@@ -9,6 +9,7 @@ project(
     version : '@version@'
 )
 add_project_arguments(
+    '-DLD_VERSION=@version@',
     # Prevent build failures due to these targets not being defined
     '-DTARGET_OS_BRIDGE=0',
     '-DTARGET_OS_EXCLAVEKIT=0',
@@ -63,6 +64,32 @@ corecrypto_dep = declare_dependency(
     link_with : corecrypto,
 )
 
+common = static_library(
+    'common',
+    dependencies : [ corecrypto_dep ],
+    include_directories : [
+        common_inc,
+        'cache_builder',
+        'lsl',
+        'other-tools',
+    ],
+    sources : [
+        'common/CRC32c.cpp',
+        'common/CachePatching.cpp',
+        'common/Diagnostics.cpp',
+        'common/DyldSharedCache.cpp',
+        'common/MachOFile.cpp',
+        'common/MachOLayout.cpp',
+        'common/MachOLoaded.cpp',
+        'common/TargetPolicy.cpp',
+        'common/Utilities.cpp',
+    ],
+)
+common_dep = declare_dependency(
+    include_directories : [ 'common' ],
+    link_with : common,
+)
+
 lsl = static_library(
     'lsl',
     cpp_args : [
@@ -77,7 +104,6 @@ lsl = static_library(
     ],
     sources : [
         'lsl/Allocator.cpp',
-        'lsl/CRC32c.cpp',
         'lsl/PVLEInt64.cpp',
     ],
 )
@@ -107,7 +133,7 @@ libmach_o = static_library(
         'mach_o/FunctionStarts.cpp',
         'mach_o/FunctionVariants.cpp',
         'mach_o/GradedArchitectures.cpp',
-        'mach_o/Header.cpp',
+        'mach_o/LazyLoadDylib.cpp',
         'mach_o/Image.cpp',
         'mach_o/Instructions.cpp',
         # 'mach_o/LinkerOptimizationHints.cpp',
@@ -121,6 +147,7 @@ libmach_o = static_library(
         'mach_o/SplitSeg.cpp',
         'mach_o/Symbol.cpp',
         'mach_o/Universal.cpp',
+        'mach_o/UnsafeHeader.cpp',
         'mach_o/Version32.cpp',
         'mach_o/Version64.cpp',
     ],
@@ -147,12 +174,12 @@ libmach_o_writer = static_library(
         'mach_o_writer/ExportsTrieWriter.cpp',
         'mach_o_writer/FunctionStartsWriter.cpp',
         'mach_o_writer/FunctionVariantsWriter.cpp',
-        'mach_o_writer/HeaderWriter.cpp',
         'mach_o_writer/LinkerOptimizationHintsWriter.cpp',
         'mach_o_writer/NListSymbolTableWriter.cpp',
         'mach_o_writer/RebaseOpcodesWriter.cpp',
         'mach_o_writer/SplitSegWriter.cpp',
         'mach_o_writer/UniversalWriter.cpp',
+        'mach_o_writer/UnsafeHeaderWriter.cpp',
     ],
 )
 libmach_o_writer_dep = declare_dependency(
@@ -170,7 +197,11 @@ libminidyld = static_library(
         '-DPRIVATE',
         '-DBUILDING_LIBDYLD=1',
     ],
-    dependencies : [ corecrypto_dep, lsl_dep ],
+    dependencies : [
+        common_dep,
+        corecrypto_dep,
+        lsl_dep
+    ],
     include_directories : [
         common_inc,
         'cache_builder',
@@ -178,9 +209,6 @@ libminidyld = static_library(
         'libdyld_introspection',
     ],
     sources : [
-        'common/CachePatching.cpp',
-        'common/MachOLayout.cpp',
-        'common/MachOLoaded.cpp',
         'libdyld/CrashReporterAnnotations.c',
     ],
 )
@@ -189,6 +217,7 @@ libdsc_extractor = shared_library(
     'dsc_extractor',
     cpp_args : [ '-DBUILDING_SHARED_CACHE_EXTRACTOR=1' ],
     dependencies : [
+        common_dep,
         corecrypto_dep,
         libmach_o_dep,
         lsl_dep
@@ -204,13 +233,8 @@ libdsc_extractor = shared_library(
     name_prefix : '',
     name_suffix : 'bundle',
     sources : [
-        'common/DyldSharedCache.cpp',
-        'common/MachOFile.cpp',
-        'common/TargetPolicy.cpp',
         'other-tools/dsc_extractor.cpp',
         'other-tools/dsc_iterator.cpp',
-        'common/MachOLayout.cpp',
-        'common/Diagnostics.cpp',
     ],
 )
 
@@ -223,6 +247,30 @@ executable(
     sources : [ 'other-tools/dsc_extractor_bin.cpp' ],
 )
 
+
+executable(
+    'dyld_analyzer',
+    cpp_args : [ '-DBUILDING_LEGACY_TOOL' ],
+    dependencies : [
+        common_dep,
+        libmach_o_dep,
+        lsl_dep,
+    ],
+    include_directories : [
+        common_inc,
+        'cache_builder',
+        'other-tools',
+    ],
+    install : true,
+    link_with : [ libminidyld ],
+    sources : [
+        'other-tools/dyld_analyzer.cpp',
+        'other-tools/FileUtils.cpp',
+        'other-tools/MiscFileUtils.cpp',
+        'other-tools/Tool.cpp',
+    ],
+)
+
 executable(
     'dyld_info',
     cpp_args : [
@@ -230,6 +278,7 @@ executable(
         '-DBUILDING_FOR_TOOLCHAIN=1',
     ],
     dependencies : [
+        common_dep,
         corecrypto_dep,
         libmach_o_dep,
         llvm_dep,
@@ -244,13 +293,6 @@ executable(
     link_args : [ '-Wl,-weak-lLTO' ],
     link_with : [ libminidyld ],
     sources : [
-        'common/Diagnostics.cpp',
-        'common/DyldSharedCache.cpp',
-        'common/MachOAnalyzer.cpp',
-        'common/MachOFile.cpp',
-        'common/MetadataVisitor.cpp',
-        'common/SwiftVisitor.cpp',
-        'common/TargetPolicy.cpp',
         'other-tools/dyld_info.cpp',
         'other-tools/FileUtils.cpp',
         'other-tools/MiscFileUtils.cpp',
@@ -258,3 +300,101 @@ executable(
     ],
 )
 install_man('doc/man/man1/dyld_info.1')
+
+# Requires headers from unpublished ld-prime sources
+# executable(
+#     'libtool',
+#     dependencies : [ lsl_dep ],
+#     include_directories : [
+#         common_inc,
+#         'cache_builder',
+#         'mach_o_writer',
+#     ],
+#     install : true,
+#     sources : [
+#         'other-tools/libtool.cpp',
+#         'other-tools/Tool.cpp',
+#     ],
+# )
+# install_man('doc/man/man1/libtool.1')
+#
+# # ranlib is a symlink to libtool
+# install_man('doc/man/man1/ranlib.1')
+
+# Requires headers from unpublished ld-prime sources
+# executable(
+#     'lipo',
+#     dependencies : [ lsl_dep ],
+#     include_directories : [ common_inc ],
+#     install : true,
+#     sources : [
+#         'other-tools/lipo.cpp',
+#         'other-tools/Tool.cpp',
+#     ],
+# )
+
+executable(
+    'nm',
+    cpp_args : [ '-DBUILDING_LEGACY_TOOL' ],
+    dependencies : [
+        common_dep,
+        libmach_o_dep,
+        lsl_dep,
+    ],
+    include_directories : [
+        common_inc,
+        'cache_builder',
+        'other-tools',
+    ],
+    install : true,
+    link_with : [ libminidyld ],
+    sources : [
+        'other-tools/MiscFileUtils.cpp',
+        'other-tools/nm.cpp',
+        'other-tools/Tool.cpp',
+    ],
+)
+
+executable(
+    'strings',
+    cpp_args : [ '-DBUILDING_LEGACY_TOOL' ],
+    dependencies : [
+        common_dep,
+        libmach_o_dep,
+        lsl_dep,
+    ],
+    include_directories : [
+        common_inc,
+        'cache_builder',
+        'other-tools',
+    ],
+    install : true,
+    link_with : [ libminidyld ],
+    sources : [
+        'other-tools/MiscFileUtils.cpp',
+        'other-tools/strings.cpp',
+        'other-tools/Tool.cpp',
+    ],
+)
+
+executable(
+    'size',
+    cpp_args : [ '-DBUILDING_LEGACY_TOOL' ],
+    dependencies : [
+        common_dep,
+        libmach_o_dep,
+        lsl_dep,
+    ],
+    include_directories : [
+        common_inc,
+        'cache_builder',
+        'other-tools',
+    ],
+    install : true,
+    link_with : [ libminidyld ],
+    sources : [
+        'other-tools/MiscFileUtils.cpp',
+        'other-tools/size.cpp',
+        'other-tools/Tool.cpp',
+    ],
+)

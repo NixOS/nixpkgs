@@ -39,8 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     substituteInPlace src/Makefile \
-      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "CFLAGS += -I/opt/local/include" "CFLAGS += -I${lib.getInclude SDL2}/include/SDL2 -I${SDL2_image}/include/SDL2"
+      --replace-fail "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc"
   '';
 
   # The prince binary expects two things of the working directory it is called from:

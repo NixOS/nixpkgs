@@ -29,17 +29,17 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-url-dispatcher";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-url-dispatcher";
     tag = finalAttrs.version;
-    hash = "sha256-+3/C6z8wyiNSpt/eyMl+j/TGJW0gZ5T3Vd1NmghK67k=";
+    hash = "sha256-Qg3nYg8SThm6lYp/TB81XW4yEM5NhzK3wPU8bB/g/ks=";
   };
 
   outputs = [
@@ -81,7 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
         setuptools
       ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        fixtures
         python-dbusmock
+        testtools
       ]
     ))
     wrapQtAppsHook
@@ -103,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    dbus-test-runner
     sqlite
   ];
 

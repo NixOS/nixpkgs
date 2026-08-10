@@ -13,6 +13,7 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = final.django_6;
+      glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
     };
   };
 
@@ -24,7 +25,6 @@ let
       arro3-core
       arro3-io
       boto3
-      brotli
       cxxfilt
       django
       django-allauth
@@ -46,8 +46,10 @@ let
       duckdb
       google-cloud-logging
       granian
+      glitchtip-rust
       mcp
       minidump
+      opentelemetry-proto
       orjson
       psycopg
       pydantic
@@ -77,14 +79,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.1.8";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4RAZYGoS1tUbcPVv8L0sFWqFfBX05yXKZHFZDbEn0C0=";
+    hash = "sha256-E1YwJwfL5+Q68xRfnoi2Sg+vAZxGQa0IKfOSVuLVnK0=";
   };
 
   postPatch = ''
@@ -128,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit frontend python;
+    inherit (python.pkgs) glitchtip-rust;
     tests = { inherit (nixosTests) glitchtip; };
     updateScript = ./update.sh;
   };

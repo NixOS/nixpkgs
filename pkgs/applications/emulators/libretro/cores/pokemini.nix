@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "pokemini";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "PokeMini";
-    rev = "bb009b1379ad15f1514f20ca7cbf710b4af42b3e";
-    hash = "sha256-iXHUk0gWciJCKfbfIa2pOBPIOeKg1yRahNKesLRC8v8=";
+    rev = "132111b76343559860532a1ccc094f93f1ed5650";
+    hash = "sha256-Gyany/aEzDlhLM/zowsOU8LLI4FdWEQ83B+mxHX56UI=";
   };
 
   makefile = "Makefile";

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus-klipper-exporter";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TcGD7WjExo1/rgwVUSPmKFJEQZhttSgBIY3gKyfcwtQ=";
+    sha256 = "sha256-gKI39j4YGWRbKAD79QzhLyueDK0yrDviffifQkpeZio=";
   };
 
   vendorHash = "sha256-VebaCzdPGl0hOHRXvwZb4aDzXlDZ57v/QVYzuagvvOM=";

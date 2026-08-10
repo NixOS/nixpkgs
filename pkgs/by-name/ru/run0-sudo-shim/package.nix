@@ -5,21 +5,30 @@
   nix-update-script,
   coreutils,
   polkit-stdin-agent,
+  installShellFiles,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "run0-sudo-shim";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "LordGrimmauld";
     repo = "run0-sudo-shim";
     tag = finalAttrs.version;
-    hash = "sha256-QkDoEBgcWh/eKX8jxctMNEy08Sf8kpxXFhWbsygTWz8=";
+    hash = "sha256-J/I7VPXpOwNtEk9H+lbZVT+xJYBsSKgnMlwzlVIJSWk=";
   };
 
-  cargoHash = "sha256-ly2e2x1Z1XEXblGqWi+/r5q2FmvpekVfzGVGm+S1xio=";
+  cargoHash = "sha256-JfxMmYgYLKxVqj8H0/qRGn9z8XNoNpPK3RcIhb/RKOc=";
 
   __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   env = {
     POLKIT_STDIN_AGENT = lib.getExe polkit-stdin-agent;
@@ -28,6 +37,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     ln -s $out/bin/run0-sudo-shim $out/bin/sudo
+    installManPage target/tmp/run0-sudo-shim/manpage/*
+    installShellCompletion \
+      target/tmp/run0-sudo-shim/completion/sudo.{bash,fish} \
+      --zsh target/tmp/run0-sudo-shim/completion/_sudo
   '';
 
   passthru.updateScript = nix-update-script { };

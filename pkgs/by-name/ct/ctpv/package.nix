@@ -8,6 +8,7 @@
   atool,
   bat,
   chafa,
+  coreutils,
   delta,
   ffmpeg,
   ffmpegthumbnailer,
@@ -16,7 +17,7 @@
   imagemagick,
   jq,
   poppler-utils,
-  ueberzug,
+  ueberzugpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
           atool # for archive files
           bat
           chafa # for image files on Wayland
+          coreutils
           delta # for diff files
           ffmpeg
           ffmpegthumbnailer
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
           imagemagick
           jq # for json files
           poppler-utils # for pdf files
-          ueberzug # for image files on X11
+          ueberzugpp # for image files on X11
         ]
       }";
   '';

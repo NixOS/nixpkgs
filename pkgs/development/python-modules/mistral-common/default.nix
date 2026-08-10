@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.11.3";
+  version = "1.11.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9NeJqv7m7vT/lI6mV9QbAsrLUcxO4Wr+QgKfz6RWtsM=";
+    hash = "sha256-yYJBWnHxv/0BLGvi2MjcQvRhNjR5F8tdAy2f7q9hEJg=";
   };
 
   build-system = [

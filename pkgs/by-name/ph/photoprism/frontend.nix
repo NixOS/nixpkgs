@@ -9,21 +9,15 @@ buildNpmPackage {
   inherit src version;
   pname = "photoprism-frontend";
 
-  postPatch = ''
-    cd frontend
-  '';
+  npmDepsHash = "sha256-HBzul2fyISwOqf8w92yt0friMnLhMmvKPm8yI2I3ngE=";
 
-  npmDepsHash = "sha256-RjPTtIm1BhyeQLUN9mWI+sXakNju4up0FbrdwZzkTS0=";
-
-  # Some dependencies are fetched from git repositories
-  forceGitDeps = true;
-  makeCacheWritable = true;
+  npmWorkspace = "frontend";
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp -r ../assets $out/
+    cp -r assets $out/
 
     runHook postInstall
   '';
@@ -32,6 +26,8 @@ buildNpmPackage {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ benesim ];
+    maintainers = with lib.maintainers; [
+      ipetkov
+    ];
   };
 }

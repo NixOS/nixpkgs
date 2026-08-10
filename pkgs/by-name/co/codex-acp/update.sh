@@ -141,7 +141,6 @@ fetchurl {
     {
       x86_64-linux = "${V8_HASH_X86_64_LINUX}";
       aarch64-linux = "${V8_HASH_AARCH64_LINUX}";
-      x86_64-darwin = "${V8_HASH_X86_64_DARWIN}";
       aarch64-darwin = "${V8_HASH_AARCH64_DARWIN}";
     }
     .\${stdenv.hostPlatform.system}
@@ -198,9 +197,8 @@ export CODEX_HASH
 
 V8_HASH_X86_64_LINUX="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz")"
 V8_HASH_AARCH64_LINUX="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz")"
-V8_HASH_X86_64_DARWIN="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_x86_64-apple-darwin.a.gz")"
 V8_HASH_AARCH64_DARWIN="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_aarch64-apple-darwin.a.gz")"
-export V8_VERSION V8_HASH_X86_64_LINUX V8_HASH_AARCH64_LINUX V8_HASH_X86_64_DARWIN V8_HASH_AARCH64_DARWIN
+export V8_VERSION V8_HASH_X86_64_LINUX V8_HASH_AARCH64_LINUX V8_HASH_AARCH64_DARWIN
 
 update-source-version "$ATTR_PATH" "$latest_version" "$src_hash" --ignore-same-version
 update_codex_pins

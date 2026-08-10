@@ -17,6 +17,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-ze6s/XCxW/Lf5fiFEI8tmgd5DRAPVD6Z9Xo/ayI5fAc=";
   };
 
+  pythonRelaxDeps = [
+    "chardet"
+    "rich"
+  ];
+
   build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
@@ -26,8 +31,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     rich-argparse-plus
     yara-python
   ];
-
-  pythonRelaxDeps = [ "rich" ];
 
   pythonImportsCheck = [ "yaralyzer" ];
 

@@ -7,17 +7,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "polonium";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
     repo = "polonium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R50Br8GGVVkA/AtXvYazgBWSEax0KEvWwyFQv3zqWqU=";
+    hash = "sha256-6Y/9+b7BfWnAkDG9HtlxM53gvoqJGsdw6YCnietc/XM=";
     fetchSubmodules = true;
   };
 
-  npmDepsHash = "sha256-T8dW+ctRlN8fIJtPKy0niWcCuQTd3GV5MbmaZf8CqZk=";
+  npmDepsHash = "sha256-LbLzoP/amLOMrXfjC3O3F0jg+zpxJvrkf0a0nB5mKnA=";
 
   __structuredAttrs = true;
 

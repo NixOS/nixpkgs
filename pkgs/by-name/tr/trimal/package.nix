@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     repo = "trimal";
-    owner = "scapella";
+    owner = "inab";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-ONSkYceCgYGSpABj0iOx6yj2hMyFHqCHflYRW+Q6RVc=";
   };

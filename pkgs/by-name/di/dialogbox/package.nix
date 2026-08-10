@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "dialogbox";
-  version = "1.0+unstable=2020-11-16";
+  version = "1.0-unstable-2020-11-16";
 
   src = fetchFromGitHub {
     owner = "martynets";

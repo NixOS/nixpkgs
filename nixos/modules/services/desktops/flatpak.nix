@@ -40,6 +40,8 @@ in
       pkgs.fuse3
     ];
 
+    programs.fuse.enable = true;
+
     security.polkit.enable = true;
 
     fonts.fontDir.enable = true;

@@ -4,10 +4,12 @@
   cmakeMinimal,
   fetchFromGitHub,
   ninja,
+  rust-bindgen,
   testers,
   aws-lc,
   nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
+  withRustBindings ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
@@ -29,10 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmakeMinimal
     ninja
+  ]
+  ++ lib.optionals withRustBindings [
+    rust-bindgen
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" useSharedLibraries)
+    (lib.cmakeBool "GENERATE_RUST_BINDINGS" withRustBindings)
     "-GNinja"
     "-DDISABLE_GO=ON"
     "-DDISABLE_PERL=ON"
@@ -50,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
     moveToOutput lib/ssl/cmake "$dev"
+  ''
+  + lib.optionalString withRustBindings ''
+    moveToOutput share/rust "$dev"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (

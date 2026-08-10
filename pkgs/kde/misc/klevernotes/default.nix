@@ -27,7 +27,7 @@ mkKdeDerivation rec {
     bsd3
     cc-by-sa-40
     cc0
-    # TODO: add FSFAP license
+    fsfap
     gpl2Plus
     gpl3Only
     gpl3Plus

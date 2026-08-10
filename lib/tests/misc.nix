@@ -4687,7 +4687,7 @@ runTests {
   };
 
   testPlatformMatchNoMatch = {
-    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expr = meta.platformMatch { system = "x86_64-freebsd"; } "x86_64-linux";
     expected = false;
   };
 

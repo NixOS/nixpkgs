@@ -8,6 +8,7 @@
 }:
 buildNpmPackage rec {
   pname = "playwright-mcp";
+  # nixpkgs-update: no auto update
   version = "0.0.76";
 
   src = fetchFromGitHub {
@@ -32,7 +33,8 @@ buildNpmPackage rec {
 
     wrapProgram $out/bin/playwright-mcp \
       --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \
-      --set-default PLAYWRIGHT_MCP_BROWSER chromium
+      --set-default PLAYWRIGHT_MCP_BROWSER chromium \
+      --run 'if [ -z "$PLAYWRIGHT_MCP_USER_DATA_DIR" ]; then export PLAYWRIGHT_MCP_ISOLATED=1; fi'
   '';
 
   dontNpmBuild = true;

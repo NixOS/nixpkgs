@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkbprint";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xkbprint";
     tag = "xkbprint-${finalAttrs.version}";
-    hash = "sha256-JcVXwhEV6tTdgBNki7MuUPjjZOjVE83uBP/yc+ShycE=";
+    hash = "sha256-ul/gMblKljyUYA2EK1X3FRRKbJ6I0x9Y31Bmi4QdDoo=";
   };
 
   strictDeps = true;

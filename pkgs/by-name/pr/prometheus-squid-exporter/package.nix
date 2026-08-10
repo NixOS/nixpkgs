@@ -20,6 +20,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Squid Prometheus exporter";
     homepage = "https://github.com/boynux/squid-exporter";
+    mainProgram = "squid-exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ srhb ];
   };

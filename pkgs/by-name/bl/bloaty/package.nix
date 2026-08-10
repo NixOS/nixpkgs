@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   zlib,
+  zstd,
   fetchFromGitHub,
   re2,
   abseil-cpp,
@@ -18,19 +19,19 @@ let
   demumble = fetchFromGitHub {
     owner = "nico";
     repo = "demumble";
-    rev = "01098eab821b33bd31b9778aea38565cd796aa85";
-    hash = "sha256-605SsXd7TSdm3BH854ChHIZbOXcHI/n8RN+pFMz4Ex4=";
+    rev = "10e00fb708a3d24c1bb16682cac76925ffb76af5";
+    hash = "sha256-JNSSvYE5bh/9RVLQXVNmWRKAzidg4ktmqLI7pcUATDs=";
   };
 in
 stdenv.mkDerivation {
   pname = "bloaty";
-  version = "1.1-unstable-2024-09-23";
+  version = "1.1-unstable-2026-05-31";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bloaty";
-    rev = "0c89acd7e8b9d91fd1e9c8c129be627b4e47f1ea";
-    hash = "sha256-txZDPytWnkjkiVkPL2SWLwCPEtVvqoI/MVRvbJ2kBGw=";
+    rev = "4a601b636e2347322d0371c8bf8ca5eaeaca4bac";
+    hash = "sha256-16Ic2x5JctSCuHJZjK96xkgJw8qyy8GqFupwWuc2U/k=";
   };
 
   cmakeFlags = [
@@ -43,7 +44,6 @@ stdenv.mkDerivation {
     # Build system relies on some of those source files
     rm -rf third_party/googletest third_party/abseil-cpp third_party/demumble
     ln -s ${gtest.src} third_party/googletest
-    ln -s ${abseil-cpp.src} third_party/abseil-cpp
     ln -s ${demumble} third_party/demumble
     substituteInPlace CMakeLists.txt \
       --replace "find_package(Python COMPONENTS Interpreter)" "" \
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     zlib
+    zstd
     re2
     abseil-cpp
     protobuf

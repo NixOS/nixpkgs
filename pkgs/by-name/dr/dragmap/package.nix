@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dragen-os";
     longDescription = ''
       DRAGMAP is an open-source software implementation of the DRAGEN mapper,
-      which the Illumina team created to procude the same results as their
+      which the Illumina team created to produce the same results as their
       proprietary DRAGEN hardware.
     '';
     homepage = "https://github.com/Illumina/DRAGMAP";

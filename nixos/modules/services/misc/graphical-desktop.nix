@@ -22,17 +22,23 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      # localectl looks into 00-keyboard.conf
-      etc."X11/xorg.conf.d/00-keyboard.conf".text = ''
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbModel" "${xcfg.xkb.model}"
-          Option "XkbLayout" "${xcfg.xkb.layout}"
-          Option "XkbOptions" "${xcfg.xkb.options}"
-          Option "XkbVariant" "${xcfg.xkb.variant}"
-        EndSection
-      '';
+      # systemd-localed looks into 00-keyboard.conf
+      # systemd-localed does not like if Option values are ""
+      etc."X11/xorg.conf.d/00-keyboard.conf".text =
+        let
+          optionLine =
+            name: value: lib.optionalString (value != null && value != "") ''Option "${name}" "${value}"'';
+        in
+        ''
+          Section "InputClass"
+            Identifier "Keyboard catchall"
+            MatchIsKeyboard "on"
+            ${optionLine "XkbModel" xcfg.xkb.model}
+            ${optionLine "XkbLayout" xcfg.xkb.layout}
+            ${optionLine "XkbOptions" xcfg.xkb.options}
+            ${optionLine "XkbVariant" xcfg.xkb.variant}
+          EndSection
+        '';
       systemPackages = with pkgs; [
         nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
         xdg-utils

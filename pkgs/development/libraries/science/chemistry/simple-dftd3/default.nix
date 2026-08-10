@@ -64,9 +64,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
 
   meta = {
     description = "Reimplementation of the DFT-D3 program";

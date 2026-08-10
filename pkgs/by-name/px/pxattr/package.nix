@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.lesbonscomptes.com/pxattr/index.html";
     description = "Provides a single interface to extended file attributes";
     maintainers = [ ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "pxattr";
   };

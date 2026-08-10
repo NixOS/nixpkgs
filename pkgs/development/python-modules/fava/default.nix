@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   buildNpmPackage,
-  fetchpatch2,
   fetchFromGitHub,
   stdenv,
   babel,
@@ -83,6 +82,8 @@ buildPythonPackage {
     werkzeug
     watchfiles
   ];
+
+  pythonRelaxDeps = [ "simplejson" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

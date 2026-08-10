@@ -13,7 +13,7 @@
   lame,
   libxml2_13,
   libjack2,
-  ffmpeg_4-headless,
+  ffmpeg-headless,
   vlc,
   xdg-utils,
   xdotool,
@@ -40,17 +40,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
-  version = "7.74";
+  version = "7.78";
 
   src = fetchurl {
     url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-QxmAag1tPB3bjz68lFsxSlMim06IfjWUTa++rE4fudE="
+        "sha256-Z7H85bcIoY9tXGuOboh3X54hZQAD2LPKxLGXZ1EtfQE="
       else
         {
-          x86_64-linux = "sha256-4Mf2q/eJz8djJv5JlrGGAWjivjEriRrkbrfKXd/iS6w=";
-          aarch64-linux = "sha256-zQ4XmFrACfUD04UWs0fYWW+m4L4B1xxe4Rg18xCUemc=";
+          x86_64-linux = "sha256-1mLrNdyrf9LOX6xqYJITYu8DPi0HXHTM75dPu9E6ZUI=";
+          aarch64-linux = "sha256-xqzPN4naSYaveYlFOkKzocnfysMfzaUkWndLel4jAHw=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
               curl
               lame
               libxml2_13
-              ffmpeg_4-headless
+              ffmpeg-headless
               vlc
               xdotool
               stdenv.cc.cc
@@ -148,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

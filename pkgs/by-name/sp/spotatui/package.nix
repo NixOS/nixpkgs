@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotatui";
-  version = "0.39.1";
+  version = "0.40.3";
 
   src = fetchFromGitHub {
     owner = "LargeModGames";
     repo = "spotatui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fuOSJSN5bKKmEVZZnzckNOxGK1+gDC9pU0vO7MHowis=";
+    hash = "sha256-9t/gwFdbKWlw1VaWq3y9dcEbdCK+oGUrnAK+eEwij/0=";
   };
 
-  cargoHash = "sha256-fe86HbNckgFruPl8KIW2akW6qFOpR98iCde9kRXthpM=";
+  cargoHash = "sha256-5pY+tIk6U71ko09om/CK0PkSaMeCjdxxb15W62c+xqo=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withPipewireVisualizer rustPlatform.bindgenHook;
 

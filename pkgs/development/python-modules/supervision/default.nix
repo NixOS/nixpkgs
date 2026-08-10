@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "supervision";
-  version = "0.29.0.post0";
+  version = "0.29.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "roboflow";
     repo = "supervision";
     tag = finalAttrs.version;
-    hash = "sha256-Pug95Srb8dv+3QctaZzF5Gz88eaOmlw4OkZWI7QFsXI=";
+    hash = "sha256-rDRdoiOfE6n/ZHAxI09cdJbsHwHU8MY9eAVP0J6B2ZA=";
   };
 
   build-system = [

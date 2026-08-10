@@ -49,13 +49,9 @@ in
 
       filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
 
-      pnpm-fixup-state-db' =
-        if pnpm.nodejs-slim or null != null then
-          pnpm-fixup-state-db.override {
-            inherit (pnpm) nodejs-slim;
-          }
-        else
-          pnpm-fixup-state-db;
+      pnpm-fixup-state-db' = pnpm-fixup-state-db.override {
+        inherit (pnpm) nodejs-slim;
+      };
     in
     assert
       fetcherVersion != null
@@ -68,6 +64,10 @@ in
     assert
       builtins.elem fetcherVersion supportedFetcherVersions
       || throw "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
+
+    assert
+      !(fetcherVersion == 3 && lib.versionAtLeast pnpm.version "11.0.0")
+      || throw "fetchPnpmDeps `fetcherVersion = 3` is no longer supported for `pnpm_11`. Please upgrade to the latest, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     stdenvNoCC.mkDerivation (
       finalAttrs:
@@ -171,6 +171,13 @@ in
               if [[ ${toString fetcherVersion} -ge 4 ]]; then
                 sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
                 rm "$storePath/v11/index.db"
+                ${lib.optionalString (lib.versionAtLeast sqlite.version "3.53.0") ''
+                  # SQLite 3.53.0 refactored code around the dump generation, that changed
+                  # BLOB data type representations from `X'...'` to `x'...'`, breaking existing hashes.
+                  # This change was made in http://github.com/sqlite/sqlite/commit/d2424338b05f2766034f91c03009c8f0d78bc937
+                  # and the following command reverts the dump to the old format:
+                  sed -i "s/,x'/,X'/g" "$storePath/v11/index.db.sql"
+                ''}
               fi
             fi
 
@@ -209,10 +216,7 @@ in
 
           passthru = args.passthru or { } // {
             inherit fetcherVersion;
-            serve = callPackage ./serve.nix {
-              inherit pnpm; # from args
-              pnpmDeps = finalAttrs.finalPackage;
-            };
+            serve = throw "fetchPnpmDeps: `serve` has been deprecated as it was removed in pnpm 11 and only had a niche use case."; # Added 2026-06-04
           };
 
           dontConfigure = true;

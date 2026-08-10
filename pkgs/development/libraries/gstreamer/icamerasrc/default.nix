@@ -34,6 +34,11 @@ stdenv.mkDerivation {
     export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
   '';
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

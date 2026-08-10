@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "badsecrets";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "badsecrets";
     tag = finalAttrs.version;
-    hash = "sha256-fhRQvVb+JUP1DyTMAV7leIAKD/L4kRhGFYtD78cYABI=";
+    hash = "sha256-I0CyY8FVFFPRBK04zZ1v2WSv4ovRATZmAWLGwE0Q4pQ=";
   };
 
   pythonRelaxDeps = [

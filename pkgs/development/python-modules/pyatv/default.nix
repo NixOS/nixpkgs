@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyatv";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wsLqG1yJf5A3BMgpbQMrXn6NzpcF4BU1TD+0NJ6Nt7c=";
+    hash = "sha256-UNBpVB2H+xr0ijdlfK/Hrh6k3lhRSqHkthjWp/WZsaQ=";
   };
 
   pythonRelaxDeps = [

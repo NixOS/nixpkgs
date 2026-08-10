@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
         "s390" = "s390";
         "mips" = "mips";
         "loongarch" = "loongarch64";
+        "riscv" = "riscv64";
       };
     in
     [
@@ -159,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "armv7l-linux"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

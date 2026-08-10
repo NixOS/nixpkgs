@@ -4,6 +4,8 @@
   fetchFromGitHub,
   meson,
   ninja,
+  pkg-config,
+  json_c,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,10 +19,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OC6wXBCIW4XznWG0zzxRK3BzWMVK2Jq/gTL36sJV1PE=";
   };
 
+  outputs = [
+    "out"
+    "tools"
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
+
+  buildInputs = [
+    json_c
+  ];
+
+  # sscregistrygen is only compiled when json-c is available and meson doesn't install it
+  postInstall = ''
+    mkdir -p $tools/bin
+    install -Dm755 tools/sscregistrygen $tools/bin/sscregistrygen
+  '';
 
   meta = {
     description = "Daemon to communicate with Qualcomm DSPs";

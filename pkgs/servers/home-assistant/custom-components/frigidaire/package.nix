@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "bm1549";
   domain = "frigidaire";
-  version = "0.1.21";
+  version = "0.1.37";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-frigidaire";
     tag = version;
-    hash = "sha256-Pa1pVxP1gB/1XNqFy3U5t2xeHk+BUe6TQKtU00xcbx4=";
+    hash = "sha256-q3rF7PtvlOL2CJCWZpahsOkJCmKwyTg9Bantobu9cdE=";
   };
 
   dependencies = [ frigidaire ];

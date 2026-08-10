@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "scdl";
-  version = "3.0.6";
+  version = "3.0.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-kAvK1KqfVK6axQXTkBtcMxc7OHLPYNfIyy2n+97LhB4=";
+    hash = "sha256-3jwruTldVZ/j+i0X0+EW6JX8CwGQAZOGi2894MTrmVk=";
   };
 
   build-system = [ python3Packages.setuptools ];

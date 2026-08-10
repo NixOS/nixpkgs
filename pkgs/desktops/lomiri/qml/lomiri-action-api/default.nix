@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -22,22 +21,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-action-api";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-action-api";
     tag = finalAttrs.version;
-    hash = "sha256-pwHvbiUvkAi7/XgpNfgrqcp3znFKSXlAAacB2XsHQkg=";
+    hash = "sha256-2bI507ey9VMVgnrsly5L6SexLE6OPgmgwfv+ejwk/Mw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "0001-lomiri-action-api-fix-qt6-unit-tests.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-action-api/-/commit/8fadb3d75938403aca2dc0e9392370c0d9b45c3e.patch";
-      hash = "sha256-qqgFgw2YY6cPEbzGKI7r4fk/CgR9NRe1ZY2HUsKLNlo=";
-    })
-  ];
 
   outputs = [
     "out"

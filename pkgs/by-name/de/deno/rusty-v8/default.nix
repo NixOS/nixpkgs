@@ -1,15 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   rustc,
-  rustc-unwrapped,
   rust-bindgen,
-  rust-analyzer,
   rustfmt,
   cargo,
-  clippy,
   llvmPackages ? rustc.llvmPackages,
   pkg-config,
   stdenv,
@@ -30,20 +26,24 @@ let
     name = "rusty-v8-rust-toolchain";
     paths = [
       rustc
-      rustc-unwrapped
       rust-bindgen
-      rust-analyzer
       rustfmt
       cargo
-      clippy
       llvmPackages.libclang.lib
+      # To provide about the same tools as the upstream rust toolchain, the following inputs are also needed.
+      # But they are not actually needed, and to avoid unnecessary rebuilds, we are not adding them.
+      #rustc-unwrapped
+      #rust-analyzer
+      #clippy
     ];
-    postBuild = ''
-      mkdir -p "$out/lib/rustlib/src/rust"
-      cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
-      chmod u+w "$out/lib/rustlib/src/rust/library/"
-      ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
-    '';
+    /*
+      postBuild = ''
+        mkdir -p "$out/lib/rustlib/src/rust"
+        cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
+        chmod u+w "$out/lib/rustlib/src/rust/library/"
+        ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
+      '';
+    */
   };
 
   clangBasePath = symlinkJoin {
@@ -71,26 +71,27 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
-  version = "149.3.0";
+  version = "150.2.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "rusty_v8";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hQfSDpdQBeQrOerXi+fI6mGCXkFH2ro90eWZX7xcwjA=";
+    hash = "sha256-Iwgc08bUHR4OiwqopJua6fkQYMOdC5k9TgoCmZQrWIw=";
   };
 
   patches = [
     ./librusty_v8_no_downloads.patch
     ./llvm22.patch
     ./gn_inputs_fix.patch
+    ./c_additional_outputs.patch
   ]
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
   ];
 
-  cargoHash = "sha256-ROz8f+o/OVNKSm4Hp1z4eCI2pmlNTUpBZ5447uvVXUk=";
+  cargoHash = "sha256-M65ODvL+o3njO3SdbJaCvgRupoguCGCIoYY/dYiJPng=";
 
   nativeBuildInputs = [
     llvmPackages.clang
@@ -163,10 +164,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=scope"
   ];
 
+  outputs = [
+    "out"
+    "binding"
+  ];
+
   installPhase = ''
     runHook preInstall
 
     cp target/*/release/gn_out/obj/librusty_v8${stdenv.hostPlatform.extensions.staticLibrary} $out
+    # workaround for riscv64 because has no pre-generated bindings.
+    cp target/*/release/gn_out/src_binding.rs $binding
 
     runHook postInstall
   '';

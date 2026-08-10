@@ -11,7 +11,6 @@
   freetype,
   fontconfig,
   libxml2,
-  gnome2,
   darwin,
 }:
 
@@ -31,7 +30,7 @@ let
       freetype
       fontconfig
       libxml2
-      gnome2.gtksourceview
+      # gnome2.gtksourceview: was here and appeared used, but was removed from Nixpkgs.
     ]
     + ":${lib.getLib stdenv.cc.cc}/lib64:$out/libexec";
 
@@ -59,10 +58,6 @@ stdenv.mkDerivation (
       aarch64-darwin = fetchurl {
         url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-macos-aarch.tar.gz";
         hash = "sha256-/UicTlA4lFRk3OBgcsiS8YtDGmb7R7d6zeVLZo49HV8=";
-      };
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-macos.tar.gz";
-        hash = "sha256-EVYPcnPsERfs2bqVQMbdR6TAv/ChQDrmCZNRl2Qs1Qw=";
       };
     };
   in

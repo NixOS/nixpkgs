@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
-    # create meta package providing dist-info for python3Pacakges.adios2
+    # create meta package providing dist-info for python3Packages.adios2
     ++ lib.optional pythonSupport (
       python3Packages.mkPythonMetaPackage {
         inherit (finalAttrs) pname version meta;

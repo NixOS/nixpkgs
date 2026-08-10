@@ -42,6 +42,6 @@ buildPythonPackage {
     description = "Online Change-Point Detection library based on ChangeFinder algorithm";
     homepage = "https://github.com/shunsukeaihara/changefinder";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

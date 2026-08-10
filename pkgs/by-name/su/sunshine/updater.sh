@@ -57,12 +57,6 @@ if ! grep -q "$src_hash" "$package_nix"; then
     exit 1
 fi
 
-log "Regenerating sunshine.ui package-lock.json"
-# `--generate-lockfile` only regenerates package-lock.json; it skips the npmDepsHash
-# refresh (see nix-update's dependency_hashes.py). Run a second pass to update the hash.
-# `--no-src` avoids re-fetching the (already-pinned) sunshine src on each pass.
-nix-update sunshine --version=skip --no-src --generate-lockfile --subpackage ui
-
 log "Refreshing sunshine.ui npmDepsHash"
 nix-update sunshine --version=skip --no-src --subpackage ui
 
@@ -102,7 +96,6 @@ ffmpeg_url() {
 declare -A ffmpeg_arch=(
     [x86_64-linux]=Linux-x86_64
     [aarch64-linux]=Linux-aarch64
-    [x86_64-darwin]=Darwin-x86_64
     [aarch64-darwin]=Darwin-arm64
 )
 

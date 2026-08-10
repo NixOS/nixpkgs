@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";
     repo = "python-neo";
     tag = version;
-    hash = "sha256-VdT7PFSle8HxWfsPrrI+mHtsTO315+Sw0RGx8HSYtwk=";
+    hash = "sha256-IB+RuQBJTu0Ss7PLdBpONBl50xdTiR512ni+w3Z+DEM=";
   };
 
   build-system = [ setuptools ];

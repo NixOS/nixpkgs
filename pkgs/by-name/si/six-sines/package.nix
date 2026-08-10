@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   pkg-config,
   autoPatchelfHook,
@@ -22,9 +23,6 @@
   libxrandr,
   libxrender,
   libxscrnsaver,
-  # clap-wrapper's Linux standalone GUI host (auto-detected via pkg-config;
-  # if absent, the standalone still builds but can't show plugin windows)
-  gtkmm3,
 }:
 
 let
@@ -34,18 +32,19 @@ let
   # `base_sdks.cmake` short-circuits the CPM path when *_SDK_ROOT is set.
   #
   # Revisions are pinned to whatever the clap-wrapper submodule at the
-  # six-sines v1.1.0 tag requests in cmake/base_sdks.cmake. When bumping
+  # six-sines v1.2.1 tag requests in cmake/base_sdks.cmake. When bumping
   # six-sines, re-check those tags here.
   vst3sdk = fetchFromGitHub {
     owner = "steinbergmedia";
     repo = "vst3sdk";
-    rev = "v3.7.6_build_18";
+    rev = "v3.8.0_build_66";
     fetchSubmodules = true;
-    hash = "sha256-MeMb09bM8D4FPHWvvRbmWbiyO9u8JVxyfgv4jmeogLI=";
+    hash = "sha256-9HnDOOiKT0ploNJukk4vcZjBLS5gL4SdvmfFqZJPIxA=";
     # The `doc` submodule is ~130 MB of PDFs we never reference. The
     # `vstgui4` submodule isn't touched by clap-wrapper's VST3 glue either,
-    # but it's small (~12 MB) and removing it would diverge further from
-    # upstream Steinberg, so leave it in.
+    # but it — like the `tutorials` submodule that appeared in 3.8.0 — is
+    # small, and removing more would diverge further from upstream
+    # Steinberg, so leave both in.
     postFetch = ''
       rm -rf $out/doc
     '';
@@ -68,7 +67,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "six-sines";
-  version = "1.1.0";
+  version = "1.2.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -77,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "six-sines";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-IQLGC86FqS3dptPzNpHEYKB59MWFDKsOPGM+FuzGcPo=";
+    hash = "sha256-Sq94n5pG6JOOeLAtk13RUGqk0T6XxhT0hXPw18r3Lqs=";
   };
 
   nativeBuildInputs = [
@@ -110,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxscrnsaver
-    gtkmm3
   ];
 
   # JUCE loads several X11 libraries via dlopen() in juce_XSymbols_linux.h
@@ -154,20 +152,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "VST3_SDK_ROOT" "${vst3sdk}")
     (lib.cmakeFeature "RTAUDIO_SDK_ROOT" "${rtaudio-src}")
     (lib.cmakeFeature "RTMIDI_SDK_ROOT" "${rtmidi-src}")
-
-    # CMake 4 hard-removed support for cmake_minimum_required(VERSION < 3.5).
-    # The bundled libsamplerate submodule still declares `VERSION 3.1..3.18`
-    # at the top of its CMakeLists.txt and refuses to configure otherwise.
-    # 3.5 is the value CMake itself suggests in the error.
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
-  # The CMakeLists exposes a `six-sines_all` custom target that aggregates
-  # the `_clap`, `_vst3`, and `_standalone` sub-targets (`_auv2` is
-  # APPLE-gated and absent on Linux). The default ALL target would build
-  # the same outputs in practice — the test subdir is already EXCLUDE_FROM_ALL
-  # — but going through `six-sines_all` matches what upstream documents and
-  # keeps the surface narrow if extra default targets ever land later.
+  # clap-wrapper's make_clapfirst_plugins() defines a `six-sines_all` custom
+  # target that aggregates the `_clap`, `_vst3`, and `_standalone`
+  # sub-targets (`_auv2` is APPLE-gated and absent on Linux). The default
+  # ALL target would build the same outputs in practice — the test subdir
+  # is EXCLUDE_FROM_ALL and the installer helper target added in 1.2.0 is
+  # likewise outside it — but going through `six-sines_all` matches what
+  # upstream documents and keeps the surface narrow if extra default
+  # targets ever land later.
   buildPhase = ''
     runHook preBuild
     cmake --build . --config Release --parallel "$NIX_BUILD_CORES" --target six-sines_all
@@ -193,6 +187,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # nix-update bumps version + src hash, but knows nothing about the
+  # vst3sdk pin in the let-binding above — on every bump, re-check the
+  # tag requested by the clap-wrapper submodule's cmake/base_sdks.cmake.
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Small synthesizer exploring audio-rate inter-modulation of sine waves (FM/PM/AM)";
     longDescription = ''
@@ -208,9 +207,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     mainProgram = "six-sines";
-    # cmake/compile-options.cmake hard-codes `-march=nehalem` for non-Apple
-    # builds, and clap-wrapper hard-codes the VST3 bundle architecture path
-    # to `x86_64-linux`. aarch64-linux would require patching both.
+    # Since 1.2.0 upstream selects `-march=armv8-a` on aarch64 (`nehalem`
+    # only on x86), and clap-wrapper derives the VST3 bundle arch dir from
+    # CMAKE_SYSTEM_PROCESSOR instead of hard-coding x86_64-linux, so
+    # aarch64-linux should now be viable — add it once a build has been
+    # verified.
     platforms = [ "x86_64-linux" ];
   };
 })

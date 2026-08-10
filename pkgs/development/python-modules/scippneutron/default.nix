@@ -22,6 +22,7 @@
 
   # tests
   pytestCheckHook,
+  anywidget,
   pooch,
   hypothesis,
   ipykernel,
@@ -37,7 +38,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scippneutron";
-  version = "26.6.0";
+  version = "26.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scipp";
     repo = "scippneutron";
     tag = finalAttrs.version;
-    hash = "sha256-ZhQVOUX2LcoLtAvAos7CWfVHKfqIWtIsXeYAPbUZTV0=";
+    hash = "sha256-a/d2TLqrCgUknZ6wIPQRvL/X6v96ZBuL1HjChASeci8=";
   };
 
   build-system = [
@@ -69,6 +70,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    anywidget
     hypothesis
     ipykernel
     ipympl
@@ -80,7 +82,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   env = {
-    # See: https://github.com/scipp/scippneutron/blob/26.6.0/src/scippneutron/data/__init__.py
+    # See: https://github.com/scipp/scippneutron/blob/26.7.0/src/scippneutron/data/__init__.py
     SCIPPNEUTRON_DATA_DIR =
       let
         # NOTE this might be changed by upstream in the future.

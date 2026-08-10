@@ -8,7 +8,7 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "plakar";
-  version = "1.1.3";
+  version = "1.1.4";
 
   # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
   __darwinAllowLocalNetworking = true;
@@ -17,10 +17,10 @@ buildGo125Module (finalAttrs: {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AQyE8VtTdkuevBVMLDfhN1h6/DirdhLgPu+76QfRUas=";
+    hash = "sha256-Urj1BG3XGhSroaa9pl9NGiKj38J1P+H9sA7noGwIhdc=";
   };
 
-  vendorHash = "sha256-nueFE6Ka1dq4Rt+Qs9YJU9N+yYfEyA8jkVGC4vKLjSI=";
+  vendorHash = "sha256-aqHjSTVVxBbaHAZZNQaFbftN0Hbl/+7wgk5uFM664po=";
 
   buildInputs = [
     fuse

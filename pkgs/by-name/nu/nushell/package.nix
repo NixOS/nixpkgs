@@ -17,6 +17,7 @@
   curlMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,16 +25,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.113.1";
+  version = "0.114.1";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-sV2fN9TOWQVyPVFSWdNLPOtOdLuynPTvt9+uqJsgtds=";
+    hash = "sha256-EpcbOnEcu8llVNC9zGEo62dHIHUJnyRRxP4sV8kSUwY=";
   };
 
-  cargoHash = "sha256-yfJPhx+Y+Y3vkIQU/w3DCKJpH4LsEmzDzyEuyor5PDc=";
+  cargoHash = "sha256-KZSWYJpyeN1fTeBSpuJ5r4HKZZ8a9k5KVft9uKqOJIE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -102,6 +103,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     shellPath = "/bin/nu";
     updateScript = nix-update-script { };
+
+    withPlugins = plugins: callPackage ./with-plugins.nix { inherit plugins; };
+    tests.withPlugins = callPackage ./plugins/test-with-plugins.nix { };
   };
 
   meta = {

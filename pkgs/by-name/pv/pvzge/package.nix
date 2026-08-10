@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pvzge";
-  version = "0.9.3";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Gzh0821";
     repo = "pvzge_web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QFHWTTwvhtVzcApehPfYCpFHjLXmq9SZcbBSc0eSkpM=";
+    hash = "sha256-3jyivZcBfh3UvhYUF0hVK6O8xBws1EZCqa7hGAd2348=";
   };
 
   iconSrc = fetchurl {

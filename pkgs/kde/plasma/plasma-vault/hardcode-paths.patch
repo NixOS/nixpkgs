@@ -1,16 +1,3 @@
-diff --git a/kded/engine/backends/cryfs/cryfsbackend.cpp b/kded/engine/backends/cryfs/cryfsbackend.cpp
-index f425eb3..5b8cd43 100644
---- a/kded/engine/backends/cryfs/cryfsbackend.cpp
-+++ b/kded/engine/backends/cryfs/cryfsbackend.cpp
-@@ -207,7 +207,7 @@ QProcess *CryFsBackend::cryfs(const QStringList &arguments) const
-     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
-     KConfigGroup backendConfig(config, "CryfsBackend");
- 
--    return process("cryfs", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
-+    return process("@cryfs@", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
- }
- 
- } // namespace PlasmaVault
 diff --git a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
 index 8636e4e..4f4ba0d 100644
 --- a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
@@ -46,16 +33,3 @@ index f488d00..6b76565 100644
              | cast<QString>()
              | onError([this] {
                  d->updateMessage(i18n("Failed to fetch the list of applications using this vault"));
-diff --git a/kded/ui/cryfscypherchooserwidget.cpp b/kded/ui/cryfscypherchooserwidget.cpp
-index bbe76ef..dbd27ac 100644
---- a/kded/ui/cryfscypherchooserwidget.cpp
-+++ b/kded/ui/cryfscypherchooserwidget.cpp
-@@ -39,7 +39,7 @@ void CryfsCypherChooserWidget::initializeCyphers()
-     // TODO: This needs to be prettier -- for modules to be able
-     // to reach their backends directly
-     auto process = new QProcess();
--    process->setProgram("cryfs");
-+    process->setProgram("@cryfs@");
-     process->setArguments({"--show-ciphers"});
- 
-     auto env = process->processEnvironment();

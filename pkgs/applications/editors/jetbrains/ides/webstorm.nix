@@ -12,20 +12,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.1.3.tar.gz";
-      hash = "sha256-lryIoVxoytyDyfgjnobQ3e94wIIohmIKL88fwf2I49w=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1.tar.gz";
+      hash = "sha256-FEe4EDYWJwGt5hEdbf0A6g2+ZyIrX4ztzQYmZe5GZPg=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.1.3-aarch64.tar.gz";
-      hash = "sha256-oZQaxpVV0O4WlDE6Ia+KzHIF0SfWQBubBFIopSRMbvE=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.1.3.dmg";
-      hash = "sha256-KUcQRWYUD/+4HHWnkGuqoltqL2an0WQkUEfUcttwjCI=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-pt1MwGNXHT1QlePbVdtkwtYpenKlf53DGDG24+PM9tc=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.1.3-aarch64.dmg";
-      hash = "sha256-1N1RtN1QLvuJ1QL8jbN5TdbOHAHSN84W9XEK2PEPijI=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-WtvL7DLrchsKlMPrsYeluxoPo/sXBaUw0WO1mlxtHkc=";
     };
   };
   # update-script-end: urls
@@ -39,8 +35,8 @@ mkJetBrainsProduct {
   product = "WebStorm";
 
   # update-script-start: version
-  version = "2026.1.3";
-  buildNumber = "261.25134.101";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.341";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

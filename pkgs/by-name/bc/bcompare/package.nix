@@ -25,12 +25,10 @@ let
       sha256 = "sha256-CCSRNGWIYVKAoQVVJ8McDUtc45nK0S4CdamcT5uVlQM=";
     };
 
-    x86_64-darwin = fetchurl {
+    aarch64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
       sha256 = "sha256-R+G2Zlr074i2W4GaEDweK0c0q8tnzjs6M0N106WVAlg=";
     };
-
-    aarch64-darwin = srcs.x86_64-darwin;
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;

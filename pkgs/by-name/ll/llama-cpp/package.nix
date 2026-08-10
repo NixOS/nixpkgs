@@ -34,11 +34,10 @@
   npmHooks,
 
   pkg-config,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
+  metalSupport ? stdenv.hostPlatform.isDarwin && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
   openssl,
-  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -81,7 +80,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "9747";
+  version = "10273";
 
   outputs = [
     "out"
@@ -92,7 +91,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-ecXJxidnlQRAyDftYIcTrER5U3+YQ+XfvAxA29pj+uI=";
+    hash = "sha256-A4VLmyOr19NaWI/L//BzK30EuaWNI+38em8YABvQ3wE=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -125,7 +124,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ [ openssl ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-0dctM/apI3ysMIEVBaBXO9hZMWskpJpNpOws1gwiOYc=";
+  npmDepsHash = "sha256-B7uEynAG70a3xauBKc20RuFa9cnWaWzVBCh+LPLBnIM=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -190,9 +189,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
   postInstall = ''
-    # Match previous binary name for this package
-    ln -sf $out/bin/llama-cli $out/bin/llama
-
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
 
@@ -206,9 +202,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      metal = llama-cpp.override { metalSupport = true; };
-    };
     updateScript = nix-update-script {
       attrPath = "llama-cpp";
       extraArgs = [

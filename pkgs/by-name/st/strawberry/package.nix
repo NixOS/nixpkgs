@@ -30,7 +30,6 @@
   taglib,
   util-linux,
   sparsehash,
-  rapidjson,
 
   # tests
   gtest,
@@ -38,14 +37,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.18";
+  version = "1.2.21";
 
   src = fetchFromGitHub {
-    owner = "jonaski";
+    owner = "strawberrymusicplayer";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-5h1psYJDKnFFgIGZY3ecCttgkR+zuUwa3b/A4keLk9o=";
+    hash = "sha256-FI+lyVx9x82o2HZ9YysIlPsSAl94YUD8nrHP0HsmO2E=";
   };
+
+  patches = [
+    # Link tests against missing gstreamer app
+    # https://github.com/strawberrymusicplayer/strawberry/pull/2252
+    ./strawberry-tests-link-gst-app.patch
+  ];
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
   postPatch = ''
@@ -71,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     taglib
     sparsehash
-    rapidjson
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -108,6 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # defaults to "xcb" otherwise, which requires a display
     export QT_QPA_PLATFORM=offscreen
+
+    # The waveformloader test calls QStandardPaths::setTestModeEnabled(true) which
+    # expects a writable $HOME
+    # https://doc.qt.io/qt-6/qstandardpaths.html#setTestModeEnabled
+    # https://github.com/strawberrymusicplayer/strawberry/blob/dc831c03bd5863f133dd9f57eba75dafb27e5cf8/tests/src/waveformloader_test.cpp#L67
+    export HOME=$(mktemp -d)
   '';
   doCheck = true;
 

@@ -1,7 +1,6 @@
 {
   buildDunePackage,
   lib,
-  ocaml,
   fetchFromGitHub,
   which,
   ocsigen_server,

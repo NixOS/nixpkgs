@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZK8yXitfHT2al2xmYM8uk7is5zelLr3JYS7WcaUR834=";
+    hash = "sha256-iU9rMBiI+nlEqGthb/zHKsG/KPdBd16BKUsvzyCR0UY=";
   };
 
-  cargoHash = "sha256-ujEIuUNEcHftpeHD6UX8CzoQ1tEcfL0sT3H0z81UBfc=";
+  cargoHash = "sha256-PX2tRsNC60S2sc6kVuRS7uqFvX4CYV37v7HOqspEb7M=";
 
   nativeBuildInputs = [
     cmake

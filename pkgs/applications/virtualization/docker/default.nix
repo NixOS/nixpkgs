@@ -143,6 +143,27 @@ let
         hash = mobyHash;
       };
 
+      extraMobyPath = lib.optionals stdenv.hostPlatform.isLinux (
+        lib.makeBinPath [
+          iproute2
+          iptables
+          e2fsprogs
+          xz
+          xfsprogs
+          procps
+          util-linuxMinimal
+          gitMinimal
+        ]
+      );
+
+      extraMobyUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (
+        lib.makeBinPath [
+          rootlesskit
+          slirp4netns
+          fuse-overlayfs
+        ]
+      );
+
       moby = buildGoModule (
         lib.optionalAttrs stdenv.hostPlatform.isLinux {
           pname = "moby";
@@ -169,27 +190,6 @@ let
           ++ lib.optionals withBtrfs [ btrfs-progs ]
           ++ lib.optionals withSystemd [ systemd ]
           ++ lib.optionals withSeccomp [ libseccomp ];
-
-          extraPath = lib.optionals stdenv.hostPlatform.isLinux (
-            lib.makeBinPath [
-              iproute2
-              iptables
-              e2fsprogs
-              xz
-              xfsprogs
-              procps
-              util-linuxMinimal
-              gitMinimal
-            ]
-          );
-
-          extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (
-            lib.makeBinPath [
-              rootlesskit
-              slirp4netns
-              fuse-overlayfs
-            ]
-          );
 
           postPatch = ''
             patchShebangs hack/make.sh hack/make/
@@ -218,7 +218,9 @@ let
             install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
             makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
-              --prefix PATH : "$out/libexec/docker:$extraPath"
+              --prefix PATH : "$out/libexec/docker${
+                lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
+              }"
 
             ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
             ln -s ${docker-containerd}/bin/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"} $out/libexec/docker/containerd-shim${lib.optionalString (lib.versionAtLeast version "29.0.0") "-runc-v2"}
@@ -233,7 +235,9 @@ let
             # rootless Docker
             install -Dm755 ./contrib/dockerd-rootless.sh $out/libexec/docker/dockerd-rootless.sh
             makeWrapper $out/libexec/docker/dockerd-rootless.sh $out/bin/dockerd-rootless \
-              --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
+              --prefix PATH : "$out/libexec/docker${
+                lib.optionalString (extraMobyPath != "") ":${extraMobyPath}"
+              }${lib.optionalString (extraMobyUserPath != "") ":${extraMobyUserPath}"}"
 
             runHook postInstall
           '';
@@ -335,7 +339,7 @@ let
           install -Dm755 ./build/docker $out/libexec/docker/docker
 
           makeWrapper $out/libexec/docker/docker $out/bin/docker \
-            --prefix PATH : "$out/libexec/docker:$extraPath" \
+            --prefix PATH : "$out/libexec/docker" \
             --prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"
         ''
         + lib.optionalString (!clientOnly) ''
@@ -420,18 +424,18 @@ in
 
   docker_29 =
     let
-      version = "29.5.3";
+      version = "29.6.2";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-ZYfBWNVp7w8ZKdRA6bmDVQV4UEp+t8lWehInvtfysxM=";
+      cliHash = "sha256-WpPSePMCfWAVxCkX1nZyI+sra/Vug009ZPmnVKDaX0I=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-D+XjHsKUFgMBCQsFI825JIGHEQmDt3NQCwpTdu6XSc8=";
-      runcRev = "v1.3.5";
-      runcHash = "sha256-Swphxbu/OLkUrfRjLMZIVGwYb7AN0xHdyxm0ysAVam0=";
-      containerdRev = "v2.2.4";
-      containerdHash = "sha256-F0lw7zh4V9JlFQGkE4RNT1VLX8WWLgZAAvbP12jnRMw=";
+      mobyHash = "sha256-zrvrZCRUuiZ2vixZNOUFeGmDehHzSI+FzDMzV1gMqMc=";
+      runcRev = "v1.3.6";
+      runcHash = "sha256-cBMYZOElWHQ4OkF2NlYJSZrlW4833WD8CRJRkkXeKJc=";
+      containerdRev = "v2.2.6";
+      containerdHash = "sha256-Ngo9x847cXFYPnj/0I+g7BeV7e1/5T2YXfA1zkIdiPg=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

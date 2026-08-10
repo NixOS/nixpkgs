@@ -9,11 +9,11 @@
 # SHA of ${finalAttrs.version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
 let
-  rev = "a988242e8bbded3ef4602eda48addcfac24a1a91"; # update-commit-sha
+  rev = "310c51d9874a4d10d021ec8a19f8b42292ec0bfc"; # update-commit-sha
 in
 buildGoModule (finalAttrs: {
   pname = "sonobuoy";
-  version = "0.57.3"; # Do not forget to update `rev` above
+  version = "0.57.5"; # Do not forget to update `rev` above
 
   ldflags =
     let
@@ -30,10 +30,10 @@ buildGoModule (finalAttrs: {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YFItnwU08g4pVo4OOHscRmPRVXyr+R9YWYTxhSzd7iI=";
+    hash = "sha256-yd2a4FeWpONn/SQ1UEVN6f1RwgOT4Sbs6rSYDAuTqCU=";
   };
 
-  vendorHash = "sha256-QjVnC6CZXuw6qLNyX9ut2g1Ws1cYO1JuT043aqqeF0Q=";
+  vendorHash = "sha256-saReHf6oYu1IydP0qNEuFCtrqHDsHoHlPJpo9kSIEiQ=";
 
   subPackages = [ "." ];
 

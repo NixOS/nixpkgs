@@ -95,11 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
   };
 
-  patches = lib.optional stdenv.hostPlatform.is32bit (fetchpatch {
-    name = "fix-32bit-VkImage-null.patch";
-    url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
-    hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
-  });
+  patches = [
+    (fetchpatch {
+      name = "fix-32bit-VkImage-null.patch";
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
+      hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -307,7 +309,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gtk.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";

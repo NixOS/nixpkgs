@@ -32,6 +32,7 @@
   libslirp,
   libcbor,
   darwin,
+  apple-sdk_15,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -98,6 +99,8 @@
   capstone,
   valgrindSupport ? false,
   valgrind-light,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
+  brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -140,11 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "11.0.1";
+  version = "11.0.3";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DSNfWCAnjZFKMVXsJ6+OQljWl+qJKJVXCAfWnAy4zWQ=";
+    hash = "sha256-2l/P/DJ2KCBWi4KO1DCnKIZNNNULbS8wNYWXdgy7BSM=";
   };
 
   depsBuildBuild = [
@@ -251,7 +254,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
-  ++ lib.optionals valgrindSupport [ valgrind-light ];
+  ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals brlttySupport [ brltty ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -275,6 +280,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # Fix compilation of the TLS migration tests when gnutls is available
+    # but libtasn1 is not, as in the minimal build, see #547163.
+    # Submitted upstream, remove when included in a release:
+    # https://lists.gnu.org/archive/html/qemu-devel/2026-07/msg08469.html
+    ./fix-tls-tests-without-tasn1.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -336,6 +347,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional brlttySupport "--enable-brlapi"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"

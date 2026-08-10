@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xQ2WD0S4GiFLYqQlOE+3V23bIs7AqJY6Xn9m4sjc10I=";
+    hash = "sha256-nYfS9HXWTKcvVrq+wm5cgvB7keMAQPmKEe8bI0jngFg=";
   };
 
   postPatch =

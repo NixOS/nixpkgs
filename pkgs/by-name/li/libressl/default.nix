@@ -23,6 +23,9 @@ let
       pname = "libressl";
       inherit version;
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       src = fetchurl {
         url = "mirror://openbsd/LibreSSL/libressl-${version}.tar.gz";
         inherit hash;
@@ -60,6 +63,23 @@ let
       preCheck = ''
         export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
         export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
+      ''
+      + lib.optionalString (stdenv.hostPlatform.isElf && buildShared) ''
+        # Bail if any shared object has executable stack enabled. This can
+        # happen when an object produced from an assmbly file in libcrypto is
+        # missing a .note.GNU-stack section. An executable stack is dangerous
+        # and unintentional, but without this check the derivation will build
+        # and even run if W^X is not enforced; it would fail dangerously.
+        objdump -p **/*.so | awk '
+          BEGIN { res = 0 }
+          /file format/ { file = $1 }
+          /STACK/ { stack = 1; next }
+          stack {
+            if ($0 ~ /flags.*x/) { print file " has executable stack"; res = 1 }
+            stack = 0
+          }
+          END { exit res }
+        '
       '';
       postCheck = ''
         export ${ldLibPathEnvName}=$PREVIOUS_${ldLibPathEnvName}
@@ -80,6 +100,17 @@ let
         moveToOutput "share/man/man1/nc.1.gz" "$nc"
       '';
 
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        # Check whether the build target actually contains our cacert.
+        # A simple binary match for the path is enough.
+        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+
+        runHook postInstallCheck
+      '';
+
       meta = {
         description = "Free TLS/SSL implementation";
         homepage = "https://www.libressl.org";
@@ -96,6 +127,7 @@ let
         maintainers = with lib.maintainers; [
           thoughtpolice
           fpletz
+          ruuda
         ];
         inherit knownVulnerabilities;
 
@@ -111,37 +143,40 @@ let
         identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" version;
       };
     };
+
   # https://github.com/libressl/portable/pull/1206
+  # This got merged in February 2026 and is included as of LibreSSL 4.3.0.
   common-cmake-install-full-dirs-patch = fetchpatch {
     url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
     hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
   };
+
+  # https://github.com/libressl/portable/issues/1295
+  # https://github.com/libressl/portable/pull/1303
+  tls-default-ca-patch = fetchpatch {
+    url = "https://github.com/libressl/portable/commit/c85e07d0d68129fc1b1c9039b266099c8d735c3d.patch";
+    hash = "sha256-oNL3v8Ef1HrayXn+/3T4UhHLJos8eVMlqebVyaxnWVo=";
+  };
 in
 {
-  libressl_4_1 = generic {
-    version = "4.1.2";
-    hash = "sha256-+6Ti+ip/UjBt96OJlwoQ6YuX6w7bKZqf252/SZmcYeE=";
-    # Fixes build on loongarch64
-    # https://github.com/libressl/portable/pull/1184
-    postPatch = ''
-      mkdir -p include/arch/loongarch64
-      cp ${
-        fetchurl {
-          url = "https://github.com/libressl/portable/raw/refs/tags/v4.1.0/include/arch/loongarch64/opensslconf.h";
-          hash = "sha256-68dw5syUy1z6GadCMR4TR9+0UQX6Lw/CbPWvjHGAhgo=";
-        }
-      } include/arch/loongarch64/opensslconf.h
-    '';
-    patches = [
-      common-cmake-install-full-dirs-patch
-    ];
-  };
-
+  # 4.2 was released October 2025 and will become unsupported on October 22,
+  # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
     version = "4.2.1";
     hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
       common-cmake-install-full-dirs-patch
+      tls-default-ca-patch
+    ];
+  };
+
+  # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
+  # one year after the release of OpenBSD 7.9.
+  libressl_4_3 = generic {
+    version = "4.3.2";
+    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
+    patches = [
+      tls-default-ca-patch
     ];
   };
 }

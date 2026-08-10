@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "drone-runner-ssh";
-  version = "unstable-2022-12-22";
+  version = "1.0.1-unstable-2022-12-22";
 
   src = fetchFromGitHub {
     owner = "drone-runners";

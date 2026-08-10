@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.42";
+  version = "1.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
     tag = "v${version}";
-    hash = "sha256-/xinm/Jz4JVmm0jioLAhkbBueZCM0ehgt4gsgE7hX6I=";
+    hash = "sha256-b/nzAkWFOGPqr/cMX38WIQaOz7n+9d6gtMIgtFAd+yY=";
   };
 
   nativeBuildInputs = [ flit-core ];

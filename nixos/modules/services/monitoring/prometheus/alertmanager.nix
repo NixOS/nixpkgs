@@ -200,11 +200,8 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        preStart = ''
-          ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
-                                                   -i "${alertmanagerYml}"
-        '';
         serviceConfig = {
+          ExecStartPre = "${lib.getBin pkgs.envsubst}/bin/envsubst -i '${alertmanagerYml}' -o '/tmp/alert-manager-substituted.yaml'";
           ExecStart =
             "${cfg.package}/bin/alertmanager"
             + lib.optionalString (lib.length cmdlineArgs != 0) (

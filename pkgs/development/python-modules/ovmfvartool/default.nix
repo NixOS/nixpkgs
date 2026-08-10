@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyyaml,
+  nixosTests,
 }:
 
 buildPythonPackage {
@@ -11,10 +12,11 @@ buildPythonPackage {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "hlandau";
+    # https://github.com/hlandau/ovmfvartool/pull/4
+    owner = "baloo";
     repo = "ovmfvartool";
-    rev = "45e6b1e53967ee6590faae454c076febce096931";
-    hash = "sha256-XbvcE/MXNj5S5N7A7jxdwgEE5yMuB82Xg+PYBsFRIm0=";
+    rev = "6a17190131bf44699ea27815543a65efff880142";
+    hash = "sha256-lIneg3kL21oxqjsraogGlOVsgmYnp38CPav1TwBg0p0=";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -23,6 +25,10 @@ buildPythonPackage {
   doCheck = false;
 
   pythonImportsCheck = [ "ovmfvartool" ];
+
+  passthru.tests = {
+    inherit (nixosTests.nixos-test-driver) efivars;
+  };
 
   meta = {
     description = "Parse and generate OVMF_VARS.fd from Yaml";

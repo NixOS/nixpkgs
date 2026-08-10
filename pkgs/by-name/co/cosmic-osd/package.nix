@@ -15,27 +15,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.16";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-jv28hxhQUcUDLnOwU3xQJwCU+s52pwDNs8Gf4I5Hp9k=";
+    hash = "sha256-a1+JJILBiiUZywXD5iuxlrph0lsAAAtK/J4biMtfQ3Y=";
   };
 
-  cargoHash = "sha256-YwZXlhggrUddxour+/S1mSL3Fq1mzvFaOHArLSnfPvc=";
-
-  cargoPatches = [
-    # A different reference to the `cargo-settings` crate was added in:
-    # <https://github.com/pop-os/cosmic-osd/pull/204>
-    # Remove this patch once upstream fixes their lockfile.
-    ./deduplicate-cosmic-settings-crate.patch
-  ];
+  cargoHash = "sha256-5hput7WMstON8YG9GNNU61T+bQevGV72mAHYMtJJXng=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
+
+  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   nativeBuildInputs = [
     just
@@ -61,8 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   passthru = {
     tests = {

@@ -6,7 +6,7 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -22,12 +22,11 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
-    "x86_64-darwin" = "darwin";
     "aarch64-darwin" = "darwin-arm64";
   };
 
@@ -35,20 +34,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.6.5";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Rz8g03JHQ+52lOd92413ArE4LixioCFNSG7ytduxsA=";
+    hash = "sha256-7Uoo8vYaci8ROk5pqs14dNrU3q7UsadDXyw1mW8Mx5I=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-WXlzUtiaphaSngWd6aXQuOHiBb3a3bCNgIHypMP4YXo=";
+    vendorHash = "sha256-weg5MRidW8JId13Ug1VaVgaIcJqydGBR/EquFOS3QO4=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -71,13 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
     tags = [ "fts5" ];
-  };
 
-  # this should contain a 'packages' key, but it doesn't...
-  # we can remove it because it's not needed to build
-  postPatch = ''
-    rm pnpm-workspace.yaml
-  '';
+    # filepath.ToSlash does not convert Windows path separators on Unix.
+    checkFlags = [ "-skip=^TestSyObjectBase/windows_backslash$" ];
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -99,11 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-M2Fdie0XK2Pck/fP7Djxb7XNAQXpJO2i2kSJrDj1G0E=";
+    fetcherVersion = 4;
+    hash = "sha256-i7llORlVU1CCmyVCvJr7xCQffTmbmIA9rT68Raqg5y8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";

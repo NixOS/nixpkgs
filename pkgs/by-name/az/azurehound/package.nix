@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "azurehound";
-  version = "2.12.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w8PmSt+QvU0HELkgdYLfIUgK3R5vCYzlPbMyrHztiPw=";
+    hash = "sha256-4uc4XSjvuMUSeCsJl9uHBFIaeG1KZ1xDaACXnXkp7v0=";
   };
 
   vendorHash = "sha256-WF46wXaNU/Em0KpF6hkuuJ+7K1IKLGqpNS/HxpxX5WY=";

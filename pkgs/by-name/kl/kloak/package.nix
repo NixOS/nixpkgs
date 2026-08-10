@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kloak";
-  version = "0.8.5-1";
+  version = "0.8.9-1";
 
   src = fetchFromGitHub {
     owner = "Whonix";
     repo = "kloak";
     tag = finalAttrs.version;
-    hash = "sha256-fDmqA00b5ESS9LW2QIeEx3wWb0lhgkqoBYcw1XYDI7k=";
+    hash = "sha256-PzKaOaGDzn+1rbfW1daY/DcAwNflJ+nMaBdtiVSQJf0=";
   };
 
   strictDeps = true;

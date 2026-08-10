@@ -12,6 +12,9 @@
   pybind11,
   torch,
 
+  # build-system
+  setuptools_80,
+
   # dependencies
   addict,
   mmengine,
@@ -79,6 +82,10 @@ buildPythonPackage (finalAttrs: {
       libcusparse # cusparse.h
     ]
   );
+
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  # also applies here
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict
@@ -150,7 +157,7 @@ buildPythonPackage (finalAttrs: {
     description = "Foundational Library for Computer Vision Research";
     homepage = "https://github.com/open-mmlab/mmcv";
     changelog = "https://github.com/open-mmlab/mmcv/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
 })

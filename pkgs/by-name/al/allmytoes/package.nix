@@ -2,6 +2,8 @@
   lib,
   nix-update-script,
   rustPlatform,
+  makeWrapper,
+  shared-mime-info,
   fetchFromGitLab,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +17,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-BYKcDJN/uKESj0pnb2xvrx1lO6rOGdi+PVT6ywZqjbQ=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   cargoHash = "sha256-Pzbruv1E4mMohw//lf1JBoK+4BHDJVr4/9xXE4FrWbA==";
+
+  postInstall = ''
+    wrapProgram "$out/bin/allmytoes" --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

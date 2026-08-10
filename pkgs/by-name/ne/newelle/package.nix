@@ -12,6 +12,7 @@
   vte-gtk4,
   gsettings-desktop-schemas,
   gtksourceview5,
+  glib-networking,
   webkitgtk_6_0,
   lsb-release,
   bash,
@@ -54,11 +55,13 @@ python3Packages.buildPythonApplication {
     gsettings-desktop-schemas
     gtksourceview5
     webkitgtk_6_0
+    glib-networking
   ];
 
   dependencies = with python3Packages; [
     pygobject3
     libxml2
+    cssselect
     pydub
     gtts
     speechrecognition
@@ -75,6 +78,7 @@ python3Packages.buildPythonApplication {
     llama-index-readers-file
     google-genai
     anthropic
+    mcp
   ];
 
   strictDeps = true;
@@ -104,6 +108,8 @@ python3Packages.buildPythonApplication {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      michaelAllen
+    ];
   };
 }

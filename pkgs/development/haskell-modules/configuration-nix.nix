@@ -529,7 +529,9 @@ builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
+  # Upstream has switched to Lix as its supported Nix implementation.
+  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.lix; }) [
+    (enableCabalFlag "lix")
     # nix-serve-ng isn't regularly released to Hackage
     (overrideSrc {
       src = pkgs.fetchFromGitHub {
@@ -874,17 +876,6 @@ builtins.intersectAttrs super {
     "--extra-lib-dirs=${pkgs.smpeg}/lib"
     "--extra-include-dirs=${pkgs.smpeg.dev}/include/smpeg"
   ] super.SDL-mpeg;
-
-  # https://github.com/ivanperez-keera/hcwiid/pull/4
-  hcwiid = overrideCabal (drv: {
-    configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.bluez.out}/lib"
-      "--extra-lib-dirs=${pkgs.cwiid}/lib"
-      "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez.dev}/include"
-    ];
-    prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
-  }) super.hcwiid;
 
   # cabal2nix doesn't pick up some of the dependencies.
   ginsu =

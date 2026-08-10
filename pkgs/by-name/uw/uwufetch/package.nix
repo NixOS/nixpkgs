@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.1";
 
   src = fetchFromGitHub {
-    owner = "TheDarkBug";
+    owner = "ad-oliviero";
     repo = "uwufetch";
     rev = finalAttrs.version;
     hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Meme system info tool for Linux";
-    homepage = "https://github.com/TheDarkBug/uwufetch";
+    homepage = "https://github.com/ad-oliviero/uwufetch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bbjubjub ];

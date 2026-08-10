@@ -90,6 +90,9 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
+    # https://core.tcl-lang.org/thread/tktview/30e201c7111a438e2fe6aadc9d733b954874cbb9
+    env = lib.optionalAttrs (lib.versionAtLeast version "9.0") { ZIPFS_BUILD = 0; };
+
     buildFlags = lib.optionals stdenv.hostPlatform.isStatic [
       # Don't use the default Make target for static,
       # since it builds shared libraries for bundled packages.

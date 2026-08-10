@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -20,7 +20,7 @@
   pixman,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
   version = "0.5.1";
 
@@ -58,6 +58,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = nix-update-script { };

@@ -5,7 +5,7 @@
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
-  pytestCheckHook,
+  pytest9_0CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cov-stub
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pythonImportsCheck = [ "aionut" ];

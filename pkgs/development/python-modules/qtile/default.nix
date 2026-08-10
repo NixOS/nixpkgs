@@ -16,7 +16,7 @@
   dbus-fast,
   iwlib,
   libcst,
-  mpd2,
+  python-mpd2,
   prompt-toolkit,
   psutil,
   pulsectl-asyncio,
@@ -118,7 +118,7 @@ buildPythonPackage (finalAttrs: {
     dbus-fast
     iwlib
     libcst
-    mpd2
+    python-mpd2
     # prompt-toolkit used for qtile repl
     # see https://github.com/qtile/qtile/blob/master/libqtile/scripts/repl.py
     prompt-toolkit
@@ -209,7 +209,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://www.qtile.org/";
+    homepage = "https://qtile.org/";
     license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     changelog = "https://github.com/qtile/qtile/blob/v${finalAttrs.version}/CHANGELOG";
@@ -218,7 +218,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
-      doronbehar
     ];
   };
 })

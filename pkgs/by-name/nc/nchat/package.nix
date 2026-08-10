@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "5.15.26";
+  version = "5.16.9";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-SJG+yKYm1T8VjhfTCUzFXwgBClPqa3fqnOUOwDOyRhg=";
+    hash = "sha256-Hl8LzROGn9oAV9G4hnnvDAltPte+2krEEGPNTmMzUoU=";
   };
 
   libcgowm = buildGoModule {
@@ -31,7 +31,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-KMTMxnjz28pVcIDKkJ/l7x3iw5GtEk8LkG4ccgsjdCA=";
+    vendorHash = "sha256-t7WG9xce1UC5FB6LFIT7Oacc2rO/BqZ/p5JP0AtPDoo=";
 
     buildPhase = ''
       runHook preBuild

@@ -10,7 +10,7 @@
 mkRocqDerivation {
 
   namePrefix = [
-    "rocq-core"
+    "rocq"
     "mathcomp"
   ];
   pname = "real-closed";
@@ -18,6 +18,7 @@ mkRocqDerivation {
   inherit version;
   release = {
     "2.0.5".sha256 = "sha256-nns1TF3isv8FpWqtXilfMEVKvR50fvS6MXnYVzbCzVs=";
+    "2.0.6".sha256 = "sha256-c+0nlNTjTf115vjvnpLrgXye5YdjsWlsCBpGZj+hU9E=";
   };
 
   defaultVersion =
@@ -34,7 +35,8 @@ mkRocqDerivation {
     lib.switch
       [ rocq-core.version mathcomp.version ]
       [
-        (case (range "9.0" "9.2") (isGe "2.5.0") "2.0.5")
+        (case (range "9.0" "9.3") (isGe "2.6.0") "2.0.6")
+        (case (range "9.0" "9.2") (isEq "2.5.0") "2.0.5")
       ]
       null;
 

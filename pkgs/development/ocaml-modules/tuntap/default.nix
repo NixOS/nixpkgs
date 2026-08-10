@@ -8,11 +8,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "tuntap";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-tuntap/releases/download/v${finalAttrs.version}/tuntap-${finalAttrs.version}.tbz";
-    hash = "sha256-J8YBl8w7xFloDqt/Xiz03KCIls5BR72VT8X/LYZMDN0=";
+    hash = "sha256-DfztWPkNhdSIX/TaldCoNhAA/AZwQDqCdRmDOyOORu0=";
   };
 
   propagatedBuildInputs = [

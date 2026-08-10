@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mediawiki-langcodes";
-  version = "0.2.23";
+  version = "0.2.25";
   pyproject = true;
 
   # Using fetchPypi instead of fetching from source for technical reason.
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "mediawiki_langcodes";
     inherit (finalAttrs) version;
-    hash = "sha256-X4yWykEIBrdPnYQlzJ999lYI0v3PKUOjTH7aGyNx1n8=";
+    hash = "sha256-sZu96vMqDW5egNByDEJ+xRlOO61PVyQ2XyiHs27tGSg=";
   };
 
   build-system = [ setuptools ];

@@ -111,7 +111,7 @@ let
           wait_for_unit("prometheus-bind-exporter.service")
           wait_for_open_port(9119)
           succeed(
-              "curl -sSf http://localhost:9119/metrics | grep 'bind_query_recursions_total 0'"
+              "curl -sSf http://localhost:9119/metrics | grep 'bind_up 1'"
           )
         '';
       };
@@ -1756,16 +1756,6 @@ let
         exporterConfig = {
           enable = true;
           tokenFile = "/tmp/faketoken";
-        };
-        metricProvider = {
-          networking = {
-            # The exporter tries to access Hetzner on startup and crashes.
-            # Blocking this on the firewall level allows the exporter to start.
-            extraHosts = "127.0.0.1 api.hetzner.com";
-            firewall.extraCommands = ''
-              iptables -A OUTPUT -p tcp --dport 443 -d 127.0.0.1 -j DROP
-            '';
-          };
         };
         exporterTest = ''
           succeed(

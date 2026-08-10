@@ -1,9 +1,11 @@
 {
+  lib,
   mkKdeDerivation,
   plasma-workspace,
   pkg-config,
   qtwebengine,
   libcec,
+  libcec_platform,
   sdl3,
 }:
 
@@ -19,7 +21,7 @@ mkKdeDerivation {
   '';
 
   extraCmakeFlags = [
-    "-DQT_FIND_PRIVATE_MODULES=ON"
+    (lib.cmakeBool "QT_FIND_PRIVATE_MODULES" true)
   ];
 
   extraNativeBuildInputs = [
@@ -30,6 +32,7 @@ mkKdeDerivation {
     qtwebengine
 
     libcec
+    libcec_platform
     sdl3
   ];
 

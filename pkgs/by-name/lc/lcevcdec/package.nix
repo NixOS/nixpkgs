@@ -1,4 +1,5 @@
 {
+  cctools,
   cmake,
   fetchFromGitHub,
   git,
@@ -46,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     git
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   buildInputs = [

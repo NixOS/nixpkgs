@@ -29,6 +29,5 @@ builtins.listToAttrs (
       "nginxMainline"
       "nginxShibboleth"
       "openresty"
-      "tengine"
     ]
 )

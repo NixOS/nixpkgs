@@ -1,21 +1,18 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   binaryen,
   cargo,
   fetchFromGitHub,
-  fetchYarnDeps,
   nodejs,
   rustPlatform,
   rustc,
   sd,
-  wasm-bindgen-cli_0_2_108,
+  wasm-bindgen-cli_0_2_125,
   wasm-pack,
-  yarnConfigHook,
-  yarnBuildHook,
   writeScript,
   extraBuildEnv ? { },
-  # This package contains serveral sub-applications. This specifies which of them you want to build.
+  # This package contains several sub-applications. This specifies which of them you want to build.
   enteApp ? "photos",
   # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
   # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you
@@ -25,12 +22,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.36";
+  version = "1.3.59";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [
       "rust"
@@ -38,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-o75r8LFgG3BT3IIPiD9x6gY3fRDoxJ3ZTBPAYr3hLWI=";
+    hash = "sha256-M2JFNfozDU6AeHpPul6rLtwxjc//CdxTLjl4vWojv8w=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -50,35 +47,36 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-NYPxaVYEaJVcsRX6wLVJd+/UUJrNel0zTPYGdEv8a+U=";
+    hash = "sha256-66MZPxwXkvna3IfDGH6vPJ5CxTaYl1AJ/7qGYKHt1Mg=";
   };
-  cargoRoot = "packages/wasm";
+  cargoRoot = "../rust";
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-eGu+s8g0nGijYfjo8RkT5/iBfbwk5cBMacbe/gO03NI=";
-  };
+  npmDepsHash = "sha256-+ygPdfrgVGephAtef7VhRrLGLtTb503BlaJbiIzfEl8=";
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
     binaryen
     cargo
     rustPlatform.cargoSetupHook
     rustc
     rustc.llvmPackages.lld
     nodejs
-    wasm-bindgen-cli_0_2_108
+    wasm-bindgen-cli_0_2_125
     wasm-pack
   ];
 
-  # See: https://github.com/ente-io/ente/blob/main/web/apps/photos/.env
+  # See: https://github.com/ente/ente/blob/main/web/apps/photos/.env
   env = extraBuildEnv;
 
   postPatch =
+    # The Rust workspace lives in `../rust`, outside the `web` sourceRoot, so it
+    # is not made writable during unpacking. `wasm-pack` needs to create a cargo
+    # target directory there, so make it writable.
+    ''
+      chmod -R u+w ../rust
+    ''
     # Use our `wasm-pack` binary, rather than the Node version, which is
     # just a wrapper that tries to download the actual binary
-    ''
+    + ''
       substituteInPlace \
         packages/wasm/package.json \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
@@ -92,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  yarnBuildScript = "build:${enteApp}";
+  npmBuildScript = "build:${enteApp}";
   installPhase =
     let
       distName = if enteApp == "payments" then "dist" else "out";
@@ -139,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "Updated to version $new_version, checking wasm-bindgen..."
 
       # Fetch Cargo.lock from GitHub instead of cloning repository
-      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
+      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/rust/Cargo.lock"
 
       wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
 
@@ -163,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Ente application web frontends";
     homepage = "https://ente.io/";
-    changelog = "https://github.com/ente-io/ente/releases";
+    changelog = "https://github.com/ente/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox

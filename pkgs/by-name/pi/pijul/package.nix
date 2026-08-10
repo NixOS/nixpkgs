@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "pijul";
-  version = "1.0.0-beta.14";
+  version = "1.0.0-beta.21";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-Ex8fCIcif2lmZ3ytLARwgGzEeq6GB2NDvwd96niDKbQ=";
+    hash = "sha256-IC47l6FzlopoiVZmKojPzIQzBS6UzdgE397no6GzrR4=";
   };
 
-  cargoHash = "sha256-yPzDzfD+QdhAXdyvzDV1z9HDe1mwF9cRCsliejr8H88=";
+  cargoHash = "sha256-Ldb+CpKiVvNOeMhdD/hfQfAAMwdwUy/npY85VBPBq5k=";
 
   # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       gal_bolle
       dywedir

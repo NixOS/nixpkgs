@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-hcli";
-  version = "0.18.2";
+  version = "0.18.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "HexRaysSA";
     repo = "ida-hcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rxeu9vAH4O80wjmLvHREOL0MhKpUEilU04S5KqN5/IQ=";
+    hash = "sha256-n8hLgVgxqaU7Au6HVgOEUKOm1LV3Wx/v42gi2gOD3Jk=";
   };
 
   build-system = [ setuptools ];

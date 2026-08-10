@@ -1,9 +1,9 @@
 {
   stdenv,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  sdl3,
+  sdl3-image,
+  sdl3-mixer,
+  sdl3-ttf,
   cmake,
   fetchFromGitHub,
   fmt,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lincity-ng";
-  version = "2.14.2";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "lincity-ng";
     repo = "lincity-ng";
     tag = "lincity-ng-${finalAttrs.version}";
-    hash = "sha256-HW+bB9xnrok8tWKIJJUt3Qgo5e9HmI6NZORG4PazmEM=";
+    hash = "sha256-NgOMbFsK/8njP3hOT9N9E9TRipSW+7CAw1oVDW1F5QU=";
   };
 
   hardeningDisable = [ "format" ];
@@ -47,10 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
+    sdl3
+    sdl3-image
+    sdl3-mixer
+    sdl3-ttf
     libx11
     libwebp
     libtiff
@@ -68,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = "
-    -I${lib.getDev SDL2_image}/include/SDL2
-    -I${lib.getDev SDL2_mixer}/include/SDL2
+    -I${lib.getDev sdl3-image}/include/SDL3
+    -I${lib.getDev sdl3-mixer}/include/SDL3
   ";
 
   meta = {

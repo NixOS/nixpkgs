@@ -22,7 +22,7 @@ maven.buildMavenPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/java";
 
-  mvnHash = "sha256-LK673DYibhntPsHXvCM676ZzsE7tYIWPlQ2LFoCVvpc=";
+  mvnHash = "sha256-TWp/vlxqlK+8zqDzQySBKpLRUpLCG7Oa1C/1dIlwmsw=";
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 
   nativeBuildInputs = [

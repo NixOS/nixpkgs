@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "conglomerate";
-  version = "unstable-2023-01-19";
+  version = "1.6.80-unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

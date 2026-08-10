@@ -1,5 +1,5 @@
 {
-  buildGo126Module,
+  buildGoModule,
   cairo,
   copyDesktopItems,
   fetchFromCodeberg,
@@ -15,7 +15,8 @@
   libsecret,
   librsvg,
   makeDesktopItem,
-  makeWrapper,
+  makeBinaryWrapper,
+  nix-update-script,
   pango,
   pkg-config,
   symlinkJoin,
@@ -38,7 +39,8 @@ let
     ];
   };
 in
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
   pname = "tonearm";
   version = "1.4.2";
   src = fetchFromCodeberg {
@@ -66,7 +68,7 @@ buildGo126Module (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
     wrapGAppsHook4
   ];
 
@@ -106,6 +108,8 @@ buildGo126Module (finalAttrs: {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "GTK client for TIDAL written in Golang";
     homepage = "https://codeberg.org/dergs/Tonearm";
@@ -115,5 +119,6 @@ buildGo126Module (finalAttrs: {
       nilathedragon
     ];
     mainProgram = "tonearm";
+    platforms = lib.platforms.unix;
   };
 })

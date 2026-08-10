@@ -1,12 +1,9 @@
 {
   boost,
-  cmake,
-  doxygen,
   eigen,
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
-  pkg-config,
   stdenv,
 }:
 
@@ -17,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eiquadprog";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ukYIc5ZCIDunXMyC44Dd1qac4Ku4pNv9p4ik+xyI0i0=";
   };
 
@@ -26,12 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-    jrl-cmakemodules
-  ];
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags;
+
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+  buildInputs = [ jrl-cmakemodules ];
   propagatedBuildInputs = [ eigen ];
   checkInputs = [ boost ];
 

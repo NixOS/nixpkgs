@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner = "zer0-x";
+    owner = "zefr0x";
     repo = "foxmarks";
     rev = "v${finalAttrs.version}";
     hash = "sha256-6lJ9acVo444RMxc3wUakBz4zT74oNUpwoP69rdf2mmE=";
@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CLI read-only interface for Mozilla Firefox's bookmarks";
-    homepage = "https://github.com/zer0-x/foxmarks";
-    changelog = "https://github.com/zer0-x/foxmarks/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/zefr0x/foxmarks";
+    changelog = "https://github.com/zefr0x/foxmarks/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ loicreynier ];
   };

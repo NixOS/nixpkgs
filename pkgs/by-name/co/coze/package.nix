@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Cyphrme";
-    repo = "Coze_cli";
+    repo = "CozeCLI";
     rev = "v${finalAttrs.version}";
     hash = "sha256-/Cznx5Q0a9vVrC4oAoBmAkejT1505AQzzCW/wi3itv4=";
   };
@@ -24,8 +24,8 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI client for Coze, a cryptographic JSON messaging specification";
     mainProgram = "coze";
-    homepage = "https://github.com/Cyphrme/coze_cli";
-    license = with lib.licenses; [ bsd3 ];
+    homepage = "https://github.com/Cyphrme/CozeCLI";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ qbit ];
   };
 })

@@ -13,8 +13,8 @@ files using the same mechanism.
 """
 
 import json
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitra";
-  version = "5.0.0";
+  version = "5.6.0";
 
   src = fetchFromCodeberg {
     owner = "silverpill";
     repo = "mitra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Chn3SONSg6yhwwHcry/cO2L7/ihEco35gpRlMlQVXz8=";
+    hash = "sha256-1G1XHLCdeETSqltrYxfxQCL4q1x7L2sqr9C2VOB9ecs=";
   };
 
-  cargoHash = "sha256-0lXwOphoUQqe1O0KbAOl98ZbMKyG8ZZOl7NhXYwSvvQ=";
+  cargoHash = "sha256-VGJ1ObOe/QQzSwRov06hkf9zkrmSmODiJUkhC2+Bcrk=";
 
   # require running database
   doCheck = false;

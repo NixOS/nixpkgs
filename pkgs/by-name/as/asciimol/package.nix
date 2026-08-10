@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "asciimol";
-  version = "1.2.5";
+  version = "1.2.7";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-sB8hHtjfCv5jFHXEoUG7zNn3d3QKihPLbgnR+Jyz4GQ=";
+    hash = "sha256-SqwViOnVx1TcpY8Kd5VQCg1A8KQnBhL8aq9Gsrwer3k=";
   };
 
   build-system = with python3Packages; [ setuptools ];

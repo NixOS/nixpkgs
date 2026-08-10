@@ -55,10 +55,12 @@ let
       ;
   };
 
+  removeDriverPrefix = removePrefix "xf86-video-";
+
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   videoDrivers =
     mapAttrs' (name: value: {
-      name = removePrefix "xf86-video-" value.pname;
+      name = removeDriverPrefix value.pname;
       value = {
         modules = [ value ];
       };
@@ -466,7 +468,7 @@ in
         ];
         relatedPackages = mapAttrsToList (name: value: {
           path = [ name ];
-          title = removePrefix "xf86-video-" value.pname;
+          title = removeDriverPrefix value.pname;
         }) knownVideoDriverPackages;
 
         description = ''

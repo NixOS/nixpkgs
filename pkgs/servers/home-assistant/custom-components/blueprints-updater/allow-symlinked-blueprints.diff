@@ -1,24 +1,24 @@
 diff --git a/custom_components/blueprints_updater/coordinator.py b/custom_components/blueprints_updater/coordinator.py
-index 441b870..54551d1 100644
+index dfc001c..5017b84 100644
 --- a/custom_components/blueprints_updater/coordinator.py
 +++ b/custom_components/blueprints_updater/coordinator.py
-@@ -3731,19 +3731,6 @@ def scan_blueprints(
+@@ -3752,19 +3752,6 @@ def _scan_single_blueprint_file(
+     ) -> BlueprintMetadata | None:
+         """Scan and process a single blueprint file."""
+         real_full_path = os.path.realpath(full_path)
+-        try:
+-            if (
+-                os.path.commonpath([real_full_path, context.real_blueprint_path])
+-                != context.real_blueprint_path
+-            ):
+-                _LOGGER.warning(
+-                    "Security alert: Ignoring blueprint symlink outside root: %s",
+-                    full_path,
+-                )
+-                return None
+-        except (ValueError, OSError):
+-            _LOGGER.warning("Skipping blueprint with invalid path: %s", full_path)
+-            return None
  
-                     full_path = os.path.join(root, file)
-                     real_full_path = os.path.realpath(full_path)
--                    try:
--                        if (
--                            os.path.commonpath([real_full_path, real_blueprint_path])
--                            != real_blueprint_path
--                        ):
--                            _LOGGER.warning(
--                                "Security alert: Ignoring blueprint symlink outside root: %s",
--                                full_path,
--                            )
--                            continue
--                    except (ValueError, OSError):
--                        _LOGGER.warning("Skipping blueprint with invalid path: %s", full_path)
--                        continue
- 
-                     if relative_path := get_blueprint_relative_path(hass, full_path):
-                         try:
+         relative_path = get_blueprint_relative_path(context.hass, full_path)
+         if not relative_path:

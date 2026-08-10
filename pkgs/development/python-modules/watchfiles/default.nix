@@ -13,19 +13,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "watchfiles";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "watchfiles";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UlQnCYSNU9H4x31KenSfYExGun94ekrOCwajORemSco=";
+    hash = "sha256-gfH/8o3WsGL4Qki5kRrWpQLyk85HgTtR6iImInPYthg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-6sxtH7KrwAWukPjLSMAebguPmeAHbC7YHOn1QiRPigs=";
+    hash = "sha256-GFGhEXW0M23G0NB4Bu1FXV9Bmdt9weznHHSD/6rBSjI=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,10 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     rm -rf watchfiles
   '';
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTests = [
     #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)

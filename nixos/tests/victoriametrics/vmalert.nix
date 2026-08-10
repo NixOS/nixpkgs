@@ -9,8 +9,8 @@
     ];
   };
 
-  nodes = {
-    victoriametrics =
+  containers = {
+    vmserver =
       { config, pkgs, ... }:
       {
         environment.systemPackages = [ pkgs.jq ];
@@ -27,7 +27,7 @@
                 static_configs = [
                   {
                     targets = [
-                      "alertmanager:${toString config.services.prometheus.alertmanager.port}"
+                      "alert:${toString config.services.prometheus.alertmanager.port}"
                     ];
                   }
                 ];
@@ -51,7 +51,7 @@
           settings = {
             "datasource.url" = "http://localhost:8428"; # victoriametrics' api
             "notifier.url" = [
-              "http://alertmanager:${toString config.services.prometheus.alertmanager.port}"
+              "http://alert:${toString config.services.prometheus.alertmanager.port}"
             ]; # alertmanager's api
             rule = [
               (pkgs.writeText "instance-down.yml" ''
@@ -71,7 +71,7 @@
         };
       };
 
-    alertmanager = {
+    alert = {
       services.prometheus.alertmanager = {
         enable = true;
         openFirewall = true;
@@ -115,33 +115,33 @@
   };
 
   testScript = ''
-    alertmanager.wait_for_unit("alertmanager")
-    alertmanager.wait_for_open_port(9093)
-    alertmanager.wait_until_succeeds("curl -s http://127.0.0.1:9093/-/ready")
+    alert.wait_for_unit("alertmanager")
+    alert.wait_for_open_port(9093)
+    alert.wait_until_succeeds("curl -s http://127.0.0.1:9093/-/ready")
 
     logger.wait_for_unit("alertmanager-webhook-logger")
     logger.wait_for_open_port(6725)
 
-    victoriametrics.wait_for_unit("victoriametrics")
-    victoriametrics.wait_for_unit("vmalert")
-    victoriametrics.wait_for_open_port(8428)
+    vmserver.wait_for_unit("victoriametrics")
+    vmserver.wait_for_unit("vmalert")
+    vmserver.wait_for_open_port(8428)
 
-    victoriametrics.wait_until_succeeds(
+    vmserver.wait_until_succeeds(
       "curl -sf 'http://127.0.0.1:8428/api/v1/query?query=count(up\{job=\"alertmanager\"\}==1)' | "
       + "jq '.data.result[0].value[1]' | grep '\"1\"'"
     )
 
-    victoriametrics.wait_until_succeeds(
+    vmserver.wait_until_succeeds(
       "curl -sf 'http://127.0.0.1:8428/api/v1/query?query=sum(alertmanager_build_info)%20by%20(version)' | "
       + "jq '.data.result[0].metric.version' | grep '\"${pkgs.prometheus-alertmanager.version}\"'"
     )
 
-    victoriametrics.wait_until_succeeds(
+    vmserver.wait_until_succeeds(
       "curl -sf 'http://127.0.0.1:8428/api/v1/query?query=count(up\{job=\"node\"\}!=1)' | "
       + "jq '.data.result[0].value[1]' | grep '\"1\"'"
     )
 
-    victoriametrics.wait_until_succeeds(
+    vmserver.wait_until_succeeds(
       "curl -sf 'http://127.0.0.1:8428/api/v1/query?query=alertmanager_notifications_total\{integration=\"webhook\"\}' | "
       + "jq '.data.result[0].value[1]' | grep -v '\"0\"'"
     )
@@ -152,6 +152,6 @@
 
     logger.log(logger.succeed("systemd-analyze security alertmanager-webhook-logger.service | grep -v '✓'"))
 
-    alertmanager.log(alertmanager.succeed("systemd-analyze security alertmanager.service | grep -v '✓'"))
+    alert.log(alert.succeed("systemd-analyze security alertmanager.service | grep -v '✓'"))
   '';
 }

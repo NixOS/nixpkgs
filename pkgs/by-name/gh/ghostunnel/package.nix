@@ -3,17 +3,16 @@
   fetchFromGitHub,
   lib,
   nixosTests,
-  ghostunnel,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghostunnel";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BntQCauAgnaiNn31nrVEsHFvQv7zK6D0z/rInbCVTr0=";
   };
 
@@ -41,13 +40,13 @@ buildGoModule rec {
     imports = [
       (lib.modules.importApply ./service.nix { })
     ];
-    ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
+    ghostunnel.package = finalAttrs.finalPackage;
   };
 
   meta = {
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
-    changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";
+    changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       roberth
@@ -55,4 +54,4 @@ buildGoModule rec {
     ];
     mainProgram = "ghostunnel";
   };
-}
+})

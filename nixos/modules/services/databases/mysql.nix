@@ -662,16 +662,16 @@ in
                 ) | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
-              # Secure root@localhost for MySQL/Percona on first initialization
-              ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
-                echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
-              ''}
-
               ${lib.optionalString (cfg.initialScript != null) ''
                 # Execute initial script
                 # using toString to avoid copying the file to nix store if given as path instead of string,
                 # as it might contain credentials
                 cat ${toString cfg.initialScript} | ${cfg.package}/bin/mysql -u ${superUser} -N
+              ''}
+
+              # Secure root@localhost for MySQL/Percona on first initialization
+              ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
+                echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
               rm ${cfg.dataDir}/mysql_init

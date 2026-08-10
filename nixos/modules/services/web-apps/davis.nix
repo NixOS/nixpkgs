@@ -41,21 +41,20 @@ let
     };
   };
   secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
-  mkSecretReplacement = file: ''
-    replace-secret ${
-      lib.escapeShellArgs [
-        (
-          if (lib.isString file) then
-            builtins.hashString "sha256" file
-          else
-            builtins.hashString "sha256" (builtins.readFile file)
-        )
-        file
-        "${cfg.dataDir}/.env.local"
-      ]
-    }
-  '';
-  secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+  mkSecretReplacement =
+    file:
+    lib.escapeShellArgs [
+      (lib.getExe pkgs.replace-secret)
+      (
+        if (lib.isString file) then
+          builtins.hashString "sha256" file
+        else
+          builtins.hashString "sha256" (builtins.readFile file)
+      )
+      file
+      "${cfg.dataDir}/.env.local"
+    ];
+  secretReplacements = map mkSecretReplacement secretPaths;
   filteredConfig = lib.converge (lib.filterAttrsRecursive (
     _: v:
     !lib.elem v [
@@ -420,21 +419,18 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
+          ExecStart = [
+            # create .env file with the upstream values
+            "${lib.getExe' pkgs.coreutils "install"} -T -m 0600 -o '${user}' '${cfg.package}/env-upstream' '${cfg.dataDir}/.env'"
+            # create .env.local file with the user-provided values
+            "${lib.getExe' pkgs.coreutils "install"} -T -m 0600 -o '${user}' '${davisEnv}' '${cfg.dataDir}/.env.local'"
+          ]
+          ++ secretReplacements;
         };
-        path = [ pkgs.replace-secret ];
         restartTriggers = [
           cfg.package
           davisEnv
         ];
-        script = ''
-          # error handling
-          set -euo pipefail
-          # create .env file with the upstream values
-          install -T -m 0600 -o ${user} ${cfg.package}/env-upstream "${cfg.dataDir}/.env"
-          # create .env.local file with the user-provided values
-          install -T -m 0600 -o ${user} ${davisEnv} "${cfg.dataDir}/.env.local"
-          ${secretReplacements}
-        '';
       };
 
       systemd.services.davis-db-migrate = {
@@ -458,17 +454,16 @@ in
             "APP_LOG_DIR=${cfg.dataDir}/var/log"
           ];
           EnvironmentFile = "${cfg.dataDir}/.env.local";
+          ExecStart = [
+            "${cfg.package}/bin/console cache:clear --no-debug"
+            "${cfg.package}/bin/console cache:warmup --no-debug"
+            "${cfg.package}/bin/console doctrine:migrations:migrate"
+          ];
         };
         restartTriggers = [
           cfg.package
           davisEnv
         ];
-        script = ''
-          set -euo pipefail
-          ${cfg.package}/bin/console cache:clear --no-debug
-          ${cfg.package}/bin/console cache:warmup --no-debug
-          ${cfg.package}/bin/console doctrine:migrations:migrate
-        '';
       };
 
       systemd.services.phpfpm-davis.after = [

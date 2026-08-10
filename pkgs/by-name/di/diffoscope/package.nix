@@ -85,8 +85,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # version 2 breaks dataset and thus androguard
-      sqlalchemy = prev.sqlalchemy_1_4;
       # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
@@ -100,6 +98,11 @@ let
             tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
+
+          postPatch = ''
+            substituteInPlace py_ext/setup.py \
+              --replace-fail "0.2.0" "${version}"
+          '';
         }
       );
     };
@@ -109,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "321";
+  version = "326";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-M/rsyUGlJDpU3o1RMfaN9fNMpOn9Xpz2ydflPUXVhD4=";
+    hash = "sha256-Km0CvLx8BQ44Nwzxd9kHVFgVOnWPc+vly3ThcENGMOQ=";
   };
 
   outputs = [
@@ -124,16 +127,11 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    # Remove flags output from an OCaml test's diff, as it's Debian-specific
-    ./remove-flags-from-ocaml-diff.patch
   ];
 
   postPatch = ''
     # When generating manpage, use the installed version
     substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
-
-    substituteInPlace diffoscope/comparators/apk.py \
-      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
   '';
 
   nativeBuildInputs = [
@@ -145,7 +143,7 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
-  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  # To help figuring out what's missing from the list, run: ./pkgs/by-name/di/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
   # Android-specific tools:
@@ -331,12 +329,12 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = writeScript "update-diffoscope" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
-      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      newVersion="$(curl -s https://diffoscope.org/ | pcre2grep -o1 'Latest release: ([0-9]+)')"
       update-source-version ${pname} "$newVersion"
     '';
   };
@@ -359,7 +357,6 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       danielfullmer
       mdaniels5757
-      raitobezarius
     ];
     platforms = lib.platforms.unix;
     mainProgram = "diffoscope";

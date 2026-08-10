@@ -5,24 +5,32 @@
   jre_headless,
   makeWrapper,
   nix-update-script,
+  versionCheckHook,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-config-cli";
-  version = "6.4.0";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "adorsys";
     repo = "keycloak-config-cli";
-    tag = "v${version}";
-    hash = "sha256-Vg56Dz9U0eAJw+7u90MSZWmMIZttWYGXAwsXZsEfTj8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dSeLn9YaT0k6Mg8cxmoDoEtvjrzkyETvI4dt+q/Wj3A=";
   };
 
-  mvnHash = "sha256-tdh8hRqGXI3zuwy55dC3La9dm2naqeCEZT4qcw37iDI=";
+  mvnHash = "sha256-Ff9ra9ruPJ8PA0bmC8uU8PiNqjtJoR4U04veZAqZ3sM=";
 
-  # Tests use MockServer which needs to bind to a local port
-  __darwinAllowLocalNetworking = true;
+  # JavaScriptEvaluatorTest needs GraalVM's Truffle engine, which fails to
+  # initialize on the sandbox JDK (org.graalvm.polyglot.Engine$ImplHolder).
+  doCheck = false;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   installPhase = ''
     runHook preInstall
@@ -36,6 +44,7 @@ maven.buildMavenPackage rec {
 
   meta = {
     homepage = "https://github.com/adorsys/keycloak-config-cli";
+    changelog = "https://github.com/adorsys/keycloak-config-cli/releases/tag/v${finalAttrs.version}";
     description = "Import YAML/JSON-formatted configuration files into Keycloak";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -46,4 +55,4 @@ maven.buildMavenPackage rec {
     mainProgram = "keycloak-config-cli";
     platforms = jre_headless.meta.platforms;
   };
-}
+})

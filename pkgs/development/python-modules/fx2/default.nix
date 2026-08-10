@@ -14,7 +14,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "whitequark";
+    owner = "GlasgowEmbedded";
     repo = "libfx2";
     rev = "v${version}";
     hash = "sha256-uMgf1VL3yvkLUfRlBn9NKcerfHfcFg9yEgHGWmwyh8I=";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
     mainProgram = "fx2tool";
-    homepage = "https://github.com/whitequark/libfx2";
+    homepage = "https://github.com/GlasgowEmbedded/libfx2";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };

@@ -506,12 +506,12 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      mguentner
-      dandellion
       nickcao
       teutat3s
+      transcaffeine
+      skowalak
     ];
-    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+    scope = "Maintain the foundational packages of the Matrix ecosystem.";
     shortName = "Matrix";
   };
 
@@ -519,7 +519,6 @@ with lib.maintainers;
     members = [
       alejandrosame
       aleksi
-      artturin
       emilytrau
       ericson2314
       jk
@@ -551,6 +550,7 @@ with lib.maintainers;
       dotlambda
       ma27
       provokateurin
+      staticdev
     ];
     scope = "Maintain Nextcloud, its tests and the integration of applications.";
     shortName = "Nextcloud";
@@ -654,6 +654,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  pulumi = {
+    scope = "Maintains the Pulumi IaC tool and its language-specific SDKs";
+    shortName = "Pulumi";
+    members = [
+      nicoo
+      tie
+      untio11
+    ];
+  };
+
   python = {
     members = [
       hexa
@@ -717,6 +727,15 @@ with lib.maintainers;
     github = "security-review";
   };
 
+  stardust-xr = {
+    members = [
+      pandapip1
+      technobaboo
+    ];
+    scope = "Maintain Stardust XR packages";
+    shortName = "StardustXR";
+  };
+
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
@@ -737,7 +756,6 @@ with lib.maintainers;
       dduan
       samasaur
       stephank
-      trepetti
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
@@ -748,10 +766,8 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  tests = {
-    members = [ tfc ];
-    scope = "Maintain the NixOS VM test runner.";
-    shortName = "NixOS tests";
+  test-driver = {
+    github = "test-driver";
     enableFeatureFreezePing = true;
   };
 

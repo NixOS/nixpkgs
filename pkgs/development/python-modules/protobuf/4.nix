@@ -6,6 +6,7 @@
   lib,
   stdenv,
   numpy,
+  packaging,
   protobuf,
   pytestCheckHook,
   pythonAtLeast,
@@ -68,9 +69,18 @@ buildPythonPackage {
     + ''
       substituteInPlace google/protobuf/internal/json_format_test.py \
         --replace-warn assertRaisesRegexp assertRaisesRegex
+    ''
+    # setuptools 81 dropped pkg_resources, parse versions via packaging module
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail "import pkg_resources" "import packaging.version" \
+        --replace-fail "pkg_resources.parse_version" "packaging.version.parse"
     '';
 
-  nativeBuildInputs = lib.optional isPyPy tzdata;
+  nativeBuildInputs = [
+    packaging
+  ]
+  ++ lib.optional isPyPy tzdata;
 
   buildInputs = [ protobuf ];
 

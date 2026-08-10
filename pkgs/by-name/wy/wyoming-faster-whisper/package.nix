@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-faster-whisper";
-  version = "3.2.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "wyoming-faster-whisper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4tgBsraFd7IUHw6p/59FHzuUISOaALxBU7H8V0yQl0E=";
+    hash = "sha256-+RmP552zsvWbxIpfhmKNdU4EZSeEImUdaF827g6Tuco=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     faster-whisper
+    pysilero-vad
     wyoming
   ];
 
@@ -57,9 +58,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/OHF-Voice/wyoming-faster-whisper/releases/tag/v${finalAttrs.version}";
     description = "Wyoming Server for Faster Whisper";
-    homepage = "https://github.com/rhasspy/wyoming-faster-whisper";
+    homepage = "https://github.com/OHF-Voice/wyoming-faster-whisper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "wyoming-faster-whisper";

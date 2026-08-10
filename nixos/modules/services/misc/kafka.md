@@ -12,10 +12,9 @@ manual](https://kafka.apache.org/documentation/#configuration) broker settings.
 
 ## KRaft {#module-services-apache-kafka-kraft}
 
-Unlike in Zookeeper mode, Kafka in
-[KRaft](https://kafka.apache.org/documentation/#kraft) mode requires each log
-dir to be "formatted" (which means a cluster-specific a metadata file must
-exist in each log dir)
+Kafka in [KRaft](https://kafka.apache.org/documentation/#kraft) mode requires
+each log dir to be "formatted" (which means a cluster-specific a metadata file
+must exist in each log dir)
 
 The upstream intention is for users to execute the [storage
 tool](https://kafka.apache.org/documentation/#kraft_storage) to achieve this,
@@ -59,5 +58,4 @@ Notable changes to be aware of include:
   - [Upstream docs](https://kafka.apache.org/documentation.html#brokerconfigs_broker.id)
 
 - Removal of `services.apache-kafka.zookeeper`
-  - Translate using: `services.apache-kafka.settings."zookeeper.connect"`
-  - [Upstream docs](https://kafka.apache.org/documentation.html#brokerconfigs_zookeeper.connect)
+  - ZooKeeper mode is no longer supported; migrate to [KRaft](#module-services-apache-kafka-kraft) mode instead.

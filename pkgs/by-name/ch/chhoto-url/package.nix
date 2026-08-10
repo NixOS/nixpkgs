@@ -8,28 +8,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chhoto-url";
-  version = "7.2.1";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "SinTan1729";
     repo = "chhoto-url";
     tag = finalAttrs.version;
-    hash = "sha256-n8fCQeY0gIyZuACKWa8Fk9TQ680PpVS2MHMFy7UgDwk=";
+    hash = "sha256-lyrTuZxsVui25JIfxDoezNcMTZDKgYOPJ9+VMOfhHjg=";
     fetchLFS = true;
   };
 
-  sourceRoot = "${finalAttrs.src.name}/actix";
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
   postPatch = ''
     substituteInPlace src/{main.rs,services/get.rs,services/utils.rs} \
-      --replace-fail "./resources/" "${placeholder "out"}/share/chhoto-url/resources/"
+      --replace-fail "./frontend/" "${placeholder "out"}/share/chhoto-url/frontend/"
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.96"' 'rust-version = "1.95"'
   '';
 
-  cargoHash = "sha256-9EVGsOipx9ObygpM37iZYLnhYjSMHFhHTDvjHkLWLz8=";
+  cargoHash = "sha256-y1MIiJ7NAP1F1c0IkrrVn1Wd2K+mrQD1RhqiumcPq1o=";
 
   postInstall = ''
     mkdir -p $out/share/chhoto-url
-    cp -r ${finalAttrs.src}/resources $out/share/chhoto-url/resources
+    cp -r ${finalAttrs.src}/frontend $out/share/chhoto-url/frontend
   '';
 
   passthru = {

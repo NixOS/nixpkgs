@@ -48,9 +48,5 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       flokli
     ];
-    badPlatforms = [
-      # Illegal instruction: 4
-      "x86_64-darwin"
-    ];
   };
 }

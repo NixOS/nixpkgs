@@ -22,7 +22,7 @@
   confluent-kafka,
 
   # test
-  myst-docutils,
+  myst-parser,
   pytestCheckHook,
   pytest-benchmark,
 }:
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    myst-docutils
+    myst-parser
     pytestCheckHook
     pytest-benchmark
   ]
@@ -95,7 +95,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # dependens on an old myst-docutils version
+    # depends on an old myst-parser version
     "docs"
   ];
 

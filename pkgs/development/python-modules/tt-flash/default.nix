@@ -17,7 +17,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tt-flash";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-flash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YpkDBLkhN413wbJ2eLzRJGSG6Rn6eMNSkCBvy+G0wh4=";
+    hash = "sha256-wE8qDgoXiYeUbrcGY46JnPVT4neNGu3U5DTXlMuewjc=";
   };
 
   build-system = [
@@ -55,6 +55,6 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/tenstorrent/tt-flash";
     changelog = "https://github.com/tenstorrent/tt-flash/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 })

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pagure.io/tmpwatch";
     description = "Recursively searches through specified directories and removes files which have not been accessed in a specified period of time";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ vlstill ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "tmpwatch";
   };

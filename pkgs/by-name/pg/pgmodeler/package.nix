@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.3";
 
   src = fetchFromGitHub {
-    owner = "pgmodeler";
+    owner = "nullptrlabs";
     repo = "pgmodeler";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-WA3EOJm9RrKk7DrzdrpiihW+LhJOvvE2uajGwPCsBIk=";

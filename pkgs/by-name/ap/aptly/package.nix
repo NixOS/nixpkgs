@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aptly";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "aptly-dev";
     repo = "aptly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jkljg05C4GJ4F9l6mKAU4JCH8I0/bjzfb74X714z4UI=";
+    hash = "sha256-fjNN8EffY9G8YX/uME5ehs2zZj/YRA62y/muqigWSnE=";
   };
 
-  vendorHash = "sha256-3pFVAVvIpJut2YYxvnCQbBpdwwmUbZIyrx0WoQrU+nQ=";
+  vendorHash = "sha256-QPYKdiEiV1iS3xJ3A66ILUXAlj0TGXuGf11wzdX3Z7Y=";
 
   nativeBuildInputs = [
     installShellFiles

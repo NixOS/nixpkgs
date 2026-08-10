@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frida-tools";
-  version = "14.10.2";
+  version = "14.10.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "frida_tools";
-    hash = "sha256-DGv5zyOkxQHXhFFrbcG4zVkNhOosymmEZdX2Aphdh/0=";
+    hash = "sha256-eixUS1RdCVBA//vTdoooekJjQ9rYkJW0ok9LIDgtkmo=";
   };
 
   build-system = with python3Packages; [

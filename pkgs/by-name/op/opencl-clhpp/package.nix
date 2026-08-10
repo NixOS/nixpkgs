@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-clhpp";
-  version = "2025.07.22";
+  version = "2026.05.29";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-afiHjAhdhjtNkGggCO69MwHiQuJZb028lfpQl3HIvXw=";
+    sha256 = "sha256-VrI6cufrIXUizV2exKnQ5B1zjKzWsX5imp3ON39BkSw=";
   };
 
   nativeBuildInputs = [

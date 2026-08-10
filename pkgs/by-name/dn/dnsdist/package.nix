@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I8Z9usIeVWTflbZ4merP7sfXwZQRiqv5jODnY8zVx64=";
+    hash = "sha256-WGgPeAUXt4fmT+5M1NzFf0Ob5gcIT4nuRpl4nX1iaHU=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) cargoRoot src;
-    hash = "sha256-0CfOkjMe3p7xg62jlS3ASZRlr+/nqIJLRyRT+jcDiHQ=";
+    hash = "sha256-xFh+cywfNWalzRfCtM2pPtPfq8/RAlTC1EdZYYEiwxA=";
   };
 
   cargoRoot = "dnsdist-rust-lib/rust";
@@ -89,11 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (nixosTests) dnsdist;
-  };
+  passthru.tests = nixosTests.dnsdist;
 
   meta = {
+    changelog = "https://www.dnsdist.org/changelog.html";
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";

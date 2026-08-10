@@ -7,15 +7,15 @@
 
 buildNpmPackage rec {
   pname = "zwave-js-ui";
-  version = "11.20.0";
+  version = "11.22.2";
 
   src = fetchFromGitHub {
     owner = "zwave-js";
     repo = "zwave-js-ui";
     tag = "v${version}";
-    hash = "sha256-No9s6fZk8b2eE4LPYbX7juSBNDpG49kMTdEeAcC62Ms=";
+    hash = "sha256-jLi4++LYh8vuMjcHW4OkSZkNqrXtiukFSQLqY9/XcjY=";
   };
-  npmDepsHash = "sha256-/mAUsCdOd9aDzUnJCEI9gr++55xdwDy6OXgUkF8EcM0=";
+  npmDepsHash = "sha256-qmbylSpDTtLtnHVz0VOXLXQ+fhLoeKdcCC/kwgm9OkQ=";
 
   passthru.tests.zwave-js-ui = nixosTests.zwave-js-ui;
 

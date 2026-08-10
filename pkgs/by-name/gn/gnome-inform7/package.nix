@@ -104,7 +104,7 @@ stdenv.mkDerivation {
   version = "unstable-2021-04-06";
   src = fetchFromGitHub {
     owner = "ptomato";
-    repo = "gnome-inform7";
+    repo = "inform7-ide";
     # build from revision in the GTK3 branch as mainline requires webkit-1.0
     rev = "c37e045c159692aae2e4e79b917e5f96cfefa66a";
     sha256 = "Q4xoITs3AYXhvpWaABRAvJaUWTtUl8lYQ1k9zX7FrNw=";
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     longDescription = ''
       This version of Inform 7 for the Gnome platform was created by Philip Chimento, based on a design by Graham Nelson and Andrew Hunter.
     '';
-    homepage = "https://github.com/ptomato/gnome-inform7";
+    homepage = "https://github.com/ptomato/inform7-ide";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.fitzgibbon ];
     platforms = lib.platforms.linux;

@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # fixes build error because of missing include
-  # is in masster, should be removed with next release
+  # is in master, should be removed with next release
   patches = [
     (fetchpatch2 {
       url = "https://github.com/OpenPHDGuiding/phd2/commit/0927de6c8943fae7161457008b989bf72a05c638.patch?full_index=1";

@@ -1,34 +1,34 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iredis";
-  version = "1.15.2";
+  version = "1.16.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g/gQb9QOyfa7kyHCUZf/kLZRO5IE8389BUCYz8Sqr8o=";
+    hash = "sha256-m8XDNzHgMWBgcN3AyFlb8K/UNXbGhH4toKBiX5Q4/QY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'packaging = "^23.0"' 'packaging = "*"' \
-      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"' \
-      --replace-fail 'redis = "^5.0.0"' 'redis = "*"'
-  '';
+  pythonRelaxDeps = [
+    "packaging"
+    "redis"
+  ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     configobj
     mistune
@@ -37,10 +37,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pygments
     python-dateutil
     redis
-    wcwidth
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pexpect
     pytestCheckHook
@@ -64,6 +63,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "iredis" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";

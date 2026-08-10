@@ -46,7 +46,6 @@ let
     setAttrByPath
     substring
     take
-    throwIfNot
     trace
     typeOf
     types
@@ -680,8 +679,11 @@ let
           config = addFreeformType (addMeta (m.config or { }));
         }
     else
-      # shorthand syntax
-      throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module." {
+    # shorthand syntax
+    if !isAttrs m then
+      throw "module ${file} (${key}) does not look like a module."
+    else
+      {
         _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;

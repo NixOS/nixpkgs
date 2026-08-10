@@ -29,71 +29,24 @@ let
 
   cfg = config.services.sabnzbd;
 
+  # Sabnzbd expects 0/1 instead of true/false
+  fixupSettings = lib.mapAttrsRecursive (
+    path: value:
+    if value == true then
+      1
+    else if value == false then
+      0
+    else
+      value
+  );
+
   mandatoryGlobalSettings = {
     "__version__" = 19;
     "__encoding__" = "utf-8";
   };
-  allSettings = mandatoryGlobalSettings // cfg.settings;
+  allSettings = fixupSettings (mandatoryGlobalSettings // cfg.settings);
 
-  # sabnzbd uses configobj type inis, which support
-  # nested sections specified by increasing numbers
-  # of square brackets (but not toml style dotted paths)
-  configObjAtom = types.oneOf [
-    types.str
-    types.int
-    types.bool
-  ];
-
-  configObjValue =
-    let
-      valueType =
-        types.oneOf [
-          types.str
-          types.int
-          types.bool
-          (types.listOf configObjAtom)
-          (types.attrsOf valueType)
-        ]
-        // {
-          description = "ConfigObj type";
-        };
-    in
-    valueType;
-
-  configObjIni =
-    { }:
-    let
-      extractAtoms = lib.filterAttrs (k: v: v != null && !lib.isAttrs v);
-      extractSections = lib.filterAttrs (k: v: lib.isAttrs v);
-      mkValueString = (
-        v:
-        if true == v then
-          "1"
-        else if false == v then
-          "0"
-        else
-          mkValueStringDefault { } v
-      );
-      mkKeyValue = mkKeyValueDefault { inherit mkValueString; } "=";
-      mkSection = (
-        depth: attrs:
-        let
-          sections = extractSections attrs;
-          sectionHeadingLeft = lib.concatStrings (lib.replicate (depth + 1) "[");
-          sectionHeadingRight = lib.concatStrings (lib.replicate (depth + 1) "]");
-          mkSectionHeading =
-            name: "${sectionHeadingLeft}${lib.escape [ "[" "]" ] name}${sectionHeadingRight}";
-          mkSubsection = name: attrs: (mkSectionHeading name) + "\n" + (mkSection (depth + 1) attrs) + "\n";
-        in
-        toKeyValue { inherit mkKeyValue; } (extractAtoms attrs)
-        + "\n"
-        + lib.concatStrings (lib.mapAttrsToList mkSubsection sections)
-      );
-    in
-    {
-      type = types.attrsOf configObjValue;
-      generate = name: attrs: pkgs.writeText name (mkSection 0 attrs);
-    };
+  configObjIni = pkgs.formats.configobj;
 
   publicSettingsIni =
     if cfg.configFile != null then
@@ -162,6 +115,28 @@ in
           - servers.<name>.username, servers.<name>.password
         '';
         default = [ ];
+      };
+
+      secretValues = mkOption {
+        type = with types; attrsOf path;
+        description = ''
+          Attrset of patterns in the settings that should be replaced at
+          runtime, just before the service starts, with values read from the
+          given files. The files must be readable by the service user.
+
+          Compared to the secretFiles option, secretValues allows having the
+          full settings structure in Nix, and only externalizing the secret
+          values themselves.
+        '';
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "@my_server_password@" = "/run/secrets/my_server_password";
+            "@my_server_username@" = "/run/secrets/my_server_username";
+            "@sabnzbd_api_key@" = "/run/secrets/sabnzbd_api_key";
+            "@sabnzbd_nzb_key@" = "/run/secrets/sabnzbd_nzb_key";
+          }
+        '';
       };
 
       allowConfigWrite = mkOption {
@@ -547,6 +522,12 @@ in
             ${./config_merge.py} \
             "''${files[@]}" \
             > "$tmpfile"
+
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (n: v: ''
+              "${lib.getExe pkgs.replace-secret}" "${n}" "${v}" "$tmpfile"
+            '') cfg.secretValues
+          )}
 
           install -D \
             -m ${if cfg.allowConfigWrite then "600" else "400"} \

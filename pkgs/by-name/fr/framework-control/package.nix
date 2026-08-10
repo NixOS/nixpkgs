@@ -7,6 +7,7 @@
   fetchNpmDeps,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
   controlPort ? 30912,
 }:
 
@@ -74,6 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 web/public/assets/logo.png \
       $out/share/icons/hicolor/256x256/apps/framework-control.png
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight control surface for Framework laptops";

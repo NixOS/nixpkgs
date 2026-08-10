@@ -43,7 +43,7 @@
   fetchpatch2,
 
   # Feature flags
-  withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Alsa in/output supporT
+  withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Alsa in/output support
   withAmf ? withHeadlessDeps && lib.meta.availableOn stdenv.hostPlatform amf, # AMD Media Framework video encoding
   withAom ? withHeadlessDeps, # AV1 reference encoder
   withAribb24 ? withFullDeps, # ARIB text and caption decoding
@@ -55,11 +55,16 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withFullDeps, # CELT decoder
+  withCelt ? withFullDeps && lib.versionOlder version "9.0", # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
-  withCudaLLVM ? withHeadlessDeps,
+  withCudaLLVM ?
+    withHeadlessDeps
+    # Cuda isn’t supported on Darwin
+    && !stdenv.hostPlatform.isDarwin
+    # Clang for our ppc64 targets needs cc-wrapper to work
+    && !(stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian),
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
@@ -128,7 +133,11 @@
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
-  withShaderc ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "5.0",
+  withShaderc ?
+    withFullDeps
+    && !stdenv.hostPlatform.isDarwin
+    && lib.versionAtLeast version "5.0"
+    && lib.versionOlder version "9.0",
   withShine ? withFullDeps, # Fixed-point MP3 encoding
   withSnappy ? withFullDeps, # Snappy compression, needed for hap encoding
   withSoxr ? withHeadlessDeps, # Resampling via soxr
@@ -249,7 +258,6 @@
   celt,
   chromaprint,
   codec2,
-  clang,
   dav1d,
   davs2,
   fdk_aac,
@@ -467,7 +475,7 @@ stdenv.mkDerivation (
           hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
         })
       ]
-      ++ optionals (lib.versionOlder version "7.1.1") [
+      ++ optionals (lib.versionOlder version "7.1.1" && lib.versions.major version != "5") [
         (fetchpatch2 {
           name = "texinfo-7.1.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
@@ -481,9 +489,6 @@ stdenv.mkDerivation (
           hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
-        ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-      ]
       ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
@@ -491,24 +496,18 @@ stdenv.mkDerivation (
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.4") [
-        (fetchpatch2 {
-          name = "lcevcdec-4.0.0-compat.patch";
-          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
-          hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
-        })
-      ]
-      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
-        (fetchpatch2 {
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
-          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
-        })
-      ]
       ++ optionals (lib.versionOlder version "7.1.2") [
         (fetchpatch2 {
           name = "unbreak-svt-av1-3.0.0.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
           hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "6" && lib.versionOlder version "7.1.4") [
+        (fetchpatch2 {
+          name = "svt-av1-4.0.0-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
+          hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
       ];
 
@@ -615,7 +614,12 @@ stdenv.mkDerivation (
       (enableFeature withBzlib "bzlib")
       (enableFeature withCaca "libcaca")
       (enableFeature withCdio "libcdio")
+    ]
+    ++ optionals (versionOlder version "9.0") [
+      # FFMpeg >= 9 doesn't know about the flag anymore
       (enableFeature withCelt "libcelt")
+    ]
+    ++ [
       (enableFeature withChromaprint "chromaprint")
       (enableFeature withCodec2 "libcodec2")
       (enableFeature withCuda "cuda")
@@ -714,7 +718,7 @@ stdenv.mkDerivation (
       (enableFeature withSamba "libsmbclient")
       (enableFeature withSdl2 "sdl2")
     ]
-    ++ optionals (versionAtLeast version "5.0") [
+    ++ optionals (versionAtLeast version "5.0" && versionOlder version "9.0") [
       (enableFeature withShaderc "libshaderc")
     ]
     ++ [
@@ -811,6 +815,10 @@ stdenv.mkDerivation (
       "--cc=${stdenv.cc.targetPrefix}clang"
       "--cxx=${stdenv.cc.targetPrefix}clang++"
     ]
+    ++ optionals withCudaLLVM [
+      # Unwrapped compiler because it will be retargeted and used freestanding with --cuda-device-only.
+      "--nvcc=${lib.getExe buildPackages.clang.cc}"
+    ]
     ++ optionals withMetal [
       "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
       "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -825,10 +833,12 @@ stdenv.mkDerivation (
         toStrip =
           map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
           ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
+          ++ lib.optional withCudaLLVM buildPackages.clang.cc
           ++ lib.optional withMetal xcode;
       in
-      "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
+      "remove-references-to ${lib.concatMapStringsSep " " (o: "-t ${o}") toStrip} config.h";
 
+    __structuredAttrs = versionAtLeast version "9";
     strictDeps = true;
 
     nativeBuildInputs = [
@@ -840,7 +850,6 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =

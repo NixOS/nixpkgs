@@ -10,23 +10,22 @@
   nix-update-script,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  majorVersion ? "45",
+  variant ? "main",
 }:
 let
   sources = {
-    "36" = {
-      version = "36.0.11";
-      hash = "sha256-rrSI2dSOA8/1CL7JhW0eQ7LaeS5EqTVnyn2HTI+/x20=";
-      cargoHash = "sha256-S67/fv7179uDy4PpwycyXSWAknIC/7ZzvzWPOd6MD+8=";
+    lts-36 = {
+      version = "36.0.13";
+      hash = "sha256-KVNnxmEVDgH+EzItFdpRIpLm6DbmrN2JIKjctx6IyBE=";
+      cargoHash = "sha256-q1l2zmfdCI7Yg41/8jDTjf5akeHiQcC/60iIzMnh6B0=";
     };
-    "45" = {
-
-      version = "45.0.2";
-      hash = "sha256-LEQitwz+UDSX4mrjEecmoO/ZPgRnYTZ3DsD1pu8Jybs=";
-      cargoHash = "sha256-uTgEW2w0RSMetd2W1ucGiVMEEvz2A7CQ79SEsE8/+BM=";
+    main = {
+      version = "47.0.3";
+      hash = "sha256-LC+WeOCP3fKjhg2PhJPYdzr7U7Ghdxb0IFy061TSTak=";
+      cargoHash = "sha256-GrLdoffHrmVICB4oHZY1qlHhiS0SSaZabfmoLs78Dqc=";
     };
   };
-  source = sources.${majorVersion};
+  source = sources.${variant};
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
@@ -56,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
     "lib"
   ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -122,10 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre

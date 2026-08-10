@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
   version = "1.13.0";
 
   src = fetchFromGitHub {
-    owner = "maximbaz";
+    owner = "max-baz";
     repo = "yubikey-touch-detector";
     tag = finalAttrs.version;
     hash = "sha256-aHR/y8rAKS+dMvRdB3oAmOiI7hTA6qlF4Z05OjwYOO4=";
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool to detect when your YubiKey is waiting for a touch";
-    homepage = "https://github.com/maximbaz/yubikey-touch-detector";
+    homepage = "https://github.com/max-baz/yubikey-touch-detector";
     maintainers = with lib.maintainers; [ sumnerevans ];
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

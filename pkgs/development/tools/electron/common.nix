@@ -106,12 +106,6 @@ in
 
   src = null;
 
-  patches =
-    base.patches
-    ++ lib.optionals (lib.versions.major info.version == "40") [
-      ./40-angle-patchdir.patch
-    ];
-
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
 
@@ -231,16 +225,18 @@ in
     allow_runtime_configurable_key_storage = true;
     enable_cet_shadow_stack = false;
     is_cfi = false;
-    v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
-    dawn_use_built_dxc = false;
+    enable_dangling_raw_ptr_feature_flag = false;
     v8_enable_private_mapping_fork_optimization = true;
     v8_expose_public_symbols = true;
-    enable_dangling_raw_ptr_feature_flag = false;
-    clang_unsafe_buffers_paths = "";
-    enterprise_cloud_content_analysis = false;
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
+    node_openssl_path = "//third_party/boringssl";
+  }
+  // lib.optionalAttrs (lib.versionOlder info.version "43") {
+    enterprise_cloud_content_analysis = false;
+  }
+  // {
 
     # other
     enable_widevine = false;

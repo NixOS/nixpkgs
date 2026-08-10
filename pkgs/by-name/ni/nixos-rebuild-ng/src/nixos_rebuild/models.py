@@ -166,6 +166,10 @@ class GenerationJson(TypedDict):
     current: bool
 
 
+class FlakeMetadataJson(TypedDict):
+    resolvedUrl: str
+
+
 @dataclass(frozen=True)
 class GroupedNixArgs:
     build_flags: Args

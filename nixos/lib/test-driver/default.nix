@@ -11,6 +11,7 @@
   ptpython,
   pydantic,
   python,
+  ovmfvartool,
   remote-pdb,
   ruff,
   ty,
@@ -18,8 +19,6 @@
   netpbm,
   vhost-device-vsock,
   nixosTests,
-  qemu_pkg ? qemu_test,
-  qemu_test,
   setuptools,
   socat,
   systemd,
@@ -49,6 +48,7 @@ buildPythonApplication {
     junit-xml
     ptpython
     pydantic
+    ovmfvartool
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
@@ -56,7 +56,6 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     netpbm
-    qemu_pkg
     socat
     util-linux
     vde2

@@ -11,13 +11,13 @@
 }:
 mkLibretroCore {
   core = "pcsx2";
-  version = "0-unstable-2026-06-01";
+  version = "0-unstable-2026-07-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "ps2";
-    rev = "65e8afb9e9ca0a3f3af32d9b35d7d8537cd3cbc1";
-    hash = "sha256-H6lZLLO1+ir+vPchq3XGHKsepmYLbohQFvoA0+yiQo0=";
+    rev = "43129ad5ccbde21b022dd3b3fad1862f72a109bf";
+    hash = "sha256-frS44hQeMAgNMEJ5xzmt4fUpx5om5csUsE4qe4kZBao=";
     fetchSubmodules = true;
   };
 

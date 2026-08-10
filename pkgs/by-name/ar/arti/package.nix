@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitLab,
-  fetchpatch,
   pkg-config,
   sqlite,
   openssl,
@@ -14,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -22,29 +21,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-YLOdrHstmN2pLl75uclkbpN5h3iBs3xpraZ8XN6R/+Q=";
+    hash = "sha256-jOCFXlBI2xAzgpb7Fa8ap53SpDF6kcRGYnBXcu3vpk4=";
   };
-
-  patches = [
-    # Fixes a panic that could allow malicious directory caches to crash
-    # clients.
-    # https://gitlab.torproject.org/tpo/core/arti/-/merge_requests/4062
-    (fetchpatch {
-      name = "TROVE-2026-024.patch";
-      url = "https://gitlab.torproject.org/tpo/core/arti/-/commit/f69be8c70561629e63004788f0aa4bf898025f93.patch";
-      hash = "sha256-P0sXTKOBW7ulqQZwmTVJfrpLksLyaonuDpxGF2keDqE=";
-    })
-  ];
 
   # Working around a bug in cargo that appears with cargo-auditable, see
   # https://github.com/rust-secure-code/cargo-auditable/issues/124.
   postPatch = ''
     substituteInPlace crates/arti/Cargo.toml \
-      --replace-fail '"tor-rpcbase"' '"dep:tor-rpcbase"'
+      --replace-fail '"tokio-util"' '"dep:tokio-util"'
   '';
 
   buildAndTestSubdir = "crates/arti";
-  cargoHash = "sha256-7X3JJbt0/jxaMvBR3XQvguR7tqd96kiqX66G2byvPjM=";
+  cargoHash = "sha256-JK6ubp697jZ98ErNrZdFe0mXIez3lUZ5SmAHkyD97WQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 

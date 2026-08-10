@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     pnpm = pnpm_11;
-    fetcherVersion = 3;
-    hash = "sha256-z41U5Yr7e6SgIyFTfwx6TNcVnJIxGcYUWnLlIoDIgo0=";
+    fetcherVersion = 4;
+    hash = "sha256-BJkPE4dNDNIUL6+LeFXTTCWNf5njItHuM/rHMkmxLJk=";
   };
 
   buildPhase = ''

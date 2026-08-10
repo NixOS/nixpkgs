@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "netfoil";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "tinfoil-factory";
     repo = "netfoil";
     tag = "v${version}";
-    hash = "sha256-iea76gzkbLKguqkFh1QzTiYu2aKkdW6FAOkMcp34P1M=";
+    hash = "sha256-WKtyNdb3hwveLpg3vkKFTXceE6b4AjVrzZoj9eEkdx4=";
   };
 
   __structuredAttrs = true;

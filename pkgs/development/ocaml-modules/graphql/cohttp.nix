@@ -28,7 +28,7 @@ buildDunePackage (finalAttrs: {
     ocplib-endian
   ];
 
-  checkInputs = lib.optionals finalAttrs.doCheck [
+  checkInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     alcotest
     cohttp-lwt-unix
     graphql-lwt

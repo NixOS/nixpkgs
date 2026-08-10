@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-files";
-  version = "41";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit-files";
     tag = finalAttrs.version;
-    hash = "sha256-qS9L0REWN8exXiy5ogYQNbuwaxuh8CiKaCUJHdkfSqQ=";
+    hash = "sha256-NfI6y60O5ctsPbwPcXgkwxpNYuZkF/2YXZOIcRZUc5c=";
 
     fetchSubmodules = true;
     postFetch = "cp $out/node_modules/.package-lock.json $out/package-lock.json";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cockpit-project/cockpit-files";
     changelog = "https://github.com/cockpit-project/cockpit-files/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.linux;
-    license = [ lib.licenses.lgpl21 ];
+    license = lib.licenses.lgpl21;
     teams = [ lib.teams.cockpit ];
   };
 })

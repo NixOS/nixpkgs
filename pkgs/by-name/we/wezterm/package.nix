@@ -24,18 +24,19 @@
   libxcb-keysyms,
   libxcb-wm,
   zlib,
+  rcodesign,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-06-22";
+  version = "0-unstable-2026-08-05";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "6ff5492866490be859f23db01541df0ec67dcc3b";
+    rev = "4b1c3c151eb530e569f867e1461693c56fe89695";
     fetchSubmodules = true;
-    hash = "sha256-1QPLiudM2rmD3OYrc+LKvzE9VJS6Ut7QiS48pf0zU14=";
+    hash = "sha256-cZ5RDeHP9cBa1Qu6E96lRjKW4aC/wMJBZNpUZ2kAWuU=";
   };
 
   postPatch = ''
@@ -58,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-UDCTHu/BiAXXQOEJtZhVVJ9lYFyHSSxviLSqXuZismk=";
+  cargoHash = "sha256-4jm0uMj0/6fcLHSvd7y12h1QjQ/VavkmNc5L/ebQez0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -66,7 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     python3
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin perl;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    perl
+    rcodesign
+  ];
 
   buildInputs = [
     fontconfig
@@ -115,14 +119,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       OUT_APP="$out/Applications/WezTerm.app"
       cp -r assets/macos/WezTerm.app "$OUT_APP"
       rm $OUT_APP/*.dylib
-      cp -r assets/shell-integration/* "$OUT_APP"
+      # macos codesigning requires a specific directory structure
+      # see also: https://github.com/wezterm/wezterm/blob/76b606ec597a3c0263fa60321548637451c0a547/ci/deploy.sh#L31
+      mkdir -p $OUT_APP/Contents/{MacOS,Resources}
+      cp -r assets/shell-integration/* $OUT_APP/Contents/Resources/
       # https://github.com/wezterm/wezterm/pull/6886
       # macOS will only recognize our application bundle
       # if the binaries are inside of it. Move them there
       # and create symbolic links for them in bin/.
-      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
-      ln -s "$OUT_APP"/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$out/bin"
+      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} $OUT_APP/Contents/MacOS/
+      ln -s $OUT_APP/Contents/MacOS/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} $out/bin
     '';
+
+  # notifications require that the app bundle be codesigned (beyond the linker-signing that happens automatically for the executable)
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin "rcodesign sign $out/Applications/WezTerm.app";
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
@@ -161,6 +171,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
       SuperSandro2000
+      yvnth
     ];
   };
 })

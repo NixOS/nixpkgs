@@ -16,6 +16,7 @@
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
+  extraPreConfigure ? "",
   extraBuildInputs ? [ ],
   extraMakeFlags ? [ ],
   extraPassthru ? { },
@@ -58,6 +59,7 @@ in
   pkg-config,
   pkgsCross, # wasm32 rlbox
   python3,
+  python313,
   runCommand,
   rustc,
   rust-cbindgen,
@@ -144,7 +146,13 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  # PGO merges profile data with a 32-bit llvm-profdata, which runs out of
+  # address space on the huge libxul profile, so disable it on 32-bit.
+  pgoSupport ? (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    && stdenv.hostPlatform.is64bit
+  ),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
@@ -238,9 +246,9 @@ let
   # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" { } ''
-    mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
-      ln -s $lib $out/lib/wasm32-wasi
+    mkdir -p $out/lib/wasm32-wasip1
+    for lib in ${pkgsCross.wasm32-wasip1.llvmPackages.libcxx}/lib/*; do
+      ln -s $lib $out/lib/wasm32-wasip1
     done
   '';
 
@@ -303,6 +311,9 @@ buildStdenv.mkDerivation {
 
   inherit src unpackPhase;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta =
     meta
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -340,6 +351,11 @@ buildStdenv.mkDerivation {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
       ./140-bindgen-string-view.patch
     ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
+      # https://github.com/mozilla/cbindgen/issues/1165
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
+      ./153-cbindgen-0.29.4-compat.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''
@@ -364,7 +380,7 @@ buildStdenv.mkDerivation {
     makeBinaryWrapper
     nodejs
     perl
-    python3
+    (if lib.versionAtLeast version "143.0" then python3 else python313)
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc
@@ -411,8 +427,8 @@ buildStdenv.mkDerivation {
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
     # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    export WASM_CC=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}c++
   ''
   + lib.optionalString pgoSupport ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
@@ -455,7 +471,8 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+  ''
+  + extraPreConfigure;
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];

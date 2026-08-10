@@ -81,6 +81,7 @@ buildPythonPackage rec {
   ];
 
   env = {
+    CI = 1; # quiet lerna progress bar
     JUPYTER_PLATFORM_DIRS = 1;
   };
 

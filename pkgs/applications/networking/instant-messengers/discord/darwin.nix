@@ -107,6 +107,7 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   dontUnpack = true;
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall

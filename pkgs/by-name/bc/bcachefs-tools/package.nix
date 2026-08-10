@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -19,6 +20,7 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -30,19 +32,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.6";
+  version = "1.38.8";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VNY9kURuXky504utCZ0Ye76mDG2TFAdzrgYI2iup/PI=";
+    hash = "sha256-9sDE7ua3WMCfV9ZbwQdAbpatv2IhvcwHzzPr+/l2au0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rajYbfE98j/YqniUoV66LHh22PwEc6sWWJ/7bgGgGtA=";
+    hash = "sha256-F1+FeAlYSqOxeWJI8vHShpXrOZqYXjNGvty/s6f6u8w=";
   };
+
+  patches = [
+    # Fix compile-time assertion failure on big-endian
+    (fetchpatch {
+      name = "0001-bcachefs-tools-debug-copy-packed-bkey-fields-before-asserting.patch";
+      url = "https://evilpiepirate.org/git/bcachefs-tools.git/patch/?id=79f119c4cd6900ab9ea27b0aa671f68300d9d38e";
+      hash = "sha256-ACrpad93wrZOXhc73otnXBNQvyoDeZSfgtwze5nKaUE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -58,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
     makeWrapper
     installShellFiles
   ];

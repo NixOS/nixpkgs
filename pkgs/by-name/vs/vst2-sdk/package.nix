@@ -21,6 +21,6 @@ fetchzip {
       VST2 is proprietary, and deprecated by Steinberg.
       As such, it should only be used for legacy reasons.
     '';
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
   };
 }

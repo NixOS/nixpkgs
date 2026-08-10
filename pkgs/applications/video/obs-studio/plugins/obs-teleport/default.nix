@@ -30,8 +30,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  CGO_CFLAGS = "-I${obs-studio}/include/obs";
-  CGO_LDFLAGS = "-L${obs-studio}/lib -lobs -lobs-frontend-api";
+  env = {
+    CGO_CFLAGS = "-I${obs-studio}/include/obs";
+    CGO_LDFLAGS = "-L${obs-studio}/lib -lobs -lobs-frontend-api";
+  };
 
   buildPhase = ''
     runHook preBuild

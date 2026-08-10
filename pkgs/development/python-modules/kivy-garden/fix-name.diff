@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index ca8791b81f..a78fb9bfc2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -4,7 +4,7 @@
+ from setuptools import setup
+ 
+ setup(
+-        name='Kivy Garden',
++        name='Kivy-Garden',
+         version='0.1.5',
+         license='MIT',
+         packages=['garden'],

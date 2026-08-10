@@ -47,6 +47,7 @@
   ruff,
   starlette-admin,
   uvicorn,
+  gitMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -81,6 +82,8 @@ let
       ]
       ++ lib.optional (pname != "hatch-reflex-pyi") subPkgs.hatch-reflex-pyi;
 
+      pythonRelaxDeps = [ "rich" ];
+
       preBuild = ''
         # for .ruff_cache and whatnot, written by hatch-reflex-pyi
         chmod -R +w ../..
@@ -98,20 +101,39 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.4";
+  version = "0.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CTW8p8cPSZnTMgXk9F6oHvbfIiTtgKZVvRygUZbccJw=";
+    hash = "sha256-r7lajRhNXe+cquCT6zzP/0lnnTZ6xN2BFaediUFCafQ=";
   };
 
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
+
+  pythonRelaxDeps = [
+    # pinned to satisfy pyright
+    # https://github.com/reflex-dev/reflex/commit/67489196035bacb2e4bb2fe6ae165088bc6db988
+    "wrapt"
+    # preemptive upper bound, doesn't seem breaking
+    "redis"
+    "rich"
+  ];
+  # pythonRelaxDeps is not sufficient
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"redis >=6.4,<8.0"' \
+        '"redis >=6.4,<9.0"' \
+      --replace-fail \
+        '"wrapt >=1.17.0,<2.2"' \
+        '"wrapt >=1.17.0"'
+  '';
 
   nativeBuildInputs = [
     ruff
@@ -168,6 +190,7 @@ buildPythonPackage (finalAttrs: {
     starlette-admin
     uvicorn
     versionCheckHook
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
@@ -210,8 +233,14 @@ buildPythonPackage (finalAttrs: {
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
     "tests/units/docgen/test_reflex_transformer.py"
+    "docs/app/tests/test_breadcrumbs.py"
+    "docs/app/tests/test_changelogs.py"
+    "docs/app/tests/test_doc_description.py"
     "docs/app/tests/test_doc_links.py"
     "docs/app/tests/test_docgen_double_eval.py"
+
+    # circular imports (reflex-integrations-docs)
+    "docs/app/tests/test_integrations.py"
 
     # circular imports (reflex-site-shared)
     "docs/app/tests/test_routes.py"
@@ -420,10 +449,12 @@ buildPythonPackage (finalAttrs: {
     );
 
     tests = {
+      # overridePythonAttrs does not exist for finalAttrs.finalPackage
       reflex-no-checks = finalAttrs.finalPackage.overrideAttrs (old: {
-        pname = "${old.pname}-sans-checks-phase";
+        pname = "${old.pname}-sans-check-phase";
         doCheck = false;
-        nativeCheckInputs = [ ];
+        doInstallCheck = false;
+        dontCheckPythonMetadata = true;
       });
     }
     // finalAttrs.passthru.subPkgs;

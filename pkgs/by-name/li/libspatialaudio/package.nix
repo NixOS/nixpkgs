@@ -8,20 +8,23 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialaudio";
   version = "0.3.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    owner = "videolabs";
+    owner = "videolan";
     repo = "libspatialaudio";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-sPnQPD41AceXM4uGqWXMYhuQv0TUkA6TZP8ChxUFIoI=";
   };
 
   # Fix the build with CMake 4.
   #
-  # See: <https://github.com/videolabs/libspatialaudio/commit/cec3eeac0984cfd8c1d09fef0dd511c6ccf2a175>
+  # See: <https://github.com/videolan/libspatialaudio/commit/cec3eeac0984cfd8c1d09fef0dd511c6ccf2a175>
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail \
@@ -42,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Ambisonic encoding / decoding and binauralization library in C++";
-    homepage = "https://github.com/videolabs/libspatialaudio";
+    homepage = "https://github.com/videolan/libspatialaudio";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ krav ];
   };
-}
+})

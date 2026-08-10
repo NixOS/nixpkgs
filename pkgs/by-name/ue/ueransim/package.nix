@@ -4,7 +4,6 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
-  fetchpatch,
   lksctp-tools,
   iproute2,
   nix-update-script,
@@ -12,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueransim";
-  version = "3.2.8";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "aligungr";
     repo = "ueransim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dnFGPEgnmbx+ehfeas1Imv8G7s8snd7P2h70E3PtmuY=";
+    hash = "sha256-lTo/XYkRddyNdOpNO7MIAwq5mKMHDarCVzXjDomeXec=";
   };
 
   nativeBuildInputs = [

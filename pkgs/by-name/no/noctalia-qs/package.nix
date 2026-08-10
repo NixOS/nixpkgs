@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/noctalia-dev/noctalia-qs";
-    description = "Flexbile QtQuick based desktop shell toolkit";
+    description = "Flexible QtQuick based desktop shell toolkit";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "quickshell";

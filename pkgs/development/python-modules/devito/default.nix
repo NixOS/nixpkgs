@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devito";
-  version = "4.8.22";
+  version = "4.8.23";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7bHMMZKm+n+wSVGUSSoYQjXklxzdTeyCkjMuK0Z8qTI=";
+    hash = "sha256-y+Ao+uJAEHOxegz/AJ7Xs1FUzcfPdEPRWRGTouUpEeg=";
   };
 
   patches = [

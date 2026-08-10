@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vg";
-  version = "1.75.0";
+  version = "1.75.1";
 
   src = fetchFromGitHub {
     owner = "vgteam";
     repo = "vg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2N9F9qSuLtmDcpFkycZVJo5R9PTvOZlVsyc3Wg9kokI=";
+    hash = "sha256-CPyOZ4w5b26NQ+bz5QSaB6DcwQnlyjNNHlK1hHIEu9s=";
     fetchSubmodules = true;
   };
 

@@ -76,7 +76,7 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
 
   return Promise.all(
     shas.map(async (sha) => {
-      // Subject, author name, author email, committer name, committer email (all tab-seperated)
+      // Subject, author name, author email, committer name, committer email (all tab-separated)
       // then a blank line, then filenames.
       const result = (
         await runGit({

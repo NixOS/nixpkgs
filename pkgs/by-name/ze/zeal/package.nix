@@ -11,28 +11,17 @@
   libpthread-stubs,
   libxcb-keysyms,
   qt6,
-  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FGg89bluN2IJJtkjwPa6dC83CBLdOr+LW5ArUKp4awk=";
+    hash = "sha256-UvgvPeBShlBCTKbTNz3LbV2hUOGov6a66D/Cpe2I12s=";
   };
-
-  patches = [
-    # https://github.com/zealdocs/zeal/issues/1813
-    # Can likely remove with 0.9
-    (fetchpatch {
-      name = "fix-activateShortcut-protected.patch";
-      url = "https://github.com/zealdocs/zeal/commit/f3714111ecad65ddedde43fc7c4f8c5bd240ff64.patch";
-      hash = "sha256-DKTvanO14NRFhiHayJIWXWO7gQSRyjCQ1XFAiEN86XI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

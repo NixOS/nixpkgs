@@ -107,13 +107,17 @@ in
       ];
     };
 
-    services.avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
-      enable = true;
-      openFirewall = lib.mkIf cfg.openFirewall true;
-      publish = {
+    services = {
+      avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
         enable = true;
-        userServices = true;
+        openFirewall = lib.mkIf cfg.openFirewall true;
+        publish = {
+          enable = true;
+          userServices = true;
+        };
       };
+
+      music-assistant.providers = cfg.package.providersBuiltins;
     };
 
     systemd.services.music-assistant = {
@@ -142,8 +146,11 @@ in
         ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
           shairport-sync
         ]
-        ++ lib.optionals (lib.elem "spotify" cfg.providers || lib.elem "spotify_connect" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
           librespot-ma
+        ]
+        ++ lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+          go-librespot
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
@@ -167,8 +174,12 @@ in
         DevicePolicy = "closed";
         LockPersonality = true;
         # breaks pyopenssl's cffi calls, used in remote access feature
+        # not compatible with llvmlite which is required by numba -> librosa
         MemoryDenyWriteExecute = false;
-        ProcSubset = "pid";
+        # required for torch to properly detect the supported engines
+        # allows Music-Assistant to warn, if x86_64-v2 cpu features are missing
+        BindReadOnlyPaths = [ "/proc/cpuinfo" ];
+        ProcSubset = "all";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -190,7 +201,7 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
-          "~@privileged @resources"
+          "~@privileged"
           "mbind"
         ]
         ++ lib.optionals useYTMusic [

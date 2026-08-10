@@ -37,7 +37,7 @@ buildDotnetModule (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/nilaoda/N_m3u8DL-RE/releases/tag/v{finalAttrs.version}";
+    changelog = "https://github.com/nilaoda/N_m3u8DL-RE/releases/tag/v${finalAttrs.version}";
     description = "Cross-Platform, modern and powerful stream downloader for MPD/M3U8/ISM";
     homepage = "https://github.com/nilaoda/N_m3u8DL-RE";
     license = lib.licenses.mit;

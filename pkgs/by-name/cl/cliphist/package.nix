@@ -4,6 +4,12 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  gawk,
+  wl-clipboard,
+  fuzzel,
+  fzf,
+  chafa,
+  wofi,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,8 +25,23 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-4XyDLOJHdre/1BpjgFt/W6gOlPOvKztE+MsbwE3JAaQ=";
 
+  postPatch = ''
+    substituteInPlace contrib/cliphist-{fuzzel,rofi,wofi}-img \
+      --replace-fail "gawk" "${lib.getExe gawk}"
+    substituteInPlace contrib/cliphist-{fuzzel-img,fzf,fzf-sixel,rofi,rofi-img,wofi-img} \
+      --replace-fail "wl-copy" "${lib.getExe' wl-clipboard "wl-copy"}"
+    substituteInPlace contrib/cliphist-fuzzel-img \
+      --replace-fail "fuzzel " "${lib.getExe fuzzel} "
+    substituteInPlace contrib/cliphist-fzf{,-sixel} \
+      --replace-fail "fzf " "${lib.getExe fzf} "
+    substituteInPlace contrib/cliphist-fzf-sixel \
+      --replace-fail "chafa " "${lib.getExe chafa} "
+    substituteInPlace contrib/cliphist-wofi-img \
+      --replace-fail "| wofi" "| ${lib.getExe wofi}"
+  '';
+
   postInstall = ''
-    cp ${finalAttrs.src}/contrib/* $out/bin/
+    cp ./contrib/cliphist-{fuzzel-img,fzf,fzf-sixel,rofi,rofi-img,wofi-img} $out/bin/
   '';
 
   passthru = {
@@ -34,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/sentriz/cliphist";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ klea ];
     mainProgram = "cliphist";
   };
 })

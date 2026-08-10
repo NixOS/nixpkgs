@@ -894,6 +894,12 @@ assertNoAdditions {
     };
   });
 
+  cocci-syntax = super.cocci-syntax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   codecompanion-history-nvim = super.codecompanion-history-nvim.overrideAttrs {
     dependencies = with self; [
       # transitive dependency for codecompanion-nvim
@@ -935,6 +941,7 @@ assertNoAdditions {
     nvimSkipModules = [
       "repro_blink"
       "repro_cmp"
+      "repro_native_completion"
     ];
   };
 
@@ -1020,6 +1027,27 @@ assertNoAdditions {
         url = "https://github.com/zbirenbaum/copilot-cmp/commit/06430ebf99834ebc5d86c63816e409f4cb51fe79.patch";
         sha256 = "sha256-YOJPFC+qbyURFU58tAiAqbamQLmi7ovnJGkOeOTUPH0=";
       })
+    ];
+  };
+
+  copilot-lua = super.copilot-lua.overrideAttrs {
+    # Avoid copying the bundled 500MB language server into the plugin output.
+    preInstall = ''
+      rm -rf copilot/js
+    '';
+
+    postInstall = ''
+      mkdir -p $target/copilot
+      ln -s ${copilot-language-server}/share/copilot-language-server $target/copilot/js
+
+      substituteInPlace $target/lua/copilot/lsp/nodejs.lua \
+        --replace-fail "copilot/js/language-server.js" "copilot/js/main.js"
+      sed -i 's/version = "[^"]*"/version = "${copilot-language-server.version}"/' $target/lua/copilot/util.lua
+    '';
+
+    runtimeDeps = [
+      copilot-language-server
+      nodejs
     ];
   };
 
@@ -1551,6 +1579,18 @@ assertNoAdditions {
     ];
   };
 
+  fyler-nvim = super.fyler-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires setup
+      "fyler.extensions.trash"
+      "fyler.finder"
+      "fyler.integrations.icon"
+      "fyler.integrations.window_picker"
+      "fyler.schemes.file"
+      "fyler.state"
+    ];
+  };
+
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
     # This prevents it.
@@ -1992,6 +2032,14 @@ assertNoAdditions {
   });
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs (old: {
+    # `vim.health.report_*` was removed in neovim 0.11, which makes
+    # `:checkhealth jupytext` error out. Upstream is inactive and has several
+    # open PRs for this, e.g.
+    # https://github.com/GCBallesteros/jupytext.nvim/pull/40
+    postPatch = ''
+      substituteInPlace lua/jupytext/health.lua \
+        --replace-fail "vim.health.report_" "vim.health."
+    '';
     passthru = old.passthru // {
       python3Dependencies = ps: [ ps.jupytext ];
     };
@@ -2376,6 +2424,10 @@ assertNoAdditions {
   };
 
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
+    dependencies = [ self.lualine-nvim ];
+  };
+
+  lualine-so-fancy-nvim = super.lualine-so-fancy-nvim.overrideAttrs {
     dependencies = [ self.lualine-nvim ];
   };
 
@@ -3012,11 +3064,24 @@ assertNoAdditions {
     ];
   };
 
+  neovim-project = super.neovim-project.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      neovim-session-manager
+    ];
+  };
+
   neovim-sensible = super.neovim-sensible.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
     };
   });
+
+  neovim-session-manager = super.neovim-session-manager.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
 
   neovim-tips = super.neovim-tips.overrideAttrs {
     dependencies = [
@@ -3070,6 +3135,10 @@ assertNoAdditions {
 
   noice-nvim = super.noice-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
+  };
+
+  none-ls-extras-nvim = super.none-ls-extras-nvim.overrideAttrs {
+    dependencies = [ self.none-ls-nvim ];
   };
 
   none-ls-nvim = super.none-ls-nvim.overrideAttrs {
@@ -3290,6 +3359,7 @@ assertNoAdditions {
   };
 
   nvim-jdtls = super.nvim-jdtls.overrideAttrs (old: {
+    runtimeDeps = [ python3 ];
     meta = old.meta // {
       license = lib.licenses.gpl3Only;
     };
@@ -3434,7 +3504,7 @@ assertNoAdditions {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
     dependencies = with self; [
-      nvim-treesitter-legacy
+      nvim-treesitter
       nvim-treesitter-parsers.c_sharp
       nvim-treesitter-parsers.go
       nvim-treesitter-parsers.haskell
@@ -3571,7 +3641,6 @@ assertNoAdditions {
       snacks-nvim
       telescope-nvim
     ];
-    dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Issue reproduction file
       "minimal"
@@ -5791,22 +5860,6 @@ assertNoAdditions {
   vim-zscript = super.vim-zscript.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.cc0;
-    };
-  });
-
-  vimacs = super.vimacs.overrideAttrs (old: {
-    buildPhase = ''
-      substituteInPlace bin/vim \
-        --replace-fail '/usr/bin/vim' 'vim' \
-        --replace-fail '/usr/bin/gvim' 'gvim'
-      # remove unnecessary duplicated bin wrapper script
-      rm -r plugin/vimacs
-    '';
-    meta = old.meta // {
-      description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
-      homepage = "http://algorithm.com.au/code/vimacs";
-      license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ millerjason ];
     };
   });
 

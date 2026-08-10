@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kmike/port-for";
-    description = "Command-line utility and library that helps with TCP port managment";
+    description = "Command-line utility and library that helps with TCP port management";
     mainProgram = "port-for";
     changelog = "https://github.com/kmike/port-for/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mit;

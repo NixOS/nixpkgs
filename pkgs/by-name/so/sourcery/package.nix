@@ -30,10 +30,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
         platform = "manylinux1_x86_64";
         hash = "sha256-oUL7EVbfwgV1K1Rv0kzW5r1AXr167BCXwzntDgVyTc0=";
       };
-      "x86_64-darwin" = fetchWheel {
-        platform = "macosx_10_9_x86_64";
-        hash = "sha256-Ynn1BUBrmzRV2sL5ZGwOEQ/ccoV0edwFt4iiz9KN+k8=";
-      };
       "aarch64-darwin" = fetchWheel {
         platform = "macosx_11_0_arm64";
         hash = "sha256-iQNOSoAClAk2FMjAExfgsFHDXS56vwieePGDCYRRbgQ=";

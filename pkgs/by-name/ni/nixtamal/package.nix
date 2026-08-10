@@ -21,7 +21,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.8.0";
+  version = "1.9.3";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -30,13 +30,15 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-75p+4hZtgsiUeOxRhLpg3l/0G/XS2uCCPF58KbGTqJ8=";
+    hash = "sha256-NlCm9XQBK5ooX67ruOJr8TWlOAHGoCgNwIU0BKWol84=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     removeReferencesTo
     installShellFiles
+    # Compile-time preprocessing
+    ocamlPackages.ppx_deriving
     # Completions
     ocamlPackages.cmdliner
     # For manpages
@@ -48,7 +50,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   buildInputs = with ocamlPackages; [
     cmdliner
     fmt
-    ppx_deriving_qcheck
   ];
 
   propagatedBuildInputs = with ocamlPackages; [
@@ -62,18 +63,17 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     })
     kdl
     logs
-    ppx_deriving
-    qcheck-core
     saturn
     stdint
-    uri
     xdg
   ];
 
   checkInputs = with ocamlPackages; [
     alcotest
+    ppx_deriving_qcheck
     qcheck
     qcheck-alcotest
+    qcheck-core
   ];
 
   postPatch = ''
@@ -105,6 +105,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
        --mandir="$man/share/man" \
        --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
        nixtamal
+
+    cp -r "$src/meta" "$src/ncl" "$data/share"/*/
 
     for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"; do
        remove-references-to -t "$dep" "$bin/bin/nixtamal"
@@ -142,7 +144,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   };
 
   meta = {
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "nixtamal";
     outputsToInstall = [

@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
     maintainers = with lib.maintainers; [
-      trepetti
       aleksana
     ];
     license = lib.licenses.gpl3Plus;

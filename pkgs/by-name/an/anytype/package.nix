@@ -24,7 +24,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "anytype";
-  version = "0.55.5";
+  version = "0.56.1";
 
   strictDeps = true;
 
@@ -32,14 +32,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9myOd7LTH/NoRY4SjU7+FSSNIhDMGKRPTBOQOURk/Hs=";
+    hash = "sha256-7e8wGrha3eiW1ou0vJa/njDna87wDOPzpk4fX6qj9qA=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "b96bf7b76f10e764e7a60c7f284854aaabedcec6";
-    hash = "sha256-+vkProHi25CWxG74QB5eo0Pnwj0u5vXoZeeCoXyMOv4=";
+    rev = "c16beda3d1a931d3330b1f7cc99185f7bdcba2f5";
+    hash = "sha256-ludb8WyECZW0PxnhR/znHS3uXQuk8KDIXHujha4YeA0=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-6IHFidjVDDzUOCRXVwjvzcLGKV6dWWS7k2jwrOuJ748=";
+    outputHash = "sha256-i2GPGi7LgIy8y+//rR0H+vX+bc/v2NKd7xGLargd044=";
     outputHashMode = "recursive";
   };
 
@@ -143,6 +143,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace scripts/generate-protos.sh \
       --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
 
+    substituteInPlace package.json \
+      --replace-fail \
+        '"build:nmh": "go build -o dist/nativeMessagingHost ./go/nativeMessagingHost.go"' \
+        '"build:nmh": "go build -trimpath -ldflags=-buildid= -o dist/nativeMessagingHost ./go/nativeMessagingHost.go"'
+
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
 
@@ -168,7 +173,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # remove unnecessary files
   preInstall = ''
     chmod u+w -R dist node_modules
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    find dist node_modules -type f \( -name '*.ts' -o -name '*.map' \) -delete
+    rm -f node_modules/keytar/build/{Makefile,binding.Makefile,config.gypi,keytar.target.mk}
+    rm -rf node_modules/keytar/build/Release/{.deps,obj.target}
   '';
 
   installPhase = ''
@@ -231,7 +238,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     broken = stdenv.hostPlatform.isDarwin;

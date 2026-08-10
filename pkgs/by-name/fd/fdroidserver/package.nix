@@ -7,16 +7,9 @@
   installShellFiles,
 }:
 
-let
-  pythonPackages = python3Packages.overrideScope (
-    self: super: {
-      sqlalchemy = self.sqlalchemy_1_4;
-    }
-  );
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
-  version = "2.4.3";
+  version = "2.4.5";
 
   pyproject = true;
 
@@ -24,13 +17,15 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "fdroid";
     repo = "fdroidserver";
     tag = finalAttrs.version;
-    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
+    hash = "sha256-AiDhtYpaOXTRVY5QA7fOgfGbpCtdJYzt3tnY2lrGJao=";
   };
 
   pythonRelaxDeps = [
     "androguard"
     "pyasn1"
     "pyasn1-modules"
+    "ruamel-yaml"
+    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
@@ -43,7 +38,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   '';
 
   preConfigure = ''
-    ${pythonPackages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
@@ -55,19 +50,20 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with pythonPackages; [
+  build-system = with python3Packages; [
     setuptools
     babel
   ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
+    asn1crypto
     androguard
     biplist
     clint
     defusedxml
     gitpython
     libcloud
-    libvirt
+    libvirt-python
     magic
     mwclient
     oscrypto
@@ -81,13 +77,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pyyaml
     qrcode
     requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
+    ruamel-yaml
     sdkmanager
     yamllint
   ];

@@ -17,8 +17,8 @@ in
       # Releases prior to 10.14.1 don't have any sample data available to them, so just use the 10.14.1 release's
       # sample data.
       sample-data_10_14_1 = {
-        url = "https://github.com/NVIDIA/TensorRT/releases/download/v10.14/tensorrt_sample_data_20251106.zip";
-        hash = "sha256-IA1pH8idtk/7FD1Tf0hKtyP7A5SW/2ugezyBRluG8yk=";
+        url = "https://github.com/NVIDIA/TensorRT/releases/download/v10.14/tensorrt_sample_data_20260128.zip";
+        hash = "sha256-KSUKJsBaOSRHJKDp5SUzmfHNWlcEP1TwTgXja3nhVKI=";
       };
     in
     fetchzip (

@@ -31,10 +31,15 @@
         wrapper = finalAttrs.finalPackage;
       };
     };
-    postBuild = ''
-      wrapProgram "$out/bin/treefmt" \
-        --prefix PATH : "$binPath" \
-        --add-flags "--config-file $configFile"
-    '';
+    postBuild =
+      let
+        wrapPrefixPathArgument = lib.optionalString (
+          config.runtimeInputs != [ ]
+        ) "--prefix PATH : \"$binPath\"";
+      in
+      ''
+        wrapProgram "$out/bin/treefmt" \
+          --add-flags "--config-file $configFile " ${wrapPrefixPathArgument}
+      '';
   });
 }

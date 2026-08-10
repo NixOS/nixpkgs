@@ -57,10 +57,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     bashate
   ];
 
-  # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "test_load_ok")
+    stestr run
     runHook postCheck
   '';
 

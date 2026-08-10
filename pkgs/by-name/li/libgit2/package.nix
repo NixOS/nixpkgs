@@ -17,6 +17,7 @@
   gitstatus,
   llhttp,
   withGssapi ? false,
+  withExperimentalSha256 ? false,
   krb5,
 }:
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_HTTP_PARSER=llhttp"
     "-DUSE_SSH=ON"
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
+    (lib.cmakeBool "EXPERIMENTAL_SHA256" withExperimentalSha256)
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
@@ -87,6 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
       set -x
       ./libgit2_tests ''${testArgs[@]}
     )
+  '';
+
+  postInstall = lib.optionalString withExperimentalSha256 ''
+    # Downstream Rust bindings (git2-rs / git2-sys) expect experimental headers
+    # to be located at 'git2/experimental.h', but upstream libgit2 installs them
+    # into 'git2-experimental/' when EXPERIMENTAL_SHA256 is enabled.
+    ln -s git2-experimental $dev/include/git2
   '';
 
   passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {

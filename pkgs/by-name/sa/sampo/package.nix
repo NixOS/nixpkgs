@@ -9,21 +9,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
-  version = "0.18.0";
+  version = "0.19.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bruits";
     repo = "sampo";
     tag = "cargo-sampo-v${finalAttrs.version}";
-    hash = "sha256-LPgY/UA2AF871bid8wqxzIhTDnsHsQ7IhY/eNYE6Npk=";
+    hash = "sha256-WGK2B6SzZNnclD2HeurXLujlScTZaI+jQbOaOrAt8Xw=";
   };
 
-  cargoHash = "sha256-U52xGXJlz7cM1fJWZMp51iNgYQRA8AKJ0OkbxlAB5C8=";
+  cargoHash = "sha256-WY+LYVxEo5FEon3pv/OHiDUZDXSaPot7PIgdOTXpWII=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  # Disable self-update
+  buildNoDefaultFeatures = true;
 
   cargoBuildFlags = [
     "-p"

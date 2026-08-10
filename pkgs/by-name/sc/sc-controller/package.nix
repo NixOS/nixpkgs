@@ -1,5 +1,6 @@
 {
   lib,
+  python3,
   python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
@@ -20,14 +21,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sc-controller";
-  version = "0.5.5";
+  version = "0.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IQxHa0bR8FWad9v5DfvXHskwayCgzbJm5ekzf1sjfiQ=";
+    hash = "sha256-jQcp3c3S6G6GrU6j0m5Re9S28eLGJxmvD81dOuHFCz8=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +91,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       patchPythonScript scc-autoswitch-daemon.py
       patchPythonScript scc-osd-daemon.py
     )
+  '';
+
+  preCheck = ''
+    # Fix for tests not finding native libraries
+    ln -s build/lib.*/*.so -t .
   '';
 
   doInstallCheck = true;

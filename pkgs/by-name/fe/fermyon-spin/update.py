@@ -7,7 +7,6 @@ from os.path import join, dirname
 # We set oldHash and newHash fields in the inner dict later.
 systems = {
   "x86_64-linux": {"os": "linux", "arch": "amd64"},
-  "x86_64-darwin": {"os": "macos", "arch": "amd64"},
   "aarch64-linux": {"os": "linux", "arch": "aarch64"},
   "aarch64-darwin": {"os": "macos", "arch": "aarch64"},
 }

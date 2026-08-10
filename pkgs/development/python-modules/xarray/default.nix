@@ -39,7 +39,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xarray";
-  version = "2026.04.0";
+  version = "2026.07.0";
   pyproject = true;
   # Needed mainly for pytestFlags with spaces
   __structuredAttrs = true;
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pydata";
     repo = "xarray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
+    hash = "sha256-dj6V/HkHRm1kjHlAHUjN7pGCa1ioW11o1fdKUyxI8e0=";
   };
 
   postPatch = ''

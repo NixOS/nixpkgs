@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     # NOTE: Darwin requires a static build; otherwise, tests fail in the Python package.
     BUILD_SHARED_LIBS = if stdenv.hostPlatform.isDarwin then "0" else "1";
     ONNX_BUILD_PYTHON = "1";
-    ONNX_BUILD_TESTS = if finalAttrs.doCheck then "1" else "0";
+    ONNX_BUILD_TESTS = if finalAttrs.finalPackage.doCheck then "1" else "0";
     # ONNX_ML is enabled by default.
     # See: https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/CMakeLists.txt#L66-L73
     ONNX_ML = "1";
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
-  # Leave the CMake bulid directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
+  # Leave the CMake build directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
   # them up, do the python build from the top-level, then resume the C++ build.
   preBuild = ''
     pushd ..

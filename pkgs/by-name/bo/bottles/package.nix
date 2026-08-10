@@ -21,6 +21,7 @@ let
         # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
         # See https://github.com/bottlesdevs/Bottles/issues/2401
         vkbasalt
+        lsfg-vk
       ]
       ++ extraPkgs pkgs;
 
@@ -104,6 +105,8 @@ let
         openal
 
         # Steam runtime
+        attr
+        glibc
         libgcrypt
         libgpg-error
         p11-kit

@@ -1,0 +1,57 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2446abb8..8946820c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -194,6 +194,8 @@ option(COVERAGE "Compile with Sail coverage collection enabled.")
+ include(GNUInstallDirs)
+ 
+ # Third party dependencies.
++find_package(CLI11 REQUIRED)
++find_package(jsoncons REQUIRED)
+ add_subdirectory("dependencies")
+ 
+ # Sail C runtime.
+diff --git a/c_emulator/CMakeLists.txt b/c_emulator/CMakeLists.txt
+index 349d2c68..3d121b75 100644
+--- a/c_emulator/CMakeLists.txt
++++ b/c_emulator/CMakeLists.txt
+@@ -60,7 +60,7 @@ target_include_directories(riscv_model
+ )
+ 
+ target_link_libraries(riscv_model
+-    PUBLIC elfio softfloat sail_runtime jsoncons default_config
++    PUBLIC elfio softfloat sail_runtime jsoncons::jsoncons default_config
+ )
+ 
+ add_dependencies(riscv_model generated_sail_riscv_model generated_config_schema)
+@@ -94,7 +94,7 @@ set_source_files_properties(
+ add_dependencies(sail_riscv_sim generated_sail_riscv_model)
+ 
+ target_link_libraries(sail_riscv_sim
+-    PRIVATE CLI11 riscv_model
++    PRIVATE CLI11::CLI11 riscv_model
+ )
+ 
+ # After the emulator is built, use it to validate the generated config files.
+diff --git a/c_emulator/riscv_sim.cpp b/c_emulator/riscv_sim.cpp
+index b50bb4cb..d8a59db1 100644
+--- a/c_emulator/riscv_sim.cpp
++++ b/c_emulator/riscv_sim.cpp
+@@ -18,7 +18,7 @@
+ #include <unistd.h>
+ #include <vector>
+ 
+-#include "CLI11.hpp"
++#include "CLI/CLI.hpp"
+ #include "elf_loader.h"
+ #include "jsoncons/config/version.hpp"
+ #include "jsoncons/json.hpp"
+diff --git a/dependencies/CMakeLists.txt b/dependencies/CMakeLists.txt
+index 95600694..66692022 100644
+--- a/dependencies/CMakeLists.txt
++++ b/dependencies/CMakeLists.txt
+@@ -1,4 +1,2 @@
+-add_subdirectory("CLI11")
+ add_subdirectory("elfio")
+ add_subdirectory("softfloat")
+-add_subdirectory("jsoncons")

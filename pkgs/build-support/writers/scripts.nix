@@ -799,7 +799,7 @@ rec {
     ## `pkgs.writers.writeNim` usage example
 
     ```nix
-      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+      writeNim "hello-nim" { nim = pkgs.nim; } ''
         echo "hello nim"
       '';
     ```
@@ -809,7 +809,7 @@ rec {
     name:
     {
       makeWrapperArgs ? [ ],
-      nim ? pkgs.nim2,
+      nim ? pkgs.nim,
       nimCompileOptions ? { },
       strip ? true,
     }:
@@ -1196,15 +1196,12 @@ rec {
       ])
       // {
         interpreter =
-          if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then
-              python.interpreter
-            else if (lib.isFunction libraries) then
-              (python.withPackages libraries).interpreter
-            else
-              (python.withPackages (ps: libraries)).interpreter
+          if libraries == [ ] then
+            python.interpreter
+          else if (lib.isFunction libraries) then
+            (python.withPackages libraries).interpreter
           else
-            python.interpreter;
+            (python.withPackages (ps: libraries)).interpreter;
         check = optionalString (python.isPy3k && doCheck) (
           writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"

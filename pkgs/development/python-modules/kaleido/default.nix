@@ -34,10 +34,6 @@ buildPythonPackage rec {
         url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-manylinux2014_aarch64.whl";
         hash = "sha256-hFgZhEyAgslGnZwX5CYh+/hcKyN++KhuyKhSf5i2USo=";
       };
-      x86_64-darwin = fetchurl {
-        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-macosx_10_11_x86_64.whl";
-        hash = "sha256-ym9z5/8AquvyhD9z8dO6zeGTDvUEEJP+drg6FXhQSac=";
-      };
       aarch64-darwin = fetchurl {
         url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-macosx_11_0_arm64.whl";
         hash = "sha256-u5pdH3EDV9XUMu4kDvZlim0STD5hCTWBe0tC2px4fAU=";
@@ -98,7 +94,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/plotly/Kaleido/releases";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
     ];

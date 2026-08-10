@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-ovh";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-ovh";
     tag = "v${version}";
-    hash = "sha256-UbxOdpG099G9oKyweIMH5JTP0W0MpLmsOWgQYEFD8sQ=";
+    hash = "sha256-XNwrne+NTriByEmP9JGGWcymDT42lryWtSEcuGdJiXU=";
   };
 
   build-system = [

@@ -24,11 +24,6 @@ stdenv.mkDerivation rec {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.arm64-linux.ubuntu-24.04-arm_glibc2.39.tgz";
         hash = "sha256-rn65t253SfUShAM3kXiLQJHT7JS7EO3fAPB23LWIwfc=";
       })
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      (fetchurl {
-        url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.macos-13_gmp-static.tgz";
-        hash = "sha256-fW0hqjrWUcy+PIN8WHb1r4EYgfuwF9Zz3q7f2ZtxOi0=";
-      })
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       (fetchurl {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.arm64-darwin.macos-15_gmp-static.tgz";

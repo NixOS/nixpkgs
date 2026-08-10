@@ -26,6 +26,43 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
     ./CVE-2026-7598.patch
+
+    (fetchurl {
+      name = "CVE-2025-15661.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2025-15661.patch";
+      hash = "sha256-Rz6i/881CbObUDcZbcPlgVPaKizSp6ZRTdmJNJ9HLHE=";
+    })
+
+    (fetchurl {
+      name = "CVE-2026-55199.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2026-55199.patch";
+      hash = "sha256-AFZa5kohha62aE0if5ckmAdJ0TZNcjfP32yDznoEhNo=";
+    })
+
+    (fetchurl {
+      name = "CVE-2026-55200.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2026-55200.patch";
+      hash = "sha256-wCAglr8BsBWIhnh3SiFeyKzZmIp8rC5MVfFgoEzp/hE=";
+    })
+
+    # necessary for the fix for CVE-2026-15661
+    (fetchurl {
+      name = "libssh-unconst-backport.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/libssh-unconst-backport.patch";
+      hash = "sha256-jc01Fb70GbaD9+RYeSjRaLFBtKLiMPTMuXas21aC0Ag=";
+    })
+
+    # https://github.com/libssh2/libssh2/issues/1925#issuecomment-4938515829
+    (fetchurl {
+      name = "CVE-2026-58050.patch";
+      url = "https://raw.githubusercontent.com/JuliaPackaging/Yggdrasil/9404aa5dd96c945a790c425a5f49af19ed2a93b0/L/LibSSH2/LibSSH2%401.11/bundled/patches/CVE-2026-58050-3449752.patch";
+      hash = "sha256-BZ1ewZgrroev2gkJwdoHCMFJK4wiRmA/Y4tzwaQqBd8=";
+    })
+    (fetchurl {
+      name = "CVE-2026-58051.patch";
+      url = "https://github.com/JuliaPackaging/Yggdrasil/raw/9404aa5dd96c945a790c425a5f49af19ed2a93b0/L/LibSSH2/LibSSH2%401.11/bundled/patches/CVE-2026-58051-a9758da.patch";
+      hash = "sha256-fduXIH02uwzqWV2RDidZmaDBy51V8yuC4XKlGYacjxg=";
+    })
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -57,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
     platforms = lib.platforms.all;
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.bsd3;
   };
 })

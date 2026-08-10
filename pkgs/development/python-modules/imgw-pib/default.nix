@@ -8,6 +8,7 @@
   freezegun,
   lib,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -16,17 +17,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "imgw-pib";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
     tag = finalAttrs.version;
-    hash = "sha256-IJOzQV2WYc6ZWo6S6kkgSJLC4Y5kWbwkyMDvuFSmESU=";
+    hash = "sha256-nxQeYLDf7TEbbvbEygssH0X/sXLnoXoB1teZM8w70jQ=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonRelaxDeps = [
     "aiohttp"

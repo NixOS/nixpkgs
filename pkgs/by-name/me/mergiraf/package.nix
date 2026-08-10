@@ -6,23 +6,27 @@
 
   # native check inputs
   git,
+  jujutsu,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromCodeberg {
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tqz1gNg2XIYO/dFETajF3XUs3A1+mY82U4pz+mMb/ws=";
+    hash = "sha256-PfGiPH7CU8z+Flj3X04XnRdWcv5K+hTZMfvHpM52Fic=";
   };
 
-  cargoHash = "sha256-8Geu6Cd83hTnd53/ZTKq1YIEMIX4oIgwzSS6h8RNaP8=";
+  cargoHash = "sha256-1MDjaaH2PcvQz0DKSTADRB+8YEUWP1GN2edHk4EDVGA=";
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    jujutsu
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

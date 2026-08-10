@@ -23,6 +23,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  preCheck = ''
+    rm -rf docs
+  '';
+
   pythonImportsCheck = [ "click_threading" ];
 
   meta = {

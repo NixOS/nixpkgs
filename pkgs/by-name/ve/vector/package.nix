@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.56.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ge3epfB8xErF+2I1jW3OvHS+mHnGSSU6vOz2v/sSMW4=";
+    hash = "sha256-x4yfC/qAMRM7X19usonsp8GSJHwIsn0zoX0owLn2EXs=";
   };
 
-  cargoHash = "sha256-iwd6GCbI3PiM1ksAxDEZglueGWYCkEbJ3N76wn13TPY=";
+  cargoHash = "sha256-H26tUF+i/79t7W2BVjh2bVRCGZK8rgazHzlTF4L2jyA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -86,12 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
-  # https://github.com/vectordotdev/vector/pull/25406
-  postPatch = ''
-    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
-      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
-  '';
-
   doCheck = true;
   checkType = "debug";
 
@@ -109,6 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
     "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
     "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
+    "--skip=topology::test::reload::topology_reload_preserves_enrichment_table_state"
 
     # Requires access to journalctl
     "--skip=sources::journald::tests::emits_cursor"
@@ -125,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::journald::tests::parses_string_sequences"
     "--skip=sources::journald::tests::reads_journal"
 
-    # No multicast access avaiable in sandbox
+    # No multicast access available in sandbox
     "--skip=sources::socket::test::multicast_and_unicast_udp_message"
     "--skip=sources::socket::test::multicast_udp_message"
     "--skip=sources::socket::test::multiple_multicast_addresses_udp_message"

@@ -31,7 +31,7 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.4.0";
+  version = "2.4.1";
   outputs = [
     "out"
     "doc"
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    hash = "sha256-j2yi70L48HzcjsOR6KpBpwJJDq5VrHIBawuU3fRK4pI=";
+    hash = "sha256-ViQyHwscwe/2yrnvCPJZVP9kxRsz1L87mUhM8e3Yz/8=";
   };
 
   patches = [
@@ -115,13 +115,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-mutt" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -euo pipefail
 
       # Expect the text in format of "The current stable public release version is 2.2.6."
       new_version="$(curl -s http://www.mutt.org/download.html |
-          pcregrep -o1 'The current stable public release version is ([0-9.]+).')"
+          pcre2grep -o1 'The current stable public release version is ([0-9.]+).')"
       update-source-version ${pname} "$new_version"
     '';
   };

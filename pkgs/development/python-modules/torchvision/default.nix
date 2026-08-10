@@ -84,7 +84,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;

@@ -341,7 +341,7 @@ The double invocation is a _simple_ way to get around the problem that `nix-buil
 
 It treats the entire Maven repository as a single source to be downloaded, relying on Maven's dependency resolution to satisfy the output hash. This is similar to fetchers like `fetchgit`, except it has to run a Maven build to determine what to download.
 
-The first step will be to build the Maven project as a fixed-output derivation in order to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
+The first step will be to build the Maven project as a fixed-output derivation to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
 
 ::: {.note}
 Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
@@ -469,7 +469,7 @@ The previous example builds a `jar` file but that's not a file one can run.
 
 You need to use it with `java -jar $out/share/java/output.jar` and make sure to provide the required dependencies on the classpath.
 
-The following explains how to use `makeWrapper` in order to make the derivation produce an executable that will run the JAR file you created.
+The following explains how to use `makeWrapper` to make the derivation produce an executable that will run the JAR file you created.
 
 We will use the same repository we built above (either _double invocation_ or _buildMaven_) to setup a CLASSPATH for our JAR.
 

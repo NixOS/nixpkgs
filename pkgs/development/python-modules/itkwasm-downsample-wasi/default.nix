@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "itkwasm-downsample-wasi";
-  version = "1.8.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "itkwasm_downsample_wasi";
     inherit (finalAttrs) version;
-    hash = "sha256-OykKkZRlRGDw+SsK69z6dqh6LY7eUlyHGdZwmkKsMKQ=";
+    hash = "sha256-5vqw+sb9Zb0npYiDtzUla3JT5zEimOD5gAnwxcYi4cM=";
   };
 
   build-system = [

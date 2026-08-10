@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bergercookie/bubop";
     changelog = "https://github.com/bergercookie/bubop/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

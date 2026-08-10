@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "usacloud";
-  version = "1.22.3";
+  version = "1.22.8";
 
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vFaJBPw13YmjIzzYeAJZxnOc+nzO1Rs81xGWJqXMrL0=";
+    hash = "sha256-0RXlFmH1vvm0qIvxnVJ0RBXVO2qvz8ClL5OTSfE5Ns0=";
   };
 
-  vendorHash = "sha256-5UE0JAKEcKCyQg0ksnQt8WFHZlQZRVnM0LKwwnAgfqA=";
+  vendorHash = "sha256-5hMDkGvbm6x34HrhyNs2ycgNm9nW6nOIKJtKLMura0g=";
 
   ldflags = [
     "-s"

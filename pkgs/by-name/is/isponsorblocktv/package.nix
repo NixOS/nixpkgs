@@ -1,29 +1,20 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isponsorblocktv";
-  version = "2.6.1";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AGjLehhGYz8FyojSFmSYKLCkHAExtpQiukQnTNt1YoY=";
+    hash = "sha256-DxSrvUT1Ga8XwbPTZxMY4ZUBL4Tnhy9ZD0iuT+8NweE=";
   };
-
-  patches = [
-    # Port iSponsorBlockTV to pyytlounge v3
-    (fetchpatch {
-      url = "https://github.com/ameertaweel/iSponsorBlockTV/commit/1809ca5a0d561bc9326a51e82118f290423ed3e6.patch";
-      hash = "sha256-v5YXfKUPTzpZPIkVSQF2VUe9EvclAH+kJyiiyUEe/HM=";
-    })
-  ];
 
   build-system = with python3Packages; [
     hatchling
@@ -34,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     aiohttp
     appdirs
     async-cache
+    pychromecast
     pyytlounge
     rich-click
     rich
@@ -41,6 +33,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     textual-slider
     textual
     xmltodict
+    zeroconf
   ];
 
   # all dependencies are pinned to exact version numbers

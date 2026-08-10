@@ -112,7 +112,7 @@ in
       {
         boot.binfmt.emulatedSystems = [
           "aarch64-linux"
-          "wasm32-wasi"
+          "wasm32-wasip1"
         ];
         boot.binfmt.preferStaticEmulators = true;
 
@@ -121,7 +121,7 @@ in
             set -euo pipefail
             mkdir -p /tmp/chroot
             cp ${lib.getExe' pkgs.pkgsCross.aarch64-multiplatform.pkgsStatic.busybox "busybox"} /tmp/chroot/busybox
-            cp ${lib.getExe pkgs.pkgsCross.wasi32.yaml2json} /tmp/chroot/yaml2json # wasi binaries that build are hard to come by
+            cp ${lib.getExe pkgs.pkgsCross.wasm32-wasip1.yaml2json} /tmp/chroot/yaml2json # wasi binaries that build are hard to come by
             chroot /tmp/chroot /busybox uname -m | grep aarch64
             echo 42 | chroot /tmp/chroot /yaml2json | grep 42
           '')

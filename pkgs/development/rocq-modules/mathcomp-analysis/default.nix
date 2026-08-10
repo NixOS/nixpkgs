@@ -31,7 +31,7 @@ let
     lib.switch
       [ rocq-core.rocq-version mathcomp.version ]
       [
-        (case (range "9.0" "9.1") (range "2.4.0" "2.5.0") "1.16.0")
+        (case (range "9.0" "9.3") (range "2.4.0" "2.6.0") "1.16.0")
       ]
       null;
 
@@ -85,7 +85,7 @@ let
           ;
 
         namePrefix = [
-          "rocq-core"
+          "rocq"
           "mathcomp"
         ];
 

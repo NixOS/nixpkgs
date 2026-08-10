@@ -15,10 +15,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1x3mgdzr33xymbaidj273dax3591j7kpyia4nxhlji9dapsnbal5";
+      sha256 = "069fzwdij5i6iiqzfjb75bhkz7nwnqrwsr4m1m8ak149pcvjwm08";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.2.0";
   };
   digest-crc = {
     dependencies = [ "rake" ];
@@ -36,10 +36,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "19kdyjg3kv7x0ad4xsd4swy5izsbb1vl1rpb6qqcqisr5s23awi9";
+      sha256 = "1kqasqvy8d7r09ri4n6bkdwbk63j7afd9ilsw34nzlgh0qp69ldw";
       type = "gem";
     };
-    version = "1.17.2";
+    version = "1.17.4";
   };
   homie-mqtt = {
     dependencies = [
@@ -50,20 +50,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1aizmy6h60s5sj9x0q5i4174lmrzfm7283bvdz44mazgr486fa0b";
+      sha256 = "0vvvig5ccbj7byhn038s9d0w7vs3h3s0n4rrs60vq66n2nra2hnj";
       type = "gem";
     };
-    version = "1.8.0";
+    version = "1.8.2";
   };
   json = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "098m3q2jrx4xbf0knrbmflsynmmb5x9q9b0bzpmj7jmm1cr30mna";
+      sha256 = "10q54a0dkm0050n0zzqiv2ln8w931wszybbhym1i8r4mbpvkv90k";
       type = "gem";
     };
-    version = "2.16.0";
+    version = "2.21.1";
   };
   logger = {
     groups = [ "default" ];
@@ -76,14 +76,18 @@
     version = "1.7.0";
   };
   mqtt-ccutrer = {
+    dependencies = [
+      "logger"
+      "uri"
+    ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "17jv2snnk9lmdpbz5gjc5g6p6zrbws0gh4d3rd40nyb9shv1biwg";
+      sha256 = "0n24dk6v4s0593v4dkpig4s60qixjlpiyl2a3j3kmj27yrsvvs6v";
       type = "gem";
     };
-    version = "1.0.3";
+    version = "1.1.2";
   };
   mqtt-homeassistant = {
     dependencies = [
@@ -94,10 +98,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1vsn78gw55npkrzfvgjwq0qjhmr1dry9llrzbh0qwqxr3p90p6fi";
+      sha256 = "07g17lnxk06khfnfdnw221s9rqldgbcvbw82yd2310z71lsblnha";
       type = "gem";
     };
-    version = "1.0.3";
+    version = "1.2.1";
   };
   mqtt-homie-homeassistant = {
     dependencies = [
@@ -108,21 +112,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "07dpsm1hnkb4bw5lmdch2x3msdfyafxi81jfqg12s7qfvc52xni1";
+      sha256 = "1ymni26r7q5drqayq80qq04nh7k8kn6ylypdsk8ysjdlr30pyl2i";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.2.2";
   };
   mustermann = {
-    dependencies = [ "ruby2_keywords" ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "08ma2fmxlm6i7lih4mc3har2fzsbj1pl4hhva65kljf6nfvdryl5";
+      sha256 = "163i29mdcr1h0nximk3d51a1fgp7vz3sfasn8p1rjm2d4g3p0qac";
       type = "gem";
     };
-    version = "3.0.4";
+    version = "3.1.1";
   };
   net-telnet = {
     groups = [ "default" ];
@@ -161,20 +164,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "07pajhv7pqz82kcjc6017y4d0hwz5kp746cydpx1npd79r56xddr";
+      sha256 = "1c0l2jb2d75zdw7diqhh6sciwlxcwfacshp107af0cnmmff0xgyp";
       type = "gem";
     };
-    version = "6.6.1";
+    version = "7.2.1";
   };
   rack = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1xmnrk076sqymilydqgyzhkma3hgqhcv8xhy7ks479l2a3vvcx2x";
+      sha256 = "1hhjy9gcp52dzij05gmidqac8g28ski5xm67prwmdqmjfcgqxmsy";
       type = "gem";
     };
-    version = "3.2.4";
+    version = "3.2.6";
   };
   rack-protection = {
     dependencies = [
@@ -200,10 +203,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1sg4laz2qmllxh1c5sqlj9n1r7scdn08p3m4b0zmhjvyx9yw0v8b";
+      sha256 = "1s7zcxlmg88a6dam4aqbgk9xkpy6dkdfqmmcszkkliy3q3w38m2r";
       type = "gem";
     };
-    version = "2.1.1";
+    version = "2.1.2";
   };
   rackup = {
     dependencies = [ "rack" ];
@@ -211,20 +214,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "13brkq5xkj6lcdxj3f0k7v28hgrqhqxjlhd4y2vlicy5slgijdzp";
+      sha256 = "0s48d2a0z5f0cg4npvzznf933vipi6j7gmk16yc913kpadkw4ybc";
       type = "gem";
     };
-    version = "2.2.1";
+    version = "2.3.1";
   };
   rake = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "175iisqb211n0qbfyqd8jz2g01q6xj038zjf4q0nm8k6kz88k7lc";
+      sha256 = "009p524zl0p0kfa65nii8wdmaigkmawv9pbvlcffky7islmmp0nb";
       type = "gem";
     };
-    version = "13.3.1";
+    version = "13.4.2";
   };
   rmodbus = {
     dependencies = [ "digest-crc" ];
@@ -270,28 +273,40 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0w27v04d7rnxjr3f65w1m7xyvr6ch6szjj2v5wv1wz6z5ax9pa9m";
+      sha256 = "089pvsdyf8krrhzavqm1lq4yqf79valiklnn290y1qbgf6r2wixs";
       type = "gem";
     };
-    version = "2.6.1";
+    version = "2.8.0";
+  };
+  uri = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1ijpbj7mdrq7rhpq2kb51yykhrs2s54wfs6sm9z3icgz4y6sb7rp";
+      type = "gem";
+    };
+    version = "1.1.1";
   };
   waterfurnace_aurora = {
     dependencies = [
       "ccutrer-serialport"
+      "homie-mqtt"
       "mqtt-homie-homeassistant"
       "net-telnet-rfc2217"
       "puma"
       "rackup"
       "rmodbus"
       "sinatra"
+      "uri"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1nrcf0vyxh81hrbf315mpmwvzcwmz1552bvyyyydkg3kyz9gm36j";
+      sha256 = "1j6zrdsqjvn7d6kngcyqh28d7jp6mkmr381d7ixkh4v5wangjgqi";
       type = "gem";
     };
-    version = "1.5.8";
+    version = "1.7.0";
   };
 }

@@ -281,7 +281,7 @@ in
           If `sidekiqProcesses` is configured and any processes specify null `threads`, this value is used.
         '';
         type = lib.types.int;
-        default = 5;
+        default = 3;
       };
 
       sidekiqProcesses = lib.mkOption {
@@ -304,10 +304,13 @@ in
                   "digests"
                   "exports"
                   "families"
+                  "highest_priority"
                   "imports"
+                  "low_priority"
                   "mailers"
                   "places"
                   "points"
+                  "posters"
                   "reverse_geocoding"
                   "stats"
                   "tracks"

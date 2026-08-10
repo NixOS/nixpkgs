@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     texliveBasic
   ];
 
-  # Remove pre-built documentaton artifacts
+  # Remove pre-built documentation artifacts
   postConfigure = ''
     make clean
   '';

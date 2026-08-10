@@ -4,6 +4,7 @@ bcachefs-tools:
   stdenv,
   kernelModuleMakeFlags,
   kernel,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation {
@@ -27,6 +28,7 @@ stdenv.mkDerivation {
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
+    "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
   ];
 
   installPhase = ''
@@ -50,6 +52,6 @@ stdenv.mkDerivation {
       platforms
       ;
 
-    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "7.2");
+    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "7.3");
   };
 }

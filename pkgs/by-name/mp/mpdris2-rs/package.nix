@@ -6,15 +6,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpdris2-rs";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "szclsya";
     repo = "mpdris2-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oiyqK7vj41d9bsXBtenc477SOrVHRkXpFljkN8MjdQg=";
+    hash = "sha256-VcBmo8zpgxowAZyHpe5EVQ/e6zuCYw21Xws0Yf5EZEo=";
   };
-  cargoHash = "sha256-xdgUKU9YiaC3o1uH38ZjvQgR78B/1LqTPis4+XqinQ8=";
+  cargoHash = "sha256-1Syt8lP/3Efr1A/LuV+k6aMuxDg+AWDg4HPTDFP/UW0=";
 
   postPatch = ''
     substituteInPlace misc/mpdris2-rs.service --replace-fail "/usr/local" "$out"

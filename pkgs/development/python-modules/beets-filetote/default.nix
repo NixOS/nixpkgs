@@ -1,11 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   buildPythonPackage,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # nativeBuildInputs
   beets-minimal,
@@ -14,7 +13,6 @@
   pytestCheckHook,
   beets-audible,
   mediafile,
-  pytest,
   reflink,
   toml,
   typeguard,
@@ -23,31 +21,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets-filetote";
-  version = "1.3.5";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qMHjcBrXkVG7U5a1E0yRwNgmg7XinRnK3gnV7jAZLTk=";
+    hash = "sha256-W5ZZ30LzZLXSMxBBIEQB03Fh04ovETfacZE5gA4oqVM=";
   };
-  # needed to keep beetsplug a namespace package, othwise other plugins will not be found
-  # can be removed with next version
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/gtronset/beets-filetote/commit/762cf0c4b60b8f6b38cf39b027de4241f12cef37.patch?full_index=1";
-      hash = "sha256-c7qIECcqwoV4ZOaA/8JYsM6Aym34peWPh7ZLWUxIYSI=";
-      excludes = [ "CHANGELOG.md" ];
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail "poetry-core<2.0.0" "poetry-core"
-  '';
 
   build-system = [
-    poetry-core
+    uv-build
   ];
 
   nativeBuildInputs = [
@@ -56,9 +41,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     mediafile
-    reflink
-    toml
-    typeguard
   ];
 
   nativeCheckInputs = [
@@ -69,12 +51,6 @@ buildPythonPackage (finalAttrs: {
     toml
     typeguard
     writableTmpDirAsHomeHook
-  ];
-
-  pytestFlags = [
-    # This is the same as:
-    #   -r fEs
-    "-rfEs"
   ];
 
   meta = {

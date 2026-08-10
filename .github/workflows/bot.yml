@@ -41,10 +41,6 @@ jobs:
   run:
     runs-on: ubuntu-slim
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
-    env:
-      # TODO: Remove after 2026-03-04, when Node 24 becomes the default.
-      # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -53,7 +49,8 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install @actions/artifact@6.2.1 bottleneck@2.19.5
+        run: npm ci --package-lock-only=false @actions/artifact bottleneck
+        working-directory: ci/github-script
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -91,7 +88,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
         name: Labels from touched files
         if: |
           github.event_name == 'pull_request_target' &&
@@ -101,7 +98,7 @@ jobs:
           configuration-path: .github/labeler.yml # default
           sync-labels: true
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
         name: Labels from touched files (no sync)
         if: |
           github.event_name == 'pull_request_target' &&
@@ -111,7 +108,7 @@ jobs:
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
         name: Labels from touched files (development branches)
         # Development branches like staging-next, haskell-updates and python-updates get special labels.
         # This is to avoid the mass of labels there, which is mostly useless - and really annoying for

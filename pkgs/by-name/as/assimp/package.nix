@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
-  version = "6.0.4";
+  version = "6.0.5";
   outputs = [
     "out"
     "lib"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "assimp";
     repo = "assimp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ryTgsN0z9BZBz7i9aUMKuneN5oqfxpduwJlb+Q0q3Mk=";
+    hash = "sha256-QWBi1pl5C76UtPhB6SmFipm9oEdnfhELMT3MqfV6oxg=";
   };
 
   postPatch = ''
@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
     (lib.cmakeBool "ASSIMP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ASSIMP_WARNINGS_AS_ERRORS" false)
   ];
 
   # Some matrix tests fail on non-86_64-linux:

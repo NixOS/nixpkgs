@@ -89,6 +89,8 @@ makeScopeWithSplicing' {
       libquotient = callPackage ../development/libraries/libquotient { };
       mlt = callPackage ../by-name/ml/mlt/package.nix { };
 
+      mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
+
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
       pyotherside = callPackage ../development/libraries/pyotherside { };
@@ -147,8 +149,8 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
-      sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
+      sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
+      sddm = callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
         kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced

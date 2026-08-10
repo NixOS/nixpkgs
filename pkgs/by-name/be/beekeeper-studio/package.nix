@@ -35,11 +35,12 @@
   systemd,
   libGL,
   krb5,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.8.1";
+  version = "5.9.3";
 
   src =
     let
@@ -47,17 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
       asset = selectSystem {
         x86_64-linux = "beekeeper-studio_${finalAttrs.version}_amd64.deb";
         aarch64-linux = "beekeeper-studio_${finalAttrs.version}_arm64.deb";
-        x86_64-darwin = "Beekeeper-Studio-${finalAttrs.version}-mac.zip";
         aarch64-darwin = "Beekeeper-Studio-${finalAttrs.version}-arm64-mac.zip";
       };
     in
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-e5y7uBzdbDSUQKpxRjho+2kU3wx23spdSv1PwmJ30gA=";
-        aarch64-linux = "sha256-iuZDeSYljiSRUqtLIA1BcrRaYoqg9dnlbRDLsetVkMQ=";
-        x86_64-darwin = "sha256-7iW40NPAU4C+gDZb7YmGFmTOnmg5V/yb9+6EW6MlyXU=";
-        aarch64-darwin = "sha256-Jnm4Vfm9+6dXmjnI5gYpYW1g7Anl9xhIKXbQA2SGUDE=";
+        x86_64-linux = "sha256-ngVE7hjtr/a6CBASwZA3gmvk7+WR2okQy+ywXbEUQpk=";
+        aarch64-linux = "sha256-aAoputvhCHqekT+pdaZEmps4aa48gz9DDCgomJvWQSw=";
+        aarch64-darwin = "sha256-SCttC+P3ZSAlU8mBWfPpT4wAVtwcvpgePhJp+sbsvU8=";
       };
     };
 
@@ -98,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     krb5
+    unixodbc
   ];
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
@@ -158,7 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

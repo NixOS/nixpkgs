@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.3.11";
+  version = "0.4.12";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vd4XmO+Z0Zs5kE/PMesnr6q+JUz+DGXWKVoHsPZPKwM=";
+    hash = "sha256-FOGycyjldrn0VN22fIv/NUmVxZ2S0GOl70/PzcdazDU=";
   };
 
-  cargoHash = "sha256-AggCANaSMeKftOlan8TpgLgpYgaLCpYBBbBOeLKCCVo=";
+  cargoHash = "sha256-tGfi5kdw1LQciOeUwceAql7In+ggyatsRC7T0+by9e8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Better `pre-commit`, re-engineered in Rust ";
     mainProgram = "prek";
     changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.knl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.thunze ];
   };
 })

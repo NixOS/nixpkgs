@@ -2,6 +2,7 @@
   lib,
   stdenv,
   home-assistant,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -15,10 +16,12 @@ let
       "frontend"
       "stream"
     ];
+    analytics = getComponentDeps "homeassistant_hardware";
     anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "deconz";
+    backup = getComponentDeps "homeassistant_hardware";
     bluetooth = getComponentDeps "switchbot";
     braviatv = getComponentDeps "ssdp";
     bthome = getComponentDeps "frontend";
@@ -28,6 +31,7 @@ let
     emulated_hue = [
       defusedxml
     ];
+    esphome = getComponentDeps "homeassistant_hardware";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     go2rtc = [
       tqdm
@@ -44,7 +48,12 @@ let
     homeassistant_sky_connect = getComponentDeps "zha";
     homeassistant_yellow = getComponentDeps "zha";
     homekit = getComponentDeps "frontend";
-    http = getComponentDeps "cloud" ++ getComponentDeps "frontend";
+    http = concatMap getComponentDeps [
+      "cloud"
+      "frontend"
+      "homeassistant_hardware"
+    ];
+    influxdb = getComponentDeps "isal";
     intelliclima = getComponentDeps "intellifire";
     logbook = getComponentDeps "alexa";
     lovelace = getComponentDeps "frontend" ++ [
@@ -54,9 +63,11 @@ let
     mastodon = concatMap getComponentDeps [
       "stream"
     ];
+    matter = getComponentDeps "homeassistant_hardware";
     miele = getComponentDeps "cloud";
     mobile_app = getComponentDeps "frontend";
     mopeka = getComponentDeps "switchbot";
+    mqtt = getComponentDeps "homeassistant_hardware";
     nest = [
       av
     ];
@@ -65,8 +76,14 @@ let
       pymetno
       radios
       rpi-bad-power
-    ];
+    ]
+    ++ getComponentDeps "homeassistant_hardware"
+    ++ getComponentDeps "usb";
     open_router = getComponentDeps "ai_task";
+    osoenergy = [
+      # loguru wants to write into HOME
+      writableTmpDirAsHomeHook
+    ];
     raspberry_pi = [
       rpi-bad-power
     ];
@@ -91,16 +108,20 @@ let
     yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
-    zwave_js = getComponentDeps "frontend";
+    zwave_js = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_hardware";
   };
 
   extraDisabledTestPaths = {
-    influxdb = [
-      # These tests fail because they check for the number of warnings in the
-      # logs and there is an extra warning in the logs:
-      # `WARNING:aiohttp_fast_zlib:zlib_ng and isal are not available, falling back to zlib, performance will be degraded.`
-      "tests/components/influxdb/test_sensor.py::test_state_for_no_results"
-      "tests/components/influxdb/test_sensor.py::test_state_matches_first_query_result_for_multiple_return"
+    ecovacs = [
+      # [2026.7.2] Outdated snapshots
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_room_from_not_current_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_no_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_invalid_map_id"
+    ];
+    izone = [
+      # [2026.7.2] Failed: Description not found for placeholder `host` in component.izone.config.step.confirm.description
+      "tests/components/izone/test_config_flow.py::test_not_found"
+      "tests/components/izone/test_config_flow.py::test_found"
     ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
@@ -115,9 +136,21 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
+    netatmo = [
+      # [2026.7.2] Language string mismatch (id vs ID)
+      "tests/components/netatmo/test_media_source.py::test_async_browse_media"
+    ];
+    remote_calendar = [
+      # [2026.8.0] AssertionError: assert '2026-05-18 06:40:00' == '2026-05-19 08:00:00'
+      "tests/components/remote_calendar/test_calendar.py::test_coordinator_refresh_updates_upcoming_event_state"
+    ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    wmspro = [
+      # [2026.7.2] Outdated snapshot
+      "tests/components/wmspro/test_number.py::test_number_update"
     ];
   };
 
@@ -134,19 +167,9 @@ let
       # disabled via nixos-was-never-supported.patch
       "test_deprecated_installation_issue_core"
     ];
-    opendisplay = [
-      # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
-      # https://github.com/home-assistant/core/pull/172909
-      "test_upload_image_device_not_in_range"
-    ];
-    teslemetry = [
-      # [2026.6.4] http://github.com/home-assistant/core/commit/a33a92982af19e682a0d0fa7bec0cb16929c00d1
-      "test_sensors"
-      "test_sensors_streaming"
-    ];
-    yardian = [
-      # [2026.6.1] failing snapshot
-      "test_all_entities"
+    smlight = [
+      # [2026.7.1] outdated snapshot
+      "test_entry_diagnostics"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
@@ -154,36 +177,34 @@ let
     ];
   };
 in
-lib.listToAttrs (
-  map (
-    component:
-    lib.nameValuePair component (
-      home-assistant.overridePythonAttrs (old: {
-        pname = "homeassistant-test-${component}";
-        pyproject = false;
+lib.genAttrs home-assistant.supportedComponentsWithTests (
+  component:
+  home-assistant.overridePythonAttrs (old: {
+    pname = "homeassistant-test-${component}";
+    pyproject = false;
 
-        dontBuild = true;
-        dontInstall = true;
+    dontBuild = true;
+    dontInstall = true;
 
-        nativeCheckInputs =
-          old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python3Packages
-          ++ extraCheckInputs.${component} or [ ];
+    nativeCheckInputs =
+      old.requirementsTest
+      ++ home-assistant.getPackages component home-assistant.python3Packages
+      ++ extraCheckInputs.${component} or [ ];
 
-        disabledTests = extraDisabledTests.${component} or [ ];
-        disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
+    disabledTests = extraDisabledTests.${component} or [ ];
+    disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
 
-        # components are more often racy than the core
-        dontUsePytestXdist = true;
+    # components are more often racy than the core
+    dontUsePytestXdist = true;
 
-        enabledTestPaths = [ "tests/components/${component}" ];
+    enabledTestPaths = [ "tests/components/${component}" ];
 
-        meta = old.meta // {
-          broken = lib.elem component [ ];
-          # upstream only tests on Linux, so do we.
-          platforms = lib.platforms.linux;
-        };
-      })
-    )
-  ) home-assistant.supportedComponentsWithTests
+    pytestFlags = [ "-vvv" ];
+
+    meta = old.meta // {
+      broken = lib.elem component [ ];
+      # upstream only tests on Linux, so do we.
+      platforms = lib.platforms.linux;
+    };
+  })
 )

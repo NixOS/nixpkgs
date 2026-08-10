@@ -88,7 +88,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "NLOPT_MATLAB" false)
     (lib.cmakeBool "NLOPT_GUILE" false)
     (lib.cmakeBool "NLOPT_LUKSAN" (!withoutLuksanSolvers))
-    (lib.cmakeBool "NLOPT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "NLOPT_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optional withPython (
     lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"

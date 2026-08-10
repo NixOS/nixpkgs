@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.12.11";
+  version = "1.12.13";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-X5cqedKlv48pFBp0w15oa7CGCmtuxneviS+Uz5sSRkU=";
+    hash = "sha256-gmcpLmAjXGDC0l6ho48lyS1uxHdY1SImNrjB7PCM1ec=";
   };
 
   postPatch = ''

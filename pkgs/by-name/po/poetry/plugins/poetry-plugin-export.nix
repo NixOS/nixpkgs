@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry-plugin-export";
     tag = version;
-    hash = "sha256-KsvkM4hjG+jrdPVauXYdc6E87Gp7srMg/mJHpWRjaEs=";
+    hash = "sha256-JFP44lMmJyS55dvMtxKvqctJ2Dt1NUJ+V4un/FHkIWw=";
   };
 
   build-system = [

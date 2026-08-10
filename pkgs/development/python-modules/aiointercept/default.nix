@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiointercept";
-  version = "0.1.7";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Polandia94";
     repo = "aiointercept";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+tl3Cb2Lkl40FdPNs5byCNoyfm9g6wEKtR0nT1jjrx0=";
+    hash = "sha256-ivWdPw7irgrl0mH+mxChRt6ZITey9w/QB9TIxGu5XeU=";
   };
 
   build-system = [ hatchling ];

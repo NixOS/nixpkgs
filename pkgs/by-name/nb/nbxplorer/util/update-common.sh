@@ -50,10 +50,15 @@ repo=$tmpdir/repo
 trap "rm -rf $tmpdir" EXIT
 git clone --depth 1 --branch v${newVersion} -c advice.detachedHead=false https://github.com/$(getRepo) $repo
 export GNUPGHOME=$tmpdir
+importKey() {
+  curl --fail --location --silent --show-error --retry 3 --retry-all-errors \
+    "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x$1" \
+    | gpg --batch --import
+}
 # Fetch Nicolas Dorier's key (64-bit key ID: 6618763EF09186FE)
-gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys AB4CFA9895ACA0DBE27F6B346618763EF09186FE 2> /dev/null
+importKey AB4CFA9895ACA0DBE27F6B346618763EF09186FE
 # Fetch Andrew Camilleri's key (64-bit key ID: 8E5530D9D1C93097)
-gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 836C08CF3F523BB7A8CB8ECF8E5530D9D1C93097 2> /dev/null
+importKey 836C08CF3F523BB7A8CB8ECF8E5530D9D1C93097
 echo
 echo "Verifying commit"
 git -C $repo verify-commit HEAD
@@ -64,12 +69,7 @@ echo
 
 # Update pkg version and hash
 echo "Updating $pkgName: $oldVersion -> $newVersion"
-if [[ $newVersion == $oldVersion ]]; then
-  # Temporarily set a source version that doesn't equal $newVersion so that $newHash
-  # is always updated in the next call to update-source-version.
-  (cd "$nixpkgs" && update-source-version "$pkgName" "0" "0000000000000000000000000000000000000000000000000000")
-fi
-(cd "$nixpkgs" && update-source-version "$pkgName" "$newVersion" "$newHash")
+(cd "$nixpkgs" && update-source-version "$pkgName" "$newVersion" "$newHash" --ignore-same-version)
 echo
 
 # Create deps file

@@ -71,7 +71,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
     teams = with lib.teams; [ ngi ];

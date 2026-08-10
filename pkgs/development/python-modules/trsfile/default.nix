@@ -9,18 +9,16 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "trsfile";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "Keysight";
     repo = "python-trsfile";
     tag = finalAttrs.version;
-    hash = "sha256-mY4L1FFg2wDWAGVadOca7GDffA05O3v317SCqHxt4F0=";
+    hash = "sha256-c56DvBezOPOTBoNnnP0NnpeKv5Gmf6usGrLwI4Qm3As=";
   };
 
   pyproject = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   build-system = [
     setuptools

@@ -42,14 +42,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "10.1.1";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = version;
-    hash = "sha256-dFwlcbR8NNKrDBoKPDX9M82tTK5aCbeP3KMF/BctgMc=";
+    hash = "sha256-ed6t96CcemrUE6NtBmP1Am7l7dYmcNLGFN8slTSfgOM=";
   };
 
   postPatch = ''

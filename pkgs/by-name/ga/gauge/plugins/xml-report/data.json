@@ -1,9 +1,5 @@
 {
   "version": "0.5.2",
-  "x86_64-darwin": {
-    "url": "https://github.com/getgauge/xml-report/releases/download/v0.5.2/xml-report-0.5.2-darwin.x86_64.zip",
-    "hash": "sha256-YVH9Eh9EVDdJp8F/PXMz4egVpo8ULJmvWjWHH4iH2iI="
-  },
   "aarch64-darwin": {
     "url": "https://github.com/getgauge/xml-report/releases/download/v0.5.2/xml-report-0.5.2-darwin.arm64.zip",
     "hash": "sha256-UW3Axcti8r9dEfiupj2r+mcLGpFBwYQf/7mDNyynReE="

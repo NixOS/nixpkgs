@@ -78,6 +78,8 @@ let
     # Allow very slow start
     DefaultTimeoutStartSec = 300;
     DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in
@@ -194,7 +196,7 @@ in
     # that do not specify any nodes, or an empty attr set as nodes) will not
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.package) {
       qemu = {
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so

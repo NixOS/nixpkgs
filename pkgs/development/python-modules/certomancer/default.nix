@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
   # build-system
   setuptools,
-  wheel,
+  setuptools-scm,
+
   # dependencies
   asn1crypto,
   click,
@@ -12,11 +14,13 @@
   python-dateutil,
   pyyaml,
   tzlocal,
+
   # optional-dependencies
   requests-mock,
   jinja2,
   werkzeug,
   python-pkcs11,
+
   # nativeCheckInputs
   freezegun,
   pyhanko-certvalidator,
@@ -28,19 +32,19 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
     tag = "v${version}";
-    hash = "sha256-2/qTTN/UuSMHjkSsOs/KbfzKLBjJSLHY51XtgQ6x1Wo=";
+    hash = "sha256-rsugn1g8iYESrC+IUSbxCAbwnKXWG+ubbUj9QdZB+Ow=";
   };
 
   build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   dependencies = [

@@ -36,6 +36,7 @@
   hatchling,
   httpx,
   importlib-metadata,
+  isoduration,
   itsdangerous,
   jinja2,
   jsonschema,
@@ -114,7 +115,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-wJ2u+y3umecL4IeVW/29/yDgYZ77ffOBQLHeplD3XlQ=";
+        hash = "sha256-bKdZ4Y+enrXYuSpJ85eFHl2EM+QfZsMTGqQZ9yLfGEc=";
       };
 
       buildPhase = ''
@@ -147,7 +148,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-AKaafmDjIlg4eFJT1JGyelXVjcId8f0iXTR3JK4ZMq0=";
+        hash = "sha256-Ye8jRs9jgsf3YUd3JPldEcTzQFmgS4cvkOVP6tuZw+8=";
       };
 
       buildPhase = ''
@@ -228,10 +229,12 @@ buildPythonPackage (
         fsspec
         greenback
         httpx
+        isoduration
         jinja2
         jsonschema
         methodtools
         msgspec
+        opentelemetry-api
         pendulum
         psutil
         pydantic
@@ -349,7 +352,7 @@ buildPythonPackage (
   in
   {
     pname = "apache-airflow";
-    version = "3.2.2";
+    version = "3.3.0";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -358,7 +361,7 @@ buildPythonPackage (
       owner = "apache";
       repo = "airflow";
       tag = finalAttrs.version;
-      hash = "sha256-nAFSLdcKmP2CNm3rx+/fwIsJnpju7wBl+fYWQV8p+sU=";
+      hash = "sha256-1DRaJCJ488BKUOEFaFMGnZjS2yxBx4pwHvIP67juu54=";
     };
 
     pyproject = true;

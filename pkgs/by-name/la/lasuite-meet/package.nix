@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.21.0";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-pUCSdnTBj/qwc0cya3P96r89r2K1GNSGg4DeIhxUKwI=";
+    hash = "sha256-gtChKd6sr2nHEmi0Z/nbuCCNsOD8iVIAFjqonZFgQ/Y=";
   };
 
   meta = {
@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
   ];
 
@@ -86,6 +86,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       mozilla-django-oidc
       nested-multipart-parser
       phonenumbers
+      posthog
       psycopg
       pydantic
       pyjwt

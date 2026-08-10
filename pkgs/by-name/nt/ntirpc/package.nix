@@ -9,17 +9,18 @@
   libnsl,
   prometheus-cpp-lite,
   rdma-core,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntirpc";
-  version = "9.16";
+  version = "14.1";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZpjP1ugT9gN3TW7roBfJJBA6Y6FCkaOl31WRoRqPvTU=";
+    hash = "sha256-cOEmlsmXHTXiQcTmCkiQ8PeA+0U3W+xyUQ0Ba8kwvrw=";
   };
 
   outputs = [
@@ -43,11 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     libnsl
     prometheus-cpp-lite
     rdma-core
+    openssl
   ];
 
   cmakeFlags = [
     "-DUSE_MONITORING=ON"
     "-DUSE_RPC_RDMA=ON"
+    "-DUSE_TLS=ON"
   ];
 
   postInstall = ''

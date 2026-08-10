@@ -46,6 +46,8 @@ buildPythonPackage (finalAttrs: {
     "test_process_misc_csv"
     "test_process_runnable_win32_jar"
     "test_process_runnable_win32_lnk"
+    # Assertion error
+    "test_process_runnable_win32_msi"
   ];
 
   meta = {

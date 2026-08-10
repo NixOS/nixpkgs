@@ -42,14 +42,14 @@ mkCoqDerivation {
       ]
       null;
 
-  release."1.0.0".sha256 = "sha256-kszARPBizWbxSQ/Iqpf2vLbxYc6AjpUCLnSNlPcNfls=";
-  release."1.1.1".sha256 = "sha256-5wItMeeTRoJlRBH3zBNc2VUZn6pkDde60YAvXTx+J3U=";
-  release."1.2.2".sha256 = "sha256-EU9RJGV3BvnmsX+mGH+6+MDXiGHgDI7aP5sIYiMUXTs=";
-  release."1.2.3".sha256 = "sha256-6uc1VEfDv+fExEfBR2c0/Q/KjrkX0TbEMCLgeYcpkls=";
-  release."1.2.4".sha256 = "sha256-BRxt0LGPz2u3kJRjcderaZqCfs8M8qKAAwNSWmIck7Q=";
-  release."1.2.5".sha256 = "sha256-wTfe+g7ljWs1S+g02VQutnJGLVIOzNX1lm1HTMXeUUA=";
-  release."1.2.6".sha256 = "sha256-D7EEiLeCJMgxsYvlAFyL7QZyx/KJAKesVE+vyfzqzkU=";
-  release."1.2.7".sha256 = "sha256-pCal3BPZ85SMAsEFAXRWWV7nuriHGWtyfNocJqsEmLk=";
+  release."1.0.0".hash = "sha256-kszARPBizWbxSQ/Iqpf2vLbxYc6AjpUCLnSNlPcNfls=";
+  release."1.1.1".hash = "sha256-5wItMeeTRoJlRBH3zBNc2VUZn6pkDde60YAvXTx+J3U=";
+  release."1.2.2".hash = "sha256-EU9RJGV3BvnmsX+mGH+6+MDXiGHgDI7aP5sIYiMUXTs=";
+  release."1.2.3".hash = "sha256-6uc1VEfDv+fExEfBR2c0/Q/KjrkX0TbEMCLgeYcpkls=";
+  release."1.2.4".hash = "sha256-BRxt0LGPz2u3kJRjcderaZqCfs8M8qKAAwNSWmIck7Q=";
+  release."1.2.5".hash = "sha256-wTfe+g7ljWs1S+g02VQutnJGLVIOzNX1lm1HTMXeUUA=";
+  release."1.2.6".hash = "sha256-D7EEiLeCJMgxsYvlAFyL7QZyx/KJAKesVE+vyfzqzkU=";
+  release."1.2.7".hash = "sha256-pCal3BPZ85SMAsEFAXRWWV7nuriHGWtyfNocJqsEmLk=";
 
   propagatedBuildInputs = [
     mathcomp-ssreflect

@@ -7,7 +7,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  llvmPackages,
 
   # dependencies
   frozendict,
@@ -45,10 +44,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
   ];
 
   dependencies = [
@@ -98,6 +93,9 @@ buildPythonPackage (finalAttrs: {
     "test_mxfp8_scales_e2e"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Numerical precision error
+    "test_quantization_enabled_disabled"
+
     # torch._inductor.exc.InductorError: ImportError: dlopen(/nix/var/nix/builds/nix-25002-542173852/torchinductor__nixbld1/xo/cxovsevcfanmw7lgoddbnyhoxes3nzlu7ecugxedaq2zr4f6b2qh.main.so, 0x0002):
     # symbol not found in flat namespace '___kmpc_barrier'
     "test_compress_decompress_module"

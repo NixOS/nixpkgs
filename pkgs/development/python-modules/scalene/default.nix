@@ -138,10 +138,9 @@ buildPythonPackage (finalAttrs: {
       # The scalene doesn't seem to account for arm64 linux
       "aarch64-linux"
 
-      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
-      # x86 and the other as arm64 then tries to link them into a single binary
+      # On darwin, builds mistakenly compile one part as x86 and the
+      # other as arm64 then tries to link them into a single binary
       # which fails.
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

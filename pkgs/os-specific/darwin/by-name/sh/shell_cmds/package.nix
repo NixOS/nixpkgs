@@ -24,7 +24,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-fY8k7qzqqiv/KvGIB4a82qbNsm23QPnGOadrZmNoi54=";
+  xcodeHash = "sha256-sbgPFMMXgUp+F1IRLiaFto+PsfMHBd23KQ1sQK7tP7A=";
 
   postPatch = ''
     # Fix `mktemp` templates

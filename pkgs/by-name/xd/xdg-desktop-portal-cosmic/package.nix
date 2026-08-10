@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   glib,
+  just,
   libcosmicAppHook,
   pkg-config,
   util-linux,
@@ -17,23 +18,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.16";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-LwZqF3Yg4DMis21wtu1XMAoPTjJ39GPrf07K9Yc2YAg=";
+    hash = "sha256-Q4m5PVF8vC4Z2+06EYqMcoDoVogcA33OF4IaAlDStzM=";
   };
 
-  cargoHash = "sha256-wSwXzaU872KqcRgAIKRuQFvG9f/q4z0OysysLyYMwdg=";
+  cargoHash = "sha256-Z5rszmonDnoplysE86ipNDWfh3QFW05sJsNxDbPi5Q8=";
 
   separateDebugInfo = true;
 
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     libcosmicAppHook
     rustPlatform.bindgenHook
     pkg-config
@@ -53,11 +55,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/backgrounds' '${cosmic-wallpapers}/share/backgrounds'
   '';
 
-  dontCargoInstall = true;
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   passthru = {

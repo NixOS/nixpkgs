@@ -83,7 +83,6 @@ in
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
-    ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/lomiri.nix
     ./lightdm-greeters/tiny.nix
@@ -106,6 +105,9 @@ in
         "autoLogin"
         "user"
       ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "xserver" "displayManager" "lightdm" "greeters" "enso" ]
+      "services.xserver.displayManager.lightdm.greeters.enso has been removed following removal of the corresponding package."
     )
   ];
 
@@ -362,7 +364,7 @@ in
           {
             name = "unix";
             control = "sufficient";
-            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            modulePath = config.security.pam.pam_unixModulePath;
           }
         ];
 
@@ -446,7 +448,7 @@ in
           {
             name = "unix";
             control = "sufficient";
-            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            modulePath = config.security.pam.pam_unixModulePath;
           }
         ];
 
@@ -454,9 +456,8 @@ in
           {
             name = "unix";
             control = "requisite";
-            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            modulePath = config.security.pam.pam_unixModulePath;
             settings.nullok = true;
-            settings.yescrypt = true;
           }
         ];
 

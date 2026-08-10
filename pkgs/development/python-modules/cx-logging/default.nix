@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=70.1,<75" "setuptools"
+
+    echo '${finalAttrs.version}' > VERSION
   ''
   # The flag -soname isn't recognized by the linker on darwin. Only -install_name is valid.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

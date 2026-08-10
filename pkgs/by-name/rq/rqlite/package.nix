@@ -12,16 +12,16 @@ buildGoModule (
   in
   {
     pname = "rqlite";
-    version = "10.2.1";
+    version = "10.2.7";
 
     src = fetchFromGitHub {
       owner = "rqlite";
       repo = "rqlite";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-SQH/dkirdsIMf/GyteqyxI/b7t2QbfUJc5DAevsKklE=";
+      hash = "sha256-T7ymv0nG5ZA4uUzT2Br6N2qFCggQYs28fAX6bTdUNKo=";
     };
 
-    vendorHash = "sha256-rWyDyypKbettuwL8tfXmkvKtIg5fm5EzZud2/5RL0kY=";
+    vendorHash = "sha256-hfuVxcI1tGdkY1CWP1p5r1kMJfvNzqZlVI3Ge/gRNqo=";
 
     subPackages = [
       "cmd/rqlite"

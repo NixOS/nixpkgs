@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "leanclient";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oOo0oOo";
     repo = "leanclient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fNtgJqGtAR9fRvGW0eN8VZYHZET/D/bL1/xkzlDtlEQ=";
+    hash = "sha256-h90AMErcwdmHfIBgFerFEaUwjfRkJMl1iesXjtEpdlA=";
   };
 
   build-system = [ hatchling ];

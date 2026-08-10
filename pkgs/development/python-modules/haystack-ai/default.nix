@@ -71,7 +71,7 @@
   pytesseract,
   faiss-cpu,
   # , faiss-gpu
-  pinecone-client,
+  pinecone,
   onnxruntime,
   onnxruntime-tools,
   # , onnxruntime-gpu
@@ -209,7 +209,7 @@ buildPythonPackage rec {
     # only-faiss-gpu = [
     #   faiss-gpu
     # ];
-    only-pinecone = [ pinecone-client ];
+    only-pinecone = [ pinecone ];
     onnx = [
       onnxruntime
       onnxruntime-tools

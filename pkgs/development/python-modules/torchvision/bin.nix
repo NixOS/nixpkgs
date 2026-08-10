@@ -65,7 +65,8 @@ buildPythonPackage {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html

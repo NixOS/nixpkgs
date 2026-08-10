@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "compreffor" ];
 
   meta = {
-    changelog = "https://github.com/googlefonts/compreffor/releases/tag/${version}";
+    changelog = "https://github.com/googlefonts/compreffor/releases/tag/v${version}";
     description = "CFF table subroutinizer for FontTools";
     mainProgram = "compreffor";
     homepage = "https://github.com/googlefonts/compreffor";

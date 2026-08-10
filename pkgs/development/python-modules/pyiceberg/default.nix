@@ -59,9 +59,10 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "iceberg-python";
+  pname = "pyiceberg";
   version = "0.11.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
@@ -77,6 +78,13 @@ buildPythonPackage (finalAttrs: {
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
+
+  pythonRelaxDeps = [
+    # cachetools<7.0,>=5.5 not satisfied by version 7.1.4
+    "cachetools"
+    # rich<15.0.0,>=10.11.0 not satisfied by version 15.0.0
+    "rich"
+  ];
 
   dependencies = [
     cachetools
@@ -288,6 +296,10 @@ buildPythonPackage (finalAttrs: {
     # Timing sensitive
     # AssertionError: assert 8 == 5
     "test_hive_wait_for_lock"
+
+    # Schema comparison faildue to `string` becoming `large_string`
+    "test_read_map "
+    "test_projection_maps_of_structs"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'

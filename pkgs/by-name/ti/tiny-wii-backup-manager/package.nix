@@ -27,16 +27,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-wii-backup-manager";
-  version = "6.0.7";
+  version = "6.0.8";
 
   src = fetchFromGitHub {
     owner = "mq1";
     repo = "TinyWiiBackupManager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yvmLI8T+ut0QwnHPw+0+XKvd+wWo0cJLcxSkz3oj/vE=";
+    hash = "sha256-zY/vLzsj256uKMkr+uxXj5SLQPKxfkS3IB0mXePlGiA=";
   };
 
-  cargoHash = "sha256-/Q0P3re8w9O4a8MTZXmEiaJNURo1XeZhHk8adcUCNeQ=";
+  cargoHash = "sha256-unv/9LoCpRcfGRq8mo6Y1b5PEf0+5UONi2eked8gfSg=";
 
   cargoBuildFlags = [
     "--bin"

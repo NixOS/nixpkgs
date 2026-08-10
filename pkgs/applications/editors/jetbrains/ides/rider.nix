@@ -24,20 +24,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2.tar.gz";
-      hash = "sha256-OmysaGXGMxxAAa2qrHvX8yXIwJLU7tKG8/EBGhr55EA=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1.tar.gz";
+      hash = "sha256-fpc9aJufO2Qiw7dyr1uOsMHsvBruFuX4D0KY1erpmwo=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2-aarch64.tar.gz";
-      hash = "sha256-xcwd4OgobMXFQ2W+SN6O5I3mud4kedVQ/0rZBWbXIGY=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2.dmg";
-      hash = "sha256-uoOP+EYB11M99MlAFF7efZSKmCk0fwjCImFiasUQPUw=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-MuK1dvi3fnPdSyETPeEkW4k7hNFPkHYtaKjp/IZzdIU=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2-aarch64.dmg";
-      hash = "sha256-Mo6gxWatX6wlL3s8Li19F58cnKZtOtFUfNyGPrC6CtA=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-q0UXuh2RuH0sC1kqbjv0QcxmLtml9v3qeLRVcjCCVuw=";
     };
   };
   # update-script-end: urls
@@ -51,8 +47,8 @@ in
   product = "Rider";
 
   # update-script-start: version
-  version = "2026.1.2";
-  buildNumber = "261.24374.190";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.385";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

@@ -2,14 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
   boost,
   cmake,
   cmake-extras,
-  ctestCheckHook,
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -33,17 +31,17 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-NEFwNofW0Ry9V0oUiUeuzs7q6+Ht2B0oCEGjmc3ywck=";
+    hash = "sha256-bDSqLxYQYCnN5SngoZmYwJTL6qoWpZ9HVUQMiAVQxlE=";
   };
 
   outputs = [
@@ -125,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   nativeCheckInputs = [
-    ctestCheckHook
     shared-mime-info
     xvfb-run
   ];
@@ -146,17 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  disabledTests = [
-    # QSignalSpy tests in QML suite always fail, pass when running interactively
-    "qml"
-  ]
-  ++ lib.optionals withQt6 [
-    # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/work_items/13
-    "dbus"
-    "lomiri-thumbnailer-qt6"
-    "thumbnailer-admin"
-  ];
 
   enableParallelChecking = false;
 

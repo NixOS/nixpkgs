@@ -86,6 +86,7 @@ let
         "lnd"
         "mail"
         "mailman3"
+        "mail-tlsa-check"
         "mikrotik"
         "modemmanager"
         "mongodb"

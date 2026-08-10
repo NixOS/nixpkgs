@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nexia";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "nexia";
     tag = finalAttrs.version;
-    hash = "sha256-d3mV7kzUoM6JvZ82FLNxapkRZDjFH7V/rf4qjIyf2is=";
+    hash = "sha256-jkyosr829jyR/aSDL9L+8xYZwwja0/TRETYFFBbwiFg=";
   };
 
   build-system = [ poetry-core ];

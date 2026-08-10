@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
     # When building a wide-character (Unicode) build, create backward
-    # compatibility links from the the "normal" libraries to the
+    # compatibility links from the "normal" libraries to the
     # wide-character libraries (e.g. libncurses.so to libncursesw.so).
     + lib.optionalString unicodeSupport ''
       libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"

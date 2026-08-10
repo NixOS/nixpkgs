@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Media key forwarder for Music and Spotify";
     homepage = "https://stuntsoftware.com/reflex/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ iniw ];
+    maintainers = with lib.maintainers; [ wini ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gallery-dl";
-  version = "1.32.1";
+  version = "1.32.8";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5GVwCVpoxpC32VHh1Ju50bhtvwTmZQnuqEIPFu99njQ=";
+    hash = "sha256-ias2Agf+yNWGQ3Xm+q9jF/rHe42viN3v98dfO05QB+M=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
-      FlameFlag
+      _4evy
     ];
   };
 })

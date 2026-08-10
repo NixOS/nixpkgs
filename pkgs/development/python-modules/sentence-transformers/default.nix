@@ -13,6 +13,7 @@
   numpy,
   scikit-learn,
   scipy,
+  tokenizers,
   torch,
   tqdm,
   transformers,
@@ -20,7 +21,6 @@
 
   # optional-dependencies
   # image
-  pillow,
   # train
   accelerate,
   datasets,
@@ -34,14 +34,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.4.1";
+  version = "5.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VZu50DVuU0P7o3+iKVWougui7nWSrnP/eza0Rqtt7ZU=";
+    hash = "sha256-0H/sgSxEcDnZkDEtAroSV9zVLfLF04AsjSV0m0Csyk0=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +52,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     scikit-learn
     scipy
+    tokenizers
     torch
     tqdm
     transformers
@@ -119,6 +121,7 @@ buildPythonPackage (finalAttrs: {
     "test_save_and_load"
     "test_simple"
     "test_simple_encode"
+    "test_sparse_cosent_loss_default_matches_explicit_pairwise"
     "test_tokenize"
     "test_train_stsb"
     "test_trainer"
@@ -159,14 +162,29 @@ buildPythonPackage (finalAttrs: {
     "tests/base/modules/"
     "tests/base/test_model.py"
     "tests/base/test_model_card.py"
+    "tests/base/test_model_type_subclass.py"
     "tests/cross_encoder/evaluation/test_reranking.py"
+    "tests/cross_encoder/losses/test_cached_multiple_negatives_ranking.py"
+    "tests/cross_encoder/losses/test_misc.py"
+    "tests/cross_encoder/losses/test_misc.py"
     "tests/cross_encoder/test_model.py"
     "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
+    "tests/sentence_transformer/evaluation/test_binary_classification_evaluator.py"
+    "tests/sentence_transformer/losses/test_adaptive_layer.py"
+    "tests/sentence_transformer/losses/test_cached_gist_embed.py"
+    "tests/sentence_transformer/losses/test_cached_mnsrl.py"
+    "tests/sentence_transformer/losses/test_cmnrl.py"
+    "tests/sentence_transformer/losses/test_denoising_auto_encoder.py"
+    "tests/sentence_transformer/losses/test_embed_distill.py"
+    "tests/sentence_transformer/losses/test_gradcache.py"
+    "tests/sentence_transformer/losses/test_gradcache.py"
+    "tests/sentence_transformer/losses/test_mega_batch_margin.py"
     "tests/sentence_transformer/test_compute_embeddings.py"
     "tests/sentence_transformer/test_model.py"
     "tests/sentence_transformer/test_model_card.py"
     "tests/sentence_transformer/test_model_card_data.py"
+    "tests/sparse_encoder/losses/test_cached_splade.py"
     "tests/sparse_encoder/modules/test_csr.py"
     "tests/sparse_encoder/modules/test_sparse_static_embedding.py"
     "tests/sparse_encoder/test_model.py"

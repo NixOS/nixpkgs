@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "harness";
-    repo = "drone";
+    repo = "harness";
     tag = "v${finalAttrs.version}";
     hash = "sha256-jKM+jET6dsMe5+QRDKIHA40OOHb/nZmli3owaDB7IvU=";
   };
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Continuous Integration platform built on container technology";
     mainProgram = "drone-server";
-    homepage = "https://github.com/harness/drone";
+    homepage = "https://github.com/harness/harness";
     maintainers = with lib.maintainers; [
       vdemeester
       techknowlogick

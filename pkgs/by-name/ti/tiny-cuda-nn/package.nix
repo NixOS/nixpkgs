@@ -59,6 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-m73lnXufFQOoYHko8x/gIT2UAuHADAGRxVqDSbW+KlY=";
   };
 
+  postPatch = ''
+    substituteInPlace bindings/torch/setup.py \
+      --replace-fail \
+        "from pkg_resources import parse_version" \
+        "from packaging.version import Version as parse_version"
+  '';
+
   nativeBuildInputs = [
     cmake
     cuda-native-redist

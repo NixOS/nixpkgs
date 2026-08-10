@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
   writeShellApplication,
   curl,
-  htmlq,
+  jq,
   common-updater-scripts,
   zlib,
   rdma-core,
@@ -70,7 +70,7 @@ let
       name = "update-intel-oneapi";
       runtimeInputs = [
         curl
-        htmlq
+        jq
         common-updater-scripts
       ];
       text = ''
@@ -81,27 +81,60 @@ let
 
         echo 'Figuring out the download URL' >&2
 
-        # Intel helpfully gives us a wget command to run so that we can download the toolkit installer, as part of their product page.
-        # This variable will contain that command (wget https://...), we will extract the URL from it.
-        wget_command="$(curl "$download_page" \
-          | htmlq 'code' --text \
-          | grep "wget.*$pname.*sh")"
+        # NOTE: Do NOT scrape the `wget ...` command that Intel renders on the
+        # product page. Intel updates that snippet by hand and occasionally forgets
+        # to (e.g. 2026.0.1 shipped while the snippet still pointed at 2026.0.0.198).
+        # Instead we drive the same API the page's own JavaScript uses to populate the version/checksum panel:
+        #
+        #   1. The product page references a per-product config JSON under
+        #      .../uswd-json-files/oneapi-toolkit/toolkit-<ver>.json
+        #   2. That config carries Intel's internal IRC component UUID for the
+        #      toolkit (irc.unbundledComponents."oneapi-toolkit"[0]).
+        #   3. /libs/apps/intel/idz/productsinfo?downloadId=<uuid> returns the live
+        #      file list, each entry with the real url + checksums + version.
+        #      We then pick the Linux offline installer (.sh) from that list.
 
-        # _offline is optional: Intel sometimes only links the online installer, which shares the same UUID and version.
-        regex="wget (https://registrationcenter-download[.]intel[.]com/akdlm/IRC_NAS/([0-9a-z-]+)/$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)(_offline)?[.]sh)"
-        if [[ "$wget_command" =~ $regex ]]; then
-            uuid="''${BASH_REMATCH[2]}"
-            versionYear="''${BASH_REMATCH[3]}"
-            versionMajor="''${BASH_REMATCH[4]}"
-            versionMinor="''${BASH_REMATCH[5]}"
-            versionRel="''${BASH_REMATCH[6]}"
-        else
-            echo "'$wget_command' does not match the expected format $regex" >&2
+        # 1. Discover the config JSON the page links to
+        config_path="$(curl -fsS "$download_page" \
+          | grep -oE '/content/dam/[^"]*uswd-json-files/oneapi-toolkit/[^"]+[.]json' \
+          | head -n1)"
+        if [[ -z "$config_path" ]]; then
+            echo "Could not find the toolkit config JSON on $download_page" >&2
             exit 1
         fi
 
-        # Always reconstruct to point at the offline installer
-        url="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/$uuid/$pname-$versionYear.$versionMajor.$versionMinor.''${versionRel}_offline.sh"
+        # 2. Extract the IRC component UUID
+        component_id="$(curl -fsS "https://www.intel.com$config_path" \
+          | jq -r '.irc.unbundledComponents."oneapi-toolkit"[0]')"
+        if [[ -z "$component_id" || "$component_id" == "null" ]]; then
+            echo "Could not extract the IRC component UUID from $config_path" >&2
+            exit 1
+        fi
+
+        # 3. Resolve the component to its live file list and pick the Linux
+        # offline installer
+        # NOTE: Intel's field name really is misspelled "downlaodFileName"
+        file_entry="$(curl -fsS "https://www.intel.com/libs/apps/intel/idz/productsinfo?downloadId=$component_id" \
+          | jq -r '[.. | objects | select(.downlaodFileName? != null)
+                    | select(.operatingSystem == "linux")
+                    | select(.downlaodFileName | test("_offline[.]sh$"))][0]')"
+        url="$(echo "$file_entry" | jq -r '.url')"
+        filename="$(echo "$file_entry" | jq -r '.downlaodFileName')"
+        if [[ -z "$url" || "$url" == "null" ]]; then
+            echo "Could not find a Linux offline (.sh) installer for component $component_id" >&2
+            exit 1
+        fi
+
+        regex="$pname-([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)_offline[.]sh"
+        if [[ "$filename" =~ $regex ]]; then
+            versionYear="''${BASH_REMATCH[1]}"
+            versionMajor="''${BASH_REMATCH[2]}"
+            versionMinor="''${BASH_REMATCH[3]}"
+            versionRel="''${BASH_REMATCH[4]}"
+        else
+            echo "'$filename' does not match the expected format $regex" >&2
+            exit 1
+        fi
 
         if grep -qF "url = \"$url\"" "$file"; then
             echo "The URL is the same ($url), skipping update" >&2
@@ -185,8 +218,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   versionYear = "2026";
   versionMajor = "0";
-  versionMinor = "0";
-  versionRel = "198";
+  versionMinor = "1";
+  versionRel = "27";
 
   version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
 
@@ -194,8 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/71180075-e4e3-4c6f-bbbb-19017ed0cf7d/intel-oneapi-toolkit-2026.0.0.198_offline.sh";
-    hash = "sha256-FVpSiWvSQjndxzP0h+zLKvXK2ZV+7R4r/mDOFFNpTls=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c9c3d3e3-ddb4-490e-bb41-6e9041ba32a7/intel-oneapi-toolkit-2026.0.1.27_offline.sh";
+    hash = "sha256-MCMdAN4BCIkuptUOeFCRtAy4eQuwBryl5PXmRzWjPPo=";
   };
 
   nativeBuildInputs = [
@@ -295,6 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       balsoft
+      kilyanni
     ];
     platforms = [ "x86_64-linux" ];
   };

@@ -14,7 +14,6 @@
   patchelf,
   pkg-config,
   python3Packages,
-  shellcheck,
 
   # runtime
   flatbuffers,
@@ -56,24 +55,28 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino";
-  version = "2026.2.1";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-66g+v+L0BPNW6HvmWMHAHoNEFn9SUPrmZDyDjES6K1I=";
+    hash = "sha256-iZ2Z3yWJxzDqffdq8/grpbk3qXmSy/6i8ptMGBGBA0c=";
   };
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "python"
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
+    # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
+    addDriverRunpath
+
     cmake
     git
     libarchive
@@ -81,10 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python
     scons'
-    shellcheck
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ];
+
+  patches = [
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
   ];
 
   dontUseSconsCheck = true;
@@ -161,16 +168,14 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $python
-    mv $out/python/* $python/
-    rmdir $out/python
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
   '';
 
   postFixup = ''
-    # Link to OpenCL
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addDriverRunpath "$lib"
-    done
+    substituteInPlace $dev/lib/pkgconfig/openvino.pc \
+      --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
   '';
 
   meta = {
@@ -184,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };

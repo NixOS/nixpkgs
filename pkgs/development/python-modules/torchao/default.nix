@@ -77,19 +77,14 @@ buildPythonPackage (finalAttrs: {
     cpuinfo
   ];
 
-  propagatedBuildInputs = lib.optionals isDarwin [
-    # Otherwise, torch will fail to include `omp.h`:
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # OpenMP support not found.
-    llvmPackages.openmp
-  ];
-
   dependencies = [
     torch
   ];
 
   env = {
     USE_SYSTEM_LIBS = true;
+    # if this is unset, build script will append '+git' to the version number
+    VERSION_SUFFIX = "";
   };
 
   # Otherwise, the tests are loading the python module from the source instead of the installed one

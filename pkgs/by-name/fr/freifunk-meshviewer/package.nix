@@ -9,6 +9,9 @@ buildNpmPackage (finalAttrs: {
 
   version = "13.1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "freifunk";
     repo = "meshviewer";

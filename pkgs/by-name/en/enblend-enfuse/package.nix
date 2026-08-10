@@ -22,12 +22,15 @@
 
 stdenv.mkDerivation {
   pname = "enblend-enfuse";
-  version = "unstable-2022-03-06";
+  version = "4.3-unstable-2022-03-06";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/enblend/code";
     rev = "0f423c72e51872698fe2985ca3bd453961ffe4e0";
-    sha256 = "sha256-0gCUSdg3HR3YeIbOByEBCZh2zGlYur6DeCOzUM53fdc=";
+    hash = "sha256-0gCUSdg3HR3YeIbOByEBCZh2zGlYur6DeCOzUM53fdc=";
   };
 
   buildInputs = [
@@ -60,6 +63,6 @@ stdenv.mkDerivation {
     homepage = "https://enblend.sourceforge.net/";
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
     license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
   };
 }

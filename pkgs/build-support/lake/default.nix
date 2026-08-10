@@ -43,6 +43,8 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
+      pname,
+      version,
       nativeBuildInputs ? [ ],
       passthru ? { },
 
@@ -66,12 +68,6 @@ lib.extendMkDerivation {
       ...
     }@args:
     let
-      lakeDeps' = args.lakeDeps or null;
-      lakeHash = args.lakeHash or null;
-      leanDeps = args.leanDeps or [ ];
-      overrideLakeDepsAttrs = args.overrideLakeDepsAttrs or (_: _: { });
-      buildTargets = args.buildTargets or [ ];
-      isLibrary = args.isLibrary or true;
       leanPackageName = args.leanPackageName or finalAttrs.pname;
 
       allLeanDeps = lib.unique (
@@ -79,14 +75,13 @@ lib.extendMkDerivation {
       );
 
       computedLakeDeps =
-        if lakeDeps' != null then
-          lakeDeps'
+        if lakeDeps != null then
+          lakeDeps
         else if lakeHash == null then
           null
         else
           (fetchLakeDeps {
-            name = finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-            inherit (finalAttrs) src;
+            inherit (finalAttrs) src pname version;
             hash = lakeHash;
             sourceRoot = finalAttrs.sourceRoot or "";
             patches = finalAttrs.patches or [ ];
@@ -233,6 +228,8 @@ lib.extendMkDerivation {
       };
 
       meta = meta // {
+        # Note: This conflates the platforms that the Lean compiler can run on (a package build system) and the platforms the Lean compiler
+        # can target (build host)
         platforms = meta.platforms or lean4.meta.platforms;
       };
     };

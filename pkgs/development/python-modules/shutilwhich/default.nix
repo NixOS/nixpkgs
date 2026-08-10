@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shutilwhich";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mbr";
     repo = "shutilwhich";
-    rev = version;
-    sha256 = "05fwcjn86w8wprck04iv1zccfi39skdf0lhwpb4b9gpvklyc9mj0";
+    tag = finalAttrs.version;
+    hash = "sha256-QNbEPJ37vrTIuhxS4NrUaUTH2A87EjBZvhxxg6xk3BU=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    pytest -rs
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "shutilwhich" ];
 
   meta = {
     description = "Backport of shutil.which";
@@ -29,4 +32,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mbr/shutilwhich";
     maintainers = with lib.maintainers; [ multun ];
   };
-}
+})

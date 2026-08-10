@@ -90,7 +90,7 @@ stdenv.mkDerivation {
       name = "netsoft-com.netsoft.hubstaff";
       desktopName = "Hubstaff";
       exec = "HubstaffClient";
-      icon = "hubstaff";
+      icon = "hubstaff-color";
       comment = "Time tracking software";
       categories = [
         "Office"
@@ -119,6 +119,13 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+
+    # Link icons to the standard directory
+    for dir in $opt/data/resources/hicolor/[0-9]*x[0-9]*; do
+      size=$(basename "$dir")
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $dir/apps/hubstaff-color.png $out/share/icons/hicolor/$size/apps/hubstaff-color.png
+    done
     runHook postInstall
   '';
 

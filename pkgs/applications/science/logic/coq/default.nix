@@ -19,7 +19,7 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   rocqPackages, # for versions >= 9.0 that are transition shims on top of Rocq
   ncurses,
   buildIde ? null, # default is true for Coq < 8.14 and false for Coq >= 8.14
@@ -76,10 +76,11 @@ let
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
     "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
     "9.2.0".sha256 = "sha256-rVhv2GLImdVPgRwwTQ+wiWNtRUflMrES0ElIrdTIN1s=";
+    "9.3+rc1".sha256 = "sha256-vGJkRRzf8ur7i9IUpRA/sxVEQvZGnxfV/ex28Lt1kWw=";
   };
   releaseRev = v: "V${v}";
   fetched =
-    import ../../../../build-support/coq/meta-fetch/default.nix
+    import ../../../../build-support/rocq/meta-fetch/default.nix
       {
         inherit
           lib
@@ -105,11 +106,25 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '';
+  dune =
+    if lib.versions.isEq coq-version "8.20" then
+      args.dune.override { version = "3.21.1"; }
+    else
+      args.dune;
   ocamlPackages =
     if customOCamlPackages != null then
       customOCamlPackages
     else
       lib.switch coq-version [
+        {
+          case = lib.versions.isEq "8.20";
+          out = ocamlPackages_4_14.overrideScope (
+            self: super: {
+              inherit dune;
+              dune_3 = dune;
+            }
+          );
+        }
         {
           case = lib.versions.range "8.16" "9.1";
           out = ocamlPackages_4_14;
@@ -126,12 +141,15 @@ let
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
         }
-      ] ocamlPackages_5_4;
+      ] ocamlPackages_5_5;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
   ++ lib.optional (coqAtLeast "8.14") dune;
+  ocamlBuildInputs = [
+    ocamlPackages.findlib
+  ];
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -211,6 +229,7 @@ let
     buildInputs = [
       ncurses
     ]
+    ++ ocamlBuildInputs
     ++ lib.optionals buildIde (
       if coqAtLeast "8.10" then
         [
@@ -314,11 +333,18 @@ let
       platforms = lib.platforms.unix;
       mainProgram = if buildIde then "coqide" else "coqtop";
     };
+
+    # Things required by the CI
+    strictDeps = true;
+    __structuredAttrs = true;
   };
 in
 if coqAtLeast "8.21" then
   self.overrideAttrs (o: {
     # coq-core is now a shim for rocq
+    nativeBuildInputs = o.nativeBuildInputs ++ [
+      rocqPackages.rocq-core
+    ];
     propagatedBuildInputs = o.propagatedBuildInputs ++ [
       rocqPackages.rocq-core
     ];

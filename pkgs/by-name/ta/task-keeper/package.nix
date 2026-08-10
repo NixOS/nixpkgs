@@ -6,23 +6,20 @@
   openssl,
   pkg-config,
   runCommand,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "task-keeper";
-  version = "0.33.0";
+  version = "0.35.3";
 
   src = fetchFromGitHub {
     owner = "linux-china";
     repo = "task-keeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pSMF0ORwHUV9H6RAMRaEt/A61MVIj5cQcsY+wDDyAwk=";
+    hash = "sha256-T68AtpWTJCT2D9fqG/qxriofYYTcKc429njbMCFaTcw=";
   };
-
-  patches = [
-    # https://github.com/linux-china/task-keeper/pull/20
-    ./version.patch
-  ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -31,12 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-leQpeB145seO2mPg+eqA3S5ATbRBzsXj9cWNsVpXF+U=";
+  cargoHash = "sha256-eox9D/6YrdlkTRN8X6nmkuDmr3edoyyj4Wn0fDfhYyI=";
 
   # tests depend on many packages (java, node, python, sbt, ...) - which I'm not currently willing to set up 😅
   doCheck = false;
 
   passthru = {
+    updateScript = nix-update-script { };
     tests = {
       makefile =
         runCommand "task-keeper-makefile-test"
@@ -74,8 +72,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://github.com/linux-china/task-keeper";
+    changelog = "https://github.com/linux-china/task-keeper/releases/tag/v${finalAttrs.version}";
     description = "CLI to manage tasks from different task runners or package managers";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

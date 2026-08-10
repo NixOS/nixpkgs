@@ -1,15 +1,17 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
   cmake,
   python3Packages,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
   nix-update-script,
 }:
 
 let
   opencv4WithGtk = python3Packages.opencv4.override {
-    enableGtk2 = true; # For GTK2 support
     enableGtk3 = true; # For GTK3 support
   };
 in
@@ -19,16 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "AprilRobotics";
-    repo = "AprilTags";
+    repo = "apriltag";
     tag = "v${finalAttrs.version}";
     hash = "sha256-pBUjRKfP884+bNgV5B4b8TiuhyZ9p/jIluxs+idv/28=";
   };
 
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [ opencv4WithGtk ];
+  buildInputs = [ opencv4WithGtk ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_EXAMPLES" true) ];
 

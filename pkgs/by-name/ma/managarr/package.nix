@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "managarr";
-  version = "0.7.2";
+  version = "0.7.3";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Dark-Alex-17";
     repo = "managarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-10wM6OI3XqFQKyspJU6fqnE3GyzxNaquQlPjn3nS774=";
+    hash = "sha256-NdKtyvWNFBhXb6bxclfa/68/5WqOhlqLnEd0e2LQ10Q=";
   };
 
-  cargoHash = "sha256-7myysFoBYTosHPZ3gzSzXhN8+wbHHF/73b6wQqdlKe8=";
+  cargoHash = "sha256-yecVTD/UC0vNuCRpLBr7GxT3Bs+Zs5oZHNcBa2HQns4=";
 
   nativeBuildInputs = [ perl ];
 

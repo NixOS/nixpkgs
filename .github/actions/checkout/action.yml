@@ -19,6 +19,7 @@ runs:
         TARGET_SHA: ${{ inputs.target-as-trusted-at }}
         PIN_BUMP_SHA: ${{ inputs.untrusted-pin-bump }}
       with:
+        retries: 3
         script: |
           const { rm, writeFile } = require('node:fs/promises')
           const { spawn } = require('node:child_process')

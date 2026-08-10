@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-jena";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZTEIqR/Zswmom8dWJYuuC8oBWHzvR1lC0RhS4766KuM=";
+    hash = "sha256-FMEu9KovAHikc75LELAV4OC4XnZ9aGfoWBZ53o/sP24=";
   };
 
   nativeBuildInputs = [

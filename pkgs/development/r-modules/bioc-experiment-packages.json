@@ -587,9 +587,9 @@
     },
     "Hiiragi2013": {
       "name": "Hiiragi2013",
-      "version": "1.47.0",
-      "sha256": "1p2d6vpss2s61n82p6wy7nq86zjhfw0nw9wi8ws3hhq6nxs1h7pp",
-      "depends": ["Biobase", "KEGGREST", "MASS", "RColorBrewer", "affy", "boot", "clue", "cluster", "genefilter", "geneplotter", "gplots", "gtools", "lattice", "latticeExtra", "mouse4302_db", "xtable"]
+      "version": "1.48.1",
+      "sha256": "0ariib3wsc6d7a0wkgp9j303id5a31zy4h38dwgb82hvvfp29q5z",
+      "depends": ["Biobase", "MASS", "RColorBrewer", "cluster", "genefilter", "gplots", "lattice", "latticeExtra"]
     },
     "HumanAffyData": {
       "name": "HumanAffyData",
@@ -2343,6 +2343,12 @@
       "sha256": "0n66amxlcr9ddi8b7mjld4xjsqdca185nms32yi7nwqpz81ncjfk",
       "depends": ["Biobase", "oligo", "puma"]
     },
+    "qPLEXdata": {
+      "name": "qPLEXdata",
+      "version": "1.30.1",
+      "sha256": "190jaz16fd8h2njpyb151i83y6ygv8pa5nhiprh84bx6q25kgs3z",
+      "depends": ["MSnbase", "dplyr", "knitr", "qPLEXanalyzer"]
+    },
     "raerdata": {
       "name": "raerdata",
       "version": "1.10.0",
@@ -3012,13 +3018,6 @@
       "version": "1.14.0",
       "sha256": "1bldyvjsv5wwzasg9sbsivyi7m2ypc17mqjglsl22fjkykm92h4s",
       "depends": ["ExperimentHub"],
-      "broken": true
-    },
-    "qPLEXdata": {
-      "name": "qPLEXdata",
-      "version": "1.27.0",
-      "sha256": "15fq5yzpipp2g7fx6nh766ykq84rr82yi6cccq7kqi9c1aywgwbf",
-      "depends": ["MSnbase", "dplyr", "knitr", "qPLEXanalyzer"],
       "broken": true
     },
     "rRDPData": {

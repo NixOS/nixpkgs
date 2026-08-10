@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     # "undefined symbol: cblas_ctrmv" errors.
     ./patches/revert-blas-mesonification.patch
 
+    # https://github.com/sagemath/sage/pull/42587
+    ./patches/link-ntl-directly-for-ntl-cython-extensions.patch
+
     # https://github.com/sagemath/sage/pull/41637 causes problems when
     # docbuilding.
     (fetchpatch2 {
@@ -78,11 +81,31 @@ stdenv.mkDerivation rec {
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
 
+    # https://github.com/sagemath/sage/issues/42473
+    ./patches/lower-sleep2-test-threshold.patch
+
+    # https://github.com/sagemath/sage/pull/42611
+    ./patches/faster-flint.patch
+
+    # https://github.com/sagemath/sage/pull/41954, landed in 10.10.beta0
+    (fetchpatch2 {
+      name = "gap-element-stability.patch";
+      url = "https://github.com/sagemath/sage/commit/11da83dd3666c2509288a828c54eb0273ee0cf50.patch?full_index=1";
+      hash = "sha256-CjZyeUJVIevDaStLs+9BMT9JlISEdRw3TyTIso/BXi0=";
+    })
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";
       url = "https://github.com/sagemath/sage/commit/24c9605a770b2419cd401bf6c8780bb4be923244.patch?full_index=1";
       hash = "sha256-68w2HWLR6mb13BWi5Fb6SfPAqPbdJrns0l5T6SoMqNI=";
+    })
+
+    # https://github.com/sagemath/sage/pull/42612
+    (fetchpatch2 {
+      name = "relax-svd-doctest-tolerance.patch";
+      url = "https://github.com/sagemath/sage/commit/8f7b7299c985f74179555b2c7a0dad8a741bf879.patch?full_index=1";
+      hash = "sha256-9o0t5n3oWt/NmQTRlDsad5g8g7FhSYpAV62BMvY+w2Q=";
     })
   ];
 
@@ -106,6 +129,35 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/f8951eacbdc6538af3330d17d5587a0c208ab349/srcpkgs/sagemath/patches/40679-Update_to_maxima_5.49.patch";
       hash = "sha256-n6YSVNomLM7f5kRAGzhijag8QnlXxKJz9RHFLVtZpdk=";
     })
+
+    # https://github.com/sagemath/sage/pull/42384, landed in 10.10.beta4
+    (fetchpatch2 {
+      name = "matplotlib-3.11-update.patch";
+      url = "https://github.com/sagemath/sage/commit/3d3a04bbfb66dc1141afadbfaefa01dff8749761.patch?full_index=1";
+      hash = "sha256-LlEblRKlPPmvSU26LmT6DTxFElvhA9SBkrU3xeIFZu4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/42437, landed in 10.10.beta5
+    (fetchpatch2 {
+      name = "numpy-2.5-update.patch";
+      url = "https://github.com/sagemath/sage/commit/3e709448881442c133047f2993db39d855c70bd8.patch?full_index=1";
+      hash = "sha256-8vxIYG6yhCBML9vioJhAjBgTeCCGmdfk7qAtEEQnK/g=";
+    })
+
+    # https://github.com/sagemath/sage/pull/42465, landed in 10.10.beta5
+    (fetchpatch2 {
+      name = "scipy-1.18-update.patch";
+      url = "https://github.com/sagemath/sage/commit/926f32aab22f81ddb9fda874a20fee84c7bfacc3.patch?full_index=1";
+      hash = "sha256-EMn/fr5WlRQtFj5GHo02kczasmKaiqFfRSVZo2uvOPI=";
+    })
+
+    # work around https://github.com/ipython/ipython/issues/15207, which
+    # will likely be properly fixed in IPython 9.16.
+    ./patches/ipython-9_15-workaround.patch
+
+    # work around https://github.com/scipy/scipy/issues/25471, which is
+    # fixed as part of SciPy 1.18.1.
+    ./patches/scipy-1_18-workaround.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

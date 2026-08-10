@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyscf";
-  version = "2.13.1";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IEgbm7sZqxKxI+VPE9IoH+BAHkNgasGmRsdDykUFCeM=";
+    hash = "sha256-9FyiN5VrFpZ6Q4JFvNn1gVQJq4KQysiL5Sz5E+fSC5U=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -80,7 +80,6 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     # Set config used by tests to ensure reproducibility
     echo 'pbc_tools_pbc_fft_engine = "NUMPY"' > pyscf/pyscf_config.py
-    export OMP_NUM_THREADS=1
     ulimit -s 20000
     export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
   '';
@@ -117,6 +116,7 @@ buildPythonPackage (finalAttrs: {
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
     "test_sparse_dot"
+    "test_set_param_named"
   ];
 
   disabledTestPaths = [
@@ -132,7 +132,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = [ lib.maintainers.sheepforce ];

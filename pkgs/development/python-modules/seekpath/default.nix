@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "giovannipizzi";
+    owner = "materialscloud-org";
     repo = "seekpath";
     tag = "v${version}";
-    hash = "sha256-mrutQCSSiiLPt0KEohZeYcQ8aw2Jhy02bEvn6Of8w6U=";
+    hash = "sha256-yz9IX68AmFP8P8uzZMKa4d/pdzbOm0IcQsZMvC7MuSU=";
   };
 
   env.LC_ALL = "en_US.utf-8";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to obtain and visualize band paths in the Brillouin zone of crystal structures";
-    homepage = "https://github.com/giovannipizzi/seekpath";
+    homepage = "https://github.com/materialscloud-org/seekpath";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };

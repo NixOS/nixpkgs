@@ -74,6 +74,8 @@ let
       installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
+    __structuredAttrs = true;
     strictDeps = true;
 
     preConfigure = ''
@@ -217,7 +219,6 @@ let
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
       mainProgram = "flutter";

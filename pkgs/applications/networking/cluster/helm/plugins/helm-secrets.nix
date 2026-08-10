@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -dm755 $out/helm-secrets $out/helm-secrets/scripts
-    install -m644 -Dt $out/helm-secrets plugin.yaml
-    cp -r scripts/* $out/helm-secrets/scripts
+    install -m644 -Dt $out/helm-secrets plugins/helm-secrets-cli/plugin.yaml
+    cp -r plugins/helm-secrets-cli/scripts/* $out/helm-secrets/scripts
     wrapProgram $out/helm-secrets/scripts/run.sh \
         --prefix PATH : ${
           lib.makeBinPath [

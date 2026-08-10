@@ -1,45 +1,19 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   # tests
+  gitMinimal,
   uv,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = _final: prev: {
-      # Many tests fail with the current version of opentelemetry we have in nixpkgs
-      # vibe.acp.exceptions.InternalError: module '...' has no attribute 'GEN_AI_PROVIDER_NAME'
-      opentelemetry-api = prev.opentelemetry-api.overridePythonAttrs (old: rec {
-        version = "1.40.0";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
-        };
-      });
-      opentelemetry-exporter-otlp-proto-http =
-        prev.opentelemetry-exporter-otlp-proto-http.overridePythonAttrs
-          (old: {
-            disabledTests =
-              (old.disabledTests or [ ])
-              ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                # AssertionError: False is not true
-                # self.assertTrue(0.75 < after - before < 1.25)
-                "test_retry_timeout"
-              ];
-          });
-    };
-  };
-  python3Packages = python.pkgs;
-in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.17.1";
+  version = "2.24.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -47,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JrUepzbJupeyHiNz9gbX+C3kc2tJaNkxCldMELKeXcU=";
+    hash = "sha256-Ux5W+9mtvAdlINQfr58Fft4OtpqjoYQrQe3XZwhvovc=";
   };
 
   build-system = with python3Packages; [
@@ -129,6 +103,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       requests
       rich
       rpds-py
+      sentry-sdk
       six
       smmap
       sounddevice
@@ -159,6 +134,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "vibe" ];
 
   nativeCheckInputs = [
+    # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
+    gitMinimal
     python3Packages.pytest-asyncio
     python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
@@ -186,46 +163,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # AssertionError: assert 0 == 1
     "test_preserves_accents_when_matching_latin1_encoded_file"
 
-    # Fail in the sandbox
-    # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
-    "test_audio_stream_yields_chunks"
-    "test_auto_stops_after_max_duration"
-    "test_buffer_mode_audio_stream_yields_nothing"
-    "test_callback_feeds_audio_data"
-    "test_callback_pads_silence_at_end"
-    "test_can_play_multiple_times"
-    "test_can_record_multiple_times"
-    "test_cancel_discards_audio"
-    "test_creates_stream_with_correct_params"
-    "test_finished_callback_resets_state"
-    "test_manual_stop_prevents_on_expire"
-    "test_on_expire_receives_audio"
-    "test_on_finished_called_after_natural_completion"
-    "test_peak_clamps_to_one"
-    "test_peak_updates_from_callback"
-    "test_play_sets_playing_state"
-    "test_play_when_already_playing_raises"
-    "test_silent_audio_has_zero_peak"
-    "test_start_sets_recording_state"
-    "test_start_when_already_recording_raises"
-    "test_stop_closes_stream"
-    "test_stop_from_event_loop_does_not_block"
-    "test_stop_returns_empty_data_in_stream_mode"
-    "test_stop_returns_positive_duration"
-    "test_stop_returns_valid_wav"
-    "test_stop_triggers_on_finished_via_callback"
-    "test_stop_without_drain_returns_promptly"
-    "test_stream_audio_does_not_leak_into_buffer_recording"
-    "test_unsupported_format_raises"
-
-    # AssertionError: assert True is False
-    #  +  where True = VibeApp(title='VibeApp', ...)._rewind_mode
-    "test_rewind_confirm_edits_message_and_prefills_input"
-    "test_rewind_option_selection_with_number_keys"
-
-    # AssertionError: assert 3 == 1
-    # +  where 3 = len([UserMessage(classes='user-message'), UserMessage(classes='...
-    "test_rewind_removes_messages_after_selected"
+    # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
+    "test_orchestrator_deepcopies_and_stays_functional"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError
@@ -245,11 +184,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # All snapshot tests fail with AssertionError
     "tests/snapshots/"
 
-    # Try to invoke `uv run vibe`
-    "tests/e2e/"
+    # These tests invoke uv run and fail to import the packaged pydantic extension.
+    "tests/e2e/agent_loop_characterization/test_resume.py"
+    "tests/e2e/agent_loop_characterization/test_subagents.py"
+    "tests/e2e/agent_loop_characterization/test_tool_execution.py"
+    "tests/e2e/agent_loop_characterization/test_tool_permissions.py"
+    "tests/e2e/agent_loop_characterization/test_user_interaction.py"
+    "tests/e2e/test_cli_tui_fresh_install.py"
+    "tests/e2e/test_cli_tui_hooks.py"
+    "tests/e2e/test_cli_tui_onboarding.py"
+    "tests/e2e/test_cli_tui_session_exit.py"
+    "tests/e2e/test_cli_tui_streaming.py"
+    "tests/e2e/test_cli_tui_tool_approval.py"
 
     # ACP tests require network access
-    "tests/acp/test_acp.py"
     "tests/acp/test_acp_entrypoint_smoke.py"
   ];
 

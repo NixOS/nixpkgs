@@ -15,7 +15,7 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands =
     let
-      appimageContents = appimageTools.extractType2 { inherit pname version src; };
+      appimageContents = appimageTools.extract { inherit pname version src; };
     in
     ''
       install -Dm444 ${appimageContents}/clash-nyanpasu.desktop -t $out/share/applications

@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trackers";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     owner = "roboflow";
     repo = "trackers";
     tag = finalAttrs.version;
-    hash = "sha256-BJsRRKz+NyjldT88ZVTkqd0pVul/rLicFA9QpUSOGDg=";
+    hash = "sha256-DSyBzI+hz0o7d8SfpGav5Ezhs3RtjR3pxElOZyCDQwY=";
   };
 
   build-system = [

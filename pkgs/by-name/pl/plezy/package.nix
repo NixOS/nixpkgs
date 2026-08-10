@@ -27,13 +27,13 @@
 
 let
   pname = "plezy";
-  version = "2.7.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-lzq0a7zxKpRwLM6T2VeD4A+qbW55bkwmtBN0bc6Lq4g=";
+    hash = "sha256-Ib1ZBKbuan8GfkxKVytQ5Bn0sPKtDR3o4em4h8p78Xk=";
   };
 
   simdutf = fetchurl {
@@ -55,9 +55,9 @@ let
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -72,13 +72,7 @@ let
 
     gitHashes = lib.importJSON ./git-hashes.json;
 
-    # Upstream uses a sentry-dart fork that fetches sentry-native as a zip instead of via
-    # git clone. The PR was merged and reverted upstream (getsentry/sentry-dart#3630), so
-    # we use upstream since theres no actual meaningful difference
-    patches = [
-      ./replace-sentry-fork.patch
-    ]
-    ++ lib.optionals use16kPagesizeWorkaround [
+    patches = lib.optionals use16kPagesizeWorkaround [
       ./16k-font-workaround.patch
     ];
 
@@ -152,7 +146,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-tkkZWwMK3SHzkB2r/JDj+JPggXHFGSinMn8ZtKyRUMU=";
+      hash = "sha256-el4w0SXVo3kQi/aRrozl4q8KGs+Y7kCJeQmpV26+Pvk=";
     };
 
     nativeBuildInputs = [

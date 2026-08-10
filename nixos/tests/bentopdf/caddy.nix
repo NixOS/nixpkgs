@@ -22,7 +22,7 @@ import ../make-test-python.nix (
       machine.wait_for_unit("caddy.service")
       machine.wait_for_open_port(80)
       machine.succeed("curl -vvv --fail --show-error --silent --location --insecure http://localhost/")
-      assert "<title>BentoPDF - The Privacy First PDF Toolkit</title>" in machine.succeed("curl --fail --show-error --silent --location --insecure http://localhost/")
+      assert "<title>PDF Tools</title>" in machine.succeed("curl --fail --show-error --silent --location --insecure http://localhost/")
     '';
   }
 )

@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -79,6 +80,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211
@@ -121,8 +129,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-hefWMElsTGTkPvSnovwR8P0kunnPLUGDR5Hvoa31SMM=";
-          aarch64-linux = "sha256-4leXyoebeqWPHxO9D2MomnVqza/9IEcJEuiRCf3/eUc=";
+          x86_64-linux = "sha256-GASDnneoxfZLUctJLnaUTPW4HDbKdSamJBxFDVpPUC0=";
+          aarch64-linux = "sha256-qtqMCyEZVQu44HGI73t50D1WcnuzxuxLY7MDzf4NDeA=";
         }
         .${system} or throwSystem;
     };
@@ -135,6 +143,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -193,18 +202,12 @@ let
   };
   webkit-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        x86_64-darwin = "sha256-D9iZitRG3lPWQ/Zu/HAjx2gEehr/xr0d+j2jo7yjnoQ=";
-        aarch64-darwin = "sha256-383PHqwW+QoXL4qxXEE3ytbQVQ4rg2YDK+B+XvIfBmY=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-glVkYnthOFBPp1gZXTue9WwjP+oCgQpq6j9Mlm/bjmg=";
   };
 in
 {
   x86_64-linux = webkit-linux;
   aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
   aarch64-darwin = webkit-darwin;
 }
 .${system} or throwSystem

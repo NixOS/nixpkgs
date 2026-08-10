@@ -1,46 +1,38 @@
 {
   lib,
   stdenv,
-  perlPackages,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
   coreutils,
   dmidecode,
+  fetchFromGitHub,
   findutils,
   inetutils,
   ipmitool,
   iproute2,
   lvm2,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
   nmap,
   pciutils,
+  perlPackages,
   usbutils,
   util-linux,
-  nixosTests,
-  testers,
-  ocsinventory-agent,
-  nix-update-script,
+  versionCheckHook,
+  which,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ocsinventory-agent";
-  version = "2.10.4";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "OCSInventory-NG";
     repo = "UnixAgent";
     tag = "v${version}";
-    hash = "sha256-MKUYf3k47lHc9dTGo1wYd7r4GrX98dU+04mF0Jm5e9U=";
+    hash = "sha256-BIR93ABiE3wzuw9Q0fZMm7ClKyDmsxE+UcPTYd6P7No=";
   };
 
-  patches = [
-    # Fix Getopt-Long warnings
-    # See https://github.com/OCSInventory-NG/UnixAgent/pull/490
-    (fetchpatch {
-      url = "https://github.com/OCSInventory-NG/UnixAgent/commit/c4899cef6b797df471ddf41c427970de47302f80.patch";
-      hash = "sha256-HxcWb9jmHiL0r6VWlsvmKUuybnM9W5471FLBBe3Zrfs=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -84,6 +76,7 @@ perlPackages.buildPerlPackage rec {
         ipmitool # ipmitool
         nmap # nmap
         pciutils # lspci
+        which # which
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         dmidecode # dmidecode
@@ -97,14 +90,11 @@ perlPackages.buildPerlPackage rec {
       wrapProgram $out/bin/ocsinventory-agent --prefix PATH : ${lib.makeBinPath runtimeDependencies}
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    tests = {
-      inherit (nixosTests) ocsinventory-agent;
-      version = testers.testVersion {
-        package = ocsinventory-agent;
-        command = "ocsinventory-agent --version";
-      };
-    };
+    tests.ocsinventory-agent = nixosTests.ocsinventory-agent;
     updateScript = nix-update-script { };
   };
 
@@ -118,7 +108,7 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ocsinventory-ng.org";
     changelog = "https://github.com/OCSInventory-NG/UnixAgent/releases/tag/v${version}";
     downloadPage = "https://github.com/OCSInventory-NG/UnixAgent/releases";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ocsinventory-agent";
     maintainers = with lib.maintainers; [
       totoroot

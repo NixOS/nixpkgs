@@ -276,12 +276,15 @@ with foo_running:
 
 `polling_condition` takes the following (optional) arguments:
 
-`seconds_interval`
+`interval`
 
-:   specifies how often the condition should be polled:
+:   specifies how often the condition should be polled, as a `datetime.timedelta`:
 
 ```py
-@polling_condition(seconds_interval=10)
+import datetime as dt
+
+
+@polling_condition(interval=dt.timedelta(seconds=10))
 def foo_running():
     machine.succeed("pgrep -x foo")
 ```

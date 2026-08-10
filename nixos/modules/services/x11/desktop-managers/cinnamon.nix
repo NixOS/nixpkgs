@@ -116,7 +116,6 @@ in
         enablePkexecWrapper = lib.mkDefault true;
       };
       services.accounts-daemon.enable = true;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
         cinnamon
         cinnamon-screensaver
@@ -230,6 +229,9 @@ in
             xdg-user-dirs-gtk
           ] config.environment.cinnamon.excludePackages
         );
+
+      # For printers@cinnamon.org applet
+      programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;

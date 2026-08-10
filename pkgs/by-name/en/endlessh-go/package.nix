@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/shizunge/endlessh-go";
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ azahi ];
+    maintainers = [ ];
     mainProgram = "endlessh-go";
   };
 })

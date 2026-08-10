@@ -1,22 +1,22 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 2caa0e75..f6fcf60a 100644
+index 7be62275..0b70ad88 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -16,7 +16,7 @@ dependencies = [
+@@ -17,7 +17,7 @@ dependencies = [
    "img2pdf>=0.5",
    "packaging>=20",
-   "pdfminer.six>=20220319",
+   "pdfminer.six>=20260107",  # fixes parsing of tokens split across the read buffer/streams (gh #1361)
 -  "pi-heif",                # Heif image format - maintainers: if this is removed, it will NOT break
 +  "pillow-heif",                # Heif image format - maintainers: if this is removed, it will NOT break
    "pikepdf>=10",
    "Pillow>=10.0.1",
    "pluggy>=1",
 diff --git a/src/ocrmypdf/_pipeline.py b/src/ocrmypdf/_pipeline.py
-index 90524d58..0be5a0f8 100644
+index 161d77df..1ec03a12 100644
 --- a/src/ocrmypdf/_pipeline.py
 +++ b/src/ocrmypdf/_pipeline.py
-@@ -42,7 +42,7 @@ from ocrmypdf.pdfinfo import Colorspace, Encoding, PageInfo, PdfInfo
- from ocrmypdf.pluginspec import OrientationConfidence
+@@ -49,7 +49,7 @@ from ocrmypdf.pdfinfo import Colorspace, Encoding, FloatRect, Ink, PageInfo, Pdf
+ from ocrmypdf.pluginspec import GhostscriptRasterDevice, OrientationConfidence
  
  try:
 -    from pi_heif import register_heif_opener

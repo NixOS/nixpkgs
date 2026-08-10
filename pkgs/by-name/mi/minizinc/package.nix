@@ -13,31 +13,15 @@
   zlib,
 }:
 
-let
-  gecode_6_3_0 = gecode.overrideAttrs (_: {
-    version = "6.3.0";
-    src = fetchFromGitHub {
-      owner = "gecode";
-      repo = "gecode";
-      rev = "f7f0d7c273d6844698f01cec8229ebe0b66a016a";
-      hash = "sha256-skf2JEtNkRqEwfHb44WjDGedSygxVuqUixskTozi/5k=";
-    };
-    patches = [ ];
-  });
-in
-let
-  gecode = gecode_6_3_0;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.9.7";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
     tag = finalAttrs.version;
-    hash = "sha256-k9imUrGn6VyQVvHU8Ef9wvBIOEHA3SSmEwIui3fW9JI=";
+    hash = "sha256-pQsH0ofXPW52CnhH2qO9XmFGO8rGxojCNxRNIGiemmU=";
   };
 
   nativeBuildInputs = [

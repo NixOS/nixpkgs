@@ -17,14 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdng";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "quantum-dynamics-ng";
     repo = "QDng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T59Bb014KSUOOFTFjPOrWmbF6GqIqAIyrb3Xe5TwU88=";
+    hash = "sha256-SK1sutYXlhgZffl/bJb/iRTGOVNYcnnfsSQPbiS3b50=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
     "--enable-openmp"
@@ -32,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  # Remove static library leftovers
+  postInstall = ''
+    rm -r $out/lib
+  '';
 
   nativeBuildInputs = [
     autoreconfHook

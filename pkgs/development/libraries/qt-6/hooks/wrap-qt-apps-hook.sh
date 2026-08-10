@@ -3,8 +3,11 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
     # wrap only once per output
     declare -a qtWrapperDoneForOuputs
 
-    # Inherit arguments given in mkDerivation
-    qtWrapperArgs=(${qtWrapperArgs-})
+    # Normalize qtWrapperArgs to an array
+    declare -a _qtWrapperArgsTmp
+    concatTo _qtWrapperArgsTmp qtWrapperArgs
+    qtWrapperArgs=("${_qtWrapperArgsTmp[@]}")
+    unset _qtWrapperArgsTmp
 
     qtHostPathSeen=()
 

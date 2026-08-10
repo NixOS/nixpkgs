@@ -92,14 +92,6 @@ in
           ];
         };
 
-        linux_7_0 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.0";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_7_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "7.1";
           kernelPatches = [
@@ -175,6 +167,7 @@ in
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
+        linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -348,8 +341,6 @@ in
 
         framework-laptop-kmod = callPackage ../os-specific/linux/framework-laptop-kmod { };
 
-        fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
-
         gasket = callPackage ../os-specific/linux/gasket { };
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
@@ -470,8 +461,6 @@ in
         rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack { };
 
         rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
-
-        rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
 
         rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
@@ -649,6 +638,7 @@ in
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+        rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22
         vm-tools = self.mm-tools;
         xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
         amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
@@ -662,6 +652,7 @@ in
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
         nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
+        fwts-efi-runtime = throw "fwts-efi-runtime has been replaced by efi_test starting with kernel version 4.8, see https://bugs.launchpad.net/fwts/+bug/2138473"; # added 2026-05-16
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
@@ -674,7 +665,6 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_0 = recurseIntoAttrs (packagesFor kernels.linux_7_0);
     linux_7_1 = recurseIntoAttrs (packagesFor kernels.linux_7_1);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -689,6 +679,7 @@ in
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
+    linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
   };
 
   rpiPackages = {

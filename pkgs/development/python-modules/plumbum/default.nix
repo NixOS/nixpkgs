@@ -4,24 +4,29 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  mount,
+  openssh,
   paramiko,
+  ps,
   psutil,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.10.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     tag = "v${version}";
-    hash = "sha256-ca9avbBJnMecuKljIrx3mYIGA50QXmhC/LP3hM9Uvcs=";
+    hash = "sha256-XwsEcAHvVhWQG5trznOvkfP8Al7kfMGSG2wR0sXY+eI=";
   };
 
   build-system = [
@@ -29,12 +34,20 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+  dependencies = [
+    typing-extensions
+  ];
+
   optional-dependencies = {
     ssh = [ paramiko ];
   };
 
   nativeCheckInputs = [
+    mount
+    openssh
+    ps
     psutil
+    pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytest-timeout
@@ -46,19 +59,9 @@ buildPythonPackage rec {
     export HOME=$TMP
   '';
 
-  disabledTests = [
+  pytestFlags = [
     # broken in nix env
-    "test_change_env"
-    "test_dictlike"
-    "test_local"
-    # incompatible with pytest 7
-    "test_incorrect_login"
-  ];
-
-  disabledTestPaths = [
-    # incompatible with pytest7
-    # https://github.com/tomerfiliba/plumbum/issues/594
-    "tests/test_remote.py"
+    "--deselect=tests/test_local.py::TestLocalMachine::test_local"
   ];
 
   meta = {
@@ -66,6 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
     homepage = "https://github.com/tomerfiliba/plumbum";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

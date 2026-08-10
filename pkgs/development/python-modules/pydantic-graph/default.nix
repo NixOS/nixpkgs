@@ -14,16 +14,19 @@
   typing-inspection,
 }:
 
+# Update together with pydantic-ai-slim
+# nixpkgs-update: no auto update
+
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-graph";
-  version = "2.0.0";
+  version = "2.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4mqGRKFcQAexgccvUoZP0oDsmgfK9jzFPM1cIvWUOUA=";
+    hash = "sha256-9T1y3PARJVPdfVHaAVz1ApPIyCjijxYgvqM/enbgVaU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_graph";

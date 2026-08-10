@@ -21,13 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
       system = selectSystem {
         x86_64-linux = "linux-x64";
         aarch64-linux = "linux-arm64";
-        x86_64-darwin = "macos-x64";
         aarch64-darwin = "macos-arm64";
       };
       hash = selectSystem {
         x86_64-linux = "sha256-KOR7RM8HXzZ3EEbAaLsNF0IBz5x2CHRK7RzCMgQpnC0=";
         aarch64-linux = "sha256-+CyD7OfRaAR1UN/UpmTkBxrHxIi923LcQxAsItfgtRg=";
-        x86_64-darwin = "sha256-OBmfVv4i8iNednmRkdW5UW42A2nGG2ukQROY1dWSC6s=";
         aarch64-darwin = "sha256-zYdTko53trZlvXDc4OZLTsbS4v3hQdZAm7cWyKwfHAo=";
       };
     in
@@ -113,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

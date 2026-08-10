@@ -26,11 +26,6 @@ let
       url = "https://cli.leetgpu.com/dist/${version}/leetgpu-macos-arm64";
       hash = "sha256-B1Sdyw+6fDBKS3PsINmiNA9PnOtEpDZiodFPsx+qk1Y=";
     };
-
-    x86_64-darwin = fetchurl {
-      url = "https://cli.leetgpu.com/dist/${version}/leetgpu-macos-amd64";
-      hash = "sha256-Iw2w0qDddM38OE37mVZ4krRTqjKGhXPxZSCav+oM1ac=";
-    };
   };
 
   src = srcs.${stdenvNoCC.hostPlatform.system} or throwSystem;

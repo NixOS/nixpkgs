@@ -11,6 +11,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microcode-intel";
   version = "20260512";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "intel";
     repo = "Intel-Linux-Processor-Microcode-Data-Files";

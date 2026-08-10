@@ -38,8 +38,14 @@ stdenv.mkDerivation (
 
     configurePhase = ''
       runHook preConfigure
+
       export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
       export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
+
+      if [ -f ./configure ] && [ -z "''${dontPatchShebangsInConfigure:-}" ]; then
+        patchShebangs --build ./configure
+      fi
+
       runHook postConfigure
     '';
 

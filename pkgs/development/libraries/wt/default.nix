@@ -18,6 +18,8 @@
   openssl,
   harfbuzz,
   icu,
+  libice,
+  libsm,
 }:
 
 let
@@ -53,10 +55,18 @@ let
         openssl
         harfbuzz
         icu
+        libice
+        libsm
       ];
 
       dontWrapQtApps = true;
       cmakeFlags = [
+        "-DCMAKE_INSTALL_RPATH=${
+          lib.makeLibraryPath [
+            libice
+            libsm
+          ]
+        }"
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
       ]

@@ -72,6 +72,7 @@ LICENSE_NORMALIZATION = {
     "Apache 2.0": "lib.licenses.asl20",
     "Apache-2.0": "lib.licenses.asl20",
     "Apache License Version 2": "lib.licenses.asl20",
+    "BSD": "lib.licenses.free",  # Too unspecific
     "BSD-2-Clause": "lib.licenses.bsd2",
     "BSD-3-Clause": "lib.licenses.bsd3",
     "GPL-2+": "lib.licenses.gpl2Plus",
@@ -82,16 +83,23 @@ LICENSE_NORMALIZATION = {
     "GPL-3.0": "lib.licenses.gpl3Only",
     "GPL-3.0-only": "lib.licenses.gpl3Only",
     "GPL-3.0-or-later": "lib.licenses.gpl3Plus",
+    "GPLv3+ and other free licenses": "lib.licenses.AND [ lib.licenses.gpl3Plus lib.licenses.free ]",
     "ISC": "lib.licenses.isc",
+    "LGPL": "lib.licenses.free",  # Too unspecific
     "LGPL-2.0": "lib.licenses.lgpl2Only",
     "LGPL-2.1": "lib.licenses.lgpl21Only",
     "LGPL-3.0": "lib.licenses.lgpl3Only",
     "MIT": "lib.licenses.mit",
     "MIT <http://opensource.org/licenses/MIT>": "lib.licenses.mit",
+    "MIT/X11": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/X license": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/ICU": "lib.licenses.AND [ lib.licenses.mit lib.licenses.unicode-30 ]",
     "MPL-2.0": "lib.licenses.mpl20",
     "Unlicense": "lib.licenses.unlicense",
     "2-clause BSD": "lib.licenses.bsd2",
     "Two-clause BSD": "lib.licenses.bsd2",
+    "Public domain": "lib.licenses.publicDomain",
+    "UNKNOWN": "lib.licenses.unfree",
 }
 
 LICENSE_FULL_NAME_RE = re.compile(r'(?P<indent>\s*)license\.fullName = "(?P<license>[^"]+)";')
@@ -174,6 +182,13 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         parser.set_defaults(proc=1, update_only=None)
         return parser
 
+    def configure_add_parser(self, parser):
+        parser.add_argument(
+            "--maintainers",
+            default="",
+            help="Space-separated nixpkgs maintainer names to add to each package",
+        )
+
     def get_current_plugins(self, _config: FetchConfig, _nixpkgs: str):
         return []
 
@@ -202,11 +217,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         specs = sorted(specs, key=lambda v: v.name.lower())
 
         if args.update_only:
-            specs = [
-                p
-                for p in specs
-                if p.normalized_name in args.update_only or p.name in args.update_only
-            ]
+            specs = [p for p in specs if p.normalized_name in args.update_only or p.name in args.update_only]
 
         if not specs:
             log.error("No matching Lua packages to update")
@@ -332,7 +343,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 "server": "",
                 "version": "",
                 "luaversion": "",
-                "maintainers": "",
+                "maintainers": args.maintainers,
             }
             existing_entries.append(new_entry)
 

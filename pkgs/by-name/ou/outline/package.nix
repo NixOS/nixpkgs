@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  nix-update-script,
   nodejs,
   nixosTests,
   yarn-berry_4,
@@ -11,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.8.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jdG1sIJN1UiajsZ86+ztY3uXZgdS5MxjaPaKw/Glepo=";
+    hash = "sha256-6w4Pso7I0ojbsbACEZrYuJsW9J2W38jY9uiErMQNeXE=";
   };
 
   patches = [
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-uSXw/x+4d22ow7QE3nduTUDNlZebCrnW6OIzhSugcXw=";
+    hash = "sha256-7nREE+sGd6ZUGfZ+YSIIGUaysMSEdap189koFQcV+hs=";
   };
 
   buildPhase = ''
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       basic-functionality = nixosTests.outline;
     };
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
     # alias for nix-update to be able to find and update this attribute
     inherit (finalAttrs) offlineCache;
   };
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
-    changelog = "https://github.com/outline/outline/releases";
+    changelog = "https://github.com/outline/outline/releases/v${finalAttrs.version}";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [
       cab404

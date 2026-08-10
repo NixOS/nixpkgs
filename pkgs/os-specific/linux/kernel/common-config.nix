@@ -303,6 +303,7 @@ let
       XDP_SOCKETS = yes;
       XDP_SOCKETS_DIAG = yes;
       WAN = yes;
+      TCP_AO = whenAtLeast "6.7" yes;
       TCP_CONG_ADVANCED = yes;
       TCP_CONG_CUBIC = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
@@ -669,7 +670,7 @@ let
 
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
-      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptable Power Supplies)
+      USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptible Power Supplies)
 
       # default to dual role mode
       USB_DWC2_DUAL_ROLE = yes;
@@ -861,13 +862,15 @@ let
       # enable temporary caching of the last request_key() result
       KEYS_REQUEST_CACHE = yes;
       # randomized slab caches
-      RANDOM_KMALLOC_CACHES = whenAtLeast "6.6" yes;
+      RANDOM_KMALLOC_CACHES = whenBetween "6.6" "7.2" yes;
+      KMALLOC_PARTITION_CACHES = whenAtLeast "7.2" yes;
+      KMALLOC_PARTITION_RANDOM = whenAtLeast "7.2" yes;
 
       # NIST SP800-90A DRBG modes - enabled by most distributions
       #   and required by some out-of-tree modules (ShuffleCake)
       #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
-      CRYPTO_DRBG_HASH = yes;
-      CRYPTO_DRBG_CTR = yes;
+      CRYPTO_DRBG_HASH = whenOlder "7.2" yes;
+      CRYPTO_DRBG_CTR = whenOlder "7.2" yes;
 
       # Enable KFENCE
       # See: https://docs.kernel.org/dev-tools/kfence.html
@@ -1289,13 +1292,15 @@ let
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
         LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
-        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
+        PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION and BSD_DISKLABEL
         # Windows Logical Disk Manager (Dynamic Disk) support
         LDM_PARTITION = yes;
         LOGIRUMBLEPAD2_FF = yes; # Logitech Rumblepad 2 force feedback
         LOGO = no; # not needed
         MEDIA_ATTACH = yes;
         MEGARAID_NEWGEN = yes;
+
+        BSD_DISKLABEL = yes;
 
         MLX5_CORE_EN = option yes;
 
@@ -1387,7 +1392,7 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
-        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        # Allows PCIe devices to report errors with Advanced Error Reporting (AER).
         PCIEAER = yes;
         ACPI_APEI_PCIEAER = yes;
 
