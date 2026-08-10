@@ -6563,6 +6563,8 @@ self: super: with self; {
     inherit (pkgs) bluez glib pkg-config;
   };
 
+  gatus-api = callPackage ../development/python-modules/gatus-api { };
+
   gawd = callPackage ../development/python-modules/gawd { };
 
   gb-io = callPackage ../development/python-modules/gb-io { };
