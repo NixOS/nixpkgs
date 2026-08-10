@@ -166,24 +166,27 @@ def list_secrets(
         )
 
 
-def fixup_secret(
+def fixup_secrets(
     args: VarsArgs,
     config: VarsConfig,
-    generator: VarsGenerator,
-    file: VarsFile,
+    backend: VarsGeneratorBackend,
+    files: List[tuple[str, str]],
 ):
-    backend = config.generatorBackends[generator.backend]
+    inputLines = []
+    for generator, filename in files:
+        inputLines.append(f"{generator} {filename}")
+
     binary = build_binary(backend.fixup)
     try:
         subprocess.run(
-            [binary, generator.name, file.name],
+            [binary, "\n".join(inputLines)],
             capture_output=not args.verbose,
             text=True,
             check=True,
         )
     except subprocess.CalledProcessError as e:
         raise VarsError(
-            f"Error running fixup script for secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
+            f"Error running fixup script for backend '{backend.name}':\n{e.stderr}"
         )
 
 
@@ -293,18 +296,20 @@ def rebuild_order(
 
 def fixup_all(args: VarsArgs, config: VarsConfig):
     print("Running fixup scripts:")
-    if args.dry_run:
-        return
 
-    order = execution_order(config)
-    for gen_name in order:
-        generator = config.generators[gen_name]
+    for backend in config.generatorBackends.values():
+        files = config.files_for_backend(backend)
 
-        if config.generatorBackends[generator.backend].fixup:
-            print(f"- '{gen_name}' ({len(generator.files)} file(s))")
+        if not backend.fixup:
+            print(f"- Skipping '{backend.name}' (no fixup script)")
+            continue
+        elif not files:
+            print(f"- Skipping '{backend.name}' (no files)")
+            continue
         else:
-            print(f"- Skipping '{gen_name}' (no fixup script)")
+            print(f"- '{backend.name}' ({len(files)} file(s))")
+
+        if args.dry_run:
             continue
 
-        for file in generator.files.values():
-            fixup_secret(args, config, generator, file)
+        fixup_secrets(args, config, backend, files)

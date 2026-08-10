@@ -10,15 +10,7 @@ def deploy(args: VarsArgs, config: VarsConfig):
     print(f"Running deploy scripts for {len(config.generatorBackends)} backends:")
 
     for backend in config.generatorBackends.values():
-        files = []
-
-        for generator in config.generators.values():
-            if generator.backend != backend.name:
-                continue
-
-            for file in generator.files.values():
-                if file.deploy:
-                    files.append((generator.name, file.name))
+        files = config.files_for_backend(backend)
 
         if not files:
             print(f"- Skipping '{backend.name}' (no files to deploy)")
