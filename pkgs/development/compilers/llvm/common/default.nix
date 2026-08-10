@@ -476,21 +476,15 @@ makeScopeWithSplicing' {
         # Standalone flang still resolves driver/option definitions via the
         # installed libclang package, so keep flang-specific driver backports
         # in a private libclang variant instead of patching the flang source
-        # tree. The `-Xflang` diagnostic improvement applies to every
-        # supported standalone-flang version (20+); the other two backports
-        # are only needed up to LLVM 21 because upstream merged equivalent
-        # behaviour into LLVM 22.
+        # tree.
         flangDriverPatches =
-          lib.optionals (lib.versionAtLeast metadata.release_version "20") [
-            (metadata.getVersionFile "flang/use-xflang-in-diagnostics.patch")
-          ]
-          ++
-            lib.optionals
-              (lib.versionAtLeast metadata.release_version "20" && lib.versionOlder metadata.release_version "22")
-              [
-                (metadata.getVersionFile "flang/warn-on-fbuiltin-and-fno-builtin.patch")
-                (metadata.getVersionFile "flang/accept-and-ignore-some-gfortran-optimization-flags.patch")
-              ];
+          lib.optionals
+            (lib.versionAtLeast metadata.release_version "20" && lib.versionOlder metadata.release_version "22")
+            [
+              (metadata.getVersionFile "flang/use-xflang-in-diagnostics.patch")
+              (metadata.getVersionFile "flang/warn-on-fbuiltin-and-fno-builtin.patch")
+              (metadata.getVersionFile "flang/accept-and-ignore-some-gfortran-optimization-flags.patch")
+            ];
         flangLibclang =
           if flangDriverPatches == [ ] then
             self.libclang
