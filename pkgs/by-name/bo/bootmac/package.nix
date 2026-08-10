@@ -15,7 +15,7 @@
   udevCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "bootmac";
+  pname = "bootmac";
   version = "0.7.1";
   __structuredAttrs = true;
   strictDeps = true;
