@@ -31504,6 +31504,11 @@
       { fingerprint = "D2A8 A906 ACA7 B6D6 575E 9A2F 3A49 5054 6EA6 9E5C"; }
     ];
   };
+  Yonnix = {
+    github = "Yonnix";
+    githubId = 116506223;
+    name = "Yonnix";
+  };
   yoquec = {
     email = "alvaro.viejo@yoquec.com";
     github = "yoquec";
