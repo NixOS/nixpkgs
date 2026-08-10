@@ -41,11 +41,6 @@ buildHomeAssistantComponent rec {
     tests/setup.sh
   '';
 
-  disabledTests = [
-    # test contacts api.powercalc.nl
-    "test_exception_is_raised_on_github_resource_unavailable"
-  ];
-
   meta = {
     changelog = "https://github.com/bramstroker/homeassistant-powercalc/releases/tag/${src.tag}";
     description = "Custom Home Assistant component for virtual power sensors";

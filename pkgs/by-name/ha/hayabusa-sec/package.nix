@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper $out/share/hayabusa-sec/hayabusa $out/bin/hayabusa
   '';
 
-  passthru.updateScript = nix-update-script { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sigma-based threat hunting and fast forensics timeline generator for Windows event logs";

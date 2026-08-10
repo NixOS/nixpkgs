@@ -6,12 +6,7 @@
 #     nix-build -A tests.config
 #
 
-{
-  config,
-  lib,
-  docPrefix,
-  ...
-}:
+{ config, lib, ... }:
 
 let
   inherit (lib)
@@ -148,13 +143,13 @@ let
     gitConfig = mkOption {
       type = types.attrsOf (types.attrsOf types.anything);
       description = ''
-        The default [git configuration](https://git-scm.com/docs/git-config#_variables) for all [`pkgs.fetchgit`](${docPrefix}#fetchgit) calls.
+        The default [git configuration](https://git-scm.com/docs/git-config#_variables) for all [`pkgs.fetchgit`](#fetchgit) calls.
 
         Among many other potential uses, this can be used to override URLs to point to local mirrors.
 
         Changing this will not cause any rebuilds because `pkgs.fetchgit` produces a [fixed-output derivation](https://nix.dev/manual/nix/stable/glossary.html?highlight=fixed-output%20derivation#gloss-fixed-output-derivation).
 
-        To set the configuration file directly, use the [`gitConfigFile`](${docPrefix}#opt-gitConfigFile) option instead.
+        To set the configuration file directly, use the [`gitConfigFile`](#opt-gitConfigFile) option instead.
 
         To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
       '';
@@ -168,9 +163,9 @@ let
     gitConfigFile = mkOption {
       type = types.nullOr types.path;
       description = ''
-        A path to a [git configuration](https://git-scm.com/docs/git-config#_variables) file, to be used for all [`pkgs.fetchgit`](${docPrefix}#fetchgit) calls.
+        A path to a [git configuration](https://git-scm.com/docs/git-config#_variables) file, to be used for all [`pkgs.fetchgit`](#fetchgit) calls.
 
-        This overrides the [`gitConfig`](${docPrefix}#opt-gitConfig) option, see its documentation for more details.
+        This overrides the [`gitConfig`](#opt-gitConfig) option, see its documentation for more details.
       '';
       default =
         if config.gitConfig != { } then
@@ -188,7 +183,7 @@ let
 
         For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
 
-        To set the string directly, see [`npmRegistryOverridesString`](${docPrefix}#opt-npmRegistryOverridesString).
+        To set the string directly, see [`npmRegistryOverridesString`](#opt-npmRegistryOverridesString).
       '';
       default = { };
       example = {
@@ -207,7 +202,7 @@ let
       description = ''
         A string containing a string with a JSON representation of npm registry overrides for `fetchNpmDeps`.
 
-        This overrides the [`npmRegistryOverrides`](${docPrefix}#opt-npmRegistryOverrides) option, see its documentation for more details.
+        This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
       '';
       default = builtins.toJSON config.npmRegistryOverrides;
     };
@@ -445,7 +440,7 @@ let
       type = types.listOf types.str;
       default = [ "https://tarballs.nixos.org" ];
       description = ''
-        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](${docPrefix}#sec-pkgs-fetchers-fetchurl).
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
         In case `pkgs.fetchurl` can't download from the given URLs,
         it will try the hashed mirrors based on the expected output hash.
 
@@ -498,24 +493,8 @@ let
         binaries for the platform. It is provided only as an escape
         hatch for custom setups, and comes with no support.
 
-        See the [release notes](${docPrefix}#x86_64-darwin-26.11) for more
+        See the [release notes](#x86_64-darwin-26.11) for more
         information.
-      '';
-    };
-
-    packageOverrides = mkOption {
-      type = types.functionTo types.attrs;
-      default = pkgs: { };
-      description = ''
-        A function to replace or add packages in `pkgs` expects an attrset to be returned when called.
-      '';
-    };
-
-    perlPackageOverrides = mkOption {
-      type = types.functionTo types.attrs;
-      default = pkgs: { };
-      description = ''
-        The same as `packageOverrides` but for packages in the perl package set.
       '';
     };
 
@@ -542,7 +521,6 @@ in
   inherit options;
 
   config = {
-    _module.args.docPrefix = lib.mkDefault "";
     warnings =
       optionals config.warnUndeclaredOptions (
         mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
