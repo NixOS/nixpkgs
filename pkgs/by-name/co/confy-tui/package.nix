@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 confy.1 $out/share/man/man1/confy.1
   '';
-
+  # this comment was added to force a ci retrigger. you can ignore this comment
   meta = {
     description = "config manager tui for linux/unix systems";
     homepage = "https://github.com/phluxjr/confy";
