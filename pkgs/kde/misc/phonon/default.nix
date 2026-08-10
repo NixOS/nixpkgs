@@ -33,6 +33,8 @@ mkKdeDerivation rec {
   cmakeFlags = [
     "-DPHONON_BUILD_QT5=0"
     "-DPHONON_BUILD_QT6=1"
+    # Newer Clang rejects the experimental library's out-of-range enum casts.
+    (lib.cmakeBool "PHONON_BUILD_EXPERIMENTAL" false)
   ];
 
   meta.license = with lib.licenses; [
