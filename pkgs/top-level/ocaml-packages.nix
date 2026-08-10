@@ -1021,6 +1021,8 @@ let
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+        jsonoo = callPackage ../development/ocaml-modules/jsonoo { };
+
         jsont = callPackage ../development/ocaml-modules/jsont { };
 
         jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
