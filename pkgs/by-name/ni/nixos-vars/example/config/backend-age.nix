@@ -32,7 +32,10 @@ let
       ageJSONConfig = pkgs.writeText "age.json" (builtins.toJSON ageNixConfig);
       scriptSource = builtins.readFile ./backend-age.py;
       raw = pkgs.writers.writePython3Bin "vars-age-backend" {
-        flakeIgnore = [ "W191" ];
+        flakeIgnore = [
+          "W191"
+          "E501"
+        ];
       } scriptSource;
     in
     lib.getExe (

@@ -226,13 +226,15 @@ def run_prompt(config: VarsConfig, prompt: VarsPrompt, out: Path):
     try:
         env = os.environ.copy()
         env["out"] = out
+        command = [binary, prompt.type, prompt.label]
+        if prompt.description:
+            command.append(prompt.description)
         subprocess.run(
-            [binary, prompt.type, prompt.description],
+            command,
             env=env,
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        print()
         raise VarsError(
             f"Error running prompt '{prompt.name}' via the '{backend.name}' backend:\n{e.stderr}"
         )

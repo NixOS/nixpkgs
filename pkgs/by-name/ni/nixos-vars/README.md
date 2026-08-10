@@ -87,6 +87,7 @@ Generators can depend on other generators. The inputs for a given generator will
             pkgs.cowsay
           ]
         }"
+
         cat $in/example/example | cowsay > $out/derived
       '';
   };
@@ -115,7 +116,8 @@ It is often useful for generators to allow human (or otherwise external) input. 
 {
   vars = {
     prompts.name = {
-      description = "Your name";
+      label = "Your name";
+      description = "The person to address the greeting to";
       type = "line";
       backend = "plain";
     };
@@ -147,21 +149,22 @@ Before jumping in to the more complex idea of generator backends, we'll go over 
     pkgs:
     pkgs.writeScript "simple-prompt" ''
       #!/bin/sh
-      export PATH="${
-        lib.makeBinPath [
-          pkgs.coreutils
-          pkgs.cowsay
-        ]
-      }"
+      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+
+      prompt="$2"
+      if [[ ! -z "$3" ]]; then
+        prompt="$prompt ($3)"
+      fi
+
       if [[ "$1" == "line" ]]; then
-        read -rp "$2: " text
+        read -rp "$prompt: " text
         echo -n "$text" > "$out"
       elif [[ "$1" == "hidden" ]]; then
-        read -srp "$2: " text
+        read -srp "$prompt: " text
         echo ""
         echo -n "$text" > "$out"
       elif [[ "$1" == "multiline" ]]; then
-        echo "<$2>" > "$out"
+        echo "<$prompt>" > "$out"
         $EDITOR "$out"
       else
         exit 1
@@ -170,7 +173,7 @@ Before jumping in to the more complex idea of generator backends, we'll go over 
 }
 ```
 
-That's about it! One thing to note is that prompt (and by extension, generator) backends will not be sandboxed (unlike generator scripts). Be careful with what backends you pass to the CLI!
+That's about it! The script receives the type of prompt as its first argument, the label of the prompt as the second, and an optional description as the third. One thing to note is that prompt (and by extension, generator) backends will not be sandboxed (unlike generator scripts). Be careful with what backends you pass to the CLI!
 
 ## Generator backends
 
