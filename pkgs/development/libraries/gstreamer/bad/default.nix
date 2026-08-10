@@ -113,6 +113,7 @@
   gst-plugins-bad,
   apple-sdk_gstreamer,
   libexif,
+  libltc,
   # disabled by default for now to reduce closure size
   vulkanSupport ? false && stdenv.hostPlatform.isLinux,
   vulkan-headers,
@@ -221,6 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
     wildmidi
     svt-av1
+    libltc # used by timecode plugin
   ]
   ++ lib.optionals onnxSupport [
     onnxruntime
