@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   fetchurl,
   intltool,
   libtorrent-rasterbar,
@@ -32,11 +31,8 @@ let
       };
 
       patches = [
-        (fetchpatch {
-          name = "deluge-replace-pyopenssl-certificate-generation.patch";
-          url = "https://github.com/deluge-torrent/deluge/commit/b763626ce88f9f9b82616de0a29087fde6d8828f.patch";
-          hash = "sha256-EtHcdZU1nCmLFrZiysoazRu9657NnuIbFdwRMhAWjI0=";
-        })
+        # https://github.com/deluge-torrent/deluge/pull/514
+        ./replace-pyopenssl-certificate-generation.patch
       ];
 
       propagatedBuildInputs =
