@@ -233,8 +233,9 @@ let
         };
 
         script = delayedPackage ''
-          Given $1=prompt_type and $2=prompt_text, the script runs the prompt
-          by the user, then saves respective value to $out.
+          Given $1=prompt_type, $2=prompt_label, and optionally
+          $3=prompt_description, the script runs the prompt by the user, then
+          saves respective value to $out.
         '';
       };
     }
@@ -244,20 +245,18 @@ let
     { name, ... }:
     {
       options = {
-        name = lib.mkOption {
-          description = "The name of the backend.";
+        label = lib.mkOption {
+          description = "The label to attach to the prompt.";
           type = lib.types.str;
-          readOnly = true;
           default = name;
         };
 
         description = lib.mkOption {
           description = ''
-            The description of the prompted value
+            An optional longer description of the prompted value.
           '';
-          type = lib.types.str;
-          default = name;
-          defaultText = "Name of the prompt";
+          type = lib.types.nullOr lib.types.str;
+          default = null;
           example = "SSH private key";
         };
 
