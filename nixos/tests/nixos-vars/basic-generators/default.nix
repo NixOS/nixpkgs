@@ -7,10 +7,6 @@
       nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
       environment.systemPackages = [ pkgs.nixos-vars ];
       environment.etc."nixos".source = ./config;
-      nix.settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
 
       system.extraDependencies = [
         (import ../collect-vars-scripts.nix {
