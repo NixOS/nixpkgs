@@ -6755,6 +6755,8 @@ self: super: with self; {
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
 
+  gfmetadata = callPackage ../development/python-modules/gfmetadata { };
+
   gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
   gftools = callPackage ../development/python-modules/gftools { };
