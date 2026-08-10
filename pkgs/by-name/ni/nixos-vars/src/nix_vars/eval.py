@@ -23,21 +23,36 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
     elif args.flake is not None:
         expr = f"config: import {jsonify} {{ inherit config; }}"
         # Currently passing --impure since `jsonify` is an absolute path...
-        evalCommand = [args.flake, "--impure", "--apply", expr]
+        evalCommand = [
+            "nix",
+            "eval",
+            "--json",
+            args.flake,
+            "--impure",
+            "--apply",
+            expr,
+        ]
+
+        if args.verbose:
+            evalCommand.append("--show-trace")
     elif args.file is not None:
         expr = f"""
 import {jsonify} {{
     config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
-        evalCommand = ["--impure", "--expr", expr]
+        evalCommand = [
+            "nix-instantiate",
+            "--eval",
+            "--json",
+            "--strict",
+            "--expr",
+            expr,
+        ]
 
     try:
-        if args.verbose:
-            evalCommand.append("--show-trace")
-
         result = subprocess.run(
-            ["nix", "eval", "--json", *evalCommand],
+            evalCommand,
             capture_output=True,
             text=True,
             check=True,
