@@ -27529,6 +27529,12 @@
     githubId = 187109;
     name = "Bjarki Ágúst Guðmundsson";
   };
+  surajssc1232 = {
+    email = "surajsinghchauhan8923@gmail.com";
+    github = "surajssc1232";
+    githubId = 88922576;
+    name = "Suraj Chauhan";
+  };
   surfaceflinger = {
     email = "nat@nekopon.pl";
     github = "surfaceflinger";
