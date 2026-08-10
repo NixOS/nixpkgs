@@ -42,7 +42,7 @@
   expat,
   libjpeg,
   snappy,
-  libcap,
+  libcap ? null,
   minizip,
   libwebp,
   libusb1,
@@ -53,40 +53,40 @@
   nasm,
   nspr,
   nss,
-  util-linux,
-  alsa-lib,
+  util-linux ? null,
+  alsa-lib ? null,
   bison,
   gperf,
   libkrb5,
   glib,
-  gtk3,
-  dbus-glib,
-  libxscrnsaver,
-  libxcursor,
-  libxtst,
-  libxshmfence,
-  libGLU,
-  libGL,
-  dri-pkgconfig-stub,
-  libgbm,
-  pciutils,
+  gtk3 ? null,
+  dbus-glib ? null,
+  libxscrnsaver ? null,
+  libxcursor ? null,
+  libxtst ? null,
+  libxshmfence ? null,
+  libGLU ? null,
+  libGL ? null,
+  dri-pkgconfig-stub ? null,
+  libgbm ? null,
+  pciutils ? null,
   protobuf,
-  speechd-minimal,
-  libxdamage,
-  at-spi2-core,
-  pipewire,
-  libva,
-  libdrm,
-  wayland,
-  libxkbcommon, # Ozone
+  speechd-minimal ? null,
+  libxdamage ? null,
+  at-spi2-core ? null,
+  pipewire ? null,
+  libva ? null,
+  libdrm ? null,
+  wayland ? null,
+  libxkbcommon ? null, # Ozone
   curl,
   libffi,
-  libepoxy,
-  libevdev,
+  libepoxy ? null,
+  libevdev ? null,
   # postPatch:
-  glibc, # gconv + locale
+  glibc ? null, # gconv + locale
   # postFixup:
-  vulkan-loader,
+  vulkan-loader ? null,
 
   # Package customization:
   cupsSupport ? true,
@@ -94,11 +94,13 @@
   proprietaryCodecs ? true,
   libpulseaudio ? null,
   ungoogled ? false,
-  ungoogled-chromium,
+  ungoogled-chromium ? null,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
+  systemdSupport ? (systemdLibs != null && lib.meta.availableOn stdenv.hostPlatform systemdLibs),
+  systemdLibs ? null,
+  # Darwin:
+  apple-sdk ? null,
 }:
 
 buildFun:
@@ -175,9 +177,13 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
-    inherit (upstream-info.deps.ungoogled-patches) rev hash;
-  };
+  ungoogler =
+    if ungoogled then
+      ungoogled-chromium {
+        inherit (upstream-info.deps.ungoogled-patches) rev hash;
+      }
+    else
+      null;
 
   # There currently isn't a (much) more concise way to get a stdenv
   # that uses lld as its linker without bootstrapping pkgsLLVM; see
@@ -219,9 +225,14 @@ let
       platform:
       if platform.isLinux then
         "linux"
+      else if platform.isDarwin then
+        "mac"
       else
         throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
+
+  isLinuxHost = stdenv.hostPlatform.isLinux;
+  isDarwinHost = stdenv.hostPlatform.isDarwin;
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
@@ -275,6 +286,58 @@ let
     ) chromiumDeps
   );
 
+  commonBuildDeps = [
+    (buildPackages.libopus.override { withCustomModes = true; })
+    bzip2
+    flac
+    speex
+    libevent
+    expat
+    libjpeg
+    snappy
+    minizip
+    libwebp
+    libusb1
+    re2
+    ffmpeg
+    libxslt
+    libxml2
+    nasm
+    nspr
+    nss
+    libkrb5
+    glib
+    protobuf
+    curl
+    libffi
+  ];
+
+  linuxOnlyBuildDeps = [
+    libcap
+    util-linux
+    alsa-lib
+    gtk3
+    dbus-glib
+    libxscrnsaver
+    libxcursor
+    libxtst
+    libxshmfence
+    libGLU
+    libGL
+    libgbm
+    pciutils
+    speechd-minimal
+    libxdamage
+    at-spi2-core
+    pipewire
+    libva
+    libdrm
+    wayland
+    libxkbcommon
+    libepoxy
+    libevdev
+  ];
+
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -326,69 +389,14 @@ let
       pkg-config
       libuuid
     ]
-    # When cross-compiling, chromium builds a huge proportion of its
-    # components for both the `buildPlatform` (which it calls
-    # `host`) as well as for the `hostPlatform` -- easily more than
-    # half of the dependencies are needed here.  To avoid having to
-    # maintain a separate list of buildPlatform-dependencies, we
-    # simply throw in the kitchen sink.
-    # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
-    ++ [
-      (buildPackages.libopus.override { withCustomModes = true; })
-      bzip2
-      flac
-      speex
-      libevent
-      expat
-      libjpeg
-      snappy
-      libcap
-      minizip
-      libwebp
-      libusb1
-      re2
-      ffmpeg
-      libxslt
-      libxml2
-      nasm
-      nspr
-      nss
-      util-linux
-      alsa-lib
-      libkrb5
-      glib
-      gtk3
-      dbus-glib
-      libxscrnsaver
-      libxcursor
-      libxtst
-      libxshmfence
-      libGLU
-      libGL
-      libgbm
-      pciutils
-      protobuf
-      speechd-minimal
-      libxdamage
-      at-spi2-core
-      pipewire
-      libva
-      libdrm
-      wayland
-      libxkbcommon
-      curl
-      libepoxy
-      libffi
-      libevdev
-    ]
+    ++ commonBuildDeps
+    ++ lib.optionals isLinuxHost linuxOnlyBuildDeps
     ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
     ]
-    ++ [
-      libpulseaudio
-    ];
+    ++ lib.optional (libpulseaudio != null) libpulseaudio;
 
     buildInputs = [
       (libopus.override { withCustomModes = true; })
@@ -399,7 +407,6 @@ let
       expat
       libjpeg
       snappy
-      libcap
       minizip
       libwebp
       libusb1
@@ -410,43 +417,25 @@ let
       nasm
       nspr
       nss
-      util-linux
-      alsa-lib
       libkrb5
       glib
-      gtk3
-      dbus-glib
-      libxscrnsaver
-      libxcursor
-      libxtst
-      libxshmfence
-      libGLU
-      libGL
-      dri-pkgconfig-stub
-      libgbm
-      pciutils
       protobuf
-      speechd-minimal
-      libxdamage
-      at-spi2-core
-      pipewire
-      libva
-      libdrm
-      wayland
-      libxkbcommon
       curl
-      libepoxy
       libffi
-      libevdev
     ]
+    ++ lib.optionals isLinuxHost (
+      linuxOnlyBuildDeps
+      ++ [
+        dri-pkgconfig-stub
+      ]
+    )
+    ++ lib.optional isDarwinHost apple-sdk
     ++ lib.optional systemdSupport systemdLibs
     ++ lib.optionals cupsSupport [
       libgcrypt
       cups
     ]
-    ++ [
-      libpulseaudio
-    ];
+    ++ lib.optional (libpulseaudio != null) libpulseaudio;
 
     patches = [
       ./patches/cross-compile.patch
@@ -737,6 +726,8 @@ let
           chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
         fi
 
+      ''
+      + lib.optionalString isLinuxHost ''
         # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
         substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
           --replace \
@@ -753,7 +744,6 @@ let
           --replace \
             '/usr/share/locale/' \
             '${glibc}/share/locale/'
-
       ''
       + ''
         # Allow to put extensions into the system-path.
@@ -773,10 +763,23 @@ let
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
-        ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
-        ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
-
+        mkdir -p third_party/jdk/current/bin
+        ln -sfn "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/java
+      ''
+      + lib.optionalString isLinuxHost ''
+        mkdir -p third_party/node/linux/node-linux-x64/bin
+        ln -sfn "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
+      ''
+      + lib.optionalString (isDarwinHost && stdenv.hostPlatform.isAarch64) ''
+        # Chromium M151+ uses mac_arm64/ for host arm64 (see third_party/node/node.gni).
+        mkdir -p third_party/node/mac_arm64/node-darwin-arm64/bin
+        ln -sfn "${pkgsBuildHost.nodejs}/bin/node" third_party/node/mac_arm64/node-darwin-arm64/bin/node
+      ''
+      + lib.optionalString (isDarwinHost && stdenv.hostPlatform.isx86_64) ''
+        mkdir -p third_party/node/mac/node-darwin-x64/bin
+        ln -sfn "${pkgsBuildHost.nodejs}/bin/node" third_party/node/mac/node-darwin-x64/bin/node
+      ''
+      + ''
         # Allow building against system libraries in official builds
         sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
@@ -812,6 +815,7 @@ let
       name = "llvmCcAndBintools";
       paths = [
         buildPackages.rustc.llvmPackages.llvm
+        buildPackages.rustc.llvmPackages.lld
         buildPackages.rustc.llvmPackages.stdenv.cc
       ];
     };
@@ -840,19 +844,29 @@ let
         # actually called either "default_toolchain" or "custom_toolchain",
         # depending on which part of the codebase you are in; see:
         # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
-        custom_toolchain = "//build/toolchain/linux/unbundle:default";
-        host_toolchain = "//build/toolchain/linux/unbundle:default";
         # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
         # end up building much more things than they need to (roughly double the build steps and time/compute):
       }
-      // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      // lib.optionalAttrs isLinuxHost {
+        custom_toolchain = "//build/toolchain/linux/unbundle:default";
+        host_toolchain = "//build/toolchain/linux/unbundle:default";
+      }
+      // lib.optionalAttrs (isLinuxHost && stdenv.buildPlatform != stdenv.hostPlatform) {
         host_toolchain = "//build/toolchain/linux/unbundle:host";
         v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
       }
+      // lib.optionalAttrs isDarwinHost {
+        # Use Chromium's mac toolchain definitions with nixpkgs clang via clang_base_path.
+        # Leave mac_sdk_path empty so sdk_info.py creates $root_build_dir/sdk/xcode_links.
+        use_system_xcode = true;
+      }
       // {
         host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
+      }
+      // lib.optionalAttrs isLinuxHost {
         pkg_config = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
-
+      }
+      // {
         # Don't build against a sysroot image downloaded from Cloud Storage:
         use_sysroot = false;
         # Because we use a different toolchain / compiler version:
@@ -871,8 +885,8 @@ let
         google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
 
         # Optional features:
-        use_gio = true;
-        use_cups = cupsSupport;
+        use_gio = isLinuxHost;
+        use_cups = cupsSupport && isLinuxHost;
       }
       // lib.optionalAttrs (packageName == "chromium") {
         # Enabling the Widevine here doesn't affect whether we can redistribute the chromium package.
@@ -881,7 +895,7 @@ let
       }
       // {
         # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
-        rtc_use_pipewire = true;
+        rtc_use_pipewire = isLinuxHost;
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
@@ -901,10 +915,13 @@ let
 
         # LLVM < v21 does not support --warning-suppression-mappings yet:
         clang_warning_suppression_file = "";
-
+      }
+      // lib.optionalAttrs isLinuxHost {
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
+      }
+      // {
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
         rust_bindgen_root = "${rustTools}";
@@ -923,12 +940,12 @@ let
         enable_hangout_services_extension = true;
         ffmpeg_branding = "Chrome";
       }
-      // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+      // lib.optionalAttrs (isLinuxHost && stdenv.hostPlatform.isAarch64) {
         # Enable v4l2 video decoder for hardware acceleratation on aarch64:
         use_vaapi = false;
         use_v4l2_codec = true;
       }
-      // {
+      // lib.optionalAttrs isLinuxHost {
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
@@ -961,7 +978,16 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${lib.optionalString isLinuxHost ''
+        ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ''}
+      ${lib.optionalString isDarwinHost ''
+        export DEVELOPER_DIR=/tmp/fake-devtools
+        mkdir -p "$DEVELOPER_DIR"
+        export SDKROOT="${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+        # Chromium's mac toolchain probes xcrun; provide a shim when possible.
+        export PATH="${python3.pythonOnBuildForHost}/bin:$PATH"
+      ''}
       gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
@@ -1003,14 +1029,16 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          bash -s << EOL
-          (
-            source remoting/host/installer/linux//installer.include
-            PACKAGE=$packageName
-            MENUNAME="Chromium"
-            process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )
-          EOL
+          ${lib.optionalString isLinuxHost ''
+            bash -s << EOL
+            (
+              source remoting/host/installer/linux//installer.include
+              PACKAGE=$packageName
+              MENUNAME="Chromium"
+              process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+            )
+            EOL
+          ''}
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;
@@ -1021,7 +1049,7 @@ let
         runHook postBuild
       '';
 
-    postFixup = ''
+    postFixup = lib.optionalString isLinuxHost ''
       # Make sure that libGLESv2 and libvulkan are found by dlopen in both chromium binary and ANGLE libGLESv2.so.
       # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
       for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do

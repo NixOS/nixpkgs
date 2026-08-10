@@ -1,0 +1,127 @@
+{
+  "src": {
+    "fetcher": "fetchFromGitiles",
+    "args": {
+      "url": "https://chromium.googlesource.com/chromium/src.git",
+      "rev": "ef35003457e93c278f911a334b06e4a5f8967e06",
+      "hash": "sha256-/FFp3s1nuTJr+RAeRZAXK6uOyV4a2IW72ytbviwrkt4="
+    }
+  },
+  "src/brave/components/brave_wallet/browser/zcash/rust/librustzcash/src": {
+    "args": {
+      "hash": "sha256-JVA/FjShfEz8T0DWTmviNX50g5PJn1JATRKZ4K+tYHw=",
+      "owner": "brave",
+      "repo": "librustzcash",
+      "rev": "f34cb36d9287b76b52ba1a2ab58e50db96706dc8"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/argon2/src": {
+    "args": {
+      "hash": "sha256-cYipidr4SRfalfzIj7INl5zOo29dRr+AlilWYFvymVw=",
+      "owner": "P-H-C",
+      "repo": "phc-winner-argon2",
+      "rev": "62358ba2123abd17fccf2a108a301d4b52c01a7c"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/bip39wally-core-native": {
+    "args": {
+      "hash": "sha256-AOmhevaM+q+yDSulvziy4P3z/0NLfgGIem2ePegyrjg=",
+      "owner": "brave-intl",
+      "repo": "bat-native-bip39wally-core",
+      "rev": "547a7810333d821e29b8f55126aba031aa0d5fcd"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/bitcoin-core/src": {
+    "args": {
+      "hash": "sha256-gVrgFgxjepqlbFLFS50lTgOCSQac2wvaeVO6c8UcJ94=",
+      "owner": "bitcoin",
+      "repo": "bitcoin",
+      "rev": "8105bce5b384c72cf08b25b7c5343622754e7337"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/ethash/src": {
+    "args": {
+      "hash": "sha256-N30v9OZwTmDbltPPmeSa0uOGJhos1VzyS5zY9vVCWfA=",
+      "owner": "chfast",
+      "repo": "ethash",
+      "rev": "e4a15c3d76dc09392c7efd3e30d84ee3b871e9ce"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/playlist_component/src": {
+    "args": {
+      "hash": "sha256-7s2zRLduuwiylSk/LGJNHoFoh4Yvokgp9+NB3F4tFJk=",
+      "owner": "brave",
+      "repo": "playlist-component",
+      "rev": "673d40f017a1559bb685a15cf608ad1d4a94f8fb"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/reclient_configs/src": {
+    "args": {
+      "hash": "sha256-oRlp0yPtrl2SjxOfot4XYKX5QPcdP62nzO29smcDH5E=",
+      "owner": "EngFlow",
+      "repo": "reclient-configs",
+      "rev": "21c8fe69ff771956c179847b8c1d9fd216181967"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/third_party/rust/futures_retry/v0_5/crate": {
+    "args": {
+      "hash": "sha256-etkiFKabiuE3KwCRZ6x1Gg7XjYsHmqn5TacaSQgC+ck=",
+      "owner": "brave-intl",
+      "repo": "futures-retry",
+      "rev": "2aaaafbc3d394661534d4dbd14159d164243c20e"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/vendor/bat-native-tweetnacl": {
+    "args": {
+      "hash": "sha256-vb+hlRkJa/V9qdH1DzRIEchARtBxGOwLql7Qc33ec0k=",
+      "owner": "brave-intl",
+      "repo": "bat-native-tweetnacl",
+      "rev": "8b424ccf29957fe01c88c36076fd32006a357887"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/vendor/gn-project-generators": {
+    "args": {
+      "hash": "sha256-9nWqO24XOl+SLd8RovlYZYQgLc5ET2uc96JEGBLr/5s=",
+      "owner": "brave",
+      "repo": "gn-project-generators",
+      "rev": "b76e14b162aa0ce40f11920ec94bfc12da29e5d0"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/vendor/python-patch": {
+    "args": {
+      "hash": "sha256-pjq0/j6Qg10rn68fBZFypqKGiqGWnZ7u/NV7U155iTk=",
+      "owner": "brave",
+      "repo": "python-patch",
+      "rev": "d8880110be6554686bc08261766538c2926d4e82"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave/vendor/web-discovery-project": {
+    "args": {
+      "hash": "sha256-Eg+WhP7l1fNjemjFGDpDDVay/pfQizbkaXA4nHg1FBs=",
+      "owner": "brave",
+      "repo": "web-discovery-project",
+      "rev": "f25eb3d6f91f5618c04894db98f8d65bab8301d1"
+    },
+    "fetcher": "fetchFromGitHub"
+  },
+  "src/brave": {
+    "args": {
+      "hash": "sha256-h2oij8ZU5nGgV50UidK6wtIy8QuDa6+8v8flPzjPu/Q=",
+      "owner": "brave",
+      "repo": "brave-core",
+      "tag": "v1.93.131"
+    },
+    "fetcher": "fetchFromGitHub"
+  }
+}

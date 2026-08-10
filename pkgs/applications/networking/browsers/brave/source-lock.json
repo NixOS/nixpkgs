@@ -1,0 +1,24 @@
+{
+  "version": "1.93.131",
+  "braveCore": {
+    "owner": "brave",
+    "repo": "brave-core",
+    "rev": "v1.93.131",
+    "hash": "sha256-h2oij8ZU5nGgV50UidK6wtIy8QuDa6+8v8flPzjPu/Q="
+  },
+  "braveCore_npm_hash": "sha256-3p24Cl2WtEhRUMlrmvVynVTGgTdASWepc7fvF73VAwo=",
+  "webDiscoveryProject_npm_hash": "sha256-ZswgZQKkmB2Z9JVIhPiKd/NJzBMWo8NMALhoHYy7kOg=",
+  "leo": {
+    "owner": "brave",
+    "repo": "leo",
+    "rev": "171b814b205217d651a76080a0c50a80d1b0c257",
+    "hash": "sha256-z6Ltx77+yiBwYGwnSSda1cZuGqJbQrvlImbmxdHxBRg="
+  },
+  "leo_npm_hash": "sha256-rZ6T4z7j0eMovTYA0fZOkp4ppTEDNPvc+DRnSc90N2U=",
+  "chromium": {
+    "url": "https://chromium.googlesource.com/chromium/src.git",
+    "rev": "ef35003457e93c278f911a334b06e4a5f8967e06",
+    "hash": "sha256-/FFp3s1nuTJr+RAeRZAXK6uOyV4a2IW72ytbviwrkt4="
+  },
+  "chromium_npm_hash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg="
+}
