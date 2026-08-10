@@ -48,6 +48,15 @@ let
         pkgs.makeFontsCache {
           inherit fontconfig;
           fontDirectories = config.fonts.packages;
+          # Since fontconfig 2.18.3, the alias configuration determines the
+          # generic family of the aliased fonts in the caches, caches lacking
+          # this classification break generic-family matching for the aliased
+          # fonts.
+          extraConfigFiles = [
+            defaultFontsConf
+            aliases
+          ]
+          ++ lib.optional (cfg.localConf != "") localConf;
         };
       cache = makeCache pkgs.fontconfig;
       cache32 = makeCache pkgs.pkgsi686Linux.fontconfig;

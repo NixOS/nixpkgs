@@ -12,6 +12,7 @@ in
 {
   fontconfig ? fontconfig',
   fontDirectories,
+  extraConfigFiles ? [ ],
 }:
 
 let
@@ -33,6 +34,9 @@ runCommand "fc-cache"
     <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
       <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
+      ${lib.concatMapStringsSep "\n  " (
+        file: ''<include ignore_missing="yes">${file}</include>''
+      ) extraConfigFiles}
       <cachedir>$out</cachedir>
     EOF
     cat "${fontDirsPath}" >> fonts.conf
