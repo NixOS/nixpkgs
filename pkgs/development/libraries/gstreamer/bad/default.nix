@@ -113,6 +113,12 @@
   gst-plugins-bad,
   apple-sdk_gstreamer,
   libexif,
+  # disabled by default for now to reduce closure size
+  vulkanSupport ? false && stdenv.hostPlatform.isLinux,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
+  libxkbcommon,
 }:
 
 let
@@ -154,6 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
+  ]
+  ++ lib.optionals vulkanSupport [
+    # alternative: glslang
+    shaderc
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
@@ -208,6 +218,11 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
     wildmidi
     svt-av1
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+    libxkbcommon
   ]
   ++ lib.optionals opencvSupport [
     opencv4
@@ -323,7 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
     teletext = false;
     tinyalsa = false;
     voamrwbenc = false;
-    vulkan = false; # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
+    vulkan = vulkanSupport;
     wasapi = false; # not packaged in nixpkgs as of writing / no Windows support
     wasapi2 = false; # not packaged in nixpkgs as of writing / no Windows support
     wpe = false; # required `wpe-webkit` library not packaged in nixpkgs as of writing
@@ -415,7 +430,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      ext/vulkan/shaders/bin2array.py
   '';
 
   # This package has some `_("string literal")` string formats
