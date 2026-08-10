@@ -14,7 +14,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.13.4";
+  version = "1.13.6";
   appname = "Obsidian";
   meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -40,17 +40,17 @@ let
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-      hash = "sha256-66wkn5SbaJSBn7tLxWV+yIkvAGzv7ZVdNKbB/+Ji8Ws=";
+      hash = "sha256-MlyzgcZJumK0R1YntBbcOSnckT2Dnku6dmMHhj9j+KU=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
-      hash = "sha256-4tRNJjab0DXhrVj2MRMHP7eRtS9MJsziLO1jtJKnE24=";
+      hash = "sha256-lv8+WkhDHSAzPDaYZtyrKjHd5Wat745/YFnmxOo6yyE=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
-      hash = "sha256-6EuVlaul5QIhyX5D0+P0N0Fu379MSoTDeUYecPhU148=";
+      hash = "sha256-i7ddFVPhG0pkCUfZzKchGoQrcDpbfVtojWiSAVXCT3Q=";
     };
   };
 
