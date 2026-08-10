@@ -260,6 +260,7 @@ stdenv.mkDerivation {
       chkno
       fgaz
       thekostins
+      indium114
     ];
     platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin

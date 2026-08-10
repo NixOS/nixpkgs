@@ -332,6 +332,7 @@ mapAliases {
   arangodb = throw "arangodb has been removed, as it was unmaintained and the packaged version does not build with supported GCC versions"; # Added 2025-08-12
   arc-browser = throw "arc-browser was removed due to being unmaintained"; # Added 2025-09-03
   arc-theme = throw "'arc-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
+  arc_unpacker = throw "'arc_unpacker' has been moved to 'arc-unpacker'"; # Added 2026-07-28
   archi = throw "'archi' has been removed, since its upstream maintainers do not want it packaged"; # Added 2025-11-18
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
   ArchiSteamFarm = warnAlias "ArchiSteamFarm has been renamed to/replaced by 'archisteamfarm'" archisteamfarm; # Added 2026-01-31
@@ -339,6 +340,7 @@ mapAliases {
   archiver = throw "archiver has been removed, as it has been unmaintained upstream since November 2024"; # Added 2026-01-15
   ardour_7 = throw "ardour_7 has been removed because it relies on gtk2, please use ardour instead."; # Added 2025-10-04
   arduinoOTA = warnAlias "'arduinoOTA' has been renamed to 'arduino-ota'" arduino-ota; # Added 2026-02-08
+  arena = throw "'arena' has been removed because it relies on gtk2 and appears unmaintained upstream."; # Added 2026-08-08
   argo = throw "'argo' has been renamed to/replaced by 'argo-workflows'"; # Converted to throw 2025-10-27
   aria = throw "'aria' has been renamed to/replaced by 'aria2'"; # Converted to throw 2025-10-27
   arrayfire = throw "arrayfire was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
@@ -886,6 +888,7 @@ mapAliases {
   ); # Converted to warning 2025-10-28
   forge = throw "forge was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
+  foxtrotgps = throw "'foxtrotgps' has been removed as it depended on the deprecated GTK2 engine and the archive GNOME 2 libglade."; # Added 2026-07-23
   fped = throw "'fped' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'kicad' instead."; # Added 2026-05-22
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
   framac = warnAlias "'framac' has been renamed to 'frama-c'" frama-c; # Added 2026-04-24
@@ -900,6 +903,7 @@ mapAliases {
   frozen-bubble = throw "'frozen-bubble' has been removed because it is broken and unmaintained"; # Added 2026-05-17
   frugal = throw "'frugal' was removed because upstream has been pulled"; # Added 2025-12-20
   fuse-7z-ng = throw "'fuse-7z-ng' was removed as it is unmaintained, and depends on fuse2"; # Added 2026-05-05
+  fuse-ext2 = throw "'fuse-ext2' was removed as it is unmaintained, and depends on fuse2"; # Added 2026-08-05
   fusee-launcher = throw "'fusee-launcher' was removed as upstream removed the original source repository fearing legal repercussions"; # Added 2025-07-05
   fuseiso = throw "'fuseiso' has been removed as it is unmaintained upstream, and depends on fuse2"; # Added 2026-05-05
   fusionInventory = warnAlias "'fusionInventory' has been renamed to 'fusioninventory-agent'" fusioninventory-agent; # Added 2026-02-08
@@ -994,6 +998,16 @@ mapAliases {
   gnatcoll-zlib = throw "'gnatcoll-zlib' has been renamed to/replaced by 'gnatPackages.gnatcoll-zlib'"; # Converted to throw 2025-10-27
   gnatinspect = throw "'gnatinspect' has been renamed to/replaced by 'gnatPackages.gnatinspect'"; # Converted to throw 2025-10-27
   gnaural = throw "'gnaural' has been removed due to lack of maintenance and relying on gtk2. Consider using 'sbagen' instead"; # Added 2026-05-22
+  gnome2.GConf = throw "gnome2.GConf has been removed as it was long deprecated upstream. Consider using gsettings and dconf instead."; # Added 2026-07-23
+  gnome2.gnome-common = throw "gnome2.gnome-common has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gnome_mime_data = throw "gnome2.gnome_mime_data has been removed as it was unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.gtkglext = warnAlias "'gnome2.gtkglext' has been renamed to 'gtkglext'" gtkglext; # Added 2026-07-23
+  gnome2.libart_lgpl = throw "gnome2.libart_lpl has been removed as it was deprecated upstream and unused in Nixpkgs"; # Added 2026-07-23
+  gnome2.libglade = throw "gnome2.libglade has been removed as it has been archived upstream since January 2010"; # Added 2026-07-23
+  gnome2.libgnomecanvas = throw "gnome2.libgnomecanvas has been removed as it has been archived upstream since April 2012"; # Added 2026-07-23
+  gnome2.libgtksourceview = throw "gnome2.libgtksourceview has been removed as it was unmaintained upstream and depended on the deprecated GTK2 engine. Consider using gtksourceview3, gtksourceview4, or gtksourceview5 instead."; # Added 2026-07-23
+  gnome2.libIDL = throw "gnome2.libIDL has been removed as it has been archived upstream since July 2014"; # Added 2026-07-23
+  gnome2.ORBit2 = throw "gnome2.ORBit2 has been removed as it has been archived upstream since July 2016"; # Added 2026-07-23
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
@@ -1157,6 +1171,7 @@ mapAliases {
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
   julia_19 = throw "Julia 1.9 has reached its end of life and 'julia_19' has been removed. Please use a supported version."; # Added 2025-10-29
   julia_19-bin = throw "Julia 1.9 has reached its end of life and 'julia_19-bin' has been removed. Please use a supported version."; # Added 2025-10-29
+  jwm-settings-manager = throw "'jwm-settings-manager' has been removed, as it is unmaintained upstream"; # Added 2026-08-01
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   k3s_1_31 = throw "'k3s_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08
   k3s_1_32 = throw "'k3s_1_32' has been removed from nixpkgs as it has reached end of life"; # Added 2026-03-31
@@ -1201,6 +1216,7 @@ mapAliases {
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   ksmoothdock = throw "'ksmoothdock' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
   ktextaddons = throw "'ktextaddons' has been removed due to outdated KF5 dependencies. A Qt6 version is available at 'kdePackages.ktextaddons'."; # Added 2026-05-01
+  ktop = lib.warnOnInstantiate "'ktop' has been removed as duplicate of 'kubectl-ktop'" kubectl-ktop; # Added 2026-08-01
   kube3d = throw "'kube3d' has been renamed to/replaced by 'k3d'"; # Converted to throw 2025-10-27
   kubei = throw "'kubei' has been renamed to/replaced by 'kubeclarity'"; # Converted to throw 2025-10-27
   kubo-migrator-all-fs-repo-migrations = throw "'kubo-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
@@ -1541,7 +1557,6 @@ mapAliases {
   MACS2 = throw "'MACS2' has been renamed to/replaced by 'macs2'"; # Converted to throw 2025-10-27
   magma_2_6_2 = throw "'magma_2_6_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   magma_2_7_2 = throw "'magma_2_7_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
-  magnetic-catppuccin-gtk = throw "'magnetic-catppuccin-gtk' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   magpie = throw "'magpie' has been removed, no longer used by budgie-desktop."; # Added 2025-11-19
   maia-icon-theme = throw "'maia-icon-theme' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
@@ -1933,6 +1948,7 @@ mapAliases {
   pkgsx86_64Darwin = throw "pkgsx86_64Darwin has been removed, as support for the platform has been dropped; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11"; # Added 2026-06-21
   plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
+  planetary_annihilation = throw "'planetary_annihilation' has been removed, as it was outdated and unmaintained in Nixpkgs"; # Added 2026-07-23
   plano-theme = throw "'plano-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30

@@ -9,10 +9,10 @@
 
 # Upstream changes files in-place, to update:
 # 1. Check latest version at http://www.un4seen.com/
-# 2. Update `version`s and `hash` sums.
+# 2. Upload that URL to the internet archive (https://web.archive.org/save).
+# 3. Use the internet archive URL.
+# 4. Update `version`s and `hash` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
-
-# Internet Archive used due to upstream URLs being unstable
 
 let
   allBass = {
@@ -69,10 +69,10 @@ let
 
     bassmidi = {
       h = {
-        linux = "bassmidi.h";
-        darwin = "bassmidi.h";
+        linux = "c/bassmidi.h";
+        darwin = "c/bassmidi.h";
       };
-      version = "2.4.15.3";
+      version = "2.4.16";
       so = {
         i686_linux = "libs/x86/libbassmidi.so";
         x86_64-linux = "libs/x86_64/libbassmidi.so";
@@ -81,12 +81,12 @@ let
         aarch64-darwin = "libbassmidi.dylib";
       };
       url = {
-        linux = "https://web.archive.org/web/20240501180447/http://www.un4seen.com/files/bassmidi24-linux.zip";
-        darwin = "https://web.archive.org/web/20260318193855/https://www.un4seen.com/files/bassmidi24-osx.zip";
+        linux = "https://web.archive.org/web/20260801181155/https://www.un4seen.com/files/bassmidi24-linux.zip";
+        darwin = "https://web.archive.org/web/20260801180948/https://www.un4seen.com/files/bassmidi24-osx.zip";
       };
       hash = {
-        linux = "sha256-HrF1chhGk32bKN3jwal44Tz/ENGe/zORsrLPeGAv1OE=";
-        darwin = "sha256-Sqr83pSEv6hGGxgzEBLSg56sLR2QiPLazp0cmKz1vis=";
+        linux = "sha256-qNzY7ciG2Ld1n+hamcd6MOvuzOvmIIzVMbNLnmyd6HI=";
+        darwin = "sha256-gBVVtfmDxJ+bOylYIJLtwyEwKwD1u4YkN96HoBUot/c=";
       };
       buildInputs = [ libbass ];
     };

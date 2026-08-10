@@ -18,19 +18,20 @@
   parsel,
   requests,
   ruamel-yaml,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dateparser";
-  version = "1.4.1";
+  version = "1.4.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    tag = "v${version}";
-    hash = "sha256-TA4GZb24++RF1sw4tECJF5UzouRCwwhPiim5z5/hMzU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ulwX8yLLXm3V4eldiK+j0XWzgrPepeWiA3BAjDJv9iM=";
   };
 
   build-system = [ setuptools ];
@@ -61,12 +62,9 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
   enabledTestPaths = [ "tests" ];
@@ -80,11 +78,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dateparser" ];
 
   meta = {
-    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${finalAttrs.src.tag}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = lib.licenses.bsd3;
     mainProgram = "dateparser-download";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

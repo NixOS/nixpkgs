@@ -43,16 +43,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CxuoyscGiZmWz2P3i3tcKe0JIL2PIvCk6AicjgdyUzw=";
+    hash = "sha256-+sV8XRK+rBVKB6AdoGuz7q6bYtz8HwnVZghK3JjGFes=";
   };
 
-  cargoHash = "sha256-UEM5UG+0fh5StIVU8AIptX6bqwTqUA4SNOn1GmUPfow=";
+  cargoHash = "sha256-QItJQ7POtH+SRr5pyLJAWD4wx+fRpx1JI/KK6KIgNT8=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -93,7 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
     libGL
     dbus
-    gvfs
     libheif
     onnxruntime
     wrapGAppsHook4
@@ -101,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libappindicator
+    gvfs
   ];
 
   cargoRoot = "src-tauri";

@@ -3,7 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_18,
+  llvmPackages_22,
   ncurses,
   cmake,
   libxml2,
@@ -16,17 +16,18 @@
 }:
 
 let
-  luajitRev = "83954100dba9fc0cf5eeaf122f007df35ec9a604";
+  # https://github.com/terralang/terra/blob/0776e640ba9eb20c7d5419686ef106a38d8e18a3/cmake/Modules/GetLuaJIT.cmake#L19
+  luajitRev = "04dca7911ea255f37be799c18d74c305b921c1a6";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
-    tag = luajitRev;
-    hash = "sha256-L9T6lc32dDLAp9hPI5mKOzT0c4juW9JHA3FJCpm7HNQ=";
+    rev = luajitRev;
+    hash = "sha256-IvkOwyKXUqo++A0XalCKuS0uLj5PlTOUQX1qXDP6JBk=";
   };
 
-  llvmPackages = llvmPackages_18;
+  llvmPackages = llvmPackages_22;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
@@ -44,7 +45,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
-  version = "1.2.0";
+  version = "1.2.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "terralang";
     repo = "terra";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
+    hash = "sha256-K2AMNgqHBYIyPZ7wFocZcbQGlbrX7lyuks43pWqI4jU=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals enableCUDA [ cudaPackages.cuda_nvcc ];
@@ -135,10 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       elliottslaughter
     ];
     license = lib.licenses.mit;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    # Linux Aarch64 broken above LLVM11
-    # https://github.com/terralang/terra/issues/597
-    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "terra";
   };
 })

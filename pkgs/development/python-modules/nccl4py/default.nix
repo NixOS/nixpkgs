@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   cudaPackages,
   addDriverRunpath,
 
@@ -14,6 +15,10 @@
   packaging,
   pythonOlder,
   typing-extensions,
+
+  # passthru
+  runCommand,
+  python,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,11 +26,16 @@ buildPythonPackage (finalAttrs: {
   # `nccl4py` is versioned independently of `nccl` and should be the
   # same as the contents of
   # `${cudaPackages.nccl.src}/bindings/nccl4py/nccl/_version.py`
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
-  inherit (cudaPackages.nccl) src;
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nccl";
+    tag = "nccl4py-v${finalAttrs.version}";
+    hash = "sha256-jpgCUnUWWl2oihtHibgoQRnnXsQC6vlIjVX73i3bVqw=";
+  };
   sourceRoot = "${finalAttrs.src.name}/bindings/nccl4py";
 
   postPatch =
@@ -50,6 +60,21 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           'cdef uintptr_t handle = load_nvidia_dynamic_lib("nccl")._handle_uint' \
           'cdef uintptr_t handle = <uintptr_t>dlopen("${lib.getLib cudaPackages.nccl}/lib/libnccl.so.2", RTLD_NOW | RTLD_GLOBAL)'
+
+      substituteInPlace nccl/bindings/_internal/nccl_ep_linux.pyx \
+        --replace-fail \
+          "handle = dlopen('libcuda.so.1'" \
+          "handle = dlopen('${libCudaPath}/lib/libcuda.so.1'"
+
+      substituteInPlace nccl/bindings/_internal/nccl_ep_linux.pyx \
+        --replace-fail \
+          'load_nvidia_dynamic_lib("nccl")' \
+          'dlopen("${lib.getLib cudaPackages.nccl}/lib/libnccl.so.2", RTLD_NOW | RTLD_GLOBAL)'
+
+      substituteInPlace nccl/bindings/_internal/nccl_ep_linux.pyx \
+        --replace-fail \
+          'cdef bytes path_bytes = _resolve_library_path().encode()' \
+          'cdef bytes path_bytes = b"${lib.getLib cudaPackages.nccl-ep}/lib/libnccl_ep.so"'
     '';
 
   build-system = [
@@ -60,6 +85,10 @@ buildPythonPackage (finalAttrs: {
   env = {
     # `${sourceRoot}/setup.py` insists on reading only from $CUDA_HOME/include
     CUDA_HOME = (lib.getInclude cudaPackages.cuda_cudart).outPath;
+    # Since `cudaPackages.nccl-ep` is used as a byte string, it gets
+    # compressed and no dependency is created. Disable string
+    # compression for Nix to correctly detect the dependency.
+    NIX_CFLAGS_COMPILE = "-DCYTHON_COMPRESS_STRINGS=0";
   };
 
   buildInputs =
@@ -83,6 +112,19 @@ buildPythonPackage (finalAttrs: {
     "nccl"
     "nccl.bindings"
   ];
+
+  passthru.tests = {
+    import-clean-env =
+      runCommand "import-clean-env-nccl4py-ep"
+        {
+          nativeBuildInputs = [ (python.withPackages (_: [ finalAttrs.finalPackage ])) ];
+        }
+        ''
+          LD_LIBRARY_PATH="${lib.getLib cudaPackages.cuda_cudart}/lib/stubs" \
+              python -c 'import nccl.ep'
+          touch $out
+        '';
+  };
 
   # Upstream doesn't ship any tests.
   doCheck = false;

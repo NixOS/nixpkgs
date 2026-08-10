@@ -15,7 +15,7 @@
   gobject-introspection,
   # runtime deps
   glib,
-  systemd,
+  systemdLibs,
   lua5_4,
   pipewire,
   # options
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
     lua5_4
     pipewire
   ];

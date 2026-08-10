@@ -85,14 +85,14 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.56.1";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u3DU6wmJ2PZk8kAOnx64MTlVxp/hZH+oUtXouj1E3+0=";
+    hash = "sha256-jOcfiv+Zs2iz5oTIQcJXZ0+5MfqW0oLgGxD0cKdmXpE=";
   };
 
   postPatch = ''

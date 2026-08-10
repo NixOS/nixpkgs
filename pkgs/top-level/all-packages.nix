@@ -2909,10 +2909,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    extraFonts = true;
-  };
-
   tldr-hs = haskellPackages.tldr;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
@@ -9124,15 +9120,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-libav
-      ;
-  };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
@@ -10092,8 +10079,6 @@ with pkgs;
     }
   );
 
-  gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
-
   gnome = recurseIntoAttrs (callPackage ../desktops/gnome { });
 
   inherit (callPackage ../desktops/gnome/extensions { })
@@ -10447,14 +10432,6 @@ with pkgs;
   };
 
   ### SCIENCE / MATH
-
-  caffe = callPackage ../applications/science/math/caffe (
-    {
-      opencv4 = opencv4WithoutCuda; # Used only for image loading.
-      blas = openblas;
-    }
-    // (config.caffe or { })
-  );
 
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
@@ -10925,17 +10902,6 @@ with pkgs;
   vdr = callPackage ../applications/video/vdr { };
   vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
   wrapVdr = callPackage ../applications/video/vdr/wrapper.nix { };
-
-  phonetisaurus = callPackage ../development/libraries/phonetisaurus {
-    # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
-    openfst = openfst.overrideAttrs rec {
-      version = "1.7.9";
-      src = fetchurl {
-        url = "http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-${version}.tar.gz";
-        hash = "sha256-kxmusx0eKVCuJUSYhOJVzCvJ36+Yf2AVkHY+YaEPvd4=";
-      };
-    };
-  };
 
   compressDrv = callPackage ../build-support/compress-drv { };
 

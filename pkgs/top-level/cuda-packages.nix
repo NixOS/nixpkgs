@@ -46,7 +46,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.14.1";
+          "10.16.1";
     };
 
   cudaPackages_12_8 =
@@ -73,7 +73,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.14.1";
+          "10.16.1";
     };
 
   cudaPackages_12_9 =
@@ -100,7 +100,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.14.1";
+          "10.16.1";
     };
 
   # NOTE: Thor is supported from CUDA 13.0, so our check needs to capture whether pre-Thor devices were selected.
@@ -126,7 +126,7 @@ let
       nvpl = "25.5";
       nvtiff = "0.5.1";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
 
   cudaPackages_13_1 =
@@ -149,7 +149,7 @@ let
       nvpl = "25.5";
       nvtiff = "0.5.1";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
 
   cudaPackages_13_2 =
@@ -172,7 +172,7 @@ let
       nvpl = "25.5";
       nvtiff = "0.5.1";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
 
   cudaPackages_13_3 =
@@ -195,7 +195,7 @@ let
       nvpl = "25.5";
       nvtiff = "0.5.1";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.14.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
 in
 {
