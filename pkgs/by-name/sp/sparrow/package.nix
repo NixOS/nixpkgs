@@ -110,11 +110,11 @@ let
       --add-opens=javafx.controls/javafx.scene.control.cell=com.sparrowwallet.sparrow
       --add-opens=org.controlsfx.controls/impl.org.controlsfx.skin=com.sparrowwallet.sparrow
       --add-opens=org.controlsfx.controls/impl.org.controlsfx.skin=javafx.fxml
-      --add-opens=javafx.graphics/com.sun.javafx.tk=centerdevice.nsmenufx
-      --add-opens=javafx.graphics/com.sun.javafx.tk.quantum=centerdevice.nsmenufx
-      --add-opens=javafx.graphics/com.sun.glass.ui=centerdevice.nsmenufx
-      --add-opens=javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
-      --add-opens=javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
+      --add-opens=javafx.graphics/com.sun.javafx.tk=nsmenufx
+      --add-opens=javafx.graphics/com.sun.javafx.tk.quantum=nsmenufx
+      --add-opens=javafx.graphics/com.sun.glass.ui=nsmenufx
+      --add-opens=javafx.controls/com.sun.javafx.scene.control=nsmenufx
+      --add-opens=javafx.graphics/com.sun.javafx.menu=nsmenufx
       --add-opens=javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
       --add-opens=javafx.graphics/javafx.scene.input=com.sparrowwallet.sparrow
       --add-opens=javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
