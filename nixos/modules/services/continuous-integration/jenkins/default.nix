@@ -257,8 +257,22 @@ in
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
         StateDirectoryMode = "750";
         # For (possible) socket use
-        RuntimeDirectory = "jenkins";
+        RuntimeDirectory = [
+          "jenkins"
+          "jenkins/rootdir"
+          "jenkins/files"
+        ];
         RuntimeDirectoryMode = "700";
+        BindPaths = [
+          cfg.home
+          "/run/jenkins/files:/run/jenkins"
+        ];
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+          "/etc/resolv.conf"
+        ];
+        RootDirectory = "/run/jenkins/rootdir";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
