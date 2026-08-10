@@ -2295,6 +2295,8 @@ let
 
         xenstore_transport = callPackage ../development/ocaml-modules/xenstore_transport { };
 
+        xkbcommon = callPackage ../development/ocaml-modules/xkbcommon { };
+
         xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
         xmlm = callPackage ../development/ocaml-modules/xmlm { };
