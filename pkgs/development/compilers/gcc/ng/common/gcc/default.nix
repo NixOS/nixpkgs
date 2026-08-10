@@ -81,6 +81,36 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
     })
 
+    # Not upstream yet; a follow-up to the series above (drop the `/raw` to
+    # read them). They extend that series' `<target>-as` preference to `PATH`,
+    # where we put the cross toolchain, so a cross compiler finds its tools
+    # the way a native one does. See below for the problems `--with-as` and
+    # `--with-ld` cause, and thus why we want to avoid them.
+    (fetchpatch {
+      name = "driver-factor-out-env-path-parsing.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-1-git@JohnEricson.me/raw";
+      hash = "sha256-2qUUMWuyxX4mVaBPeNnHIiMl/aN7ejWM5stTSFWxD7g=";
+    })
+    (fetchpatch {
+      name = "driver-search-PATH-ourselves.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
+      # The posted patch is against trunk, which spells this cast with the C++
+      # operator.  GCC 15 still uses the CONST_CAST macro, and the line is
+      # context rather than a change, so it cannot fuzz-match.  Rewrite it
+      # here rather than keeping a forked copy of the whole patch.
+      postFetch = ''
+        substituteInPlace "$out" \
+          --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
+                         'string, CONST_CAST (char **, commands[i].argv),'
+      '';
+      hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
+    })
+    (fetchpatch {
+      name = "driver-search-PATH-machine-prefix.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
+      hash = "sha256-Q5CJpJKD11kadIKselQdHgNe26GqojpyAAmlAyHnsB0=";
+    })
+
     (getVersionFile "gcc/fix-collect2-paths.diff")
   ];
 
@@ -93,6 +123,29 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  # The target assembler and linker have to be *runnable here*, during
+  # configure. GCC probes them for capabilities, and a probe it cannot run is
+  # not an error -- it silently records "no". Without the target `ld` on
+  # `PATH`, every `gcc_cv_ld_*` probe fails that way, and the two that matter
+  # most are `HAVE_GAS_HIDDEN` (which needs `gcc_cv_as_hidden` *and*
+  # `gcc_cv_ld_hidden`) and `HAVE_LD_EH_FRAME_HDR`.
+  #
+  # Losing `HAVE_GAS_HIDDEN` is the nasty one: `-fvisibility=hidden` degrades
+  # into a no-op that merely warns, so every symbol stays preemptible and GCC's
+  # own same-translation-unit `R_X86_64_PC32` references become invalid when
+  # linking a shared library.
+  #
+  # The *unwrapped* bintools: `as` and `ld` proper carry no target-libc
+  # reference, so the decoupling this package set exists for still holds.
+  #
+  # Note this is `PATH` rather than `--with-as`/`--with-ld` on purpose. We want
+  # configure to *ask* the real tools what they support, and we want it to bake
+  # nothing else: those flags record `DEFAULT_ASSEMBLER`/`DEFAULT_LINKER` as
+  # absolute store paths, and the driver then runs exactly those binaries
+  # instead of the wrapped ones it is meant to defer to.
+  depsBuildTarget = [ (bintools.bintools or bintools) ];
+
   nativeBuildInputs = [
     texinfo
     which
@@ -218,7 +271,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-headers"
     "--with-gnu-as"
     "--with-gnu-ld"
-    "--with-as=${lib.getExe' bintools "${bintools.targetPrefix}as"}"
+    # Deliberately no `--with-as` / `--with-ld`. Those bake
+    # `DEFAULT_ASSEMBLER` and `DEFAULT_LINKER` -- absolute store paths -- into
+    # the compiler, so the driver runs exactly those binaries and stops
+    # deferring to the wrapped tools it is meant to use.
+    #
+    # Nothing has to be baked. At configure time the tools are on `PATH` via
+    # `depsBuildTarget`, which is what the capability probes need; at use time
+    # the driver finds them on `PATH` under their target-prefixed names, via
+    # the `find_a_program` patches above.
     "--with-system-zlib"
     "--without-included-gettext"
     "--enable-linker-build-id"
