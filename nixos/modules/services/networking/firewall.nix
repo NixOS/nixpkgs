@@ -205,8 +205,8 @@ in
             "loose"
           ]
         );
-        default = true;
-        defaultText = lib.literalMD "`true` except if the iptables based firewall is in use and the kernel lacks rpfilter support";
+        default = "loose";
+        defaultText = "loose";
         example = "loose";
         description = ''
           Performs a reverse path filter test on a packet.  If a reply
