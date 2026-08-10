@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bitmagnet";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KgpKpnOVtS3VoIqKhIzDvbdR54M014tQj2/ufhWMZDo=";
+    hash = "sha256-lnYoJbqE936IR8MJZT3ETR4pKuVNjgmfQEa6wK7HEEU=";
   };
 
-  vendorHash = "sha256-Scper1eR6I4pCXus/jytSpW8a1omg7sJIPvOn3jYcLM=";
+  vendorHash = "sha256-9qvBVCSvHdS2K9Soly9CVu/HoxXclw444WWEWYTlOJM=";
 
   subPackages = [ "." ];
 
