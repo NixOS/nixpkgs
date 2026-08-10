@@ -77,6 +77,7 @@ let
     "trivialautovarinit"
     "zerocallusedregs"
   ];
+  isErroneous = flag: !elem flag knownHardeningFlags;
 
   removedOrReplacedAttrNames = [
     "checkInputs"
@@ -511,8 +512,6 @@ let
                 concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
               }${name} for ${attrs.name or attrs.pname}"
           ) 1 deps) deps;
-
-      isErroneous = flag: !elem flag knownHardeningFlags;
     in
     if
       # Check if any hardening flag is erroneous
