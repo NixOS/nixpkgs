@@ -967,7 +967,7 @@ in
   livekit = runTest ./networking/livekit.nix;
   lix = runTest ./lix.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
-  llama-swap = runTest ./web-servers/llama-swap.nix;
+  llama-swap = handleTest ./web-servers/llama-swap.nix { inherit runTest; };
   lldap = runTest ./lldap.nix;
   local-content-share = runTest ./local-content-share.nix;
   locale = runTest ./locale.nix;
