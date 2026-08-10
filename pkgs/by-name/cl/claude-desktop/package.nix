@@ -80,18 +80,18 @@ let
 
   unwrapped = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "claude-desktop";
-    version = "1.24012.9";
+    version = "1.26832.0";
 
     src =
       if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_${finalAttrs.version}_amd64.deb";
-          hash = "sha256-MC5tII3YyOnlIGfaoo7zsRcaFhNYb9DhC+3GQiJbbuE=";
+          hash = "sha256-K8bw1BCbtDswdpbhEo31P785PvmPlHp4aZSGQkUCRdc=";
         }
       else if stdenvNoCC.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_${finalAttrs.version}_arm64.deb";
-          hash = "sha256-Gpvhd7BjNluS5SL+3RnIfa9uvJKp9xEhvf9ynifeQIw=";
+          hash = "sha256-woEP1oskEPgyboCkVXPS8+e81RqvgQ2a6S08CXih1VM=";
         }
       else
         throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
@@ -188,21 +188,40 @@ let
       fi
 
       substituteInPlace "$coworkJs" \
-        --replace-fail \
-        '["/usr/share/OVMF/OVMF_CODE_4M.fd","/usr/share/OVMF/OVMF_CODE.fd"]' \
-        '["${OVMF.fd}/FV/OVMF_CODE.fd"]' \
-        --replace-fail \
-        '["/usr/libexec/virtiofsd","/usr/bin/virtiofsd"]' \
-        '["${virtiofsd}/bin/virtiofsd"]'
+        --replace-fail '/usr/share/OVMF/OVMF_CODE_4M.fd' '${OVMF.fd}/FV/OVMF_CODE.fd' \
+        --replace-fail '/usr/share/OVMF/OVMF_CODE.fd' '${OVMF.fd}/FV/OVMF_CODE.fd' \
+        --replace-fail '/usr/libexec/virtiofsd' '${virtiofsd}/bin/virtiofsd' \
+        --replace-fail '/usr/bin/virtiofsd' '${virtiofsd}/bin/virtiofsd'
+
+      if grep -rE '/usr/share/OVMF/OVMF_CODE|/usr/(bin|libexec)/virtiofsd' .vite/build; then
+        echo "unpatched FHS paths remain in app.asar" >&2
+        exit 1
+      fi
 
       cd - >/dev/null
 
-      asar pack "$work/contents" "$work/app.asar" --unpack "{**/*.node,**/spawn-helper}"
+      # Keep every executable/native asset that upstream ships outside app.asar.
+      # Fail when a future release adds another kind that needs explicit handling.
+      stray=$(find "$asarRoot/app.asar.unpacked" -type f \
+        ! -name '*.node' \
+        ! -name 'spawn-helper' \
+        ! -path '*/resources/github-mcp/github-mcp-server')
+      if [ -n "$stray" ]; then
+        echo "unexpected files in app.asar.unpacked:" >&2
+        echo "$stray" >&2
+        exit 1
+      fi
+
+      asar pack "$work/contents" "$work/app.asar" \
+        --unpack "{**/*.node,**/spawn-helper}" \
+        --unpack-dir "resources/github-mcp"
       cp -f "$work/app.asar" "$asarRoot/app.asar"
       if [ -d "$work/app.asar.unpacked" ]; then
         rm -rf "$asarRoot/app.asar.unpacked"
         cp -r "$work/app.asar.unpacked" "$asarRoot/app.asar.unpacked"
       fi
+      # asar recreates unpacked files read-only; Electron spawns this helper.
+      chmod 755 "$asarRoot/app.asar.unpacked/resources/github-mcp/github-mcp-server"
       rm -rf "$work"
 
       wrapProgram $out/bin/claude-desktop \
