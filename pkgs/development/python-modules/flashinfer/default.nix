@@ -12,17 +12,24 @@
 
   # build-system
   apache-tvm-ffi,
+  packaging,
   setuptools,
 
   # nativeBuildInputs
-  cmake,
-  ninja,
   cudaPackages,
+  ninja,
 
   # dependencies
   click,
+  cuda-bindings,
+  cuda-core,
+  cuda-pathfinder,
+  cuda-tile,
   einops,
+  nccl4py,
   numpy,
+  nvidia-cudnn-frontend,
+  nvidia-cutlass-dsl,
   nvidia-ml-py,
   requests,
   tabulate,
@@ -32,29 +39,36 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flashinfer";
-  version = "0.6.4";
+  version = "0.6.16.post3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
+    hash = "sha256-mhmjIX1Whats3JUjrMr27mY7o3DR4D/Wg5XCJrFHqEY=";
   };
+
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    export MAX_JOBS="$NIX_BUILD_CORES"
+    export FLASHINFER_WORKSPACE_BASE="$TMPDIR/flashinfer-workspace"
+    mkdir -p $FLASHINFER_WORKSPACE_BASE
+  '';
 
   build-system = [
     apache-tvm-ffi
+    packaging
     setuptools
   ];
 
   nativeBuildInputs = [
-    cmake
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
   ];
-
-  dontUseCmakeConfigure = true;
 
   buildInputs = with cudaPackages; [
     cccl
@@ -63,35 +77,30 @@ buildPythonPackage (finalAttrs: {
     libcurand
   ];
 
-  # FlashInfer offers two installation modes:
-  #
-  # JIT mode: CUDA kernels are compiled at runtime using PyTorch’s JIT, with
-  # compiled kernels cached for future use. JIT mode allows fast installation,
-  # as no CUDA kernels are pre-compiled, making it ideal for development and
-  # testing. JIT version is also available as a sdist in PyPI.
-  #
-  # AOT mode: Core CUDA kernels are pre-compiled and included in the library,
-  # reducing runtime compilation overhead. If a required kernel is not
-  # pre-compiled, it will be compiled at runtime using JIT. AOT mode is
-  # recommended for production environments.
-  #
-  # Here we use opt for the AOT version.
-  preConfigure = ''
-    export FLASHINFER_ENABLE_AOT=1
-    export TORCH_NVCC_FLAGS="--maxrregcount=64"
-    export MAX_JOBS="$NIX_BUILD_CORES"
-  '';
-
-  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env = {
+    TORCH_NVCC_FLAGS = "--maxrregcount=64";
+    FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  };
 
   pythonRemoveDeps = [
-    "nvidia-cudnn-frontend"
-    "nvidia-cutlass-dsl"
+    # `cuda-python` (github:NVIDIA/cuda-python) is a repository of
+    # various sub-packages and we (nixpkgs) have packaged all of them
+    # in cuda-bindings` `cuda-core` `cuda-pathfinder` `cuda-tile`.
+    # so remove the meta-package entry
+    "cuda-python"
   ];
+
   dependencies = [
     click
+    cuda-bindings
+    cuda-core
+    cuda-pathfinder
+    cuda-tile
     einops
+    nccl4py
     numpy
+    nvidia-cudnn-frontend
+    nvidia-cutlass-dsl
     nvidia-ml-py
     requests
     tabulate
