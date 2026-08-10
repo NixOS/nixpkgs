@@ -115,6 +115,9 @@
   libexif,
 }:
 
+let
+  vaSupport = gst-plugins-base.waylandEnabled && lib.meta.availableOn stdenv.hostPlatform libva;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
   version = "1.28.6";
@@ -233,10 +236,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ajaSupport [
     libajantv2
   ]
-  ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
-    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
+  ++ lib.optionals gst-plugins-base.waylandEnabled [
     wayland
     wayland-protocols
+  ]
+  ++ lib.optionals vaSupport [
+    libva
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
