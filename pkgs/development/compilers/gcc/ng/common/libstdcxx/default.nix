@@ -168,7 +168,12 @@ stdenv.mkDerivation (finalAttrs: {
     "cross_compiling=true"
     "--disable-multilib"
 
-    "--enable-clocale=gnu"
+    # `gnu` is the glibc locale model: `config/locale/gnu/ctype_members.cc`
+    # reads `__ctype_b`, which only glibc has. Forcing it everywhere breaks any
+    # other libc -- on musl the build fails converting `const unsigned short *`
+    # to `const ctype_base::mask *`. Configure picks the right model from the
+    # host triple on its own, as it does for the monolithic build, which passes
+    # no `--enable-clocale` at all.
     "--disable-libstdcxx-pch"
     "--disable-vtable-verify"
     "--enable-libstdcxx-visibility"
