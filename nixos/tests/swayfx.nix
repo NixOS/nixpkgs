@@ -90,6 +90,8 @@
       import shlex
       import json
 
+      from test_driver.errors import RequestedAssertionFailed
+
       q = shlex.quote
       NODE_GROUPS = ["nodes", "floating_nodes"]
 
@@ -123,16 +125,20 @@
 
 
       def wait_for_window(pattern):
-          def func(last_chance):
-              nodes = (node["name"] for node in walk(swaymsg(type="get_tree")))
+          last_nodes = []
 
-              if last_chance:
-                  nodes = list(nodes)
-                  machine.log(f"Last call! Current list of windows: {nodes}")
+          def func(_remaining):
+              nonlocal last_nodes
+              last_nodes = [
+                  node["name"] for node in walk(swaymsg(type="get_tree"))
+              ]
+              return any(pattern in name for name in last_nodes)
 
-              return any(pattern in name for name in nodes)
-
-          retry(func)
+          try:
+              retry(func)
+          except RequestedAssertionFailed:
+              machine.log(f"Timed out. Last list of windows: {last_nodes}")
+              raise
 
       start_all()
       machine.wait_for_unit("multi-user.target")

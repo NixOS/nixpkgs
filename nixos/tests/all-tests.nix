@@ -156,6 +156,7 @@ in
     multi-arch-test = runTest ./nixos-test-driver/multi-arch-test.nix;
     skip-typecheck = runTest ./nixos-test-driver/skip-typecheck.nix;
     console-timeout = runTest ./nixos-test-driver/console-timeout.nix;
+    retry = runTest ./nixos-test-driver/retry.nix;
     options-doc-regression = import ./nixos-test-driver/options-doc-regression.nix { inherit pkgs; };
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"

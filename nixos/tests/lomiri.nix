@@ -90,10 +90,11 @@ let
     from collections.abc import Callable
     import tempfile
     import subprocess
+    import time
 
     # Based on terminal-emulators.nix' check_for_pink
-    def check_for_color(color: str) -> Callable[[bool], bool]:
-      def check_for_color_retry(final=False) -> bool:
+    def check_for_color(color: str) -> Callable[[float | None], bool]:
+      def check_for_color_retry(_remaining: float | None) -> bool:
         with tempfile.NamedTemporaryFile() as tmpin:
           machine.send_monitor_command("screendump {}".format(tmpin.name))
 
@@ -111,25 +112,18 @@ let
 
       return check_for_color_retry
 
-    def check_for_color_continued_presence(color: str) -> Callable[[bool], bool]:
-      colorFunc: Callable[[bool], bool] = check_for_color(color)
-      def check_for_color_continued_presence_retry(final=False) -> bool:
-        colorPresent: bool = colorFunc(final)
+    def ensure_color_continued_presence(color: str, duration: float) -> None:
+      color_func = check_for_color(color)
+      deadline = time.monotonic() + duration
 
-        if final:
-          # If it fails now, retry handles the exception raising.
-          # Otherwise, we passed.
-          return colorPresent
-        else:
-          if colorPresent:
-            # We want retry to continue running us until the timeout, so signal failure.
-            return False
-          else:
-            # Color disappeared
-            raise Exception(
-              "color {} has disappeared from the screen!".format(color)
-            )
-      return check_for_color_continued_presence_retry
+      while True:
+        if not color_func(None):
+          raise Exception(
+            "color {} has disappeared from the screen!".format(color)
+          )
+        if (remaining := deadline - time.monotonic()) <= 0:
+          return
+        time.sleep(min(1, remaining))
 
     def ensure_terminal_running() -> None:
       """
@@ -140,7 +134,7 @@ let
       with machine.nested("Waiting for the screen to have terminalTextColor {} on it:".format(terminalTextColor)):
         retry(check_for_color(terminalTextColor))
       with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
-        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout_seconds=5)
+        ensure_color_continued_presence(terminalTextColor, duration=5)
 
     def change_tty_back_forth(ttynumMain: int, ttynumDiff: int) -> None:
       """
@@ -189,7 +183,7 @@ let
       with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
         retry(check_for_color(launcherColor))
       with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
-        retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
+        ensure_color_continued_presence(launcherColor, duration=30)
 
       # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that launcher button is still shown
       change_tty_back_forth(ttynumMain, ttynumDiff)

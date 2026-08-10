@@ -585,20 +585,22 @@ class Driver:
                 if timeout is None:
                     timeout = dt.timedelta(minutes=15)
 
-                def condition(last: bool) -> bool:
-                    if last:
-                        driver.logger.info(
-                            f"Last chance for {self.condition.description}"
-                        )
+                def condition(_timeout: float | None) -> bool:
                     ret = self.condition.check(force=True)
-                    if not ret and not last:
+                    if not ret:
                         driver.logger.info(
                             f"({self.condition.description} failure not fatal yet)"
                         )
                     return ret
 
                 with driver.logger.nested(f"waiting for {self.condition.description}"):
-                    retry(condition, timeout=timeout)
+                    try:
+                        retry(condition, timeout=timeout)
+                    except RequestedAssertionFailed:
+                        driver.logger.info(
+                            f"Timed out waiting for {self.condition.description}"
+                        )
+                        raise
 
         if fun_ is None:
             return Poll
