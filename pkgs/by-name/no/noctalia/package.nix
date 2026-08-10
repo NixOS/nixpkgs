@@ -65,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.0.0-beta.7";
+  version = "5.0.0-beta.8";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9RlJNIy2DFVm9SB2vwGEBsbHc1r3dIB+K+b+nd6Bdho=";
+    hash = "sha256-qy3Cheg/FQ9ZaBPTIgdq4IkmkNtC6XBpmtC8nT+wU/Y=";
   };
 
   strictDeps = true;
@@ -117,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wireplumber
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "tests" false)
   ];
 
   mesonBuildType = "release";
