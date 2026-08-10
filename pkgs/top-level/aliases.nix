@@ -1271,6 +1271,7 @@ mapAliases {
   libclc = throw "'libclc' has been removed, as no packages use it; reach out to LLVM/Mesa maintainers if you need this back."; # Added 2026-08-06
   libdbiDrivers = warnAlias "'libdbiDrivers' has been renamed to 'libdbi-drivers'" libdbi-drivers; # Added 2026-02-08
   libdbiDriversBase = warnAlias "'libdbiDriversBase' has been renamed to 'libdbi-drivers-base'" libdbi-drivers-base; # Added 2026-02-08
+  libdbusmenu-gtk2 = throw "'libdbusmenu-gtk2' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-10
   libdevil = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
   libdevil-nox = throw "libdevil has been removed, as it was unmaintained in Nixpkgs and upstream since 2017"; # Added 2025-09-16
   libdisplay-info_0_2 = throw "`libdisplay-info_0_2` has been removed as it is was unused in Nixpkgs. Consider upgrading to `libdisplay-info_0_3` or `libdisplay-info` instead"; # Added 2026-08-04

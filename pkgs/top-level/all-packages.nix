@@ -5950,8 +5950,7 @@ with pkgs;
     withSqlite = false;
   };
 
-  libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
-  libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
+  libdbusmenu-gtk3 = libdbusmenu.override { withGtk3 = true; };
 
   libdisplay-info_0_3 = callPackage ../by-name/li/libdisplay-info/0.3.nix { };
 
