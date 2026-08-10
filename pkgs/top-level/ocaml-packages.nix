@@ -2069,6 +2069,8 @@ let
 
         stringext = callPackage ../development/ocaml-modules/stringext { };
 
+        superbol-studio-oss = callPackage ../development/ocaml-modules/superbol-studio-oss { };
+
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
         symex = callPackage ../development/ocaml-modules/symex { };
