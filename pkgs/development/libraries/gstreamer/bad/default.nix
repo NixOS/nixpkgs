@@ -119,6 +119,9 @@
   vulkan-loader,
   shaderc,
   libxkbcommon,
+  # disabled by default for now to reduce closure size
+  onnxSupport ? false && lib.meta.availableOn stdenv.hostPlatform onnxruntime,
+  onnxruntime,
 }:
 
 let
@@ -218,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
     wildmidi
     svt-av1
+  ]
+  ++ lib.optionals onnxSupport [
+    onnxruntime
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-headers
@@ -344,7 +350,7 @@ stdenv.mkDerivation (finalAttrs: {
     wpe = false; # required `wpe-webkit` library not packaged in nixpkgs as of writing
     wpe2 = false;
     gs = false; # depends on `google-cloud-cpp`
-    onnx = false;
+    onnx = onnxSupport;
     openaptx = true; # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     opencv = opencvSupport; # Reduces rebuild size when `config.cudaSupport = true`
     aja = ajaSupport;
