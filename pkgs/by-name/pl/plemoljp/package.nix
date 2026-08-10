@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchzip,
   nix-update-script,
+  plemoljp-hs,
+  plemoljp-nf,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -26,8 +28,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit plemoljp-hs plemoljp-nf;
+
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+      extraArgs = [
+        "--version-regex=^v([0-9.]+)$"
+        "--subpackage"
+        "plemoljp-hs"
+        "--subpackage"
+        "plemoljp-nf"
+      ];
     };
   };
 
