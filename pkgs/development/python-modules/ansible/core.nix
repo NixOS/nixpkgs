@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
-  version = "2.21.2";
+  version = "2.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ansible";
     repo = "ansible";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/Pc8xeqUUT9Z+jEKtlhPcxlrIkw32M2iAH3kAmwzSYU=";
+    hash = "sha256-1MTZyTPT2RT6AhOddw3aVYgOlOyUeHq9qWbNf1MLhW0=";
   };
 
   postPatch = ''
