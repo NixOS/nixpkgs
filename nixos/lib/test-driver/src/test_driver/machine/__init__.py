@@ -1228,7 +1228,7 @@ class QemuMachine(BaseMachine):
                         f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
                     )
 
-    def get_screen_text_variants(self) -> list[str]:
+    def get_screen_text_variants(self, timeout: Duration | None = None) -> list[str]:
         """
         Return a list of different interpretations of what is currently
         visible on the machine's screen using optical character
@@ -1236,32 +1236,58 @@ class QemuMachine(BaseMachine):
         specified and is subject to change, but if no exception is raised at
         least one will be returned.
 
+        If timeout is set, preprocessing and all OCR variants share that time
+        budget. A timed-out variant produces an empty string.
+
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "get_screen_text_variants")
+        timeout_seconds = None if timeout is None else as_seconds(timeout)
+        start_time = time.monotonic()
         with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_variants_on_screenshot(screenshot_path)
+            remaining = (
+                None
+                if timeout_seconds is None
+                else max(0, timeout_seconds - (time.monotonic() - start_time))
+            )
+            return perform_ocr_variants_on_screenshot(
+                screenshot_path, timeout=remaining
+            )
 
-    def get_screen_text(self) -> str:
+    def get_screen_text(self, timeout: Duration | None = None) -> str:
         """
         Return a textual representation of what is currently visible on the
         machine's screen using optical character recognition.
 
+        If timeout is set, the OCR operation is limited to that many seconds
+        and returns an empty string when it times out.
+
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "get_screen_text")
+        timeout_seconds = None if timeout is None else as_seconds(timeout)
+        start_time = time.monotonic()
         with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_on_screenshot(screenshot_path)
+            remaining = (
+                None
+                if timeout_seconds is None
+                else max(0, timeout_seconds - (time.monotonic() - start_time))
+            )
+            return perform_ocr_on_screenshot(screenshot_path, remaining)
 
     def wait_for_text(
-        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+        self, regex: str, timeout: Duration | None = dt.timedelta(minutes=15)
     ) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
         `get_screen_text` and `get_screen_text_variants`).
+
+        A timeout of None waits indefinitely.
 
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
@@ -1271,9 +1297,14 @@ class QemuMachine(BaseMachine):
 
         last_variants: list[str] = []
 
-        def screen_matches(_timeout: float | None) -> bool:
+        def screen_matches(attempt_timeout: float | None) -> bool:
             nonlocal last_variants
-            last_variants = self.get_screen_text_variants()
+            ocr_timeout = (
+                None
+                if attempt_timeout is None
+                else dt.timedelta(seconds=attempt_timeout)
+            )
+            last_variants = self.get_screen_text_variants(ocr_timeout)
             for text in last_variants:
                 if re.search(regex, text) is not None:
                     return True
@@ -1282,7 +1313,10 @@ class QemuMachine(BaseMachine):
 
         with self.nested(f"waiting for {regex} to appear on screen"):
             try:
-                retry(screen_matches, timeout=as_timedelta(timeout))
+                retry(
+                    screen_matches,
+                    timeout=None if timeout is None else as_timedelta(timeout),
+                )
             except RequestedAssertionFailed:
                 self.log(
                     f"OCR timed out. Text from the last attempt was: {last_variants}"
