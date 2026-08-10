@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchFromGitLab {
     owner = "bilheps";
     repo = "lifeograph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EliJ77EoPDE78UNtfsyeQRMB1VlBuh70KblZYgcz1mU=";
+    hash = "sha256-Tsvuc6s8D45WKCTWSqRBIVu1zOjx43edBlAw/TLOGV0=";
   };
 
   nativeBuildInputs = [
