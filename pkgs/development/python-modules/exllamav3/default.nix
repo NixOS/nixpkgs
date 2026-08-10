@@ -8,8 +8,7 @@
   setuptools,
 
   flash-linear-attention,
-  formatron,
-  kbnf,
+  llguidance,
   marisa-trie,
   ninja,
   numpy,
@@ -27,14 +26,14 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pWdh5fiGZEkdSLXvI5DAEdj6XmBFquzew57L1YIsEg8=";
+    hash = "sha256-6TzJbLGcp3rmlpIRiz26bYVbW2ZORrsJF3257Iv2QZc=";
   };
 
   pythonRelaxDeps = [
@@ -59,8 +58,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   dependencies = [
     flash-linear-attention
-    formatron
-    kbnf
+    llguidance
     marisa-trie
     numpy
     pillow
