@@ -18,11 +18,13 @@
   pkg-config,
   procps,
   pulseaudio,
+  replaceVars,
   rustPlatform,
   shaderc,
   stdenv,
   testers,
   wayvr,
+  xwayland-satellite,
   withOpenVR ? !stdenv.hostPlatform.isAarch64,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-0llU19bFJJ4yJvA6eGzOzyW8TnnurTS9js3/r+UAVCQ=";
   };
+
+  patches = [
+    (replaceVars ./use-system-xwayland-satellite.patch {
+      xwayland-satellite = lib.getExe xwayland-satellite;
+    })
+  ];
 
   cargoHash = "sha256-yUHLtB3/cBEWVAN1vuGLLlLFqJ25ucIy6qqInTGaOvA=";
 
