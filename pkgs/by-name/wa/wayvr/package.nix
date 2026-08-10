@@ -134,7 +134,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gpl3Only
       mit # wayvr-ipc
     ];
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      ImSapphire
+    ];
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64 && withOpenVR;
     mainProgram = "wayvr";
