@@ -13994,6 +13994,12 @@
     name = "John Soo";
     githubId = 10039785;
   };
+  jsqu4re = {
+    email = "johannes.jeising@gmail.com";
+    github = "jsqu4re";
+    githubId = 35706792;
+    name = "Johannes Jeising";
+  };
   jsusk = {
     email = "joshua@suskalo.org";
     github = "IGJoshua";
