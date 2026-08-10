@@ -220,7 +220,7 @@ These operations are not difficult to implement for in the easy case of managing
 
 ### Performing automatic updates
 
-Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command (even if the generator & file in question has not changed this run!). Said script will be given, as you might've guessed, a generator name and a file name as arguments.
+Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command (even if the generator & file in question has not changed this run!). Said script can perform side effects, yet must remain idempotent. The script is expected to perform the necessary updates to every file within a single invocation, and is given a list of files to act on as argument, in the same format as the output of the `list` script.
 
 ### Deployment
 

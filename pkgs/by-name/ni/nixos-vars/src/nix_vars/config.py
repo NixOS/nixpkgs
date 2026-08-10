@@ -156,3 +156,17 @@ class VarsConfig:
             )
 
         return result
+
+    def files_for_backend(
+        self: Self, backend: VarsGeneratorBackend
+    ) -> List[tuple[str, str]]:
+        files = []
+        for generator in self.generators.values():
+            if generator.backend != backend.name:
+                continue
+
+            for file in generator.files.values():
+                if file.deploy:
+                    files.append((generator.name, file.name))
+
+        return files

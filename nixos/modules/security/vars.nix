@@ -69,23 +69,25 @@ let
 
         fixup = nullableDelayedPackage ''
           This script will be run on every invocation of the CLI's generator
-          command. Given $1=gen_name and $2=file_name, the script performs any
-          necessary updates to the secrets' files (e.g. rekeying encrypted
-          secrets). This script can perform side effects, but must be
-          idempotent.
+          command. Given $1=file_list in the same format used by `list`, the
+          script performs any necessary updates to the secrets' files (e.g.
+          rekeying encrypted secrets). This script can perform side effects,
+          but must be idempotent.
         '';
 
         deploy = nullableDelayedPackage ''
-          Deploys every available file to the given machine. Any additional
-          information required by the deploy script can be provided by the user
-          through environment variables.
+          Deploys every available file to the given machine. The list of files
+          to deploy is provided as $1 in the same format used by `list`. Any
+          additional information required by the deploy script can be provided
+          by the user through environment variables.
         '';
 
         deployLocal = nullableDelayedPackage ''
           Deploys every available file to the machine with system root mounted
-          at $1=system_root. This is useful for fresh installs from
-          environments live live CDs, where the target system is not yet up and
-          running (even if nixos-install has successfully completed).
+          at $1=system_root. The list of files to deploy is provided as $2 in
+          the same format used by `list`. This is useful for fresh installs
+          from environments live live CDs, where the target system is not yet
+          up and running (even if nixos-install has successfully completed).
         '';
 
         fileModule = lib.mkOption {
