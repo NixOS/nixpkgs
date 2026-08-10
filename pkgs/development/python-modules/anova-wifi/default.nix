@@ -10,7 +10,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anova-wifi";
   version = "2.0.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "anova_wifi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-StQ3kQTeYf+MfoTmbKR+G9wZoGyzjKkzuiR5xpDnoto=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
-    changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
+    changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
   };
-}
+})
