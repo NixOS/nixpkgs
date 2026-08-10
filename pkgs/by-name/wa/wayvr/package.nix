@@ -1,14 +1,17 @@
 {
   alsa-lib,
+  autoPatchelfHook,
   dav1d,
   dbus,
   fetchFromGitHub,
   lib,
   libinput,
   libx11,
+  libxcursor,
   libxext,
   libxrandr,
   libxcb,
+  libxi,
   libxkbcommon,
   nix-update-script,
   openssl,
@@ -23,6 +26,8 @@
   shaderc,
   stdenv,
   testers,
+  vulkan-loader,
+  wayland,
   wayvr,
   xwayland-satellite,
   withOpenVR ? !stdenv.hostPlatform.isAarch64,
@@ -49,6 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -56,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dav1d
     dbus
     libinput
+    # X dependencies are dlopen'd at runtime by uidev
     libx11
     libxext
     libxrandr
@@ -64,6 +71,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     openxr-loader
     pipewire
+
+    # only dlopen'd at runtime by uidev
+    libxcursor
+    libxi
+    wayland
+    vulkan-loader
   ]
   ++ lib.optionals withOpenVR [ openvr ];
 
@@ -92,6 +105,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -D wayvr/wayvr.svg -t $out/share/icons/hicolor/scalable/apps
 
     rm $out/bin/prost_build
+  '';
+
+  preFixup = ''
+    patchelf \
+      --add-needed libwayland-client.so.0 \
+      --add-needed libwayland-cursor.so.0 \
+      --add-needed libwayland-egl.so.1 \
+      --add-needed libX11.so.6 \
+      --add-needed libxcb.so.1 \
+      --add-needed libXcursor.so.1 \
+      --add-needed libXi.so.6 \
+      --add-needed libvulkan.so.1 \
+      --add-needed libxkbcommon.so.0 \
+      $out/bin/uidev
   '';
 
   passthru = {
