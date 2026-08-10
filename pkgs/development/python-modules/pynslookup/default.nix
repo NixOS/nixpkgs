@@ -30,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module to do DNS lookups";
     homepage = "https://github.com/wesinator/pynslookup";
+    changelog = "https://github.com/wesinator/pynslookup/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
