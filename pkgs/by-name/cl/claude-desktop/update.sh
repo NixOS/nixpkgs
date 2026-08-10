@@ -2,13 +2,17 @@
 #!nix-shell -i bash -p curl common-updater-scripts
 set -euo pipefail
 
+script_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+package_file="$script_dir/package.nix"
+cd "$(git -C "$script_dir" rev-parse --show-toplevel)"
+
 ### Fetch latest version from apt repository metadata
 new_version=$(curl -sS "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages" \
   | sed -nE 's/^Version: ([0-9]+\.[0-9]+\.[0-9]+)$/\1/p' \
   | sort -V \
   | tail -n 1)
 
-old_version=$(sed -nE 's/^\s*version = "(.*)";/\1/p' ./package.nix)
+old_version=$(sed -nE 's/^\s*version = "(.*)";/\1/p' "$package_file")
 
 if [[ "$new_version" == "$old_version" ]]; then
     echo "claude-desktop: up to date ($old_version)"
@@ -27,7 +31,11 @@ update_hash() {
     hash=$(nix-prefetch-url --type sha256 "$url")
     local sri
     sri=$(nix --extra-experimental-features nix-command hash to-sri "sha256:$hash")
-    update-source-version claude-desktop "$new_version" "$sri" --system="$system" --ignore-same-version
+    update-source-version claude-desktop "$new_version" "$sri" \
+        --file="$package_file" \
+        --source-key=passthru.unwrapped.src \
+        --system="$system" \
+        --ignore-same-version
 }
 
 update_hash x86_64-linux amd64
