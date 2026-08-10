@@ -9,9 +9,13 @@
     };
 
     # Example of how one can override the host package set!
-    varsConfigurations.differentArch = import ../../src/nix_vars/nix/jsonify.nix {
-      config = inputs.self.nixosConfigurations.example;
-      pkgsHost = inputs.nixpkgs.legacyPackages.x86_64-linux;
-    };
+    varsConfigurations.differentArch =
+      let
+        pkgsHost = inputs.nixpkgs.legacyPackages.x86_64-linux;
+      in
+      pkgsHost.nixos-vars.jsonify {
+        inherit pkgsHost;
+        config = inputs.self.nixosConfigurations.example;
+      };
   };
 }
