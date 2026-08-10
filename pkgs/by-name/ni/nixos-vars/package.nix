@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication {
   };
 
   # This is perhaps not a good idea?
-  passthru.jsonify = import ./src/nix_vars/nix/jsonify.nix;
+  passthru.jsonify = import ./src/nixos_vars/nix/jsonify.nix;
 
   meta = {
     description = "NixOS secret management abstraction";
