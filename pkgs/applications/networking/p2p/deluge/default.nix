@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   fetchurl,
   intltool,
   libtorrent-rasterbar,
@@ -32,11 +31,8 @@ let
       };
 
       patches = [
-        (fetchpatch {
-          name = "deluge-use-importlib-for-ui-entrypoints.patch";
-          url = "https://github.com/deluge-torrent/deluge/commit/1a031d00094d4613667bcaadae57b548b7e1413b.patch";
-          hash = "sha256-KfACbRs1yVr5PsRrXLp/RD8YT3Ow71bvuPZyKMDRmOA=";
-        })
+        # https://github.com/deluge-torrent/deluge/pull/501
+        ./use-importlib-for-ui-entrypoints.patch
       ];
 
       propagatedBuildInputs =
