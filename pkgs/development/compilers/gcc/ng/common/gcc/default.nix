@@ -27,6 +27,12 @@
   texinfo,
   which,
   gettext,
+  flex,
+  bison,
+  # Whether `monorepoSrc` is a VCS checkout rather than a release tarball. A
+  # checkout lacks the generated sources (gengtype-lex.cc and friends) that a
+  # tarball ships pre-built, so they have to be regenerated with flex and bison.
+  fromVCS ? false,
   getVersionFile,
   buildGccPackages,
   targetPackages,
@@ -151,7 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
     which
     gettext
   ]
-  ++ lib.optional (perl != null) perl;
+  ++ lib.optional (perl != null) perl
+  ++ lib.optionals fromVCS [
+    flex
+    bison
+  ];
 
   buildInputs = [
     gmp

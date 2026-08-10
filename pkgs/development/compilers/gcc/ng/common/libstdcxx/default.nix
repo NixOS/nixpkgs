@@ -15,36 +15,41 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libstdcxx";
   inherit version;
 
-  src = runCommand "libstdcxx-src-${version}" { src = monorepoSrc; } ''
-    runPhase unpackPhase
+  src = runCommand "libstdcxx-src-${version}" { src = monorepoSrc; } (
+    ''
+      runPhase unpackPhase
 
-    mkdir -p "$out/gcc"
-    cp gcc/BASE-VER "$out/gcc"
-    cp gcc/DATESTAMP "$out/gcc"
+      mkdir -p "$out/gcc"
+      cp gcc/BASE-VER "$out/gcc"
+      cp gcc/DATESTAMP "$out/gcc"
 
-    mkdir -p "$out/libgcc"
-    cp libgcc/gthr*.h "$out/libgcc"
-    cp libgcc/unwind-pe.h "$out/libgcc"
+      mkdir -p "$out/libgcc"
+      cp libgcc/gthr*.h "$out/libgcc"
+      cp libgcc/unwind-pe.h "$out/libgcc"
 
-    cp -r libstdc++-v3 "$out"
+      cp -r libstdc++-v3 "$out"
 
-    cp -r libiberty "$out"
-    cp -r include "$out"
-    cp -r contrib "$out"
+      cp -r libiberty "$out"
+      cp -r include "$out"
+      cp -r contrib "$out"
 
-    cp -r config "$out"
-    cp -r multilib.am "$out"
+      cp -r config "$out"
+      cp -r multilib.am "$out"
 
-    cp config.guess "$out"
-    cp config.rpath "$out"
-    cp config.sub "$out"
-    cp config-ml.in "$out"
-    cp ltmain.sh "$out"
-    cp install-sh "$out"
-    cp mkinstalldirs "$out"
+      cp config.guess "$out"
+      cp config.rpath "$out"
+      cp config.sub "$out"
+      cp config-ml.in "$out"
+      cp ltmain.sh "$out"
+      cp install-sh "$out"
+      cp mkinstalldirs "$out"
 
-    [[ -f MD5SUMS ]]; cp MD5SUMS "$out"
-  '';
+    ''
+    # `MD5SUMS` exists only in release tarballs, not in a VCS checkout.
+    + ''
+      if [[ -f MD5SUMS ]]; then cp MD5SUMS "$out"; fi
+    ''
+  );
 
   outputs = [
     "out"
