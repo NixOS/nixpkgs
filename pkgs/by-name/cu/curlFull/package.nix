@@ -5,6 +5,7 @@
 
 curl.override (
   {
+    c-aresSupport = true;
     ldapSupport = true;
     gsaslSupport = true;
     rtmpSupport = true;
