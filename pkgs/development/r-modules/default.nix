@@ -25,7 +25,7 @@ let
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
-    inherit (pkgs) gettext gfortran;
+    inherit (pkgs) gettext;
   };
 
   # Generates package templates given per-repository settings
