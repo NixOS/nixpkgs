@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-zeek";
-  version = "0.2.15";
+  version = "0.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "tree-sitter-zeek";
     tag = "v${version}";
-    hash = "sha256-gxBHNhldyzAQdsMb5QwPAB8z+k/hFAS6SrSQmAAfi9Q=";
+    hash = "sha256-khode6gx0ZAOyD8Q3Rche9F1S2+0FGGNhos+rTiKQF0=";
   };
 
   build-system = [ setuptools ];
