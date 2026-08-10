@@ -131,6 +131,7 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
+          "-B${targetGccPackages.libstdcxx}/lib"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -163,6 +164,11 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
+          # `libcxx` above tells cc-wrapper where the C++ *headers* are; it does
+          # not put the library itself on the link path for a GNU compiler. So
+          # every C++ link failed with `cannot find -lstdc++` until this was
+          # added, in the same style as the other runtime libraries.
+          "-B${targetGccPackages.libstdcxx}/lib"
           "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
