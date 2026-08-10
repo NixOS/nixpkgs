@@ -9,13 +9,13 @@
 let
   alsa-ucm-conf-asahi = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "alsa-ucm-conf-asahi";
-    version = "9";
+    version = "10";
 
     src = fetchFromGitHub {
       owner = "AsahiLinux";
       repo = "alsa-ucm-conf-asahi";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-F+NiEP4EKLUVV2oHSVY+fkXlzXcLyywNOolUy9DO8sI=";
+      hash = "sha256-2A5HiaXRplAOi4M6qrihH8GyTT8+ANWs9DyCZhgE8pc=";
     };
 
     installPhase = ''
