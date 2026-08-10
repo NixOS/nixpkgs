@@ -66,7 +66,7 @@ let
 in
 {
   texinfo7 = buildTexinfo {
-    version = "7.2";
-    hash = "sha256-AynXeI++8RP6gsuAiJyhl6NEzg33ZG/gAJdMXXFDY6Y=";
+    version = "7.3";
+    hash = "sha256-UfdOsPUc+phzuFJk391dRuiVfslbiPD7di9j2eFkxy4=";
   };
 }
