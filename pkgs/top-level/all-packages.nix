@@ -1891,14 +1891,6 @@ with pkgs;
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
 
-  curlFull = curl.override {
-    ldapSupport = true;
-    gsaslSupport = true;
-    rtmpSupport = true;
-    pslSupport = true;
-    websocketSupport = true;
-  };
-
   curlWithGnuTls = curl.override {
     gnutlsSupport = true;
     opensslSupport = false;
