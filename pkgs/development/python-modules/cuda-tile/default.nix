@@ -52,13 +52,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     substituteInPlace setup.py \
       --replace-fail ' dry_run=self.dry_run)' ' )'
   ''
-  # Remove deprecated parameter in setuptools
-  # https://github.com/NixOS/nixpkgs/issues/550403
-  # https://github.com/NVIDIA/cutile-python/pull/98
-  + ''
-    substituteInPlace setup.py \
-      --replace-fail "dry_run=self.dry_run" ""
-  ''
   # Otherwise fails to find libc
   # xla_ffi.cpp:(.text+0x308): undefined reference to `__stack_chk_fail'
   + ''
