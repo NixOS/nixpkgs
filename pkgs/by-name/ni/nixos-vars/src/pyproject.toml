@@ -6,4 +6,4 @@ version = "0.1.0"
 nixos-vars = "nixos_vars.cli:main"
 
 [tool.setuptools.package-data]
-nix_vars = ["nix/*"]
+nixos_vars = ["nix/*"]
