@@ -153,6 +153,16 @@ let
         # Derived meta-data
         useLLVM = final.isFreeBSD || final.isOpenBSD;
 
+        # Use the split GCC package set (`gccNGPackages`) instead of the
+        # monolithic `gcc`. No platform selects it yet; it is opt-in, set
+        # explicitly on a platform spec, so that the split set can be exercised
+        # before anything depends on it.
+        #
+        # I (@Ericson2314) plan on making obscure low-tier platforms (e.g.
+        # NetBSD) use it soon, so we can dogfood GCC NG and thereby iron out its
+        # bugs.
+        useGccNG = false;
+
         libc =
           if final.isDarwin then
             "libSystem"

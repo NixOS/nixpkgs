@@ -88,6 +88,8 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccNoLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -99,6 +101,11 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          # The split package set can express the two rungs separately, the way
+          # the LLVM set does: no libgcc above, libgcc but no libc here. The
+          # monolithic `gccCrossLibcStdenv` has to serve both.
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -3244,9 +3251,11 @@ with pkgs;
       # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
       gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
       gccNGPackages_15 = gccNGPackagesSet."15";
+      gccNGPackages = gccNGPackagesSet.${toString default-gcc-version};
       mkGCCNGPackages = gccNGPackagesSet.mkPackage;
     })
     gccNGPackages_15
+    gccNGPackages
     mkGCCNGPackages
     ;
 
