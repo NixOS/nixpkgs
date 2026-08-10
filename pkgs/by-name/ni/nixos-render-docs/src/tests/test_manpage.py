@@ -1,4 +1,5 @@
 import nixos_render_docs as nrd
+import textwrap
 
 from sample_md import sample1
 
@@ -35,6 +36,139 @@ def test_dedup_links() -> None:
     c._renderer.link_footnotes = []
     assert c._render("[a](link) [b](link)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[1]\\fR"
     assert c._renderer.link_footnotes == ['link']
+
+def test_table_two_columns() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | key | value |
+      |-----|-------|
+      | foo | bar   |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb lb\n"
+        "l l .\n"
+        "key\tvalue\n"
+        "foo\tbar\n"
+        ".TE\n"
+        ".RE"
+    )
+
+def test_table_many_columns() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | d | l | m |
+      |---|---|---|
+      | a | b | c |
+      | x | y | z |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb lb lb\n"
+        "l l l .\n"
+        "d\tl\tm\n"
+        "a\tb\tc\n"
+        "x\ty\tz\n"
+        ".TE\n"
+        ".RE"
+    )
+
+def test_table_single_column() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | key |
+      |-----|
+      | foo |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb\n"
+        "l .\n"
+        "key\n"
+        "foo\n"
+        ".TE\n"
+        ".RE"
+    )
+
+def test_table_column_alignment() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | l | c | r |
+      |:--|:-:|--:|
+      | a | b | c |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb cb rb\n"
+        "l c r .\n"
+        "l\tc\tr\n"
+        "a\tb\tc\n"
+        ".TE\n"
+        ".RE"
+    )
+
+def test_table_header_shown() -> None:
+    c = Converter({})
+    assert "HEADER" in c._render(textwrap.dedent("""
+      | HEADER |
+      |--------|
+      | body   |
+    """))
+
+def test_table_empty_cell() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | key |
+      |-----|
+      |     |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb\n"
+        "l .\n"
+        "key\n"
+        "\\&\n"
+        ".TE\n"
+        ".RE"
+    )
+    assert c._render(textwrap.dedent("""
+      | a | b |
+      |---|---|
+      |   | x |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb lb\n"
+        "l l .\n"
+        "a\tb\n"
+        "\tx\n"
+        ".TE\n"
+        ".RE"
+    )
+
+def test_table_escapes_content() -> None:
+    c = Converter({})
+    assert c._render(textwrap.dedent("""
+      | key   | value    |
+      |-------|----------|
+      | a-b   | *em* `c` |
+    """)) == (
+        ".RS 4\n"
+        ".TS\n"
+        "allbox;\n"
+        "lb lb\n"
+        "l l .\n"
+        "key\tvalue\n"
+        "a\\-b\t\\fIem\\fR \\fR\\(oqc\\(cq\\fP\n"
+        ".TE\n"
+        ".RE"
+    )
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })
