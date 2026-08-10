@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./do-not-manually-compute-sdk-version.patch
     ./always-install-desktop-files.patch
     ./use-absolute-resource-paths.patch
+    # Linphone creates a broken desktop file.
+    # See: https://github.com/NixOS/nixpkgs/issues/551204
+    ./no-user-desktop-file.patch
 
     # .mkv recordings are broken in NixOS and other distros (see
     # https://github.com/NixOS/nixpkgs/issues/219551), and simply changing the
