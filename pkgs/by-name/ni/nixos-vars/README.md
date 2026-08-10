@@ -270,7 +270,7 @@ The CLI does accept pre-evaluated configurations (like one would, for example, e
 
 Once the configuration is evaluated, the CLI will extract the data it needs into a Nix attrset that can be directly serialized as JSON (this implies the package set-reliant script functions are evaluated with the host package set as an argument, for example) before being taken in by the Python code.
 
-This is done by calling to the so-called [`jsonify.nix`](./nix_vars/nix/jsonify.nix) function (proper name TBD). If we were to assign a type signature to the aforementioned function, it would look something like this:
+This is done by calling to the so-called [`jsonify.nix`](./nixos_vars/nix/jsonify.nix) function (proper name TBD). If we were to assign a type signature to the aforementioned function, it would look something like this:
 
 ```
 jsonify : { config, pkgsTarget ? null, pkgsHost ? null } -> VarsConfiguration
