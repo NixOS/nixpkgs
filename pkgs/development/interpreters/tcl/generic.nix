@@ -4,6 +4,7 @@
   callPackage,
   makeSetupHook,
   runCommand,
+  bashNonInteractive,
   tzdata,
   zip,
   zlib,
@@ -42,9 +43,14 @@ let
       zip
     ];
 
-    buildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
+    buildInputs = [
+      bashNonInteractive
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
       zlib
     ];
+
+    strictDeps = true;
 
     preConfigure = ''
       cd unix
