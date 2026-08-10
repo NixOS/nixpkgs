@@ -8,6 +8,7 @@
   glibc,
   adcli,
   augeas,
+  bashNonInteractive,
   dnsutils,
   c-ares,
   curl,
@@ -68,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
   version = "2.13.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
@@ -99,11 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = true;
 
-  # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
+    ];
+    KRB5_CONFIG = lib.getExe' (lib.getDev libkrb5) "krb5-config";
+    NSUPDATE = lib.getExe' dnsutils "nsupdate";
+    XMLLINT = lib.getExe' libxml2 "xmllint";
+    XSLTPROC = lib.getExe' libxslt "xsltproc";
+  };
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
@@ -142,10 +150,18 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     doxygen
+    (python3.withPackages (
+      p: with p; [
+        setuptools
+        distutils
+        python-ldap
+      ]
+    ))
   ];
 
   buildInputs = [
     augeas
+    bashNonInteractive
     dnsutils
     c-ares
     curl
@@ -158,13 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     nfs-utils
     p11-kit
-    (python3.withPackages (
-      p: with p; [
-        setuptools
-        distutils
-        python-ldap
-      ]
-    ))
     popt
     talloc
     tdb
