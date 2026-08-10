@@ -6,7 +6,9 @@ from .error import VarsError
 from .args import VarsArgs
 from .config import VarsConfig
 
-jsonify = Path(__file__).parent / "nix" / "jsonify.nix"
+jsonify_path = Path(__file__).parent / "nix" / "jsonify.nix"
+with open(jsonify_path) as f:
+    jsonify_source = f.read()
 
 
 def evaluate_config(args: VarsArgs) -> VarsConfig:
@@ -21,14 +23,12 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
         except json.decoder.JSONDecodeError as e:
             raise VarsError(f"Error parsing JSON: {e}")
     elif args.flake is not None:
-        expr = f"config: import {jsonify} {{ inherit config; }}"
-        # Currently passing --impure since `jsonify` is an absolute path...
+        expr = f"config: ({jsonify_source}) {{ inherit config; }}"
         evalCommand = [
             "nix",
             "eval",
             "--json",
             args.flake,
-            "--impure",
             "--apply",
             expr,
         ]
@@ -37,7 +37,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
             evalCommand.append("--show-trace")
     elif args.file is not None:
         expr = f"""
-import {jsonify} {{
+({jsonify_source}) {{
     config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
