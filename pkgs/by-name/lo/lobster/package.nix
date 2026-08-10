@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
     mainProgram = "lobster";
