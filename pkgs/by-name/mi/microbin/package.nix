@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tiny, self-contained, configurable paste bin and URL shortener written in Rust";
     homepage = "https://github.com/szabodanika/microbin";
