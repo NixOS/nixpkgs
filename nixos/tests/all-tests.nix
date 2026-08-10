@@ -1446,6 +1446,7 @@ in
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   prowlarr = runTest ./prowlarr.nix;
+  proxmox-backup-server = runTest ./proxmox-backup-server.nix;
   proxy = runTest ./proxy.nix;
   pt2-clone = runTest ./pt2-clone.nix;
   public-inbox = runTest ./public-inbox.nix;

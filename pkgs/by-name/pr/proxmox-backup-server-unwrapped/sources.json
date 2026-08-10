@@ -1,0 +1,72 @@
+{
+  "version": "4.2.4",
+  "repos": {
+    "proxmox-backup": {
+      "url": "git://git.proxmox.com/git/proxmox-backup.git",
+      "name": "proxmox-backup",
+      "rev": "b750ffceca49e1b7bf3415cceb152c0f31f8fe9e",
+      "hash": "sha256-u8VuImtDX+W3NzLv8kLWyykm4tEiNDugvj3oUptOB84="
+    },
+    "proxmox": {
+      "url": "git://git.proxmox.com/git/proxmox.git",
+      "name": "proxmox",
+      "rev": "89c1d597a9d15743049eadcb1add380573265904",
+      "hash": "sha256-RXESd32rIKVA5AZUrxAKUJ9E/D+y3gvxRKAPe4ZH8tc="
+    },
+    "proxmox-fuse": {
+      "url": "git://git.proxmox.com/git/proxmox-fuse.git",
+      "name": "proxmox-fuse",
+      "rev": "ac99ac97f7c2eb7ab9ee6ec3b41034e68b1eca7d",
+      "hash": "sha256-pW2xDWCEH9eMWNjbUZ299ooYlFM9Izs963HCxqKkjeo="
+    },
+    "proxmox-pxar": {
+      "url": "git://git.proxmox.com/git/pxar.git",
+      "name": "pxar",
+      "rev": "091a8a382d0d6fc71025351fb35c51b1f3b0074d",
+      "hash": "sha256-9SFlrz6nuVby6iQ2ELVaioZu2pcs90tSuyzLCWJlcrA="
+    },
+    "proxmox-pathpatterns": {
+      "url": "git://git.proxmox.com/git/pathpatterns.git",
+      "name": "pathpatterns",
+      "rev": "5323cbe49ae5d592eb8a3fa2e215550e83dd7fba",
+      "hash": "sha256-cEVTDIDKL4K5RtbYR4OQ19LmtSKM7o8IN1jJKGa+9T4="
+    }
+  },
+  "webAssets": {
+    "proxmox-backup-docs": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/proxmox-backup-docs_4.2.4-1_all.deb",
+      "hash": "sha256-bBTmg2f2P5w0qemUWkr92PU/CmMqz+5FQYRiOnGq70c="
+    },
+    "libjs-extjs": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/libjs-extjs_7.0.0-5_all.deb",
+      "hash": "sha256-RhCa4YCVeaChny/eswvsF06/yRj++pfvy6rOSoZ3RLU="
+    },
+    "proxmox-widget-toolkit": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/proxmox-widget-toolkit_5.2.6_all.deb",
+      "hash": "sha256-mJFaDKMZ8HiSdPRmGOv5wT0bH8H1DcWTPfv7dYZho8M="
+    },
+    "pve-xtermjs": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/pve-xtermjs_6.0.0-2_all.deb",
+      "hash": "sha256-OxrEw3hLVV5fGzh80+v7Gn8GDcVtElETim911dEZYTo="
+    },
+    "libjs-qrcodejs": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/libjs-qrcodejs_1.20230525-pve1_all.deb",
+      "hash": "sha256-FldTh4sXnETm9OausJl4KxZKIJRuOsy8TYyFPS46ko0="
+    },
+    "pbs-i18n": {
+      "source": "proxmox",
+      "url": "http://download.proxmox.com/debian/pbs/dists/trixie/pbs-no-subscription/binary-amd64/pbs-i18n_3.9.0_all.deb",
+      "hash": "sha256-5NuV3dhFhssDB5T/ihF7LCTQEOpqX5ixfKrJmoY2AWA="
+    },
+    "fonts-font-awesome": {
+      "source": "debian",
+      "url": "http://deb.debian.org/debian/pool/main/f/fonts-font-awesome/fonts-font-awesome_5.0.10+really4.7.0~dfsg-4.1_all.deb",
+      "hash": "sha256-Xwnhrc4m1ZYoojnFOIgtU+WJeLlYIzhk/GF76aUQAY4="
+    }
+  }
+}
