@@ -7433,6 +7433,8 @@ self: super: with self; {
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
+  harbor-python = callPackage ../development/python-modules/harbor-python { };
+
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
 
   harlequin-postgres = callPackage ../development/python-modules/harlequin-postgres { };
