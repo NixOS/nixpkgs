@@ -3,8 +3,9 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
+  pnpm_11,
   pnpmConfigHook,
-  pnpm_10,
+  pnpmBuildHook,
   nodejs_24,
   nodejs-slim,
   rustPlatform,
@@ -19,6 +20,9 @@
   darwin,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 # Build with pnpm instead of buildRustPackage because the upstream npm CLI is the
 # JS-plugin-capable runtime. The standalone Rust `oxlint` binary intentionally
 # runs without an external linter, which leaves `jsPlugins` configs inert.
@@ -40,12 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-CjhQyPY9Bsj8g+tVVqfd5i/wKDSeU+geEssEzDsSi1A=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-fdXk7ODkw9zQSsxGG85We5VKAG8j/NRAcDRWz5zli80=";
   };
 
   dontUseCmakeConfigure = true;
+
+  pnpmWorkspaces = [ "oxlint-app" ];
 
   nativeBuildInputs = [
     cargo
@@ -53,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     nodejs_24
     pnpmConfigHook
-    pnpm_10
+    pnpmBuildHook
+    pnpm
     rustPlatform.cargoSetupHook
     rustc
   ];
@@ -73,14 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$cli" \
         --replace-fail '"/bin/ps"' '"${darwin.adv_cmds}/bin/ps"'
     done
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm --workspace-concurrency=1 --filter oxlint-app run build
-
-    runHook postBuild
   '';
 
   installPhase = ''
