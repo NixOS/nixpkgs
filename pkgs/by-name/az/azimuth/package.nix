@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeBinaryWrapper
     which
+    SDL2
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     icnsify
@@ -47,11 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/azimuth/system/generate_blob_index.sh
 
-    # Modern Clang over-erroring measures
+    # Remove over-erroring measures
     substituteInPlace Makefile \
-      --replace-fail \
-        '-Werror' \
-        '-Werror -Wno-uninitialized-const-pointer -Wno-default-const-init-var-unsafe'
+      --replace-fail "-Werror" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # iconutil is not available in the build sandbox
