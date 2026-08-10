@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typing-inspection";
   version = "0.4.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "typing-inspection";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jNAMYV9mpUnClLOahQyLisBkOfELcmjKavKJgyxkQr4=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pydantic/typing-inspection/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/pydantic/typing-inspection/blob/${finalAttrs.src.tag}/HISTORY.md";
     description = "Runtime typing introspection tools";
     homepage = "https://github.com/pydantic/typing-inspection";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
