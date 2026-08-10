@@ -610,6 +610,8 @@ let
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
 
+        ez_api = callPackage ../development/ocaml-modules/ez_api { };
+
         ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
 
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
