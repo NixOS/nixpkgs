@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gexiv2";
   __structuredAttrs = true;
   strictDeps = true;
-  version = "0.16.0";
+  version = "0.16.2";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor finalAttrs.version}/gexiv2-${finalAttrs.version}.tar.xz";
-    sha256 = "2W+JXyRTn5ZvV3srskia6E+CMpcKjQwGTkoAdHSne7s=";
+    hash = "sha256-qtniQP3/voXjkPRu4KVn4lG66lwpw9hpAmA4hoPcjQo=";
   };
 
   depsBuildBuild = [
