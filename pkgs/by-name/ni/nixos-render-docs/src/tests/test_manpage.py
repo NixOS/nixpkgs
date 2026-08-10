@@ -312,4 +312,13 @@ more stuff in same deflist
 .RS 4
 foo
 .RE
+.RE
+.RS 4
+.TS
+allbox;
+lb lb
+l l .
+this\tis
+a\ttable
+.TE
 .RE"""

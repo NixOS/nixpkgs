@@ -266,4 +266,12 @@ text
 
 
 more stuff in same deflist:: {empty}foo
+
+
+[cols="<,<",options="header"]
+|===
+| this | is
+
+| a | table
+|===
 """
