@@ -1891,12 +1891,6 @@ with pkgs;
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
 
-  curlWithGnuTls = curl.override {
-    gnutlsSupport = true;
-    opensslSupport = false;
-    ngtcp2 = ngtcp2-gnutls;
-  };
-
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   inherit (callPackages ../applications/networking/p2p/deluge { })
