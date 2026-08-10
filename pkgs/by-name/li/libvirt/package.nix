@@ -121,14 +121,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "12.4.0";
+  version = "12.6.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-xgXbgZ8UDdiKPJSGEHB5PasGws5VvCgd+DpoOxwceEA=";
+    hash = "sha256-SEscELXhiEoFnDDcxV7Jb2LjyheNJbgPp7AnXix2GVU=";
   };
 
   patches = [
@@ -350,6 +350,7 @@ stdenv.mkDerivation rec {
       (feat "tests" true)
       (feat "udev" isLinux)
       (feat "json_c" true)
+      (feat "libvirtd" true)
 
       (driver "ch" (isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64)))
       (driver "esx" true)
