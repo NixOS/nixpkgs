@@ -149,10 +149,6 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
   ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/numpy/numpy/issues/26713
-    "test_iter_refcount"
-  ]
   ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # https://github.com/numpy/numpy/issues/24548
     "test_impossible_feature_enable" # AssertionError: Failed to generate error
