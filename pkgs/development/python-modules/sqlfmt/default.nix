@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nbgLzeMOXgiXtvV/XHu1I0LkwwaTrzj8ga6EtoZuvRk=";
+    hash = "sha256-GM+LS1jrt7cCjkjM5T/nJEVRBdTm0Jd4ib+SvCbTAdA=";
   };
 
   build-system = [ hatchling ];
