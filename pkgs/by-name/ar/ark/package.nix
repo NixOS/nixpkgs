@@ -38,10 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   # Ark loads R dynamically at runtime, locating it via `R_HOME` or by running
-  # `R RHOME`. Put R on PATH so the kernel works out of the box.
+  # `R RHOME`. Put R on PATH so the kernel works out of the box. Also set
+  # R_LIBS_SITE so that ark can find installed packages.
   postInstall = ''
     wrapProgram $out/bin/ark \
-      --suffix PATH : ${lib.makeBinPath [ R ]}
+      --suffix PATH : ${lib.makeBinPath [ R ]} \
+      --prefix R_LIBS_SITE : "$(${lib.getExe' R "Rscript"} -e 'cat(Sys.getenv("R_LIBS_SITE"))')"
   '';
 
   meta = {
