@@ -18,14 +18,22 @@
   transformers,
   writableTmpDirAsHomeHook,
   wurlitzer,
+
+  config,
+  cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
-  inherit (ctranslate2-cpp) pname version src;
+let
+  ctranslate2-cpp' = ctranslate2-cpp.override { inherit cudaSupport; };
+in
+
+buildPythonPackage (finalAttrs: {
+  inherit (ctranslate2-cpp') pname version src;
   pyproject = true;
+  __structuredAttrs = true;
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -37,14 +45,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ctranslate2-cpp ];
+  buildInputs = [
+    ctranslate2-cpp'
+  ];
 
   dependencies = [
     numpy
     pyyaml
   ];
 
-  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+  cmakeFlags = [
+    # "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   pythonImportsCheck = [
     # https://opennmt.net/CTranslate2/python/overview.html
@@ -62,8 +74,8 @@ buildPythonPackage rec {
     wurlitzer
   ];
 
+  # run tests against build result, not sources
   preCheck = ''
-    # run tests against build result, not sources
     rm -rf ctranslate2
   '';
 
@@ -80,6 +92,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # TODO: ModuleNotFoundError: No module named 'opennmt'
     "tests/test_opennmt_tf.py"
+
     # OSError: We couldn't connect to 'https://huggingface.co' to load this file
     "tests/test_transformers.py"
   ];
@@ -87,8 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast inference engine for Transformer models";
     homepage = "https://github.com/OpenNMT/CTranslate2";
-    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

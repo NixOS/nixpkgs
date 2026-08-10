@@ -8,7 +8,8 @@
   llvmPackages, # openmp
   withMkl ? false,
   mkl,
-  withCUDA ? config.cudaSupport,
+  cudaSupport ? config.cudaSupport,
+  withCUDA ? cudaSupport,
   withCuDNN ? withCUDA && (cudaPackages ? cudnn),
   cudaPackages,
   # Enabling both withOneDNN and withOpenblas is broken
@@ -54,7 +55,7 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
   version = "4.8.1";
 
-  __strutcturedAttrs = true;
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
