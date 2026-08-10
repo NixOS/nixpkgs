@@ -2322,7 +2322,8 @@
       ];
     "geosphere_austria_warnings" =
       ps: with ps; [
-      ]; # missing inputs: pygeosphere-warnings
+        pygeosphere-warnings
+      ];
     "ghost" =
       ps: with ps; [
         aioghost
@@ -8314,6 +8315,7 @@
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
+    "geosphere_austria_warnings"
     "ghost"
     "gios"
     "github"
