@@ -5939,9 +5939,6 @@ with pkgs;
 
   libcamera-qcam = callPackage ../by-name/li/libcamera/package.nix { withQcam = true; };
 
-  libcanberra-gtk2 = pkgs.libcanberra.override {
-    gtkSupport = "gtk2";
-  };
   libcanberra-gtk3 = pkgs.libcanberra.override {
     gtkSupport = "gtk3";
   };
