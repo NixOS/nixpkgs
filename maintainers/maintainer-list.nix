@@ -26521,6 +26521,12 @@
     githubId = 848812;
     name = "Stephan Jau";
   };
+  sjcobb = {
+    email = "sjcobb2003@gmail.com";
+    github = "sjcobb2022";
+    githubId = 68509699;
+    name = "sjcobb";
+  };
   sjfloat = {
     email = "steve+nixpkgs@jonescape.com";
     github = "sjfloat";
