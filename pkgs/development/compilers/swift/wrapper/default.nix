@@ -53,7 +53,6 @@ stdenv.mkDerivation (
       stdenv.targetPlatform.darwinMinVersion
     );
 
-    passAsFile = [ "buildCommand" ];
     buildCommand = ''
       mkdir -p $out/bin $out/nix-support
 
