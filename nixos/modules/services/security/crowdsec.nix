@@ -798,7 +798,10 @@ in
               description = "Update the crowdsec hub index";
               # for dns resolving
               wants = [ "network-online.target" ];
-              after = [ "network-online.target" ];
+              after = [
+                "network-online.target"
+                "crowdsec-setup.service"
+              ];
 
               serviceConfig = createServiceConfig {
                 Type = "oneshot";
