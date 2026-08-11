@@ -12,6 +12,7 @@
   # dependencies
   cuda-core,
   numpy,
+  nvidia-cutlass-dsl,
   packaging,
   pythonOlder,
   typing-extensions,
@@ -23,10 +24,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nccl4py";
-  # `nccl4py` is versioned independently of `nccl` and should be the
-  # same as the contents of
+  # `nccl4py` is versioned independently of `nccl` and should be the same as the contents of
   # `${cudaPackages.nccl.src}/bindings/nccl4py/nccl/_version.py`
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "nccl";
     tag = "nccl4py-v${finalAttrs.version}";
-    hash = "sha256-jpgCUnUWWl2oihtHibgoQRnnXsQC6vlIjVX73i3bVqw=";
+    hash = "sha256-p9z4NlccBdI0auMRzTJtK8VbAOSunLdwKKU0Wn5c6c0=";
   };
   sourceRoot = "${finalAttrs.src.name}/bindings/nccl4py";
 
@@ -102,6 +102,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     cuda-core
     numpy
+    nvidia-cutlass-dsl
     packaging
   ]
   ++ lib.optionals (pythonOlder "3.13") [
@@ -132,6 +133,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python bindings for NCCL";
     homepage = "https://github.com/NVIDIA/nccl/blob/master/bindings/nccl4py/README.md";
+    changelog = "https://github.com/NVIDIA/nccl/releases/tag/${finalAttrs.src.tag}";
     # `cudaPackages.nccl` is BSD3 but the bindings are licensed under
     # Apache License 2.0
     license = lib.licenses.bsd3;
