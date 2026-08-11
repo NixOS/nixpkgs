@@ -53,6 +53,7 @@ jetbrains.mkJetBrainsProduct {
     description = "Ruby IDE from JetBrains";
     longDescription = "Ruby IDE from JetBrains";
     maintainers = with lib.maintainers; [ tymscar ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

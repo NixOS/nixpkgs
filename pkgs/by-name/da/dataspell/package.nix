@@ -64,6 +64,7 @@ jetbrains.mkJetBrainsProduct {
       Mainly it integrates Jupyter notebooks in the IntelliJ platform.
     '';
     maintainers = with lib.maintainers; [ leona ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

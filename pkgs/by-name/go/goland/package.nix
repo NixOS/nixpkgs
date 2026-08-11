@@ -60,6 +60,7 @@ in
       The IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language.
     '';
     maintainers = with lib.maintainers; [ tymscar ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

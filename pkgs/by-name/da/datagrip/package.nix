@@ -52,6 +52,7 @@ jetbrains.mkJetBrainsProduct {
       It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.
     '';
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

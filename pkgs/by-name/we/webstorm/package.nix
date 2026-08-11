@@ -56,6 +56,7 @@ jetbrains.mkJetBrainsProduct {
       abaldeau
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

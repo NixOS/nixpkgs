@@ -49,6 +49,7 @@ jetbrains.mkJetBrainsProduct {
     description = "IDE for building domain-specific languages from JetBrains";
     longDescription = "A metaprogramming system which uses projectional editing which allows users to overcome the limits of language parsers, and build DSL editors, such as ones with tables and diagrams.";
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

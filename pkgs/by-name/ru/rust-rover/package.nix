@@ -68,6 +68,7 @@ jetbrains.mkJetBrainsProduct {
     description = "Rust IDE from JetBrains";
     longDescription = "Rust IDE from JetBrains";
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
