@@ -7,7 +7,6 @@
   glib-networking,
   lib,
   libappindicator,
-  libappindicator-gtk3,
   libayatana-appindicator,
   llvmPackages,
   makeWrapper,
@@ -60,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libappindicator-gtk3
+    libappindicator
     openssl
     webkitgtk_4_1
   ];

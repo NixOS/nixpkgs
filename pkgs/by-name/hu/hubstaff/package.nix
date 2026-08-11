@@ -21,7 +21,7 @@
   libnotify,
   glib,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   curl,
   writeShellScript,
   common-updater-scripts,
@@ -50,7 +50,7 @@ let
     libnotify
     glib
     gtk3
-    libappindicator-gtk3
+    libappindicator
     curl
     libxfixes
     libxscrnsaver

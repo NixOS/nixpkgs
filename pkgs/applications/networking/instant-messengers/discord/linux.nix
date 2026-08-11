@@ -76,7 +76,7 @@
   libxkbcommon,
   pango,
   pipewire,
-  libappindicator-gtk3,
+  libappindicator,
   libdbusmenu,
   wayland,
   speechd-minimal,
@@ -134,7 +134,7 @@ let
         pango
         pipewire
         libxscrnsaver
-        libappindicator-gtk3
+        libappindicator
         libdbusmenu
         wayland
         ;
