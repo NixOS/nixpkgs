@@ -220,5 +220,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "Ladybird";
     broken = stdenv.hostPlatform.isDarwin;
+    knownVulnerabilities = [
+      "CVE-2026-58592"
+    ];
   };
 })

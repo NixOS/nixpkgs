@@ -140,6 +140,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     "huey"
     "nh3"
     "psycopg2-binary"
+    "pypdf"
     "pypdfium2"
   ];
 

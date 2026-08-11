@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.26.1+174";
+  version = "1.26.7+180";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-GF7O28vv6KT+O3yYKdtgRkXq9o6uz4l0xkq5typOy+g=";
+    hash = "sha256-QRPgtzMRdfuflw36okY8DiXqPC+EJLjz8HQ3iL2Yxh8=";
   };
 in
 flutter341.buildFlutterApplication {
