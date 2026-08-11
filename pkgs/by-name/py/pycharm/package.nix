@@ -1,24 +1,21 @@
 {
-  stdenv,
-  lib,
   fetchurl,
-  jetbrains,
-  jetbrains-libdbm,
   fsnotifier,
-  python3,
+  jetbrains-libdbm,
+  jetbrains,
+  lib,
   musl,
+  python3,
+  stdenv,
 }:
 let
   pycharm-overrides = (
     finalAttrs: previousAttrs:
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs =
-        with python3.pkgs;
-        (previousAttrs.buildInputs or [ ])
-        ++ [
-          python3
-          setuptools
-        ];
+      buildInputs = (previousAttrs.buildInputs or [ ]) ++ [
+        python3
+        python3.pkgs.setuptools
+      ];
       preInstall = ''
         echo "compiling cython debug speedups"
         if [[ -d plugins/python-ce ]]; then

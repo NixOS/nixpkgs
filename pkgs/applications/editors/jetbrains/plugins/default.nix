@@ -1,12 +1,12 @@
 {
+  autoPatchelfHook,
+  callPackage,
+  darwin,
   fetchurl,
   fetchzip,
+  glib,
   lib,
   stdenv,
-  callPackage,
-  autoPatchelfHook,
-  glib,
-  darwin,
 }:
 {
   tests = callPackage ./tests.nix { };

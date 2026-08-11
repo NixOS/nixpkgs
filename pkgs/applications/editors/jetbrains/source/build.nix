@@ -1,23 +1,22 @@
 {
+  ant,
+  callPackage,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
+  fsnotifier,
+  glibc,
+  jetbrains-libdbm,
+  jetbrains,
+  kotlin,
   lib,
   linkFarm,
   makeWrapper,
-  runCommand,
-  stdenvNoCC,
-  rustPlatform,
-  callPackage,
-
-  ant,
-  fsnotifier,
-  glibc,
-  jetbrains,
-  jetbrains-libdbm,
-  kotlin,
   maven,
   p7zip,
+  runCommand,
+  rustPlatform,
+  stdenvNoCC,
 }:
 {
   version,
@@ -184,9 +183,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [
-    p7zip
     jbr
     jps-bootstrap
+    p7zip
   ];
   repo = mvnRepo;
 

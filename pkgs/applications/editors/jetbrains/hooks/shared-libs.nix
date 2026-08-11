@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   makeSetupHook,
   patchelf,
+  stdenv,
 }:
 makeSetupHook
   {

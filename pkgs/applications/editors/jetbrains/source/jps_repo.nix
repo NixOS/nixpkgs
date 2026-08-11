@@ -1,9 +1,8 @@
 {
-  runCommand,
   ant,
   jbr,
-
   jpsHash,
+  runCommand,
   src,
 }:
 runCommand "jps-bootstrap-repository"

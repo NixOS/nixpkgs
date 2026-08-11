@@ -18,11 +18,9 @@
   # for the aliases below
   warnAlias,
 
-  lib,
-  config,
   callPackage,
-
-  jetbrains,
+  config,
+  lib,
 
   vmopts ? null,
 }:

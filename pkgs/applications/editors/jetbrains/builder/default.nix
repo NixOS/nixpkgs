@@ -1,9 +1,9 @@
 # Builder for JetBrains IDEs (`mkJetBrainsProduct`)
 
 {
+  callPackage,
   lib,
   stdenv,
-  callPackage,
 
   vmopts ? null,
 }:

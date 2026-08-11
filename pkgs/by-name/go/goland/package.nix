@@ -1,11 +1,11 @@
 {
-  stdenv,
-  lib,
   fetchurl,
-  jetbrains,
-  jetbrains-libdbm,
   fsnotifier,
+  jetbrains-libdbm,
+  jetbrains,
+  lib,
   libgcc,
+  stdenv,
 }:
 let
   system = stdenv.hostPlatform.system;

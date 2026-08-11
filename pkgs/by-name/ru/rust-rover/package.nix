@@ -1,15 +1,15 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  jetbrains,
-  jetbrains-libdbm,
-  fsnotifier,
-  python3,
-  openssl,
-  libxcrypt-legacy,
   expat,
+  fetchurl,
+  fsnotifier,
+  jetbrains-libdbm,
+  jetbrains,
+  lib,
+  libxcrypt-legacy,
   libxml2,
+  openssl,
+  python3,
+  stdenv,
   xz,
 }:
 let
@@ -52,9 +52,9 @@ jetbrains.mkJetBrainsProduct {
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      python3
-      openssl
       libxcrypt-legacy
+      openssl
+      python3
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
       expat

@@ -1,7 +1,7 @@
 {
   fsnotifier,
-  lib,
   jetbrains,
+  lib,
   pycharm,
 }:
 let

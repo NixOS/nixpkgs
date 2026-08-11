@@ -1,21 +1,21 @@
 {
-  stdenv,
-  lib,
+  dotnetCorePackages,
+  expat,
   fetchurl,
-  jetbrains,
-  jetbrains-libdbm,
   fsnotifier,
-  openssl,
-  libxcrypt,
-  lttng-ust_2_12,
-  musl,
+  jetbrains-libdbm,
+  jetbrains,
+  lib,
   libice,
   libsm,
   libx11,
-  dotnetCorePackages,
   libxcb-keysyms,
-  expat,
+  libxcrypt,
   libxml2,
+  lttng-ust_2_12,
+  musl,
+  openssl,
+  stdenv,
   xz,
 }:
 let
@@ -60,11 +60,11 @@ in
   #       Somebody with a Darwin machine should investigate this.
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
+      libxcb-keysyms
       libxcrypt
       lttng-ust_2_12
       musl
-      libxcb-keysyms
+      openssl
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
       expat
@@ -98,6 +98,7 @@ in
   };
 }).overrideAttrs
   (attrs: {
+    # TODO: It is not correct to bundle the .NET in nixpkgs as-is, see https://github.com/NixOS/nixpkgs/issues/489048
     postInstall =
       (attrs.postInstall or "")
       + lib.optionalString stdenv.hostPlatform.isLinux ''
