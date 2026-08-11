@@ -96,6 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "A systemd GUI to manage service, timer, socket and other units.";
     homepage = "https://github.com/plrigaux/sysd-manager";
+    changelog = "https://github.com/plrigaux/sysd-manager/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ plrigaux ];
     platforms = lib.platforms.linux;
