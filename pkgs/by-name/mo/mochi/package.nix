@@ -72,7 +72,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       piotrkwiecinski
-      poopsicles
+      dibenzepin
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
