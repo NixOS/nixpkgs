@@ -3680,6 +3680,12 @@
     githubId = 47600778;
     name = "Arnav Vijaywargiya";
   };
+  bindusara-reddy = {
+    email = "business@waterfly.blue";
+    github = "bindusara-reddy";
+    githubId = 43317025;
+    name = "Bindusara";
+  };
   binsky = {
     email = "timo@binsky.org";
     github = "binsky08";
