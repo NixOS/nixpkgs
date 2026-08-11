@@ -652,9 +652,11 @@ let
             let
               # Indicate the host platform of the derivation if cross compiling.
               # Fixed-output derivations like source tarballs shouldn't get a host
-              # suffix. But we have some weird ones with run-time deps that are
-              # just used for their side-affects. Those might as well since the
-              # hash can't be the same. See #32986.
+              # suffix: their store path is derived from the name as well as the
+              # hash, so renaming them per target forks identical content across
+              # store paths. But we have some weird ones with run-time deps that
+              # are just used for their side-effects. Those might as well since
+              # the hash can't be the same. See #32986.
               hostSuffix = optionalString (
                 hostSuffixNecessary
                 && (
@@ -672,10 +674,13 @@ let
               ) stdenvHostSuffix;
 
               # Disambiguate statically built packages. This was originally
-              # introduce as a means to prevent nix-env to get confused between
-              # nix and nixStatic. This should be also achieved by moving the
-              # hostSuffix before the version, so we could contemplate removing
-              # it again.
+              # introduced as a means to prevent nix-env from getting confused
+              # between nix and nixStatic. The hostSuffix has since moved before
+              # the version, which already disambiguates anything built with a
+              # CC stdenv: pkgsStatic.hello is
+              # hello-static-x86_64-unknown-linux-musl-2.12.3. stdenvNoCC
+              # packages never get a hostSuffix though, so the marker is still
+              # their only disambiguator.
               staticMarker = stdenvStaticMarker;
             in
             sanitizeDerivationName (
