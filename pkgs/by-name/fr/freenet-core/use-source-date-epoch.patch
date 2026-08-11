@@ -1,0 +1,21 @@
+diff --git a/crates/core/build.rs b/crates/core/build.rs
+index 59b5a42..3215e03 100644
+--- a/crates/core/build.rs
++++ b/crates/core/build.rs
+@@ -132,3 +132,15 @@ fn emit_build_metadata() {
+     // Build timestamp (ISO 8601)
+-    let timestamp = chrono::Utc::now().format("%Y-%m-%dT%H:%M:%SZ").to_string();
++    let timestamp = match std::env::var("SOURCE_DATE_EPOCH") {
++        Ok(value) => {
++            let seconds = value
++                .parse::<i64>()
++                .expect("SOURCE_DATE_EPOCH must be a Unix timestamp");
++            chrono::DateTime::<chrono::Utc>::from_timestamp(seconds, 0)
++                .expect("SOURCE_DATE_EPOCH is outside the supported range")
++        }
++        Err(_) => chrono::Utc::now(),
++    }
++    .format("%Y-%m-%dT%H:%M:%SZ")
++    .to_string();
++    println!("cargo:rerun-if-env-changed=SOURCE_DATE_EPOCH");
+     println!("cargo:rustc-env=BUILD_TIMESTAMP={timestamp}");
