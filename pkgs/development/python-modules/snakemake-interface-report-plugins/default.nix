@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-report-plugins";
-  version = "1.3.0";
+  version = "2.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "snakemake";
     repo = "snakemake-interface-report-plugins";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3ugEmdO1dcusKXXBZBRszlZXX5fhJyYSSF5Uj5CKJkQ=";
+    hash = "sha256-DnPgM+VESlZTBGKDpt2f/TKVYDdA5uKkoon1rnDca2Y=";
   };
 
   build-system = [
