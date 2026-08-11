@@ -257,6 +257,7 @@ in
   enableExternalInterpreter ?
     isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
   __darwinAllowLocalNetworking ? false,
+  strictDeps ? true,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
@@ -1137,5 +1138,6 @@ lib.fix (
     // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
       inherit __darwinAllowLocalNetworking;
     }
+    // optionalAttrs (strictDeps || args ? strictDeps) { inherit strictDeps; }
   )
 )
