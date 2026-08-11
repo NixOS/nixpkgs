@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mpl-typst";
-  version = "0.2.1";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daskol";
     repo = "mpl-typst";
     tag = "v${version}";
-    hash = "sha256-lkO4BTo3duNAsppTjteeBuzgSJL/UnKVW2QXgrfVrqM=";
+    hash = "sha256-RVzovICoDqEnjq0HngSe4vLlPszSgkq1FF0/Jrnw34Y=";
   };
 
   postPatch = ''
@@ -53,14 +53,21 @@ buildPythonPackage rec {
     "mpl_typst.as_default"
   ];
 
-  disabledTests = [
-    # runs typst and gets "error: failed to download package"
-    "test_draw_path"
-    "test_draw_image_lenna"
-    "test_draw_image_spy"
-  ];
-
-  disabledTestPaths = lib.optional stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # These render generated Typst through the typst binary. The prologue
+    # imports @preview/based, so Typst attempts to download a package in the
+    # Nix sandbox.
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_path"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_path_clips_to_bbox"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_path_bbox_pixels"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_path_hatched_rect_pixels"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_path_hatched_rect_pixels_golden"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_text_colored"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_image_lenna"
+    "mpl_typst/backend_test.py::TestTypstRenderer::test_draw_image_spy"
+    "tests/regression/issue32_test.py::TestIssue32::test_reference"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fatal error when matplotlib creates a canvas
     "mpl_typst/backend_test.py"
   ];

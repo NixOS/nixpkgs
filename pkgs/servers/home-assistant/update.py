@@ -6,9 +6,8 @@ import asyncio
 import json
 import os
 import re
-import sys
 from subprocess import check_output, run
-from typing import Dict, Final, List, Optional, Union
+from typing import Final
 
 import aiohttp
 from aiohttp import ClientSession
@@ -21,15 +20,12 @@ ROOT: Final = check_output([
 ]).decode().strip()
 
 
-def run_sync(cmd: List[str]) -> None:
+def run_sync(cmd: list[str]) -> None:
     print(f"$ {' '.join(cmd)}")
-    process = run(cmd)
-
-    if process.returncode != 0:
-        sys.exit(1)
+    run(cmd, check=True)
 
 
-async def check_async(cmd: List[str]) -> str:
+async def check_async(cmd: list[str]) -> str:
     print(f"$ {' '.join(cmd)}")
     process = await asyncio.create_subprocess_exec(
         *cmd,
@@ -45,7 +41,7 @@ async def check_async(cmd: List[str]) -> str:
     return stdout.decode().strip()
 
 
-async def run_async(cmd: List[str]):
+async def run_async(cmd: list[str]):
     print(f"$ {' '.join(cmd)}")
 
     process = await asyncio.create_subprocess_exec(
@@ -116,11 +112,11 @@ class Nix:
     ]
 
     @classmethod
-    async def _run(cls, args: List[str]) -> Optional[str]:
+    async def _run(cls, args: list[str]) -> str | None:
         return await check_async(cls.base_cmd + args)
 
     @classmethod
-    async def eval(cls, expr: str) -> Union[List, Dict, int, float, str, bool]:
+    async def eval(cls, expr: str) -> list | dict | int | float | str | bool:
         response = await cls._run([
             "eval",
             "-f", f"{ROOT}/default.nix",
@@ -135,7 +131,7 @@ class Nix:
             raise RuntimeError("Nix eval response could not be parsed from JSON")
 
     @classmethod
-    async def hash_to_sri(cls, algorithm: str, value: str) -> Optional[str]:
+    async def hash_to_sri(cls, algorithm: str, value: str) -> str | None:
         return await cls._run([
             "hash",
             "to-sri",
@@ -227,7 +223,7 @@ class HomeAssistant:
         ])
 
 
-async def main(target_version: Optional[str] = None):
+async def main(target_version: str | None = None):
     headers = {}
     if token := os.environ.get("GITHUB_TOKEN", None):
         headers.update({"GITHUB_TOKEN": token})
@@ -263,7 +259,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "check", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=E501,EXE", __file__])
     run_sync(["isort", __file__])
 
     asyncio.run(main(args.version))

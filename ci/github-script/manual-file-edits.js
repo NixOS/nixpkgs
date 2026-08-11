@@ -1,12 +1,11 @@
-// @ts-check
 const { classify } = require('../supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details')
 
 /**
  * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context,
- *  core: import('@actions/core'),
+ *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
+ *  context: typeof import('@actions/github').context,
+ *  core: typeof import('@actions/core'),
  *  repoPath?: string,
  *  dry: boolean,
  * }} CheckManualFileEditsProps

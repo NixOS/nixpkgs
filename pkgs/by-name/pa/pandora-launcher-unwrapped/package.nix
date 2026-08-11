@@ -29,7 +29,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandora-launcher-unwrapped";
-  version = "5.2.2";
+  version = "5.3.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Moulberry";
     repo = "PandoraLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jUvCrz8srRRlXcrFWQ5Kx8V6KLc8cozZg+QYrcnMOUE=";
+    hash = "sha256-KjCpHg5n7VWN4OWt6IdxYUCaqC9auMbvolwIGSQ/BVs=";
   };
 
   # Currently the client id is hardcoded and must be patched like this.
@@ -73,8 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
   ];
-
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
 
   doCheck = false; # there aren't any tests
 

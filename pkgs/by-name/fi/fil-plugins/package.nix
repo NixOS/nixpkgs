@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       Each section has an active/bypass switch, frequency, bandwidth and gain controls.
       There is also a global bypass switch and gain control.
       The 2nd order resonant filters are implemented using a Mitra-Regalia style lattice filter.
-      All switches and controls are internally smoothed, so they can be used 'live' whithout any clicks or zipper noises.
+      All switches and controls are internally smoothed, so they can be used 'live' without any clicks or zipper noises.
       This should make this plugin a good candidate for use in systems that allow automation of plugin control ports, such as Ardour, or for stage use.
     '';
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html";

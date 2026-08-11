@@ -2,17 +2,18 @@
   lib,
   nix-update-script,
   buildGoModule,
-  fetchFromGitHub,
+  fetchFromGitea,
 }:
 buildGoModule (finalAttrs: {
   pname = "di-tui";
-  version = "1.14.0";
+  version = "1.15.0";
 
-  src = fetchFromGitHub {
-    owner = "acaloiaro";
+  src = fetchFromGitea {
+    domain = "code.adriano.fyi";
+    owner = "me";
     repo = "di-tui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P784Tf3XA/28PgKTr89yizKAX1MhAb4877gV7vVHBYE=";
+    hash = "sha256-3dYcecrDSfd5sP5PjkagbFt2RmhaQSVw6kMt9J7wyeM=";
   };
 
   vendorHash = "sha256-b7dG0nSjPQpjWUbOlIxWudPZWKqtq96sQaJxKvsQT9I=";
@@ -21,7 +22,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Simple terminal UI player for di.fm";
-    homepage = "https://github.com/acaloiaro/di-tui";
+    homepage = "https://code.adriano.fyi/me/di-tui";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.acaloiaro ];
     mainProgram = "di-tui";

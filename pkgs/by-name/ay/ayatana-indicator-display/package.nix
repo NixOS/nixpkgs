@@ -30,22 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-display";
-  version = "24.5.2";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-display";
     tag = finalAttrs.version;
-    hash = "sha256-rsZjEfAiz1HC5XMjPume1Y6miNAv1kmPFP4J/+NKlsA=";
+    hash = "sha256-A4v2cdsFgR50b8BGAMpR9DrHxlVlahaM8Fii+eQ3UcA=";
   };
-
-  patches = [
-    # This should be dropped once the issue is fixed upstream.
-    # https://github.com/AyatanaIndicators/ayatana-indicator-display/pull/108
-    ./patches/0001-service.cpp-Mark-create_phone_menu-as-static.patch
-    ./patches/0002-cppcheck-Workaround-undefined-function-like-macro-fo.patch
-    ./patches/0003-Fix-cppcheck-warning-has-no-initializer.patch
-  ];
 
   postPatch = ''
     # Replace systemd prefix in pkg-config query, use GNUInstallDirs location for /etc

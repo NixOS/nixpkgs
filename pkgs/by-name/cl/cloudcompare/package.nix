@@ -16,6 +16,7 @@
   mpfr,
   pcl,
   libsForQt5,
+  nixosTests,
   onetbb,
   xercesc,
   wrapGAppsHook3,
@@ -161,6 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "ccViewer";
     })
   ];
+
+  passthru.tests = nixosTests.cloudcompare;
 
   meta = {
     description = "3D point cloud and mesh processing software";

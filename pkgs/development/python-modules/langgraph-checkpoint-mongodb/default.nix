@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "libs/langgraph-checkpoint-mongodb/v";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -17,6 +17,7 @@
   withNode ? true,
   version,
   hash,
+  knownVulnerabilities ? [ ],
 }:
 let
   majorVersion = lib.versions.major version;
@@ -170,5 +171,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = "pnpm";
+    inherit knownVulnerabilities;
   };
 })

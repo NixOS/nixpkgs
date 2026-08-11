@@ -6,12 +6,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plasmavantage";
-  version = "0.30";
+  version = "0.31";
   src = fetchFromGitLab {
     owner = "Scias";
     repo = "plasmavantage";
     tag = finalAttrs.version;
-    hash = "sha256-++WewCzTWGrMTXhBQQ339W/bDgKO040xeBNhozljsko=";
+    hash = "sha256-SUsPb7NblnTpcju1d1km5877IPnaykiKd1bHJ/D6wyw=";
   };
 
   strictDeps = true;

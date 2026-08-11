@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cell";
-  version = "0.5.0";
+  version = "0.5.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "garritfra";
     repo = "cell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J13D46ttG7KlePyFZYxqjaMF7ZR5m3nTJ8/GLm4VH5o=";
+    hash = "sha256-43E2EW3SS35VyJpOE7KdDz7XcOsn3V9aVglIW1vPgIE=";
   };
 
-  cargoHash = "sha256-ZQXyt/hL6wamGrFvmrShoUCTSGAo8V5CuejAzO5oCuU=";
+  cargoHash = "sha256-4qWI1dKv84Ga6A2ImkI3rRypqm+UkDNzD94Gxl43wj0=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

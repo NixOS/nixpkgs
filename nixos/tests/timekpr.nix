@@ -1,13 +1,15 @@
-{ pkgs, lib, ... }:
+{
+  lib,
+  ...
+}:
+
 {
   name = "timekpr";
   meta.maintainers = [ lib.maintainers.atry ];
 
-  nodes.machine =
-    { pkgs, lib, ... }:
-    {
-      services.timekpr.enable = true;
-    };
+  containers.machine = {
+    services.timekpr.enable = true;
+  };
 
   testScript = ''
     start_all()

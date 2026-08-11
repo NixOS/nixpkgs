@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   requests,
   segno,
   setuptools,
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_0CheckHook
     writableTmpDirAsHomeHook
   ];
 

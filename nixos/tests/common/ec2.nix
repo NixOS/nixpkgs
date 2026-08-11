@@ -51,9 +51,11 @@ in
         )
         os.makedirs(image_dir, mode=0o700, exist_ok=True)
         disk_image = os.path.join(image_dir, "machine.qcow2")
+        QEMU_BIN = "${pkgs.qemu}"
+        QEMU_IMG = f"{QEMU_BIN}/bin/qemu-img"
         subprocess.check_call(
             [
-                "qemu-img",
+                QEMU_IMG,
                 "create",
                 "-f",
                 "qcow2",
@@ -64,7 +66,7 @@ in
                 disk_image,
             ]
         )
-        subprocess.check_call(["qemu-img", "resize", disk_image, "10G"])
+        subprocess.check_call([QEMU_IMG, "resize", disk_image, "10G"])
 
         # Note: we use net=169.0.0.0/8 rather than
         # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
@@ -74,7 +76,7 @@ in
         # turn off the DHCP server, but qemu does not have an option
         # to do that.
         start_command = (
-            "qemu-kvm -m 1024"
+            f"{QEMU_BIN}/bin/qemu-kvm -m 1024"
             + " -device virtio-net-pci,netdev=vlan0"
             + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${getExe imdsServer} ${metaData}'"
             + f" -drive file={disk_image},if=virtio,werror=report"

@@ -20,6 +20,7 @@
   libx11,
   libxcb,
   libxshmfence,
+  mesa-libclc,
   spirv-llvm-translator,
   spirv-tools,
   zlib,
@@ -59,13 +60,6 @@ stdenv.mkDerivation {
     ./opencl.patch
   ];
 
-  postPatch = ''
-    # Darwin only installs `swrast_dri.so`. It is symlinked to `libdril_dri.dylib`, but the script never terminates
-    # checking for `swrast_dri.dylib`, which isn’t what will be created.
-    substituteInPlace bin/install_megadrivers.py \
-      --replace-fail "            while ext != '.' + args.libname_suffix" "            while ext != '.so'"
-  '';
-
   outputs = [
     "out"
     "dev"
@@ -92,8 +86,8 @@ stdenv.mkDerivation {
     libpng
     libxml2 # should be propagated from libllvm
     llvmPackages.libclang
-    llvmPackages.libclc
     llvmPackages.libllvm
+    mesa-libclc
     python3Packages.python # for shebang
     spirv-llvm-translator
     spirv-tools

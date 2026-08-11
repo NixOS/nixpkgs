@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tgpt";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FsLJXJBPg9Lz5iOcoIMkcs8zH4hkSWKjlIU0MLjL4k0=";
+    hash = "sha256-bIIWzXdLneXQSwAGIAYv5GaSc9vtFIrOCscCt9qLZWs=";
   };
 
-  vendorHash = "sha256-MV86fp6684lBhFrqYXJCf1OguftncVVb/1wEPgvaOYc=";
+  vendorHash = "sha256-9uQvS6XZ3iEjtF9jygPLPJJwCiWaXzTrkjdANlvll+o=";
 
   buildInputs = [ libx11 ];
 

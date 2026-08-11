@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Aanok/jftui";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.nyanloutre ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "jftui";
   };
 })

@@ -27,8 +27,8 @@ mkCoqDerivation {
     lib.switch coq.coq-version [
       (case "9.1" "1.0.1")
     ] null;
-  release."1.0.1".sha256 = "sha256-HqbgUnGcZHkeG6qLf4qp/JT5oTPmdfOn1IJqnrloM2U=";
-  release."1.0.0".sha256 = "sha256-R+kWOZtR7T2LVQnHmLGDmGpLO0S76fPRWJpsO9nWqLE=";
+  release."1.0.1".hash = "sha256-HqbgUnGcZHkeG6qLf4qp/JT5oTPmdfOn1IJqnrloM2U=";
+  release."1.0.0".hash = "sha256-R+kWOZtR7T2LVQnHmLGDmGpLO0S76fPRWJpsO9nWqLE=";
   releaseRev = v: "v${v}";
 
   propagatedBuildInputs = [

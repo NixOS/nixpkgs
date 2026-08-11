@@ -1,6 +1,6 @@
 --- a/mlflow/server/__init__.py
 +++ b/mlflow/server/__init__.py
-@@ -471,6 +471,11 @@
+@@ -474,6 +474,11 @@
              else tempfile.mkdtemp()
          )
 +    # In Nix-packaged environments sys.path is populated by wrappers but

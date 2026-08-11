@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   tuya-device-sharing-sdk,
   pytestCheckHook,
   syrupy,
@@ -10,15 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tuya-device-handlers";
-  version = "0.0.22";
+  version = "0.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "tuya-device-handlers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6zAzHjOzCaPYNP+dwz4/2o0/WXvEAZzPIoJW5Nwenu8=";
+    hash = "sha256-kk48QGwhC8hqNNDgVGGelqHkoXmzMHa7FLBmhazpbho=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

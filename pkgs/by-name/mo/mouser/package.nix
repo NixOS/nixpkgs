@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  qt6,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
@@ -12,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mouser";
-  version = "3.6.0";
+  version = "3.7.3";
   pyproject = false;
 
   __structuredAttrs = true;
@@ -21,11 +22,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "TomBadash";
     repo = "Mouser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ESfkpswENa91wL1WSfDL/Wpu4sjhT8qibJ0wsEYHX+0=";
+    hash = "sha256-eAbaT9Q/dwmd++CXLjnWso8s7FGYKvbm+ja9MmRGq7A=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+  ];
+
+  # pyside6 does not bundle Qt's QML modules or plugins the way the PyPI
+  # wheel does, so the QtQuick imports and the SVG image/icon plugins must be
+  # provided here for wrapQtAppsHook to pick up.
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
   ];
 
   dependencies =
@@ -38,6 +54,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       with python3Packages;
       [
         evdev
+      ]
+    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with python3Packages;
+      [
+        pyobjc-core
+        pyobjc-framework-Cocoa
+        pyobjc-framework-Quartz
       ]
     );
 
@@ -52,12 +76,40 @@ python3Packages.buildPythonApplication (finalAttrs: {
     install -Dm444 packaging/linux/69-mouser-logitech.rules \
       -t $out/lib/udev/rules.d
   ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    appBundle="$out/Applications/Mouser.app"
+    mkdir -p "$appBundle/Contents/MacOS" "$appBundle/Contents/Resources"
+    install -Dm644 images/AppIcon.icns "$appBundle/Contents/Resources/AppIcon.icns"
+
+    cat > "$appBundle/Contents/Info.plist" <<'EOF'
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>CFBundleName</key><string>Mouser</string>
+      <key>CFBundleDisplayName</key><string>Mouser</string>
+      <key>CFBundleExecutable</key><string>Mouser</string>
+      <key>CFBundleIdentifier</key><string>io.github.tombadash.mouser</string>
+      <key>CFBundleIconFile</key><string>AppIcon</string>
+      <key>CFBundleShortVersionString</key><string>${finalAttrs.version}</string>
+      <key>CFBundleVersion</key><string>${finalAttrs.version}</string>
+      <key>CFBundlePackageType</key><string>APPL</string>
+      <key>NSHighResolutionCapable</key><true/>
+      <key>LSUIElement</key><true/>
+      <key>LSMinimumSystemVersion</key><string>12.0</string>
+    </dict>
+    </plist>
+    EOF
+  ''
   + ''
     runHook postInstall
   '';
 
+  # The wrapper is created manually below; there is no binary for the hook to wrap.
+  dontWrapQtApps = true;
+
   postFixup = ''
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/mouser \
+    makeQtWrapper ${python3Packages.python.interpreter} $out/bin/mouser \
       --prefix PYTHONPATH : "$PYTHONPATH" \
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -70,6 +122,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ''
   + ''
     --add-flags "$out/share/mouser/main_qml.py"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper $out/bin/mouser $out/Applications/Mouser.app/Contents/MacOS/Mouser
   '';
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [

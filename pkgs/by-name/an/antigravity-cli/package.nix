@@ -6,27 +6,24 @@
   versionCheckHook,
 }:
 let
-  wholeVersion = "1.0.7-5858071034068992"; # unfortunately this has dumb versioning
-  version = builtins.head (lib.splitString "-" wholeVersion);
+  version = "1.1.11";
+  buildId = "6181354723999744";
+  wholeVersion = "${version}-${buildId}";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
   sourceData = {
     x86_64-linux = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-x64/cli_linux_x64.tar.gz";
-      hash = "sha256-8kaHmc0XPAPuATHb4rrkMhUzBqaLqi7n1UQPFcRB4Go=";
+      hash = "sha256-8kOw7R3wtXxw1n5FA76FjmppB8oLFmu8h9Rh5sJaLK0=";
     };
     aarch64-linux = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-arm/cli_linux_arm64.tar.gz";
-      hash = "sha256-3ylG6ZW/9AuKydzzyMLtqC1ec2NnixFG/CJih26S0K0=";
+      hash = "sha256-m6mj3gLwDPFTcQF22hofNpC06doHEzcSLl/QYlXoPew=";
     };
     aarch64-darwin = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-arm/cli_mac_arm64.tar.gz";
-      hash = "sha256-e4VhL/9rUNgE2XyW8REz8QXEbzwsUFg41xNpUHfNLK0=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-x64/cli_mac_x64.tar.gz";
-      hash = "sha256-SECE7bAd0VneVeAvBs14Ortkcqg8CJy9xcq3ZnuqfKY=";
+      hash = "sha256-SK+7wgNOVGjmyt60Kj6XY1kSU85u5Y42WQ8bi7w4vX0=";
     };
   };
 in
@@ -41,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isElf [ autoPatchelfHook ];
 
   dontConfigure = true;
   dontBuild = true;

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "4.2.0";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wyihzf7KpnVuIdp5lmjhB7uLAGgtmI0TXYl29uaVC5Y=";
+    hash = "sha256-t7cdJjazG38T49y+x2B1akBNvZNXhN2ig3eNnHirV2g=";
   };
 
-  vendorHash = "sha256-QTDC0v0BPE3FoK9AAq1n2jWxOE9gB9OsoY2wnpcCDUQ=";
+  vendorHash = "sha256-6TJWtGTdTtzOpPvWsk4rtJwxZxkIxIA6QSAemOnHcJ4=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -72,15 +72,15 @@ buildGoModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/dependency_build_test.go \
+    substituteInPlace pkg/cmd/dependency_build_test.go \
       --replace-fail "TestDependencyBuildCmd" "SkipDependencyBuildCmd"
-    substituteInPlace cmd/helm/dependency_update_test.go \
+    substituteInPlace pkg/cmd/dependency_update_test.go \
       --replace-fail "TestDependencyUpdateCmd" "SkipDependencyUpdateCmd"
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/install_test.go \
+    substituteInPlace pkg/cmd/install_test.go \
       --replace-fail "TestInstall" "SkipInstall"
     # skipping as test fails in sandbox
-    substituteInPlace cmd/helm/pull_test.go \
+    substituteInPlace pkg/cmd/pull_test.go \
       --replace-fail "TestPullCmd" "SkipPullCmd" \
       --replace-fail "TestPullWithCredentialsCmd" "SkipPullWithCredentialsCmd"
   '';

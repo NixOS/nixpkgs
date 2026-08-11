@@ -12,22 +12,18 @@
   libGL,
   libjpeg,
   libpng,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2026.06.06";
+  version = "2026.07.15";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
-    rev = finalAttrs.version;
-    hash = "sha256-FLMEOpgESsGYvVejea59xbBcVWGUp7qgZLCDugolMXk=";
+    tag = finalAttrs.version;
+    hash = "sha256-kIUi5vXXI3R2P4ZsbfLdfmRexfpk0zWZAMhUjreZPuA=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libjpeg
     libpng
-    SDL2
-    SDL2_gfx
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
+    sdl3
   ];
 
   cmakeFlags = [

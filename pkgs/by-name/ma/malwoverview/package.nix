@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "malwoverview";
-  version = "8.0.2";
+  version = "8.0.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "alexandreborges";
     repo = "malwoverview";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dT1FnVm6J93mQHUfodVGgEFy7HAKFcHVicp4B9QKBrs=";
+    hash = "sha256-BIuz7QitSM7xOSwiIsitIdYXaBoENhzrOLVfyVcoy3M=";
   };
 
   build-system = with python3Packages; [

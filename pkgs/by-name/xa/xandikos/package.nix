@@ -3,18 +3,19 @@
   lib,
   nixosTests,
   python3Packages,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     tag = "v${version}";
-    hash = "sha256-lVxbqgxBhHJHxG3QozX9xvCZAOPSa85ATSE88i3zayA=";
+    hash = "sha256-nK+od6mJRj6I6qFhQmwwf6x+0kfC07VRVNKY6fkbNjc=";
   };
 
   build-system = with python3Packages; [
@@ -32,6 +33,12 @@ python3Packages.buildPythonApplication rec {
     multidict
     vobject
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage man/xandikos{,-milter}.8
+  '';
 
   passthru.tests.xandikos = nixosTests.xandikos;
 

@@ -8,7 +8,7 @@
   unixtools,
 }:
 let
-  version = "0.30.4";
+  version = "0.30.6";
 in
 buildGoModule {
   pname = "step-cli";
@@ -18,7 +18,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-ToM+RzpioI+TlljlptYY0jnKGNdITzJ/xeWf4azhT/4=";
+    hash = "sha256-fMHvv14ToKq73h3aLJBebzhIJQghfBOX6C0hvDODHN8=";
     # this file change depending on git branch status (via .gitattributes)
     # https://github.com/NixOS/nixpkgs/issues/84312
     postFetch = ''

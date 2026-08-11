@@ -92,7 +92,7 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Probabalistic Symbolic Model Checker";
+    description = "Probabilistic Symbolic Model Checker";
 
     homepage = "https://www.prismmodelchecker.org";
     license = lib.licenses.gpl2Plus;

@@ -5,15 +5,15 @@
   puredata,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyclone";
-  version = "unstable-2023-09-12";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-cyclone";
-    rev = "7c470fb03db66057a2198843b635ac3f1abde84d";
-    hash = "sha256-ixfnmeoRzV0qEOOIxCV1361t3d59fwxjHWhz9uXQ2ps=";
+    tag = "cyclone_${finalAttrs.version}";
+    hash = "sha256-nAnokWcy3Rd1nFctAb6F3DBwryQvB39zkFRos8sB0Ao=";
   };
 
   buildInputs = [ puredata ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

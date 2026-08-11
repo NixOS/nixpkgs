@@ -15,22 +15,22 @@
 }:
 
 let
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-jQQ54By77dOVSIu08YhJn+EUV0D03j1bcMQRk9404RE=";
+    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python313Packages.python.override {
-    packageOverrides = self: super: {
+  python3Packages = python313Packages.overrideScope (
+    self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
         src = fetchFromGitHub {
@@ -43,9 +43,10 @@ let
 
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
-    };
-  };
-  python3Packages = python.pkgs;
+    }
+  );
+
+  inherit (python3Packages) python;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -101,6 +102,9 @@ python3Packages.buildPythonApplication rec {
     # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resolution in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''
@@ -238,9 +242,6 @@ python3Packages.buildPythonApplication rec {
     ffmpeg-headless
     pytestCheckHook
   ];
-
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
 
   preCheck = ''
     # Unavailable in the build sandbox

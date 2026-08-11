@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyzx";
-  version = "0.10.3";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxcalc";
     repo = "pyzx";
     tag = "v${version}";
-    hash = "sha256-pvwn1Kva2T9twrWieqWmB7DR+vTbRsARs1ltHQ3V2g4=";
+    hash = "sha256-NsA+txVj938sk10DEZIsN2Rveo0z6PIioWPHQ3+AIuA=";
   };
 
   build-system = [ setuptools ];

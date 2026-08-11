@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "30.0.4";
+  version = "30.2.6";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-kkKiGRxztEVFo/wlcdBYcDlxadNarcTyL1MqwonfVY4=";
+    hash = "sha256-hn+Lrsn+aNZqVFcyLinuJjUiQgai0o4F5d5cT9CvtLA=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-hv1LQwsSOsBR5l/joUmXq6foQsVilH+jw3Wje24ISCg=";
+    hash = "sha256-PnYUy0Arxo5uTYyYfUEkbd4u7oIOHkEc0/ufp0umBhE=";
   };
 
   nativeBuildInputs = [
@@ -64,19 +64,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -R ${electron.dist}/Electron.app Electron.app
-    chmod -R u+w Electron.app
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
     sed -i "/afterSign/d" electron-builder-linux-mac.json
-  ''
-  + ''
+
     npm exec electron-builder -- \
       --dir \
-      ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json --config.mac.identity=null"} \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
-      -c.electronVersion=${electron.version}
+      --config electron-builder-linux-mac.json \
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
 
     runHook postBuild
   '';

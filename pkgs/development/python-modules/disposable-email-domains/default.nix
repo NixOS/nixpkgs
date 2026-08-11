@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "disposable-email-domains";
-  version = "0.0.193";
+  version = "0.0.237";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "disposable_email_domains";
     inherit (finalAttrs) version;
-    hash = "sha256-5XT3UtSwPM2xQM44QgezX0YitUXR4xS/2tICH/O6BB4=";
+    hash = "sha256-gKBV8rICYFEBabn5ZqDQbyoF1zohS34V8VReD8z4elg=";
   };
 
   build-system = [

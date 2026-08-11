@@ -13,24 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "findutils";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
+    sha256 = "sha256-v9GcsGzHHzNS1WfpAoTYzawCrIl3S76t8LUzsMEUMv0=";
   };
 
   postPatch = ''
-    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
   '';
 
   patches = [
     ./no-install-statedir.patch
-
-    # Fixes test-float failure on ppc64 with C23
-    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
-    # Multiple upstream commits squashed with adjustments, see header
-    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
   ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
@@ -53,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
-    "SORT=${coreutils}/bin/sort"
+    "SORT=${lib.getExe' coreutils "sort"}"
     "--localstatedir=/var/cache"
   ];
 
@@ -86,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
+    changelog = "https://cgit.git.savannah.gnu.org/cgit/findutils.git/tree/NEWS?h=v${finalAttrs.version}";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
     longDescription = ''
       The GNU Find Utilities are the basic directory searching

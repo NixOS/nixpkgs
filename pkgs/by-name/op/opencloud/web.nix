@@ -10,20 +10,20 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-web";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-awEGCmdauqHkigXqumOYs8woOyY8gIccmzKOyrZ7SwQ=";
+    hash = "sha256-BiOue8+zQ3+6RLiDbLMnxKEen2aav3bljji4d+0Hr5c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-oIVbhvFiVu0S7sSs5u14M0A1+Q1WmiAsyoBt8QtojyE=";
+    hash = "sha256-gCsgnOEi9rvtwTZy8J/i63D92Gl2V9ZihxCJ+Y5hLUE=";
   };
 
   nativeBuildInputs = [

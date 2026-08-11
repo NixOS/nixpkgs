@@ -32,29 +32,29 @@
   zlib,
 }:
 
-let
-  asepriteStrings = fetchFromGitHub {
-    owner = "aseprite";
-    repo = "strings";
-    rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
-    hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
-  };
-in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.17.2";
+  version = "1.3.18.1";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+rLrk/c3WLqNhXQ7J0eeqZ3h4PsbZad61Cxw0RubWgk=";
+    hash = "sha256-uItjmYg21Ph2QIYFKm0N6kVwJtedH0aVKm8hSbQcJIM=";
   };
 
-  # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
+  asepriteStrings = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "strings";
+    rev = "417074f649f359f98511fc87a707c276d87f5739";
+    hash = "sha256-5bB7yK4eJHhkUwGYtIFYdFXpRrBt69VBbTh7EmPFI08=";
+  };
+
+  # Translation files are copied without overwriting existing ones to preserve
+  # the potentially more up-to-date English file from the main source.
   postUnpack = ''
-    cp --no-clobber ${asepriteStrings}/* "$sourceRoot/data/strings"
+    cp --no-clobber ${finalAttrs.asepriteStrings}/* "$sourceRoot/data/strings"
   '';
 
   nativeBuildInputs = [
@@ -174,6 +174,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     # Keep $out/bin clean on Darwin; the bundle lives under $out/Applications.
     rmdir "$out/bin" 2>/dev/null || true
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.aseprite.org/";

@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gtk-engine-murrine,
   jdupes,
   kdePackages,
 }:
@@ -86,8 +85,6 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ jdupes ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
   dontWrapQtApps = true;
 
   installPhase = ''
@@ -107,7 +104,7 @@ stdenvNoCC.mkDerivation {
     rm -r $out/share/themes/*/src
     rm -r $out/share/themes/*/cinnamon/*.scss
     rm -r $out/share/themes/*/gnome-shell/{earlier-versions,extensions,*.scss}
-    rm -r $out/share/themes/*/gtk-2.0/{assets.svg,assets.txt,links.fish,render-assets.sh}
+    rm -r $out/share/themes/*/gtk-2.0
     rm -r $out/share/themes/*/gtk-3.0/{apps,widgets,*.scss}
     rm -r $out/share/themes/*/gtk-4.0/{apps,widgets,*.scss}
     rm -r $out/share/themes/*/xfwm4/{assets,render_assets.fish}

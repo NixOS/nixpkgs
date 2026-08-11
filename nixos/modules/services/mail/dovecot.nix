@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    all
     attrsToList
     concatMapStringsSep
     concatStringsSep
@@ -19,7 +18,6 @@ let
     isBool
     isDerivation
     isInt
-    isList
     isPath
     isString
     listToAttrs
@@ -98,53 +96,67 @@ let
     i: n: v:
     "${i}${toString n} = ${v}";
 
-  formatKeyValue =
-    indent: n: v:
-    if (v == null) then
-      ""
-    else if isInt v then
-      toOption indent n (toString v)
+  isPrimitive = v: !isAttrs v || isDerivation v;
+
+  formatPrimitive =
+    v:
+    if isInt v then
+      toString v
     else if isBool v then
-      toOption indent n (yesOrNo v)
+      yesOrNo v
     else if isString v then
-      toOption indent n v
-    else if isList v then
-      if all isString v then
-        toOption indent n (concatStringsSep " " v)
-      else
-        map (formatKeyValue indent n) v
+      v
     else if isPath v || isDerivation v then
       # paths -> copy to store
       # derivations -> just use output path instead of looping over the attrs
-      toOption indent n "${v}"
-    else if isAttrs v && v ? _section then
-      let
-        sectionType = v._section.type;
-        sectionName = v._section.name;
-        sectionTitle = concatStringsSep " " (
-          filter (s: s != null) [
-            sectionType
-            sectionName
-          ]
-        );
-      in
-      concatStringsSep "\n" (
-        [
-          "${indent}${sectionTitle} {"
-        ]
-        ++ (mapAttrsToList (formatKeyValue "${indent}  ") (removeAttrs v [ "_section" ]))
-        ++ [ "${indent}}" ]
-      )
-    else if isAttrs v then
-      concatStringsSep "\n" (
-        [
-          "${indent}${n} {"
-        ]
-        ++ (mapAttrsToList (formatKeyValue "${indent}  ") v)
-        ++ [ "${indent}}" ]
-      )
+      "${v}"
     else
-      throw (traceSeq v "services.dovecot2.settings: unexpected type");
+      throw (traceSeq v "services.dovecot2.settings: unexpected primitive type");
+
+  formatSection =
+    indent: n: v:
+    let
+      sectionTitle =
+        if v ? _section then
+          concatStringsSep " " (
+            filter (s: s != null) [
+              v._section.type
+              v._section.name
+            ]
+          )
+        else
+          n;
+      inner = removeAttrs v [ "_section" ];
+    in
+    concatStringsSep "\n" (
+      [ "${indent}${sectionTitle} {" ]
+      ++ flatten (mapAttrsToList (primitiveLinesFor "${indent}  ") inner)
+      ++ flatten (mapAttrsToList (sectionLinesFor "${indent}  ") inner)
+      ++ [ "${indent}}" ]
+    );
+
+  # emit lines for a k=v pair only when the value is a primitive
+  primitiveLinesFor =
+    indent: n: v:
+    let
+      primitives = filter isPrimitive (flatten [ v ]);
+      hasOnlySections = primitives == [ ] && v != [ ];
+    in
+    # Only emit an empty list if the original entry was also an empty list.
+    # This is so that values like k = [{ ... }] will not produce an output
+    # here, but k = [] will, even though they result in the same
+    # primitives = [].
+    optional (!hasOnlySections && v != null) (
+      toOption indent n (concatMapStringsSep " " formatPrimitive primitives)
+    );
+
+  # emit lines for a k=v pair only when the value is *not* a primitive
+  sectionLinesFor =
+    indent: n: v:
+    let
+      sections = filter (e: !isPrimitive e) (flatten [ v ]);
+    in
+    map (e: formatSection indent n e) sections;
 
   doveConf =
     let
@@ -156,10 +168,13 @@ let
       ];
     in
     concatStringsSep "\n" (
-      optional (configVersion != null) (formatKeyValue "" "dovecot_config_version" configVersion)
-      ++ optional (storageVersion != null) (formatKeyValue "" "dovecot_storage_version" storageVersion)
+      optionals (configVersion != null) (primitiveLinesFor "" "dovecot_config_version" configVersion)
+      ++ optionals (storageVersion != null) (
+        primitiveLinesFor "" "dovecot_storage_version" storageVersion
+      )
       ++ optionals (cfg.includeFiles != [ ]) (map (f: "!include ${f}") cfg.includeFiles)
-      ++ flatten (mapAttrsToList (formatKeyValue "") remainingSettings)
+      ++ flatten (mapAttrsToList (primitiveLinesFor "") remainingSettings)
+      ++ flatten (mapAttrsToList (sectionLinesFor "") remainingSettings)
     );
 
   isPre24 = versionOlder cfg.package.version "2.4";

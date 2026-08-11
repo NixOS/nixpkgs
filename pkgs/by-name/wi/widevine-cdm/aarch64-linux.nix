@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp squashfs-root/WidevineCdm/LICENSE LICENSE.txt
   '';
 
-  # Accoring to widevine-installer: "Hack because Chromium hardcodes a check for this right now..."
+  # According to widevine-installer: "Hack because Chromium hardcodes a check for this right now..."
   postInstall = ''
     install -vD manifest.json "$out/share/google/chrome/WidevineCdm/manifest.json"
     install -vD LICENSE.txt "$out/share/google/chrome/WidevineCdm/License.txt"

@@ -16,6 +16,7 @@
 
   # tests
   pytest-asyncio,
+  pytest-dotenv,
   pytestCheckHook,
 }:
 
@@ -55,6 +56,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-dotenv
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.cli;

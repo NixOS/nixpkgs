@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "compressed-rtf";
   version = "1.0.7";
   pyproject = true;
@@ -14,12 +14,11 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "delimitry";
     repo = "compressed_rtf";
-    # https://github.com/delimitry/compressed_rtf/issues/15
-    rev = "581400c1b4c69ab0d944cfb5ca82c32059bbcc96";
-    hash = "sha256-ivvND+cOCAmRyO8yL0+WhFY/2OkrJ+E/o4xWWd7ivHA=";
+    tag = finalAttrs.version;
+    hash = "sha256-eQ1rX+IyQG6oStd+ELIMNJ3EjTKJTA3tHzuxdIuKgGs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -28,9 +27,10 @@ buildPythonPackage {
   enabledTestPaths = [ "tests/tests.py" ];
 
   meta = {
+    changelog = "https://github.com/delimitry/compressed_rtf/releases/tag/${finalAttrs.src.tag}";
     description = "Compressed Rich Text Format (RTF) compression and decompression";
     homepage = "https://github.com/delimitry/compressed_rtf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

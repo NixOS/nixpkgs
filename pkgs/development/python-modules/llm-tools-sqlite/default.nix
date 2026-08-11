@@ -10,17 +10,22 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-tools-sqlite";
   version = "0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-tools-sqlite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VAmK4cXzZWTWCU92TwMdhNJPvYPZ88t5BZe8vo60SZY=";
   };
+
+  patches = [
+    ./fix-test.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -39,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM tools for running queries against SQLite";
     homepage = "https://github.com/simonw/llm-tools-sqlite";
-    changelog = "https://github.com/simonw/llm-tools-sqlite/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-tools-sqlite/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

@@ -8,6 +8,11 @@
   _7zz,
   cctools,
   validatePkgConfig,
+  # sets MKL_NUM_THREADS for packages
+  # invoking mkl during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://www.intel.com/content/www/us/en/docs/onemkl/developer-guide-linux/2023-0/mkl-domain-num-threads.html
+  checkPhaseThreadLimitHook,
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -85,6 +90,10 @@ stdenvNoCC.mkDerivation (
       else
         [ rpmextract ]
     );
+
+    propagatedNativeBuildInputs = [
+      checkPhaseThreadLimitHook
+    ];
 
     buildPhase =
       if stdenvNoCC.hostPlatform.isDarwin then
@@ -210,7 +219,6 @@ stdenvNoCC.mkDerivation (
       license = lib.licenses.issl;
       platforms = [
         "x86_64-linux"
-        "x86_64-darwin"
       ];
     };
   }

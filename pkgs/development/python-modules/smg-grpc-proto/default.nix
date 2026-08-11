@@ -9,7 +9,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "smg-grpc-proto";
-  version = "0.4.8";
+  version = "0.4.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     format = "setuptools";
     pname = "smg_grpc_proto";
     inherit (finalAttrs) version;
-    hash = "sha256-BK2sEbhHsa5/+yej9SB5A06SHB+9oCuuMmwENHJPyHY=";
+    hash = "sha256-VBVhjSUuWitD0du9LB6uMFdgBw3SRzUwgUCu0Gp0hr4=";
   };
 
   build-system = [

@@ -12,13 +12,13 @@
 
 buildOctavePackage rec {
   pname = "audio";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-audio";
     tag = "release-${version}";
-    sha256 = "sha256-Qy9It6IiLJTvTlet3L/EP7qL58U0AUKHilmSKa2nATU=";
+    sha256 = "sha256-DO7tNnYIJME08u8Kxbgkq8D4ZT0dvxiqK2deJEWmCyU=";
   };
 
   nativeBuildInputs = [

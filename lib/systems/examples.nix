@@ -332,12 +332,6 @@ rec {
     platform = { };
   };
 
-  x86_64-darwin = {
-    config = "x86_64-apple-darwin";
-    xcodePlatform = "MacOSX";
-    platform = { };
-  };
-
   #
   # UEFI
   #
@@ -449,8 +443,14 @@ rec {
   # WASM
   #
 
+  wasm32-wasip1 = {
+    config = "wasm32-unknown-wasip1";
+    useLLVM = true;
+  };
+
+  # Historical-reasons alias for wasm32-wasip1.
   wasi32 = {
-    config = "wasm32-unknown-wasi";
+    config = "wasm32-unknown-wasip1";
     useLLVM = true;
   };
 

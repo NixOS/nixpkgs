@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "csv2md";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lzakharov";
     repo = "csv2md";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-51MCeM/zfjYMhB8Ryt1RMevEwszAzgYrJsyViEIOYVY=";
+    hash = "sha256-UgX05ObIG3+Cucb0lC/+5w1WRB8eZbOeBpJoYHTotiw=";
   };
 
   build-system = [ setuptools ];

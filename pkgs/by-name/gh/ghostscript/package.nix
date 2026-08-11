@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.07.0";
+  version = "10.07.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }/ghostscript-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3azk4XIflnpVA5uv9WSEAiXguqHU9UMiR8oczRRzt8E=";
+    hash = "sha256-HNt2bejbjx5YnIF/CcWFXqX2XfyFQORlpprBTBhBYCU=";
   };
 
   patches = [
@@ -233,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ghostscript.com/";
+    changelog = "https://ghostscript.readthedocs.io/en/gs${finalAttrs.version}/News.html";
     description = "PostScript interpreter (mainline version)";
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an

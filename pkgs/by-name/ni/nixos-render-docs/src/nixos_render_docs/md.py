@@ -579,6 +579,58 @@ def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
 
     return do_add
 
+
+def _gfm_alerts(md: markdown_it.MarkdownIt) -> None:
+
+    _ALERT_PATTERN = re.compile(r"^\[\!(TIP|NOTE|IMPORTANT|WARNING|CAUTION)\][ \t]*(?:\n|$)", re.IGNORECASE)
+
+    @dataclasses.dataclass
+    class Entry:
+        open: Token
+        content: Token | None = None
+
+    """
+    Find blockquote tokens and convert GFM-alert-style blockquotes to admonition tokens.
+    """
+    def gfm_alert(state: markdown_it.rules_core.StateCore) -> None:
+        stack: list[Entry] = []
+        size = len(state.tokens)
+
+        for i, token in enumerate(state.tokens):
+            match token.type:
+                case "blockquote_open":
+                    entry = Entry(token)
+                    # Get the first inline token of the blockquote's first paragraph
+                    if i + 2 < size:
+                        para = state.tokens[i + 1]
+                        inline = state.tokens[i + 2]
+                        if para and para.type == "paragraph_open" and inline and inline.type == "inline":
+                            entry.content = inline
+                    stack.append(entry)
+
+                case "blockquote_close":
+                    entry = stack.pop()
+
+                    if entry.content is None:
+                        continue
+
+                    m = _ALERT_PATTERN.match(entry.content.content)
+                    if m is None:
+                        continue
+
+                    # Remove the alert marker from the rendered text.
+                    entry.content.content = entry.content.content[m.end() :]
+
+                    # Rewrite the enclosing blockquote as an admonition.
+                    entry.open.type = "admonition_open"
+                    entry.open.tag = "div"
+                    entry.open.meta["kind"] = m.group(1).lower()
+                    token.type = "admonition_close"
+                    token.tag = "div"
+
+    md.core.ruler.after("block", "github-alerts", gfm_alert)
+
+
 TR = TypeVar('TR', bound='Renderer')
 
 class Converter(ABC, Generic[TR]):
@@ -626,6 +678,7 @@ class Converter(ABC, Generic[TR]):
         self._md.use(_block_attr)
         self._md.use(_block_titles("example"))
         self._md.use(_block_titles("figure"))
+        self._md.use(_gfm_alerts)
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str) -> list[Token]:

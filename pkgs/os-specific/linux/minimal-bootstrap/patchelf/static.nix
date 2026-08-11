@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -31,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -42,6 +40,8 @@ bash.runCommand "${pname}-${version}"
       gnutar
       gzip
     ];
+
+    disallowedReferences = [ gcc ];
 
     passthru.tests.get-version =
       result:
@@ -69,12 +69,12 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc \
-      CXXFLAGS=-static
+      CXXFLAGS="-g0 -O2 -DNDEBUG -ffile-prefix-map=${gcc}=. -fmacro-prefix-map=${gcc}=."
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/share
   ''

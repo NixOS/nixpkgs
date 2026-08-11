@@ -16,8 +16,25 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
   };
 
+  postPatch =
+    # Copy-pasting typo
+    # https://github.com/Dr-Noob/cpufetch/issues/350
+    ''
+      substituteInPlace src/ppc/udev.c \
+        --replace-fail 'memset(name, 0, sizeof(char) * 128)' 'memset(path, 0, sizeof(char) * 128)'
+    '';
+
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  # Upstream Makefile bug: for x86 builds, sysctl.c is only added to
+  # SOURCE on FreeBSD even though cpuid.c calls get_sys_info_by_name
+  # (defined there) on darwin too. Without this the x86_64-darwin
+  # build fails to link with "Undefined symbols: _get_sys_info_by_name".
+  # Widen the conditional to cover Darwin alongside FreeBSD.
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./darwin-x86-sysctl.patch
   ];
 
   installPhase = ''

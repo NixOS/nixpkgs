@@ -70,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/common/load_save.cpp \
       --replace-fail "/usr/share/" "$out/share/"
+
+    substituteInPlace JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/cpu.c \
+      --replace-fail "__sigemptyset(&sigill_sse.sa_mask);" "sigemptyset(&sigill_sse.sa_mask);"
   '';
 
   meta = {

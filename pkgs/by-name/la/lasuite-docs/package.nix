@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "5.2.1";
+  version = "5.4.1";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-FRN4rcS2aYoYjFY05nYV9pYz0Es8X3EWsD/oPdp4kpI=";
+    hash = "sha256-Xomq2i1t1POgggcAR8FAWf+Lr0y6YOKGvANFOv/BH20=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-MYzADDcXHGieGkygmlbZQbYcS68NdKWyHYGgoSaqDO8=";
+      hash = "sha256-miA1ysqNSaBZSb2B2uqTx1rea9R5/AgRfuCPr5X0bx8=";
     };
 
     nativeBuildInputs = [
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
   ];
 

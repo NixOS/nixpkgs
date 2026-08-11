@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests-cache";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qil5z54kkxu8QlPQ2P/7jo+VyfC+KhhiSUyAVmuLG/o=";
+    hash = "sha256-iqoP7NalipY3BXMQkh+lrzPtPQehYg3bB/3azgx0iuo=";
   };
 
   build-system = [ hatchling ];
@@ -98,7 +98,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
-    changelog = "https://github.com/requests-cache/requests-cache/blob/$v{finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${finalAttrs.version}/HISTORY.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     # bumps better-sqlite3 to work with electron 39+
     # also fixes outdated yarn.lock
     ./bump-better-sqlite3.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -115,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-5DBVlCWlUXYvo0bJWQwvSNMW4P9E8kjE9RQe9/ViJM0=";
+    hash = "sha256-TFisR5GwcKmuddGhe0i6rAmr2wDWzed/mXnxVGARYK0=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
@@ -241,6 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r static/node_modules resources/node_modules
   '';
 
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
+
   yarnBuildScript = "release-electron";
 
   installPhase = ''
@@ -257,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/logseq \
         --add-flags $out/share/logseq/resources/app \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --set-default LOCAL_GIT_DIRECTORY ${git} \
         --inherit-argv0
   ''

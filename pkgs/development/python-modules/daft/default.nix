@@ -1,16 +1,17 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchgit,
-  pythonOlder,
-  rustPlatform,
-  stdenv,
 
+  # cargoDeps
+  rustPlatform,
+
+  # nativeBuildInputs
   cargo,
-  nasm,
   pkg-config,
   rustc,
+  nasm,
 
   # dependencies
   fsspec,
@@ -78,67 +79,54 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.14";
+  version = "0.7.23";
   pyproject = true;
   __structuredAttrs = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qw1NB+RvXOFMHZvqpD5CSLWSUUKmtfWr0EyBgRMv2lA=";
+    hash = "sha256-SFK4iTmrXOgW/wRMs5kTQP+GcMK8W17nmMFbaXAydSU=";
   };
 
-  cargoDeps =
-    (rustPlatform.importCargoLock.override {
-      fetchgit =
-        args:
-        if (args.url or null) == "https://github.com/Eventual-Inc/azure-sdk-for-rust" then
-          fetchgit (
-            args
-            // {
-              postFetch = (args.postFetch or "") + ''
-                substituteInPlace $out/services/Cargo.toml \
-                  --replace-fail '"mgmt/batch",' '"mgmt/batch", "svc/blobstorage",'
-              '';
-            }
-          )
-        else
-          fetchgit args;
-    })
-      {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "azure_core-0.21.0" = "sha256-I8kzIkguRa3REwii0xsFFpNhE90/QX5msXwE6rrzDlY=";
-        };
-      };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-x/NOvQRqZhN7x1D/Mga/kMIAgK0bFn5Yuh3jfQPNj5Y=";
+
+    # azure-sdk-for-rust omits svc/blobstorage from the services workspace
+    postBuild = ''
+      substituteInPlace "$out"/git/*/services/Cargo.toml \
+        --replace-fail '"mgmt/batch",' '"mgmt/batch", "svc/blobstorage",'
+    '';
+  };
 
   postPatch = ''
     substituteInPlace Cargo.toml \
-      --replace-fail 'version = "0.3.0-dev0"' 'version = "${finalAttrs.version}"'
-
-    # ArrayChunks::into_remainder() returns IntoIter<_, N> on current stable
-    # rustc but Option<IntoIter<_, N>> on the nightly upstream pins.
+      --replace-fail \
+        'version = "0.3.0-dev0"' \
+        'version = "${finalAttrs.version}"'
+  ''
+  # ArrayChunks::into_remainder() returns IntoIter<_, N> on current stable
+  # rustc but Option<IntoIter<_, N>> on the nightly upstream pins.
+  + ''
     substituteInPlace src/daft-minhash/src/lib.rs \
-      --replace-fail 'chunks.into_remainder()' 'Some(chunks.into_remainder())'
-
-    # `hash_map_macro` was renamed/removed in newer rustc; the gate is declared
-    # but never used in the crate.
-    substituteInPlace src/daft-distributed/src/lib.rs \
-      --replace-fail '#![feature(hash_map_macro)]' ""
+      --replace-fail \
+        'chunks.into_remainder()' \
+        'Some(chunks.into_remainder())'
   '';
 
   nativeBuildInputs = [
     cargo
     pkg-config
-    rustc
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    rustc
   ]
-  ++ lib.optional stdenv.hostPlatform.isx86_64 nasm;
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    nasm
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -154,8 +142,10 @@ buildPythonPackage (finalAttrs: {
     RUSTC_BOOTSTRAP = "1";
   };
 
-  pythonRelaxDeps = [ "fsspec" ];
-
+  pythonRelaxDeps = [
+    "fsspec"
+    "tqdm"
+  ];
   dependencies = [
     fsspec
     packaging
@@ -247,11 +237,12 @@ buildPythonPackage (finalAttrs: {
     memray
     moto
     numpy
-    opencv-python
     openai
+    opencv-python
     pandas
     pgvector
     pillow
+    psycopg
     pydantic
     pyiceberg
     pymysql
@@ -310,9 +301,37 @@ buildPythonPackage (finalAttrs: {
 
     # ray runtime OOMs
     "tests/ray"
+
+    # tries to reach huggingface.co despite the "mocked" name (dns error)
+    "tests/datasets/test_common_crawl_mocked.py"
   ];
 
   disabledTests = [
+    # ValueError: numeric_only accepts only Boolean values
+    "test_sum_groupby_sorted"
+    "test_groupby_count_rows"
+    "test_distinct_all_columns"
+    "test_sum_groupby"
+    "test_mean_groupby"
+    "test_sum_groupby_sorted"
+
+    # daft.exceptions.DaftCoreException: DaftError::ComputeError Caught panic when spawning blocking task in the IO runtime:
+    # Client::new(): reqwest::Error { kind: Builder, source: General("No CA certificates were loaded from the system") }
+    "test_opendal_fs_glob_parquet"
+    "test_opendal_fs_read_csv"
+    "test_opendal_fs_read_parquet"
+    "test_opendal_fs_roundtrip_csv_multiple_columns"
+    "test_opendal_fs_roundtrip_parquet_empty"
+    "test_opendal_fs_roundtrip_parquet_large"
+    "test_opendal_fs_roundtrip_parquet_multiple_columns"
+    "test_opendal_fs_roundtrip_parquet_partitioned"
+    "test_opendal_fs_write_csv"
+    "test_opendal_fs_write_parquet"
+
+    # same "No CA certificates were loaded from the system" IO-runtime panic
+    "test_alias_to_fs_reads_parquet"
+    "test_alias_to_fs_write_and_read"
+
     # writes via relative paths fail in the sandbox
     "test_append_and_overwrite_local_relative_path"
 
@@ -321,6 +340,15 @@ buildPythonPackage (finalAttrs: {
 
     # broken upstream
     "test_table_concat_schema_mismatch"
+
+    # requires the daft[hdf5] extra (h5py), which is not packaged
+    "test_trajectory_requires_trajectory_column"
+
+    # numpy/pandas/pyarrow are newer than upstream's pins, causing assertion skew
+    "test_download_with_missing_urls" # None vs nan
+    "test_download_with_none" # None vs nan
+    "test_from_pandas_roundtrip" # Timestamp[us] vs Timestamp[ns]
+    "test_infer_from_type" # issubclass() arg 1 must be a class (numpy_ndarray_int)
   ];
 
   pythonImportsCheck = [ "daft" ];
@@ -330,7 +358,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Eventual-Inc/Daft";
     changelog = "https://github.com/Eventual-Inc/Daft/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ derdennisop ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
     mainProgram = "daft";
     platforms = lib.platforms.unix;
   };

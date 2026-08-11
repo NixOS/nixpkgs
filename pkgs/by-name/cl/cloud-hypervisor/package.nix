@@ -6,29 +6,38 @@
   pkg-config,
   dtc,
   openssl,
+  zstd,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "52.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OGyvmedSaWPsyH6mdHhgXN7MvTnK1HzdfTKUhJRlq8I=";
+    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
   };
 
-  cargoHash = "sha256-ZNj1H3Iq+IUSe0McHJjrwPOoR+YRB+rsSmZHMhXsHy0=";
+  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
+
+  patches = [
+    ./musl-1.2.6.patch
+  ];
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
-  checkInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 dtc;
 
   env.OPENSSL_NO_VENDOR = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoTestFlags = [
     "--workspace"
@@ -40,10 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "vmm" # /dev/kvm
     "--"
     # io_uring syscalls are blocked by the Lix sandbox
-    "--skip=io_uring"
-    "--skip=qcow_async::unit_tests::"
-    # fallocate(PUNCH_HOLE) reported size depends on the host filesystem
-    "--skip=test_query_device_size_sparse_file_punch_hole"
+    "--skip=formats"
+    "--skip=io_impl::async_io::uring_data_io"
   ];
 
   nativeInstallCheckInputs = [

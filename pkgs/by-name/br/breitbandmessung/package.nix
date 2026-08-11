@@ -18,7 +18,7 @@ let
   sources = import ./sources.nix;
 
   systemArgs =
-    rec {
+    {
       x86_64-linux = {
         src = fetchurl sources.x86_64-linux;
 
@@ -57,8 +57,8 @@ let
         '';
       };
 
-      x86_64-darwin = {
-        src = fetchurl sources.x86_64-darwin;
+      aarch64-darwin = {
+        src = fetchurl sources.aarch64-darwin;
 
         nativeBuildInputs = [ undmg ];
 
@@ -74,8 +74,6 @@ let
           runHook postInstall
         '';
       };
-
-      aarch64-darwin = x86_64-darwin;
     }
     .${system} or {
       src = throw "Unsupported system: ${system}";
@@ -97,7 +95,6 @@ stdenv.mkDerivation (
       maintainers = with lib.maintainers; [ b4dm4n ];
       platforms = [
         "x86_64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };

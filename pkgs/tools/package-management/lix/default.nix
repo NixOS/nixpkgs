@@ -253,7 +253,7 @@ lib.makeExtensible (
 
     latest = self.lix_2_95;
 
-    stable = self.lix_2_94;
+    stable = self.lix_2_95;
 
     # Previously, `nix-eval-jobs` was not packaged here, so we export an
     # attribute with the previously-expected structure for compatibility. This

@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "checkpolicy";
-  version = "3.10";
+  version = "3.11";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/checkpolicy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-LZKVHfywkNYXnnojhWYi4Py8Mr4Dvx5grOncnL2hHlk=";
+    hash = "sha256-m4G/zu9/qdAvmHLlanhvND3FjvS1cT3ODVxBbluEzvo=";
   };
 
   nativeBuildInputs = [

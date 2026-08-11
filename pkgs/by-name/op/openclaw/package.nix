@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.6.1",
+  version ? "2026.6.33",
 }:
 let
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FjxiI7YHkt6fTzJD7G5A3/wsbcWgpO44IHMOwymDxpg=";
+    hash = "sha256-OdH5olBLDGQYCtR2ElbzcQ2+Hgy3cZDixkIwmSPh9Xw=";
   };
 
-  pnpmDepsHash = "sha256-7RQJAVWqhauG8JrF8AD1VU1IJRM+SH05aHAfmFaXraU=";
+  pnpmDepsHash = "sha256-eVyR8SVp0SyjflFomvgn9dgAqvXIUgjCYc5NICxxIg8=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -134,6 +134,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       chrisportela
       mkg20001
+      nikhilmaddirala
     ];
     platforms = with lib.platforms; linux ++ darwin;
     knownVulnerabilities = [

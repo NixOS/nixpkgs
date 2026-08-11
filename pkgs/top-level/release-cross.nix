@@ -121,6 +121,10 @@ let
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
+    tree-sitter.builtGrammars =
+      mapAttrs (_: _: nativePlatforms)
+        (pkgsForCross systems.examples.wasm32-wasip1 (builtins.head supportedSystems))
+        .tree-sitter.builtGrammars;
     zlib = nativePlatforms;
   };
 
@@ -266,6 +270,7 @@ in
   android64 = mapTestOnCross systems.examples.aarch64-android-prebuilt linuxCommon;
   android32 = mapTestOnCross systems.examples.armv7a-android-prebuilt linuxCommon;
 
+  wasm32-wasip1 = mapTestOnCross systems.examples.wasm32-wasip1 wasiCommon;
   wasi32 = mapTestOnCross systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross systems.examples.msp430 embedded;

@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     shellNames = {
       "x86_64-linux" = "bin/shell-linux-amd64";
       "aarch64-linux" = "bin/shell-linux-arm64";
-      "x86_64-darwin" = "bin/shell-macos-amd64";
       "aarch64-darwin" = "bin/shell-macos-arm64";
     };
     # versionCheckHook cannot be used because appfire-cli requires $HOME to be set

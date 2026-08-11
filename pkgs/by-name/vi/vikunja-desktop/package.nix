@@ -3,7 +3,8 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
-  pnpm_10_29_2,
+  darwin,
+  pnpm_10,
   pnpmConfigHook,
   nodejs,
   electron,
@@ -36,11 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      patches
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-phvNUUYh858CDt0O8GCWkgO402C0wiYtzEorOIV789M=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-2jyb5BYEkopZCbS19flUgCopiJWngyFxkXsyMuOpJEU=";
   };
+
+  patches = [
+    # pnpm 10.29.3 changed `pnpm ls --json`; older electron-builder omits runtime deps.
+    # This patch was generated from the v2.3.0 lockfile with pnpm_10, using the
+    # electron-builder 26.15.3 version already present in upstream main.
+    ./electron-builder-26.15.3.patch
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -49,9 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10_29_2
+    pnpm_10
     pnpmConfigHook
     vikunja.passthru.frontend
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildPhase = ''
@@ -60,7 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s/\$${version}/${version}/g" package.json
     sed -i "s/\"version\": \".*\"/\"version\": \"${version}\"/" package.json
     ln -s '${vikunja.passthru.frontend}' frontend
-    pnpm run pack -c.electronDist="${electron.dist}" -c.electronVersion="${electron.version}"
+
+    electronDist="${electron.dist}"
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      electronDist="$(mktemp -d)"
+      cp -R "${electron.dist}/." "$electronDist"
+      chmod -R u+w "$electronDist"
+      export CSC_IDENTITY_AUTO_DISCOVERY=false
+    ''}
+    pnpm run pack \
+      -c.electronDist="$electronDist" \
+      -c.electronVersion="${electron.version}" \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     runHook postBuild
   '';
@@ -70,20 +93,30 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/share/lib/vikunja-desktop"
-    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/vikunja-desktop"
-    cp -r ./node_modules "$out/share/lib/vikunja-desktop/resources"
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p "$out/share/lib/vikunja-desktop"
+      cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/vikunja-desktop"
+      cp -r ./node_modules "$out/share/lib/vikunja-desktop/resources"
 
-    install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/vikunja-desktop.png"
+      install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/vikunja-desktop.png"
 
-    # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
-    # see https://github.com/NixOS/nixpkgs/issues/172583
-    makeShellWrapper "${lib.getExe electron}" "$out/bin/vikunja-desktop" \
-      --add-flags "$out/share/lib/vikunja-desktop/resources/app.asar" \
-      "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
+      # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
+      # see https://github.com/NixOS/nixpkgs/issues/172583
+      makeShellWrapper "${lib.getExe electron}" "$out/bin/vikunja-desktop" \
+        --add-flags "$out/share/lib/vikunja-desktop/resources/app.asar" \
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
+    ''}
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications" "$out/bin"
+      mv ./dist/mac*/*.app "$out/Applications"
+      makeWrapper \
+        "$out/Applications/Vikunja Desktop.app/Contents/MacOS/Vikunja Desktop" \
+        "$out/bin/vikunja-desktop"
+    ''}
 
     runHook postInstall
   '';

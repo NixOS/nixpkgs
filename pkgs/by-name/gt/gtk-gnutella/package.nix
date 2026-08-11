@@ -7,12 +7,10 @@
   gettext,
   pkg-config,
   glib,
-  gtk2,
   libxml2,
   libbfd,
   zlib,
   gnutls,
-  enableGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,16 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     libbfd
     libxml2
     zlib
-  ]
-  ++ lib.optionals enableGui [
-    gtk2
   ];
 
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
-  ]
-  ++ lib.optionals (!enableGui) [
     "--topless"
   ];
 

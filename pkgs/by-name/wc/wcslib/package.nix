@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcslib";
-  version = "8.8";
+  version = "8.9";
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-3NW5UuaAFtDiRZ4fD5hmND54uTljXbZEKfz0eOHqS/w=";
+    hash = "sha256-gqwJzlCRsL8Gzsj1ze7B2r4dBrpd+3/yvbDBaASIgHs=";
   };
 
   # error: call to undeclared library function 'snprintf'

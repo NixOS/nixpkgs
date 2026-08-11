@@ -176,7 +176,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # timouts
+    # timeouts
     "test/test_cli.py"
     "test/cli/test_packages.py"
     "test/end_to_end/test_net_naming.py"
@@ -238,7 +238,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
     changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";
   };

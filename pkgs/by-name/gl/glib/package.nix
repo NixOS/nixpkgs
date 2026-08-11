@@ -99,10 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      ./darwin-compilation.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    lib.optionals stdenv.hostPlatform.isMusl [
       ./quark_init_on_demand.patch
       ./gobject_init_on_demand.patch
     ]
@@ -373,9 +370,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-    ];
     teams = [ lib.teams.gnome ];
     pkgConfigModules = [
       "gio-2.0"

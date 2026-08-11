@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-aO0bY8p0quh5VQEtqd/X/arkcTKdACiyKbhBxxksz1I=";
+    hash = "sha256-mN/UD6vGwNthDu6upAPwu54q7AvGma4M30dfpKVHEMo=";
   };
 
   dependencies = [

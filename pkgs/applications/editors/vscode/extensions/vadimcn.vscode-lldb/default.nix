@@ -16,7 +16,7 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.12.1";
+  version = "1.12.2";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -26,7 +26,7 @@ let
     owner = "vadimcn";
     repo = "codelldb";
     rev = "v${version}";
-    hash = "sha256-B8iCy4NXG7IzJVncbYm5VoAMfhMfxGF+HW7M5sVn5b0=";
+    hash = "sha256-7//+y02rfDloeNADpoM8tist7fPstBZ2Eqt4dM5dCaE=";
   };
 
   lldb = llvmPackages_19.lldb;
@@ -180,8 +180,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.r4v3n6101 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

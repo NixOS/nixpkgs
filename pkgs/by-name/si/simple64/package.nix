@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${cheats-json} cheats.json
   '';
 
-  stictDeps = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook

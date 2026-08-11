@@ -8,16 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bunbun";
-  version = "1.5.0";
+  version = "1.6.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "devraza";
     repo = "bunbun";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-3f/G0Vx1uXeH3QMDVUAHWi4Pf/B88/4F+4XywVsp3/4=";
+    # There is no 1.6.1 tag on github. This corresponds to the commit of the release.
+    rev = "595857b1cd03b907e97c7eb0effc29fe973821bf";
+    hash = "sha256-TaAlEST6WLPTlYADzAA4i46dr4Bo+fButu65g43EvWo";
   };
 
-  cargoHash = "sha256-2pgQB2myEnLvrU3ApNL/bwaVcGku+X/TjR6YBqXD7Xg=";
+  cargoHash = "sha256-tL70RQ8YOSHyyTnPjg7IiuCEhb4EF4xIkT8HMMXhc9g";
 
   nativeInstallCheckInputs = [
     versionCheckHook

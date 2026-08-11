@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   btrfs-progs,
   autoreconfHook,
   pkg-config,
@@ -11,8 +12,11 @@
 buildPythonPackage {
   pname = "btrfsutil";
   inherit (btrfs-progs) version src;
-  format = "setuptools";
+  pyproject = true;
 
+  build-system = [
+    setuptools
+  ];
   buildInputs = [
     btrfs-progs
     e2fsprogs
@@ -41,7 +45,7 @@ buildPythonPackage {
 
   meta = {
     description = "Library for managing Btrfs filesystems";
-    homepage = "https://btrfs.wiki.kernel.org/";
+    homepage = "https://btrfs.readthedocs.io/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       raskin

@@ -7,7 +7,7 @@ index b51fd0075e..87ee317e05 100644
      # SIP >= 5.0 path
  
 -    FILE(GLOB _pyqt5_metadata "${Python_SITEARCH}/PyQt5-*.dist-info/METADATA")
-+    FILE(GLOB _pyqt5_metadata "@pyQt5PackageDir@/PyQt5-*.dist-info/METADATA")
++    FILE(GLOB _pyqt5_metadata "@pyQt5PackageDir@/[Pp]y[Qq]t5-*.dist-info/METADATA")
      IF(_pyqt5_metadata)
        FILE(READ ${_pyqt5_metadata} _pyqt5_metadata_contents)
        STRING(REGEX REPLACE ".*\nVersion: ([^\n]+).*$" "\\1" PYQT5_VERSION_STR ${_pyqt5_metadata_contents})
@@ -21,7 +21,7 @@ index 69e41c1fe9..5456c3d59b 100644
      # SIP >= 5.0 path
  
 -    FILE(GLOB _qsci_metadata "${Python_SITEARCH}/QScintilla*.dist-info/METADATA")
-+    FILE(GLOB _qsci_metadata "@qsciPackageDir@/QScintilla*.dist-info/METADATA")
++    FILE(GLOB _qsci_metadata "@qsciPackageDir@/[Qq][Ss]cintilla*.dist-info/METADATA")
      IF(_qsci_metadata)
        FILE(READ ${_qsci_metadata} _qsci_metadata_contents)
        STRING(REGEX REPLACE ".*\nVersion: ([^\n]+).*$" "\\1" QSCI_MOD_VERSION_STR ${_qsci_metadata_contents})

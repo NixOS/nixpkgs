@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner = "digitalbitbox";
+    owner = "BitBoxSwiss";
     repo = "dbb-app";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";

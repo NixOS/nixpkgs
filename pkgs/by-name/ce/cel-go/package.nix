@@ -9,7 +9,7 @@ let
     version = "0.25.2";
 
     src = fetchFromGitHub {
-      owner = "google";
+      owner = "cel-expr";
       repo = "cel-spec";
       tag = "v${finalAttrs.version}";
       hash = "sha256-aNyBGUlpTqILCiQHo7BxaZShI6q9xgtRegywd+jQSlo=";
@@ -26,18 +26,18 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "cel-go";
-  version = "0.28.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "cel-expr";
     repo = "cel-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fiFkoYVKdSdYkSMQxmC1SvEEGsalBasCl9tzsGSYwmw=";
+    hash = "sha256-d2qteEY7aRKvzD+uF7uNibUv5dECaL61NogbZfd3cAQ=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-tMaDwKoE5tzbQD5b7EnpKqiT/CT9WDCKgoxQeyhIlXE=";
+  vendorHash = "sha256-SetkDfzfR/zqkNirGeGlczvV5h/CM9GiAPP2pKq6QDU=";
 
   subPackages = [
     "main"
@@ -68,9 +68,9 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/google/cel-go/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/cel-expr/cel-go/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
-    homepage = "https://github.com/google/cel-go";
+    homepage = "https://github.com/cel-expr/cel-go";
     license = lib.licenses.asl20;
     mainProgram = "cel-go";
     maintainers = with lib.maintainers; [ hythera ];

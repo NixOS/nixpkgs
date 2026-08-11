@@ -29,6 +29,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.gnome-look.org/s/Gnome/p/1717914";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ argrat ];
+    maintainers = [ ];
   };
 })

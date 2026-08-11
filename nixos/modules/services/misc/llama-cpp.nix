@@ -164,7 +164,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.settings.port;
   };
 
   meta.maintainers = with lib.maintainers; [

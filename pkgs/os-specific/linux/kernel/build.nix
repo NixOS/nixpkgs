@@ -92,8 +92,7 @@ lib.makeOverridable (
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
-    # ignored
-    features ? null,
+    features ? { },
     lib ? lib_,
     stdenv ? stdenv_,
   }:
@@ -151,8 +150,6 @@ lib.makeOverridable (
 
     isModular = config.isYes "MODULES";
     withRust = config.isYes "RUST";
-
-    inherit buildDTBs target;
 
     # Dependencies that are required to build kernel modules
     moduleBuildDependencies = [
@@ -516,6 +513,9 @@ lib.makeOverridable (
       inherit
         isZen
         withRust
+        # Forwarded into passthru so features survive kernel.override() call chains
+        # used by the NixOS module system (see boot.kernelPackages apply in kernel.nix).
+        features
         ;
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;

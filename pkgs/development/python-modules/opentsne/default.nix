@@ -62,7 +62,7 @@ let
       homepage = "https://github.com/pavlin-policar/openTSNE";
       changelog = "https://github.com/pavlin-policar/openTSNE/releases/tag/v${version}";
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ lucasew ];
+      maintainers = [ ];
     };
   };
 in

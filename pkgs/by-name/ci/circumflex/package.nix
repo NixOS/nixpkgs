@@ -1,10 +1,8 @@
 {
   lib,
-  less,
-  ncurses,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,16 +18,20 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-4YL0N8wA8igveYfeL4uZDY5YD1InW0iD3WWq1E/vIJs=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  excludedPackages = [
+    "gen-completions"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/clx \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          less
-          ncurses
-        ]
-      }
+    installManPage share/man/clx.1
+
+    installShellCompletion --bash share/completions/clx.bash
+    installShellCompletion --fish share/completions/clx.fish
+    installShellCompletion --zsh share/completions/_clx
   '';
 
   meta = {

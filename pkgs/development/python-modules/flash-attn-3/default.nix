@@ -11,8 +11,8 @@
   # dependencies
   einops,
 
-  # tests
-  pytestCheckHook,
+  # passthru
+  nix-update-script,
 }:
 
 let
@@ -20,7 +20,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-attn-3";
-  version = "3.0.0-unstable-2026-06-02";
+  version = "3.0.0-unstable-2026-06-10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,8 +33,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "flash-attention";
-    rev = "b02b07e1a10238fe12831b80a8937ed59b1353a5";
-    hash = "sha256-LALX4lYioJLYssoQ0rJCC5M2Ij28wtP7ucpGkKIzmmg=";
+    rev = "fc8cbad6b6b90220cf6ef8121c29e299a3ba7d9a";
+    hash = "sha256-6HxeLAahkWO5pghszfLS6i8Ju67sAxjWnDk0RYRuY88=";
     fetchSubmodules = true;
   };
 
@@ -95,6 +95,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   # Tests require access to a physical GPU
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=v(3.*)"
+    ];
+  };
 
   meta = {
     description = "Official implementation of FlashAttention-3";

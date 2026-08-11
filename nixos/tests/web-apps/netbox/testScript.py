@@ -62,11 +62,11 @@ def compare(a: str, b: str):
 
 with subtest("Home screen loads"):
     machine.wait_until_succeeds(
-        "curl -sSfL http://[::1]:8001 | grep '<title>Home | NetBox</title>'"
+        "curl -sSfL http://[::1]:80 | grep '<title>Home | NetBox</title>'"
     )
 
 with subtest("Staticfiles are generated"):
-    machine.succeed("test -e /var/lib/netbox/static/netbox.js")
+    machine.wait_for_file("/var/lib/netbox/static/netbox.js")
 
 with subtest("Superuser can be created"):
     machine.succeed(
@@ -155,7 +155,7 @@ def patch(uri: str, data: Dict[str, Any]):
     return data_request(uri, "PATCH", data)
 
 with subtest("Can retrieve netbox version"):
-    assert netbox_version == get("/status/")["netbox-version"]
+    t.assertEqual(netbox_version, get("/status/")["netbox-version"])
 
 with subtest("Can create objects"):
     result = post("/dcim/sites/", {"name": "Test site", "slug": "test-site"})
@@ -196,28 +196,28 @@ with subtest("Can create objects"):
 with subtest("Can list objects"):
     result = get("/dcim/sites/")
 
-    assert result["count"] == 1
-    assert result["results"][0]["id"] == site_id
-    assert result["results"][0]["name"] == "Test site"
-    assert result["results"][0]["description"] == ""
+    t.assertEqual(result["count"], 1)
+    t.assertEqual(result["results"][0]["id"], site_id)
+    t.assertEqual(result["results"][0]["name"], "Test site")
+    t.assertEqual(result["results"][0]["description"], "")
 
     result = get("/dcim/device-types/")
-    assert result["count"] == 1
-    assert result["results"][0]["id"] == device_type_id
-    assert result["results"][0]["model"] == "Test device type"
+    t.assertEqual(result["count"], 1)
+    t.assertEqual(result["results"][0]["id"], device_type_id)
+    t.assertEqual(result["results"][0]["model"], "Test device type")
 
 with subtest("Can update objects"):
     new_description = "Test site description"
     patch(f"/dcim/sites/{site_id}/", {"description": new_description})
     result = get(f"/dcim/sites/{site_id}/")
-    assert result["description"] == new_description
+    t.assertEqual(result["description"], new_description)
 
 with subtest("Can delete objects"):
     # Delete a device-type since no object depends on it
     delete(f"/dcim/device-types/{device_type_id}/")
 
     result = get("/dcim/device-types/")
-    assert result["count"] == 0
+    t.assertEqual(result["count"], 0)
 
 def request_graphql(query: str):
     return machine.succeed(
@@ -252,10 +252,10 @@ if compare(netbox_version, '4.2.0') >= 0:
 
         answer = request_graphql(graphql_query)
         result = json.loads(answer)
-        assert len(result["data"]["prefix_list"]) == 3
-        assert test_objects["prefixes"]["v4-with-updated-desc"] in result["data"]["prefix_list"]
-        assert test_objects["prefixes"]["v6-cidr-32"] in result["data"]["prefix_list"]
-        assert test_objects["prefixes"]["v6-cidr-48"] in result["data"]["prefix_list"]
+        t.assertEqual(len(result["data"]["prefix_list"]), 3)
+        t.assertIn(test_objects["prefixes"]["v4-with-updated-desc"], result["data"]["prefix_list"])
+        t.assertIn(test_objects["prefixes"]["v6-cidr-32"], result["data"]["prefix_list"])
+        t.assertIn(test_objects["prefixes"]["v6-cidr-48"], result["data"]["prefix_list"])
 
 if compare(netbox_version, '4.2.0') < 0:
     with subtest("Can use the GraphQL API (Netbox <= 4.2.0)"):
@@ -270,8 +270,8 @@ if compare(netbox_version, '4.2.0') < 0:
         ''')
         result = json.loads(answer)
         print(result["data"]["prefix_list"][0])
-        assert result["data"]["prefix_list"][0]["prefix"] == test_objects["prefixes"]["v4-with-updated-desc"]["prefix"]
-        assert int(result["data"]["prefix_list"][0]["site"]["id"]) == int(test_objects["prefixes"]["v4-with-updated-desc"]["scope"]["id"])
+        t.assertEqual(result["data"]["prefix_list"][0]["prefix"], test_objects["prefixes"]["v4-with-updated-desc"]["prefix"])
+        t.assertEqual(int(result["data"]["prefix_list"][0]["site"]["id"]), int(test_objects["prefixes"]["v4-with-updated-desc"]["scope"]["id"]))
 
 # With 4.5.2 and higher, obtaining a session cookie or token without supplying
 # proper CSRF tokens on the frontend /login/ endpoint is no longer possible
@@ -283,5 +283,8 @@ if compare(netbox_version, '4.5.2') < 0:
     with subtest("Can associate LDAP groups"):
         result = get("/users/users/?username=${testUser}")
 
-        assert result["count"] == 1
-        assert any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"])
+        t.assertEqual(result["count"], 1)
+        t.assertTrue(any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"]))
+
+# Print systemd unit hardening state
+machine.log(machine.execute("systemd-analyze security netbox.service netbox-rq.service netbox-housekeeping.service | grep -v ✓")[1])

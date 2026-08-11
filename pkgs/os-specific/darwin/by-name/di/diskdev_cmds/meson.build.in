@@ -114,7 +114,6 @@ executable(
     dependencies : [ apfs, libdisk ],
     include_directories : [ 'edt_fstab', 'fsck.tproj', 'mount_flags_dir' ],
     install : true,
-    link_args : host_machine.cpu_family() == 'x86_64' ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ],
     sources : [
         'edt_fstab/edt_fstab.c',
         'mount.tproj/mount.c',

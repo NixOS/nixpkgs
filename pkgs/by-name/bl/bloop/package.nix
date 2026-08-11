@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "2.1.0";
+  version = "2.1.1";
 
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-        "sha256-yZEN3w2pvCmDRcvwE3KjUaJOVbUSDvVthMmlRSY2cSY="
+        "sha256-F5wRihAwf/TNBSYortTCoK9qKqTI+1N5InJ+rqLFp8A="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        "sha256-U1rPA1h0xVjAsuDFfaFvy7n6L+yRNKgqS9OQYvZH8MM="
+        "sha256-wQXAldzU6Typ6pZB8k3dfX7g+aaVF7jXvd0pnuk5gZU="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        "sha256-1MO14ChMnn/cDSEl1qiwDhzgX3pQjsSN8ksp4WkPDMk="
+        "sha256-OrONKbC2l0jjfmguDmoiyEaJWdTrKBiP0ZEa5rhizDM="
       else
         throw "unsupported platform";
   };
@@ -86,7 +86,6 @@ stdenv.mkDerivation rec {
     mainProgram = "bloop";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

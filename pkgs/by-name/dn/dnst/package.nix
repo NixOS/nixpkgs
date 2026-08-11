@@ -10,14 +10,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnst";
-  version = "0.2.0-alpha2";
+  version = "0.2.0-alpha3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "dnst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OpyOnBddbIdnJLchY5y2oMqK5JSXCTF8cC5KstJ7pnc=";
+    hash = "sha256-6Sgj2OZptG/bMsuYdGfaaY62qh4uUyxdbit6vpWWm9w=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-y048tMh5wBjAB7I8FK3pETn0j9S/h893JZb9sbOBdbo=";
+  cargoHash = "sha256-8pzf4GeBJbqIZf6KAqROEAvFAqtf6XLODWhS3RVfpAQ=";
 
   postInstall = ''
     mkdir -p $out/libexec
@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage doc/manual/build/man/*.1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     description = "Toolset to assist DNS operators with zone and nameserver maintenance";

@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "99.0";
+  version = "100.0";
 
   src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-re4z0ZseuOP/P1HW3qdWLIo+YhLlSRBuqefewRm6KEI=";
+    hash = "sha256-85mL3/x7SoTgOxU/YCFh58vcGzHLG3qPbbG4MD5dB9o=";
   };
 
   passthru = {
@@ -98,10 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGUI [ cmark ]
   ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
+    # autoupdate is not needed but it silences a ton of pointless warnings
     patchShebangs . > /dev/null
     autoupdate configure.ac ac/*.m4
+
+    # fix unit tests with GUI disabled
+    sed -i '5i$gtest_apps.delete("gui") if !$build_mkvtoolnix_gui' rake.d/gtest.rb
   '';
 
   configureFlags = [

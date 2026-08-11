@@ -83,6 +83,8 @@ buildPythonPackage rec {
     sphinxcontrib-websupport
   ];
 
+  pythonRelaxDeps = [ "docutils" ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
@@ -95,11 +97,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals isPyPy [
     # internals are asserted which are sightly different in PyPy
-    "tests/test_extensions/test_ext_autodoc.py"
-    "tests/test_extensions/test_ext_autodoc_autoclass.py"
-    "tests/test_extensions/test_ext_autodoc_autofunction.py"
-    "tests/test_extensions/test_ext_autodoc_automodule.py"
-    "tests/test_extensions/test_ext_autodoc_preserve_defaults.py"
+    "tests/test_ext_autodoc/test_ext_autodoc.py"
+    "tests/test_ext_autodoc/test_ext_autodoc_autoclass.py"
+    "tests/test_ext_autodoc/test_ext_autodoc_autofunction.py"
+    "tests/test_ext_autodoc/test_ext_autodoc_automodule.py"
+    "tests/test_ext_autodoc/test_ext_autodoc_preserve_defaults.py"
     "tests/test_util/test_util_inspect.py"
     "tests/test_util/test_util_typing.py"
   ];

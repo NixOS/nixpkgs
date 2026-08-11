@@ -12,8 +12,12 @@ buildNpmPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) version src sourceRoot;
-    hash = "sha256-Dd0wqssmLBfHkOHI5aactLnCPG4JxPLhNC+eo//QRXM=";
+    inherit (finalAttrs)
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-PArNKjdLqKJSEEKe94mguzKiNSwpYk56inenU3GL1mI=";
   };
   npmBuildScript = "build";
 

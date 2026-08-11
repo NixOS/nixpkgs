@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "pvolok";
-    repo = "mprocs";
+    repo = "dekit";
     tag = "v${finalAttrs.version}";
     hash = "sha256-fh294Re4gEveWgX29m0SXdI8hwuiXuniTq7pVZ464ws=";
   };
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "TUI tool to run multiple commands in parallel and show the output of each command separately";
-    homepage = "https://github.com/pvolok/mprocs";
-    changelog = "https://github.com/pvolok/mprocs/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/pvolok/dekit";
+    changelog = "https://github.com/pvolok/dekit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;

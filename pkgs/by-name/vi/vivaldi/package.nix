@@ -23,7 +23,6 @@
   dbus,
   cups,
   libexif,
-  ffmpeg,
   systemd,
   libva,
   libGL,
@@ -67,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "8.0.4033.42";
+  version = "8.1.4087.61";
 
   suffix =
     {
@@ -80,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-qHIUVfD+rVIrBse5xsmJwVjCAszieAJzuHAC/oKzCHA=";
-        x86_64-linux = "sha256-abaU3PiUQNhpliCnmih96pkU6CgW/S1GgxFKFo8PBmo=";
+        aarch64-linux = "sha256-dr6elx+KCmwqwPDnGXO8M4vMmEjCUfILULBKuKvQMEg=";
+        x86_64-linux = "sha256-fluTiicLsQgqGsdBZlRo8QSLI03xjhhXwuZog3Dc44Y=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -131,7 +130,6 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     libexif
-    ffmpeg
     systemd
     libva
     qt6.qtbase
@@ -163,7 +161,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.is64bit) (
       ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
     )
-    + ":$out/opt/vivaldi/lib";
+    + ":$out/opt/vivaldi";
 
   buildPhase = ''
     runHook preBuild

@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  buildPackages,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
@@ -42,10 +43,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  postInstall = ''
-    installShellCompletion --cmd delta \
-      etc/completion/completion.{bash,fish,zsh}
-  '';
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd delta \
+        --bash <(${emulator} $out/bin/delta --generate-completion bash) \
+        --fish <(${emulator} $out/bin/delta --generate-completion fish) \
+        --zsh <(${emulator} $out/bin/delta --generate-completion zsh)
+    ''
+  );
 
   # test_env_parsing_with_pager_set_to_bat sets environment variables,
   # which can be flaky with multiple threads:

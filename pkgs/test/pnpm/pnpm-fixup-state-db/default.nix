@@ -16,8 +16,8 @@ testers.runCommand {
 
     pnpm-fixup-state-db ./store
 
-    cp ./store/index.db $out
+    sqlite3 ./store/index.db .dump > $out
   '';
 
-  hash = "sha256-tjpKgdMvDcs0X65PENIsiHELYPzVupEH3jS4PyLsF40=";
+  hash = "sha256-PEzcJgGRo+dK5X9TBcx3A+BOIsvJ7gFmzV8vanTuGCo=";
 }

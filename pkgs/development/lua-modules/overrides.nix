@@ -1,6 +1,7 @@
 # do not add pkgs, it messes up splicing
 {
   stdenv,
+  config,
   cargo,
   cmake,
 
@@ -44,7 +45,6 @@
   oniguruma,
   openldap,
   openssl,
-  pcre,
   pcre2,
   pkg-config,
   readline,
@@ -427,15 +427,6 @@ in
     ];
   };
 
-  lrexlib-pcre = prev.lrexlib-pcre.overrideAttrs {
-    externalDeps = [
-      {
-        name = "PCRE";
-        dep = pcre;
-      }
-    ];
-  };
-
   lrexlib-pcre2 = prev.lrexlib-pcre2.overrideAttrs {
     externalDeps = [
       {
@@ -591,8 +582,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
-        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/mysql";
       };
     };
     buildInputs = old.buildInputs ++ [
@@ -716,7 +707,6 @@ in
     ];
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
       final.bit32
-      final.std-normalize
     ];
   });
 
@@ -948,8 +938,12 @@ in
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
     postFixup = ''
-      sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
+      substituteInPlace "$out/bin/nlua" \
+        --replace-fail \
+        "#!/usr/bin/env -S nvim" \
+        "#!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim"
     '';
+
     dontPatchShebangs = true;
   };
 
@@ -1003,10 +997,17 @@ in
       # remove failing tests
       rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
       rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+      # trailing whitespace inconsistencies
+      rm tests/plenary/api/api_spec.lua
+      rm tests/plenary/babel/tangle_spec.lua
+      rm tests/plenary/capture/datetree_spec.lua
+      rm tests/plenary/init_spec.lua
+
+      # UI tests depend on the neovim version
+      rm -r tests/plenary/ui/*
 
       # not sure why yet
-      rm tests/plenary/ui/mappings/date_spec.lua \
-        tests/plenary/capture/templates_spec.lua
+      rm tests/plenary/capture/templates_spec.lua
 
       # bypass upstream launcher that interacts with network
       nvim --headless -i NONE \
@@ -1171,9 +1172,9 @@ in
     '';
     postConfigure = (old.postConfigure or "") + ''
       substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
-        --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",'
+        --replace-fail '"ltreesitter == 0.3.0",' '"ltreesitter >= 0.3.0",' \
+        --replace-fail '"luv == 1.52.1",' '"luv >= 1.52.1",' \
+        --replace-fail '"tl == 0.24.8",' '"tl >= 0.24.8",'
     '';
   });
 
@@ -1254,6 +1255,13 @@ in
     ];
   });
 
+  tree-sitter-kulala_http = prev.tree-sitter-kulala_http.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = lua.luaversion != "5.1";
@@ -1329,4 +1337,7 @@ in
   });
 
   # keep-sorted end
+}
+// lib.optionalAttrs config.allowAliases {
+  lrexlib-pcre = throw "lrexlib-pcre was removed as the PCRE library is end-of-life"; # added 2026-08-03
 }

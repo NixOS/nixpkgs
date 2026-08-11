@@ -18,6 +18,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-2wnfc+W1lhUgvWa1iwHxJu4WGZHaXvmxgtBAkTJHJ3E=";
   };
 
+  postPatch = ''
+    echo '${finalAttrs.version}' > VERSION
+  '';
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];

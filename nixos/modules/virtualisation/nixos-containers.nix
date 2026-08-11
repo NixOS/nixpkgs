@@ -520,7 +520,7 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
-    localmacAddress = null;
+    localMacAddress = null;
     tmpfs = null;
   };
 

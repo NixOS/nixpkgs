@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "python314-docs-texinfo";
-  version = "3.14";
+  version = "3.14.6";
 
   src = fetchurl {
-    url = "https://docs.python.org/3.14/archives/python-3.14-docs-texinfo.tar.bz2";
-    sha256 = "0r89zg2dzh90iv3qff9rx0ckfsds8hin5z53ai31cchxhglg4b8s";
+    url = "https://www.python.org/ftp/python/doc/3.14.6/python-3.14.6-docs-texinfo.tar.bz2";
+    sha256 = "0nwdvgnxs6sik0d1kkl6fnnhxrvmj356i92abp84i33d4dy6i9hw";
   };
   installPhase = ''
     mkdir -p $out/share/info

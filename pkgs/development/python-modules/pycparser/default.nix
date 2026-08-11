@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
@@ -25,6 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+  preCheck = ''
+    substituteInPlace examples/using_gcc_E_libc.py \
+      --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
+  '';
   unittestFlagsArray = [
     "-s"
     "tests"

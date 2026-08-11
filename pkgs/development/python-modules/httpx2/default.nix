@@ -24,15 +24,17 @@
   pygments,
   rich,
   socksio,
+  wsproto,
   zstandard,
 
   # tests
   chardet,
   pytestCheckHook,
-  pytest-httpbin,
   pytest-trio,
+  starlette,
   trustme,
   uvicorn,
+  websockets,
 
   # reverse deps
   httpx2,
@@ -40,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.3.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cW6meHx6VBMz5r/lXCKKK7Sq4e2nk+n1A5YTNtR2kB4=";
+    hash = "sha256-3kghDQMYksF9a4sFGajzNfGPOjdX1OiMwv7rH/fbmM0=";
   };
 
   postPatch = ''
@@ -76,6 +78,7 @@ buildPythonPackage (finalAttrs: {
     ];
     http2 = [ h2 ];
     socks = [ socksio ];
+    ws = [ wsproto ];
     zstd = lib.optionals (pythonOlder "3.14") [ zstandard ];
   };
 
@@ -90,10 +93,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     chardet
     pytestCheckHook
-    # pytest-httpbin
     pytest-trio
+    (starlette.overridePythonAttrs { doCheck = false; })
     trustme
     uvicorn
+    websockets
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
@@ -103,6 +107,13 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # uvicorn access logging mismatch
+    "test_logging_request"
+    "test_logging_redirect_chain"
+    # chardet shenanigans (Windows-1252 == WINDOWS-1252 cmp)
+    "test_client_decode_text_using_autodetect"
+    "test_client_decode_text_using_explicit_encoding"
+    "test_response_decode_text_using_autodetect"
   ];
 
   passthru.tests = {

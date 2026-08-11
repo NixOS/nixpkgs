@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
     changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ivan-tkatchev ];
+    maintainers = [ ];
   };
 }

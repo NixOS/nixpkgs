@@ -116,29 +116,6 @@ let
           }
         ];
       };
-      x86_64-darwin = {
-        variantSuffix = "";
-        src = {
-          url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-          sha256 = "e1fe990eb987f5c4b03e0396f9c228a10da71769c8a2bc8fadbc1d3b10a0f53a";
-        };
-        exePathForLibraryCheck = null; # we don't have a library check for darwin yet
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = ncurses6;
-            fileToCheckFor = null;
-          }
-          {
-            nixPackage = libiconv;
-            fileToCheckFor = null;
-          }
-        ];
-        isHadrian = true;
-      };
       aarch64-darwin = {
         variantSuffix = "";
         src = {

@@ -1,0 +1,29 @@
+diff --git a/crates/simd/src/byte.rs b/crates/simd/src/byte.rs
+index 0c7c4be..87737d4 100644
+--- a/crates/simd/src/byte.rs
++++ b/crates/simd/src/byte.rs
+@@ -389,7 +389,7 @@ mod reduce_sum_of_xy {
+         }
+     }
+ 
+-    #[crate::multiversion(@"v4:avx512vnni", @"v4", @"v3", @"v2", @"a2:dotprod", @"a2", "z17", "z16", "z15", "z14", "z13", "p9", "p8", "p7", "r1")]
++    #[crate::multiversion(@"v4", @"v3", @"v2", @"a2:dotprod", @"a2", "z17", "z16", "z15", "z14", "z13", "p9", "p8", "p7", "r1")]
+     pub fn reduce_sum_of_xy(s: &[u8], t: &[u8]) -> u32 {
+         assert_eq!(s.len(), t.len());
+         let n = s.len();
+diff --git a/crates/simd/src/halfbyte.rs b/crates/simd/src/halfbyte.rs
+index e1aa016..f7dc3dc 100644
+--- a/crates/simd/src/halfbyte.rs
++++ b/crates/simd/src/halfbyte.rs
+@@ -411,7 +411,7 @@ mod reduce_sum_of_xy {
+         }
+     }
+ 
+-    #[crate::multiversion(@"v4:avx512vnni", @"v4", @"v3", @"v2", @"a2:dotprod", @"a2", "z17", "z16", "z15", "z14", "z13", "p9", "p8", "p7", "r1")]
++    #[crate::multiversion(@"v4", @"v3", @"v2", @"a2:dotprod", @"a2", "z17", "z16", "z15", "z14", "z13", "p9", "p8", "p7", "r1")]
+     pub fn reduce_sum_of_xy(s: &[u8], t: &[u8]) -> u32 {
+         assert_eq!(s.len(), t.len());
+         let n = s.len();
+-- 
+2.54.0
+

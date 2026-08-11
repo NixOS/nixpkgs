@@ -31,16 +31,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "elephant";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "elephant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-h7Rw0vlb0n0Jsk21WJPm7H+1T1bG+PEuxE5cJ2TZl8A=";
+    hash = "sha256-frlaSpCf/e94OqO5Glp1NW96bemc+BhrKoPu+4X1FyI=";
   };
 
-  vendorHash = "sha256-EWXZ+9/QDRpidpVHBcfJgp0xoc3YtRsiC/UTk1R+FSY=";
+  vendorHash = "sha256-ssX+ZQ6v+XcwC/RuIZ+rO/9zZwZnotudj8bvZNM7M3g=";
 
   buildInputs = [ protobuf ];
   nativeBuildInputs = [

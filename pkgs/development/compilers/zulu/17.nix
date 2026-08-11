@@ -30,15 +30,6 @@ callPackage ./common.nix (
             "sha256-wX1WV6ZzwM/AmenYA+0wSYSViU1zWf0QZNRjCT7ZhQs=";
       };
 
-      x86_64-darwin = {
-        inherit zuluVersion jdkVersion;
-        hash =
-          if enableJavaFX then
-            "sha256-3DHXEjYN9RXYD4sB/75/fATzPAwJmZv3D+PaSU8qrog="
-          else
-            "sha256-anuLI/JBnqHd5+6s4NWkzF2+e7yDqN2jXcZKoSJp0EE=";
-      };
-
       aarch64-darwin = {
         inherit zuluVersion jdkVersion;
         hash =

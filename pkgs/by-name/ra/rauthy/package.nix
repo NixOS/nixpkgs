@@ -8,20 +8,20 @@
   nix-update-script,
   perl,
   wasm-pack,
-  wasm-bindgen-cli_0_2_121,
+  wasm-bindgen-cli_0_2_126,
   binaryen,
   lld,
   rust-jemalloc-sys-unprefixed,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0.35.2";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-onwNtlz2FP01aYr/T3Y3KK3CJHKsBBOF6vCfWKrdyRE=";
+    hash = "sha256-G+7fCkG1omdFgbmZDYGPiQTWCvcHtui+Fv0dXXzuJ08=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     perl
-    wasm-bindgen-cli_0_2_121
+    wasm-bindgen-cli_0_2_126
     wasm-pack
   ];
 
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/frontend";
-    hash = "sha256-w3x+dUfmJ4H82wX87C3UHEJ5Ls4v6lsn7kKOxvRJY8g=";
+    hash = "sha256-mDJMETAasMXIH9yCh2zfeaPNQUaYlHjxz8jDf7LySaY=";
   };
 
-  cargoHash = "sha256-oUc8aMsI3i0WM5/tP/ro93GgkjaDjBdYcgpxiKDvtJ4=";
+  cargoHash = "sha256-VPavc79U8AFhctktJ2Z2M75zguTGz7fhJGtMPXLqIgQ=";
 
   preBuild = ''
     pushd src/wasm-modules

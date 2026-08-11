@@ -2,28 +2,30 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  lwt_log,
+  logs,
+  lwt,
 }:
 
 buildDunePackage (finalAttrs: {
-  version = "1.2";
+  version = "1.3";
   pname = "resource-pooling";
-
-  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "resource-pooling";
-    rev = finalAttrs.version;
-    sha256 = "sha256-GNYPxjMTo7y40y7aQdseuFyeVF/hSCZKXfEaH/WIO9w=";
+    tag = finalAttrs.version;
+    hash = "sha256-DkuFBPobl0HJ/n8N9u086oxiHe8s/KiwQ5pR5n8oKLc=";
   };
 
-  propagatedBuildInputs = [ lwt_log ];
+  propagatedBuildInputs = [
+    logs
+    lwt
+  ];
 
   doCheck = true;
 
   meta = {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/ocsigen/resource-pooling/";
     description = "Library for pooling resources like connections, threads, or similar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

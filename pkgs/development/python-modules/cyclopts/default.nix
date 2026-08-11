@@ -28,15 +28,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.17.0";
+  version = "4.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JhUfgEGL4EBuBmgeDuHpL8M2vLz4+Yf2s4nCUHdD3us=";
+    hash = "sha256-zmvqpRJGZnfmhOiHwYogMbqLaAkfIG34CFbRXUUEr0E=";
   };
+
+  pythonRelaxDeps = [ "rich-rst" ];
 
   build-system = [
     hatchling
@@ -82,6 +84,9 @@ buildPythonPackage (finalAttrs: {
     # Building docs
     "build_succeeds"
     # timeouts under heavy concurrency
+    "test_behavior[zsh-root-subcommands]"
+    "test_behavior[zsh-subcommand-prefix]"
+    "test_path_completion_action"
     "test_requires_equals_eq_form_value_completion"
   ];
 

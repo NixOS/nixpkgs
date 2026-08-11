@@ -4,10 +4,8 @@
   fetchPypi,
   flit-core,
   marshmallow,
-  mock,
   openapi-spec-validator,
   packaging,
-  prance,
   pytestCheckHook,
   pyyaml,
 }:
@@ -29,15 +27,10 @@ buildPythonPackage rec {
   optional-dependencies = {
     marshmallow = [ marshmallow ];
     yaml = [ pyyaml ];
-    validation = [
-      openapi-spec-validator
-      prance
-    ]
-    ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [
-    mock
+    openapi-spec-validator
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;

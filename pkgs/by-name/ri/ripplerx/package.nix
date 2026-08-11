@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ripplerx";
-  version = "1.5.18";
+  version = "1.5.19";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "ripplerx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lHLAJ8eCmn/WFYxGl/zIq8a2xPKqzpB7tilffJcXhM4=";
+    hash = "sha256-YcrBJu7vLh8KZkds6OA48nhOHtZjRymxGrNmh7yTIxc=";
     fetchSubmodules = true;
   };
 

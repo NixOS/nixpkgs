@@ -24,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-nLloXJWOuaK/enZfwXJI94IcsAMYrkBtG4i3gmxuhfw=";
   };
 
-  patches = [ ./0001-Update-for-QuickJS-2025-04-26-release.patch ];
+  patches = [
+    ./0001-Update-for-QuickJS-2025-04-26-release.patch
+    # Refreshes two stale resource-limit test expectations for the newer quickjs nixpkgs de-vendors
+    ./0002-Update-for-QuickJS-2026-06-04-release.patch
+  ];
 
   # Upstream uses Git submodules; let's de-vendor and use Nix, so that we gain security fixes like
   # https://github.com/NixOS/nixpkgs/pull/407469

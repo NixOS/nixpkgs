@@ -19,7 +19,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "26.1.0";
+  version = "26.1.4";
 
   src =
     let
@@ -28,14 +28,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       suffix = selectSystem {
         x86_64-linux = "linux-x86_64.tar.gz";
         aarch64-linux = "linux-aarch64.tar.gz";
-        x86_64-darwin = "macos-x86_64.dmg";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-zAkHddh5xm9SHMV6OcJpl2A3+lS4GMJDbZ/+zg/5PzE=";
-        aarch64-linux = "sha256-0Tv45N+nZ2lRgn/Lo5HpPjuGigI0X2CJIIV96UO0bs8=";
-        x86_64-darwin = "sha256-INfXvR9FJZcruC8KeRtc0SIHUUHc0p3jjDNk4eBk7Lo=";
-        aarch64-darwin = "sha256-s+NQ5hp3NiQpJ/b3mp7Fdjh5rEmf1UnSz/Ai5Z43qEg=";
+        x86_64-linux = "sha256-vySdu/BStELNyi5kO6cixwnlM7fgpQdfumoh18UBMeI=";
+        aarch64-linux = "sha256-WulNI5kAvrBBFue17uxHPpOQW+dmYrq6l4XnQaukZ2M=";
+        aarch64-darwin = "sha256-KPZvcTExThKM7+Sr0I8WG+B7+hTJFMqIqAEH+RDd70s=";
       };
     in
     fetchurl {
@@ -144,7 +142,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001

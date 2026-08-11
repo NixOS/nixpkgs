@@ -272,7 +272,7 @@ instance FromJSON JobMaintainers where
 -- @@
 --  fromList
 --    [ ("arion.aarch64-linux", ["rob22"])
---    , ("conduit.x86_64-darwin", ["snoyb", "webber"])
+--    , ("conduit.aarch64-darwin", ["snoyb", "webber"])
 --    ]
 -- @@
 type MaintainerMap = Map JobName (NonEmpty Text)
@@ -404,15 +404,13 @@ platformIcon :: Platform -> Text
 platformIcon (Platform x) = case x of
    "x86_64-linux" -> "🐧"
    "aarch64-linux" -> "📱"
-   "x86_64-darwin" -> "🍎"
-   "aarch64-darwin" -> "🍏"
+   "aarch64-darwin" -> "🍎"
    _ -> x
 
 platformIsOS :: OS -> Platform -> Bool
 platformIsOS os (Platform x) = case (os, x) of
    (Linux, "x86_64-linux") -> True
    (Linux, "aarch64-linux") -> True
-   (Darwin, "x86_64-darwin") -> True
    (Darwin, "aarch64-darwin") -> True
    _ -> False
 

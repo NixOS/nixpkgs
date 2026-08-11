@@ -82,7 +82,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.gokapi = {
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = lib.mapAttrs (_: value: toString value) cfg.environment;

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  sourceRoot = "source/QtWebApp";
+  sourceRoot = "${finalAttrs.src.name}/QtWebApp";
 
   postPatch = ''
     cat >>QtWebApp.pro <<EOF
@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
       INSTALLS += target
     }
     EOF
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace QtWebApp.pro \
+      --replace-fail "QMAKE_CXXFLAGS += -std=c++11" "QMAKE_CXXFLAGS += -std=c++20" \
+      --replace-fail "CONFIG += c++11" "CONFIG += c++20"
   '';
 
   nativeBuildInputs = [

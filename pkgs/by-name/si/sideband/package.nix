@@ -1,13 +1,13 @@
 {
   lib,
-  python3Packages,
+  python313Packages, # Require a working version of Kivy, which is not yet working with Python 3.14
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "1.9.6";
+  version = "2.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "markqvist";
     repo = "Sideband";
     tag = finalAttrs.version;
-    hash = "sha256-Dbhi4Sz+a42OILXcSfNNM4UDqMV5gHJ5xfYUMEON3ws=";
+    hash = "sha256-RCSSyTtt2eN9hYT1xzPYjJloPjnkIS6bo21PHrlg5S8=";
   };
 
   # Unable to upstream all of this
@@ -23,24 +23,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
-        "lxst>=0.4.6" \
-        "lxst" \
-      --replace-fail \
         '"kivymd")' \
         '"sbapp/kivymd")'
 
     substituteInPlace sbapp/main.py \
       --replace-fail \
         "1.9.2" \
-        "1.9.6"
+        "2.0.0"
   '';
 
-  build-system = with python3Packages; [
+  build-system = with python313Packages; [
     setuptools
   ];
 
   dependencies =
-    with python3Packages;
+    with python313Packages;
     [
       audioop-lts
       beautifulsoup4
@@ -59,8 +56,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sh
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pycodec2
       pyaudio
+      pycodec2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pyobjus

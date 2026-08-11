@@ -52,7 +52,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
       python3Packages.pynput
       python3Packages.pyside6
       python3Packages.requests
-      python3Packages.xlib
+      python3Packages.python-xlib
       kdePackages.qtbase
       kdePackages.qt6gtk2
     ]);

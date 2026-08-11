@@ -18,10 +18,9 @@ fi
 for i in \
     "x86_64-linux linux-x86_64.tar.gz" \
     "aarch64-linux linux-aarch64.tar.gz" \
-    "x86_64-darwin macos-x86_64.dmg" \
     "aarch64-darwin macos-aarch64.dmg"
 do
-    # shellcheck disable=SC2086 # $i is intentionally splitted to $1 and $2
+    # shellcheck disable=SC2086 # $i is intentionally split to $1 and $2
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/dbeaver/dbeaver/releases/download/$latestVersion/dbeaver-ce-$latestVersion-$2")
     hash=$(nix-hash --type sha256 --to-sri "$prefetch")

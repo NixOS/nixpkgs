@@ -8,12 +8,13 @@
   pythonOlder,
   setuptools,
   time-machine,
+  zha,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "1.2.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-mDcvVwqzSmszaJDahzkRNteiO4C/eU+BqTdBpWj5yGw=";
+    hash = "sha256-CHyp+uU6keMHoNL+mj5NhrwF/oQH2fEvWv1alHBLMg8=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    zha
     zigpy
   ];
 
@@ -47,18 +49,7 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: expected call not found
     "test_tuya_mcu_set_time"
-  ];
-
-  disabledTestPaths = [
-    # function signature mismatch with zigpy 1.5.1
-    "tests/test_tuya.py"
-    "tests/test_tuya_builder.py"
-    "tests/test_tuya_dimmer.py"
-    "tests/test_tuya_rcbo.py"
-    "tests/test_tuya_siren.py"
-    "tests/test_tuya_spells.py"
-    "tests/test_tuya_trv.py"
-    "tests/test_tuya_valve.py"
+    "test_moes"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];

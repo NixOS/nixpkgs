@@ -15,13 +15,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "immudb";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YL6L3WqazzdpXQiLGnuQ7ZRKzmx2Z8C9raFXkN1D1Zk=";
+    hash = "sha256-S+X52zxIJj9uJhvSk0aGrEvLKKoa0BciQW5nAgPRtrc=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     go generate -mod=mod -tags webconsole ./webconsole
   '';
 
-  vendorHash = "sha256-D1dEVnYNpCGSJ5lxzV0+ukDVbQntxcNw6mB3UKDBdQA=";
+  vendorHash = "sha256-7/TR+YjeeTQk+kY2WjYBeiP94onLJXrjJijYl5N6cPc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

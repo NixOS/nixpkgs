@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Public Key Addressable Resource Records (sovereign TLDs) ";
     homepage = "https://github.com/pubky/pkarr";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "pkarr-server";
   };

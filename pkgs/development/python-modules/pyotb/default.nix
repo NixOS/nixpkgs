@@ -37,14 +37,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pyotb";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "pyotb";
     tag = version;
-    hash = "sha256-KomIMVx4jfsTSbGtoml9ON/82sHanOkp/mp1TiUaa2E=";
+    hash = "sha256-TDBhMCdO3kGjbysYZN9un7Y8YY+dGlHw5Vj/ZJVPXdk=";
   };
 
   postPatch = ''
@@ -71,6 +71,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ otbWithPy ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   pythonImportsCheck = [ "pyotb" ];
 

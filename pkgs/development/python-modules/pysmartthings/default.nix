@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -31,6 +32,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     aiohttp
     mashumaro
@@ -52,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
     changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -14,7 +14,7 @@
 let
   src = fetchurl { inherit url hash; };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit

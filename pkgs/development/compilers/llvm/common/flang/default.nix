@@ -23,21 +23,25 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flang";
   inherit version;
 
-  src = runCommand "flang-src-${version}" { inherit (monorepoSrc) passthru; } ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/llvm "$out"
-    cp -r ${monorepoSrc}/clang "$out"
-    cp -r ${monorepoSrc}/mlir "$out"
-    cp -r ${monorepoSrc}/third-party "$out"
-    chmod -R +w $out/llvm
-  '';
+  src =
+    runCommand "${finalAttrs.pname}-src-${finalAttrs.version}"
+      {
+        inherit (monorepoSrc) passthru;
+      }
+      ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/llvm "$out"
+        cp -r ${monorepoSrc}/clang "$out"
+        cp -r ${monorepoSrc}/mlir "$out"
+        cp -r ${monorepoSrc}/third-party "$out"
+        cp -r ${monorepoSrc}/flang-rt "$out"
+        chmod -R +w $out/llvm
+      '';
 
-  patches = [
-    ./dummy_target_19+.patch
-  ];
-  patchFlags = [ "-p2" ];
+  patches = [ ];
+  patchFlags = [ "-p1" ];
 
   sourceRoot = "${finalAttrs.src.name}/flang";
 
@@ -62,23 +66,34 @@ stdenv.mkDerivation (finalAttrs: {
     ls -l ${mlir.dev}/lib/cmake/mlir/MLIRConfig.cmake
   '';
   cmakeFlags = [
-    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
-    # TODO: Needs patches and the `lit` package like other LLVM builds?
     (lib.cmakeFeature "LLVM_TOOLS_BINARY_DIR" "${buildLlvmPackages.tblgen}/bin/")
-    (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${buildLlvmPackages.tblgen}/bin/llvm-lit")
     (lib.cmakeFeature "CLANG_DIR" "${libclang.dev}/lib/cmake/clang")
     (lib.cmakeFeature "MLIR_DIR" "${mlir.dev}/lib/cmake/mlir")
     (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
-    (lib.cmakeFeature "MLIR_TABLEGEN_TARGET" "MLIR-TBLGen")
-    (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
+    (lib.cmakeBool "MLIR_LINK_MLIR_DYLIB" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "LLVM_LIT_ARGS" "-v")
     (lib.cmakeBool "LLVM_ENABLE_PLUGINS" false)
     (lib.cmakeBool "FLANG_STANDALONE_BUILD" true)
     (lib.cmakeBool "LLVM_INCLUDE_EXAMPLES" false)
     (lib.cmakeBool "FLANG_INCLUDE_TESTS" false)
-
   ]
   ++ devExtraCmakeFlags;
+
+  passthru = {
+    # Used by cc-wrapper to determine whether or not the default setup hook is enabled.
+    langC = false;
+    langCC = false;
+    langFortran = true;
+    isClang = true;
+    isFlang = true;
+
+    hardeningUnsupportedFlags = [
+      "zerocallusedregs"
+      "stackprotector"
+      "stackclashprotection"
+    ];
+  };
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..

@@ -33,14 +33,14 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dirsearch";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "maurosoria";
     repo = "dirsearch";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eXB103qUB3m7V/9hlq2xv3Y3bIz89/pGJsbPZQ+AZXs=";
   };
 
@@ -114,11 +114,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${version}";
+    changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line tool for brute-forcing directories and files in webservers, AKA a web path scanner";
     homepage = "https://github.com/maurosoria/dirsearch";
     license = lib.licenses.gpl2Only;
     mainProgram = "dirsearch";
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

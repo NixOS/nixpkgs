@@ -1,8 +1,8 @@
 diff --git a/kcms/audio_information/kcm_audio_information.json b/kcms/audio_information/kcm_audio_information.json
-index 5648bb73..28db7ffb 100644
+index baa7fbea..24b3c30b 100644
 --- a/kcms/audio_information/kcm_audio_information.json
 +++ b/kcms/audio_information/kcm_audio_information.json
-@@ -82,7 +82,7 @@
+@@ -90,7 +90,7 @@
          "Name[zh_CN]": "音频",
          "Name[zh_TW]": "音訊"
      },
@@ -25,10 +25,10 @@ index adb196fd..9d6c8675 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/block_devices/kcm_block_devices.json b/kcms/block_devices/kcm_block_devices.json
-index 5d864d49..8ea55707 100644
+index 37912e43..1adfadb3 100644
 --- a/kcms/block_devices/kcm_block_devices.json
 +++ b/kcms/block_devices/kcm_block_devices.json
-@@ -82,7 +82,7 @@
+@@ -90,7 +90,7 @@
          "Name[zh_CN]": "块设备",
          "Name[zh_TW]": "區塊裝置"
      },
@@ -51,10 +51,10 @@ index 2de923f3..6b14f7fb 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/cpu/kcm_cpu.json b/kcms/cpu/kcm_cpu.json
-index 7541b258..3ba7f289 100644
+index 05b3b039..e769cdba 100644
 --- a/kcms/cpu/kcm_cpu.json
 +++ b/kcms/cpu/kcm_cpu.json
-@@ -102,7 +102,7 @@
+@@ -104,7 +104,7 @@
          "Name[zh_CN]": "CPU",
          "Name[zh_TW]": "CPU"
      },
@@ -90,10 +90,10 @@ index da803598..4e24eaaf 100755
      printf "%s\n\n" "$data"
  done
 diff --git a/kcms/edid/kcm_edid.json b/kcms/edid/kcm_edid.json
-index 4639da41..1afb5522 100644
+index cf0f6cfe..2e6650a1 100644
 --- a/kcms/edid/kcm_edid.json
 +++ b/kcms/edid/kcm_edid.json
-@@ -74,7 +74,7 @@
+@@ -82,7 +82,7 @@
          "Name[zh_CN]": "EDID",
          "Name[zh_TW]": "EDID"
      },
@@ -116,10 +116,10 @@ index 9f04e7fd..8ef37d2c 100644
      [[nodiscard]] CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/egl/kcm_egl.json b/kcms/egl/kcm_egl.json
-index a5a21cd6..cddef596 100644
+index 8af87ff5..42382afe 100644
 --- a/kcms/egl/kcm_egl.json
 +++ b/kcms/egl/kcm_egl.json
-@@ -102,7 +102,7 @@
+@@ -104,7 +104,7 @@
          "Name[zh_CN]": "OpenGL (EGL)",
          "Name[zh_TW]": "OpenGL (EGL)"
      },
@@ -155,10 +155,10 @@ index eab20e0f..5a0d2499 100644
                                                     {executable},
                                                     Qt::TextFormat::RichText,
 diff --git a/kcms/glx/kcm_glx.json b/kcms/glx/kcm_glx.json
-index 900d8d6a..c1bef34f 100644
+index b3525b4f..e2e237a7 100644
 --- a/kcms/glx/kcm_glx.json
 +++ b/kcms/glx/kcm_glx.json
-@@ -101,7 +101,7 @@
+@@ -103,7 +103,7 @@
          "Name[zh_CN]": "OpenGL (GLX)",
          "Name[zh_TW]": "OpenGL (GLX)"
      },
@@ -197,10 +197,10 @@ index 2c009acd..f6c1c8e5 100644
  
  KAuth::ActionReply DMIDecodeHelper::memoryinformation(const QVariantMap &args)
 diff --git a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
-index d173229d..71815467 100644
+index d3a071a5..43cc1c38 100644
 --- a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
 +++ b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
-@@ -95,7 +95,7 @@
+@@ -99,7 +99,7 @@
          "Name[zh_CN]": "窗口管理器",
          "Name[zh_TW]": "視窗管理員"
      },
@@ -223,10 +223,10 @@ index ddb55b5c..8dc6b668 100644
                                                     parent);
      }
 diff --git a/kcms/memory/kcm_memory.json b/kcms/memory/kcm_memory.json
-index 87ad4a4c..e3f07e81 100644
+index a0e573e1..a1acfc7e 100644
 --- a/kcms/memory/kcm_memory.json
 +++ b/kcms/memory/kcm_memory.json
-@@ -134,7 +134,7 @@
+@@ -139,7 +139,7 @@
          "Name[zh_CN]": "内存",
          "Name[zh_TW]": "記憶體"
      },
@@ -236,10 +236,10 @@ index 87ad4a4c..e3f07e81 100644
      "X-KDE-Keywords": "Memory,RAM,dmidecode",
      "X-KDE-Keywords[ar]": "Memory,RAM,dmidecode,رام,ذاكرة,ذاكرة حية",
 diff --git a/kcms/network/kcm_network.json b/kcms/network/kcm_network.json
-index 4ab2e0f1..559baf6f 100644
+index 55df7791..f932c500 100644
 --- a/kcms/network/kcm_network.json
 +++ b/kcms/network/kcm_network.json
-@@ -146,7 +146,7 @@
+@@ -147,7 +147,7 @@
          "Name[zh_CN]": "网络接口",
          "Name[zh_TW]": "網路介面"
      },
@@ -257,15 +257,15 @@ index a49284d3..77818fe2 100644
          const QString executable = QStandardPaths::locate(QStandardPaths::GenericDataLocation, u"kinfocenter/network/ip.sh"_s, QStandardPaths::LocateFile);
          const QString darkness = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark ? u"1"_s : u"0"_s;
 -        m_outputContext = new CommandOutputContext({u"ip"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
-+        m_outputContext = new CommandOutputContext({u"@ip@"_s, u"aha"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
++        m_outputContext = new CommandOutputContext({u"@ip@"_s, u"@aha@"_s}, u"/bin/sh"_s, {executable, darkness}, Qt::TextFormat::RichText, parent);
      }
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/opencl/kcm_opencl.json b/kcms/opencl/kcm_opencl.json
-index e63b60a9..93f1f484 100644
+index 73d1e8c9..5688b964 100644
 --- a/kcms/opencl/kcm_opencl.json
 +++ b/kcms/opencl/kcm_opencl.json
-@@ -92,7 +92,7 @@
+@@ -96,7 +96,7 @@
          "Name[zh_CN]": "OpenCL",
          "Name[zh_TW]": "OpenCL"
      },
@@ -301,10 +301,10 @@ index 36d82ef8..16ce2703 100644
  endif()
  
 diff --git a/kcms/sensors/kcm_sensors.json b/kcms/sensors/kcm_sensors.json
-index 4f9959dc..1cba9e5f 100644
+index d67d8435..96f04ace 100644
 --- a/kcms/sensors/kcm_sensors.json
 +++ b/kcms/sensors/kcm_sensors.json
-@@ -66,7 +66,7 @@
+@@ -76,7 +76,7 @@
          "Name[zh_CN]": "传感器",
          "Name[zh_TW]": "感測器"
      },
@@ -314,31 +314,34 @@ index 4f9959dc..1cba9e5f 100644
      "X-KDE-Keywords": "lm_sensors,sensors,temp,temperature,volt,voltage,sensors,fan,fan speed,monitoring,amp,amps,current,power",
      "X-KDE-Keywords[ar]": "مستشعرات lm,مستشعرات,درجة الحرارة,درجة الحرارة,فولت,جهد,مستشعرات,مروحة,سرعة المروحة,مراقبة,أمبير,أمبير,تيار,طاقة",
 diff --git a/kcms/sensors/main.cpp b/kcms/sensors/main.cpp
-index 8dae9f8f..ee70f381 100644
+index 276280db..aa8856b6 100644
 --- a/kcms/sensors/main.cpp
 +++ b/kcms/sensors/main.cpp
-@@ -18,7 +18,7 @@ public:
-     explicit KCMSensors(QObject *parent, const KPluginMetaData &data)
+@@ -21,9 +21,9 @@ public:
          : KQuickConfigModule(parent, data)
      {
--        m_outputContext = new CommandOutputContext(u"sensors"_s, {}, parent);
-+        m_outputContext = new CommandOutputContext(u"@sensors@"_s, {}, parent);
+         if (QLocale().measurementSystem() == QLocale::ImperialUSSystem) {
+-            m_outputContext = new CommandOutputContext(u"sensors"_s, {u"-f"_s}, parent);
++            m_outputContext = new CommandOutputContext(u"@sensors@"_s, {u"-f"_s}, parent);
+         } else {
+-            m_outputContext = new CommandOutputContext(u"sensors"_s, {}, parent);
++            m_outputContext = new CommandOutputContext(u"@sensors@"_s, {}, parent);
+         }
          m_outputContext->setAutoRefreshMs(1000);
      }
-     CommandOutputContext *outputContext() const
 diff --git a/kcms/vulkan/kcm_vulkan.json b/kcms/vulkan/kcm_vulkan.json
-index ca4cf9e0..4f6af805 100644
+index 3e6df405..ae08bc95 100644
 --- a/kcms/vulkan/kcm_vulkan.json
 +++ b/kcms/vulkan/kcm_vulkan.json
-@@ -100,7 +100,7 @@
+@@ -102,7 +102,7 @@
          "Name[zh_CN]": "Vulkan",
          "Name[zh_TW]": "Vulkan"
      },
 -    "TryExec": "vulkaninfo",
 +    "TryExec": "@vulkaninfo@",
      "X-KDE-KInfoCenter-Category": "graphical_information",
-     "X-KDE-Keywords": "Vulkan,VideoCard,Hardware Acceleration,Graphics,dxdiag",
-     "X-KDE-Keywords[ar]": "Vulkan,VideoCard,Hardware Acceleration,Graphics,فولكان,بطاقة الفيديو,تسريع الأجهزة,الرسومات,dxdiag",
+     "X-KDE-Keywords": "Vulkan,VideoCard,Hardware Acceleration,Graphics,dxdiag,vulkaninfo",
+     "X-KDE-Keywords[ar]": "Vulkan,VideoCard,Hardware Acceleration,Graphics,فولكان,بطاقة الفيديو,تسريع الأجهزة,الرسومات,dxdiag,vulkaninfo",
 diff --git a/kcms/vulkan/main.cpp b/kcms/vulkan/main.cpp
 index 5665d9d2..008f1bf0 100644
 --- a/kcms/vulkan/main.cpp
@@ -353,10 +356,10 @@ index 5665d9d2..008f1bf0 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/wayland/kcm_wayland.json b/kcms/wayland/kcm_wayland.json
-index 7ca1dcb7..e814570b 100644
+index 3a1a9ad1..572af87e 100644
 --- a/kcms/wayland/kcm_wayland.json
 +++ b/kcms/wayland/kcm_wayland.json
-@@ -106,7 +106,7 @@
+@@ -108,7 +108,7 @@
          "Name[zh_CN]": "Wayland",
          "Name[zh_TW]": "Wayland"
      },
@@ -379,10 +382,10 @@ index 3a4825c7..4633927b 100644
      CommandOutputContext *outputContext() const
      {
 diff --git a/kcms/xserver/kcm_xserver.json b/kcms/xserver/kcm_xserver.json
-index 5b12997a..9debc887 100644
+index b22ecf03..e9240ce7 100644
 --- a/kcms/xserver/kcm_xserver.json
 +++ b/kcms/xserver/kcm_xserver.json
-@@ -146,7 +146,7 @@
+@@ -147,7 +147,7 @@
          "Name[zh_CN]": "X 服务器",
          "Name[zh_TW]": "X 伺服器"
      },

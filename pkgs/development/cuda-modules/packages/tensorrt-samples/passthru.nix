@@ -17,8 +17,14 @@ in
       # Releases prior to 10.14.1 don't have any sample data available to them, so just use the 10.14.1 release's
       # sample data.
       sample-data_10_14_1 = {
-        url = "https://github.com/NVIDIA/TensorRT/releases/download/v10.14/tensorrt_sample_data_20251106.zip";
-        hash = "sha256-IA1pH8idtk/7FD1Tf0hKtyP7A5SW/2ugezyBRluG8yk=";
+        url = "https://github.com/NVIDIA/TensorRT/releases/download/v10.14/tensorrt_sample_data_20260128.zip";
+        hash = "sha256-KSUKJsBaOSRHJKDp5SUzmfHNWlcEP1TwTgXja3nhVKI=";
+      };
+
+      sample-data_11_0_0 = {
+        url = "https://github.com/NVIDIA/TensorRT/releases/download/v11.0/tensorrt_sample_data_20260602.zip";
+        hash = "sha256-4SFzdg1fQS/ot1AtF5VsECjgxCGrV9E62S1B7/1g5c4=";
+        stripRoot = false;
       };
     in
     fetchzip (
@@ -28,6 +34,7 @@ in
         lib.getAttr finalAttrs.version {
           "10.14.1" = sample-data_10_14_1;
           "10.16.1" = sample-data_10_14_1; # Release 10.16 is missing sample data
+          "11.0.0" = sample-data_11_0_0;
         }
     );
 

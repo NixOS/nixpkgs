@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wandio";
-  version = "4.2.6-1";
+  version = "4.2.7-1";
 
   src = fetchFromGitHub {
     owner = "LibtraceTeam";
     repo = "wandio";
     tag = finalAttrs.version;
-    hash = "sha256-fYSAmuTgik8YeonHQc+GHRQ1lEuWxlE17npVsMpBlOE=";
+    hash = "sha256-2lsECBtbyTc+xlOeuOdEMZr/qdlWtPPaMCbJf+nGHWE=";
   };
 
   strictDeps = true;

@@ -62,16 +62,13 @@ let
       ln -s ${configFile} $out/application/config/config.php
       ln -s ${dbFile} $out/application/config/database.php
 
+      # make a copy of the original assets/json to prime the datadir
+      cp -a "$out/assets/json/" "$out/assets/json.original/"
+
       # link writable directories
-      for directory in updates uploads backup logbook; do
+      for directory in updates uploads backup logbook assets/qslcard images/eqsl_card_images assets/sstvimages assets/json; do
         rm -rf $out/$directory
         ln -s ${cfg.dataDir}/$directory $out/$directory
-      done
-
-      # link writable asset files
-      for asset in dok sota wwff; do
-        rm -rf $out/assets/json/$asset.txt
-        ln -s ${cfg.dataDir}/assets/json/$asset.txt $out/assets/json/$asset.txt
       done
     '';
   };
@@ -383,37 +380,44 @@ in
         cloudlog-upload-lotw = {
           description = "Upload QSOs to LoTW if certs have been provided";
           enable = cfg.upload-lotw.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/lotw/lotw_upload";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/lotw/lotw_upload";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-update-lotw-users = {
           description = "Update LOTW Users Database";
           enable = cfg.update-lotw-users.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/lotw/load_users";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/lotw/load_users";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-update-dok = {
           description = "Update DOK File for autocomplete";
           enable = cfg.update-dok.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_dok";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_dok";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-update-clublog-scp = {
           description = "Update Clublog SCP Database File";
           enable = cfg.update-clublog-scp.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_clublog_scp";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_clublog_scp";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-update-wwff = {
           description = "Update WWFF File for autocomplete";
           enable = cfg.update-wwff.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_wwff";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_wwff";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-upload-qrz = {
           description = "Upload QSOs to QRZ Logbook";
           enable = cfg.upload-qrz.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/qrz/upload";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/qrz/upload";
+          serviceConfig.Type = "oneshot";
         };
         cloudlog-update-sota = {
           description = "Update SOTA File for autocomplete";
           enable = cfg.update-sota.enable;
-          script = "${pkgs.curl}/bin/curl -s ${cfg.baseUrl}/update/update_sota";
+          serviceConfig.ExecStart = "${lib.getExe pkgs.curl} -s ${cfg.baseUrl}/update/update_sota";
+          serviceConfig.Type = "oneshot";
         };
       };
       timers = {
@@ -503,13 +507,26 @@ in
           group = config.services.nginx.group;
         in
         [
-          "d ${cfg.dataDir}                0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/updates        0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/uploads        0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/backup         0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/logbook        0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/assets/json    0750 ${cfg.user} ${group} - -"
-          "d ${cfg.dataDir}/assets/qslcard 0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}                         0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/updates                 0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/uploads                 0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/backup                  0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/logbook                 0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/assets                  0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/assets/json             0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/assets/qslcard          0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/assets/sstvimages       0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/images                  0750 ${cfg.user} ${group} - -"
+          "d ${cfg.dataDir}/images/eqsl_card_images 0750 ${cfg.user} ${group} - -"
+          "C ${cfg.dataDir}/assets/json/dok.txt                              0640 ${cfg.user} ${group} - ${package}/assets/json.original/dok.txt"
+          "C ${cfg.dataDir}/assets/json/pota.txt                             0640 ${cfg.user} ${group} - ${package}/assets/json.original/pota.txt"
+          "C ${cfg.dataDir}/assets/json/satellite_data.json                  0640 ${cfg.user} ${group} - ${package}/assets/json.original/satellite_data.json"
+          "C ${cfg.dataDir}/assets/json/sota.txt                             0640 ${cfg.user} ${group} - ${package}/assets/json.original/sota.txt"
+          "C ${cfg.dataDir}/assets/json/US_counties.csv                      0640 ${cfg.user} ${group} - ${package}/assets/json.original/US_counties.csv"
+          "C ${cfg.dataDir}/assets/json/us_national_parksontheair.csv        0640 ${cfg.user} ${group} - ${package}/assets/json.original/us_national_parksontheair.csv"
+          "C ${cfg.dataDir}/assets/json/WABSquares.geojson                   0640 ${cfg.user} ${group} - ${package}/assets/json.original/WABSquares.geojson"
+          "C ${cfg.dataDir}/assets/json/wwff.txt                             0640 ${cfg.user} ${group} - ${package}/assets/json.original/wwff.txt"
+          "C+ ${cfg.dataDir}/assets/json/datatables_languages                0750 ${cfg.user} ${group} - ${package}/assets/json.original/datatables_languages"
         ];
     };
 

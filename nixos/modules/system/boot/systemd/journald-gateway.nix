@@ -9,16 +9,19 @@ let
   cfg = config.services.journald.gateway;
 
   cliArgs = lib.cli.toCommandLineShellGNU { } {
-    # If either of these are null / false, they are not passed in the command-line
+    # If either of these are false, they are not passed in the command-line
     inherit (cfg)
-      cert
-      key
-      trust
       system
       user
       merge
       ;
   };
+
+  tlsOptionRemovedMessage = ''
+    systemd in Nixpkgs is built without GnuTLS, so systemd-journal-gatewayd
+    cannot serve HTTPS. Use a reverse proxy (such as nginx) to terminate TLS
+    in front of the gateway if you need encrypted access.
+  '';
 in
 {
   imports = [
@@ -26,9 +29,12 @@ in
       [ "services" "journald" "enableHttpGateway" ]
       [ "services" "journald" "gateway" "enable" ]
     )
+    (lib.mkRemovedOptionModule [ "services" "journald" "gateway" "cert" ] tlsOptionRemovedMessage)
+    (lib.mkRemovedOptionModule [ "services" "journald" "gateway" "key" ] tlsOptionRemovedMessage)
+    (lib.mkRemovedOptionModule [ "services" "journald" "gateway" "trust" ] tlsOptionRemovedMessage)
   ];
 
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
+  meta.maintainers = [ ];
   options.services.journald.gateway = {
     enable = lib.mkEnableOption "the HTTP gateway to the journal";
 
@@ -37,47 +43,6 @@ in
       type = lib.types.port;
       description = ''
         The port to listen to.
-      '';
-    };
-
-    cert = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr str;
-      description = ''
-        The path to a file or `AF_UNIX` stream socket to read the server
-        certificate from.
-
-        The certificate must be in PEM format. This option switches
-        `systemd-journal-gatewayd` into HTTPS mode and must be used together
-        with {option}`services.journald.gateway.key`.
-      '';
-    };
-
-    key = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr str;
-      description = ''
-        Specify the path to a file or `AF_UNIX` stream socket to read the
-        secret server key corresponding to the certificate specified with
-        {option}`services.journald.gateway.cert` from.
-
-        The key must be in PEM format.
-
-        This key should not be world-readable, and must be readably by the
-        `systemd-journal-gateway` user.
-      '';
-    };
-
-    trust = lib.mkOption {
-      default = null;
-      type = with lib.types; nullOr str;
-      description = ''
-        Specify the path to a file or `AF_UNIX` stream socket to read a CA
-        certificate from.
-
-        The certificate must be in PEM format.
-
-        Setting this option enforces client certificate checking.
       '';
     };
 

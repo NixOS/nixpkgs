@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   buildPythonPackage,
   callPackage,
   setuptools,
@@ -21,20 +22,29 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "48.0.0";
+  version = "49.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-S1oOLou6tE1atqZ6HXwVQDps9BnjiEpRdoZY5VQm+Kg=";
+    hash = "sha256-yHUIGauFZYnjcoROvocT1UqQ0B8ZuVTaJ0ZAfri6T1E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-mp+1Fw8xNBJD1DM8obAqYBP8erxXiP768+ifqRN1Uqs=";
+    hash = "sha256-yMCBu/RGRcEQST8tEWCNgVvlQsp2KamOqt60qvOYdt8=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Add test marks where malloc failure is expected on systems with overcommit enabled
+      name = "malloc-overcommit-mark.patch";
+      url = "https://github.com/pyca/cryptography/commit/2efeba9cc67809b67e659bea8eaea680df2135e8.patch";
+      hash = "sha256-06Z+sk2JTJ50CCnPf2vXyPL5BZeI98oc43LpccenzNg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

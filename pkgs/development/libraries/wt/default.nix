@@ -18,6 +18,8 @@
   openssl,
   harfbuzz,
   icu,
+  libice,
+  libsm,
 }:
 
 let
@@ -53,10 +55,18 @@ let
         openssl
         harfbuzz
         icu
+        libice
+        libsm
       ];
 
       dontWrapQtApps = true;
       cmakeFlags = [
+        "-DCMAKE_INSTALL_RPATH=${
+          lib.makeLibraryPath [
+            libice
+            libsm
+          ]
+        }"
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
       ]
@@ -77,7 +87,7 @@ let
 in
 {
   wt4 = generic {
-    version = "4.12.0";
-    sha256 = "sha256-/SM/iTp/TQU8nq647UAHexFb3S5n6pk3lDkra3AEjis=";
+    version = "4.13.2";
+    sha256 = "sha256-UK0r99f8ub7YPETiz3Ka/jCkJmF4qc7R8ZLkb/RWQCI=";
   };
 }

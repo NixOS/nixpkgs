@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0-unstable-2026-05-09";
 
   src = fetchFromGitHub {
-    owner = "KevinOConnor";
+    owner = "Klipper3d";
     repo = "klipper";
     rev = "4767a8ed97c57e4bb2ecf60fd72e345f58dfa3fc";
     sha256 = "sha256-ZwPy1Et0ftCX8haogRSOUm1et2pvYZxvdsuM74acu6Q=";
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Klipper 3D printer firmware";
     mainProgram = "klippy";
-    homepage = "https://github.com/KevinOConnor/klipper";
+    homepage = "https://github.com/Klipper3d/klipper";
     maintainers = with lib.maintainers; [
       lovesegfault
       zhaofengli

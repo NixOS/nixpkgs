@@ -305,7 +305,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 ### pnpm {#javascript-pnpm}
 
-pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
+pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
 
@@ -408,6 +408,8 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 }
 ```
 
+If needed, `dontPnpmConfigure = true;` can be used to fully disable `pnpmConfigHook` without manually removing it from inputs.
+
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
 If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.
@@ -493,7 +495,7 @@ In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by th
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. New packages should use `3`:
+This is the version of the output of `fetchPnpmDeps`. New packages should use `4`:
 
 ```nix
 {

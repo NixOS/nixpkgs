@@ -2,30 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "motioneye";
-  version = "0.43.1";
+  version = "0.44.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "motioneye-project";
     repo = "motioneye";
     tag = version;
-    hash = "sha256-ckOgYmOP5irjNutcC3FMZPBexn/CldG0UtFZ+tPYNJ4=";
+    hash = "sha256-4sXttSSkmMgsoZb7PXEXXh8KNORTSmqq4lYp3JBDmPo=";
   };
-
-  patches = [
-    # fix pytest
-    # https://github.com/motioneye-project/motioneye/pull/3271
-    (fetchpatch {
-      url = "https://github.com/motioneye-project/motioneye/commit/41c0727e2872af1b758743c41b529e76dcac6f84.patch";
-      hash = "sha256-0zDveoAN1T0SuCob0U/9GEGTh7pj2CXH/j4YrjO0VE0=";
-      includes = [ "conftest.py" ];
-    })
-  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -38,15 +28,23 @@ python3Packages.buildPythonApplication rec {
     pillow
     pycurl
     tornado
+    argon2-cffi
   ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   pythonImportsCheck = [
     "motioneye"
   ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/meyectl";
+  versionCheckProgramArg = "-v";
 
   meta = {
     description = "Web frontend for the motion daemon";

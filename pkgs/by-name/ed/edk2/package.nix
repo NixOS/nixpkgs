@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   applyPatches,
   libuuid,
   bc,
@@ -29,18 +28,23 @@ let
       "LOONGARCH64"
     else
       throw "Unsupported architecture";
+
+  # The toolchain definition uses different variables for different architectures.
+  targetPrefixes = lib.genAttrs [ "GCC_BIN" "GCC_${targetArch}_PREFIX" ] (
+    lib.const stdenv.cc.targetPrefix
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202602";
+  version = "202605";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TeMGpqVpXYRaeLjjg/aWHjtvfJpEfauA7Xg7dfe3XNg=";
+    hash = "sha256-sUqLocdX7lxN2pEdn84Cjh8pOzYqIeKqO144XhwKA30=";
   };
 
   src = applyPatches {
@@ -48,12 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     src = finalAttrs.srcWithVendoring;
 
     patches = [
-      # pass targetPrefix as an env var
-      (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
-        hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
-      })
-
       ./fix-cross-compilation-antlr-dlg.patch
     ];
 
@@ -106,10 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
       + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
     PYTHON_COMMAND = lib.getExe pythonEnv;
-    # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
-    ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-
-  };
+  }
+  // targetPrefixes;
 
   hardeningDisable = [
     "format"
@@ -169,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
         finalAttrsInner:
         let
           attrs = lib.toFunction attrsOrFun finalAttrsInner;
-          buildType = attrs.buildType or (if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC5");
+          buildType = attrs.buildType or (if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC");
         in
         {
           inherit (finalAttrs) src;
@@ -212,10 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
           "env"
         ]
         // {
-          env = {
-            ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-          }
-          // (attrs.env or { });
+          env = targetPrefixes // (attrs.env or { });
         }
       );
   };

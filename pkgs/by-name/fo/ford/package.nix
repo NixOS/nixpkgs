@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Fortran documentation system";
     mainProgram = "ford";
     homepage = "https://github.com/Fortran-FOSS-Programmers/ford";
-    license = [ lib.licenses.gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.sheepforce ];
   };
 })

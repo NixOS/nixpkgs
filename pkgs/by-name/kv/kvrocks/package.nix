@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # keep-sorted start
   cmake,
@@ -12,6 +13,7 @@
 
   # keep-sorted start
   cpptrace,
+  fast-float,
   fmt,
   gtest,
   hat-trie,
@@ -83,8 +85,8 @@ let
   luajit-src = fetchFromGitHub {
     owner = "RocksLabs";
     repo = "LuaJIT";
-    rev = "c0a8e68325ec261a77bde1c8eabad398168ffe74";
-    hash = "sha256-Wjh14d0JR5ecAwdYVBjQYIHb2vJ1I61oR0N0LMmtq4E=";
+    rev = "02dfcc34e93e57ac96e566d123c66ee01e650299";
+    hash = "sha256-HINP9nahXHTManDMAAJBOUlSSxv5JZhlHs96HHkE7qE=";
   };
 
   zlib-ng' = zlib-ng.override { withZlibCompat = true; };
@@ -107,16 +109,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvrocks";
-  version = "2.15.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "kvrocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4saKuezPYvcmKSqVBVDbPJcQXr6pVfIWjff7Txg8tY=";
+    hash = "sha256-CAbhOX7dmyXgl0STNjzALseXUzrpTPNy9tjoPACe0Os=";
   };
 
   __structuredAttrs = true;
+
+  patches = [
+    # Fix build with jsoncons 1.9.0
+    (fetchpatch {
+      url = "https://github.com/apache/kvrocks/commit/50cd1f0da4c3eb8f8c86bad080410e556f18fc98.patch";
+      hash = "sha256-uqaVvBP4XOUvRJZGeHKLKQj0TVoKvxN24KhnNj5ebaM=";
+    })
+  ];
 
   postPatch = ''
     # Replace FetchContent-based cmake files with system library finders
@@ -151,6 +161,15 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     }}
     ${mkCmakeFile "fmt" { findPackage = "fmt"; }}
+    ${mkCmakeFile "fast_float" {
+      findPackage = "FastFloat";
+      libraries = [
+        {
+          name = "fast_float";
+          target = "FastFloat::fast_float";
+        }
+      ];
+    }}
     ${mkCmakeFile "spdlog" { findPackage = "spdlog"; }}
     ${mkCmakeFile "snappy" {
       pkgConfig = {
@@ -273,6 +292,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     # keep-sorted start
     cpptrace
+    fast-float
     fmt
     gtest
     hat-trie

@@ -51,7 +51,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ig";
-    # The last successful Darwin Hydra build was in 2024
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

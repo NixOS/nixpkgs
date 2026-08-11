@@ -64,7 +64,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gotailwind" ];
 
   meta = {
-    description = "Modul to communicate with Tailwind garage door openers";
+    description = "Module to communicate with Tailwind garage door openers";
     homepage = "https://github.com/frenck/python-gotailwind";
     changelog = "https://github.com/frenck/python-gotailwind/releases/tag/${src.tag}";
     license = lib.licenses.mit;

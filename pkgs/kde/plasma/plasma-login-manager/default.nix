@@ -11,7 +11,6 @@ mkKdeDerivation {
   pname = "plasma-login-manager";
 
   patches = [
-    ./config-mtime.patch
     ./config-path.patch
 
     (replaceVars ./kwin-path.patch {

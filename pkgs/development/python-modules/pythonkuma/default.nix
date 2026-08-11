@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Simple Python wrapper for Uptime Kuma";
     homepage = "https://github.com/tr4nt0r/pythonkuma";
-    changelog = "https://github.com/tr4nt0r/pythonkuma/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/tr4nt0r/pythonkuma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };

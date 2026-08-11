@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs,
+  nodejs_22,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -25,7 +25,9 @@
 }:
 
 let
-  yarn-berry = yarn-berry_4;
+  # nodejs pin should be obsolete once #522655 is in master
+  nodejs = nodejs_22;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
 
   releaseData = lib.importJSON ./release-data.json;
 in

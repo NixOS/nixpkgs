@@ -21,7 +21,9 @@ let
     ;
 in
 pythonPackages.buildPythonPackage {
-  pname = "qscintilla-qt${qtVersion}";
+  # Matches the `name` declared in Python/pyproject-qt${qtVersion}.toml upstream,
+  # which is inconsistent between Qt5 ("QScintilla") and Qt6 ("PyQt6-QScintilla").
+  pname = if qtVersion == "5" then "qscintilla" else "pyqt${qtVersion}-qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;
   pyproject = true;

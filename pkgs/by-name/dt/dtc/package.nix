@@ -49,8 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
         }
       );
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   nativeBuildInputs = [
     meson
     ninja

@@ -9,21 +9,19 @@
   # dependencies
   protobuf,
   requests,
-
-  # tests
-  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "kagglesdk";
-  version = "0.1.23";
+  version = "0.1.36";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglesdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0KzZy7Hghkljdbbp4AnafBmZL+jw/3q44+caSZ1S1mU=";
+    hash = "sha256-a7+/bAqRJyETzBFqD5AlrJsMtF227GLdM7EnYTlcfso=";
   };
 
   build-system = [

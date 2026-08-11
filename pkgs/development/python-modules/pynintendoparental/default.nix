@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynintendoparental";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pynintendoparental";
     tag = finalAttrs.version;
-    hash = "sha256-rkDWhWIBqTwb9M8msYFw8x6Tt9ymhDRJFrRyjRFh3G8=";
+    hash = "sha256-cQwWL7OhuLHHKZy3Bv+FuodoHVE9IduZgqjBKNE5ddQ=";
   };
 
   postPatch = ''

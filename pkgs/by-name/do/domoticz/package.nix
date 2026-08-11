@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
   cmake,
   python3,
@@ -24,22 +23,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2024.7";
+  version = "2026.2-unstable-2026-07-09";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = "domoticz";
-    tag = finalAttrs.version;
-    hash = "sha256-D8U1kK3m1zT83YvZ42hGSU9PzBfS1VGr2mxUYbM2vNQ=";
+    rev = "7e12d1e5d7bf3f7d083ef31d5dd611d678f89d48"; # pinned due to removed dependency (see nixpkgs pr #539060)
+    hash = "sha256-+6EIEsgGTaLEPzBa/R5EYAxnYB3+cj54LGDJwutTQGA=";
+    fetchSubmodules = true;
   };
-
-  patches = [
-    # Boost 1.87 compatibility, remove once upgraded to 2025.1
-    (fetchpatch {
-      url = "https://github.com/domoticz/domoticz/commit/5d0db89bbd120ed5dc05b4ff8c136f14a42f0cd3.patch";
-      hash = "sha256-FPe83yJKJEgnY3kABy9CTRe1CBh42dPG1ZWCUE5PO8E=";
-    })
-  ];
 
   buildInputs = [
     openssl
@@ -87,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [
-    versionCheckHook
+    # versionCheckHook # readd once we can move to a tagged release again
   ];
   doInstallCheck = true;
 
@@ -98,15 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with lib.maintainers; [ edcragg ];
+    maintainers = with lib.maintainers; [
+      edcragg
+      lenny
+    ];
     homepage = "https://www.domoticz.com/";
     changelog = "https://github.com/domoticz/domoticz/blob/${finalAttrs.version}/History.txt";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
     mainProgram = "domoticz";
-    knownVulnerabilities = [
-      "CVE-2026-1001"
-    ];
   };
 })

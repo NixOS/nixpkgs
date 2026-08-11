@@ -129,6 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dselinux=disabled"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # D-Bus defaults to launchd-activation on Darwin, but that requires the launch agent be installed. It also breaks
+    # anything that uses `dbus-run-session` in tests. Changing the default aligns Darwin with other UNIX platforms.
+    "-Ddbus_session_bus_listen_address=unix:tmpdir=/tmp"
     # `launchctl` is only needed at runtime. Lie to `find_program` because it will always be present on a Darwin host.
     "--cross-file=${writeText "darwin.ini" ''
       [binaries]
@@ -154,6 +157,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
     substituteInPlace ./tools/dbus-launch.c \
       --replace-fail 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # For some reason, only these binaries reference the dylib by rpath instead of by an absolute install name.
+    for exe in bin/dbus-daemon bin/dbus-run-session libexec/dbus-daemon-launch-helper; do
+      install_name_tool "$out/$exe" \
+        -change "@rpath/libdbus-1.3.dylib" "$lib/lib/libdbus-1.3.dylib"
+    done
   '';
 
   postFixup = ''

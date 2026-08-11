@@ -6,8 +6,6 @@
   python,
 
   # nativeBuildInputs
-  cmake,
-  doxygen,
   nanobind,
 
   # propagatedBuildInputs
@@ -50,7 +48,7 @@ buildPythonPackage rec {
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_TESTING" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
@@ -62,16 +60,11 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    nanobind
-  ];
-
+  buildInputs = [ jrl-cmakemodules ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs ++ [ nanobind ];
   propagatedBuildInputs = [
     suitesparse
     eigen
-    jrl-cmakemodules
   ];
 
   dependencies = [

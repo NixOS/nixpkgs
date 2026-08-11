@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.86.0";
+  version = "2.89.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-3C39e9C3m9M0faGUgOEWo66fFGDytfGohgUYX55VN8g=";
+    hash = "sha256-bNKPp/O5YOhne9OOEjextcXVNtGl1TP+vyFUBmOXt7I=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -192,6 +192,7 @@ py.pkgs.toPythonApplication (
         azure-mgmt-cosmosdb
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
+        azure-mgmt-domainregistration
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
         azure-mgmt-extendedlocation

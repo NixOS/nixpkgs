@@ -4,7 +4,6 @@
   stdenv,
 
   # Dependencies
-  abseil-cpp,
   c-ares,
   croncpp,
   double-conversion,
@@ -15,8 +14,6 @@
   gperftools,
   gtest,
   hdrhistogram_c,
-  hnswlib,
-  jemalloc,
   liburing,
   lz4,
   pcre2,
@@ -36,6 +33,7 @@
   cmake,
   gcc-unwrapped,
   ninja,
+  perl,
 
   # Runtime dependencies
   boost,
@@ -57,21 +55,31 @@
 
 let
   pname = "dragonflydb";
-  version = "1.34.2";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "dragonflydb";
     repo = "dragonfly";
     tag = "v${version}";
-    hash = "sha256-n70IB32tZDe665hVLrKC0BSSJutmYhtPJvfNa48xaqA=";
+    hash = "sha256-vLuuf3fVdVzcd06bafGiLtION6IwTnspiIJmZF9tUGg=";
     fetchSubmodules = true;
   };
 
-  aws-sdk-cpp-1-11-162 = fetchFromGitHub {
+  # dragonfly's helio applies patches written against this exact abseil
+  # release (see helio/patches/abseil-20250512.1.patch), so it's pinned here
+  # rather than taken from nixpkgs' abseil-cpp, which tracks a newer version.
+  abseil-cpp-20250512 = fetchFromGitHub {
+    owner = "abseil";
+    repo = "abseil-cpp";
+    tag = "20250512.1";
+    hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
+  };
+
+  aws-sdk-cpp-1-11-717 = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
-    tag = "1.11.162";
-    hash = "sha256-NxVE7H8BOetpbBkB2PTVBoHSXYm6cTp41F1LJmhtBbs=";
+    tag = "1.11.717";
+    hash = "sha256-stDZg9dvKljnbZZUHEn1KmlgDdvW6BK7H7RtGk/nyEI=";
     fetchSubmodules = true;
   };
 
@@ -85,8 +93,17 @@ let
   jsoncons-dragonfly = fetchFromGitHub {
     owner = "dragonflydb";
     repo = "jsoncons";
-    rev = "Dragonfly.178";
-    hash = "sha256-cxM95DFFo5z+eImgZzJw+ykaeSDtBF+hw5qo6gnL53s=";
+    rev = "Dragonfly1.5.0";
+    hash = "sha256-9W9GJpzKuqolXoz5iYiE1EbVWr7HiFqpMgZO1BQdi0s=";
+  };
+
+  # dragonfly's search module uses a fork of hnswlib with custom changes, so
+  # this can't come from nixpkgs' hnswlib (nmslib upstream).
+  hnswlib-dragonfly = fetchFromGitHub {
+    owner = "dragonflydb";
+    repo = "hnswlib";
+    rev = "d07dd1da2bf48b85d2f03b8396193ad7120f75c2";
+    hash = "sha256-GFBjKzDauznGGfkXZqSFgbvBKxDXbx2rETqY5BnCIiw=";
   };
 
   lua-dragonfly = fetchFromGitHub {
@@ -96,18 +113,20 @@ let
     hash = "sha256-uLNe+hLihu4wMW/wstGnYdPa2bGPC5UiNE+VyNIYY2c=";
   };
 
-  mimalloc216 = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.1.6";
-    hash = "sha256-Ff3+RP+lAXCOeHJ87oG3c02rPP4WQIbg5L/CVe6gA3M=";
-  };
-
   mimalloc224 = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
     tag = "v2.2.4";
     hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
+  };
+
+  # nixpkgs' libstemmer is older than the snowball release dragonfly's search
+  # module builds against, so the source is pinned and built in-tree here.
+  snowball-stemmer = fetchFromGitHub {
+    owner = "snowballstem";
+    repo = "snowball";
+    tag = "v3.0.1";
+    hash = "sha256-QPIPePddUqwpa0YMn0E7H9GZj3s2bEkJzZdXlrHeZbo=";
   };
 
   withUnwind = !stdenv.targetPlatform.isAarch64;
@@ -130,7 +149,7 @@ stdenv.mkDerivation {
 
     # Copy FetchContent dependencies (in helio/cmake/third_party.cmake)
     # These go to build/_deps/ where FetchContent expects them
-    cp -r --no-preserve=mode,ownership ${abseil-cpp.src} build/_deps/abseil_cpp-src
+    cp -r --no-preserve=mode,ownership ${abseil-cpp-20250512} build/_deps/abseil_cpp-src
     cp -r --no-preserve=mode,ownership ${gbenchmark.src} build/_deps/benchmark-src
     cp -r --no-preserve=mode,ownership ${glog-absl} build/_deps/glog-src
     cp -r --no-preserve=mode,ownership ${gtest.src} build/_deps/gtest-src
@@ -142,13 +161,12 @@ stdenv.mkDerivation {
     cp -r --no-preserve=mode,ownership ${fast-float.src} build/deps-nixpkgs/fast_float
     cp -r --no-preserve=mode,ownership ${flatbuffers_23.src} build/deps-nixpkgs/flatbuffers
     cp -r --no-preserve=mode,ownership ${hdrhistogram_c.src} build/deps-nixpkgs/hdr_histogram
-    cp -r --no-preserve=mode,ownership ${jemalloc.src} build/deps-nixpkgs/jemalloc
     cp -r --no-preserve=mode,ownership ${jsoncons-dragonfly} build/deps-nixpkgs/jsoncons
     cp -r --no-preserve=mode,ownership ${liburing.src} build/deps-nixpkgs/uring
     cp -r --no-preserve=mode,ownership ${lua-dragonfly} build/deps-nixpkgs/lua
     cp -r --no-preserve=mode,ownership ${lz4.src} build/deps-nixpkgs/lz4
-    cp -r --no-preserve=mode,ownership ${mimalloc216} build/deps-nixpkgs/mimalloc216
     cp -r --no-preserve=mode,ownership ${mimalloc224} build/deps-nixpkgs/mimalloc224
+    cp -r --no-preserve=mode,ownership ${rapidjson.src} build/deps-nixpkgs/rapidjson
     cp -r --no-preserve=mode,ownership ${pugixml.src} build/deps-nixpkgs/pugixml
     cp -r --no-preserve=mode,ownership ${re-flex.src} build/deps-nixpkgs/reflex
     cp -r --no-preserve=mode,ownership ${xxhash.src} build/deps-nixpkgs/xxhash
@@ -161,16 +179,7 @@ stdenv.mkDerivation {
     ${
       if withAws then
         ''
-          cp -r --no-preserve=mode,ownership ${aws-sdk-cpp-1-11-162} build/deps-nixpkgs/aws-sdk-cpp
-        ''
-      else
-        ""
-    }
-
-    ${
-      if withGcp then
-        ''
-          cp -r --no-preserve=mode,ownership ${rapidjson.src} build/deps-nixpkgs/rapidjson
+          cp -r --no-preserve=mode,ownership ${aws-sdk-cpp-1-11-717} build/deps-nixpkgs/aws-sdk-cpp
         ''
       else
         ""
@@ -188,7 +197,8 @@ stdenv.mkDerivation {
     ${
       if withSearch then
         ''
-          cp -r --no-preserve=mode,ownership ${hnswlib.src} build/deps-nixpkgs/hnswlib
+          cp -r --no-preserve=mode,ownership ${hnswlib-dragonfly} build/deps-nixpkgs/hnswlib
+          cp -r --no-preserve=mode,ownership ${snowball-stemmer} build/deps-nixpkgs/stemmer
           cp -r --no-preserve=mode,ownership ${uni-algo.src} build/deps-nixpkgs/uni-algo
         ''
       else
@@ -200,6 +210,14 @@ stdenv.mkDerivation {
     chmod u+x build/deps-nixpkgs/reflex/configure
     chmod u+x build/deps-nixpkgs/uring/configure
     touch build/deps-nixpkgs/xxhash/xxhsum.1
+
+    # snowball generates its C sources with perl scripts run via their shebang;
+    # the source copy drops their execute bit, so restore it and fix the
+    # /usr/bin/env shebang for the sandbox.
+    if [ -d build/deps-nixpkgs/stemmer ]; then
+      find build/deps-nixpkgs/stemmer -name '*.pl' -exec chmod +x {} +
+      patchShebangs build/deps-nixpkgs/stemmer
+    fi
   '';
 
   nativeBuildInputs = [
@@ -209,6 +227,7 @@ stdenv.mkDerivation {
     bison
     cmake
     ninja
+    perl
   ];
 
   buildInputs = [

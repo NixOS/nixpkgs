@@ -7,7 +7,9 @@
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
   httpretty,
+  mocket,
   opentelemetry-test-utils,
+  pytest-benchmark,
   pytestCheckHook,
 }:
 
@@ -30,8 +32,14 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     httpretty
+    mocket
     opentelemetry-test-utils
+    pytest-benchmark
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "--benchmark-disable"
   ];
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.requests" ];

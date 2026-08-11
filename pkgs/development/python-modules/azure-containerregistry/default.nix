@@ -4,7 +4,6 @@
   fetchPypi,
   azure-core,
   msrest,
-  msrestazure,
   isodate,
   setuptools,
 }:
@@ -25,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     azure-core
     msrest
-    msrestazure
     isodate
   ];
 

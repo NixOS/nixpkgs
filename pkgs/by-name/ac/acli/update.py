@@ -10,7 +10,7 @@ from urllib.request import urlopen, Request
 
 def get_arch_os_key(url) -> str:
     if "darwin_amd64" in url:
-        return "x86_64-darwin"
+        return None
     elif "darwin_arm64" in url:
         return "aarch64-darwin"
     elif "linux_amd64" in url:
@@ -57,9 +57,8 @@ def parse_and_check(content):
         )
 
     for url, hex_sha in matches:
-        key = get_arch_os_key(url)
-
-        data["sources"][key] = {"url": url, "sha256": hex_sha}
+        if key := get_arch_os_key(url):
+            data["sources"][key] = {"url": url, "sha256": hex_sha}
 
     data["sources"] = dict(sorted(data["sources"].items()))
 

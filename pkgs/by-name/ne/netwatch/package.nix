@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netwatch-tui";
-  version = "0.25.5";
+  version = "0.28.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "netwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JE/jKQVAkHpgI8nwgrJcaynixJX7c4C1Qhe8VULggAE=";
+    hash = "sha256-q+3zQ27Evb9Ed4OW4/1jnKJE/CNU4pKUPXVfaAisqUA=";
   };
 
-  cargoHash = "sha256-W8CSx/MM9M6FoN/LHcV/d3vh27/hysgsPh7eLZVUgjA=";
+  cargoHash = "sha256-V3S+VrIEVPNb6NXYyYs8xFfSPJ7WviAajUw5tsDVG7Q=";
 
   nativeBuildInputs = [ pkg-config ];
 

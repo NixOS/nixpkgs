@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config pcre gnugrep
+#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nurl pkg-config pcre gnugrep
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'
@@ -51,7 +51,7 @@ json_set '.invidious.date' "$date"
 json_set '.invidious.commit' "$commit"
 json_set '.invidious.version' "$new_version"
 
-new_hash=$(nix-prefetch -I 'nixpkgs=../../../..' "$pkg")
+new_hash=$(nurl --submodules --hash "$git_url" "$new_tag")
 json_set '.invidious.hash' "$new_hash"
 
 # fetch video.js dependencies

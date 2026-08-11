@@ -1,13 +1,13 @@
 diff --git a/deltachat2/transport.py b/deltachat2/transport.py
-index c48827e..bfbc390 100644
+index c8b4a9c..a89994c 100644
 --- a/deltachat2/transport.py
 +++ b/deltachat2/transport.py
-@@ -71,7 +71,7 @@ class IOTransport:
-             # `process_group` is not supported before Python 3.11.
-             kwargs = {"preexec_fn": os.setpgrp, **self._kwargs}  # noqa: PLW1509
-         self.process = subprocess.Popen(  # pylint:disable=consider-using-with
--            "deltachat-rpc-server",
-+            "@deltachatrpcserver@",
-             stdin=subprocess.PIPE,
-             stdout=subprocess.PIPE,
-             **kwargs,
+@@ -44,7 +44,7 @@ class IOTransport:
+     def __init__(
+         self,
+         accounts_dir: Optional[str] = None,
+-        rpc_executable: str = "deltachat-rpc-server",
++        rpc_executable: str = "@deltachatrpcserver@",
+         **kwargs,
+     ):
+         """The given arguments will be passed to subprocess.Popen()"""

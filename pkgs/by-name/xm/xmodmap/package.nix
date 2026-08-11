@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmodmap";
-  version = "1.0.11";
+  version = "1.0.12";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xmodmap-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mi+BaPewvDgoKIR0A5Astr8XXhdlizYYnqyH7dqHfoE=";
+    hash = "sha256-/FS5tbvyrli6j51CvQUcQcdDg3dADELBfXSW0Z4bs84=";
   };
 
   strictDeps = true;

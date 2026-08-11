@@ -12,7 +12,6 @@ let
       x86_64-linux = "amd64";
       aarch64-linux = "arm64";
       armv7l-linux = "arm";
-      x86_64-darwin = "amd64";
       aarch64-darwin = "arm64";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -31,7 +30,6 @@ let
       hash_amd64-linux = "sha256-tmUfDKLO35qCs1hauJQKhJhcnMhqOpcqDFtAggMFhLE=";
       hash_arm64-linux = "sha256-ggRDW1cnTHMQKvOvCDH3eptH3O3PgYaondlzOGHTjio=";
       hash_arm-linux = "sha256-uMLRow1NeHufSI5B4k5qSIfH3lTxg+WxzLxgdedAz40=";
-      hash_amd64-darwin = "sha256-LZ6n/f2MdbFaPnBCoJqZZ7HQiLG3Z6ZoatgFsxaFvMc=";
       hash_arm64-darwin = "sha256-k5X2ZInFS/HlToOZPX23TRJqlx/XM1ZG++Xr4BHn8SY=";
     }
     ."hash_${arch}-${os}";
@@ -67,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ramblurr
       bhankas
-      danth
       ramblurr
     ];
 
@@ -75,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.intersectLists lib.platforms.linux (
         lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.x86
       ))
-      ++ (lib.intersectLists lib.platforms.darwin (lib.platforms.aarch64 ++ lib.platforms.x86_64));
+      ++ lib.platforms.darwin;
 
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "ocis";

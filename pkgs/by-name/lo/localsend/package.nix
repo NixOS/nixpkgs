@@ -132,7 +132,6 @@ let
       mainProgram = "localsend";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };

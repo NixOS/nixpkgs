@@ -1,45 +1,54 @@
 {
-  anndata,
-  array-api-compat,
-  awkward,
-  boltons,
+  lib,
   buildPythonPackage,
-  dask,
-  distributed,
   fetchFromGitHub,
-  filelock,
-  h5py,
+
+  # build-system
   hatch-vcs,
   hatchling,
-  joblib,
-  lib,
+
+  # dependencies
+  array-api-compat,
+  h5py,
   legacy-api-wrap,
   natsort,
-  numba,
   numpy,
-  openpyxl,
   pandas,
+  scipy,
+  scverse-misc,
+  zarr,
+  pythonOlder,
+  typing-extensions,
+
+  # tests
+  awkward,
+  boltons,
+  dask,
+  distributed,
+  filelock,
+  joblib,
+  jsonschema,
+  numba,
+  openpyxl,
   pyarrow,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   scanpy,
   scikit-learn,
-  scipy,
-  stdenv,
-  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anndata";
-  version = "0.12.7";
+  version = "0.13.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "anndata";
-    tag = version;
-    hash = "sha256-LVpkLWlt7GtsHoh5rcHPM0JWlTDQqTl/c/38Mz7oBJA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Iw8LJklySaJGcyvtv6nl81xC63+bALtmH83H+LidHkQ=";
   };
 
   build-system = [
@@ -55,8 +64,15 @@ buildPythonPackage rec {
     numpy
     pandas
     scipy
+    scverse-misc
     zarr
+  ]
+  ++ scverse-misc.optional-dependencies.settings
+  ++ lib.optionals (pythonOlder "3.14") [
+    typing-extensions
   ];
+
+  pythonImportsCheck = [ "anndata" ];
 
   nativeCheckInputs = [
     awkward
@@ -65,14 +81,15 @@ buildPythonPackage rec {
     distributed
     filelock
     joblib
+    jsonschema
     numba
     openpyxl
     pyarrow
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    scikit-learn
     scanpy
+    scikit-learn
   ];
 
   # Optionally disable pytest-xdist to make it easier to debug the test suite.
@@ -84,9 +101,10 @@ buildPythonPackage rec {
     export NUMBA_CACHE_DIR=$(mktemp -d);
   '';
 
-  doCheck = false; # use passthru.tests instead to prevent circularity with `scanpy`
-
-  passthru.tests = anndata.overridePythonAttrs { doCheck = true; };
+  disabledTestPaths = [
+    # UnicodeDecodeError: 'ascii' codec can't decode byte 0xc5 in position 263183: ordinal not in range(128)
+    "accessors.rst"
+  ];
 
   disabledTests = [
     # requires data from a previous test execution:
@@ -125,20 +143,21 @@ buildPythonPackage rec {
 
     # Tests that are seemingly broken. See https://github.com/scverse/anndata/issues/2017.
     "test_concat_dask_sparse_matches_memory"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
-    # RuntimeError: Cluster failed to start: [Errno 1] Operation not permitted
-    "test_dask_distributed_write"
-    "test_read_lazy_h5_cluster"
   ];
 
-  pythonImportsCheck = [ "anndata" ];
+  __darwinAllowLocalNetworking = true;
+
+  doCheck = false; # use passthru.tests instead to prevent circularity with `scanpy`
+
+  passthru.tests = finalAttrs.finalPackage.overrideAttrs {
+    doInstallCheck = true;
+  };
 
   meta = {
-    changelog = "https://github.com/scverse/anndata/blob/main/docs/release-notes/${src.tag}.md";
+    changelog = "https://github.com/scverse/anndata/blob/main/docs/release-notes/${finalAttrs.src.tag}.md";
     description = "Python package for handling annotated data matrices in memory and on disk";
     homepage = "https://anndata.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

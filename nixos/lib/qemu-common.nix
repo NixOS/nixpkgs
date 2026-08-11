@@ -46,15 +46,10 @@ rec {
         powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
         riscv32-linux = "${qemuPkg}/bin/qemu-system-riscv32 -machine virt";
         riscv64-linux = "${qemuPkg}/bin/qemu-system-riscv64 -machine virt";
-        x86_64-darwin = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=${accel "kvm"} -cpu max";
       };
       otherHostGuestMatrix = {
         aarch64-darwin = {
           aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=${accel "hvf"} -cpu max";
-          inherit (otherHostGuestMatrix.x86_64-darwin) x86_64-linux;
-        };
-        x86_64-darwin = {
-          x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=${accel "hvf"} -cpu max";
         };
       };
 

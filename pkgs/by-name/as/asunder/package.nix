@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
   makeWrapper,
-  gtk2,
+  gtk3,
   libcddb,
   intltool,
   pkg-config,
@@ -36,20 +37,24 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.0.2";
   pname = "asunder";
-  src = fetchurl {
-    url = "http://littlesvr.ca/asunder/releases/asunder-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-txNB10bM9WqnexeFxq+BqmQdCErD00t4vrU3YYhItks=";
+  version = "3.1.0-unstable-2025-03-24";
+
+  src = fetchFromGitHub {
+    owner = "rizalmart";
+    repo = "asunder-gtk3";
+    rev = "e3676704f7c7912e61ad7d78fe19015c102a27e1";
+    hash = "sha256-bJVrSbjOUkmrF76e6euM5VPwbvvRrA5ZLPzZGjEep98=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     intltool
     makeWrapper
     pkg-config
   ];
   buildInputs = [
-    gtk2
+    gtk3
     libcddb
   ];
 
@@ -61,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graphical Audio CD ripper and encoder for Linux";
     mainProgram = "asunder";
-    homepage = "http://littlesvr.ca/asunder/index.php";
+    homepage = "https://github.com/rizalmart/asunder-gtk3";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ mudri ];
     platforms = lib.platforms.linux;

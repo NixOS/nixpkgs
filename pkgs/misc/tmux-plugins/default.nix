@@ -4,6 +4,7 @@
   pkgs,
   stdenv,
   config,
+  nix-update-script,
 }:
 
 let
@@ -45,6 +46,8 @@ let
 
             strictDeps = true;
             __structuredAttrs = true;
+
+            passthru.updateScript = nix-update-script { };
 
             inherit
               pluginName
@@ -235,12 +238,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.2.0";
+    version = "3.3.1";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
+      hash = "sha256-UFK0PJFgGIBdpjuSn3stAJ7z73FgEj0yK6F+ETRQ5f4=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -255,12 +258,12 @@ in
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
-    version = "0.3.2";
+    version = "0.3.3";
     src = fetchFromGitHub {
       owner = "vaaleyard";
       repo = "tmux-dotbar";
       tag = version;
-      hash = "sha256-WaRKepmPqiE+W8Tm0dBc6hGiqqZP122eXjrG0rJnt0w=";
+      hash = "sha256-CAKEN8Sk3t0nonV2R9df/DFTTUrVnbso0ZVGgeeGINM=";
     };
     meta = {
       homepage = "https://github.com/vaaleyard/tmux-dotbar";
@@ -521,7 +524,7 @@ in
     rtpFilePath = "minimal.tmux";
     version = "0-unstable-2025-06-04";
     src = fetchFromGitHub {
-      owner = "niksingh710";
+      owner = "semi710";
       repo = "minimal-tmux-status";
       rev = "de2bb049a743e0f05c08531a0461f7f81da0fc72";
       hash = "sha256-0gXtFVan+Urb79AjFOjHdjl3Q73m8M3wFSo3ZhjxcBA=";
@@ -534,10 +537,10 @@ in
         quickly identify the prefix state. Designed to be minimal in appearance and dependencies, it is ideal for users
         who want essential information without clutter.
       '';
-      homepage = "https://github.com/niksingh710/minimal-tmux-status.git";
+      homepage = "https://github.com/semi710/minimal-tmux-status.git";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        niksingh710
+        semi710
       ];
       platforms = lib.platforms.unix;
     };
@@ -911,12 +914,12 @@ in
 
   sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
-    version = "unstable-2017-12-03";
+    version = "unstable-2023-05-02";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sessionist";
-      rev = "09ec86be38eae98ffc27bd0dde605ed10ae0dc89";
-      hash = "sha256-hFNrdbhmBUAyJ73RCG4RILzJ3LHIYiuNYGsqJGsVGAw=";
+      rev = "a315c423328d9bdf5cf796435ce7075fa5e1bffb";
+      hash = "sha256-iC8NvuLujTXw4yZBaenHJ+2uM+HA9aW5b2rQTA8e69s=";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-sessionist";
@@ -973,12 +976,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.6.6";
+    version = "1.8.1";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
-      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
+      rev = "a39e00bf01fea05f916e4b7707bad5e64adee02c";
+      hash = "sha256-tmS0MBANSsTg53E2GB0TnjwGcZXboTRFNeDE6Ehn+bM=";
     };
     meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
@@ -1159,12 +1162,12 @@ in
 
   tmux-sm = mkTmuxPlugin {
     pluginName = "tmux-sm";
-    version = "0-unstable-2026-05-14";
+    version = "0-unstable-2026-06-06";
     src = fetchFromGitHub {
       owner = "vimlinuz";
       repo = "tmux-sm";
-      rev = "97d411a11d124443c982d17fde03c1e09809d7b1";
-      hash = "sha256-7HW/TLP/yyQp4j0/utA0tibTv+suV1B2K56pUS3Z004=";
+      rev = "33b4841531eefcc30ebaa52438d7073b0066164b";
+      hash = "sha256-6zEx5X7j7Pm4Vn8edFtbaCkE8cDtN2rOQYVYJ/Vo5Qs=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     rtpFilePath = "main.tmux";
@@ -1206,13 +1209,13 @@ in
 
   t-smart-tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "t-smart-tmux-session-manager";
-    version = "2.8.0";
+    version = "2.11.1";
     rtpFilePath = "t-smart-tmux-session-manager.tmux";
     src = pkgs.fetchFromGitHub {
       owner = "joshmedeski";
       repo = "t-smart-tmux-session-manager";
       rev = "v${version}";
-      hash = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+      hash = "sha256-iEiTF4NPUCVDp+bIfrbRx8HE1NrTJtxd667fTk0EfEA=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -1357,6 +1360,68 @@ in
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ szaffarano ];
+    };
+  };
+
+  tmux-tpad = mkTmuxPlugin {
+    pluginName = "tmux-tpad";
+    rtpFilePath = "tpad.tmux";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "Subbeh";
+      repo = "tmux-tpad";
+      rev = "v0.3.0";
+      hash = "sha256-w1eNg6n5JEWcKT7hCr3nFPe01kW3PwGBx8sdtfFojvk=";
+    };
+    meta = {
+      homepage = "https://github.com/Subbeh/tmux-tpad";
+      description = "Tmux scratchpad plugin";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ anned20 ];
+    };
+  };
+
+  tmux-window-name = mkTmuxPlugin {
+    pluginName = "tmux-window-name";
+    version = "2024-03-08";
+    src = fetchFromGitHub {
+      owner = "ofirgall";
+      repo = "tmux-window-name";
+      rev = "34026b6f442ceb07628bf25ae1b04a0cd475e9ae";
+      sha256 = "sha256-BNgxLk/BkaQkGlB4g2WKVs39y4VHL1Y2TdTEoBy7yo0=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    rtpFilePath = "tmux_window_name.tmux";
+    postInstall = ''
+      script=$target/scripts/rename_session_windows.py
+
+      sed -i \
+        -e 's|^USR_BIN_REMOVER.*|USR_BIN_REMOVER = (r"^" + os.path.expanduser("~") + r"/.nix-profile/bin/(.+)( --.*)?", r"\\g<1>")|' \
+        -e 's|^\(\s*\)substitute_sets: List.*|\1substitute_sets: List[Tuple] = field(default_factory=lambda: [(os.path.expanduser("~") + r"/.nix-profile/bin/(.+) --.*", r"\\g<1>"), (r".+ipython([32])", r"ipython\\g<1>"), USR_BIN_REMOVER, (r"(bash) (.+)/(.+[ $])(.+)", r"\\g<3>\\g<4>")])|' \
+        -e 's|^\(\s*\)dir_programs: List.*|\1dir_programs: List[str] = field(default_factory=lambda: [os.path.expanduser("~") + "/.nix-profile/bin/" + p for p in ["vim", "vi", "git", "nvim"]])|' \
+        $script
+
+      for f in tmux_window_name.tmux scripts/rename_session_windows.py; do
+        wrapProgram $target/$f \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              (pkgs.python3.withPackages (
+                p: with p; [
+                  libtmux
+                  pip
+                ]
+              ))
+            ]
+          }
+      done
+    '';
+    meta = with lib; {
+      homepage = "https://github.com/ofirgall/tmux-window-name";
+      description = "Tmux plugin to name your windows smartly, like IDE's";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ndom91 ];
     };
   };
 }

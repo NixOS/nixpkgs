@@ -17,7 +17,7 @@
   setuptools,
   wcwidth,
   wheel,
-  xlib,
+  python-xlib,
   wrapQtAppsHook,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "openstenoproject";
+    owner = "opensteno";
     repo = "plover";
     tag = "v${finalAttrs.version}";
     hash = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
@@ -54,8 +54,13 @@ buildPythonPackage (finalAttrs: {
     rtf-tokenize
     setuptools
     wcwidth
-    xlib
+    python-xlib
   ];
+  optional-dependencies = {
+    gui-qt = [
+      pyqt5
+    ];
+  };
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
@@ -69,6 +74,10 @@ buildPythonPackage (finalAttrs: {
 
   # Segfaults?!
   disabledTestPaths = [ "test/gui_qt/test_dictionaries_widget.py" ];
+
+  postInstall = ''
+    install -Dm 444 linux/plover.desktop $out/share/applications/plover.desktop
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

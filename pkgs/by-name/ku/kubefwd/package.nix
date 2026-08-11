@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubefwd";
-  version = "1.25.15";
+  version = "1.25.16";
 
   src = fetchFromGitHub {
     owner = "txn2";
     repo = "kubefwd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OlmaKXw3SRa+7wXGBD6hEjdccBbdUXp67SM9bHduNEs=";
+    hash = "sha256-+2RdT4SbXc7Ir9ChG+ps11WAMGno4vKOwc9VTXFijHE=";
   };
 
-  vendorHash = "sha256-t6JaUKHpNrf9E8NTFFWwrJJI9b0HyYNQeUoV7II2ocQ=";
+  vendorHash = "sha256-MIz2pZerUjKjcViEPZQeduzga3d6fYPlWo7dGQ+OdR4=";
 
   subPackages = [ "cmd/kubefwd" ];
 

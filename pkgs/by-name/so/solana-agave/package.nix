@@ -18,20 +18,21 @@
   llvm,
   llvmPackages,
   rocksdb,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "solana-agave";
-  version = "3.1.14";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "anza-xyz";
     repo = "agave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yi71jUtFJhv6gvWQC9YrEqhe4cB6QU+hokn3hTLww30=";
+    hash = "sha256-lbkuywAuLeTIoe/5zbKmxCbnNcEx96BiX6ftNJHutZE=";
   };
 
-  cargoHash = "sha256-klcpQRrPvCVgfbhnK/MsZB3m4u2rg7qIq7YeBL3+ajw=";
+  cargoHash = "sha256-lQl8q0xMpXOmUirqL3Eyb4JcmYGSZK6pPMxQHOav9Zk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -93,4 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "agave";
   };
+
+  passthru.updateScript = nix-update-script { };
 })

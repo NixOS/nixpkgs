@@ -3,6 +3,7 @@
   jdk11,
   jdk17,
   jdk21,
+  jdk25,
   nix-update-script,
 }:
 
@@ -114,7 +115,6 @@ let
         "aarch64-linux"
         "i686-windows"
         "x86_64-cygwin"
-        "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
       ],
@@ -306,7 +306,7 @@ let
               '';
         };
       };
-      passthru.jdk = defaultJava;
+      passthru.jdk = java;
       passthru.wrapped = callPackage wrapGradle {
         gradle-unwrapped = mkGradle genArgs;
       };
@@ -317,8 +317,8 @@ let
               "--url=https://github.com/gradle/gradle"
               "--use-github-releases"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-              # release version omits the `.0`, so we’ll wanto to only capture
-              # the version up but not including the the trailing `.0`.
+              # release version omits the `.0`, so we’ll want to only capture
+              # the version up to but not including the trailing `.0`.
               "--version-regex=^v(${updateScriptMajorVersion}\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
             ];
           }
@@ -371,9 +371,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.4.1";
-    hash = "sha256-KrKVjyoeURIMMmytbzhRU7sR7pOzwhbF/M6/37t+xss=";
-    defaultJava = jdk21;
+    version = "9.5.1";
+    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    defaultJava = jdk25;
     updateScriptMajorVersion = "9";
   };
   gradle_8 = mkGradle {

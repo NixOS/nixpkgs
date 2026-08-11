@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
   jsonschema,
   poetry-core,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-
-  dependecies = [ click ];
 
   nativeCheckInputs = [
     pytestCheckHook

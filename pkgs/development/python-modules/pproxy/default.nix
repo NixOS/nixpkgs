@@ -8,6 +8,7 @@
   aioquic,
   python-daemon,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-DWxbU2LtXzec1T175cMVJuWuhnxWYhe0FH67stMyOTM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     accelerated = [

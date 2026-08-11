@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.5.4";
+  version = "1.14.2";
 
   outputs = [
     "out"
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I9+v5qeubBA9bAS4OU7V/BsxxfP5rj9aS4xvopbF578=";
+    hash = "sha256-k6wZ8hgrBhvJjxUYCpR01Vuj7ecr5eZnGBUoMzsckko=";
   };
 
   postPatch = ''
@@ -134,13 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
-
-  cargoHash = "sha256-x40nSnpksKX+JFuN1RSsVm3OrrArb0rtalQplLstAd8=";
+  cargoHash = "sha256-9kjNF4TpR6t7L3fV8CgWiIU5qVzX1iPIMauB5ie20lo=";
 
   __structuredAttrs = true;
 
@@ -177,6 +171,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [

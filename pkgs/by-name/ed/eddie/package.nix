@@ -17,7 +17,6 @@
   openvpn,
   stunnel,
 
-  gtk2,
   libayatana-indicator,
 
   mono,
@@ -70,7 +69,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   runtimeInputs = lib.makeLibraryPath [
-    gtk2
     gtk3
     libayatana-indicator
   ];
@@ -107,7 +105,7 @@ buildDotnetModule (finalAttrs: {
     cp src/Lib.Platform.Linux.Native/bin/libLib.Platform.Linux.Native.so $out/lib/eddie-ui
     cp src/App.Forms.Linux.Tray/bin/eddie-tray $out/lib/eddie-ui
 
-    ln -s $out/lib/eddie-ui/eddie-cli-elevated $out/lib/eddie/eddie-cli-elevated
+    cp $out/lib/eddie-ui/eddie-cli-elevated $out/lib/eddie/eddie-cli-elevated
     ln -s $out/lib/eddie-ui/libLib.Platform.Linux.Native.so $out/lib/eddie/Lib.Platform.Linux.Native.so
 
     cp -r src/App.Forms.Linux/bin/*/Release/* $out/lib/eddie-ui

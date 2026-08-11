@@ -18,7 +18,7 @@
     if localSystem.isAarch64 then
       import ./bootstrap-files/aarch64-apple-darwin.nix
     else
-      import ./bootstrap-files/x86_64-apple-darwin.nix
+      throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
 
@@ -285,7 +285,6 @@ let
   };
   sdkDarwinPackages = prevStage: {
     inherit (prevStage.darwin)
-      Csu
       adv_cmds
       copyfile
       libiconv
@@ -340,7 +339,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
   # Create a stage with the bootstrap tools. This will be used to build the subsequent stages and
   # build up the standard environment.
   #
-  # Note: Each stage depends only on the the packages in `prevStage`. If a package is not to be
+  # Note: Each stage depends only on the packages in `prevStage`. If a package is not to be
   # rebuilt, it should be passed through by inheriting it.
   (
     prevStage:
@@ -601,6 +600,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
+          zstd = null; # Avoid infinite recursion due to zstd depending on libiconv, which depends on Python via Meson.
           enableLTO = false;
         };
 
@@ -1058,7 +1058,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             prevStage.updateAutotoolsGnuConfigScriptsHook
             prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
-          ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
             binutils
             binutils.bintools
@@ -1177,9 +1176,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isFromNixpkgs prevStage.binutils-unwrapped.src;
     assert isBuiltByNixpkgsCompiler prevStage.curl;
-
-    # libiconv should be an alias for darwin.libiconv
-    assert prevStage.libiconv == prevStage.darwin.libiconv;
 
     {
       inherit (prevStage) config overlays stdenv;

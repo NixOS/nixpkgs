@@ -25,7 +25,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/SpectralOps/senv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    broken = stdenv.hostPlatform.isDarwin; # needs golang.org/x/sys bump
     mainProgram = "senv";
   };
 })

@@ -310,7 +310,8 @@ stdenv.mkDerivation (finalAttrs: {
         # for gimp-script-fu-interpreter-3.0 invoked by shebang of some plug-ins
         "$out"
       ]
-    }")
+    }"
+    --suffix XDG_DATA_DIRS : "${adwaita-icon-theme}/share")
   '';
 
   postFixup = ''
@@ -337,8 +338,6 @@ stdenv.mkDerivation (finalAttrs: {
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk3;
   };
-
-  __structuredAttrs = true;
 
   meta = {
     description = "GNU Image Manipulation Program";

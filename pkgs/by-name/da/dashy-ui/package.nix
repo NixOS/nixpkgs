@@ -11,22 +11,22 @@
   nixosTests,
   nodejs_24,
   nodejs-slim_24,
-  remarshal_0_17,
+  remarshal,
   nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "4.2.2";
+  version = "4.5.6";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
     tag = finalAttrs.version;
-    hash = "sha256-8oShyf4TfHjPG/yxK1sbZA5gHyqOQYqfoUEDQlaJgU0=";
+    hash = "sha256-gj1U9w4GkY/CZ9tyXmONIQOUIYZAK0NhgKDek7zjRm4=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-5a2ypu6A4WOGdcm6HlvuzuCEgq3szd64zqTp/rmnjh4=";
+    hash = "sha256-UjcA3z3jnnDizjYIb1D76OWC7n9UcN0HhQnwfW7y8BU=";
   };
 
   passthru = {
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     nodejs_24
     # For yaml conversion
-    remarshal_0_17
+    remarshal
   ];
   doDist = false;
   meta = {

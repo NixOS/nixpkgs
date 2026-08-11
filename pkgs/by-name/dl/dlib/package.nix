@@ -76,7 +76,7 @@
       libcurand
       libcusolver
       cudnn
-      cuda_cccl
+      cccl
     ]
   );
 

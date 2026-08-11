@@ -6,7 +6,6 @@
   pkg-config,
   fftw,
   file,
-  gnome2,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
@@ -29,6 +28,7 @@
   libpngSupport ? true,
   libpng,
   openglSupport ? !stdenv.hostPlatform.isDarwin,
+  gtkglext,
   libGL,
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ]
   ++ lib.optionals openglSupport [
-    gnome2.gtkglext
+    gtkglext
     libGL
   ]
   ++ lib.optional openexrSupport openexr

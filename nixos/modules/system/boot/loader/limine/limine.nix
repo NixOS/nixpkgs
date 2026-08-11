@@ -205,6 +205,17 @@ in
       '';
     };
 
+    extraInstallCommands = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
+      '';
+    };
+
     secureBoot = {
       enable = lib.mkEnableOption null // {
         description = ''
@@ -443,14 +454,25 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.replaceVarsWith {
-          src = ./limine-install.py;
-          isExecutable = true;
-          replacements = {
-            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-            configPath = limineInstallConfig;
-          };
-        };
+        build.installBootLoader =
+          let
+            install = pkgs.replaceVarsWith {
+              src = ./limine-install.py;
+              isExecutable = true;
+              replacements = {
+                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                configPath = limineInstallConfig;
+              };
+            };
+
+            final = pkgs.writeScript "limine-install.sh" ''
+              #!${pkgs.runtimeShell}
+              set -euo pipefail
+              ${install} "$@"
+              ${cfg.extraInstallCommands}
+            '';
+          in
+          final;
       };
     })
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable) {

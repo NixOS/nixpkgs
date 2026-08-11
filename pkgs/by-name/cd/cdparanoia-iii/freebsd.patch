@@ -1,0 +1,45 @@
+From 368ea1fcdf4e8f9a5de4e7ade590242292ccb8fa Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 15 Jun 2026 18:40:07 +0200
+Subject: [PATCH] Fix designated initializers in memcpy arguments
+
+On FreeBSD, memcpy is a macro, and the lack of parentheses causes a
+compilation failure.
+---
+ interface/scsi_interface.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/interface/scsi_interface.c b/interface/scsi_interface.c
+index adbb9bf..7805559 100644
+--- a/interface/scsi_interface.c
++++ b/interface/scsi_interface.c
+@@ -674,7 +674,7 @@ static int scsi_read_toc (cdrom_drive *d){
+   }
+ 
+   for (i = first; i <= last; i++){
+-    memcpy(cmd, (char []){ 0x43, 0, 0, 0, 0, 0, 0, 0, 12, 0}, 10);
++    memcpy(cmd, ((char []){ 0x43, 0, 0, 0, 0, 0, 0, 0, 12, 0}), 10);
+     cmd[1]=d->lun<<5;
+     cmd[6]=i;
+     
+@@ -695,7 +695,7 @@ static int scsi_read_toc (cdrom_drive *d){
+     }
+   }
+ 
+-  memcpy(cmd, (char []){ 0x43, 0, 0, 0, 0, 0, 0, 0, 12, 0}, 10);
++  memcpy(cmd, ((char []){ 0x43, 0, 0, 0, 0, 0, 0, 0, 12, 0}), 10);
+   cmd[1]=d->lun<<5;
+   cmd[6]=0xAA;
+     
+@@ -745,7 +745,7 @@ static int scsi_read_toc2 (cdrom_drive *d){
+   }
+ 
+   for (i = 0; i < tracks; i++){
+-    memcpy(cmd, (char[]){ 0xe5, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 10);
++    memcpy(cmd, ((char[]){ 0xe5, 0, 0, 0, 0, 0, 0, 0, 0, 0}), 10);
+     cmd[5]=i+1;
+     cmd[8]=255;
+     
+-- 
+2.54.0
+

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "otel-desktop-viewer";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oHnawHizBsyGSMORZz8qVQ6PZ/Ta/ftX+m799J1GhWM=";
+    hash = "sha256-9m1W2DxbMyBOGeECTn78X7I3GcToW5Gi33HWXGyWFO8=";
   };
 
   # NOTE: This project uses Go workspaces, but 'buildGoModule' does not support
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${finalAttrs.version}";
-    description = "Receive & visualize OpenTelemtry traces locally within one CLI tool";
+    description = "Receive & visualize OpenTelemetry traces locally within one CLI tool";
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

@@ -8,7 +8,7 @@
 
 let
   inherit (stdenv.hostPlatform) isDarwin;
-  inherit (lib) optional optionalString;
+  inherit (lib) optionalString;
 in
 
 stdenv.mkDerivation rec {

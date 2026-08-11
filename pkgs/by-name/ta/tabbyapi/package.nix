@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-05-29";
+  version = "0-unstable-2026-08-08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "95c1101bd2a18abec818a1bc2eb013438d1b55d0";
-    hash = "sha256-VOHoPD8tb1ewOQL4LOhAYxsMBrahLAIEppYA8BXHOfc=";
+    rev = "3d2848d03184344664b9a8ed7685033e87744742";
+    hash = "sha256-gmvr8d0vGlkFcSbjSvECGiYWM69Y2c8ZWqL59+s34Yw=";
   };
 
   build-system = with python3Packages; [
@@ -44,8 +44,7 @@ python3Packages.buildPythonApplication {
       sse-starlette
       packaging
       tokenizers
-      formatron
-      kbnf
+      numpy
       aiofiles
       aiohttp
       async-lru
@@ -57,7 +56,6 @@ python3Packages.buildPythonApplication {
       numpy
       setuptools
 
-      exllamav2
       exllamav3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

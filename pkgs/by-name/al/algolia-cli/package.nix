@@ -43,6 +43,6 @@ buildGoModule {
     mainProgram = "algolia";
     homepage = "https://algolia.com/doc/tools/cli/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 }

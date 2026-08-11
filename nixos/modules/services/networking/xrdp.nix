@@ -19,7 +19,7 @@ let
     cat > $out/startwm.sh <<EOF
     #!/bin/sh
     . /etc/profile
-    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init"}
+    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init"}
     ${cfg.defaultWindowManager}
     EOF
     chmod +x $out/startwm.sh

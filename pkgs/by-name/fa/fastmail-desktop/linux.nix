@@ -66,9 +66,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   # remove musl-libc dependencies before the autoPatchelfHook
-  preFixup = ''
-    rm -r "$out/opt/fastmail/app.asar.unpacked/node_modules/@img/"{sharp-linuxmusl-x64,sharp-libvips-linuxmusl-x64}
-  '';
+  preFixup =
+    let
+      suffix =
+        {
+          aarch64-linux = "arm64";
+          x86_64-linux = "x64";
+        }
+        .${stdenvNoCC.targetPlatform.system};
+    in
+    ''
+      rm -r "$out/opt/fastmail/app.asar.unpacked/node_modules/@img/"{sharp-linuxmusl-${suffix},sharp-libvips-linuxmusl-${suffix}}
+    '';
 
   meta = meta // {
     mainProgram = "fastmail";

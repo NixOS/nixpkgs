@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
       {
         x86_64-linux = "sha256-4EQkvsoji9M4VCrdwyHm+ncd4XFjgAf34Kt+YeM3qjs=";
         aarch64-linux = "sha256-xm4T1BL3AyRsYOERz4LhG4ZJQkSMzspoA+l60OND3E0=";
-        x86_64-darwin = "sha256-L+zY9O5ridMvZEhGH0R56P3XiDlYF3UrFZwmOYlqxYY=";
         aarch64-darwin = "sha256-ZUx+jF7IcEbUCnUUeW0uOFgEpO9UIJpP3/VpUJ5ulAM=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");

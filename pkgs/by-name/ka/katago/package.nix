@@ -78,7 +78,7 @@ stdenv'.mkDerivation rec {
   ++ lib.optionals (backend == "cuda") (
     with cudaPackages;
     [
-      cuda_cccl
+      cccl
       cuda_cudart
       cuda_nvcc
       cudnn

@@ -39,7 +39,7 @@ let
 in
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "libmobility";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -47,7 +47,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "stochasticHydroTools";
     repo = "libMobility";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7jUpVR4bS9vkgeKN68of6VNZzGPlQMcRMBStQ+wFEx4=";
+    hash = "sha256-8GOQ+TY7WXIEzI+n3W+IpuEg+N5ZscjsAoE49Ob6uDQ=";
   };
 
   postPatch =
@@ -115,7 +115,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     lapack
   ]
   ++ (with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart # CUDA::cuda_driver (driver stub)
     libcublas
     libcufft

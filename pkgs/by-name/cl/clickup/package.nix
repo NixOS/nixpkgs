@@ -23,7 +23,7 @@ let
     extraPkgs = pkgs: [ pkgs.libxkbfile ];
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 stdenvNoCC.mkDerivation {
   inherit pname version;

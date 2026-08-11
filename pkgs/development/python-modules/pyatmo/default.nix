@@ -12,19 +12,20 @@
   requests-oauthlib,
   requests-mock,
   setuptools-scm,
+  tenacity,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.4.0";
+  version = "9.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-VW4whif1l7nY1Ifwn/NHJrDbYNeroJRWQtO47dOfEAo=";
+    hash = "sha256-H5lj0IkUMOcAngiPrOxcR58DcSUsyf6Jsxilce7P9nU=";
   };
 
   pythonRelaxDeps = [
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     oauthlib
     requests
     requests-oauthlib
+    tenacity
   ];
 
   nativeCheckInputs = [

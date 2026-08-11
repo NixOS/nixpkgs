@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "multipath-tcp";
     repo = "mptcpd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gPXtYmCLJ8eL6VfCi3kpDA7lNn38WB6J4FXefdu2D7M=";
   };
 
@@ -47,7 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = "doxygen -u";
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
+
+  installFlags = [
+    # The NixOS module generates /etc/mptcpd/mptcpd.conf declaratively.
+    "pkgsysconfdir=$out/etc/mptcpd"
   ];
 
   # fix: 'Fontconfig error: Cannot load default config file: No such file: (null)'

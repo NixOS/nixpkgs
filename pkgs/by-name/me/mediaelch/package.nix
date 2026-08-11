@@ -38,6 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Komet/MediaElch/commit/dbea12fbf2c1fe603819392aa2a181cffa168548.patch";
       hash = "sha256-Lv6rvjKbRNr5XrdZhPyw4S4RRCOnfAGhWgcSLo0gqS8=";
     })
+
+    # fix from: https://github.com/Komet/MediaElch/pull/1995
+    # TMDb rejects a duplicate include_adult query param with HTTP 400 (issue #1992).
+    # Remove once MediaElch > 2.12.0 is released.
+    (fetchpatch {
+      name = "fix-tmdb-duplicate-include-adult.patch";
+      url = "https://github.com/Komet/MediaElch/commit/f68419e746455d3c7eb6d95a4a1da7a6f7a5c505.patch";
+      hash = "sha256-u+ScJDFX2IIpjXV58MCp1uJGx9QU+7cbq+e1qZPMWns=";
+    })
   ];
 
   nativeBuildInputs = [

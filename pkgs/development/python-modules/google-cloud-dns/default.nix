@@ -46,8 +46,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Cloud DNS API client library";
-    homepage = "https://github.com/googleapis/python-dns";
-    changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
+    homepage = "https://cloud.google.com/dns";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dns-v${version}/packages/google-cloud-dns/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

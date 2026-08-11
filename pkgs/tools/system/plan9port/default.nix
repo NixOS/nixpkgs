@@ -135,7 +135,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bbarker
-      ftrvxmtrx
       kovirobi
       matthewdargan
       ylh

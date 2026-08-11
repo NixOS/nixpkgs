@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cog";
-  version = "0.1.13";
+  version = "0.1.23";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "cog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e8PxH09d3n4nDhJzJ/y4KwTZ5UhKgwNupy31Z9VGi7A=";
+    hash = "sha256-uMlxFWMdrFF61FBinXi03QP1dGdQxaQWIyqv9eQCBP4=";
   };
 
-  vendorHash = "sha256-0ywSn4JghAfg9KZptpLYp+h1hZju2SmLeOXG5DKPa98=";
+  vendorHash = "sha256-MY+rS6lF2p8cTDB2faxBwu1VpyMy/ZvadpRdGC8/SRU=";
 
   subPackages = [ "cmd/cli" ];
 

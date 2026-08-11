@@ -36,8 +36,14 @@ let
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
   userbornStaticFiles =
-    pkgs.runCommand "static-userborn" { }
-      "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
+    pkgs.runCommand "static-userborn"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      ''
+        mkdir -p $out
+        userborn ${userbornConfigJson} $out
+      '';
   previousConfigPath = "/var/lib/userborn/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
@@ -86,7 +92,7 @@ in
         The primary motivation for this is an immutable `/etc`, where we cannot
         write the files directly to `/etc`.
 
-        However this an also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
+        However this can also serve other use cases, e.g. when `/etc` is on a `tmpfs`.
       '';
     };
 

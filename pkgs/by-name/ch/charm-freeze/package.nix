@@ -23,6 +23,8 @@ buildGoModule (finalAttrs: {
     "-X=main.Version=${finalAttrs.version}"
   ];
 
+  excludedPackages = [ "test/input" ];
+
   meta = {
     description = "Tool to generate images of code and terminal output";
     mainProgram = "freeze";

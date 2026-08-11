@@ -14,7 +14,6 @@
   gst-plugins-base,
   gst-plugins-good,
   gst-libav,
-  gst-vaapi,
   ffmpeg,
   libva,
   libpulseaudio,
@@ -59,7 +58,6 @@ qtModule {
     gst-plugins-base
     gst-plugins-good
     gst-libav
-    gst-vaapi
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [

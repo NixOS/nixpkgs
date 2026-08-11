@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-euRUA4LTmAdb9466DAMqKgAPX3N4KNXCh1ED9cL42lA=";
+  cargoHash = "sha256-0/TmIwg8y1vUN9SvlBhKQ3krvdaBcWFfk/+CVhBgXaU=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
@@ -64,7 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
       gst_all_1.gst-plugins-bad
-      gst_all_1.gst-vaapi
       gst_all_1.gstreamer
       libayatana-appindicator
       openssl

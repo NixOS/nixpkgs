@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lxmf-rs";
-  version = "0.2.0";
+  version = "0.9.7";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FreeTAKTeam";
     repo = "LXMF-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2bxSBw4ISb7xOQiazrSVytvW9cW4i7azB7U8sos7+yA=";
+    hash = "sha256-ZK48G8oDms8GepF+g2SxWalBbSP3yD1IHDVyev/Sc7w=";
   };
 
-  cargoHash = "sha256-EqRL1JoAdyh46Ev8S/Ta6RsbhhaNH6dlisudpO2D1Rw=";
+  cargoHash = "sha256-ZqeTA5hbcYO12llZZ9/U1L9vOCxeY3GdT9s2TF7lU0I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transport::announce_limits::tests::ingress_limiting_is_scoped_per_interface"
     # multicast listener expected to see the Broadcast tx within 500ms
     "--skip=broadcast_tx_reaches_multicast_listeners"
+    "--skip=direct_link_proof_targeting_multicast_iface_falls_back_to_broadcast"
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-o6f/UmTlvKUuiuVHu/0HYbcklSMNQ40FtsCRW+YZsOI=";
   };
 
+  patches = [
+    # Adapted from https://github.com/aio-libs/aiohttp-jinja2/pull/1025
+    ./aiohttp-3.14.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

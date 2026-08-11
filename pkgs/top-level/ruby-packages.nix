@@ -914,10 +914,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ipbrgvf0pp6zxdk5ascp6i29aybz2bx9wdrlchjmpx6mhvkwfw1";
+      sha256 = "sha256-svG+g26WjMx4zPzid+p5xyqIYz8iMGeCwW/yP7QV0eE=";
       type = "gem";
     };
-    version = "1.3.5";
+    version = "1.3.8";
   };
   connection_pool = {
     groups = [ "default" ];
@@ -3062,10 +3062,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0i24prs7yy1p1zdps2x1ksb7lmvbn2f0llxwdjdw3z2ksddx136b";
+      sha256 = "1px886qvws5zvqphy5cysj8vg01lym0w7vs9wq1h41pk1pjlxaln";
       type = "gem";
     };
-    version = "0.5.12";
+    version = "0.6.6";
   };
   net-pop = {
     dependencies = [ "net-protocol" ];
@@ -3150,10 +3150,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1hcwwr2h8jnqqxmf8mfb52b0dchr7pm064ingflb78wa00qhgk6m";
+      sha256 = "1d9safb4dly6qmc2g06444l0zifby52yy6j1a5fa1g4j3ihm3jah";
       type = "gem";
     };
-    version = "1.18.10";
+    version = "1.19.4";
   };
   observer = {
     groups = [ "default" ];
@@ -3552,10 +3552,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1pa9zpr51kqnsq549p6apvnr95s9flx6bnwqii24s8jg2b5i0p74";
+      sha256 = "1yw6nvkvddriacmva8hm0za0961d6j96dm7zm6748rmyzcfqgvf8";
       type = "gem";
     };
-    version = "7.1.0";
+    version = "8.0.2";
   };
   pwntools = {
     dependencies = [

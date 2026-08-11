@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   # upstream disable CGO in release build
   # https://github.com/crazy-max/diun/blob/76c0fe99212adc58d6a3433bbcde1ffa9fb879c4/Dockerfile#L11
-  env.CGO_ENABLED = false;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

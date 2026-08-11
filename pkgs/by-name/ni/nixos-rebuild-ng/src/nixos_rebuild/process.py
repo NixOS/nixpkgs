@@ -25,10 +25,18 @@ SSH_DEFAULT_OPTS: Final = [
     "-o",
     "ControlMaster=auto",
     "-o",
-    f"ControlPath={tmpdir.TMPDIR_PATH / 'ssh-%C'}",
+    f"ControlPath={tmpdir.SSH_CONTROL_PATH}",
     "-o",
     "ControlPersist=60",
 ]
+
+
+def ssh_default_opts() -> list[str]:
+    "Default ssh options appended after NIX_SSHOPTS."
+    env = os.getenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS")
+    if env is None:
+        return SSH_DEFAULT_OPTS
+    return shlex.split(env)
 
 
 @dataclass(frozen=True)
@@ -133,7 +141,7 @@ def run_wrapper(
         ssh_args: list[Arg] = [
             "ssh",
             *remote.opts,
-            *SSH_DEFAULT_OPTS,
+            *ssh_default_opts(),
             remote.ssh_host(),
             "--",
             *[_quote_remote_arg(a) for a in remote_run_args],
@@ -282,7 +290,7 @@ def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
             [
                 "ssh",
                 *remote.opts,
-                *SSH_DEFAULT_OPTS,
+                *ssh_default_opts(),
                 remote.ssh_host(),
                 "--",
                 "pkill",

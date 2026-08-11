@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ansi2image";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "ansi2image";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GWrVo1WJux+ATvG5F9J4WMDlI0XAeTpQg7NrkN1P4Co=";
+    hash = "sha256-3nTCWyWfFs1NqUGIvYO3ao9MnOMtrq1fmTihLwSky60=";
   };
 
   build-system = [ setuptools ];

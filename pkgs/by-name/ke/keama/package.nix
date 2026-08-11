@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Kea Migration Assistent";
+    description = "Kea Migration Assistant";
 
     longDescription = ''
       Kea migration assistant is an experimental tool that reads a ISC DHCP server

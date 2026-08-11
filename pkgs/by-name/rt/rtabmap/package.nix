@@ -41,13 +41,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.23.2";
+  version = "0.23.8";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
+    hash = "sha256-bVy/C6ZQdY7LmMW3vxxM5PCEtY/hBqrNsIdGcEulagU=";
   };
 
   # Fix boost 1.89 compatibility
@@ -107,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
-    changelog = "https://github.com/introlab/rtabmap/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/introlab/rtabmap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
     platforms = with lib.platforms; linux;

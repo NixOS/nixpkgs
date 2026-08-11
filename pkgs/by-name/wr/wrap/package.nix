@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "Wraparound";
+    owner = "eprovst";
     repo = "wrap";
     rev = "v${finalAttrs.version}";
     hash = "sha256-58wsH/e3X72S7tJUObazyvvkI8+B7DLPTBmQO9A+jmk=";
@@ -25,12 +25,12 @@ buildGoModule (finalAttrs: {
   patches = [
     (fetchpatch {
       name = "courier-prime-variants.patch";
-      url = "https://github.com/Wraparound/wrap/commit/b72c280b6eddba9ec7b3507c1f143eb28a85c9c1.patch";
+      url = "https://github.com/eprovst/wrap/commit/b72c280b6eddba9ec7b3507c1f143eb28a85c9c1.patch";
       hash = "sha256-hcUsRyv6XVN+GyMN7LXzXPsp8jYUKTJPaK+e5p4CO7U=";
     })
     # Fix build on Go 1.17+
     (fetchpatch {
-      url = "https://github.com/Wraparound/wrap/commit/a222c18a7e0810486741684781ff6158a359a8ba.patch";
+      url = "https://github.com/eprovst/wrap/commit/a222c18a7e0810486741684781ff6158a359a8ba.patch";
       hash = "sha256-eIKvA91olfbNJhOhIUu3GOL/rbgX3m6unmU8nRdKbtc=";
     })
   ];
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Fountain export tool with some extras";
-    homepage = "https://github.com/Wraparound/wrap";
+    homepage = "https://github.com/eprovst/wrap";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.austinbutler ];
   };

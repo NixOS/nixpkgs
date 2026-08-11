@@ -10,15 +10,17 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.3";
+  version = "1.5.4";
   pname = "loudmouth";
 
   src = fetchurl {
     url = "https://mcabber.com/files/loudmouth/loudmouth-${finalAttrs.version}.tar.bz2";
-    sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
+    hash = "sha256-McvJHB/dzFNGszc7j7RVlOnqnMf+NtBZXokSxHrZTQ0=";
   };
 
   configureFlags = [ "--with-ssl=openssl" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   propagatedBuildInputs = [
     openssl
@@ -30,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
+    changelog = "https://mcabber.com/";
     description = "Lightweight C library for the Jabber protocol";
     platforms = lib.platforms.all;
     downloadPage = "http://mcabber.com/files/loudmouth/";

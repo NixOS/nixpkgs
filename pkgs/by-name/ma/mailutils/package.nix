@@ -75,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-build-mb-len-max.patch
+    # Fix linking loadable modules with Libtool 2.6.2
+    # https://savannah.gnu.org/bugs/?68588
+    ./fix-linking-with-libtool-2.6.2.patch
     ./path-to-cat.patch
     # Fix cross-compilation
     # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html

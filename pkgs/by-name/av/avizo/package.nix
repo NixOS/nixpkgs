@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   version = "1.3-unstable-2024-11-03";
 
   src = fetchFromGitHub {
-    owner = "misterdanb";
+    owner = "heyjuvi";
     repo = "avizo";
     rev = "5efaa22968b2cc1a3c15a304cac3f22ec2727b17";
     sha256 = "sha256-KYQPHVxjvqKt4d7BabplnrXP30FuBQ6jQ1NxzR5U7qI=";
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Neat notification daemon for Wayland";
-    homepage = "https://github.com/misterdanb/avizo";
+    homepage = "https://github.com/heyjuvi/avizo";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [

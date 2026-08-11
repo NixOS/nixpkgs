@@ -23,7 +23,6 @@ let
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ tricktron ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "teams";

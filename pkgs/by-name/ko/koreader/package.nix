@@ -11,13 +11,13 @@
   gtk3-x11,
   luajit,
   sdcv,
-  SDL2,
+  sdl3,
   openssl,
   writeScript,
 }:
 
 let
-  version = "2025.10";
+  version = "2026.07.1";
 
   # LuaJIT with table.pack/unpack support for KOReader
   # https://github.com/koreader/koreader-base/tree/master/thirdparty/luajit
@@ -35,12 +35,15 @@ let
     owner = "koreader";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-uYKN5fgIdCVH+pXU2lmsGu7HxZbDld5EJVO9o7Tk8BA=";
+    hash = "sha256-395G5bu0gs0oKOc/CfKNeal66vgXBDgHSpopoQ0GRzw=";
   };
 in
 stdenv.mkDerivation {
   pname = "koreader";
   inherit version;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     let
@@ -54,11 +57,11 @@ stdenv.mkDerivation {
       };
     in
     fetchurl {
-      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-${arch}.deb";
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader_${version}-1_${arch}.deb";
       hash = selectSystem {
-        aarch64-linux = "sha256-z92sguFe5qcPmHk+Orm8vHJycVeZY3cYGByU6xIcrkA=";
-        armv7l-linux = "sha256-kVO+eUwGMULJZwbxZwbeooqRDF8oZPiuo47a7lNsl3I=";
-        x86_64-linux = "sha256-OYzMOUFzUzkYvcjjMX0FZBkZs//9ie3025lhhFOrt9M=";
+        aarch64-linux = "sha256-swwNcmquMjnO31pFNkKZbqU8Kx7Rtwq2ebT12XK8yvQ=";
+        armv7l-linux = "sha256-TpMm9smcDff7A4BkWguWuOwDAJXQITk/HGmDgDIRtrw=";
+        x86_64-linux = "sha256-CWmnfC7Dy4nVf7diwRvsOvE12W/gkE2235h49Hq0f4k=";
       };
     };
 
@@ -73,7 +76,7 @@ stdenv.mkDerivation {
     gtk3-x11
     luajit_koreader
     sdcv
-    SDL2
+    sdl3
     openssl
   ];
 
@@ -90,8 +93,9 @@ stdenv.mkDerivation {
   ''
   # Link SSL/network libraries
   + ''
-    ln -sf ${openssl.out}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
-    ln -sf ${openssl.out}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
+    ln -sf ${lib.getLib openssl}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
+    ln -sf ${lib.getLib openssl}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
+    ln -sf ${lib.getLib sdl3}/lib/libSDL3.so.0 $out/lib/koreader/libs/libSDL3.so.0
   ''
   # Copy fonts
   + ''
@@ -105,7 +109,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : $out/lib/koreader/libs:${
       lib.makeLibraryPath [
         gtk3-x11
-        SDL2
+        sdl3
         glib
         stdenv.cc.cc
         openssl.out

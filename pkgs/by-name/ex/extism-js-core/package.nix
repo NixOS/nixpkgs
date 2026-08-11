@@ -67,8 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # TODO: revisit when https://github.com/DelSkayn/rquickjs/pull/648 is released and extism updated
   env.WASI_SDK = runCommand "wasi-sdk" { } ''
     mkdir -p $out/bin
-    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasi-clang"} $out/bin/clang
-    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasi-ar"} $out/bin/ar
+    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasip1-clang"} $out/bin/clang
+    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasip1-ar"} $out/bin/ar
     ln -s ${stdenv.cc}/nix-support $out/nix-support
     mkdir -p $out/share
     ln -s ${stdenv.cc.libc} $out/share/wasi-sysroot
@@ -79,6 +79,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    # Fails to build on darwin due to libiconv linking failure (ld: library not found for -liconv)
+    # See https://github.com/NixOS/nixpkgs/pull/523442 for a (failed) attempt at fixing the issue
+    broken = stdenv.buildPlatform.isDarwin;
     changelog = "https://github.com/extism/js-pdk/releases/tag/${finalAttrs.src.tag}";
     description = "Write Extism plugins in JavaScript & TypeScript (WASM core)";
     homepage = "https://github.com/extism/js-pdk";
@@ -87,6 +90,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.maintainers.diogotcorreia
       lib.maintainers.dotlambda
     ];
-    platforms = lib.platforms.wasi;
+    platforms = [
+      "wasm32-wasip1"
+    ];
   };
 })

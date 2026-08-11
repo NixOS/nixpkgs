@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pubnub";
-  version = "10.6.3";
+  version = "10.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
     tag = finalAttrs.version;
-    hash = "sha256-gfbHYNP9qOq4FRr+YLwaAOg7XHhcDTanpotp9JMOpfA=";
+    hash = "sha256-qHLkRWq30o6F1P5z+hxUkGLOh15ReOVtto0ttKCiPqg=";
   };
 
   pythonRelaxDeps = [ "httpx" ];

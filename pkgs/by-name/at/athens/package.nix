@@ -10,14 +10,14 @@
 
 buildGo126Module (finalAttrs: {
   pname = "athens";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "gomods";
       repo = "athens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-hNk0hW7R7HdE4Wt1KuKSIUarRGKbtbFqQbfls1HXTqI=";
+      hash = "sha256-sFNxAG0hIxsoKCuef/ROy2MOjA7iC5ehXRvnUr20U0Y=";
     };
     # Trim the patch version, not needed anyway.
     postPatch = ''
@@ -25,7 +25,7 @@ buildGo126Module (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-he7GNkCfqLgOXuCTahvqOnwW5TpbYjlCMfMGfKGwYZ4=";
+  vendorHash = "sha256-nTkrma32+JR+5a5u/XM+EFh9o7YwKMvZJ9cz4evo7Ec=";
 
   env.CGO_ENABLED = "0";
   ldflags = [

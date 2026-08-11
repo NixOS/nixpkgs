@@ -1,30 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGo127Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.8.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mUBCX2FP/ieDCeqQwtAFmR3dKr8P5bGv8K3+f9ULhZM=";
+    hash = "sha256-n9yqZs8RlgJk+NByRJ7a+HRY4YkQNNH7xY02BSy/RhE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-QJyy39v4+4+hJO14p6QjgUeHs3t5EXuqCHM/d91jKsM=";
+  vendorHash = "sha256-BGIF9ZhPAJrUvX1cahe3EyWM3QLIfkkZaChaBign7io=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -37,12 +38,11 @@ buildGo126Module (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking
-    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+    "-tags=unit"
   ];
 
   # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
@@ -59,24 +59,19 @@ buildGo126Module (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm_10
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-vohVXJWPQA/29ntx4hY1eTDHuTGx5UuYymQH02Ufd/Y=";
+      fetcherVersion = 4;
+      hash = "sha256-iXWR3idBiafZXCrt1M7UCJQJsA+IL2AU6pRJI7MdY1E=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
 
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter pocket-id-frontend build
-
-      runHook postBuild
-    '';
+    pnpmWorkspaces = [ "pocket-id-frontend" ];
 
     installPhase = ''
       runHook preInstall
@@ -111,6 +106,7 @@ buildGo126Module (finalAttrs: {
       marcusramberg
       tmarkus
       ymstnt
+      esch
     ];
     platforms = lib.platforms.unix;
   };

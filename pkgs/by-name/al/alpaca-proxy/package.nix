@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "HTTP forward proxy with PAC and NTLM authentication support";
     homepage = "https://github.com/samuong/alpaca";
-    changelog = "https://github.com/samuong/alpaca/releases/tag/v${finalAttrs.src.rev}";
+    changelog = "https://github.com/samuong/alpaca/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ _1nv0k32 ];

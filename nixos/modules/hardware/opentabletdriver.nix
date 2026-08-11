@@ -61,16 +61,27 @@ in
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
 
+      unitConfig = {
+        After = "graphical-session.target";
+        ConditionEnvironment = [
+          "|WAYLAND_DISPLAY"
+          "|DISPLAY"
+        ];
+      };
+
       serviceConfig = {
         Type = "simple";
-        # workaround for https://github.com/NixOS/nixpkgs/issues/469340
-        ExecStartPre = pkgs.writeShellScript "disable-for-gdm-greeter" ''
-          if [[ "$USER" = "gdm-greeter"* ]]; then
+        # workaround for https://github.com/NixOS/nixpkgs/issues/469340 and
+        # https://github.com/OpenTabletDriver/OpenTabletDriver/issues/4885
+        ExecStartPre = pkgs.writeShellScript "poll-for-non-gdm-greeter-display" ''
+          if [[ "$USER" = "gdm-greeter"* \
+              || ( "$${XDG_SESSION_TYPE}" = wayland && -z "$${WAYLAND_DISPLAY}" ) ]]; then
             exit 1
           fi
         '';
         ExecStart = lib.getExe' cfg.package "otd-daemon";
         Restart = "on-failure";
+        RestartSec = 3;
       };
     };
   };

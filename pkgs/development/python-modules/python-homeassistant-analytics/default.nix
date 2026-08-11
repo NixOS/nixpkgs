@@ -5,6 +5,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   aiohttp,
@@ -33,6 +34,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

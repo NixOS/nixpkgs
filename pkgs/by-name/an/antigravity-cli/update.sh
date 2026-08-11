@@ -3,6 +3,7 @@
 
 set -euo pipefail
 
+packageFile=pkgs/by-name/an/antigravity-cli/package.nix
 baseUrl=https://storage.googleapis.com/antigravity-public/antigravity-cli
 
 currentVersion=$(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.version or (lib.getVersion antigravity-cli)")
@@ -15,15 +16,17 @@ fi
 
 # urls unfortunately include a weird buildid that make it hard to get
 latestWholeVersion=$(curl $baseUrl/$latestVersion/manifest.json | jq -r '.platforms."linux-x64".url' | cut -d/ -f6)
+latestBuildId=${latestWholeVersion#*-}
+currentBuildId=$(sed -n 's/.*buildId = "\([^"]*\)";.*/\1/p' "$packageFile")
 
-update-source-version --version-key=wholeVersion antigravity-cli $latestWholeVersion || true
+sed -i "s/buildId = \"$currentBuildId\";/buildId = \"$latestBuildId\";/" "$packageFile"
+update-source-version --version-key=version antigravity-cli $latestVersion || true
 
 for system in \
     x86_64-linux \
     aarch64-linux \
-    x86_64-darwin \
     aarch64-darwin; do
     hash=$(nix store prefetch-file --json --hash-type sha256 \
       $(nix-instantiate --eval --raw -E "with import ./. {}; antigravity-cli.src.url" --system "$system") | jq -r '.hash')
-    update-source-version --version-key=wholeVersion antigravity-cli $latestWholeVersion $hash --system=$system --ignore-same-version
+    update-source-version --version-key=version antigravity-cli $latestVersion $hash --system=$system --ignore-same-version
 done

@@ -15,17 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "redisvl";
-  version = "0.20.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-vl-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qzGK/M2KXVR9FEutA8xQU9bMYWerOFS2BzNtuAW9n0Q=";
+    hash = "sha256-+b27+c3S/XNRTIyXyqgjV6Z5MD9GnuqjrpME09qyEog=";
   };
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "redis" ];
 
   dependencies = [
     numpy
@@ -49,9 +51,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/redis/redis-vl-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "rvl";
-    maintainers = with lib.maintainers; [
-      codgician
-      hythera
-    ];
+    maintainers = with lib.maintainers; [ codgician ];
+    teams = [ lib.teams.redis ];
   };
 })

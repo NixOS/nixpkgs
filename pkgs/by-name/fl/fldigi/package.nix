@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       relrod
-      ftrvxmtrx
     ];
     platforms = lib.platforms.unix;
   };

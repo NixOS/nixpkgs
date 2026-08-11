@@ -2,7 +2,7 @@
 {
   name = "gs1200-exporter";
   meta.maintainers = with lib.maintainers; [ DerGrumpf ];
-  nodes.machine = _: {
+  containers.machine = {
     services.gs1200-exporter = {
       enable = true;
       address = "192.168.2.4";

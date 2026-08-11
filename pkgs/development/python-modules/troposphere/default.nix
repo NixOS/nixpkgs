@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.10.1";
+  version = "4.10.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = "troposphere";
     tag = version;
-    hash = "sha256-Pna5L2uO8KRN0L1XXRdFNWlPwNW9lAfcGwKiyK3ihgE=";
+    hash = "sha256-o8Wq1kRBg4yFozQo02jlR5huBtpuLGZLTkLG5LuoI8s=";
   };
 
   propagatedBuildInputs = [ cfn-flip ];

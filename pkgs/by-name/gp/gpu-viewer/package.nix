@@ -29,7 +29,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpu-viewer";
-  version = "3.34";
+  version = "3.35";
   pyproject = false;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ovgP5RaFAT01zccQiyy1vERBj9OW77v0hMZ0SjoS74M=";
+    hash = "sha256-W8BPtHbOwLZ95bY6ZmAaKS87fh+gOWZIhxjWKqiavag=";
   };
 
   nativeBuildInputs = [

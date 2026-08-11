@@ -42,6 +42,7 @@ makeScopeWithSplicing' {
     // {
 
       # LIBRARIES
+      accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
       accounts-qt = callPackage ../development/libraries/accounts-qt { };
       appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -88,6 +89,8 @@ makeScopeWithSplicing' {
       libquotient = callPackage ../development/libraries/libquotient { };
       mlt = callPackage ../by-name/ml/mlt/package.nix { };
 
+      mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
+
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
       pyotherside = callPackage ../development/libraries/pyotherside { };
@@ -99,6 +102,10 @@ makeScopeWithSplicing' {
       qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
+
+      qmenumodel = callPackage ../development/libraries/qmenumodel {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
 
       qodeassist-plugin = callPackage ../development/libraries/qodeassist-plugin { };
 
@@ -142,8 +149,8 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
-      sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
+      sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
+      sddm = callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
         kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced

@@ -57,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xrandr";
     license = lib.licenses.hpndSellVariant;
     mainProgram = "xrandr";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -15,13 +15,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.6.0";
+  version = "26.8.1";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Ulz3M5z78mJQRr+te7qwVCeULCgEfE17NECSBagbI88=";
+    hash = "sha256-xOvcp4B3yz+v/XAx4wVQ5PgBia6z/7SWRGkFDlcc6J0=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -29,8 +29,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "c26df422b50745085191721b1f078664daac947d";
-    hash = "sha256-u3EVA8J0VCLPafidGHhDiySB2fQdibntN+6FfErQi70=";
+    rev = "f5a3541768632052e2e2039f977e3dc608ef0b60";
+    hash = "sha256-NTEStwU6UzbrGpYoEosbwstoQAXvZYqgK2HCF6Jf6Ak=";
   };
 
 in
@@ -40,12 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     translations
   ];
   sourceRoot = "${src.name}/";
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/actualbudget/actual/blob/master/package.json#L123
-    ./yarn-4.14-support.patch
-  ];
 
   nativeBuildInputs = [
     yarn-berry
@@ -71,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
+    # We bring our own yarn
+    sed -i '/yarnPath:/d' .yarnrc.yml
+
     ln -sv ../../../${translations.name} ./packages/desktop-client/locale
 
     patchShebangs --build ./bin ./packages/*/bin
@@ -114,8 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-lC9+B9agqwVARfMhXSTjb6cBj23PQz+RpZZ700jypF4=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-wYBRDhf1lu1xiNdWh7jXM2Ecimj/aETI863G0PlFLRU=";
   };
 
   pname = "actual-server";

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.21.0";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_redis";
     inherit version;
-    hash = "sha256-6ulUf+zR5wLWoc5wHGgZ1Rp+bEjNUmdZlIRXx+EkEUI=";
+    hash = "sha256-EFysFdIdh87u5BhHYY8A6mzKqjYLiws/0uQveaI9CGg=";
   };
 
   build-system = [ setuptools ];

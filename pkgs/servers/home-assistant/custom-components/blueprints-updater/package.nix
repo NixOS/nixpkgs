@@ -2,24 +2,25 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  h2,
   home-assistant,
+  httpx,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
-  pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.7.3";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-Sb4ZUuOw4S8kh8N3fSgE35lD38LyvLW2oouot2zIWYg=";
+    hash = "sha256-hFBOmjbhw8HECJLj/MmgCzCb1rVlh7k/oI9v20HuYlI=";
   };
 
   patches = [
@@ -34,25 +35,15 @@ buildHomeAssistantComponent rec {
       --replace-fail '"--timeout=60",' ""
   '';
 
-  dependencies = [
-    # Uncodumented, but otherwise the home-assistant helpers/httpx_client.py fails like:
-    # ImportError: Using http2=True, but the 'h2' package is not installed. Make sure to install httpx using `pip install httpx[http2]`.
-    h2
-  ];
+  dependencies = httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     home-assistant
     pytest-asyncio
     pytest-cov-stub
     pytest-homeassistant-custom-component
+    pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # pytest-homeassistant-custom-component tries to create temporary directories inside the nix store
-    "tests/integration/test_init.py::test_full_update_lifecycle"
-    "tests/integration/test_services.py::test_restore_blueprint_service"
-    "tests/integration/test_services.py::test_update_all_service"
   ];
 
   meta = {

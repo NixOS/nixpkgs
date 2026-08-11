@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "django-haystack";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_haystack";
     inherit version;
-    hash = "sha256-487ta4AAYl2hTUCetNrGmJSQXirIrBj5v9tZMjygLqs=";
+    hash = "sha256-Eianyc4T4efq2KyD9uh7/vSZbxRu0klx/eeJYRWxxTA=";
   };
 
   build-system = [
@@ -59,8 +59,6 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    # crashes in threading during tests
-    broken = pythonAtLeast "3.14";
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     changelog = "https://github.com/django-haystack/django-haystack/releases/tag/v${version}";

@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rura";
-  version = "1.5.0";
+  version = "1.10.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tlipinski";
     repo = "rura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AL8qrO6QlHD+cLMEjgfH/4cLqxsRapp9nxJ/eMe0uic=";
+    hash = "sha256-yxYTBXGFX2PdtzgYexnXyjNMcDTnfwsy2s8S0y4hp+M=";
   };
 
-  cargoHash = "sha256-t/ylPVTi0AAumiixU5oaFgldtKkwYvuETjaxCwzveDk=";
+  cargoHash = "sha256-FnLeyUUwQFWLNLLQX538LHIlzwNRg+JfAW9r3IiBnWg=";
 
   passthru = {
     updateScript = nix-update-script { };

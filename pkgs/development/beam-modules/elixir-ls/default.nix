@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elixir-ls";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-AKJJyQUCZSsFpqVPtwL7+arCOzDC0251MwooEM8JFM4=";
+    hash = "sha256-H7u2rcH0qSiswC6aHdaFdM8IyEpXS74RQrVFuJx35Lo=";
   };
 
   patches = [

@@ -6,13 +6,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-java-format";
-  version = "1.35.0";
+  version = "1.36.1";
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://github.com/google/google-java-format/releases/download/v${version}/google-java-format-${version}-all-deps.jar";
-    sha256 = "sha256-v7f56tbNMoOJvC2lOGBEO8DoBd/QjMiJv99Dsmyypug=";
+    sha256 = "sha256-JbQA8AMInSPMUyDNrxoWyr7hm4qjQ00P8CGz2fQhVLQ=";
+    url = "https://github.com/google/google-java-format/releases/download/v${finalAttrs.version}/google-java-format-${finalAttrs.version}-all-deps.jar";
   };
 
   dontUnpack = true;
@@ -23,17 +24,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/${pname}}
-    install -D ${src} $out/share/${pname}/google-java-format-${version}-all-deps.jar
+    mkdir -p $out/{bin,share/${finalAttrs.pname}}
+    install -D ${finalAttrs.src} $out/share/${finalAttrs.pname}/google-java-format-${finalAttrs.version}-all-deps.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --argv0 ${pname} \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
+      --argv0 ${finalAttrs.pname} \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED" \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED" \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED" \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED" \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" \
-      --add-flags "-jar $out/share/${pname}/google-java-format-${version}-all-deps.jar"
+      --add-flags "-jar $out/share/${finalAttrs.pname}/google-java-format-${finalAttrs.version}-all-deps.jar"
 
     runHook postInstall
   '';
@@ -50,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "google-java-format";
   };
-}
+})

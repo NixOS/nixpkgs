@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmt32emu";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "libmt32emu_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-O9x+uL1QnixXNl/rTCnGwbutoCs6bI8vCmkhAWJW4Do=";
+    hash = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   outputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix; # Not tested on ReactOS yet :)
   };

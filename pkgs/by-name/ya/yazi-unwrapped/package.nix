@@ -30,6 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish    ./yazi-boot/completions/yazi.fish \
       --zsh     ./yazi-boot/completions/_yazi
 
+    installShellCompletion --cmd ya \
+      --nushell ./yazi-cli/completions/ya.nu \
+      --bash    ./yazi-cli/completions/ya.bash \
+      --fish    ./yazi-cli/completions/ya.fish \
+      --zsh     ./yazi-cli/completions/_ya
+
     installManPage ../${finalAttrs.passthru.srcs.man_src.name}/yazi{.1,-config.5}
 
     install -Dm444 assets/yazi.desktop -t $out/share/applications

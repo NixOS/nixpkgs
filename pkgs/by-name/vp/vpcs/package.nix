@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpcs";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "vpcs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
+    hash = "sha256-sWqQDf3xqrr6k7MFXV/9K9KdsEAvftsDkGlSUhA5CmY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

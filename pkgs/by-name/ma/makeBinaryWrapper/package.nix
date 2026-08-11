@@ -24,9 +24,13 @@ makeSetupHook {
 
   passthru = {
     # Extract the function call used to create a binary wrapper from its embedded docstring
-    extractCmd = writeShellScript "extract-binary-wrapper-cmd" ''
-      ${targetPackages.gnuStdenv.cc.bintools.targetPrefix}strings -dw "$1" | sed -n '/^makeCWrapper/,/^$/ p'
-    '';
+    extractCmd =
+      let
+        bintools = targetPackages.gnuStdenv.cc.bintools;
+      in
+      writeShellScript "extract-binary-wrapper-cmd" ''
+        ${lib.getExe' bintools "${bintools.targetPrefix}strings"} -dw "$1" | sed -n '/^makeCWrapper/,/^$/ p'
+      '';
 
     tests = tests.makeBinaryWrapper;
   };

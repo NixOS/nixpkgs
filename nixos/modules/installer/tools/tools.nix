@@ -30,15 +30,20 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${
+      perl = lib.getExe (
         pkgs.perl.withPackages (p: [
           p.FileSlurp
           p.ConfigIniFiles
         ])
-      }/bin/perl";
+      );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      bcachefs =
+        if pkgs.bcachefs-tools.meta.broken then
+          lib.getExe' pkgs.coreutils "false"
+        else
+          lib.getExe pkgs.bcachefs-tools;
+      btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
     };
@@ -330,7 +335,7 @@ in
           '';
 
           config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
-            security.polkit.enable = lib.mkDefault true;
+            security.run0.enable = lib.mkDefault true;
             environment.systemPackages = [ pkgs.polkit-stdin-agent ];
           };
         }

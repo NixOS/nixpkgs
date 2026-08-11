@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   click,
   click-default-group,
   python-dateutil,
@@ -15,17 +15,19 @@
   sqlite-utils,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlite-utils";
-  version = "3.39";
+  version = "4.1.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   build-system = [ setuptools ];
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sqlite_utils";
-    hash = "sha256-v6Lqwps+PrXJZHKDeXUn/rz079Spu7Mdl5oUoR75280=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "sqlite-utils";
+    tag = finalAttrs.version;
+    hash = "sha256-igf4d+5iyC+gYb9TL2JCNzTmTrCgRdR9gscTcfslDng=";
   };
 
   dependencies = [
@@ -51,11 +53,11 @@ buildPythonPackage rec {
     description = "Python CLI utility and library for manipulating SQLite databases";
     mainProgram = "sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-utils";
-    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
+    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       meatcar
       techknowlogick
     ];
   };
-}
+})

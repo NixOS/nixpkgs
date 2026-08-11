@@ -96,13 +96,13 @@ with lib;
   config = mkIf cfg.enable {
     services.tor = mkIf cfg.tor {
       enable = true;
-      controlPort = 9051;
 
-      extraConfig = ''
-        CacheDirectoryGroupReadable 1
-        CookieAuthentication 1
-        CookieAuthFileGroupReadable 1
-      '';
+      settings = {
+        ControlPort = 9051;
+        CacheDirectoryGroupReadable = true;
+        CookieAuthentication = true;
+        CookieAuthFileGroupReadable = true;
+      };
     };
 
     systemd.services.zeronet = {

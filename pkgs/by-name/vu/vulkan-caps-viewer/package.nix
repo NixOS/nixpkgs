@@ -13,25 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-caps-viewer";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     tag = finalAttrs.version;
-    hash = "sha256-Vc4zK1Kurirp+xK7A2D3CC4veJSghE9mS7YzRA3CnHM=";
+    hash = "sha256-sQnqUbpq7AQJBG19aYQy224Kztzm6X3tDr3+SufJNPo=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.
     fetchSubmodules = true;
   };
-
-  patches = [
-    # In Qt 6.10+, the path of the Metal layer has changed.
-    # Without this patch, the application fails to launch on darwin.
-    # Upstream PR: https://github.com/SaschaWillems/VulkanCapsViewer/pull/270
-    ./Fix-darwin-metal-layer.patch
-  ];
 
   postPatch = ''
     # These paths are appended to the install target, so we strip the /usr/ prefix

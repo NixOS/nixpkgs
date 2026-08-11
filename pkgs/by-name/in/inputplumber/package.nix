@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inputplumber";
-  version = "0.77.3";
+  version = "0.78.0";
 
   src = fetchFromGitHub {
     owner = "ShadowBlip";
     repo = "InputPlumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lcv61lzZ45vNDdFdlnJOQW/mIN8KdsAEAUsoNuuhLM0=";
+    hash = "sha256-wa05/gStEbXUZLvokY1N4k4f4/cPm2Kolbf+AF479lU=";
   };
 
-  cargoHash = "sha256-VrzePyiBWAWy+IC9QWi5vooAp2+SwuzT3n+SMG/Ntas=";
+  cargoHash = "sha256-lScpMua5czwmnz/+fz+UrgZSWHwRNP7zB317xJS+6gs=";
 
   nativeBuildInputs = [
     pkg-config

@@ -3,7 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
-  electron_40, # see https://github.com/NixOS/nixpkgs/pull/521495
+  electron,
   makeDesktopItem,
   imagemagick,
   asar,
@@ -14,7 +14,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.12.7";
+  version = "1.13.4";
   appname = "Obsidian";
   meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -33,28 +33,25 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
 
-  srcs = rec {
+  srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-      hash = "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+      hash = "sha256-66wkn5SbaJSBn7tLxWV+yIkvAGzv7ZVdNKbB/+Ji8Ws=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
-      hash = "sha256-a8hye/27bXMdWvmgb1HW3nBhxoyQjIrotDqe03miAmA=";
+      hash = "sha256-4tRNJjab0DXhrVj2MRMHP7eRtS9MJsziLO1jtJKnE24=";
     };
 
-    x86_64-darwin = fetchurl {
+    aarch64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
-      hash = "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs=";
+      hash = "sha256-6EuVlaul5QIhyX5D0+P0N0Fu379MSoTDeUYecPhU148=";
     };
-
-    aarch64-darwin = x86_64-darwin;
   };
 
   src =
@@ -102,7 +99,7 @@ let
         --replace-fail "supportFetchAPI: true," "supportFetchAPI: true, corsEnabled: true,"
       asar pack app-src resources/app.asar
 
-      makeWrapper ${electron_40}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
@@ -140,15 +137,14 @@ let
       appname
       meta
       ;
-    sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
       _7zz
     ];
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/{Applications/${appname}.app,bin}
-      cp -R . $out/Applications/${appname}.app
+      mkdir -p $out/{Applications,bin}
+      cp -R ${appname}.app $out/Applications
       makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/obsidian
       makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
       runHook postInstall

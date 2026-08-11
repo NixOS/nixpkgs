@@ -43,7 +43,7 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://github.com/workhorsy/py-cpuinfo";
-    changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/workhorsy/py-cpuinfo/blob/${src.rev}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

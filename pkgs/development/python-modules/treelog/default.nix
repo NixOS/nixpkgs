@@ -26,6 +26,6 @@ buildPythonPackage (finalAttrs: {
     description = "Logging framework that organizes messages in a tree structure";
     homepage = "https://github.com/evalf/treelog";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.Scriptkiddi ];
   };
 })

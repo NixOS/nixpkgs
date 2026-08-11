@@ -14,7 +14,6 @@
   wayland,
   wayland-scanner,
   vulkan-headers,
-  vulkan-loader,
   pipewire,
   libdrm,
   libva,
@@ -29,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "5.13.8";
+  version = "5.13.9";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-0uYj9NA6KqORr7ag8OOMphWWyHU27ptuOs5q0lGLGLc=";
+    hash = "sha256-rGjS21eY2XfcdRwmKE2hJO1+FIXAmmBJ4y2oKgSwoRM=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-scanner
     vulkan-headers
-    vulkan-loader
     libdrm
     libva
     libxdamage
@@ -84,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       }" \
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
+    substituteInPlace $out/lib/systemd/user/gpu-screen-recorder.service \
+      --replace-fail "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
   '';
 
   passthru.updateScript = gitUpdater { };

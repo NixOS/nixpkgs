@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iometer";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iometer-gmbh";
     repo = "iometer.py";
-    tag = finalAttrs.version;
-    hash = "sha256-ksf/nZHv4/JRHo5OrFp6lgPF62DD37ELFfUVkL+TDEo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-50tq+z1+8CX58Yj6GztYXStHMG+IncOHDgwK8WhxVcQ=";
   };
 
   build-system = [ poetry-core ];

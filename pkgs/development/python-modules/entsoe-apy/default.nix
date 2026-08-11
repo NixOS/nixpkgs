@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "entsoe-apy";
-  version = "0.9.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "berrij";
     repo = "entsoe-apy";
     tag = "v${version}";
-    hash = "sha256-szJ3UlYJjwNZMWHJ81Gp4AgdB7JQyDP0NL0MpmjTQGY=";
+    hash = "sha256-IzZ20ZCdJRxzCQDLX5Gs78ynPHGp5kdTbDA+fsdVhlM=";
   };
 
   pyproject = true;

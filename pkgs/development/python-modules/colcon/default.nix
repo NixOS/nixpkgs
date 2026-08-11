@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "colcon-core";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-core";
     tag = version;
-    hash = "sha256-yERPJD2LYmBrLchyX/axQ+8h5/hRXsjvzF3DkR8CsCs=";
+    hash = "sha256-nIROvz5HdL8s9gCcXGhbygce1M/0O0KXaHDDs2rP1i0=";
   };
 
   # Upstream tracking issue: https://github.com/ros2/ros2/issues/1738

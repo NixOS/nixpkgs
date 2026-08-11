@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   fetchpatch,
   include,
@@ -7,6 +9,7 @@
   flex,
   byacc,
   csu,
+  libcompiler_rt,
   extraSrc ? [ ],
 }:
 
@@ -32,6 +35,9 @@ mkDerivation {
     "sys/crypto"
     "include/gssapi"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "contrib/arm-optimized-routines"
+  ]
   ++ extraSrc;
 
   patches = [
@@ -55,6 +61,7 @@ mkDerivation {
   buildInputs = [
     include
     libsys
+    libcompiler_rt
   ];
 
   extraNativeBuildInputs = [

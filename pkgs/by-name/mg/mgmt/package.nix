@@ -12,16 +12,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mgmt";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "purpleidea";
     repo = "mgmt";
     tag = finalAttrs.version;
-    hash = "sha256-nLk497gGrZ664VG9/yV6tqTtwAsN8EmuAEh5Vmq95hQ=";
+    hash = "sha256-jVFIVlytDvfTrAzWkX+pedAq/AcLrCDFtLPx0Wc+XjM=";
   };
 
-  vendorHash = "sha256-w4j9cJwW2tnjXSnd3w3v81TwHI8tGYiImjG3LZ+Pjuc=";
+  vendorHash = "sha256-mMRAlqySy6dpRG86p0BHSpYn2gzE8N4sZ3qHiyuttBA=";
 
   proxyVendor = true;
 

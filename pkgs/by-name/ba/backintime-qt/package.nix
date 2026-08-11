@@ -49,7 +49,6 @@ stdenv.mkDerivation {
     version
     src
     installFlags
-    meta
     dontAddPrefix
     ;
 
@@ -105,4 +104,15 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/backintime-qt_polkit" \
       --prefix PATH : "${lib.getBin polkit}/bin:$PATH"
   '';
+
+  meta = {
+    inherit (backintime-common.meta)
+      homepage
+      description
+      license
+      maintainers
+      platforms
+      longDescription
+      ;
+  };
 }

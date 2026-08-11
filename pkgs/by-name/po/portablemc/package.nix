@@ -36,7 +36,7 @@
   jdk17,
   jdk8,
 
-  # can be overriden to reduce the closure size
+  # can be overridden to reduce the closure size
   jvms ? [
     jdk25
     jdk21

@@ -12,17 +12,19 @@
   pandas,
   scipy,
   statsmodels,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "seaborn";
   version = "0.13.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";
     repo = "seaborn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
@@ -46,9 +48,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
@@ -64,15 +66,24 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-xdist
     pytest8_3CheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # requires internet connection
     "test_load_dataset_string_error"
+    # matplotlib error string matching
+    "test_theme_validation"
+    # log scale transformation match too strict
+    "test_log_scale"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # overly strict float tolerances
     "TestDendrogram"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # overly strict float tolerances
+    "test_ticklabels_overlap"
   ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
@@ -84,8 +95,8 @@ buildPythonPackage rec {
   meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    changelog = "https://github.com/mwaskom/seaborn/blob/v${version}/doc/whatsnew/v${version}.rst";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/mwaskom/seaborn/blob/${finalAttrs.src.tag}/doc/whatsnew/${finalAttrs.src.tag}.rst";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

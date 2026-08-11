@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
     tag = version;
-    hash = "sha256-B8luwaIDUMdMZk/QZNKTM+ejCvJR8LoIcuQCCqsqu2k=";
+    hash = "sha256-qNgPuFG/j/q1osu/IJ8JbF+l/XiCphdhUYPOKbLEgTk=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10

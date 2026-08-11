@@ -1,30 +1,33 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_18,
+  llvmPackages_22,
   ncurses,
   cmake,
   libxml2,
   symlinkJoin,
   cudaPackages,
-  enableCUDA ? false,
+  enableCUDA ? config.cudaSupport,
   libffi,
   libpfm,
+  versionCheckHook,
 }:
 
 let
-  luajitRev = "83954100dba9fc0cf5eeaf122f007df35ec9a604";
+  # https://github.com/terralang/terra/blob/0776e640ba9eb20c7d5419686ef106a38d8e18a3/cmake/Modules/GetLuaJIT.cmake#L19
+  luajitRev = "04dca7911ea255f37be799c18d74c305b921c1a6";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    hash = "sha256-L9T6lc32dDLAp9hPI5mKOzT0c4juW9JHA3FJCpm7HNQ=";
+    hash = "sha256-IvkOwyKXUqo++A0XalCKuS0uLj5PlTOUQX1qXDP6JBk=";
   };
 
-  llvmPackages = llvmPackages_18;
+  llvmPackages = llvmPackages_22;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
@@ -37,30 +40,37 @@ let
     ];
   };
 
-  cuda = cudaPackages.cudatoolkit;
-
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
-  version = "1.2.0";
+  version = "1.2.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "release-${finalAttrs.version}";
-    hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-K2AMNgqHBYIyPZ7wFocZcbQGlbrX7lyuks43pWqI4jU=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCUDA [ cudaPackages.cuda_nvcc ];
   buildInputs = [
     llvmMerged
     ncurses
     libffi
     libxml2
   ]
-  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optionals enableCUDA (
+    with cudaPackages;
+    [
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
+      cuda_cudart
+    ]
+  )
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
@@ -100,13 +110,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $bin/bin bin/terra
     install -Dm755 -t $out/lib lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm644 -t $static/lib lib/libterra_s.a
 
     mkdir -pv $dev/include
     cp -rv include/terra $dev/include
+
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Low-level counterpart to Lua";
@@ -119,9 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       elliottslaughter
     ];
     license = lib.licenses.mit;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    # Linux Aarch64 broken above LLVM11
-    # https://github.com/terralang/terra/issues/597
-    broken = stdenv.hostPlatform.isAarch64;
+    mainProgram = "terra";
   };
 })

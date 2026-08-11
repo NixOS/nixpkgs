@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.23.0";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libva-utils";
     rev = version;
-    sha256 = "sha256-losxOPCrLCjtRKJ8RuwkjRllYYtJluKhscNfdxpC/xg=";
+    sha256 = "sha256-ezYoJ9hyG0pAficudoS4oiXbdrw4oCUU8C6qmJrNQRc=";
   };
 
   nativeBuildInputs = [

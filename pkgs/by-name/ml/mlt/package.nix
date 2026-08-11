@@ -1,4 +1,5 @@
 {
+  alsa-lib,
   config,
   lib,
   stdenv,
@@ -8,16 +9,23 @@
   which,
   ffmpeg,
   fftw,
+  fontconfig,
   frei0r,
   libdv,
+  libebur128,
+  libexif,
   libjack2,
   libsamplerate,
+  libspatialaudio,
   libvorbis,
   libxml2,
   libx11,
+  lilv,
   makeWrapper,
   movit,
   opencv4,
+  pango,
+  rnnoise,
   rtaudio,
   rubberband,
   sox,
@@ -44,13 +52,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlt";
-  version = "7.38.0";
+  version = "7.40.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZWkgDffNZwJgfrFQNKfS+QzpcjaM0SEBbyxrVBqubc=";
+    hash = "sha256-rw1jnQJzbtpGsIe/AFMiy7k/3X0vkfkY3rG4E419aVM=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
     # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
@@ -74,20 +82,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    (opencv4.override { inherit ffmpeg; })
+    (opencv4.override { ffmpeg-headless = ffmpeg; })
     ffmpeg
     fftw
-    frei0r
+    fontconfig
+    (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
     libdv
+    libebur128
+    libexif
     libjack2
     libsamplerate
+    libspatialaudio
     libvorbis
     libxml2
+    lilv
     movit
+    pango
+    rnnoise
     rtaudio
     rubberband
     sox
     vid-stab
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -119,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MOD_OPENCV" true)
     (lib.cmakeBool "MOD_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
     (lib.cmakeBool "MOD_GLAXNIMATE_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
+    (lib.cmakeBool "RELOCATABLE" false)
   ]
   ++ lib.optionals enablePython [
     (lib.cmakeBool "SWIG_PYTHON" true)
@@ -126,7 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     wrapProgram $out/bin/melt \
-      --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
+      --prefix FREI0R_PATH : ${
+        (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+      }/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
       ${lib.optionalString (qtbase != null) "\${qtWrapperArgs[@]}"}
 
@@ -134,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   passthru = {

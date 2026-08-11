@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-power-manager";
-  version = "4.20.0";
+  version = "4.20.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-power-manager";
     tag = "xfce4-power-manager-${finalAttrs.version}";
-    hash = "sha256-qKUdrr+giLzNemhT3EQsOKTSiIx50NakmK14Ak7ZOCE=";
+    hash = "sha256-0Pgk5N+Cr75RwOp2dbYB8OOEzmXDVUHzoqFbaUF/Z0k=";
   };
 
   nativeBuildInputs = [

@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Set of tweening / easing functions implemented in Python";
     homepage = "https://github.com/asweigart/pytweening";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/Jwink3101/syncrclone/blob/${finalAttrs.src.rev}/docs/changelog.md";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    maintainers = [ ];
     mainProgram = "syncrclone";
   };
 })

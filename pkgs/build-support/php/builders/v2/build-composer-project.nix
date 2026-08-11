@@ -111,7 +111,7 @@ let
       };
 
       meta = meta // {
-        platforms = lib.platforms.all;
+        platforms = meta.platforms or lib.platforms.all;
       };
     };
 in

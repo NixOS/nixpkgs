@@ -36,11 +36,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnuplot";
-  version = "6.0.4";
+  version = "6.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/gnuplot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
+    hash = "sha256-cyN/N/AzBtaL+uEzqaUNXpNBOE4ZjVqzfuypq1NN7tg=";
   };
 
   nativeBuildInputs = [

@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     dbus-python
-    mpd2
+    python-mpd2
     mutagen
     pygobject3
   ];

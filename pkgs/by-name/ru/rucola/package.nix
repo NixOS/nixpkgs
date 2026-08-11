@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rucola";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Linus-Mussmaecher";
     repo = "rucola";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gBX7ivLiCpdVE77O+Qy2fVGjvh/qG9FxX4jNxsTL03s=";
+    hash = "sha256-dE2XlO+CwC78GblNoyv7oA5d/GezzuiuOwcQjsm7Pns=";
   };
 
-  cargoHash = "sha256-9QBZEZS1LFfjlKVTM5vAbm+8tFlZVyWDLEKvpsDIu5E=";
+  cargoHash = "sha256-yhBY/6NLn1aIRZLLpHrEsMo/yzSnKzsvrIiJFCRcYMc=";
 
   nativeBuildInputs = [
     pkg-config

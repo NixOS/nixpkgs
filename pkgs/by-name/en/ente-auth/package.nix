@@ -20,7 +20,7 @@ flutter.buildFlutterApplication rec {
   version = "4.4.17";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
@@ -34,7 +34,7 @@ flutter.buildFlutterApplication rec {
 
   customSourceBuilders.ente_strings =
     { version, src, ... }:
-    # There currently is no covenient way to setup the flutter SDK outside of apps
+    # There currently is no convenient way to setup the flutter SDK outside of apps
     # and we can't move this to the app's own build phase as it would still reference
     # the immutable source variant without the generated l10n files.
     flutter.buildFlutterApplication {
@@ -94,8 +94,8 @@ flutter.buildFlutterApplication rec {
     "--dart-define=app.flavor=independent"
   ];
 
-  # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
-  # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
+  # Based on https://github.com/ente/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
+  # and https://github.com/ente/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [
     (makeDesktopItem {
       name = desktopId;
@@ -138,7 +138,7 @@ flutter.buildFlutterApplication rec {
       Ente's 2FA app. An end-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups. Works offline. You can even use it without signing up for an account if you don't want the cloud backups or multi-device sync.
     '';
     homepage = "https://ente.io/auth/";
-    changelog = "https://github.com/ente-io/ente/releases/tag/auth-v${version}";
+    changelog = "https://github.com/ente/ente/releases/tag/auth-v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz

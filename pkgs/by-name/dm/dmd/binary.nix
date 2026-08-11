@@ -86,7 +86,6 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.lionello ];
     homepage = "https://dlang.org/";
     platforms = [
-      "x86_64-darwin"
       "i686-linux"
       "x86_64-linux"
     ];

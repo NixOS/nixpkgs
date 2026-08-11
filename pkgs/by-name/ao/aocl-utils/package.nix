@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aocl-utils";
-  version = "5.3.0";
+  version = "5.3";
 
   src = fetchFromGitHub {
     owner = "amd";

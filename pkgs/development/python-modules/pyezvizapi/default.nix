@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyezvizapi";
-  version = "1.0.4.9";
+  version = "1.0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RenierM26";
     repo = "pyEzvizApi";
     tag = "v${version}";
-    hash = "sha256-hpfsDZzv5rhr8y7PNcprwFoQdVUq0UlN+UtPrkqz4zE=";
+    hash = "sha256-m3rj8ELu8/X/3TPtC1wfN8VOs7eHKb4DNvb7JAoKXfE=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Python interface for for Ezviz cameras";
+    description = "Python interface for Ezviz cameras";
     homepage = "https://github.com/RenierM26/pyEzvizApi";
     changelog = "https://github.com/RenierM26/pyEzvizApi/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

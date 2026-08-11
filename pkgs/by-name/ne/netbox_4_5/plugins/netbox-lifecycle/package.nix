@@ -9,7 +9,7 @@
   django-polymorphic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-lifecycle";
   version = "1.1.9";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-lifecycle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iCBlwhaf6IFdni7FQyRPtRJVwt04w0Jc4R0CeQlIWCY=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin for managing Hardware EOL/EOS, and Support Contracts";
     homepage = "https://github.com/DanSheps/netbox-lifecycle";
-    changelog = "https://github.com/DanSheps/netbox-lifecycle/releases/tag/${src.tag}";
+    changelog = "https://github.com/DanSheps/netbox-lifecycle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = "bpf-linker";
     tag = "v${version}";
-    hash = "sha256-QqJtiKQgU1rgiQOTw5kn0LhxiGrGz65y9wzMMpqEBz8=";
+    hash = "sha256-W1ZrKSkAHH1CBFNhyD5qfVJuf9mhwzZuzkdWGX4prnI=";
   };
 
-  cargoHash = "sha256-zA3R34QS3wAALEIo7k37BjDgyfzqg0n12Z0rZ/GTIIk=";
+  cargoHash = "sha256-jgVuJ5xq/M2Bq1B1u8BnULqSsbwxXpSsIFhVU8ehDZM=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "llvm-${lib.versions.major llvmPackagesForLinker.llvm.version}" ];

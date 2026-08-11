@@ -1,9 +1,9 @@
 {
-  applyPatches,
   boost,
   catch2_3,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   libarchive,
   libpcap,
@@ -24,6 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-df5tByZwtQLdV0UlSo1WkgyoF3hReU/mN74V2WL6zoI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "jasterix-fix-tests.patch";
+      url = "https://github.com/OpenATSGmbH/jASTERIX/commit/b79e59c042ebb7eee31f50a7ed48840bcec50429.patch";
+      hash = "sha256-V0/nMJGb8ZB/Z6bKvyZnic57HXAsUAHXgyVq+D4yFDw=";
+    })
+  ];
+
   # Disable boost-stacktrace_backtrace, which is an optional dependency and not yet available in Nix.
   postPatch = ''
     sed -i 's/\(find_package .*\) stacktrace_backtrace/\1/' CMakeLists.txt
@@ -41,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_STATIC" stdenv.hostPlatform.isStatic)
-    (lib.cmakeBool "WITH_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "WITH_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   buildInputs = [
@@ -54,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl.dev
   ];
 
-  doCheck = false; # The tests require ASTERIX files that are not publicly provided
+  doCheck = true;
 
   strictDeps = true;
   __structuredAttrs = true;

@@ -39,3 +39,31 @@ def test_options_commonmark_legacy_anchors() -> None:
     c.add_options(opts)
     s = c.finalize()
     assert s == expected
+
+@pytest.mark.parametrize(
+    ("style", "expected_file"),
+    [
+        (nixos_render_docs.types.AdmonitionStyle.PLAIN,
+         "tests/sample_options_admonition_plain.md"),
+        (nixos_render_docs.types.AdmonitionStyle.GFM,
+         "tests/sample_options_admonition_gfm.md"),
+        (nixos_render_docs.types.AdmonitionStyle.PANDOC,
+         "tests/sample_options_admonition_pandoc.md"),
+    ],
+)
+def test_options_commonmark_admonition_style(style, expected_file):
+    c = nixos_render_docs.options.CommonMarkConverter(
+        {},
+        "local",
+        admonition_style=style,
+    )
+
+    with Path("tests/sample_options_admonition.json").open() as f:
+        opts = json.load(f)
+
+    with Path(expected_file).open() as f:
+        expected = f.read()
+
+    c.add_options(opts)
+
+    assert c.finalize() == expected

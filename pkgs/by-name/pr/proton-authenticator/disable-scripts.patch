@@ -1,0 +1,13 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+index 44d5b0a935..bfe72b9fd6 100644
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -5,7 +5,7 @@ compressionLevel: mixed
+ 
+ enableConstraintsChecks: true
+ 
+-enableScripts: true
++enableScripts: false
+ 
+ httpProxy: '${http_proxy:-}'
+ 

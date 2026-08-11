@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 1ec793b..74e538e 100644
+--- a/package.json
++++ b/package.json
+@@ -12,6 +12,7 @@
+   "author": "Thomas Lovén",
+   "license": "MIT",
+   "devDependencies": {
++    "@babel/core": "^7.0.0",
+     "@rollup/plugin-babel": "^6.0.4",
+     "@rollup/plugin-json": "^6.1.0",
+     "@rollup/plugin-node-resolve": "^16.0.1",

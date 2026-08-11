@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitHub,
   llvmPackages,
   libbpf,
@@ -49,7 +50,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   __structuredAttrs = true;
-  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+  env.EXPECTED_SCHEDULERS = lib.concatStringsSep " " finalAttrs.passthru.schedulers;
 
   doInstallCheck = true;
   installCheckPhase = ''

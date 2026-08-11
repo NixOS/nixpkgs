@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "genann";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "codeplea";
     repo = "genann";
     rev = "v${finalAttrs.version}";
-    sha256 = "0z45ndpd4a64i6jayr4yxfcr5h87bsmhm7lfgnbp35pnfywiclmq";
+    sha256 = "sha256-WZuJbCJZXjJE4X6pAcWvlDqHMw3bEdFIBbTvFJNXM04=";
   };
 
   dontBuild = true;

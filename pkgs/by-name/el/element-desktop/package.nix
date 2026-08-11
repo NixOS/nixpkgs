@@ -5,7 +5,7 @@
   makeWrapper,
   makeDesktopItem,
   nodejs,
-  electron_41,
+  electron_42,
   element-web,
   callPackage,
   typescript,
@@ -15,7 +15,7 @@
   commandLineArgs ? "",
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   faketty,
   asar,
   copyDesktopItems,
@@ -24,19 +24,19 @@
 }:
 
 let
-  pnpm = pnpm_10;
-  electron = electron_41;
+  pnpm = pnpm_11;
+  electron = electron_42;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.18";
+  version = "1.12.24";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G2HEOv1fHVgbT79bo8ibp9VmtQ8o5vA6/i6Q5TUKqdw=";
+    hash = "sha256-VSnhOPjlMuQRy5RsLN5IdRVyjmghTuAoRSffOFL6fns=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-0iGzjwT+99tvRuxYD+1+SrYrCYAI1dcjhXT3x6E/wHg=";
+    fetcherVersion = 4;
+    hash = "sha256-dicE2mDba0mgu3iTbevowW6fRhqMytBQacQa4aSP47M=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";

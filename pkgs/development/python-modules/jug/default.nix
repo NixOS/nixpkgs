@@ -10,21 +10,23 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jug";
   version = "2.5.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "jug";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YjBhA+yEdMQ/4yYf25kkXwbvw+ta9Nb4CX8Rnr0du6k=";
   };
 
   build-system = [ setuptools ];
 
-  dependenciesk = [ bottle ];
+  dependencies = [ bottle ]; # needed for webstatus sub-command
 
   nativeCheckInputs = [
     numpy
@@ -38,8 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Task-Based Parallelization Framework";
     homepage = "https://jug.readthedocs.io/";
-    changelog = "https://github.com/luispedro/jug/blob/v${version}/ChangeLog";
+    downloadPage = "https://github.com/luispedro/jug";
+    changelog = "https://github.com/luispedro/jug/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luispedro ];
   };
-}
+})

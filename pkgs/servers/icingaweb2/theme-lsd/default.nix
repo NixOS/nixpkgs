@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Psychadelic theme for IcingaWeb 2";
+    description = "Psychedelic theme for IcingaWeb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-lsd";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;

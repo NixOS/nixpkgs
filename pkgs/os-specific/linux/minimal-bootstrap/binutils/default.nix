@@ -54,6 +54,8 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
+    "--disable-gold"
+    "--disable-plugins"
   ];
 in
 bash.runCommand "${pname}-${version}"

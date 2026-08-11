@@ -9,18 +9,14 @@
 
 buildDunePackage (finalAttrs: {
   pname = "pyml";
-  version = "20231101";
+  version = "20250807";
 
   src = fetchFromGitHub {
     owner = "ocamllibs";
     repo = "pyml";
     tag = finalAttrs.version;
-    hash = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
+    hash = "sha256-WPtmj9EEs7P72OXWJg1syIrbLuh7u4V4W4nyozXmSa0=";
   };
-
-  patches = [
-    ./remove-stdcompat.patch
-  ];
 
   buildInputs = [
     utop
@@ -37,6 +33,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   doCheck = true;
 

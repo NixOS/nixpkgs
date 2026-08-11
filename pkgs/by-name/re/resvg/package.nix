@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "resvg";
-  version = "0.47.0";
+  version = "0.48.1";
 
   src = fetchFromGitHub {
-    owner = "RazrFalcon";
+    owner = "linebender";
     repo = "resvg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BCYjVOWFpOZm7ocmfszFpaBxnd96vhf3/yGlvAVRtCw=";
+    hash = "sha256-BHT4uzjgU9x2HJbuG6HKciPLnMyUgsjN+jWlEzEeG2E=";
   };
 
-  cargoHash = "sha256-cVOAmwX/pYA6R0HK8+RLt/IvzowAO/g1i2YM71bYFoA=";
+  cargoHash = "sha256-KTeeuCNT17xyVHzu8n5b8joVvire+Yz5vOUb7QV4h98=";
 
   cargoBuildFlags = [
     "--package=resvg"
@@ -29,10 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "SVG rendering library";
-    homepage = "https://github.com/RazrFalcon/resvg";
-    changelog = "https://github.com/RazrFalcon/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
-    maintainers = [ ];
+    homepage = "https://github.com/linebender/resvg";
+    changelog = "https://github.com/linebender/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
+    maintainers = [ lib.maintainers.jopejoe1 ];
     mainProgram = "resvg";
   };
 })

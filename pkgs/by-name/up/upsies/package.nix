@@ -18,14 +18,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upsies";
-  version = "2026.05.24";
+  version = "2026.06.12";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "plotski";
     repo = "upsies";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2gb5eGtEXPaFfFdfE6tBVQGPVmWwnA9Nm2N7OyinWEM=";
+    hash = "sha256-Hf26kYWnThpcemEerpx9cHlBVUa1pQ9ZP+AZeeJahSo=";
   };
 
   patches = [

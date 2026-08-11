@@ -1547,6 +1547,10 @@ with haskellLib;
     revision = null;
   }) super.svgcairo;
 
+  # Support GHC >= 9.12.3 || >= 9.14.1
+  # Patch from https://github.com/gtk2hs/gtk2hs/pull/349
+  glib = appendPatches [ ./patches/glib-support-rts-at-least-9.12.3-and-9.14.patch ] super.glib;
+
   # Too strict upper bound on tasty-hedgehog (<1.5)
   # https://github.com/typeclasses/ascii-predicates/pull/1
   ascii-predicates = doJailbreak super.ascii-predicates;
@@ -2038,14 +2042,25 @@ with haskellLib;
         } super.regex-compat-tdfa
       );
 
-  darcs = appendPatches [
-    # Cabal 3.12 support in Setup.hs
-    # https://hub.darcs.net/darcs/darcs-reviewed/patch/50d9b0b402a896c83aa7929a50a0e0449838600f
-    ./patches/darcs-cabal-3.12.patch
-    # GHC 9.10 patch plus lifted constraints for hashable
-    # https://hub.darcs.net/darcs/darcs-reviewed/patch/32646b190e019de21a103e950c4eccdd66f7eadc
-    ./patches/darcs-stackage-lts-23.patch
-  ] super.darcs;
+  darcs = lib.pipe (super.darcs.override { fgl = null; }) [
+    (overrideCabal (drv: {
+      # fgl isn’t used; removing it avoids cross-compilation failures.
+      #
+      # See: https://hub.darcs.net/darcs/darcs-reviewed/patch/3a8e57ef9fed776f62a3538f8842b6593546e368
+      postPatch = (drv.postPatch or "") + ''
+        substituteInPlace darcs.cabal \
+          --replace-fail "fgl               >= 5.5.2.3 && < 5.9," ""
+      '';
+    }))
+    (appendPatches [
+      # Cabal 3.12 support in Setup.hs
+      # https://hub.darcs.net/darcs/darcs-reviewed/patch/50d9b0b402a896c83aa7929a50a0e0449838600f
+      ./patches/darcs-cabal-3.12.patch
+      # GHC 9.10 patch plus lifted constraints for hashable
+      # https://hub.darcs.net/darcs/darcs-reviewed/patch/32646b190e019de21a103e950c4eccdd66f7eadc
+      ./patches/darcs-stackage-lts-23.patch
+    ])
+  ];
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
@@ -2530,12 +2545,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.12";
+          version = "14.16";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-9Y14sDjHf51qv78DGIrcoU1S/nSHOhc6lGM9wRlegMs=";
+            hash = "sha256-lIUXBBFrnMN5IIW2cAzaE4WlXPmdiQmpBcYklxS3rI4=";
           };
         })
       ];

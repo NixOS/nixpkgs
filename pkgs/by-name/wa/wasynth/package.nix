@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "Rerumu";
+    owner = "SovereignSatellite";
     repo = "Wasynth";
     tag = "v${finalAttrs.version}";
     hash = "sha256-0Gtqet6KKLtooh9cU2R/top142AeT+uIxFwe1dPTvAU=";
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
        * wasm2luajit: translate WebAssembly to LuaJIT source code
        * wasm2luau: translate WebAssembly Luau source code
     '';
-    homepage = "https://github.com/Rerumu/Wasynth";
-    license = with lib.licenses; [ gpl3Only ];
+    homepage = "https://github.com/SovereignSatellite/Wasynth";
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 })

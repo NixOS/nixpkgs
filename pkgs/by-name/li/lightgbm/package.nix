@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.6.0";
 
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "lightgbm-org";
     repo = "lightgbm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools_80,
   plaster,
   pastedeploy,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "plaster-pastedeploy";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "plaster_pastedeploy";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-viYubS5BpyZIddqi/ihQy7BhVyi83JKCj9xyc244FBI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     plaster
     pastedeploy
   ];

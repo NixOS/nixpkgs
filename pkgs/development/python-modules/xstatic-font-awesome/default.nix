@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,9 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
+
+  # xstatic uses pkg_resources.declare_namespace, removed in setuptools 83.
+  build-system = [ setuptools_80 ];
 
   # no tests implemented
   doCheck = false;

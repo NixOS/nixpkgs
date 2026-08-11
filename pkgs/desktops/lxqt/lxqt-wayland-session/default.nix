@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-wayland-session";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-wayland-session";
     rev = version;
-    hash = "sha256-QmknSFJLmAy3OxU9jv6xMAAxQXlWuUcuPNHDs8r2/ls=";
+    hash = "sha256-7wNp1a+JCnFu2h391KUeNRlZqybA5gY3ZCciYbIx5Rs=";
   };
 
   nativeBuildInputs = [

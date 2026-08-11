@@ -1,35 +1,35 @@
 {
   lib,
+  anyio,
   anysqlite,
-  boto3,
   buildPythonPackage,
   fetchFromGitHub,
+  fastapi,
   hatch-fancy-pypi-readme,
   hatchling,
   httpx,
   inline-snapshot,
-  moto,
   msgpack,
   pytest-asyncio,
   pytestCheckHook,
-  pyyaml,
   redis,
   redisTestHook,
+  requests,
+  fakeredis,
   time-machine,
-  trio,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "1.1.10";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-+DAB1zVolAyzKXnOjxrvhqGLMBECY7Hmwt7IWLoOV/g=";
+    hash = "sha256-aD6sHMM7dzy6n1EJN/+K+7H5nu5ohGfru224pSAf1Nc=";
   };
 
   postPatch = ''
@@ -42,26 +42,28 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    httpx
     msgpack
     typing-extensions
   ];
 
   optional-dependencies = {
+    async = [
+      anyio
+      anysqlite
+    ];
+    requests = [ requests ];
+    httpx = [ httpx ];
+    fastapi = [ fastapi ];
     redis = [ redis ];
-    s3 = [ boto3 ];
-    sqlite = [ anysqlite ];
-    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     inline-snapshot
-    moto
     pytest-asyncio
     pytestCheckHook
     redisTestHook
+    fakeredis
     time-machine
-    trio
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

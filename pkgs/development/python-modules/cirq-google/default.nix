@@ -5,6 +5,7 @@
   google-api-core,
   protobuf,
   freezegun,
+  pytest-benchmark,
   pytestCheckHook,
   typedunits,
 }:
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    pytest-benchmark
     pytestCheckHook
   ];
 

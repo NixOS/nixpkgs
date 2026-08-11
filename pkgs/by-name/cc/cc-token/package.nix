@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "cc-token";
-  version = "unstable-2025-12-04";
+  version = "1.1.2-unstable-2025-12-04";
 
   src = fetchFromGitHub {
     owner = "iota-uz";

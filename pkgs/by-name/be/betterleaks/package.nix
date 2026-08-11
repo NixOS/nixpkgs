@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "betterleaks";
-  version = "1.4.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "betterleaks";
     repo = "betterleaks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eq0U4KiL91NW2lxizQ0tZuXxkNnTuSb/pvNSY/+3DZQ=";
+    hash = "sha256-GEAzibwm0ysNlec9Dcp6jT/vogDfrNwRcoCPaTo3Kqw=";
   };
 
-  vendorHash = "sha256-zlZNay6srObMfm4iweCezsr/EImCN9rl03DH8qJU/rc=";
+  vendorHash = "sha256-vwy3GJV7MPRxmM7ztwghKit5HZWnz+IyWNX5v/TKkfY=";
 
   ldflags = [
     "-s"
@@ -59,6 +59,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kachick
+      sshine
     ];
     mainProgram = "betterleaks";
   };

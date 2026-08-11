@@ -10,7 +10,7 @@
   pydriller,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-config-backup";
   version = "2.2.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-config-backup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PT7/RCpB7SAinQ8McQV59b9ouqqUSoEqEj0ultL37cs=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "NetBox plugin for configuration backups using napalm";
     homepage = "https://github.com/DanSheps/netbox-config-backup";
-    changelog = "https://github.com/DanSheps/netbox-config-backup/releases/tag/${src.tag}";
+    changelog = "https://github.com/DanSheps/netbox-config-backup/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

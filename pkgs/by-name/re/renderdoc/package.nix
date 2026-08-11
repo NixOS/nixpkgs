@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.44";
+  version = "1.45";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EInMFJMs+0bNSWmNP/f17pFCV9tJj6Ys3tZY6D69c/E=";
+    hash = "sha256-0XwKOLzkFN5u2ItRKPxNVC3hP3X6RVZyEL82LvYS0EA=";
   };
 
   outputs = [
@@ -140,6 +140,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-DRENDERDOC_SWIG_PACKAGE=$PWD/../swig"
       "-DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
      )
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/renderdoc.thumbnailer \
+      --replace-fail "TryExec=/usr/bin/renderdoccmd" "TryExec=$out/bin/renderdoccmd" \
+      --replace-fail "Exec=/usr/bin/renderdoccmd" "Exec=$out/bin/renderdoccmd"
   '';
 
   preFixup =

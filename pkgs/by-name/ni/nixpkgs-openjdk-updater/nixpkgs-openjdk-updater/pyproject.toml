@@ -28,7 +28,7 @@ line-length = 80
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["COM812", "D203", "D213", "ISC001", "T201"]
+ignore = ["COM812", "D203", "D213", "ISC001", "T201", "S607"]
 allowed-confusables = ["’"]
 
 [tool.ruff.format]

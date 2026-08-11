@@ -5,8 +5,10 @@
   dpkg,
   makeWrapper,
   alsa-lib,
+  atk,
   bintools,
   brotli,
+  bzip2,
   cairo,
   cups,
   curl,
@@ -14,10 +16,14 @@
   expat,
   fontconfig,
   freetype,
+  gdk-pixbuf,
   glib,
+  gnutls,
   gsm,
   gst_all_1,
+  gtk3,
   harfbuzz,
+  jbigkit,
   lcms,
   libbluray,
   libcap,
@@ -26,20 +32,25 @@
   libgbm,
   libGL,
   libGLU,
+  libinput,
+  libjpeg,
   libkrb5,
   libmng,
   libopenmpt,
   libopus,
   libpulseaudio,
   librsvg,
+  libssh,
   libtheora,
   libtiff,
   libva,
   libvdpau,
+  libvorbis,
   libwebp,
   libxkbcommon,
   libxkbfile,
-  libxml2,
+  # Viber's bundled Qt6WebEngineCore and libavformat need the libxml2.so.2 soname
+  libxml2_13,
   libxslt,
   mtdev,
   nspr,
@@ -48,6 +59,7 @@
   ocl-icd,
   openjpeg,
   openssl,
+  pango,
   snappy,
   speex,
   systemdLibs,
@@ -57,10 +69,12 @@
   wayland,
   xkeyboard-config,
   libxcb-wm,
+  libxcb-util,
   libxcb-render-util,
   libxcb-keysyms,
   libxcb-image,
   libxtst,
+  libxshmfence,
   libxscrnsaver,
   libxrender,
   libxrandr,
@@ -98,7 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   libPath = lib.makeLibraryPath [
     alsa-lib
+    atk
     brotli
+    bzip2
     cairo
     cups
     curl
@@ -106,13 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     freetype
+    gdk-pixbuf
     glib
+    gnutls
     gsm
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
+    gtk3
     harfbuzz
+    jbigkit
     lcms
     libbluray
     libcap
@@ -121,20 +141,24 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     libGL
     libGLU
+    libinput
+    libjpeg
     libkrb5
     libmng
     libopenmpt
     libopus
     libpulseaudio
     librsvg
+    libssh
     libtheora
     libtiff
     libva
     libvdpau
+    libvorbis
     libwebp
     libxkbcommon
     libxkbfile
-    libxml2
+    libxml2_13
     libxslt
     mtdev
     nspr
@@ -143,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     ocl-icd
     openjpeg
     openssl
+    pango
     snappy
     speex
     stdenv.cc.cc
@@ -163,11 +188,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxrender
     libxscrnsaver
+    libxshmfence
     libxtst
     libxcb
     libxcb-image
     libxcb-keysyms
     libxcb-render-util
+    libxcb-util
     libxcb-wm
     xvidcore
     zlib
@@ -199,8 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix the desktop link
     substituteInPlace $out/share/applications/viber.desktop \
       --replace-fail "/opt/viber/" "$out/opt/viber/"
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/opt/viber/lib/libxml2.so.2"
 
     runHook postInstall
   '';

@@ -26,10 +26,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "decouple" ];
 
   meta = {
-    description = "Module to handle code and condifuration";
+    description = "Module to handle code and configuration";
     homepage = "https://github.com/HBNetwork/python-decouple";
     changelog = "https://github.com/HBNetwork/python-decouple/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

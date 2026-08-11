@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazytrivy";
-  version = "1.4.0";
+  version = "1.4.1";
 
   env.GOEXPERIMENT = "jsonv2";
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "owenrumney";
     repo = "lazytrivy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mZg8hXTZhgIkPNrzP7hQ7fwMDUL9MP5kUVdg8Smq5l4=";
+    hash = "sha256-0VWmsZKp0IEQ93AuMoYXN8pF0G3fwaP7Lzh3JsN2CtU=";
   };
 
-  vendorHash = "sha256-2t6PckucJTr/2anqG8zarQOAlmGpOVvDxHkhhHfVaOo=";
+  vendorHash = "sha256-HKD7vpQAw3G4uMLUMhbv6tsFCOxfp62Phynun4HkFrg=";
 
   ldflags = [
     "-s"

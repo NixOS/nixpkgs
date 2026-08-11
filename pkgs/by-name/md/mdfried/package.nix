@@ -1,34 +1,68 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   chafa,
+  fontconfig,
   glib,
+  gnumake,
+  gperf,
+  libiconv,
+  python3,
+  unzip,
+  writeShellScriptBin,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.22.0";
+  version = "0.22.5";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zJSh5g1FkR/nqk2qj22Xo8qIOjwyF346PM4KOUOCBBo=";
+    hash = "sha256-BdcwU+9qY7gOIMgOfw7rpdh3KpBTLI1oGuNyOqO0AY8=";
   };
 
-  cargoHash = "sha256-2wwaEKknnxX6QuE+6udHL2GTOuPpS1oqRI+b3aP0e1I=";
+  cargoHash = "sha256-Gi+mdABVs11TJSmOhXsC+Cc48QRbCUxODhW06y190w0=";
+
+  buildFeatures = [ "pdf" ];
+
+  # Prevent updateAutotoolsGnuConfigScripts from modifying mupdf's vendored
+  # autotools files — doing so invalidates cargo's fingerprint for mupdf-sys
+  # and causes a rebuild that fails on read-only cargoArtifacts files.
+  updateAutotoolsGnuConfigScriptsPhase = "true";
 
   nativeBuildInputs = [
     pkg-config
+    rustPlatform.bindgenHook # for mupdf-sys bindgen
+    gperf # for mupdf vendored Makefile
+    python3 # for mupdf vendored Makefile
+    unzip # for mupdf vendored docx_template build
+    # mupdf-sys cp_r copies files from the read-only Nix store, preserving
+    # mode 444. make then fails to regenerate headers. Wrap make to chmod first.
+    (writeShellScriptBin "make" ''
+      chmod -R u+w . 2>/dev/null || true
+      exec ${lib.getExe gnumake} "$@"
+    '')
   ];
 
   buildInputs = [
     chafa
-    glib
+    fontconfig.dev # for font-kit (mupdf dep)
+    glib.dev # for glib-2.0.pc (mupdf needs glib.dev, chafa could do with just glib)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS_aarch64_apple_darwin = "-UTARGET_OS_MAC";
+    CXXFLAGS_aarch64_apple_darwin = "-UTARGET_OS_MAC";
+  };
 
   doCheck = true;
 
