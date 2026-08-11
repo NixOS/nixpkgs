@@ -29,6 +29,7 @@
   boost,
   ada,
   cmark-gfm,
+  libfido2,
   libavif,
   libheif,
   libjxl,
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     ada
     cmark-gfm
+    libfido2
     (tdlib.override { tde2eOnly = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
