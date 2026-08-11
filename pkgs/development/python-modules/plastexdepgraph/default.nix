@@ -15,11 +15,11 @@ buildPythonPackage {
   version = "0.0.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  src = self.fetchFromGitHub {
     repo = "plastexdepgraph";
     owner = "PatrickMassot";
-    rev = "0.0.4";
-    hash = "sha256-Q13uYYZe1QgZHS4Nj8ugr+Fmhva98ttJj3AlXTK6XDw=";
+    rev = "0.0.5";
+    hash = "sha256-GOTQmcWrmEZ2DkAMcE1ZknLOyVorGC87+qhO8jxcGJ4=";
   };
 
   build-system = [ setuptools ];
