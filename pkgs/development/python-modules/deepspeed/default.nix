@@ -24,8 +24,6 @@
   tqdm,
   # cuda-only:
   nvidia-ml-py,
-  # cupy,
-  # cutlass,
 
   # tests
   accelerate,
