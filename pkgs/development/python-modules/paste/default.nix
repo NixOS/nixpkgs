@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  six,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-NY/h6hbpluEu1XAv3o4mqoG+l0LXfM1dw7+G0Rm1E4o=";
   };
 
+  patches = [
+    # https://github.com/pasteorg/paste/pull/108
+    ./remove-pkg-resource.patch
+  ];
+
   postPatch = ''
     patchShebangs tests/cgiapp_data/
   '';
 
   build-system = [ setuptools ];
-
-  dependencies = [
-    setuptools
-    six
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,11 +35,6 @@ buildPythonPackage rec {
     # needs to be modified after Sat, 1 Jan 2005 12:00:00 GMT
     touch tests/urlparser_data/secured.txt
   '';
-
-  disabledTests = [
-    # pkg_resources deprecation warning
-    "test_form"
-  ];
 
   pythonNamespaces = [ "paste" ];
 

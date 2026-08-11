@@ -1,0 +1,198 @@
+diff --git a/paste/__init__.py b/paste/__init__.py
+index ec8b065..0962681 100644
+--- a/paste/__init__.py
++++ b/paste/__init__.py
+@@ -1,17 +1,8 @@
+ # (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
+ # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+ 
+-import warnings
+-
+-try:
+-    with warnings.catch_warnings():
+-        warnings.simplefilter("ignore", category=DeprecationWarning)
+-        import pkg_resources
+-        pkg_resources.declare_namespace(__name__)
+-except (AttributeError, ImportError):
+-    # don't prevent use of paste if pkg_resources isn't installed
+-    from pkgutil import extend_path
+-    __path__ = extend_path(__path__, __name__)
++from pkgutil import extend_path
++__path__ = extend_path(__path__, __name__)
+ 
+ try:
+     import modulefinder
+diff --git a/paste/urlparser.py b/paste/urlparser.py
+index 2210b22..755ef0e 100644
+--- a/paste/urlparser.py
++++ b/paste/urlparser.py
+@@ -9,12 +9,7 @@
+ import mimetypes
+ import warnings
+ import importlib.util as imputil
+-try:
+-    with warnings.catch_warnings():
+-        warnings.simplefilter("ignore", category=DeprecationWarning)
+-        import pkg_resources
+-except ImportError:
+-    pkg_resources = None
++import importlib.metadata
+ from paste import request
+ from paste import fileapp
+ from paste.util import import_string
+@@ -521,19 +516,40 @@ def make_static(global_conf, document_root, cache_max_age=None):
+     return StaticURLParser(
+         document_root, cache_max_age=cache_max_age)
+ 
++class _DistributionResources:
++    """Minimal shim replacing pkg_resources distribution resource methods."""
++
++    def __init__(self, dist):
++        self._root = dist.locate_file('')
++        self.project_name = dist.metadata['Name']
++
++    def _path(self, resource_name):
++        return self._root / resource_name
++
++    def has_resource(self, resource_name):
++        p = self._path(resource_name)
++        return p.is_file() or p.is_dir()
++
++    def resource_isdir(self, resource_name):
++        return self._path(resource_name).is_dir()
++
++    def get_resource_stream(self, manager, resource_name):
++        return self._path(resource_name).open('rb')
++
++
+ class PkgResourcesParser(StaticURLParser):
+ 
+     def __init__(self, egg_or_spec, resource_name, manager=None, root_resource=None):
+-        if pkg_resources is None:
+-            raise NotImplementedError("This class requires pkg_resources.")
+-        if isinstance(egg_or_spec, (bytes, str)):
+-            self.egg = pkg_resources.get_distribution(egg_or_spec)
++        if isinstance(egg_or_spec, str):
++            dist = importlib.metadata.distribution(egg_or_spec)
++            self.egg = _DistributionResources(dist)
++        elif isinstance(egg_or_spec, bytes):
++            dist = importlib.metadata.distribution(egg_or_spec.decode())
++            self.egg = _DistributionResources(dist)
+         else:
+             self.egg = egg_or_spec
+         self.resource_name = resource_name
+-        if manager is None:
+-            manager = pkg_resources.ResourceManager()
+-        self.manager = manager
++        self.manager = manager  # kept for API compatibility; no longer used
+         if root_resource is None:
+             root_resource = resource_name
+         self.root_resource = os.path.normpath(root_resource)
+@@ -595,12 +611,10 @@ def not_found(self, environ, start_response, debug_message=None):
+ def make_pkg_resources(global_conf, egg, resource_name=''):
+     """
+     A static file parser that loads data from an egg using
+-    ``pkg_resources``.  Takes a configuration value ``egg``, which is
++    ``importlib.resources``.  Takes a configuration value ``egg``, which is
+     an egg spec, and a base ``resource_name`` (default empty string)
+     which is the path in the egg that this starts at.
+     """
+-    if pkg_resources is None:
+-        raise NotImplementedError("This function requires pkg_resources.")
+     return PkgResourcesParser(egg, resource_name)
+ 
+ def make_url_parser(global_conf, directory, base_python_name,
+diff --git a/paste/util/template.py b/paste/util/template.py
+index ee6b25f..f4fe3af 100644
+--- a/paste/util/template.py
++++ b/paste/util/template.py
+@@ -682,12 +682,12 @@ def parse_default(tokens, name, context):
+ """
+ 
+ def fill_command(args=None):
+-    import sys, optparse, pkg_resources, os
++    import sys, optparse, importlib.metadata, os
+     if args is None:
+         args = sys.argv[1:]
+-    dist = pkg_resources.get_distribution('Paste')
++    version = importlib.metadata.version('Paste')
+     parser = optparse.OptionParser(
+-        version=str(dist),
++        version=version,
+         usage=_fill_command_usage)
+     parser.add_option(
+         '-o', '--output',
+diff --git a/setup.py b/setup.py
+index cd1ac04..5bd6d89 100644
+--- a/setup.py
++++ b/setup.py
+@@ -52,10 +52,8 @@
+       packages=find_packages(exclude=['ez_setup', 'examples', 'packages', 'tests*']),
+       package_data=finddata.find_package_data(
+           exclude_directories=finddata.standard_exclude_directories + ('tests',)),
+-      namespace_packages=['paste'],
+       zip_safe=False,
+       install_requires=[
+-        'setuptools',  # pkg_resources
+         ],
+       extras_require={
+         'subprocess': [],
+diff --git a/tests/__init__.py b/tests/__init__.py
+index 2f10103..9f2d860 100644
+--- a/tests/__init__.py
++++ b/tests/__init__.py
+@@ -3,5 +3,3 @@
+ import os
+ 
+ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+-
+-import pkg_resources
+diff --git a/tests/cgiapp_data/form.cgi b/tests/cgiapp_data/form.cgi
+index 21dca13..4005dc3 100755
+--- a/tests/cgiapp_data/form.cgi
++++ b/tests/cgiapp_data/form.cgi
+@@ -4,20 +4,11 @@ print('Content-type: text/plain')
+ print('')
+ 
+ import sys
+-import warnings
+ from os.path import dirname
+ 
+ base_dir = dirname(dirname(dirname(__file__)))
+ sys.path.insert(0, base_dir)
+ 
+-with warnings.catch_warnings():
+-    warnings.simplefilter("ignore", category=DeprecationWarning)
+-    try:
+-        import pkg_resources
+-    except ImportError:
+-        # Ignore
+-        pass
+-
+ from paste.util.field_storage import FieldStorage
+ 
+ class FormFieldStorage(FieldStorage):
+diff --git a/tests/test_urlparser.py b/tests/test_urlparser.py
+index c0cf622..297f1d6 100644
+--- a/tests/test_urlparser.py
++++ b/tests/test_urlparser.py
+@@ -1,9 +1,6 @@
+ import os
+ import warnings
+-
+-with warnings.catch_warnings():
+-    warnings.simplefilter("ignore", category=DeprecationWarning)
+-    from pkg_resources import get_distribution
++import importlib.metadata
+ 
+ from paste.fixture import TestApp
+ from paste.urlparser import PkgResourcesParser, StaticURLParser, URLParser
+@@ -155,7 +152,7 @@ def test_egg_parser():
+     # Find a readable file in the Paste pkg's root directory (or upwards the
+     # directory tree). Ensure it's not accessible via the URLParser
+     unreachable_test_file = None
+-    search_path = pkg_root_path = get_distribution('Paste').location
++    search_path = pkg_root_path = str(importlib.metadata.distribution('Paste').locate_file(''))
+     level = 0
+     # We might not find any readable files in the pkg's root directory (this
+     # is likely when Paste is installed as a .egg in site-packages). We

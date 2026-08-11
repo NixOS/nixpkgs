@@ -36,9 +36,9 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
-  format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
+  pyproject = true;
 
   postPatch = ''
     # https://git.sr.ht/~mediagoblin/mediagoblin/tree/bf61d38df21748aadb480c53fdd928647285e35f/item/.guix/modules/mediagoblin-package.scm#L60-62
@@ -58,7 +58,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = with python.pkgs; [
