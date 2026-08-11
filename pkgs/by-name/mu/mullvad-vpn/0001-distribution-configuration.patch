@@ -1,16 +1,40 @@
 diff --git a/desktop/packages/mullvad-vpn/tasks/distribution.cjs b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
-index 7b2bc36e08..ec027454a2 100644
+index 0a5c668..591849a 100644
 --- a/desktop/packages/mullvad-vpn/tasks/distribution.cjs
 +++ b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
-@@ -28,6 +28,7 @@ function newConfig() {
+@@ -31,6 +31,7 @@ function newConfig() {
      publish: null,
      asar: true,
      compression: noCompression ? 'store' : 'normal',
-+    electronDist: '@electron-dist@',
++    electronDist: process.platform === 'darwin' ? root('electron-dist') : '@electron-dist@',
      extraResources: [
        { from: distAssets('ca.crt'), to: '.' },
        { from: distAssets('relays/relays.json'), to: '.' },
-@@ -180,11 +181,7 @@
+@@ -85,7 +86,8 @@ function newConfig() {
+ 
+     mac: {
++      identity: null,
+       target: {
+-        target: 'pkg',
++        target: 'dir',
+         arch: getMacArch(),
+       },
+       x64ArchFiles:
+@@ -99,13 +100,6 @@ function newConfig() {
+         NSUserNotificationAlertStyle: 'banner',
+       },
+       extraResources: [
+-        { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad')), to: '.' },
+-        { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-problem-report')), to: '.' },
+-        { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-daemon')), to: '.' },
+-        { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-setup')), to: '.' },
+-        { from: distAssets('uninstall_macos.sh'), to: './uninstall.sh' },
+-        { from: buildAssets('shell-completions/_mullvad'), to: '.' },
+-        { from: buildAssets('shell-completions/mullvad.fish'), to: '.' },
+       ],
+     },
+ 
+@@ -180,11 +174,7 @@ function newConfig() {
      linux: {
        target: [
          {
@@ -23,7 +47,7 @@ index 7b2bc36e08..ec027454a2 100644
            arch: getLinuxTargetArch(),
          },
        ],
-@@ -185,9 +181,6 @@ function newConfig() {
+@@ -194,9 +184,6 @@ function newConfig() {
        icon: distAssets('icon.icns'),
        extraFiles: [{ from: distAssets('linux/mullvad-gui-launcher.sh'), to: '.' }],
        extraResources: [
@@ -33,7 +57,21 @@ index 7b2bc36e08..ec027454a2 100644
        ],
      },
  
-@@ -494,6 +487,7 @@ function getMacArch() {
+@@ -392,13 +392,2 @@ function packMac() {
+       },
+-      afterAllArtifactBuild: async (_buildResult) => {
+-        // Remove the folder that contains the unpacked app. Electron builder cleans up some of
+-        // these directories and it's changed between versions without a mention in the changelog.
+-        for (const dir of appOutDirs) {
+-          try {
+-            await fs.promises.rm(dir, { recursive: true });
+-          } catch {
+-            // noop
+-          }
+-        }
+-      },
+       afterSign: (context) => {
+@@ -503,6 +496,7 @@ function getMacArch() {
  // than a non-tilde version component
  // https://docs.fedoraproject.org/en-US/packaging-guidelines/Versioning/#_complex_versioning
  function getLinuxVersion() {
@@ -41,7 +79,7 @@ index 7b2bc36e08..ec027454a2 100644
    const [version, ...prereleaseParts] = productVersion([]).split('-');
    const [major, minor] = version.split('.');
    const prerelease = prereleaseParts.join('-');
-@@ -509,6 +503,7 @@ function getLinuxVersion() {
+@@ -518,6 +506,7 @@ function getLinuxVersion() {
  // Returns the product version. The `args` argument is optional. Set it to `'semver'`
  // to get the version in semver format.
  function productVersion(extraArgs) {
