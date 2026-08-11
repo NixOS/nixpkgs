@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "3.1.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-/Yf2rt/5FH1WiD2VV2hEksM1XleEl4YRBqGQI4GVa8Q=";
+    hash = "sha256-hF/xJGjDu6435hnusIc4L45tDmA1E2G/Yk3PCyXAxjM=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
