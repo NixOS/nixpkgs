@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   patches = [
     ./0001-fix-backport-SEC10.patch
     ./0002-fix-backport-SEC28.patch
+    ./0003-fix-backport-SEC26.patch
   ];
 
   nativeBuildInputs = [
