@@ -1,8 +1,5 @@
 {
   lib,
-  buildPackages ? {
-    inherit stdenvNoCC;
-  },
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
   cacert ? null,
@@ -24,7 +21,11 @@ let
     isList
     isString
     length
+    mapAttrs'
     match
+    nameValuePair
+    toFile
+    toShellVars
     warn
     ;
   nixpkgsVersion = lib.trivial.release;
@@ -38,15 +39,12 @@ let
   # fetchurl instantiations via environment variables.  This makes the
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
-  mirrorsFile = buildPackages.stdenvNoCC.mkDerivation (
-    {
-      name = "mirrors-list";
-      strictDeps = true;
-      builder = ./write-mirror-list.sh;
-      preferLocalBuild = true;
-    }
-    // mirrors
-  );
+  mirrorsListFile =
+    let
+      # Add a prefix to the names of the mirrors to avoid variable name clashes in the builder
+      mirrorsPrefixed = mapAttrs' (n: v: nameValuePair ("_mirror_" + n) v) mirrors;
+    in
+    toFile "mirrors-list" (toShellVars mirrorsPrefixed);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
   # "gnu", etc.).
@@ -378,7 +376,7 @@ lib.extendMkDerivation {
         curlOptsList
         downloadToTemp
         executable
-        mirrorsFile
+        mirrorsListFile
         postFetch
         showURLs
         ;
