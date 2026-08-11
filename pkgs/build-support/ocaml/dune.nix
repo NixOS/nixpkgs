@@ -40,7 +40,7 @@ lib.extendMkDerivation {
       throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
     else
       {
-        name = "ocaml${ocaml.version}-${pname}-${version}";
+        name = "ocaml${ocaml.version}-${pname}-${finalAttrs.version}";
 
         strictDeps = true;
 

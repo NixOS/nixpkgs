@@ -19,20 +19,20 @@ let
   };
 in
 maven.buildMavenPackage (finalAttrs: {
-  version = "2.24.0";
+  version = "2.25.0";
   pname = "mustang-cli";
 
   src = fetchFromGitHub {
     owner = "ZUGFeRD";
     repo = "mustangproject";
     tag = "core-${finalAttrs.version}";
-    hash = "sha256-hNsVVG0OJlshv0J8l6TYtoFCaPKVQrv6U8HO/I6whBo=";
+    hash = "sha256-0DUcKwL/CY3nhvwwJ9AzwOAIJVh6fmneMD05xIo5JMM=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  mvnHash = "sha256-JjhKHcnLO6OZ6VAI7fFpvS90TK6yOVhX0wk4vrnbFFo=";
+  mvnHash = "sha256-0oXoZQjJzXc6DdsoeKjpEpBn9ypqdmIeHOJNcAcdk7A=";
 
   nativeBuildInputs = [
     makeWrapper
