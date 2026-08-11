@@ -659,15 +659,14 @@ let
                 hostSuffixNecessary
                 && (
                   !(attrs ? outputHash)
-                  ||
-                    depsBuildTarget == [ ]
-                    && depsBuildTargetPropagated == [ ]
-                    && depsHostHost == [ ]
-                    && depsHostHostPropagated == [ ]
-                    && buildInputs == [ ]
-                    && propagatedBuildInputs == [ ]
-                    && depsTargetTarget == [ ]
-                    && depsTargetTargetPropagated == [ ]
+                  || depsBuildTarget != [ ]
+                  || depsBuildTargetPropagated != [ ]
+                  || depsHostHost != [ ]
+                  || depsHostHostPropagated != [ ]
+                  || buildInputs != [ ]
+                  || propagatedBuildInputs != [ ]
+                  || depsTargetTarget != [ ]
+                  || depsTargetTargetPropagated != [ ]
 
                 )
               ) stdenvHostSuffix;
