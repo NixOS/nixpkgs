@@ -1878,6 +1878,7 @@ in
   wastebin = runTest ./wastebin.nix;
   watchdogd = runTest ./watchdogd.nix;
   watt = runTest ./watt.nix;
+  wavelog = runTest ./wavelog.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
   wg-access-server = runTest ./wg-access-server.nix;
