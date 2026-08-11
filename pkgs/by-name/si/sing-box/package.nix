@@ -1,25 +1,26 @@
 {
   lib,
   buildGoModule,
+  coreutils,
   fetchFromGitHub,
   installShellFiles,
-  coreutils,
-  nix-update-script,
   nixosTests,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.13.16";
+  version = "1.13.18";
 
+  __structuredAttrs = true;
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GAIU0SRvxU92E40zCkMsiSPuIEIUZM5vORN2u2XIhqs=";
+    hash = "sha256-OsztNxrONCkyE0kxJFB0Ni61FW9cRJLAcpNia5WWhNo=";
   };
 
-  vendorHash = "sha256-ZUEpYfgb/iflImVCdLIgUzfp4QY9ho1gYkIAJV1tXrg=";
+  vendorHash = "sha256-70cAuzVZY1F++xjoS+ZbWno7Y4uzi7FHIc2RFXFhMw0=";
 
   tags = [
     "with_gvisor"
@@ -40,15 +41,22 @@ buildGoModule (finalAttrs: {
     "cmd/sing-box"
   ];
 
-  env.CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+  };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
     "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
     "-checklinkname=0"
   ];
+
+  # no tests
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion release/completions/sing-box.{bash,fish,zsh}
@@ -63,7 +71,6 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) sing-box; };
   };
 
@@ -74,6 +81,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       nickcao
       prince213
+      moraxyc
     ];
     mainProgram = "sing-box";
   };
