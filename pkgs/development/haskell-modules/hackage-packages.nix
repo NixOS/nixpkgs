@@ -295144,7 +295144,7 @@ self: {
       license = lib.licenses.lgpl21Only;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) gtkimageview; };
+  ) { gtkimageview = null; };
 
   gtkrsync = callPackage (
     {
