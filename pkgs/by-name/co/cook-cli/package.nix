@@ -7,6 +7,7 @@
   pkg-config,
   openssl,
   nodejs,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
@@ -46,6 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npm run build-css
     npm run build-js
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
