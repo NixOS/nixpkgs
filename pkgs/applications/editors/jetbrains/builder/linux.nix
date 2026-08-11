@@ -62,7 +62,7 @@ lib.extendMkDerivation {
       productShort ? product,
       wmClass,
 
-      libdbm,
+      jetbrains-libdbm,
       fsnotifier,
 
       extraLdPath ? [ ],
@@ -185,7 +185,7 @@ lib.extendMkDerivation {
         cp -a . $out/$pname
         [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/icons/hicolor/128x128/apps/${pname}.png
         [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-        cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
+        cp ${jetbrains-libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
         cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
         jdk=${jdk.home}

@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   mkJetBrainsProduct,
-  libdbm,
+  jetbrains-libdbm,
   fsnotifier,
   patchSharedLibs,
   python3,
@@ -33,7 +33,7 @@ let
   # update-script-end: urls
 in
 (mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "rust-rover";
 
