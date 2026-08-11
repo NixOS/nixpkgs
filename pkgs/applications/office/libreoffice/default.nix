@@ -811,6 +811,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit srcs;
+    inherit withJava;
     jdk = if withJava then jre' else null;
     python = python3; # for unoconv
     updateScript = [

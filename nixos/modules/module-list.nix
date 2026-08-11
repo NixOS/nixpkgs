@@ -638,6 +638,7 @@
   ./services/display-managers/greetd.nix
   ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
+  ./services/display-managers/noctalia-greeter.nix
   ./services/display-managers/plasma-login-manager.nix
   ./services/display-managers/regreet.nix
   ./services/display-managers/sddm.nix
@@ -1498,6 +1499,7 @@
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil-jumper.nix
   ./services/networking/yggdrasil.nix
+  ./services/networking/zapret2.nix
   ./services/networking/zapret.nix
   ./services/networking/zenohd.nix
   ./services/networking/zerobin.nix

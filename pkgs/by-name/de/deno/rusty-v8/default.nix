@@ -164,10 +164,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=scope"
   ];
 
+  outputs = [
+    "out"
+    "binding"
+  ];
+
   installPhase = ''
     runHook preInstall
 
     cp target/*/release/gn_out/obj/librusty_v8${stdenv.hostPlatform.extensions.staticLibrary} $out
+    # workaround for riscv64 because has no pre-generated bindings.
+    cp target/*/release/gn_out/src_binding.rs $binding
 
     runHook postInstall
   '';

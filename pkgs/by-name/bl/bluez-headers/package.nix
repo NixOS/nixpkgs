@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  bluez,
 }:
 
 # This package only provides the bluetooth headers from the bluez package
@@ -27,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/include/
     cp -rv lib/* "$out/include/"
   '';
+
+  passthru.tests = {
+    inherit bluez; # inherits bluez-headers.src
+  };
 
   meta = {
     homepage = "https://www.bluez.org/";

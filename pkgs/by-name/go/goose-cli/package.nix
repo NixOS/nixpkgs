@@ -191,6 +191,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       miniharinn
       caniko
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 })

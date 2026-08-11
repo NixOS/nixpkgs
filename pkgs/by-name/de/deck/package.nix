@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "deck";
-  version = "1.65.0";
+  version = "1.65.1";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PWaMqqRWhHcP2bSs2HuuOtlkG3rb4eTZnJNHaIxaHlw=";
+    hash = "sha256-ukIwuApiwfobJRfc0b4Zh8MNJHmRY305YcbU+jocq4U=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

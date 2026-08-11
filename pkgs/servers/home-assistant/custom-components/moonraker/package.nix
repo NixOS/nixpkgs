@@ -34,15 +34,6 @@ buildHomeAssistantComponent rec {
   ]
   ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
-  disabledTests = [
-    # tests try to open sockets
-    "test_thumbnail_camera_from_img_to_none"
-    "test_bad_connection_config_flow"
-  ];
-
-  #skip phases with nothing to do
-  dontConfigure = true;
-
   meta = {
     changelog = "https://github.com/marcolivierarsenault/moonraker-home-assistant/releases/tag/${version}";
     description = "Custom integration for Moonraker and Klipper in Home Assistant";

@@ -2616,6 +2616,8 @@ with pkgs;
     openrgb-plugin-hardwaresync
   ];
 
+  openscadPackages = lib.recurseIntoAttrs (callPackage ../top-level/openscad-packages.nix { });
+
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh { });
 
   openssh = opensshPackages.openssh.override {
@@ -3948,13 +3950,6 @@ with pkgs;
   mono = mono6;
 
   mono6 = callPackage ../development/compilers/mono/6.nix { };
-
-  mozart2 = callPackage ../development/compilers/mozart {
-    emacs = emacs-nox;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
-  mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
   buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
@@ -5937,9 +5932,6 @@ with pkgs;
 
   libcamera-qcam = callPackage ../by-name/li/libcamera/package.nix { withQcam = true; };
 
-  libcanberra-gtk2 = pkgs.libcanberra.override {
-    gtkSupport = "gtk2";
-  };
   libcanberra-gtk3 = pkgs.libcanberra.override {
     gtkSupport = "gtk3";
   };
@@ -10942,11 +10934,11 @@ with pkgs;
     meta.license = lib.licenses.mit;
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
+  freebsd = recurseIntoAttrs (callPackage ../os-specific/bsd/freebsd { });
 
-  netbsd = callPackage ../os-specific/bsd/netbsd { };
+  netbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/netbsd { });
 
-  openbsd = callPackage ../os-specific/bsd/openbsd { };
+  openbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 

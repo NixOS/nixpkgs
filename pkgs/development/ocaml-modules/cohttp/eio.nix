@@ -33,6 +33,8 @@ buildDunePackage {
     uri
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkInputs = [
     alcotest

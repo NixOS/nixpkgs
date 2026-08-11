@@ -16,6 +16,7 @@
   libnetfilter_queue,
   systemdLibs,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -130,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) zapret2; };
 
   meta = {
     description = "Anti-DPI software for bypassing DPI systems";

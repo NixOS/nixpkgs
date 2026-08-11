@@ -34,5 +34,5 @@ let
 in
 callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
   inherit pname passthru meta;
-  inherit (sources.${system} or (throw "Unsupported system: ${system}")) version src;
+  inherit (sources.${system} or sources.x86_64-linux) version src;
 }

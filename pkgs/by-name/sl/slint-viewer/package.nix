@@ -36,11 +36,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
   ];
 
+  buildFeatures = [ "gettext" ];
+
   nativeBuildInputs = [
-    autoPatchelfHook
     pkg-config
     qt6.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   # stolen from the surfer package
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [

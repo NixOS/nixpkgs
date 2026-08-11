@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.10.1";
+  version = "0.10.3";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff";
     tag = "v${version}";
-    hash = "sha256-GGoy8ghA87vwHEc0fi97uiBrpRTAGk/QgqzKu8BBRXo=";
+    hash = "sha256-pE4DsaCvlvgTKJtyV8uGhAQvbJpxpgXlIkoVh8I15qw=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-sOE3Zrs/ZtOIusH0+OvR1Ew5sfQfse6eWSLPwDPVSU4=";
+    cargoHash = "sha256-iRQa3K5/E520hbq6yO+RRG8pjJBTamj/nm13XCHNOZs=";
 
     cargoBuildFlags = [
       "-p"
@@ -74,9 +74,6 @@ let
     ];
 
     env = {
-      # Build zlob for a portable CPU baseline (https://github.com/dmtrKovalenko/fff/issues/705)
-      CI = "1";
-
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime

@@ -1966,6 +1966,13 @@
     githubId = 143312793;
     name = "Annin";
   };
+  annoyingrains = {
+    email = "avali@avali.zone";
+    matrix = "@avali:avali.zone";
+    github = "AnnoyingRain5";
+    githubId = 35289650;
+    name = "AnnoyingRains";
+  };
   anntnzrb = {
     github = "anntnzrb";
     githubId = 51257127;
@@ -2185,6 +2192,12 @@
     github = "ar1a";
     githubId = 8436007;
     name = "Aria Edmonds";
+  };
+  ar4m1s = {
+    name = "Aramis";
+    github = "Ar4m1s";
+    githubId = 59250656;
+    matrix = "@vegardbm:matrix.org";
   };
   arbel-arad = {
     email = "arbel@spacetime.technology";
@@ -7964,6 +7977,12 @@
     email = "edli.merkaj@identinet.io";
     github = "edlimerkaj";
     githubId = 71988351;
+  };
+  edoars = {
+    name = "Edoardo Signorini";
+    email = "mail@edoars.me";
+    github = "edoars";
+    githubId = 44139791;
   };
   edrex = {
     email = "ericdrex@gmail.com";
@@ -13986,6 +14005,12 @@
     github = "jsoo1";
     name = "John Soo";
     githubId = 10039785;
+  };
+  jsqu4re = {
+    email = "johannes.jeising@gmail.com";
+    github = "jsqu4re";
+    githubId = 35706792;
+    name = "Johannes Jeising";
   };
   jsusk = {
     email = "joshua@suskalo.org";
@@ -20944,6 +20969,12 @@
     github = "nthorne";
     githubId = 1839979;
     name = "Niklas Thörne";
+  };
+  ntsk = {
+    email = "ntsk@ntsk.jp";
+    github = "ntsk";
+    githubId = 5681281;
+    name = "ntsk";
   };
   nudelsalat = {
     email = "nudelsalat@clouz.de";
@@ -30880,6 +30911,13 @@
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
   };
+  WOnder93 = {
+    email = "omosnacek@gmail.com";
+    github = "WOnder93";
+    githubId = 3041388;
+    matrix = "@omos:fedora.im";
+    name = "Ondrej Mosnáček";
+  };
   workflow = {
     email = "4farlion@gmail.com";
     github = "workflow";
@@ -31190,6 +31228,12 @@
     github = "xNWDD";
     githubId = 3028542;
     name = "Guillermo NWDD";
+  };
+  xoconoch = {
+    email = "github@cordovault.com";
+    github = "xoconoch";
+    githubId = 93692082;
+    name = "Xoconoch";
   };
   xokdvium = {
     email = "sergei@zimmerman.foo";

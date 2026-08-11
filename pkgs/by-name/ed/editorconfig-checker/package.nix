@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "editorconfig-checker";
-  version = "3.8.0";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t0EliFWYYxKfPbfLKP4p3wJvmIfXF6CPpWIgUuD3pXY=";
+    hash = "sha256-kQTaBm/duyLm2KIjl2fZ5rblJX7ucmWWDUGGvge9PgY=";
   };
 
-  vendorHash = "sha256-5x7c8v+uMmqvyQnN47XgD8FFMoEq5/MPFO2WEj0WevU=";
+  vendorHash = "sha256-tu7a8P010YkA+fI8cDGKq+i1Fz+uehM+VEkyVEFpTRo=";
 
   # Tests run on source and don't expect vendor dir.
   doCheck = false;

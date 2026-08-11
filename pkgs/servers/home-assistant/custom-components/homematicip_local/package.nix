@@ -49,13 +49,8 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTestPaths = [
-    # tries to write to the Nix store
-    "tests/test_blueprints.py"
-  ];
-
-  disabledTests = [
-    # custom_components.homematicip_local.support.InvalidConfig: C
-    "test_async_validate_config_and_get_system_information"
+    # zeroconf fails with: No such device
+    "tests/test_config_flow.py::TestReauthFlow::test_reauth_flow_success"
   ];
 
   meta = {
