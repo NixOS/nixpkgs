@@ -304,6 +304,8 @@ lib.extendMkDerivation {
 
       nativeBuildInputs = defaultNativeBuildInputs ++ nativeBuildInputs;
 
+      strictDeps = true;
+
       urls = urls_;
 
       # If set, prefer the content-addressable mirrors
