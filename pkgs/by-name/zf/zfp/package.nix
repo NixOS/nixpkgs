@@ -16,6 +16,7 @@
   enableOpenMP ? true,
   enablePython ? true,
   enableUtilities ? true,
+  versionCheckHook,
 }@inputs:
 
 let
@@ -97,6 +98,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   checkFlags = lib.optionals (bitStreamWordSize != 64) [
     "ARGS=\"--exclude-regex testzfp\""
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.tests = {
     cmake-config = testers.hasCmakeConfigModules {
