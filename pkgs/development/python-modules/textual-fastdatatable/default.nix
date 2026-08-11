@@ -2,38 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  pandas,
+
+  # dependencies
   pyarrow,
-  pytz,
   textual,
-  tzdata,
+  typing-extensions,
+
+  # optional-dependencies
   polars,
+
+  # tests
   pytest-asyncio,
   pytest-textual-snapshot,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-fastdatatable";
-  version = "0.14.0";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
-    tag = "v${version}";
-    hash = "sha256-gm1h+r8rZO1/9sXoNwqVuBbv7CpZm2a3YAMHRHGg5uo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aDbYwPISsmk9af3yQWh4ClHj3SRljzBMVxvYgWk61rM=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
-    pandas
     pyarrow
-    pytz
     textual
-    tzdata
+    typing-extensions
   ]
   ++ textual.optional-dependencies.syntax;
 
@@ -46,13 +51,7 @@ buildPythonPackage rec {
     pytest-textual-snapshot
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  pythonRelaxDeps = [
-    "numpy"
-    "pandas"
-    "pyarrow"
-  ];
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 
@@ -64,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Performance-focused reimplementation of Textual's DataTable widget, with a pluggable data storage backend";
     homepage = "https://github.com/tconbeer/textual-fastdatatable";
-    changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${src.tag}";
+    changelog = "https://github.com/tconbeer/textual-fastdatatable/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
-}
+})

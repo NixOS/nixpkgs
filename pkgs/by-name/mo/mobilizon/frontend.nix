@@ -9,9 +9,14 @@ let
   common = callPackage ./common.nix { };
 in
 buildNpmPackage {
-  inherit (common) pname version src;
+  inherit (common)
+    pname
+    version
+    src
+    patches
+    ;
 
-  npmDepsHash = "sha256-nqjqRdIF583cmUd/mg9+PogA8Tpo5mfh0R9IylDpWZg=";
+  npmDepsHash = "sha256-gvAHUgfS21UrZYUL/QUsAMymqh4g/Moo/+vTl6RH/7I=";
 
   nativeBuildInputs = [ imagemagick ];
 

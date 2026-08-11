@@ -9,7 +9,6 @@
   libusb1,
   libtool,
   libexif,
-  libgphoto2,
   libjpeg,
   curl,
   libxml2,
@@ -31,21 +30,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    gettext
     libtool
     pkg-config
   ];
 
   buildInputs = [
+    gettext
     libjpeg
     libtool # for libltdl
     libusb1
     curl
     libxml2
     gd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gettext
   ];
 
   doInstallCheck = true;

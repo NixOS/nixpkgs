@@ -15243,28 +15243,6 @@ with self;
     };
   };
 
-  GooCanvas = buildPerlPackage {
-    pname = "Goo-Canvas";
-    version = "0.06";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YE/YEWENBIN/Goo-Canvas-0.06.tar.gz";
-      hash = "sha256-DFiMUH7tXmLRLtHMHkkcb/Oh9ZxPs9Q14UIUs3qzklE=";
-    };
-    propagatedBuildInputs = [
-      pkgs.goocanvas_1
-      pkgs.gtk2
-      Gtk2
-    ];
-    env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=implicit-function-declaration";
-    meta = {
-      description = "Perl interface to the GooCanvas";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
   GooCanvas2 = buildPerlPackage {
     pname = "GooCanvas2";
     version = "0.06";
@@ -15574,119 +15552,6 @@ with self;
         de11n
         despsyched
       ];
-    };
-  };
-
-  Gtk2 = buildPerlPackage {
-    pname = "Gtk2";
-    version = "1.24993";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz";
-      hash = "sha256-ScRDdDsu7+EadoACck9/akxI78lP8806VZ+357aTyWc=";
-    };
-
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-std=gnu17";
-    };
-
-    patches = [
-      # Fix incompatible function pointer conversion (assigning `GdkNativeWindow` to `guint32`).
-      ../development/perl-modules/Gtk2-fix-incompatible-pointer-conversion.patch
-    ];
-    buildInputs = [ pkgs.gtk2 ];
-    # https://rt.cpan.org/Public/Bug/Display.html?id=130742
-    # doCheck = !stdenv.hostPlatform.isDarwin;
-    doCheck = false;
-    propagatedBuildInputs = [ Pango ];
-    meta = {
-      description = "Perl interface to the 2.x series of the Gimp Toolkit library";
-      homepage = "https://gtk2-perl.sourceforge.net";
-      license = lib.licenses.lgpl21Plus;
-    };
-  };
-
-  Gtk2TrayIcon = buildPerlPackage {
-    pname = "Gtk2-TrayIcon";
-    version = "0.07";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-TrayIcon-0.07.tar.gz";
-      hash = "sha256-OfwrmabmE9qeqXfYy1MD+l4H5poVJIk03hIXqXuWRVQ=";
-    };
-    propagatedBuildInputs = [
-      pkgs.gtk2
-      Gtk2
-    ];
-    meta = {
-      description = "(DEPRECATED) Perl interface to the EggTrayIcon library";
-      license = lib.licenses.gpl2Plus;
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2TrayIcon.x86_64-darwin
-    };
-  };
-
-  Gtk2AppIndicator = buildPerlPackage {
-    pname = "Gtk2-AppIndicator";
-    version = "0.15";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OE/OESTERHOL/Gtk2-AppIndicator-0.15.tar.gz";
-      hash = "sha256-olywceIU+4m0RQqkYFAx6uibeWHhSbDW6PSRwZwUqQo=";
-    };
-    propagatedBuildInputs = [
-      pkgs.libappindicator-gtk2
-      pkgs.libdbusmenu-gtk2
-      pkgs.gtk2
-      pkgs.pkg-config
-      Gtk2
-    ];
-    # Tests fail due to no display:
-    #   Gtk-WARNING **: cannot open display:  at /nix/store/HASH-perl-Gtk2-1.2498/lib/perl5/site_perl/5.22.2/x86_64-linux-thread-multi/Gtk2.pm line 126.
-    doCheck = false;
-    meta = {
-      description = "Perl extension for libappindicator";
-      license = lib.licenses.artistic1;
-    };
-  };
-
-  Gtk2ImageView = buildPerlPackage {
-    pname = "Gtk2-ImageView";
-    version = "0.05";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk2-ImageView-0.05.tar.gz";
-      hash = "sha256-CHGGw2k6zxlkUc9ZzIt/XPmnsFq+INMty8uggilT+4A=";
-    };
-    buildInputs = [
-      pkgs.gtkimageview
-      pkgs.gtk2
-    ];
-    propagatedBuildInputs = [ Gtk2 ];
-    # Tests fail due to no display server:
-    #   Gtk-WARNING **: cannot open display:  at /nix/store/HASH-perl-Gtk2-1.2498/lib/perl5/site_perl/5.22.2/x86_64-linux-thread-multi/Gtk2.pm line 126.
-    #   t/animview.t ...........
-    doCheck = false;
-    meta = {
-      description = "Perl bindings for the GtkImageView widget";
-      license = lib.licenses.lgpl3Plus;
-    };
-  };
-
-  Gtk2Unique = buildPerlPackage {
-    pname = "Gtk2-Unique";
-    version = "0.07";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-Unique-0.07.tar.gz";
-      hash = "sha256-nOX2ikFgC8z31u/eMMBwqxFOk57XqKx8O3rZE5mJGGc=";
-    };
-    propagatedBuildInputs = [
-      pkgs.libunique
-      pkgs.gtk2
-      Gtk2
-    ];
-    meta = {
-      description = "(DEPRECATED) Use single instance applications";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2Unique.x86_64-darwin
     };
   };
 
@@ -32798,12 +32663,12 @@ with self;
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "12.4.0";
+    version = "12.6.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       tag = "v${version}";
-      hash = "sha256-GMZvSRZnxrPvhhLOJoFnNas7+ccsGXsL6s16EAeeFJQ=";
+      hash = "sha256-Na+O1sw5elyDsUutevcJh1WuhVHCBDu5usDx1zme9WI=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
@@ -39925,7 +39790,13 @@ with self;
   BSON = throw "BSON has been removed"; # 2025-09-12
   BSONXS = throw "BSONXS has been removed"; # 2025-09-12
   GnuPG = throw "'GnuPG' has been removed"; # 2025-01-11
+  Gtk2 = throw "'Gtk2' has been removed as it relied on gtk2"; # 2026-07-24
+  GooCanvas = throw "'GooCanvas' has been removed as it relied on gtk2"; # 2026-07-24
+  Gtk2AppIndicator = throw "'Gtk2AppIndicator' has been removed as it relied on gtk2"; # 2026-07-24
+  Gtk2ImageView = throw "'Gtk2ImageView' has been removed as it relied on gtk2"; # 2026-07-24
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
+  Gtk2TrayIcon = throw "'Gtk2TrayIcon' has been removed as it relied on gtk2"; # 2026-07-24
+  Gtk2Unique = throw "'Gtk2Unique' has been removed as it relied on gtk2"; # 2026-07-24
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08

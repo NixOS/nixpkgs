@@ -1,49 +1,51 @@
 {
-  stdenv,
-  lib,
-  replaceVars,
-  fetchpatch,
+  alsa-lib,
+  bashNonInteractive,
   buildPackages,
+  colord,
+  cups,
   fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gnome,
-  perl,
+  fontconfig,
+  gcr_4,
+  geoclue2,
+  geocode-glib_2,
   gettext,
   glib,
-  libnotify,
-  libgnomekbd,
-  libpulseaudio,
-  alsa-lib,
-  libcanberra,
-  upower,
-  colord,
-  libgweather,
-  polkit,
+  gnome,
+  gnome-desktop,
+  gnome-session-ctl,
   gsettings-desktop-schemas,
-  geoclue2,
-  systemd,
+  lib,
+  libcanberra,
   libgudev,
-  libxslt,
-  libxml2,
+  libgweather,
+  libnotify,
+  libpulseaudio,
+  libx11,
+  libxfixes,
+  meson,
   modemmanager,
   networkmanager,
-  gnome-desktop,
-  geocode-glib_2,
-  docbook-xsl-nons,
-  wrapGAppsNoGuiHook,
-  python3,
+  ninja,
+  perl,
+  pkg-config,
+  polkit,
+  replaceVars,
+  stdenv,
+  systemd,
   tzdata,
-  gcr_4,
-  gnome-session-ctl,
   udevCheckHook,
+  upower,
+  wrapGAppsNoGuiHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
   version = "50.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
@@ -65,39 +67,39 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    perl
     gettext
     glib
-    libxml2
-    libxslt
-    docbook-xsl-nons
-    wrapGAppsNoGuiHook
-    python3
+    meson
+    ninja
+    perl
+    pkg-config
     udevCheckHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    alsa-lib
+    bashNonInteractive
+    colord
+    cups
+    fontconfig
+    gcr_4
+    geoclue2
+    geocode-glib_2
     glib
+    gnome-desktop
     gsettings-desktop-schemas
+    libcanberra
+    libgudev
+    libgweather
+    libnotify
+    libpulseaudio
+    libx11
+    libxfixes
     modemmanager
     networkmanager
-    libnotify
-    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-    gnome-desktop
-    libpulseaudio
-    alsa-lib
-    libcanberra
-    upower
-    colord
-    libgweather
     polkit
-    geocode-glib_2
-    geoclue2
-    libgudev
-    gcr_4
+    upower
   ]
   ++ lib.optionals withSystemd [
     systemd
@@ -131,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    description = "GNOME Settings Daemon";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;

@@ -293,6 +293,7 @@
   ./programs/npm.nix
   ./programs/ns-usbloader.nix
   ./programs/nushell.nix
+  ./programs/nvrs.nix
   ./programs/nxdumpclient.nix
   ./programs/oblogout.nix
   ./programs/obs-studio.nix
@@ -638,6 +639,7 @@
   ./services/display-managers/greetd.nix
   ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
+  ./services/display-managers/noctalia-greeter.nix
   ./services/display-managers/plasma-login-manager.nix
   ./services/display-managers/regreet.nix
   ./services/display-managers/sddm.nix
@@ -1371,6 +1373,7 @@
   ./services/networking/opkssh/opkssh.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/p2pool.nix
   ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
@@ -1498,6 +1501,7 @@
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil-jumper.nix
   ./services/networking/yggdrasil.nix
+  ./services/networking/zapret2.nix
   ./services/networking/zapret.nix
   ./services/networking/zenohd.nix
   ./services/networking/zerobin.nix
@@ -1804,6 +1808,7 @@
   ./services/web-apps/remark42.nix
   ./services/web-apps/reposilite.nix
   ./services/web-apps/rimgo.nix
+  ./services/web-apps/romm.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/rsshub.nix
   ./services/web-apps/rustical.nix

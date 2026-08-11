@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
   const { DefaultArtifactClient } = await import('@actions/artifact')

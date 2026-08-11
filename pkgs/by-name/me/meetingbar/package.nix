@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "meetingbar";
-  version = "4.11.6";
+  version = "5.0.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/leits/MeetingBar/releases/download/v${finalAttrs.version}/MeetingBar.dmg";
-    hash = "sha256-TxmvSW1P9EubDuAr4CvHYgfz42Wn+ed8chmgjGB4ONc=";
+    hash = "sha256-qxBQjxW/S2xeUgpE5xdX3oOgsCv+iE3jXoMRROMMRUU=";
   };
 
   sourceRoot = ".";

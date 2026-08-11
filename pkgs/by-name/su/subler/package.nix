@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "subler";
   version = "1.9.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = "https://github.com/SublerApp/Subler/releases/download/${finalAttrs.version}/Subler-${finalAttrs.version}.zip";
     hash = "sha256-tYFyBG2G2Am+1HdS+pyOKr9MoAEpaYmITad04CyWL3Y=";

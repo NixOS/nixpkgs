@@ -670,7 +670,7 @@ stdenv.mkDerivation rec {
 
     ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+    substituteInPlace ./configure --replace-fail '/usr/share/fonts' '${unifont}/share/fonts'
   ''
   # build-grub-mkfont is built & run during build, need to find freetype for buildPlatform
   + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''

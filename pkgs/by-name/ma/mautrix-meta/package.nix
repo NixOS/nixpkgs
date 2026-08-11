@@ -18,7 +18,10 @@ buildGoModule rec {
   version = "26.07";
   tag = "v0.2607.0";
 
-  subPackages = [ "cmd/mautrix-meta" ];
+  subPackages = [
+    "cmd/mautrix-meta"
+    "cmd/mautrix-instagram"
+  ];
 
   src = fetchFromGitHub {
     owner = "mautrix";

@@ -46,13 +46,6 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # pytest-homeassistant-custom-component tries to create temporary directories inside the nix store
-    "tests/integration/test_init.py::test_full_update_lifecycle"
-    "tests/integration/test_services.py::test_restore_blueprint_service"
-    "tests/integration/test_services.py::test_update_all_service"
-  ];
-
   meta = {
     description = "Automatically update Home Assistant blueprints via native update entities";
     homepage = "https://github.com/luuquangvu/blueprints-updater/";

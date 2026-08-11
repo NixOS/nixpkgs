@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { classify } = require('../supportedBranches.js')
 const { postReview, dismissReviews } = require('./reviews.js')
 const reviewKey = 'prepare'

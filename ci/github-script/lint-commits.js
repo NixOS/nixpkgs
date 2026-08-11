@@ -1,4 +1,3 @@
-// @ts-check
 const { classify } = require('../supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
 
@@ -6,9 +5,9 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
 
 /**
  * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
+ *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
  *  context: typeof import('@actions/github').context,
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  repoPath?: string,
  * }} LintCommitsProps
  */
@@ -57,7 +56,7 @@ async function lintCommits({ github, context, core, repoPath }) {
 /**
  * @param {{
  *  commits: Commit[],
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  * }} CheckCommitMessagesProps
  */
 async function checkCommitMessages({ commits, core }) {
@@ -170,7 +169,7 @@ async function checkCommitMessages({ commits, core }) {
 /**
  * @param {{
  *  commits: Commit[],
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  * }} CheckGitFieldsProps
  */
 async function checkCommitMetadata({ commits, core }) {

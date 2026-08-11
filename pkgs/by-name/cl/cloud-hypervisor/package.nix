@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
 
+  patches = [
+    ./musl-1.2.6.patch
+  ];
+
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];

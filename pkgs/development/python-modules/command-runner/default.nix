@@ -3,22 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   psutil,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "command-runner";
-  version = "1.7.5";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netinvent";
     repo = "command_runner";
     tag = "v${version}";
-    hash = "sha256-jGYIz+c6wt137b8kG1QVVAvBAaJQAzNnZyKVeKHIk5c=";
+    hash = "sha256-/xfpvEU3yWWXz+xsntht9NY3kUenc7S1Sw8hRZbM/fQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ psutil ];
 

@@ -38,7 +38,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Not actually used, dropped from nixpkgs
   pythonRemoveDeps = [ "pyrr" ];
 
-  buildInputs = with qt5; [ qtquickcontrols2 ];
+  buildInputs = with qt5; [
+    qtquickcontrols
+    qtquickcontrols2
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     platformdirs

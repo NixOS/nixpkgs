@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pyprojectVersionPatchHook,
 
   # build-system
   pybind11,
@@ -42,6 +43,10 @@ buildPythonPackage rec {
       url = "https://github.com/SINGROUP/dscribe/pull/162.patch";
       hash = "sha256-mSKIerAIqdRp6b/ylqcYr8VwLCGxw5fz/5foo0ZQqgk=";
     })
+  ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   build-system = [

@@ -1,30 +1,43 @@
 {
   lib,
+  stdenv,
   fetchFromGitLab,
   python3Packages,
   fetchPypi,
   apksigner,
+  gradlew-fdroid,
   installShellFiles,
+  withLibvirt ? false,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    _final: prev: {
+      # Match Debian Trixie's version because ruamel.yaml output changes can break
+      # `fdroid rewritemeta`.
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs {
+        version = "0.18.10";
+        src = fetchPypi {
+          pname = "ruamel.yaml";
+          version = "0.18.10";
+          hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
+        };
+      };
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
-  version = "2.4.3";
+  version = "2.4.5-unstable-2026-06-11";
 
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    tag = finalAttrs.version;
-    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
+    rev = "00932d0a715b43b3ecf8da44826abf2ba65dd8b4";
+    hash = "sha256-ye+Zv8WreTXS+1dZZ6b56zPiRmcBrM2ea2nFcotrduQ=";
   };
-
-  pythonRelaxDeps = [
-    "androguard"
-    "pyasn1"
-    "pyasn1-modules"
-  ];
 
   pythonRemoveDeps = [
     "puremagic" # Only used as a fallback when magic is not installed
@@ -36,60 +49,56 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   preConfigure = ''
-    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
-    patchShebangs gradlew-fdroid
-    install -m 0755 gradlew-fdroid $out/bin
     installShellCompletion --cmd fdroid \
       --bash completion/bash-completion
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     babel
   ];
 
-  dependencies = with python3Packages; [
-    androguard
-    biplist
-    clint
-    defusedxml
-    gitpython
-    libcloud
-    libvirt-python
-    magic
-    mwclient
-    oscrypto
-    paramiko
-    pillow
-    platformdirs
-    pyasn1
-    pyasn1-modules
-    pycountry
-    python-vagrant
-    pyyaml
-    qrcode
-    requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
-    sdkmanager
-    yamllint
-  ];
+  dependencies =
+    with pythonPackages;
+    [
+      androguard
+      asn1crypto
+      defusedxml
+      gitpython
+      magic
+      oscrypto
+      paramiko
+      pillow
+      platformdirs
+      progress
+      python-vagrant
+      pyyaml
+      qrcode
+      requests
+      ruamel-yaml
+      sdkmanager
+      yamllint
+    ]
+    ++ lib.optional withLibvirt libvirt-python
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      biplist
+      pycountry
+    ];
 
   makeWrapperArgs = [
     "--prefix"
     "PATH"
     ":"
-    "${lib.makeBinPath [ apksigner ]}"
+    "${lib.makeBinPath [
+      apksigner
+      gradlew-fdroid
+    ]}"
   ];
 
   # no tests
@@ -99,7 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
-    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [

@@ -88,7 +88,7 @@ selectKernel {
         with pkgs;
         [
           icu
-          libappindicator-gtk3
+          libappindicator
         ]
         ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";

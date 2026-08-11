@@ -30,12 +30,6 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # pytest_homeassistant_custom_component wants to write into its nix store path
-    "tests/test_conditions.py"
-    "tests/test_triggers.py"
-  ];
-
   meta = {
     description = "Alternative Plant component of home assistant";
     homepage = "https://github.com/Olen/homeassistant-plant";

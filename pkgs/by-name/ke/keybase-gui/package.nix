@@ -16,7 +16,7 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   nspr,
   nss,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gsettings-desktop-schemas
     gtk3
-    libappindicator-gtk3
+    libappindicator
     libnotify
     nspr
     nss
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = [
     (lib.getLib udev)
-    libappindicator-gtk3
+    libappindicator
   ];
 
   dontBuild = true;

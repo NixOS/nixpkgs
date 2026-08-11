@@ -25,7 +25,7 @@
   pango,
   # linux-only:
   alsa-lib,
-  libappindicator-gtk3,
+  libappindicator,
   libx11,
   libxi,
   libxkbcommon,
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libappindicator-gtk3
+    libappindicator
     libx11
     libxi
     libxkbcommon

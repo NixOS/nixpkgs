@@ -231,7 +231,7 @@ in
         webserver = lib.mkOption {
           type = lib.types.attrTag {
             nginx = lib.mkOption {
-              type = lib.types.submodule (import ../web-servers/nginx/vhost-options.nix);
+              type = lib.types.submodule ../web-servers/nginx/vhost-options.nix;
               default = { };
               description = ''
                 Extra configuration for the nginx virtual host of Misskey.
@@ -240,7 +240,7 @@ in
             };
             caddy = lib.mkOption {
               type = lib.types.submodule (
-                import ../web-servers/caddy/vhost-options.nix { cfg = config.services.caddy; }
+                lib.modules.importApply ../web-servers/caddy/vhost-options.nix { cfg = config.services.caddy; }
               );
               default = { };
               description = ''

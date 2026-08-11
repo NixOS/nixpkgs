@@ -748,6 +748,7 @@ let
                   kbd.dev
                   kmod.dev
                   libarchive.dev
+                  libcap-text-verifier
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
