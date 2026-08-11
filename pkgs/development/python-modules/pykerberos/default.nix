@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykerberos";
   version = "1.2.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nXAevY/FlsmdMVXVukWBO9WQjSbvg7oK3SUO22IqvtQ=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     description = "High-level interface to Kerberos";
     license = lib.licenses.asl20;
   };
-}
+})
