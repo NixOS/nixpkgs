@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       qtWrapperArgs+=(
-        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
+        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}${lib.optionalString stdenv.hostPlatform.isLinux ":/run/opengl-driver/lib"}"
         ''${gappsWrapperArgs[@]}
       )
     ''
