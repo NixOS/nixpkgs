@@ -448,9 +448,8 @@ let
 
       patches ? [ ],
 
-      __contentAddressed ?
-        (!attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-        && contentAddressedByDefault,
+      # Fixed-output drvs can't be content addressed
+      __contentAddressed ? contentAddressedByDefault && !(attrs ? outputHash),
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
