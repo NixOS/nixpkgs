@@ -53,6 +53,14 @@ in
           The maximum log size.
         '';
       };
+
+      telemetry = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Collects anonymous usage data and crash reports.
+        '';
+      };
     };
   };
 
@@ -83,6 +91,7 @@ in
             verbose = ${toString cfg.verbosity}
             silent = ${if cfg.silent then "1" else "0"}
             logsize = ${toString cfg.logSize}
+            telemetry = ${lib.boolToString cfg.telemetry}
           ''}";
           Restart = "on-failure";
         };
