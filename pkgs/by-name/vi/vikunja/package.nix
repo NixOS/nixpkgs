@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   stdenv,
   nodejs_24,
@@ -11,6 +12,7 @@
   dart-sass,
   writeShellScriptBin,
   nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -82,7 +84,7 @@ let
       }' ${file}
     '';
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   inherit src version;
   pname = "vikunja";
 
@@ -105,6 +107,7 @@ buildGoModule {
   vendorHash = "sha256-bn+bcGzeB0/KkhPNkbjK/EgKQG3iqVlJxtt6betGUNE=";
 
   inherit frontend;
+  veans = callPackage ./veans.nix { inherit (finalAttrs) src version meta; };
 
   prePatch = ''
     cp -r ${frontend} frontend/dist
@@ -143,7 +146,14 @@ buildGoModule {
   passthru = {
     tests.vikunja = nixosTests.vikunja;
     frontend = frontend;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--subpackage"
+        "veans"
+      ];
+    };
   };
 
   meta = {
@@ -158,4 +168,4 @@ buildGoModule {
     mainProgram = "vikunja";
     platforms = lib.platforms.linux;
   };
-}
+})
