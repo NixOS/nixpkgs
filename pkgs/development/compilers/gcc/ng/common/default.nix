@@ -173,12 +173,11 @@ makeScopeWithSplicing' {
         ];
       };
 
-      # `binutilsNoLibc` carries `preLibcHeaders` as its `libc` — the
-      # header-only stand-in for platforms that have one, and nothing at all
-      # for platforms that do not. `wrapCCWith` defaults `libc` to
-      # `bintools.libc`, so this wrapper carries it too, and that is the only
-      # place the pre-libc stage is written down: everything built with this
-      # compiler reads `stdenv.cc.libc` and needs no flag of its own.
+      # Stage 1 of the bootstrap chain; see ../README.md.
+      #
+      # No `libc` is passed: `wrapCCWith` defaults it to `bintools.libc`, and
+      # `binutilsNoLibc` carries `preLibcHeaders`. That is the only place the
+      # pre-libc stage is written down.
       gccNoLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
@@ -189,13 +188,9 @@ makeScopeWithSplicing' {
         ];
       };
 
-      # Built before there is a libc, and good for nothing but getting one
-      # built: single-threaded, and compiled against `preLibcHeaders` at best.
-      # Never hand this to users.
-      #
-      # Nothing is passed here to say which stage this is; it follows from the
-      # compiler, exactly as the LLVM set distinguishes `compiler-rt-no-libc`
-      # from `compiler-rt-libc`.
+      # Built before there is a libc, and not intended for use beyond getting
+      # one built. Note the two differ only by `stdenv`: which stage this is
+      # follows from the compiler, never from an argument.
       libgcc-no-libc = callPackage ./libgcc {
         stdenv = overrideCC stdenv buildGccPackages.gccNoLibgcc;
       };
@@ -209,15 +204,9 @@ makeScopeWithSplicing' {
       libgcc =
         if stdenv.hostPlatform.libc == null then gccPackages.libgcc-no-libc else gccPackages.libgcc-libc;
 
-      # The bootstrap step between `gccNoLibgcc` and `gccWithLibc`: libgcc is
-      # available, libc is not yet. Compiling a libc needs exactly this — libc's
-      # own sources call into libgcc (integer/floating-point helpers, stack
-      # unwinding), so `gccNoLibgcc` is not enough, while `gccWithLibc` cannot
-      # be used to build the very libc it depends on.
-      #
-      # `binutilsNoLibc` is what keeps libc out: it supplies the header-only
-      # `preLibcHeaders` instead of a real libc, so nothing here refers to a
-      # libc derivation and the cycle stays broken.
+      # Stage 2: libgcc available, libc not yet — what compiling a libc needs.
+      # `binutilsNoLibc` is what keeps the libc out, so nothing here refers to
+      # a libc derivation and the cycle stays broken.
       gccWithLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
@@ -230,10 +219,8 @@ makeScopeWithSplicing' {
         ];
       };
 
-      # The rung after `gccWithLibgcc`: the libc it was used to build now
-      # exists, so this has a real libc, but still only the bootstrap libgcc —
-      # the finished one is what it is about to build. That is `libgcc-libc`,
-      # which unlike its predecessor can use the libc's threads.
+      # Stage 3: real libc, bootstrap libgcc still. The finished libgcc is what
+      # this is about to build.
       gccWithLibcAndBasicLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
