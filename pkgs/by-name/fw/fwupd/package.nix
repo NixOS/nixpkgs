@@ -52,7 +52,6 @@
   readline,
   sqlite,
   tpm2-tss,
-  valgrind,
   xz, # for liblzma
 
   # mesonFlags
@@ -75,7 +74,6 @@
   nix-update-script,
 
   enablePassim ? false,
-  enableValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind,
 }:
 
 let
@@ -224,9 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     tpm2-tss
     xz # for liblzma
-  ]
-  ++ lib.optionals enableValgrind [
-    valgrind
   ];
 
   mesonFlags = [
@@ -248,14 +243,12 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: what should this be?
     (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
     (lib.mesonEnable "umockdev_tests" false)
+    (lib.mesonEnable "valgrind" false)
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ]
   ++ lib.optionals (!enablePassim) [
     (lib.mesonEnable "passim" false)
-  ]
-  ++ lib.optionals (!enableValgrind) [
-    (lib.mesonEnable "valgrind" false)
   ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
