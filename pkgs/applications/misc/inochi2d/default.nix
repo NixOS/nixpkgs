@@ -8,7 +8,7 @@
 
 # Note for maintainers:
 #
-# These packages are only allowed to be packaged under the the condition that we
+# These packages are only allowed to be packaged under the condition that we
 # - patch source/creator/config.d to not point to upstream's bug tracker
 # - use the "barebones" configuration to remove the mascot and logo from the build
 #

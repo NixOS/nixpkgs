@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
 
   chromaprint,
@@ -12,15 +12,17 @@
   gst_all_1,
 
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 let
-  pythonPackages = python312Packages;
+  # A few more tests fail with python314Packages, indicating the code isn't
+  # ready for it yet.
+  pythonPackages = python313Packages;
   pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
   pyproject = true;
   strictDeps = true;
@@ -45,7 +47,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt5.qtwayland) [
     qt5.qtwayland
   ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
+  ++ lib.optionals pyqt5.multimediaEnabled [
     qt5.qtmultimedia.bin
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -59,7 +61,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pyobjc-framework-Cocoa"
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     with pythonPackages;
     [
       charset-normalizer
@@ -104,9 +106,16 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   ''
-  + lib.optionalString (pyqt5.multimediaEnabled) ''
+  + lib.optionalString pyqt5.multimediaEnabled ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://picard.musicbrainz.org";

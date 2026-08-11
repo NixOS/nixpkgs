@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
@@ -18,7 +18,7 @@
   libxdmcp,
   debug ? false,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
   version = "0.4.7";
 

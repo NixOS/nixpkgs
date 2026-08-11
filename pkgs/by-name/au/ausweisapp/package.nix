@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp";
     rev = finalAttrs.version;
-    hash = "sha256-pr41KbejZCOvfXH2uHO5MA/VklSNU38EL6AgznvGqeY=";
+    hash = "sha256-y9F/dQZHbUFDRZDpdGtNCjTIypS2l4XJLbUZHjliEDA=";
   };
 
   postPatch = ''

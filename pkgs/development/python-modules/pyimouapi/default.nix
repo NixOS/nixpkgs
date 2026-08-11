@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyimouapi";
-  version = "1.3.0";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Imou-OpenPlatform";
     repo = "Py-Imou-Open-Api";
     tag = finalAttrs.version;
-    hash = "sha256-/ZGaJubdeEe5d4wnzrS/e6hPC5i/IRccgYc34su2iw4=";
+    hash = "sha256-g70zYBmhQXlk1EUExqWuHWDenx8ZCcnMvh8wo1hLS4g=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Async Python client for the Imou Open Platform cloud APIs";
     homepage = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api";
-    changelog = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/Imou-OpenPlatform/Py-Imou-Open-Api/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };

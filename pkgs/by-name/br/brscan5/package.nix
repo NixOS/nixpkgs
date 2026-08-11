@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     makeWrapper \
       "$out/$PATH_TO_BRSCAN5/brsaneconfig5" \
       "$out/bin/brsaneconfig5" \
-      --suffix-each NIX_REDIRECT ":" "/etc/opt/brother/scanner/brscan5=$out/opt/brother/scanner/brscan5 /opt/brother/scanner/brscan5=$out/opt/brother/scanner/brscan5" \
+      --suffix-each NIX_REDIRECTS ":" "/etc/opt/brother/scanner/brscan5=$out/opt/brother/scanner/brscan5 /opt/brother/scanner/brscan5=$out/opt/brother/scanner/brscan5" \
       --set LD_PRELOAD ${libredirect}/lib/libredirect.so
 
     mkdir -p $out/etc/sane.d/dll.d

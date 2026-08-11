@@ -20,7 +20,7 @@ let
 in
 
 symlinkJoin {
-  inherit (qgis-ltr-unwrapped) version outputs src;
+  inherit (qgis-ltr-unwrapped) version outputs;
   pname = "qgis-ltr";
 
   paths = [ qgis-ltr-unwrapped ];

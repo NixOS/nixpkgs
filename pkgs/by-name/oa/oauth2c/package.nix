@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.20.0";
 
   src = fetchFromGitHub {
-    owner = "cloudentity";
+    owner = "SecureAuthCorp";
     repo = "oauth2c";
     rev = "v${finalAttrs.version}";
     hash = "sha256-l/fXorXE4+6n7qQM2c2pJssNq3DKaxOjapdfNlXuAWg=";
@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   doCheck = false; # tests want to talk to oauth2c.us.authz.cloudentity.io
 
   meta = {
-    homepage = "https://github.com/cloudentity/oauth2c";
+    homepage = "https://github.com/SecureAuthCorp/oauth2c";
     description = "User-friendly OAuth2 CLI";
     mainProgram = "oauth2c";
     longDescription = ''

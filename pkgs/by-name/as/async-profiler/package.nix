@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "async-profiler";
-  version = "4.3";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "async-profiler";
     repo = "async-profiler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wysOjirCfxm0SmwDW7GS+S73lAT8/0g4avu7T5+qy2Q=";
+    hash = "sha256-H3NBWyCjyuQkQ7HZ+B8ycBGIvQWdQDkx2SpQr+0gL08=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

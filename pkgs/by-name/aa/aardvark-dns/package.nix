@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aardvark-dns";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "aardvark-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w+qHHq/4jdkEzyoxfy1h6Vb+55uWLJhirbBSZHxLxTU=";
+    hash = "sha256-EQFTkJQaW4f6AFmMP5h24ugK5st1rg9c/QK3WjBORAQ=";
   };
 
-  cargoHash = "sha256-rpflZfMYNlrn13Cv3znkS2Jp9peyIJDQrXVnVnVuy9g=";
+  cargoHash = "sha256-nTcAuhfez2ub+4z9E2YGp5i+JJr9K/PpG22ZvMW5ni4=";
 
   passthru.tests = { inherit (nixosTests) podman; };
 

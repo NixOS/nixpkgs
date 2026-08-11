@@ -3,6 +3,31 @@
   nodejs-slim,
   symlinkJoin,
 }:
+let
+  hasDisallowedPrefix = lib.hasPrefix "__";
+  allowedNames = [
+    "override"
+    "overrideAttrs"
+    "overrideDerivation"
+    "outputs"
+    "outputName"
+    "system"
+    "type"
+
+    # Filter out arguments of `getOutput`
+    "bin"
+    "dev"
+    "include"
+    "lib"
+    "man"
+    "out"
+    "static"
+
+    # Filter out outputs that didn't exist on 25.11
+    "npm"
+    "corepack"
+  ];
+in
 (symlinkJoin {
   pname = "nodejs";
   inherit (nodejs-slim) version passthru meta;
@@ -22,31 +47,7 @@
           })
           (
             builtins.filter (
-              name:
-              !lib.strings.hasPrefix "__" name
-              && !(builtins.elem name [
-                "override"
-                "overrideAttrs"
-                "overrideDerivation"
-                "outputs"
-                "outputName"
-                "system"
-                "type"
-
-                # Filter out arguments of `getOutput`
-                "bin"
-                "dev"
-                "include"
-                "lib"
-                "man"
-                "out"
-                "static"
-
-                # Filter out outputs that didn't exist on 25.11
-                "npm"
-                "corepack"
-              ])
-              && !(builtins.hasAttr name nodejs)
+              name: !hasDisallowedPrefix name && !(builtins.elem name allowedNames) && !(nodejs ? ${name})
             ) (builtins.attrNames nodejs-slim)
           )
       ))

@@ -127,6 +127,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/bus1/dbus-broker/commit/fd5c6e191bffcf5b3e6c9abb8b0b03479accc04b.patch";
       hash = "sha256-+QgZzm/qRnVSr0wDNw9Np3LRreRKl6CQXJextLPy6fc=";
     })
+    (fetchpatch {
+      name = "CVE-2026-16730-1.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/c4a3c886366f7bd566ec9a55b3855ade8290fa17.patch";
+      hash = "sha256-8O4YX83NI6ztS5oR2JY1++QrWLVCCSCNTpwcp2bu9LE=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-16730-2.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/aaa9fd6bbc2d5d7bfeca039f9c457b7f88a50dde.patch";
+      hash = "sha256-f0p5oDw/6Wxe26fcqfKua766ylMg5NydywFM3MZYV8I=";
+    })
   ];
 
   nativeBuildInputs = [

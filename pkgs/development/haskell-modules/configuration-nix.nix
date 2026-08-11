@@ -877,17 +877,6 @@ builtins.intersectAttrs super {
     "--extra-include-dirs=${pkgs.smpeg.dev}/include/smpeg"
   ] super.SDL-mpeg;
 
-  # https://github.com/ivanperez-keera/hcwiid/pull/4
-  hcwiid = overrideCabal (drv: {
-    configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.bluez.out}/lib"
-      "--extra-lib-dirs=${pkgs.cwiid}/lib"
-      "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez.dev}/include"
-    ];
-    prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
-  }) super.hcwiid;
-
   # cabal2nix doesn't pick up some of the dependencies.
   ginsu =
     let

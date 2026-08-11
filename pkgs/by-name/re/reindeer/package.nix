@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reindeer";
-  version = "2026.05.04.00";
+  version = "2026.07.27.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m27zMZbDv/2bXhb16rFxUUokEn0bxyrhpxlOSZvVcfk=";
+    hash = "sha256-8/AtBZzjC5NSashMtEjCasZU53GqZTkoAhWytoIweGU=";
   };
 
-  cargoHash = "sha256-nJU9ClYxRkAfFkOq1V7k34pjdqJntDr3gJekUibq304=";
+  cargoHash = "sha256-MB/TQnOB96x86uAQJNt6IiTUmy74Dom4xtqWGga6GkA=";
 
   nativeBuildInputs = [ pkg-config ];
 

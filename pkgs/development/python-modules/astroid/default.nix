@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "astroid";
-  version = "4.0.3"; # Check whether the version is compatible with pylint
+  version = "4.2.0"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5p1xY6EWviSgmrLVOx3w7RcG/Vpx+sUtVndoxXrIFTQ=";
+    hash = "sha256-PwKGAk9tiQzxWydEREg0l0cF4J56SNRwhGRCVjmRoCo=";
   };
 
   build-system = [ setuptools ];

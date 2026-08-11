@@ -12,7 +12,7 @@ let
   version = "4.1.2";
 
   src = fetchFromGitHub {
-    owner = "leoafarias";
+    owner = "conceptadev";
     repo = "fvm";
     tag = version;
     hash = "sha256-Kyxyt2UsrQ6Bc6EuYJjpEFdYwcus2/bcVrWsd/gs3Ok=";
@@ -47,7 +47,7 @@ buildDartApplication {
 
   meta = {
     description = "Simple CLI to manage Flutter SDK versions";
-    homepage = "https://github.com/leoafarias/fvm";
+    homepage = "https://github.com/conceptadev/fvm";
     license = lib.licenses.mit;
     mainProgram = "fvm";
     maintainers = [ ];

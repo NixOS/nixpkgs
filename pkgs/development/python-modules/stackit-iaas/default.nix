@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-iaas";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "stackit_iaas";
     inherit (finalAttrs) version;
-    hash = "sha256-k1I7I0QjUMfr79kSlIXEwqU59pSpw2oPjt+rqYYgV+o=";
+    hash = "sha256-ImLGPbL7C9cHI3ia9vM+u/1nGhRmKGujSeLn7979byI=";
   };
 
   build-system = [ hatchling ];

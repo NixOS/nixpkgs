@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "2.63.18";
+  version = "2.63.23";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     tag = "v${version}";
-    hash = "sha256-0j0i6bKKbyUi4O0wBT+xYjvywjRzAGd0/13Yh/dG5GA=";
+    hash = "sha256-G0TIQE+Rru4JWBJIi8kdxSaP0CDPo2DyWLmcU2AX7Fs=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -46,7 +46,7 @@ let
         ;
       fetcherVersion = 3;
       pnpm = pnpm_10;
-      hash = "sha256-UwTA7Eogp2GrvmXDbdfGBTJS3DuOTJ42e6fHlQxSHoA=";
+      hash = "sha256-XZdHaXnIfjA1wO6KQihj6PwXQ5LEcMrLRe2Md65nQ38=";
     };
 
     installPhase = ''
@@ -64,7 +64,7 @@ buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-BXw+fURCh1qNlwWo49aXIpSM339bV3Gwn9Ov8HLEVF0=";
+  vendorHash = "sha256-CuYi2PfR0F0lppFiRFzFj0yLms7VFNxzKpzlmEaCWWs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.1.3";
+  version = "3.2.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-9Apjyg+wmAWrK7hMSF54b1u/3TT0GGitDlyF6rQA4OY=";
+    hash = "sha256-m+uAf5K7biExv8rmOsyCMAVoKSSRAgm0ugw54s2JvMs=";
   };
 
   # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
@@ -60,6 +60,9 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "numba"
+  ];
   dependencies = [
     cons
     etuples
@@ -176,13 +179,6 @@ buildPythonPackage (finalAttrs: {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-
-    # The IndexedElemwise fusion is intentionally disabled on the 3.0.x line
-    # (it can trigger a RecursionError, see the comment in
-    # pytensor/tensor/rewriting/indexed_elemwise.py), but these tests still
-    # assert that the fusion produces an IndexedElemwise node. Upstream test bug.
-    "tests/link/numba/test_indexed_elemwise.py"
-    "tests/benchmarks/test_gather_fusion.py"
   ];
 
   passthru.updateScript = nix-update-script {

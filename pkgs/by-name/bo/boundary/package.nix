@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
       jk
       techknowlogick
     ];
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "boundary";
   };
 }

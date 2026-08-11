@@ -9,6 +9,7 @@
   esptool,
   git,
   versionCheckHook,
+  addBinToPathHook,
   nixosTests,
 }:
 
@@ -24,14 +25,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.6.2";
+  version = "2026.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
+    hash = "sha256-4sbc/X86OWN/Bx2sPk3H2lgzGxdQNS6bIspNLAVqHz8=";
   };
 
   patches = [
@@ -85,7 +86,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     paho-mqtt
     pillow
-    platformio
     puremagic
     py7zr
     pyparsing
@@ -138,6 +138,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ++ [
       git
       versionCheckHook
+      addBinToPathHook
     ];
 
   disabledTestPaths = [
@@ -149,10 +150,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "tests/unit_tests/test_espidf_component.py"
   ];
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
-
   postInstall =
     let
       argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
@@ -163,8 +160,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
-
-  doInstallCheck = true;
 
   disabledTests = [
     # tries to import platformio, which is wrapped in an fhsenv
@@ -207,6 +202,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       picnoir
       thanegill
       karlbeecken
+      tmarkus
     ];
     mainProgram = "esphome";
   };

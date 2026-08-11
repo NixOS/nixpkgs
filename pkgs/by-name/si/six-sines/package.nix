@@ -32,7 +32,7 @@ let
   # `base_sdks.cmake` short-circuits the CPM path when *_SDK_ROOT is set.
   #
   # Revisions are pinned to whatever the clap-wrapper submodule at the
-  # six-sines v1.2.0 tag requests in cmake/base_sdks.cmake. When bumping
+  # six-sines v1.2.1 tag requests in cmake/base_sdks.cmake. When bumping
   # six-sines, re-check those tags here.
   vst3sdk = fetchFromGitHub {
     owner = "steinbergmedia";
@@ -67,7 +67,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "six-sines";
-  version = "1.2.0";
+  version = "1.2.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "six-sines";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6m3+IthBnBvRX8gB8JH3NVN7ot3jTn5zSl/HYUB5Zy4=";
+    hash = "sha256-Sq94n5pG6JOOeLAtk13RUGqk0T6XxhT0hXPw18r3Lqs=";
   };
 
   nativeBuildInputs = [

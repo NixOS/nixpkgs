@@ -519,7 +519,6 @@ with lib.maintainers;
     members = [
       alejandrosame
       aleksi
-      artturin
       emilytrau
       ericson2314
       jk
@@ -551,6 +550,7 @@ with lib.maintainers;
       dotlambda
       ma27
       provokateurin
+      staticdev
     ];
     scope = "Maintain Nextcloud, its tests and the integration of applications.";
     shortName = "Nextcloud";
@@ -654,6 +654,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  pulumi = {
+    scope = "Maintains the Pulumi IaC tool and its language-specific SDKs";
+    shortName = "Pulumi";
+    members = [
+      nicoo
+      tie
+      untio11
+    ];
+  };
+
   python = {
     members = [
       hexa
@@ -715,6 +725,15 @@ with lib.maintainers;
 
   security-review = {
     github = "security-review";
+  };
+
+  stardust-xr = {
+    members = [
+      pandapip1
+      technobaboo
+    ];
+    scope = "Maintain Stardust XR packages";
+    shortName = "StardustXR";
   };
 
   stdenv = {

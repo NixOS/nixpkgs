@@ -1,3 +1,4 @@
+import json
 import sys
 import textwrap
 import uuid
@@ -274,6 +275,17 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
                 "NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])
             },
         )
+
+    # NIXOS_REBUILD_SSH_DEFAULT_OPTS replaces the ControlMaster defaults
+    monkeypatch.setenv("NIX_SSHOPTS", "-oControlPath=/run/user/1000/%C")
+    monkeypatch.setenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS", "")
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--to", "user@target.host", closure],
+            append_local_env={"NIX_SSHOPTS": "-oControlPath=/run/user/1000/%C"},
+        )
+    monkeypatch.delenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS")
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     env = {"NIX_SSHOPTS": " ".join(["--ssh build-target-opt", *p.SSH_DEFAULT_OPTS])}
@@ -628,12 +640,18 @@ def test_repl(mock_run: Mock) -> None:
     mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [], 0, stdout=json.dumps({"resolvedUrl": "path:/flake.nix"})
+    ),
+)
 def test_repl_flake(mock_run: Mock) -> None:
     n.repl_flake(m.Flake("flake.nix", "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
-    assert mock_run.call_count == 1
+    assert mock_run.call_count == 2
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)

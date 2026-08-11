@@ -808,7 +808,7 @@ rec {
   hasPrefix =
     pref:
     let
-      lenPrefix = stringLength pref;
+      getGivenPrefix = substring 0 (stringLength pref);
     in
     if isPath pref then
       # Before 23.05, paths would be copied to the store before converting them
@@ -817,7 +817,7 @@ rec {
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
     else
-      str: substring 0 lenPrefix str == pref;
+      str: getGivenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -905,7 +905,7 @@ rec {
   hasInfix =
     infix:
     let
-      escapedInfix = escapeRegex infix;
+      matchGivenInfix = builtins.match ".*${escapeRegex infix}.*";
     in
     if isPath infix then
       # Before 23.05, paths would be copied to the store before converting them
@@ -915,7 +915,7 @@ rec {
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
-      content: builtins.match ".*${escapedInfix}.*" "${content}" != null;
+      content: matchGivenInfix "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
@@ -2871,7 +2871,11 @@ rec {
 
     :::
   */
-  fileContents = file: removeSuffix "\n" (readFile file);
+  fileContents =
+    let
+      removeNewlineSuffix = removeSuffix "\n";
+    in
+    file: removeNewlineSuffix (readFile file);
 
   /**
     Creates a valid derivation name from a potentially invalid one.

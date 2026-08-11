@@ -21,11 +21,12 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
+  npmDepsFetcherVersion = 2;
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    npmDepsFetcherVersion = 3;
-    hash = "sha256-V9aRKoJ6+BN/q7NS21eZBopzkWje8sOGGL1AgO4cUM0=";
+    fetcherVersion = 2;
+    hash = "sha256-xobZg0Hc+Yi9+q6kMwuKtBb4pjdYNS4T9VdFy5hARlw=";
   };
 
   postPatch = ''

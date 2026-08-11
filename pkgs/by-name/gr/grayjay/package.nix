@@ -2,8 +2,11 @@
   buildDotnetModule,
   fetchFromGitLab,
   dotnetCorePackages,
-  buildNpmPackage,
   lib,
+  ffmpeg,
+  curl-impersonateFull,
+  libsodium,
+  sqlite,
   libz,
   icu,
   openssl,
@@ -39,6 +42,8 @@
   krb5,
   wrapGAppsHook3,
   _experimental-update-script-combinators,
+  grayjay-frontend,
+  grayjay-libcurlshim,
 }:
 let
   version = "17";
@@ -51,27 +56,19 @@ let
     fetchSubmodules = true;
     fetchLFS = true;
   };
-  frontend = buildNpmPackage {
-    pname = "grayjay-frontend";
-    inherit version src;
-
-    sourceRoot = "source/Grayjay.Desktop.Web";
-
-    npmBuildScript = "build";
-    npmDepsHash = "sha256-3yJIPkuEvkFL9Wb4y/r0yEULQbXx/wHqicFBLzOPj68=";
-
-    installPhase = ''
-      runHook preInstall
-      cp -r dist/ $out
-      runHook postInstall
-    '';
-  };
+  getLibrary =
+    pkg: libnm:
+    "${lib.getLib pkg}/lib/lib${libnm}${pkg.drvAttrs.stdenv.hostPlatform.extensions.sharedLibrary}";
 in
 buildDotnetModule (finalAttrs: {
   pname = "grayjay";
 
-  inherit version src frontend;
+  inherit version src;
 
+  frontend = grayjay-frontend;
+
+  __structuredAttrs = true;
+  strictDeps = true;
   buildInputs = [
     openssl
     libgbm
@@ -84,6 +81,7 @@ buildDotnetModule (finalAttrs: {
     nss
     icu
     krb5
+    curl-impersonateFull
   ];
 
   nativeBuildInputs = [
@@ -135,15 +133,24 @@ buildDotnetModule (finalAttrs: {
 
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
-    cp -r ${frontend} Grayjay.ClientServer/wwwroot/web
+    cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
   '';
 
   postInstall = ''
-    chmod +x $out/lib/grayjay/cef/dotcefnative
-    chmod +x $out/lib/grayjay/ffmpeg
-    rm $out/lib/grayjay/Portable
     ln -s /tmp/grayjay-launch $out/lib/grayjay/launch
     ln -s /tmp/grayjay-cef-launch $out/lib/grayjay/cef/launch
+
+    # Unvendor most stuff
+    rm -f $out/lib/grayjay/{Portable,ffmpeg,libcurl-impersonate.so,libcurlshim.so,libsodium.so,libe_sqlite3.so,FUTO.Updater.Client}
+    ln -s ${lib.getExe ffmpeg} $out/lib/grayjay/ffmpeg
+    ln -s ${getLibrary curl-impersonateFull "curl-impersonate"} $out/lib/grayjay/libcurl-impersonate.so
+    ln -s ${getLibrary grayjay-libcurlshim "curlshim"} $out/lib/grayjay/libcurlshim.so
+    ln -s ${getLibrary libsodium "sodium"} $out/lib/grayjay/libsodium.so
+    ln -s ${getLibrary sqlite "sqlite3"} $out/lib/grayjay/libe_sqlite3.so
+
+    # CEF is still vendored for now
+    chmod +x $out/lib/grayjay/cef/dotcefnative
+
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/lib/grayjay/grayjay.png $out/share/icons/hicolor/scalable/apps/grayjay.png
   '';
@@ -206,8 +213,12 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       kruziikrel13
       samfundev
+      pandapip1
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "Grayjay";
   };
 })

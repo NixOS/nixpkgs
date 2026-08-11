@@ -1,10 +1,11 @@
 {
   cjson,
   lib,
-  libx11,
+  libdrm,
   libinput,
   libxcb,
   libxkbcommon,
+  pango,
   pcre2,
   pixman,
   pkg-config,
@@ -18,21 +19,21 @@
   enableXWayland ? true,
   meson,
   ninja,
-  scenefx,
-  wlroots_0_19,
+  scenefx_0_5,
+  wlroots_0_20,
   libGL,
 }:
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   pname = "mango";
-  version = "0.14.4";
+  version = "0.15.6";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=";
+    hash = "sha256-DWa1m7y8iYGQ5sm8oCE9GkiWs63KI4G0gdQ2qpbh6Ks=";
   };
 
   nativeBuildInputs = [
@@ -44,19 +45,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cjson
+    libdrm
     libinput
-    libxcb
     libxkbcommon
+    pango
     pcre2
     pixman
     wayland
     wayland-protocols
-    wlroots_0_19
-    scenefx
+    wlroots_0_20
+    scenefx_0_5
     libGL
   ]
   ++ lib.optionals enableXWayland [
-    libx11
+    libxcb
     libxcb-wm
     xwayland
   ];

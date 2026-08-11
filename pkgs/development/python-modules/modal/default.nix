@@ -34,18 +34,21 @@
   types-toml,
   typing-extensions,
   watchfiles,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "modal";
-  version = "1.4.2";
+  version = "1.5.3";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "modal-client";
     tag = "py/v${finalAttrs.version}";
-    hash = "sha256-MXaiei2hUBwI9qlB7HZtWbnrsZq/iLnZgqIejn2ZgX8=";
+    hash = "sha256-XVY+RzedSMVug+mZ6pioO5qYbR6gUaD5QJIENIPWgx8=";
   };
   sourceRoot = "${finalAttrs.src.name}/py";
 
@@ -105,6 +108,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     python-dotenv
     six
+    versionCheckHook
   ];
 
   disabledTestPaths = [
@@ -127,6 +131,15 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Non-deterministic
     "test_queue_blocking_put"
+
+    # try to hit modal servers
+    "test_blob_upload_uses_proxy"
+    "test_grpc_control_plane_uses_prox"
+    "test_grpc_task_command_router_uses_proxy"
+    "test_socks5_proxy_via_all_proxy"
+
+    # flaky
+    "test_process_fork"
   ];
 
   __darwinAllowLocalNetworking = true;

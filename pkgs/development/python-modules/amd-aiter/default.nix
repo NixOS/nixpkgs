@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     rmdir 3rdparty/composable_kernel
-    ln -sf ${rocmPackages.composable_kernel.src} 3rdparty/composable_kernel
+    ln -sf ${rocmPackages.composable_kernel.composable_kernel_src} 3rdparty/composable_kernel
 
     substituteInPlace pyproject.toml \
       --replace-fail '"flydsl==0.0.1.dev95158637"' ""

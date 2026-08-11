@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/mib1185/aioimmich/releases/tag/${src.tag}";
-    description = "Asynchronous library to fetch albums and assests from immich";
+    description = "Asynchronous library to fetch albums and assets from immich";
     homepage = "https://github.com/mib1185/aioimmich";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];

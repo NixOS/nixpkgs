@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication {
   dependencies = with python3Packages; [
     mercurial
     # The one from python3Packages
-    qscintilla-qt5
+    qscintilla
     iniparse
   ];
 

@@ -36,8 +36,14 @@ let
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
   userbornStaticFiles =
-    pkgs.runCommand "static-userborn" { }
-      "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
+    pkgs.runCommand "static-userborn"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      ''
+        mkdir -p $out
+        userborn ${userbornConfigJson} $out
+      '';
   previousConfigPath = "/var/lib/userborn/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;

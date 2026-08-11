@@ -11,7 +11,7 @@ let
     url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-build-260521zej1bgvs1-x86_64.AppImage";
     hash = "sha512-Stb0Mcap4KmRkj/s5jf1uZLm8sR5KNKGpZKXa2VtBIFxKofS1CxQJDWiJiPSNGsqtezLxmvsC4VSI45isYQSpQ==";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 
 appimageTools.wrapType2 {

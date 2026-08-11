@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
-      is able to do other tricky things. Intentions were convering a given
-      IPv6 address into compressed format, convering a given IPv6 address into
+      is able to do other tricky things. Intentions were converting a given
+      IPv6 address into compressed format, converting a given IPv6 address into
       the same format like shown in /proc/net/if_inet6 and (because it was not
       difficult) migrating the Perl program ip6_int into.
-      Now only one utiltity is needed to do a lot.
+      Now only one utility is needed to do a lot.
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
     license = lib.licenses.gpl2Only;

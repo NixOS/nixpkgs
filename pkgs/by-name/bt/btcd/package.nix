@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "btcd";
-  version = "0.26.0";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "btcsuite";
     repo = "btcd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-08Ce66iSVCVzhSQ4fouWiXmld7e7jFU+Y1o8HdtsaDE=";
+    hash = "sha256-0FTWF+9lOLcSCyyvh8SDayikgOKeNO2R64SOHl4lh6s=";
   };
 
-  vendorHash = "sha256-vXQSFh9lD7iNjgUwhA4AMZ2miq/1pV8Y8QT7rcvgdCE=";
+  vendorHash = "sha256-U9Mk642wMhz/Ld/9e7FKjPm7jGR8toQB+bQi/z4GHiA=";
 
   subPackages = [
     "."

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "safishamsi";
+    owner = "Graphify-Labs";
     repo = "graphify";
     tag = "v${version}";
     hash = "sha256-QEzB1tFBqGhpmI7oudMRC1Ia0CDcm+GYt6AgxMA5zDo=";
@@ -84,8 +84,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "AI coding assistant skill. Turn any folder of code, docs, papers, images, or videos into a queryable knowledge graph.";
-    homepage = "https://github.com/safishamsi/graphify";
-    changelog = "https://github.com/safishamsi/graphify/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Graphify-Labs/graphify";
+    changelog = "https://github.com/Graphify-Labs/graphify/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stunkymonkey ];
     mainProgram = "graphify";

@@ -1,4 +1,5 @@
 import base64
+import datetime as dt
 import io
 import os
 import platform
@@ -22,6 +23,12 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.duration import (
+    Duration,
+    _warn_if_numeric_duration,
+    as_seconds,
+    as_timedelta,
+)
 from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
@@ -99,24 +106,46 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
-def retry(fn: Callable, timeout_seconds: int = 900) -> None:
+def retry(
+    fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
+    timeout: dt.timedelta | None = None,
+) -> None:
     """Call the given function repeatedly, with a one second interval between
     retries, until it returns True or a timeout is reached.
 
     Note that the timeout shown will include the time of the last attempted run.
+
+    Has a default timeout of 15 minutes which can be modified.
+    The ``timeout_seconds`` argument is deprecated. Use ``timeout`` instead.
     """
+    if timeout_seconds is not None:
+        if timeout is not None:
+            raise TypeError(
+                "retry() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
+            )
+        if not isinstance(timeout_seconds, dt.timedelta):
+            warnings.warn(
+                "retry(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
+            )
+        timeout = as_timedelta(timeout_seconds)
+
+    if timeout is None:
+        timeout = dt.timedelta(minutes=15)
     start_time = time.monotonic()
 
-    while time.monotonic() - start_time < timeout_seconds:
+    def elapsed() -> dt.timedelta:
+        return dt.timedelta(seconds=time.monotonic() - start_time)
+
+    while elapsed() < timeout:
         if fn(False):
             return
         time.sleep(1)
 
-    elapsed = time.monotonic() - start_time
-
     if not fn(True):
         raise RequestedAssertionFailed(
-            f"action timed out after {elapsed:.2f} seconds (timeout={timeout_seconds})"
+            f"action timed out after {elapsed().total_seconds():.2f} seconds "
+            f"(timeout={timeout.total_seconds()})"
         )
 
 
@@ -341,13 +370,17 @@ class BaseMachine(ABC):
         return self.execute(f"systemctl {q}")
 
     def wait_for_unit(
-        self, unit: str, user: str | None = None, timeout: int = 900
+        self,
+        unit: str,
+        user: str | None = None,
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as after
         timing out.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_unit")
 
         def check_active(_last_try: bool) -> bool:
             state = self.get_unit_property(unit, "ActiveState", user)
@@ -369,7 +402,7 @@ class BaseMachine(ABC):
             f"waiting for unit {unit}"
             + (f" with user {user}" if user is not None else "")
         ):
-            retry(check_active, timeout)
+            retry(check_active, as_timedelta(timeout))
 
     def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
         """
@@ -443,13 +476,14 @@ class BaseMachine(ABC):
                     f"'{require_state}' but it is in state '{state}'"
                 )
 
-    def succeed(self, *commands: str, timeout: int | None = None) -> str:
+    def succeed(self, *commands: str, timeout: Duration | None = None) -> str:
         """
         Execute a shell command, raising an exception if the exit status is
         not zero, otherwise returning the standard output. Similar to `execute`,
         except that the timeout is `None` by default. See `execute` for details on
         command execution.
         """
+        _warn_if_numeric_duration(timeout, "succeed")
         output = ""
         for command in commands:
             with self.nested(f"must succeed: {command}"):
@@ -462,11 +496,12 @@ class BaseMachine(ABC):
                 output += out
         return output
 
-    def fail(self, *commands: str, timeout: int | None = None) -> str:
+    def fail(self, *commands: str, timeout: Duration | None = None) -> str:
         """
         Like `succeed`, but raising an exception if the command returns a zero
         status.
         """
+        _warn_if_numeric_duration(timeout, "fail")
         output = ""
         for command in commands:
             with self.nested(f"must fail: {command}"):
@@ -478,14 +513,23 @@ class BaseMachine(ABC):
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(
+        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> str:
         """
-        Repeat a shell command with 1-second intervals until it succeeds.
-        Has a default timeout of 900 seconds which can be modified, e.g.
-        `wait_until_succeeds(cmd, timeout=10)`. See `execute` for details on
-        command execution.
+        Repeat a shell command on 1-second intervals until it succeeds.
+        Has a default timeout of 15 minutes which can be modified.
+        Example:
+            ```py
+            import datetime as dt
+
+            wait_until_succeeds(cmd, timeout=dt.timedelta(seconds=10))
+            ```
+        A bare number is still accepted and interpreted as a number of seconds.
+        See `execute` for details on command execution.
         Throws an exception on timeout.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_succeeds")
         output = ""
 
         def check_success(_last_try: bool) -> bool:
@@ -494,13 +538,16 @@ class BaseMachine(ABC):
             return status == 0
 
         with self.nested(f"waiting for success: {command}"):
-            retry(check_success, timeout)
+            retry(check_success, as_timedelta(timeout))
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(
+        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> str:
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_fails")
         output = ""
 
         def check_failure(_last_try: bool) -> bool:
@@ -509,47 +556,76 @@ class BaseMachine(ABC):
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
-            retry(check_failure, timeout)
+            retry(check_failure, as_timedelta(timeout))
             return output
 
-    def sleep(self, secs: int) -> None:
-        # We want to sleep in *guest* time, not *host* time.
-        self.succeed(f"sleep {secs}")
+    def sleep(
+        self,
+        secs: dt.timedelta | int | None = None,
+        duration: dt.timedelta | None = None,
+    ) -> None:
+        if secs is not None:
+            if duration is not None:
+                raise TypeError(
+                    "sleep() got both 'duration' and 'secs'. Pass only 'duration'"
+                )
+            if not isinstance(secs, dt.timedelta):
+                warnings.warn(
+                    "sleep(): The 'secs' argument is deprecated. Use 'duration' instead.",
+                )
+            duration = as_timedelta(secs)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+        if duration is None:
+            raise TypeError("sleep() missing required argument 'duration'")
+
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {as_seconds(duration)}")
+
+    def wait_for_file(
+        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_file")
 
         def check_file(_last_try: bool) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
-            retry(check_file, timeout)
+            retry(check_file, as_timedelta(timeout))
 
     def wait_for_open_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self,
+        port: int,
+        addr: str = "localhost",
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
         (default `localhost`).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_open_port")
 
         def port_is_open(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
 
         with self.nested(f"waiting for TCP port {port} on {addr}"):
-            retry(port_is_open, timeout)
+            retry(port_is_open, as_timedelta(timeout))
 
     def wait_for_open_unix_socket(
-        self, addr: str, is_datagram: bool = False, timeout: int = 900
+        self,
+        addr: str,
+        is_datagram: bool = False,
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until a process is listening on the given UNIX-domain socket
         (default to a UNIX-domain stream socket).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_open_unix_socket")
 
         nc_flags = [
             "-z",
@@ -563,22 +639,26 @@ class BaseMachine(ABC):
         with self.nested(
             f"waiting for UNIX-domain {'datagram' if is_datagram else 'stream'} on '{addr}'"
         ):
-            retry(socket_is_open, timeout)
+            retry(socket_is_open, as_timedelta(timeout))
 
     def wait_for_closed_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self,
+        port: int,
+        addr: str = "localhost",
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until nobody is listening on the given TCP port and IP address
         (default `localhost`).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_closed_port")
 
         def port_is_closed(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
 
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
-            retry(port_is_closed, timeout)
+            retry(port_is_closed, as_timedelta(timeout))
 
     def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         """
@@ -597,7 +677,7 @@ class BaseMachine(ABC):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: Duration | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
@@ -627,16 +707,23 @@ class BaseMachine(ABC):
         the machine and would therefore break the pipe that would be used for
         retrieving the return code.
 
-        A timeout for the command can be specified (in seconds) using the optional
-        `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
-        `execute(cmd, timeout=None)`. The default is 900 seconds.
+        Has a default timeout of 15 minutes which can be modified.
+        Example:
+            ```py
+            import datetime as dt
+
+            execute(cmd, timeout=dt.timedelta(seconds=10))
+            execute(cmd, timeout=None)
+            ```
+        A bare number is still accepted and interpreted as a number of seconds.
         """
+        _warn_if_numeric_duration(timeout, "execute")
         self.run_callbacks()
         return self._execute(
             command=command,
             check_return=check_return,
             check_output=check_output,
-            timeout=timeout,
+            timeout=as_timedelta(timeout) if timeout is not None else None,
         )
 
     @abstractmethod
@@ -645,7 +732,7 @@ class BaseMachine(ABC):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]: ...
 
     def run_callbacks(self) -> None:
@@ -660,25 +747,22 @@ class BaseMachine(ABC):
     def copy_from_machine(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the machine (specified by an in-machine source path) to a path
         relative to `$out`. The file is copied via the `shared_dir` shared among
-        all the machines (using a temporary directory).
+        all the machines.
         """
         # Compute the source, target, and intermediate shared file names
         vm_src = Path(source)
-        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = Path(shared_td)
-            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
-            vm_intermediate = vm_shared_temp / vm_src.name
-            intermediate = shared_temp / vm_src.name
-            # Copy the file to the shared directory inside machines
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
-            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = self.out_dir / target_dir / vm_src.name
-            abs_target.parent.mkdir(exist_ok=True, parents=True)
-            # Copy the file from the shared directory outside machines
-            if intermediate.is_dir():
-                shutil.copytree(intermediate, abs_target)
-            else:
-                shutil.copy(intermediate, abs_target)
+        vm_intermediate = Path("/tmp/shared") / target_dir / vm_src.name
+        intermediate = self.shared_dir / target_dir / vm_src.name
+        # Copy the file to the shared directory inside machines
+        self.succeed(make_command(["mkdir", "-p", vm_intermediate.parent]))
+        self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+        abs_target = self.out_dir / target_dir / vm_src.name
+        abs_target.parent.mkdir(exist_ok=True, parents=True)
+        # Copy the file from the shared directory outside machines
+        if intermediate.is_dir():
+            shutil.copytree(intermediate, abs_target)
+        else:
+            shutil.copy(intermediate, abs_target)
 
     @warnings.deprecated("Use copy_from_machine() instead")
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
@@ -864,10 +948,13 @@ class QemuMachine(BaseMachine):
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_tty_matches")
         matcher = re.compile(regexp)
 
         def tty_matches(last_try: bool) -> bool:
@@ -880,7 +967,7 @@ class QemuMachine(BaseMachine):
             return len(matcher.findall(text)) > 0
 
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
-            retry(tty_matches, timeout)
+            retry(tty_matches, as_timedelta(timeout))
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
@@ -891,7 +978,7 @@ class QemuMachine(BaseMachine):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         self.connect()
 
@@ -900,7 +987,7 @@ class QemuMachine(BaseMachine):
 
         timeout_str = ""
         if timeout is not None:
-            timeout_str = f"timeout {timeout}"
+            timeout_str = f"timeout {timeout.total_seconds()}"
 
         # While sh is bash on NixOS, this is not the case for every distro.
         # We explicitly call bash here to allow for the driver to boot other distros as well.
@@ -992,7 +1079,9 @@ class QemuMachine(BaseMachine):
             self.connected = False
 
     def wait_for_qmp_event(
-        self, event_filter: Callable[[dict[str, Any]], bool], timeout: int = 60 * 10
+        self,
+        event_filter: Callable[[dict[str, Any]], bool],
+        timeout: Duration = dt.timedelta(minutes=10),
     ) -> dict[str, Any]:
         """
         Wait for a QMP event which you can filter with the `event_filter` function.
@@ -1002,56 +1091,64 @@ class QemuMachine(BaseMachine):
         It will skip all events received in the meantime, if you want to keep them,
         you have to do the bookkeeping yourself and store them somewhere.
 
-        By default, it will wait up to 10 minutes, `timeout` is in seconds.
+        By default, it will wait up to 10 minutes.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_qmp_event")
         if self.qmp_client is None:
             raise RuntimeError("QMP API is not ready yet, is the VM ready?")
 
-        start = time.time()
+        timeout = as_timedelta(timeout)
+        start = time.monotonic()
         while True:
             evt = self.qmp_client.wait_for_event(timeout=timeout)
             if event_filter(evt):
                 return evt
 
-            elapsed = time.time() - start
+            elapsed = dt.timedelta(seconds=time.monotonic() - start)
             if elapsed >= timeout:
                 raise TimeoutError
 
-    def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
+    def send_chars(
+        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
+    ) -> None:
         r"""
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
         followed by the Enter key.
         """
+        _warn_if_numeric_duration(delay, "send_chars")
         with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
                 self.send_key(char, delay, log=False)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+    def wait_for_file(
+        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_file")
 
         def check_file(_last_try: bool) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
-            retry(check_file, timeout)
+            retry(check_file, as_timedelta(timeout))
 
     def connect(self) -> None:
         """
         Wait for a connection to the guest root shell
         """
 
-        def shell_ready(timeout_secs: int) -> bool:
+        def shell_ready(timeout: dt.timedelta) -> bool:
             """We sent some data from the backdoor service running on the guest
             to indicate that the backdoor shell is ready.
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
             assert self.shell
-            (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
+            (ready, _, _) = select.select([self.shell], [], [], timeout.total_seconds())
             return bool(ready)
 
         if self.connected:
@@ -1065,7 +1162,7 @@ class QemuMachine(BaseMachine):
             tic = time.time()
 
             for _ in range(10):
-                if shell_ready(timeout_secs=30):
+                if shell_ready(timeout=dt.timedelta(seconds=30)):
                     break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
@@ -1150,7 +1247,9 @@ class QemuMachine(BaseMachine):
         with self._managed_screenshot() as screenshot_path:
             return perform_ocr_on_screenshot(screenshot_path)
 
-    def wait_for_text(self, regex: str, timeout: int = 900) -> None:
+    def wait_for_text(
+        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
@@ -1160,6 +1259,7 @@ class QemuMachine(BaseMachine):
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "wait_for_text")
 
         def screen_matches(last_try: bool) -> bool:
             variants = self.get_screen_text_variants()
@@ -1173,9 +1273,11 @@ class QemuMachine(BaseMachine):
             return False
 
         with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches, timeout)
+            retry(screen_matches, as_timedelta(timeout))
 
-    def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
+    def wait_for_console_text(
+        self, regex: str, timeout: Duration | None = None
+    ) -> None:
         """
         Wait until the supplied regular expressions match a line of the
         serial console output.
@@ -1183,6 +1285,7 @@ class QemuMachine(BaseMachine):
 
         When this method returns, the console output that includes the match has already become part of get_console_log().
         """
+        _warn_if_numeric_duration(timeout, "wait_for_console_text")
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
@@ -1203,7 +1306,7 @@ class QemuMachine(BaseMachine):
 
         with self.nested(f"waiting for {regex} to appear on console"):
             if timeout is not None:
-                retry(console_matches, timeout)
+                retry(console_matches, as_timedelta(timeout))
             else:
                 console_matches(False, block=True)
 
@@ -1215,7 +1318,10 @@ class QemuMachine(BaseMachine):
         return "\n".join(self.full_console_log)
 
     def send_key(
-        self, key: str, delay: float | None = 0.01, log: bool | None = True
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
     ) -> None:
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
@@ -1224,12 +1330,13 @@ class QemuMachine(BaseMachine):
         Please also refer to the QEMU documentation for more information on the
         input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
         """
+        _warn_if_numeric_duration(delay, "send_key")
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
         with context:
             self.send_monitor_command(f"sendkey {key}")
             if delay is not None:
-                time.sleep(delay)
+                time.sleep(as_seconds(delay))
 
     def send_console(self, chars: str) -> None:
         r"""
@@ -1358,10 +1465,11 @@ class QemuMachine(BaseMachine):
         self.send_key("ctrl-alt-delete")
         self.connected = False
 
-    def wait_for_x(self, timeout: int = 900) -> None:
+    def wait_for_x(self, timeout: Duration = dt.timedelta(minutes=15)) -> None:
         """
         Wait until it is possible to connect to the X server.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_x")
 
         def check_x(_last_try: bool) -> bool:
             cmd = (
@@ -1375,18 +1483,21 @@ class QemuMachine(BaseMachine):
             return status == 0
 
         with self.nested("waiting for the X11 server"):
-            retry(check_x, timeout)
+            retry(check_x, as_timedelta(timeout))
 
     def get_window_names(self) -> list[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
+    def wait_for_window(
+        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_window")
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -1400,7 +1511,7 @@ class QemuMachine(BaseMachine):
             return any(pattern.search(name) for name in names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible, timeout)
+            retry(window_is_visible, as_timedelta(timeout))
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """
@@ -1650,7 +1761,7 @@ class NspawnMachine(BaseMachine):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         self.start()
 
@@ -1682,7 +1793,7 @@ class NspawnMachine(BaseMachine):
                 command,
             ],
             env={},
-            timeout=timeout,
+            timeout=timeout.total_seconds() if timeout is not None else None,
             stdout=subprocess.PIPE,
             text=True,
         )

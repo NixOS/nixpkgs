@@ -5,23 +5,28 @@
   pkg-config,
   autoreconfHook,
   file,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exfatprogs";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "exfatprogs";
     repo = "exfatprogs";
-    rev = finalAttrs.version;
-    sha256 = "sha256-eXJg4mMYydOpYVgOup7WJze0qx6RVkia0xSZOlG+IOQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-c1tdSX/xpZw56B7LPWwvKI7U6xk55lDc7D0k5FI7zwQ";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
     file
+  ];
+
+  buildInputs = [
+    util-linux
   ];
 
   outputs = [

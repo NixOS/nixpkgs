@@ -50,13 +50,13 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "openobserve";
-    version = "0.91.1";
+    version = "0.91.5";
 
     src = fetchFromGitHub {
       owner = "openobserve";
       repo = "openobserve";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-4Oe1YRblkJg9aNG/aLvP89zrHIysA67GP7GN7oCTdd8=";
+      hash = "sha256-3K6xaXFmhWY0ElqiFgR8mEi0XUVBF/cRNwONqLhniPc=";
     };
 
     patches = [

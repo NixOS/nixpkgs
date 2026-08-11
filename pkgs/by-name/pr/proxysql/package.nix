@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./makefiles.patch
     ./dont-phone-home.patch
+    ./btree-cstdint.patch
   ];
 
   nativeBuildInputs = [

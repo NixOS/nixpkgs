@@ -15,20 +15,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blinkpy";
-  version = "0.25.7";
+  version = "0.25.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/GaSnovF6IwIKdbQ4bTqXI/lZERa2DhbLalOO+ZYXEY=";
+    hash = "sha256-D85AXTvpIZhWhY6wZefe7tcdk9RJrYdBM1hdyN0Vsas=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "wheel>=0.40,<0.48" wheel \
-      --replace-fail "setuptools>=68,<83" setuptools
+      --replace-fail "setuptools>=68,<84" setuptools
   '';
 
   build-system = [ setuptools ];

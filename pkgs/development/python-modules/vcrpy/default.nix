@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pytest-asyncio,
   pytest-httpbin,
   pytestCheckHook,
   pyyaml,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "8.2.1";
+  version = "8.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "vcrpy";
     tag = "v${version}";
-    hash = "sha256-PlpbBzAj9a4bAfORGozAAsbrzngJt2Pnnp3bI96wYfI=";
+    hash = "sha256-WQLWUr1EgOibdAVVASxMzeFi1YikYAjjye/NtCEJ6Kk=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-httpbin
     pytestCheckHook
   ];

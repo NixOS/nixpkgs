@@ -1,0 +1,22 @@
+--- a/tclh/include/errnoname.c
++++ b/tclh/include/errnoname.c
+@@ -394,7 +394,9 @@ char const * errnoname(int errno_)
+         [EFRAGS] = "EFRAGS",
+     #endif
+     #ifdef EFSCORRUPTED
++        #if !defined(EUCLEAN) || EFSCORRUPTED != EUCLEAN
+         [EFSCORRUPTED] = "EFSCORRUPTED",
++        #endif
+     #endif
+     #ifdef EFTYPE
+         [EFTYPE] = "EFTYPE",
+@@ -1813,7 +1815,9 @@ char const * errnoname(int errno_)
+         case EFRAGS: return "EFRAGS";
+     #endif
+     #ifdef EFSCORRUPTED
++        #if !defined(EUCLEAN) || EFSCORRUPTED != EUCLEAN
+         case EFSCORRUPTED: return "EFSCORRUPTED";
++        #endif
+     #endif
+     #ifdef EFTYPE
+         case EFTYPE: return "EFTYPE";

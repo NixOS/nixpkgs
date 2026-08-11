@@ -91,6 +91,7 @@ in
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          cosmic-sound-theme
           glib
           hicolor-icon-theme
           networkmanagerapplet

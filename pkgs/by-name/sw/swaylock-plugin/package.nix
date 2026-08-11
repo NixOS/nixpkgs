@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Screen locker for Wayland, forked from swaylock";
     longDescription = ''
-      swaylock-pulgins is a fork of swaylock, a screen locking utility for Wayland compositors.
+      swaylock-plugin is a fork of swaylock, a screen locking utility for Wayland compositors.
       On top of the usual swaylock features, it allow you to use a
       subcommand to generate the lockscreen background.
 

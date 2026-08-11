@@ -26,7 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Common Lisp launcher script";
-    license = lib.licenses.llgpl21;
+    license =
+      with lib.licenses;
+      OR [
+        (WITH lgpl21Only llgplPreamble)
+        bugroff
+      ];
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };

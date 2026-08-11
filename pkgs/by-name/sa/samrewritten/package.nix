@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "1.4.4";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WYwuYNbapD0cIifQALtfgMNqXs5KMvaCsQqUdifJwf8=";
+    hash = "sha256-IUiEr9JfxZb3FBfQGoN3Ck7I7Ypk6SGIlI2oj3sbsvc=";
   };
 
-  cargoHash = "sha256-dh4WPk6rU/HsUVJTMrMPsqKXpOmb/0LUAsGTbmdI6Ts=";
+  cargoHash = "sha256-XA/7wcYUmDf0+Ku3vSpzpuRBZGepiH5+dYgOh2T0Akw=";
 
   # Tests require network access and a running Steam client. Skipping.
   doCheck = false;

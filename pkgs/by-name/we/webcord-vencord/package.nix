@@ -1,6 +1,6 @@
 {
   # allow overriding electron
-  electron_42,
+  electron_43,
   webcord,
   replaceVars,
   lib,
@@ -8,7 +8,7 @@
 }:
 
 # nixpkgs-update: no auto update
-(webcord.override { inherit electron_42; }).overrideAttrs (old: {
+(webcord.override { inherit electron_43; }).overrideAttrs (old: {
   pname = "webcord-vencord";
 
   patches = (old.patches or [ ]) ++ [

@@ -103,7 +103,7 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
 
-    # Fix more granular dtype resultion in Pandas 3.0
+    # Fix more granular dtype resolution in Pandas 3.0
     ./pandas3-compat.patch
   ];
 

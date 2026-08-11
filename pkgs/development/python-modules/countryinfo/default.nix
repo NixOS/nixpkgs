@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pydantic,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   typer,
 }:
@@ -28,6 +29,8 @@ buildPythonPackage (finalAttrs: {
     pydantic
     typer
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   pythonImportsCheck = [ "countryinfo" ];
 

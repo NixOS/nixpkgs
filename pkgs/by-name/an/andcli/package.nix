@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "andcli";
-  version = "2.7.0";
+  version = "2.8.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "tjblackheart";
     repo = "andcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l+ZpAm+yHCKPalGib4OlIaGFsDHc3IFFlOvB1kXWZG0=";
+    hash = "sha256-BVF+r8N+/PvARxANlL7nPf23ABbp+O1DNPblMyXroq8=";
   };
 
-  vendorHash = "sha256-S2JRkVy1iLGBqoOWukTQm80fVJ2YMNHTLfUUA2530GE=";
+  vendorHash = "sha256-aFOwfloqFPPMgCufwmDgfM9lDinkFvu4i+BiVUo+Iwk=";
 
   ldflags = [
     "-s"

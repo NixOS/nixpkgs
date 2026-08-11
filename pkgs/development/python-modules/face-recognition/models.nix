@@ -2,7 +2,7 @@
   buildPythonPackage,
   lib,
   fetchPypi,
-  setuptools_80,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -16,7 +16,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-t5vSAKiMh8mp1EbJkK5xxaYm0fNzAXTm1XAVf/HYls8=";
   };
 
-  build-system = [ setuptools_80 ];
+  patches = [
+    # Replace deprecated pkg_resources with importlib.resources
+    # https://github.com/ageitgey/face_recognition_models/pull/24
+    ./0001-use-importlib-resources.patch
+  ];
+
+  build-system = [ setuptools ];
 
   # no tests
   doCheck = false;

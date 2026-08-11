@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
-  version = "1.14.2";
+  version = "1.15.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g8URLqh7VXlb5vvpkiUUfE6cgtkMwYNGzs26iUtg28A=";
+    hash = "sha256-cP13HRNa17KL5ZE6if8QmoyKQBLf8ckAa0bOaioEOgE=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
     (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
     (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
+
+    # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+    # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+    # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+    (lib.cmakeBool "FAISS_ENABLE_METAL" false)
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)

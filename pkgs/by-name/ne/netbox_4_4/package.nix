@@ -66,7 +66,7 @@ py.pkgs.buildPythonApplication rec {
         social-auth-app-django
         sorl-thumbnail
         strawberry-graphql
-        strawberry-django
+        strawberry-graphql-django
         svgwrite
         tablib
 

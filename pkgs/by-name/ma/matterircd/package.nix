@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "matterircd";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-W00q5bRzCXl9R56xGol1bWYeW5w5MUpcoraKVaKimyk=";
+    sha256 = "sha256-ZlWXPyAK/Z8u3RHp/BwjhkAHT2VFzU1+G9SKGgRf6n8=";
   };
 
   vendorHash = null;

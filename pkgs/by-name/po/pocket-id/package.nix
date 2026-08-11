@@ -14,18 +14,18 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.10.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ad8YlWwWeGEwsrx29qpq1asEr4UNN7BueGTBPfFrRuE=";
+    hash = "sha256-n9yqZs8RlgJk+NByRJ7a+HRY4YkQNNH7xY02BSy/RhE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-bQNeocRCmhiV7gwCJppjsNw7K5MnsJMK9M18jf0X/oM=";
+  vendorHash = "sha256-BGIF9ZhPAJrUvX1cahe3EyWM3QLIfkkZaChaBign7io=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -38,12 +38,11 @@ buildGo127Module (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking
-    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+    "-tags=unit"
   ];
 
   # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
@@ -67,7 +66,7 @@ buildGo127Module (finalAttrs: {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-LVhTS3ertpGqLMsoodaoEgDb7sK3kTRTVB3KOyvJwpE=";
+      hash = "sha256-iXWR3idBiafZXCrt1M7UCJQJsA+IL2AU6pRJI7MdY1E=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
@@ -107,6 +106,7 @@ buildGo127Module (finalAttrs: {
       marcusramberg
       tmarkus
       ymstnt
+      esch
     ];
     platforms = lib.platforms.unix;
   };

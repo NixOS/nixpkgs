@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gnome-themes-extra,
-  gtk-engine-murrine,
   gtk3,
   sassc,
 }:
@@ -26,10 +25,6 @@ stdenvNoCC.mkDerivation {
     # remove when merged
     # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/35
     ./gtk3-remove-border-spacing.patch
-  ];
-
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
   ];
 
   buildInputs = [
@@ -71,7 +66,7 @@ stdenvNoCC.mkDerivation {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jn-sena ];
+    maintainers = with lib.maintainers; [ poz ];
     platforms = lib.platforms.unix;
   };
 }

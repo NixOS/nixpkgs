@@ -1,4 +1,4 @@
-#!@python3@/bin/python3 -B
+#!@python3@/bin/python3 -BP
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple

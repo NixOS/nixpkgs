@@ -92,6 +92,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
+    problems.removal = {
+      message = "Unpaid tier and Google AI Pro/Ultra users: Gemini CLI was replaced by Antigravity CLI.";
+      urls = [
+        "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+      ];
+    };
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ljxfstorm ];
     mainProgram = "gemini";

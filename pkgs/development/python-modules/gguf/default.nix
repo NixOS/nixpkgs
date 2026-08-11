@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   numpy,
@@ -33,6 +34,8 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/gguf-py";
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     numpy

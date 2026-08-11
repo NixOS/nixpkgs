@@ -30,8 +30,9 @@ let
       lib.switch
         [ coq.coq-version mathcomp.version ]
         [
-          (case (range "8.20" "9.1") (isGe "2.3.0") "2.1.1")
-          (case (range "8.20" "9.1") (isGe "2.3.0") "2.1.0")
+          (case (range "9.0" "9.3") (isGe "2.5.0") "2.1.2")
+          (case (range "8.20" "9.1") (range "2.3.0" "2.5.0") "2.1.1")
+          (case (range "8.20" "9.1") (range "2.3.0" "2.5.0") "2.1.0")
           (case (range "8.16" "8.20") (isGe "2.1.0") "2.0.3")
           (case (range "8.16" "8.20") (isGe "2.0.0") "2.0.1")
           (case (range "8.16" "8.17") (isGe "2.0.0") "2.0.0")
@@ -44,6 +45,7 @@ let
         ]
         null;
 
+    release."2.1.2".hash = "sha256-ktoejlxAtbPzWGdW+DXwLSAmxNHDzQTujkY1If4EM8E=";
     release."2.1.1".hash = "sha256-nAQAX35W9br7dgrT9FqGyHYSzwgMiMsuD1d7SztQDwY=";
     release."2.1.0".hash = "sha256-UoDxy2BKraDyRsO42GXRo26O74OF51biZQGkIMWLf8Y=";
     release."2.0.3".hash = "sha256-5lDq7IWlEW0EkNzYPu+dA6KOvRgy53W/alikpDr/Kd0=";
@@ -58,7 +60,6 @@ let
     release."1.0.3".hash = "sha256:0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
 
     propagatedBuildInputs = [
-      mathcomp.ssreflect
       mathcomp.algebra
       bignums
       multinomials
@@ -74,10 +75,15 @@ let
       o.propagatedBuildInputs
       ++ lib.optional (lib.versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
   });
-  patched-derivation = patched-derivation1.overrideAttrs (o: {
+  patched-derivation2 = patched-derivation1.overrideAttrs (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
       ++ lib.optional (lib.versions.isLe "2.0.3" o.version && o.version != "dev") paramcoq;
   });
+  patched-derivation3 = patched-derivation2.overrideAttrs (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versions.isLe "2.1.1" o.version && o.version != "dev") mathcomp.ssreflect;
+  });
 in
-patched-derivation
+patched-derivation3

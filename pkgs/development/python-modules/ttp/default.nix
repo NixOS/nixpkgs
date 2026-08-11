@@ -11,6 +11,7 @@
   openpyxl,
   pytestCheckHook,
   poetry-core,
+  pyprojectVersionPatchHook,
   pyyaml,
   tabulate,
   ttp-templates,
@@ -29,7 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-A0McQRpSjr0EYIrHQExtBqMe+AmL+IGWaRHeexyvtvg=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   propagatedBuildInputs = [
     # https://github.com/dmulyalin/ttp/blob/master/docs/source/Installation.rst#additional-dependencies

@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  click,
   filelock,
   fsspec,
   hf-xet,
@@ -14,7 +15,6 @@
   packaging,
   pyyaml,
   tqdm,
-  typer,
   typing-extensions,
 
   # optional-dependencies
@@ -28,6 +28,10 @@
   # gradio
   gradio,
   requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
   # mcp
   mcp,
 
@@ -37,19 +41,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.10.2";
+  version = "1.26.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9N0QnxV8oJcxUsJzv4wX8Z6FkNdEfUH5BEVoZolsRY=";
+    hash = "sha256-JF0hWsDO0ERiTwFJ9pu1ImuD+ggWySg/zeU/c++GEXE=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
+    click
     filelock
     fsspec
     hf-xet
@@ -57,19 +66,12 @@ buildPythonPackage (finalAttrs: {
     packaging
     pyyaml
     tqdm
-    typer
     typing-extensions
   ];
 
   optional-dependencies = {
     all = [
-
     ];
-    torch = [
-      torch
-      safetensors
-    ]
-    ++ safetensors.optional-dependencies.torch;
     fastai = [
       toml
       fastai
@@ -85,6 +87,17 @@ buildPythonPackage (finalAttrs: {
     mcp = [
       mcp
     ];
+    oauth = [
+      authlib
+      fastapi
+      httpx
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
   };
 
   nativeCheckInputs = [

@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "basiliskii";
-  version = "unstable-2026-06-30";
+  version = "1.0.0-unstable-2026-06-30";
 
   # This src is also used to build pkgs/os-specific/linux/sheep-net
   # Therefore changes to it may effect the sheep-net package
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "68k Macintosh emulator";
     homepage = "https://basilisk.cebix.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ quag ];
     platforms = lib.platforms.linux;
     mainProgram = "BasiliskII";

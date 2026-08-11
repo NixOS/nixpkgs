@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.security.account-utils;
+  format = pkgs.formats.ini { };
 in
 {
   options.security.account-utils = {
@@ -24,6 +25,16 @@ in
         This is passed to both pwupdd and pwaccessd, which support identical flags.
         :::
       '';
+    };
+    pwaccessd.settings = lib.mkOption {
+      description = ''
+        Options for pwaccessd.
+        See {manpage}`pwaccessd.conf(5)` for available options.
+      '';
+      type = lib.types.submodule {
+        freeformType = format.type;
+      };
+      default = { };
     };
   };
 
@@ -44,6 +55,8 @@ in
     };
 
     environment.systemPackages = [ cfg.package ];
+    environment.etc."account-utils/pwaccessd.conf".source =
+      format.generate "pwaccessd.conf" cfg.pwaccessd.settings;
 
     security.pam.services = {
       pwupd-passwd = { };

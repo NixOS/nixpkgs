@@ -5,6 +5,7 @@
   hatchling,
   httpx,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -14,15 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fressnapftracker";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "fressnapftracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gJsE/1HnUXEDa5Y7eLtHexx+G00MGQDZJu3pui9OeMM=";
+    hash = "sha256-4ZsK/yW+E4nwP5S300FPXnfPe11fIL2ULII2SkhLAys=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

@@ -2,20 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pycryptodome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "temescal";
   version = "0.5";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "temescal";
+    inherit (finalAttrs) version;
     hash = "sha256-MfTftheNj8zI3iXIIJU+jy9xikvX9eO58LA0NCMJBnY=";
   };
 
-  propagatedBuildInputs = [ pycryptodome ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pycryptodome ];
 
   # Module has no tests
   doCheck = false;
@@ -28,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

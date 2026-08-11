@@ -4,8 +4,7 @@
   lib,
   bats,
   fetchFromGitHub,
-  fetchpatch,
-  python,
+  fetchpatch2,
   buildPythonApplication,
   callPackage,
   kicad,
@@ -49,10 +48,16 @@ buildPythonApplication (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-stencil-arc-numpy2.patch";
-      url = "https://github.com/yaqwsx/KiKit/commit/036ca08fc380dd2c5b8b3ba2adc4215f4114e975.patch?full_index=1";
-      hash = "sha256-AmvH822nAubqVhl1PEKvE0Ij/K0NrBsSvnMUJXgxmfI=";
+    # Remove when new release is tagged
+    # NOTE: not bumping the above with a `rev = latest git commit`
+    # because versioneer doesn't handle non-semver versions
+    # packaging.version.InvalidVersion: Invalid version: '1.8.0-unstable-2026-07-23'
+    # https://github.com/yaqwsx/KiKit/issues/925
+    # NOTE: .patch doesn't apply so using diff
+    (fetchpatch2 {
+      name = "fix-zone-duplication-on-kicad-10.0.5-and-numpy2-stencil-arc.diff";
+      url = "https://github.com/yaqwsx/KiKit/compare/6eb4e7aed72165c0179af485a1a1de2d98abfe95..054ac1a5be281e8d74052d3195ad5fb0a701a2ec.diff";
+      hash = "sha256-uN6FjhqCLgfZnyGLGg7j1FxHo/nUWYQ6rYVx7kUXh7g=";
     })
   ];
 
@@ -95,9 +100,21 @@ buildPythonApplication (finalAttrs: {
   ];
 
   # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-  # should be done in postInstall to overwrite what versioneer generates again during the build phase
-  postInstall = ''
-    echo 'def get_versions(): return {"version": "${finalAttrs.version}"}' > $out/${python.sitePackages}/kikit/_version.py
+  # Must include version_json block because versioneer uses regex parsing on this file.
+  postPatch = ''
+    cat > kikit/_version.py <<'EOF'
+    # DO NOT EDIT! nixpkgs GENERATED FILE
+    import json
+
+    version_json = ''''
+    {
+     "version": "${finalAttrs.version}"
+    }
+    ''''  # END VERSION_JSON
+
+    def get_versions():
+        return json.loads(version_json)
+    EOF
   '';
 
   preCheck = ''

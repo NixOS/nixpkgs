@@ -11,6 +11,7 @@
   webkitgtk_6_0,
   blueprint-compiler,
   evolution-data-server-gtk4,
+  glib-networking,
   gst_all_1,
   libportal-gtk4,
   libpsl,
@@ -44,6 +45,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     evolution-data-server-gtk4
+    glib-networking
     gst_all_1.gstreamer
     libadwaita
     libportal-gtk4

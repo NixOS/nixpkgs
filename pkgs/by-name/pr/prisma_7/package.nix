@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   prisma-engines_7,
   jq,
   makeWrapper,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma_7";
-  version = "7.8.0";
+  version = "7.9.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     tag = finalAttrs.version;
-    hash = "sha256-89q5433z54h3oGX+lEYDQykN2mNltGz4+LWlYSE75/E=";
+    hash = "sha256-h89lJbGG2ZkK3Viipsqe8hqTSTZk6vEulaMLPPkgn8c=";
   };
 
   nativeBuildInputs = [
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     jq
     makeWrapper
     moreutils
-    pnpm_10
+    pnpm_11
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-mrFU5SAF4QuTBJj5TP8tUkYDG4zchttjcQMLtx6OBnI=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-EEfVAdF6QawXV95NUmEL9IqzPqazCz47Y9Hg/F6IybU=";
   };
 
   patchPhase = ''

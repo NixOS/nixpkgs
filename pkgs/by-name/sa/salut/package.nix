@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "salut";
-  version = "unstable-2022-12-17";
+  version = "3.0.1-unstable-2022-12-17";
 
   src = fetchFromGitLab {
     owner = "snakedye";

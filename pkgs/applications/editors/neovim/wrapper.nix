@@ -46,7 +46,7 @@ let
       withPerl ? false,
       withRuby ? false,
 
-      # wether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
+      # whether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
       vimAlias ? false,
       viAlias ? false,
 

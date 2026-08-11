@@ -1,10 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  flutter335,
+  flutter344,
+  stdenv,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
+  rustPlatform,
+  writeText,
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
@@ -13,7 +16,7 @@
 
 let
   pname = "flclash";
-  version = "0.8.92";
+  version = "0.8.94";
 
   src = fetchFromGitHub {
     owner = "chen08209";
@@ -24,7 +27,7 @@ let
       export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
       export GIT_CONFIG_VALUE_0=git@github.com:
     '';
-    hash = "sha256-bPz2QNwhlCZBmjU0ZpRTwNk0TKVTIHH4E6ZJ5+rtaTk=";
+    hash = "sha256-kLSyLsnTzYspPQ2IZRGdUjHouFKvZWTvuYdcGxLWPdw=";
     fetchSubmodules = true;
   };
 
@@ -41,21 +44,39 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-/p/Z5vIstuerR5jA0vXXLURSoPqS7IDEIXCa/SFCrLc=";
+    vendorHash = "sha256-sf8PXdkqgq/0hxbxP26a73XLT88tGiH5NDV6LoiHuZM=";
 
     env.CGO_ENABLED = 0;
 
     buildPhase = ''
       runHook preBuild
 
-      mkdir -p $out/bin
+      mkdir --parents $out/bin
       go build -ldflags="-w -s" -tags=with_gvisor -o $out/bin/FlClashCore
 
       runHook postBuild
     '';
   };
+
+  rustApi = rustPlatform.buildRustPackage {
+    pname = "rustApi";
+    inherit version src meta;
+
+    sourceRoot = "${src.name}/plugins/rust_api/rust";
+
+    cargoHash = "sha256-8zY3VkbEatU78qUTDIocasw4ca/jC94NUjDvcKnkxAA=";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir --parents $out/lib
+      cp target/*/release/librust_api.so $out/lib/
+
+      runHook postInstall
+    '';
+  };
 in
-flutter335.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -75,6 +96,10 @@ flutter335.buildFlutterApplication {
 
   flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
 
+  # RustLib.init() loads librust_api.so with dlopen(), which ignores
+  # RUNPATH and only consults LD_LIBRARY_PATH
+  extraWrapProgramArgs = "--prefix LD_LIBRARY_PATH : $out/app/flclash/lib";
+
   desktopItems = [
     (makeDesktopItem {
       name = "flclash";
@@ -93,18 +118,83 @@ flutter335.buildFlutterApplication {
     })
   ];
 
+  customSourceBuilders = {
+    setup =
+      { version, src, ... }:
+      stdenv.mkDerivation {
+        pname = "setup";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch =
+          let
+            cmakeLists = writeText "CMakeLists.txt" ''
+              cmake_minimum_required(VERSION 3.10)
+              set(PROJECT_NAME "setup")
+              project(''${PROJECT_NAME} LANGUAGES CXX)
+              get_filename_component(PROJECT_ROOT "''${CMAKE_SOURCE_DIR}" DIRECTORY)
+              install(PROGRAMS "''${PROJECT_ROOT}/libclash/linux/FlClashCore"
+                DESTINATION "''${CMAKE_BINARY_DIR}/bundle"
+                COMPONENT Runtime
+              )
+            '';
+          in
+          ''
+            cp ${cmakeLists} plugins/setup/linux/CMakeLists.txt
+          '';
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir --parents $out/plugins
+          cp --recursive plugins/setup $out/plugins/
+
+          runHook postInstall
+        '';
+      };
+
+    rust_api =
+      { version, src, ... }:
+      stdenv.mkDerivation {
+        pname = "rust_api";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch =
+          let
+            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+                set("''${target}_cargokit_lib" ${rustApi}/lib/librust_api.so PARENT_SCOPE)
+              endfunction()
+            '';
+          in
+          ''
+            cp ${fakeCargokitCmake} plugins/rust_api/cargokit/cmake/cargokit.cmake
+          '';
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir --parents $out/plugins
+          cp --recursive plugins/rust_api $out/plugins/
+
+          runHook postInstall
+        '';
+      };
+  };
+
   preBuild = ''
-    mkdir -p libclash/linux
+    mkdir --parents libclash/linux
     cp ${core}/bin/FlClashCore libclash/linux/FlClashCore
   '';
 
   postInstall = ''
-    mkdir -p $out/share/icons/hicolor/512x512/apps
+    mkdir --parents $out/share/icons/hicolor/512x512/apps
     magick assets/images/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/flclash.png
   '';
 
   passthru = {
-    inherit core;
+    inherit core rustApi;
     updateScript = ./update.sh;
   };
 

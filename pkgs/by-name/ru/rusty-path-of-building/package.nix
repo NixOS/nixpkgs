@@ -95,6 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob" ];
     })
     (makeDesktopItem {
       name = "rusty-path-of-building-2";

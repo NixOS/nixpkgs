@@ -28,6 +28,8 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/liamg/tml";
     changelog = "https://github.com/liamg/tml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unlicense;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
   };
 })

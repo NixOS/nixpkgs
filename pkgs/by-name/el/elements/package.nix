@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
   ]
-  ++ lib.optionals (!finalAttrs.doCheck) [
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
   ]

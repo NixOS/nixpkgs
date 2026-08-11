@@ -14,16 +14,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.2.tar.gz";
-      hash = "sha256-D5eONrO+5EL1cuskUU4cRYLgcbG7RCvlucnmw9t2COM=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz";
+      hash = "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.2-aarch64.tar.gz";
-      hash = "sha256-SSmIPF0pDMolxeXL21UaHMbZdtYbChWVxTKZOsPhH+I=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.2-aarch64.dmg";
-      hash = "sha256-MGWufS0nlswdqhACNQWtlXJwfPiYw8wUx7olIxPS15k=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg";
+      hash = "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY=";
     };
   };
   # update-script-end: urls
@@ -37,8 +37,8 @@ mkJetBrainsProduct {
   product = "DataSpell";
 
   # update-script-start: version
-  version = "2026.1.2";
-  buildNumber = "261.25134.18";
+  version = "2026.1.3";
+  buildNumber = "261.26222.84";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

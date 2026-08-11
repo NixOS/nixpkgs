@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "KawaYww";
-    repo = "tola";
+    owner = "tola-rs";
+    repo = "tola-ssg";
     tag = "v${finalAttrs.version}";
     hash = "sha256-zgPKsIRXp5na2d0X7j5+9xJBGFSlvIKIRmzVVo/dcLk=";
   };
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "A static site generator for typst-based blog, written in Rust";
-    homepage = "https://github.com/KawaYww/tola";
+    homepage = "https://github.com/tola-rs/tola-ssg";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer

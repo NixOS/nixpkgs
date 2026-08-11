@@ -21,8 +21,11 @@ let
   inherit (lib.lists) optionals;
   inherit (lib.strings)
     cmakeBool
+    escapeShellArg
     optionalString
     ;
+  compileFeatures = "target_compile_features(cudnn_frontend INTERFACE cxx_std_17)";
+  linkCudart = "target_link_libraries(cudnn_frontend INTERFACE CUDA::cudart)";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -50,6 +53,31 @@ backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         '#include "cudnn_frontend/thirdparty/nlohmann/json.hpp"' \
         '#include <nlohmann/json.hpp>'
+  ''
+  # Upstream resolves CUDAToolkit at configure time and freezes the result into the exported target
+  # as a bare absolute path, while its config file never forwards the dependency. Consumers then
+  # inherit a build-machine path -- under Nixpkgs, cuda_nvcc's include, a nativeBuildInput -- instead
+  # of resolving the toolkit themselves. Confine the path to the build and export the dependency, so
+  # consumers re-run find_package(CUDAToolkit) in their own environment. This matters beyond the
+  # closure: on CUDA 12 crt/ lives in cuda_nvcc, and cuda_runtime_api.h includes it, so consumers
+  # that do not otherwise pull in the toolkit would fail to compile.
+  # NOTE: the multi-line replacements are built as Nix strings with explicit newlines, so the
+  # formatter cannot reindent them into the substitution.
+  + ''
+    nixLog "patching $PWD/CMakeLists.txt to export CUDAToolkit as a dependency rather than a path"
+    substituteInPlace ./CMakeLists.txt \
+      --replace-fail \
+        '    ''${CUDAToolkit_INCLUDE_DIRS}' \
+        '    $<BUILD_INTERFACE:''${CUDAToolkit_INCLUDE_DIRS}>' \
+      --replace-fail \
+        ${escapeShellArg compileFeatures} \
+        ${escapeShellArg "${linkCudart}\n${compileFeatures}"}
+
+    nixLog "patching $PWD/cudnn_frontend-config.cmake.in to forward the CUDAToolkit dependency"
+    substituteInPlace ./cudnn_frontend-config.cmake.in \
+      --replace-fail \
+        '@PACKAGE_INIT@' \
+        ${escapeShellArg "@PACKAGE_INIT@\n\ninclude(CMakeFindDependencyMacro)\nfind_dependency(CUDAToolkit)"}
   '';
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a

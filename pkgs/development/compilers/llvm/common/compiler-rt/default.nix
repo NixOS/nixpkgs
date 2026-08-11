@@ -107,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
     hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
     relative = "compiler-rt";
+  })
+  # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
+  ++ lib.optional (lib.strings.versionOlder version "22.1.5") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
+    hash = "sha256-Av6CN95XjdUagIKh3AAjD0UK8r01fDz0cD0BLjZ70dg=";
+    relative = "compiler-rt";
   });
 
   nativeBuildInputs = [

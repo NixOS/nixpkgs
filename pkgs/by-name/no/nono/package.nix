@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.68.0";
+  version = "0.71.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
-    owner = "always-further";
+    owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RxVYatzKjv6LJ+M4Js+sTvg0hMnovXxtr6WxwFYF16Y=";
+    hash = "sha256-Xrqd8Do1R2kCwTAmju2VmOLAf329eoOSslfa8i9ogJc=";
   };
-  cargoHash = "sha256-9gMhW2qt5gbf6x/uPLc4vl3rn6UdneoxRmWpeRqI4V0=";
+  cargoHash = "sha256-bMGrLh3DEA3yJsyb62Xdt+SfhzFY5VXawai4V6xttpI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -95,6 +95,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "server::tests::reactive_proxy_auth_retry_answered_after_407"
       "server::tests::test_oauth_capture_routes_activate_intercept"
       "server::tests::test_route_diagnostics_groups_credential_and_endpoint_routes"
+
+      # nono's ELF dependency resolution cannot find `libc.so.6` for libgcc_s.so.1
+      # command_policies are broken on nixos without this support
+      "command_policies_allows_compiled_binary_exec_in_writable_grant_dir"
+      "command_policies_allows_script_exec_in_writable_grant_dir"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # panics with "exact-path fallback must not recursively cover descendants"
@@ -104,15 +109,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # wants access to /var/folders
       "sandbox_state::cap_file_validation_tests::test_acceptable_temp_roots_includes_var_folders_on_macos"
       "sandbox_state::cap_file_validation_tests::test_validate_rejects_path_outside_temp"
-      # don't work inside of the /nix dir
-      # unsure why home is still under /nix with writableTmpDirAsHomeHook
+      # doesn't work inside of the /nix dir, which build-dir is under
       "deprecated_override_deny_flag_emits_single_warning_on_stderr"
       "deprecated_override_deny_flag_warning_is_emitted_once_for_multiple_uses"
       "override_deny_alias_and_bypass_protection_merge_in_argv_order"
+      "shell_dry_run_rejects_block_net_with_upstream_proxy"
+      "run_launch_plan_rejects_block_net_with_upstream_proxy"
 
       # env_vars
-      # don't work inside of the /nix dir
-      # unsure why home is still under /nix with writableTmpDirAsHomeHook
+      # doesn't work inside of the /nix dir, which build-dir is under
       # Sandbox initialization failed: Refusing to grant '/nix' (source: group:system_read_macos) because it overlaps protected nono state root '/nix/build/nix-<ID>/.home/.nono'.
       "allow_net_overrides_profile_external_proxy"
       "cli_flag_overrides_env_var"
@@ -131,25 +136,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       "tool_sandbox::macos::tests::executable_shape_baseline_grants_env_shebang_target_interpreter"
       "tool_sandbox::macos::tests::macos_runtime_baseline_does_not_grant_system_volumes_data"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_attributes_when_helper_names_the_daemon"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_cache_prunes_dead_entries"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_denies_when_helper_names_a_different_pid"
+      "tool_sandbox::macos::tests::run_daemon_pid_source_verify_mode_round_trips_candidate_pid"
       "env_nono_capability_elevation_accepts_truthy"
       "env_nono_trust_override_accepts_truthy"
       "env_nono_trust_proxy_ca_accepts_truthy"
       "dry_run_does_not_modify_workspace"
       "rollback_restores_file_after_write"
+
+      # `git init` intermittently fails with ENOENT, most likely because a
+      # concurrent test mutates PATH under the shared env lock
+      "tool_sandbox::dynamic_providers::tests::git_read_main_worktree_returns_main_repo_root_in_linked_worktree"
     ]
   );
 
   passthru.updateScript = nix-update-script { };
   meta = {
     description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
-    homepage = "https://github.com/always-further/nono";
-    changelog = "https://github.com/always-further/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/nolabs-ai/nono";
+    changelog = "https://github.com/nolabs-ai/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
     ];
     mainProgram = "nono";
-    # https://github.com/always-further/nono#platform-support
+    # https://github.com/nolabs-ai/nono#platform-support
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

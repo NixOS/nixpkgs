@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeconf";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libeconf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZXZcXQdG3hXAMwwftrIWL5GbVdPXk+AyqdhGTnaKL1I=";
+    hash = "sha256-jIEsfX3Oz/koX0srLPGII99WaeFjKtXvB4kzMu7LbWs=";
   };
 
   __structuredAttrs = true;

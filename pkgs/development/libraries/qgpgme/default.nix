@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qgpgme";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/qgpgme/qgpgme-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WzL+s+7kp/lALSK3IGSAkI3EO7TfOCkXwHXFEhFvjwg=";
+    hash = "sha256-PGKQ/1v+q5gbtIspUXA3YfHb6mQMtje+s1YNX++w4LM=";
   };
 
   patches = [

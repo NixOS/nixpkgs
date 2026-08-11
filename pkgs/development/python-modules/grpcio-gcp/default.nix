@@ -2,20 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   grpcio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio-gcp";
   version = "0.2.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "e292605effc7da39b7a8734c719afb12ec4b5362add3528d8afad3aa3aa9057c";
+    pname = "grpcio-gcp";
+    inherit (finalAttrs) version;
+    hash = "sha256-4pJgXv/H2jm3qHNMcZr7EuxLU2Kt01KNivrTqjqpBXw=";
   };
 
-  propagatedBuildInputs = [ grpcio ];
+  build-system = [ setuptools ];
+
+  dependencies = [ grpcio ];
 
   meta = {
     description = "gRPC extensions for Google Cloud Platform";
@@ -23,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

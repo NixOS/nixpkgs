@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.0.7";
+  version = "6.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-B28twwEGLcXV0TlQxgRhNBiKhwJd+5f7sL35SkHAkRY=";
+    hash = "sha256-hQQMKa8YirrTAoCrW1nn3RqRXv0szLgeSOjeKxBfiSo=";
   };
 
   patches = [
@@ -127,8 +127,7 @@ buildPythonPackage (finalAttrs: {
     runHook preCheck
 
     pushd tests
-    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
-    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
+    ${python.interpreter} runtests.py --settings=test_sqlite --parallel=$NIX_BUILD_CORES
     popd
 
     runHook postCheck

@@ -83,6 +83,8 @@ buildPythonPackage rec {
     sphinxcontrib-websupport
   ];
 
+  pythonRelaxDeps = [ "docutils" ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [

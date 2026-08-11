@@ -131,14 +131,9 @@
         "alsa-lib"
       ]
     },
-    "appindicator-0.1": {
-      "attrPath": [
-        "libappindicator-gtk2"
-      ]
-    },
     "appindicator3-0.1": {
       "attrPath": [
-        "libappindicator-gtk3"
+        "libappindicator"
       ]
     },
     "bzip2": {

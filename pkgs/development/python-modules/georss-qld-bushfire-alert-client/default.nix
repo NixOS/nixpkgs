@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "georss-qld-bushfire-alert-client";
-  version = "0.8";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-qld-bushfire-alert-client";
     tag = "v${version}";
-    hash = "sha256-/MyjYLu29PANe17KxJCkmHPjvjlPfswn7ZBAKFSwohc=";
+    hash = "sha256-iXcBzrU0hPeNykz4OZ3XiXAG0CobdARVHeC6LVuH+KY=";
   };
 
   build-system = [ setuptools ];

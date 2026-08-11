@@ -34,7 +34,9 @@
     ]
   ),
 }:
-
+let
+  projectRoot = "projects/composablekernel";
+in
 stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     echo "This derivation isn't intended to be built directly and only exists to be overridden and built in chunks";
@@ -59,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
     sparseCheckout = [
-      "projects/composablekernel"
+      projectRoot
       "shared"
     ];
     hash = "sha256-Zs6wwPmys1kUlgDD4XzKKw273nH/Ur3HtuYxJjvjDs0=";
   };
-  sourceRoot = "${finalAttrs.src.name}/projects/composablekernel";
+  sourceRoot = "${finalAttrs.src.name}/${projectRoot}";
 
   nativeBuildInputs = [
     # Deliberately not using ninja
@@ -179,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit gpuTargets miOpenReqLibsOnly;
+    composable_kernel_src = "${finalAttrs.src}/${projectRoot}";
+
     updateScript = rocmUpdateScript { inherit finalAttrs; };
     anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
     anyMfmaTarget =

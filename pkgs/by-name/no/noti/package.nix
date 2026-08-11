@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromCodeberg,
-  llvmPackages,
   installShellFiles,
 }:
 
@@ -20,18 +18,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/noti" ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Work around ld64's libc++ hardening issue.
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   ldflags = [
     "-s"

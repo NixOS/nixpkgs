@@ -46,13 +46,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "cutlass";
-  version = "4.5.2";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5SMEfoqB2QXRfH5wBwTKKjez0x2zhR8T8EA0bqPMqwM=";
+    hash = "sha256-pXRmZ/60ENcLKxnvnMhTumetWV4e9nGNwJmT8EE0RQ8=";
   };
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a
@@ -152,8 +152,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "CUTLASS_ENABLE_EXAMPLES" false)
 
     # Tests.
-    (cmakeBool "CUTLASS_ENABLE_TESTS" finalAttrs.doCheck)
-    (cmakeBool "CUTLASS_ENABLE_GTEST_UNIT_TESTS" finalAttrs.doCheck)
+    (cmakeBool "CUTLASS_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (cmakeBool "CUTLASS_ENABLE_GTEST_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (cmakeBool "CUTLASS_USE_SYSTEM_GOOGLETEST" true)
 
     # NOTE: Both CUDNN and CUBLAS can be used by the examples and the profiler. Since they are large dependencies, they
@@ -189,12 +189,12 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Because the test cases immediately create and try to run the binaries, we don't have an opportunity
   # to patch them with autoAddDriverRunpath. To get around this, we add the driver runpath to the environment.
   # TODO: This would break Jetson when using cuda_compat, as it must come first.
-  preCheck = optionalString finalAttrs.doCheck ''
+  preCheck = optionalString finalAttrs.finalPackage.doCheck ''
     export LD_LIBRARY_PATH="$(readlink -mnv "${addDriverRunpath.driverLink}/lib")"
   '';
 
   # This is *not* a derivation you want to build on a small machine.
-  requiredSystemFeatures = optionals finalAttrs.doCheck [
+  requiredSystemFeatures = optionals finalAttrs.finalPackage.doCheck [
     "big-parallel"
     "cuda"
   ];

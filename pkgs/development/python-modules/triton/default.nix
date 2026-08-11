@@ -227,6 +227,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
       nativeBuildInputs = [
         (python.withPackages (ps: [
+          ps.expecttest
           ps.scipy
           ps.torchWithCuda
           ps.triton-cuda
@@ -260,6 +261,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         # However, this is not the case here, as triton is built with TRITON_OFFLINE_BUILD=1
         # and TRITON_PTXAS_PATH=<path_to_nix_store_ptxas>
         "test_nvidia_tool"
+
+        # Assertion `ctaLayout.getNumOutDims() == rank' failed in
+        # TritonGPUAccelerateMatmul on Blackwell (compute capability 12.0).
+        "test_batched_mxfp"
       ]
       ++ lib.optionals (pythonAtLeast "3.14") [
         # triton.compiler.errors.CompilationError
@@ -277,6 +282,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         "test_temp_var_in_loop"
         "test_tensor_descriptor_rank_reducing_matmul"
         "test_tensor_descriptor_reshape_matmul"
+
+        # Python 3.14 adds an internal __annotate__ function which Triton 3.7
+        # incorrectly includes in the aggregate dependency hash.
+        "test_bound_unused_result"
+        "test_aggregate_with_tuple"
       ];
 
       disabledTestPaths = [

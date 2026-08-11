@@ -90,7 +90,7 @@ in
 
       # https://github.com/Servarr/ffmpeg-build/blob/bc29af6f0bf84bf9253d4d462611b1dc31ee688e/common.sh#L15-L45
 
-      # Disable unused functionnalities
+      # Disable unused functionalities
       "--disable-encoders"
       "--disable-muxers"
       "--disable-protocols"

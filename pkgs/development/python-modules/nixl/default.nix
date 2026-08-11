@@ -82,6 +82,10 @@ buildPythonPackage.override { inherit (nixl) stdenv; } (finalAttrs: {
   # No tests we can run in the sandbox
   doCheck = false;
 
+  # The wheel installs as `nixl_cu{12,13}`, while the plain `nixl` module is a metadata-less shim
+  # (see postInstall), so there is no `nixl` .dist-info to check.
+  dontCheckPythonMetadata = true;
+
   meta = nixl.meta // {
     description = "Python API for nixl";
   };

@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
-  nix-update-script,
 
   cmake,
   gitMinimal,
@@ -112,11 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b10242";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b9840";
-    hash = "sha256-SlcBqlUSeXgGltk7fz1blp4DobypzkT8cw8a7dkVGiU=";
+    tag = llamaCppVersion;
+    hash = "sha256-mBqO6h9eiSAXqiHy1H3aK2ACbz1aYagmjAN7IpXNTcw=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.32.0";
+  version = "0.32.7";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyZ3H1gsC692IcmdTXjIA9jDtTobUEfJladGW72aNGw=";
+    hash = "sha256-dCUDeAdzJETCMumbSMSkmc6n3uQR36jvjBnn+gaVr/U=";
   };
 
   vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
@@ -302,6 +302,7 @@ goBuild (finalAttrs: {
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
         -DOLLAMA_MLX_BACKENDS="" \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
@@ -365,6 +366,7 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
+    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
@@ -376,7 +378,7 @@ goBuild (finalAttrs: {
       service-vulkan = nixosTests.ollama-vulkan;
     };
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 
   meta = {
     description =
@@ -393,5 +395,7 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       prusnak
     ];
+    # install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

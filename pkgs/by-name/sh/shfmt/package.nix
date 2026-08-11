@@ -50,6 +50,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mvdan/sh";
+    changelog = "https://github.com/mvdan/sh/releases/tag/v${finalAttrs.version}";
     description = "Shell parser and formatter";
     longDescription = ''
       shfmt formats shell programs. It can use tabs or any number of spaces to indent.

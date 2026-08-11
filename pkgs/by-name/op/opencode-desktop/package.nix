@@ -2,7 +2,7 @@
   autoPatchelfHook,
   bun,
   copyDesktopItems,
-  electron_41,
+  electron_42,
   lib,
   makeBinaryWrapper,
   makeDesktopItem,
@@ -17,7 +17,7 @@
 }:
 
 let
-  electron = electron_41;
+  electron = electron_42;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode-desktop";
@@ -47,10 +47,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # resolve on glibc systems. They aren't loaded at runtime on the host libc anyway.
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    NODE_OPTIONS = "--max-old-space-size=4096";
     OPENCODE_CHANNEL = "prod";
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;

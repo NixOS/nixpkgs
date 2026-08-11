@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.15.0";
+  version = "3.15.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EF61E7pwyuv9eKkTaPzJOWfbhK6rwkePIvmaVeriEDM=";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
 
   build-system = [

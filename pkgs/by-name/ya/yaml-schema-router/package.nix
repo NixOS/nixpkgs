@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "traiproject";
+    owner = "tepea-code";
     repo = "yaml-schema-router";
     tag = "v${finalAttrs.version}";
     hash = "sha256-GFe5NPW8nxv+bQsG5G26WCf2Z6qrW1WAZBMWFZD8MFI=";
@@ -27,8 +27,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Content-based JSON schema routing for yaml-language-server";
-    homepage = "https://github.com/traiproject/yaml-schema-router";
-    changelog = "https://github.com/traiproject/yaml-schema-router/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/tepea-code/yaml-schema-router";
+    changelog = "https://github.com/tepea-code/yaml-schema-router/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kpbaks ];
     mainProgram = "yaml-schema-router";

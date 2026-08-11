@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # On MacOS, we need to adress differences in int64_t types and remove the
+    # On macOS, we need to address differences in int64_t types and remove the
     # "experimental/" library and namespace prefixes as well as references to
     # std::execution.
     ./gfan-0.7-macos.patch

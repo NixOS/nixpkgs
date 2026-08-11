@@ -33,6 +33,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
+        (case (range "9.0" "9.3") (range "2.6.0" "2.6.0") "2.5.0") # also works on MC 2.4 and 2.5 but breaks validsdp
         (case (range "8.18" "9.1") (range "2.1.0" "2.5.0") "2.4.0")
         (case (range "8.17" "9.0") (range "2.1.0" "2.3.0") "2.3.0")
         (case (range "8.17" "8.20") (isGe "2.1.0") "2.2.0")
@@ -49,6 +50,7 @@ mkCoqDerivation {
       ]
       null;
   release = {
+    "2.5.0".hash = "sha256-e1C1NfulQV1Ep2XxNjjcxIoY5FGzndiCuwIy3upwO78=";
     "2.4.0".hash = "sha256-7zfIddRH+Sl4nhEPtS/lMZwRUZI45AVFpcC/UC8Z0Yo=";
     "2.3.0".hash = "sha256-usIcxHOAuN+f/j3WjVbPrjz8Hl9ac8R6kYeAKi3CEts=";
     "2.2.0".hash = "sha256-Cie6paweITwPZy6ej9+qIvHFWknVR382uJPW927t/fo=";

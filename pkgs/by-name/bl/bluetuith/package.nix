@@ -30,11 +30,11 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "TUI-based bluetooth connection manager";
+    description = "TUI-based Bluetooth connection manager";
     longDescription = ''
       Bluetuith can transfer files via OBEX, perform authenticated pairing,
-      and (dis)connect different bluetooth devices. It interacts with bluetooth
-      adapters and can toogle their power and discovery state. Bluetuith can also
+      and (dis)connect different Bluetooth devices. It interacts with Bluetooth
+      adapters and can toggle their power and discovery state. Bluetuith can also
       manage Bluetooth-based networking/tethering (PANU/DUN) and remote control
       devices. The TUI has mouse support.
     '';

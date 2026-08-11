@@ -5,14 +5,14 @@
   copyDesktopItems,
   dart-sass,
   darwin,
-  electron_39,
+  electron_41,
   fetchFromGitHub,
   gnome-keyring,
   jq,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs_24,
   pkg-config,
   rustc,
   rustPlatform,
@@ -22,17 +22,17 @@
 
 let
   icon = "bitwarden";
-  electron = electron_39;
+  electron = electron_41;
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.6.1";
+  version = "2026.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-ee+C58Y5pZWEmqbRO/w7rdY+e6gy4EL7Sn0S1AxGMXI=";
+    hash = "sha256-E4glf4G70BuT0GYu1kEb5Z9B76ElIlDPe1rdGSdmCzo=";
   };
 
   patches = [
@@ -64,7 +64,7 @@ buildNpmPackage (finalAttrs: {
     rm -r apps/cli
   '';
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -73,8 +73,8 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmWorkspace = "apps/desktop";
-  npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-C5GLei/WWetd4qLv7obBJWbQR9LBy+Sqdbjko3/W7VY=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       patches
       ;
-    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
+    hash = "sha256-PLfR+yS+MtscRRuyLaK/qIWJVDoefhOobev1fpNeHNo=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -197,7 +197,7 @@ buildNpmPackage (finalAttrs: {
     # Extract the polkit policy file from the multiline string in the source code.
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
-    pushd apps/desktop/src/key-management/biometrics
+    pushd apps/desktop/src/key-management/biometrics/native-v2
     awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 

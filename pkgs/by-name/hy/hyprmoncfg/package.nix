@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprmoncfg";
-  version = "1.8.0";
+  version = "1.9.1";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "crmne";
     repo = "hyprmoncfg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hu3ekA4wAp83DE2v00B2n5gsZt2iSv0/OWbg5Mwo4gY=";
+    hash = "sha256-LCZ1F30Ix4NnWYPI3WkL03jke9XW1cB5CWxmVSrdYYI=";
   };
 
   vendorHash = "sha256-gQbjvdKtO0hCXrs9RnWo1s0YeHf5W9t+8AgS2ELXlPo=";

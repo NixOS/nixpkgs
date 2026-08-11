@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-veJ42myRo23JXh33qC1OXxiGVI0VAARuYKVs7ObFr+Q=";
+    hash = "sha256-90Ui3hiLzU0apYq6YNuAYbqd2JOZ3J7XMh+Lu+C729w=";
   };
 
   build-system = [
@@ -38,6 +38,10 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "cachetools"
+    "pytensor"
+  ];
   dependencies = [
     arviz
     cachetools

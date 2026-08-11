@@ -8,14 +8,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "bbrew";
-  version = "2.3.1";
+  version = "2.3.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Valkyrie00";
     repo = "bold-brew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g74rBvBlw/rlLmZdJtIeIp0sba0Q6kFyhlHTwegOA+0=";
+    hash = "sha256-auHOKirhRtrYCaKqWeOgRVI+zzVIEGhkkuO290Zh3SA=";
   };
 
   vendorHash = "sha256-5gFyfyerRKfq0uGkyIJ1W4XLhyRR5qPyhc/f2Y2skrI=";

@@ -35,8 +35,6 @@
   withShared ? true,
 
   nix-update-script,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs documentation/make_*
+  ''
+  # https://github.com/fltk/fltk/commit/dd819a118cfaa889bec6563b6a8e1e969b91f7ee
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMake/setup.cmake \
+      --replace-fail 'set (FLTK_CONFIG_PATH FLTK.framework/Resources/CMake)' 'set (FLTK_CONFIG_PATH ''${FLTK_DATADIR}/fltk)'
   '';
 
   nativeBuildInputs = [
@@ -70,10 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDocs [
     doxygen
     graphviz
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs =
@@ -145,12 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
-  ]
-  # Fix for ld64 hardening issue
-  #
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   preBuild = lib.optionalString (withCairo && withShared && stdenv.hostPlatform.isDarwin) ''
@@ -168,9 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
       mv bin/{test,examples}/* $bin/bin/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Library/Frameworks
-      mv $out{,/Library/Frameworks}/FLTK.framework
-
       moveAppBundles() {
         echo "Moving and symlinking $1"
         appname="$(basename "$1")"

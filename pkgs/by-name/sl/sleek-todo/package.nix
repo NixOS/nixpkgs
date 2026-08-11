@@ -10,17 +10,28 @@
 let
 
   pname = "sleek-todo";
-  version = "2.0.14";
+  version = "2.0.26";
 
-  src =
-    fetchurl
+  suffixMap = {
+    aarch64-darwin = "mac-arm64.dmg";
+    aarch64-linux = "linux-arm64.AppImage";
+    x86_64-linux = "linux-x86_64.AppImage";
+  };
+
+  suffix =
+    suffixMap.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  src = fetchurl {
+    url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-${version}-${suffix}";
+    sha256 =
       {
-        x86_64-linux = {
-          url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-2.0.14.AppImage";
-          hash = "sha256-d2fLsCI7peuNBtjgHs1qumgPAF9eJeBYiIIffoSv9Jk=";
-        };
+        aarch64-darwin = "sha256-cQ5c9qs3Icl5vwSoU0tCM5QbrqftYUwlBBzDGaggyOE=";
+        aarch64-linux = "sha256-zcMUCLzIseipG15PQXsECNz/baAYBEzOGxh3hvw6pdg=";
+        x86_64-linux = "sha256-QpeWbnSJTCFXrj/sy+Ava7dk2OlHCzaiDoIM29q9r44=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
+  };
 
   meta = {
     description = "Todo manager based on todo.txt syntax";
@@ -30,9 +41,10 @@ let
     mainProgram = "sleek-todo";
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
     ];
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
@@ -54,7 +66,7 @@ if stdenv.hostPlatform.isDarwin then
     '';
   }
 else
-  appimageTools.wrapType2 {
+  appimageTools.wrapType2 (finalAttr: {
     inherit
       pname
       version
@@ -66,11 +78,11 @@ else
       wrapProgram $out/bin/sleek-todo \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       mkdir -p $out/share/{applications,sleek}
-      cp -a ${appimageContents}/{locales,resources} $out/share/sleek
-      cp -a ${appimageContents}/usr/share/icons $out/share
-      install -Dm 444 ${appimageContents}/sleek.desktop $out/share/applications
+      cp -a ${finalAttr.contents}/{locales,resources} $out/share/sleek
+      cp -a ${finalAttr.contents}/usr/share/icons $out/share
+      install -Dm 444 ${finalAttr.contents}/sleek.desktop $out/share/applications
       substituteInPlace $out/share/applications/sleek.desktop \
       --replace-warn 'Exec=AppRun' 'Exec=${pname}'
     '';
 
-  }
+  })

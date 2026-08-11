@@ -3,12 +3,13 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.2" then
-      "1.3"
+      "1.4"
     else if lib.versionAtLeast ocaml.version "5.1" then
       "1.2"
     else
       "0.12",
   buildDunePackage,
+  dune-configurator,
   bigstringaf,
   cstruct,
   domain-local-await,
@@ -35,14 +36,14 @@ let
         minimalOCamlVersion = "5.1";
         hash = "sha256-N5LpEr2NSUuy449zCBgl5NISsZcM8sHxspZsqp/WvEA=";
       };
-      "1.3" = {
+      "1.4" = {
         minimalOCamlVersion = "5.2";
-        hash = "sha256-jtXBPmaJ8xyF3KXxJ2LYS4zABCp7B9PkZN9utLcrPfw=";
+        hash = "sha256-uhGtSG9JITDbtIbys73EkFZD8QAWgG3fhumjTkNGqqU=";
       };
     }
     ."${version}";
 in
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "eio";
   inherit version;
   inherit (param) minimalOCamlVersion;
@@ -51,6 +52,8 @@ buildDunePackage {
     url = "https://github.com/ocaml-multicore/eio/releases/download/v${version}/eio-${version}.tbz";
     inherit (param) hash;
   };
+
+  buildInputs = lib.optional (lib.versionAtLeast finalAttrs.version "1.4") dune-configurator;
 
   propagatedBuildInputs = [
     bigstringaf
@@ -74,6 +77,8 @@ buildDunePackage {
     mdx.bin
   ];
 
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
+
   meta = {
     homepage = "https://github.com/ocaml-multicore/eio";
     changelog = "https://github.com/ocaml-multicore/eio/raw/v${version}/CHANGES.md";
@@ -81,4 +86,4 @@ buildDunePackage {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

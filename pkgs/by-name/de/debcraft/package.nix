@@ -6,14 +6,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "debcraft";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debcraft";
     tag = "debian/${finalAttrs.version}";
-    hash = "sha256-U8qWT26qno2zpfdsLqlqZg0SipvHCN6dUjUCjGuyrkY=";
+    hash = "sha256-o/rFKsAryj+lFaRpKD1x1z+2XgnuXmZsaTKGhJdU1Zo=";
   };
 
   strictDeps = true;

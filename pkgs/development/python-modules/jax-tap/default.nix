@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jax-tap";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "arcueil";
     repo = "jax-tap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B6Y8+9FXLhHZwQ9ayomffP3P7Uz7zuL52oxzJwCE2hM=";
+    hash = "sha256-xMBiEuACoPFSIlhR+/k4dBCGxqDqN7jkioSmsBlpWYk=";
   };
 
   build-system = [

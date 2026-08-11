@@ -10,7 +10,6 @@
   python3,
   unzip,
   testers,
-  nix-update-script,
 }:
 
 let
@@ -18,19 +17,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1129.0";
+  version = "2.1135.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-KXbNrzylyY+RSp4Da9rMSEn7UdPTHU9iDID/qXGL+io=";
+    hash = "sha256-NF80AuuizRMjD0z127mWFUJGAg6hzjHcLCGdJEaOc/s=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-jh/EW+scTCJ698jKr1eRYeckRhgE+SmOjfUUgJ7GbFU=";
+    hash = "sha256-H/jpxsSTA5LFgDz2f2oaLgdB/ITs3hmSJGznqanuS34=";
   };
 
   nativeBuildInputs = [
@@ -129,12 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "cdk@v(.*)"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {

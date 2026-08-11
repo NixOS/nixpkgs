@@ -69,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/zed-industries/codex-acp";
     changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tlvince ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "codex-acp";

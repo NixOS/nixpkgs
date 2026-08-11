@@ -64,7 +64,7 @@ let
         export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
         export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
       ''
-      + lib.optionalString stdenv.hostPlatform.isElf ''
+      + lib.optionalString (stdenv.hostPlatform.isElf && buildShared) ''
         # Bail if any shared object has executable stack enabled. This can
         # happen when an object produced from an assmbly file in libcrypto is
         # missing a .note.GNU-stack section. An executable stack is dangerous
@@ -98,6 +98,17 @@ let
         moveToOutput "bin/openssl" "$bin"
         moveToOutput "bin/ocspcheck" "$bin"
         moveToOutput "share/man/man1/nc.1.gz" "$nc"
+      '';
+
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        # Check whether the build target actually contains our cacert.
+        # A simple binary match for the path is enough.
+        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+
+        runHook postInstallCheck
       '';
 
       meta = {
@@ -139,6 +150,13 @@ let
     url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
     hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
   };
+
+  # https://github.com/libressl/portable/issues/1295
+  # https://github.com/libressl/portable/pull/1303
+  tls-default-ca-patch = fetchpatch {
+    url = "https://github.com/libressl/portable/commit/c85e07d0d68129fc1b1c9039b266099c8d735c3d.patch";
+    hash = "sha256-oNL3v8Ef1HrayXn+/3T4UhHLJos8eVMlqebVyaxnWVo=";
+  };
 in
 {
   # 4.2 was released October 2025 and will become unsupported on October 22,
@@ -148,26 +166,17 @@ in
     hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
       common-cmake-install-full-dirs-patch
+      tls-default-ca-patch
     ];
   };
 
-  # 4.3 was released April 2026 and will become unsupported one year after the
-  # release of OpenBSD 7.9.
+  # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
+  # one year after the release of OpenBSD 7.9.
   libressl_4_3 = generic {
-    version = "4.3.1";
-    hash = "sha256-wttCrOFOfVQZgm+rNadC7G5NEnJaBRpR0M6jwQug+lA=";
+    version = "4.3.2";
+    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
     patches = [
-      # Fix for https://github.com/libressl/portable/issues/1278, where LibreSSL
-      # 4.3 started requiring executable stack because some objects were missing
-      # a .note.GNU-stack section; will probably be included in the next release.
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/libressl/portable/4dae91d056c6c75ba5cf2bc5e6148b8e02239119/patches/gnu-stack.patch";
-        hash = "sha256-Q1oWL4N8w5Zmjfq5QkTJR53NgZ4GqChSDaBicli5G2I=";
-        # This patch is written to be applied with -p0, with no leading path
-        # component, but Nix applies with -p1 by default, so we add it to not
-        # break compatibility with how other patches must be applied.
-        decode = "sed 's|^--- |--- a/|; s|^+++ |+++ b/|'";
-      })
+      tls-default-ca-patch
     ];
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,119 +10,65 @@
   dill,
   numpy,
   pandas,
+  psutil,
+  scikit-learn,
   sortedcontainers,
+  statsmodels,
+  tqdm,
   typing-extensions,
+  xgboost,
 
-  # optional-dependencies
-  autograd,
+  # tests
   botorch,
-  # configspace,
   fastparquet,
   h5py,
   huggingface-hub,
-  matplotlib,
   pymoo,
-  scikit-learn,
-  scipy,
-  # smac,
-  statsmodels,
-  xgboost,
-  # yahpo-gym,
-
-  # tests
-  pytestCheckHook,
   pytest-timeout,
-  ray,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "syne-tune";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "syne-tune";
     repo = "syne-tune";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UNBpfC+aLXhkbyvCG2K00yedJnpYpfldqisZ/wDPtuA=";
+    hash = "sha256-fejG/KWWT6HrGCGzGh4p/Q3kzIDgYbRgfwGQf5sgKic=";
   };
 
   build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
-
   dependencies = [
     dill
     numpy
     pandas
+    psutil
+    scikit-learn
     sortedcontainers
+    statsmodels
+    tqdm
     typing-extensions
+    xgboost
   ];
 
-  optional-dependencies = lib.fix (self: {
-    blackbox-repository = [
-      fastparquet
-      h5py
-      huggingface-hub
-      numpy
-      pandas
-      scikit-learn
-      xgboost
-    ];
-    bore = [
-      scikit-learn
-      xgboost
-    ];
-    botorch = [ botorch ];
-    gpsearchers = [
-      autograd
-      scipy
-    ];
-    kde = [ statsmodels ];
-    moo = [
-      pymoo
-      scipy
-    ];
-    sklearn = [ scikit-learn ];
-    # smac = [ smac swig ]; # smac unavailable on nixpkgs
-    visual = [ matplotlib ];
-    # yahpo = [ configspace onnxruntime pandas pyyaml yahpo-gym ]; # yahpo-gym unavailable on nixpkgs
-  });
+  pythonImportsCheck = [ "syne_tune" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    botorch
+    fastparquet
+    h5py
+    huggingface-hub
+    pymoo
     pytest-timeout
-    ray
+    pytestCheckHook
     writableTmpDirAsHomeHook
-  ]
-  ++ ray.optional-dependencies.tune
-  ++ finalAttrs.passthru.optional-dependencies.blackbox-repository
-  ++ finalAttrs.passthru.optional-dependencies.bore
-  ++ finalAttrs.passthru.optional-dependencies.botorch
-  ++ finalAttrs.passthru.optional-dependencies.gpsearchers
-  ++ finalAttrs.passthru.optional-dependencies.kde
-  ++ finalAttrs.passthru.optional-dependencies.sklearn;
-
-  disabledTests = [
-    # NameError: name 'HV' is not defined
-    # these require pkg `pymoo` and adding `pymoo` raises:
-    # setuptools.errors.PackageDiscoveryError: Multiple top-level packages discovered in a flat-layout: ['cma', 'notebooks'].
-    "test_append_hypervolume_indicator"
-    "test_hypervolume"
-    "test_hypervolume_progress"
-    "test_hypervolume_simple"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # assert np.float64(1.0114686865847489e-12) < 1e-12
-    "test_cholesky_factorization"
-  ];
-
-  pythonImportsCheck = [
-    "syne_tune"
   ];
 
   meta = {

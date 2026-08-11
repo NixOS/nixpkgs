@@ -904,9 +904,11 @@ let
 
         text =
           let
+            hasSpaceInfix = lib.hasInfix " ";
+            escapeEndingBrackets = lib.replaceStrings [ "]" ] [ "\\]" ];
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
-              token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+              token: if hasSpaceInfix token then "[${escapeEndingBrackets token}]" else token;
 
             formatRules =
               type:
@@ -1422,7 +1424,6 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1831,11 +1832,6 @@ let
       pkgs.writeText "motd" config.users.motd
     else
       config.users.motdFile;
-
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
 
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
@@ -2648,7 +2644,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))

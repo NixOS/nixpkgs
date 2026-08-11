@@ -3,9 +3,9 @@ import hashlib
 import html
 import json
 import re
-import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
@@ -44,6 +44,7 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
         self._current_type = ['book']
         try:
             tokens = self._parse(infile.read_text())
+            self._prepend_config(infile, tokens)
             self._postprocess(infile, outfile, tokens)
             converted = self._renderer.render(tokens)
             outfile.write_text(converted)
@@ -51,6 +52,9 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             raise RuntimeError(f"failed to render manual {infile}") from e
 
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
+        pass
+
+    def _prepend_config(self, infile: Path, tokens: list[Token]) -> None:
         pass
 
     def _handle_headings(self, tokens: list[Token], *, src: str, on_heading: Callable[[Token,str],None]) -> None:
@@ -232,6 +236,7 @@ class RendererMixin(Renderer):
             'included_preface': lambda *args: self._included_thing("preface", *args),
             'included_parts': lambda *args: self._included_thing("part", *args),
             'included_appendix': lambda *args: self._included_thing("appendix", *args),
+            'included_page': lambda *args: self._included_thing("page", *args),
             'included_options': self.included_options,
         }
 
@@ -264,7 +269,6 @@ class HTMLParameters(NamedTuple):
     # structural depth of the navigation sidebar tree
     sidebar_depth: int
     media_dir: Path
-    sidebar_open: frozenset[str] = frozenset()
     header: Path | None = None
     no_navheader: bool = False
 
@@ -273,15 +277,18 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _in_dir: Path
     _html_params: HTMLParameters
     _redirects: Redirects | None
+    _sidebar_open: frozenset[str]
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 redirects: Redirects | None, in_dir: Path, base_path: Path):
+                 redirects: Redirects | None, in_dir: Path, base_path: Path,
+                 sidebar_open: frozenset[str]):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
         self._in_dir = in_dir
         self._base_path = base_path.absolute()
         self._html_params = html_params
         self._redirects = redirects
+        self._sidebar_open = sidebar_open
 
     def _pull_image(self, src: str) -> str:
         src_path = Path(src)
@@ -375,6 +382,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         # Without this the popover can still be closed by clicking outside of it
         # It handles auto-closing when the user clicks a href.
         close_menu_js = """
+            //<![CDATA[
             document.addEventListener("DOMContentLoaded", () => {
                 const nav = document.getElementById("manual-toc");
                 nav?.addEventListener("click", (e) => {
@@ -383,7 +391,68 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                     }
                 });
             });
+            //]]>
         """
+        intersection_observer_js = """
+//<![CDATA[
+function createObserver() {
+  const content = document.querySelector("main.content");
+  const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+  const links = new Map();
+  document.querySelectorAll("ol li a").forEach((a) => {
+    links.set(a.hash.slice(1), a);
+  });
+  const visible = new Set();
+
+  function setActive(link) {
+    document
+      .querySelectorAll("ol.toc a.active, ol.toc a.active-trail")
+      .forEach((a) => a.classList.remove("active", "active-trail"));
+
+    link.classList.add("active");
+
+    let li = link.closest("li")?.parentElement.closest("li");
+    for (; li; li = li.parentElement.closest("li")) {
+      li.querySelector(":scope > details > summary > a")?.classList.add(
+        "active-trail",
+      );
+    }
+  }
+
+  const handleIntersect = (entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) visible.add(entry.target);
+      else visible.delete(entry.target);
+    }
+
+    const current = [...visible]
+      .filter((h) => links.has(h.id))
+      .sort(
+        (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
+      )[0];
+
+    if (!current) return;
+
+    const link = links.get(current.id);
+    if (link) setActive(link);
+  };
+
+  const observer = new IntersectionObserver(handleIntersect, {
+    root: content,
+    rootMargin: "0px 0px -70% 0px",
+    threshold: 0,
+  });
+
+  [...headings]
+    .filter((h) => h.id && links.has(h.id))
+    .forEach((h) => observer.observe(h));
+}
+
+document.addEventListener("DOMContentLoaded", createObserver);
+//]]>
+        """
+
         header_content = ""
         if self._html_params.header:
             with open(self._html_params.header) as header_file:
@@ -403,6 +472,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f"<script>{close_menu_js}</script>",
+            f"<script>{intersection_observer_js}</script>",
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
@@ -479,7 +549,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 link = f'<a href="{e.target.href()}">{e.target.toc_html}</a>'
                 cls = html.escape(e.kind, True)
                 if children:
-                    open_attr = " open" if e.target.id in self._html_params.sidebar_open else ""
+                    # a group without an 'id' in the config gets open_id "".
+                    # the empty key then fails the truth test, so the group stays closed.
+                    key = e.target.id if e.open_id is None else e.open_id
+                    open_attr = " open" if key and key in self._sidebar_open else ""
                     items.append(
                         f'<li class="{cls}">'
                         f'<details{open_attr}><summary>{link}</summary>{children}</details>'
@@ -544,6 +617,25 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 def _to_base26(n: int) -> str:
     return (_to_base26(n // 26) if n > 26 else "") + chr(ord("A") + n % 26)
 
+@dataclass
+class ConfigLeaf:
+    file: str
+    label: str | None = None
+
+@dataclass
+class ConfigGroup:
+    label: str
+    children: list["ConfigNode"]
+    id: str | None = None
+
+ConfigNode = ConfigLeaf | ConfigGroup
+
+@dataclass
+class ConfigManifest:
+    items: list[ConfigNode]
+    open: frozenset[str]
+
+
 class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     INCLUDE_ARGS_NS = "html"
     INCLUDE_FRAGMENT_ALLOWED_ARGS = { 'into-file' }
@@ -555,23 +647,126 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     _xref_targets: dict[str, XrefTarget]
     _redirection_targets: set[str]
     _appendix_count: int = 0
+    _config_path: Path | None
+    _config: ConfigManifest | None
 
     def _next_appendix_id(self) -> str:
         self._appendix_count += 1
         return _to_base26(self._appendix_count - 1)
 
-    def __init__(self, revision: str, html_params: HTMLParameters, manpage_urls: Mapping[str, str], redirects: Redirects | None = None):
+    def __init__(
+            self,
+            revision: str,
+            html_params: HTMLParameters,
+            manpage_urls: Mapping[str, str],
+            redirects: Redirects | None = None,
+            config_path: Path | None = None
+        ):
         super().__init__()
         self._revision, self._html_params, self._manpage_urls, self._redirects = revision, html_params, manpage_urls, redirects
+        self._config_path = config_path
+        self._config = None
         self._xref_targets = {}
         self._redirection_targets = set()
         # renderer not set on purpose since it has a dependency on the output path!
 
     def convert(self, infile: Path, outfile: Path) -> None:
+        try:
+            self._config = self._load_config()
+        except Exception as e:
+            raise RuntimeError(f"failed to load config '{self._config_path}'") from e
+        sidebar_open = self._config.open if self._config is not None else frozenset()
         self._renderer = ManualHTMLRenderer(
             'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
-            self._redirects, infile.parent, outfile.parent)
+            self._redirects, infile.parent, outfile.parent, sidebar_open)
         super().convert(infile, outfile)
+
+    def _load_config(self) -> ConfigManifest | None:
+        if self._config_path is None:
+            return None
+        src = self._config_path.read_text()
+        config = json.loads(src)
+        if not isinstance(config, dict) or not isinstance(config.get('items'), list):
+            raise SrcError(
+                src=src,
+                description=f"config {self._config_path}: expected a top-level object with an 'items' array")
+        open_ids = config.get('open', [])
+        if not isinstance(open_ids, list) or not all(isinstance(i, str) for i in open_ids):
+            raise SrcError(
+                src=src,
+                description=f"config {self._config_path}: 'open' must be an array of strings")
+        items = self._parse_config_nodes(config['items'], "config items", src)
+        return ConfigManifest(items=items, open=frozenset(open_ids))
+
+    def _parse_config_nodes(self, items: Any, where: str, src: str) -> list[ConfigNode]:
+        return [self._parse_config_node(item, f"{where}[{idx}]", src)
+                for idx, item in enumerate(items)]
+
+    def _parse_config_node(self, item: Any, where: str, src: str) -> ConfigNode:
+        if not isinstance(item, dict):
+            raise SrcError(src=src, description=f"{where}: expected an object, got {type(item).__name__}")
+        label = item.get('label')
+        if label is not None and (not isinstance(label, str) or not label):
+            raise SrcError(src=src, description=f"{where}: 'label' must be a non-empty string")
+        has_file, has_children = 'file' in item, 'children' in item
+        if has_file == has_children:
+            raise SrcError(
+                src=src,
+                description=f"{where}: must have exactly one of 'file' or 'children'")
+        if has_file:
+            if not isinstance(item['file'], str):
+                raise SrcError(src=src, description=f"{where}: 'file' must be a string")
+            return ConfigLeaf(file=item['file'], label=label)
+        children = item['children']
+        if not isinstance(children, list) or not children:
+            raise SrcError(src=src, description=f"{where}: 'children' must be a non-empty array")
+        if not isinstance(label, str) or not label:
+            raise SrcError(src=src, description=f"{where}: a group requires a non-empty 'label'")
+        gid = item.get('id')
+        if gid is not None and (not isinstance(gid, str) or not gid):
+            raise SrcError(src=src, description=f"{where}: 'id' must be a non-empty string")
+        return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=gid)
+
+    def _prepend_config(self, infile: Path, tokens: list[Token]) -> None:
+        if self._config is None:
+            return
+        assert self._config_path is not None
+        include = self._build_config_include(self._config.items, self._config_path.resolve())
+        # tokens 0 to 5 hold the title h1 triple and the subtitle h2 triple.
+        # _render_book renders tokens[6:] as the body.
+        # a change to the preamble must change this index too.
+        tokens[6:6] = [include]
+
+    def _build_config_include(self, nodes: list[ConfigNode], config_file: Path) -> Token:
+        included = [self._build_config_item(node, config_file) for node in nodes]
+        token = Token('included_page', '', 0, map=[0, 1])
+        token.meta['included'] = included
+        token.meta['include-args'] = {}
+        return token
+
+    def _build_config_item(self, node: ConfigNode, config_file: Path) -> tuple[list[Token], Path]:
+        if isinstance(node, ConfigLeaf):
+            path = (config_file.parent / node.file).resolve()
+            leaf_src = path.read_text()
+            self._base_paths.append(path)
+            self._current_type.append('page')
+            try:
+                fragment = self._parse(leaf_src)
+            finally:
+                self._current_type.pop()
+                self._base_paths.pop()
+            if node.label is not None:
+                fragment[1].meta['toc-label'] = node.label
+            return fragment, path
+
+        # TocEntry._collect_entries reads nav-label and nav-id.
+        # it builds the sidebar group from them.
+        group = self._build_config_include(node.children, config_file)
+        group.meta['nav-label'] = node.label
+        if node.id is not None:
+            group.meta['nav-id'] = node.id
+
+        return [group], config_file
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
         tokens = super()._parse(src,auto_id_prefix=auto_id_prefix)
@@ -684,10 +879,12 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             title_html = self._renderer.renderInline(inlines.children[0:1])
         else:
             toc_html, title = title_html, title_html
+            if (toc_label := inlines.meta.get('toc-label')) is not None:
+                toc_html = html.escape(cast(str, toc_label))
             title_html = (
                 f"<em>{title_html}</em>"
                 if typ == 'chapter'
-                else title_html if typ in [ 'book', 'part' ]
+                else title_html if typ in [ 'book', 'part', 'page' ]
                 else f'the section called “{title_html}”'
             )
         return XrefTarget(id, title_html, toc_html, re.sub('<.*?>', '', title), path, drop_fragment)
@@ -757,9 +954,14 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
     p.add_argument('--sidebar-depth', default=2, type=int)
-    # nav metadata (JSON): {"open": ["anchor-id", ...]} selects which sidebar
-    # entries render expanded; omitted or absent means everything is collapsed.
-    p.add_argument('--nav', type=Path)
+    p.add_argument('--experimental-config', type=Path, help="""
+JSON file of the following form
+{ items: [ { file, label? } | { label, children: [...], id? } ], open: [ id, ... ] }
+
+Files added through this flag prepend '--infile'
+
+This flag will replace --infile and `{=include=}` directives in the future
+""")
     # Deprecated flags,
     p.add_argument('--toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
     p.add_argument('--chunk-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
@@ -772,10 +974,6 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('outfile', type=Path)
 
 def _run_cli_html(args: argparse.Namespace) -> None:
-    sidebar_open: frozenset[str] = frozenset()
-    if args.nav:
-        with open(args.nav) as nav_file:
-            sidebar_open = frozenset(json.load(nav_file).get("open", []))
     with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
         redirects = None
         if args.redirects:
@@ -785,8 +983,8 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script,
-                           args.sidebar_depth, args.media_dir, sidebar_open, args.header, args.no_navheader),
-            json.load(manpage_urls), redirects)
+                           args.sidebar_depth, args.media_dir, args.header, args.no_navheader),
+            json.load(manpage_urls), redirects, args.experimental_config)
         md.convert(args.infile, args.outfile)
 
 def build_cli(p: argparse.ArgumentParser) -> None:

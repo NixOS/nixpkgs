@@ -38,9 +38,11 @@ let
   #       everyone to reuse.
   roslyn-copilot = fetchzip {
     url = "https://roslyn.blob.core.windows.net/releases/Microsoft.VisualStudio.Copilot.Roslyn.LanguageServer-18.3.72-alpha.zip";
-    hash = "sha256-Eh1XaF9eCN5saTrIf4NeZZKDeiEvrTo0m+vOiM5QZoI=";
+    hash = "sha256-vzowJOPp/VVeWkPihvWX2jvTrbFMZMtgX03eLezdanE=";
+    # Must be written to $out: fetchzip runs postFetch with cwd = $TMPDIR/unpack,
+    # which stripRoot has already emptied by moving the payload to $out.
     postFetch = ''
-      touch install.Lock
+      touch "$out/install.Lock"
     '';
   };
 in

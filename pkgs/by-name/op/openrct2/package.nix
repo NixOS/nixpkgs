@@ -43,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = "0.5.3";
+  version = "0.5.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -52,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-my7fPBD5N0bO1yPaxwHUFqw6TvayQs10kcAX/NqPpIg=";
+    hash = "sha256-NzPkrPQ8XIekFfTzPwHnR1skhKv530x80YBZ5fvTRqw=";
   };
 
   passthru = {
     updateScript = ./update.sh;
 
-    objects-version = "1.7.10";
+    objects-version = "1.7.11";
     openmusic-version = "1.6.1";
     opensfx-version = "1.0.6";
     title-sequences-version = "0.4.26";
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     assets = {
       objects = fetchurl {
         url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.passthru.objects-version}/objects.zip";
-        hash = "sha256-9IO+Jm3CIHe6hRe78y/+OIw1Q7LuWF4K+9QQLbRSgCE=";
+        hash = "sha256-dOc7vQEjOVEbs1ndD7sUj9qJl5CuN9fWmGHYgYOxlFI=";
       };
       openmusic = fetchurl {
         url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${finalAttrs.passthru.openmusic-version}/openmusic.zip";

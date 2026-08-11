@@ -24,10 +24,14 @@
   libxkbfile,
   libsecret,
   webkitgtk_4_1,
+  libxtst,
+  libei,
+  libjpeg8,
+  pipewire,
 }:
 let
   pname = "positron-bin";
-  version = "2026.06.1-6";
+  version = "2026.07.1-5";
 in
 stdenv.mkDerivation {
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -37,17 +41,17 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
-        hash = "sha256-v5FaquIX7zYHvU6FddR4dDyt9uLheHr0+IpxLVpuKMg=";
+        hash = "sha256-3sJdfh/9s5aucdLkrQhVcYNL5B+ZZAMtfANEn5/MRkQ=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-Xc+ZlYPqKkiZgTvpfKo79LXGhD0voanEj98aJOsfjo0=";
+        hash = "sha256-qSjqDJXvmPa4qOFvuXJPAk70BUavgH/NKoUdxGv9K00=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-kTVHMNRbPoLg2Ua+Fo6UaUiUA6OqPwNAXXpgtqaBjls=";
+        hash = "sha256-Qy4i0x5lJQ4KHqzwzzTVjhFf1vnnBRa1L92r9nkbmAA=";
       };
 
   buildInputs = [
@@ -69,6 +73,10 @@ stdenv.mkDerivation {
     libxkbfile
     libsecret
     webkitgtk_4_1
+    libei
+    libjpeg8
+    pipewire
+    libxtst
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     blas

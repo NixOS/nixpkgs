@@ -1,23 +1,23 @@
 {
   lib,
   fetchzip,
-  buildGo125Module,
+  buildGo126Module,
   nixosTests,
   nix-update-script,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "traefik";
-  version = "3.7.6";
+  version = "3.7.10";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${finalAttrs.version}/traefik-v${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-7osOcFQIqsMQ0ZiGQMy6Joet/Tlou9BYlzmtyytaMh8=";
+    hash = "sha256-Y7SQ4MOqsoNREZ7FXiMaOb9/gP+eTVImSiLcnJ4bRhA=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-lMGuyp3GdcMUdzxu/e3c3ZV1/XWnsqVho2uj230GXzw=";
+  vendorHash = "sha256-qN+5DiiJpk6Eh/848PLUUtjrGp4QtiIuI4drPzdsriA=";
 
   proxyVendor = true;
 

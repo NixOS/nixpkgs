@@ -76,7 +76,7 @@ let
 
               # required
               jwtSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your JWT secret used during identity verificaton.
@@ -84,7 +84,7 @@ let
               };
 
               oidcIssuerPrivateKeyFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your private key file used to encrypt OIDC JWTs.
@@ -92,7 +92,7 @@ let
               };
 
               oidcHmacSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your HMAC secret used to sign OIDC JWTs.
@@ -100,7 +100,7 @@ let
               };
 
               sessionSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your session secret. Only used when redis is used as session storage.
@@ -109,7 +109,7 @@ let
 
               # required
               storageEncryptionKeyFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your storage encryption key.
@@ -211,7 +211,7 @@ let
                 };
 
                 file_path = mkOption {
-                  type = types.nullOr types.path;
+                  type = types.nullOr types.externalPath;
                   default = null;
                   example = "/var/log/authelia/authelia.log";
                   description = "File path where the logs will be written. If not set logs are written to stdout.";
@@ -389,10 +389,10 @@ in
           // lib.mapAttrs (_: v: "%d/${v}") nonNullEnvSecretsMap
           // instance.environmentVariables;
 
-          preStart = "${execCommand} ${configArg} validate-config";
           serviceConfig = {
             User = instance.user;
             Group = instance.group;
+            ExecStartPre = "${execCommand} ${configArg} validate-config";
             ExecStart = "${execCommand} ${configArg}";
             Restart = "always";
             RestartSec = "5s";
@@ -457,11 +457,11 @@ in
           group = instance.group;
         };
       };
-      instances = lib.attrValues cfg.instances;
+      enabledInstances = lib.filterAttrs (name: instance: instance.enable) cfg.instances;
     in
     {
       assertions = lib.flatten (
-        lib.flip lib.mapAttrsToList cfg.instances (
+        lib.flip lib.mapAttrsToList enabledInstances (
           name: instance: [
             {
               assertion =
@@ -470,8 +470,8 @@ in
               message = ''
                 Authelia requires a JWT Secret and a Storage Encryption Key to work.
                 Either set them like so:
-                services.authelia.${name}.secrets.jwtSecretFile = /my/path/to/jwtsecret;
-                services.authelia.${name}.secrets.storageEncryptionKeyFile = /my/path/to/encryptionkey;
+                services.authelia.${name}.secrets.jwtSecretFile = "/my/path/to/jwtsecret";
+                services.authelia.${name}.secrets.storageEncryptionKeyFile = "/my/path/to/encryptionkey";
                 Or set services.authelia.${name}.secrets.manual = true and provide them yourself via
                 environmentVariables or settingsFiles.
                 Do not include raw secrets in nix settings.
@@ -482,15 +482,12 @@ in
       );
 
       systemd.services = lib.mkMerge (
-        map (
-          instance:
-          lib.mkIf instance.enable {
-            ${autheliaName instance.name} = mkInstanceServiceConfig instance;
-          }
-        ) instances
+        map (instance: {
+          ${autheliaName instance.name} = mkInstanceServiceConfig instance;
+        }) (lib.attrValues enabledInstances)
       );
       users = lib.mkMerge (
-        map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances
+        map (instance: (mkInstanceUsersConfig instance)) (lib.attrValues enabledInstances)
       );
     };
 

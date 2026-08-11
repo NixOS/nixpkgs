@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.66.0";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GKXTEzCya5aOh02O3yoEdA4RS/GibiHZu+wXq7rrOV0=";
+    hash = "sha256-TBna2iFzrVyfa4D/rDysQdZPS5yHEv/mTY8ixc4GilE=";
   };
 
-  cargoHash = "sha256-MjRi4WK+afrShCLXEp7pWhDiAyjKPbtqHjVIOtI3LVI=";
+  cargoHash = "sha256-UdSWEP9m/b9xtEtyX5JWvF4LU2uJdbk4juYrKwrx4gA=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -54,6 +54,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests probe the live process table — on macOS that means libproc
+    # (`proc_listallpids` / `proc_pidinfo`). Inside the Nix darwin sandbox,
+    # those calls are denied. The build process can't even read its own pid
+    # from the table, so two tests panic:
+    "--skip=shell::utils::tests::test_process_name_and_ppid_self"
+    "--skip=shell::utils::tests::test_probe_reports_invoked_name_for_sh"
   ];
 
   doInstallCheck = true;
@@ -78,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       siriobalmelli
       DuskyElf
+      yzx9
     ];
   };
 })

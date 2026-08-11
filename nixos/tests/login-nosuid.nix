@@ -11,7 +11,12 @@
     {
       security.enableWrappers = false;
       systemd.settings.Manager.NoNewPrivileges = true;
-      security.account-utils.enable = true;
+      security.account-utils = {
+        enable = true;
+        pwaccessd.settings = {
+          ExpiredCheck.SpMin = true;
+        };
+      };
       users.mutableUsers = true;
       security.account-utils.extraArgs = [
         "-v"
@@ -46,9 +51,13 @@
         print(f"passwd path is: {passwd_path}")
         assert "account-utils" in passwd_path
 
+    with subtest("config file exists"):
+        machine.succeed("ls /etc/account-utils/pwaccessd.conf")
+
     with subtest("create user"):
         machine.succeed("useradd -m alice")
         machine.succeed("(echo foobar; echo foobar) | passwd alice")
+        machine.succeed("grep -F 'alice:$y$' /etc/shadow")
 
     with subtest("Check whether switching VTs works"):
         machine.fail("pgrep -f 'agetty.*tty2'")

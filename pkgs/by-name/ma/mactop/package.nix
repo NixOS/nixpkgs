@@ -2,33 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  llvmPackages,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "mactop";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "metaspartan";
     repo = "mactop";
     tag = "v${version}";
-    hash = "sha256-rWALbjy7s6X3hegcUxoR0XUXKFZGnWRWV5OeXtN3BjU=";
+    hash = "sha256-uIHqnHkqdQGZceruvHdXacS5vD2tgN1KPY4v6k7s5Vc=";
   };
 
   vendorHash = "sha256-TF66wg8nyAb/kZ80XLaD7H39EehZQ896DS6Ce3+P8Lk=";
 
   proxyVendor = true;
-
-  nativeBuildInputs = [ llvmPackages.lld ];
-
-  env = {
-    # Work around ld64's libc++ hardening issue.
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   ldflags = [
     "-s"

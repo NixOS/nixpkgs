@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=ab9fe5cb9b85c5afab94f2a7f4b6d7d473c14ee9";
       hash = "sha256-wmSLgLnLuFE+IC6AjxzZp/HEnaOCS1VfY2cac0T7Y+w=";
     })
+
+    # GCC 16 detects ambiguity in the `ranges` name in a test (conflicts with
+    # `namespace std::range { }` from GCC), so we rename the variable to
+    # disambiguate.
+    ./gcc16-disambiguate-regex-ranges-test.patch
   ]
   ++ lib.optionals stdenv.cc.isClang [
     # Adds compatibility with C++17 by removing the `register` storage class specifier.

@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lean-lsp-mcp";
-  version = "0.26.2";
+  version = "0.28.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "oOo0oOo";
     repo = "lean-lsp-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NWX+r6hz04WnSkERqVj57ruw47RhqOeEofYUaxuU/uM=";
+    hash = "sha256-dpVWJ598in9S/GlYrnqZgz2T/5vQV1m/eI+lQBiD8w4=";
   };
 
   build-system = with python3Packages; [ setuptools ];

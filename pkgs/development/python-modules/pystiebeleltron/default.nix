@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pymodbus,
+  modbus-connection,
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
@@ -11,29 +11,27 @@
 
 buildPythonPackage rec {
   pname = "pystiebeleltron";
-  version = "0.3.2";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThyMYthOS";
     repo = "python-stiebel-eltron";
     tag = "v${version}";
-    hash = "sha256-ApFhqJsYC/Kym1ITq5dn0/OQ6++led6RbG97DGvno0k=";
+    hash = "sha256-tX9n+ez6+ToK7nVxZfhjywdk4hjqi685kTboNxSW+Ag=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ pymodbus ];
+  dependencies = [
+    modbus-connection
+  ]
+  ++ modbus-connection.optional-dependencies.pymodbus;
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-mock
-  ];
-
-  disabledTestPaths = [
-    # mock server is not compatible with pymodbus 3.13
-    "test/test_pystiebeleltron.py"
   ];
 
   pythonImportsCheck = [ "pystiebeleltron" ];

@@ -30,9 +30,6 @@
   withEGL ? true,
   withPrivateFonts ? false,
   webkitgtk_4_1,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,11 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gB+mEk8rHpB4z1m8RWJSV+upKzLt7pZtlviS2g03EHY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -110,17 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  env =
-    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      SEARCH_LIB = toString [
-        "${libGLU.out}/lib"
-        "${libGL.out}/lib"
-      ];
-    }
-    # TODO: Clean up on `staging`.
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_CFLAGS_LINK = "-fuse-ld=lld";
-    };
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    SEARCH_LIB = toString [
+      "${libGLU.out}/lib"
+      "${libGL.out}/lib"
+    ];
+  };
 
   postInstall = "
     pushd $out/include

@@ -46,7 +46,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Computer management web app";
     homepage = "https://meshcentral.com/";
-    maintainers = with lib.maintainers; [ ma27 ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };

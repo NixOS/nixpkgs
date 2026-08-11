@@ -75,6 +75,7 @@
   nix-update-script,
 
   enablePassim ? false,
+  enableValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind,
 }:
 
 let
@@ -222,8 +223,10 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     tpm2-tss
-    valgrind
     xz # for liblzma
+  ]
+  ++ lib.optionals enableValgrind [
+    valgrind
   ];
 
   mesonFlags = [
@@ -250,6 +253,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!enablePassim) [
     (lib.mesonEnable "passim" false)
+  ]
+  ++ lib.optionals (!enableValgrind) [
+    (lib.mesonEnable "valgrind" false)
   ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF

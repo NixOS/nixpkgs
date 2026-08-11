@@ -28,11 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--locked" ];
 
-  buildFeatures = [
-    (lib.optionals enableWayland "Wayland")
-    (lib.optionals enableX11 "X11")
-    (lib.optionals enableSass "Sass")
-  ];
+  buildFeatures =
+    lib.optionals enableWayland [ "Wayland" ]
+    ++ lib.optionals enableX11 [ "X11" ]
+    ++ lib.optionals enableSass [ "Sass" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -43,9 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libpulseaudio
     gtk4
-    (lib.optionals enableWayland gtk4-layer-shell)
-    (lib.optionals enableX11 libxcb)
-  ];
+  ]
+  ++ lib.optionals enableWayland [ gtk4-layer-shell ]
+  ++ lib.optionals enableX11 [ libxcb ];
 
   outputs = [
     "out"

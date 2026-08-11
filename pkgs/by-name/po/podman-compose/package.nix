@@ -25,8 +25,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
   ];
 
-  propagatedBuildInputs = [ python3Packages.pypaBuildHook ];
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     parameterized

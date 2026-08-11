@@ -8,6 +8,7 @@
   useMpi ? false,
   mpi,
   fetchFromGitLab,
+  fetchpatch,
   cmake,
   pkg-config,
   readline,
@@ -18,15 +19,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siesta";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitLab {
     owner = "siesta-project";
     repo = "siesta";
     tag = finalAttrs.version;
-    hash = "sha256-pud8RlJAT+0TwyPRsbf5D/8FfLjZvPYPf84Xb7UH6os=";
+    hash = "sha256-J6cR8h6wMaofNLcTVyH9cr59FN533GhkviOQ4/5whIM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # upstream patch, remove with next upgrade
+    (fetchpatch {
+      name = "gcc-bug-125383";
+      url = "https://gitlab.com/siesta-project/siesta/-/commit/bb6d7f5493c19078ecc236cf36b8672eeaf228c8.patch";
+      hash = "sha256-p7jE5m055m0XW/lJHtyHYmGIJ3Dz+5sLy0jcG/zyAqg=";
+    })
+  ];
 
   passthru = {
     inherit mpi;
@@ -59,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  enableParallelBuilding = false; # Started making trouble with gcc-11
+  enableParallelBuilding = true;
 
   preBuild =
     if useMpi then

@@ -13,8 +13,10 @@ from .utils import Freezeable
 # FragmentType is used to restrict structural include blocks.
 FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
 
-# in the TOC all fragments are allowed, plus the all-encompassing book.
-TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure']
+# the TOC allows every fragment type. it also allows the enclosing book.
+# it allows 'example' and 'figure'.
+# --experimental-config adds a generic 'page' kind.
+TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure', 'page']
 
 def is_include(token: Token) -> bool:
     return token.type == "fence" and token.info.startswith("{=include=} ")
@@ -145,6 +147,7 @@ class TocEntry(Freezeable):
     next: TocEntry | None = None
     children: list[TocEntry] = dc.field(default_factory=list)
     starts_new_chunk: bool = False
+    open_id: str | None = None
 
     @property
     def root(self) -> TocEntry:
@@ -193,9 +196,21 @@ class TocEntry(Freezeable):
                 fragment_type_str = token.type[9:].removesuffix('s')
                 assert fragment_type_str in get_args(TocEntryType)
                 fragment_type = cast(TocEntryType, fragment_type_str)
-                for fragment, _path in included:
-                    subentries = cls._collect_entries(xrefs, fragment, fragment_type)
-                    entries[-1][1].children.append(subentries)
+                if (nav_label := token.meta.get('nav-label')) is not None:
+                    children = [cls._collect_entries(xrefs, fragment, fragment_type)
+                                for fragment, _path in included]
+                    first = children[0].target
+                    group = TocEntry(
+                        fragment_type,
+                        dc.replace(first, title_html=nav_label, toc_html=nav_label, title=nav_label),
+                        children=children,
+                        open_id=token.meta.get('nav-id', ''))
+                    entries.append(('h1', group))
+                    token.meta['TocEntry'] = group
+                else:
+                    for fragment, _path in included:
+                        subentries = cls._collect_entries(xrefs, fragment, fragment_type)
+                        entries[-1][1].children.append(subentries)
             elif token.type == 'heading_open' and (id := cast(str, token.attrs.get('id', ''))):
                 while len(entries) > 1 and entries[-1][0] >= token.tag:
                     entries[-2][1].children.append(entries.pop()[1])

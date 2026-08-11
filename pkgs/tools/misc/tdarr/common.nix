@@ -26,6 +26,8 @@
   apprise,
   openssl,
   nixosTests,
+  pnpm_10,
+  nodejs,
 }:
 {
   pname,
@@ -54,6 +56,8 @@ let
     [
       jellyfin-ffmpeg
       mkvtoolnix
+      pnpm_10
+      nodejs
     ]
     ++ includeInPath
     # ! Handbrake is currently marked as broken on darwin
@@ -85,8 +89,6 @@ let
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
-    ]
-    ++ lib.optionals (component == "server") [
       "--set-default"
       "ccextractorPath"
       "${ccextractor}/bin/ccextractor"
@@ -101,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.81.01";
+  version = "2.85.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -143,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     # * exiftool-vendored checks for /usr/bin/perl existence; when missing (NixOS), it sets ignoreShebang=true which breaks spawn by using shell:true with an env lacking PATH. Since we patched the shebang, force ignoreShebang to false.
     substituteInPlace node_modules/exiftool-vendored/dist/ExifTool.js \
       --replace-fail '!_fs.existsSync("/usr/bin/perl")' 'false'
+
+    # * Substitute in nixpkgs version of pnpm as autopatchelf breaks the bundled copy see: https://github.com/NixOS/nixpkgs/issues/544841
+    rm ./runtime/pnpm
+    makeWrapper ${pnpm_10}/bin/pnpm ./runtime/pnpm \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   preInstall = ''

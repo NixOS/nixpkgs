@@ -2087,13 +2087,13 @@ in
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";
-      script = ''
-        set -o errexit -o pipefail -o nounset -o errtrace
-        shopt -s inherit_errexit
-
-        exec ${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}
-      '';
       serviceConfig = {
+        ExecStartPre = [
+          "${lib.getExe' pkgs.coreutils "ln"} -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}"
+          "${lib.getExe' pkgs.coreutils "ln"} -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}"
+        ];
+        ExecStart = "${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}";
+
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
         Restart = "on-failure";
@@ -2136,10 +2136,6 @@ in
         ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
-      preStart = ''
-        ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}
-        ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
-      '';
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.http_port ];

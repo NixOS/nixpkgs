@@ -20,18 +20,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
-  version = "4.12.5";
+  version = "4.12.6";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/A/O42jwwK2iDV1IdRjOO8fE/AZ0h7UWAZZLozOqUWs=";
+    hash = "sha256-XNbdTRm+oJjnuWEk1AT63HRmOV4OjSK7aj874z+15pE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
-  cargoHash = "sha256-EF8gpfeZasazq0NKrjItt4bkgautQjYjEegf1OlWLOw=";
+  cargoHash = "sha256-2jzsXj6iLf4TRUIgWe+VTEjBtYgnHJPBnZmlfvTlrXs=";
 
   postPatch =
     let

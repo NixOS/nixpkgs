@@ -5,19 +5,20 @@
   openssl,
   pkg-config,
   versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwin";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Jake-Shadle";
     repo = "xwin";
     tag = finalAttrs.version;
-    hash = "sha256-p7rrZ2yxSpGKNuddcSO2wlvsIFj8LYG91tCK1mWO+NY=";
+    hash = "sha256-tccavt0VhA5l3rDXxbQu1ueQsoHV55g8/twKp11hrk8=";
   };
 
-  cargoHash = "sha256-e2uYAE2veYDNZpHr40bpIbplg7orW8oIxgZORhPpbFY=";
+  cargoHash = "sha256-jJBLrcMVGbP1NPDgdUPQYM8333XGo6ulbs4qBk2Np90=";
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -26,11 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-  ];
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "native-tls"
   ];
 
   doCheck = true;
@@ -46,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   versionCheckProgram = placeholder "out" + "/bin/xwin";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Utility for downloading the Microsoft CRT & Windows SDK libraries";
     homepage = "https://github.com/Jake-Shadle/xwin";
@@ -55,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.eveeifyeve ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
 })

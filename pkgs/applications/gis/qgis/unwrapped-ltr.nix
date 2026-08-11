@@ -76,7 +76,7 @@ let
     python-dateutil
     pytz
     pyyaml
-    qscintilla-qt5
+    py.pkgs.qscintilla # avoid confusion with C++ qscintilla
     requests
     setuptools
     sip
@@ -85,7 +85,7 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.44.11";
+  version = "3.44.12";
   pname = "qgis-ltr-unwrapped";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
@@ -93,7 +93,7 @@ mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-gWSl9OrRSxreQdKxKKDCOUWBE5uE2w3/ebW266LCWLI=";
+    hash = "sha256-G/7Tnr9u6VgbQFCmGqeqXap0081mFW4UOYix8nM+/co=";
   };
 
   passthru = {
@@ -154,7 +154,7 @@ mkDerivation rec {
   patches = [
     (replaceVars ./set-pyqt-package-dirs-ltr.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
-      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla}/${py.pkgs.python.sitePackages}";
     })
     (replaceVars ./spatialite-path.patch {
       spatialiteLib = "${libspatialite}/lib/mod_spatialite.so";

@@ -76,6 +76,7 @@ let
         kirigami-addons = self.callPackage ./misc/kirigami-addons { };
         kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 { };
         kio-fuse = self.callPackage ./misc/kio-fuse { };
+        kio-s3 = self.callPackage ./misc/kio-s3 { };
         klevernotes = self.callPackage ./misc/klevernotes { };
         ktextaddons = self.callPackage ./misc/ktextaddons { };
         kup = self.callPackage ./misc/kup { };

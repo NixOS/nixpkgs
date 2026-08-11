@@ -15,20 +15,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ni";
-  version = "30.2.0";
+  version = "30.3.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "ni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H+gmiy+sHdiK5rRpOvkUe54kc/66J9eI9kIMfFcjTrg=";
+    hash = "sha256-bcljQAlwE4VrVp+lJEf/MdHBesudgHDlXVzZygeLyqg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-OxGdTKzGliGshBWlx+5rxVSN1QWTsQKHzJXynnlCUg0=";
+    hash = "sha256-QzILjHzJKOoE7FP4tWaktVRq3b62Suu/kTP0jKQOoU8=";
   };
 
   nativeBuildInputs = [

@@ -130,6 +130,9 @@ let
         !stdenv.hostPlatform.isDarwin
         && !stdenv.hostPlatform.isAndroid
         && !(stdenv.hostPlatform.useLLVM or false)
+        # Avoids eager evaluation on isGNU up the chain since Meson uses Python
+        # which uses OpenSSL
+        && stdenv.targetPlatform.libc != "picolibc"
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
@@ -410,38 +413,11 @@ let
 in
 {
   # intended version "policy":
-  # - 1.1 as long as some package exists, which does not build without it
-  #   (tracking issue: https://github.com/NixOS/nixpkgs/issues/269713)
-  #   try to remove in 24.05 for the first time, if possible then
   # - latest 3.x LTS
   # - latest 3.x non-LTS as preview/for development
   #
   # - other versions in between only when reasonable need is stated for some package
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
-
-  # If you do upgrade here, please update in pkgs/top-level/release.nix
-  # the permitted insecure version to ensure it gets cached for our users
-  # and backport this to stable release (at time of writing this 23.11).
-  openssl_1_1 = common {
-    version = "1.1.1w";
-    hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
-    patches = [
-      ./1.1/nix-ssl-cert-file.patch
-
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./1.1/use-etc-ssl-certs-darwin.patch
-        else
-          ./1.1/use-etc-ssl-certs.patch
-      )
-    ];
-    withDocs = true;
-    extraMeta = {
-      knownVulnerabilities = [
-        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.11 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
-      ];
-    };
-  };
 
   openssl_3 = common {
     version = "3.0.21";

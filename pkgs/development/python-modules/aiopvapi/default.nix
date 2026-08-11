@@ -3,40 +3,44 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopvapi";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
-    tag = "v${version}";
-    hash = "sha256-yystaH2HRsJoYh2aTpOBA7DLiC2xwpBUccHwmJ0FlaY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pIi6A0YZnkFFg2juThPIO2IymzWZokTnyZl0QNUKstg=";
   };
 
-  patches = [
-    # https://github.com/sander76/aio-powerview-api/pull/46
-    ./fix-tests.patch
-  ];
+  postPatch = ''
+    substituteInPlace aiopvapi/__version__.py \
+      --replace-fail "3.3.0" "${finalAttrs.version}"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aiopvapi" ];
 
   meta = {
     description = "Python API for the PowerView API";
     homepage = "https://github.com/sander76/aio-powerview-api";
-    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

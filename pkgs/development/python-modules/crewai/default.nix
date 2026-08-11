@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   nix-update-script,
 
   # build-system
@@ -11,14 +10,17 @@
   aiofiles,
   aiosqlite,
   appdirs,
+  cel-python,
   chromadb,
   click,
+  crewai-cli,
+  crewai-core,
+  httpx,
   instructor,
   json-repair,
   json5,
   jsonref,
   lancedb,
-  litellm,
   mcp,
   openai,
   opentelemetry-api,
@@ -31,12 +33,14 @@
   pydantic-settings,
   pyjwt,
   python-dotenv,
+  pyyaml,
   regex,
-  textual,
   tokenizers,
   tomli,
   tomli-w,
-  uv,
+
+  # optional-dependencies
+  litellm,
 
   # tests
   a2a-sdk,
@@ -50,34 +54,24 @@
   pytestCheckHook,
   qdrant-client,
   vcrpy,
-  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.14.4";
+  version = "1.15.10";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "crewAIInc";
-    repo = "crewAI";
-    tag = finalAttrs.version;
-    hash = "sha256-QrJM2oVoqos8GMhrn9E6i1m1O1guP/q+51b8NYtJA5Q=";
-  };
+  inherit (crewai-core) src;
 
-  postPatch = ''
-    substituteInPlace ../../conftest.py \
-      --replace-fail \
-        "import vcr.stubs.httpx_stubs as httpx_stubs" \
-        "import vcr.stubs.httpcore_stubs as httpx_stubs" \
-      --replace-fail \
-        "def _patched_make_vcr_request(httpx_request: Any, **kwargs: Any) -> Any:" \
-        "def _patched_make_vcr_request(httpx_request: Any, request_body: Any = None, **kwargs: Any) -> Any:" \
-      --replace-fail \
-        "raw_body = httpx_request.read()" \
-        "raw_body = request_body if request_body is not None else httpx_request.read()"
-  '';
+  postPatch =
+    # The crewai executable is provided by the crewai-cli package (a dependency);
+    # drop the duplicate entry point to avoid a file collision in shared environments.
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'crewai = "crewai_cli.cli:crewai"' ""
+    '';
 
   sourceRoot = "${finalAttrs.src.name}/lib/crewai";
 
@@ -90,7 +84,6 @@ buildPythonPackage (finalAttrs: {
     "json-repair"
     "json5"
     "lancedb"
-    "litellm"
     "mcp"
     "openai"
     "opentelemetry-api"
@@ -106,21 +99,23 @@ buildPythonPackage (finalAttrs: {
     "tokenizers"
     "tomli"
     "tomli-w"
-    "uv"
   ];
 
   dependencies = [
     aiofiles
     aiosqlite
     appdirs
+    cel-python
     chromadb
     click
+    crewai-cli
+    crewai-core
+    httpx
     instructor
     json-repair
     json5
     jsonref
     lancedb
-    litellm
     mcp
     openai
     opentelemetry-api
@@ -133,19 +128,21 @@ buildPythonPackage (finalAttrs: {
     pydantic-settings
     pyjwt
     python-dotenv
+    pyyaml
     regex
-    textual
     tokenizers
     tomli
     tomli-w
-    uv
   ];
+
+  optional-dependencies = {
+    litellm = [ litellm ];
+  };
 
   pythonImportsCheck = [ "crewai" ];
 
   disabledTestPaths = [
     # Ignore tests that require {chromadb, telemetry, security, test_agent}
-    "tests/cli/test_git.py" # require git
     "tests/test_crew.py" # require require API keys
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
@@ -180,6 +177,7 @@ buildPythonPackage (finalAttrs: {
     "tests/agents/test_lite_agent.py"
 
     # Tests requiring crewai-files
+    "tests/agents/test_agent_executor.py"
     "tests/llms/test_multimodal.py"
     "tests/llms/test_multimodal_integration.py"
     "tests/test_agent_multimodal.py"
@@ -476,16 +474,9 @@ buildPythonPackage (finalAttrs: {
     "test_areset_wrong_client_type"
     "test_adelete_collection"
 
-    # Tests requiring litellm
-    "test_litellm_anthropic_error_handling"
-    "test_litellm_auth_error_handling"
-    "test_crew_agent_executor_litellm_auth_error"
-    "test_agent_with_callbacks"
-    "test_crew_memoization"
-    "test_task_guardrail"
-    "test_crew_name"
-    "test_get_conversion_instructions_non_gpt"
-    "test_supports_function_calling_false"
+    # Tests requiring crewai-tools
+    "test_non_ok_response_becomes_a_tool_failure"
+    "test_ok_response_still_returns_json"
 
     # Tests requiring network
     "test_agent_events_have_event_ids"
@@ -546,13 +537,14 @@ buildPythonPackage (finalAttrs: {
     anthropic
     boto3
     google-genai
-    pytestCheckHook
+    # litellm is an optional dependency upstream, but the test suite requires it
+    litellm
     pytest-asyncio
     pytest-recording
     pytest-xdist
+    pytestCheckHook
     qdrant-client
     vcrpy
-    versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -574,6 +566,5 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
-    mainProgram = "crewai";
   };
 })

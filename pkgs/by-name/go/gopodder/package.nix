@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gopodder";
-  version = "1.2.1";
+  version = "1.2.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cbrgm";
     repo = "gopodder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o/iQnr8WLArecRyMttCluuEYwKirKsOJyj5a7tdulVo=";
+    hash = "sha256-e+d2/1yAhUc88Hn8lAACfK3LGhGiPxQX+FjzNQc6Wqk=";
   };
 
-  vendorHash = "sha256-iG2IUfBVLQ7P0W4HOiGShVyD4mGUQ0dfGjG4XIYVtWU=";
+  vendorHash = "sha256-3SJbVflgwhIw2JmWoKUVjVL8fXWHfYXlm7iI3hYbTpE=";
 
   ldflags = [
     "-s"

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.14.2";
+  version = "1.14.3";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djcb";
     repo = "mu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0svY7XhhimIgsYUbHcNT4OCmpmhE4otRxqoasABEIA4=";
+    hash = "sha256-nDAtegMqKsUiKLQuTY7clFh2oBeW0OrG7LY1yeIW+R4=";
   };
 
   postPatch = ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.mesonEnable "guile" false)
     (lib.strings.mesonEnable "scm" false)
     (lib.strings.mesonEnable "readline" false)
-    (lib.strings.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.strings.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")
   ];
 

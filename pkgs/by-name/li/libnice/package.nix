@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/libnice/libnice/-/blob/${finalAttrs.version}/NEWS";
     description = "GLib ICE implementation";
     longDescription = ''
-      Libnice is an implementation of the IETF's Interactice Connectivity
+      Libnice is an implementation of the IETF's Interactive Connectivity
       Establishment (ICE) standard (RFC 5245) and the Session Traversal
       Utilities for NAT (STUN) standard (RFC 5389).
 

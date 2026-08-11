@@ -19,14 +19,13 @@
   libx11,
   libxcb,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "tableplus";
-  version = "0.1.296";
+  version = "0.1.308";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20251230232124/https://deb.tableplus.com/debian/22/pool/main/t/tableplus/tableplus_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-BJ+S2cBRZtehDU5DOzNEVGzhMoF4jvsNSwntoa5bnlc=";
+    hash = "sha256-sqiA+iCZrqHPIkh24JejtfBvILtZt3HN2bKf/1Sc714=";
   };
 
   nativeBuildInputs = [

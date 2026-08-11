@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MZ_OPENSSL" true)
     (lib.cmakeBool "MZ_PPMD" false) # PPMD support requres internet access to make a git clone
     (lib.cmakeBool "MZ_LIBCOMP" false) # builds only on Darwin by default where it fails due to mising headers
-    (lib.cmakeBool "MZ_BUILD_TESTS" finalAttrs.doCheck)
-    (lib.cmakeBool "MZ_BUILD_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "MZ_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "MZ_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "MZ_COMPAT" enableCompat)
   ]
   ++ lib.optionals stdenv.hostPlatform.isi686 [

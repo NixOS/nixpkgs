@@ -6,17 +6,17 @@
   obs-studio,
   pkg-config,
   qtbase,
+  nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttr: {
   pname = "obs-wayland-hotkeys";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "leia-uwu";
     repo = "obs-wayland-hotkeys";
     tag = "v${finalAttr.version}";
-    hash = "sha256-vOQfOEAnxn5vCaWpwDED1C107BB/d7T10kmKTXJ4k8k=";
+    hash = "sha256-m/AW2glyxJLPWcptZYbZ9Befm4gNmD1V3JDC8hjKtkA=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttr: {
   ];
 
   dontWrapQtApps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OBS Studio plugin to integrate OBS hotkeys with the Wayland global shortcuts portal";

@@ -153,6 +153,9 @@ in
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
   fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
+  fetchFromHuggingFace = recurseIntoAttrs (
+    callPackages ../build-support/fetchhuggingface/tests.nix { }
+  );
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
@@ -281,4 +284,6 @@ in
   );
 
   home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
+
+  openscad = recurseIntoAttrs (callPackage ../build-support/openscad/tests { });
 }

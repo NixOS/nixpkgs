@@ -234,15 +234,20 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/v${finalAttrs.version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
-    license = with lib.licenses; [
-      gpl2Only
-      gpl2Plus
-      gpl3Plus
-      lgpl21Plus
-      bsd3
-      bsdOriginalUC
-      publicDomain
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl1Plus
+        gpl2Only
+        gpl2Plus
+        gpl3Plus
+        lgpl21Plus
+        mit
+        bsd2
+        bsd3
+        eupl12
+        publicDomain
+      ];
     maintainers = with lib.maintainers; [ numinit ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;

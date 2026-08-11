@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "multipath-tcp";
     repo = "mptcpd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gPXtYmCLJ8eL6VfCi3kpDA7lNn38WB6J4FXefdu2D7M=";
   };
 

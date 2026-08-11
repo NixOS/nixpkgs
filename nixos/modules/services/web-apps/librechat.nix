@@ -218,7 +218,7 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall (lib.toInt cfg.env.PORT);
 
     systemd.tmpfiles.settings."10-librechat"."${cfg.dataDir}".d = {
       mode = "0755";

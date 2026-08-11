@@ -5,7 +5,7 @@
   tlpdb,
   bin,
   tlpdbxz,
-  tl,
+  pkgs,
   installShellFiles,
   coreutils,
   findutils,
@@ -146,6 +146,14 @@ lib.recursiveUpdate orig rec {
   ulqda.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DigestSHA1 ])) ];
 
   #### python packages
+  pygmentex.extraBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        pygments
+        chardet
+      ]
+    ))
+  ];
   pythontex.extraBuildInputs = [ (python3.withPackages (ps: with ps; [ pygments ])) ];
 
   #### other runtime PATH dependencies
@@ -253,9 +261,9 @@ lib.recursiveUpdate orig rec {
 
   context.binlinks = {
     context = "luametatex";
-    "context.lua" = tl.context.tex + "/scripts/context/lua/context.lua";
+    "context.lua" = pkgs.context.tex + "/scripts/context/lua/context.lua";
     mtxrun = "luametatex";
-    "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
+    "mtxrun.lua" = pkgs.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
   dvipdfmx.binlinks = {
@@ -269,10 +277,10 @@ lib.recursiveUpdate orig rec {
 
   # TODO: handle symlinks in bin.core
   ptex.binlinks = {
-    pbibtex = tl.uptex.out + "/bin/upbibtex";
-    pdvitype = tl.uptex.out + "/bin/updvitype";
-    ppltotf = tl.uptex.out + "/bin/uppltotf";
-    ptftopl = tl.uptex.out + "/bin/uptftopl";
+    pbibtex = pkgs.uptex.out + "/bin/upbibtex";
+    pdvitype = pkgs.uptex.out + "/bin/updvitype";
+    ppltotf = pkgs.uptex.out + "/bin/uppltotf";
+    ptftopl = pkgs.uptex.out + "/bin/uptftopl";
   };
 
   texdef.binlinks = {
@@ -281,7 +289,7 @@ lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = tl."texlive.infra".out + "/bin/mktexlsr";
+    texhash = pkgs."texlive.infra".out + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {
@@ -309,7 +317,7 @@ lib.recursiveUpdate orig rec {
   '';
 
   context-legacy.postFixup = ''
-    sed -i 's!File.dirname(\$0)!'"'"'${tl.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
+    sed -i 's!File.dirname(\$0)!'"'"'${pkgs.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
   '';
 
   cyrillic-bin.postFixup = ''
@@ -476,7 +484,7 @@ lib.recursiveUpdate orig rec {
 
   # find files in source container, fix incompatibilities with snobol4
   texaccents.postFixup = ''
-    sed -i '1s!$! -I${tl.texaccents.texsource}/source/support/texaccents!' "$out"/bin/*
+    sed -i '1s!$! -I${pkgs.texaccents.texsource}/source/support/texaccents!' "$out"/bin/*
   '';
   texaccents.postUnpack = ''
     if [[ -f "$out"/source/support/texaccents/grepl.inc ]] ; then
@@ -564,7 +572,7 @@ lib.recursiveUpdate orig rec {
 
   # Use top-level git-latexdiff's version and src. NOTE that this derivation is
   # still different from top-level's `git-latexdiff`, due to __structuredAttrs
-  # enabled unconditionally. Still though this derivation produces a funcitonal
+  # enabled unconditionally. Still though this derivation produces a functional
   # binary.
   inherit git-latexdiff;
 
@@ -586,7 +594,7 @@ lib.recursiveUpdate orig rec {
         mkdir -p support/texdoc
         touch support/texdoc/NEWS
 
-        TEXMFCNF="${tl.kpathsea.tex}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+        TEXMFCNF="${pkgs.kpathsea.tex}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
           "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
           -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
@@ -596,7 +604,7 @@ lib.recursiveUpdate orig rec {
 
     # install zsh completion
     postFixup = ''
-      TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
+      TEXMFCNF="${pkgs.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       installShellCompletion --zsh "$TMPDIR"/_texdoc
     '';
@@ -618,7 +626,7 @@ lib.recursiveUpdate orig rec {
       coreutils
       gnused
       gnupg
-      tl.kpathsea
+      pkgs.kpathsea
       (perl.withPackages (ps: with ps; [ Tk ]))
     ];
 
@@ -631,7 +639,7 @@ lib.recursiveUpdate orig rec {
         lib.makeBinPath [
           coreutils
           gnused
-          tl.kpathsea
+          pkgs.kpathsea
         ]
       }''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';

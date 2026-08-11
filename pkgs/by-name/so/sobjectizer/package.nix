@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SOBJECTIZER_BUILD_STATIC" withStatic)
     (lib.cmakeBool "SOBJECTIZER_BUILD_SHARED" withShared)
     (lib.cmakeBool "BUILD_EXAMPLES" (buildExamples && withStatic))
-    (lib.cmakeBool "BUILD_TESTS" (finalAttrs.doCheck && withShared))
+    (lib.cmakeBool "BUILD_TESTS" (finalAttrs.finalPackage.doCheck && withShared))
   ];
 
   # The tests require the shared library thanks to the patch.

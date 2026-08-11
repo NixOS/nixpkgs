@@ -10,7 +10,7 @@
   pkg-config,
   python3,
   jonquil,
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 }:
 
 assert (
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     pkg-config
     python3
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ]
   ++ lib.optionals (buildType == "meson") [
     meson

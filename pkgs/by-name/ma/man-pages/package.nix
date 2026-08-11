@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "6.18";
 
   # `man` is first: most people installing `man-pages` want man pages.
-  # The binaries could be split to a seperate package (as upstream suggests),
-  # but storing in a seperate not-installed-by-default output is easier,
+  # The binaries could be split to a separate package (as upstream suggests),
+  # but storing in a separate not-installed-by-default output is easier,
   # and has a similar effect.
   outputs = [
     "man"

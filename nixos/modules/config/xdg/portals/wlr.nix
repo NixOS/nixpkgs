@@ -12,7 +12,7 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ minijackson ];
+    maintainers = [ ];
   };
 
   options.xdg.portal.wlr = {

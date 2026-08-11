@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "chromium-hsts-preload-list";
-  version = "152.0.7937.0";
+  version = "153.0.7990.1";
 
   src = fetchurl {
     url = "https://raw.github.com/chromium/chromium/${finalAttrs.version}/net/http/transport_security_state_static.json";
-    hash = "sha256-kC18kJADCyxCtznyPzynTpnLOewIUWAGV8sQttUs9uU=";
+    hash = "sha256-ObT9lWtjw/V0UGY552pEWJ6KbfF0izB/zJ7v+00IFB8=";
   };
 
   dontUnpack = true;

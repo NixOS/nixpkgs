@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   runCommand,
   fetchurl,
   appimageTools,
@@ -11,11 +12,23 @@
 }:
 let
   pname = "beeper";
-  version = "4.2.985";
-  src = fetchurl {
-    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-oWJdpZL+Q8/jaI/WJfgXUisPASuvHkxU6rOeJkedHSM=";
+  version = "4.3.0";
+
+  inherit (stdenv.hostPlatform) system;
+
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
+      hash = "sha256-/DJmQMQGzZFnONjQZ9fr9NDtGv9Kg8jF8aBzAOUyCUg=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
+      hash = "sha256-zZIbcE78XcXremyWjs3jsiBRTwP24y45CfZHJym8MhQ=";
+    };
   };
+
+  src = sources.${system} or (throw "beeper is not supported on ${system}");
+
   # Beeper 4.2.985+ ships AppImages without the type-2 magic bytes
   # (ASCII "AI" + 0x02 at ELF offset 8) that appimageTools.extract requires.
   linuxSrc = runCommand "Beeper-${version}-appimage" { inherit src; } ''
@@ -23,6 +36,7 @@ let
     chmod +w $out
     printf 'AI\x02' | dd of=$out bs=1 seek=8 conv=notrunc status=none
   '';
+
   appimageContents = appimageTools.extract {
     inherit pname version;
     src = linuxSrc;
@@ -67,6 +81,7 @@ appimageTools.wrapAppImage {
   '';
 
   passthru = {
+    inherit sources;
     updateScript = lib.getExe (writeShellApplication {
       name = "update-beeper";
       runtimeInputs = [
@@ -77,12 +92,11 @@ appimageTools.wrapAppImage {
         set -o errexit
         latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
         version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
-        update-source-version beeper "$version"
+        for platform in ${lib.escapeShellArgs (lib.attrNames sources)}; do
+          update-source-version beeper "$version" --ignore-same-version --source-key="passthru.sources.$platform"
+        done
       '';
     });
-
-    # needed for nix-update
-    inherit src;
   };
 
   meta = {
@@ -99,6 +113,8 @@ appimageTools.wrapAppImage {
       zh4ngx
       aspauldingcode
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames sources;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "beeper";
   };
 }

@@ -5,13 +5,12 @@
   lib,
   gnugrep,
   gnused,
-  curl,
+  curl-impersonate,
   catt,
   syncplay,
-  openssl,
   ffmpeg,
   fzf,
-  aria2,
+  yt-dlp,
   mpv,
   vlc,
   iina,
@@ -28,27 +27,29 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
-  version = "4.14";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
+    hash = "sha256-rRQESi0Skoyf1jy/dRRK6ooKRPQhkak107kk5ulwZYI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeInputs = [
-    openssl
     gnugrep
     gnused
-    curl
+    curl-impersonate
     fzf
     ffmpeg
-    aria2
+    yt-dlp
   ]
   ++ lib.optional chromecastSupport catt
   ++ lib.optional syncSupport syncplay;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall

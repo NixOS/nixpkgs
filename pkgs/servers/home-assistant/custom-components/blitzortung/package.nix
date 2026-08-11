@@ -28,11 +28,6 @@ buildHomeAssistantComponent (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # 2026.5.0 compat issue
-    "test_connect_with_server_stats"
-  ];
-
   meta = {
     description = "Custom Component for fetching lightning data from blitzortung.org";
     homepage = "https://github.com/mrk-its/homeassistant-blitzortung";

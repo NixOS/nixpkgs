@@ -7,7 +7,7 @@
 }:
 let
   base = {
-    version = "0-unstable-2024-07-29";
+    version = "0-unstable-2026-07-01";
     nativeBuildInputs = [ unzip ];
     dontBuild = true;
     dontFixup = true;
@@ -30,9 +30,10 @@ let
     }:
     let
       src = fetchFromGitHub {
+        name = "nltk-${location}";
         owner = "nltk";
         repo = "nltk_data";
-        rev = "cfe82914f3c2d24363687f1db3b05e8b9f687e2b";
+        rev = "550b6625bcef1f2abff2ff770a5a0d272c9c6b2a";
         inherit hash;
         sparseCheckout = [ "packages/${location}/${pname}.zip" ];
       };
@@ -60,7 +61,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "chunkers";
-      hash = "sha256-kemjqaCM9hlKAdMw8oVJnp62EAC9rMQ50dKg7wlAwEc=";
+      hash = "sha256-+n0TkS+/NHk0OqFZNQBLIcO/9uw56Mn7/AyNkRDGZEQ=";
     };
 
   makeCorpus =
@@ -68,7 +69,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "corpora";
-      hash = "sha256-8lMjW5YI8h6dHJ/83HVY2OYGDyKPpgkUAKPISiAKqqk=";
+      hash = "sha256-7uiTXZ+eMyBtH135NsYoAjLV6R/DG2hVV+RJwYDmu50=";
     };
 
   makeGrammar =
@@ -76,7 +77,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "grammars";
-      hash = "sha256-pyLEcX3Azv8j1kCGvVYonuiNgVJxtWt7veU0S/yNbIM=";
+      hash = "sha256-KoZ1q0F2X7bSFdbw1qK/jzZ3iuMJXTYHfogylO7nHEY=";
     };
 
   makeHelp =
@@ -84,7 +85,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "help";
-      hash = "sha256-97mYLNES5WujLF5gD8Ul4cJ6LqSzz+jDzclUsdBeHNE=";
+      hash = "sha256-2x3kemPdipHAj0TGYCm6Il5Aapx+fuo/jlNT9+XWbss=";
     };
 
   makeMisc =
@@ -92,7 +93,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "misc";
-      hash = "sha256-XtizfEsc8TYWqvvC/eSFdha2ClC5/ZiJM8nue0vXLb4=";
+      hash = "sha256-edBgrWM+eQgEGWq7oBHTebtvJPZcofCzzXSu3S9Fa1o=";
     };
 
   makeModel =
@@ -100,7 +101,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "models";
-      hash = "sha256-iq3weEgCci6rgLW2j28F2eRLprJtInGXKe/awJPSVG4=";
+      hash = "sha256-uTRr9pBfL1KZ7z8WTQPAiWlMn/os4ISa9tj/Si/RmtI=";
     };
 
   makeTagger =
@@ -108,7 +109,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "taggers";
-      hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
+      hash = "sha256-V5bs0JUQgr4ijs2NaF5JXzVwT1e/ZYnlU0TZXeoqfM4=";
     };
 
   makeTokenizer =
@@ -116,7 +117,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "tokenizers";
-      hash = "sha256-OzMkruoYbFKqzuimOXIpE5lhHz8tmSqOFoLT+fjdTVg=";
+      hash = "sha256-V/Qs8wJbCZB8gp5pAAM1JK8aAfcHorNyvAkHUat56uY=";
     };
 
   makeStemmer =
@@ -124,7 +125,7 @@ let
     makeNltkDataPackage {
       inherit pname;
       location = "stemmers";
-      hash = "sha256-mNefwOPVJGz9kXV3LV4DuV7FJpNir/Nwg4ujd0CogEk=";
+      hash = "sha256-6sQQCA8r8jWRFImpiBovUt/IzHjh13W6X8yLpn61cs0=";
     };
 in
 lib.makeScope newScope (self: {
@@ -152,6 +153,7 @@ lib.makeScope newScope (self: {
   crubadan = makeCorpus "crubadan";
   dependency-treebank = makeCorpus "dependency_treebank";
   dolch = makeCorpus "dolch";
+  english_wordnet = makeCorpus "english_wordnet";
   europarl-raw = makeCorpus "europarl_raw";
   extended-omw = makeCorpus "extended_omw";
   floresta = makeCorpus "floresta";
@@ -170,6 +172,7 @@ lib.makeScope newScope (self: {
   mac-morpho = makeCorpus "mac_morpho";
   machado = makeCorpus "machado";
   masc-tagged = makeCorpus "masc_tagged";
+  mock_corpus = makeCorpus "mock_corpus";
   movie-reviews = makeCorpus "movie_reviews";
   mte-teip5 = makeCorpus "mte_teip5";
   names = makeCorpus "names";
@@ -178,6 +181,7 @@ lib.makeScope newScope (self: {
   nps-chat = makeCorpus "nps_chat";
   omw = makeCorpus "omw";
   omw-1-4 = makeCorpus "omw-1.4";
+  omw-2-0 = makeCorpus "omw-2.0";
   opinion-lexicon = makeCorpus "opinion_lexicon";
   panlex-swadesh = makeCorpus "panlex_swadesh";
   paradigms = makeCorpus "paradigms";

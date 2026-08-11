@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 let
@@ -19,14 +20,11 @@ let
         hash = "sha256-UI3JP/5Os7xWB07dwlEpWuDMG1awpsOr0itmZpxGtyg=";
       };
 
-      installPhase = ''
-        runHook preInstall
+      sourceRoot = "${finalAttrs.src.name}/${directory}";
+      nativeBuildInputs = [ installFonts ];
 
-
-        install -D -m444 -t "$out/share/fonts/truetype" "${directory}/"*.ttf
-        install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" "${directory}/OFL.txt"
-
-        runHook postInstall
+      postInstall = ''
+        install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" OFL.txt
       '';
 
       meta = {
@@ -67,7 +65,7 @@ lib.mapAttrs mkOpenRelayTypeface {
         supports many scripts and a large number of Unicode blocks as well as
         constructed scripts as encoded in the Under-ConScript Unicode Registry,
         pseudographics and semigraphics, and tons of private use characters. It
-        has been superceded by Fairfax HD but is still maintained.
+        has been superseded by Fairfax HD but is still maintained.
       '';
     };
   };

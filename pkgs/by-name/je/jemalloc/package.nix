@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
@@ -51,6 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
     # `rtree_read.constprop.0` shows up in some builds but
     # not others, so we fall back to O2:
     ./o3-to-o2.patch
+
+    # Active profiling may make xallocx decline to grow non-page-aligned
+    # allocations, so test/integration/extent can observe decommit without
+    # the matching commit on platforms with real decommit/commit.
+    #
+    # A (longer) patch addressing the failure posted upstream at:
+    # https://github.com/jemalloc/jemalloc/pull/2954
+    ./skip-extent-test-with-prof-active.patch
+
+    # the nonstandard `std::__throw_bad_alloc` is no longer exposed in gcc 16.
+    # this makes it conditional on exceptions and defers to either
+    # `throw std::bad_alloc()` or `std::terminate` as appropriate.
+    # https://github.com/jemalloc/jemalloc/pull/2900
+    (fetchpatch {
+      name = "jemalloc-dont-use-nonstandard-throw-bad-alloc.patch";
+      url = "https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea.patch";
+      hash = "sha256-pL9fo8UMSbFlHCo3LFFkw0qBsdrVHcEJIkLutZYa2Yg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -60,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
+    # Profiling is inert unless enabled at runtime
+    "--enable-prof"
   ]
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="

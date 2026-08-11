@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "miraie-ac";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "miraie_ac";
-    hash = "sha256-IiRDPz5IcD3Df+vw4YvR3zc0oThGjb7pBJfD4d98h/g=";
+    hash = "sha256-q4CXdJrNr9nhkY74eHllmRchrQx770vQJMqRtggxxlw=";
   };
 
   build-system = [ poetry-core ];

@@ -8,10 +8,12 @@
 
   # dependencies
   boto3,
-  langchain,
   langchain-core,
   numpy,
   pydantic,
+
+  # tests
+  langchain,
 
   # optional-dependencies
   anthropic,
@@ -29,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.6.2";
+  version = "1.6.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-MFlC9/9ZC1b5jAkvLRy2alcSYU5+KETJ6rIW05nLR5I=";
+    hash = "sha256-7qg2cUjlFEo6ekK269Ew0wmmSx+1BwUdTJZCMPd2tBU=";
   };
 
   postPatch = ''
@@ -51,7 +53,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     boto3
-    langchain
     langchain-core
     numpy
     pydantic
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     anthropic
+    langchain
     langchain-tests
     pytest-asyncio
     pytest-cov-stub

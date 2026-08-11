@@ -37,7 +37,7 @@ let
   python = scons.python.withPackages (
     ps: with ps; [
       pyyaml
-      cheetah3
+      ct3
       psutil
       setuptools_80
       distutils

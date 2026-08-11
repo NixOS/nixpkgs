@@ -79,7 +79,10 @@ maven.buildMavenPackage rec {
     changelog = "https://github.com/DraqueT/PolyGlot/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ noodlez1232 ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "PolyGlot";
   };
 }

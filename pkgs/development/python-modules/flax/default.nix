@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.7";
+  version = "0.12.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,16 +43,8 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a78KiTsCCARWZvbxz9QKdUKnjkDJGXcPVVJu5rU4m/U=";
+    hash = "sha256-0I5RwA1ORlWtSawOZhgsZMBQSOusyxD0WnIoPgZdxZw=";
   };
-
-  # DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
-  postPatch = ''
-    substituteInPlace tests/nnx/transforms_test.py \
-      --replace-fail \
-        "with mesh:" \
-        "with jax.set_mesh(mesh):"
-  '';
 
   build-system = [
     setuptools

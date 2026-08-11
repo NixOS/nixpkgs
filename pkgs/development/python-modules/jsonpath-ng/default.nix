@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hypothesis,
   ply,
   pytestCheckHook,
   setuptools,
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "setuptools";
   # TODO: typo; change to pyproject = true;
   pypropject = true;
@@ -18,14 +19,17 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = "jsonpath-ng";
     tag = "v${version}";
-    hash = "sha256-sfIqEc5SsNQYxK+Ur00fFdVoC0ysOkHrx4Cq/3SpGHw=";
+    hash = "sha256-soCSMOHJpAM/tOaydvv8tGS/VewtSMBteDNipSPttI0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ ply ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jsonpath_ng" ];
 

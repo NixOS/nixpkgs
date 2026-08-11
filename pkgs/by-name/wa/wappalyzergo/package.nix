@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wappalyzergo";
-  version = "0.2.89";
+  version = "0.2.93";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "wappalyzergo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L5DBXn96PK4Ed3MhmIgfVDLniGWgB/iogI+HKzfsvvA=";
+    hash = "sha256-faf+DiFHyNlZZ0HG7JlgKk8Cb1c8fDqVy/UjQLs7iYw=";
   };
 
-  vendorHash = "sha256-9MUhivdlbxAhcdbLALdt6vhxvMLzm+WincF3iG9pR1A=";
+  vendorHash = "sha256-KicCQ184+ybGcxTdOjVpgxZ4XzELvVqLyJJXIdiImII=";
 
   ldflags = [ "-s" ];
 

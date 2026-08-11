@@ -1,11 +1,11 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   meson,
   ninja,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-protocols";
   version = "0.7.0";
 

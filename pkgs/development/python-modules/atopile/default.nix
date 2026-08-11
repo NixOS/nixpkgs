@@ -176,7 +176,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # timouts
+    # timeouts
     "test/test_cli.py"
     "test/cli/test_packages.py"
     "test/end_to_end/test_net_naming.py"

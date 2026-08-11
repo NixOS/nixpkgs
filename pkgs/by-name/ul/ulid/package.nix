@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ulid";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "oklog";
     repo = "ulid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kPNLaZMGwGc7ngPCivf/n4Bis219yOkGAaa6mt7+yTY=";
+    hash = "sha256-J4+O+1pQPAr+ieHBocT/AQ9kjmcU40RqRKMrS4qQxfc=";
   };
 
   vendorHash = "sha256-s1YkEwFxE1zpUUCgwOAl8i6/9HB2rcGG+4kqnixTit0=";

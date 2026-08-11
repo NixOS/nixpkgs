@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "js8call";
-  version = "2.5.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "JS8Call-improved";
     repo = "JS8Call-improved";
-    tag = "release/${finalAttrs.version}";
-    hash = "sha256-dpPh3+s29ksdVGc1I5JOJrqzS51Bda8afgU5RrO6B3w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yT+0nZQqNHQrc2biL2Qneg6CdNC2yy7bs+NvdQ3I1gQ=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp JS8Call $out/bin/js8call
     cp ../LICENSE ../README.md $out/share/doc/js8call
     cp ../artwork/js8call_icon.png $out/share/icons/hicolor/128x128/apps
-    cp ../JS8Call.desktop $out/share/applications
+    cp ../.github/workflows/misc/JS8Call.desktop $out/share/applications
     runHook postInstall
   '';
 

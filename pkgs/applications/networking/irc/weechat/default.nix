@@ -105,11 +105,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.9.3";
+  version = "4.10.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-XH2VOfqGyZ6nalUaiJqSusIeq3uyeQ29NGRS0AsQw3w=";
+    hash = "sha256-w6fnxqVAHd6aRtAmT6RKowMsqYqoZBDEVNPeXGlQXFQ=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031

@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "0.11.0";
+  version = "0.12.1";
 
   # me3 creates a pipe under /tmp needed by the compat tool subprocess
   steam-run =
@@ -22,10 +22,10 @@ let
     owner = "garyttierney";
     repo = "me3";
     tag = "v${version}";
-    sha256 = "sha256-XyeMVPGzNF2syipLz9HPtUg7lhxcEq434FnRH3Ax+HM=";
+    sha256 = "sha256-pGK6A85Xp6NbpYRKJTgi47acv4c8dZgb+Jdmeu8F/uU=";
   };
 
-  cargoHash = "sha256-T1HeYe9FUC5oy/SDeEd6vV4D9YIGIXMkbzf43gRNyt8=";
+  cargoHash = "sha256-ss2NkDHfd5NBLGpnZ80UdvO0nn2mGueO0mnlWkog1jc=";
 
   me3-cli = rustPlatform.buildRustPackage (final: {
     inherit cargoHash version src;
@@ -79,7 +79,7 @@ let
 in
 symlinkJoin {
   inherit version;
-  name = "me3";
+  pname = "me3";
 
   paths = [
     me3-cli

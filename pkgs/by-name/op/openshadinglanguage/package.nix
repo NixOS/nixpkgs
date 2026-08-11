@@ -31,13 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-edtYKN2obQexQtclrIUflm3upc14MhHQ7eLvit5Hqq0=";
   };
 
+  patches = [ ./libclang-no-shared.patch ];
+
   cmakeFlags = [
+    (lib.cmakeBool "LLVM_STATIC" true)
     (lib.cmakeBool "USE_QT" false)
 
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
     (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
-    (lib.cmakeFeature "LLVM_CONFIG" "${llvm.dev}/bin/llvm-config")
     (lib.cmakeFeature "LLVM_DIRECTORY" "${llvm}")
   ];
 
@@ -52,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bison
-    clang
     cmake
     flex
   ];
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hexdump
     libclang
+    libxml2
     llvm
     openexr
     openimageio
@@ -68,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pybind11
     robin-map
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libxml2
   ];
 
   propagatedBuildInputs = [

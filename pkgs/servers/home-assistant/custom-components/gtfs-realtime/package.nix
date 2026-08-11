@@ -30,9 +30,9 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # upstream snapshot is stale
-    "test_diagnostics"
+  pytestFlags = [
+    # delete unused snapshots in 0.4.8 release
+    "--snapshot-update"
   ];
 
   ignoreVersionRequirement = [ "gtfs_station_stop" ];

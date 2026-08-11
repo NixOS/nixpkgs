@@ -7,15 +7,12 @@
   pythonSupport ? false,
   python3Packages,
 
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  graphviz,
+  # buildInputs
+  jrl-cmakemodules,
 
   # propagatedBuildInputs
   cereal,
   eigen,
-  jrl-cmakemodules,
   simde,
 
   # nativeCheckInputs
@@ -46,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_DOCUMENTATION" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
@@ -54,20 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    jrl-cmakemodules.docsNativeBuildInputs
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
+
+  buildInputs = [ jrl-cmakemodules ];
 
   propagatedBuildInputs = [
     cereal
     eigen
-    jrl-cmakemodules
     simde
   ]
   ++ lib.optionals pythonSupport [ python3Packages.nanobind ];

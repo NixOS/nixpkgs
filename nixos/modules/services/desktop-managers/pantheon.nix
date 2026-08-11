@@ -197,6 +197,7 @@ in
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
         pantheon.elementary-settings-daemon
+        pantheon.pantheon-agent-polkit
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -212,6 +213,12 @@ in
         # https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "gnome-session-initialized.target" ];
         # The daemon might launch external applications via g_app_info_launch.
+        environment.PATH = lib.mkForce null;
+      };
+
+      systemd.user.services."io.elementary.desktop.agent-polkit" = {
+        # Same as above.
+        wantedBy = [ "gnome-session-initialized.target" ];
         environment.PATH = lib.mkForce null;
       };
 

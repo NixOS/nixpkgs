@@ -7,7 +7,6 @@
   python3,
   gtk3,
   pantheon,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
@@ -31,7 +30,6 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

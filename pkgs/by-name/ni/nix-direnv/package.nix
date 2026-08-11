@@ -9,13 +9,13 @@
 
 resholve.mkDerivation (finalAttrs: {
   pname = "nix-direnv";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = finalAttrs.version;
-    hash = "sha256-3qT5mSqHi+0cskdoOGPVbuSzkoWtwOHBVXUOL84dAM8=";
+    hash = "sha256-dNJeSRuuqA2avtLpTse7mTTmnYdVnC5BxRsofuLXiqE=";
   };
 
   installPhase = ''

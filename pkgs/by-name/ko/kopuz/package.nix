@@ -6,6 +6,7 @@
   cmake,
   git,
   openssl,
+  cacert,
   tailwindcss_4,
   dioxus-cli,
   yt-dlp,
@@ -44,18 +45,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kopuz";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Kopuz-org";
     repo = "kopuz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e3cPRxaUIbxXRQqGXRf9rVLP97eVGnz/D24O8WGDJcA=";
+    hash = "sha256-sqfI4v3J6GAMTQaB+UhnLlwpfBKFJq2JUl7fZMt1yxE=";
   };
 
-  cargoHash = "sha256-69FjH+cXaqsviDUlAGnkPrvxKVq0w3LXDwgEraoaEGA=";
+  cargoHash = "sha256-lu1PaWf02D0dK+IV+fIzIKNr8ORfkSHFnRhnPdXaueI=";
 
-  env.RUSTY_V8_ARCHIVE = librustyV8;
+  env = {
+    RUSTY_V8_ARCHIVE = librustyV8;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   nativeBuildInputs = [
     pkg-config

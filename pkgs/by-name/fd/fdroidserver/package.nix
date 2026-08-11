@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
-  version = "2.4.3";
+  version = "2.4.5";
 
   pyproject = true;
 
@@ -17,13 +17,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "fdroid";
     repo = "fdroidserver";
     tag = finalAttrs.version;
-    hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
+    hash = "sha256-AiDhtYpaOXTRVY5QA7fOgfGbpCtdJYzt3tnY2lrGJao=";
   };
 
   pythonRelaxDeps = [
     "androguard"
     "pyasn1"
     "pyasn1-modules"
+    "ruamel-yaml"
+    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
@@ -54,13 +56,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
+    asn1crypto
     androguard
     biplist
     clint
     defusedxml
     gitpython
     libcloud
-    libvirt
+    libvirt-python
     magic
     mwclient
     oscrypto
@@ -74,13 +77,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
     qrcode
     requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
+    ruamel-yaml
     sdkmanager
     yamllint
   ];

@@ -1,17 +1,17 @@
 {
   lib,
+  pkgs,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
   pillow,
-  zbar,
   pytestCheckHook,
   setuptools,
 }:
 
 let
-  zbar' = zbar.override {
+  zbar' = pkgs.zbar.override {
     enableVideo = false;
     withXorg = false;
   };

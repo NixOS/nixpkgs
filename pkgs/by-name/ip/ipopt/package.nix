@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
-    rev = "releases/${finalAttrs.version}";
-    sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
   outputs =

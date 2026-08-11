@@ -52,6 +52,11 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  # partially applied set of functions for each hash type
+  # this is indexed into with a prefix to avoid re-calling hasPrefix, since it
+  # takes advantage of partial application for performance reasons
+  hasAlgoPrefix = lib.genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
+
   /**
     Resolve a URL against the available mirrors.
 
@@ -87,10 +92,10 @@ let
       map (mirror: mirror + elemAt mirrorSplit 1) mirrorList;
 
   rewriteAllUrls =
-    urls:
     if rewriteURL == null then
-      urls
+      urls: urls
     else
+      urls:
       let
         u = concatMap (
           url:
@@ -218,12 +223,12 @@ lib.extendMkDerivation {
 
     let
       preRewriteUrls =
-        if urls != [ ] && url == "" then
-          (if isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}")
-        else if urls == [ ] && url != "" then
+        if urls == [ ] && url != "" then
           (
             if isString url then [ url ] else throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
           )
+        else if urls != [ ] && url == "" then
+          (if isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}")
         else
           throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
 
@@ -310,7 +315,7 @@ lib.extendMkDerivation {
         if
           hash_.outputHashAlgo == null
           || hash_.outputHash == ""
-          || hasPrefix hash_.outputHashAlgo hash_.outputHash
+          || hasAlgoPrefix.${hash_.outputHashAlgo} hash_.outputHash
         then
           hash_.outputHash
         else

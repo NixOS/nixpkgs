@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "bsp-layout";
-  version = "unstable-2022-06-19";
+  version = "0.0.10-unstable-2022-06-19";
 
   src = fetchFromGitHub {
     owner = "phenax";

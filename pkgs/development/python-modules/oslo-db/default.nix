@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "oslo_db.tests.sqlalchemy.test_utils.TestModelQuery.test_project_filter_allow_none")
+    stestr run
     runHook postCheck
   '';
 

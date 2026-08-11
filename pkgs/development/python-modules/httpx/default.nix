@@ -100,6 +100,9 @@ buildPythonPackage rec {
     "test_client_decode_text_using_autodetect"
     "test_client_decode_text_using_explicit_encoding"
     "test_response_decode_text_using_autodetect"
+    # uvicorn access logging mismatch
+    "test_logging_request"
+    "test_logging_redirect_chain"
   ];
 
   disabledTestPaths = [ "tests/test_main.py" ];

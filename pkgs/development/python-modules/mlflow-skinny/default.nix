@@ -39,9 +39,16 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-e11ZncpvThb1Nt6OH+O6Do74N3dphxBiK/HIeLQMxAw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GVa/O2nT0vJS6NG00NMGpyX+3Z+bbOarNe0ZZqCQrH8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools<=82.0.1" \
+        "setuptools"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libs/skinny";
 

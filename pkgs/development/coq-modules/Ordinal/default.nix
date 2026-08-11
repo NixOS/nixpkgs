@@ -10,12 +10,12 @@ mkCoqDerivation {
   owner = "snu-sf";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.version [
-      {
-        case = range "8.12" "9.2";
-        out = "0.5.6";
-      }
+    lib.switch coq.coq-version [
+      (case (range "8.12" "9.3") "0.5.6")
     ] null;
   release = {
     "0.5.6".hash = "sha256-ox9GaUsh/tWJGEPawPnNqXULI0kYglKmNmiTL8dF3uU=";

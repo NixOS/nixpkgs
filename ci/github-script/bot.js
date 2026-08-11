@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
   const { DefaultArtifactClient } = await import('@actions/artifact')
@@ -395,6 +396,13 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
         per_page: 100,
       })
+
+      // label llm-assisted PRs accordingly
+      const assistedByPattern = /Assisted-by: (?!nix-init)/i
+      evalLabels['llm-assisted'] = prCommits.some((c) =>
+        assistedByPattern.test(c.commit.message),
+      )
+
       const commitSubjects = prCommits.map(
         (c) => c.commit.message.split('\n')[0],
       )

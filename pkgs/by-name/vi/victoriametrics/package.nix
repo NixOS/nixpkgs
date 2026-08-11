@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.146.0";
+  version = "1.149.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EWRVbUeugyLsExP3NyPVLd7v2kwbRg5OjFg2WAY1FuM=";
+    hash = "sha256-RRXrs6OfndYBcVLxfUfZZUuNoBuyC+1lpf1e3qISdQA=";
   };
 
   vendorHash = null;
@@ -60,7 +60,6 @@ buildGoModule (finalAttrs: {
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
       --replace-fail "time.After(10 " "time.After(120 " \
-      --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
       --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)"
   '';
 
@@ -79,7 +78,13 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # avoid pmm and -cluster releases
+        "--version-regex"
+        "v([0-9\\.]+)"
+      ];
+    };
   };
 
   meta = {

@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "oxfordcontrol";
+    owner = "osqp";
     repo = "osqp";
     tag = "v${finalAttrs.version}";
     hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";

@@ -21,17 +21,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.4.3";
+  version = "5.4.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-opICnFQ6xFOMpXYouBQsntypsoOjqAyzk+2UfgWE8A8=";
+    hash = "sha256-Tut86kxxvTuABQWitPyFSd1vRnW36eFkC/8bNDpJwzo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
-    hash = "sha256-eAiXdsHWZca0wx5FONGfa7JDcpDHyCABJOUROhwAsZo=";
+    hash = "sha256-0/HLB9wMVQALga7ZJcPSDczjcBinMwQz2vTPep+x8p8=";
   };
 
   cargoRoot = "rec-rust-lib/rust";

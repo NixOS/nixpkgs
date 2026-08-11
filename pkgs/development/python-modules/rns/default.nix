@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rns";
-  version = "1.3.8";
+  version = "1.4.2";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "rns";
     version = finalAttrs.version;
-    hash = "sha256-1cHzlJOqm3WrZ7g5l9StW9NX5n6dYp/6KU4xov/eNH0=";
+    hash = "sha256-J15DaYGcmfu9uLcKDU6z/JdncW/KY5/nIGhWg5+zhno=";
   };
 
   patches = [

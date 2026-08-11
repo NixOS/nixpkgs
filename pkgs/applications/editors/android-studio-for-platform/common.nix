@@ -19,7 +19,7 @@
   gnugrep,
   gnused,
   gnutar,
-  gtk2,
+  gtk3,
   glib,
   gzip,
   fontsConf,
@@ -119,7 +119,7 @@ let
             libxrandr
 
             # For GTKLookAndFeel
-            gtk2
+            gtk3
             glib
 
             # For Soong sync

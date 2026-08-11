@@ -6,7 +6,7 @@
   fetchpatch,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   addict,
@@ -71,7 +71,8 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "import numpy.compat" ""
     '';
 
-  build-system = [ setuptools ];
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict

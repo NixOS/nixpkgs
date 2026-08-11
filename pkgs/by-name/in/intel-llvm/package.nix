@@ -6,6 +6,13 @@
   overrideCC,
   lib,
   fetchFromGitHub,
+  writeShellApplication,
+  nix,
+  nix-update,
+  nix-prefetch-github,
+  curl,
+  jq,
+  onedpl,
 }:
 let
   # This derivation uses makeScope to help with overriding.
@@ -42,28 +49,26 @@ let
 
     llvmMajorVersion = "22";
 
-    version = "unstable-2025-11-14";
+    version = "7.0.0";
 
     src = fetchFromGitHub {
       owner = "intel";
       repo = "llvm";
-      # Latest commit which doesn't require dependency versions newer than
-      # what's available in nixpkgs as of 2026-01-13.
-      # Commits after require newer level-zero and pre-release unified memory framework.
-      rev = "ab3dc98de0fd1ada9df12b138de1e1f8b715cc27";
-      hash = "sha256-oHk8kQVNsyC9vrOsDqVoFLYl2yMMaTgpQnAW9iHZLfE=";
+      tag = "v${self.version}";
+      hash = "sha256-l4InHzR/W6Gihoxt9CjEREyB9LDIDQggskzFIPIS2bA=";
     };
 
+    # The commit date of the release tag above, kept in sync by `updateScript`.
     # If you override src, you'll probably also want to override this,
-    # as some packages check for this date to decide what features the compiler supports
-    commitDate = "20251114";
+    # as some packages check for this date to decide what features the compiler supports.
+    commitDate = "20260713";
 
     vc-intrinsics-src = fetchFromGitHub {
       owner = "intel";
       repo = "vc-intrinsics";
-      # See llvm/lib/SYCLLowerIR/CMakeLists.txt:17
+      # See LLVMGenXIntrinsics_GIT_TAG in llvm/lib/SYCLLowerIR/CMakeLists.txt
       rev = "60cea7590bd022d95f5cf336ee765033bd114d69";
-      sha256 = "sha256-1K16UEa6DHoP2ukSx58OXJdtDWyUyHkq5Gd2DUj1644=";
+      hash = "sha256-1K16UEa6DHoP2ukSx58OXJdtDWyUyHkq5Gd2DUj1644=";
     };
 
     # ===============================
@@ -111,6 +116,7 @@ let
         mkdir "$rsrc"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
         ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/include" "$rsrc"
+        ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/lib" "$rsrc"
       ''
       + (lib.concatStrings (
         lib.mapAttrsToList (k: v: ''
@@ -158,9 +164,28 @@ let
       ];
 
       passthru = self.unwrapped.passthru // {
-        inherit (self) stdenv;
-        unwrapped = self.unwrapped;
-        tests = callPackage ./tests.nix { inherit (self) stdenv; };
+        inherit (self) stdenv unwrapped vc-intrinsics-src;
+
+        updateScript = lib.getExe (writeShellApplication {
+          name = "update-intel-llvm";
+          runtimeInputs = [
+            nix
+            nix-update
+            nix-prefetch-github
+            curl
+            jq
+          ];
+          text = builtins.readFile ./update.sh;
+        });
+
+        tests =
+          callPackage ./tests.nix {
+            inherit (self) stdenv;
+            inherit (self.unwrapped.unified-runtime) backends;
+          }
+          // {
+            inherit onedpl;
+          };
 
         overrideScope = newF: (self.overrideScope newF).merged;
       };

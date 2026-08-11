@@ -5,6 +5,7 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -25,7 +26,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-QCiosQHxuwDxztXMEkEosob8M2NMtnlGI33m5oAkaBw=";
   };
 
-  pythonRelaxDeps = [ "aiohttp" ];
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 

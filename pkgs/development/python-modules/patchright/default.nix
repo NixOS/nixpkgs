@@ -35,6 +35,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ ];
 
   meta = {
+    # From https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-python/blob/main/pyproject.toml:
+    #     Only for test Runs, does not relate to actual Patchright package
+    # To package the correct project, replicate the following GitHub workflow:
+    # https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-python/blob/main/.github/workflows/patchright_release.yml
+    broken = true;
     description = "Undetected Python version of the Playwright testing and automation library";
     homepage = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-python";
     changelog = "https://github.com/Kaliiiiiiiiii-Vinyzu/patchright-python/releases/tag/v${finalAttrs.src.tag}";

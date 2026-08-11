@@ -23,8 +23,8 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "SPIRV-Headers";
-      rev = "b8a32968473ce852a809b9de5f04f02a5a9dfa78";
-      hash = "sha256-k5lAF7TxJ+8cXDnx7lQxG/3IjSTzYcqBl5PYY2gv9E8=";
+      rev = "948a3b0997e2dffea5484b3df7bd5590c5b844cc";
+      hash = "sha256-goQTZ4vR4R+bp3mcco10y4grB97aB7QJauO9ZaHJbU8=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -32,7 +32,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.36.3";
+  version = "2.38.2";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-0GzZQECcngF9b5lZyeIKXeM6w64WzCYFtHOobQKN80o=";
+      hash = "sha256-xLRQzXUSqRVAN0flRlcrsSFZTLFxmQi6ePbm5ks6vhI=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v17.0.24";
-      hash = "sha256-s/dNWmT3KXdXK0CSVjqEfsY9r8ONAGMZ5KUy9FeqF0E=";
+      tag = "v17.0.25";
+      hash = "sha256-WzazByTj9Pnk9ix6cyCtxT8aSh9kg0lK3geiokCqO8I=";
     })
   ];
 
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
     # match default LLVM version with our provided version to apply correct patches
     substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "16.0.6" "${llvmVersion}"
+      --replace-fail "17.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [

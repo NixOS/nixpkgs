@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasp-desktop";
-  version = "0.97.1";
+  version = "0.98.1";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4K6ReOJJF8Pt/RdNSp2ZVH/d64ZMCFlX1RIXDAWWWBE=";
+    hash = "sha256-73RxbWVa03V6MdcW9k4Hv8EBsSNw0Feg91SioWLgC5U=";
   };
 
   patches = [
@@ -68,8 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtwebengine
-    qt6.qtsvg
-    qt6.qt5compat
+    qt6.qthttpserver
   ];
 
   # needed so that the linker can find libRInside.so

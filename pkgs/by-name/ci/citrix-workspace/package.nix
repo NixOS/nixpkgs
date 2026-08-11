@@ -26,7 +26,7 @@
   krb5,
   lcms2,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libcanberra-gtk3,
   libcap,
   libcxx,
@@ -109,12 +109,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "citrix-workspace";
   version = "26.04.0.105";
 
   src = requireFile rec {
-    name = "linuxx64-${version}.tar.gz";
+    name = "linuxx64-${finalAttrs.version}.tar.gz";
     sha256 = "1kl6b1ldjd9gb6cmvhxf6ggvc3amq1kz0qwjlb1fp6dxx0pivwm8";
 
     message = ''
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
       https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html
 
-      (if you do not find version ${version} there, try at
+      (if you do not find version ${finalAttrs.version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
 
       Once you have downloaded the file, please use the following command and re-run the
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
   __structuredAttrs = true;
   sourceRoot = ".";
   preferLocalBuild = true;
-  passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
+  passthru.icaroot = "${finalAttrs.finalPackage}/opt/citrix-icaclient";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     glib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     libGL
     pcsclite
 
@@ -435,4 +435,4 @@ stdenv.mkDerivation rec {
     ];
     homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html";
   };
-}
+})

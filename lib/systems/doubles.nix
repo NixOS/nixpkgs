@@ -112,8 +112,8 @@ let
     "x86_64-redox"
 
     # WASI
-    "wasm64-wasi"
-    "wasm32-wasi"
+    "wasm64-wasip1"
+    "wasm32-wasip1"
 
     # Windows
     "aarch64-windows"

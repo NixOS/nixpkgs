@@ -258270,7 +258270,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) GConf; };
+  ) { GConf = null; };
 
   gd =
     callPackage
@@ -279720,7 +279720,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) libglade; };
+  ) { libglade = null; };
 
   gladexml-accessor = callPackage (
     {
@@ -295103,7 +295103,7 @@ self: {
       )
       {
         inherit (pkgs) gtk2;
-        inherit (pkgs.gnome2) gtkglext;
+        inherit (pkgs) gtkglext;
         inherit (pkgs) libGLU;
         inherit (pkgs) libice;
         inherit (pkgs) libsm;
@@ -295144,7 +295144,7 @@ self: {
       license = lib.licenses.lgpl21Only;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) gtkimageview; };
+  ) { gtkimageview = null; };
 
   gtkrsync = callPackage (
     {
@@ -304694,7 +304694,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk2; };
+  ) { libappindicator-gtk2 = null; };
 
   happindicator3 = callPackage (
     {
@@ -304721,7 +304721,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk3; };
+  ) { libappindicator-gtk3 = null; };
 
   happlets = callPackage (
     {
@@ -325423,7 +325423,7 @@ self: {
       )
       {
         bluetooth = null;
-        inherit (pkgs) cwiid;
+        cwiid = null;
       };
 
   hdaemonize = callPackage (

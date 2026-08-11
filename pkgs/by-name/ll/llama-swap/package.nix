@@ -12,6 +12,8 @@
 
   nixosTests,
   nix-update-script,
+
+  withUI ? true,
 }:
 
 let
@@ -19,7 +21,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "224";
+  version = "240";
 
   outputs = [
     "out"
@@ -30,7 +32,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IblAaM9FBdI2Y9rg36SWpclQ0jV6Y93RC+N+cXWEO94=";
+    hash = "sha256-cvxF4J9Qvi522dBGjaNZvwwY/bV3wXSE0oGFATjzD4U=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -43,7 +45,10 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-b+RreafBMCWT/jbWTlXaiDRzA4DRe76WaCEbrfRxV/4=";
+  vendorHash = "sha256-jQRnFGqQvk6my7ejnesv1pylCmEXLs9GKbQJEZdsaYg=";
+
+  # Upstream only embeds the UI when this build tag is set.
+  tags = lib.optionals withUI [ "embed_ui" ];
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
@@ -62,7 +67,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace internal/process/process_command_forking_test.go \
-      --replace "#!/bin/bash" "#!${lib.getExe bash}"
+      --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
   '';
 
   preBuild = ''
@@ -70,8 +75,10 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
     ldflags+=" -X main.date=$(cat SOURCE_DATE_EPOCH)"
 
-    # copy for go:embed in internal/server/ui_embed.go
-    cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ${lib.optionalString withUI ''
+      # copy for go:embed in internal/server/ui_embed.go
+      cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ''}
   '';
 
   excludedPackages = [
@@ -88,7 +95,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
         # Fail only on *-darwin intermittently
         # https://github.com/mostlygeek/llama-swap/issues/320
         "TestProcess_AutomaticallyStartsUpstream"
@@ -137,6 +144,8 @@ buildGoModule (finalAttrs: {
       "ui"
     ];
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/mostlygeek/llama-swap";

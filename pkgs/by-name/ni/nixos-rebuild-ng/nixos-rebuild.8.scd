@@ -379,6 +379,11 @@ NIX_PATH
 NIX_SSHOPTS
 	Additional options to be passed to ssh on the command line.
 
+NIXOS_REBUILD_SSH_DEFAULT_OPTS
+	Replaces the built-in default ssh options (connection sharing via a
+	private _ControlMaster_ that is closed on exit). If empty, no
+	default options are added.
+
 NIX_SUDOOPTS
 	Additional options to be passed to sudo on the command line.
 

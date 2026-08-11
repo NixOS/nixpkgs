@@ -60,7 +60,6 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   cups,
   libexecinfo,
-  llvmPackages,
   broadwaySupport ? true,
   testers,
   darwinMinVersionHook,
@@ -130,10 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     shaderc # for glslc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
-    llvmPackages.lld
   ]
   ++ finalAttrs.setupHooks;
 
@@ -226,10 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     NIX_LDFLAGS = "-lexecinfo";
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
-    NIX_CFLAGS_LINK = "--ld-path=${lib.getExe' llvmPackages.lld "ld64.lld"}";
   };
 
   postPatch = ''
@@ -318,7 +309,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gtk.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";

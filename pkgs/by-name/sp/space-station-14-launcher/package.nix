@@ -39,15 +39,13 @@
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  pname = "space-station-14-launcher";
   version = "0.39.1";
+  buildType = "Release";
 in
-buildDotnetModule rec {
-  inherit pname;
+buildDotnetModule {
+  inherit version buildType;
 
-  # Workaround to prevent buildDotnetModule from overriding assembly versions.
-  # If you inherit version it will break loading Robust.LoaderApi when connecting to a server!
-  name = "${pname}-${version}";
+  pname = "SS14.Launcher";
 
   src = fetchFromGitHub {
     owner = "space-wizards";
@@ -57,22 +55,21 @@ buildDotnetModule rec {
     fetchSubmodules = true;
   };
 
-  buildType = "Release";
-  selfContainedBuild = false;
+  _structuredAttrs = true;
+  strictDeps = true;
+
+  nugetDeps = ./deps.json;
+
+  passthru.updateScript = nix-update-script { };
 
   projectFile = [
     "SS14.Loader/SS14.Loader.csproj"
     "SS14.Launcher/SS14.Launcher.csproj"
   ];
 
-  nugetDeps = ./deps.json;
-
-  passthru = {
-    inherit version;
-  };
-
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+
+  executables = [ "SS14.Launcher" ];
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -80,10 +77,13 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [
-    iconConvTools
-    copyDesktopItems
-  ];
+  # Workaround to prevent buildDotnetModule from overriding assembly versions.
+  # If this is not done it will break Robust.LoaderApi when connecting to a server!
+  # I do not believe there is any way in nix (apart from overrideAttrs) to do this
+  preBuild = ''
+    version=""
+    versionForDotnet=""
+  '';
 
   runtimeDeps = [
     libGL
@@ -113,32 +113,33 @@ buildDotnetModule rec {
   # via https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html under ${parameter@operator}
   makeWrapperArgs = [ "--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}" ];
 
-  executables = [ "SS14.Launcher" ];
+  nativeBuildInputs = [
+    iconConvTools
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = meta.mainProgram;
-      icon = pname;
+      name = "SS14.Launcher";
+      exec = "SS14.Launcher";
+      icon = "SS14";
       desktopName = "Space Station 14 Launcher";
-      comment = meta.description;
+      comment = "A multiplayer disaster simulator";
       categories = [ "Game" ];
-      startupWMClass = meta.mainProgram;
+      startupWMClass = "SS14.Launcher";
     })
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/space-station-14-launcher/loader
-    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
+    mkdir -p $out/lib/SS14.Launcher/loader
+    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/SS14.Launcher/loader/
 
-    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico ${pname} $out
+    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico SS14 $out
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
-    homepage = "https://spacestation14.io";
+    homepage = "https://spacestation14.com";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.coca ];
     platforms = [ "x86_64-linux" ];

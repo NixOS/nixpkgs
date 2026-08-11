@@ -21,7 +21,6 @@
   libarchive,
   libass,
   libbluray,
-  libbs2b,
   libcaca,
   libcdio,
   libcdio-paranoia,
@@ -61,13 +60,11 @@
   wayland-protocols,
   wayland-scanner,
   zimg,
-  llvmPackages,
 
   # Boolean
   alsaSupport ? stdenv.hostPlatform.isLinux,
   archiveSupport ? true,
   bluraySupport ? true,
-  bs2bSupport ? true,
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
@@ -164,8 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.darwin.sigtool
     swift
     makeBinaryWrapper
-    # TODO: Remove once #536365 reaches this branch
-    llvmPackages.lld
   ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
@@ -183,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals archiveSupport [ libarchive ]
   ++ lib.optionals bluraySupport [ libbluray ]
-  ++ lib.optionals bs2bSupport [ libbs2b ]
   ++ lib.optionals cacaSupport [ libcaca ]
   ++ lib.optionals cddaSupport [
     libcdio
@@ -236,19 +230,12 @@ stdenv.mkDerivation (finalAttrs: {
   # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
   env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
-
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
     popd
-  '';
-
-  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    (allow mach-lookup (global-name "com.apple.coreservices.launchservicesd"))
   '';
 
   postInstall = ''

@@ -13,7 +13,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "proton-cli";
-  version = "1.9.0";
+  version = "1.10.0";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ buildGoModule (finalAttrs: {
     owner = "roman-16";
     repo = "proton-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0IVWoDUHXvJusFceerlz5DgifFme9PN/NaAdwwwkCK4=";
+    hash = "sha256-Amu7mHH7o5KEqvIjitvnPWNmDrQvz0AgehDOmhiW9YM=";
   };
 
-  vendorHash = "sha256-H4q7b+NfiktjWRyStV9/lXF9fuAkApepq6l6CNV/5co=";
+  vendorHash = "sha256-bFpBsxU9dehg4X5xBjzb8es7S+RdnTeHDiqlUM1kIuY=";
 
   subPackages = [ "." ];
 

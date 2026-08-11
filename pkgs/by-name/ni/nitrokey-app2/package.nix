@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 meta/nk-app2.png $out/share/icons/hicolor/128x128/apps/com.nitrokey.nitrokey-app2.png
   '';
 
-  # wrapQtApps only wrapps binary files and normally skips python programs.
+  # wrapQtApps only wraps binary files and normally skips python programs.
   # Manually pass the qtWrapperArgs from wrapQtAppsHook to wrap python programs.
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

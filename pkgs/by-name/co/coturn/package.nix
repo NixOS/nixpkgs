@@ -5,7 +5,6 @@
   openssl,
   libevent,
   pkg-config,
-  libprom,
   libmicrohttpd,
   sqlite,
   nixosTests,
@@ -14,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coturn";
-  version = "4.13.1";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     tag = finalAttrs.version;
-    hash = "sha256-66bPrw/jUleEOKBBdNDa8qyxxQCiLk5saTnUQfDdTak=";
+    hash = "sha256-XQeS81QImTQXeC60PKNPGAvlM39AsVLOGn+H72i9Kb8=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     (libevent.override { inherit openssl; })
-    libprom
     libmicrohttpd
     sqlite.dev
   ]
@@ -40,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./pure-configure.patch
-
-    # Don't call setgroups unconditionally in mainrelay
-    # https://github.com/coturn/coturn/pull/1508
-    ./dont-call-setgroups-unconditionally.patch
   ];
 
   configureFlags = [

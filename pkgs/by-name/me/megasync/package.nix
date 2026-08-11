@@ -34,13 +34,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";
-  version = "6.4.0.2";
+  version = "6.5.1.0";
 
   src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     tag = "v${finalAttrs.version}_Linux";
-    hash = "sha256-PgIRIr3+XRwv48EpREL56yzuqI8Ws72V4o3pTSR1ZfA=";
+    hash = "sha256-SkLh2YmXCzrVJs01FhqrSIeeacJCB2KPu61fKoZ/26s=";
     fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
     leaveDotGit = true;
     postFetch = ''
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     mainProgram = "megasync";
   };
 })

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switchfin";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
     rev = finalAttrs.version;
-    hash = "sha256-Q/AXCnw3NZh9Y0CciP87vmVsoHggMMKL4SYdmLhC62c=";
+    hash = "sha256-khfcFRRccWPYvxETgQC52BlLySKnhgSUdF4hv/8znEM=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     mpv
     SDL2
     tinyxml-2
-    tweeny
   ];
 
   cmakeFlags = [
@@ -55,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_SDL2=ON"
     "-DUSE_SYSTEM_TINYXML2=ON"
-    "-DUSE_SYSTEM_TWEENY=ON"
+    # Should be enabled in the next release, see:
+    # https://github.com/dragonflylee/switchfin/issues/242
+    "-DUSE_SYSTEM_TWEENY=OFF"
   ];
 
   meta = {

@@ -43,7 +43,7 @@
 }:
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "tilelang";
-  version = "0.1.11";
+  version = "0.1.13";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +52,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "tilelang";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-C/c99/26/dBnQJYGrZ+NXl1Rqk3bjM2kpkgP/hWkTGE=";
+    hash = "sha256-mUma33LlPw2bwB+mryshlY5wuVSDmPSMjWmDAefdN/w=";
   };
 
   postPatch =
@@ -67,14 +67,18 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     + ''
       sed -i '/def get_git_commit_id()/a\\    return None' version_provider.py
     ''
-    # fix permissions for install_name_tool -id
+    # fix permissions for install_name_tool -id and use the toolchain's
+    # install_name_tool, as /usr/bin is not available in the sandbox
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cmake/pypi-z3/FindZ3.cmake \
         --replace-fail COPYONLY 'FILE_PERMISSIONS
           OWNER_READ OWNER_WRITE OWNER_EXECUTE
           GROUP_READ GROUP_WRITE GROUP_EXECUTE
           WORLD_READ WORLD_WRITE WORLD_EXECUTE
-          COPYONLY'
+          COPYONLY' \
+        --replace-fail \
+          "COMMAND /usr/bin/install_name_tool" \
+          "COMMAND ${lib.getExe' stdenv.cc.bintools.bintools "install_name_tool"}"
     '';
 
   nativeBuildInputs = [
@@ -133,17 +137,23 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   };
 
   preFixup =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux (
       # libtvm_ffi.so
-      addAutoPatchelfSearchPath "${finalAttrs.passthru.apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
+      ''
+        addAutoPatchelfSearchPath "${finalAttrs.passthru.apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
+      ''
       # libz3.so.4.16
-      addAutoPatchelfSearchPath "${z3-solver.lib}/lib"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # @rpath/libz3.dylib
-      install_name_tool -add_rpath "${z3-solver.lib}/lib" \
-        "$out/${python.sitePackages}/tilelang/lib/libtvm_compiler.dylib"
-    '';
+      + ''
+        addAutoPatchelfSearchPath "${z3-solver.lib}/lib"
+      ''
+    )
+    +
+      lib.optionalString stdenv.hostPlatform.isDarwin
+        # @rpath/libz3.dylib
+        ''
+          install_name_tool -add_rpath "${z3-solver.lib}/lib" \
+            "$out/${python.sitePackages}/tilelang/lib/libtvm_compiler.dylib"
+        '';
 
   pythonImportsCheck = [ "tilelang" ];
 
@@ -167,16 +177,20 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     doCheck = true;
   };
 
-  passthru.apache-tvm-ffi = apache-tvm-ffi.overrideAttrs (previousAttrs: {
-    version = "0.1.10";
-    src = previousAttrs.src.override {
-      tag = null;
-      rev = "3c35034fd1026011736e19a4e0e1ed0f22058c42";
-      hash = "sha256-dqAO6RLLGIRzPk7dNQsQCck+ziyONddhK/t4+S28cn8=";
-    };
-    # fix eval
-    meta.changelog = "";
-  });
+  passthru.apache-tvm-ffi = apache-tvm-ffi.overrideAttrs (
+    previousAttrs:
+    let
+      version = "0.1.12";
+    in
+    {
+      inherit version;
+      src = previousAttrs.src.override {
+        tag = "v${version}";
+        hash = "sha256-ZFi7MKFiHK2lNoVkQbPhOc7NpIf24PLLP8SqGQiQ9Lw=";
+      };
+      postPatch = "";
+    }
+  );
 
   meta = {
     description = "Tile level programming language to generate high performance code";

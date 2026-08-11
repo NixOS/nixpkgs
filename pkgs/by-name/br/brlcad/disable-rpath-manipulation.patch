@@ -1,5 +1,4 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7526f05b70..18871afb75 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -356,20 +356,6 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
@@ -24,10 +23,9 @@ index 7526f05b70..18871afb75 100644
  # For certain platforms (in particular Visual C++) we want to keep some pre-defined
  # flags that are commonly used in the build logic.
 diff --git a/misc/CMake/BRLCAD_ExternalDeps.cmake b/misc/CMake/BRLCAD_ExternalDeps.cmake
-index fdce1dc0c0..1375de50d1 100644
 --- a/misc/CMake/BRLCAD_ExternalDeps.cmake
 +++ b/misc/CMake/BRLCAD_ExternalDeps.cmake
-@@ -752,15 +752,6 @@ function(brlcad_bext_process)
+@@ -905,15 +905,6 @@ endfunction()
    string(REPLACE ";" "\n" TP_B "${ALL_BINARY_FILES}")
    file(WRITE "${TP_INVENTORY_BINARIES}" "${TP_B}")
  
@@ -43,19 +41,10 @@ index fdce1dc0c0..1375de50d1 100644
    if(NNOEXEC_FILES)
      message("Scrubbing paths from new 3rd party data files...")
      foreach(tf ${NNOEXEC_FILES})
-@@ -864,6 +855,7 @@ function(brlcad_bext_process)
-   # to define an RPATH that will allow the binary files to work when
-   # the install directory is relocated.
-   foreach(bf ${ALL_BINARY_FILES})
-+    continue()
-     if(IS_SYMLINK ${bf})
-       continue()
-     endif(IS_SYMLINK ${bf})
 diff --git a/misc/CMake/BRLCAD_Util.cmake b/misc/CMake/BRLCAD_Util.cmake
-index 631909f499..43a536d21d 100644
 --- a/misc/CMake/BRLCAD_Util.cmake
 +++ b/misc/CMake/BRLCAD_Util.cmake
-@@ -154,17 +154,6 @@ function(PLUGIN_SETUP plugin_targets subdir)
+@@ -220,17 +220,6 @@ function(PLUGIN_SETUP plugin_targets subdir)
        LIBRARY DESTINATION ${LIBEXEC_DIR}/${subdir}
        ARCHIVE DESTINATION ${LIBEXEC_DIR}/${subdir}
      )

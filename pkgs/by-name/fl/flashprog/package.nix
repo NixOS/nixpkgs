@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
   version = "1.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     tag = "v${finalAttrs.version}";

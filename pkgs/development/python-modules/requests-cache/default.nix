@@ -98,7 +98,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
-    changelog = "https://github.com/requests-cache/requests-cache/blob/$v{finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${finalAttrs.version}/HISTORY.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

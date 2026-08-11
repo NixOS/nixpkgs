@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mocha";
-  version = "11.7.7";
+  version = "11.8.0";
 
   src = fetchFromGitHub {
     owner = "mochajs";
     repo = "mocha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U05dHIIk9MwMY2mV9WZZl2ibS0e35tkJg/EV3EHa6C4=";
+    hash = "sha256-zfKUfB5clRrjorj9IgxbpWc721GC3Wa464+n8iATAJ4=";
   };
 
-  npmDepsHash = "sha256-crMuMnLJXVSzDMiZDtWXVW0x4XtZ4QXkK7qL90/kkHA=";
+  npmDepsHash = "sha256-iUXr89ZxR4QkOn200lavkm8xfeZpqe+Gymw+I5O28do=";
 
   postInstall = ''
     # Installed only for backwards compat, but should just be removed.

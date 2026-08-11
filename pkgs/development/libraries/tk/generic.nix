@@ -9,8 +9,6 @@
   zlib,
   patches ? [ ],
   enableAqua ? stdenv.hostPlatform.isDarwin,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
   ...
 }:
 
@@ -76,10 +74,6 @@ tcl.mkTclDerivation {
   ++ lib.optionals (lib.versionAtLeast tcl.version "9.0") [
     # Only used to detect the presence of zlib. Could be replaced with a stub.
     zip
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
   buildInputs = lib.optionals (lib.versionAtLeast tcl.version "9.0") [
     zlib
@@ -95,16 +89,9 @@ tcl.mkTclDerivation {
 
   inherit tcl;
 
-  env =
-    lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
-      NIX_CFLAGS_COMPILE = "-std=gnu17";
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # workaround for ld64 hardening issue
-      #
-      # TODO: Clean up on `staging`
-      NIX_CFLAGS_COMPILE = "-fuse-ld=lld";
-    };
+  env = lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   passthru = rec {
     inherit (tcl) release version;

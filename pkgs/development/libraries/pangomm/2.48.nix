@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version = "2.56.1";
+  version = "2.56.2";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
-    hash = "sha256-U59apg6b3GuVW7RI4qYswUVidE32kCWAQPu3S/iFdV0=";
+    hash = "sha256-8emEyFqFtqDmFhY2ZSH1HdgoKgcrtF0VtQhHYrYvTA4=";
   };
 
   nativeBuildInputs = [
@@ -60,9 +60,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.pango.org/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      raskin
-    ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

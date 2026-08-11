@@ -5,7 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   glib,
   gobject-introspection,
   librsvg,
@@ -41,7 +41,10 @@ let
           service-identity
           libtorrent-rasterbar.dev
           libtorrent-rasterbar.python
-          setuptools
+          # pkg_resources was removed in setuptools>=82; deluge 2.2.0 still uses it
+          # standard-pkg-resources is an independent PyPI redistribution providing it
+          # TODO: remove once deluge migrates off pkg_resources
+          standard-pkg-resources
           setproctitle
           pillow
           rencode
@@ -55,7 +58,7 @@ let
           gtk3
           gobject-introspection
           pygobject3
-          libappindicator-gtk3
+          libappindicator
         ];
 
       nativeBuildInputs = [

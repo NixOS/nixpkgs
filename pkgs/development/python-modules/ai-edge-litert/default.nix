@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchurl,
   lib,
-  patchelf,
   python,
   pythonAtLeast,
   stdenv,
@@ -50,9 +49,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [
-    openvino-native
-  ];
+  buildInputs = [ openvino-native ];
 
   dependencies = [
     backports-strenum
@@ -69,15 +66,18 @@ buildPythonPackage {
       ml-dtypes
       # TODO :xdsl
     ];
+    # TODO: npu-intel
     # TODO: npu-sdk
   };
 
-  preFixup = ''
-    while IFS= read -r -d "" so; do
-      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2620 libopenvino.so "$so"
-      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2620 libopenvino_tensorflow_lite_frontend.so "$so"
-    done < <(find "$out" -type f \( -name '*.so' -o -name '*.so.*' \) -print0)
-  '';
+  autoPatchelfIgnoreMissingDeps = [
+    # Qualcomm Neural Network SDK
+    # https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk
+    "libQnnHtp.so"
+    "libQnnIr.so"
+    "libQnnSaver.so"
+    "libQnnSystem.so"
+  ];
 
   pythonRemoveDeps = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/google-ai-edge/LiteRT/pull/5298

@@ -15,6 +15,7 @@
 
   # dependencies
   cloudpickle,
+  hoptorch,
   packaging,
   pyvers,
   tensordict,
@@ -75,7 +76,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.13.1";
+  version = "0.13.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -83,7 +84,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xnQLwOofHwdRvrOMNJpAEiOT7BEfxoPmrcxw2H3CTvI=";
+    hash = "sha256-GdiGZZlx8olRMzl4CJD11S1+q0+pOeCD2wrDPcji5p0=";
   };
 
   postPatch = ''
@@ -104,10 +105,11 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     cloudpickle
+    hoptorch
     numpy
     packaging
-    tensordict
     pyvers
+    tensordict
     torch
   ];
 
@@ -204,6 +206,15 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.rendering;
 
   disabledTests = [
+    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most
+    # likely means that a valid OpenGL context has not been created before mjr_makeContext was
+    # called
+    "test_from_pixels_spec_and_rollout"
+
+    # Hang forever
+    "test_pixels_only_drops_observation_key"
+    "test_render_method"
+
     # Require network
     "test_create_or_load_dataset"
     "test_from_text_env_tokenizer"
@@ -264,7 +275,7 @@ buildPythonPackage (finalAttrs: {
     "test_trans_serial_env_check"
     "test_transform_env"
 
-    # undeterministic
+    # nondeterministic
     "test_distributed_collector_updatepolicy"
     "test_timeit"
 

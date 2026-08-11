@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -6,6 +7,8 @@
   nix-update-script,
   testers,
   vcluster,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +23,12 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [
+    installShellFiles
+    # vcluster crashes, even on generating the completion script, if home is not writeable
+    writableTmpDirAsHomeHook
+  ];
 
   subPackages = [ "cmd/vclusterctl" ];
 
@@ -39,6 +48,13 @@ buildGoModule (finalAttrs: {
     install -Dm755 $GOPATH/bin/vclusterctl $out/bin/vcluster
 
     runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd vcluster \
+      --bash <($out/bin/vcluster completion bash) \
+      --fish <($out/bin/vcluster completion fish) \
+      --zsh <($out/bin/vcluster completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {

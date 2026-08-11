@@ -150,6 +150,10 @@ in
     ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [
+      "services"
+      "bosun"
+    ] "bosun has been removed as it is no longer maintained upstream.")
     (mkRemovedOptionModule [ "services" "botamusique" ]
       "The botamusique module has been removed. The project was archived upstream in 2024: https://github.com/azlux/botamusique"
     )
@@ -403,9 +407,19 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "afterstep" ] ''
+      The services.xserver.windowManager.afterstep module and the corresponding
+      package have been removed from Nixpkgs because they were unmaintained
+      upstream.
+    '')
     (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
       The services.xserver.windowManager.ragnarwm module has been removed
       because the corresponding package was removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "sawfish" ] ''
+      The services.xserver.windowManager.sawfish module and the corresponding
+      package have been removed from Nixpkgs because they depended on the
+      deprecated GTK2 engine.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -534,6 +548,13 @@ in
     (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
       services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "overseerr"
+      ]
+      "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
+    )
     # Do NOT add any option renames here, see top of the file
   ];
 }

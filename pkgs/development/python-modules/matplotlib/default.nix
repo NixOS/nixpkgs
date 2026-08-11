@@ -62,9 +62,6 @@
 
   # Reverse dependency
   sage,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 let
@@ -72,13 +69,13 @@ let
 in
 
 buildPythonPackage (finalAttrs: {
-  version = "3.11.0";
+  version = "3.11.1";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-aMDHvgGzDcyjY4k09/WR33NAEjXL2/DRqxxx59t/i1c=";
+    hash = "sha256-aWR9tXRpQceT1uRFpM00kyP/uH2cyVjCrYSmWbSDLTA=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -107,12 +104,7 @@ buildPythonPackage (finalAttrs: {
         --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals enableGtk3 [ gobject-introspection ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
 
   buildInputs = [
     ffmpeg-headless
@@ -167,11 +159,6 @@ buildPythonPackage (finalAttrs: {
     # -https://github.com/matplotlib/matplotlib/issues/28357#issuecomment-2155350739
     b_lto = false;
   };
-
-  # TODO: Clean up on `staging`.
-  env.${if stdenv.hostPlatform.isDarwin then "CC_LD" else null} = "lld";
-  env.${if stdenv.hostPlatform.isDarwin then "CXX_LD" else null} = "lld";
-  env.${if stdenv.hostPlatform.isDarwin then "OBJC_LD" else null} = "lld";
 
   passthru.tests = {
     inherit sage;

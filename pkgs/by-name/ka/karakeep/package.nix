@@ -11,20 +11,20 @@
   python3,
   srcOnly,
   removeReferencesTo,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-P88DQi0T7tmBH7cjs8/Hz77bU0oG7u67XPoLsdePNhI=";
+    hash = "sha256-WL4M2rpbIDUTUUCuw2T5tG4VCMGZaLsWq+BCAQBa2Sc=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     node-gyp
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildInputs = [
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-aT4JPx3iYw4kw8GHXKWMnelSVT0q2S3PK8DgSCQCyKQ=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-JhD1soZj8l6ZVtTOSZc1lMfWfi3R0PU/SsVHEvr50PI=";
   };
   buildPhase = ''
     runHook preBuild

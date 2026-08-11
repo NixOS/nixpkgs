@@ -80,7 +80,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "9925";
+  version = "10273";
 
   outputs = [
     "out"
@@ -91,7 +91,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-yX8BrHA0fIgIozBGOXnN72KlfqIcR/mnO5ttUBLvxZE=";
+    hash = "sha256-A4VLmyOr19NaWI/L//BzK30EuaWNI+38em8YABvQ3wE=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -124,7 +124,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ [ openssl ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-6s9skw1wzEfm9QKktTqea3J+oudQAsS6O2VnZEMXAdw=";
+  npmDepsHash = "sha256-B7uEynAG70a3xauBKc20RuFa9cnWaWzVBCh+LPLBnIM=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;

@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "immichframe";
-  version = "1.0.35.0";
+  version = "1.0.37.0";
 
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VET0em+CyJzXPlCXjozj6SDhjD26lH94AETFKGG895I=";
+    hash = "sha256-ZS6lkfDdMSq1cffIIeXqG3/eIaQFGSZcRYPXiDCHA/U=";
   };
 
   projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";

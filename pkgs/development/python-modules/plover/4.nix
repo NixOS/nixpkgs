@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "openstenoproject";
+    owner = "opensteno";
     repo = "plover";
     tag = "v${finalAttrs.version}";
     hash = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";

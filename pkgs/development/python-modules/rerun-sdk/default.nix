@@ -55,6 +55,28 @@ buildPythonPackage {
         --replace-fail \
           "PYO3_CONFIG_FILE" \
           "# PYO3_CONFIG_FILE"
+    ''
+
+    # `lance-linalg` (reachable only through `rerun_py`'s `re_server` "lance" feature, hence the
+    # plain `rerun` CLI is unaffected) has AVX-512 VNNI u8-distance kernels that call
+    # `_mm512_dpbusd_epi32`.
+    # With the current toolchain, stdarch's signature for that intrinsic mismatches LLVM's
+    # `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+    # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+    # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+    # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+    # AVX2 / scalar kernels.
+    + ''
+      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-8.0.0/src/distance"
+
+      substituteInPlace "$lanceDistance/dot_u8.rs" \
+        --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+      substituteInPlace "$lanceDistance/l2_u8.rs" \
+        --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+      substituteInPlace "$lanceDistance/cosine_u8.rs" \
+        --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
     '';
 
   nativeBuildInputs = [
@@ -111,6 +133,7 @@ buildPythonPackage {
     "test_b_frames_in_stream_mode_raise"
     "test_custom_entity_path_applies_to_every_chunk"
     "test_default_mode_produces_video_stream_chunks"
+    "test_output_codec_same_as_source_stays_on_the_direct_path"
     "test_stream_mode_chunk_by_gop_false_emits_one_sample_per_chunk"
     "test_stream_mode_chunk_by_gop_true_packs_multiple_samples"
     "test_timeline_type_timestamp_produces_timestamp_typed_column"
@@ -147,6 +170,11 @@ buildPythonPackage {
     "test_anchor_path_decodes_mid_gop_target"
     "test_collect_optimize_video_stream_summary"
     "test_heuristic_fallback_when_is_keyframe_column_absent"
+
+    # AssertionError: the Git LFS pointer mp4 asset fails to demux before the
+    # expected "FFmpeg executable not found" error can be raised, so the
+    # pytest.raises regex does not match (rerun.src is fetched without fetchLFS).
+    "test_b_frames_without_ffmpeg_reports_missing_ffmpeg"
   ];
 
   disabledTestPaths = [
@@ -154,6 +182,11 @@ buildPythonPackage {
     # Git LFS pointer files, not real binaries (rerun.src is fetched without
     # fetchLFS).
     "rerun_py/tests/integration/test_mcap_reader.py"
+
+    # RuntimeError: Failed to open the HDF5 file: HDF5 format error: HDF5
+    # signature not found. The .h5 test assets are Git LFS pointer files, not
+    # real binaries (rerun.src is fetched without fetchLFS).
+    "rerun_py/tests/integration/test_hdf5_reader.py"
 
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"

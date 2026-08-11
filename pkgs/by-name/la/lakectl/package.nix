@@ -7,13 +7,13 @@
 
 buildGo126Module (finalAttrs: {
   pname = "lakectl";
-  version = "1.83.0";
+  version = "1.84.1";
 
   src = fetchFromGitHub {
     owner = "treeverse";
     repo = "lakeFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5/2iI5/87x+VJ1MbYw7zPEDeTm1XVuLmSsI6KssRGRE=";
+    hash = "sha256-l9UxuiGiVaI8lxJfpvLlsphX13eEb+OP0colVAPmB78=";
   };
 
   subPackages = [ "cmd/lakectl" ];

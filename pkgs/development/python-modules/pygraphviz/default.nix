@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  stdenv,
   graphviz,
   coreutils,
   pkg-config,
@@ -12,10 +11,6 @@
   pytest,
 }:
 
-let
-  # TODO: remove once #540793 makes it to master
-  graphviz' = graphviz.override { withQuartz = stdenv.hostPlatform.isDarwin; };
-in
 buildPythonPackage (finalAttrs: {
   pname = "pygraphviz";
   version = "2.0";
@@ -32,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     # pygraphviz depends on graphviz executables and wc being in PATH
     (replaceVars ./path.patch {
       path = lib.makeBinPath [
-        graphviz'
+        graphviz
         coreutils
       ];
     })
@@ -43,19 +38,19 @@ buildPythonPackage (finalAttrs: {
       --replace-fail ', "swig>4.1.0"' ""
   '';
 
-  env.GRAPHVIZ_PREFIX = graphviz';
+  env.GRAPHVIZ_PREFIX = graphviz;
 
   build-system = [
     setuptools
   ];
 
   nativeBuildInputs = [
-    graphviz' # for dot
+    graphviz # for dot
     pkg-config
     swig
   ];
 
-  buildInputs = [ graphviz' ];
+  buildInputs = [ graphviz ];
 
   nativeCheckInputs = [ pytest ];
 

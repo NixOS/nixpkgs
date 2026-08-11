@@ -18,7 +18,7 @@ buildDotnetModule rec {
   version = "0.1.565";
 
   src = fetchFromGitHub {
-    owner = "stakira";
+    owner = "openutau";
     repo = "OpenUtau";
     tag = version;
     hash = "sha256-tjW1xmt409AlEmw/N1RG46oigP4mWAoTecQGV/hwMo4=";

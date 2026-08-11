@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.13.5";
-  npmDepsHash = "sha256-7dchbcGAZm+PlVsES76sYD9NOqeCulEKC7S0zLERvvY=";
+  version = "2.25.0";
+  npmDepsHash = "sha256-qW7G+zZCmFMR9pKdLelI+jfHyuU1/cTx1hTmzM9HRc4=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cTALzPtoagq1VGsWzitF/9SdKqXidBLPQet4vatVuU=";
+    hash = "sha256-Sdyl5b8IeshmstXQqUX1YbWehCaUrKELU2FiTW4xm7g=";
   };
 
   npmWorkspace = "apps/desktop";
@@ -90,6 +90,7 @@ buildNpmPackage (finalAttrs: {
       justkrysteq
       Br1ght0ne
       ad030
+      showhyt
     ];
     mainProgram = "zennotes-desktop";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

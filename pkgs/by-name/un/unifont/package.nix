@@ -2,65 +2,58 @@
   lib,
   stdenv,
   fetchurl,
-  mkfontscale,
-  fonttosfnt,
-  libfaketime,
+  perl,
+  bdftopcf,
+  bdf2psf,
+  imagemagick,
 }:
 
+let
+  perlenv = perl.withPackages (ps: [ ps.GD ]);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
   version = "17.0.05";
 
-  otf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.otf";
-    hash = "sha256-hXAaubHiUe4W9N8AsT8i6sMR1yt9q0J6fZdf5/UGRwI=";
+  strictDeps = true;
+
+  src = fetchurl {
+    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.tar.gz";
+    hash = "sha256-8ofP+ybiJyOqNuZoSGmw8/87+4IsSwEAi9hHkR7BtjE=";
   };
 
-  pcf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.pcf.gz";
-    hash = "sha256-kld9gZ/QPhsu7IcqtFghB4qed4B6+Gp9IbbaOP72HNw=";
-  };
-
-  bdf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.bdf.gz";
-    hash = "sha256-2wERwGbt/nWD8Nd62+y7pGPwBkOjfcO5ZRrpNJVDSH8=";
-  };
+  postPatch = ''
+    rm -r font/precompiled
+    patchShebangs ./src
+  '';
 
   nativeBuildInputs = [
-    libfaketime
-    fonttosfnt
-    mkfontscale
+    perlenv
+    bdftopcf
+    bdf2psf
+    imagemagick
   ];
 
-  dontUnpack = true;
+  buildInputs = [
+    perlenv
+  ];
 
-  buildPhase = ''
-    runHook preBuild
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-    # convert pcf font to otb
-    faketime -f "1970-01-01 00:00:01" \
-    fonttosfnt -g 2 -m 2 -v -o "unifont.otb" "${finalAttrs.pcf}"
+  buildFlags = [ "BUILDFONT=1" ];
 
-    runHook postBuild
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput share/unifont "$doc"
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    # install otb fonts
-    install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
-    mkfontdir "$out/share/fonts"
-
-    # install pcf, otf, and bdf fonts
-    install -m 644 -D ${finalAttrs.pcf} $out/share/fonts/unifont.pcf.gz
-    install -m 644 -D ${finalAttrs.otf} $out/share/fonts/opentype/unifont.otf
-    gunzip -c ${finalAttrs.bdf} > $out/share/fonts/unifont.bdf
-    cd "$out/share/fonts"
-    mkfontdir
-    mkfontscale
-
-    runHook postInstall
-  '';
+  outputs = [
+    "out"
+    "bin"
+    "doc"
+    "man"
+    "info"
+  ];
 
   passthru.updateScript = ./update.sh;
 

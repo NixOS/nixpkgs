@@ -11,10 +11,7 @@ let
   defaultGroup = "sillytavern";
 in
 {
-  meta.maintainers = [
-    lib.maintainers.wrvsrx
-    lib.maintainers.A1ca7raz
-  ];
+  meta.maintainers = [ lib.maintainers.A1ca7raz ];
 
   options = {
     services.sillytavern = {

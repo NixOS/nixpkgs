@@ -50,15 +50,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    file="$(mktemp)"
-    echo "abc\nbcd\ncde" > "$file"
-    ${rg} -N 'bcd' "$file"
-    ${rg} -N 'cd' "$file"
-  ''
-  + lib.optionalString withPCRE2 ''
-    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
-  '';
+  installCheckPhase = lib.optionalString canRunRg (
+    ''
+      file="$(mktemp)"
+      echo "abc\nbcd\ncde" > "$file"
+      ${rg} -N 'bcd' "$file"
+      ${rg} -N 'cd' "$file"
+    ''
+    + lib.optionalString withPCRE2 ''
+      echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
+    ''
+  );
 
   meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";

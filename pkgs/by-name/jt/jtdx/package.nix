@@ -21,5 +21,7 @@ wsjtx.overrideAttrs (old: {
       pkharvey
     ];
     homepage = "https://github.com/jtdx-project/jtdx";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
   };
 })

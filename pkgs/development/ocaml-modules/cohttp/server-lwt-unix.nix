@@ -4,6 +4,7 @@
   cohttp-lwt-unix,
   http,
   lwt,
+  ppx_expect,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -15,7 +16,10 @@ buildDunePackage (finalAttrs: {
     lwt
   ];
 
-  checkInputs = [ cohttp-lwt-unix ];
+  checkInputs = [
+    cohttp-lwt-unix
+    ppx_expect
+  ];
   doCheck = true;
 
   meta = cohttp.meta // {

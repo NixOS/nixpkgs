@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchgit,
-  goocanvas_1,
+  goocanvas_2,
   pkg-config,
-  gtk2,
+  gtk3,
   libxml2,
   curl,
   libmicrohttpd,
@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gtk2
+    gtk3
     libxml2
     curl
     libmicrohttpd
-    goocanvas_1
+    goocanvas_2
     qrencode
     openssl
     json-glib
@@ -59,17 +59,27 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR=$(out)"
   ];
 
-  # Use system php
-  # Disable git soft depend
-  # Disable dch changelog generation
-  # FixUp `install` phase output
   postPatch = ''
+    # Use system php
     substituteInPlace ./sources/common/network/web_server.cpp --replace-fail "php7.4" "${php}/bin/php"
+
+    # FixUp desktop templates to point to our own output
     substituteInPlace ./build/BellePoule/debian/bellepoule.desktop.template --replace-fail "/usr" "$out"
+
+    # FixUp erroneous properties in glade files tripping-up GTK2 -> GTK3 upgrade (identation is intentional here)
+    # Such as https://git.launchpad.net/bellepoule/tree/resources/glade/contest.glade?h=5.0/master#n197
+    substituteInPlace ./resources/glade/*.glade --replace "            <property name=\"homogeneous\">True</property>" ""
+
+    # Disable git soft depend
+    # Disable dch changelog generation
+    # FixUp output path
+    # Upgrade GTK2 -> GTK3, goocanvas1 -> goocanvas2
     substituteInPlace ./build/BellePoule/Makefile \
       --replace-fail "git" "#git" \
       --replace-fail "dch" "echo Ignoring: dch" \
-      --replace-fail "/usr" ""
+      --replace-fail "/usr" "" \
+      --replace-fail "gtk+-2.0" "gtk+-3.0" \
+      --replace-fail "GOO = goocanvas" "GOO = goocanvas-2.0"
   '';
 
   # Prepare release directory for buildPhase

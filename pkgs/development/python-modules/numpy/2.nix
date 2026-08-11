@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python,
   pythonAtLeast,
   buildPythonPackage,
@@ -19,7 +20,7 @@
   coreutils,
   lapack,
 
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 
   # Reverse dependency
   astropy,
@@ -41,7 +42,7 @@ assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -49,8 +50,18 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RiC1dLoDamK5B2VzHBL0V//K/Vix25q11wNGcl3Witk=";
+    hash = "sha256-IriSrnGAZHvJ7m97s12BydNQZDZunCVtRgj/iSgw5Vc=";
   };
+
+  patches = [
+    # Fix for test failure on i686. Remove with next release.
+    # Upstream report: https://github.com/numpy/numpy/issues/32060
+    # Upstream PR: https://github.com/numpy/numpy/pull/32064
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/0e1dce62e27f79be9d6552487787a19b7f95cfbf.patch";
+      hash = "sha256-mQjf6y/mLSgx9+G70/r9U3VJg5zIrl/6ANQhpP2LGmg=";
+    })
+  ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
@@ -118,7 +129,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''

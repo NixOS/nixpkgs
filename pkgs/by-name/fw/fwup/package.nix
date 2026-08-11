@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
     zip
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     mtools
     dosfstools
   ];

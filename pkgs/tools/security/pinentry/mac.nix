@@ -10,8 +10,6 @@
   common-updater-scripts,
   writers,
   re-plistbuddy,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,8 +47,6 @@ stdenv.mkDerivation rec {
     makeBinaryWrapper
     texinfo
     re-plistbuddy
-    # TODO: Clean up on `staging`
-    llvmPackages.lld
   ];
 
   configureFlags = [
@@ -59,11 +55,6 @@ stdenv.mkDerivation rec {
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
   ];
-
-  # Fix for ld64 hardening issue
-  #
-  # TODO: Clean up on `staging`
-  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     mkdir -p $out/Applications $out/bin

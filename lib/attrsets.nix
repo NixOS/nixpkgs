@@ -333,8 +333,8 @@ rec {
     :::
   */
   getAttrFromPath =
-    attrPath: set:
-    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'")) set;
+    attrPath:
+    attrByPath attrPath (abort ("cannot find attribute '" + concatStringsSep "." attrPath + "'"));
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.
@@ -832,9 +832,7 @@ rec {
   */
   foldAttrs =
     op: nul: list_of_attrs:
-    foldr (
-      n: a: foldr (name: o: o // { ${name} = op n.${name} (a.${name} or nul); }) a (attrNames n)
-    ) { } list_of_attrs;
+    mapAttrs (name: foldr op nul) (zipAttrs list_of_attrs);
 
   /**
     Recursively collect sets that verify a given predicate named `pred`
@@ -873,13 +871,18 @@ rec {
     :::
   */
   collect =
-    pred: attrs:
-    if pred attrs then
-      [ attrs ]
-    else if isAttrs attrs then
-      concatMap (collect pred) (attrValues attrs)
-    else
-      [ ];
+    pred:
+    let
+      recurse =
+        attrs:
+        if pred attrs then
+          [ attrs ]
+        else if isAttrs attrs then
+          concatMap recurse (attrValues attrs)
+        else
+          [ ];
+    in
+    recurse;
 
   /**
     Return the cartesian product of attribute set value combinations.
@@ -1158,7 +1161,7 @@ rec {
     mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
     ```
   */
-  mapAttrsRecursive = f: set: mapAttrsRecursiveCond (as: true) f set;
+  mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
 
   /**
     Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
@@ -1345,7 +1348,14 @@ rec {
 
     :::
   */
-  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
+  genAttrs =
+    names: f:
+    listToAttrs (
+      map (name: {
+        inherit name;
+        value = f name;
+      }) names
+    );
 
   /**
     Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
@@ -1863,7 +1873,7 @@ rec {
 
     :::
   */
-  overrideExisting = old: new: mapAttrs (name: value: new.${name} or value) old;
+  overrideExisting = old: new: old // intersectAttrs old new;
 
   /**
     Turns a list of strings into a human-readable description of those
@@ -1971,10 +1981,9 @@ rec {
   getFirstOutput =
     candidates: pkg:
     let
-      outputs = builtins.filter (name: hasAttr name pkg) candidates;
-      output = builtins.head outputs;
+      outputs = filter (name: pkg ? ${name}) candidates;
     in
-    if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${output};
+    if pkg.outputSpecified or false || outputs == [ ] then pkg else pkg.${head outputs};
 
   /**
     Get a package's `bin` output.
@@ -2209,7 +2218,13 @@ rec {
 
     :::
   */
-  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+  recurseIntoAttrs =
+    let
+      doRecurse = {
+        recurseForDerivations = true;
+      };
+    in
+    attrs: attrs // doRecurse;
 
   /**
     Undo the effect of `recurseIntoAttrs`.
@@ -2226,7 +2241,13 @@ rec {
     dontRecurseIntoAttrs :: AttrSet -> AttrSet
     ```
   */
-  dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
+  dontRecurseIntoAttrs =
+    let
+      dontRecurse = {
+        recurseForDerivations = false;
+      };
+    in
+    attrs: attrs // dontRecurse;
 
   /**
     `unionOfDisjoint x y` is equal to `x // y`, but accessing attributes present

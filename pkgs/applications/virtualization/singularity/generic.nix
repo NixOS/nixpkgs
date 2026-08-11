@@ -1,4 +1,4 @@
-# Configurations that should only be overrided by
+# Configurations that should only be overridden by
 # overrideAttrs
 {
   pname,

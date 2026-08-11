@@ -10,16 +10,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-guardian";
-  version = "3.2.0";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-guardian";
     repo = "django-guardian";
-    tag = version;
-    hash = "sha256-imisHa5DOIQrQCEPWC/0EqPjDq12tR3xr0Dl1VifJoI=";
+    tag = finalAttrs.version;
+    hash = "sha256-0zUdcDeJ40AuYSzhjy3/htU43cy6T54rZOj2zFo6J+8=";
   };
 
   build-system = [ setuptools ];
@@ -36,9 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "guardian" ];
 
   meta = {
+    changelog = "https://github.com/django-guardian/django-guardian/releases/tag/${finalAttrs.src.tag}";
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

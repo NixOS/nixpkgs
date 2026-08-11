@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lulu";
-  version = "4.3.1";
+  version = "4.5.1";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/objective-see/LuLu/releases/download/v${finalAttrs.version}/LuLu_${finalAttrs.version}.dmg";
-    hash = "sha256-zANmUn8fQSMpX9EzKaCAMaZgr9JWB23asD5gdDZc75M=";
+    hash = "sha256-mPTTQn9Mb8z5aA/tIoeb6Qpa6B6A64YWwddYdVtrtiQ=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -41,12 +41,34 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Free open-source macOS firewall that alerts you to outgoing network connections";
+    longDescription = ''
+      Nearly every application makes network connections. So does malware.
+      LuLu is a free, open-source firewall that blocks unknown outgoing
+      connections, protecting your privacy and your Mac.
+    '';
     homepage = "https://objective-see.org/products/lulu.html";
+    downloadPage = "https://objective-see.org/products/lulu.html";
     changelog = "https://github.com/objective-see/LuLu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "LuLu";
-    maintainers = with lib.maintainers; [ philocalyst ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    identifiers = {
+      cpeParts = {
+        vendor = "objective-see";
+        product = "lulu";
+        version = finalAttrs.version;
+        target_sw = "macos";
+      };
+      purlParts = {
+        type = "github";
+        namespace = "objective-see";
+        name = "lulu";
+        version = finalAttrs.version;
+      };
+    };
+    maintainers = with lib.maintainers; [
+      KristijanZic
+      philocalyst
+    ];
   };
 })

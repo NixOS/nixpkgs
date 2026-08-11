@@ -42,6 +42,8 @@ let
   enable32BitAlsaPlugins =
     cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.pipewire != null;
 
+  inPipewireDirectory = hasPrefix "pipewire/";
+
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
   #
@@ -284,27 +286,28 @@ in
         default = [ ];
         example = literalExpression ''
           [
-                    (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
-                      context.modules = [
-                      {   name = libpipewire-module-loopback
-                          args = {
-                            node.description = "Scarlett Focusrite Line 1"
-                            capture.props = {
-                                audio.position = [ FL ]
-                                stream.dont-remix = true
-                                node.target = "alsa_input.usb-Focusrite_Scarlett_Solo_USB_Y7ZD17C24495BC-00.analog-stereo"
-                                node.passive = true
-                            }
-                            playback.props = {
-                                node.name = "SF_mono_in_1"
-                                media.class = "Audio/Source"
-                                audio.position = [ MONO ]
-                            }
-                          }
-                      }
-                      ]
-                    ''')
-                  ]'';
+            (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
+              context.modules = [
+              {   name = libpipewire-module-loopback
+                  args = {
+                    node.description = "Scarlett Focusrite Line 1"
+                    capture.props = {
+                        audio.position = [ FL ]
+                        stream.dont-remix = true
+                        node.target = "alsa_input.usb-Focusrite_Scarlett_Solo_USB_Y7ZD17C24495BC-00.analog-stereo"
+                        node.passive = true
+                    }
+                    playback.props = {
+                        node.name = "SF_mono_in_1"
+                        media.class = "Audio/Source"
+                        audio.position = [ MONO ]
+                    }
+                  }
+              }
+              ]
+            ''')
+          ]
+        '';
         description = ''
           List of packages that provide PipeWire configuration, in the form of
           `share/pipewire/*/*.conf` files.
@@ -383,7 +386,7 @@ in
         assertion =
           length (
             attrNames (
-              filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
+              filterAttrs (name: value: inPipewireDirectory name || name == "pipewire") config.environment.etc
             )
           ) == 1;
         message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";

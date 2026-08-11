@@ -93,7 +93,7 @@ let
               # We also want to test router protocols that enable connections
               # between nodes even if they don't share a VLAN, so we include
               # the primary IPs of all machines in the hosts file.
-              primaryIPs = [
+              primaryIPs = lib.remove "" [
                 remoteConfig.networking.primaryIPAddress
                 remoteConfig.networking.primaryIPv6Address
               ];

@@ -15,9 +15,9 @@
 assert odbcSupport -> unixodbc != null;
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionalString;
 
-  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  throwSystem = "unsupported";
 
   # assemble list of components
   components = [

@@ -38,24 +38,25 @@
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.8";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LbAEQwZeFeiKV6lVt8vh+mZpqlJ02RSHs0rZEMeMRc4=";
+    hash = "sha256-+sV8XRK+rBVKB6AdoGuz7q6bYtz8HwnVZghK3JjGFes=";
   };
 
-  cargoHash = "sha256-vx4+5aMxML5Cp1s7HKHSOYS4d4HaAGO2l6jMZuFPUsQ=";
+  cargoHash = "sha256-QItJQ7POtH+SRr5pyLJAWD4wx+fRpx1JI/KK6KIgNT8=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-JtkzeCt21KIEshvoCHWo1QoxUgvVJN1loJrUHgvV4qE=";
+    hash = "sha256-DXz+An1LzPiHM8rY+7KdrsieimAjwPYJBiGSa624SE0=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
     libGL
     dbus
-    gvfs
     libheif
     onnxruntime
     wrapGAppsHook4
@@ -100,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libappindicator
+    gvfs
   ];
 
   cargoRoot = "src-tauri";
@@ -151,6 +152,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapGApp "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw" \
         --set ORT_STRATEGY "system"
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";

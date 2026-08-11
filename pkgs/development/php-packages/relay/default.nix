@@ -98,52 +98,28 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + (
     if stdenv.hostPlatform.isDarwin then
-      let
-        args =
-          lib.concatMapStrings
-            (
-              v:
-              let
-                targetName = if v ? to then v.to else builtins.baseNameOf v.from;
-              in
-              " -change ${v.from} ${lib.strings.makeLibraryPath [ v.pkg ]}/${targetName}"
-            )
-            [
-              {
-                from = "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib";
-                pkg = libck;
-              }
-              {
-                from = "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib";
-                pkg = openssl;
-              }
-              {
-                from = "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib";
-                pkg = openssl;
-              }
-              {
-                from = "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib";
-                pkg = zstd;
-              }
-              {
-                from = "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib";
-                pkg = lz4;
-              }
-              {
-                from = "/opt/homebrew/opt/hiredis/lib/libhiredis.1.3.0.dylib";
-                pkg = hiredis;
-                to = "libhiredis.1.1.0.dylib";
-              }
-              {
-                from = "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.1.3.0.dylib";
-                pkg = hiredis;
-                to = "libhiredis_ssl.dylib.1.1.0";
-              }
-            ];
-      in
-      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add
+      # absolute paths. Rather than hardcoding the Homebrew paths and versions relay.so happens to be
+      # linked against (which silently goes stale whenever relay or one of these libraries updates),
+      # discover the actual references via otool and remap them by matching their basename.
       ''
-        install_name_tool${args} $out/lib/php/extensions/relay.so
+        for dylib in $(otool -L $out/lib/php/extensions/relay.so | tail -n +2 | awk '{print $1}' | grep '^/opt/homebrew/'); do
+          base=$(basename "$dylib")
+          case "$base" in
+            libhiredis_ssl.*) dir="${lib.makeLibraryPath [ hiredis ]}" ;;
+            libhiredis.*) dir="${lib.makeLibraryPath [ hiredis ]}" ;;
+            libssl.*) dir="${lib.makeLibraryPath [ openssl ]}" ;;
+            libcrypto.*) dir="${lib.makeLibraryPath [ openssl ]}" ;;
+            libzstd.*) dir="${lib.makeLibraryPath [ zstd ]}" ;;
+            liblz4.*) dir="${lib.makeLibraryPath [ lz4 ]}" ;;
+            libck.*) dir="${lib.makeLibraryPath [ libck ]}" ;;
+            *)
+              echo "relay.so references unrecognized Homebrew library $dylib; add a mapping for it" >&2
+              exit 1
+              ;;
+          esac
+          install_name_tool -change "$dylib" "$dir/$base" $out/lib/php/extensions/relay.so
+        done
       ''
     else
       ""

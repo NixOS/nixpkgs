@@ -15,6 +15,7 @@
   evalConfig,
   mkTest,
   sharedDir,
+  callReload,
   namePrefix ? "modular-service-compliance",
 }:
 
@@ -45,6 +46,11 @@ let
           ];
           warnings = [ "compliance child warning" ];
         };
+        # A sub-service exercising reload derivation from a reload signal.
+        services.reloadee = {
+          process.argv = [ "${coreutils}/bin/true" ];
+          process.reloadSignal = "HUP";
+        };
       };
     };
   };
@@ -65,7 +71,7 @@ let
       };
 
       testAssertions = {
-        expr = builtins.elem {
+        expr = lib.elem {
           assertion = true;
           message = "compliance test assertion";
         } c.assertions;
@@ -73,12 +79,12 @@ let
       };
 
       testWarnings = {
-        expr = builtins.elem "compliance test warning" c.warnings;
+        expr = lib.elem "compliance test warning" c.warnings;
         expected = true;
       };
 
       testSubServiceAssertions = {
-        expr = builtins.elem {
+        expr = lib.elem {
           assertion = true;
           message = "compliance child assertion";
         } c.services.child.assertions;
@@ -86,20 +92,74 @@ let
       };
 
       testSubServiceWarnings = {
-        expr = builtins.elem "compliance child warning" c.services.child.warnings;
+        expr = lib.elem "compliance child warning" c.services.child.warnings;
+        expected = true;
+      };
+
+      # The reload-conflict assertion must not fire (its `assertion` must hold) for a
+      # service that sets only reloadSignal (guards the inverted-assertion fix, and the
+      # priority-aware conflict detection: reloadSignal derives reloadCommand internally,
+      # which must not be mistaken for a user-set conflict).
+      testNoReloadConflict = {
+        expr = lib.any (
+          a:
+          a.message
+          == "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand."
+          && !a.assertion
+        ) c.services.reloadee.assertions;
+        expected = false;
+      };
+
+      # Setting process.reloadSignal derives process.reloadCommand
+      # (guards the misplaced-paren mkIf fix).
+      testReloadSignalDerivesCommand = {
+        expr = c.services.reloadee.process.reloadCommand;
+        expected = "${coreutils}/bin/kill -HUP $MAINPID";
+      };
+
+      # notificationProtocol submodule bools default to false.
+      testNotificationProtocolSystemdDefault = {
+        expr = c.notificationProtocol.systemd;
+        expected = false;
+      };
+
+      testNotificationProtocolS6Default = {
+        expr = c.notificationProtocol.s6;
+        expected = false;
+      };
+
+      # Setting both reloadSignal and reloadCommand explicitly is a genuine conflict,
+      # so the assertion must fire. Separate eval: checkDrv would fail on this.
+      testReloadConflictFires = {
+        expr = lib.any (
+          a:
+          a.message
+          == "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand."
+          && !a.assertion
+        ) conflictEval.config.conflict.assertions;
         expected = true;
       };
 
       # Separate eval for a failing assertion — checkDrv would fail here,
       # so we only access config.
       testFailingAssertionValue = {
-        expr = builtins.elem {
+        expr = lib.elem {
           assertion = false;
           message = "compliance failing assertion";
         } failingEval.config.failing.assertions;
         expected = true;
       };
     };
+
+  conflictEval = evalConfig {
+    services = {
+      conflict = {
+        process.argv = [ "${coreutils}/bin/true" ];
+        process.reloadSignal = "HUP";
+        process.reloadCommand = "${coreutils}/bin/kill -HUP $MAINPID";
+      };
+    };
+  };
 
   failingEval = evalConfig {
     services = {
@@ -127,6 +187,24 @@ let
     echo "$$" > "$dir/pid"
     printf '%s\n' "$@" > "$dir/args"
     exec "${coreutils}/bin/sleep" infinity
+  '';
+
+  /**
+    A reloadable service script. Like `svc`, it namespaces a comms subdirectory
+    by its first argument and records the remaining arguments. It traps SIGHUP
+    and appends a marker line to `$dir/reloads` on each reload, then stays alive
+    as the trapping shell itself (no `exec`, so the trap and MAINPID are kept).
+  */
+  reloadableSvc = writeShellScript "${namePrefix}-reloadable-svc" ''
+    id="$1"; shift
+    dir="${sharedDir}/$id"
+    mkdir -p "$dir"
+    : > "$dir/reloads"
+    reload() { printf 'reloaded\n' >> "$dir/reloads"; }
+    trap reload HUP
+    echo "$$" > "$dir/pid"
+    printf '%s\n' "$@" > "$dir/args"
+    while true; do "${coreutils}/bin/sleep" 1; done
   '';
 
   mkArgv =
@@ -171,6 +249,27 @@ let
       inherit text;
     });
 
+  # The reload runtime test's service tree. The reloadable unit is the *sub*-service,
+  # so its name path `[ "reload" "inner" ]` handed to `callReload` exercises the
+  # integration's nested unit naming (NixOS dash-joins to `reload-inner.service`).
+  reloadServices = {
+    reload = {
+      # Parent must run something; a bare keep-alive is enough.
+      process.argv = [
+        reloadableSvc
+        "reload-parent"
+      ];
+      services.inner.process = {
+        argv = [
+          reloadableSvc
+          "reload-inner"
+        ];
+        # The script traps SIGHUP; reloadSignal derives the manager's reload command.
+        reloadSignal = "HUP";
+      };
+    };
+  };
+
 in
 {
   # Eval-level tests: config structure, evaluated in the integration's
@@ -186,9 +285,9 @@ in
     representative = evalResult.checkDrv;
     passthru = {
       tests = evalTestDefs;
-      failures = lib.runTests finalAttrs.passthru.tests;
+      failures = lib.runTests finalAttrs.finalPackage.tests;
     };
-    testResults = lib.mapAttrs (_: test: test.expr == test.expected) finalAttrs.passthru.tests;
+    testResults = lib.mapAttrs (_: test: test.expr == test.expected) finalAttrs.finalPackage.tests;
     buildCommand = ''
       touch $out
       for testName in "''${!testResults[@]}"; do
@@ -244,6 +343,27 @@ in
       ${waitAndCheck "a" [ "--depth=0" ]}
       ${waitAndCheck "b" [ "--depth=1" ]}
       ${waitAndCheck "c" [ "--depth=2" ]}
+    '';
+  };
+
+  # Runtime reload: start a reloadable service, ask the integration to reload it,
+  # and assert the service observed the reload (recorded a SIGHUP marker).
+  reload = mkTest {
+    name = "${namePrefix}-reload";
+    services = reloadServices;
+    testExe = mkTestScript "reload" ''
+      ${waitAndCheck "reload-inner" [ ]}
+      ${callReload [
+        "reload"
+        "inner"
+      ]}
+      timeout=30; elapsed=0
+      while ! grep -qx "reloaded" "${sharedDir}/reload-inner/reloads" && [ "$elapsed" -lt "$timeout" ]; do
+        sleep 1; elapsed=$((elapsed + 1))
+      done
+      grep -qx "reloaded" "${sharedDir}/reload-inner/reloads" \
+        || { echo "reload: no reload recorded after ''${timeout}s"; cat "${sharedDir}/reload-inner/reloads"; exit 1; }
+      echo "reload: reload observed"
     '';
   };
 

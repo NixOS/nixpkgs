@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "netbox_documents" ];
 
   meta = {
-    description = "Plugin designed to faciliate the storage of site, circuit, device type and device specific documents within NetBox";
+    description = "Plugin designed to facilitate the storage of site, circuit, device type and device specific documents within NetBox";
     homepage = "https://github.com/jasonyates/netbox-documents";
     changelog = "https://github.com/jasonyates/netbox-documents/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;

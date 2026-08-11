@@ -144,7 +144,7 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
+            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resolved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
 

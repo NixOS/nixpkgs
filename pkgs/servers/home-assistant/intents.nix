@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "home-assistant-intents";
-  version = "2026.6.24";
+  version = "2026.7.30";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     repo = "intents-package";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-fuVS+s3l/oStgrRdeLzHrzCr9cmFesq6sYV8EgNNsIo=";
+    hash = "sha256-vnh2slsMH1zIC8oo97t8rWGh4hoeljgry9rsGtp7lT4=";
   };
 
   build-system = [

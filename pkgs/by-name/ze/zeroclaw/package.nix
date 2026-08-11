@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mTH7DRaCHmYw3m9DguceP+nGGMYff7vsoIe3J0XNb/Q=";
+    hash = "sha256-H1512vayE35bLxlFpWExT6u/z3rMKsrv6gs5un9IPaA=";
   };
 
-  cargoHash = "sha256-6tLLt8cblYABOTli1LrrWbyTOJYGmmewHJgTxBAhJlE=";
+  cargoHash = "sha256-zLj2ItDp8tbldBvFNxlrcoqcE0J5Ce19NDlV+lCu/BY=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;

@@ -32,6 +32,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-YIMmP8CIGUlgnB8/96lR9yDvEZTES766dSN0vT0JfbM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "tag_build = dev" ""
+  '';
+
   build-system = [ setuptools_80 ];
 
   dependencies = [ markupsafe ];

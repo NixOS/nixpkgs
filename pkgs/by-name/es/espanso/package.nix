@@ -35,16 +35,16 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WvFV+WZxwaGCfMVEbfHrQZS0LtgJElmOtSXK9jEeaDk=";
+    hash = "sha256-MCV4v0f7VXwS0ZrphURMb/sZqKR2pwPPCut6zOzWYIE=";
   };
 
-  cargoHash = "sha256-E3z8NfKZiQsaYqDKXSIltETa4cSL0ShHnUMymjH5pas=";
+  cargoHash = "sha256-JFXCsTV9DAIP5T3QouQ2bzSlVVa+LIgQBOE68Z7UVe4=";
 
   nativeBuildInputs = [
     kdePackages.extra-cmake-modules
@@ -88,15 +88,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxcb
     xclip
     xdotool
-  ];
-
-  patches = [
-    # remove when version > 2.3.0
-    (fetchpatch {
-      name = "fix-welcome-screen-expansion.patch";
-      url = "https://github.com/espanso/espanso/commit/5d5fc84df695d628d1d9c3e7e3854c2991a64d64.patch";
-      hash = "sha256-dhoqq0V8b8mGvZvPInHiHKGmGDDFO/SH5HqMY7EA134=";
-    })
   ];
 
   postPatch =

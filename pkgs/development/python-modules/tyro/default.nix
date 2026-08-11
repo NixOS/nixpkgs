@@ -35,6 +35,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mnYVinyys21BjHRhwOLjc3n8mShH2+krEK0dK0VBWp4=";
   };
 
+  patches = [
+    ./fix-shtab-1.9.patch # reduced version of https://github.com/brentyi/tyro/pull/488
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [

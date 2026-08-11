@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motoc";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3Ti2YnZGTkiqC32jnaBaWQ+g4L9+ZiSbanfUxdqMN4=";
+    hash = "sha256-XvqI6rwy7AOWjJNojs/nk5RsN/BUVTlx8GACiot0pUY=";
   };
 
-  cargoHash = "sha256-fQFuKqcDqqtsh4GxoBuFF6gyd6mV5PjCntPbCdQU41A=";
+  cargoHash = "sha256-SLNnRXCavAyOqbKvzsG660yTK5Bcff/VM+EQ1K3npng=";
 
   buildInputs = [
     openxr-loader

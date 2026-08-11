@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentofu-mcp-server";
-  version = "1.0.0-unstable-2026-06-09";
+  version = "1.0.0-unstable-2026-07-15";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,15 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "opentofu-mcp-server";
-    rev = "59ee379fff12389a25e75dc26768f8602e505a91";
-    hash = "sha256-pPeqlJ/M7ylD7bniVbw/HqsFkZywHISmzpqsQG0VhoU=";
+    rev = "ad9e50780d8ae56ee9a71ddea5f3f8c8f2da1020";
+    hash = "sha256-bp1tY4ggHVSVFcU+b/TlWBHhjmrf32Q3a86GWgvkFOk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 4;
     pnpm = pnpm_10;
-    hash = "sha256-N9+sbSsae1wOmHkOQ1+Km97w7T+BLuZKdskWZs8c4kw=";
+    hash = "sha256-7GEO4Mzxo7k7LXtCaLzF++4iEvc1kFw6uF9LywfPcdo=";
   };
 
   nativeBuildInputs = [

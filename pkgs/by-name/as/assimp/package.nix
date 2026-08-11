@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
     (lib.cmakeBool "ASSIMP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ASSIMP_WARNINGS_AS_ERRORS" false)
   ];
 
   # Some matrix tests fail on non-86_64-linux:
