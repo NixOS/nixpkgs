@@ -1,13 +1,15 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start case=no
   fetchurl,
+  fsnotifier,
   jetbrains,
   jetbrains-libdbm,
-  fsnotifier,
+  lib,
   libgcc,
-  runCommand,
   R,
+  runCommand,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;

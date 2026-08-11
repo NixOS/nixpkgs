@@ -1,8 +1,10 @@
 {
+  # keep-sorted start
   bash,
   lib,
   makeSetupHook,
   python3,
+  # keep-sorted end
 }:
 /**
   See https://www.jetbrains.com/help/pycharm/2026.2/cython-speedups.html

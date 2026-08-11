@@ -1,8 +1,10 @@
 {
+  # keep-sorted start
   lib,
-  stdenv,
   makeSetupHook,
   patchelf,
+  stdenv,
+  # keep-sorted end
 }:
 makeSetupHook {
   name = "shared-libs-hook";

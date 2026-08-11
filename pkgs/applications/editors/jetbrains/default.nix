@@ -1,10 +1,10 @@
 {
-  lib,
-  config,
-  stdenv,
+  # keep-sorted start
   callPackage,
-
-  jetbrains,
+  config,
+  lib,
+  stdenv,
+  # keep-sorted end
 
   vmopts ? null,
 }:

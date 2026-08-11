@@ -1,14 +1,16 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
+  fsnotifier,
   jetbrains,
   jetbrains-libdbm,
-  fsnotifier,
-  maven,
-  zlib,
+  lib,
   lldb,
+  maven,
   musl,
+  stdenv,
+  zlib,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -59,8 +61,10 @@ jetbrains.mkJetBrainsProduct {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # keep-sorted start
     lldb
     musl
+    # keep-sorted end
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed

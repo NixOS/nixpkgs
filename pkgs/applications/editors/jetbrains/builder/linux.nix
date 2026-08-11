@@ -1,37 +1,27 @@
 # Linux-specific base builder.
 
 {
-  stdenv,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  patchelf,
-  writeText,
-  coreutils,
-  gnugrep,
-  which,
-  git,
-  unzip,
-  libsecret,
-  libnotify,
-  udev,
-  e2fsprogs,
-  python3,
-  autoPatchelfHook,
-  glibcLocales,
-  fontconfig,
-  libGL,
-  libx11,
-
-  # bundled jcef-plugin
+  # keep-sorted start
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
   atk,
+  autoPatchelfHook,
   cairo,
+  coreutils,
   cups,
   dbus,
+  e2fsprogs,
+  fontconfig,
+  git,
+  glibcLocales,
+  gnugrep,
+  lib,
+  libGL,
   libgbm,
+  libnotify,
+  libsecret,
+  libx11,
   libxcb,
   libxcomposite,
   libxdamage,
@@ -39,9 +29,19 @@
   libxfixes,
   libxkbcommon,
   libxrandr,
+  makeDesktopItem,
+  makeWrapper,
   nspr,
   nss,
   pango,
+  patchelf,
+  python3,
+  stdenv,
+  udev,
+  unzip,
+  which,
+  writeText,
+  # keep-sorted end
 
   vmopts ? null,
   excludeDrvArgNames,
@@ -96,12 +96,7 @@ lib.extendMkDerivation {
       inherit desktopItem vmoptsIDE vmoptsFile;
 
       buildInputs = buildInputs ++ [
-        stdenv.cc.cc
-        fontconfig
-        libGL
-        libx11
-        # required for the bundled jcef-plugin
-        udev
+        # keep-sorted start
         alsa-lib
         at-spi2-atk
         at-spi2-core
@@ -109,7 +104,10 @@ lib.extendMkDerivation {
         cairo
         cups
         dbus
+        fontconfig
+        libGL
         libgbm
+        libx11
         libxcb
         libxcomposite
         libxdamage
@@ -120,13 +118,18 @@ lib.extendMkDerivation {
         nspr
         nss
         pango
+        stdenv.cc.cc
+        udev
+        # keep-sorted end
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
+        # keep-sorted start
+        autoPatchelfHook
         makeWrapper
         patchelf
         unzip
-        autoPatchelfHook
+        # keep-sorted end
       ];
 
       postPatch = ''
@@ -161,11 +164,9 @@ lib.extendMkDerivation {
         fi
         echo -Djna.library.path=${
           lib.makeLibraryPath [
-            libsecret
             e2fsprogs
             libnotify
-            # Required for Help -> Collect Logs
-            # in at least rider and goland
+            libsecret
             udev
           ]
         } >> $vmopts_file
@@ -199,11 +200,11 @@ lib.extendMkDerivation {
           wrapProgram  "$launcher" \
             --prefix PATH : "${
               lib.makeBinPath [
-                jdk
                 coreutils
-                gnugrep
-                which
                 git
+                gnugrep
+                jdk
+                which
               ]
             }" \
             --suffix PATH : "${lib.makeBinPath [ python3 ]}" \

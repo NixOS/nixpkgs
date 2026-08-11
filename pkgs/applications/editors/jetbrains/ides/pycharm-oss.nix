@@ -1,9 +1,11 @@
 {
+  # keep-sorted start
   fsnotifier,
-  lib,
   jetbrains,
-  stdenv,
+  lib,
   python3,
+  stdenv,
+  # keep-sorted end
 }:
 let
   src = jetbrains.mkJetBrainsSource {
@@ -54,9 +56,11 @@ jetbrains.mkJetBrainsProduct {
   productShort = "PyCharm";
 
   nativeBuildInputs = [
+    # keep-sorted start
+    jetbrains.cythonDebugSpeedupsHook
     python3
     python3.pkgs.setuptools
-    jetbrains.cythonDebugSpeedupsHook
+    # keep-sorted end
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed

@@ -1,23 +1,24 @@
 {
+  # keep-sorted start
+  ant,
+  callPackage,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
-  lib,
-  linkFarm,
-  makeWrapper,
-  runCommand,
-  stdenvNoCC,
-  rustPlatform,
-  callPackage,
-
-  ant,
   fsnotifier,
   glibc,
   jetbrains,
   jetbrains-libdbm,
   kotlin,
+  lib,
+  linkFarm,
+  makeWrapper,
   maven,
   p7zip,
+  runCommand,
+  rustPlatform,
+  stdenvNoCC,
+  # keep-sorted end
 }:
 {
   version,
@@ -77,8 +78,10 @@ let
 
     # Allow static linking
     buildInputs = [
+      # keep-sorted start
       glibc
       glibc.static
+      # keep-sorted end
     ];
   };
 
@@ -90,9 +93,11 @@ let
     inherit src;
     sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [
+      # keep-sorted start
       ant
-      makeWrapper
       jbr
+      makeWrapper
+      # keep-sorted end
     ];
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
@@ -184,9 +189,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [
-    p7zip
+    # keep-sorted start
     jbr
     jps-bootstrap
+    p7zip
+    # keep-sorted end
   ];
   repo = mvnRepo;
 

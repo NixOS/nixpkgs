@@ -1,12 +1,14 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
+  fsnotifier,
   jetbrains,
   jetbrains-libdbm,
-  fsnotifier,
+  lib,
   musl,
   python3,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -50,9 +52,11 @@ jetbrains.mkJetBrainsProduct {
       null;
 
   nativeBuildInputs = [
+    # keep-sorted start
+    jetbrains.cythonDebugSpeedupsHook
     python3
     python3.pkgs.setuptools
-    jetbrains.cythonDebugSpeedupsHook
+    # keep-sorted end
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
