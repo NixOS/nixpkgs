@@ -847,22 +847,6 @@ let
             in
             computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
 
-          # -- Windows/Cygwin-specific attrs --
-          ${if isWindows || isCygwin then "allowedImpureDLLs" else null} =
-            allowedImpureDLLs
-            ++ optionals isCygwin [
-              "KERNEL32.dll"
-            ];
-
-          # -- Output reference checks --
-          ${if !__structuredAttrs && attrs ? disallowedReferences then "disallowedReferences" else null} =
-            map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-          ${if !__structuredAttrs && attrs ? disallowedRequisites then "disallowedRequisites" else null} =
-            map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-          ${if !__structuredAttrs && attrs ? allowedReferences then "allowedReferences" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-          ${if !__structuredAttrs && attrs ? allowedRequisites then "allowedRequisites" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
           ${if __structuredAttrs then "outputChecks" else null} =
             let
               attrsOutputChecks = makeOutputChecks attrs;
@@ -902,6 +886,37 @@ let
         };
       in
       derivationArg
+      // (
+        # -- Output reference checks --
+        if
+          !__structuredAttrs
+          && (
+            attrs ? disallowedReferences
+            || attrs ? disallowedRequisites
+            || attrs ? allowedReferences
+            || attrs ? allowedRequisites
+          )
+        then
+          {
+            ${if attrs ? disallowedReferences then "disallowedReferences" else null} =
+              map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+            ${if attrs ? disallowedRequisites then "disallowedRequisites" else null} =
+              map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+            ${if attrs ? allowedReferences then "allowedReferences" else null} =
+              mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+            ${if attrs ? allowedRequisites then "allowedRequisites" else null} =
+              mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+          }
+        else
+          { }
+      )
+      // (
+        # -- Windows/Cygwin-specific attrs --
+        if isWindows || isCygwin then
+          { allowedImpureDLLs = allowedImpureDLLs ++ optionals isCygwin [ "KERNEL32.dll" ]; }
+        else
+          { }
+      )
       // (
         if __contentAddressed then
           {
