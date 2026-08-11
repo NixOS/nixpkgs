@@ -12,9 +12,37 @@
   buildPackages,
   which,
   python3,
+  # Build `libgcc_s` as well as `libgcc.a`, deriving it the way the monolithic
+  # build does rather than forcing it off.
+  enableShared ? stdenv.hostPlatform.hasSharedLibraries,
 }:
+let
+  # A libc needs libgcc to build, and a libgcc that can use the libc's threads
+  # needs the libc, so this package is instantiated twice — see
+  # `libgcc-no-libc` and `libgcc-libc` in the package set, the same split the
+  # LLVM package set makes with `compiler-rt-no-libc` and `compiler-rt-libc`.
+  #
+  # Nothing here says which of the two it is. The difference is entirely in the
+  # compiler it is handed: the bootstrap wrapper's `libc` is `preLibcHeaders`
+  # (or nothing at all, on platforms without one), the later wrapper's is the
+  # finished libc. Everything below reads that one value.
+  libc = stdenv.cc.libc or null;
+
+  # Which threading model may be used is decided by the libc, so take it from
+  # there rather than guess — and pass it on in `passthru` so that `libstdcxx`,
+  # which has to agree, reads the same answer instead of probing for its own.
+  #
+  # This is what makes the bootstrap build single-threaded without being told
+  # to be: a headers-only package declares no `threadModel`, and a real libc
+  # does. That build exists only to get the libc built and is thrown away
+  # afterwards, so there is nothing to be gained from threading it, and plenty
+  # to go wrong: `gthr-posix.h` includes `<pthread.h>` unconditionally, which
+  # at that point is either absent or a stand-in for a libc that does not exist
+  # yet.
+  threadModel = if libc == null then "single" else libc.threadModel or "single";
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libgcc";
+  pname = "libgcc" + lib.optionalString (libc == null) "-no-libc";
   inherit version;
 
   src = monorepoSrc;
@@ -83,9 +111,18 @@ stdenv.mkDerivation (finalAttrs: {
     buildRoot=$(readlink -e "./build")
   '';
 
-  postPatch = ''
-    sourceRoot=$(readlink -e "./libgcc")
-  '';
+  postPatch =
+    # `SHLIB_LC` defaults to `-lc`, so the `libgcc_s.so` rule cannot link
+    # before libc exists.  The monolithic build clobbers it for exactly this
+    # reason; do the same rather than giving up on shared libgcc.  Runs while
+    # the working directory is still the monorepo root, before `sourceRoot`
+    # is repointed below.
+    lib.optionalString enableShared (
+      import ../../../common/libgcc-buildstuff.nix { inherit lib stdenv; }
+    )
+    + ''
+      sourceRoot=$(readlink -e "./libgcc")
+    '';
 
   enableParallelBuilding = true;
 
@@ -231,13 +268,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-dependency-tracking"
-    "gcc_cv_target_thread_file=single"
+    "gcc_cv_target_thread_file=${threadModel}"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
-    # Do not have dynamic linker without libc
     "--enable-static"
-    "--disable-shared"
-  ];
+  ]
+  # `libgcc_s` needs no libc: it comes out with an empty `DT_NEEDED`, which is
+  # why the monolithic build ships one even from its nolibc stage.
+  ++ lib.optional (!enableShared) "--disable-shared";
 
   # Set the variable back the way it was, see corresponding code in
   # `preConfigure`.
@@ -255,6 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     isGNU = true;
+    inherit threadModel;
   };
 
   meta = gcc_meta // {

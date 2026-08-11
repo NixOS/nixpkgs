@@ -10,6 +10,7 @@
   autoreconfHook269,
   runCommand,
   gettext,
+  libgcc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstdcxx";
@@ -43,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
       cp ltmain.sh "$out"
       cp install-sh "$out"
       cp mkinstalldirs "$out"
+
+    ''
+    # `src/Makefile` runs this to compute `LTLDFLAGS`, reaching out of the
+    # subdirectory for it as `$(top_srcdir)/../libtool-ldflags`. Missing, the
+    # shell says "No such file or directory" and `LTLDFLAGS` silently comes out
+    # empty, dropping our `LDFLAGS` from every library link.
+    + ''
+      cp libtool-ldflags "$out"
 
     ''
     # `MD5SUMS` exists only in release tarballs, not in a VCS checkout.
@@ -90,6 +99,32 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$buildRoot"
     configureScript=$sourceRoot/configure
     chmod +x "$configureScript"
+
+  ''
+  # Put libgcc's `gthr-default.h` where libstdc++ expects to find it.
+  #
+  # It is not a source file. In a monolithic build libgcc's Makefile creates
+  # it by copying whichever `gthr-<model>.h` matches the target's thread
+  # model, and libstdc++ -- configured inside that same build tree -- picks
+  # it up. Standalone there is no such tree, so take the one `libgcc`
+  # installed. The two implement a single threading model between them, and
+  # copying libgcc's own answer is what makes them agree by construction
+  # rather than by two independent guesses that can drift apart. `libgcc`
+  # decided it from the libc; `gcc_cv_target_thread_file` below repeats the
+  # same value.
+  #
+  # The consequence of getting this wrong is worth spelling out, because the
+  # installed headers do not show it. `GLIBCXX_CHECK_GTHREADS` compiles
+  # `#include "gthr.h"` and requires `__GTHREADS_CXX0X`, which
+  # `gthr-posix.h` defines unconditionally. With no posix `gthr-default.h`
+  # on the include path that test fails, configure concludes there are no
+  # gthreads, and `_GLIBCXX_HAS_GTHREADS` is left undefined in
+  # `c++config.h` -- so `<mutex>` compiles away and `std::mutex` does not
+  # exist. Stating the intent with `--enable-threads=posix` does not help:
+  # the probe overrides intent with an empirical answer, so the header has
+  # to actually be there.
+  + ''
+    cp ${lib.getDev libgcc}/include/gthr-default.h "$sourceRoot/../libgcc/gthr-default.h"
   '';
 
   configurePlatforms = [
@@ -99,7 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-dependency-tracking"
-    "gcc_cv_target_thread_file=posix"
+    # The same answer `libgcc` used, and the model of the `gthr-default.h`
+    # copied in above. A mismatch here is silent: the unwinder's locks vanish
+    # while `libstdc++` still hands out `std::thread`.
+    "gcc_cv_target_thread_file=${libgcc.threadModel}"
     "cross_compiling=true"
     "--disable-multilib"
 

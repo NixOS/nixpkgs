@@ -5631,11 +5631,22 @@ with pkgs;
     if stdenv.hostPlatform != stdenv.buildPlatform then
       {
         stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
-        libgcc = callPackage ../development/libraries/gcc/libgcc {
-          gcc = gccCrossLibcStdenv.cc;
-          glibc = glibc.override { libgcc = null; };
-          stdenvNoLibs = gccCrossLibcStdenv;
-        };
+        # glibc `dlopen`s `libgcc_s.so` without consulting the usual search
+        # path, so it has to name one that already exists. The monolithic
+        # build gets there by building glibc twice: the inner `libgcc = null`
+        # one names no libgcc at all, and is used for nothing but building the
+        # libgcc the real one names. The split package set already has that
+        # rung as a package of its own — `libgcc-no-libc` is what exists
+        # before any libc does — so there is nothing left to open-code here.
+        libgcc =
+          if stdenv.hostPlatform.useGccNG or false then
+            gccNGPackages.libgcc-no-libc
+          else
+            callPackage ../development/libraries/gcc/libgcc {
+              gcc = gccCrossLibcStdenv.cc;
+              glibc = glibc.override { libgcc = null; };
+              stdenvNoLibs = gccCrossLibcStdenv;
+            };
       }
     else
       {

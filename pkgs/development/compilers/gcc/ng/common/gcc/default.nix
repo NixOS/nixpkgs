@@ -38,6 +38,9 @@
   targetPackages,
   libc,
   bintools,
+  # Build the shared runtime libraries, and so have the driver's specs emit
+  # `-lgcc_s`. Derived the way the monolithic build derives it.
+  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries,
 }:
 let
   inherit (stdenv) targetPlatform hostPlatform;
@@ -260,7 +263,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-install-libiberty"
     "--disable-multilib"
     "--disable-nls"
-    "--disable-shared"
+    # Derived rather than forced off: the driver's specs only emit `-lgcc_s`
+    # for a target that has shared libraries, so hardcoding this leaves every
+    # throwing C++ program unlinkable even though `libgcc_s.so` is built and
+    # findable. Same predicate the monolithic build uses.
+    (lib.enableFeature enableTargetShared "shared")
     "--enable-default-pie"
     "--enable-languages=${
       lib.concatStrings (
