@@ -23364,6 +23364,12 @@
     githubId = 12279531;
     name = "Ricardo Guevara";
   };
+  rharish = {
+    email = "harish.rajagopals@gmail.com";
+    github = "rharish101";
+    githubId = 25344287;
+    name = "Harish Rajagopal";
+  };
   rhelmot = {
     name = "Audrey Dutcher";
     github = "rhelmot";
@@ -28270,6 +28276,12 @@
     github = "traxys";
     githubId = 5623227;
     name = "Quentin Boyer";
+  };
+  tree-sapii = {
+    email = "supersapiiiiii@gmail.com";
+    github = "tree-sapii";
+    githubId = 144389458;
+    name = "sapii";
   };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";

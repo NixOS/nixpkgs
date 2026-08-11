@@ -66,6 +66,7 @@ in
 
         StateDirectory = "technitium-dns-server";
         LogsDirectory = "technitium";
+        WorkingDirectory = "%S/technitium-dns-server";
 
         Restart = "always";
         RestartSec = 10;
