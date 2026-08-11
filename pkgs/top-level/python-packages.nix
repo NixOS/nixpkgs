@@ -3779,6 +3779,8 @@ self: super: with self; {
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
 
+  cryptomobile = callPackage ../development/python-modules/cryptomobile { };
+
   cryptoparser = callPackage ../development/python-modules/cryptoparser { };
 
   crysp = callPackage ../development/python-modules/crysp { };
