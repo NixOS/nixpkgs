@@ -21,14 +21,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-aimdo";
-  version = "0.4.11";
+  version = "0.4.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-aimdo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i/1/j+VKikPrgltmaaDGGp2KOAUY5VzjowZJZDQAbow=";
+    hash = "sha256-cIgvOC4Ocv3JiAdVMUGjX4cv+bGFkaiw65PRi0ys2ig=";
   };
 
   postPatch = ''

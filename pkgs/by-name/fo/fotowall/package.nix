@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fotowall";
-  version = "1.1.2";
+  version = "1.1.3";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fotowall";
     repo = "fotowall";
     rev = "v${version}";
-    hash = "sha256-icZUT17vgpI65Vyx7/TuTP4ISDkb7mrXwuyVzDHcoNE=";
+    hash = "sha256-u3EV8UzfESbhaIDLYimYnjDXiP0j04VKoqqO/NglFLA=";
   };
 
   nativeBuildInputs = [
