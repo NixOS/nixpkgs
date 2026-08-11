@@ -43,7 +43,6 @@
   nss,
   pango,
 
-  jdk,
   vmopts ? null,
   excludeDrvArgNames,
 }:
@@ -61,6 +60,7 @@ lib.extendMkDerivation {
       productShort ? product,
       wmClass,
 
+      jdk,
       jetbrains-libdbm,
       fsnotifier,
 

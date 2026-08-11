@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   maven,
@@ -29,7 +29,7 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "idea";
@@ -44,6 +44,13 @@ mkJetBrainsProduct {
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   extraLdPath = [ zlib ];
   extraWrapperArgs = [

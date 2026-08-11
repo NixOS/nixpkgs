@@ -5,8 +5,6 @@
   stdenv,
   callPackage,
 
-  jdk,
-
   vmopts ? null,
 }:
 let
@@ -15,7 +13,7 @@ in
 # Makes a JetBrains IDE
 lib.extendMkDerivation {
   constructDrv = callPackage baseBuilder {
-    inherit vmopts jdk;
+    inherit vmopts;
     # Args to not pass to mkDerivation in the base builders. Since both get the same args
     # passed in, both have the same list of args to ignore, even if they don't both use
     # all of them.

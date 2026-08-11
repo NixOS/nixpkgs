@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   patchSharedLibs,
@@ -32,7 +32,7 @@ let
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
+(jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "rust-rover";
@@ -46,6 +46,13 @@ in
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
