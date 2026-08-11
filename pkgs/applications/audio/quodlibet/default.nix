@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   tag ? "",
 
@@ -196,5 +197,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

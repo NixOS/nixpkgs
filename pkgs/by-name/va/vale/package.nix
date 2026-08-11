@@ -11,7 +11,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.17.0";
+  version = "3.17.1";
 
   subPackages = [ "cmd/vale" ];
 
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "vale-cli";
     repo = "vale";
     tag = "v${version}";
-    hash = "sha256-FChOhCgvV/jO795nKlkbnGiB9oFCA8XmJBlgH+DyYvs=";
+    hash = "sha256-KSfbqQRv7sLmTHXuyGiG2mUV3g1JByOy3al5wP4JJVg=";
   };
 
-  vendorHash = "sha256-95Om+XQB+4L1Xr9ZGW2T8hMDdVjvlOLiRGOIig2SJ50=";
+  vendorHash = "sha256-K7cdb+Qgs6zml+q0PMqsFBK4SDLV2s0Kda8XmV3nZ50=";
 
   ldflags = [
     "-s"

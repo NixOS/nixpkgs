@@ -2185,7 +2185,8 @@
       ];
     "fuelprices_dk" =
       ps: with ps; [
-      ]; # missing inputs: pybraendstofpriser
+        pybraendstofpriser
+      ];
     "fujitsu_anywair" =
       ps: with ps; [
       ];
@@ -2258,7 +2259,8 @@
       ];
     "gatus" =
       ps: with ps; [
-      ]; # missing inputs: gatus-api
+        gatus-api
+      ];
     "gaviota" =
       ps: with ps; [
       ];
@@ -8293,6 +8295,7 @@
     "fronius"
     "frontend"
     "frontier_silicon"
+    "fuelprices_dk"
     "fujitsu_fglair"
     "fully_kiosk"
     "fumis"
@@ -8301,6 +8304,7 @@
     "garages_amsterdam"
     "gardena_bluetooth"
     "gate"
+    "gatus"
     "gdacs"
     "generic"
     "generic_hygrostat"
