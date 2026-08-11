@@ -71,6 +71,16 @@ stdenv.mkDerivation {
     writableTmpDirAsHomeHook
   ];
 
+  # Teach `hunk skill path` to find the FHS layout under share/skills/$pname
+  # (https://github.com/NixOS/nixpkgs/issues/547426) instead of $out/skills.
+  postPatch = ''
+    substituteInPlace src/core/paths.ts \
+      --replace-fail \
+        'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),' \
+        'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),
+    join("share", "skills", "${pname}", "hunk-review", "SKILL.md"),'
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
@@ -100,9 +110,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/hunk
-    cp -R skills $out/share/hunk/skills
-    ln -s share/hunk/skills $out/skills
+    mkdir -p $out/share/skills
+    cp -R skills $out/share/skills/$pname
 
     runHook postInstall
   '';
@@ -121,6 +130,7 @@ stdenv.mkDerivation {
     runHook preInstallCheck
 
     $out/bin/hunk --version | grep -F ${version}
+    test -f $out/share/skills/$pname/hunk-review/SKILL.md
     test -f "$($out/bin/hunk skill path)"
 
     runHook postInstallCheck
