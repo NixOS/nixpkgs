@@ -58,9 +58,5 @@ lib.extendMkDerivation {
           plugins = callPackage ../plugins/tests.nix { ide = finalAttrs.finalPackage; };
         };
       };
-
-      meta = meta // {
-        teams = [ lib.teams.jetbrains ];
-      };
     };
 }
