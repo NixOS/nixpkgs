@@ -6,7 +6,7 @@
   wrapGAppsHook3,
   gtk3,
   gobject-introspection,
-  libappindicator-gtk3,
+  libappindicator,
   librsvg,
   bluez,
   linuxHeaders,
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     librsvg
   ];
 

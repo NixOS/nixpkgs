@@ -26,7 +26,7 @@
   krb5,
   lcms2,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libcanberra-gtk3,
   libcap,
   libcxx,
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     glib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     libGL
     pcsclite
 

@@ -6,7 +6,7 @@
   gtk3,
   installShellFiles,
   keyutils,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   librsvg,
   python3Packages,
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     libnotify
     librsvg # SVG icons
     udisks
