@@ -34,7 +34,7 @@ in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
-  pname = "idea";
+  pname = "intellij-idea";
 
   wmClass = "jetbrains-idea";
   product = "IntelliJ IDEA";
