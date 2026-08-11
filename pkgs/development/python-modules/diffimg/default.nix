@@ -11,6 +11,8 @@
 buildPythonPackage {
   pname = "diffimg";
   version = "0.3.0"; # github recognized 0.1.3, there's a v0.1.5 tag and setup.py says 0.3.0
+
+  __structureAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
