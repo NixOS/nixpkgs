@@ -35,6 +35,9 @@ def main():
         help="do not update maven dependencies for source IDEs",
     )
     parser.add_argument(
+        "--dry-run", action="store_true", help="do not change any files"
+    )
+    parser.add_argument(
         "--old-version",
         type=str,
         help="old version of the IDE, only used if `ide` (or UPDATE_NIX_PNAME) is also used. "
@@ -50,9 +53,9 @@ def main():
     version_fetcher = VersionFetcher()
 
     ides_to_run_for = (
-        [get_single_ide(update_info, config.jetbrains_root, config.ide)]
+        [get_single_ide(update_info, config.nixpkgs_root, config.ide)]
         if config.ide is not None
-        else list(get_all_ides(update_info, config.jetbrains_root))
+        else list(get_all_ides(update_info, config.nixpkgs_root))
     )
 
     print(f"[.] found IDEs to update: {', '.join(ide.name for ide in ides_to_run_for)}")
