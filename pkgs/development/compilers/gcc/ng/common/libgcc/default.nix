@@ -12,9 +12,31 @@
   buildPackages,
   which,
   python3,
-  # Build `libgcc_s` as well as `libgcc.a`, deriving it the way the monolithic
-  # build does rather than forcing it off.
-  enableShared ? stdenv.hostPlatform.hasSharedLibraries,
+
+  # Build `libgcc_s` as well as `libgcc.a`. Only ever worth turning *off*: the
+  # assertion below refuses to force it on where the default says it cannot
+  # work, since what follows from that is a link failure much further away.
+  enableShared ? __defaultEnableShared,
+
+  # The following are arguments rather than a `let` bindings only so
+  # that it is in scope for the default definition above.
+
+  # Whether a shared libgcc can be built at all here, derived the way the
+  # monolithic build derives it rather than forced off.
+  #
+  # Shared needs something to link against. Normally that is the libc, on any
+  # format -- PE/COFF included -- which is why every stage after the bootstrap
+  # builds it. ELF additionally allows it *before* the libc exists, because a
+  # shared object may keep undefined symbols; `libgcc_s.so` comes out with an
+  # empty `DT_NEEDED`, which is why the monolithic build ships one even from
+  # its nolibc stage. A PE/COFF DLL must resolve everything at link time, so
+  # there the bootstrap yields only `libgcc.a` -- all it is used for anyway.
+  __defaultEnableShared ?
+    stdenv.hostPlatform.hasSharedLibraries && (__haveLinkableLibc || stdenv.hostPlatform.isElf),
+
+  # Whether the compiler has a libc that can actually be linked against, as
+  # opposed to nothing at all or a headers-only stand-in.
+  __haveLinkableLibc ? (stdenv.cc.libc or null) != null && !(stdenv.cc.libc.headersOnly or false),
 }:
 let
   # A libc needs libgcc to build, and a libgcc that can use the libc's threads
@@ -41,6 +63,9 @@ let
   # yet.
   threadModel = if libc == null then "single" else libc.threadModel or "single";
 in
+
+assert enableShared -> __defaultEnableShared;
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgcc" + lib.optionalString (libc == null) "-no-libc";
   inherit version;
@@ -112,11 +137,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch =
+    # Both halves of this are ELF-specific, so it is applied only there.
+    # `crti.o`/`crtn.o` are an ELF convention; forcing the rule on a PE/COFF
+    # target makes the build assemble the generic ELF `crti.S` with a PE
+    # assembler, which fails outright. And on those targets `SHLIB_LC` is not
+    # `-lc` but the list of system import libraries the DLL needs, so blanking
+    # it would leave the shared libgcc missing its real dependencies.
+    #
     # Trick to build a gcc that is capable of emitting shared libraries *without* having the
     # hostPlatform libc available beforehand.  Taken from:
     #   https://web.archive.org/web/20170222224855/http://frank.harvard.edu/~coldwell/toolchain/
     #   https://web.archive.org/web/20170224235700/http://frank.harvard.edu/~coldwell/toolchain/t-linux.diff
-    lib.optionalString enableShared (
+    lib.optionalString (enableShared && stdenv.hostPlatform.isElf) (
       let
 
         # crt{i,n}.o are the first and last (respectively) object file
@@ -355,10 +387,9 @@ stdenv.mkDerivation (finalAttrs: {
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
     "--enable-static"
-  ]
-  # `libgcc_s` needs no libc: it comes out with an empty `DT_NEEDED`, which is
-  # why the monolithic build ships one even from its nolibc stage.
-  ++ lib.optional (!enableShared) "--disable-shared";
+
+    (lib.enableFeature enableShared "shared")
+  ];
 
   # Set the variable back the way it was, see corresponding code in
   # `preConfigure`.
