@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  airplay-cli,
   python3Packages,
   fetchFromGitHub,
   ffmpeg_7-headless,
@@ -139,6 +140,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     if [[ -n $found_bins ]]; then
       echo "Found binaries that should be replaced with packages built from source: $found_bins"
       exit 2
+    fi
+
+    airplay_cli_version=$(grep -oP 'CLIAIRPLAY_VERSION=v\K[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)
+    if [[ $airplay_cli_version != ${airplay-cli.version} ]]; then
+      echo "Our airplay-cli version ${airplay-cli.version} is not matching upstream $airplay_cli_version, please update it!"
+      exit 5
     fi
   '';
 
