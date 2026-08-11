@@ -17,11 +17,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spoofer";
-  version = "1.4.13";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://www.caida.org/projects/spoofer/downloads/spoofer-${finalAttrs.version}.tar.gz";
-    hash = "sha256-n3B2yAckbcm2kyv5QzBGh4nvKa0S/+EbGCxe0eyWG1U=";
+    hash = "sha256-uWQcfKAs8Ho8Zh+67exRVJOyM9i+sgu/7t8vuVWGyIU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
