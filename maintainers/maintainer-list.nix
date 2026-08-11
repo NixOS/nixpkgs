@@ -6865,6 +6865,12 @@
     githubId = 27348469;
     name = "Cat";
   };
+  denzonl = {
+    email = "dennis@bogers.xyz";
+    github = "DenzoNL";
+    githubId = 7504556;
+    name = "Dennis Bogers";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -8263,6 +8269,12 @@
     github = "ElvishJerricco";
     githubId = 1365692;
     name = "Will Fancher";
+  };
+  elzorrorebelde = {
+    name = "Jorge Javier Araya Navarro";
+    email = "jorge@esavara.cr";
+    github = "elzorrorebelde";
+    githubId = 1055216;
   };
   emaiax = {
     email = "github@emaiax.dev";
@@ -25967,12 +25979,6 @@
     github = "sguimmara";
     githubId = 5512096;
     name = "Sébastien Guimmara";
-  };
-  shackra = {
-    name = "Jorge Javier Araya Navarro";
-    email = "jorge@esavara.cr";
-    github = "shackra";
-    githubId = 1055216;
   };
   shadaj = {
     github = "shadaj";
