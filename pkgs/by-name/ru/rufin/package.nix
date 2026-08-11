@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rufin";
-  version = "0.12.5";
+  version = "0.13.0";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QOlDZAVjDgAV1G4+f82TpNbyv+96QGDAUqf5r+A4PuU=";
+    hash = "sha256-xNeANA+qiegxojC3YO0JOMk92Qv+FAFe0/YO4He/I80=";
   };
 
-  cargoHash = "sha256-6u23YZSYYYAcnoOOZiCUCy9rbiOS59Nu4hj3WKhL/B0=";
+  cargoHash = "sha256-UitZfrsvfHkiQUTAq8srstBGRbcuKBn5OJ+WUq1jdqI=";
 
   strictDeps = true;
 
@@ -52,46 +52,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "-p"
     "rufin"
+    "-p"
+    "xtask"
   ];
 
   doCheck = false;
 
-  postInstall = ''
-    install -Dm644 data/japanese-readings.dic \
-      "$out/share/rufin/japanese-readings.dic"
-    install -Dm644 data/japanese-readings.LICENSE \
-      "$out/share/licenses/rufin/japanese-readings.LICENSE"
-    install -Dm644 data/io.github.screwys.Rufin.desktop \
-      "$out/share/applications/io.github.screwys.Rufin.desktop"
+  installPhase = ''
+    runHook preInstall
+
+    rufin_binary="$(find target -type f -path "*/$cargoBuildType/rufin" -perm -0100 -print -quit)"
+    xtask_binary="$(find target -type f -path "*/$cargoBuildType/xtask" -perm -0100 -print -quit)"
+    if [ -z "$rufin_binary" ] || [ -z "$xtask_binary" ]; then
+      echo "The Rufin or xtask build output is missing." >&2
+      exit 1
+    fi
+    "$xtask_binary" install linux \
+      --binary "$rufin_binary" \
+      --destdir "$out" \
+      --prefix /
     substituteInPlace "$out/share/applications/io.github.screwys.Rufin.desktop" \
       --replace-fail "Exec=rufin" "Exec=$out/bin/rufin"
-    install -Dm644 data/io.github.screwys.Rufin.metainfo.xml \
-      "$out/share/metainfo/io.github.screwys.Rufin.metainfo.xml"
-    install -Dm644 data/icons/hicolor/scalable/apps/io.github.screwys.Rufin.svg \
-      "$out/share/icons/hicolor/scalable/apps/io.github.screwys.Rufin.svg"
-    install -Dm644 -t "$out/share/icons/hicolor/scalable/actions" \
-      data/icons/hicolor/scalable/actions/*.svg
-    install -Dm644 -t "$out/share/icons/hicolor/scalable/status" \
-      data/icons/hicolor/scalable/status/*.svg
-    install -Dm644 -t "$out/share/icons/hicolor/512x512/apps" \
-      data/icons/hicolor/512x512/apps/*.png
-    install -Dm644 -t "$out/share/icons/hicolor/64x64/apps" \
-      data/icons/hicolor/64x64/apps/*.png
 
-    for po_file in crates/localization/locales/*.po; do
-      if [ -f "$po_file" ]; then
-        lang="$(basename "$po_file" .po)"
-        mkdir -p "$out/share/locale/$lang/LC_MESSAGES"
-        msgfmt "$po_file" -o "$out/share/locale/$lang/LC_MESSAGES/rufin.mo"
-      fi
-    done
+    runHook postInstall
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --set-default RUFIN_LOCALEDIR "$out/share/locale"
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     )
   '';
 
