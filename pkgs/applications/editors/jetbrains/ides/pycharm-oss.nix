@@ -1,4 +1,5 @@
 {
+  fsnotifier,
   lib,
   mkJetBrainsProduct,
   mkJetBrainsSource,
@@ -35,13 +36,13 @@ let
   };
 in
 (mkJetBrainsProduct {
-  inherit src;
+  inherit src fsnotifier;
   inherit (src)
     version
     buildNumber
-    libdbm
-    fsnotifier
     ;
+  # this is jetbrains-libdbm but using the sources from the IDE build.
+  jetbrains-libdbm = src.libdbm;
 
   pname = "pycharm-oss";
 

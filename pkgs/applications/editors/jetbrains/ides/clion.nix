@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   mkJetBrainsProduct,
-  libdbm,
+  jetbrains-libdbm,
   fsnotifier,
   patchSharedLibs,
   dotnetCorePackages,
@@ -36,7 +36,7 @@ let
   # update-script-end: urls
 in
 (mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "clion";
 

@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   mkJetBrainsProduct,
-  libdbm,
+  jetbrains-libdbm,
   fsnotifier,
   libgcc,
   runCommand,
@@ -29,7 +29,7 @@ let
   # update-script-end: urls
 in
 mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "dataspell";
 

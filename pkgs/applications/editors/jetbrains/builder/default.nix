@@ -25,7 +25,7 @@ lib.extendMkDerivation {
       "productShort"
       "buildNumber"
       "wmClass"
-      "libdbm"
+      "jetbrains-libdbm"
       "fsnotifier"
       "extraLdPath"
       "extraWrapperArgs"
@@ -39,7 +39,7 @@ lib.extendMkDerivation {
       buildNumber,
       product,
 
-      libdbm,
+      jetbrains-libdbm,
       fsnotifier,
 
       meta ? { },
@@ -51,7 +51,7 @@ lib.extendMkDerivation {
         inherit
           buildNumber
           product
-          libdbm
+          jetbrains-libdbm
           fsnotifier
           ;
 
