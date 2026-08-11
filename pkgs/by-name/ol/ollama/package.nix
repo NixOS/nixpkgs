@@ -107,18 +107,6 @@ let
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
 
-  # Since v0.30, llama.cpp is consumed via CMake FetchContent rather than
-  # vendored in-tree. Pre-stage the pin (tracks upstream's
-  # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
-  # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b10242";
-  llamaCppSrc = fetchFromGitHub {
-    owner = "ggml-org";
-    repo = "llama.cpp";
-    tag = llamaCppVersion;
-    hash = "sha256-mBqO6h9eiSAXqiHy1H3aK2ACbz1aYagmjAN7IpXNTcw=";
-  };
-
   wrapperOptions = [
     # ollama embeds llama-cpp binaries which actually run the ai models
     # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
@@ -204,6 +192,18 @@ goBuild (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
     ++ lib.optionals enableVulkan vulkanLibs;
 
+  # Since v0.30, llama.cpp is consumed via CMake FetchContent rather than
+  # vendored in-tree. Pre-stage the pin (tracks upstream's
+  # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
+  # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b10242";
+  llamaCppSrc = fetchFromGitHub {
+    owner = "ggml-org";
+    repo = "llama.cpp";
+    tag = finalAttrs.llamaCppVersion;
+    hash = "sha256-mBqO6h9eiSAXqiHy1H3aK2ACbz1aYagmjAN7IpXNTcw=";
+  };
+
   # replace inaccurate version number with actual release version
   postPatch = ''
     substituteInPlace version/version.go \
@@ -225,7 +225,7 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
-    cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
+    cp -r ${finalAttrs.llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
@@ -366,7 +366,6 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
-    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
