@@ -3,7 +3,7 @@
   lib,
   jetbrains,
   stdenv,
-  pyCharmCommonOverrides,
+  python3,
 }:
 let
   src = jetbrains.mkJetBrainsSource {
@@ -35,7 +35,7 @@ let
     # update-script-end: source-args
   };
 in
-(jetbrains.mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit src fsnotifier;
   inherit (src)
     version
@@ -52,6 +52,12 @@ in
   wmClass = "jetbrains-pycharm-ce";
   product = "PyCharm Open Source";
   productShort = "PyCharm";
+
+  nativeBuildInputs = [
+    python3
+    python3.pkgs.setuptools
+    jetbrains.cythonDebugSpeedupsHook
+  ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
@@ -74,5 +80,4 @@ in
       ''
     ];
   };
-}).overrideAttrs
-  pyCharmCommonOverrides
+}
