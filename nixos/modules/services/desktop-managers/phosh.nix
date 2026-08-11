@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.services.xserver.desktopManager.phosh;
+  cfg = config.services.desktopManager.phosh;
 
   phocConfigType = lib.types.submodule {
     options = {
@@ -21,13 +21,6 @@ let
           "immediate"
         ];
         default = "false";
-      };
-      cursorTheme = lib.mkOption {
-        description = ''
-          Cursor theme to use in Phosh.
-        '';
-        type = lib.types.str;
-        default = "default";
       };
       outputs = lib.mkOption {
         description = ''
@@ -120,8 +113,6 @@ let
       [core]
       xwayland = ${phoc.xwayland}
       ${lib.concatStringsSep "\n" outputs}
-      [cursor]
-      theme = ${phoc.cursorTheme}
     '';
 in
 
@@ -131,8 +122,31 @@ in
     maintainers = with lib.maintainers; [ armelclo ];
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" "enable" ]
+      [ "services" "desktopManager" "phosh" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" "package" ]
+      [ "services" "desktopManager" "phosh" "package" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" "user" ]
+      [ "services" "desktopManager" "phosh" "user" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" "group" ]
+      [ "services" "desktopManager" "phosh" "group" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" "phocConfig" ]
+      [ "services" "desktopManager" "phosh" "phocConfig" ]
+    )
+  ];
+
   options = {
-    services.xserver.desktopManager.phosh = {
+    services.desktopManager.phosh = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -227,6 +241,7 @@ in
       pkgs.phoc
       cfg.package
       pkgs.stevia
+      pkgs.phosh-mobile-settings
     ];
 
     systemd.packages = [ cfg.package ];
