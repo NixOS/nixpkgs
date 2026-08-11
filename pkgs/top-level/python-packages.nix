@@ -18271,6 +18271,8 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
+  scat = callPackage ../development/python-modules/scat { };
+
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
   schedula = callPackage ../development/python-modules/schedula { };
