@@ -3,17 +3,20 @@
   fetchPypi,
   buildPythonPackage,
   krb5-c, # C krb5 library, not PyPI krb5
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykerberos";
   version = "1.2.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-nXAevY/FlsmdMVXVukWBO9WQjSbvg7oK3SUO22IqvtQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ krb5-c ]; # for krb5-config
 
