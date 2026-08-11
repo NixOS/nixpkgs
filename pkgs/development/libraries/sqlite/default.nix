@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+  patches = lib.optional (stdenv.hostPlatform.extensions.executable != "") ./fix-target-exeext.patch;
+
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
     patchShebangs configure
