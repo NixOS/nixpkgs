@@ -14,7 +14,7 @@
 
   alsa-lib,
   glib-networking,
-  libappindicator-gtk3,
+  libappindicator,
   openssl,
   webkitgtk_4_1,
 }:
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     openssl
     webkitgtk_4_1
   ];

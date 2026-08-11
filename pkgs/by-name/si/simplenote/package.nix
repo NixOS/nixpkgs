@@ -32,7 +32,7 @@ appimageTools.wrapType2 {
     pkgs: with pkgs; [
       libsecret
       libnotify
-      libappindicator-gtk3
+      libappindicator
     ];
 
   desktopItems = [

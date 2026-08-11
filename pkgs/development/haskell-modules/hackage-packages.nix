@@ -304694,7 +304694,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk2; };
+  ) { libappindicator-gtk2 = null; };
 
   happindicator3 = callPackage (
     {
@@ -304721,7 +304721,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk3; };
+  ) { libappindicator-gtk3 = null; };
 
   happlets = callPackage (
     {

@@ -31,7 +31,7 @@
   libxrandr,
   libxrender,
   libxtst,
-  libappindicator-gtk3,
+  libappindicator,
   libcxx,
   libdbusmenu,
   libdrm,
@@ -106,7 +106,7 @@ let
     libxrandr
     libxrender
     libxtst
-    libappindicator-gtk3
+    libappindicator
     libcxx
     libdbusmenu
     libdrm
