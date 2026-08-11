@@ -8864,6 +8864,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/scenefx { })
     scenefx_0_4
     scenefx_0_5
+    scenefx
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
