@@ -92,6 +92,6 @@ in
   };
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
 }
