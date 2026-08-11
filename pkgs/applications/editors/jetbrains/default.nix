@@ -3,8 +3,8 @@
   datagrip,
   dataspell,
   goland,
-  idea-oss,
-  idea,
+  intellij-idea-oss,
+  intellij-idea,
   jetbrains-gateway,
   jetbrains-mps,
   phpstorm,
@@ -47,8 +47,8 @@
   dataspell = dataspell; # Added 2026-08-15
   gateway = jetbrains-gateway; # Added 2026-08-15
   goland = goland; # Added 2026-08-15
-  idea = idea; # Added 2026-08-15
-  idea-oss = idea-oss; # Added 2026-08-15
+  idea = intellij-idea; # Added 2026-08-15
+  idea-oss = intellij-idea-oss; # Added 2026-08-15
   mps = jetbrains-mps; # Added 2026-08-15
   phpstorm = phpstorm; # Added 2026-08-15
   pycharm = pycharm; # Added 2026-08-15

@@ -46,7 +46,7 @@ jetbrains.mkJetBrainsProduct {
 
   jdk = jetbrains.jdk;
 
-  pname = "idea-oss";
+  pname = "intellij-idea-oss";
 
   wmClass = "jetbrains-idea-ce";
   product = "IntelliJ IDEA Open Source";

@@ -31,7 +31,7 @@
       "aarch64-darwin": "https://download.jetbrains.com/go/goland-{version}-aarch64.dmg"
     }
   },
-  "idea": {
+  "intellij-idea": {
     "channel": "IU-RELEASE-licensing-RELEASE",
     "urls": {
       "x86_64-linux": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
@@ -39,7 +39,7 @@
       "aarch64-darwin": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg"
     }
   },
-  "idea-oss": {
+  "intellij-dea-oss": {
     "channel": "IU-RELEASE-licensing-RELEASE",
     "urls": {}
   },

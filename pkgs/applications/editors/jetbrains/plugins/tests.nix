@@ -5,8 +5,8 @@
   fetchurl,
   fetchzip,
   goland,
-  idea-oss,
-  idea,
+  intellij-idea-oss,
+  intellij-idea,
   jetbrains-gateway,
   jetbrains-mps,
   jetbrains,
@@ -32,8 +32,8 @@ let
         datagrip
         dataspell
         goland
-        idea-oss
-        idea
+        intellij-idea-oss
+        intellij-idea
         jetbrains-gateway
         jetbrains-mps
         phpstorm
