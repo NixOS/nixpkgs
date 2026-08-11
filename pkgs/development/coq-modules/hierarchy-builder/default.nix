@@ -72,9 +72,14 @@ let
       propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
     }
   );
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? hierarchy-builder
+    else
+      lib.versionAtLeast version "1.9.1";
 in
 # this is just a wrapper for rocqPackages.hierarchy-builder for Rocq >= 9.0
-if coq.rocqPackages ? hierarchy-builder then
+if useRocqPackages then
   coq.rocqPackages.hierarchy-builder.override {
     inherit version;
     inherit (coq.rocqPackages) rocq-core;
