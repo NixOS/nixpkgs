@@ -217,7 +217,14 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
 
 # Fetch the config.json file and get the .dl key from it
 # See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-def fetch_dl_for_registry_source(source: RegistrySource, session: requests.Session) -> str:
+# If `overrides` contains an entry for `source.raw`, that value is used directly
+def fetch_dl_for_registry_source(source: RegistrySource, session: requests.Session, overrides: dict[str, str] | None = None) -> str:
+    if overrides is not None:
+        override = overrides.get(source.raw)
+        if override is not None:
+            eprint(f'Using registry dl override for "{source.raw}": {override}')
+            return override
+
     if source.is_sparse:
         url = source.url + "/config.json"
 
@@ -287,18 +294,27 @@ def download_git_tree(url: str, git_sha_rev: str, out_dir: Path) -> None:
     subprocess.check_output(cmd)
 
 
-def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
+def load_registry_dl_overrides(path: Path | None) -> dict[str, str]:
+    if path is None:
+        return {}
+    with path.open("rb") as f:
+        return json.load(f)
+
+
+def create_vendor_staging(lockfile_path: Path, out_dir: Path, registry_dl_overrides_path: Path | None = None) -> None:
     lockfile = load_lockfile(lockfile_path)
 
     git_sources = [source for source in lockfile.sources if isinstance(source, GitSource)]
     registry_sources = [source for source in lockfile.sources if isinstance(source, RegistrySource)]
     registry_packages = [pkg for pkg in lockfile.packages if isinstance(pkg, RegistryPackage)]
 
+    registry_dl_overrides = load_registry_dl_overrides(registry_dl_overrides_path)
+
     session = create_http_session()
 
     raw_registry_source_to_dl: dict[str, str] = {}
     for source in registry_sources:
-        raw_registry_source_to_dl[source.raw] = fetch_dl_for_registry_source(source, session)
+        raw_registry_source_to_dl[source.raw] = fetch_dl_for_registry_source(source, session, registry_dl_overrides)
 
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
@@ -555,7 +571,11 @@ def main() -> None:
     subcommand = sys.argv[1]
 
     subcommand_func_dict = {
-        "create-vendor-staging": lambda: create_vendor_staging(lockfile_path=Path(sys.argv[2]), out_dir=Path(sys.argv[3])),
+        "create-vendor-staging": lambda: create_vendor_staging(
+            lockfile_path=Path(sys.argv[2]),
+            out_dir=Path(sys.argv[3]),
+            registry_dl_overrides_path=Path(sys.argv[4]) if len(sys.argv) > 4 else None,
+        ),
         "create-vendor": lambda: create_vendor(vendor_staging_dir=Path(sys.argv[2]), out_dir=Path(sys.argv[3]))
     }
 
