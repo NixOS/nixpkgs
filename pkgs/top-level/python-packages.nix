@@ -7076,6 +7076,8 @@ self: super: with self; {
 
   google-geo-type = callPackage ../development/python-modules/google-geo-type { };
 
+  google-health-api = callPackage ../development/python-modules/google-health-api { };
+
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   google-maps-routing = callPackage ../development/python-modules/google-maps-routing { };
