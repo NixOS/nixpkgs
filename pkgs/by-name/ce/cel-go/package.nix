@@ -26,18 +26,18 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "cel-go";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "cel-expr";
     repo = "cel-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D07O4eLNvOLecIRDylUC5Rrc8EfworHwEPIzTZV82IU=";
+    hash = "sha256-d2qteEY7aRKvzD+uF7uNibUv5dECaL61NogbZfd3cAQ=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-AR1XxMJZEtfFgq/H/N07d/qpnI7K1/IHZCHqvqIfeC8=";
+  vendorHash = "sha256-SetkDfzfR/zqkNirGeGlczvV5h/CM9GiAPP2pKq6QDU=";
 
   subPackages = [
     "main"
