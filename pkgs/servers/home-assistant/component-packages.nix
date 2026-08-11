@@ -2567,7 +2567,8 @@
       ];
     "harman_luxury" =
       ps: with ps; [
-      ]; # missing inputs: aioharmanluxury
+        aioharmanluxury
+      ];
     "harmony" =
       ps: with ps; [
         aioharmony
@@ -8359,6 +8360,7 @@
     "hanna"
     "hardkernel"
     "hardware"
+    "harman_luxury"
     "harmony"
     "hassio"
     "hddtemp"
