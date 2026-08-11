@@ -44,6 +44,41 @@ in
 
       package = lib.mkPackageOption pkgs "llama-cpp" { };
 
+      modelLoader = {
+        enable = lib.mkEnableOption "the llama.cpp model loader";
+
+        models = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [
+            "bartowski/Llama-3.2-1B-Instruct-GGUF:Q4_K_M"
+            "ggml-org/gemma-3-1b-it-GGUF"
+          ];
+          description = ''
+            Models to download using llama.cpp before the services listed in
+            {option}`services.llama-cpp.modelLoader.wantedBy` start.
+
+            Models use llama.cpp's `<user>/<model>[:quant]` Hugging Face format
+            and are stored in {file}`/var/cache/llama-cpp`. The quantization is
+            optional and defaults to `Q4_K_M` when available. The model loader
+            does not require {option}`services.llama-cpp.enable`.
+          '';
+        };
+
+        wantedBy = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ "llama-cpp.service" ];
+          example = [
+            "llama-cpp.service"
+            "llama-swap.service"
+          ];
+          description = ''
+            Systemd units that pull in `llama-cpp-model-loader.service` and wait
+            for the configured models to be downloaded before starting.
+          '';
+        };
+      };
+
       settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = lib.types.attrs;
@@ -100,8 +135,8 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.llama-cpp = {
+  config = {
+    systemd.services.llama-cpp = lib.mkIf cfg.enable {
       description = "llama.cpp HTTP server";
       wants = [ "network.target" ];
       after = [ "network.target" ];
@@ -124,8 +159,10 @@ in
         DynamicUser = true;
         StateDirectory = "llama-cpp";
         CacheDirectory = "llama-cpp";
-        WorkingDirectory = "/var/lib/llama-cpp";
-        Environment = [ "LLAMA_CACHE=/var/cache/llama-cpp" ];
+        WorkingDirectory = "/var/lib/${config.systemd.services.llama-cpp.serviceConfig.StateDirectory}";
+        Environment = [
+          "LLAMA_CACHE=/var/cache/${config.systemd.services.llama-cpp.serviceConfig.CacheDirectory}"
+        ];
 
         AmbientCapabilities = [ "" ];
         CapabilityBoundingSet = [ "" ];
@@ -164,7 +201,30 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.settings.port;
+    systemd.services.llama-cpp-model-loader = lib.mkIf cfg.modelLoader.enable {
+      description = "Download llama.cpp models";
+      wantedBy = cfg.modelLoader.wantedBy;
+      before = cfg.modelLoader.wantedBy;
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+
+      script = lib.concatMapStringsSep "\n" (
+        model: "${lib.getExe cfg.package} download --hf-repo ${lib.escapeShellArg model}"
+      ) cfg.modelLoader.models;
+
+      serviceConfig = {
+        Type = "oneshot";
+        DynamicUser = true;
+        CacheDirectory = "llama-cpp";
+        Environment = [
+          "LLAMA_CACHE=/var/cache/${config.systemd.services.llama-cpp-model-loader.serviceConfig.CacheDirectory}"
+        ];
+      };
+    };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable (
+      lib.optional cfg.openFirewall cfg.settings.port
+    );
   };
 
   meta.maintainers = with lib.maintainers; [

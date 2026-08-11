@@ -27,6 +27,13 @@ let
   # check if we can use smollm2-135m taking either globally allowUnfree or
   # explicit allow with predicate
   useSmollm2-135m = pkgs.config.allowUnfree || allowUnfreePredicate smollm2-135m;
+
+  llama-downloader = pkgs.writeShellScriptBin "llama" ''
+    if [ "$1" != download ] || [ "$2" != --hf-repo ]; then
+      exit 1
+    fi
+    printf '%s\n' "$3" >> "$LLAMA_CACHE/downloads"
+  '';
 in
 {
   name = "llama-swap";
@@ -44,6 +51,7 @@ in
 
         services.llama-swap = {
           enable = true;
+          useLlamaCppCacheDir = true;
           settings =
             # config for basic tests
             if !useSmollm2-135m then
@@ -95,6 +103,19 @@ in
                 };
               };
         };
+
+        services.llama-cpp = {
+          package = llama-downloader;
+          modelLoader = {
+            enable = true;
+            models = [
+              "example/model-one:Q4_K_M"
+              ""
+              "example/model-two"
+            ];
+            wantedBy = [ "llama-swap.service" ];
+          };
+        };
       };
   };
 
@@ -125,6 +146,11 @@ in
 
       machine.wait_for_unit('llama-swap')
       machine.wait_for_open_port(8080)
+
+      with subtest('downloads configured models before llama-swap without enabling llama-cpp'):
+          downloads = machine.succeed('cat /var/cache/llama-cpp/downloads').splitlines()
+          assert downloads == ['example/model-one:Q4_K_M', 'example/model-two'], downloads
+          machine.fail('systemctl is-enabled llama-cpp.service')
 
       with subtest('check is serving ui'):
         machine.succeed('curl --fail http:/localhost:8080/ui/')
