@@ -62,18 +62,18 @@ in
     tests.standalone = nixosTests.hbase_2_4;
   };
   hbase_2_5 = common {
-    version = "2.5.14";
-    hash = "sha256-2ZwramW5welrYSGuGe7Z6lmpKdq43hld9X5k09THmjA=";
+    version = "2.5.15";
+    hash = "sha256-oQ0bdIM2PNQD+32QBMmYYIcXzr3ICXoi+sOfj+ckHZA=";
     tests.standalone = nixosTests.hbase_2_5;
   };
   hbase_2_6 = common {
-    version = "2.6.5";
-    hash = "sha256-+ap1ymg925QvM6UDKrc5dQn+Sou4UfUHgXamalgy/CE=";
+    version = "2.6.6";
+    hash = "sha256-y8+/7WQRz4mJYRM8Io3NtL7rFVphHlA8yyEubwir7AA=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {
-    version = "3.0.0-beta-1";
-    hash = "sha256-lmeaH2gDP6sBwZpzROKhR2Je7dcrwnq7qlMUh0B5fZs=";
+    version = "3.0.0";
+    hash = "sha256-CeyIoA8jjw7GCPpYtzfO761gu3M5vVV+oy6kp6CnllU=";
     tests.standalone = nixosTests.hbase3;
   };
 }
