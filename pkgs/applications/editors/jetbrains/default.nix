@@ -8,25 +8,6 @@
 
   vmopts ? null,
 }:
-
-let
-  # Common build overrides, fixes, etc.
-  # TODO: These should eventually be moved outside of this file
-  patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ls -d \
-      $out/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/bin/*/linux/*/lib/python3.*/lib-dynload/* \
-      $out/*/plugins/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/plugins/*/bin/*/linux/*/lib/python3.*/lib-dynload/* |
-    xargs patchelf \
-      --replace-needed libssl.so.10 libssl.so \
-      --replace-needed libssl.so.1.1 libssl.so \
-      --replace-needed libcrypto.so.10 libcrypto.so \
-      --replace-needed libcrypto.so.1.1 libcrypto.so \
-      --replace-needed libcrypt.so.1 libcrypt.so \
-      ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
-  '';
-in
 {
   # Builders
   mkJetBrainsProduct = callPackage ./builder/default.nix {
@@ -34,8 +15,11 @@ in
   };
   mkJetBrainsSource = callPackage ./source/build.nix { };
 
+  # Hooks
+  sharedLibsHook = callPackage ./hooks/shared-libs.nix { };
+
   # Sorted alphabetically. Deprecated products and aliases are at the very end.
-  clion = callPackage ./ides/clion.nix { inherit patchSharedLibs; };
+  clion = callPackage ./ides/clion.nix { };
   datagrip = callPackage ./ides/datagrip.nix { };
   dataspell = callPackage ./ides/dataspell.nix { };
   gateway = callPackage ./ides/gateway.nix { };
@@ -46,9 +30,9 @@ in
   phpstorm = callPackage ./ides/phpstorm.nix { };
   pycharm = callPackage ./ides/pycharm.nix { };
   pycharm-oss = callPackage ./ides/pycharm-oss.nix { };
-  rider = callPackage ./ides/rider.nix { inherit patchSharedLibs; };
+  rider = callPackage ./ides/rider.nix { };
   ruby-mine = callPackage ./ides/ruby-mine.nix { };
-  rust-rover = callPackage ./ides/rust-rover.nix { inherit patchSharedLibs; };
+  rust-rover = callPackage ./ides/rust-rover.nix { };
   webstorm = callPackage ./ides/webstorm.nix { };
 
   # Plugins

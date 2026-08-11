@@ -5,7 +5,6 @@
   jetbrains,
   jetbrains-libdbm,
   fsnotifier,
-  patchSharedLibs,
   openssl,
   libxcrypt,
   lttng-ust_2_12,
@@ -55,6 +54,8 @@ in
 
   jdk = jetbrains.jdk-no-jcef;
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
+
   # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
   #       Somebody with a Darwin machine should investigate this.
   buildInputs =
@@ -99,8 +100,6 @@ in
     postInstall =
       (attrs.postInstall or "")
       + lib.optionalString stdenv.hostPlatform.isLinux ''
-        ${patchSharedLibs}
-
         for dir in $out/rider/lib/ReSharperHost/linux-*; do
           rm -rf $dir/dotnet
           ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet
