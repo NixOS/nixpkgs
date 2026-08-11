@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  # A libgcc built against this library gets the "mcf" threading model, which
+  # on Windows beats the "win32" model the bare libc offers. Same attribute a
+  # libc uses to declare what it provides; see `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix.
+  passthru.threadModel = "mcf";
+
   meta = {
     description = "Threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
