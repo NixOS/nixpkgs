@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "plotext";
-  version = "5.3.2";
+  version = "6.0.0b0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "piccolomo";
     repo = "plotext";
     tag = version;
-    hash = "sha256-4cuStXnZFTlOoBp9w+LrTZavCWEaQdZMY4apGNKvBXE=";
+    hash = "sha256-81+AR/FOftlzR0XROOyeTMH9F1mgwSVkCIsRec/4i40=";
   };
 
   # Package does not have a conventional test suite that can be run with either
