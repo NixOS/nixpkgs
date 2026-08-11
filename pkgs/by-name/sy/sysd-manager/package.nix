@@ -11,7 +11,6 @@
   gsettings-desktop-schemas,
   fetchFromGitHub,
   wrapGAppsHook4,
-  gnused,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-FkqWQ66QdUCo9eXtfwxP5IRB5elZn1F0GtED67fvnyA=";
   };
 
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
+  cargoHash = "sha256-EJ64ZGPmQM+Gs5O4WkUMJmT8zDRyF4ZjzXGi1Jw+ovA=";
 
   nativeBuildInputs = [
     pkg-config
