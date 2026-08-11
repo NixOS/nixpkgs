@@ -283,6 +283,10 @@ let
     # Components that require access to input devices (/dev/input/*)
     "keyboard_remote"
   ];
+  componentsWritingExecutableMemory = [
+    # Custom components, maintained manually
+    "localthings"
+  ];
 in
 {
   imports = [
@@ -1034,7 +1038,7 @@ in
             ];
           DevicePolicy = "closed";
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          MemoryDenyWriteExecute = !(any useComponent componentsWritingExecutableMemory);
           NoNewPrivileges = true;
           PrivateTmp = true;
           PrivateUsers = false; # prevents gaining capabilities in the host namespace
