@@ -396,6 +396,8 @@ self: super: with self; {
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
 
+  aiokarakeep = callPackage ../development/python-modules/aiokarakeep { };
+
   aiokef = callPackage ../development/python-modules/aiokef { };
 
   aiokem = callPackage ../development/python-modules/aiokem { };
