@@ -3373,7 +3373,8 @@
       ];
     "karakeep" =
       ps: with ps; [
-      ]; # missing inputs: aiokarakeep
+        aiokarakeep
+      ];
     "keba" =
       ps: with ps; [
         keba-kecontact
@@ -8474,6 +8475,7 @@
     "justnimbus"
     "jvc_projector"
     "kaleidescape"
+    "karakeep"
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
