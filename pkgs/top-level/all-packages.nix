@@ -6106,7 +6106,6 @@ with pkgs;
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
   libwnck = callPackage ../development/libraries/libwnck { };
-  libwnck2 = callPackage ../development/libraries/libwnck/2.nix { };
 
   libwpd = callPackage ../development/libraries/libwpd { };
 

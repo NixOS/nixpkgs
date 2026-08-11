@@ -1349,6 +1349,7 @@ mapAliases {
   libva1-minimal = throw "'libva1-minimal' has been removed, as it is no longer required. Please use libva-minimal."; # Added 2026-05-14
   libviper = throw "'libviper' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   libWindowsWM = libwindowswm; # Added 2026-01-19
+  libwnck2 = throw "'libwnck2' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-11
   libwnck3 = throw "'libwnck3' has been renamed to/replaced by 'libwnck'"; # Converted to throw 2025-10-27
   libX11 = libx11; # Added 2026-02-06
   libXau = libxau; # Added 2026-02-06
