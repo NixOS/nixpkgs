@@ -754,13 +754,6 @@ let
 
           inherit outputs;
 
-          # When the derivations is content addressed provide default values
-          # for outputHashMode and outputHashAlgo because most people won't
-          # care about these anyways
-          ${if __contentAddressed then "__contentAddressed" else null} = __contentAddressed;
-          ${if __contentAddressed then "outputHashAlgo" else null} = attrs.outputHashAlgo or "sha256";
-          ${if __contentAddressed then "outputHashMode" else null} = attrs.outputHashMode or "recursive";
-
           ${if enableParallelBuilding then "enableParallelBuilding" else null} = enableParallelBuilding;
           ${if enableParallelBuilding then "enableParallelChecking" else null} =
             attrs.enableParallelChecking or true;
@@ -908,7 +901,19 @@ let
               );
         };
       in
-      derivationArg;
+      derivationArg
+      // (
+        if __contentAddressed then
+          {
+            __contentAddressed = true;
+            # Provide default values for outputHashMode and outputHashAlgo
+            # because most people won't care about these anyways.
+            outputHashAlgo = attrs.outputHashAlgo or "sha256";
+            outputHashMode = attrs.outputHashMode or "recursive";
+          }
+        else
+          { }
+      );
 
   mkDerivationSimple =
     overrideAttrs:
