@@ -209,13 +209,13 @@
     "vendorHash": "sha256-rCWeetM6nhNb1I1PmB66E5K1ku9ODRqN87MU9y6W/dc="
   },
   "cloudflare_cloudflare": {
-    "hash": "sha256-qy/bW3CnsSXoiCLPW+LVuBb7OQLhxIpCDNTyAdjU5rM=",
+    "hash": "sha256-5ff27VUJ6Cht0nhOjfuOsPiM4VkL6tB8HBHt2zjBCj0=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.22.0",
+    "rev": "v5.23.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-IwklxMtQ6pOO/066SKx298ANoh0i/DiGtgqamenMi+s="
+    "vendorHash": "sha256-nFvqShhjMiFzJXLG1BYZld0D5N2jdsa05A740k/nw3I="
   },
   "cloudfoundry-community_cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -1085,11 +1085,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-+0edUEoaJCg8iDZxRQVQMiP3pLROTi19djEhS5LiRHw=",
+    "hash": "sha256-7GwmZMffN1XdS2cvcnQJxfKx5ZsLb7Bk1o8JPcN2zyY=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.34.0",
+    "rev": "v3.35.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

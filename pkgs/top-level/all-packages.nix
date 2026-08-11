@@ -5923,9 +5923,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
-  libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
-
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
   libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
@@ -5950,8 +5947,7 @@ with pkgs;
     withSqlite = false;
   };
 
-  libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
-  libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
+  libdbusmenu-gtk3 = libdbusmenu.override { withGtk3 = true; };
 
   libdisplay-info_0_3 = callPackage ../by-name/li/libdisplay-info/0.3.nix { };
 
@@ -5972,8 +5968,6 @@ with pkgs;
     genPosixLockObjOnly = true;
   };
 
-  libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
-  libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
@@ -8704,7 +8698,6 @@ with pkgs;
     recurseIntoAttrs (
       callPackages ../applications/editors/jetbrains {
         vmopts = config.jetbrains.vmopts or null;
-        jdk = jetbrains.jdk;
       }
     )
     // {
@@ -9163,7 +9156,7 @@ with pkgs;
   quodlibet = callPackage ../applications/audio/quodlibet {
     kakasi = null;
     keybinder3 = null;
-    libappindicator-gtk3 = null;
+    libappindicator = null;
     libmodplug = null;
   };
 
@@ -9182,7 +9175,7 @@ with pkgs;
     inherit gtksourceview;
     kakasi = kakasi;
     keybinder3 = keybinder3;
-    libappindicator-gtk3 = libappindicator-gtk3;
+    libappindicator = libappindicator;
     libmodplug = libmodplug;
     tag = "-full";
     withDbusPython = true;

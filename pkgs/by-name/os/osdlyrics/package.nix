@@ -12,7 +12,6 @@
   glib,
   gtk2,
   dbus-glib,
-  libappindicator-gtk2,
   libnotify,
   python3,
   runtimeShell,
@@ -41,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk2
     dbus-glib
-    libappindicator-gtk2
     libnotify
     python3.pkgs.wrapPython
     (python3.withPackages (

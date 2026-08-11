@@ -10,5 +10,10 @@
     "@actions/github": "9.1.0",
     "bottleneck": "2.19.5",
     "commander": "14.0.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "24.0.4",
+    "@types/node": "24.13.3",
+    "typescript": "7.0.2"
   }
 }
