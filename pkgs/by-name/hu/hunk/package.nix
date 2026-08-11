@@ -110,8 +110,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/skills
-    cp -R skills $out/share/skills/$pname
+    mkdir -p $out/share/skills/$pname/hunk-review
+    cp skills/hunk-review/SKILL.md $out/share/skills/$pname/hunk-review/SKILL.md
 
     runHook postInstall
   '';
@@ -130,7 +130,6 @@ stdenv.mkDerivation {
     runHook preInstallCheck
 
     $out/bin/hunk --version | grep -F ${version}
-    test -f $out/share/skills/$pname/hunk-review/SKILL.md
     test -f "$($out/bin/hunk skill path)"
 
     runHook postInstallCheck
