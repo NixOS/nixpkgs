@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
 
@@ -26,7 +26,7 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "mps";
@@ -40,6 +40,8 @@ mkJetBrainsProduct {
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  jdk = jetbrains.jdk-no-jcef;
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {

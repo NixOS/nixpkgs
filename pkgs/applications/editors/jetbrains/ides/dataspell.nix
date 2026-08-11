@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   libgcc,
@@ -28,7 +28,7 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "dataspell";
@@ -42,6 +42,8 @@ mkJetBrainsProduct {
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  jdk = jetbrains.jdk-no-jcef;
 
   # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
   #       DataSpell may need these, even on Darwin!

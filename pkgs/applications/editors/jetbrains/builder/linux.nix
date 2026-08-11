@@ -43,9 +43,7 @@
   nss,
   pango,
 
-  jdk,
   vmopts ? null,
-  forceWayland ? null,
   excludeDrvArgNames,
 }:
 
@@ -62,6 +60,7 @@ lib.extendMkDerivation {
       productShort ? product,
       wmClass,
 
+      jdk,
       jetbrains-libdbm,
       fsnotifier,
 
@@ -78,11 +77,6 @@ lib.extendMkDerivation {
       loName = lib.toLower productShort;
       hiName = lib.toUpper productShort;
       vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
-      finalExtraWrapperArgs =
-        extraWrapperArgs
-        ++ lib.optionals forceWayland [
-          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-        ];
 
       desktopItem = makeDesktopItem {
         name = finalAttrs.pname;
@@ -214,7 +208,7 @@ lib.extendMkDerivation {
             }" \
             --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
-            ${lib.concatStringsSep " " finalExtraWrapperArgs} \
+            ${lib.concatStringsSep " " extraWrapperArgs} \
             --set-default JDK_HOME "$jdk" \
             --set-default ANDROID_JAVA_HOME "$jdk" \
             --set-default JAVA_HOME "$jdk" \

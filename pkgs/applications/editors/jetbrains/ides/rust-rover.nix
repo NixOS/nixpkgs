@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   patchSharedLibs,
@@ -32,7 +32,7 @@ let
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
+(jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "rust-rover";
@@ -46,6 +46,8 @@ in
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  jdk = jetbrains.jdk-no-jcef;
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [

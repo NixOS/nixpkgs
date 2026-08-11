@@ -8,37 +8,9 @@
   jetbrains,
 
   vmopts ? null,
-  forceWayland ? false,
 }:
 
 let
-  jetbrainsBuilder =
-    jdk:
-    callPackage ./builder/default.nix {
-      inherit jdk forceWayland vmopts;
-    };
-
-  mkSrcIde =
-    path: extras:
-    callPackage path (
-      {
-        mkJetBrainsProduct = jetbrainsBuilder jetbrains.jdk;
-        mkJetBrainsSource = callPackage ./source/build.nix { };
-      }
-      // extras
-    );
-
-  _idea-oss = mkSrcIde ./ides/idea-oss.nix { };
-
-  mkBinIde =
-    path: extras:
-    callPackage path (
-      {
-        mkJetBrainsProduct = jetbrainsBuilder jetbrains.jdk-no-jcef;
-      }
-      // extras
-    );
-
   # Common build overrides, fixes, etc.
   # TODO: These should eventually be moved outside of this file
   pyCharmCommonOverrides = (
@@ -78,22 +50,28 @@ let
   '';
 in
 {
+  # Builders
+  mkJetBrainsProduct = callPackage ./builder/default.nix {
+    inherit vmopts;
+  };
+  mkJetBrainsSource = callPackage ./source/build.nix { };
+
   # Sorted alphabetically. Deprecated products and aliases are at the very end.
-  clion = mkBinIde ./ides/clion.nix { inherit patchSharedLibs; };
-  datagrip = mkBinIde ./ides/datagrip.nix { };
-  dataspell = mkBinIde ./ides/dataspell.nix { };
-  gateway = mkBinIde ./ides/gateway.nix { };
-  goland = mkBinIde ./ides/goland.nix { };
-  idea = mkBinIde ./ides/idea.nix { };
-  idea-oss = _idea-oss;
-  mps = mkBinIde ./ides/mps.nix { };
-  phpstorm = mkBinIde ./ides/phpstorm.nix { };
-  pycharm = mkBinIde ./ides/pycharm.nix { inherit pyCharmCommonOverrides; };
-  pycharm-oss = mkSrcIde ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; };
-  rider = mkBinIde ./ides/rider.nix { inherit patchSharedLibs; };
-  ruby-mine = mkBinIde ./ides/ruby-mine.nix { };
-  rust-rover = mkBinIde ./ides/rust-rover.nix { inherit patchSharedLibs; };
-  webstorm = mkBinIde ./ides/webstorm.nix { };
+  clion = callPackage ./ides/clion.nix { inherit patchSharedLibs; };
+  datagrip = callPackage ./ides/datagrip.nix { };
+  dataspell = callPackage ./ides/dataspell.nix { };
+  gateway = callPackage ./ides/gateway.nix { };
+  goland = callPackage ./ides/goland.nix { };
+  idea = callPackage ./ides/idea.nix { };
+  idea-oss = callPackage ./ides/idea-oss.nix { };
+  mps = callPackage ./ides/mps.nix { };
+  phpstorm = callPackage ./ides/phpstorm.nix { };
+  pycharm = callPackage ./ides/pycharm.nix { inherit pyCharmCommonOverrides; };
+  pycharm-oss = callPackage ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; };
+  rider = callPackage ./ides/rider.nix { inherit patchSharedLibs; };
+  ruby-mine = callPackage ./ides/ruby-mine.nix { };
+  rust-rover = callPackage ./ides/rust-rover.nix { inherit patchSharedLibs; };
+  webstorm = callPackage ./ides/webstorm.nix { };
 
   # Plugins
   plugins = callPackage ./plugins { };

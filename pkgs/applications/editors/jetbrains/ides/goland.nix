@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   libgcc,
@@ -26,7 +26,7 @@ let
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
+(jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "goland";
@@ -40,6 +40,8 @@ in
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  jdk = jetbrains.jdk-no-jcef;
 
   extraWrapperArgs = [
     # fortify source breaks build since delve compiles with -O0

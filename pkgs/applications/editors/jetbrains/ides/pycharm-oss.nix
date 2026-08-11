@@ -1,12 +1,11 @@
 {
   fsnotifier,
   lib,
-  mkJetBrainsProduct,
-  mkJetBrainsSource,
+  jetbrains,
   pyCharmCommonOverrides,
 }:
 let
-  src = mkJetBrainsSource {
+  src = jetbrains.mkJetBrainsSource {
     # update-script-start: source-args
     version = "2025.3.3";
     buildNumber = "253.31033.139";
@@ -35,7 +34,7 @@ let
     # update-script-end: source-args
   };
 in
-(mkJetBrainsProduct {
+(jetbrains.mkJetBrainsProduct {
   inherit src fsnotifier;
   inherit (src)
     version
@@ -43,6 +42,8 @@ in
     ;
   # this is jetbrains-libdbm but using the sources from the IDE build.
   jetbrains-libdbm = src.libdbm;
+
+  jdk = jetbrains.jdk;
 
   pname = "pycharm-oss";
 

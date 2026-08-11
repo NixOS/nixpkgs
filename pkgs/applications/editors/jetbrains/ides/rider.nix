@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  mkJetBrainsProduct,
+  jetbrains,
   jetbrains-libdbm,
   fsnotifier,
   patchSharedLibs,
@@ -38,7 +38,7 @@ let
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
+(jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
 
   pname = "rider";
@@ -52,6 +52,8 @@ in
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  jdk = jetbrains.jdk-no-jcef;
 
   # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
   #       Somebody with a Darwin machine should investigate this.

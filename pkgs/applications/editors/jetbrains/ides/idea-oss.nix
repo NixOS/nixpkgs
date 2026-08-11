@@ -1,13 +1,12 @@
 {
   fsnotifier,
   lib,
-  mkJetBrainsProduct,
-  mkJetBrainsSource,
+  jetbrains,
   maven,
   zlib,
 }:
 let
-  src = mkJetBrainsSource {
+  src = jetbrains.mkJetBrainsSource {
     # update-script-start: source-args
     version = "2025.3.4";
     buildNumber = "253.32098.37";
@@ -36,7 +35,7 @@ let
     # update-script-end: source-args
   };
 in
-mkJetBrainsProduct {
+jetbrains.mkJetBrainsProduct {
   inherit src fsnotifier;
   inherit (src)
     version
@@ -44,6 +43,8 @@ mkJetBrainsProduct {
     ;
   # this is jetbrains-libdbm but using the sources from the IDE build.
   jetbrains-libdbm = src.libdbm;
+
+  jdk = jetbrains.jdk;
 
   pname = "idea-oss";
 
