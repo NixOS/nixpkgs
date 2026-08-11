@@ -326,7 +326,9 @@ in
             'canaille:create_app()'
         '';
       };
-      restartTriggers = [ "/etc/canaille/config.toml" ];
+      restartTriggers = [
+        config.environment.etc."canaille/config.toml".source
+      ];
     };
 
     systemd.sockets.canaille = {
