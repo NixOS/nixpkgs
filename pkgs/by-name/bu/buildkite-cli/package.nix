@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildkite-cli";
-  version = "3.42.0";
+  version = "3.54.2";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dk/25ujJ83+FlactIoDXOmLpyOlE0eEnruV4hGWVfwc=";
+    hash = "sha256-VnahUKqJiGjnvBeTY+6CTZidGyH1betUyWQGVXl7reI=";
   };
 
-  vendorHash = "sha256-GGIjZ3Fc40JN6STP9h+0AER5PcTL4zf/SYa22vqrj6k=";
+  vendorHash = "sha256-ttEJqnImFRq7n03eGssx+oyhtVJ6xVst1yaZ2fhXgkc=";
 
   ldflags = [
     "-s"
