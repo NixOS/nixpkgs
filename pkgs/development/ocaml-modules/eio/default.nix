@@ -77,7 +77,7 @@ buildDunePackage (finalAttrs: {
     mdx.bin
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/eio";
