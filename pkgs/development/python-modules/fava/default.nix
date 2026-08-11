@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  buildNpmPackage,
   fetchFromGitHub,
+  fetchNpmDeps,
   stdenv,
   babel,
   beancount,
@@ -14,6 +14,8 @@
   flask-babel,
   jinja2,
   markdown2,
+  nodejs,
+  npmHooks,
   ply,
   pytestCheckHook,
   setuptools-scm,
@@ -21,43 +23,25 @@
   watchfiles,
   werkzeug,
 }:
-let
-  src = buildNpmPackage (finalAttrs: {
-    pname = "fava-frontend";
-    version = "1.30.14";
-
-    src = fetchFromGitHub {
-      owner = "beancount";
-      repo = "fava";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-whfFXZjhZl69cUie/7xFLcsvqUmpDRHVAO56HEsz0HE=";
-    };
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-FFqBomnTbiJLaxMtEKPkb4/ASFbtcF6lR/MbcK+MiaQ=";
-    makeCacheWritable = true;
-
-    preBuild = ''
-      chmod -R u+w ..
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      cp -R .. $out
-      runHook postInstall
-    '';
-  });
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "fava";
-  inherit (src) version;
+  version = "1.30.14";
   pyproject = true;
 
-  inherit src;
+  src = fetchFromGitHub {
+    owner = "beancount";
+    repo = "fava";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-whfFXZjhZl69cUie/7xFLcsvqUmpDRHVAO56HEsz0HE=";
+  };
 
-  patches = [
-    ./dont-compile-frontend.patch
-  ];
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-FFqBomnTbiJLaxMtEKPkb4/ASFbtcF6lR/MbcK+MiaQ=";
+  };
+
+  npmRoot = "frontend";
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
@@ -84,6 +68,11 @@ buildPythonPackage {
   ];
 
   pythonRelaxDeps = [ "simplejson" ];
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -112,4 +101,4 @@ buildPythonPackage {
       cbrxyz
     ];
   };
-}
+})
