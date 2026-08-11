@@ -12,15 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fip-c";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "flint-lang";
     repo = "fip";
-    # For the 0.4.0 release the rev can be changed to the tag again
-    # tag = "v${finalAttrs.version}";
-    rev = "a00cbc1762265239694668baeb8c3a70f11ef9f1";
-    sha256 = "sha256-2e9mHgBQLnOKrfMxhk9rzvoiJgOivhH3tdnFzvjI1z8=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-UeuJOB3jUpmfHqH+MCq6/4RU/oEAb/ic2IeUls6tWTQ=";
   };
 
   llvm-src = fetchFromGitHub {
