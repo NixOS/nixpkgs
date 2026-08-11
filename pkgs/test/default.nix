@@ -247,6 +247,8 @@ in
 
   auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
 
+  auto-patchelf-hook-relativize-rpath = callPackage ./auto-patchelf-hook-relativize-rpath { };
+
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
     concatMapAttrs (
