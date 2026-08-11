@@ -1,5 +1,20 @@
 {
+  clion,
+  datagrip,
+  dataspell,
+  goland,
+  idea-oss,
+  idea,
   jetbrains,
+  jetbrains-gateway,
+  jetbrains-mps,
+  phpstorm,
+  pycharm-oss,
+  pycharm,
+  rider,
+  ruby-mine,
+  rust-rover,
+  webstorm,
   symlinkJoin,
   lib,
   runCommand,
@@ -12,16 +27,15 @@
 let
   ides =
     if ide == null then
-      with jetbrains;
       [
         clion
         datagrip
         dataspell
-        gateway
         goland
         idea-oss
         idea
-        mps
+        jetbrains-gateway
+        jetbrains-mps
         phpstorm
         pycharm-oss
         pycharm

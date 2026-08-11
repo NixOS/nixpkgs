@@ -23,14 +23,6 @@
       "aarch64-darwin": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg"
     }
   },
-  "gateway": {
-    "channel": "GW-RELEASE-licensing-RELEASE",
-    "urls": {
-      "x86_64-linux": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
-      "aarch64-linux": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.tar.gz",
-      "aarch64-darwin": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg"
-    }
-  },
   "goland": {
     "channel": "GO-RELEASE-licensing-RELEASE",
     "urls": {
@@ -51,7 +43,15 @@
     "channel": "IU-RELEASE-licensing-RELEASE",
     "urls": {}
   },
-  "mps": {
+  "jetbrains-gateway": {
+    "channel": "GW-RELEASE-licensing-RELEASE",
+    "urls": {
+      "x86_64-linux": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
+      "aarch64-linux": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.tar.gz",
+      "aarch64-darwin": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg"
+    }
+  },
+  "jetbrains-mps": {
     "channel": "MPS-RELEASE-licensing-RELEASE",
     "urls": {
       "x86_64-linux": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}.tar.gz",
