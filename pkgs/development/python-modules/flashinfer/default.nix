@@ -6,12 +6,12 @@
 # environment variable `CUDA_HOME` to `cudatoolkit`.
 {
   lib,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
   apache-tvm-ffi,
+  packaging,
   setuptools,
 
   # nativeBuildInputs
@@ -21,30 +21,36 @@
 
   # dependencies
   click,
+  cuda-tile,
   einops,
   numpy,
+  nvidia-cutlass-dsl,
   nvidia-ml-py,
   requests,
   tabulate,
   torch,
   tqdm,
+
+  cudaSupport ? torch.cudaSupport,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flashinfer";
-  version = "0.6.4";
+  version = "0.6.12";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
+    hash = "sha256-UhLDUM5sNJdOYiEV2wGMdbijsi+SrIi7wgU7eDAJlW8=";
   };
 
   build-system = [
     apache-tvm-ffi
+    packaging
     setuptools
   ];
 
@@ -56,12 +62,14 @@ buildPythonPackage (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = with cudaPackages; [
-    cccl
-    cuda_cudart
-    libcublas
-    libcurand
-  ];
+  buildInputs =
+    (with cudaPackages; [
+      cccl
+      cuda_cudart
+      libcublas
+      libcurand
+    ])
+    ++ [ cuda-tile ];
 
   # FlashInfer offers two installation modes:
   #
@@ -82,16 +90,18 @@ buildPythonPackage (finalAttrs: {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env = {
+    FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  };
 
   pythonRemoveDeps = [
     "nvidia-cudnn-frontend"
-    "nvidia-cutlass-dsl"
   ];
   dependencies = [
     click
     einops
     numpy
+    nvidia-cutlass-dsl
     nvidia-ml-py
     requests
     tabulate
@@ -99,9 +109,13 @@ buildPythonPackage (finalAttrs: {
     tqdm
   ];
 
+  doCheck = true;
+
   meta = {
-    broken = !torch.cudaSupport || !config.cudaSupport;
+    broken = !cudaSupport;
     homepage = "https://flashinfer.ai/";
+    downloadPage = "https://github.com/flashinfer-ai/flashinfer";
+    changelog = "https://github.com/flashinfer-ai/flashinfer/releases/tag/${finalAttrs.src.tag}";
     description = "Library and kernel generator for Large Language Models";
     longDescription = ''
       FlashInfer is a library and kernel generator for Large Language Models
