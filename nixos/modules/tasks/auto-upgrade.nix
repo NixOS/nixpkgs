@@ -193,6 +193,18 @@ in
         '';
       };
 
+      networkRetries = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 6;
+        example = 0;
+        description = ''
+          Number of network connectivity probe attempts with exponential
+          backoff.
+
+          Setting this to `0` disables network probing.
+        '';
+      };
+
     };
 
   };
@@ -237,7 +249,49 @@ in
         cfg.runGarbageCollection && config.nix.enable
       ) "nix-gc.service";
 
-      serviceConfig.Type = "oneshot";
+      serviceConfig = {
+        ExecStartPre = lib.mkIf (cfg.networkRetries > 0) (
+          lib.getExe (
+            pkgs.writeShellApplication {
+              name = "nixos-upgrade-wait-network";
+              runtimeEnv.max_retries = cfg.networkRetries;
+
+              runtimeInputs = [
+                config.nix.package
+                pkgs.curl
+              ];
+
+              text = ''
+                sleep=1
+
+                for ((current_retries = 1; current_retries <= max_retries; current_retries++)); do
+                  if ${
+                    if cfg.flake != null then
+                      "nix --extra-experimental-features 'nix-command flakes' flake metadata ${lib.escapeShellArg (lib.head (lib.splitString "#" cfg.flake))}"
+                    else
+                      "curl --fail --location ${
+                        if cfg.channel != null then lib.escapeShellArg cfg.channel else "https://channels.nixos.org"
+                      }"
+                  } >/dev/null 2>&1; then
+                    exit 0
+                  fi
+
+                  if ((current_retries < max_retries)); then
+                    echo "warning: network endpoint unreachable; retrying in ''${sleep}s (attempt $current_retries/$max_retries)..."
+                    sleep "$sleep"
+                    ((sleep *= 2))
+                  fi
+                done
+
+                echo "error: network endpoint unreachable after $max_retries attempts"
+                exit 1
+              '';
+            }
+          )
+        );
+
+        Type = "oneshot";
+      };
 
       environment =
         config.nix.envVars
