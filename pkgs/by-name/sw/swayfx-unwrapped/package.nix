@@ -22,7 +22,7 @@
   json_c,
   libevdev,
   scdoc,
-  scenefx_0_5,
+  scenefx,
   wayland-scanner,
   libxcb-wm,
   wlroots_0_20,
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pango
     pcre2
-    scenefx_0_5
+    scenefx
     wayland
     wayland-protocols
     (wlroots_0_20.override { inherit (finalAttrs) enableXWayland; })

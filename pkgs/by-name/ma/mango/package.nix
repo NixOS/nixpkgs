@@ -19,7 +19,7 @@
   enableXWayland ? true,
   meson,
   ninja,
-  scenefx_0_5,
+  scenefx,
   wlroots_0_20,
   libGL,
 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_20
-    scenefx_0_5
+    scenefx
     libGL
   ]
   ++ lib.optionals enableXWayland [
