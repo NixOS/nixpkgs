@@ -21,7 +21,7 @@
   zlib,
   liburing,
   gnutls,
-  systemd,
+  systemdLibs,
   samba,
   talloc,
   jansson,
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isLinux [
     liburing
-    systemd
+    systemdLibs
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
   ++ optionals enableLDAP [
