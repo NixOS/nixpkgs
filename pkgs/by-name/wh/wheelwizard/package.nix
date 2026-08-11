@@ -4,7 +4,6 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  makeDesktopItem,
   makeWrapper,
   avalonia,
   # Runtime dependencies
@@ -55,7 +54,9 @@ buildDotnetModule (finalAttrs: {
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
 
-    install -D $desktopItem/share/applications/* -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard-url-handler.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.png $out/share/icons/hicolor/256x256/apps/io.github.TeamWheelWizard.WheelWizard.png
 
     runHook postInstall
   '';
@@ -63,14 +64,6 @@ buildDotnetModule (finalAttrs: {
   postFixup = ''
     rm $out/bin/*.{so,dylib}
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "wheelwizard";
-    exec = "WheelWizard";
-    comment = "WheelWizard, Retro Rewind Launcher";
-    desktopName = "Wheel Wizard";
-    categories = [ "Game" ];
-  };
 
   passthru.updateScript = nix-update-script { };
 

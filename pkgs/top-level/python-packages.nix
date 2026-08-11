@@ -7076,6 +7076,8 @@ self: super: with self; {
 
   google-geo-type = callPackage ../development/python-modules/google-geo-type { };
 
+  google-health-api = callPackage ../development/python-modules/google-health-api { };
+
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   google-maps-routing = callPackage ../development/python-modules/google-maps-routing { };
@@ -15253,6 +15255,8 @@ self: super: with self; {
 
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
+  pynauty = callPackage ../development/python-modules/pynauty { };
+
   pync = callPackage ../development/python-modules/pync { inherit (pkgs) which; };
 
   pynecil = callPackage ../development/python-modules/pynecil { };
@@ -20483,6 +20487,8 @@ self: super: with self; {
   tldextract = callPackage ../development/python-modules/tldextract { };
 
   tlds = callPackage ../development/python-modules/tlds { };
+
+  tlparse = callPackage ../development/python-modules/tlparse { };
 
   tls-client = callPackage ../development/python-modules/tls-client { };
 
