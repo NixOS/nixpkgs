@@ -4,7 +4,6 @@
   stdenv,
   callPackage,
 
-  python3,
   jetbrains,
 
   vmopts ? null,
@@ -13,27 +12,6 @@
 let
   # Common build overrides, fixes, etc.
   # TODO: These should eventually be moved outside of this file
-  pyCharmCommonOverrides = (
-    finalAttrs: previousAttrs:
-    lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs =
-        with python3.pkgs;
-        (previousAttrs.buildInputs or [ ])
-        ++ [
-          python3
-          setuptools
-        ];
-      preInstall = ''
-        echo "compiling cython debug speedups"
-        if [[ -d plugins/python-ce ]]; then
-            ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
-        else
-            ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
-        fi
-      '';
-      # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
-    }
-  );
   patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
     ls -d \
       $out/*/bin/*/linux/*/lib/liblldb.so \
@@ -66,8 +44,8 @@ in
   idea-oss = callPackage ./ides/idea-oss.nix { };
   mps = callPackage ./ides/mps.nix { };
   phpstorm = callPackage ./ides/phpstorm.nix { };
-  pycharm = callPackage ./ides/pycharm.nix { inherit pyCharmCommonOverrides; };
-  pycharm-oss = callPackage ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; };
+  pycharm = callPackage ./ides/pycharm.nix { };
+  pycharm-oss = callPackage ./ides/pycharm-oss.nix { };
   rider = callPackage ./ides/rider.nix { inherit patchSharedLibs; };
   ruby-mine = callPackage ./ides/ruby-mine.nix { };
   rust-rover = callPackage ./ides/rust-rover.nix { inherit patchSharedLibs; };

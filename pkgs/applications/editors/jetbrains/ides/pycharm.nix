@@ -5,10 +5,32 @@
   jetbrains,
   jetbrains-libdbm,
   fsnotifier,
-  pyCharmCommonOverrides,
+  python3,
   musl,
 }:
 let
+  pycharm-overrides = (
+    finalAttrs: previousAttrs:
+    lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      buildInputs =
+        with python3.pkgs;
+        (previousAttrs.buildInputs or [ ])
+        ++ [
+          python3
+          setuptools
+        ];
+      preInstall = ''
+        echo "compiling cython debug speedups"
+        if [[ -d plugins/python-ce ]]; then
+            ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
+        else
+            ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
+        fi
+      '';
+      # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
+    }
+  );
+
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
@@ -48,6 +70,11 @@ in
     musl
   ];
 
+  passthru = {
+    # for pycharm-oss
+    inherit pycharm-overrides;
+  };
+
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/pycharm/";
@@ -68,4 +95,4 @@ in
         [ lib.sourceTypes.binaryBytecode ];
   };
 }).overrideAttrs
-  pyCharmCommonOverrides
+  pycharm-overrides

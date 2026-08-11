@@ -2,7 +2,6 @@
   fsnotifier,
   lib,
   jetbrains,
-  pyCharmCommonOverrides,
 }:
 let
   src = jetbrains.mkJetBrainsSource {
@@ -73,4 +72,4 @@ in
     ];
   };
 }).overrideAttrs
-  pyCharmCommonOverrides
+  jetbrains.pycharm.pycharm-overrides
