@@ -74,6 +74,11 @@ in
     ];
   };
 
+  flag-appending-curlOptsEnv = testFlagAppending {
+    name = "test-fetchurl-flag-appending-env";
+    derivationArgs.env.NIX_CURL_FLAGS = "--foo --bar";
+  };
+
   flag-appending-netrcPhase-curlOpts = testFlagAppending {
     name = "test-fetchurl-flag-appending-netrcPhase-curlOpts";
     netrcPhase = ''
@@ -120,6 +125,47 @@ in
       "0"
     ];
   };
+
+  # Tests that multiple hashedMirrors are handled correctly
+  multipleHashedMirrors =
+    let
+      fetchurlWithBrokenMirror = fetchurl.override (prevArgs: {
+        hashedMirrors = [ "http://brokenMirror" ] ++ prevArgs.hashedMirrors;
+      });
+    in
+    testers.invalidateFetcherByDrvHash fetchurlWithBrokenMirror {
+      # Make sure that we can only download from hashed mirrors
+      url = "http://broken";
+      # A file with this hash is definitely on tarballs.nixos.org
+      sha256 = "1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+
+      # No chance
+      curlOptsList = [
+        "--retry"
+        "0"
+      ];
+    };
+
+  # Tests that mirrors provided via NIX_HASHED_MIRRORS are handled correctly
+  # and that env.SSL_CERT_FILE is not clobbered
+  hashedMirrorsFromEnv =
+    let
+      fetchurlWithOnlyEnvMirrors = fetchurl.override { hashedMirrors = [ ]; };
+    in
+    testers.invalidateFetcherByDrvHash fetchurlWithOnlyEnvMirrors {
+      # Make sure that we can only download from hashed mirrors
+      url = "http://broken";
+      # A file with this hash is definitely on tarballs.nixos.org
+      sha256 = "1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+
+      derivationArgs.env.NIX_HASHED_MIRRORS = "http://brokenMirror https://tarballs.nixos.org";
+
+      # No chance
+      curlOptsList = [
+        "--retry"
+        "0"
+      ];
+    };
 
   # Tests that downloadToTemp works with hashedMirrors
   no-skipPostFetch = testers.invalidateFetcherByDrvHash fetchurl {

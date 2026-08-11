@@ -1,5 +1,5 @@
 source "$NIX_ATTRS_SH_FILE"
-source $mirrorsFile
+source "$mirrorsListFile"
 
 # Normalize `curlOpts` as a string.
 # If defined as a list (deprecated), it would be a bash array.
@@ -41,11 +41,8 @@ if [[ -n "${netrcPhase-}" ]]; then
     curl+=(--netrc-file "$PWD/netrc")
 fi
 
-curl+=(
-    "${curlOptsList[@]}"
-    $curlOpts
-    $NIX_CURL_FLAGS
-)
+curl+=("${curlOptsList[@]}")
+concatTo curl curlOpts NIX_CURL_FLAGS
 
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
@@ -60,7 +57,7 @@ tryDownload() {
     success=
 
     # if we get error code 18, resume partial download
-    while [ $curlexit -eq 18 ]; do
+    while [ "$curlexit" -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
        if "${curl[@]}" -C - --fail "$url" --output "$target" 2> >(tr '\r' '\n'); then
           success=1
@@ -77,8 +74,8 @@ finish() {
 
     set +o noglob
 
-    if [[ $executable == "1" ]]; then
-      chmod +x $downloadedFile
+    if [[ "$executable" == "1" ]]; then
+      chmod +x "$downloadedFile"
     fi
 
     if [ -z "$skipPostFetch" ]; then
@@ -91,10 +88,10 @@ finish() {
 
 tryHashedMirrors() {
     if test -n "$NIX_HASHED_MIRRORS"; then
-        hashedMirrors="$NIX_HASHED_MIRRORS"
+        IFS=' ' read -r -a hashedMirrors <<< "$NIX_HASHED_MIRRORS"
     fi
 
-    for mirror in $hashedMirrors; do
+    for mirror in "${hashedMirrors[@]}"; do
         url="$mirror/$outputHashAlgo/$outputHash"
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
@@ -125,34 +122,56 @@ tryHashedMirrors() {
 set -o noglob
 
 resolvedUrls=()
-for url in "${urls[@]}"; do
-    if test "${url:0:9}" != "mirror://"; then
-        resolvedUrls+=("$url")
-    else
-        url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
-        #varName="mirror_$site"
-        varName="$site" # !!! danger of name clash, fix this
-        if test -z "${!varName}"; then
-            echo "warning: unknown mirror:// site \`$site'"
-        else
-            mirrors=${!varName}
 
-            # Allow command-line override by setting NIX_MIRRORS_$site.
-            varName="NIX_MIRRORS_$site"
-            if test -n "${!varName}"; then mirrors="${!varName}"; fi
-
-            for url3 in $mirrors; do
-                resolvedUrls+=("$url3$fileName");
-            done
+_resolveUrls() {
+    local url
+    for url in "${urls[@]}"; do
+        # Direct URL
+        if test "${url:0:9}" != "mirror://"; then
+            resolvedUrls+=("${url}")
+            continue
         fi
-    fi
-done
+
+        # Try to get appropriate mirrors via the sourced mirrorsListFile
+        local urlAfterMirrorPrefix="${url:9}"
+        local site filePath
+
+        if ! [[ "$urlAfterMirrorPrefix" =~ ^([^/ ]+)[/]([^ ]+)$ ]]; then
+          echo "error: fetchurl: $name: invalid mirror:// URL format: $url" >&2
+          exit 1
+        fi
+        site="${BASH_REMATCH[1]}"
+        filePath="${BASH_REMATCH[2]}"
+
+        local varName="${site}"
+        if test -z "${!varName}"; then
+            echo "warning: unknown mirror:// site \`${site}'"
+            continue
+        fi
+        local arrName="${varName}[@]"
+        local mirrorUrls
+        mirrorUrls=("${!arrName}")
+
+        # Allow command-line override by setting NIX_MIRRORS_$site.
+        varName="NIX_MIRRORS_${site}"
+        if test -n "${!varName}"; then
+            IFS=' ' read -r -a mirrorUrls <<< "${!varName}"
+        fi
+
+        local mirrorUrl
+        for mirrorUrl in "${mirrorUrls[@]}"; do
+            resolvedUrls+=("${mirrorUrl}${filePath}");
+        done
+    done
+}
+
+_resolveUrls
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
-    echo "${resolvedUrls[*]}" > $out
+    echo "${resolvedUrls[*]}" > "$out"
     exit 0
 fi
 
@@ -172,6 +191,8 @@ for url in "${resolvedUrls[@]}"; do
                ;;
            https://gitlab.com/*/-/archive/*)
                echo "warning: archives from GitLab revisions should use fetchFromGitLab"
+               ;;
+           *)
                ;;
        esac
     fi
