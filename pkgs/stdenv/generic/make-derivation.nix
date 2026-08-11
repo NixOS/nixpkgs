@@ -785,8 +785,6 @@ let
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
           # NixOS module already sets gccarch, unsure of nix installers and other distributions
-          ${if requiredSystemFeaturesShouldBeSet then "requiredSystemFeatures" else null} =
-            attrs.requiredSystemFeatures or [ ] ++ gccArchFeature;
 
           # -- Darwin-specific attrs --
           ${if buildIsDarwin then "__darwinAllowLocalNetworking" else null} = __darwinAllowLocalNetworking;
@@ -847,45 +845,58 @@ let
             in
             computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
 
-          ${if __structuredAttrs then "outputChecks" else null} =
-            let
-              attrsOutputChecks = makeOutputChecks attrs;
-              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
-            in
-            # to avoid the listToAttrs in most common situations, we replicate
-            # what it would produce for most derivations. this can be improved
-            # in the future at the cost of a mass rebuild - empty attrsets for
-            # each output is a noop
-            if
-              !attrs ? outputs
-              && !attrs ? outputChecks
-              && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
-            then
-              if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
-            else
-              listToAttrs (
-                map (name: {
-                  inherit name;
-                  value =
-                    let
-                      raw = zipAttrsWith (_: concatLists) [
-                        attrsOutputChecksFiltered
-                        (makeOutputChecks (attrs.outputChecks.${name} or { }))
-                      ];
-                    in
-                    # separateDebugInfo = true will put all sorts of files in
-                    # the debug output which could carry references, but
-                    # that's "normal". Notably it symlinks to the source.
-                    # So disable reference checking for the debug output
-                    if separateDebugInfo' && name == "debug" then
-                      removeAttrs raw referenceCheckingAttrsToRemove
-                    else
-                      raw;
-                }) outputs
-              );
         };
       in
       derivationArg
+      // (
+        if requiredSystemFeaturesShouldBeSet then
+          { requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ gccArchFeature; }
+        else
+          { }
+      )
+      // (
+        if __structuredAttrs then
+          {
+            outputChecks =
+              let
+                attrsOutputChecks = makeOutputChecks attrs;
+                attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
+              in
+              # to avoid the listToAttrs in most common situations, we replicate
+              # what it would produce for most derivations. this can be improved
+              # in the future at the cost of a mass rebuild - empty attrsets for
+              # each output is a noop
+              if
+                !attrs ? outputs
+                && !attrs ? outputChecks
+                && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
+              then
+                if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
+              else
+                listToAttrs (
+                  map (name: {
+                    inherit name;
+                    value =
+                      let
+                        raw = zipAttrsWith (_: concatLists) [
+                          attrsOutputChecksFiltered
+                          (makeOutputChecks (attrs.outputChecks.${name} or { }))
+                        ];
+                      in
+                      # separateDebugInfo = true will put all sorts of files in
+                      # the debug output which could carry references, but
+                      # that's "normal". Notably it symlinks to the source.
+                      # So disable reference checking for the debug output
+                      if separateDebugInfo' && name == "debug" then
+                        removeAttrs raw referenceCheckingAttrsToRemove
+                      else
+                        raw;
+                  }) outputs
+                );
+          }
+        else
+          { }
+      )
       // (
         # -- Output reference checks --
         if
