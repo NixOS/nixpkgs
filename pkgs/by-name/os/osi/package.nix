@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osi";
-  version = "0.108.11";
+  version = "0.108.12";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Osi";
     rev = "releases/${finalAttrs.version}";
-    hash = "sha256-3aTO7JGEOP/RCOZ1X9b68rrtv6T78euf1TYGTjyXSRE=";
+    hash = "sha256-58wG0S3tkDfFUKTVcDQg4Ft2gGmnZHNoHXaWVoWdR0Y=";
   };
 
   buildInputs = [
