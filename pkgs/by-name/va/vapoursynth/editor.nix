@@ -83,6 +83,7 @@ let
     in
     runCommand "${unwrapped.name}-with-plugins"
       {
+        inherit (unwrapped) pname version;
         nativeBuildInputs = [ makeWrapper ];
         passthru = {
           withPlugins = plugins': withPlugins (plugins ++ plugins');
