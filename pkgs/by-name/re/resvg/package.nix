@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/linebender/resvg";
     changelog = "https://github.com/linebender/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jopejoe1 ];
     mainProgram = "resvg";
   };
 })
