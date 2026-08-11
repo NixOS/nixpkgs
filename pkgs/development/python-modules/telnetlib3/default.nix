@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "telnetlib3";
-  version = "4.0.5";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jquast";
     repo = "telnetlib3";
     tag = finalAttrs.version;
-    hash = "sha256-qJ9fbly8nNCOppLxEnzmKTE0CbbORnkANvbioSZUgmk=";
+    hash = "sha256-Gp76iTxzGGyLPhkJ1PaT9UZqD9jpfQdnB76XElyiV+8=";
   };
 
   build-system = [ hatchling ];
