@@ -10,7 +10,7 @@ lib:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
-    all
+    any
     attrNames
     concatLists
     concatMap
@@ -27,8 +27,8 @@ let
     isAttrs
     isBool
     isDerivation
-    isInt
     isFunction
+    isInt
     isList
     isPath
     isString
@@ -39,7 +39,6 @@ let
     optionalString
     optionals
     remove
-    seq
     splitString
     subtractLists
     toFunction
@@ -49,7 +48,6 @@ let
     unsafeGetAttrPos
     warn
     zipAttrsWith
-    any
     ;
 
   inherit (lib.generators) toPretty;
@@ -133,8 +131,6 @@ let
     ./default-builder.sh
   ];
 
-  isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
-
   cachedOutputChecks = {
     out = { };
   };
@@ -151,6 +147,56 @@ let
       unsafeDiscardStringContext drv.outPath
     else
       drv;
+
+  # types that don't actually have an output, but are still valid and coercible
+  # to a string
+  nonDrvButValid = dep: isPath dep || dep == null || isString dep;
+  makeDependencyOutputs =
+    splicedName: commonName: pname: deps:
+    map (
+      dep:
+      # NOTE: this shows up as an extremely hot path in the profiler. This seems
+      # to be mainly a limitation of lazy evaluation, as this is where most
+      # derivations are are first evaluated. However, it may be possible to
+      # eliminate some of these checks or move them elsewhere
+      if dep.type or null == "derivation" then
+        getDev (dep.__spliced.${splicedName} or dep)
+      else if nonDrvButValid dep then
+        dep
+      else
+        # iterate again with the index if an invalid type was passed to generate
+        # the error message
+        foldl' (
+          index: dep:
+          if dep.type or null == "derivation" || nonDrvButValid dep then
+            index + 1
+          else
+            throw "Dependency is not of a valid type: element ${toString index} of ${commonName} for package ${pname}"
+            + (
+              if isList dep then
+                ''
+                  was a nested list.
+                  Support for these is removed as of Nixpkgs release 26.11. Dependency lists should instead be
+                  concatenated together using '++' or 'builtins.concatLists'.''
+              else
+                ""
+            )
+        ) 1 deps
+
+    ) deps;
+
+  makeBuildBuild = makeDependencyOutputs "buildBuild" "depsBuildBuild";
+  makePropagatedBuildBuild = makeDependencyOutputs "buildBuild" "depsBuildBuildPropagated";
+  makeBuildHost = makeDependencyOutputs "buildHost" "nativeBuildInputs";
+  makePropagatedBuildHost = makeDependencyOutputs "buildHost" "nativeBuildInputs";
+  makeBuildTarget = makeDependencyOutputs "buildTarget" "depsBuildTarget";
+  makePropagatedBuildTarget = makeDependencyOutputs "buildTarget" "depsBuildTargetPropagated";
+  makeHostHost = makeDependencyOutputs "hostHost" "depsHostHost";
+  makePropagatedHostHost = makeDependencyOutputs "hostHost" "depsHostHostPropagated";
+  makeHostTarget = makeDependencyOutputs "hostTarget" "buildInputs";
+  makePropagatedHostTarget = makeDependencyOutputs "hostTarget" "propagatedBuildInputs";
+  makeTargetTarget = makeDependencyOutputs "targetTarget" "depsTargetTarget";
+  makePropagatedTargetTarget = makeDependencyOutputs "targetTarget" "depsTargetTargetPropagated";
 
   makeOutputChecks =
     attrs:
@@ -484,25 +530,6 @@ let
         else
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
-
-      checkDependencyList =
-        name: deps:
-        if all isSingularDependency deps then
-          deps
-        else
-          # iterate again with the index if an invalid type was passed
-          seq (foldl' (
-            index: dep:
-            if isSingularDependency dep then
-              index + 1
-            else if isList dep then
-              throw ''
-                Dependency of package '${attrs.name or attrs.pname}' uses a nested list in attribute '${name}'.
-                Support for these is removed as of Nixpkgs release 26.11. Dependency lists should instead be
-                concatenated together using '++' or 'builtins.concatLists'.''
-            else
-              throw "Dependency is not of a valid type: element ${toString index} of ${name} for ${attrs.name or attrs.pname}"
-          ) 1 deps) deps;
     in
     if
       # Check if any hardening flag is erroneous
@@ -539,44 +566,16 @@ let
 
         outputs = outputs';
 
-        buildBuildOutputs =
-          if depsBuildBuild == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.buildBuild or drv) (
-              checkDependencyList "depsBuildBuild" depsBuildBuild
-            );
+        pname = attrs.pname or attrs.name;
+
+        buildBuildOutputs = if depsBuildBuild == [ ] then [ ] else makeBuildBuild pname depsBuildBuild;
         buildHostOutputs =
-          if nativeBuildInputs' == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.buildHost or drv) (
-              checkDependencyList "nativeBuildInputs" nativeBuildInputs'
-            );
-        buildTargetOutputs =
-          if depsBuildTarget == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.buildTarget or drv) (
-              checkDependencyList "depsBuildTarget" depsBuildTarget
-            );
-        hostHostOutputs =
-          if depsHostHost == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost);
-        hostTargetOutputs =
-          if buildInputs' == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs');
+          if nativeBuildInputs' == [ ] then [ ] else makeBuildHost pname nativeBuildInputs';
+        buildTargetOutputs = if depsBuildTarget == [ ] then [ ] else makeBuildTarget pname depsBuildTarget;
+        hostHostOutputs = if depsHostHost == [ ] then [ ] else makeHostHost pname depsHostHost;
+        hostTargetOutputs = if buildInputs' == [ ] then [ ] else makeHostTarget pname buildInputs';
         targetTargetOutputs =
-          if depsTargetTarget == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.targetTarget or drv) (
-              checkDependencyList "depsTargetTarget" depsTargetTarget
-            );
+          if depsTargetTarget == [ ] then [ ] else makeTargetTarget pname depsTargetTarget;
         allDependencies = concatLists [
           buildBuildOutputs
           buildHostOutputs
@@ -590,44 +589,26 @@ let
           if depsBuildBuildPropagated == [ ] then
             [ ]
           else
-            map (drv: getDev drv.__spliced.buildBuild or drv) (
-              checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
-            );
+            makePropagatedBuildBuild pname depsBuildBuildPropagated;
         propagatedBuildHostOutputs =
           if propagatedNativeBuildInputs == [ ] then
             [ ]
           else
-            map (drv: getDev drv.__spliced.buildHost or drv) (
-              checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
-            );
+            makePropagatedBuildHost pname propagatedNativeBuildInputs;
         propagatedBuildTargetOutputs =
           if depsBuildTargetPropagated == [ ] then
             [ ]
           else
-            map (drv: getDev drv.__spliced.buildTarget or drv) (
-              checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
-            );
+            makePropagatedBuildTarget pname depsBuildTargetPropagated;
         propagatedHostHostOutputs =
-          if depsHostHostPropagated == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.hostHost or drv) (
-              checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
-            );
+          if depsHostHostPropagated == [ ] then [ ] else makePropagatedHostHost pname depsHostHostPropagated;
         propagatedHostTargetOutputs =
-          if propagatedBuildInputs == [ ] then
-            [ ]
-          else
-            map (drv: getDev drv.__spliced.hostTarget or drv) (
-              checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
-            );
+          if propagatedBuildInputs == [ ] then [ ] else makePropagatedHostTarget pname propagatedBuildInputs;
         propagatedTargetTargetOutputs =
           if depsTargetTargetPropagated == [ ] then
             [ ]
           else
-            map (drv: getDev drv.__spliced.targetTarget or drv) (
-              checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
-            );
+            makePropagatedTargetTarget pname depsTargetTargetPropagated;
         allPropagatedDependencies = concatLists [
           propagatedBuildBuildOutputs
           propagatedBuildHostOutputs
