@@ -52,7 +52,22 @@
       !headersOnly && stdenvNoLibc.hostPlatform != stdenvNoLibc.buildPlatform
     ) ./fix-cross.patch;
 
-    passthru.w32api = if headersOnly then w32api-headers else w32api;
+    passthru = {
+      w32api = if headersOnly then w32api-headers else w32api;
+
+      # The headers-only build is the stand-in used to bootstrap a toolchain
+      # before this package itself exists. Runtimes built against it can
+      # compile, but there is nothing here to link against.
+      inherit headersOnly;
+    }
+    # Cygwin's threads are POSIX threads.
+    #
+    # See the comment on `threadModel` in
+    # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+    # details.
+    // lib.optionalAttrs (!headersOnly) {
+      threadModel = "posix";
+    };
 
     meta = {
       homepage = "https://cygwin.com/";

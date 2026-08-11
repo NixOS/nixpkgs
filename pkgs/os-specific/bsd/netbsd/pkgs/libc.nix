@@ -48,9 +48,10 @@ symlinkJoin {
   '';
 
   # NetBSD's threads are POSIX threads — `libpthread` is joined in above.
-  # `libgcc` and `libstdc++` have to be configured for the same threading model
-  # as each other, so rather than have each guess, they take it from the libc
-  # they are built against.
+  #
+  # See the comment on `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+  # details.
   passthru.threadModel = "posix";
 
   meta.platforms = lib.platforms.netbsd;

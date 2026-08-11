@@ -54,13 +54,23 @@ let
   # there rather than guess — and pass it on in `passthru` so that `libstdcxx`,
   # which has to agree, reads the same answer instead of probing for its own.
   #
-  # This is what makes the bootstrap build single-threaded without being told
-  # to be: a headers-only package declares no `threadModel`, and a real libc
-  # does. That build exists only to get the libc built and is thrown away
-  # afterwards, so there is nothing to be gained from threading it, and plenty
-  # to go wrong: `gthr-posix.h` includes `<pthread.h>` unconditionally, which
-  # at that point is either absent or a stand-in for a libc that does not exist
-  # yet.
+  # A headers-only package declares no `threadModel`, and a real libc does.
+  # That build exists only to get the libc built and is thrown away afterwards,
+  # so there is nothing to be gained from threading it, and plenty to go wrong:
+  # `gthr-posix.h` includes `<pthread.h>` unconditionally, which at that point
+  # is either absent or a stand-in for a libc that does not exist yet.
+  #
+  # If, in the future, we ever wish to use the headers-only build to avoid
+  # building those other libraries twice (other distros sometimes do this), we
+  # would declare the threading model unconditonally, and then there would be
+  # more cyclic symbol-level dependencies between them and us.
+  #
+  # libgcc (and libstdc++) read this attribute rather than probing the
+  # compiler, which in a split package set is configured separately from the
+  # runtimes and so can disagree. Only if we switched `cc-wrapper` to give GCC
+  # "spec files" (more powerful than CLI flags) would be be able to get the
+  # compiler `-v` flag correct with respect to the libraries it happend to be
+  # wrapped with.
   threadModel = if libc == null then "single" else libc.threadModel or "single";
 in
 
