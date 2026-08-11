@@ -53,7 +53,10 @@ stdenv.mkDerivation {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.markus1189 ];
+    maintainers = with lib.maintainers; [
+      agilesteel
+      markus1189
+    ];
     mainProgram = "scalafmt";
   };
 }
