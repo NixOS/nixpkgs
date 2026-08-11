@@ -42,6 +42,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/SukramJ/openccu-loom-client/blob/${finalAttrs.src.tag}/changelog.md";
     description = "Async Python REST + WebSocket client for the openccu-loom daemon";
