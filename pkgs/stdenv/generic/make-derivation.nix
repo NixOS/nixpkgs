@@ -648,7 +648,7 @@ let
         ];
 
         derivationArg = removeAttrs attrs removedOrReplacedAttrNames // {
-          ${if (attrs ? name || (attrs ? pname && attrs ? version)) then "name" else null} =
+          name =
             let
               # Indicate the host platform of the derivation if cross compiling.
               # Fixed-output derivations like source tarballs shouldn't get a host
@@ -687,9 +687,14 @@ let
               if attrs ? name then
                 attrs.name + hostSuffix
               else
-                # we cannot coerce null to a string below
                 assert
-                  (attrs ? version && attrs.version != null) || throw "The `version` attribute cannot be null.";
+                  isString (attrs.pname or null) && isString (attrs.version or null)
+                  || throw ''
+                    mkDerivation requires either a `name` attribute, or a `pname` and a `version`, both strings.
+                    Got `pname` = ${toPretty { multiline = false; } (attrs.pname or null)} and `version` = ${
+                      toPretty { multiline = false; } (attrs.version or null)
+                    }.
+                  '';
                 "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
             );
 
