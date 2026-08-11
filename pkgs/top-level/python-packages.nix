@@ -15837,6 +15837,8 @@ self: super: with self; {
 
   pyscss = callPackage ../development/python-modules/pyscss { };
 
+  pysctp = callPackage ../development/python-modules/pysctp { };
+
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
