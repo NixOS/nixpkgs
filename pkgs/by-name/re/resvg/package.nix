@@ -31,7 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "SVG rendering library";
     homepage = "https://github.com/linebender/resvg";
     changelog = "https://github.com/linebender/resvg/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.jopejoe1 ];
     mainProgram = "resvg";
   };
