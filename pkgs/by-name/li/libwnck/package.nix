@@ -22,7 +22,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwnck";
   version = "43.3";
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libwnck/${lib.versions.major version}/libwnck-${version}.tar.xz";
-    sha256 = "avisQajwZ63h08qu0lSoNCO19hrT96Rg/Ky6wuGSvfc=";
+    url = "mirror://gnome/sources/libwnck/${lib.versions.major finalAttrs.version}/libwnck-${finalAttrs.version}.tar.xz";
+    hash = "sha256-avisQajwZ63h08qu0lSoNCO19hrT96Rg/Ky6wuGSvfc=";
   };
 
   nativeBuildInputs = [
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ liff ];
   };
-}
+})
