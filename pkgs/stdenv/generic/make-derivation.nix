@@ -185,9 +185,12 @@ let
 in
 config:
 let
-  doCheckByDefault = config.doCheckByDefault or false;
-  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
-  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
+  inherit (config)
+    enableParallelBuildingByDefault
+    contentAddressedByDefault
+    doCheckByDefault
+    structuredAttrsByDefault
+    ;
   userHook = config.stdenv.userHook or null;
   checkMeta = import ./check-meta.nix {
     inherit lib config;
