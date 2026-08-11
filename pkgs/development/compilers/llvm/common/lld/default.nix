@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
       WebAssembly in descending order of completeness. Internally, LLD consists
       of several different linkers.
     '';
+    mainProgram = "lld";
   };
 })
