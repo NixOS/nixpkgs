@@ -71,8 +71,8 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          Type = "forking";
-          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${pkgs.writeText "et.cfg" ''
+          Type = "exec";
+          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --logtostdout --cfgfile=${pkgs.writeText "et.cfg" ''
             ; et.cfg : Config file for Eternal Terminal
             ;
 
@@ -85,7 +85,6 @@ in
             logsize = ${toString cfg.logSize}
           ''}";
           Restart = "on-failure";
-          KillMode = "process";
         };
       };
     };
