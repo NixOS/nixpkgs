@@ -31432,6 +31432,12 @@
     github = "yechielw";
     githubId = 41305372;
   };
+  yefada = {
+    name = "Chi Ye";
+    email = "yezhidezhangh@163.com";
+    github = "YeFaDa";
+    githubId = 261456766;
+  };
   yelite = {
     name = "Lite Ye";
     email = "yelite958@gmail.com";
