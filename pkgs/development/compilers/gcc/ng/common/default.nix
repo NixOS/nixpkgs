@@ -28,6 +28,17 @@ assert lib.assertMsg (lib.xor (gitRelease != null) (officialRelease != null)) (
 let
   monorepoSrc' = monorepoSrc;
 
+  # libgomp is OpenMP on top of pthreads, and will refuse to build with
+  # any other threading model.
+  hasLibgomp = targetGccPackages.libgcc.threadModel == "posix";
+
+  libgompCflags = lib.optionals hasLibgomp [
+    "-B${targetGccPackages.libgomp}/lib"
+  ];
+  libgompIncludeCflags = lib.optionals hasLibgomp [
+    "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
+  ];
+
   metadata = rec {
     inherit
       (import ./common-let.nix {
@@ -129,7 +140,9 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
-          "-B${targetGccPackages.libgomp}/lib"
+        ]
+        ++ libgompCflags
+        ++ [
           "-B${targetGccPackages.libstdcxx}/lib"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
@@ -146,9 +159,9 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
-          "-B${targetGccPackages.libgomp}/lib"
-          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
-        ];
+        ]
+        ++ libgompCflags
+        ++ libgompIncludeCflags;
       };
 
       gcc = wrapCCWith {
@@ -162,14 +175,16 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
-          "-B${targetGccPackages.libgomp}/lib"
+        ]
+        ++ libgompCflags
+        ++ [
           # `libcxx` above tells cc-wrapper where the C++ *headers* are; it does
           # not put the library itself on the link path for a GNU compiler. So
           # every C++ link failed with `cannot find -lstdc++` until this was
           # added, in the same style as the other runtime libraries.
           "-B${targetGccPackages.libstdcxx}/lib"
-          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
-        ];
+        ]
+        ++ libgompIncludeCflags;
       };
 
       # Stage 1 of the bootstrap chain; see ../README.md.
