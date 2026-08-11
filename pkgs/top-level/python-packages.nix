@@ -9487,6 +9487,8 @@ self: super: with self; {
 
   libscanbuild = callPackage ../development/python-modules/libscanbuild { };
 
+  libscrc = callPackage ../development/python-modules/libscrc { };
+
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
     (
