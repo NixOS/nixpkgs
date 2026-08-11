@@ -133,7 +133,7 @@
     },
     "appindicator3-0.1": {
       "attrPath": [
-        "libappindicator-gtk3"
+        "libappindicator"
       ]
     },
     "bzip2": {

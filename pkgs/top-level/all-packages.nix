@@ -5924,8 +5924,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  libappindicator-gtk3 = libappindicator;
-
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
   libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
@@ -9159,7 +9157,7 @@ with pkgs;
   quodlibet = callPackage ../applications/audio/quodlibet {
     kakasi = null;
     keybinder3 = null;
-    libappindicator-gtk3 = null;
+    libappindicator = null;
     libmodplug = null;
   };
 
@@ -9178,7 +9176,7 @@ with pkgs;
     inherit gtksourceview;
     kakasi = kakasi;
     keybinder3 = keybinder3;
-    libappindicator-gtk3 = libappindicator-gtk3;
+    libappindicator = libappindicator;
     libmodplug = libmodplug;
     tag = "-full";
     withDbusPython = true;

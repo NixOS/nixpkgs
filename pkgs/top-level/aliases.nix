@@ -1257,6 +1257,7 @@ mapAliases {
   lfe = warnAlias "'lfe' is deprecated in favor of using the beamPackages sets. Use 'beam27Packages.lfe' instead." beam27Packages.lfe; # added 2026-06-15
   lfs = throw "'lfs' has been renamed to/replaced by 'dysk'"; # Converted to throw 2025-10-27
   libappindicator-gtk2 = throw "'libappindicator-gtk2' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-10
+  libappindicator-gtk3 = libappindicator; # Added 2026-08-10
   libAppleWM = libapplewm; # Added 2026-02-04
   libast = throw "'libast' has been removed due to lack of maintenance upstream."; # Added 2025-06-09
   libayatana-appindicator-gtk3 = throw "'libayatana-appindicator-gtk3' has been renamed to/replaced by 'libayatana-appindicator'"; # Converted to throw 2025-10-27

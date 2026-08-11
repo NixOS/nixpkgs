@@ -9,7 +9,7 @@
   gspell,
   gtk3,
   gtksourceview,
-  libappindicator-gtk3,
+  libappindicator,
   netpbm,
   webkitgtk_4_1,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     gspell
     gtk3
     gtksourceview
-    libappindicator-gtk3
+    libappindicator
     webkitgtk_4_1
   ];
 

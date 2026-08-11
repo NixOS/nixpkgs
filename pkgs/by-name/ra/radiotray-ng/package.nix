@@ -15,7 +15,7 @@
   glibmm,
   gsettings-desktop-schemas,
   hicolor-icon-theme,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   libxdg_basedir,
   wxwidgets_3_2,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     hicolor-icon-theme
     gsettings-desktop-schemas
-    libappindicator-gtk3
+    libappindicator
     libnotify
     libxdg_basedir
     lsb-release
