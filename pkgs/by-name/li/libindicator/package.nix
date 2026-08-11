@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libindicator-gtk3";
+  pname = "libindicator";
   version = "12.10.1";
 
   src = fetchurl {

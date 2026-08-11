@@ -9,7 +9,7 @@
   dbus-glib,
   json-glib,
   gtk3,
-  libindicator-gtk3,
+  libindicator,
   libdbusmenu-gtk3,
   libappindicator-gtk3,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     json-glib
     systemd
     gtk3
-    libindicator-gtk3
+    libindicator
     libdbusmenu-gtk3
     libappindicator-gtk3
   ];

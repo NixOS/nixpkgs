@@ -5971,7 +5971,6 @@ with pkgs;
     genPosixLockObjOnly = true;
   };
 
-  libindicator-gtk3 = libindicator;
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 

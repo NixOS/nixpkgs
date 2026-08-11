@@ -7,7 +7,7 @@
   glib,
   dbus-glib,
   gtk3,
-  libindicator-gtk3,
+  libindicator,
   libdbusmenu-gtk3,
   gtk-doc,
   vala,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     dbus-glib
-    libindicator-gtk3
+    libindicator
   ]
   ++ lib.optionals monoSupport [
     mono
