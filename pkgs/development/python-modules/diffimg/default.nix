@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonAtLeast,
   setuptools,
 }:
@@ -39,7 +39,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "diffimg" ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  enabledTestPaths = [ "diffimg/test.py" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Differentiate images in python - get a ratio or percentage difference, and generate a diff image";
