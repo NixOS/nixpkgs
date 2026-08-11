@@ -32176,18 +32176,18 @@
     github = "zuzuleinen";
     githubId = 944919;
   };
+  zwang20 = {
+    name = "Michael Wang";
+    github = "zwang20";
+    githubId = 41721295;
+    matrix = "@michael_wzq:matrix.org";
+  };
   zweiler1 = {
     name = "Marc Zweiler";
     email = "marc.zweiler@outlook.at";
     github = "zweiler1";
     githubId = 131394789;
     keys = [ { fingerprint = "5D51 A11D 0F30 FD88 D291  73AC 6D7C F0EA 0ABD 3370"; } ];
-  };
-  zwang20 = {
-    name = "Michael Wang";
-    github = "zwang20";
-    githubId = 41721295;
-    matrix = "@michael_wzq:matrix.org";
   };
   zx2c4 = {
     email = "Jason@zx2c4.com";
