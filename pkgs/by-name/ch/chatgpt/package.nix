@@ -70,6 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  # autoPatchelf moves PT_INTERP beyond detect-libc's 2 KiB scan. Its
+  # process.report fallback trips Electron's CFI, so use the glibc watcher.
+  postPatch = lib.optionalString isLinux ''
+    grep -aFq 'const family = familySync();' usr/lib/chatgpt/resources/app.asar
+    sed -i "s|const family = familySync();|const family = 'glibc'     ;|" usr/lib/chatgpt/resources/app.asar
+  '';
+
   nativeBuildInputs =
     lib.optionals isDarwin [ unzip ]
     ++ lib.optionals isLinux [
