@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-V" ];
-
   meta = {
     description = "Single-host system diagnostics TUI tool";
     homepage = "https://github.com/matthart1983/syswatch";
