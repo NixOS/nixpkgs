@@ -9,21 +9,22 @@
   libiconv,
 }:
 
-{
-  buildInputs ? [ ],
-  requireX ? false,
-  ...
-}@attrs:
+attrs:
 
 stdenv.mkDerivation (
+  finalAttrs:
   {
+    name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
+
+    requireX = false;
+
     buildInputs =
-      buildInputs
+      (attrs.buildInputs or [ ])
       ++ [
         R
         gettext
       ]
-      ++ lib.optionals requireX [
+      ++ lib.optionals finalAttrs.requireX [
         util-linux
         xvfb-run
       ]
@@ -32,9 +33,13 @@ stdenv.mkDerivation (
         libiconv
       ];
 
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
-
     enableParallelBuilding = true;
+
+    env = (attrs.env or { }) // {
+      NIX_CFLAGS_COMPILE =
+        (attrs.env.NIX_CFLAGS_COMPILE or "")
+        + lib.optionalString stdenv.hostPlatform.isDarwin " -I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+    };
 
     configurePhase = ''
       runHook preConfigure
@@ -54,15 +59,22 @@ stdenv.mkDerivation (
       runHook postBuild
     '';
 
-    installFlags = if attrs.doCheck or true then [ ] else [ "--no-test-load" ];
+    doCheck = true;
+
+    checkPhase = ''
+      # noop since R CMD INSTALL tests packages
+    '';
 
     rCommand =
-      if requireX then
+      if finalAttrs.requireX then
         # Unfortunately, xvfb-run has a race condition even with -a option, so that
         # we acquire a lock explicitly.
         "flock ${xvfb-run} xvfb-run -a -e xvfb-error R"
       else
         "R";
+
+    installFlags =
+      (attrs.installFlags or [ ]) ++ (if finalAttrs.doCheck then [ ] else [ "--no-test-load" ]);
 
     installPhase = ''
       runHook preInstall
@@ -73,16 +85,18 @@ stdenv.mkDerivation (
 
     postFixup = ''
       if test -e $out/nix-support/propagated-build-inputs; then
-          ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
-    '';
-
-    checkPhase = ''
-      # noop since R CMD INSTALL tests packages
-    '';
+    ''
+    + (attrs.postFixup or "");
   }
-  // attrs
-  // {
-    name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
-  }
+  // (lib.removeAttrs attrs [
+    # list of attrs that have custom logic for combining the default and the passed values
+    # if not listed, the passed value will override the default value
+    "name"
+    "buildInputs"
+    "env"
+    "installFlags"
+    "postFixup"
+  ])
 )
