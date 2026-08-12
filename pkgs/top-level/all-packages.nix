@@ -5016,8 +5016,6 @@ with pkgs;
     ];
   };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
-
   credstash = with python3Packages; toPythonApplication credstash;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
