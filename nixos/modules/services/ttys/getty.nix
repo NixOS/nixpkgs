@@ -28,14 +28,19 @@ let
 
   gettyCmd = args: "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
 
-  autologinOnceScript = otherArgs: ''
-    autologged="/run/agetty.autologged"
-    if test "$TTY" = tty1 && ! test -f "$autologged"; then
-      touch "$autologged"
-      exec ${gettyCmd "${otherArgs} --autologin ${cfg.autologinUser}"}
-    fi
-    exec ${gettyCmd otherArgs}
-  '';
+  autologinOnceScript =
+    otherArgs:
+    pkgs.writeShellApplication {
+      name = "autologin-once";
+      text = ''
+        autologged="/run/agetty.autologged"
+        if test "$TTY" = tty1 && ! test -f "$autologged"; then
+          touch "$autologged"
+          exec ${gettyCmd "${otherArgs} --autologin ${cfg.autologinUser}"}
+        fi
+        exec ${gettyCmd otherArgs}
+      '';
+    };
 
 in
 
@@ -177,13 +182,10 @@ in
         # override upstream default with an empty ExecStart
         ""
         (
-          let
-            args = "--noclear --keep-baud $TTY 115200,38400,9600 $TERM";
-          in
           if cfg.autologinOnce then
-            (pkgs.writers.writeDash "getty" (autologinOnceScript args))
+            lib.getExe (autologinOnceScript ''--noclear --keep-baud "$TTY" 115200,38400,9600 "$TERM"'')
           else
-            gettyCmd args
+            gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM"
         )
       ];
       environment.TTY = "%I";
