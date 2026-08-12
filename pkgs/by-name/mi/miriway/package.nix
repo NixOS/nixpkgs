@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "26.06.3";
+  version = "26.08";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q1CYySy5lB1bMZYdakHintRH2ZAinThm9rk7WkyY39U=";
+    hash = "sha256-2xQO49WU19NlAg+FYPDw3oKjY+GsTIbXNge/dYWxiTk=";
   };
 
   postPatch = ''

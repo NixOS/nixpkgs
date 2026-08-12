@@ -1011,6 +1011,7 @@ mapAliases {
   gnome-bluetooth_1_0 = throw "'gnome-bluetooth_1_0' has been removed as it is unmaintained upstream"; # Added 2026-03-09
   gnome-firmware-updater = throw "'gnome-firmware-updater' has been renamed to/replaced by 'gnome-firmware'"; # Converted to throw 2025-10-27
   gnome-icon-theme = throw "'gnome-icon-theme' has been removed because it is unmaintained upstream and depends on GTK 2."; # Added 2026-07-22
+  gnome-nettool = throw "'gnome-nettool' has been removed as it was archived upstream"; # Added 2026-08-11
   gnome-passwordsafe = throw "'gnome-passwordsafe' has been renamed to/replaced by 'gnome-secrets'"; # Converted to throw 2025-10-27
   gnome-recipes = throw "'gnome-recipes' has been removed due to lack of upstream maintenance and dependency on insecure libraries"; # Added 2025-09-06
   gnome-resources = throw "'gnome-resources' has been renamed to/replaced by 'resources'"; # Converted to throw 2025-10-27
@@ -1349,6 +1350,7 @@ mapAliases {
   libtransmission_3 = throw "libtransmission_3 has been removed in favour of libtransmission_4. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Converted to throw 2025-10-26
   libubox-wolfssl = throw "'libubox-wolfssl' has been removed, use 'libubox' or 'libubox-mbedtls'"; # Added 2026-03-29
   libuinputplus = throw "'libuinputplus' has been removed, as it was unmaintained upstream since 2021, no longer builds, and is no longer used by anything"; # Added 2025-11-02
+  libunique = throw "'libunique' has been removed, as it depended on the deprecated GTK2 engine."; # Added 2026-08-11
   libva1 = throw "'libva1' has been removed, as it is no longer required. Please use libva."; # Added 2026-05-14
   libva1-minimal = throw "'libva1-minimal' has been removed, as it is no longer required. Please use libva-minimal."; # Added 2026-05-14
   libviper = throw "'libviper' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
@@ -1671,6 +1673,7 @@ mapAliases {
   mpdWithFeatures = warnAlias "mpdWithFeatures has been replaced by mpd.override" mpd.override; # Added 2025-08-08
   mpris-discord-rpc = throw "'mpris-discord-rpc' has been renamed to 'music-discord-rpc'."; # Added 2025-09-14
   mpw = throw "'mpw' has been removed, as upstream development has moved to Spectre, which is packaged as 'spectre-cli'"; # Added 2025-10-26
+  mricron = throw "'mricron' has been removed, as it depended on the deprecated GTK2 engine."; # Added 2026-08-11
   mrpeach = throw "'mrpeach' has been removed as it is unmaintained"; # Added 2025-10-06
   mrxvt = throw "'mrxvt' has been removed due to lack of maintenance upstream"; # Added 2025-09-25
   msalsdk-dbusclient = throw "'msalsdk-dbusclient' has been removed, as it is no longer needed by 'intune-portal'"; # Added 2026-02-11

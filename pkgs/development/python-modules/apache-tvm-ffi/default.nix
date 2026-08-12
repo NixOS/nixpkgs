@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-tvm-ffi";
-  version = "0.1.13-post2";
+  version = "0.1.13-post3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     repo = "tvm-ffi";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TovUbVld/IcTuVYc2CGPcARDyKZ3XrQDEtQaTV1fT2k=";
+    hash = "sha256-AN7AqBl62T8DqnRt7KRvGjqo/c0SJ66QZrCQQ5yicHw=";
   };
 
   postPatch = ''

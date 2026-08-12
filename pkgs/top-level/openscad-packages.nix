@@ -12,5 +12,6 @@ lib.makeScope newScope (
   lib.recurseIntoAttrs {
     buildOpenSCADPackage = self.callPackage ../build-support/build-openscad-package { };
     openscad = openscadOrig.override { openscadPackages = self; };
+    bosl = self.callPackage ../development/openscad-packages/bosl { };
   }
 )
