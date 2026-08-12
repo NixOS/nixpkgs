@@ -61,6 +61,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/dotX12/ShazamIO";
     changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
 })
