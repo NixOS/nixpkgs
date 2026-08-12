@@ -7,6 +7,7 @@
 
 let
   inherit (lib)
+    mkMerge
     mkIf
     mkDefault
     getExe
@@ -26,7 +27,9 @@ let
     bool
     enum
     ints
+    listOf
     nullOr
+    package
     path
     str
     submodule
@@ -94,6 +97,30 @@ in
       enable = mkEnableOption "Jellyfin Media Server";
 
       package = mkPackageOption pkgs "jellyfin" { };
+
+      plugins = mkOption {
+        type = listOf package;
+        default = [ ];
+        example = literalExpression "[ pkgs.jellyfin-plugin-dlna ]";
+        description = ''
+          Plugins to make available to Jellyfin.
+
+          Each package provides one or more plugin directories under
+          `lib/jellyfin/plugins/`, which are reproduced under
+          {option}`services.jellyfin.dataDir`/plugins before the service starts.
+
+          Plugins installed from Jellyfin's own catalogue live in the same
+          directory and are left untouched, but a plugin listed here takes over
+          its directory name: install a given plugin one way or the other, not
+          both.
+
+          ::: {.note}
+          Updating or removing such a plugin from the dashboard does not work,
+          since its assemblies are read-only store paths. Bump the package
+          instead.
+          :::
+        '';
+      };
 
       user = mkOption {
         type = str;
@@ -389,46 +416,75 @@ in
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        preStart = mkIf cfg.hardwareAcceleration.enable (
-          ''
-            configDir=${escapeShellArg cfg.configDir}
-            encodingXml="$configDir/encoding.xml"
-          ''
-          + (
-            if cfg.forceEncodingConfig then
-              ''
-                if [[ -e $encodingXml ]]; then
-                  # this intentionally removes trailing newlines
-                  currentText="$(<"$encodingXml")"
-                  configuredText="$(<${encodingXmlFile})"
-                  if [[ $currentText == "$configuredText" ]]; then
-                    # don't need to do anything
-                    exit 0
-                  else
-                    encodingXmlBackup="$configDir/encoding.xml.backup-$(date -u +"%FT%H_%M_%SZ")"
-                    mv --update=none-fail -T "$encodingXml" "$encodingXmlBackup"
+        preStart = mkMerge [
+          (mkIf (cfg.plugins != [ ]) ''
+            pluginsDir=${escapeShellArg "${cfg.dataDir}/plugins"}
+            mkdir -p "$pluginsDir"
+
+            # The marker distinguishes our directories from the ones the
+            # dashboard's own installer creates, which must survive.
+            find "$pluginsDir" -mindepth 2 -maxdepth 2 -name .nix-jellyfin-plugin \
+              -printf '%h\0' | xargs -0 -r rm -rf
+
+            for source in ${
+              lib.escapeShellArgs (map (plugin: "${plugin}/lib/jellyfin/plugins") cfg.plugins)
+            }; do
+              for plugin in "$source"/*; do
+                target="$pluginsDir/$(basename "$plugin")"
+                mkdir -p "$target"
+                touch "$target/.nix-jellyfin-plugin"
+
+                find "$plugin" -maxdepth 1 -name '*.dll' \
+                  -exec ln -sf -t "$target" {} +
+
+                # Not a symlink: Jellyfin rewrites meta.json while
+                # instantiating the plugin, and a read-only one aborts startup.
+                install -m 0644 "$plugin/meta.json" "$target/meta.json"
+              done
+            done
+          '')
+
+          (mkIf cfg.hardwareAcceleration.enable (
+            ''
+              configDir=${escapeShellArg cfg.configDir}
+              encodingXml="$configDir/encoding.xml"
+            ''
+            + (
+              if cfg.forceEncodingConfig then
+                ''
+                  if [[ -e $encodingXml ]]; then
+                    # this intentionally removes trailing newlines
+                    currentText="$(<"$encodingXml")"
+                    configuredText="$(<${encodingXmlFile})"
+                    if [[ $currentText == "$configuredText" ]]; then
+                      # don't need to do anything
+                      exit 0
+                    else
+                      encodingXmlBackup="$configDir/encoding.xml.backup-$(date -u +"%FT%H_%M_%SZ")"
+                      mv --update=none-fail -T "$encodingXml" "$encodingXmlBackup"
+                    fi
                   fi
-                fi
-                cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
-                chmod u+w "$encodingXml"
-              ''
-            else
-              ''
-                if [[ -e $encodingXml ]]; then
-                  # this intentionally removes trailing newlines
-                  currentText="$(<"$encodingXml")"
-                  configuredText="$(<${encodingXmlFile})"
-                  if [[ $currentText != "$configuredText" ]]; then
-                    echo "WARN: $encodingXml already exists and is different from the configured settings. transcoding options NOT applied." >&2
-                    echo "WARN: Set config.services.jellyfin.forceEncodingConfig = true to override." >&2
-                  fi
-                else
                   cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
                   chmod u+w "$encodingXml"
-                fi
-              ''
-          )
-        );
+                ''
+              else
+                ''
+                  if [[ -e $encodingXml ]]; then
+                    # this intentionally removes trailing newlines
+                    currentText="$(<"$encodingXml")"
+                    configuredText="$(<${encodingXmlFile})"
+                    if [[ $currentText != "$configuredText" ]]; then
+                      echo "WARN: $encodingXml already exists and is different from the configured settings. transcoding options NOT applied." >&2
+                      echo "WARN: Set config.services.jellyfin.forceEncodingConfig = true to override." >&2
+                    fi
+                  else
+                    cp --update=none-fail -T ${encodingXmlFile} "$encodingXml"
+                    chmod u+w "$encodingXml"
+                  fi
+                ''
+            )
+          ))
+        ];
 
         # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
         # Upstream also disable some hardenings when running in LXC, we do the same with the isContainer option

@@ -48,6 +48,22 @@
       virtualisation.diskSize = 3 * 1024;
     };
 
+    machineWithPlugins = {
+      services.jellyfin = {
+        enable = true;
+        plugins = with pkgs; [
+          jellyfin-plugin-dlna
+          jellyfin-plugin-ldapauth
+          jellyfin-plugin-opensubtitles
+          jellyfin-plugin-reports
+          jellyfin-plugin-trakt
+          jellyfin-plugin-tvdb
+          jellyfin-plugin-webhook
+        ];
+      };
+      virtualisation.diskSize = 3 * 1024;
+    };
+
     machineWithForceConfig = {
       services.jellyfin = {
         enable = true;
@@ -99,6 +115,66 @@
 
           # Check device access
           machineWithTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
+
+      with subtest("Declaratively installed plugins are loaded"):
+          wait_for_jellyfin(machineWithPlugins)
+
+          # Jellyfin rewrites meta.json while instantiating a plugin, so a
+          # read-only one aborts startup instead of skipping the plugin.
+          machineWithPlugins.succeed(
+              "test -L /var/lib/jellyfin/plugins/DLNA_11.0.0.0/Jellyfin.Plugin.Dlna.dll"
+          )
+          machineWithPlugins.succeed(
+              "test -f /var/lib/jellyfin/plugins/DLNA_11.0.0.0/meta.json "
+              "-a ! -L /var/lib/jellyfin/plugins/DLNA_11.0.0.0/meta.json"
+          )
+          machineWithPlugins.succeed(
+              "test -w /var/lib/jellyfin/plugins/DLNA_11.0.0.0/meta.json"
+          )
+
+          # A plugin Jellyfin cannot use is skipped without failing startup,
+          # so only the log distinguishes loaded from silently ignored. These
+          # are the names the plugin classes report, which upstream lets
+          # diverge from the manifest: ldapauth ships as
+          # "LDAP Authentication_23.0.0.0" but calls itself "LDAP-Auth".
+          for plugin in [
+              "DLNA 11.0.0.0",
+              "LDAP-Auth 23.0.0.0",
+              "Open Subtitles 24.0.0.0",
+              "Reports 18.0.0.0",
+              "Trakt 30.0.0.0",
+              "TheTVDB 22.0.0.0",
+              "Webhook 21.0.0.0",
+          ]:
+              machineWithPlugins.wait_until_succeeds(
+                  f"journalctl --unit jellyfin --grep 'Loaded plugin: {plugin}'"
+              )
+
+          machineWithPlugins.succeed(
+              "test -L '/var/lib/jellyfin/plugins/Open Subtitles_24.0.0.0"
+              "/Jellyfin.Plugin.OpenSubtitles.dll'"
+          )
+
+          # A plugin dropped from the configuration has to be cleaned up,
+          # while one installed from Jellyfin's catalogue must survive. Both
+          # fixtures are created as the service user, like the real thing.
+          machineWithPlugins.succeed("systemctl stop jellyfin.service")
+          machineWithPlugins.succeed(
+              "runuser -u jellyfin -- mkdir -p /var/lib/jellyfin/plugins/Stale_1.0.0.0 "
+              "&& runuser -u jellyfin -- touch "
+              "/var/lib/jellyfin/plugins/Stale_1.0.0.0/.nix-jellyfin-plugin"
+          )
+          machineWithPlugins.succeed(
+              "runuser -u jellyfin -- mkdir -p /var/lib/jellyfin/plugins/FromCatalogue_1.0.0.0"
+          )
+          machineWithPlugins.succeed("systemctl start jellyfin.service")
+          wait_for_jellyfin(machineWithPlugins)
+
+          machineWithPlugins.succeed("test ! -e /var/lib/jellyfin/plugins/Stale_1.0.0.0")
+          machineWithPlugins.succeed("test -d /var/lib/jellyfin/plugins/FromCatalogue_1.0.0.0")
+          machineWithPlugins.succeed(
+              "test -L /var/lib/jellyfin/plugins/DLNA_11.0.0.0/Jellyfin.Plugin.Dlna.dll"
+          )
 
       # Test forceEncodingConfig backup functionality
       with subtest("Force encoding config creates backup"):
