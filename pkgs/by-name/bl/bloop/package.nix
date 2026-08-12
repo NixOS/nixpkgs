@@ -9,43 +9,34 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "bloop";
-  version = "2.1.1";
+  sources = lib.importJSON ./sources.json;
+  inherit (sources)
+    repo
+    version
+    assets
+    completions
+    ;
 
-  platform =
-    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-      "x86_64-pc-linux"
-    else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      "aarch64-apple-darwin"
-    else
-      throw "unsupported platform";
+  platforms = builtins.attrNames assets;
 
-  bloop-bash = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
-    sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
-  };
+  fetchAsset =
+    { asset, hash }:
+    fetchurl {
+      url = "https://github.com/${repo}/releases/download/v${version}/${asset}";
+      inherit hash;
+    };
 
-  bloop-fish = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
-    sha256 = "sha256-RF6nZxbw4sLwCP4irKJLYCZnlkaRdEkmpYkOHBoSF/8=";
-  };
-
-  bloop-zsh = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
-    sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
-  };
-
-  bloop-binary = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
-    sha256 =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-        "sha256-F5wRihAwf/TNBSYortTCoK9qKqTI+1N5InJ+rqLFp8A="
-      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        "sha256-OrONKbC2l0jjfmguDmoiyEaJWdTrKBiP0ZEa5rhizDM="
-      else
-        throw "unsupported platform";
-  };
+  bloop-binary = fetchAsset (
+    assets.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}")
+  );
+  bloop-bash = fetchAsset completions.bash;
+  bloop-fish = fetchAsset completions.fish;
+  bloop-zsh = fetchAsset completions.zsh;
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   dontUnpack = true;
   nativeBuildInputs = [
@@ -76,14 +67,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://scalacenter.github.io/bloop/";
+    changelog = "https://github.com/${repo}/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
-    platforms = [
-      "x86_64-linux"
-      "aarch64-darwin"
-    ];
+    inherit platforms;
     maintainers = with lib.maintainers; [
       agilesteel
       kubukoz
