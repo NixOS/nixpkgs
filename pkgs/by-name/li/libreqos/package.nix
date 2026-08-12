@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   nix-update-script,
+  nixosTests,
   # bpf
   llvmPackages,
   bpftools,
@@ -167,6 +168,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit pythonEnv;
+    tests = { inherit (nixosTests) libreqos; };
     updateScript = nix-update-script { };
   };
 
