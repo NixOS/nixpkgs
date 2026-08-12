@@ -11,7 +11,15 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+
+  # providing prettier plugins (can be used in combination):
+  # adding plugins that can be loaded by name via `.prettierrc` config
+  # works better with other non-nix prettier users
+  # e.g. `prettier.override { plugins = [ pkgs.prettier-plugin-go-template ]; }`
   plugins ? [ ],
+  # adding plugins via the `--plugin` flag which will auto load them
+  # e.g. prettier.override { plugins-always-on = [ pkgs.prettier-plugin-go-template ]; }
+  plugins-always-on ? [ ],
 }:
 let
   ## Blame NodeJS
@@ -231,6 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       l0b0
       S0AndS0
+      jk
     ];
   };
 })
