@@ -87,6 +87,7 @@
   # tests
   ffmpeg-headless,
   gitMinimal,
+  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -283,6 +284,7 @@ buildPythonPackage (finalAttrs: {
     openpyxl
     pylatexenc
     pypdfium2
+    pytest-xdist
     pytestCheckHook
     python-docx
     python-pptx
