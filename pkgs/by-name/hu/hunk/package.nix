@@ -78,7 +78,7 @@ stdenv.mkDerivation {
       --replace-fail \
         'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),' \
         'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),
-    join("share", "skills", "${pname}", "hunk-review", "SKILL.md"),'
+    join("share", "skills", "hunk", "hunk-review", "SKILL.md"),'
   '';
 
   configurePhase = ''
@@ -110,8 +110,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/skills/$pname/hunk-review
-    cp skills/hunk-review/SKILL.md $out/share/skills/$pname/hunk-review/SKILL.md
+    mkdir -p $out/share/skills/hunk/hunk-review
+    cp skills/hunk-review/SKILL.md $out/share/skills/hunk/hunk-review/SKILL.md
 
     runHook postInstall
   '';
