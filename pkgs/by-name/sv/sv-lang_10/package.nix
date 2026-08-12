@@ -35,6 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace external/CMakeLists.txt --replace-fail \
       'set(mimalloc_min_version "2.2")' \
       'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+  ''
+  # fmt 12 moved fmt::format's declaration out of the lightweight
+  # fmt/core.h into fmt/format.h (format.h is a strict superset, so this
+  # is safe everywhere it's used). Same fix as upstream slang applied for
+  # 11.0 (commit 5a898b4b9225d281902fcd59fe4732b1561677d2), backported here
+  # since nixpkgs pins slang 10.0 specifically for circt.
+  + ''
+    grep -rl '#include <fmt/core.h>' --include='*.h' --include='*.cpp' . | \
+      xargs sed -i 's|#include <fmt/core.h>|#include <fmt/format.h>|'
   '';
 
   cmakeFlags = [
