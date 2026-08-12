@@ -4,18 +4,177 @@ on:
   schedule:
     - cron: '10 0,12 * * *'
   workflow_dispatch:
+    inputs:
+      package:
+        description: Update only this package attribute path
+        required: false
+        type: string
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  update:
+  discover:
     runs-on: ubuntu-24.04
+    timeout-minutes: 120
     env:
       NIXPKGS_ALLOW_UNFREE: '1'
+      SHARD_COUNT: 128
+      PACKAGE: ${{ inputs.package }}
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      has-packages: ${{ steps.matrix.outputs.has-packages }}
     steps:
-      # Use a GitHub App when configured so generated PRs trigger CI.
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          ref: ${{ github.event_name == 'schedule' && vars.NIXPKGS_UPDATE_REF || github.ref_name }}
+
+      - name: Install Nix
+        if: inputs.package == ''
+        uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Discover update scripts
+        if: inputs.package == ''
+        env:
+          EXPRESSION: |
+            let
+              pkgs = import ./. {
+                config.allowUnfree = true;
+                config.allowAliases = false;
+              };
+            in
+            pkgs
+          APPLY: |
+            drv:
+              let
+                script = drv.updateScript or null;
+                command =
+                  if script == null then
+                    null
+                  else if builtins.isAttrs script && script ? command then
+                    script.command
+                  else if builtins.isAttrs script then
+                    null
+                  else
+                    script;
+              in
+              {
+                scriptKey =
+                  if command == null then
+                    null
+                  else
+                    builtins.toJSON (map builtins.toString (if builtins.isList command then command else [ command ]));
+                position = drv.meta.position or null;
+              }
+        run: |
+          set -euo pipefail
+          mkdir -p candidates
+          cat > "$RUNNER_TEMP/split-candidates.py" <<'PY'
+          import hashlib
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          shard_count = int(os.environ["SHARD_COUNT"])
+          shards = [[] for _ in range(shard_count)]
+          seen = set()
+          evaluated = 0
+          candidates = 0
+
+          for line in sys.stdin:
+              evaluated += 1
+              if evaluated % 1000 == 0:
+                  print(f"discovery: evaluated {evaluated} attributes", file=sys.stderr, flush=True)
+              try:
+                  result = json.loads(line)
+              except json.JSONDecodeError:
+                  continue
+              extra = result.get("extraValue") or {}
+              script_key = extra.get("scriptKey")
+              if script_key is None:
+                  continue
+              attr_path = ".".join(result["attrPath"])
+              key = (script_key, extra.get("position"))
+              if key in seen:
+                  continue
+              seen.add(key)
+              candidates += 1
+              bucket = int.from_bytes(hashlib.sha256(attr_path.encode()).digest()[:8], "big") % shard_count
+              shards[bucket].append(attr_path)
+
+          for index, packages in enumerate(shards):
+              Path("candidates", f"{index}.json").write_text(json.dumps(sorted(packages)))
+          print(f"discovery: evaluated {evaluated} attributes, found {candidates} candidates", file=sys.stderr)
+          PY
+
+          nix-shell --option max-call-depth 100000 -p nix-eval-jobs --run '
+            nix-eval-jobs \
+              --option max-call-depth 100000 \
+              --workers 2 \
+              --force-recurse \
+              --no-instantiate \
+              --expr "$EXPRESSION" \
+              --apply "$APPLY"
+          ' | python3 "$RUNNER_TEMP/split-candidates.py"
+
+      - name: Select manual package
+        if: inputs.package != ''
+        run: |
+          mkdir candidates
+          python3 -c 'import json, os; json.dump([os.environ["PACKAGE"]], open("candidates/0.json", "w"))'
+
+      - name: Create shard matrix
+        id: matrix
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          shards = [
+              {"shard": path.stem}
+              for path in sorted(Path("candidates").glob("*.json"))
+              if json.loads(path.read_text())
+          ]
+          matrix = {"include": shards}
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print("matrix=" + json.dumps(matrix, separators=(",", ":")), file=output)
+              print(f"has-packages={str(bool(shards)).lower()}", file=output)
+          print(f"Selected {len(shards)} non-empty shards")
+          PY
+
+      - name: Upload candidate shards
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: update-candidates
+          path: candidates
+          if-no-files-found: error
+
+  update:
+    needs: discover
+    if: needs.discover.outputs.has-packages == 'true'
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    name: Update shard ${{ matrix.shard }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    concurrency:
+      group: update-${{ github.repository }}-${{ matrix.shard }}
+      cancel-in-progress: false
+    env:
+      NIXPKGS_ALLOW_UNFREE: '1'
+      BASE_BRANCH: ${{ github.event_name == 'schedule' && vars.NIXPKGS_UPDATE_REF || github.ref_name }}
+
+    steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: vars.NIXPKGS_CI_CLIENT_ID
         id: app-token
@@ -29,7 +188,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-          ref: ${{ github.event_name == 'schedule' && vars.NIXPKGS_UPDATE_REF || github.ref_name }}
+          ref: ${{ env.BASE_BRANCH }}
           token: &github_token ${{ steps.app-token.outputs.token || github.token }}
 
       - name: Install Nix
@@ -38,21 +197,84 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
-      - name: Update packages
-        run: |
-          nix-shell --option max-call-depth 100000 maintainers/scripts/update.nix \
-            --arg predicate '(path: pkg: pkg.updateScript or null != null)' \
-            --arg commit true \
-            --arg keep-going true \
-            --arg skip-prompt true
-
-      - name: Open update pull request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - name: Download candidate shards
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          token: *github_token
-          branch: update/packages
-          delete-branch: true
-          commit-message: &commit-message 'nixpkgs: update packages'
-          title: *commit-message
-          body: |
-            Automated update generated by `maintainers/scripts/update.nix`.
+          name: update-candidates
+          path: candidates
+
+      - name: Run update scripts and open pull requests
+        env:
+          GH_TOKEN: *github_token
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          set -u
+          git config --global user.name 'nixpkgs-update[bot]'
+          git config --global user.email 'nixpkgs-update[bot]@users.noreply.github.com'
+          gh auth setup-git
+          base_sha=$(git rev-parse HEAD)
+          python3 - "$base_sha" <<'PY'
+          import json
+          import os
+          import shutil
+          import subprocess
+          import sys
+          import tempfile
+          from pathlib import Path
+
+          base_sha = sys.argv[1]
+          base_branch = os.environ["BASE_BRANCH"]
+          repository = os.environ["GITHUB_REPOSITORY"]
+          run_url = os.environ["RUN_URL"]
+          packages = json.loads(Path("candidates", f"{os.environ['SHARD']}.json").read_text())
+
+          def run(command, cwd=None):
+              print("$ " + " ".join(command), flush=True)
+              return subprocess.run(command, cwd=cwd, check=False)
+
+          for package in packages:
+              branch = f"auto-update/{package}"
+              worktree = Path(tempfile.mkdtemp(prefix="nixpkgs-update-", dir=os.environ["RUNNER_TEMP"]))
+              try:
+                  print(f"::group::Updating {package}", flush=True)
+                  if run(["git", "worktree", "add", "--detach", str(worktree), base_sha]).returncode != 0:
+                      continue
+                  result = run([
+                      "timeout", "30m", "nix-shell", "--option", "max-call-depth", "100000",
+                      "maintainers/scripts/update.nix", "--argstr", "package", package,
+                      "--arg", "skip-prompt", "true",
+                  ], cwd=worktree)
+                  if result.returncode != 0:
+                      print(f"::warning::Update failed for {package}: exit {result.returncode}", flush=True)
+                      continue
+                  head = subprocess.check_output(["git", "-C", str(worktree), "rev-parse", "HEAD"], text=True).strip()
+                  dirty = run(["git", "-C", str(worktree), "diff", "--quiet"]).returncode != 0
+                  if head == base_sha and not dirty:
+                      print(f"No changes for {package}", flush=True)
+                      continue
+                  if dirty:
+                      if run(["git", "-C", str(worktree), "add", "-A"]).returncode != 0:
+                          continue
+                      if run(["git", "-C", str(worktree), "commit", "-m", f"{package}: update"]).returncode != 0:
+                          continue
+                  if run(["git", "-C", str(worktree), "push", "--force", "origin", f"HEAD:refs/heads/{branch}"]).returncode != 0:
+                      continue
+                  head = f"{os.environ['GITHUB_REPOSITORY_OWNER']}:{branch}"
+                  existing = subprocess.run(
+                      ["gh", "pr", "list", "--repo", repository, "--state", "open", "--head", head, "--json", "number", "--jq", ".[0].number // empty"],
+                      check=False,
+                      capture_output=True,
+                      text=True,
+                  ).stdout.strip()
+                  title = f"{package}: update"
+                  body = f"Automated update generated by `passthru.updateScript`.\n\nWorkflow run: {run_url}"
+                  if existing:
+                      run(["gh", "pr", "edit", existing, "--repo", repository, "--title", title, "--body", body])
+                  else:
+                      run(["gh", "pr", "create", "--repo", repository, "--head", head, "--base", base_branch, "--title", title, "--body", body])
+              finally:
+                  run(["git", "worktree", "remove", "--force", str(worktree)])
+                  run(["git", "worktree", "prune"])
+                  print("::endgroup::", flush=True)
+          PY
