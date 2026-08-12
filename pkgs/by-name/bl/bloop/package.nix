@@ -7,6 +7,7 @@
   jre,
   lib,
   zlib,
+  runCommand,
 }:
 
 let
@@ -35,7 +36,7 @@ let
   bloop-fish = fetchAsset completions.fish;
   bloop-zsh = fetchAsset completions.zsh;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   dontUnpack = true;
@@ -65,6 +66,22 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    tests.help = runCommand "${pname}-help" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      export HOME="$TMPDIR"
+
+      # Anything that reaches the build server, `bloop --version` and
+      # `bloop about` included, downloads it from Maven Central first and so
+      # cannot run in the sandbox. --help is answered by the native client
+      # alone, and still exercises the patched binary and its wrapper.
+      bloop --help > help.txt
+      grep -q 'Interact with Bloop' help.txt
+      grep -q -- '--java-home' help.txt
+
+      touch $out
+    '';
+  };
+
   meta = {
     homepage = "https://scalacenter.github.io/bloop/";
     changelog = "https://github.com/${repo}/releases/tag/v${version}";
@@ -79,4 +96,4 @@ stdenv.mkDerivation {
       tomahna
     ];
   };
-}
+})
