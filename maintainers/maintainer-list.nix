@@ -23155,6 +23155,13 @@
     githubId = 478606;
     name = "Valentin Robert";
   };
+  ptman = {
+    name = "Paul Tötterman";
+    github = "ptman";
+    githubId = 24669;
+    email = "ptman+nixpkgs@ptman.name";
+    matrix = "@ptman:kapsi.fi";
+  };
   ptrhlm = {
     email = "ptrhlm0@gmail.com";
     github = "ptrhlm";
