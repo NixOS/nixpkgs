@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatch-vcs,
   hatchling,
   mount,
@@ -28,6 +29,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-i99HpT/QuF9JwX92IwwOqpEVUc/1k39E7N9v9TZ4Qvg=";
   };
+
+  patches = [
+    # Fix parsing processes with an empty STAT field on Darwin
+    (fetchpatch {
+      url = "https://github.com/tomerfiliba/plumbum/commit/217a22f361ea590c77da5f73d1387fe8a57fd742.patch";
+      hash = "sha256-Cp01aeTkJS5wy6ZZs95suzKV/HKziy1YIQtk4jYT2Gg=";
+    })
+  ];
 
   build-system = [
     hatchling
