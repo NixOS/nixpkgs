@@ -69,6 +69,12 @@ buildNpmPackage (finalAttrs: {
     runHook postBuild
   '';
 
+  dontNpmPrune = true;
+
+  preInstall = ''
+    npm prune --omit=dev --no-save
+  '';
+
   # npm workspace symlinks in the output point into packages/ which
   # doesn't exist there. Replace runtime deps with built content and
   # delete the rest.
