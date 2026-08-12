@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-V" ];
-
   meta = {
     description = "Single-host, read-only disk diagnostics TUI";
     homepage = "https://github.com/matthart1983/diskwatch";
