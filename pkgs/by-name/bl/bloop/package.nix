@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   bloop-fish = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
-    sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
+    sha256 = "sha256-RF6nZxbw4sLwCP4irKJLYCZnlkaRdEkmpYkOHBoSF/8=";
   };
 
   bloop-zsh = fetchurl {
