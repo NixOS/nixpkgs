@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dataclass-factory";
+  pname = "adaptix";
   version = "2.16";
   format = "setuptools";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "reagento";
-    repo = "dataclass-factory";
+    repo = "adaptix";
     rev = version;
     hash = "sha256-0BIWgyAV1hJzFX4xYFqswvQi5F1Ce+V9FKSmNYuJfZM=";
   };
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   checkInputs = [ typing-extensions ];
 
-  pythonImportsCheck = [ "dataclass_factory" ];
+  pythonImportsCheck = [ "adaptix" ];
 
   checkPhase = ''
     runHook preCheck
@@ -38,8 +38,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Modern way to convert python dataclasses or other objects to and from more common types like dicts or json-like structures";
-    homepage = "https://github.com/reagento/dataclass-factory";
-    changelog = "https://github.com/reagento/dataclass-factory/releases/tag/${src.rev}";
+    homepage = "https://github.com/reagento/adaptix";
+    changelog = "https://github.com/reagento/adaptix/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
