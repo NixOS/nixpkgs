@@ -33,14 +33,14 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname desktopItems;
   version = "1.01b";
 
   src = fetchFromGitHub {
     owner = "SimonLarsen";
     repo = "90-Second-Portraits";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xxgB8Aw7QTK9lPus7Q4E7iP2/rRfCwwiYbk5NqzujHI=";
     fetchSubmodules = true;
   };
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://tangramgames.dk/games/90secondportraits";
   };
 
-}
+})
