@@ -666,11 +666,11 @@ in
   fontconfig-default-fonts = runTest ./fontconfig-default-fonts.nix;
   forgejo = import ./forgejo.nix {
     inherit runTest;
-    forgejoPackage = pkgs.forgejo;
+    forgejoPackage = guestPkgs.forgejo;
   };
   forgejo-lts = import ./forgejo.nix {
     inherit runTest;
-    forgejoPackage = pkgs.forgejo-lts;
+    forgejoPackage = guestPkgs.forgejo-lts;
   };
   freenet = runTest ./freenet.nix;
   freescout = import ./freescout {
@@ -697,11 +697,11 @@ in
   gancio = runTest ./gancio.nix;
   garage_1 = import ./garage {
     inherit runTest;
-    package = pkgs.garage_1;
+    package = guestPkgs.garage_1;
   };
   garage_2 = import ./garage {
     inherit runTest;
-    package = pkgs.garage_2;
+    package = guestPkgs.garage_2;
   };
   gatus = runTest ./gatus.nix;
   gemstash = import ./gemstash.nix { inherit pkgs runTest; };
@@ -713,7 +713,7 @@ in
   ghostunnel = runTest ./ghostunnel.nix;
   ghostunnel-modular = runTest ./ghostunnel-modular.nix;
   gitdaemon = runTest ./gitdaemon.nix;
-  gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
+  gitea = handleTest ./gitea.nix { giteaPackage = guestPkgs.gitea; };
   github-runner = runTest ./github-runner.nix;
   gitlab = import ./gitlab {
     inherit runTest;
@@ -892,7 +892,10 @@ in
   jibri = runTest ./jibri.nix;
   jirafeau = runTest ./jirafeau.nix;
   jitsi-meet = runTest ./jitsi-meet.nix;
-  jool = import ./jool.nix { inherit pkgs runTest; };
+  jool = import ./jool.nix {
+    pkgs = guestPkgs;
+    inherit runTest;
+  };
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = import ./rancher {
     inherit pkgs;
@@ -1430,7 +1433,10 @@ in
       { };
   postfix-tlspol = runTest ./postfix-tlspol.nix;
   postgres-websockets = runTest ./postgres-websockets.nix;
-  postgresql = import ./postgresql { inherit runTest pkgs; };
+  postgresql = import ./postgresql {
+    inherit runTest;
+    pkgs = guestPkgs;
+  };
   postgrest = runTest ./postgrest.nix;
   power-profiles-daemon = runTest ./power-profiles-daemon.nix;
   powerdns = runTest ./powerdns.nix;
@@ -1910,12 +1916,12 @@ in
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
   windmill = import ./windmill {
-    inherit pkgs runTest;
-    inherit (pkgs) lib;
+    inherit runTest;
   };
   wine = handleTest ./wine.nix { };
   wireguard = import ./wireguard {
-    inherit pkgs runTest;
+    pkgs = guestPkgs;
+    inherit runTest;
     inherit (pkgs) lib;
   };
   without-nix = runTest ./without-nix.nix;
@@ -1924,7 +1930,7 @@ in
   workout-tracker = runTest ./workout-tracker.nix;
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
   wrappers = runTest ./wrappers.nix;
-  writefreely = import ./web-apps/writefreely.nix { inherit pkgs runTest; };
+  writefreely = import ./web-apps/writefreely.nix { inherit runTest; };
   wstunnel = runTest ./wstunnel.nix;
   xandikos = runTest ./xandikos.nix;
   xautolock = runTest ./xautolock.nix;
