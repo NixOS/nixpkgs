@@ -10,6 +10,9 @@
   callPackage,
   jre,
   testers,
+  runCommand,
+  zsh,
+  fish,
 }:
 
 let
@@ -104,5 +107,30 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "scala-cli version --offline";
     };
+
+    tests.completions =
+      runCommand "${pname}-completions"
+        {
+          nativeBuildInputs = [
+            zsh
+            fish
+          ];
+        }
+        ''
+          share=${finalAttrs.finalPackage}/share
+
+          bash -n "$share/bash-completion/completions/scala-cli.bash"
+          zsh -n "$share/zsh/site-functions/_scala-cli"
+          fish -n "$share/fish/vendor_completions.d/scala-cli.fish"
+
+          # postFixup generates these by running the binary, which puts $0 in the
+          # output; without the PATH dance there, these would name a store path.
+          if grep -r /nix/store "$share"; then
+            echo "the completions above name a store path instead of scala-cli" >&2
+            exit 1
+          fi
+
+          touch $out
+        '';
   };
 })
