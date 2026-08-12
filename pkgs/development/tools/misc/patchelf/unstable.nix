@@ -27,6 +27,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
