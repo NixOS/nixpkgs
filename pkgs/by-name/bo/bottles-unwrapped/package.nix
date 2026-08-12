@@ -10,7 +10,6 @@
   appstream-glib,
   desktop-file-utils,
   fvs2,
-  librsvg,
   gtk4,
   gtksourceview5,
   libadwaita,
@@ -27,7 +26,6 @@
   vkbasalt-cli,
   vulkan-tools,
   vmtouch,
-  libportal,
   libportal-gtk4,
   obs-studio-plugins,
   libxml2,
@@ -76,11 +74,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   buildInputs = [
-    librsvg
     gtk4
     gtksourceview5
     libadwaita
-    libportal
     libportal-gtk4
   ];
 
