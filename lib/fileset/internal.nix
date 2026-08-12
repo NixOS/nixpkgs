@@ -536,6 +536,9 @@ rec {
         else
           "/" + concatStringsSep "/" fileset._internalBaseComponents + "/";
 
+      getBaseStringPrefix = substring 0 baseLength;
+      removeBaseStringPrefix = substring baseLength (-1);
+
       baseLength = stringLength baseString;
 
       # Check whether a list of path components under the base path exists in the tree.
@@ -584,7 +587,7 @@ rec {
           # but only on the few paths above it, so its checked first.
           # With base /foo/bar this matches /foo/bar and /foo/bar/baz
           # hasPrefix "/foo/bar/" "/foo/bar/baz/"
-          if substring 0 baseLength pathSlash == baseString then
+          if getBaseStringPrefix pathSlash == baseString then
             if stringLength pathSlash == baseLength then
               # The path is the base directory itself, which is always included
               true
@@ -596,7 +599,7 @@ rec {
               # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
               # == inTree (split "/" "bar/baz")
               # == inTree [ "bar" "baz" ]
-              inTree (split "/" (substring baseLength (-1) path))
+              inTree (split "/" (removeBaseStringPrefix path))
           # Same as `hasPrefix pathSlash baseString`, but more efficient.
           # The path is a proper ancestor of the base, which needs to be included for the base to be reachable:
           # With base /foo/bar we need to include /foo:
