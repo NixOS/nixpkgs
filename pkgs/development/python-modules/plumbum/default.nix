@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     tag = "v${version}";
-    hash = "sha256-XwsEcAHvVhWQG5trznOvkfP8Al7kfMGSG2wR0sXY+eI=";
+    hash = "sha256-i99HpT/QuF9JwX92IwwOqpEVUc/1k39E7N9v9TZ4Qvg=";
   };
 
   build-system = [
