@@ -1867,7 +1867,7 @@ in
   v2ray = runTest ./v2ray.nix;
   varnish80 = runTest {
     imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish80;
+    _module.args.package = guestPkgs.varnish80;
   };
   vault = runTest ./vault.nix;
   vault-agent = runTest ./vault-agent.nix;
@@ -1885,7 +1885,7 @@ in
   vikunja = runTest ./vikunja.nix;
   vinyl-cache_9 = runTest {
     imports = [ ./vinyl-cache.nix ];
-    _module.args.package = pkgs.vinyl-cache_9;
+    _module.args.package = guestPkgs.vinyl-cache_9;
   };
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
