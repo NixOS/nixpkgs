@@ -26239,6 +26239,12 @@
     keys = [ { fingerprint = "94AD E7C4 73B5 3DC7 7615  D946 3E76 7D8C 58D4 8C78"; } ];
     name = "Miran Tuten";
   };
+  shr3yas-k = {
+    name = "Shreyas Kamalapuram";
+    email = "shreyas.2007.oct@gmail.com";
+    github = "shr3yas-k";
+    githubId = 71091209;
+  };
   shunueda = {
     name = "Shun Ueda";
     github = "shunueda";
