@@ -30,7 +30,7 @@
 
 let
   pname = "scopehal-apps";
-  version = "0.1.1";
+  version = "0.2";
 in
 stdenv.mkDerivation {
   pname = "scopehal-apps";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     owner = "ngscopeclient";
     repo = "scopehal-apps";
     tag = "v${version}";
-    hash = "sha256-7ZXfxfRa+1fbMj2IDF/boNL/qCy4i9IyMnzIgOZunDw=";
+    hash = "sha256-+nKmBI6QhVkgtg7Mj0lx6YY1Q5qOgRcz2baIjI2bNNI=";
     fetchSubmodules = true;
   };
 
