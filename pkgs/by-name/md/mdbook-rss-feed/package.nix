@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  withAtom ? false,
+  withJsonFeed ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-UkoNcwEq2Ga3PEF04Xly++VdBekdCBKSHggIGXjTMXU=";
+
+  buildFeatures = lib.optional withAtom [ "atom" ] ++ lib.optional withJsonFeed [ "json-feed" ];
 
   passthru.updateScript = nix-update-script { };
 
