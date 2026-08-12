@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  preFixup = lib.optional (!clientLibOnly) ''
+  preFixup = lib.optionalString (!clientLibOnly) ''
     wrapProgram "$out/bin/wivrn-server" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [

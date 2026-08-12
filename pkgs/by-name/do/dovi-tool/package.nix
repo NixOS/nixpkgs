@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
   ];
 
-  preCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+  preCheck = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE="${fontsConf}"
     # Fontconfig error: No writable cache directories

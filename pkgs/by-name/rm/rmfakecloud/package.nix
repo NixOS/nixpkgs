@@ -37,7 +37,7 @@ buildGoModule rec {
     fetcherVersion = 4;
     hash = "sha256-UQT6uYusDw7Hd+1URrSQkyorajih6oF0LSMpPZy9K1w=";
   };
-  preBuild = lib.optionals enableWebui ''
+  preBuild = lib.optionalString enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
     rm -r ui/node_modules/sass-embedded ui/node_modules/.pnpm/sass-embedded*
 
@@ -53,7 +53,7 @@ buildGoModule rec {
   ];
 
   # ... or don't embed it in the server
-  postPatch = lib.optionals (!enableWebui) ''
+  postPatch = lib.optionalString (!enableWebui) ''
     sed -i '/go:/d' ui/assets.go
   '';
 

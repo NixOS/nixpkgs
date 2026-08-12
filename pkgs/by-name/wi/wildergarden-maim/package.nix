@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "wildergarden-maim";
+  pname = "wildergarden-maim";
   version = "1.1.1-unstable-2026-07-23";
 
   strictDeps = true;
