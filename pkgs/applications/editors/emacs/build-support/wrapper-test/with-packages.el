@@ -90,7 +90,7 @@ Return test result, a list of values.  Each is non-nil if the test passes."
        ;; Make it easier to find out which condition fails in non-batch tests.
        (should (equal test-result
                       (cl-loop for item in test-result
-                               collect (if item item t)))))))
+                               collect (or item t)))))))
 
 (defmacro define-with-packages-non-batch-ert-tests (&rest test-names)
   "See also `define-with-packages-non-batch-ert-test'."
