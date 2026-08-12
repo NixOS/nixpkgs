@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "673";
+    version = "675";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-/Yv4bzyZiSVDaEe7pYqdSJI6DPh4A4p/0Vh2bTXc0U4=";
+      hash = "sha256-9al8xLbj/0fxidM1BOoSuFPOwayk47CStjjPh4611Yg=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {

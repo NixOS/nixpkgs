@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.17";
+  version = "2026.8.3";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OnuvK0SmRHqMiw14LEuehNKg677XtKyjedgqrg4owlM=";
+    hash = "sha256-tYn54Loo3sSEgRhgu1g5m/t5qL+EKQnvrnfHCuDDbyY=";
   };
 
-  cargoHash = "sha256-Ot5bP4J6KnATOb1Tt2DKOgFTY/urMWcUsFfjbPKnmVc=";
+  cargoHash = "sha256-fzZswzDMIKMx7R53Jxc9m/7I8Bcd2fdPJKmHsjWFqhw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
+      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \

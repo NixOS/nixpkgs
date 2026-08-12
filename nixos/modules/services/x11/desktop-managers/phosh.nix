@@ -168,6 +168,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.displayManager.enable = true;
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
     # Parts taken from nixos/modules/services/wayland/cage.nix
     systemd.services.phosh = {

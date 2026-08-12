@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.16.3";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-Q79OpJWxspTjCdeUV8ymsXDfT2+kPiEfcaCGKWquOyY=";
+    hash = "sha256-2T92WPGyeTb0mOzbBnKMhnIbDWRc2ZSVyL3uBdG1Zhw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail setuptools==82.0.1 setuptools
+      --replace-fail setuptools==83.0.0 setuptools
   '';
 
   build-system = [ setuptools ];
