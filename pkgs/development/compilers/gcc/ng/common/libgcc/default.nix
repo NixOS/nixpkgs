@@ -21,18 +21,29 @@
   # The following are arguments rather than a `let` bindings only so
   # that it is in scope for the default definition above.
 
-  # Whether a shared libgcc can be built at all here, derived the way the
-  # monolithic build derives it rather than forced off.
+  # Whether to build a shared libgcc.
   #
-  # Shared needs something to link against. Normally that is the libc, on any
-  # format -- PE/COFF included -- which is why every stage after the bootstrap
-  # builds it. ELF additionally allows it *before* the libc exists, because a
-  # shared object may keep undefined symbols; `libgcc_s.so` comes out with an
-  # empty `DT_NEEDED`, which is why the monolithic build ships one even from
-  # its nolibc stage. A PE/COFF DLL must resolve everything at link time, so
-  # there the bootstrap yields only `libgcc.a` -- all it is used for anyway.
+  # In addition to being the default, this is also the *maximal* condition --
+  # by default we enable shared wherever possible, and enabling shared in more
+  # cases should not work. That is why this is also used in the assert below.
   __defaultEnableShared ?
-    stdenv.hostPlatform.hasSharedLibraries && (__haveLinkableLibc || stdenv.hostPlatform.isElf),
+    # Of course if the platform as a whole doesn't support shared libraries, we
+    # cannot either.
+    stdenv.hostPlatform.hasSharedLibraries
+    # libstdc++ and libgomp choke if we try to build a shared libgcc, because
+    # the shared libgcc has fewer symbols, with the unwinder and the emulated-
+    # TLS support in `libgcc_eh.a` instead, which those libraries don't link.
+    #
+    # We could perhaps patch those libraries to link `libgcc_eh.a` too as
+    # needed, but it didn't feel worth the fight at this time.
+    && !stdenv.hostPlatform.isCygwin
+    # Shared needs something to link against. Normally that is the libc, on any
+    # format -- PE/COFF included -- which is why every stage after the bootstrap
+    # builds it. ELF additionally allows it *before* the libc exists, because a
+    # shared object may keep undefined symbols; `libgcc_s.so` comes out with an
+    # empty `DT_NEEDED`. A PE/COFF DLL must resolve everything at link time, so
+    # there the bootstrap yields only `libgcc.a` -- all it is used for anyway.
+    && (__haveLinkableLibc || stdenv.hostPlatform.isElf),
 
   # Whether the compiler has a libc that can actually be linked against, as
   # opposed to nothing at all or a headers-only stand-in.
