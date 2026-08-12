@@ -15,7 +15,7 @@
   SDL2_mixer,
   SDL2_net,
   SDL2_ttf,
-  ffmpeg_8,
+  ffmpeg,
   sqlite,
   zlib,
   libx11,
@@ -39,19 +39,19 @@ let
     libx11
     libGLU
     libGL
-    ffmpeg_8
+    ffmpeg
   ];
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2026.6.0";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xqP50OFUT+wreG/EZhmh5zPOwpNvG1TQkLzovgVDquI=";
+    hash = "sha256-dtZrVsXXpy70aJvMqs/IUPsvRd52FKpm9I5XuZSLwCY=";
   };
 
   nativeBuildInputs = [

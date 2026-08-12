@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
-  version = "4.23.1";
+  version = "4.23.12";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zR3a3AZLPYmnIeiT0SNwN6gVcnR4ObzJsfj7aQ8LOkQ=";
+    hash = "sha256-hHiJaLyCJwxSV1fc9Zpn/JHmvRS2fhT1XmL+B94+axw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm';
     fetcherVersion = 3;
-    hash = "sha256-jnCz9u+UMGV20t6fhzk/rVq68K+e5eBvUth6O7jOpQg=";
+    hash = "sha256-KysktlAKCChQW0CwI8qsVJu2rEmMwF+eVNvxuzAYLis=";
   };
 
   nativeBuildInputs = [

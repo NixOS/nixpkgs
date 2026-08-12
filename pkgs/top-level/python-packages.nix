@@ -11952,6 +11952,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nslookup = callPackage ../development/python-modules/nslookup { };
+
   nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
 
   nsz = callPackage ../development/python-modules/nsz { };
@@ -13289,6 +13291,8 @@ self: super: with self; {
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
+
+  pillow-jxl-plugin = callPackage ../development/python-modules/pillow-jxl-plugin { };
 
   pillowfight = callPackage ../development/python-modules/pillowfight { };
 
@@ -14744,6 +14748,8 @@ self: super: with self; {
 
   pygeocodio = callPackage ../development/python-modules/pygeocodio { };
 
+  pygeosphere-warnings = callPackage ../development/python-modules/pygeosphere-warnings { };
+
   pygerber = callPackage ../development/python-modules/pygerber { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
@@ -15314,8 +15320,6 @@ self: super: with self; {
   pynputfix = callPackage ../development/python-modules/pynputfix { };
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
-
-  pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 
@@ -16038,6 +16042,8 @@ self: super: with self; {
   pyspx = callPackage ../development/python-modules/pyspx { };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
+
+  pysquashfsimage = callPackage ../development/python-modules/pysquashfsimage { };
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 

@@ -4105,8 +4105,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
-  smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj { };
 
   squeak = callPackage ../development/compilers/squeak {
@@ -8786,6 +8784,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/scenefx { })
     scenefx_0_4
     scenefx_0_5
+    scenefx
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
