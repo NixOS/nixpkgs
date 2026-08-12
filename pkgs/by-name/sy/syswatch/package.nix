@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Single-host system diagnostics TUI tool";
-    homepage = "https://github.com/matthart1983/syswatch";
+    homepage = "https://www.netwatchlabs.com/labs/syswatch";
     changelog = "https://github.com/matthart1983/syswatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
