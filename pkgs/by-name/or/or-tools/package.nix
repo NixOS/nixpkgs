@@ -246,7 +246,10 @@ stdenv.mkDerivation (finalAttrs: {
       Google's software suite for combinatorial optimization.
     '';
     mainProgram = "fzn-cp-sat";
-    maintainers = with lib.maintainers; [ andersk ];
+    maintainers = with lib.maintainers; [
+      andersk
+      gonsolo
+    ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
