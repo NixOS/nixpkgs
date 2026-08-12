@@ -27,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "metronome-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-T/x5LpODpKWGA40W1je6jw1DS9attVUK4ZjAnRAyf6k=";
   };
 
