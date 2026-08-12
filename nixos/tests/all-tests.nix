@@ -731,6 +731,7 @@ in
   grav = runTest ./web-apps/grav.nix;
   graylog = runTest ./graylog.nix;
   greetd-no-shadow = runTest ./greetd-no-shadow.nix;
+  grimmory = runTest ./web-apps/grimmory.nix;
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = {
