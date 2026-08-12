@@ -12,7 +12,7 @@
   python3,
   gtk3,
   libdazzle,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   linuxPackages,
 }:
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     libdazzle
-    libappindicator-gtk3
+    libappindicator
     libnotify
   ];
 

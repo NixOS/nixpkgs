@@ -4,7 +4,8 @@
 final: prev: {
 
   corePlugins = symlinkJoin {
-    name = "core-vim-plugins";
+    pname = "core-vim-plugins";
+    version = "0";
     paths = with final; [
       # plugin managers
       lazy-nvim

@@ -2419,7 +2419,8 @@
       ];
     "google_health" =
       ps: with ps; [
-      ]; # missing inputs: google-health-api
+        google-health-api
+      ];
     "google_mail" =
       ps: with ps; [
         google-api-python-client
@@ -8333,6 +8334,7 @@
     "google_cloud"
     "google_drive"
     "google_generative_ai_conversation"
+    "google_health"
     "google_mail"
     "google_photos"
     "google_pubsub"

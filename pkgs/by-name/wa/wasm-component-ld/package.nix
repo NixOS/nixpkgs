@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-component-ld";
-  version = "0.5.28";
+  version = "0.5.29";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "bytecodealliance";
     repo = "wasm-component-ld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LABzedj3CsQMpgPeSCNxV6EohaAtyrqfHDIlolqlYO4=";
+    hash = "sha256-YPQDSkNj1wXaZQUtQrailRIzLJ7+k2uvRLIDiD8oYpY=";
   };
 
-  cargoHash = "sha256-u1rV51QwPG7ZCB6d/P9+seO8yumxUJ9iQ3N58zijbGc=";
+  cargoHash = "sha256-CaZNS0RInbhCjrkydP2O1eeBZCpoKknEI5HaW/pJGrQ=";
 
   # Tests require a rustc that can target wasm32-wasip1, including std. This is awkward for
   # Nixpkgs to provide at the same time as providing a rustc that's targeting the actual target.

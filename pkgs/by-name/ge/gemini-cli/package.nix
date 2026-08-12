@@ -126,7 +126,6 @@ buildNpmPackage (finalAttrs: {
       brantes
       xiaoxiangmoe
       _4evy
-      taranarmo
       caverav
     ];
     platforms = lib.platforms.all;

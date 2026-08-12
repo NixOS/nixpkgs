@@ -126,6 +126,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   patches = [
+    ./androguard-4.1.4.patch
     ./ignore_links.patch
   ];
 

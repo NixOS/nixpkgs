@@ -23,15 +23,15 @@ insert_final_newline = false
 
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
-[*.{bash,css,js,json,lock,md,nix,pl,pm,py,rb,sh,xml}]
+[*.{bash,css,js,json,lock,md,nix,pl,pm,py,rb,sh,ts,xml}]
 indent_style = space
 
 # Match docbook files, set indent width of one
 [*.xml]
 indent_size = 1
 
-# Match json/lockfiles/markdown/nix/ruby files, set indent width of two
-[*.{js,json,lock,md,nix,rb}]
+# Match js/json/lockfiles/markdown/nix/ruby/ts files, set indent width of two
+[*.{js,json,lock,md,nix,rb,ts}]
 indent_size = 2
 
 # Match all the Bash code in Nix files, set indent width of two

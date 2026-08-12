@@ -52,7 +52,6 @@
   readline,
   sqlite,
   tpm2-tss,
-  valgrind,
   xz, # for liblzma
 
   # mesonFlags
@@ -222,7 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     tpm2-tss
-    valgrind
     xz # for liblzma
   ];
 
@@ -245,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: what should this be?
     (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
     (lib.mesonEnable "umockdev_tests" false)
+    (lib.mesonEnable "valgrind" false)
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ]

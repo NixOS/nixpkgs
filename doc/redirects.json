@@ -105,6 +105,9 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dev-environments": [
+    "index.html#dev-environments"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -148,6 +151,9 @@
   ],
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
+  ],
+  "getting-started": [
+    "index.html#getting-started"
   ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"

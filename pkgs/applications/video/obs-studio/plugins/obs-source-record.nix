@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-source-record";
     maintainers = with lib.maintainers; [
       robbins
-      shackra
+      elzorrorebelde
     ];
     license = lib.licenses.gpl2Only;
     inherit (obs-studio.meta) platforms;

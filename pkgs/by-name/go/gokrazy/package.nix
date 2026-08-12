@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "gokrazy";
@@ -27,6 +28,8 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   postInstall = ''
     installShellCompletion --cmd gok \
       --bash <($out/bin/gok completion bash) \
@@ -38,7 +41,10 @@ buildGoModule (finalAttrs: {
     description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi 5, Pi Zero 2 W, or amd64 PCs";
     homepage = "https://github.com/gokrazy/gokrazy";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ shayne ];
+    maintainers = with lib.maintainers; [
+      shayne
+      slashformotion
+    ];
     mainProgram = "gok";
   };
 })
