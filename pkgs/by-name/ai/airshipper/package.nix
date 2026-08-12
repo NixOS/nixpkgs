@@ -16,10 +16,7 @@
   alsa-lib,
   stdenv,
   libxcb,
-  bzip2,
   cmake,
-  fontconfig,
-  freetype,
   pkg-config,
   makeWrapper,
   writeShellScript,
@@ -42,6 +39,8 @@ let
         libxi
         vulkan-loader
         libGL
+        wayland
+        wayland-protocols
       ];
     in
     writeShellScript "voxygen-patch" ''
@@ -63,7 +62,7 @@ let
       veloren-server-cli
   '';
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "airshipper";
   inherit version;
 
@@ -77,7 +76,6 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-ry0hFvMDnotDQu6mqgyt+6hKOvGRJLmZKs3SxEVtDRg=";
 
   buildInputs = [
-    fontconfig
     openssl
     wayland
     wayland-protocols
@@ -86,9 +84,10 @@ rustPlatform.buildRustPackage {
     libxrandr
     libxi
     libxcursor
+    vulkan-loader
+    libGL
   ];
   nativeBuildInputs = [
-    cmake
     pkg-config
     makeWrapper
   ];
@@ -100,31 +99,21 @@ rustPlatform.buildRustPackage {
     install -Dm444    "client/assets/net.veloren.airshipper.png"  "$out/share/icons/net.veloren.airshipper.png"
   '';
 
-  postFixup =
-    let
-      libPath = lib.makeLibraryPath [
-        libGL
-        vulkan-loader
-        wayland
-        wayland-protocols
-        bzip2
-        fontconfig
-        freetype
-        libxkbcommon
-        libx11
-        libxrandr
-        libxi
-        libxcursor
-      ];
-    in
-    ''
-      # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
-      # to both Airshipper itself as well as the binaries downloaded by Airshipper.
-      wrapProgram "$out/bin/airshipper" \
-        --set VELOREN_VOXYGEN_PATCHER "${patchVoxygen}" \
-        --set VELOREN_SERVER_CLI_PATCHER "${patchServer}" \
-        --prefix LD_LIBRARY_PATH : "${libPath}"
-    '';
+  postFixup = ''
+    ${patchelf}/bin/patchelf \
+      --set-rpath ${
+        lib.makeLibraryPath (
+          buildInputs
+          ++ [
+            (lib.getLib stdenv.cc.cc)
+            stdenv.cc.libc
+          ]
+        )
+      } "$out/bin/airshipper"
+    wrapProgram "$out/bin/airshipper" \
+      --set VELOREN_VOXYGEN_PATCHER "${patchVoxygen}" \
+      --set VELOREN_SERVER_CLI_PATCHER "${patchServer}"
+  '';
 
   doCheck = false;
   cargoBuildFlags = [
