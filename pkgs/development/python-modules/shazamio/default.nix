@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   poetry-core,
   wheel,
   aiofiles,
@@ -27,16 +26,6 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-beEEr9Y8w0XlC/0+mNL/oWscmnfwt9KChlZ7Ullyk3E=";
   };
-
-  patches = [
-    # remove poetry and virtualenv from build dependencies as they are not used
-    # https://github.com/dotX12/ShazamIO/pull/71
-    (fetchpatch {
-      name = "remove-unused-build-dependencies.patch";
-      url = "https://github.com/dotX12/ShazamIO/commit/5c61e1efe51c2826852da5b6aa6ad8ce3d4012a9.patch";
-      hash = "sha256-KiU5RVBPnSs5qrReFeTe9ePg1fR7y0NchIIHcQwlPaI=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
