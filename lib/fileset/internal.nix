@@ -563,7 +563,12 @@ rec {
               # or a string ("directory" or "regular", etc.) in which case it's included
               localTree != null;
         in
-        recurse 0 tree;
+        # Start by recursing into the first element. This is guaranteed to be
+        # safe. components will never be empty (builtins.split can't make an
+        # empty list). Tree can be something other than an attrset, but if so,
+        # the isAttrs check will fail when being passed `or tree`, and the index
+        # being ahead doesn't matter.
+        recurse 2 (tree.${head components} or tree);
 
       # Filter suited when there's no files
       empty = _: _: false;
