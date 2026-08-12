@@ -2,7 +2,6 @@
   runTest,
   runTestOn,
   lib,
-  ...
 }:
 
 let

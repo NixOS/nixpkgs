@@ -1193,7 +1193,7 @@ in
   nginx-status-page = runTest ./nginx-status-page.nix;
   nginx-tmpdir = runTest ./nginx-tmpdir.nix;
   nginx-unix-socket = runTest ./nginx-unix-socket.nix;
-  nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
+  nginx-variants = import ./nginx-variants.nix { inherit runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nimdow = runTest ./nimdow.nix;
   nipap = runTest ./web-apps/nipap.nix;
