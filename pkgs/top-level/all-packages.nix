@@ -6079,8 +6079,6 @@ with pkgs;
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
-  libunique = callPackage ../development/libraries/libunique { };
-
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
   libunwind =
