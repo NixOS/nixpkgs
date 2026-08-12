@@ -1,4 +1,5 @@
 {
+  "repo": "VirtusLab/scala-cli",
   "version": "1.16.0",
   "assets": {
     "aarch64-darwin": {

@@ -16,7 +16,7 @@
 let
   pname = "scala-cli";
   sources = lib.importJSON ./sources.json;
-  inherit (sources) version assets;
+  inherit (sources) repo version assets;
 
   platforms = builtins.attrNames assets;
 in
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
           or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
     in
     fetchurl {
-      url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
+      url = "https://github.com/${repo}/releases/download/v${version}/${asset.asset}";
       inherit (asset) hash;
     };
   unpackPhase = ''
@@ -94,10 +94,15 @@ stdenv.mkDerivation {
     inherit platforms;
   };
 
-  passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };
+  passthru = {
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
 
-  passthru.tests.version = testers.testVersion {
-    package = scala-cli;
-    command = "scala-cli version --offline";
+    tests.version = testers.testVersion {
+      package = scala-cli;
+      command = "scala-cli version --offline";
+    };
   };
 }
