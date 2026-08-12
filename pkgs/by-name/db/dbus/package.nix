@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "launchd" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "systemd" enableSystemd)
     "-Dselinux=disabled"
+    "-Dc_args=-Wno-error=incompatible-pointer-types"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # D-Bus defaults to launchd-activation on Darwin, but that requires the launch agent be installed. It also breaks

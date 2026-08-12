@@ -79,6 +79,9 @@ let
     pname = "zulu-${javaPackage}";
     version = dist.jdkVersion;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     src = fetchurl {
       url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-${platform}_${arch}.tar.gz";
       inherit (dist) hash;
