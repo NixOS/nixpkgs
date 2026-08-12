@@ -9,6 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1.6";
   src = fetchurl {
     url = "https://frodo.looijaard.name/system/files/software/getopt/getopt-${finalAttrs.version}.tar.gz";
+    curlOpts = "--ipv4";
     sha256 = "1zn5kp8ar853rin0ay2j3p17blxy16agpp8wi8wfg4x98b31vgyh";
   };
 
