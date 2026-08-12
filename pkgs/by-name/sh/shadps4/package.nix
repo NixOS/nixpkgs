@@ -102,6 +102,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   patches = [
     # https://github.com/shadps4-emu/shadPS4/pull/4786
     (fetchpatch2 {
@@ -219,7 +222,9 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
+    homepage = "https://shadps4.net";
+    downloadPage = "https://shadps4.net/downloads";
+    donationPage = "https://ko-fi.com/shadps4";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ryand56
