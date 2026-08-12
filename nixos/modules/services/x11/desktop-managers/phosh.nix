@@ -233,6 +233,12 @@ in
 
     programs.feedbackd.enable = true;
 
+    # Without this, the stevia OSK does not function when selecting text fields.
+    i18n.inputMethod = {
+      type = "ibus";
+      ibus.waylandFrontend = true;
+    };
+
     security.pam.services.phosh = { };
 
     services.graphical-desktop.enable = true;

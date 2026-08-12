@@ -121,6 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # skip timezone-related tests, they are flaky inside the nix sandbox
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    # lock benchmarks exceed the 300s test watchdog on slower hardware
+    sed -i '/^ISC_TEST_ENTRY(isc_mutex_benchmark/d' tests/isc/mutex_test.c
+    sed -i '/^ISC_TEST_ENTRY_CUSTOM(isc_rwlock_benchmark/d' tests/isc/rwlock_test.c
+    sed -i '/^ISC_TEST_ENTRY(isc_spinlock_benchmark/d' tests/isc/spinlock_test.c
   '';
 
   postFixup = ''

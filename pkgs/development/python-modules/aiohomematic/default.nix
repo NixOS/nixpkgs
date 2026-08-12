@@ -51,6 +51,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    "tests/benchmarks"
+  ];
+
   pythonImportsCheck = [ "aiohomematic" ];
 
   meta = {
