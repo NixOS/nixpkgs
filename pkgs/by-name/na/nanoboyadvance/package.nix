@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  fetchgit,
   cmake,
   python3Packages,
   libsForQt5,
@@ -22,17 +23,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.2";
+  version = "1.8.3";
 
-  src = fetchFromGitHub {
-    owner = "nba-emu";
-    repo = "NanoBoyAdvance";
+  src = fetchgit {
+    url = "https://codeberg.org/nba-emu/NanoBoyAdvance.git";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
   };
 
   patches = [
-    # <https://github.com/nba-emu/NanoBoyAdvance/pull/410>
+    # <https://codeberg.org/nba-emu/NanoBoyAdvance/pull/410>
     ./fix-toml11-4.0.patch
   ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
-    homepage = "https://github.com/nba-emu/NanoBoyAdvance";
+    homepage = "https://codeberg.org/nba-emu/NanoBoyAdvance";
     license = lib.licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";
     maintainers = with lib.maintainers; [ tomasajt ];
