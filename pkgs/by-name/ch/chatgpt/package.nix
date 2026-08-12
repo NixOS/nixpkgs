@@ -204,7 +204,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://developers.openai.com/codex/app";
     changelog = "https://learn.chatgpt.com/docs/changelog";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ wattmto ];
+    maintainers = with lib.maintainers; [
+      wattmto
+      moraxyc
+    ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = if isDarwin then "ChatGPT" else "chatgpt";
