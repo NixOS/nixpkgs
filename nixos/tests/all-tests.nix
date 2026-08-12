@@ -207,8 +207,7 @@ in
   accountsservice = runTest ./accountsservice.nix;
   acl = pkgs.callPackage ./acl.nix { };
   acme = import ./acme/default.nix {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit runTest lib;
   };
   acme-dns = runTest ./acme-dns.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
@@ -409,7 +408,7 @@ in
   cloudcompare = import ./cloudcompare.nix { inherit pkgs runTest; };
   cloudlog = runTest ./cloudlog.nix;
   cntr = import ./cntr.nix {
-    inherit (pkgs) lib;
+    inherit lib;
     runTest = runTestOn [
       "aarch64-linux"
       "x86_64-linux"
@@ -584,8 +583,7 @@ in
   ergochat = runTest ./ergochat.nix;
   ersatztv = runTest ./ersatztv.nix;
   espanso = import ./espanso.nix {
-    inherit (pkgs) lib;
-    inherit runTest;
+    inherit lib runTest;
   };
   esphome = runTest ./esphome.nix;
   etc = guestPkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
@@ -769,8 +767,7 @@ in
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
   h2o = import ./web-servers/h2o {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit lib runTest;
   };
   hadoop = import ./hadoop {
     inherit handleTestOn;
@@ -898,8 +895,7 @@ in
   };
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = import ./rancher {
-    inherit pkgs;
-    inherit (pkgs) lib;
+    inherit lib pkgs;
     runTest = runTestOn [
       "aarch64-linux"
       "x86_64-linux"
@@ -942,8 +938,7 @@ in
   kthxbye = runTest ./kthxbye.nix;
   kubernetes = handleTestOn [ "x86_64-linux" ] ./kubernetes { };
   kubo = import ./kubo {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit lib runTest;
   };
   labgrid = runTest ./labgrid.nix;
   lact = runTest ./lact.nix;
@@ -1057,8 +1052,7 @@ in
   mediamtx = runTest ./mediamtx.nix;
   mediatomb = runTest ./mediatomb.nix;
   mediawiki = import ./mediawiki.nix {
-    inherit (pkgs) lib;
-    inherit runTest;
+    inherit lib runTest;
   };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
@@ -1104,8 +1098,7 @@ in
   morph-browser = discoverTests (import ./morph-browser.nix);
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit lib runTest;
   };
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
@@ -1364,8 +1357,7 @@ in
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
   pcsclite = runTest ./pcsclite.nix;
   pdfding = import ./web-apps/pdfding {
-    inherit (pkgs) lib;
-    inherit runTest;
+    inherit lib runTest;
   };
   pdns-recursor = runTest ./pdns-recursor.nix;
   pdudaemon = runTest ./pdudaemon.nix;
@@ -1470,8 +1462,7 @@ in
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
   prometheus-exporters = import ./prometheus-exporters.nix {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit lib runTest;
   };
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
@@ -1509,8 +1500,7 @@ in
   rathole = runTest ./rathole.nix;
   rauc = runTest ./rauc.nix;
   reaction = import ./reaction {
-    inherit (pkgs) lib;
-    inherit runTest;
+    inherit lib runTest;
   };
   readarr = runTest ./readarr.nix;
   readeck = runTest ./readeck.nix;
@@ -1531,8 +1521,7 @@ in
   retroarch = runTest ./retroarch.nix;
   ringboard = runTest ./ringboard.nix;
   rke2 = import ./rancher {
-    inherit pkgs;
-    inherit (pkgs) lib;
+    inherit lib pkgs;
     runTest = runTestOn [
       "aarch64-linux"
       "x86_64-linux"
@@ -1655,8 +1644,7 @@ in
   sunshine = runTest ./sunshine.nix;
   suricata = runTest ./suricata.nix;
   suwayomi-server = import ./suwayomi-server.nix {
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit lib runTest;
   };
   svnserve = runTest ./svnserve.nix;
   swap-file-btrfs = runTest ./swap-file-btrfs.nix;
@@ -1693,8 +1681,7 @@ in
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
   systemd-boot = import ./systemd-boot.nix {
-    inherit runTest runTestOn;
-    inherit (pkgs) lib;
+    inherit lib runTest runTestOn;
   };
   systemd-bpf = runTest ./systemd-bpf.nix;
   systemd-capsules = runTest ./systemd-capsules.nix;
@@ -1921,8 +1908,7 @@ in
   wine = handleTest ./wine.nix { };
   wireguard = import ./wireguard {
     pkgs = guestPkgs;
-    inherit runTest;
-    inherit (pkgs) lib;
+    inherit runTest lib;
   };
   without-nix = runTest ./without-nix.nix;
   wmderland = runTest ./wmderland.nix;
@@ -1948,8 +1934,7 @@ in
   yarr = runTest ./yarr.nix;
   yb = pkgs.callPackage ./yb.nix { inherit (pkgs.yb.passthru) ybPivHarnessTests testFixtures; };
   ydotool = import ./ydotool.nix {
-    inherit (pkgs) lib;
-    inherit runTest;
+    inherit lib runTest;
   };
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
