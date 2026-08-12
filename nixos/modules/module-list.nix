@@ -1299,6 +1299,7 @@
   ./services/networking/krill.nix
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
+  ./services/networking/libreqos.nix
   ./services/networking/libreswan.nix
   ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
