@@ -9,7 +9,7 @@
 }:
 
 postgresqlBuildExtension (finalAttrs: {
-  pname = "pg_libversion";
+  pname = "libversion";
   version = "2.0.1";
 
   src = fetchFromGitHub {
