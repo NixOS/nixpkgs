@@ -6,13 +6,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "command-code";
-  version = "1.15.0";
+  version = "1.19.0";
 
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://registry.npmjs.org/command-code/-/command-code-${finalAttrs.version}.tgz";
-    hash = "sha256-WIFmU7glEE5IJlI/a0G+WDjTdfbh3VD3h298Tf9eB2w=";
+    hash = "sha256-ZkwzsfP/LSMx7VyB5c2dGrYYKNapgSQDxjtA5T89Ze0=";
   };
 
   # required until https://github.com/CommandCodeAI/command-code/issues/621 is fixed
@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-9fXgFM4nEfFv5nBpUxfWO7jJsVkJ5aaiA9YGaReNTzI=";
+  npmDepsHash = "sha256-/t3Jtko0WsWL7SiYW+Ml2QLn3MRwcFIPapK5vvL7Wwk=";
 
   dontNpmBuild = true;
 
