@@ -5,20 +5,33 @@
   openssl,
 }:
 
+let
+  # Atlas needs the dep in a certain place, easier to download and and place in deps/ folder
+  sat = fetchFromGitHub {
+    owner = "nim-lang";
+    repo = "sat";
+    # The atlas nimble file (https://github.com/nim-lang/atlas/blob/master/atlas.nimble) doesn't
+    # provide a version and upstream sat package has no version tags. This is the latest commit
+    # as of 2026-08-14
+    rev = "9d52513b3c68bfb929dbd687d4fb2836cfee6936";
+    hash = "sha256-y9kFjYFrmVejIE8fSh4AehaNnCO/UISssrnGwwcnJLk=";
+  };
+in
 buildNimPackage (
-  final: prev: {
+  final: prev: rec {
     pname = "atlas";
-    version = "unstable-2023-09-22";
+    version = "0.14.12";
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";
-      rev = "ab22f997c22a644924c1a9b920f8ce207da9b77f";
-      hash = "sha256-TsZ8TriVuKEY9/mV6KR89eFOgYrgTqXmyv/vKu362GU=";
+      rev = "${version}";
+      hash = "sha256-7LPjxqsWlZ0tjsXfMF0q93O9VLDgT+7J20QrJ+1ihDg=";
     };
     buildInputs = [ openssl ];
-    prePatch = ''
-      rm config.nims
-    ''; # never trust a .nims file
+    preConfigure = ''
+      mkdir deps
+      cp -r ${sat} deps/sat
+    '';
     doCheck = false; # tests will clone repos
     meta = final.src.meta // {
       description = "Nim package cloner";
