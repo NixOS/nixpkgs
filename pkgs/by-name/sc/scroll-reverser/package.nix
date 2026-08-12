@@ -21,7 +21,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/Applications"
-    unzip -d "$out/Applications" $src
+    # Extra `._*` files break apple signature
+    unzip $src -x '*/._*' -d "$out/Applications"
 
     runHook postInstall
   '';
