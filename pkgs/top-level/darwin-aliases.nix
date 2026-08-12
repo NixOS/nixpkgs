@@ -141,7 +141,7 @@ stubs
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02
-  openwith = pkgs.openwith; # added 2025-11-28
+  openwith = throw "'openwith' has been removed, doesn't seem to work correctly on macOS 26 or newer"; # Added 2026-08-12
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
