@@ -14746,6 +14746,8 @@ self: super: with self; {
 
   pygeocodio = callPackage ../development/python-modules/pygeocodio { };
 
+  pygeosphere-warnings = callPackage ../development/python-modules/pygeosphere-warnings { };
+
   pygerber = callPackage ../development/python-modules/pygerber { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
