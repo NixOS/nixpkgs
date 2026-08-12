@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polarity";
-  version = "0-unstable-2026-05-20";
+  version = "latest-unstable-2026-08-10";
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
     repo = "polarity";
-    rev = "522f7a7b70608cda6ce3207c81d26bef17b0cdf9";
-    hash = "sha256-o2+tOrWr8Rjy+r05PX9C6qtx70HDyhWlvza2Ssw15mk=";
+    rev = "2d8ad195effd61daa95e97aa3d1e172eefca5e9a";
+    hash = "sha256-EagBLOqLrTKwCR/yQ5docjq2VFD1u907haQqs9bPM6M=";
   };
 
   cargoHash = "sha256-7vBLZwUpZ/LQ4MO1JZhpErFvh5EQyS+7IN1U5wyAP/E=";
