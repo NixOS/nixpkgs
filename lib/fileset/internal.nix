@@ -587,7 +587,7 @@ rec {
           # With base /foo/bar this matches /foo/bar and /foo/bar/baz
           # hasPrefix "/foo/bar/" "/foo/bar/baz/"
           if getBaseStringPrefix pathSlash == baseString then
-            if stringLength pathSlash == baseLength then
+            if pathSlash == baseString then
               # The path is the base directory itself, which is always included
               true
             else
