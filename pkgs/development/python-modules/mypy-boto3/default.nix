@@ -1346,8 +1346,8 @@ in
       "sha256-WEz+PMPa1ojI7uyLyMq2s5P6u19uBI/8pra73oWsyKA=";
 
   mypy-boto3-textract =
-    buildMypyBoto3Package "textract" "1.43.0"
-      "sha256-HT/oZkcrMOpYUruaOmwm88XHj9Mp8EGkceYczF4TVlo=";
+    buildMypyBoto3Package "textract" "1.43.69"
+      "sha256-RclJXtzfxHLiV/GLiIuPP553QGUC3BtI5EbiqChUbbs=";
 
   mypy-boto3-timestream-query =
     buildMypyBoto3Package "timestream-query" "1.43.0"
