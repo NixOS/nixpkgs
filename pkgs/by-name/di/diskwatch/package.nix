@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Single-host, read-only disk diagnostics TUI";
-    homepage = "https://github.com/matthart1983/diskwatch";
+    homepage = "https://www.netwatchlabs.com/labs/diskwatch";
     changelog = "https://github.com/matthart1983/diskwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
