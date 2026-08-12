@@ -15,7 +15,8 @@
 # Example callTest that just extracts the derivation from the test:
 #   callTest = t: t.test;
 let
-  inherit (pkgs.lib)
+  inherit (pkgs) lib;
+  inherit (lib)
     isAttrs
     isFunction
     mapAttrs
