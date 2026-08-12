@@ -7,7 +7,8 @@
   cmake,
   pkg-config,
   which,
-  ffmpeg,
+  # FIXME: unpin when opencv supports ffmpeg 9
+  ffmpeg_8,
   fftw,
   fontconfig,
   frei0r,
@@ -82,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    (opencv4.override { ffmpeg-headless = ffmpeg; })
-    ffmpeg
+    (opencv4.override { ffmpeg_8-headless = ffmpeg_8; })
+    ffmpeg_8
     fftw
     fontconfig
-    (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+    (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
     libdv
     libebur128
     libexif
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     wrapProgram $out/bin/melt \
       --prefix FREI0R_PATH : ${
-        (frei0r.override { opencv = opencv4.override { ffmpeg-headless = ffmpeg; }; })
+        (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
       }/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
       ${lib.optionalString (qtbase != null) "\${qtWrapperArgs[@]}"}
@@ -159,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit ffmpeg;
+    ffmpeg = ffmpeg_8;
   };
 
   passthru.updateScript = gitUpdater {

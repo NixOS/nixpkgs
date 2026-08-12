@@ -140,6 +140,8 @@ in
   systemImageTypes ? [
     "google_apis"
     "google_apis_playstore"
+    "google_apis_ps16k"
+    "google_apis_playstore_ps16k"
   ],
   abiVersions ? [
     "x86"

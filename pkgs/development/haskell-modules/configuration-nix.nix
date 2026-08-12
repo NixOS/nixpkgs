@@ -404,6 +404,13 @@ builtins.intersectAttrs super {
     postInstall = ''
       ${drv.postInstall or ""}
       ln -s "''${!outputBin}/bin/pandoc" "''${!outputBin}/bin/pandoc-server"
+    ''
+    # Assert the lua and server features are enabled by default
+    # c.f. https://github.com/NixOS/nixpkgs/issues/540900
+    # FIXME: overrideCabal does not allow configuring installCheckPhase, so use postInstall
+    + lib.optionalString canExecute ''
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+lua'
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+server'
     '';
   }) super.pandoc-cli;
 
