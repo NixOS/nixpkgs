@@ -1,4 +1,6 @@
-/// @ts-check
+import type * as actionsCore from '@actions/core'
+import type { context as actionsContext } from '@actions/github'
+import type { GitHub } from '@actions/github/lib/utils'
 
 // TODO: should this be combined with the branch checks in prepare.js?
 // They do seem quite similar, but this needs to run after eval,
@@ -9,39 +11,47 @@ const { readFile } = require('node:fs/promises')
 const { postReview, dismissReviews } = require('./reviews.js')
 
 const reviewKey = 'check-target-branch'
-/**
- * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: typeof import('@actions/github').context
- *  core: import('@actions/core')
- *  dry: boolean
- * }} CheckTargetBranchProps
- */
-async function checkTargetBranch({ github, context, core, dry }) {
-  /**
-   * @type {{
-   *  attrdiff: {
-   *   added: string[],
-   *   changed: string[],
-   *   removed: string[],
-   *  },
-   *  attrdiffByKernel: Record<string, {
-   *   added: string[],
-   *   changed: string[],
-   *   removed: string[],
-   *  }>,
-   *  attrdiffByPlatform: Record<string, {
-   *   added: string[],
-   *   changed: string[],
-   *   removed: string[],
-   *  }>,
-   *  labels: Record<string, boolean>,
-   *  rebuildCountByKernel: Record<string, number>,
-   *  rebuildsByKernel: Record<string, string[]>,
-   *  rebuildsByPlatform: Record<string, string[]>,
-   * }}
-   */
-  const changed = JSON.parse(
+
+type ChangedPaths = {
+  attrdiff: {
+    added: string[]
+    changed: string[]
+    removed: string[]
+  }
+  attrdiffByKernel: Record<
+    string,
+    {
+      added: string[]
+      changed: string[]
+      removed: string[]
+    }
+  >
+  attrdiffByPlatform: Record<
+    string,
+    {
+      added: string[]
+      changed: string[]
+      removed: string[]
+    }
+  >
+  labels: Record<string, boolean>
+  rebuildCountByKernel: Record<string, number>
+  rebuildsByKernel: Record<string, string[]>
+  rebuildsByPlatform: Record<string, string[]>
+}
+
+async function checkTargetBranch({
+  github,
+  context,
+  core,
+  dry,
+}: {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  core: typeof actionsCore
+  dry: boolean
+}) {
+  const changed: ChangedPaths = JSON.parse(
     await readFile('comparison/changed-paths.json', 'utf-8'),
   )
   const pull_number = context.payload.pull_request?.number
@@ -155,7 +165,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       reviewKey,
     })
   } else if (rebuildsAllTests && !isExemptKernelUpdate) {
-    let branchText
+    let branchText: string
     if (base === 'master' && maxRebuildCount >= 500) {
       branchText = '(probably either `staging-nixos` or `staging`)'
     } else if (base === 'master') {
