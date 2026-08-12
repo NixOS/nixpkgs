@@ -982,8 +982,8 @@ in
       "sha256-JEuEjo0htTuDCZx2nNJK2Zq59oSUqkMf4BrNamerfVk=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.43.64"
-      "sha256-kyUieR7tYYUGbEOi6ftCEDD07+QfcyJ2cOWqrk2FVAs=";
+    buildMypyBoto3Package "organizations" "1.43.69"
+      "sha256-paBe5gVy3zwFWnrFlMJkSFsTezo8racFPocj7osxIss=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.43.0"
