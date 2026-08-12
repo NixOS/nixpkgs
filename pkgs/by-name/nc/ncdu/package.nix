@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/BratishkaErik/ncdu";
     description = "Disk usage analyzer with an ncurses interface";
-    changelog = "https://github.com/BratishkaErik/ncdu/releases";
+    changelog = "https://github.com/BratishkaErik/ncdu/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pSub
