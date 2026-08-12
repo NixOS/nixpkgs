@@ -3,22 +3,24 @@
   dev ? false,
   aarch64sha256,
   x64sha256,
+  darwinsha256,
 }:
 
 {
   fetchurl,
   lib,
   stdenv,
-  libx11,
-  glib,
-  libGL,
-  glibcLocales,
-  gtk3,
-  cairo,
-  pango,
-  libredirect,
+  libx11 ? null,
+  glib ? null,
+  libGL ? null,
+  glibcLocales ? null,
+  gtk3 ? null,
+  cairo ? null,
+  pango ? null,
+  libredirect ? null,
   makeWrapper,
-  wrapGAppsHook3,
+  unzip ? null,
+  wrapGAppsHook3 ? null,
   pkexecPath ? "/run/wrappers/bin/pkexec",
   writeShellScript,
   common-updater-scripts,
@@ -44,6 +46,7 @@ let
     if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
+  downloadUrlDarwin = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_mac.zip";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = toString ./default.nix;
 
@@ -67,19 +70,25 @@ let
 
     src = passthru.sources.${stdenv.hostPlatform.system};
 
+    sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Sublime Merge.app";
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [
+    dontFixup = stdenv.hostPlatform.isDarwin;
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       glib
       # for GSETTINGS_SCHEMAS_PATH
       gtk3
     ];
-    nativeBuildInputs = [
-      makeWrapper
-      wrapGAppsHook3
-    ];
+    nativeBuildInputs =
+      lib.optionals stdenv.hostPlatform.isLinux [
+        makeWrapper
+        wrapGAppsHook3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        unzip
+      ];
 
-    buildPhase = ''
+    buildPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
       runHook preBuild
 
       for binary in ${builtins.concatStringsSep " " binaries}; do
@@ -95,18 +104,29 @@ let
       runHook postBuild
     '';
 
-    installPhase = ''
-      runHook preInstall
+    installPhase =
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          runHook preInstall
 
-      mkdir -p $out
-      cp -r * $out/
+          mkdir -p "$out/Applications/Sublime Merge.app"
+          cp -r Contents "$out/Applications/Sublime Merge.app/"
 
-      runHook postInstall
-    '';
+          runHook postInstall
+        ''
+      else
+        ''
+          runHook preInstall
+
+          mkdir -p $out
+          cp -r * $out/
+
+          runHook postInstall
+        '';
 
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
-    postFixup = ''
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
@@ -134,6 +154,14 @@ let
           url = downloadUrl "x64";
           sha256 = x64sha256;
         };
+        "aarch64-darwin" = fetchurl {
+          url = downloadUrlDarwin;
+          sha256 = darwinsha256;
+        };
+        "x86_64-darwin" = fetchurl {
+          url = downloadUrlDarwin;
+          sha256 = darwinsha256;
+        };
       };
     };
   };
@@ -144,33 +172,47 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     makeWrapper
   ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p "$out/bin"
-    makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  ''
-  + builtins.concatStringsSep "" (
-    map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
-  )
-  + ''
-    mkdir -p "$out/share/applications"
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        runHook preInstall
 
-    substitute \
-      "${binaryPackage}/${primaryBinary}.desktop" \
-      "$out/share/applications/${primaryBinary}.desktop" \
-      --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+        mkdir -p "$out/Applications"
+        ln -s "${binaryPackage}/Applications/Sublime Merge.app" "$out/Applications/Sublime Merge.app"
 
-    for directory in ${binaryPackage}/Icon/*; do
-      size=$(basename $directory)
-      mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-    runHook postInstall
-  '';
+        mkdir -p "$out/bin"
+        ln -s "$out/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge" "$out/bin/smerge"
+
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
+        mkdir -p "$out/bin"
+        makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
+      ''
+      + builtins.concatStringsSep "" (
+        map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+      )
+      + ''
+        mkdir -p "$out/share/applications"
+
+        substitute \
+          "${binaryPackage}/${primaryBinary}.desktop" \
+          "$out/share/applications/${primaryBinary}.desktop" \
+          --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+
+        for directory in ${binaryPackage}/Icon/*; do
+          size=$(basename $directory)
+          mkdir -p "$out/share/icons/hicolor/$size/apps"
+          ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+        done
+        runHook postInstall
+      '';
 
   passthru = {
     unwrapped = binaryPackage;
@@ -214,7 +256,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
+      "aarch64-darwin"
       "aarch64-linux"
+      "x86_64-darwin"
       "x86_64-linux"
     ];
   };
