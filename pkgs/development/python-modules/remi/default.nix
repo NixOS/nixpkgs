@@ -31,6 +31,13 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "'use_scm_version':{'version_scheme': 'post-release'},"\
+        "'use_scm_version':False, 'version': '${version}',"
+  '';
+
   preCheck = ''
     # for some reason, REMI already deal with these using try blocks, but they fail
     substituteInPlace test/test_widget.py \

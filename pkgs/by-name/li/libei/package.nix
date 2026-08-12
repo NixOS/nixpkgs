@@ -11,7 +11,7 @@
   pkg-config,
   protobuf,
   protobufc,
-  systemd,
+  systemdLibs,
   buildPackages,
   epoll-shim,
   basu,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     protobufc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     basu

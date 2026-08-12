@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
-  preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''
+  preInstallCheck = lib.optionalString (lib.versionAtLeast nodejs.version "22") ''
     # Exclude test files that require internet access.
     NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
   '';
