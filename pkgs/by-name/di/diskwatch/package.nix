@@ -31,7 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/matthart1983/diskwatch";
     changelog = "https://github.com/matthart1983/diskwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      tomasrivera
+    ];
     mainProgram = "diskwatch";
   };
 })
