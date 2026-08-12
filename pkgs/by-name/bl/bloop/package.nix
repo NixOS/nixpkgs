@@ -9,6 +9,8 @@
   zlib,
   callPackage,
   runCommand,
+  zsh,
+  fish,
 }:
 
 let
@@ -86,6 +88,24 @@ stdenv.mkDerivation (finalAttrs: {
 
       touch $out
     '';
+
+    tests.completions =
+      runCommand "${pname}-completions"
+        {
+          nativeBuildInputs = [
+            zsh
+            fish
+          ];
+        }
+        ''
+          share=${finalAttrs.finalPackage}/share
+
+          bash -n "$share/bash-completion/completions/bloop"
+          zsh -n "$share/zsh/site-functions/_bloop"
+          fish -n "$share/fish/vendor_completions.d/bloop.fish"
+
+          touch $out
+        '';
   };
 
   meta = {
