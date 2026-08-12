@@ -22379,6 +22379,8 @@ self: super: with self; {
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
+  ww-manager = callPackage ../development/python-modules/ww-manager { };
+
   wxpython = callPackage ../development/python-modules/wxpython/4.2.nix {
     wxGTK = pkgs.wxwidgets_3_2.override { withWebKit = true; };
   };

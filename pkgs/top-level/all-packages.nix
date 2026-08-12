@@ -10964,4 +10964,6 @@ with pkgs;
   };
 
   feishin-web = feishin.override { webVersion = true; };
+
+  ww-manager = python3Packages.toPythonApplication python3Packages.ww-manager;
 }
