@@ -24,7 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The upstream unit assumes the /opt/throttled venv install location
   postPatch = ''
-    sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service
+    substituteInPlace systemd/throttled.service \
+      --replace-fail '/opt/throttled/venv/bin/throttled' \
+      '${placeholder "out"}/bin/throttled.py'
 
     substituteInPlace throttled.py --replace-fail "'setpci'" "'${lib.getExe' pciutils "setpci"}'"
   '';
