@@ -59,6 +59,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/reagento/adaptix";
     changelog = "https://github.com/reagento/adaptix/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
 })
