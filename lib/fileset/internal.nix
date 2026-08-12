@@ -349,7 +349,6 @@ rec {
     ```
   */
   _normaliseTreeFilter =
-    path: tree:
     let
       # Recurses into a tree that's already known to be a directory (either a "directory" or an attrset).
       #
@@ -377,7 +376,7 @@ rec {
         else
           normalisedSubtrees;
     in
-    if tree == "directory" || isAttrs tree then recurse path tree else tree;
+    path: tree: if tree == "directory" || isAttrs tree then recurse path tree else tree;
 
   /**
     A minimal normalisation of a filesetTree, intended for pretty-printing:
