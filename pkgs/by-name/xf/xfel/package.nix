@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
-  version = "1.3.5";
+  version = "1.3.6";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xboot";
     repo = "xfel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a9g5dywILcacxnNPlZMgC0ZnG2Qkophsb53ePXIbq+4=";
+    hash = "sha256-rdrinlqI94JsrDoXlrC/gENQq7v/1OMla9CrI+Av2cM=";
   };
 
   postPatch = ''
