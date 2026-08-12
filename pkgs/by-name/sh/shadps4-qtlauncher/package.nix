@@ -99,13 +99,15 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     inherit (shadps4.meta)
+      homepage
+      downloadPage
+      donationPage
       platforms
       license
       maintainers
       ;
 
     description = shadps4.meta.description + " (Qt UI)";
-    homepage = "https://github.com/shadps4-emu/shadps4-qtlauncher";
     mainProgram = "shadPS4QtLauncher";
   };
 })
