@@ -43,8 +43,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/${baseName} --version | grep -q "${version}"
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update.sh;
