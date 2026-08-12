@@ -31618,6 +31618,12 @@
     githubId = 145775305;
     name = "Sergei Zimmerman";
   };
+  Xophmeister = {
+    name = "Christopher Harrison";
+    github = "Xophmeister";
+    githubId = 384987;
+    email = "nixpkgs@acc.xoph.co";
+  };
   xosnrdev = {
     email = "hello@xosnrdev.tech";
     github = "xosnrdev";
