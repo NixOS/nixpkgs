@@ -43,13 +43,13 @@ writeShellScript "${pname}-update-script" ''
     asset=$(jq ".assets.\"$platform\".asset" --raw-output < $sources_json)
     release_asset_url="https://github.com/Virtuslab/scala-cli/releases/download/v$latest_version/$asset"
 
-    asset_hash=$(nix-prefetch-url "$release_asset_url")
+    asset_hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$release_asset_url")")
 
     asset_object=$(jq --compact-output --null-input \
       --arg asset "$asset" \
-      --arg sha256 "$asset_hash" \
+      --arg hash "$asset_hash" \
       --arg platform "$platform" \
-      '{asset: $asset, sha256: $sha256, platform: $platform}')
+      '{asset: $asset, hash: $hash, platform: $platform}')
     platform_assets+=($asset_object)
   done
 
