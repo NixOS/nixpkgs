@@ -16,6 +16,9 @@ buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
   version = "1.16.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
@@ -68,6 +71,19 @@ buildGoModule (finalAttrs: {
         "TestClientTLSWithCustomCACert"
         "TestECR"
         "TestManagerWithOPATelemetryUpdateLoop"
+
+        # tests observed to have `no space left on device` failures on darwin on hydra
+        # storage_internal_error:
+        #   cannot create memtable error:
+        #     newMemTable error:
+        #       While opening memtable: /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem error:
+        #         while opening file: /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem error:
+        #           truncate /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem: no space left on device
+        "TestBundleScope"
+        "TestDataV1"
+        "TestDataV1Metrics"
+        "TestDataMetricsEval"
+        "TestQueryV1"
       ]
       ++ lib.optionals (!enableWasmEval) [
         "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
@@ -84,11 +100,6 @@ buildGoModule (finalAttrs: {
       getGoDirs() {
         go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
       }
-    ''
-    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      rm v1/server/server_test.go
-      rm v1/server/server_bench_test.go
     '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
