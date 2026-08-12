@@ -5,7 +5,8 @@
   fetchurl,
   cmake,
   withQt ? true,
-  qt6, qt6Packages,
+  qt6, 
+  qt6Packages,
   withCurses ? false,
   ncurses,
 }:
