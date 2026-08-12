@@ -7,6 +7,7 @@
   jre,
   lib,
   zlib,
+  callPackage,
   runCommand,
 }:
 
@@ -67,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
+
     tests.help = runCommand "${pname}-help" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
       export HOME="$TMPDIR"
 
