@@ -3,6 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+
+  # full SMART attribute tables. Else, fallback to basic verified/failing flag from diskutil
+  withSmartmontools ? false,
+  smartmontools,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-MjRU/NDZIbxIXFiU6sdfPfvcszkmbVeDAC0rb+Sz/6s=";
 
   nativeCheckInputs = [ versionCheckHook ];
+
+  buildInputs = lib.optionals withSmartmontools [ smartmontools ];
 
   doInstallCheck = true;
 
