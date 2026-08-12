@@ -10,7 +10,6 @@
   callPackage,
   jre,
   testers,
-  scala-cli,
 }:
 
 let
@@ -20,7 +19,7 @@ let
 
   platforms = builtins.attrNames assets;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
   nativeBuildInputs = [
     installShellFiles
@@ -101,8 +100,8 @@ stdenv.mkDerivation {
     };
 
     tests.version = testers.testVersion {
-      package = scala-cli;
+      package = finalAttrs.finalPackage;
       command = "scala-cli version --offline";
     };
   };
-}
+})
