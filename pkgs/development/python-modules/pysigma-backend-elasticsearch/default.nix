@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-elasticsearch";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eSf0uhjhO1Bc63EBy505tTGASTNJ/mK0943vBXAT9As=";
+    hash = "sha256-47jvbbgCtsJC8q7rZVLyZNL77/fcwyQzBup9HVUNY8g=";
   };
 
   build-system = [ poetry-core ];
