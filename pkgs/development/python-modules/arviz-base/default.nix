@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  arviz,
   fetchFromGitHub,
 
   # build-system
@@ -24,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-base";
-  version = "1.2.0";
+  inherit (arviz) version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "arviz-devs";
     repo = "arviz-base";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IMS5t+ezAoALBxk0PnX7G+DFNfYW20Qd+/M2p1IzktA=";
+    hash = "sha256-viGjQrAeelzC7DBqMA4kltBllDAXJvymWdntOMYapEA=";
   };
 
   build-system = [
