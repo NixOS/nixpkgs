@@ -129,6 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${finalAttrs.version}";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.gonsolo ];
   };
 })
