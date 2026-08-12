@@ -38,8 +38,11 @@
   autoreconfHook269,
   bintools,
   # Build the shared runtime libraries, and so have the driver's specs emit
-  # `-lgcc_s`. Derived the way the monolithic build derives it.
-  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries,
+  # `-lgcc_s`. Derived the way the monolithic build derives it, including its
+  # exclusion of Cygwin: there the specs would also emit `-lgcc_eh`, and no
+  # stage of this package set produces one, so every C++ link performed while
+  # building the libc fails on a library that does not exist.
+  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries && !stdenv.targetPlatform.isCygwin,
 }:
 let
   inherit (stdenv) targetPlatform hostPlatform;
