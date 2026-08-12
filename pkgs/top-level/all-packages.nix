@@ -6078,9 +6078,6 @@ with pkgs;
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
-  libunique = callPackage ../development/libraries/libunique { };
-  libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
-
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
   libunwind =
@@ -7349,6 +7346,11 @@ with pkgs;
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
+
+  mdbook-rss-feed-full = mdbook-rss-feed.override {
+    withAtom = true;
+    withJsonFeed = true;
+  };
 
   micro-full = micro.wrapper.override {
     extraPackages = [

@@ -24169,6 +24169,12 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
+  rhousand = {
+    email = "rhousand@gmail.com";
+    github = "rhousand";
+    githubId = 6124540;
+    name = "Ryan Housand";
+  };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
     github = "RhydianJenkins";
@@ -26531,6 +26537,12 @@
     github = "sjau";
     githubId = 848812;
     name = "Stephan Jau";
+  };
+  sjcobb = {
+    email = "sjcobb2003@gmail.com";
+    github = "sjcobb2022";
+    githubId = 68509699;
+    name = "sjcobb";
   };
   sjfloat = {
     email = "steve+nixpkgs@jonescape.com";

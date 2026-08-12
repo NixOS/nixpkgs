@@ -13640,6 +13640,8 @@ self: super: with self; {
 
   pq = callPackage ../development/python-modules/pq { };
 
+  pqc-audit = callPackage ../development/python-modules/pqc-audit { };
+
   praat-parselmouth = callPackage ../development/python-modules/praat-parselmouth { };
 
   prana-api-client = callPackage ../development/python-modules/prana-api-client { };
@@ -15150,8 +15152,6 @@ self: super: with self; {
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
-
-  pymedio = callPackage ../development/python-modules/pymedio { };
 
   pymee = callPackage ../development/python-modules/pymee { };
 
