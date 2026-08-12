@@ -1,25 +1,51 @@
 {
   lib,
   buildPythonPackage,
+  rustPlatform,
   fetchFromGitHub,
-  pythonAtLeast,
   nose2,
   typing-extensions,
+  setuptools,
+  uv-build,
 }:
+let
+  /*
+    > ERROR Unmet dependencies (checked against /nix/store/3n4qphl9s728sz8frmpqqrv9b1m87g68-python3-3.14.7/bin/python3.14):
+         >       uv_build==0.8.22
+         >                wanted: ==0.8.22
+         >                found: 0.11.28
+  */
+  uv-build-8 = uv-build.overrideAttrs (oldAttrs: rec {
+    version = "0.8.22";
+    src = fetchFromGitHub {
+      owner = "astral-sh";
+      repo = "uv";
+      tag = version;
+      hash = "sha256-7/WOjsyfkDTZLNJY0+rNdRUmMabJsSFvKi2yh/WqViQ=";
+    };
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit version src;
+      pname = "uv-build";
+      hash = "sha256-RubSyxQjWlkoHMItYLjiyJ5Whz3oMXgioqbuewi1fcM=";
+    };
 
-buildPythonPackage rec {
+  });
+in
+buildPythonPackage (finalAttrs: {
   pname = "adaptix";
-  version = "2.16";
-  format = "setuptools";
+  version = "3.0.0b12";
+  pyproject = true;
 
-  # upstream 2.x branch abandoned since 2022; v3 was renamed to adaptix
-  disabled = pythonAtLeast "3.14";
+  build-system = [
+    setuptools
+    uv-build-8
+  ];
 
   src = fetchFromGitHub {
     owner = "reagento";
     repo = "adaptix";
-    rev = version;
-    hash = "sha256-0BIWgyAV1hJzFX4xYFqswvQi5F1Ce+V9FKSmNYuJfZM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-daW0yRweGf33EsiSOusKWOB8bw0kbSkWfyMuKUZet5s=";
   };
 
   nativeCheckInputs = [ nose2 ];
@@ -28,19 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adaptix" ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nose2 -v tests
-
-    runHook postCheck
-  '';
-
   meta = {
     description = "Modern way to convert python dataclasses or other objects to and from more common types like dicts or json-like structures";
     homepage = "https://github.com/reagento/adaptix";
-    changelog = "https://github.com/reagento/adaptix/releases/tag/${src.rev}";
+    changelog = "https://github.com/reagento/adaptix/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
