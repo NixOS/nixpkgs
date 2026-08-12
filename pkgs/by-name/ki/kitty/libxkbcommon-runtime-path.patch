@@ -1,0 +1,23 @@
+diff --git a/kitty/key_names.py b/kitty/key_names.py
+index 1c4ce3487..00d767d45 100644
+--- a/kitty/key_names.py
++++ b/kitty/key_names.py
+@@ -59,17 +59,7 @@ if is_macos:
+ else:
+     def load_libxkb_lookup() -> LookupFunc:
+         import ctypes
+-        for suffix in ('.0', ''):
+-            with suppress(Exception):
+-                lib = ctypes.CDLL(f'libxkbcommon.so{suffix}')
+-                break
+-        else:
+-            from ctypes.util import find_library
+-            lname = find_library('xkbcommon')
+-            if lname is None:
+-                raise RuntimeError('Failed to find libxkbcommon')
+-            lib = ctypes.CDLL(lname)
+-
++        lib = ctypes.CDLL('@libxkbcommon@')
+         f = lib.xkb_keysym_from_name
+         f.argtypes = [ctypes.c_char_p, ctypes.c_int]
+         f.restype = ctypes.c_int
