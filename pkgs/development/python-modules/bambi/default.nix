@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-2BLbvdVN+wkmP2NCGaBoJO10hbBXUJ1/Q7bjRN4idWM=";
+    hash = "sha256-eTqqcVP+ucQ2Sv9mTyMOUdmYYX0pkrsH76DGQKPGO0k=";
   };
 
   build-system = [
@@ -93,27 +93,32 @@ buildPythonPackage (finalAttrs: {
 
     # Tests require network access
     "test_alias_equal_to_name"
-    "test_exclusion"
-    "test_inplace_false"
     "test_average_by"
     "test_ax"
     "test_basic"
+    "test_categorical_and_interactions"
     "test_censored_response"
     "test_custom_prior"
     "test_data_is_copied"
     "test_distributional_model"
     "test_elasticity"
+    "test_exclusion"
     "test_extra_namespace"
     "test_fig_kwargs"
     "test_gamma_with_splines"
     "test_group_effects"
     "test_hdi_prob"
+    "test_inplace_false"
     "test_legend"
     "test_model_with_group_specific_effects"
     "test_model_with_intercept"
     "test_model_without_intercept"
+    "test_no_offsets_when_centered_parametrization"
     "test_non_distributional_model"
     "test_normal_with_splines"
+    "test_offsets_match_sampled_offsets"
+    "test_offsets_reconstructed_with_sigma_alias"
+    "test_offsets_reconstructed_without_centering"
     "test_predict_new_groups"
     "test_predict_new_groups_fail"
     "test_predict_offset"
