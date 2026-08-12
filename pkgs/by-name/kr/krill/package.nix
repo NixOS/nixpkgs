@@ -5,20 +5,23 @@
   openssl,
   pkg-config,
   stdenv,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
-  version = "0.15.1";
+  version = "0.16.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "krill";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Egy/knMiu+Pglx4v62lPZ87daRKida8W05qu+5yGt1g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j3O+8uEE0kYdNvnhTUWt0idN/hLzuDmp62DUjcdyACo=";
   };
 
-  cargoHash = "sha256-2wbMcI+zS8e9DfVvVAOHxyuHKWFCls57yt8QRw8JJq0=";
+  cargoHash = "sha256-Cgj2Ooo4W0GeNrLuFcFiDn7dxKpYRyFgGK0Bvs7PDnM=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -29,7 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # disable failing tests on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   meta = {
+    mainProgram = "krillc";
     description = "RPKI Certificate Authority and Publication Server written in Rust";
     longDescription = ''
       Krill is a free, open source RPKI Certificate Authority that lets you run
@@ -40,6 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/NLnetLabs/krill";
     changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ steamwalker ];
+    maintainers = with lib.maintainers; [
+      steamwalker
+      stepbrobd
+    ];
+    teams = [ lib.teams.ngi ];
   };
 })
