@@ -129,6 +129,7 @@ buildFHSEnv (finalAttrs: {
 
     progs_to_wrap=(
       "${unwrapped}"/quartus/bin/*
+      "${unwrapped}"/niosv/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
       "${unwrapped}"/questa_fse/bin/*
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
