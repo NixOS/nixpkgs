@@ -15,7 +15,7 @@
   SDL2_mixer,
   SDL2_net,
   SDL2_ttf,
-  ffmpeg_8,
+  ffmpeg,
   sqlite,
   zlib,
   libx11,
@@ -39,7 +39,7 @@ let
     libx11
     libGLU
     libGL
-    ffmpeg_8
+    ffmpeg
   ];
 
 in
