@@ -11,6 +11,7 @@ import nixos_rebuild.services as s
 from .helpers import get_qualified_name
 
 
+@patch.object(s, "USE_NOM", False)
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)
 @patch(get_qualified_name(n.nix.run_wrapper, n.nix), autospec=True)
@@ -39,6 +40,7 @@ def test_reexec(
                 s.NIXOS_REBUILD_ATTR,
                 n.models.BuildAttr(ANY, ANY),
                 {"build": True, "no_out_link": True},
+                use_nom=False,
             )
         ]
     )
@@ -67,6 +69,7 @@ def test_reexec(
     )
 
 
+@patch.object(s, "USE_NOM", False)
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)
 @patch(get_qualified_name(s.nix.build_flake), autospec=True)
@@ -90,6 +93,7 @@ def test_reexec_flake(
         s.NIXOS_REBUILD_ATTR,
         n.models.Flake(ANY, ANY),
         {"flake_build": True, "flake_eval": True, "no_link": True},
+        use_nom=False,
     )
     # do not exec if there is no new version
     mock_execve.assert_not_called()

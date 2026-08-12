@@ -1,66 +1,16 @@
-{ hostPkgs, ... }:
+{ mkConfigFile, ... }:
 {
   name = "nixos-rebuild-store-path";
 
-  # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
-  #        make it a _small package instead, then remove pkgsReadOnly = false;.
-  node.pkgsReadOnly = false;
-
-  nodes = {
-    machine =
-      { lib, pkgs, ... }:
-      {
-        imports = [
-          ../modules/profiles/installation-device.nix
-          ../modules/profiles/base.nix
-        ];
-
-        nix.settings = {
-          substituters = lib.mkForce [ ];
-          hashed-mirrors = null;
-          connect-timeout = 1;
-        };
-
-        system.includeBuildDependencies = true;
-
-        system.extraDependencies = [
-          # Not part of the initial build apparently?
-          pkgs.grub2
-        ];
-
-        system.switch.enable = true;
-
-        virtualisation = {
-          cores = 2;
-          memorySize = 4096;
-        };
-      };
-  };
+  imports = [ ./common.nix ];
 
   testScript =
     let
       configFile =
         hostname:
-        hostPkgs.writeText "configuration.nix" # nix
-          ''
-            { lib, pkgs, ... }: {
-              imports = [
-                ./hardware-configuration.nix
-                <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-              ];
-
-              boot.loader.grub = {
-                enable = true;
-                device = "/dev/vda";
-                forceInstall = true;
-              };
-
-              documentation.enable = false;
-
-              networking.hostName = "${hostname}";
-            }
-          '';
-
+        mkConfigFile ''
+          networking.hostName = "${hostname}";
+        '';
     in
     # python
     ''

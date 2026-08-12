@@ -391,6 +391,14 @@ NIXOS_REBUILD_NO_SYSTEMD_RUN
 	If set, then *nixos-rebuild* will run without the
 	_systemd-run_ wrapper.
 
+NIXOS_REBUILD_USE_NOM
+	Enables using *nix-output-monitor* (i.e.: *nom*) to display local
+	builds, overriding the build-time default (the _useNom_ package flag).
+	Setting it to an empty value or ‘0’ disables it instead. Even when
+	enabled, *nom* is only used when it is available in PATH and stderr is
+	a terminal; otherwise plain Nix is used. Builds on a *--build-host*
+	are unaffected.
+
 # FILES
 
 /etc/nixos/system.nix

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Final
 
 from . import nix, tmpdir
-from .constants import EXECUTABLE
+from .constants import EXECUTABLE, USE_NOM
 from .models import (
     Action,
     BuildAttr,
@@ -42,6 +42,7 @@ def reexec(
             grouped_nix_args.flake_build_flags
             | grouped_nix_args.flake_eval_flags
             | {"no_link": True},
+            use_nom=USE_NOM,
         )
     else:
         build_attr = BuildAttr.from_arg(args.attr, args.file)
@@ -49,6 +50,7 @@ def reexec(
             NIXOS_REBUILD_ATTR,
             build_attr,
             grouped_nix_args.build_flags | {"no_out_link": True},
+            use_nom=USE_NOM,
         )
 
     if drv:
@@ -151,6 +153,7 @@ def _build_system(
     flake: Flake | None,
     build_attr: BuildAttr,
     grouped_nix_args: GroupedNixArgs,
+    use_nom: bool,
 ) -> Path:
     dry_run = action == Action.DRY_BUILD
     # actions that we will not add a /result symlink in CWD
@@ -175,6 +178,7 @@ def _build_system(
                 flake_build_flags={"no_link": no_link, "dry_run": dry_run}
                 | grouped_nix_args.flake_build_flags
                 | grouped_nix_args.flake_eval_flags,
+                use_nom=use_nom,
             )
         case (Remote(_), None):
             path_to_config = nix.build_remote(
@@ -191,6 +195,7 @@ def _build_system(
                 build_attr,
                 build_flags={"no_out_link": no_link, "dry_run": dry_run}
                 | grouped_nix_args.build_flags,
+                use_nom=use_nom,
             )
 
     # In dry_run mode there is nothing to copy
@@ -318,6 +323,7 @@ def build_and_activate_system(
             flake=flake,
             build_attr=build_attr,
             grouped_nix_args=grouped_nix_args,
+            use_nom=USE_NOM,
         )
 
     if target_host is not None and not args.rollback:

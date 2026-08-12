@@ -1198,13 +1198,16 @@ in
     "x86_64-linux"
   ] ./nixos-rebuild-install-bootloader.nix { };
   nixos-rebuild-specialisations = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./nixos-rebuild-specialisations.nix ];
+    imports = [ ./nixos-rebuild/specialisations.nix ];
   };
   nixos-rebuild-store-path = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./nixos-rebuild-store-path.nix ];
+    imports = [ ./nixos-rebuild/store-path.nix ];
   };
   nixos-rebuild-target-host = runTest {
-    imports = [ ./nixos-rebuild-target-host.nix ];
+    imports = [ ./nixos-rebuild/target-host.nix ];
+  };
+  nixos-rebuild-use-nom = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./nixos-rebuild/use-nom.nix ];
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
