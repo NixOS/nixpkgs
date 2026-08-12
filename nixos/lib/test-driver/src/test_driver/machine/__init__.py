@@ -972,7 +972,7 @@ class QemuMachine(BaseMachine):
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
-        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
+        self.log(self.get_tty_text(tty))
 
     def _execute(
         self,
