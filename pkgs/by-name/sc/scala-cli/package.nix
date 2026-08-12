@@ -76,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       installShellCompletion --cmd scala-cli \
         --bash <(scala-cli completions bash) \
-        --zsh <(scala-cli completions zsh)
+        --zsh <(scala-cli completions zsh) \
+        --fish <(scala-cli completions fish)
     '';
 
   meta = {
