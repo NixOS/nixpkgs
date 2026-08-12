@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "shopify";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-iSXONoEcnLvaEGRzsXhyogjOw3jiQ5+JqDyKgplL9zg=";
+    hash = "sha256-c+fp/ml5x4CLmpkTxAZrB/zqaDWuG3cgrjNdmuvHdKY=";
   };
 
   pnpmDeps = fetchPnpmDeps {

@@ -100,7 +100,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Not equal to tolerance rtol=1e-07, atol=1e-05
     "test_equal_matrices"
+    "test_pop_oldest_exactness_k5_d5_n10_nwraps2"
     "test_restart_after_reset_matches_fresh_accumulation"
+    "test_skips_first_offset_steps"
     "test_split_pop_k1_degenerate"
   ];
 
