@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/apognu/tuigreet/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+      NotAShelf
       antoineco
     ];
     platforms = lib.platforms.linux;
