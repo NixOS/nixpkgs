@@ -6,7 +6,7 @@
   wheel,
   aiofiles,
   aiohttp,
-  dataclass-factory,
+  adaptix,
   numpy,
   pydantic,
   pydub,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiofiles
     aiohttp
-    dataclass-factory
+    adaptix
     numpy
     pydantic
     pydub
