@@ -12190,6 +12190,8 @@ self: super: with self; {
 
   numba = callPackage ../development/python-modules/numba { inherit (pkgs.config) cudaSupport; };
 
+  numba-cuda = callPackage ../development/python-modules/numba-cuda { };
+
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
   numbaWithCuda = self.numba.override { cudaSupport = true; };
