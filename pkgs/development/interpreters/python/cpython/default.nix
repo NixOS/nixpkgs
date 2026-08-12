@@ -835,6 +835,9 @@ stdenv.mkDerivation (finalAttrs: {
         sphinxHook
         python-docs-theme
       ];
+
+      strictDeps = true;
+      __structuredAttrs = true;
     };
 
     tests = passthru.tests // {
