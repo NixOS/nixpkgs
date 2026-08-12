@@ -127,31 +127,27 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
     (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "MACOS_USE_DEPENDENCIES" false)
     (lib.cmakeBool "MACOS_BUNDLE" true)
   ];
 
   postUnpack = ''
-    mkdir -p $sourceRoot/data/{object,sequence}
-    unzip -o ${finalAttrs.passthru.assets.objects} -d $sourceRoot/data/object
-    unzip -o ${finalAttrs.passthru.assets.openmusic} -d $sourceRoot/data
-    unzip -o ${finalAttrs.passthru.assets.opensfx} -d $sourceRoot/data
-    unzip -o ${finalAttrs.passthru.assets.title-sequences} -d $sourceRoot/data/sequence
+    export OPENRCT2_ASSETS_DIR=$sourceRoot/${if stdenv.hostPlatform.isDarwin then "build" else "data"}
+    mkdir -p $OPENRCT2_ASSETS_DIR/{object,sequence}
+    unzip -o ${finalAttrs.passthru.assets.objects} -d $OPENRCT2_ASSETS_DIR/object
+    unzip -o ${finalAttrs.passthru.assets.openmusic} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.passthru.assets.opensfx} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.passthru.assets.title-sequences} -d $OPENRCT2_ASSETS_DIR/sequence
   ''
-  + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $sourceRoot/build/object $sourceRoot/build/sequence
-    unzip -o ${finalAttrs.passthru.assets.objects} -d $sourceRoot/build/object
-    unzip -o ${finalAttrs.passthru.assets.title-sequences} -d $sourceRoot/build/sequence
-    unzip -o ${finalAttrs.passthru.assets.opensfx} -d $sourceRoot/build
-    unzip -o ${finalAttrs.passthru.assets.openmusic} -d $sourceRoot/build
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     printf '%s' "${finalAttrs.passthru.assets.objects.url}" > $sourceRoot/build/object/objects.zip.zipversion
     printf '%s' "${finalAttrs.passthru.assets.title-sequences.url}" > $sourceRoot/build/sequence/title-sequences.zip.zipversion
     printf '%s' "${finalAttrs.passthru.assets.opensfx.url}" > $sourceRoot/build/opensound.zip.zipversion
     printf '%s' "${finalAttrs.passthru.assets.openmusic.url}" > $sourceRoot/build/openmusic.zip.zipversion
   '';
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # MACOS_BUNDLE (to build a .APP) is tied to MACOS_USE_DEPENDENCIES by default.
     # Decouple the two variables so that we can use resources downloaded from Nix.
     sed -i \
@@ -162,9 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Clang 21 on Nixpkgs will provide a broken Foundation module, as of now.
     # The Apple Obj-C modules requested are not explicitly required, so drop them.
-    sed -i 's/-x objective-c++ -fmodules/-x objective-c++/' \
-      src/openrct2/CMakeLists.txt \
-      src/openrct2-ui/CMakeLists.txt
+    substituteInPlace src/{openrct2,openrct2-ui}/CmakeLists.txt \
+        --replace-fail '-x objective-c++ -fmodules' \
+                       '-x objective-c++'
 
     # `fixup_bundle` will inherit mismatched dependencies relative to compilation.
     # Hence, disable `fixup_bundle` for Darwin builds.
@@ -203,9 +199,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
-    mkdir -p $out/Applications $out/bin $out/share
+    mkdir -p $out/{Applications,bin,share}
     cp -R OpenRCT2.app $out/Applications/
     makeBinaryWrapper $out/Applications/OpenRCT2.app/Contents/MacOS/openrct2 $out/bin/openrct2
     cp openrct2-cli $out/bin/openrct2-cli
@@ -213,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapProgram $out/bin/openrct2 \
       ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
       ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
