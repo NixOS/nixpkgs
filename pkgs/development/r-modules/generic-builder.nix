@@ -14,6 +14,7 @@ attrs:
 stdenv.mkDerivation (
   finalAttrs:
   {
+    __structuredAttrs = true;
     strictDeps = true;
 
     name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
@@ -91,7 +92,7 @@ stdenv.mkDerivation (
     installPhase = ''
       runHook preInstall
       mkdir -p $out/library
-      $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' $installFlags --configure-args="$configureFlags" -l $out/library .
+      $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' ''${installFlags[@]} --configure-args="''${configureFlags[@]}" -l $out/library .
       runHook postInstall
     '';
 
