@@ -426,6 +426,7 @@ with pkgs;
     ;
 
   buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
+  buildJellyfinPlugin = callPackage ../build-support/jellyfin/build-jellyfin-plugin { };
   fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
