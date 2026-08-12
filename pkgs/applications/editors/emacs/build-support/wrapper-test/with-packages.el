@@ -122,15 +122,17 @@ Return test result, a list of values.  Each is non-nil if the test passes."
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
-  ;; Give Emacs some time to generate JIT native-comp results.
-  (sleep-for 2.5)
-  (list (not (cl-loop for buffer being each buffer
-                      thereis (string= (buffer-name buffer)
-                                       "*Async-native-compile-log*")))
-        (let ((eln-dir (car native-comp-eln-load-path)))
-          (or (directory-empty-p eln-dir)
-              (and (not (file-exists-p eln-dir))
-                   (file-exists-p (file-name-parent-directory eln-dir)))))))
+  (if (not (native-comp-available-p))
+      (list t)
+    ;; Give Emacs some time to generate JIT native-comp results.
+    (sleep-for 2.5)
+    (list (not (cl-loop for buffer being each buffer
+                        thereis (string= (buffer-name buffer)
+                                         "*Async-native-compile-log*")))
+          (let ((eln-dir (car native-comp-eln-load-path)))
+            (or (directory-empty-p eln-dir)
+                (and (not (file-exists-p eln-dir))
+                     (file-exists-p (file-name-parent-directory eln-dir))))))))
 
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded
