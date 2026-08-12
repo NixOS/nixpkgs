@@ -7129,6 +7129,12 @@
     githubId = 15774340;
     name = "Thomas Depierre";
   };
+  dibenzepin = {
+    name = "Fumnanya";
+    email = "fmowete@outlook.com";
+    github = "dibenzepin";
+    githubId = 87488715;
+  };
   DictXiong = {
     email = "me@beardic.cn";
     github = "DictXiong";
@@ -22812,12 +22818,6 @@
     github = "pongo1231";
     githubId = 4201956;
     name = "pongo1231";
-  };
-  poopsicles = {
-    name = "Fumnanya";
-    email = "fmowete@outlook.com";
-    github = "dibenzepin";
-    githubId = 87488715;
   };
   PopeRigby = {
     name = "PopeRigby";
