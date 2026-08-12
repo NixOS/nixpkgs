@@ -1,0 +1,22 @@
+--- a/build/fbcode_builder/CMake/FindLibUnwind.cmake
++++ b/build/fbcode_builder/CMake/FindLibUnwind.cmake
+@@ -18,12 +18,18 @@ mark_as_advanced(LIBUNWIND_INCLUDE_DIR)
+ find_library(LIBUNWIND_LIBRARY NAMES unwind)
+ mark_as_advanced(LIBUNWIND_LIBRARY)
+ 
++# Awkward hack to attach liblzma dependency to libunwind
++if (NOT LIBLZMA_LIBRARIES)
++  find_library(LIBLZMA_LIBRARIES NAMES lzma)
++  mark_as_advanced(LIBLZMA_LIBRARIES)
++endif ()
++
+ include(FindPackageHandleStandardArgs)
+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(
+   LIBUNWIND
+   REQUIRED_VARS LIBUNWIND_LIBRARY LIBUNWIND_INCLUDE_DIR)
+ 
+ if(LIBUNWIND_FOUND)
+-  set(LIBUNWIND_LIBRARIES ${LIBUNWIND_LIBRARY})
++  set(LIBUNWIND_LIBRARIES ${LIBUNWIND_LIBRARY} ${LIBLZMA_LIBRARIES})
+   set(LIBUNWIND_INCLUDE_DIRS ${LIBUNWIND_INCLUDE_DIR})
+ endif()

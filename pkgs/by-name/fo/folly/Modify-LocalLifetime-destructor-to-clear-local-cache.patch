@@ -1,0 +1,32 @@
+From f09ac09e7f5e097e4bbc1d8af3c17d581ef0ee4c Mon Sep 17 00:00:00 2001
+From: Henri Menke <henri@henrimenke.de>
+Date: Fri, 10 Jul 2026 14:57:15 +0200
+Subject: [PATCH] Modify LocalLifetime destructor to clear local cache
+
+`destroy(getWrapper())` re-enters `ThreadLocalPtr::get()` while TLS destructors
+are already running. This crashes sometimes, see e.g. #2002. Instead avoid
+re-entering `ThreadLocal` in the TLS destructor and only clears the local
+fast-path cache `getLocalCache().object = nullptr`, which is sufficient to
+prevent stale reuse.
+
+Signed-off-by: Henri Menke <henri@henrimenke.de>
+---
+ folly/SingletonThreadLocal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/folly/SingletonThreadLocal.h b/folly/SingletonThreadLocal.h
+index c71f87c3b..5249812ad 100644
+--- a/folly/SingletonThreadLocal.h
++++ b/folly/SingletonThreadLocal.h
+@@ -126,7 +126,7 @@ class SingletonThreadLocal {
+   using WrapperTL = ThreadLocal<Wrapper, TLTag>;
+ 
+   struct LocalLifetime : State::LocalLifetime {
+-    ~LocalLifetime() { destroy(getWrapper()); }
++    ~LocalLifetime() { getLocalCache().object = nullptr; }
+   };
+ 
+   SingletonThreadLocal() = delete;
+-- 
+2.55.0
+
