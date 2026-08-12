@@ -3,6 +3,7 @@
   buildGoModule,
   copyDesktopItems,
   fetchFromGitHub,
+  fetchpatch2,
   makeDesktopItem,
   testers,
 }:
@@ -21,6 +22,14 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = null;
+
+  patches = [
+    (fetchpatch2 {
+      name = "protect-local-server-from-cross-origin-requests.patch";
+      url = "https://github.com/tiagohierath/pictogrep/commit/24170e8921b6422b0b287edfea19df0c5bec105f.patch?full_index=1";
+      hash = "sha256-3oA5MNPLuOaFJ43a+jzQ6qE0oT1cy1PoyJJi41iEhfo=";
+    })
+  ];
 
   ldflags = [
     "-s"
@@ -62,7 +71,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Find local pictures using natural-language descriptions";
-    homepage = "https://github.com/tiagohierath/pictogrep";
+    homepage = "https://navylily.tv/pictogrep";
     changelog = "https://github.com/tiagohierath/pictogrep/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tiagohierath ];
