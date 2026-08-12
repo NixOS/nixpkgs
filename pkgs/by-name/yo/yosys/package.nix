@@ -155,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       shell
       thoughtpolice
       Luflosi
+      gonsolo
     ];
   };
 })
