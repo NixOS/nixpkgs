@@ -16,9 +16,6 @@
   nix-update-script,
 }:
 
-let
-  libfm' = libfm.override { withGtk3 = true; };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanfm";
   version = "1.4.0";
@@ -40,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libfm'
+    libfm
     libx11
     pango
     adwaita-icon-theme
