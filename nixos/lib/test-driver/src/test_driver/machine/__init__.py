@@ -943,10 +943,11 @@ class QemuMachine(BaseMachine):
         """
         Get the output printed to a given TTY.
         """
-        status, output = self.execute(
-            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
-        )
-        return output
+        _, size = self.execute(f"stty -F /dev/tty{tty} size")
+        cols = int(size.split()[1])
+        _, b64 = self.execute(f"base64 -w0 /dev/vcsu{tty}")
+        text = base64.b64decode(b64).decode("utf-32-le")
+        return "\n".join(text[i : i + cols] for i in range(0, len(text), cols))
 
     def wait_until_tty_matches(
         self, tty: str, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
