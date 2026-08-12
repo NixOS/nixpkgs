@@ -1148,21 +1148,12 @@ runBuildTests {
         import re
         import a.b.c
 
-        attrs = {
-            "conditional": 1 if True else 2,
-            "foo": None,
-        }
+        attrs = {"conditional": 1 if True else 2, "foo": None}
         bool = True
         float = 3.141
-        func = re.findall(r"\bf[a-z]*", "which foot or hand fell fastest")
+        func = re.findall("\\bf[a-z]*", "which foot or hand fell fastest")
         int = 10
-        list = [
-            None,
-            1,
-            "str",
-            True,
-            1 if True else 2,
-        ]
+        list = [None, 1, "str", True, 1 if True else 2]
         null = None
         str = "foo"
         str_special = "foo\ntesthello''''"
