@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuigreet";
   version = "0.11.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tuigreet";
     repo = "tuigreet";
