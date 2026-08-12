@@ -16,6 +16,10 @@ let
     inherit openjfx_jdk;
   };
 
+  # Wrapper class to bypass "JavaFX runtime components are missing" error
+  # which occurs when the main entrypoint class directly extends Application.
+  # This fix was mentioned in https://www.reddit.com/r/JavaFX/comments/k7aa9q/javafx_error_error_javafx_runtime_components_are
+
   launcherSrc = builtins.toFile "Launcher.java" ''
     public class Launcher {
         public static void main(String[] args) {
@@ -62,6 +66,14 @@ stdenvNoCC.mkDerivation rec {
     install -D Minion-jfx.jar "$out/share/minion/Minion-jfx.jar"
     cp -r ./lib "$out/share/minion/"
 
+    runHook postInstall
+  '';
+
+  # gappsWrapperArgs is populated during fixupPhase, so makeWrapper must run in preFixup.
+  # Reference: https://ryantm.github.io/nixpkgs/languages-frameworks/gnome/
+  # JFX_NATIVE prevents "Graphics Device initialization failed" errors.
+
+  preFixup = ''
     JFX_MODULES="${openjfx_jdk}/modules/javafx.base:${openjfx_jdk}/modules/javafx.controls:${openjfx_jdk}/modules/javafx.graphics:${openjfx_jdk}/modules/javafx.fxml:${openjfx_jdk}/modules/javafx.web:${openjfx_jdk}/modules/javafx.media:${openjfx_jdk}/modules/javafx.swing"
     JFX_NATIVE="${openjfx_jdk}/modules_libs/javafx.graphics:${openjfx_jdk}/modules_libs/javafx.web:${openjfx_jdk}/modules_libs/javafx.media"
 
@@ -74,8 +86,6 @@ stdenvNoCC.mkDerivation rec {
       --add-flags "--add-exports=javafx.graphics/javafx.scene.image=ALL-UNNAMED" \
       --add-flags "--add-opens=javafx.graphics/javafx.scene.image=ALL-UNNAMED" \
       --add-flags "Launcher"
-
-    runHook postInstall
   '';
 
   desktopItems = [
