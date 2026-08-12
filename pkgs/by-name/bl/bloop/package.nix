@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
       "x86_64-pc-linux"
-    else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-      "x86_64-apple-darwin"
     else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
       "aarch64-apple-darwin"
     else
@@ -43,8 +41,6 @@ stdenv.mkDerivation rec {
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
         "sha256-F5wRihAwf/TNBSYortTCoK9qKqTI+1N5InJ+rqLFp8A="
-      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        "sha256-wQXAldzU6Typ6pZB8k3dfX7g+aaVF7jXvd0pnuk5gZU="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
         "sha256-OrONKbC2l0jjfmguDmoiyEaJWdTrKBiP0ZEa5rhizDM="
       else
