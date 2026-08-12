@@ -4932,27 +4932,49 @@ with pkgs;
   # You can use a different directory, but whichever directory you choose
   # should be owned by user root, group nixbld with permissions 0770.
   ccacheWrapper =
-    makeOverridable
-      (
-        { extraConfig, cc }:
-        cc.override {
-          cc = ccache.links {
-            inherit extraConfig;
-            unwrappedCC = cc.cc;
+    let
+      makeCcacheWrapper =
+        args@{ extraConfig, cc }:
+        let
+          wrapper = cc.override {
+            cc = ccache.links {
+              inherit extraConfig;
+              unwrappedCC = cc.cc;
+            };
           };
-        }
-      )
-      {
-        extraConfig = "";
-        inherit (stdenv) cc;
-      };
+        in
+        wrapper
+        // {
+          override =
+            newArgs:
+            let
+              evaluatedArgs = if builtins.isFunction newArgs then newArgs (wrapper // args) else newArgs;
+            in
+            if evaluatedArgs ? extraConfig then
+              let
+                ccacheArgs = builtins.intersectAttrs { extraConfig = null; } evaluatedArgs;
+                wrapperArgs = removeAttrs evaluatedArgs [ "extraConfig" ];
+                ccacheWrapper = makeCcacheWrapper (args // ccacheArgs);
+              in
+              if wrapperArgs == { } then ccacheWrapper else ccacheWrapper.override wrapperArgs
+            else
+              wrapper.override evaluatedArgs;
+          overrideCcache =
+            newArgs:
+            makeCcacheWrapper (args // (if builtins.isFunction newArgs then newArgs args else newArgs));
+        };
+    in
+    makeCcacheWrapper {
+      extraConfig = "";
+      inherit (stdenv) cc;
+    };
 
-  ccacheStdenv = lowPrio (
-    makeOverridable
-      (
+  ccacheStdenv =
+    let
+      makeCcacheStdenv =
         { stdenv, ... }@extraArgs:
         overrideCC stdenv (
-          buildPackages.ccacheWrapper.override (
+          buildPackages.ccacheWrapper.overrideCcache (
             {
               inherit (stdenv) cc;
             }
@@ -4960,12 +4982,43 @@ with pkgs;
               extraConfig = extraArgs.extraConfig;
             }
           )
-        )
-      )
-      {
-        inherit stdenv;
-      }
-  );
+        );
+
+      makeOverridableCcacheStdenv =
+        args:
+        let
+          ccacheStdenv' = lowPrio (makeCcacheStdenv args);
+        in
+        ccacheStdenv'
+        // {
+          override =
+            newArgs:
+            let
+              evaluatedArgs = if builtins.isFunction newArgs then newArgs (ccacheStdenv' // args) else newArgs;
+            in
+            if evaluatedArgs ? extraConfig || evaluatedArgs ? stdenv then
+              let
+                ccacheArgs = builtins.intersectAttrs {
+                  extraConfig = null;
+                  stdenv = null;
+                } evaluatedArgs;
+                stdenvArgs = removeAttrs evaluatedArgs [
+                  "extraConfig"
+                  "stdenv"
+                ];
+                ccacheStdenv = makeOverridableCcacheStdenv (args // ccacheArgs);
+              in
+              if stdenvArgs == { } then ccacheStdenv else ccacheStdenv.override stdenvArgs
+            else
+              ccacheStdenv'.override evaluatedArgs;
+          overrideCcache =
+            newArgs:
+            makeOverridableCcacheStdenv (
+              args // (if builtins.isFunction newArgs then newArgs args else newArgs)
+            );
+        };
+    in
+    makeOverridableCcacheStdenv { inherit stdenv; };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
