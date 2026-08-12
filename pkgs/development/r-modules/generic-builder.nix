@@ -14,12 +14,14 @@ attrs:
 stdenv.mkDerivation (
   finalAttrs:
   {
+    strictDeps = true;
+
     name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
 
     requireX = false;
 
-    buildInputs =
-      (attrs.buildInputs or [ ])
+    nativeBuildInputs =
+      (attrs.nativeBuildInputs or [ ])
       ++ [
         R
         gettext
@@ -27,6 +29,16 @@ stdenv.mkDerivation (
       ++ lib.optionals finalAttrs.requireX [
         util-linux
         xvfb-run
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        gfortran
+      ];
+
+    buildInputs =
+      (attrs.buildInputs or [ ])
+      ++ [
+        R
+        gettext
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         gfortran
@@ -94,6 +106,7 @@ stdenv.mkDerivation (
     # list of attrs that have custom logic for combining the default and the passed values
     # if not listed, the passed value will override the default value
     "name"
+    "nativeBuildInputs"
     "buildInputs"
     "env"
     "installFlags"
