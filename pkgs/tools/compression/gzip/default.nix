@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ runtimeShellPackage ];
 
+  strictDeps = true;
+
   makeFlags = [
     "SHELL=/bin/sh"
     "GREP=grep"
@@ -86,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
