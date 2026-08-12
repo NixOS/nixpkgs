@@ -1,0 +1,21 @@
+From 16fcf2b986f3e6a56152a94e8079aebe626f4fcb Mon Sep 17 00:00:00 2001
+From: Daniel Woffinden <daw@hey.com>
+Date: Wed, 12 Aug 2026 16:13:09 +0100
+Subject: [PATCH] use poetry-core
+
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 852ee34..846a848 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -41,5 +41,5 @@ pytest-cov = "*"
+ ruff = "*"
+ 
+ [build-system]
+-requires = ["poetry>=0.12"]
+-build-backend = "poetry.masonry.api"
++requires = ["poetry-core"]
++build-backend = "poetry.core.masonry.api"
