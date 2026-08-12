@@ -95,13 +95,38 @@ let
     featureFlags.minimalModules = { };
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+
+  /**
+    On platforms where NixOS does not run natively, nixosTests is still available
+    as a convenience for running VM tests. This makes them easier to use, and it
+    sidesteps the question of nested virtualisation.
+
+    `runTest` already includes similar logic as part of its [public] interface.
+
+    [public]: https://nixos.org/manual/nixos/stable/#sec-call-nixos-test-outside-nixos
+  */
+  guestPkgs =
+    if pkgs.stdenv.hostPlatform.isLinux then
+      pkgs
+    else
+      let
+        hostToGuest.aarch64-darwin = "aarch64-linux";
+        guestSystem =
+          hostToGuest.${pkgs.stdenv.hostPlatform.system}
+            or (throw "NixOS tests: don't know which Linux guest system to pair with host system ${pkgs.stdenv.hostPlatform.system}.");
+      in
+      import ../.. {
+        system = guestSystem;
+        inherit (pkgs) config overlays;
+      };
+
   evalSystem =
     module:
     import ../lib/eval-config.nix {
       system = null;
       modules = [
         ../modules/misc/nixpkgs/read-only.nix
-        { nixpkgs.pkgs = pkgs; }
+        { nixpkgs.pkgs = guestPkgs; }
         module
       ];
     };
@@ -563,7 +588,7 @@ in
     inherit runTest;
   };
   esphome = runTest ./esphome.nix;
-  etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
+  etc = guestPkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   etcd = import ./etcd/default.nix { inherit pkgs runTest; };
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
@@ -1055,7 +1080,7 @@ in
   mobilizon = runTest ./mobilizon.nix;
   mod_perl = runTest ./mod_perl.nix;
   modular-service-etc = runTest ./modular-service-etc/test.nix;
-  modularService = pkgs.callPackage ../modules/system/service/systemd/test.nix {
+  modularService = guestPkgs.callPackage ../modules/system/service/systemd/test.nix {
     inherit evalSystem;
   };
   molly-brown = runTest ./molly-brown.nix;
@@ -1653,11 +1678,11 @@ in
   system-services-compliance = recurseIntoAttrs (
     import ./system-services-compliance.nix {
       inherit
-        pkgs
         evalSystem
         runTest
         callTest
         ;
+      pkgs = guestPkgs;
     }
   );
   systemd = runTest ./systemd.nix;
