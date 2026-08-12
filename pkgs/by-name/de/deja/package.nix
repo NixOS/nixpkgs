@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "deja";
-  version = "0.4.0";
+  version = "0.4.1";
   __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "Giammarco-Ferranti";
     repo = "deja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SAn/9OM5ivUkJpiBXgV2o01ww85xRo3fQKZp0spwe/w=";
+    hash = "sha256-NDTiesARUyZJQGm+ePZQgofkZYFe/07ztQQcruIkXuE=";
   };
 
-  vendorHash = "sha256-KmLdMK94cGOXMPJwWS6NgLB5OiNmJbszHdnLzauqJm8=";
+  vendorHash = "sha256-XHcZUtx82zT3yPCYzJG+a7zfARPW4clbMn77/4luskw=";
 
   ldflags = [
     "-s"
