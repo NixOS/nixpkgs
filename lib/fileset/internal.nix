@@ -359,11 +359,10 @@ rec {
       recurse =
         path: tree:
         let
-          entries = _directoryEntries path tree;
           normalisedSubtrees = mapAttrs (
             name: subtree:
             if subtree == "directory" || isAttrs subtree then recurse (path + "/${name}") subtree else subtree
-          ) entries;
+          ) (_directoryEntries path tree);
           subtreeValues = attrValues normalisedSubtrees;
         in
         # This triggers either when all files in a directory are filtered out
