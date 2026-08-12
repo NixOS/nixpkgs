@@ -30,6 +30,8 @@
   libportal,
   libportal-gtk4,
   obs-studio-plugins,
+  libxml2,
+  umu-launcher,
   nix-update-script,
   removeWarningPopup ? false,
   withObsVkCapture ? false,
@@ -37,13 +39,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "65.4";
+  version = "67.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-59Duh4E1kMShhk/iH/SBhpmFfUjYzRClNuWqoDSbTeM=";
+    hash = "sha256-BfN2RvOhp4uA1WsYHLm1dyvuvMEk6udT7JBjpNnePxc=";
   };
 
   patches = [
@@ -70,6 +72,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
+    libxml2
   ];
 
   buildInputs = [
@@ -101,6 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       certifi
       pefile
       yara-python
+      pysocks
     ]
     ++ [
       cabextract
@@ -115,6 +119,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mangohud
       vmtouch
       fvs2
+      umu-launcher
 
       # Undocumented (subprocess.Popen())
       lsb-release
