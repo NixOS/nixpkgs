@@ -10,12 +10,12 @@
   extraBuildInputs ? [ ],
   ...
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "patchutils";
   inherit version patches;
 
   src = fetchurl {
-    url = "https://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
+    url = "https://cyberelk.net/tim/data/patchutils/stable/patchutils-${finalAttrs.version}.tar.xz";
     inherit sha256;
   };
 
@@ -37,18 +37,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doCheck = lib.versionAtLeast version "0.3.4";
+  doCheck = lib.versionAtLeast finalAttrs.version "0.3.4";
 
   preCheck = ''
     patchShebangs tests
     chmod +x scripts/*
   ''
-  + lib.optionalString (lib.versionOlder version "0.4.2") ''
+  + lib.optionalString (lib.versionOlder finalAttrs.version "0.4.2") ''
     find tests -type f -name 'run-test' \
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';
 
   strictDeps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tools to manipulate patch files";
@@ -57,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})
