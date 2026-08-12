@@ -154,6 +154,8 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "max";
+  strictDeps = true;
+  __structuredAttrs = true;
   inherit version;
 
   dontUnpack = true;
