@@ -5289,6 +5289,12 @@
     githubId = 199180;
     name = "Claes Wallin";
   };
+  cktiel = {
+    email = "tiel@tuta.io";
+    github = "cktiel";
+    githubId = 310042450;
+    name = "Artur Cierocki";
+  };
   claes = {
     email = "claes.holmerson@gmail.com";
     github = "claes";

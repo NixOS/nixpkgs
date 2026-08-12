@@ -60,6 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/erpalma/throttled";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ cktiel ];
   };
 })
