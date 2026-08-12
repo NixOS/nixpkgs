@@ -547,7 +547,7 @@ let
         compilerNames.ghc910
       ];
       haskell-debugger = [
-        compilerNames.ghc9141
+        compilerNames.ghc9142
       ];
       haskell-language-server = released;
       hoogle = released;
@@ -567,7 +567,7 @@ let
       hashable = released;
       primitive = released;
       scrod = [
-        compilerNames.ghc9141
+        compilerNames.ghc9142
       ];
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but

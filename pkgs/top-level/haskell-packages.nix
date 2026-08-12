@@ -67,7 +67,7 @@ let
     ghc98 = sets.ghc984;
     ghc910 = sets.ghc9103;
     ghc912 = sets.ghc9125;
-    ghc914 = sets.ghc9141;
+    ghc914 = sets.ghc9142;
 
     microhs_0_15 = sets.microhs_0_15_4_0;
     microhs = sets.microhs_0_15;
