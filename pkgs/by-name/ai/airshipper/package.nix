@@ -27,8 +27,8 @@
 }:
 let
   version = "0.17.0";
-  # Patch for airshipper to install veloren
-  patch =
+  # Patch for airshipper to install veloren client
+  patchVoxygen =
     let
       runtimeLibs = [
         udev
@@ -44,18 +44,24 @@ let
         libGL
       ];
     in
-    writeShellScript "patch" ''
-      echo "making binaries executable"
-      chmod +x {veloren-voxygen,veloren-server-cli}
-      echo "patching dynamic linkers"
-      ${patchelf}/bin/patchelf \
-        --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-        veloren-server-cli
+    writeShellScript "voxygen-patch" ''
+      echo "making veloren-voxygen executable"
+      chmod +x veloren-voxygen
+      echo "patching veloren-voxygen dynamic linker"
       ${patchelf}/bin/patchelf \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
         --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
         veloren-voxygen
     '';
+  # Patch for airshipper to install veloren server
+  patchServer = writeShellScript "server-cli-patch" ''
+    echo "making veloren-server-cli executable"
+    chmod +x veloren-server-cli
+    echo "patching veloren-server-cli dynamic linker"
+    ${patchelf}/bin/patchelf \
+      --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
+      veloren-server-cli
+  '';
 in
 rustPlatform.buildRustPackage {
   pname = "airshipper";
@@ -115,7 +121,8 @@ rustPlatform.buildRustPackage {
       # We set LD_LIBRARY_PATH instead of using patchelf in order to propagate the libs
       # to both Airshipper itself as well as the binaries downloaded by Airshipper.
       wrapProgram "$out/bin/airshipper" \
-        --set VELOREN_PATCHER "${patch}" \
+        --set VELOREN_VOXYGEN_PATCHER "${patchVoxygen}" \
+        --set VELOREN_SERVER_CLI_PATCHER "${patchServer}" \
         --prefix LD_LIBRARY_PATH : "${libPath}"
     '';
 
