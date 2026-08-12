@@ -670,6 +670,7 @@
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
   ./services/games/openarena.nix
+  ./services/games/pumpkin.nix
   ./services/games/quake3-server.nix
   ./services/games/teeworlds.nix
   ./services/games/terraria.nix
