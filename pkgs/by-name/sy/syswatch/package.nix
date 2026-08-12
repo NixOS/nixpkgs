@@ -29,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/matthart1983/syswatch";
     changelog = "https://github.com/matthart1983/syswatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      tomasrivera
+    ];
     mainProgram = "syswatch";
   };
 })
