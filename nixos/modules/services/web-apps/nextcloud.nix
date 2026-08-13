@@ -970,6 +970,17 @@ in
               the `+49` prefix can be omitted for phone numbers.
             '';
           };
+          maintenance_window_start = lib.mkOption {
+            default = 100;
+            type = lib.types.int;
+            example = 1;
+            description = ''
+              UTC Hour for maintenance windows which advertise themselves as not time sensitive.
+              A value of 1, e.g., will only run these background jobs between 01:00am UTC and
+              05:00am UTC.
+              Default is 100 which disables this feature.
+            '';
+          };
           "profile.enabled" = lib.mkEnableOption "global profiles" // {
             description = ''
               Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
