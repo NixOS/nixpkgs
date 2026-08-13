@@ -11285,11 +11285,6 @@
     githubId = 58676303;
     name = "hhydraa";
   };
-  hibiday = {
-    name = "Katsumi Takeuchi";
-    github = "hibiday";
-    githubId = 137286929;
-  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
@@ -23877,6 +23872,12 @@
       # compare with https://keybase.io/reckenrode
       { fingerprint = "01D7 5486 3A6D 64EA AC77 0D26 FBF1 9A98 2CCE 0048"; }
     ];
+  };
+  recutita = {
+    name = "Katsumi Takeuchi";
+    email = "contact@recutita.com";
+    github = "recutita";
+    githubId = 137286929;
   };
   redfish64 = {
     email = "engler@gmail.com";
