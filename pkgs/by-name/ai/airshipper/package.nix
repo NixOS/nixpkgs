@@ -16,7 +16,6 @@
   alsa-lib,
   stdenv,
   libxcb,
-  cmake,
   pkg-config,
   makeWrapper,
   writeShellScript,
