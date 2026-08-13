@@ -344,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     hook = callPackage ./hook.nix { kvrocks = finalAttrs.finalPackage; };
     tests = {
-      inherit (nixosTests) kvrocks;
+      inherit (nixosTests) kvrocks kvrocks-backup;
       hook = callPackage ./hook-test.nix { kvrocks = finalAttrs.finalPackage; };
     };
   };

@@ -19,6 +19,9 @@ let
   defaultDir = "/var/lib/kvrocks";
   dataDir = cfg.settings.dir;
   isDefaultDir = dataDir == defaultDir;
+  backupDir = cfg.settings.backup-dir or "${dataDir}/backup";
+  backupParentDir = builtins.dirOf backupDir;
+  isBackupDirUnderDataDir = lib.hasPrefix "${dataDir}/" backupDir;
 
   # Defaults match upstream Config field defaults (config.cc).
   workers = cfg.settings.workers or 8;
@@ -93,39 +96,59 @@ in
       };
 
       settings = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = format.type;
+        type = lib.types.submodule (
+          { config, ... }:
+          {
+            freeformType = format.type;
 
-          options = {
-            bind = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [
-                "127.0.0.1"
-                "::1"
-              ];
-              description = "The addresses to bind to.";
-            };
+            options = {
+              bind = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = [
+                  "127.0.0.1"
+                  "::1"
+                ];
+                description = "The addresses to bind to.";
+              };
 
-            port = lib.mkOption {
-              type = lib.types.port;
-              default = 6666;
-              description = "Accept connections on the specified port.";
-            };
+              port = lib.mkOption {
+                type = lib.types.port;
+                default = 6666;
+                description = "Accept connections on the specified port.";
+              };
 
-            unixsocket = lib.mkOption {
-              type = lib.types.str;
-              default = "";
-              example = "/run/kvrocks/kvrocks.sock";
-              description = "Unix socket path.";
-            };
+              unixsocket = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                example = "/run/kvrocks/kvrocks.sock";
+                description = "Unix socket path.";
+              };
 
-            dir = lib.mkOption {
-              type = lib.types.str;
-              default = defaultDir;
-              description = "Directory for database files.";
+              dir = lib.mkOption {
+                type = lib.types.str;
+                default = defaultDir;
+                description = "Directory for database files.";
+              };
+
+              backup-dir = lib.mkOption {
+                type = lib.types.str;
+                default = "${config.dir}/backup";
+                defaultText = lib.literalExpression ''"''${config.services.kvrocks.settings.dir}/backup"'';
+                description = ''
+                  Directory written by `BGSAVE`.
+                  Defaults to {file}`backup` under {option}`services.kvrocks.settings.dir`.
+                  When {option}`services.kvrocks.backup.enable` is enabled, this
+                  is set to {file}`checkpoint` under
+                  {option}`services.kvrocks.backup.location`.
+
+                  Kvrocks first writes a sibling {file}`<backup-dir>.tmp` directory
+                  and then renames it into place, so the parent directory must
+                  already exist and be writable by {option}`services.kvrocks.user`.
+                '';
+              };
             };
-          };
-        };
+          }
+        );
         default = { };
         example = {
           workers = 8;
@@ -162,6 +185,10 @@ in
       {
         assertion = cfg.socketActivation -> builtins.length cfg.settings.bind == 1;
         message = "services.kvrocks.socketActivation requires exactly one settings.bind address.";
+      }
+      {
+        assertion = backupParentDir != "/";
+        message = "services.kvrocks.settings.backup-dir must not be a top-level path; BGSAVE writes <backup-dir>.tmp next to it.";
       }
     ];
 
@@ -212,7 +239,9 @@ in
         StateDirectoryMode = "0700";
         RuntimeDirectory = "kvrocks";
         RuntimeDirectoryMode = "0755";
-        BindPaths = lib.mkIf (!isDefaultDir) [ dataDir ];
+        BindPaths = lib.unique (
+          lib.optional (!isDefaultDir) dataDir ++ lib.optional (!isBackupDirUnderDataDir) backupParentDir
+        );
         LimitNPROC = lib.mkDefault (alwaysOnThreads + dynamicThreadMargin);
         # When rocksdb.max_open_files is -1 (unlimited), fall back to a high limit.
         LimitNOFILE = lib.mkDefault (
