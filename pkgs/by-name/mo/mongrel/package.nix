@@ -9,11 +9,11 @@
 
 let
   pname = "mongrel";
-  version = "5.71.41";
+  version = "5.71.42";
 
   src = fetchurl {
     url = "https://downloads.visorcraft.com/mongrel/${version}/Mongrel_${version}_amd64.AppImage";
-    hash = "sha256-brOsELYwzD01yJ2rQnTsmPtvuIY6sGhB8AldCUGrigY=";
+    hash = "sha256-fC+GkeBogxwSm+AkFsqCVp3WRxr4T3gfNzkoOeaxvXE=";
   };
 
   appimageContents = appimageTools.extract {
