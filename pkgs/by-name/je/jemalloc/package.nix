@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bashNonInteractive,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -75,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
