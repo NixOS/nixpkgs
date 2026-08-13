@@ -186,8 +186,10 @@ let
           with a lot of ergonomic improvements and configurability
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
-        homepage = "https://github.com/com-lihaoyi/Ammonite";
+        homepage = "https://github.com/${owner}/${repo}";
+        changelog = "https://github.com/${owner}/${repo}/releases/tag/${version}";
         license = lib.licenses.mit;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         mainProgram = "amm";
         maintainers = with lib.maintainers; [
           agilesteel
