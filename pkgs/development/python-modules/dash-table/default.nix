@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "First-Class Interactive DataTable for Dash";
-    homepage = "https://dash.plot.ly/datatable";
+    homepage = "https://dash.plotly.com/datatable";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
