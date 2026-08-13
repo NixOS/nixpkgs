@@ -27,9 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
 
     makeWrapper ${jre}/bin/java $out/bin/metals \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${jre.home} \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
 
     makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${jre.home} \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
 
     runHook postInstall
