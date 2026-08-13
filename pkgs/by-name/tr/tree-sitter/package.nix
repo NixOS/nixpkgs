@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   newScope,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -76,6 +77,8 @@ let
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
   hasTreeSitterPrefix = lib.hasPrefix "tree-sitter-";
+  grammarAliases = import ./grammars/aliases.nix { inherit lib; };
+
   grammarDerivationsFrom = lib.filterAttrs (
     name: value: hasTreeSitterPrefix name && lib.isDerivation value
   );
@@ -117,6 +120,7 @@ let
   grammarsScope = lib.makeScope newScope (
     self:
     builtGrammars
+    // lib.optionalAttrs config.allowAliases (grammarAliases self builtGrammars)
     // {
       derivations = grammarDerivationsFrom self;
       allGrammars = lib.filter (p: !(p.meta.broken or false)) (

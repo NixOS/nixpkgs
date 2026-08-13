@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gfmN/9LizPdacUd1eJxFx79I63SwqX0NaWFgbe6vbFk=";
+    hash = "sha256-xxS1FU3thl8UA1DzumVEazelISayLioabFjKlXX67Yk=";
   };
 
   nativeBuildInputs = [
@@ -134,28 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
     # `dev` output’s CMake files.
     ./install-test-certs.patch
 
-    # The base template for std::char_traits has been removed in LLVM 19
-    # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
-    ./char_traits.patch
-
-    # <https://github.com/facebook/folly/issues/2171>
-    ./folly-fix-glog-0.7.patch
-
     # https://github.com/facebook/folly/pull/2561
     ./memset-memcpy-aarch64.patch
 
-    # `.align 64` is invalid on x86_64 Mach-O, where `.align` takes a
-    # power-of-two exponent (64 means 2^64). The guard only excluded
-    # aarch64, so add !__APPLE__ to also skip x86_64-darwin.
-    ./memset-benchmark-darwin.patch
-
-    # Use feature detection directly instead of private standard library
-    # macros to detect the presence of ASAN and otherwise fallback to
-    # _not_ having ASAN.
-    (fetchpatch2 {
-      url = "https://github.com/facebook/folly/commit/fdde9bc360d525a1b2889b9ba89d671c3a13e72e.patch?full_index=1";
-      hash = "sha256-+1XJRAl4o9YubjqdIgQZpyrMmcb2imBfQUmiHNmFMRE=";
-    })
+    # https://github.com/Homebrew/homebrew-core/blob/1bebfe2c3e393a65c27f3e74f254770219b126f3/Formula/f/folly.rb#L83
+    ./cmake-asm-shared-library.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -167,19 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         ${lib.escapeShellArg "\${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"} \
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
-  ''
-  # Fix duplicate symbol errors on aarch64-linux caused by both
-  # memcpy_aarch64 and memcpy_aarch64-use (same for memset) being linked
-  # into libfolly.so. Add EXCLUDE_FROM_MONOLITH to -use variants.
-  # https://github.com/facebook/folly/pull/2562
-  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace folly/external/aor/CMakeLists.txt \
-      --replace-fail \
-        "NAME memcpy_aarch64-use" \
-        "NAME memcpy_aarch64-use EXCLUDE_FROM_MONOLITH" \
-      --replace-fail \
-        "NAME memset_aarch64-use" \
-        "NAME memset_aarch64-use EXCLUDE_FROM_MONOLITH"
   '';
 
   disabledTests = [
