@@ -123,6 +123,7 @@ stdenvNoCC.mkDerivation rec {
       modules (written in Java or Scala) or through an external subprocesses.
     '';
     maintainers = with lib.maintainers; [
+      agilesteel
       zenithal
     ];
     platforms = [
