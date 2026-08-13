@@ -80,7 +80,10 @@ lib.fetchers.withNormalizedHash { } (
       cacert
     ];
 
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    env.GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     buildCommand = ''
       # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
