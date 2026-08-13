@@ -181,6 +181,8 @@ stdenv.mkDerivation (
     passthru.vscodeExtPublisher = "llvm";
     passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
 
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://lldb.llvm.org/";
       description = "Next-generation high-performance debugger";
