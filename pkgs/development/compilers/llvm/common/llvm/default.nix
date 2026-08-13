@@ -616,6 +616,9 @@ stdenv.mkDerivation (
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
+
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://llvm.org/";
       description = "Collection of modular and reusable compiler and toolchain technologies";
