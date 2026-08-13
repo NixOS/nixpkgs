@@ -55,5 +55,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ ];
+    broken = true;
   };
 }
