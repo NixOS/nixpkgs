@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       adelbertc
+      agilesteel
     ];
     platforms = lib.platforms.all;
   };
