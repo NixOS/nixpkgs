@@ -65,5 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       markus1189
     ];
     mainProgram = "scalafmt";
+    # a jar plus a launcher wrapper, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
   };
 })
