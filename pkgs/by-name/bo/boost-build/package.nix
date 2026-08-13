@@ -58,6 +58,8 @@ stdenv.mkDerivation {
     bison
   ];
 
+  strictDeps = true;
+
   buildPhase = ''
     runHook preBuild
     ./bootstrap.sh
