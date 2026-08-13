@@ -93,6 +93,8 @@ stdenv.mkDerivation (
       libllvm
     ];
 
+    strictDeps = true;
+
     cmakeFlags = [
       (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
       (lib.cmakeBool "CLANGD_BUILD_XPC" false)
