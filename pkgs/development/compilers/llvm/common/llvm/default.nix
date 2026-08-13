@@ -283,6 +283,8 @@ stdenv.mkDerivation (
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
 
+    strictDeps = true;
+
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
         ''
