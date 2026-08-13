@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   # too many flaky tests
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
