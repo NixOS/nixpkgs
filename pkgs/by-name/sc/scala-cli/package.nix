@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://scala-cli.virtuslab.org";
+    changelog = "https://github.com/${repo}/releases/tag/v${version}";
     downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
