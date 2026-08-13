@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_wrong_binary_file"
       ];
     in
-    builtins.map (x: "--skip=" + x) skipList;
+    map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";

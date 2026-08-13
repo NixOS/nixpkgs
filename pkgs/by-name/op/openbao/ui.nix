@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontInstall = true;
 
-  meta = (builtins.removeAttrs openbao.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs openbao.meta [ "mainProgram" ]) // {
     description = openbao.meta.description + " - web UI";
   };
 })

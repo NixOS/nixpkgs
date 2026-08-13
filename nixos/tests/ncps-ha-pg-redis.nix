@@ -37,7 +37,7 @@ let
 
         lock.backend = "redis";
 
-        secretKeyPath = builtins.toString (
+        secretKeyPath = toString (
           pkgs.writeText "ncps-cache-key" "ncps:dcrGsrku0KvltFhrR5lVIMqyloAdo0y8vYZOeIFUSLJS2IToL7dPHSSCk/fi+PJf8EorpBn8PU7MNhfvZoI8mA=="
         );
 

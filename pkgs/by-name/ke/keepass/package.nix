@@ -26,14 +26,13 @@ let
   # plugin derivations in the Nix store and nowhere else.
   pluginLoadPathsPatch =
     let
-      inherit (builtins) toString;
       inherit (lib.strings)
         readFile
         concatStrings
         replaceStrings
         unsafeDiscardStringContext
         ;
-      inherit (lib.lists) map length;
+      inherit (lib.lists) length;
       inherit (lib) add;
 
       outputLc = toString (add 7 (length plugins));

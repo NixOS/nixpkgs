@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
             inherit version src;
             configureFlags =
               configureFlags
-              ++ [ "--enable-batchnum=${builtins.toString batchSize}" ]
+              ++ [ "--enable-batchnum=${toString batchSize}" ]
               ++ lib.optionals regexSupport [ "--enable-regex=yes" ];
             nativeBuildInputs = [ autoreconfHook ];
             buildInputs = [ libsodium ] ++ lib.optionals regexSupport [ pcre2 ];

@@ -14,7 +14,6 @@ let
     optionalString
     concatMap
     ;
-  inherit (builtins) isNull;
 
   cfg = config.services.varnish;
 

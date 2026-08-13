@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation rec {
     )"
 
     ${lib.strings.concatStrings (
-      builtins.map (
+      map (
         platform:
         let
           suffix = suffixMap.${platform} or (throw "Platform not in suffixMap: ${platform}");
