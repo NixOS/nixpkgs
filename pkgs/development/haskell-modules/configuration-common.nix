@@ -430,6 +430,12 @@ with haskellLib;
   # https://github.com/yesodweb/shakespeare/issues/294
   shakespeare = dontCheck super.shakespeare;
 
+  # Switch yesod-static from memory to ram to match crypton >= 1.1,
+  # waiting on https://github.com/yesodweb/yesod/pull/1916
+  yesod-static = appendPatches [
+    ./patches/yesod-static-crypton-1.1-and-ram.patch
+  ] (super.yesod-static.override { memory = self.ram; });
+
   # https://github.com/haskell-numerics/random-fu/issues/100
   rvar = appendPatch (fetchpatch {
     url = "https://github.com/adamConnerSax/random-fu/commit/51ba79d2cea5279821523a3861d4ec7196e71759.patch";
