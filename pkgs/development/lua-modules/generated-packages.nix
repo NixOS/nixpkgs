@@ -917,6 +917,41 @@ final: prev: {
     }
   ) { };
 
+  fallo = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      lua-cjson,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "fallo";
+      version = "2.3.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/fallo-2.3.0-1.rockspec";
+          sha256 = "14mxxd6nfbx5bchp3i5c0nf93higak6l7506r8jnh30yafyr01cq";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "NTBBloodbath";
+        repo = "fallo";
+        rev = "8bbbcd6b3db8c10ed68f51c2c6d79af99e5feed7";
+        hash = "sha256-KW3vzjAd68Q13v2OZoQIzNUj9/qhYh1Ve5dBIG+yuV0=";
+      };
+
+      disabled = luaOlder "5.1";
+      propagatedBuildInputs = [ lua-cjson ];
+
+      meta = {
+        homepage = "https://github.com/NTBBloodbath/fallo";
+        maintainers = with lib.maintainers; [ mrcjkb ];
+        license.fullName = "LGPL-2.0-only";
+        description = "Modern and ergonomic error handling for Lua, inspired by Rust's Result.";
+      };
+    }
+  ) { };
+
   fennel = callPackage (
     {
       buildLuarocksPackage,
