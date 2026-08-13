@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";
     description = "LLVM linker (unwrapped)";
