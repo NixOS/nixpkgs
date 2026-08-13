@@ -1,30 +1,35 @@
 {
-  bleach,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  bleach,
   jupytext,
   kagglesdk,
-  lib,
   packaging,
   protobuf,
   python-dateutil,
   python-dotenv,
   python-slugify,
-  pytestCheckHook,
   requests,
   six,
   tqdm,
   urllib3,
+
+  # tests
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "kaggle";
   version = "2.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
@@ -68,7 +73,7 @@ buildPythonPackage (finalAttrs: {
     description = "Official Kaggle CLI";
     mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-cli";
-    changelog = "https://github.com/Kaggle/kaggle-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Kaggle/kaggle-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
