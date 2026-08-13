@@ -78,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       agilesteel
       kashw2
     ];
-    platforms = lib.platforms.unix;
+    # sbt is a launcher script and a jar, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
     mainProgram = "sbt";
   };
 })
