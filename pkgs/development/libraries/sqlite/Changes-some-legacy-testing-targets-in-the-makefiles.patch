@@ -1,0 +1,123 @@
+From 24a2f8f767a7bbef924b5b58c6fe8afe2bf250c2 Mon Sep 17 00:00:00 2001
+From: drh <>
+Date: Fri, 13 Mar 2026 14:31:13 +0000
+Subject: [PATCH 2/6] Changes some legacy testing targets in the makefiles into
+ aliases for "devtest" and "releasetest"
+
+FossilOrigin-Name: 238e70fec074005a53794bfe9550db95a8e5ef7b520d58b6b383a339ac50f900
+---
+ Makefile.msc  | 40 ++++++++--------------------------------
+ main.mk       | 34 ++++++++--------------------------
+ manifest      | 15 +++++++--------
+ manifest.uuid |  2 +-
+ 4 files changed, 24 insertions(+), 67 deletions(-)
+
+diff --git a/Makefile.msc b/Makefile.msc
+index 52807ff7f2..4ad026d299 100644
+--- a/Makefile.msc
++++ b/Makefile.msc
+@@ -2594,43 +2594,19 @@ coretestprogs:	testfixture.exe sqlite3.exe
+ 
+ testprogs:	$(TESTPROGS) srcck1.exe fuzzcheck.exe sessionfuzz.exe
+ 
+-fulltest:	alltest fuzztest
+-
+-alltest:	$(TESTPROGS)
+-	@set PATH=$(LIBTCLPATH);$(PATH)
+-	.\testfixture.exe $(TOP)\test\all.test $(TESTOPTS)
+-
+-soaktest:	$(TESTPROGS)
+-	@set PATH=$(LIBTCLPATH);$(PATH)
+-	.\testfixture.exe $(TOP)\test\all.test -soak=1 $(TESTOPTS)
+-
+-fulltestonly:	$(TESTPROGS) fuzztest
+-	@set PATH=$(LIBTCLPATH);$(PATH)
+-	.\testfixture.exe $(TOP)\test\full.test
+-
+-queryplantest:	testfixture.exe shell
+-	@set PATH=$(LIBTCLPATH);$(PATH)
+-	.\testfixture.exe $(TOP)\test\permutations.test queryplanner $(TESTOPTS)
+-
+ fuzztest:	fuzzcheck.exe
+ 	.\fuzzcheck.exe $(FUZZDATA)
+ 
+-# Legacy testing target for third-party integrators.  The SQLite
+-# developers seldom use this target themselves.  Instead
+-# they use "nmake /f Makefile.msc devtest" which runs tests on
+-# a standard set of options
+-#
+-test:	$(TESTPROGS) sourcetest fuzztest tcltest
+-
+-# Minimal testing that runs in less than 3 minutes (on a fast machine)
+ #
+-quicktest:	testfixture.exe sourcetest
+-	@set PATH=$(LIBTCLPATH);$(PATH)
+-	.\testfixture.exe $(TOP)\test\extraquick.test $(TESTOPTS)
+-
+-# This is the common case.  Run many tests that do not take too long,
+-# including fuzzcheck, sqlite3_analyzer, and sqldiff tests.
++# Legacy testing targets, no longer used by the developers and
++# now aliased to one of the commonly used testing targets.
+ #
++quicktest:	devtest
++test:	devtest
++fulltest:	releasetest
++alltest:	releasetest
++soaktest:	releasetest
++fulltestonly:	releasetest
+ 
+ # The veryquick.test TCL tests.
+ #
+diff --git a/main.mk b/main.mk
+index d84c7b2580..336838a364 100644
+--- a/main.mk
++++ b/main.mk
+@@ -1814,20 +1814,6 @@ coretestprogs:	testfixture$(B.exe) sqlite3$(B.exe)
+ 
+ testprogs:	$(TESTPROGS) srcck1$(B.exe) fuzzcheck$(T.exe) sessionfuzz$(T.exe)
+ 
+-# A very detailed test running most or all test cases
+-fulltest:	alltest fuzztest
+-
+-# Run most or all tcl test cases
+-alltest:	$(TESTPROGS)
+-	./testfixture$(T.exe) $(TOP)/test/all.test $(TESTOPTS)
+-
+-# Really really long testing
+-soaktest:	$(TESTPROGS)
+-	./testfixture$(T.exe) $(TOP)/test/all.test -soak=1 $(TESTOPTS)
+-
+-# Do extra testing but not everything.
+-fulltestonly:	$(TESTPROGS) fuzztest
+-	./testfixture$(T.exe) $(TOP)/test/full.test
+ 
+ #
+ # Fuzz testing
+@@ -1894,19 +1880,15 @@ releasetest: srctree-check has_tclsh85 verify-source
+ 	$(TCLSH_CMD) $(TOP)/test/testrunner.tcl release $(TSTRNNR_OPTS)
+ 
+ #
+-# Minimal testing that runs in less than 3 minutes
+-#
+-quicktest:	./testfixture$(T.exe)
+-	./testfixture$(T.exe) $(TOP)/test/extraquick.test $(TESTOPTS)
+-
+-#
+-# Try to run tests on whatever options are specified by the
+-# ./configure.  The developers seldom use this target.  Instead
+-# they use "make devtest" which runs tests on a standard set of
+-# options regardless of how SQLite is configured.  This "test"
+-# target is provided for legacy only.
++# Legacy testing targets, no longer used by the developers and
++# now aliased to one of the commonly used testing targets.
+ #
+-test:	srctree-check fuzztest sourcetest $(TESTPROGS) tcltest
++quicktest:	devtest
++test:	devtest
++fulltest:	releasetest
++alltest:	releasetest
++soaktest:	releasetest
++fulltestonly:	releasetest
+ 
+ #
+ # Run a test using valgrind.  This can take a really long time
