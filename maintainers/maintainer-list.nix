@@ -349,6 +349,12 @@
     githubId = 43320117;
     name = "Sebastian Marquardt";
   };
+  _81reap = {
+    email = "prayag.bhakar@gmail.com";
+    github = "81reap";
+    githubId = 20740005;
+    name = "Prayag Bhakar";
+  };
   _9999years = {
     email = "rbt@fastmail.com";
     github = "9999years";
