@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
+  callPackage,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "system-sendmail";
   version = lib.trivial.release;
 
@@ -26,6 +27,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests = callPackage ./test.nix { system-sendmail = finalAttrs.finalPackage; };
+
   meta = {
     description = ''
       A sendmail wrapper that calls the system sendmail. Do not install as system-wide sendmail!
@@ -35,4 +38,4 @@ stdenv.mkDerivation {
     mainProgram = "sendmail";
     maintainers = with lib.maintainers; [ h7x4 ];
   };
-}
+})
