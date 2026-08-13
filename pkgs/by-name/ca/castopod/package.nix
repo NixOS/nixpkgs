@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation {
   pname = "castopod";
-  version = "1.11.0";
+  version = "2.0.0-next.1";
 
   src = fetchurl {
-    url = "https://code.castopod.org/adaures/castopod/uploads/0f1fbf6eb849b208e26b53d930b9e22f/castopod-1.11.0.tar.gz";
-    sha256 = "09l4q8v809jnvgx9vpa1fyjhgqdbbrwkyk591kx5k1gg935rmgnx";
+    url = "https://code.castopod.org/adaures/castopod/uploads/a5f2f66c8c9f8be80c66a7f9a3e831b9/castopod-2.0.0-next.1.tar.gz";
+    sha256 = "1ib8kfx90g0qayarn9cazsw1p4zhsnlmwx0y1z0wh22sjfxnhwa6";
   };
 
   dontBuild = true;
