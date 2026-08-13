@@ -56,6 +56,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/samuelcolvin/rtoml";
     changelog = "https://github.com/samuelcolvin/rtoml/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })
