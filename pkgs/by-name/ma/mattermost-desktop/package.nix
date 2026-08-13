@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_41,
+  electron_43,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_41;
+  electron = electron_43;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.2.2";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-KSyFJrYy+pueSrX20SPBoudWfiHmy5L2O8TdzLJRiYk=";
+    hash = "sha256-aDYmnFb0CJDF/M1ca/6YkKTBcTC56+zpe9iqtRR0cpU=";
   };
 
-  npmDepsHash = "sha256-70TBP4iDKuF4X9Tf0tsbUQ3N7bluoPn65OdfdcWin4Y=";
+  npmDepsHash = "sha256-nNKfzPKA0kjki169u/qe5r6rrVbVi3+0nkVj6niS+/c=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
