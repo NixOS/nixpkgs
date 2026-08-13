@@ -68,7 +68,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gobject-introspection
   ];
 
-  pythonPath = with python3.pkgs; [
+  pythonPath = [
+    # Provides gi/overrides/Atspi.py, without which Atspi.Accessible falls back
+    # to GObject pointer identity and Orca misidentifies accessibles.
+    at-spi2-core
+  ]
+  ++ (with python3.pkgs; [
     dasbus
     pygobject3
     dbus-python
@@ -79,7 +84,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     speechd-minimal
     gst-python
     setproctitle
-  ];
+  ]);
 
   strictDeps = false;
 
