@@ -93,7 +93,7 @@ let
     noDisplay = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "azuredatastudio";
   version = "1.49.1";
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
+    name = "azuredatastudio-${finalAttrs.version}.tar.gz";
 
     # Url can be found at: https://github.com/microsoft/azuredatastudio/releases
     # In the downloads table for Linux .tar.gz
@@ -129,18 +129,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D ${targetPath}/resources/app/resources/linux/code.png $out/share/icons/azuredatastudio.png
+    install -D ${finalAttrs.targetPath}/resources/app/resources/linux/code.png $out/share/icons/azuredatastudio.png
 
     runHook postInstall
   '';
 
   # change this to azuredatastudio-insiders for insiders releases
   edition = "azuredatastudio";
-  targetPath = "$out/${edition}";
+  targetPath = "$out/${finalAttrs.edition}";
 
   unpackPhase = ''
-    mkdir -p ${targetPath}
-    ${gnutar}/bin/tar xf $src --strip 1 -C ${targetPath}
+    mkdir -p ${finalAttrs.targetPath}
+    ${gnutar}/bin/tar xf $src --strip 1 -C ${finalAttrs.targetPath}
   '';
 
   sqltoolsserviceRpath = lib.makeLibraryPath [
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/5.0.20240724.1";
+  sqltoolsservicePath = "${finalAttrs.targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/5.0.20240724.1";
 
   rpath = lib.concatStringsSep ":" [
     (lib.makeLibraryPath [
@@ -185,22 +185,22 @@ stdenv.mkDerivation rec {
       stdenv.cc.cc
       systemd
     ])
-    targetPath
-    sqltoolsserviceRpath
+    finalAttrs.targetPath
+    finalAttrs.sqltoolsserviceRpath
   ];
 
   preFixup = ''
     fix_sqltoolsservice()
     {
-      mv ${sqltoolsservicePath}/$1 ${sqltoolsservicePath}/$1_old
+      mv ${finalAttrs.sqltoolsservicePath}/$1 ${finalAttrs.sqltoolsservicePath}/$1_old
       patchelf \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-        ${sqltoolsservicePath}/$1_old
+        ${finalAttrs.sqltoolsservicePath}/$1_old
 
       makeWrapper \
-        ${sqltoolsservicePath}/$1_old \
-        ${sqltoolsservicePath}/$1 \
-        --set LD_LIBRARY_PATH ${sqltoolsserviceRpath}
+        ${finalAttrs.sqltoolsservicePath}/$1_old \
+        ${finalAttrs.sqltoolsservicePath}/$1 \
+        --set LD_LIBRARY_PATH ${finalAttrs.sqltoolsserviceRpath}
     }
 
     fix_sqltoolsservice MicrosoftSqlToolsServiceLayer
@@ -209,13 +209,13 @@ stdenv.mkDerivation rec {
 
     patchelf \
       --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-      ${targetPath}/${edition}
+      ${finalAttrs.targetPath}/${finalAttrs.edition}
 
     mkdir -p $out/bin
     makeWrapper \
-      ${targetPath}/bin/${edition} \
+      ${finalAttrs.targetPath}/bin/${finalAttrs.edition} \
       $out/bin/azuredatastudio \
-      --set LD_LIBRARY_PATH ${rpath}
+      --set LD_LIBRARY_PATH ${finalAttrs.rpath}
   '';
 
   meta = {
@@ -227,4 +227,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "azuredatastudio";
   };
-}
+})
