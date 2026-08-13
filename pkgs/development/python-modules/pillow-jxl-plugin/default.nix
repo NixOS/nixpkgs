@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Isotr0py/pillow-jpegxl-plugin/releases/tag/v${finalAttrs.version}";
     description = "Pillow plugin that adds support for JPEG XL files";
     homepage = "https://github.com/Isotr0py/pillow-jpegxl-plugin";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dandellion
       KunyaKud

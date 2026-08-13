@@ -33,7 +33,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "UI for the Handheld Daemon";
     homepage = "https://github.com/hhd-dev/hhd-ui";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ toast ];
     mainProgram = "hhd-ui";
     platforms = [ "x86_64-linux" ];

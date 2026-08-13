@@ -12,10 +12,9 @@
   # dependencies
   attrs,
   numpy,
-  opencv4,
   pillow,
+  psutil,
   pyarrow,
-  semver,
   typing-extensions,
 
   # tests
@@ -23,9 +22,10 @@
   datafusion,
   inline-snapshot,
   polars,
-  pytest-snapshot,
   pytestCheckHook,
   rerun-notebook,
+  semver,
+  syrupy,
   tomli,
   torch,
   torchvision,
@@ -67,7 +67,7 @@ buildPythonPackage {
     # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
     # AVX2 / scalar kernels.
     + ''
-      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-8.0.0/src/distance"
+      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-9.0.0/src/distance"
 
       substituteInPlace "$lanceDistance/dot_u8.rs" \
         --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
@@ -89,10 +89,9 @@ buildPythonPackage {
   dependencies = [
     attrs
     numpy
-    opencv4
     pillow
+    psutil
     pyarrow
-    semver
     typing-extensions
   ];
 
@@ -115,9 +114,10 @@ buildPythonPackage {
     datafusion
     inline-snapshot
     polars
-    pytest-snapshot
     pytestCheckHook
     rerun-notebook
+    semver
+    syrupy
     tomli
     torch
     torchvision
@@ -126,11 +126,15 @@ buildPythonPackage {
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  pytestFlags = [
+    # Some checked-in `.ambr` entries belong to tests skipped below (and to tests upstream has since
+    # removed). syrupy fails the whole session over unused snapshots by default.
+    "--snapshot-warn-unused"
+  ];
+
   disabledTests = [
     # RuntimeError: MP4 error: MP4 demux: MP4 error: file contains a box with a larger size than it
-    "test_allow_b_frames_opts_in_to_b_frame_inputs"
     "test_asset_mode_timeline_type_timestamp_applies_to_index_chunk"
-    "test_b_frames_in_stream_mode_raise"
     "test_custom_entity_path_applies_to_every_chunk"
     "test_default_mode_produces_video_stream_chunks"
     "test_output_codec_same_as_source_stays_on_the_direct_path"
@@ -153,14 +157,6 @@ buildPythonPackage {
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"
     "test_viewer_dies_on_client_close"
-
-    # TypeError: 'Snapshot' object is not callable
-    "test_chunk_record_batch"
-    "test_schema_recording"
-
-    # pytest_snapshot mismatch: serialized schema/summary output drifted in 0.32.0
-    "test_schema"
-    "test_summary_format"
 
     # AttributeError: 'datetime.datetime' object has no attribute 'value'
     "test_lenses_time_extraction"
@@ -188,6 +184,10 @@ buildPythonPackage {
     # real binaries (rerun.src is fetched without fetchLFS).
     "rerun_py/tests/integration/test_hdf5_reader.py"
 
+    # ModuleNotFoundError: No module named 'mdlint'. It sits next to the test file, which is
+    # not on `sys.path` as `scripts/ci` has no `__init__.py`.
+    "scripts/ci/mdlint_test.py"
+
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
     "tests/python/log_benchmark/test_micro_benchmark.py"
@@ -198,7 +198,8 @@ buildPythonPackage {
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/api_sandbox/"
 
-    # RuntimeError: Failed to load URDF file: No elements found
+    # RuntimeError: Failed to load URDF file: No elements found. `so100.urdf` is a Git LFS
+    # pointer file, not the real model (rerun.src is fetched without fetchLFS).
     "rerun_py/tests/unit/test_urdf_tree.py"
   ];
 
