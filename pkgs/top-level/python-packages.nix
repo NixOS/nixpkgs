@@ -3779,6 +3779,8 @@ self: super: with self; {
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
 
+  cryptomobile = callPackage ../development/python-modules/cryptomobile { };
+
   cryptoparser = callPackage ../development/python-modules/cryptoparser { };
 
   crysp = callPackage ../development/python-modules/crysp { };
@@ -13698,7 +13700,7 @@ self: super: with self; {
 
   primepy = callPackage ../development/python-modules/primepy { };
 
-  primer3 = callPackage ../development/python-modules/primer3 { };
+  primer3-py = callPackage ../development/python-modules/primer3-py { };
 
   primp = callPackage ../development/python-modules/primp { };
 
@@ -14386,6 +14388,8 @@ self: super: with self; {
   pycparser = callPackage ../development/python-modules/pycparser { };
 
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
+
+  pycrate = callPackage ../development/python-modules/pycrate { };
 
   pycrdt = callPackage ../development/python-modules/pycrdt { };
 
@@ -15840,6 +15844,8 @@ self: super: with self; {
   pyscrypt = callPackage ../development/python-modules/pyscrypt { };
 
   pyscss = callPackage ../development/python-modules/pyscss { };
+
+  pysctp = callPackage ../development/python-modules/pysctp { };
 
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
@@ -17804,7 +17810,7 @@ self: super: with self; {
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
-  retinaface = callPackage ../development/python-modules/retinaface { };
+  retina-face = callPackage ../development/python-modules/retina-face { };
 
   retry = callPackage ../development/python-modules/retry { };
 
