@@ -135,14 +135,6 @@ let
 
   isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
 
-  cachedOutputChecks = {
-    out = { };
-  };
-  debugCachedOutputChecks = {
-    out = { };
-    debug = { };
-  };
-
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath =
@@ -867,16 +859,8 @@ let
               attrsOutputChecks = makeOutputChecks attrs;
               attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
             in
-            # to avoid the listToAttrs in most common situations, we replicate
-            # what it would produce for most derivations. this can be improved
-            # in the future at the cost of a mass rebuild - empty attrsets for
-            # each output is a noop
-            if
-              !attrs ? outputs
-              && !attrs ? outputChecks
-              && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
-            then
-              if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
+            if !attrs ? outputChecks && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { }) then
+              { }
             else
               listToAttrs (
                 map (name: {
