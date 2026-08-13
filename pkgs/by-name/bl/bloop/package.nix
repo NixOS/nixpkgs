@@ -52,14 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
     zlib
   ];
-  propagatedBuildInputs = [ jre ];
 
   installPhase = ''
     runHook preInstall
 
     install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
 
-    makeWrapper $out/.bloop-wrapped $out/bin/bloop
+    # The client starts a jvm build server, so it needs a jre on PATH and in
+    # JAVA_HOME; propagating the jre put it in the closure but on nobody's PATH.
+    makeWrapper $out/.bloop-wrapped $out/bin/bloop \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${jre.home}
 
     #Install completions
     installShellCompletion --name bloop --bash ${bloop-bash}
