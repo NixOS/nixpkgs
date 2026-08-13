@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0J1HVk+eR7VN0ymucW9dNlT36j16XIfCzcs1EVyEIEU=";
   };
 
@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3Packages) google-re2;
     haskell-re2 = haskellPackages.re2;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Regular expression library";
