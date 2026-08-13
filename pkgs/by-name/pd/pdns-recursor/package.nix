@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
     hash = "sha256-0/HLB9wMVQALga7ZJcPSDczjcBinMwQz2vTPep+x8p8=";
   };
