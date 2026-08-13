@@ -7,7 +7,7 @@
   ghostscript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "auctex";
   version = "13.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/auctex/auctex-${version}.tar.gz";
+    url = "mirror://gnu/auctex/auctex-${finalAttrs.version}.tar.gz";
     hash = "sha256-Hn5AKrz4RmlOuncZklvwlcI+8zpeZgIgHHS2ymCUQDU=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})
