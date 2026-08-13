@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.16";
+  version = "5.2.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     tag = version;
-    hash = "sha256-DZa3OkqnrgXp1A/HerKYdUdanvi5jxHndo1DV4RVs0M=";
+    hash = "sha256-7it3opzsiN/hHhpipZz4ogmRKGz7E9/LmTF03/UYIB0=";
   };
 
   patches = [
@@ -69,6 +69,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=83" "setuptools"
+
     substituteInPlace tests/utils_tests/test_autoreload.py \
       --replace-fail "/usr/bin/python" "${python.interpreter}"
   '';

@@ -63,13 +63,13 @@ assert lib.assertMsg (
 ) "unbound: withDoQ requires OpenSSL with QUIC support (OpenSSL >= 3.5)";
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.25.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-zt0JpVmct7w6ay+p8CdH6SGt/rL/v//e7K3MT8KZfOY=";
+    hash = "sha256-ESRboc5vwsNZ/Yynl2JGRWhH1QEYZumoTzgSvN3NbSU=";
   };
 
   outputs = [
