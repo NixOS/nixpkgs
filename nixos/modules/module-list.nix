@@ -1292,6 +1292,7 @@
   ./services/networking/knot-resolver.nix
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
+  ./services/networking/krill.nix
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
   ./services/networking/libreswan.nix
