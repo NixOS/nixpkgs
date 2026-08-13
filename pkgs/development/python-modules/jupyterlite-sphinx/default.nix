@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterlite-sphinx";
-  version = "0.22.1";
+  version = "0.23.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterlite";
     repo = "jupyterlite-sphinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eww/VyHbAp78Bz2jg43XHmetEDrXEqXK45cnXHElG80=";
+    hash = "sha256-cMMPf0CE0YMly6nHze2BZQLdNk32bS9tzVFYLAb38Ew=";
   };
 
   build-system = [
