@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared)
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
