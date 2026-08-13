@@ -6,7 +6,7 @@
   fetchFromGitHub,
   replaceVars,
   exiftool,
-  ffmpeg,
+  ffmpeg_8,
   setuptools,
   wrapGAppsHook3,
   gdk-pixbuf,
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     # hardcode paths to some binaries
     (replaceVars ./paths.patch {
       exiftool = lib.getExe exiftool;
-      ffmpeg = lib.getExe ffmpeg;
+      ffmpeg = lib.getExe ffmpeg_8;
       kdialog = if dolphinIntegration then lib.getExe kdePackages.kdialog else null;
       # replaced in postPatch
       mat2 = null;
