@@ -420,6 +420,10 @@ in
       ]
       "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`"
     )
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "useSecureBoot"
+    ] "The default OVMF now always supports Secure Boot.")
   ];
 
   options = {
@@ -986,18 +990,7 @@ in
     };
 
     virtualisation.efi = {
-      OVMF = mkOption {
-        type = types.package;
-        default =
-          (pkgs.OVMF.override {
-            secureBoot = cfg.useSecureBoot;
-          }).fd;
-        defaultText = ''
-          (pkgs.OVMF.override {
-                    secureBoot = cfg.useSecureBoot;
-                  }).fd'';
-        description = "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
-      };
+      OVMF = lib.mkPackageOption pkgs "OVMFFull" { };
 
       firmware = mkOption {
         type = types.path;
@@ -1085,14 +1078,6 @@ in
 
         If disabled, a root filesystem has to be specified and
         formatted (for example in the initial ramdisk).
-      '';
-    };
-
-    virtualisation.useSecureBoot = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable Secure Boot support in the EFI firmware.
       '';
     };
 
