@@ -21,23 +21,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  installPhase = ''
-    runHook preInstall
+  # metals itself is class-file 61; its own docs' minimum of 11 is the floor for
+  # the jdk it indexes and builds against, which metals.javaHome still selects.
+  installPhase =
+    assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
+      metals requires Java 17 or newer, but ${jre.name} is ${jre.version}
+    '';
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin
+      mkdir -p $out/bin
 
-    makeWrapper ${jre}/bin/java $out/bin/metals \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${jre.home} \
-      --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+      makeWrapper ${jre}/bin/java $out/bin/metals \
+        --prefix PATH : ${lib.makeBinPath [ jre ]} \
+        --set JAVA_HOME ${jre.home} \
+        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
 
-    makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${jre.home} \
-      --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
+      makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
+        --prefix PATH : ${lib.makeBinPath [ jre ]} \
+        --set JAVA_HOME ${jre.home} \
+        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru.updateScript = {
     command = lib.getExe (callPackage ./update.nix { });
