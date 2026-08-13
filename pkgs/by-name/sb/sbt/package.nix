@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     description = "Build tool for Scala, Java and more";
     maintainers = with lib.maintainers; [
+      agilesteel
       kashw2
     ];
     platforms = lib.platforms.unix;
