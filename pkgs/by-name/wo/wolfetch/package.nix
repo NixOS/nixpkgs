@@ -5,6 +5,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "wolfetch";
   version = "0.5.4";
 
