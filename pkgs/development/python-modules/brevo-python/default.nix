@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "brevo-python";
-  version = "5.0.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getbrevo";
     repo = "brevo-python";
     tag = "v${version}";
-    hash = "sha256-mn2EVhTmoXhPfxZRWSNSK23ANwIFfvz5FuW5ErTlqrQ=";
+    hash = "sha256-L6zRPoiqSNDli0dfBG/wRscRhTBZYXO8nVxyHzq9v70=";
   };
 
   build-system = [ poetry-core ];
