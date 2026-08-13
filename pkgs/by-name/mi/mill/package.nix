@@ -16,13 +16,25 @@
 }:
 
 let
-  suffixMap = {
-    aarch64-darwin = "native-mac-aarch64";
-    aarch64-linux = "native-linux-aarch64";
-    x86_64-linux = "native-linux-amd64";
+  # One table per platform: the artifact suffix and its hash belong together, and
+  # meta.platforms is derived from it so the two cannot drift.
+  sources = {
+    aarch64-darwin = {
+      suffix = "native-mac-aarch64";
+      hash = "sha256-tQpV0Goe9Oq16rm14mavS5ELl7z4Bsu7JBVbbFgauPE=";
+    };
+    aarch64-linux = {
+      suffix = "native-linux-aarch64";
+      hash = "sha256-lq0mR0lFhl7ESY+BM6kVRjyI3bpZOSwj+bSo37dAkaI=";
+    };
+    x86_64-linux = {
+      suffix = "native-linux-amd64";
+      hash = "sha256-2GSLEvRTlH9QPzkGM52sYiJh6OqXQzn/V0sPQ+SA39s=";
+    };
   };
-  suffix =
-    suffixMap.${stdenv.hostPlatform.system}
+
+  source =
+    sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation rec {
@@ -30,14 +42,8 @@ stdenvNoCC.mkDerivation rec {
   version = "1.1.7";
 
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/${version}/mill-dist-${suffix}-${version}.exe";
-    sha256 =
-      {
-        aarch64-darwin = "sha256-tQpV0Goe9Oq16rm14mavS5ELl7z4Bsu7JBVbbFgauPE=";
-        aarch64-linux = "sha256-lq0mR0lFhl7ESY+BM6kVRjyI3bpZOSwj+bSo37dAkaI=";
-        x86_64-linux = "sha256-2GSLEvRTlH9QPzkGM52sYiJh6OqXQzn/V0sPQ+SA39s=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${source.suffix}/${version}/mill-dist-${source.suffix}-${version}.exe";
+    inherit (source) hash;
   };
 
   buildInputs = [ zlib ];
@@ -93,7 +99,7 @@ stdenvNoCC.mkDerivation rec {
       builtins.map (
         platform:
         let
-          suffix = suffixMap.${platform} or (throw "Platform not in suffixMap: ${platform}");
+          suffix = sources.${platform}.suffix;
         in
         ''
           {
@@ -127,11 +133,7 @@ stdenvNoCC.mkDerivation rec {
       agilesteel
       zenithal
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
-    ];
+    platforms = builtins.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
