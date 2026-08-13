@@ -3779,6 +3779,8 @@ self: super: with self; {
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
 
+  cryptomobile = callPackage ../development/python-modules/cryptomobile { };
+
   cryptoparser = callPackage ../development/python-modules/cryptoparser { };
 
   crysp = callPackage ../development/python-modules/crysp { };
@@ -14387,6 +14389,8 @@ self: super: with self; {
 
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
 
+  pycrate = callPackage ../development/python-modules/pycrate { };
+
   pycrdt = callPackage ../development/python-modules/pycrdt { };
 
   pycrdt-store = callPackage ../development/python-modules/pycrdt-store { };
@@ -15840,6 +15844,8 @@ self: super: with self; {
   pyscrypt = callPackage ../development/python-modules/pyscrypt { };
 
   pyscss = callPackage ../development/python-modules/pyscss { };
+
+  pysctp = callPackage ../development/python-modules/pysctp { };
 
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
