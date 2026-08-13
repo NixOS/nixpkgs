@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,6 +23,7 @@
 
   # tests
   pytestCheckHook,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -57,8 +59,13 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    versionCheckHook
     # kaggle creates its config dir at import time; needs a writable HOME.
     writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/var/empty/.kaggle'
+    "HOME"
   ];
 
   # kaggle authenticates at import time; fake creds for the offline checks.
