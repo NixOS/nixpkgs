@@ -55,14 +55,14 @@ let
   inherit (texFunctions) fontsConf;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "awesome";
   version = "4.3";
 
   src = fetchFromGitHub {
     owner = "awesomewm";
     repo = "awesome";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
   };
 
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     #"-DGENERATE_MANPAGES=ON"
-    "-DOVERRIDE_VERSION=${version}"
+    "-DOVERRIDE_VERSION=${finalAttrs.version}"
   ]
   ++ lib.optional lua.pkgs.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so";
 
@@ -185,4 +185,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
