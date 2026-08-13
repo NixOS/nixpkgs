@@ -5,6 +5,7 @@
   jre,
   makeWrapper,
   setJavaClassPath,
+  callPackage,
   extraJavaOpts ? "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m",
 }:
 
@@ -33,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = {
+    command = lib.getExe (callPackage ./update.nix { });
+    supportedFeatures = [ "commit" ];
+  };
 
   passthru.deps = stdenv.mkDerivation {
     name = "metals-deps-${finalAttrs.version}";
