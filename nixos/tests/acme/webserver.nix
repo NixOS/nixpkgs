@@ -239,5 +239,20 @@
               webserver.wait_for_unit("renew-triggered.target")
               output = webserver.succeed("journalctl --cursor-file=/tmp/cursor")
               t.assertNotIn("Stopping Nginx Web Server...", output)
-        '';
+        ''
+    + ''
+
+      # Kept last: shutting the CA down leaves acme-order-renew failed, which
+      # would make the is-system-running checks in switch_to report degraded.
+      with subtest("Upgrading from a layout that predates the acme-success marker"):
+          # Once a real certificate is installed, cert.pem has been symlinked to fullchain.pem.
+          # Regenerating the self-signed certificate over that layout must result in working certificate.
+          acme.shutdown()  # Prevent the ordering service from overwriting the output .
+          webserver.succeed(f"test -L /var/lib/acme/{fqdn}/cert.pem")
+          webserver.succeed(f"rm /var/lib/acme/{fqdn}/acme-success")
+          webserver.succeed(f"systemctl restart acme-{fqdn}.service")
+          check_fullchain(webserver, fqdn)
+          check_keypair(webserver, fqdn)
+          check_issuer(webserver, fqdn, "minica")
+    '';
 }
