@@ -98,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://mlir.llvm.org/";
     description = "Multi-Level IR Compiler Framework";
