@@ -132,6 +132,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     maintainers = [ lib.maintainers.sheepforce ];
