@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/cs
     wrapProgram $out/bin/cs \
       --prefix PATH ":" ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${jre.home} \
       --prefix LD_LIBRARY_PATH ":" ${libPath}
 
     runHook postInstall
