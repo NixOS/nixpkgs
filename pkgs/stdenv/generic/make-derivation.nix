@@ -171,11 +171,11 @@ let
       ${
         if attrs ? allowedReferences && attrs.allowedReferences != null then "allowedReferences" else null
       } =
-        unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+        map unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
       ${
         if attrs ? allowedRequisites && attrs.allowedRequisites != null then "allowedRequisites" else null
       } =
-        unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+        map unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 in
 config:
@@ -853,10 +853,20 @@ let
             map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
           ${if !__structuredAttrs && attrs ? disallowedRequisites then "disallowedRequisites" else null} =
             map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-          ${if !__structuredAttrs && attrs ? allowedReferences then "allowedReferences" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-          ${if !__structuredAttrs && attrs ? allowedRequisites then "allowedRequisites" else null} =
-            mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+          ${
+            if !__structuredAttrs && attrs ? allowedReferences && attrs.allowedReferences != null then
+              "allowedReferences"
+            else
+              null
+          } =
+            map unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+          ${
+            if !__structuredAttrs && attrs ? allowedRequisites && attrs.allowedRequisites != null then
+              "allowedRequisites"
+            else
+              null
+          } =
+            map unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
           ${if __structuredAttrs then "outputChecks" else null} =
             let
               attrsOutputChecks = makeOutputChecks attrs;
