@@ -20,6 +20,7 @@ buildPythonPackage (finalAttrs: {
   pname = "git-dummy";
   version = "0.1.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "initialcommit-com";
@@ -46,6 +47,9 @@ buildPythonPackage (finalAttrs: {
         --fish <($out/bin/git-dummy --show-completion fish) \
         --zsh <($out/bin/git-dummy --show-completion zsh)
     '';
+
+  # No python tests nor --version flag
+  doCheck = false;
 
   meta = {
     description = "Generate dummy Git repositories populated with the desired number of commits, branches, and structure";
