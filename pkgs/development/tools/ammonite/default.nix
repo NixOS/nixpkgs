@@ -11,7 +11,6 @@
   gnused,
   jq,
   nix,
-  disableRemoteLogging ? true,
 }:
 
 let
@@ -71,9 +70,6 @@ let
           echo "the amm launcher still prefers JAVA_HOME; the substitution missed" >&2
           exit 1
         fi
-      ''
-      + lib.optionalString disableRemoteLogging ''
-        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
       '';
 
       passthru = {
