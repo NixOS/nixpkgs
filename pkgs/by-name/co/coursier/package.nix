@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
       adelbertc
       agilesteel
     ];
-    platforms = lib.platforms.all;
+    # a shell script wrapping a java launcher, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
   };
 }
