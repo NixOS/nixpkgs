@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comfyui-workflow-templates-media-assets-01";
-  version = "0.1.24";
+  version = "0.1.26";
   pyproject = true;
 
   src = fetchPypi {
     pname = "comfyui_workflow_templates_media_assets_01";
     inherit (finalAttrs) version;
-    hash = "sha256-IXMRhxUuY3ISb55TC02J65I6pk+IcpuDf2hLO1E+lso=";
+    hash = "sha256-mjjf45ybwP8ymOxhoHRqEsgNewtF4BhKLpFeDje946M=";
   };
 
   build-system = [ setuptools ];
