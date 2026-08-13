@@ -9,15 +9,17 @@
   hs-dbus-signature,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbus-signature-pyparsing";
   version = "0.4.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "dbus-signature-pyparsing";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+jY8kg3jBDpZr5doih3DiyUEcSskq7TgubmW3qdBoZM=";
   };
 
@@ -38,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})
