@@ -1,6 +1,7 @@
 {
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
+  nix-update-script,
   lib,
   meson,
   ninja,
@@ -31,13 +32,15 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
   version = "0.7.2";
 
-  src = fetchgit {
-    url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "v${version}";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "camera";
+    repo = "libcamera";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
   };
 
@@ -151,10 +154,12 @@ stdenv.mkDerivation rec {
     FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
-    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${finalAttrs.src.rev}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ citadelcore ];
     platforms = lib.platforms.linux;
@@ -163,4 +168,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})
