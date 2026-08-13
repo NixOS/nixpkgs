@@ -67,5 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.agilesteel ];
     changelog = "https://github.com/foundweekends/giter8/releases/tag/v${version}";
     mainProgram = "g8";
+    # a jar plus a launcher wrapper, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
   };
 })
