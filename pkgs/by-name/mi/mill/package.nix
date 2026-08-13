@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   # this is mostly downloading a pre-built artifact
-  preferLocal = true;
+  preferLocalBuild = true;
 
   installPhase = ''
     runHook preInstall
