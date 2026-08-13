@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   autoconf-archive,
@@ -71,6 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
     hash = "sha256-JXSz8waOaVXrlO9WQ+K2pbhYXMjqp3IJ/1y8Hi5fceU=";
   };
+
+  patches = [
+    # Remove with rsyslog 8.2608.0 or newer.
+    (fetchpatch {
+      name = "CVE-2026-19654.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/f7f774228273730ba1075f4cd457ae78303a8f08.patch";
+      hash = "sha256-ww8Ade2eKrQygJduLMPFjxd/fmBnpQ4ePLEzHffPy90=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
