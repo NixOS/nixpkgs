@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" effectiveDarwinVersion)
   ];
 
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://flang.llvm.org";
     description = "LLVM Fortran Runtime";
