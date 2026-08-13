@@ -98,6 +98,7 @@ let
     in
     {
       auto-deploy = mkTests ./auto-deploy.nix;
+      auto-deploy-upgrade = mkTests ./auto-deploy-upgrade.nix;
       configuration = mkTests ./configuration.nix;
       etcd = mkTests ./etcd.nix;
       multi-node = mkTests ./multi-node.nix;
