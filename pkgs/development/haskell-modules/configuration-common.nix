@@ -94,6 +94,10 @@ with haskellLib;
           || (
             lib.versionAtLeast self.ghc.version "9.12.4.20260606" # 9.12.5-rc1
             && lib.versionOlder self.ghc.version "9.14"
+          )
+          || (
+            lib.versionAtLeast self.ghc.version "9.14.1.20260728" # 9.14.1-rc1
+            && lib.versionOlder self.ghc.version "9.15"
           );
 
         # !!! Use cself/csuper inside for the actual overrides
@@ -109,7 +113,6 @@ with haskellLib;
                   hash = "sha256-+rcwBQILTc1ezcHb3VDampwMYGEG7S4HF1YKAk7QzUs=";
                   relative = "Cabal";
                 })
-
               ]) cself.Cabal_3_16_1_0;
               Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
             };
