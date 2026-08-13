@@ -28,12 +28,12 @@
 }:
 
 let
-  xercesc_3_2 = stdenv.mkDerivation rec {
+  xercesc_3_2 = stdenv.mkDerivation (finalAttrs: {
     pname = "xerces-c";
     version = "3.2.3";
 
     src = fetchurl {
-      url = "mirror://apache/xerces/c/3/sources/xerces-c-${version}.tar.gz";
+      url = "mirror://apache/xerces/c/3/sources/xerces-c-${finalAttrs.version}.tar.gz";
       hash = "sha256-+5b8SbH7iS0eZOU6atqKzPbw5tMM4JN5Vuxo05vXLH4=";
     };
 
@@ -46,15 +46,15 @@ let
       license = lib.licenses.asl20;
       platforms = lib.platforms.unix;
     };
-  };
+  });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autenticacao-gov-pt-bin";
   version = "3.14.0";
 
   src = fetchurl {
-    url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${version}/pteid-mw-${version}.flatpak";
+    url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${finalAttrs.version}/pteid-mw-${finalAttrs.version}.flatpak";
     hash = "sha256-eOUW3sWG8ujihqNuTvYbwzQh9sP5nS4YxL2kHngQ/V0=";
   };
 
@@ -96,14 +96,14 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     ostree init --repo=pteid --mode=archive-z2
-    ostree static-delta apply-offline --repo=pteid ${src}
+    ostree static-delta apply-offline --repo=pteid ${finalAttrs.src}
     ostree checkout --repo=pteid -U $(cd pteid/objects && echo */*.commit | sed -E "s/\/|\.commit$//g") pteid_out
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = "autenticacao-gov-pt-bin";
+      exec = "autenticacao-gov-pt-bin";
       desktopName = "Autenticação.gov";
       genericName = "Portuguese eID Data";
       comment = "Middleware for Electronic Identification in Portugal";
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    makeWrapper "${proot}/bin/proot" "$out/bin/${pname}" \
+    makeWrapper "${proot}/bin/proot" "$out/bin/autenticacao-gov-pt-bin" \
       --add-flags "-b" \
       --add-flags "$out/app:/app" \
       --add-flags "$out/app/bin/eidguiV2" \
@@ -166,4 +166,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vaavaav ];
     platforms = lib.platforms.linux;
   };
-}
+})
