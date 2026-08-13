@@ -5,6 +5,7 @@
   coursier,
   makeWrapper,
   setJavaClassPath,
+  testers,
 }:
 
 let
@@ -22,7 +23,7 @@ let
     outputHash = "sha256-NTi63ufQE9FX6AR3TJMzE9rYm1FuKZVuXTTSaf3IxVc=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = baseName;
   inherit version;
 
@@ -43,17 +44,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
+  passthru = {
+    updateScript = ./update.sh;
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/${baseName} --version | grep -q "${version}"
-
-    runHook postInstallCheck
-  '';
-
-  passthru.updateScript = ./update.sh;
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Opinionated code formatter for Scala";
@@ -65,4 +60,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "scalafmt";
   };
-}
+})
