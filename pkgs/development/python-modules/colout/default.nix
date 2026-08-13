@@ -8,15 +8,17 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colout";
   version = "1.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "nojhan";
     repo = "colout";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7Dtf87erBElqVgqRx8BYHYOWv1uI84JJ0LHrcneczCI=";
   };
 
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ badele ];
   };
-}
+})
