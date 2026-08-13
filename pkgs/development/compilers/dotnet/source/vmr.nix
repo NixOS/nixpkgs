@@ -162,7 +162,7 @@ stdenv.mkDerivation {
     # we purposely rename global.json first, because it can break dotnet --version
     mv global.json{,~}
     sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
-    jq '(.tools.dotnet=$dotnet)' global.json~ --arg dotnet "$sdk_version" > global.json
+    jq '.tools.dotnet=$dotnet | .sdk.version=$dotnet' global.json~ --arg dotnet "$sdk_version" > global.json
 
     patchShebangs $(find -name \*.sh -type f -executable)
 
