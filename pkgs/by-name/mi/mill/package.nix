@@ -6,13 +6,16 @@
   makeWrapper,
   stdenvNoCC,
   zlib,
-  writeScript,
+  writeShellApplication,
   stdenv,
+  common-updater-scripts,
   coreutils,
   curl,
+  git,
   gnugrep,
   gnused,
-  common-updater-scripts,
+  jq,
+  nix,
 }:
 
 let
@@ -71,50 +74,101 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "${pname}-updater" ''
-    #!${stdenv.shell}
-    set -eu -o pipefail
-    PATH=${
-      lib.makeBinPath [
+  passthru.updateScript = {
+    command = lib.getExe (writeShellApplication {
+      name = "update-mill";
+
+      runtimeInputs = [
+        common-updater-scripts
         coreutils
         curl
+        git
         gnugrep
         gnused
-        common-updater-scripts
-      ]
-    }:$PATH
-    metadataUrl="https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/maven-metadata.xml"
-    # Maven's <release>/<latest> just reflect whatever was published most recently, which
-    # for mill includes milestone (-M1, -M2, ...) and per-commit dev builds (-N-<sha>).
-    # Filter the full <version> list down to plain X.Y.Z semver and take the highest.
-    latestVersion="$(
-      curl -sS $metadataUrl \
-        | grep -oE '<version>[0-9]+\.[0-9]+\.[0-9]+</version>' \
-        | sed -E 's#</?version>##g' \
-        | sort -V \
-        | tail -n1
-    )"
+        jq
+        nix
+      ];
 
-    ${lib.strings.concatStrings (
-      builtins.map (
-        platform:
-        let
-          suffix = sources.${platform}.suffix;
-        in
-        ''
-          {
-            dlUrl="https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/$latestVersion/mill-dist-${suffix}-$latestVersion.exe"
+      text = ''
+        # stdout is reserved for the JSON expected by the `commit` updateScript
+        # feature, everything else has to go to stderr.
+        attr_path="''${UPDATE_NIX_ATTR_PATH:-mill}"
 
-            prefetch="$(nix-prefetch-url $dlUrl)"
-            hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
+        nixpkgs=$(git rev-parse --show-toplevel)
+        position=$(nix-instantiate --eval --raw --attr "$attr_path.meta.position" "$nixpkgs")
+        package_nix="''${position%:*}"
+        old_version=$(nix-instantiate --eval --raw --attr "$attr_path.version" "$nixpkgs")
 
+        # Maven's <release>/<latest> just reflect whatever was published most
+        # recently, which for mill includes milestones (-M1, -M2, ...) and
+        # per-commit dev builds (-N-<sha>). Filter the full <version> list down to
+        # plain X.Y.Z semver and take the highest.
+        new_version=$(curl --silent --show-error --fail \
+          "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/maven-metadata.xml" \
+          | grep -oE '<version>[0-9]+\.[0-9]+\.[0-9]+</version>' \
+          | sed -E 's#</?version>##g' \
+          | sort -V \
+          | tail -n1)
 
-            update-source-version mill "$latestVersion" "$hash" --system=${platform} --ignore-same-version
-          }
-        ''
-      ) meta.platforms
-    )}
-  '';
+        if [[ -z "$new_version" ]]; then
+          echo "no plain X.Y.Z release found in the maven metadata" >&2
+          exit 1
+        fi
+
+        order=$(nix-instantiate --eval \
+          --expr "builtins.compareVersions \"$new_version\" \"$old_version\"")
+
+        case "$order" in
+          0)
+            echo "$attr_path is already at the latest version $new_version." >&2
+            echo '[]'
+            exit 0
+            ;;
+          -1)
+            echo "refusing to downgrade $attr_path from $old_version to $new_version." >&2
+            exit 1
+            ;;
+        esac
+
+        # update-source-version rewrites package.nix in place, once per platform,
+        # so put the file back if any of them fails rather than leaving it half
+        # updated.
+        backup=$(mktemp)
+        cp "$package_nix" "$backup"
+        trap 'cp "$backup" "$package_nix"; rm -f "$backup"' EXIT
+
+        refresh() {
+          local system="$1" suffix="$2" hash
+          hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url \
+            "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-$suffix/$new_version/mill-dist-$suffix-$new_version.exe")")
+
+          update-source-version "$attr_path" "$new_version" "$hash" \
+            --system="$system" --ignore-same-version >&2
+        }
+
+        ${lib.concatMapStrings (system: ''
+          refresh ${system} ${sources.${system}.suffix}
+        '') (builtins.attrNames sources)}
+
+        trap - EXIT
+        rm -f "$backup"
+
+        jq --null-input --compact-output \
+          --arg attrPath "$attr_path" \
+          --arg oldVersion "$old_version" \
+          --arg newVersion "$new_version" \
+          --arg file "$package_nix" \
+          '[ {
+            attrPath: $attrPath,
+            oldVersion: $oldVersion,
+            newVersion: $newVersion,
+            files: [ $file ],
+            commitBody: "https://github.com/com-lihaoyi/mill/releases/tag/\($newVersion)"
+          } ]'
+      '';
+    });
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
