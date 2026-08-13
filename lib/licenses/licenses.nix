@@ -1617,6 +1617,13 @@ lib.mapAttrs mkLicense (
       fullName = "Universal Permissive License";
     };
 
+    valveSDK = {
+      fullName = "Valve Corporation Steamworks SDK Access Agreement";
+      url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
+      free = false;
+      redistributable = true;
+    };
+
     vim = {
       spdxId = "Vim";
       fullName = "Vim License";
