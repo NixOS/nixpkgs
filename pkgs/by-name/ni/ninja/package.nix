@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt.bin
   ];
 
+  strictDeps = true;
+
   patches = [
     ./0001-spawn-sh-instead-of-bin-sh.patch
   ]
@@ -113,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru.updateScript = nix-update-script { };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Small build system with a focus on speed";
