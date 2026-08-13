@@ -112,6 +112,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
+    changelog = "https://github.com/com-lihaoyi/mill/releases/tag/${version}";
     license = lib.licenses.mit;
     description = "Build tool for Scala, Java and more";
     mainProgram = "mill";
