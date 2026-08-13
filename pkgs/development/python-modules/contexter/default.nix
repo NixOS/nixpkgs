@@ -5,19 +5,23 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "contexter";
   version = "0.1.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c730890b1a915051414a6350d8ea1cddca7d01d8f756badedb30b9bf305ea0a8";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xzCJCxqRUFFBSmNQ2Ooc3cp9Adj3Vrre2zC5vzBeoKg=";
   };
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "contexter" ];
+
   meta = {
     license = lib.licenses.mit;
   };
-}
+})
