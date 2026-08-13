@@ -46,24 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-<<<<<<< HEAD
-  passthru.updateScript = ./update.sh;
-||||||| parent of c92d524004a8 (giter8: group passthru attributes)
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/g8 --version | grep -q "${version}"
-  '';
-
-  passthru.updateScript = ./update.sh;
-=======
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/g8 --version | grep -q "${version}"
-  '';
-
   passthru = {
     updateScript = ./update.sh;
->>>>>>> c92d524004a8 (giter8: group passthru attributes)
 
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
