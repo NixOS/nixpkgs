@@ -7,13 +7,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cookies";
   version = "2.2.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1raYeIyuTPpOYu+GQ6nKMyt5vZbLMUKUuGSujX6z7o4=";
   };
 
@@ -34,9 +36,11 @@ buildPythonPackage rec {
     "test_encoding_assumptions"
   ];
 
+  pythonImportsCheck = [ "cookies" ];
+
   meta = {
     description = "Friendlier RFC 6265-compliant cookie parser/renderer";
     homepage = "https://github.com/sashahart/cookies";
     license = lib.licenses.mit;
   };
-}
+})
