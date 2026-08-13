@@ -36,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/apache/buildstream-plugins/releases/tag/${finalAttrs.version}";
     description = "BuildStream plugins";
     homepage = "https://github.com/apache/buildstream-plugins";
     inherit (buildstream.meta) platforms;
