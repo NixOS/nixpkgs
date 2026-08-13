@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm
   ];
 
+  strictDeps = true;
+
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     MACOSX_DEPLOYMENT_TARGET = effectiveDarwinVersion;
     NIX_CFLAGS_COMPILE = "-mmacosx-version-min=${effectiveDarwinVersion}";
