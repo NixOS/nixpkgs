@@ -2148,6 +2148,9 @@ with haskellLib;
       # fgl isn’t used; removing it avoids cross-compilation failures.
       # https://hub.darcs.net/darcs/darcs-reviewed/patch/3a8e57ef9fed776f62a3538f8842b6593546e368
       ./patches/darcs-remove-fgl-dependency.patch
+      # Allow tls >= 2.2, http-client-tls >= 0.4
+      # https://hub.darcs.net/darcs/darcs-screened/patch/523d0a3a5480024ea35fd5d17b35a05e9d3334a0
+      ./patches/darcs-tls-2.2.patch
     ])
   ];
 
