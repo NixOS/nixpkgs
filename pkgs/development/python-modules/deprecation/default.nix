@@ -8,13 +8,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deprecation";
   version = "2.1.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-crO95k5dd4aUsM9oF4rtA9FeFUdxFq3T+3c+WB+VGP8=";
   };
 
@@ -33,9 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+  pythonImportsCheck = [ "deprecation" ];
+
   meta = {
     description = "Library to handle automated deprecations";
     homepage = "https://deprecation.readthedocs.io/";
     license = lib.licenses.asl20;
   };
-}
+})
