@@ -63,6 +63,19 @@ mesonCheckPhase() {
         flagsArray+=("--timeout-multiplier=0")
     fi
 
+    if [[ -n "${disabledTests[*]-}" ]]; then
+        _disabledTestsJson=$(@jqExe@ --compact-output --null-input '$ARGS.positional' --args -- "${disabledTests[@]}")
+        # NOTE: Meson allows assocating tests with an array of "suite" labels, though this is almost never used in practice
+        # For simplicity, we assume that tests are sufficiently identified by the first element of the suite array
+        flagsArray+=(
+            $(meson introspect --tests | \
+              @jqExe@ --argjson disabled "$_disabledTestsJson" \
+              -r 'map(select(.name | IN($disabled[]) | not))
+                | map("\(.suite[0]):\(.name)")
+                | .[]')
+        )
+    fi
+
     # Parallel building is enabled by default.
     local buildCores=1
     if [ "${enableParallelBuilding-1}" ]; then
