@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "retinaface";
+  pname = "retina-face";
   version = "0.0.17";
   pyproject = true;
 
