@@ -161,7 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libcamera.org";
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${finalAttrs.src.rev}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ citadelcore ];
+    maintainers = with lib.maintainers; [
+      citadelcore
+      tmarkus
+    ];
     platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
