@@ -5,6 +5,7 @@
   setuptools,
   numpy,
   matplotlib,
+  standard-pkg-resources,
   pytestCheckHook,
 }:
 
@@ -27,6 +28,7 @@ buildPythonPackage {
   dependencies = [
     numpy
     matplotlib
+    standard-pkg-resources
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
