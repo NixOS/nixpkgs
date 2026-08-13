@@ -49,9 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://scalameta.org/metals/";
+    changelog = "https://github.com/scalameta/metals/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     description = "Language server for Scala";
     mainProgram = "metals";
+    # a jar plus a launcher wrapper, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
     maintainers = with lib.maintainers; [
       agilesteel
       fabianhjr
