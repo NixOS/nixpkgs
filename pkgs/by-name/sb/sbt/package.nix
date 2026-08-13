@@ -8,6 +8,18 @@
   ncurses,
 }:
 
+let
+  # sbt itself is a shell script plus a jar and runs wherever the jre does; only
+  # the optional native thin client is architecture-specific, and upstream ships
+  # one for these systems alone.
+  nativeClients = {
+    aarch64-darwin = "sbtn-universal-apple-darwin";
+    aarch64-linux = "sbtn-aarch64-pc-linux";
+    x86_64-linux = "sbtn-x86_64-pc-linux";
+  };
+
+  nativeClient = nativeClients.${stdenv.hostPlatform.system} or null;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
   version = "2.0.6";
@@ -45,15 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
-    ln -sT ../share/sbt/bin/sbtn-${
-      if (stdenv.hostPlatform.isDarwin) then
-        "universal-apple-darwin"
-      else if (stdenv.hostPlatform.isAarch64) then
-        "aarch64-pc-linux"
-      else
-        "x86_64-pc-linux"
-    } $out/bin/sbtn
-
+  ''
+  + lib.optionalString (nativeClient != null) ''
+    ln -sT ../share/sbt/bin/${nativeClient} $out/bin/sbtn
+  ''
+  + ''
     runHook postInstall
   '';
 
