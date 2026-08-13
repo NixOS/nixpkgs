@@ -10,6 +10,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flux9s";
   version = "1.0.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dgunzy";
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "K9s-inspired terminal UI for monitoring Flux GitOps resources in real-time";
     mainProgram = "flux9s";
     homepage = "https://flux9s.ca/";
+    changelog = "https://github.com/dgunzy/flux9s/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.skyesoss ];
   };

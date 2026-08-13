@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "primer3";
+  pname = "primer3-py";
   version = "2.3.0";
   pyproject = true;
 

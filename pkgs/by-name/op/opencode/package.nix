@@ -21,6 +21,9 @@ let
       pname = "${finalAttrs.pname}-node_modules";
       inherit (finalAttrs) version src;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
         "GIT_PROXY_COMMAND"
         "SOCKS_SERVER"
@@ -74,14 +77,14 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-GBLs3nXtfSeXb4jXxSNM8ElMa/e/EB4sZn3c2inHnco=";
+      outputHash = "sha256-oU7qWOsY2TtVE+Gp2DhSXffm9OghTHcNhzDwwAovwZI=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.16";
+  version = "1.18.18";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -90,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AP2W443Zk/X8j6BWfMgAEbR4BQiJgnPpr1OG6JWIprE=";
+    hash = "sha256-rDVcv8j9KghTDwooPYriTloOMgTyVutud7xKLG2mTmk=";
   };
 
   postPatch =
