@@ -30153,6 +30153,12 @@
     githubId = 6148271;
     name = "Dave Nicponski";
   };
+  visorcraft = {
+    email = "packages@visorcraft.com";
+    github = "visorcraft";
+    githubId = 29009015;
+    name = "VisorCraft";
+  };
   vitorpavani = {
     email = "vipavani@hotmail.com";
     github = "vitorpavani";
