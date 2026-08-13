@@ -14,11 +14,11 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "10.4p1";
+    version = "10.5p1";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-72Am3SrqjVYFljjV0yYpAsiSzrqfiDlYNeDQbT+2Mjg=";
+      hash = "sha256-1E0oqDnqna+WnMaRUP3lmRCys5Nh2tgaO9bL0ZIY2xE=";
     };
 
     extraPatches = [
