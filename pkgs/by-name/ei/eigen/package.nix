@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "EIGEN_LEAVE_TEST_IN_ALL_TARGET" true) # Build tests in parallel
   ];
