@@ -8,6 +8,7 @@
   ncurses,
   alsa-lib,
   buildPackages,
+  versionCheckHook,
 
   ## Additional optional output modes
   enableVorbis ? false,
@@ -120,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     chmod -Rh a+rX $out/share/timidity/
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.tests = nixosTests.timidity;
 
