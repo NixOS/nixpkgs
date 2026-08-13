@@ -14,6 +14,7 @@
   libappindicator,
   libdbusmenu-gtk3,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     gdk-pixbuf
@@ -58,12 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip"
     "tui_with_pty_exits_cleanly_on_quit"
   ];
-
-  # Config/state paths expand under HOME; point at TMPDIR in the sandbox.
-  preCheck = ''
-    export HOME="$TMPDIR/walls-test-home"
-    mkdir -p "$HOME"
-  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/icons/hicolor/scalable/apps $out/share/applications
