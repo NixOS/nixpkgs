@@ -8,7 +8,7 @@ fi
 echo "getting revision $selector";
 
 done=;
-for source in $dbs; do
+for source in "${dbs[@]}"; do
     if mtn pull --db "$cacheDB" "$source" "${branch}"; then
         revision="$(mtn --db "$cacheDB" au toposort $(mtn --db "$cacheDB" au select "$selector") | tail -1)";
         if [ -n "$revision" ]; then
