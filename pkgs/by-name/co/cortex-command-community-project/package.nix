@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+# bug's not found unzip.h
+  postPatch = ''
+    substituteInPlace ./Source/System/System.cpp \
+      --replace-fail '#include "unzip.h"' '#include "minizip/unzip.h"'
+   '';
+
   postFixup = ''
     patchelf --set-rpath ${lib.makeLibraryPath [ libpulseaudio ]} $out/lib/CortexCommand/libfmod.so*
   '';
