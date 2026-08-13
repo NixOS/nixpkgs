@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
       !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
