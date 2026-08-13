@@ -2947,22 +2947,29 @@ with haskellLib;
   # 2025-04-13: jailbreak to allow hedgehog >= 1.5
   hw-bits = warnAfterVersion "0.7.2.2" (doJailbreak super.hw-bits);
 
-  monad-bayes =
-    # Floating point precision issues. Test suite is only checked on x86_64.
-    # https://github.com/tweag/monad-bayes/issues/368
-    dontCheckIf
-      (
-        let
-          inherit (pkgs.stdenv) hostPlatform;
-        in
-        !hostPlatform.isx86_64
-        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-        # also fails on Hydra
-        || hostPlatform.isDarwin
-      )
-      # Too strict bounds on brick (<2.6), vty (<6.3)
-      # https://github.com/tweag/monad-bayes/issues/378
-      (doJailbreak super.monad-bayes);
+  # Test suite is brittle, dependent on the random number generator
+  # implementation and architecture. See:
+  # * https://github.com/tweag/monad-bayes/pull/389
+  # * https://github.com/tweag/monad-bayes/issues/368
+  monad-bayes = dontCheck (doJailbreak super.monad-bayes);
+
+  # Test suite has a too-strict bound QuickCheck <2.16, but nightly ships 2.16.
+  # Bound bumped upstream in https://github.com/turion/rhine/pull/449; drop this
+  # once a release/Hackage revision with the relaxed bound reaches nixpkgs.
+  automaton = dontCheck super.automaton;
+
+  # Not maintained anymore, but still builds
+  monad-schedule = dontCheck (doJailbreak super.monad-schedule);
+
+  # Test suite has a too-strict bound QuickCheck <2.16, but nightly ships 2.16.
+  # Bound bumped upstream in https://github.com/turion/rhine/pull/449; drop this
+  # once a release/Hackage revision with the relaxed bound reaches nixpkgs.
+  rhine = dontCheck super.rhine;
+
+  # The warp test suite runs an HTTP server that needs the threaded RTS, but the
+  # test suite is missing `ghc-options: -threaded`. Fixed upstream in
+  # https://github.com/turion/essence-of-live-coding/pull/153; drop once released.
+  essence-of-live-coding-warp = dontCheck super.essence-of-live-coding-warp;
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = doJailbreak super.crucible;

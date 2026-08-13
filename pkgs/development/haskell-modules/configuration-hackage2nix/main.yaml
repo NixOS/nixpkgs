@@ -662,7 +662,6 @@ package-maintainers:
     - finite-typelits
     - has-transformers
     - monad-bayes
-    - monad-schedule
     - pulse-simple
     - openapi3-code-generator
     - rhine
