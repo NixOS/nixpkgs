@@ -34,6 +34,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/condense-json";
     changelog = "https://github.com/simonw/condense-json/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ josh ];
+    maintainers = with lib.maintainers; [
+      josh
+      dwt
+    ];
   };
 }
