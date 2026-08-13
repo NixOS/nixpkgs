@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-12-16";
+  version = "2026-07-27";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-EnKfeWRiqWVFbGc2QNT9YQHs+dlXvvri9FPVxpxpphM=";
+    hash = "sha256-BvVGCOJ7K9ISOGPa6OibXjxKcJL4UoPF6al8k8iMhkQ=";
   };
 
   nativeBuildInputs = [
@@ -40,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmakerc
+    curl
     fmt_11
   ];
 
   patches = [
-    ./change-lock-location.patch
     ./read-bundle-info-from-root.patch
   ];
 
   cmakeFlags = [
     "-DVCPKG_DEPENDENCY_EXTERNAL_FMT=ON"
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
+    "-DVCPKG_LIBCURL_DLSYM=OFF"
   ];
 
   vcpkgWrapper =
