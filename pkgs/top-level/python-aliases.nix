@@ -255,6 +255,7 @@ mapAliases {
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   fints_4 = throw "fints_4 has been removed, migrate to fints"; # added 2026-06-04
   flake8-future-import = throw "'flake8-future-import' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  flashinfer = warnAlias "'flashinfer' has been renamed to 'flashinfer-python'" flashinfer-python; # Added 2026-08-13
   flask-security-too = throw "'flask-security-too' has been renamed to/replaced by 'flask-security'"; # Converted to throw 2025-10-29
   flask-silk = throw "flask-silk was removed, as it is unmaintained since 2018."; # added 2025-05-25
   flask-themes2 = throw "'flask-themes2' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
