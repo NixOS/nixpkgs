@@ -125,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
+  strictDeps = true;
+
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
