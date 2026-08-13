@@ -1,0 +1,30 @@
+Allow readv/writev in the LibSandbox seccomp policy.
+
+The file-descriptor seccomp policy introduced in ba87a32626 ("LibSandbox:
+Add reusable sandbox building blocks") whitelists read/write/pread64/pwrite64
+but not the vectored readv/writev syscalls. Once ea1ecdad5a ("RequestServer:
+Sandbox the process on Linux") started applying this policy to RequestServer,
+any TLS-heavy connection crashes the process with SIGSYS: curl/OpenSSL read
+socket data with readv(), which the policy traps ("Sandbox violation:
+disallowed syscall (19)"). This manifests as RequestServer becoming
+unavailable and the WebContent RequestClient constructor tripping a VERIFY,
+so most HTTPS sites fail to load.
+
+readv/writev are universally available on Linux, so the plain
+SECCOMP_APPEND_ALLOW_SYSCALL macro (which does not require an IF_DEFINED_*
+helper) is used.
+
+This is unfixed upstream as of the packaged revision, and Ladybird no longer
+accepts external patches, so it is carried downstream. Remove if upstream
+adds readv/writev to the policy.
+--- a/Libraries/LibSandbox/Seccomp.cpp
++++ b/Libraries/LibSandbox/Seccomp.cpp
+@@ -882,6 +882,8 @@
+ {
+     SECCOMP_APPEND_ALLOW_SYSCALL_IF_DEFINED(*this, read);
+     SECCOMP_APPEND_ALLOW_SYSCALL_IF_DEFINED(*this, write);
++    SECCOMP_APPEND_ALLOW_SYSCALL(*this, readv);
++    SECCOMP_APPEND_ALLOW_SYSCALL(*this, writev);
+     SECCOMP_APPEND_ALLOW_SYSCALL_IF_DEFINED(*this, close);
+     SECCOMP_APPEND_ALLOW_SYSCALL_IF_DEFINED(*this, fstat);
+     SECCOMP_APPEND_ALLOW_SYSCALL_IF_DEFINED(*this, dup);
