@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
+  setuptools,
   packaging,
   unittestCheckHook,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "deprecation";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,7 +27,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ packaging ];
+  build-system = [ setuptools ];
+
+  dependencies = [ packaging ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
