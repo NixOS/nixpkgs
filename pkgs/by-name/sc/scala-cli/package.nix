@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line tool to interact with the Scala language";
     mainProgram = "scala-cli";
     maintainers = with lib.maintainers; [
-      kubukoz
       agilesteel
+      kubukoz
     ];
     inherit platforms;
   };
