@@ -53,24 +53,29 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  installPhase = ''
-    runHook preInstall
+  # upstream documents JDK 17 or higher for the CLI, which is what this packages
+  installPhase =
+    assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
+      bloop requires Java 17 or newer, but ${jre.name} is ${jre.version}
+    '';
+    ''
+      runHook preInstall
 
-    install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
+      install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
 
-    # The client starts a jvm build server, so it needs a jre on PATH and in
-    # JAVA_HOME; propagating the jre put it in the closure but on nobody's PATH.
-    makeWrapper $out/.bloop-wrapped $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${jre.home}
+      # The client starts a jvm build server, so it needs a jre on PATH and in
+      # JAVA_HOME; propagating the jre put it in the closure but on nobody's PATH.
+      makeWrapper $out/.bloop-wrapped $out/bin/bloop \
+        --prefix PATH : ${lib.makeBinPath [ jre ]} \
+        --set JAVA_HOME ${jre.home}
 
-    #Install completions
-    installShellCompletion --name bloop --bash ${bloop-bash}
-    installShellCompletion --name _bloop --zsh ${bloop-zsh}
-    installShellCompletion --name bloop.fish --fish ${bloop-fish}
+      #Install completions
+      installShellCompletion --name bloop --bash ${bloop-bash}
+      installShellCompletion --name _bloop --zsh ${bloop-zsh}
+      installShellCompletion --name bloop.fish --fish ${bloop-fish}
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru = {
     updateScript = {
