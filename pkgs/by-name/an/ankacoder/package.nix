@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ankacoder";
   version = "1.100";
 
   src = fetchzip {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-14ItaSQ/fO/WDq0O4SXGWnZgiM0kayJrWQgsKb7bsyY=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
