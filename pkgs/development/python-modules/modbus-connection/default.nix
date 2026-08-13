@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "3.9.0";
+  version = "4.6.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-WmPjIAxC9e6tYxPJSQpvdhUNj2tbYim5e1RP5MIiL9M=";
+    hash = "sha256-oQgBOyNu0FQeZ1IzUfR6YqlKY0xt1rqVFGIxCZuAOmw=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,8 @@ buildPythonPackage (finalAttrs: {
     tmodbus = [
       tmodbus
     ]
-    ++ tmodbus.optional-dependencies.async-serial;
+    ++ tmodbus.optional-dependencies.async-serial
+    ++ tmodbus.optional-dependencies.security;
   };
 
   nativeCheckInputs = [
@@ -50,6 +51,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     # tries to git clone https://github.com/sunspec/models
+    "test_generated_layout_matches_a_real_device"
     "test_official_model_catalogue_generates_and_imports"
   ];
 
