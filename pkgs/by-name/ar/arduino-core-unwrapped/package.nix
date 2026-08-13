@@ -100,7 +100,7 @@ let
       throw "${stdenv.hostPlatform.system} is not supported in teensy";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname =
     (if withTeensyduino then "teensyduino" else "arduino") + lib.optionalString (!withGui) "-core";
   version = "1.8.19";
@@ -108,13 +108,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-I+PvfGc5F8H/NJOGRa18z7dKyKcO8I8Cg7Tj5yxkYAQ=";
   };
 
   teensyduino_version = "156";
   teensyduino_src = fetchurl {
-    url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
+    url = "https://www.pjrc.com/teensy/td_${finalAttrs.teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 =
       {
         linux64 = "sha256-4DbhmmYrx+rCBpDrYFaC0A88Qv9UEeNlQAkFi3zAstk=";
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
-    url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
+    url = "https://downloads.arduino.cc/arduino-${finalAttrs.version}-${teensy_architecture}.tar.xz";
     sha256 =
       {
         linux64 = "sha256-62i93B0cASC+L8oTUKA+40Uxzzf1GEeyEhC25wVFvJs=";
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/arduino
     cp -r ./build/linux/work/* "$out/share/arduino/"
-    echo -n ${version} > $out/share/arduino/lib/version.txt
+    echo -n ${finalAttrs.version} > $out/share/arduino/lib/version.txt
 
     ${lib.optionalString withGui ''
       mkdir -p $out/bin
@@ -224,14 +224,14 @@ stdenv.mkDerivation rec {
       # Extract jars from the arduino distributable package
       mkdir arduino_dist
       cd arduino_dist
-      tar xfJ ${arduino_dist_src} arduino-${version}/lib/arduino-core.jar arduino-${version}/lib/pde.jar
+      tar xfJ ${finalAttrs.arduino_dist_src} arduino-${finalAttrs.version}/lib/arduino-core.jar arduino-${finalAttrs.version}/lib/pde.jar
       cd ..
       # Replace the built jars with the official arduino jars
-      mv arduino_dist/arduino-${version}/lib/{arduino-core,pde}.jar $out/share/arduino/lib/
+      mv arduino_dist/arduino-${finalAttrs.version}/lib/{arduino-core,pde}.jar $out/share/arduino/lib/
       # Delete the directory now that the jars are copied out
       rm -r arduino_dist
       # Extract and patch the Teensyduino installer
-      cp ${teensyduino_src} ./TeensyduinoInstall.${teensy_architecture}
+      cp ${finalAttrs.teensyduino_src} ./TeensyduinoInstall.${teensy_architecture}
       chmod +w ./TeensyduinoInstall.${teensy_architecture}
       upx -d ./TeensyduinoInstall.${teensy_architecture}
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
@@ -254,7 +254,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/lib $file || true
+      patchelf --set-rpath ${finalAttrs.rpath}:$out/lib $file || true
     done
 
     ${lib.concatMapStringsSep "\n" (
@@ -298,4 +298,4 @@ stdenv.mkDerivation rec {
       bergey
     ];
   };
-}
+})
