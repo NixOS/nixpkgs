@@ -45,14 +45,14 @@
   wavpack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "audacious-plugins";
   version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious-plugins";
-    rev = "${pname}-${version}";
+    rev = "audacious-plugins-${finalAttrs.version}";
     hash = "sha256-HfO59DOIYsEpBzUyaLYh/gXfz+zvH8lIY2yBVCn3wks=";
   };
 
@@ -134,4 +134,4 @@ stdenv.mkDerivation rec {
     description = "Plugins for Audacious music player";
     downloadPage = "https://github.com/audacious-media-player/audacious-plugins";
   };
-}
+})
