@@ -102,7 +102,8 @@ let
           agilesteel
           tbutter
         ];
-        platforms = lib.platforms.all;
+        # a launcher script running a jar, so it runs wherever the jre does
+        platforms = jre.meta.platforms;
       };
     };
 in
