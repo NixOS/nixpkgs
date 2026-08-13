@@ -56,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";
     homepage = "https://github.com/kevinkreiser/prime_server";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = with lib.maintainers; [
+      Thra11
+      karlbeecken
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
