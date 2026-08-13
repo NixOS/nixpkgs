@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     let
       conf_file = "$out/share/dbus-1/system.d/io.github.plrigaux.SysDManager.conf";
       service_file = "$out/lib/systemd/system/sysd-manager-proxy.service";
+      bus_name = "io.github.plrigaux.SysDManager";
     in
     ''
 
@@ -80,14 +81,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm644 sysd-manager-proxy/data/sysd-manager-proxy.service "${service_file}"
 
 
-      substituteInPlace "${conf_file}" "${service_file}" \
-        --replace-quiet '{BUS_NAME}' 'io.github.plrigaux.SysDManager' \
-        --replace-quiet '{DESTINATION}' 'io.github.plrigaux.SysDManager' \
-        --replace-quiet '{INTERFACE}' 'io.github.plrigaux.SysDManager' \
-        --replace-quiet '{ENVIRONMENT}' "" \
-        --replace-quiet '{EXECUTABLE}' "$out/bin/sysd-manager-proxy" \
-        --replace-quiet '{INTERFACE}' 'io.github.plrigaux.SysDManager' \
-        --replace-quiet '{SERVICE_ID}' 'sysd-manager-proxy'
+      substituteInPlace "${conf_file}" \
+        --replace-fail '{BUS_NAME}' "${bus_name}" \
+        --replace-fail '{DESTINATION}' "${bus_name}" \
+        --replace-fail '{INTERFACE}' "${bus_name}"
+
+      substituteInPlace "${service_file}" \
+        --replace-fail '{ENVIRONMENT}' "" \
+        --replace-fail '{EXECUTABLE}' "$out/bin/sysd-manager-proxy" \
+        --replace-fail '{DESTINATION}' "${bus_name}" \
+        --replace-fail '{SERVICE_ID}' 'sysd-manager-proxy'
 
       cp -r "./target/locale" "$out/share/"
     '';
