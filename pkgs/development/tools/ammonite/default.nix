@@ -47,40 +47,46 @@ let
 
       dontUnpack = true;
 
-      installPhase = ''
-        install -Dm755 $src $out/bin/amm
+      # ammonite.AmmoniteMain is class-file 55, so an older jre fails the install
+      # check below with UnsupportedClassVersionError rather than anything useful
+      installPhase =
+        assert lib.assertMsg (lib.versionAtLeast jre.version "11.0.0") ''
+          ammonite requires Java 11 or newer, but ${jre.name} is ${jre.version}
+        '';
+        ''
+          install -Dm755 $src $out/bin/amm
 
-        # Upstream ships a .bat/.sh polyglot with no interpreter directive, so
-        # without this execve gives ENOEXEC to every caller that does not retry
-        # under /bin/sh the way a shell does. patchShebangs pins it afterwards.
-        sed -i '1i #!/bin/sh' $out/bin/amm
+          # Upstream ships a .bat/.sh polyglot with no interpreter directive, so
+          # without this execve gives ENOEXEC to every caller that does not retry
+          # under /bin/sh the way a shell does. patchShebangs pins it afterwards.
+          sed -i '1i #!/bin/sh' $out/bin/amm
 
-        # The launcher prefers $JAVA_HOME over its own default, so both branches
-        # have to be pinned; patching only the default leaves `override { jre = ...; }`
-        # with no effect in any shell that sets JAVA_HOME. sed rather than
-        # substituteInPlace because the launcher has a jar appended to it.
-        sed -i \
-          -e 's|JAVACMD="java"|JAVACMD="${jre}/bin/java"|' \
-          -e 's|JAVACMD="$JAVA_HOME/bin/java"|JAVACMD="${jre}/bin/java"|' \
-          $out/bin/amm
+          # The launcher prefers $JAVA_HOME over its own default, so both branches
+          # have to be pinned; patching only the default leaves `override { jre = ...; }`
+          # with no effect in any shell that sets JAVA_HOME. sed rather than
+          # substituteInPlace because the launcher has a jar appended to it.
+          sed -i \
+            -e 's|JAVACMD="java"|JAVACMD="${jre}/bin/java"|' \
+            -e 's|JAVACMD="$JAVA_HOME/bin/java"|JAVACMD="${jre}/bin/java"|' \
+            $out/bin/amm
 
-        # sed is silent when it matches nothing, which is how the JAVA_HOME
-        # branch went unpatched in the first place.
-        if grep -qa 'JAVACMD="$JAVA_HOME/bin/java"' $out/bin/amm; then
-          echo "the amm launcher still prefers JAVA_HOME; the substitution missed" >&2
-          exit 1
-        fi
+          # sed is silent when it matches nothing, which is how the JAVA_HOME
+          # branch went unpatched in the first place.
+          if grep -qa 'JAVACMD="$JAVA_HOME/bin/java"' $out/bin/amm; then
+            echo "the amm launcher still prefers JAVA_HOME; the substitution missed" >&2
+            exit 1
+          fi
 
-        # Hand the same jre to whatever the repl spawns. makeWrapper is not an
-        # option here: the launcher passes itself as the classpath with -cp "$0",
-        # so a wrapper that changes $0 breaks it.
-        sed -i "/^exec /i export JAVA_HOME=\"${jre.home}\"\nexport PATH=\"${lib.makeBinPath [ jre ]}\''${PATH:+:\$PATH}\"" $out/bin/amm
+          # Hand the same jre to whatever the repl spawns. makeWrapper is not an
+          # option here: the launcher passes itself as the classpath with -cp "$0",
+          # so a wrapper that changes $0 breaks it.
+          sed -i "/^exec /i export JAVA_HOME=\"${jre.home}\"\nexport PATH=\"${lib.makeBinPath [ jre ]}\''${PATH:+:\$PATH}\"" $out/bin/amm
 
-        if ! grep -qa "^export JAVA_HOME=" $out/bin/amm; then
-          echo "failed to insert the environment ahead of exec" >&2
-          exit 1
-        fi
-      '';
+          if ! grep -qa "^export JAVA_HOME=" $out/bin/amm; then
+            echo "failed to insert the environment ahead of exec" >&2
+            exit 1
+          fi
+        '';
 
       passthru = {
 
