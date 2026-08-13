@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "lukesmithxyz-st";
-  version = "0.pre+unstable=2021-08-10";
+  version = "0-unstable=2026-04-10";
 
   src = fetchFromGitHub {
     owner = "LukeSmithxyz";
     repo = "st";
-    rev = "e053bd6036331cc7d14f155614aebc20f5371d3a";
-    hash = "sha256-WwjuNxWoeR/ppJxJgqD20kzrn1kIfgDarkTOedX/W4k=";
+    rev = "48b8ee6e181643800fe83353ec554f503020a8fa";
+    hash = "sha256-XFf48+6I3IHcRKGHRJIJb9u2sTKWyuWTb5lN+BILYYc=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,6 @@ stdenv.mkDerivation {
     libxext
     libxft
     ncurses
-  ];
-
-  patches = [
-    # eliminate useless calls to git inside Makefile
-    ./0000-makefile-fix-install.diff
   ];
 
   installPhase = ''
