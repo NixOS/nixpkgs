@@ -22,6 +22,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "contexter" ];
 
   meta = {
+    homepage = "https://bitbucket.org/defnull/contexter";
     license = lib.licenses.mit;
   };
 })
