@@ -51,6 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://squawkhq.com";
     changelog = "https://github.com/sbdchd/squawk/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.dibenzepin ];
   };
 })

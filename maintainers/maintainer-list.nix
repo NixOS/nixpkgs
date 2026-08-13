@@ -63,6 +63,12 @@
 {
   # keep-sorted start case=no numeric=no block=yes
 
+  "3mp3ri0r" = {
+    email = "christoforus@xendit.co";
+    github = "3mp3ri0r";
+    githubId = 3140815;
+    name = "Christoforus Surjoputro";
+  };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -7122,6 +7128,12 @@
     github = "DianaOlympos";
     githubId = 15774340;
     name = "Thomas Depierre";
+  };
+  dibenzepin = {
+    name = "Fumnanya";
+    email = "fmowete@outlook.com";
+    github = "dibenzepin";
+    githubId = 87488715;
   };
   DictXiong = {
     email = "me@beardic.cn";
@@ -22806,12 +22818,6 @@
     github = "pongo1231";
     githubId = 4201956;
     name = "pongo1231";
-  };
-  poopsicles = {
-    name = "Fumnanya";
-    email = "fmowete@outlook.com";
-    github = "dibenzepin";
-    githubId = 87488715;
   };
   PopeRigby = {
     name = "PopeRigby";

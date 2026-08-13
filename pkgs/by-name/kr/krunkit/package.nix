@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   passthru = {
-    tests.boot = lib.optional stdenv.isDarwin (
+    tests.boot = lib.optional stdenv.hostPlatform.isDarwin (
       callPackage ./boot-test.nix { krunkit = finalAttrs.finalPackage; }
     );
     updateScript = nix-update-script { };
