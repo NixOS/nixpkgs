@@ -80,7 +80,7 @@ with haskellLib;
   # Version upgrades
   #
 
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_1_0;
 
   #
   # Jailbreaks
@@ -131,14 +131,17 @@ with haskellLib;
   haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
   haskell-debugger = doDistribute (doJailbreak super.haskell-debugger); # hie-bios < 0.18, random >=1.3.1
 
-  ghc-exactprint_1_14_0_0 = addBuildDepends [
+  ghc-exactprint_1_14_1_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
+    self.containers
     self.Diff
-    self.extra
+    self.directory
+    self.filepath
     self.ghc-paths
     self.silently
+    self.syb
     self.HUnit
-  ] super.ghc-exactprint_1_14_0_0;
+  ] super.ghc-exactprint_1_14_1_0;
 
   #
   # Test suite issues
