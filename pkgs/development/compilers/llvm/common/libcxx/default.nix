@@ -158,6 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
+  strictDeps = true;
+
   # TODO: Possibly move back to `sourceRoot` on `staging`?
   postPatch = ''
     cd runtimes
