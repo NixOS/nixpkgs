@@ -28,6 +28,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patches
     ;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  # The musl prebuilts ship libc.musl-*.so.1 SONAMEs that autoPatchelfHook can't
+  # resolve on glibc systems. They aren't loaded at runtime on the host libc anyway.
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
+
+  postPatch =
+    # The auto-updater would try to download and run an upstream binary that
+    # isn't patched for Nix. Disable it at source.
+    ''
+      substituteInPlace packages/desktop/src/main/constants.ts \
+        --replace-fail 'app.isPackaged && CHANNEL !== "dev"' 'false'
+    ''
+    +
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                       'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    '';
+
   nativeBuildInputs = [
     bun
     nodejs # for patchShebangs node_modules
@@ -43,13 +65,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  # The musl prebuilts ship libc.musl-*.so.1 SONAMEs that autoPatchelfHook can't
-  # resolve on glibc systems. They aren't loaded at runtime on the host libc anyway.
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
-
-  __structuredAttrs = true;
-  strictDeps = true;
-
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     NODE_OPTIONS = "--max-old-space-size=4096";
@@ -57,18 +72,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;
   };
-
-  postPatch = ''
-    # The auto-updater would try to download and run an upstream binary that
-    # isn't patched for Nix. Disable it at source.
-    substituteInPlace packages/desktop/src/main/constants.ts \
-      --replace-fail 'app.isPackaged && CHANNEL !== "dev"' 'false'
-
-    # Relax Bun version check to be a warning instead of an error
-    substituteInPlace packages/script/src/index.ts \
-      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
-                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-  '';
 
   configurePhase = ''
     runHook preConfigure
