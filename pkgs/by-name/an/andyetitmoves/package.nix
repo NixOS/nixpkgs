@@ -17,7 +17,7 @@
   commercialVersion ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "andyetitmoves";
   version = "1.2.2";
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then
       let
         postfix = if stdenv.hostPlatform.system == "i686-linux" then "i386" else "x86_64";
-        commercialName = "${pname}-${version}_${postfix}.tar.gz";
-        demoUrl = "http://www.andyetitmoves.net/demo/${pname}Demo-${version}_${postfix}.tar.gz";
+        commercialName = "andyetitmoves-${finalAttrs.version}_${postfix}.tar.gz";
+        demoUrl = "http://www.andyetitmoves.net/demo/andyetitmovesDemo-${finalAttrs.version}_${postfix}.tar.gz";
       in
       if commercialVersion then
         requireFile {
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     homepage = "http://www.andyetitmoves.net/";
     license = lib.licenses.unfree;
   };
-}
+})
