@@ -162,7 +162,10 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://gitlab.freedesktop.org/camera/libcamera";
     changelog = "https://gitlab.freedesktop.org/camera/libcamera/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ citadelcore ];
+    maintainers = with lib.maintainers; [
+      citadelcore
+      tmarkus
+    ];
     platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
