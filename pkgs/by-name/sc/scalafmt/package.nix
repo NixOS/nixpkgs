@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
+    changelog = "https://github.com/scalameta/scalafmt/releases/tag/v${version}";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       agilesteel
