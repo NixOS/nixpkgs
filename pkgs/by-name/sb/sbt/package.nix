@@ -17,9 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YM54pQtya1szKlJ342PWfAKPFqOhUVf3ikFsCylJvG0=";
   };
 
-  postPatch = ''
-    echo -java-home ${jre.home} >>conf/sbtopts
-  '';
+  # This is baked into conf/sbtopts below, so it is the JDK every sbt
+  # invocation runs on, and sbt 2 refuses to start on anything older.
+  postPatch =
+    assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
+      sbt requires Java 17 or newer, but ${jre.name} is ${jre.version}
+    '';
+    ''
+      echo -java-home ${jre.home} >>conf/sbtopts
+    '';
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
