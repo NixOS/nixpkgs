@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
