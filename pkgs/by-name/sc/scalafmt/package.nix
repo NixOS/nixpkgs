@@ -5,6 +5,7 @@
   coursier,
   makeWrapper,
   setJavaClassPath,
+  callPackage,
   testers,
 }:
 
@@ -45,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
 
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
