@@ -101,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit isFullBuild;
   };
 
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://libc.llvm.org/";
