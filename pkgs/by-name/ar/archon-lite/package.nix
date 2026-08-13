@@ -6,10 +6,10 @@
 }:
 let
   pname = "archon-lite";
-  version = "9.4.36";
+  version = "9.5.0";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-archon-lite/releases/download/v${version}/archon-lite-v${version}.AppImage";
-    hash = "sha256-th48nSDIi2iugtiqjgkI7/QZtBq+BRQjRs1pKweDArI=";
+    hash = "sha256-ZuALgVtqsYtvnSq8hkJL4A+i4UaEpk+2L3bpSEXrhRM=";
   };
 
   extracted = appimageTools.extractType2 { inherit pname version src; };
@@ -20,13 +20,12 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     mkdir -p $out/share/applications
     mkdir -p $out/share/icons/hicolor/512x512/apps
-    cp -r ${extracted}/usr/share/icons/hicolor/512x512/apps/'Archon App Lite.png' $out/share/icons/hicolor/512x512/apps/archon-lite.png
+    cp -r ${extracted}/usr/share/icons/hicolor/512x512/apps/archon-lite.png $out/share/icons/hicolor/512x512/apps/archon-lite.png
     chmod -R +w $out/share/
     test ! -e $out/share/icons/hicolor/0x0 # check for regression of https://github.com/electron-userland/electron-builder/issues/5294
-    cp ${extracted}/'Archon App Lite.desktop' $out/share/applications/archon-lite.desktop
+    cp ${extracted}/archon-lite.desktop $out/share/applications/archon-lite.desktop
     substituteInPlace $out/share/applications/archon-lite.desktop \
-      --replace-fail "Exec=AppRun --no-sandbox" "Exec=archon-lite" \
-      --replace-fail "Icon=Archon App Lite" "Icon=archon-lite"
+      --replace-fail "Exec=AppRun --no-sandbox" "Exec=archon-lite"
   '';
 
   passthru.updateScript = nix-update-script { };
