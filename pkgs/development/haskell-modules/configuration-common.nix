@@ -99,19 +99,20 @@ with haskellLib;
         # !!! Use cself/csuper inside for the actual overrides
         cabalInstallOverlay =
           cself: csuper:
-          lib.optionalAttrs (haveSemaphoreCompat200 || lib.versionOlder csuper.ghc.version "9.14") {
-            # Waiting on Cabal-3.18 with https://github.com/haskell/cabal/pull/11628
-            Cabal = appendPatches (lib.optionals haveSemaphoreCompat200 [
-              (pkgs.fetchpatch {
-                name = "Cabal-semaphore-compat-2.0.0.patch";
-                url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
-                hash = "sha256-+rcwBQILTc1ezcHb3VDampwMYGEG7S4HF1YKAk7QzUs=";
-                relative = "Cabal";
-              })
+          lib.optionalAttrs (haveSemaphoreCompat200 || lib.versionOlder csuper.ghc.version "9.14.1.20260728")
+            {
+              # Waiting on Cabal-3.18 with https://github.com/haskell/cabal/pull/11628
+              Cabal = appendPatches (lib.optionals haveSemaphoreCompat200 [
+                (pkgs.fetchpatch {
+                  name = "Cabal-semaphore-compat-2.0.0.patch";
+                  url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
+                  hash = "sha256-+rcwBQILTc1ezcHb3VDampwMYGEG7S4HF1YKAk7QzUs=";
+                  relative = "Cabal";
+                })
 
-            ]) cself.Cabal_3_16_1_0;
-            Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
-          };
+              ]) cself.Cabal_3_16_1_0;
+              Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
+            };
       in
       {
         cabal-install =
