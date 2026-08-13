@@ -5,13 +5,32 @@
   jre,
   makeWrapper,
   setJavaClassPath,
+  extraJavaOpts ? "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
   version = "1.6.8";
 
-  deps = stdenv.mkDerivation {
+  nativeBuildInputs = [
+    makeWrapper
+    setJavaClassPath
+  ];
+  buildInputs = [ finalAttrs.passthru.deps ];
+
+  dontUnpack = true;
+
+  installPhase = ''
+    mkdir -p $out/bin
+
+    makeWrapper ${jre}/bin/java $out/bin/metals \
+      --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+
+    makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
+      --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
+  '';
+
+  passthru.deps = stdenv.mkDerivation {
     name = "metals-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
@@ -23,26 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     outputHashAlgo = "sha256";
     outputHash = "sha256-LdZ6I7zOUTHgS/TTo0T6Dh+Kb3YpgJg8gK0UngsA7Gs=";
   };
-
-  nativeBuildInputs = [
-    makeWrapper
-    setJavaClassPath
-  ];
-  buildInputs = [ finalAttrs.deps ];
-
-  dontUnpack = true;
-
-  extraJavaOpts = "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m";
-
-  installPhase = ''
-    mkdir -p $out/bin
-
-    makeWrapper ${jre}/bin/java $out/bin/metals \
-      --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
-
-    makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
-      --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
-  '';
 
   meta = {
     homepage = "https://scalameta.org/metals/";
