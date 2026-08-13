@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit prometheus-cpp;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
