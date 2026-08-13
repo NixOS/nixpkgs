@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ pythonEnv ];
 
+  strictDeps = true;
+
   src = ./source;
 
   buildPhase = ''
