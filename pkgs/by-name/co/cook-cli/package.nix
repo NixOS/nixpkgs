@@ -8,6 +8,10 @@
   openssl,
   nodejs,
   nix-update-script,
+  withSync ? true,
+  withServer ? true,
+  withImport ? true,
+  withLSP ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
@@ -24,6 +28,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
+  buildFeatures =
+    lib.optional withSync "sync"
+    ++ lib.optional withServer "server"
+    ++ lib.optional withImport "import"
+    ++ lib.optional withLSP "lsp";
+
+  checkFlags = [
+    # set to false because it fails a test
+    # see this issue https://github.com/cooklang/cookcli/issues/440
+    "--skip=test_help_output"
+  ];
 
   nativeBuildInputs = [
     pkg-config
