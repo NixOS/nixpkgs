@@ -70,6 +70,16 @@ let
           echo "the amm launcher still prefers JAVA_HOME; the substitution missed" >&2
           exit 1
         fi
+
+        # Hand the same jre to whatever the repl spawns. makeWrapper is not an
+        # option here: the launcher passes itself as the classpath with -cp "$0",
+        # so a wrapper that changes $0 breaks it.
+        sed -i "/^exec /i export JAVA_HOME=\"${jre.home}\"\nexport PATH=\"${lib.makeBinPath [ jre ]}\''${PATH:+:\$PATH}\"" $out/bin/amm
+
+        if ! grep -qa "^export JAVA_HOME=" $out/bin/amm; then
+          echo "failed to insert the environment ahead of exec" >&2
+          exit 1
+        fi
       '';
 
       passthru = {
