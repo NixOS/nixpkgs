@@ -4,26 +4,35 @@
   fetchurl,
   libxshmfence,
   stdenv,
+  writeShellScript,
+  nix-update,
+  jq,
+  nix,
+  common-updater-scripts,
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "ferdium: arch ${system} not supported";
+
   arch =
     {
       x86_64-linux = "amd64";
       aarch64-linux = "arm64";
     }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    .${system} or throwSystem;
+
   hash =
     {
-      amd64-linux_hash = "sha256-1jXo8MMk2EEkLo0n4ICmGJteKProLYKkMF//g63frHs=";
-      arm64-linux_hash = "sha256-jYDGVZhL0bswowm1H/4aa35lNJalil6ymV34NQM5Gfc=";
+      x86_64-linux = "sha256-ODQKFjBa2riJY26aPaAfLzuCyLYkB5oYSxIE28nMmwY=";
+      aarch64-linux = "sha256-CYHoTw6JUyU63iTd9tAbfWVnb48WcZgGtjthqnlAD8I=";
     }
-    ."${arch}-linux_hash";
+    .${system} or throwSystem;
 in
 mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
-  version = "7.1.1";
+  version = "7.1.2";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-${arch}.deb";
     inherit hash;
@@ -31,9 +40,21 @@ mkFranzDerivation rec {
 
   extraBuildInputs = [ libxshmfence ];
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = writeShellScript "update-ferdium" ''
+    ${lib.getExe nix-update} ferdium --no-src --override-filename pkgs/applications/networking/instant-messengers/ferdium/default.nix
+    latestVersion=$(nix eval --raw --file . ferdium.version)
+    if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
+      exit 0
+    fi
+    for system in x86_64-linux aarch64-linux; do
+      hash=$(${lib.getExe nix} store prefetch-file --json \
+        "$(nix eval --raw --file . ferdium.src.url --argstr system "$system")" \
+        | ${lib.getExe jq} --raw-output .hash)
+      ${lib.getExe' common-updater-scripts "update-source-version"} \
+        ferdium "$latestVersion" "$hash" --system="$system" \
+        --ignore-same-version --ignore-same-hash
+    done
+  '';
 
   meta = {
     description = "All your services in one place built by the community";
