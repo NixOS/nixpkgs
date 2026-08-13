@@ -23,7 +23,6 @@
   patchelf,
 }:
 let
-  version = "0.17.0";
   # Patch for airshipper to install veloren client
   patchVoxygen =
     let
@@ -62,14 +61,14 @@ let
       veloren-server-cli
   '';
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airshipper";
-  inherit version;
+  version = "0.17.0";
 
   src = fetchFromGitLab {
     owner = "Veloren";
     repo = "airshipper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M89RswC08MZnNfk2T1+rtDajTpDGTnJoZ2U8bU5U2+0=";
   };
 
@@ -103,7 +102,7 @@ rustPlatform.buildRustPackage rec {
     ${patchelf}/bin/patchelf \
       --set-rpath ${
         lib.makeLibraryPath (
-          buildInputs
+          finalAttrs.buildInputs
           ++ [
             (lib.getLib stdenv.cc.cc)
             stdenv.cc.libc
@@ -132,4 +131,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ yusdacra ];
   };
-}
+})
