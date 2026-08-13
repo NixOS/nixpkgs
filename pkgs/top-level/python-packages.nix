@@ -14623,6 +14623,8 @@ self: super: with self; {
 
   pycparser = callPackage ../development/python-modules/pycparser { };
 
+  pycppad = callPackage ../development/python-modules/pycppad { };
+
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
 
   pycrate = callPackage ../development/python-modules/pycrate { };
