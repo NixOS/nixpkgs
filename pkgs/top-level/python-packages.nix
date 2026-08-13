@@ -13698,7 +13698,7 @@ self: super: with self; {
 
   primepy = callPackage ../development/python-modules/primepy { };
 
-  primer3 = callPackage ../development/python-modules/primer3 { };
+  primer3-py = callPackage ../development/python-modules/primer3-py { };
 
   primp = callPackage ../development/python-modules/primp { };
 
