@@ -20,16 +20,27 @@
 
 let
   # Version as given in se_version.h
-  version = "2.30.100.1";
+  version = "2.30.101.1";
   # Version as used in the Git tag
-  versionTag = "2.30";
+  versionTag = "2.30.1";
+
+  # The 2.30.1 patch release did not update the SDK submodule. On the next
+  # normal release, remove these separate versions and use `version` and
+  # `versionTag` for `sgx-sdk-runtime` again.
+  sdkVersion = "2.30.100.1";
+  sdkVersionTag = "2.30";
 
   # Pre-built Intel-signed Architectural Enclaves (AE). They help run user
   # application enclaves, verify launch policies, produce remote attestation
   # quotes, and do platform certification.
-  ae.prebuilt = fetchurl {
-    url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-    hash = "sha256-Hcz1dtFJFj3LHfs35CQSObmyV4zC2PLzj42bvaLuylQ=";
+  ae = {
+    # The 2.30.1 patch release reuses the 2.30 prebuilt enclaves. On the next
+    # normal release, remove this separate version and use `versionTag` again.
+    version = "2.30";
+    prebuilt = fetchurl {
+      url = "https://download.01.org/intel-sgx/sgx-linux/${ae.version}/prebuilt_ae_${ae.version}.tar.gz";
+      hash = "sha256-Hcz1dtFJFj3LHfs35CQSObmyV4zC2PLzj42bvaLuylQ=";
+    };
   };
 
   # DCAP (Data Center Attestation Primitives) platform enclaves and pre-built
@@ -74,12 +85,12 @@ let
   # 1 min.
   sgx-sdk-runtime = stdenv.mkDerivation {
     pname = "sgx-sdk-runtime";
-    inherit version;
+    version = sdkVersion;
 
     src = fetchFromGitHub {
       owner = "intel";
       repo = "confidential-computing.sgx.sdk";
-      tag = "sgx_${versionTag}";
+      tag = "sgx_${sdkVersionTag}";
       hash = "sha256-wbozHPlHOQ8lgc2hDWPML+cKp+WlupE7Wtjnurc23tM=";
     };
 
@@ -131,7 +142,7 @@ let
       ln -s lib $out/lib64
 
       substitute common/buildenv.mk $out/buildenv.mk \
-        --replace-fail '@SDK_PKG_VERSION@' '${version}'
+        --replace-fail '@SDK_PKG_VERSION@' '${sdkVersion}'
 
       runHook postInstall
     '';
@@ -146,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "confidential-computing.sgx";
     tag = "sgx_${finalAttrs.versionTag}";
-    hash = "sha256-YYbE1QJTPumyXbpmWEKO+mn/MvGOlhdOvXkInYpr1WY=";
+    hash = "sha256-xmCVKbLkLZLizXstvm9QEbk8PKre6rsg6lExeDfkz8M=";
   };
 
   # Extract Intel-provided pre-built enclaves, libs, and subrepos
@@ -178,12 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    # Maintain backwards compat with pre-v2.30 clients, which omit `buf_size`
-    # when no public key ID buffer is requested.
-    #
-    # See PR upstream: https://github.com/intel/confidential-computing.sgx/pull/1107
-    ./aesm-init-quote-ex-compat.patch
-
     # This patch disables mtime in bundled zip file for reproducible builds.
     #
     # Context: The `aesm_service` binary depends on a vendored library called
