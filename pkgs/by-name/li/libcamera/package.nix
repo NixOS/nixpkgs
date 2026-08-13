@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitLab,
+  testers,
   nix-update-script,
   lib,
   meson,
@@ -154,7 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
     FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
@@ -162,6 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://gitlab.freedesktop.org/camera/libcamera";
     changelog = "https://gitlab.freedesktop.org/camera/libcamera/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "libcamera"
+      "libcamera-base"
+    ];
     maintainers = with lib.maintainers; [
       citadelcore
       tmarkus
