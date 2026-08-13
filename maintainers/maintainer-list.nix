@@ -1249,6 +1249,12 @@
     githubId = 3955369;
     name = "Lemon Lam";
   };
+  alephcasara = {
+    email = "aurus2@gmail.com";
+    github = "AlephCasara";
+    githubId = 70831534;
+    name = "Aleph Casara";
+  };
   alerque = {
     email = "caleb@alerque.com";
     github = "alerque";
