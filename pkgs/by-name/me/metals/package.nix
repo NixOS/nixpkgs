@@ -15,9 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "metals-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${finalAttrs.version} org.scalameta:metals-mcp_2.13:${finalAttrs.version} \
-        -r bintray:scalacenter/releases \
-        -r sonatype:snapshots > deps
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${finalAttrs.version} org.scalameta:metals-mcp_2.13:${finalAttrs.version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
