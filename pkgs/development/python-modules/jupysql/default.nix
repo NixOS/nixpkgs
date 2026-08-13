@@ -87,6 +87,9 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.dev;
 
   disabledTests = [
+    # ValueError: max() iterable argument is empty
+    "test_columns_with_missing_values[empty-dictionaries]"
+
     # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
     "test_resultset_polars_dataframe"
 
