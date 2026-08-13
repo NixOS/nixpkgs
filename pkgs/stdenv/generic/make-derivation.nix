@@ -20,7 +20,6 @@ let
     elem
     extendDerivation
     filter
-    filterAttrs
     foldl'
     getDev
     head
@@ -165,14 +164,18 @@ let
     # having to wait while nix builds a derivation that might not be used.
     # See also https://github.com/NixOS/nix/issues/4629
     {
-      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
+      ${if attrs ? disallowedReferences then "disallowedReferences" else null} =
         map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
+      ${if attrs ? disallowedRequisites then "disallowedRequisites" else null} =
         map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+      ${
+        if attrs ? allowedReferences && attrs.allowedReferences != null then "allowedReferences" else null
+      } =
+        unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+      ${
+        if attrs ? allowedRequisites && attrs.allowedRequisites != null then "allowedRequisites" else null
+      } =
+        unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 in
 config:
@@ -857,9 +860,8 @@ let
           ${if __structuredAttrs then "outputChecks" else null} =
             let
               attrsOutputChecks = makeOutputChecks attrs;
-              attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
             in
-            if !attrs ? outputChecks && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { }) then
+            if !attrs ? outputChecks && attrsOutputChecks == { } then
               { }
             else
               listToAttrs (
@@ -868,7 +870,7 @@ let
                   value =
                     let
                       raw = zipAttrsWith (_: concatLists) [
-                        attrsOutputChecksFiltered
+                        attrsOutputChecks
                         (makeOutputChecks (attrs.outputChecks.${name} or { }))
                       ];
                     in
