@@ -64,7 +64,6 @@ let
         };
         inherit doCheck requireX;
         propagatedBuildInputs = depends;
-        nativeBuildInputs = depends;
         meta.homepage = mkHomepage (args // { inherit name; });
         meta.platforms = platforms;
         meta.hydraPlatforms = hydraPlatforms;
