@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ qt6.wrapQtAppsHook  qt6.qt5compat ];
 
-  buildInputs = lib.optionals withQt [ qt6Packages.qtbase ] ++ lib.optionals withCurses ncurses;
+  buildInputs = lib.optionals withQt [ qt6.qtbase ] ++ lib.optionals withCurses ncurses;
 
   cmakeFlags =
     lib.optional withQt [ "-DQT=ON" ]
