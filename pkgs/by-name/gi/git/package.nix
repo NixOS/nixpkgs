@@ -213,6 +213,8 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
+  strictDeps = true;
+
   env = {
     # required to support pthread_cancel()
     NIX_LDFLAGS =
