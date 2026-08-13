@@ -197,6 +197,7 @@
   ./programs/cnping.nix
   ./programs/comma.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/compsize.nix
   ./programs/coolercontrol.nix
   ./programs/corefreq.nix
   ./programs/cpu-energy-meter.nix
