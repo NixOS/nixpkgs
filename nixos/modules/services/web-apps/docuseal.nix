@@ -130,6 +130,7 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
+          "@chown"
         ];
         # User and group
         DynamicUser = true;
