@@ -11186,6 +11186,12 @@
     githubId = 47456195;
     name = "hexclover";
   };
+  hexstella = {
+    name = "stella";
+    github = "0x57e11a";
+    githubId = 29938460;
+    email = "maintain.nixos@stella.lifeless.space";
+  };
   hey2022 = {
     name = "Yiheng He";
     email = "yiheng.he@proton.me";
