@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools-scm,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "configupdater";
   version = "3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-n9rFODHBsGKSm/OYtkm4fKMOfxpzXz+/SCBygEEGMGs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonImportsCheck = [ "configupdater" ];
 
