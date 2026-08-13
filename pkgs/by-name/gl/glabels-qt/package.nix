@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   qt6,
+  qrencode,
 }:
 
 stdenv.mkDerivation {
