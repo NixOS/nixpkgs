@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -52,8 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "-p"
     "rufin"
-    "-p"
-    "xtask"
   ];
 
   doCheck = false;
@@ -62,12 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook preInstall
 
     rufin_binary="$(find target -type f -path "*/$cargoBuildType/rufin" -perm -0100 -print -quit)"
-    xtask_binary="$(find target -type f -path "*/$cargoBuildType/xtask" -perm -0100 -print -quit)"
-    if [ -z "$rufin_binary" ] || [ -z "$xtask_binary" ]; then
-      echo "The Rufin or xtask build output is missing." >&2
-      exit 1
-    fi
-    "$xtask_binary" install linux \
+    cargo run -p xtask --target ${stdenv.buildPlatform.rust.rustcTarget} -- install linux \
       --binary "$rufin_binary" \
       --destdir "$out" \
       --prefix /
