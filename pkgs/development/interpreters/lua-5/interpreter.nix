@@ -219,6 +219,8 @@ stdenv.mkDerivation (
         );
       };
 
+    __structuredAttrs = true;
+
     meta = {
       homepage = "https://www.lua.org";
       description = "Powerful, fast, lightweight, embeddable scripting language";
