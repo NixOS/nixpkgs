@@ -195,7 +195,7 @@ let
       '';
 
       meta = {
-        description = "Improved Scala REPL";
+        description = "Improved Scala REPL, built for Scala ${scalaVersion}";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
           It is much more featureful than the default REPL and comes
