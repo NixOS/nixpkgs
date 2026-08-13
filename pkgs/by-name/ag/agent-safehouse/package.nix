@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "safehouse";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "eugene1g";
     repo = "agent-safehouse";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     hash = "sha256-2GWxh5J9qqudc2QM/CACXpqJLcNULKSfTAHBzR++UAE=";
   };
 
@@ -52,4 +52,4 @@ stdenvNoCC.mkDerivation rec {
       Br1ght0ne
     ];
   };
-}
+})
