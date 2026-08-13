@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPyPy,
   blas,
   lapack,
@@ -21,7 +22,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 buildPythonPackage rec {
   pname = "cvxopt";
   version = "1.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy; # hangs at [translation:info]
 
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     lapack
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
