@@ -6,7 +6,6 @@
   makeWrapper,
   setJavaClassPath,
   testers,
-  giter8,
 }:
 
 let
@@ -24,7 +23,7 @@ let
     outputHash = "sha256-MrFuyktyXADZ8lh/vzpVNi12IbKjM/Q8P7X8EE4KFNo=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   strictDeps = true;
@@ -47,16 +46,29 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
+  passthru.updateScript = ./update.sh;
+||||||| parent of c92d524004a8 (giter8: group passthru attributes)
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/g8 --version | grep -q "${version}"
   '';
 
   passthru.updateScript = ./update.sh;
+=======
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/g8 --version | grep -q "${version}"
+  '';
 
-  passthru.tests.version = testers.testVersion {
-    package = giter8;
-    command = "g8 --version";
+  passthru = {
+    updateScript = ./update.sh;
+>>>>>>> c92d524004a8 (giter8: group passthru attributes)
+
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "g8 --version";
+    };
   };
 
   meta = {
@@ -68,4 +80,4 @@ stdenv.mkDerivation {
     changelog = "https://github.com/foundweekends/giter8/releases/tag/v${version}";
     mainProgram = "g8";
   };
-}
+})
