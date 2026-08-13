@@ -916,6 +916,15 @@ in
               skeleton files.
             '';
           };
+          serverid = lib.mkOption {
+            default = 1;
+            type = lib.types.ints.between 0 511;
+            description = ''
+              Server ID, must be an integer between 0 and 511 (inclusive).
+              Should be configured if your Nextcloud instance is using different PHP
+              servers.
+            '';
+          };
           trusted_domains = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
