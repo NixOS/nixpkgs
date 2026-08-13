@@ -6,13 +6,10 @@
   imagemagick,
   makeDesktopItem,
   jdk21,
+  writeScript,
 }:
 let
   jre = jdk21;
-
-  vPath = v: lib.elemAt (lib.splitString "-" v) 0;
-
-  version = "2025.9-b175";
 
   arches = {
     aarch64-linux = "arm64";
@@ -22,32 +19,16 @@ let
   arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-pVgXlyKb3E6twBGnQJeMDR/7RxX7iyxeVaTAbbWtb7c=";
-    x64 = "sha256-srNckPBzl8GjFIlvDwZb6VBhqnVHF+oMnsZcV9Rh76Q=";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "YourKit Java Profiler";
-    desktopName = "YourKit Java Profiler " + version;
-    type = "Application";
-    exec = "yourkit-java-profiler %f";
-    icon = "yourkit-java-profiler";
-    categories = [
-      "Development"
-      "Java"
-      "Profiling"
-    ];
-    terminal = false;
-    startupWMClass = "YourKit Java Profiler";
+    arm64 = "sha256-pc+Z7dMEhinNtqssTTumn3IKZEolbKlKtckMp4KkX+g=";
+    x64 = "sha256-pc+Z7dMEhinNtqssTTumn3IKZEolbKlKtckMp4KkX+g=";
   };
 in
-stdenvNoCC.mkDerivation {
-  inherit version;
-
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yourkit-java";
+  version = "2026.3.157";
 
   src = fetchzip {
-    url = "https://download.yourkit.com/yjp/${vPath version}/YourKit-JavaProfiler-${version}-${arch}.zip";
+    url = "https://download.yourkit.com/yjp/${finalAttrs.version}/YourKit-Java-Profiler-${finalAttrs.version}-${arch}.zip";
     hash = hashes.${arch};
   };
 
@@ -58,7 +39,22 @@ stdenvNoCC.mkDerivation {
 
   buildInputs = [ jre ];
 
-  desktopItems = [ desktopItem ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "YourKit Java Profiler";
+      desktopName = "YourKit Java Profiler " + finalAttrs.version;
+      type = "Application";
+      exec = "yourkit-java-profiler %f";
+      icon = "yourkit-java-profiler";
+      categories = [
+        "Development"
+        "Java"
+        "Profiling"
+      ];
+      terminal = false;
+      startupWMClass = "YourKit Java Profiler";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -89,7 +85,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = writeScript "update-${finalAttrs.pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p coreutils curl gnugrep common-updater-scripts nix
+    version="$(curl https://www.yourkit.com/java/profiler/download/ 2>/dev/null |
+      grep -Eo '(Version|Build): ([a-z0-9#.-])+' |
+      cut -d' ' -f2 | tr -d '\n' | tr \# .)"
+
+    update-source-version yourkit-java "$version"
+
+    for system in $(nix-instantiate --eval . -A yourkit-java.meta.platforms --json | jq -r '.[]'); do
+      hash=$(nix-hash --to-sri --type sha256 $(nix-prefetch-url $(nix-instantiate --eval . --system "$system"-A yourkit-java.src.url --raw)))
+      update-source-version yourkit-java $version $hash --system=$system --ignore-same-version
+    done
+  '';
 
   meta = {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
@@ -101,4 +110,4 @@ stdenvNoCC.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ herberteuler ];
   };
-}
+})
