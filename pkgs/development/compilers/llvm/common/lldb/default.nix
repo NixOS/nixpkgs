@@ -109,6 +109,8 @@ stdenv.mkDerivation (
       darwin.bootstrap_cmds
     ];
 
+    strictDeps = true;
+
     hardeningDisable = [ "format" ];
 
     cmakeFlags = [
