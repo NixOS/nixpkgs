@@ -68,8 +68,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://get-coursier.io/";
+    changelog = "https://github.com/coursier/coursier/releases/tag/v${version}";
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
     mainProgram = "cs";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       adelbertc
