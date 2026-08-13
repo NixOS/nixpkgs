@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
     # Install headers as well
