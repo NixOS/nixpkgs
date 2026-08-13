@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   cmake,
   ninja,
@@ -15,14 +14,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.0";
+  version = "2.0.2";
   pname = "libultrahdr";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libultrahdr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SLhHiwuyHzVx/Kv+eBy8LzHTnShKXlJoszxZNPATbhs=";
+    hash = "sha256-vCa3ibxC0e+ohh50ZR+uh4QFRxJrX5MRkIsZM0vobVs=";
   };
 
   outputs = [
@@ -31,12 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix build with gcc 15 by adding missing cstdint header
-    (fetchpatch {
-      url = "https://github.com/google/libultrahdr/commit/5fa99b5271a3c80a13c78062d7adc6310222dd8e.patch";
-      hash = "sha256-o6lbDOdx+ZrCy/Iq02WjM9Tas8C5P/FMwUtXMUCoZGY=";
-    })
-
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })
@@ -45,15 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Also drop arch-specific compile and optimization flags to ensure
     # packaging friendliness.
     # Based on https://github.com/google/libultrahdr/pull/383
-    # modified to target 1.4.0 instead of main
+    # modified to target 2.0.2 instead of main
     ./remove-platform-and-detection-logic.patch
-
-    # fix tests on big-endian
-    # https://github.com/google/libultrahdr/pull/396
-    (fetchpatch {
-      url = "https://github.com/google/libultrahdr/commit/13a058f452d846e43d4691f6885eeeaa8b0ea8d0.patch";
-      hash = "sha256-2ZVvBMz8wQLEThuXdRJbbx5m2ouRZpxVWoH88RLmit4=";
-    })
   ];
 
   # CMake incorrect absolute include/lib paths: https://github.com/NixOS/nixpkgs/issues/144170
@@ -75,9 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "UHDR_BUILD_TESTS" true)
+    # v2.0.x gained optional HEIF/AVIF support via libheif, enabled by
+    # default. libheif is not wired up here, so disable it explicitly to
+    # get a deterministic build (otherwise upstream warns and silently
+    # disables it) and to match pre-2.0 packaging.
+    (lib.cmakeBool "UHDR_ENABLE_HEIF" false)
     # Build disables install target in cross-compilation mode so
     # cross-compilation would fail on NixOS. Force flag to false.
-    # See https://github.com/google/libultrahdr/blob/8cbc983d2f6c2171af5cbcdb8801102f83fe92ab/CMakeLists.txt#L153
+    # See https://github.com/google/libultrahdr/blob/v${finalAttrs.version}/CMakeLists.txt#L148
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" false)
   ];
 
