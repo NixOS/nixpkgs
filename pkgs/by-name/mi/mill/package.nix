@@ -24,15 +24,15 @@ let
   sources = {
     aarch64-darwin = {
       suffix = "native-mac-aarch64";
-      hash = "sha256-tQpV0Goe9Oq16rm14mavS5ELl7z4Bsu7JBVbbFgauPE=";
+      hash = "sha256-zssJgQWY4QI0giYPGeviUbgZ2z8XtIyvkP0BoqcfRbc=";
     };
     aarch64-linux = {
       suffix = "native-linux-aarch64";
-      hash = "sha256-lq0mR0lFhl7ESY+BM6kVRjyI3bpZOSwj+bSo37dAkaI=";
+      hash = "sha256-dzIG8bO0vWtC/798LI0WjGIQ5PB1rgYIndz24P5dfbg=";
     };
     x86_64-linux = {
       suffix = "native-linux-amd64";
-      hash = "sha256-2GSLEvRTlH9QPzkGM52sYiJh6OqXQzn/V0sPQ+SA39s=";
+      hash = "sha256-umDQNXc4CpBsInPMp2VoKHBeJf71GaHpJ2Vq4Wfo9kQ=";
     };
   };
 
@@ -42,7 +42,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "mill";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${source.suffix}/${version}/mill-dist-${source.suffix}-${version}.exe";
