@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   electron_43,
@@ -100,6 +101,8 @@ buildNpmPackage rec {
     changelog = "https://github.com/mattermost/desktop/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
+    # https://github.com/NixOS/nixpkgs/issues/430763
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       joko
       liff
