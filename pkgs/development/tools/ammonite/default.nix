@@ -30,7 +30,22 @@ let
 
       installPhase = ''
         install -Dm755 $src $out/bin/amm
-        sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
+
+        # The launcher prefers $JAVA_HOME over its own default, so both branches
+        # have to be pinned; patching only the default leaves `override { jre = ...; }`
+        # with no effect in any shell that sets JAVA_HOME. sed rather than
+        # substituteInPlace because the launcher has a jar appended to it.
+        sed -i \
+          -e 's|JAVACMD="java"|JAVACMD="${jre}/bin/java"|' \
+          -e 's|JAVACMD="$JAVA_HOME/bin/java"|JAVACMD="${jre}/bin/java"|' \
+          $out/bin/amm
+
+        # sed is silent when it matches nothing, which is how the JAVA_HOME
+        # branch went unpatched in the first place.
+        if grep -qa 'JAVACMD="$JAVA_HOME/bin/java"' $out/bin/amm; then
+          echo "the amm launcher still prefers JAVA_HOME; the substitution missed" >&2
+          exit 1
+        fi
       ''
       + lib.optionalString disableRemoteLogging ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
