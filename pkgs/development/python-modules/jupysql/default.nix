@@ -36,16 +36,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupysql";
   version = "0.11.1";
-
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7wfKvKqDf8LlUiLoevNRxmq8x5wLheOgIeWz72oFcuw=";
   };
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     psutil
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.dev;
+  ++ finalAttrs.passthru.optional-dependencies.dev;
 
   disabledTests = [
     # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
@@ -135,8 +135,8 @@ buildPythonPackage rec {
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql";
-    changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/jupysql/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})
