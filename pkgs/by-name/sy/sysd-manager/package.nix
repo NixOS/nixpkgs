@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sysd-manager";
   version = "2.20.10";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "plrigaux";
