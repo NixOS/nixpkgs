@@ -69,6 +69,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kaggle" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Official Kaggle CLI";
     mainProgram = "kaggle";
