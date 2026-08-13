@@ -83,7 +83,10 @@ let
         homepage = "https://github.com/com-lihaoyi/Ammonite";
         license = lib.licenses.mit;
         mainProgram = "amm";
-        maintainers = with lib.maintainers; [ tbutter ];
+        maintainers = with lib.maintainers; [
+          agilesteel
+          tbutter
+        ];
         platforms = lib.platforms.all;
       };
     };
