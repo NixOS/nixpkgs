@@ -45,6 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
+  # --version reaches repo1.maven.org to list the Scala versions it supports,
+  # but tolerates being offline: the version line still prints and the exit
+  # code stays 0, which is what makes this safe inside the sandbox.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/metals --version | grep -q "${finalAttrs.version}"
+    $out/bin/metals-mcp --version | grep -q "${finalAttrs.version}"
+
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = {
     command = lib.getExe (callPackage ./update.nix { });
     supportedFeatures = [ "commit" ];
