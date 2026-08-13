@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
 
+  strictDeps = true;
+
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
   postUnpack = lib.optionalString needHdrGen ''
