@@ -5,12 +5,12 @@
   mkfontscale,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "anakron";
   version = "0.3.3";
 
   src = fetchzip {
-    url = "https://github.com/molarmanful/ANAKRON/releases/download/v${version}/ANAKRON-release_v${version}.zip";
+    url = "https://github.com/molarmanful/ANAKRON/releases/download/v${finalAttrs.version}/ANAKRON-release_v${finalAttrs.version}.zip";
     hash = "sha256-l4MA3OsMnqPIBWKx3ZO5XnxjE0gnIGyAtsZe2z/9zrw=";
   };
 
@@ -33,11 +33,11 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Thicc retrofuturistic bitmap font made for the modern screen";
     homepage = "https://github.com/molarmanful/ANAKRON";
-    changelog = "https://github.com/molarmanful/ANAKRON/releases/tag/v${version}";
+    changelog = "https://github.com/molarmanful/ANAKRON/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       ejiektpobehuk
     ];
   };
-}
+})
