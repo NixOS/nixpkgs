@@ -69,6 +69,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # --allow-empty because there is no project here, and the runner reports its
+    # own version without reaching the network.
+    export HOME="$TMPDIR"
+    $out/bin/sbt --version --allow-empty | grep -q "${finalAttrs.version}"
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     homepage = "https://www.scala-sbt.org/";
     changelog = "https://github.com/sbt/sbt/releases/tag/v${finalAttrs.version}";
