@@ -511,6 +511,7 @@ mapAliases {
   pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
   pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
+  pymedio = throw "pymedio was removed, as it is archived since 2025 in upstream. The modules 'dicom-numpy' and 'simpleitk' can be used as alternatives."; # added 2026-09-11
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   pymsteams = throw "'pymsteams' was removed because API used was discontinued"; # Added 2026-06-04
   pymvglive = throw "'pymvglive' has been removed because it was unmaintained upstream and non-functional due to API changes"; # added 2026-06-10

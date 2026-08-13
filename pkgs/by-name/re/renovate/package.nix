@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "44.13.1";
+  version = "44.24.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-2N+dQnuQwQNt7SZlIYq0CT2dRMiOF947MJZZ8BhZpcI=";
+    hash = "sha256-nseiP9ccsKrE2030bTJ4hJ+5HCdF2pqPi8JPXfl2c0k=";
   };
 
   postPatch = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-xm4H+PIpVcisw8wKz77+v6iCcwEpkpLZ6awtwXPNBc8=";
+    hash = "sha256-mLFGCdj4lAbpZJGqUUrhZ0mdprh4FvWrJ0jnKZWKgQI=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

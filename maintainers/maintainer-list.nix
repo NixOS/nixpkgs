@@ -11289,6 +11289,11 @@
     github = "HigherOrderLogic";
     githubId = 73709188;
   };
+  highghlow = {
+    name = "Alex Kravchenko";
+    github = "unhighghlow";
+    githubId = 132668972;
+  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
@@ -24164,6 +24169,12 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
+  rhousand = {
+    email = "rhousand@gmail.com";
+    github = "rhousand";
+    githubId = 6124540;
+    name = "Ryan Housand";
+  };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
     github = "RhydianJenkins";
@@ -26527,6 +26538,12 @@
     githubId = 848812;
     name = "Stephan Jau";
   };
+  sjcobb = {
+    email = "sjcobb2003@gmail.com";
+    github = "sjcobb2022";
+    githubId = 68509699;
+    name = "sjcobb";
+  };
   sjfloat = {
     email = "steve+nixpkgs@jonescape.com";
     github = "sjfloat";
@@ -26545,6 +26562,12 @@
     github = "skeuchel";
     githubId = 617130;
     keys = [ { fingerprint = "C4F7 46C7 B560 38D8 210F  0288 5877 DEE9 7428 557F"; } ];
+  };
+  skirlez = {
+    name = "skirlez";
+    email = "skirlez3@gmail.com";
+    github = "skirlez";
+    githubId = 17904548;
   };
   skohtv = {
     name = "Skoh";

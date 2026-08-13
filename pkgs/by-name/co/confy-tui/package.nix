@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "confy-tui";
-  version = "3.1.0";
+  version = "3.1.1";
 
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "phluxjr";
     repo = "confy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nm7ghQ3SbcGXr/cVeCZCI0h9EbvrrMc9/lLP7Rs59Uw=";
+    hash = "sha256-SFcRMJn8AfNdLnBHEDQ9MVUiTo/8wmtEWwCKMgLTo74=";
   };
 
   cargoHash = "sha256-E4AK2WLwr7GEexM8JncfHoSBQxQ1OuCkro9jEq+9I4s=";

@@ -24,50 +24,16 @@ let
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.3.0";
+  version = "3.0.0rc1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
+    inherit version;
+    pname = "tpm2_pytss";
+    hash = "sha256-9Wj7RKjcjCzPqlsA4PxgVGQBvqQKuANG2tMb/cI3ihE=";
   };
 
   patches = [
-    # libtpms (underneath swtpm) bumped the TPM revision
-    # https://github.com/tpm2-software/tpm2-pytss/pull/593
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
-      hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
-    })
-    # support cryptography >= 45.0.0
-    # https://github.com/tpm2-software/tpm2-pytss/pull/643
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
-      hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
-    })
-    # support cryptography >= 47.0.0, which made __deepcopy__ an abstract
-    # method on the private-key base classes
-    # https://github.com/tpm2-software/tpm2-pytss/pull/689
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/5d15cad4bde28902a4becb8e2a8e915aba8abbd0.patch";
-      hash = "sha256-b2zVD7KJGVzJ765HO8LFAe9MyQmjOTpERmEqUrIg3oM=";
-    })
-    # Properly restore environment variables upon exit from
-    # FAPIConfig context. Accepted into upstream, not yet released.
-    (fetchpatch2 {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
-      hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
-    })
-    # Fix build with gcc15 by using c99 for preprocessing
-    # The first patch is needed to apply the second; it doesn't affect us
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/55d28b259f1a68f60c937ea8be7815685d32757f.patch";
-      hash = "sha256-sGxUyQ2W2Jl9ROSt1w0E0dVTgFPAmYWlNgcpHcTVv90=";
-    })
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/61d00b4dcca131b3f03f674ceabf4260bdbd6a61.patch";
-      hash = "sha256-0dwfyW0Fi5FkzYnaMOb2ua9O6eyCnMgJqT09tTT56vY=";
-    })
   ]
   ++ lib.optionals isCross [
     # pytss will regenerate files from headers of tpm2-tss.
