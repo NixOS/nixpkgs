@@ -900,7 +900,7 @@ in
               "syslog"
               "systemd"
             ];
-            default = "syslog";
+            default = "systemd";
             description = ''
               Logging backend to use.
               systemd automatically adds the php-systemd extensions to services.nextcloud.phpExtraExtensions.
