@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   qt6,
+  qrencode,
 }:
 
 stdenv.mkDerivation {
@@ -22,6 +23,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qt6.qttools
+    qrencode
   ];
 
   nativeBuildInputs = [
