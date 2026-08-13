@@ -159,9 +159,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
+    # we purposely rename global.json first, because it can break dotnet --version
+    mv global.json{,~}
     sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
-    jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
-    mv global.json{~,}
+    jq '(.tools.dotnet=$dotnet)' global.json~ --arg dotnet "$sdk_version" > global.json
 
     patchShebangs $(find -name \*.sh -type f -executable)
 
