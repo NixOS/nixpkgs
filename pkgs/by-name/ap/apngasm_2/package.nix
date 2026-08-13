@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apngasm";
   version = "2.91";
 
   src = fetchzip {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}-src.zip";
+    url = "mirror://sourceforge/apngasm/apngasm-${finalAttrs.version}-src.zip";
     stripRoot = false;
     sha256 = "0qhljqql159xkn1l83vz0q8wvzr7rjz4jnhiy0zn36pgvacg0zn1";
   };
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 
-}
+})
