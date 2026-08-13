@@ -4,8 +4,9 @@
   fetchurl,
   makeWrapper,
   jre,
-  writeScript,
+  writeShellApplication,
   common-updater-scripts,
+  gnugrep,
   coreutils,
   git,
   gnused,
@@ -43,28 +44,72 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!${stdenv.shell}
-    set -o errexit
-    PATH=${
-      lib.makeBinPath [
+  passthru.updateScript = {
+    command = lib.getExe (writeShellApplication {
+      name = "update-coursier";
+
+      runtimeInputs = [
         common-updater-scripts
         coreutils
         git
+        gnugrep
         gnused
         nix
-      ]
-    }
-    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
-    latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coursier/coursier.git 'v*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
-    if [ "$oldVersion" != "$latestTag" ]; then
-      nixpkgs="$(git rev-parse --show-toplevel)"
-      default_nix="$nixpkgs/pkgs/development/tools/coursier/default.nix"
-      update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-    else
-      echo "${pname} is already up-to-date"
-    fi
-  '';
+      ];
+
+      text = ''
+        # stdout is reserved for the JSON --print-changes emits below, everything
+        # else has to go to stderr.
+        attr_path="''${UPDATE_NIX_ATTR_PATH:-coursier}"
+
+        nixpkgs=$(git rev-parse --show-toplevel)
+        position=$(nix-instantiate --eval --raw --attr "$attr_path.meta.position" "$nixpkgs")
+        package_nix="''${position%:*}"
+        old_version=$(nix-instantiate --eval --raw --attr "$attr_path.version" "$nixpkgs")
+
+        # 'v*.*.*' also matches milestones such as v2.1.25-M26, which are not
+        # releases, so keep only plain X.Y.Z and take the highest.
+        new_version=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs \
+          --sort='version:refname' --tags https://github.com/coursier/coursier.git 'v*.*.*' \
+          | cut --delimiter='/' --fields=3 \
+          | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+          | tail --lines=1 \
+          | sed 's|^v||')
+
+        if [[ -z "$new_version" ]]; then
+          echo "no plain X.Y.Z tag found upstream" >&2
+          exit 1
+        fi
+
+        order=$(nix-instantiate --eval \
+          --expr "builtins.compareVersions \"$new_version\" \"$old_version\"")
+
+        case "$order" in
+          0)
+            echo "$attr_path is already at the latest version $new_version." >&2
+            echo '[]'
+            exit 0
+            ;;
+          -1)
+            echo "refusing to downgrade $attr_path from $old_version to $new_version." >&2
+            exit 1
+            ;;
+        esac
+
+        # update-source-version rewrites package.nix with a fake hash and rebuilds
+        # to discover the real one, so put the file back if that fails.
+        backup=$(mktemp)
+        cp "$package_nix" "$backup"
+        trap 'cp "$backup" "$package_nix"; rm -f "$backup"' EXIT
+
+        update-source-version "$attr_path" "$new_version" --version-key=version --print-changes
+
+        trap - EXIT
+        rm -f "$backup"
+      '';
+    });
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = {
     homepage = "https://get-coursier.io/";
