@@ -1,5 +1,8 @@
 {
+  stdenvNoCC,
   stdenv,
+  overrideCC,
+  buildPackages,
   lib,
   fetchFromGitHub,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -7,6 +10,33 @@
   unstableGitUpdater,
   autoreconfHook,
 }:
+
+let
+  # With GCC NG, `libstdc++` links this rather than compiling its own copy,
+  # which puts it below the C++ standard library rather than above; built with
+  # the ordinary `stdenv` the two would create a cycle.
+  #
+  # I would rather this bootstrapping detail not leak into the `package.nix`,
+  # but I don't see another solution available since all-package.nix overrides
+  # of "by-name" packages are no longer allowed.
+  #
+  # TODO: hoist this back out to a `stdenvNoCXX` in `all-packages.nix`,
+  # where the next package needing a hosted-but-C++-free compiler can
+  # share it. `nixpkgs-vet` blocks that today: it wants `strictDeps` and
+  # `__structuredAttrs`, but this is only relevant for derivations made
+  # with `stdenv.mkDerivation` --- `stdenv` itself is *not* such a
+  # derivation!
+  stdenv' =
+    if stdenvNoCC.hostPlatform.useLLVM or false then
+      overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibcxx
+    else if stdenvNoCC.hostPlatform.useGccNG or false then
+      overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibatomic
+    else
+      stdenv;
+in
+let
+  stdenv = stdenv';
+in
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
