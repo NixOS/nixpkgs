@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "2.9.3";
+  version = "3.2.2";
 in
 rustPlatform.buildRustPackage {
   pname = "turnon";
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-2dPvIuD7gVfhr/E5szJ5rqWL5yRJKZoj2lV+W9CyCjI=";
+    hash = "sha256-GccO6zwIR/JFdKE3uUQZ3RaBMm9tHumP7jpZRb6n5uU=";
   };
 
-  cargoHash = "sha256-e0Hds/y3qh7Th+ZTqHIfVleh3vmDlKKJ5Bwt64g5c60=";
+  cargoHash = "sha256-5FBVDNzmen/GnfN6JBmxU4et9gkxZt8RjSD12t/2THI=";
 
   doCheck = true;
 
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace justfile \
-        --replace-fail "version := \`git describe\`" "version := \"${version}\"" \
+        --replace-fail "version := \`git describe --always\`" "version := \"${version}\"" \
         --replace-fail "DESTPREFIX := '/app'" "DESTPREFIX := '$out'" \
         --replace-fail "APPID := 'de.swsnr.turnon.Devel'" "APPID := 'de.swsnr.turnon'" \
         --replace-fail "just --list" "just compile" # Replacing the default recipe with the compile command as just-hook-buildPhase runs the default recipe to compile the package.

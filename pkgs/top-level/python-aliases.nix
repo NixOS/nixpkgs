@@ -471,6 +471,7 @@ mapAliases {
   postgrest-py = postgrest; # added 2025-08-29
   powerlineMemSegment = throw "'powerlineMemSegment' has been renamed to/replaced by 'powerline-mem-segment'"; # Converted to throw 2025-10-29
   prayer-times-calculator = throw "'prayer-times-calculator' has been renamed to/replaced by 'prayer-times-calculator-offline'"; # Converted to throw 2025-10-29
+  primer3 = primer3-py; # Added 2026-08-13
   prometheus_client = throw "'prometheus_client' has been renamed to/replaced by 'prometheus-client'"; # Converted to throw 2025-10-29
   prompt_toolkit = throw "'prompt_toolkit' has been renamed to/replaced by 'prompt-toolkit'"; # Converted to throw 2025-10-29
   protonup = throw "'protonup' has been renamed to/replaced by 'protonup-ng'"; # Converted to throw 2025-10-29
@@ -628,6 +629,7 @@ mapAliases {
   requests_oauthlib = throw "'requests_oauthlib' has been renamed to/replaced by 'requests-oauthlib'"; # Converted to throw 2025-10-29
   requests_toolbelt = throw "'requests_toolbelt' has been renamed to/replaced by 'requests-toolbelt'"; # Converted to throw 2025-10-29
   restructuredtext_lint = throw "'restructuredtext_lint' has been renamed to/replaced by 'restructuredtext-lint'"; # Converted to throw 2025-10-29
+  retinaface = retina-face; # Added 2026-08-13
   retry_decorator = throw "'retry_decorator' has been renamed to/replaced by 'retry-decorator'"; # Converted to throw 2025-10-29
   retworkx = throw "'retworkx' has been renamed to/replaced by 'rustworkx'"; # Converted to throw 2025-10-29
   rki-covid-parser = throw "rki-covid-parser has been removed because it is unmaintained and broken"; # added 2025-09-20

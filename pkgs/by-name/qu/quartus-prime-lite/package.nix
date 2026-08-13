@@ -152,6 +152,12 @@ buildFHSEnv (finalAttrs: {
                 # SOURCE_DATE_EPOCH code path.
                 NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=0
                 ;;
+            niosv/*)
+                # Both are needed for a functional niosv-bsp and possibly other
+                # executables.
+                echo "export QUARTUS_ROOTDIR=${unwrapped}/quartus" >> "$wrapped"
+                echo "export SOPC_KIT_NIOS2=${unwrapped}/niosv" >> "$wrapped"
+                ;;
         esac
         # SOURCE_DATE_EPOCH blocklist for programs that are known to hang/break
         # with fixed/static clock.
