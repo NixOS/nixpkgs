@@ -879,10 +879,14 @@ let
                   inherit name;
                   value =
                     let
-                      raw = zipAttrsWith (_: concatLists) [
-                        attrsOutputChecks
-                        (makeOutputChecks (attrs.outputChecks.${name} or { }))
-                      ];
+                      raw =
+                        if attrs ? outputChecks.${name} then
+                          zipAttrsWith (_: concatLists) [
+                            attrsOutputChecks
+                            (makeOutputChecks attrs.outputChecks.${name})
+                          ]
+                        else
+                          attrsOutputChecks;
                     in
                     # separateDebugInfo = true will put all sorts of files in
                     # the debug output which could carry references, but
