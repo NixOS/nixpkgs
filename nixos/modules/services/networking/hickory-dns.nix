@@ -178,7 +178,8 @@ in
           ''
             ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
           '';
-        Type = "simple";
+        Type = "notify";
+        WatchdogSec = 30;
         Restart = "on-failure";
         RestartSec = "10s";
         DynamicUser = true;
@@ -204,7 +205,11 @@ in
         ProtectProc = "invisible";
         ProtectSystem = "full";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";

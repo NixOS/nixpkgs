@@ -25,11 +25,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dnssec-ring"
     "h3-ring"
     "https-ring"
+    "prometheus-metrics"
     "quic-ring"
     "recursor"
     "rustls-platform-verifier"
+    "systemd"
     "tls-ring"
   ];
+
+  # prometheus-metrics adds a required `metrics_label` method to ZoneHandler,
+  # but the integration test impls don't provide it, so exclude it from tests
+  # https://github.com/hickory-dns/hickory-dns/pull/3599
+  checkFeatures = lib.subtractLists [ "prometheus-metrics" ] finalAttrs.buildFeatures;
 
   # skip tests that need network or public resolvers
   checkFlags = [
