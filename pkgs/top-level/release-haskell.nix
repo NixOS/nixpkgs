@@ -559,6 +559,7 @@ let
       language-nix = released;
       nix-paths = released;
       titlecase = released;
+      ghc-exactprint = released;
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
