@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     makeWrapper ${jre}/bin/java $out/bin/metals \
@@ -28,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
+
+    runHook postInstall
   '';
 
   passthru.deps = stdenv.mkDerivation {
