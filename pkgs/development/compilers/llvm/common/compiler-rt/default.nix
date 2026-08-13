@@ -299,6 +299,8 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
     '';
 
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";
     description = "Compiler runtime libraries";
