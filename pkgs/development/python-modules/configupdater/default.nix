@@ -8,13 +8,15 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "configupdater";
   version = "3.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ConfigUpdater";
     hash = "sha256-n9rFODHBsGKSm/OYtkm4fKMOfxpzXz+/SCBygEEGMGs=";
   };
@@ -40,4 +42,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})
