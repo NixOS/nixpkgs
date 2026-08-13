@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchpatch,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cookies";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +24,8 @@ buildPythonPackage rec {
       hash = "sha256-8e3haOnbSXlL/ZY4uv6P4+ABBKrsCjbEpsLHaulbIUk=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pytestCheckHook ];
 
