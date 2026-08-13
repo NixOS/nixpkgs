@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-vcs,
@@ -62,6 +63,16 @@ buildPythonPackage rec {
   pytestFlags = [
     # broken in nix env
     "--deselect=tests/test_local.py::TestLocalMachine::test_local"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # list_processes() splits `ps -o pid,uid,stat,args` on whitespace; macOS
+    # leaves stat blank for tty-less children, which shifts the split and
+    # drops the executable path from args, so pgrep("[pP]ython") never
+    # matches the test process itself. Fixed upstream but unreleased:
+    # https://github.com/tomerfiliba/plumbum/pull/845 and
+    # https://github.com/tomerfiliba/plumbum/pull/846 (negative uid
+    # follow-up). Once a release carries both, drop this deselect.
+    "--deselect=tests/test_local.py::TestLocalMachine::test_pgrep"
   ];
 
   meta = {
