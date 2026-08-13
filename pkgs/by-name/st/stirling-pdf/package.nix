@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseGradleBuild = isDesktopVariant; # we'll use the buildPhase from cargo-tauri-hook for the desktop app
 
   # prepare the resources before building the desktop app
-  preBuild = lib.optionals isDesktopVariant ''
+  preBuild = lib.optionalString isDesktopVariant ''
     MODE=desktop task frontend:prepare
 
     # this simulates what the desktop:jlink:jar would do

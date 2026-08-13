@@ -8,7 +8,8 @@
   pkg-config,
 
   # buildInputs
-  ffmpeg,
+  # FIXME: unpin when upstream supports ffmpeg 9
+  ffmpeg_8,
 
   # build-system
   cmake,
@@ -45,17 +46,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       test/test_encoders.py \
       --replace-fail \
         '"ffprobe"' \
-        '"${lib.getExe' ffmpeg "ffprobe"}"'
+        '"${lib.getExe' ffmpeg_8 "ffprobe"}"'
 
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg}"'
+        '"${lib.getExe ffmpeg_8}"'
 
     substituteInPlace test/test_transform_ops.py \
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
+        'ffmpeg_cli = "${lib.getExe ffmpeg_8}"'
   '';
 
   nativeBuildInputs = [
@@ -69,7 +70,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;

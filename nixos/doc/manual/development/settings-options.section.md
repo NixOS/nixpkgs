@@ -395,7 +395,7 @@ have a predefined type and string generator already declared under
 
     `mkRaw pythonCode`
 
-    :   Outputs the given string as raw Python code
+    :   Outputs the given string as raw Python code. Note that the final result will be stripped of any comments.
 
     `_imports`
 

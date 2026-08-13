@@ -9,7 +9,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.11.4";
+  version = "3.11.5";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -19,7 +19,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-CWgdxQH2DZ9Il2elQOLgC2+TzP6cIqmcCHUZcQuCSEg=";
+    outputHash = "sha256-NTi63ufQE9FX6AR3TJMzE9rYm1FuKZVuXTTSaf3IxVc=";
   };
 in
 stdenv.mkDerivation {
@@ -43,8 +43,14 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/${baseName} --version | grep -q "${version}"
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = ./update.sh;
@@ -53,7 +59,10 @@ stdenv.mkDerivation {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.markus1189 ];
+    maintainers = with lib.maintainers; [
+      agilesteel
+      markus1189
+    ];
     mainProgram = "scalafmt";
   };
 }

@@ -46,7 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    abseil-cpp
+    # webrtc-audio-processing specifies C++17, so abseil must match. Otherwise,
+    # abseil exposes a different (incompatible) interface based on the default
+    # C++ standard of the compiler.
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/d0569cfa50c1858ee279d77b3fc8870be6902441/meson.build#L7
+    (abseil-cpp.override { cxxStandard = "17"; })
   ];
 
   mesonFlags =

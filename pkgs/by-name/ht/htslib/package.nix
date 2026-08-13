@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
   # In the case of static builds, we need to replace the build and install phases
-  buildPhase = lib.optional stdenv.hostPlatform.isStatic ''
+  buildPhase = lib.optionalString stdenv.hostPlatform.isStatic ''
     make AR=$AR lib-static
     make LDFLAGS=-static bgzip htsfile tabix
   '';
 
-  installPhase = lib.optional stdenv.hostPlatform.isStatic ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isStatic ''
     install -d $out/bin
     install -d $out/lib
     install -d $out/include/htslib

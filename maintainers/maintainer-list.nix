@@ -63,6 +63,12 @@
 {
   # keep-sorted start case=no numeric=no block=yes
 
+  "3mp3ri0r" = {
+    email = "christoforus@xendit.co";
+    github = "3mp3ri0r";
+    githubId = 3140815;
+    name = "Christoforus Surjoputro";
+  };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -7123,6 +7129,12 @@
     githubId = 15774340;
     name = "Thomas Depierre";
   };
+  dibenzepin = {
+    name = "Fumnanya";
+    email = "fmowete@outlook.com";
+    github = "dibenzepin";
+    githubId = 87488715;
+  };
   DictXiong = {
     email = "me@beardic.cn";
     github = "DictXiong";
@@ -11273,11 +11285,6 @@
     githubId = 58676303;
     name = "hhydraa";
   };
-  hibiday = {
-    name = "Katsumi Takeuchi";
-    github = "hibiday";
-    githubId = 137286929;
-  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
@@ -11288,6 +11295,11 @@
     name = "Hol";
     github = "HigherOrderLogic";
     githubId = 73709188;
+  };
+  highghlow = {
+    name = "Alex Kravchenko";
+    github = "unhighghlow";
+    githubId = 132668972;
   };
   hirenashah = {
     email = "hiren@hiren.io";
@@ -22802,12 +22814,6 @@
     githubId = 4201956;
     name = "pongo1231";
   };
-  poopsicles = {
-    name = "Fumnanya";
-    email = "fmowete@outlook.com";
-    github = "dibenzepin";
-    githubId = 87488715;
-  };
   PopeRigby = {
     name = "PopeRigby";
     github = "poperigby";
@@ -23867,6 +23873,12 @@
       { fingerprint = "01D7 5486 3A6D 64EA AC77 0D26 FBF1 9A98 2CCE 0048"; }
     ];
   };
+  recutita = {
+    name = "Katsumi Takeuchi";
+    email = "contact@recutita.com";
+    github = "recutita";
+    githubId = 137286929;
+  };
   redfish64 = {
     email = "engler@gmail.com";
     github = "redfish64";
@@ -24163,6 +24175,12 @@
     github = "rhoriguchi";
     githubId = 6047658;
     name = "Ryan Horiguchi";
+  };
+  rhousand = {
+    email = "rhousand@gmail.com";
+    github = "rhousand";
+    githubId = 6124540;
+    name = "Ryan Housand";
   };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
@@ -26527,6 +26545,12 @@
     githubId = 848812;
     name = "Stephan Jau";
   };
+  sjcobb = {
+    email = "sjcobb2003@gmail.com";
+    github = "sjcobb2022";
+    githubId = 68509699;
+    name = "sjcobb";
+  };
   sjfloat = {
     email = "steve+nixpkgs@jonescape.com";
     github = "sjfloat";
@@ -26545,6 +26569,12 @@
     github = "skeuchel";
     githubId = 617130;
     keys = [ { fingerprint = "C4F7 46C7 B560 38D8 210F  0288 5877 DEE9 7428 557F"; } ];
+  };
+  skirlez = {
+    name = "skirlez";
+    email = "skirlez3@gmail.com";
+    github = "skirlez";
+    githubId = 17904548;
   };
   skohtv = {
     name = "Skoh";

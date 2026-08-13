@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  preConfigure = lib.optionals (!extraScripts) ''
+  preConfigure = lib.optionalString (!extraScripts) ''
     echo "" > scripts/CMakeLists.txt
   '';
 

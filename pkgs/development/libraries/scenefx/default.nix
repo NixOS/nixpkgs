@@ -88,7 +88,7 @@ let
     });
 
 in
-{
+rec {
   scenefx_0_4 = generic {
     version = "0.4.1";
     hash = "sha256-XD5EcquaHBg5spsN06fPHAjVCb1vOMM7oxmjZZ/PxIE=";
@@ -101,4 +101,6 @@ in
     wlroots = wlroots_0_20;
     extraBuildInputs = [ lcms2 ];
   };
+
+  scenefx = scenefx_0_5;
 }

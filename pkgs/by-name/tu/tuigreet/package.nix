@@ -8,16 +8,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuigreet";
-  version = "0.9.1";
+  version = "0.11.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "apognu";
+    owner = "tuigreet";
     repo = "tuigreet";
     tag = finalAttrs.version;
-    hash = "sha256-e0YtpakEaaWdgu+bMr2VFoUc6+SUMFk4hYtSyk5aApY=";
+    hash = "sha256-4DB4Pl2UwIeab/MJaX3VfVNMsPWE6Q513z1NDdxvG3o=";
   };
 
-  cargoHash = "sha256-w6ZOqpwogKoN4oqqI1gFqY8xAnfvhEBVaL8/6JXpKXs=";
+  cargoHash = "sha256-5Q4E8nnmQ109gcfxxctn/rne5N4Qvz2Pft6o7as2fSc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,10 +35,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Graphical console greeter for greetd";
-    homepage = "https://github.com/apognu/tuigreet";
-    changelog = "https://github.com/apognu/tuigreet/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/tuigreet/tuigreet";
+    changelog = "https://github.com/tuigreet/tuigreet/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      antoineco
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "tuigreet";
   };

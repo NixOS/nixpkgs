@@ -38,8 +38,8 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   replaceVars,
   openssl,
   ostree-full,
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

@@ -1190,8 +1190,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.24.39";
-          hash = "sha256-r1XkER09s+38uCbUxK9MM5bHRNp3UnMj6VJCHUMZM1Q=";
+          version = "3.24.43";
+          hash = "sha256-Y3pCg0qauVu4K6qz610QGRizyodnRpDigGSSIn6m6gw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1242,8 +1242,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.12.4";
-          hash = "sha256-29xG0/AhBhidM8Hd7vHUWxESCDt8MwACIkBpmfvhD2Q=";
+          version = "2.13.0";
+          hash = "sha256-4Fa1UABo7JUO7+IECjsYEq9zyscHTGUlrUCa3aBdhoI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -2031,8 +2031,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.85.5";
-          hash = "sha256-WtdTQjDxeI4YLOSQFdrFpdualNizYIQC7HQlsocSt4M=";
+          version = "6.86.0";
+          hash = "sha256-DzVfMMXifTASxb/YvjsAxQUnqZGgBGHKfpLEtkyJt88=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";

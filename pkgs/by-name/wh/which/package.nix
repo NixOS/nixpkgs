@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/which/";
     description = "Shows the full path of (shell) commands";

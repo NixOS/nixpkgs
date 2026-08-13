@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-headers";
-  version = "5.86";
+  version = "5.87";
 
   # This package has the source, because of the emulatorAvailable check in the
   # bluez function args, that causes an infinite recursion with Python on cross
   # builds.
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mfFEVAxgcFkeTFO8uXfrQmZMYrezbLNaKc9y3tM5Yh0=";
+    hash = "sha256-Jr3PLOvXMQxvWYhQYGsDfvDFFf5mCOvFTSLFDEwys18=";
   };
 
   dontConfigure = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://www.bluez.org/";
+    homepage = "https://bluez.github.io/";
     description = "Official Linux Bluetooth protocol stack";
     changelog = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=${finalAttrs.version}";
     license = with lib.licenses; [

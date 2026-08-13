@@ -40,7 +40,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.10";
+  version = "2.9.13";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-v9xFW83/v8CjKa04oql1yGQKB58VQtFmXZTN/KMN/gM=";
+    hash = "sha256-HCqd8++PKdbuzyeztkcLUXhTivTLJEl749VD2oCsHZA=";
   };
 
   patches = [
@@ -204,6 +204,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "snapcast"
       "sonic_analysis"
       "sonic_similarity"
+      "sonos"
       "sonos_s1"
       "tidal"
       "wiim"

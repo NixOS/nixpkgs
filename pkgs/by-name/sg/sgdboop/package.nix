@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgdboop";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "SteamGridDB";
     repo = "SGDBoop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-17LfPmqvSrXvIcKfjTrpopAIzue62TXw/yXXmAQOeR0=";
+    hash = "sha256-l4l5CWupL/V/qlnFZIgqUBagc5qg0DDv/zz2yc0mtng=";
   };
 
   installPhase = ''

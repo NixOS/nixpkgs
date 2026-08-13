@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   pytestCheckHook,
   requests,
   setuptools,
-  withMypyc ? !isPyPy,
+  withMypyc ? !isPyPy && !stdenv.hostPlatform.isStatic,
 }:
 
 buildPythonPackage rec {

@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   emoji,
   fetchFromGitHub,
@@ -7,6 +8,7 @@
   tzdata,
   pdoc,
   pydantic,
+  pytest-aiohttp,
   pytest-benchmark,
   pytestCheckHook,
   python-dateutil,
@@ -16,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "14.0.1";
+  version = "14.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
     tag = finalAttrs.version;
-    hash = "sha256-y+YKHSVPd1Lkkjty2xA1O4YKmXvE4c0yIASEhjV82xo=";
+    hash = "sha256-YbYZbgSEqfQP4VQ/g25o+NbCBLU0dxA0laoeP7c54Fw=";
   };
 
   build-system = [ setuptools ];
@@ -34,16 +36,24 @@ buildPythonPackage (finalAttrs: {
     pydantic
   ];
 
+  optional-dependencies = {
+    async = [ aiohttp ];
+  };
+
   nativeCheckInputs = [
     emoji
     freezegun
     pdoc
+    pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "--benchmark-disable" ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "ical" ];
 

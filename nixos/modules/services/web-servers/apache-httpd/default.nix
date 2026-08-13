@@ -90,6 +90,7 @@ let
     "unixd"
     "slotmem_shm"
     "socache_shmcb"
+    "systemd"
     "mpm_${cfg.mpm}"
   ]
   ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
@@ -992,12 +993,12 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "@${pkg}/bin/httpd httpd -f /etc/httpd/httpd.conf";
-        ExecStop = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful-stop";
+        ExecStart = "${pkg}/bin/httpd -D FOREGROUND -f /etc/httpd/httpd.conf";
         ExecReload = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful";
+        KillMode = "mixed";
         User = cfg.user;
         Group = cfg.group;
-        Type = "forking";
+        Type = "notify";
         PIDFile = "${runtimeDir}/httpd.pid";
         Restart = "always";
         RestartSec = "5s";
