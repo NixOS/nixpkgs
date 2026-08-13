@@ -243,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       keenanweaver
       kylerisse
+      schrobingus
     ];
     mainProgram = "openrct2";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
