@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
