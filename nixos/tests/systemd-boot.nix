@@ -288,7 +288,6 @@ in
         {
           imports = [ common ];
           environment.systemPackages = [ pkgs.sbctl ];
-          virtualisation.useSecureBoot = true;
         };
 
       testScript =
