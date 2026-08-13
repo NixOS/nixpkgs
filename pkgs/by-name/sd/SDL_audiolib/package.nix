@@ -6,7 +6,7 @@
   pkg-config,
   stdenv,
   flac,
-  fmt,
+  fmt_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     flac
-    fmt
+    fmt_11
   ];
 
   strictDeps = true;
