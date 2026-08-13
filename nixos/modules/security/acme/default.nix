@@ -153,6 +153,19 @@ let
     ''
     + (lib.concatStringsSep "\n" (
       lib.mapAttrsToList (cert: data: ''
+        # Compat with NixOS < 25.11, which tracked "a real certificate exists"
+        # with ConditionPathExists on the self-signing unit rather than with an
+        # acme-success marker. Without this, upgrading replaces a perfectly good
+        # CA-issued certificate with a self-signed one until the next successful
+        # order. A certificate that does not verify against our own self-signing
+        # CA came from a real CA, so record that success up front.
+        if [ -e ${lib.escapeShellArg cert}/fullchain.pem ] \
+          && [ ! -e ${lib.escapeShellArg cert}/acme-success ] \
+          && ! ${lib.getExe' pkgs.openssl "openssl"} verify -CAfile .minica/cert.pem \
+               ${lib.escapeShellArg cert}/fullchain.pem >/dev/null 2>&1; then
+          touch ${lib.escapeShellArg cert}/acme-success
+        fi
+
         for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
           if [ -d "$fixpath" ]; then
             chmod -R u=rwX,g=rX,o= "$fixpath"

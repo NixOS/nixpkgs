@@ -173,6 +173,21 @@
         check_issuer(webserver, fqdn, "pebble")
         check_connection(webserver, fqdn)
 
+      with subtest("Retain certificate from a layout that predates the acme-success marker"):
+          # Such a system must not have its CA-issued certificate discarded and
+          # replaced by a self-signed one on the first rebuild.
+          webserver.succeed(f"rm /var/lib/acme/{fqdn}/acme-success")
+          webserver.succeed("systemctl restart acme-setup.service")
+          webserver.succeed(f"test -e /var/lib/acme/{fqdn}/acme-success")
+          mtime_before = webserver.succeed(f"stat -c %Y /var/lib/acme/{fqdn}/fullchain.pem")
+          webserver.succeed(f"systemctl restart acme-{fqdn}.service")
+          mtime_after = webserver.succeed(f"stat -c %Y /var/lib/acme/{fqdn}/fullchain.pem")
+          t.assertEqual(
+              mtime_before, mtime_after, "a CA-issued certificate was rewritten"
+          )
+          check_issuer(webserver, fqdn, "pebble")
+          check_keypair(webserver, fqdn)
+
       with subtest("security.acme changes reflect on web server part 1"):
           check_connection(webserver, f"certchange.{domain}", fail=True)
           switch_to(webserver, "certchange")
@@ -244,10 +259,10 @@
 
       # Kept last: shutting the CA down leaves acme-order-renew failed, which
       # would make the is-system-running checks in switch_to report degraded.
-      with subtest("Upgrading from a layout that predates the acme-success marker"):
+      with subtest("Self-signing on top of an already installed certificate without acme-success marker"):
           # Once a real certificate is installed, cert.pem has been symlinked to fullchain.pem.
-          # Regenerating the self-signed certificate over that layout must result in working certificate.
-          acme.shutdown()  # Prevent the ordering service from overwriting the output .
+          # Regenerating the self-signed certificate over that layout must result in a working certificate.
+          acme.shutdown()  # Prevent the ordering service from overwriting the output.
           webserver.succeed(f"test -L /var/lib/acme/{fqdn}/cert.pem")
           webserver.succeed(f"rm /var/lib/acme/{fqdn}/acme-success")
           webserver.succeed(f"systemctl restart acme-{fqdn}.service")
