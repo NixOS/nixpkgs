@@ -12,7 +12,7 @@ index 839072efe4..8b8a2a5dd4 100644
      common_all
      comic_backend
      db_helper
-+    PRIVATE
++    PUBLIC
 +    PkgConfig::QtWebApp
  )
 diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
