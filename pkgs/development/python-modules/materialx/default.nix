@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.39.4";
+  version = "1.39.5";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-XNfXOC76zM5Ns2DyyE3mKCJ1iJaszs1M0rBdVLRDo8E=";
+    hash = "sha256-7aY1SI5b5hVjvTtucQh6XpkwkhPZWDhsTVYLKM667/k=";
   };
 
   pyproject = false;
