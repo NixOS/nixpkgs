@@ -36,4 +36,8 @@ sbt.overrideAttrs (previousAttrs: {
       }" \
       --set NIX_CFLAGS_LINK "-lc++"
   '';
+
+  meta = previousAttrs.meta // {
+    description = previousAttrs.meta.description + ", with the Scala Native toolchain";
+  };
 })
