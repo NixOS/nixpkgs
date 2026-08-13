@@ -3,20 +3,23 @@
   bluepy,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pycryptodomex,
 }:
 
 buildPythonPackage rec {
   pname = "csrmesh";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "03lzam54ypcfvqvikh3gsrivvlidmz1ifdq15xv8c5i3n5b178ag";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bluepy
     pycryptodomex
   ];
