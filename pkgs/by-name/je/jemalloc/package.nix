@@ -115,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallel builds break reproducibility.
   enableParallelBuilding = false;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://jemalloc.net/";
     downloadPage = "https://github.com/jemalloc/jemalloc";
