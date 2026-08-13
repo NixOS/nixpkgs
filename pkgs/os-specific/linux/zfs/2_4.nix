@@ -18,6 +18,7 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.4.3";
 
+  # if adding a patch here, check if it also needs to be applied to zfs_unstable
   extraPatches = [
     # https://github.com/openzfs/zfs/issues/18366
     # dedup data corruption fix unreleased as of OpenZFS 2.4.3
