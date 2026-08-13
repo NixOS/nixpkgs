@@ -13,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "snowball";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/bin {snowball,stemwords}
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Snowball Stemming Algorithms";
