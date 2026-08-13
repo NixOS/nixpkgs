@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   setuptools-scm,
   fonttools,
   fontpens,
@@ -11,16 +12,19 @@
 buildPythonPackage rec {
   pname = "defcon";
   version = "0.12.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Jd/n/QFSzPKSyxkNGSikfViImcILBGhUKT4DnhyT5eA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fonttools
   ]
   ++ fonttools.optional-dependencies.ufo
