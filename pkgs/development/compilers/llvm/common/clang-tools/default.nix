@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontUnpack = true;
   clang = if enableLibcxx then libcxxClang else clang;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   installPhase = ''
     runHook preInstall
 
