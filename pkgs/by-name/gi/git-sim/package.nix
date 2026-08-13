@@ -1,44 +1,31 @@
 {
   lib,
   stdenv,
+  python3Packages,
   fetchFromGitHub,
   installShellFiles,
-  python3,
-
-  # Override Python packages using
-  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-  # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
+  addBinToPathHook,
 }:
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = lib.composeManyExtensions [ packageOverrides ];
-  };
-
-  version = "0.3.5";
-in
-
-with python.pkgs;
-buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-sim";
-  inherit version;
+  version = "0.3.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "initialcommit-com";
     repo = "git-sim";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4jHkAlF2SAzHjBi8pmAJ0TKkcLxw+6EdGsXnHZUMILw=";
   };
 
   patches = [ ./tests.patch ];
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRemoveDeps = [ "opencv-python-headless" ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     gitpython
     manim
     opencv4
@@ -49,7 +36,12 @@ buildPythonApplication {
   ];
 
   # https://github.com/NixOS/nixpkgs/commit/8033561015355dd3c3cf419d81ead31e534d2138
-  makeWrapperArgs = [ "--prefix PYTHONWARNINGS , ignore:::pydub.utils:" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONWARNINGS"
+    ","
+    "ignore:::pydub.utils:"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -61,23 +53,25 @@ buildPythonApplication {
         --fish <($out/bin/git-sim --show-completion fish) \
         --zsh <($out/bin/git-sim --show-completion zsh)
     ''
-    + "ln -s ${git-dummy}/bin/git-dummy $out/bin/";
-
-  preCheck = ''
-    PATH=$PATH:$out/bin
-  '';
+    + ''
+      ln -s ${lib.getExe python3Packages.git-dummy} $out/bin/
+    '';
 
   nativeCheckInputs = [
+    addBinToPathHook
+  ]
+  ++ (with python3Packages; [
     pytestCheckHook
     git-dummy
-  ];
+  ]);
 
   doCheck = false;
 
   meta = {
     description = "Visually simulate Git operations in your own repos with a single terminal command";
     homepage = "https://initialcommit.com/tools/git-sim";
+    changelog = "https://github.com/initialcommit-com/git-sim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ mathiassven ];
   };
-}
+})
