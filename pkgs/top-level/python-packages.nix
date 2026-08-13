@@ -18656,8 +18656,6 @@ self: super: with self; {
 
   show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
 
-  showit = callPackage ../development/python-modules/showit { };
-
   shtab = callPackage ../development/python-modules/shtab { };
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
@@ -18873,8 +18871,6 @@ self: super: with self; {
   );
 
   slh-dsa = callPackage ../development/python-modules/slh-dsa { };
-
-  slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicer = callPackage ../development/python-modules/slicer { };
 

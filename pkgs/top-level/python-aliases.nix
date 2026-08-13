@@ -657,10 +657,12 @@ mapAliases {
   setuptoolsTrial = throw "'setuptoolsTrial' has been renamed to/replaced by 'setuptools-trial'"; # Converted to throw 2025-10-29
   sharkiqpy = throw "'sharkiqpy' has been renamed to/replaced by 'sharkiq'"; # Converted to throw 2025-10-29
   shippai = throw "shippai has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
+  showit = throw "'showit' has been removed because the upstream is unmaintained"; # Added 2026-08-14
   sip_4 = throw "'sip_4' has been renamed to/replaced by 'sip4'"; # Converted to throw 2025-10-29
   sipsimple = lib.warnOnInstantiate "'sipsimple' has been renamed to 'python3-sipsimple' to fit upstream naming" python3-sipsimple; # added 2026-01-05
   slackclient = throw "'slackclient' has been renamed to/replaced by 'slack-sdk'"; # Converted to throw 2025-10-29
   sleekxmpp = throw "'sleekxmpp' has been removed because it was deprecated in favor of 'slixmpp'"; # added 2026-01-19
+  slicedimage = throw "'slicedimage' has been removed because it was unused"; # Added 2026-08-14
   smart_open = throw "'smart_open' has been renamed to/replaced by 'smart-open'"; # Converted to throw 2025-10-29
   smpp_pdu = throw "'smpp_pdu' has been renamed to/replaced by 'smpp-pdu'"; # Converted to throw 2025-10-29
   sorl_thumbnail = throw "'sorl_thumbnail' has been renamed to/replaced by 'sorl-thumbnail'"; # Converted to throw 2025-10-29
