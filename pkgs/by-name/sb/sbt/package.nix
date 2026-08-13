@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.scala-sbt.org/";
+    changelog = "https://github.com/sbt/sbt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
