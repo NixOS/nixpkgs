@@ -82,6 +82,8 @@ stdenv.mkDerivation (
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ readline ];
 
+    strictDeps = true;
+
     inherit patches;
 
     postPatch = ''
