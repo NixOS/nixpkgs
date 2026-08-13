@@ -11,14 +11,14 @@
   libid3tag,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "audiowaveform";
   version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-7pcYxl6m7mkoXGawA3gr8NTfkJlkgl+DtK79CA8dRec=";
   };
 
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
       Waveform data can be used to produce a visual rendering of the audio, similar in appearance to audio editing applications.
     '';
     homepage = "https://github.com/bbc/audiowaveform";
-    changelog = "https://github.com/bbc/audiowaveform/blob/${version}/ChangeLog";
+    changelog = "https://github.com/bbc/audiowaveform/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ edbentley ];
     mainProgram = "audiowaveform";
   };
-}
+})
