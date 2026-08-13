@@ -203,6 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
     isLLVM = true;
   };
 
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";
     description = "C++ standard library";
