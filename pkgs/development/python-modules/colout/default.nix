@@ -3,6 +3,7 @@
   babel,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pygments,
   setuptools-scm,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "colout";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nojhan";
@@ -19,9 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-7Dtf87erBElqVgqRx8BYHYOWv1uI84JJ0LHrcneczCI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     pygments
   ];
