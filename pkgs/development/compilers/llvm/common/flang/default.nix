@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm.dev
     mlir.dev
   ];
+
+  strictDeps = true;
+
   preConfigure = ''
     ls -l ${libllvm.dev}/lib/cmake/llvm/LLVMConfig.cmake
     ls -l ${libclang.dev}/lib/cmake/clang/ClangConfig.cmake
