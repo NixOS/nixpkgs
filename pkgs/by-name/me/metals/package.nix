@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Language server for Scala";
     mainProgram = "metals";
     maintainers = with lib.maintainers; [
+      agilesteel
       fabianhjr
       jpaju
       tomahna
