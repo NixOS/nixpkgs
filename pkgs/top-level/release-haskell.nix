@@ -69,6 +69,7 @@ let
     ghc9103
     ghc9125
     ghc9141
+    ghc9142
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -529,14 +530,17 @@ let
         # time < 1.13 conflicts with time == 1.14.* || == 1.15.*
         compilerNames.ghc9125
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       Cabal_3_12_1_0 = lib.subtractLists [
         # time < 1.15 conflicts with time == 1.15.*
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       Cabal_3_14_2_0 = lib.subtractLists [
         # time < 1.15 conflicts with time == 1.15.*
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       Cabal_3_16_1_0 = released;
       cabal2nix = released;
@@ -564,6 +568,7 @@ let
         # https://github.com/ndmitchell/hlint/issues/1672
         # https://github.com/ndmitchell/hlint/pull/1673
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       hpack = released;
       hsdns = released;
@@ -580,6 +585,7 @@ let
       ghc-tags = lib.subtractLists [
         # https://github.com/arybczak/ghc-tags/pull/31
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       hashable = released;
       primitive = released;
@@ -596,6 +602,7 @@ let
         # Currently (2026-08-13) blocked on
         # https://github.com/kcsongor/generic-lens/issues/174
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
 
       # MicroHs core packages
