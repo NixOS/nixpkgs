@@ -8,7 +8,7 @@
   vulkan-headers,
   SDL2,
   SDL2_ttf,
-  ffmpeg,
+  ffmpeg_8,
   libopus,
   libplacebo,
   openssl,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_ttf
-    ffmpeg
+    ffmpeg_8
     libopus
     libplacebo
     qt6.qtdeclarative

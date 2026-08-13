@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       any kind of file.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = lib.platforms.all;
   };
 })

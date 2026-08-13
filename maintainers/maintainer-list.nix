@@ -2331,6 +2331,12 @@
     githubId = 8049011;
     name = "Arik Grahl";
   };
+  arison = {
+    email = "arison@duck.com";
+    github = "ArisoN-ext";
+    githubId = 181835726;
+    name = "ArisoN";
+  };
   ariutta = {
     email = "anders.riutta@gmail.com";
     github = "ariutta";

@@ -733,13 +733,13 @@
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-hDLD3h+640IRIL5lDegn4W2tOuSef6Bi5JWdlLbtqoM=",
+    "hash": "sha256-r34ih6c5UVovef14tNMkZA/QjJxVDTpfreeJPLE3fP8=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v2.4.0",
+    "rev": "v2.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/UNr2OiDlq0gX3D77mbruDj9WMnS/0AxkoEaBcWlFHU="
+    "vendorHash": "sha256-e58CRr7mqENnAoF3eQyaypbsFr1sflrWHkx8U/JxCNA="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1202,13 +1202,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-Z5Z66WIZur68s0VkmIpbowZr26J2Ngy2l5269I6SxVA=",
+    "hash": "sha256-IewnjIw4MXAcMb3J1TxON8dz0lelClKgRgpJShWj6b8=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v8.2.4",
+    "rev": "v8.3.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-qDQXedSS41lpV1o+lfCYHs81m3AcqHhku6xlul7725E="
+    "vendorHash": "sha256-pYvj5toBm4XT5TTSECZiyd5tcPbTp+EREYaxyV0mLAM="
   },
   "siderolabs_talos": {
     "hash": "sha256-/NACmEpodBNx+Q2M9y3JnKpw9a3Y1eFDdTQ+48MXAc8=",

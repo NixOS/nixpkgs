@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-03HG8AGe6PJ516zL23iNjGUYmGOZa8NuFljb1ll2pjs=";
   };
 
