@@ -1,0 +1,12 @@
+diff --git a/src/MainWindow.vala b/src/MainWindow.vala
+index 8f407bf..32db5fb 100644
+--- a/src/MainWindow.vala
++++ b/src/MainWindow.vala
+@@ -124,6 +124,7 @@ public class Feedback.MainWindow : Gtk.ApplicationWindow {
+             AppStream.PoolFlags.LOAD_FLATPAK |
+             AppStream.PoolFlags.RESOLVE_ADDONS
+         );
++        appstream_pool.add_extra_data_location ("/run/current-system/sw/share/metainfo/", AppStream.FormatStyle.METAINFO);
+ 
+         appstream_pool.load_async.begin (null, (obj, res) => {
+             try {

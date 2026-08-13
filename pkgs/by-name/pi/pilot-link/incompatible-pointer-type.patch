@@ -1,0 +1,15 @@
+Index: pilot-link/src/pilot-read-todos.c
+===================================================================
+--- pilot-link/src/pilot-read-todos.c
++++ pilot-link/src/pilot-read-todos.c
+@@ -216,9 +216,9 @@
+ 				break;
+ 		}
+ 		else {
+ 			if (pi_file_read_record
+-			    (pif, i, (void *) &ptr, &len, &attr, &category,
++			    (pif, i, (void *) &ptr, (size_t *) &len, &attr, &category,
+ 			     0))
+ 				break;
+ 
+ 			pi_buffer_clear(recbuf);

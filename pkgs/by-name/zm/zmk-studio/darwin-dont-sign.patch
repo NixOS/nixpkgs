@@ -1,0 +1,13 @@
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 8fd57bf..6a27557 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -33,7 +33,7 @@
+       "exceptionDomain": "",
+       "frameworks": [],
+       "providerShortName": null,
+-      "signingIdentity": "-"
++      "signingIdentity": null
+     },
+     "resources": [],
+     "shortDescription": "",

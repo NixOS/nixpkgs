@@ -1,0 +1,13 @@
+diff --git a/texk/ps2pkm/type1.c b/texk/ps2pkm/type1.c
+index 027bf1f..4dcbad0 100644
+--- a/texk/ps2pkm/type1.c
++++ b/texk/ps2pkm/type1.c
+@@ -800,7 +800,7 @@ static void PSFakePush(Num)
+ static DOUBLE PSFakePop ()
+ {
+   if (PSFakeTop >= 0) return(PSFakeStack[PSFakeTop--]);
+-  else Error0("PSFakePop : Stack empty\n");
++  else { CC; IfTrace0(TRUE, "PSFakePop : Stack empty\n"); errflag = TRUE; return 0; }
+   /*NOTREACHED*/
+ }
+  

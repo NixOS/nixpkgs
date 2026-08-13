@@ -1,0 +1,16 @@
+diff --git a/napi/Cargo.toml b/napi/Cargo.toml
+index 3360a9c..86d6ba5 100644
+--- a/napi/Cargo.toml
++++ b/napi/Cargo.toml
+@@ -10,7 +10,7 @@ edition = "2021"
+ [features]
+ default = []
+ visitor = ["lightningcss/visitor"]
+-bundler = ["dep:crossbeam-channel", "dep:rayon"]
++bundler = ["dep:crossbeam-channel", "rayon"]
+ 
+ [dependencies]
+ serde = { version = "1.0.123", features = ["derive"] }
+-- 
+2.44.0
+

@@ -1,0 +1,30 @@
+diff --git a/src/pyshark/tshark/tshark.py b/src/pyshark/tshark/tshark.py
+index 73ede9d..17c0488 100644
+--- a/src/pyshark/tshark/tshark.py
++++ b/src/pyshark/tshark/tshark.py
+@@ -47,24 +47,7 @@ def get_process_path(tshark_path=None, process_name="tshark"):
+                                         f"{process_name}.exe" if sys.platform.startswith("win") else process_name)
+         possible_paths.insert(0, user_tshark_path)
+ 
+-    # Windows search order: configuration file"s path, common paths.
+-    if sys.platform.startswith("win"):
+-        for env in ("ProgramFiles(x86)", "ProgramFiles"):
+-            program_files = os.getenv(env)
+-            if program_files is not None:
+-                possible_paths.append(
+-                    os.path.join(program_files, "Wireshark", f"{process_name}.exe")
+-                )
+-    # Linux, etc. search order: configuration file's path, the system's path
+-    else:
+-        os_path = os.getenv(
+-            "PATH",
+-            "/usr/bin:/usr/sbin:/usr/lib/tshark:/usr/local/bin"
+-        )
+-        for path in os_path.split(":"):
+-            possible_paths.append(os.path.join(path, process_name))
+-    if sys.platform.startswith("darwin"):
+-        possible_paths.append(f"/Applications/Wireshark.app/Contents/MacOS/{process_name}")
++    possible_paths.append("@tshark@")
+ 
+     for path in possible_paths:
+         if os.path.exists(path):

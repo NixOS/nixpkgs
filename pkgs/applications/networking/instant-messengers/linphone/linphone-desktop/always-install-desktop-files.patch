@@ -1,0 +1,17 @@
+diff --git a/cmake/install/install.cmake b/cmake/install/install.cmake
+index 710e8fa31..636e3cff4 100644
+--- a/cmake/install/install.cmake
++++ b/cmake/install/install.cmake
+@@ -325,3 +325,11 @@ if(${ENABLE_APP_PACKAGING})
+ 	endif()
+ 	include(CPack)
+ endif()
++
++configure_file("${CMAKE_SOURCE_DIR}/cmake/install/linux/linphone.desktop.cmake" "${CMAKE_BINARY_DIR}/cmake/install/linux/${EXECUTABLE_NAME}.desktop" @ONLY)
++install(FILES "${CMAKE_BINARY_DIR}/cmake/install/linux/${EXECUTABLE_NAME}.desktop" DESTINATION "${CMAKE_INSTALL_DATADIR}/applications" PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install(FILES "${CMAKE_SOURCE_DIR}/Linphone/data/image/logo.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/" RENAME "${EXECUTABLE_NAME}.svg")
++set(ICON_DIRS 16x16 22x22 24x24 32x32 64x64 128x128 256x256)
++foreach (DIR ${ICON_DIRS})
++  install(FILES "${CMAKE_SOURCE_DIR}/Linphone/data/icon/hicolor/${DIR}/apps/icon.png" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${DIR}/apps/" RENAME "${EXECUTABLE_NAME}.png")
++endforeach ()
+

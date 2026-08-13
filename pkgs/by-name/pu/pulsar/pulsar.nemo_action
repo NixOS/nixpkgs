@@ -1,0 +1,9 @@
+[Nemo Action]
+Active=true
+Name=Open in Pulsar
+Comment=Open in Pulsar
+#%U is the current selected file, this will also work on current directory
+Exec=pulsar -n %U
+Icon-Name=pulsar
+Selection=any
+Extensions=any

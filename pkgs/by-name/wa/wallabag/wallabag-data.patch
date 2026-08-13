@@ -1,0 +1,26 @@
+diff --git a/app/AppKernel.php b/app/AppKernel.php
+index 61b734e06..d25d1aaa3 100644
+--- a/app/AppKernel.php
++++ b/app/AppKernel.php
+@@ -62,14 +62,19 @@ class AppKernel extends Kernel
+         return $bundles;
+     }
+ 
++    public function getProjectDir()
++    {
++        return getenv('WALLABAG_DATA') ?: dirname(__DIR__);
++    }
++
+     public function getCacheDir()
+     {
+-        return dirname(__DIR__) . '/var/cache/' . $this->getEnvironment();
++        return $this->getProjectDir() . '/var/cache/' . $this->getEnvironment();
+     }
+ 
+     public function getLogDir()
+     {
+-        return dirname(__DIR__) . '/var/logs';
++        return $this->getProjectDir() . '/var/logs';
+     }
+ 
+     public function registerContainerConfiguration(LoaderInterface $loader)

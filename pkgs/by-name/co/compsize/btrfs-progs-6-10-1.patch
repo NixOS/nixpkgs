@@ -1,0 +1,47 @@
+From a471982c82d1917637cce81a084fcd4b02d6e33b Mon Sep 17 00:00:00 2001
+From: David Roman <droman@ifae.es>
+Date: Mon, 25 Nov 2024 14:10:16 +0100
+Subject: [PATCH] fix build with btrfs-progs >= 6.10.1
+
+https://github.com/kilobyte/compsize/pull/54
+
+---
+ compsize.c   | 2 ++
+ radix-tree.h | 4 ----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/compsize.c b/compsize.c
+index 42ec304..0f533e5 100644
+--- a/compsize.c
++++ b/compsize.c
+@@ -5,12 +5,14 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <dirent.h>
++#include "kerncompat.h"
+ #include <btrfs/ioctl.h>
+ #include <btrfs/ctree.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <sys/ioctl.h>
+ #include <inttypes.h>
++#include <errno.h>
+ #include <linux/limits.h>
+ #include <getopt.h>
+ #include <signal.h>
+diff --git a/radix-tree.h b/radix-tree.h
+index bf96d83..d99ea7e 100644
+--- a/radix-tree.h
++++ b/radix-tree.h
+@@ -37,11 +37,7 @@
+ #ifndef _LINUX_RADIX_TREE_H
+ #define _LINUX_RADIX_TREE_H
+ 
+-#if BTRFS_FLAT_INCLUDES
+ #include "kerncompat.h"
+-#else
+-#include <btrfs/kerncompat.h>
+-#endif /* BTRFS_FLAT_INCLUDES */
+ 
+ #define RADIX_TREE_MAX_TAGS 2
+ 

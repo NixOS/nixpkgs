@@ -1,0 +1,24 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index ba8f5362..ddc40c83 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -2,7 +2,7 @@
+ # drive package
+ #
+ [build-system]
+-requires = ["uv_build>=0.11.7,<0.12.0"]
++requires = ["uv_build"]
+ build-backend = "uv_build"
+ 
+ [project]
+@@ -102,6 +102,9 @@ constraint-dependencies = [
+ 
+ [tool.uv.build-backend]
+ module-root = ""
++module-name = ["core", "demo", "drive", "e2e", "wopi"]
++data = ["data"]
++namespace = true
+ source-exclude = [
+     "**/tests/**",
+     "**/test_*.py",
+

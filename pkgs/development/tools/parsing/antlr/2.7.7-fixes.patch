@@ -1,0 +1,26 @@
+diff --git a/lib/cpp/antlr/CharScanner.hpp b/lib/cpp/antlr/CharScanner.hpp
+index 8a97e97..1835a3e 100644
+--- a/lib/cpp/antlr/CharScanner.hpp
++++ b/lib/cpp/antlr/CharScanner.hpp
+@@ -11,6 +11,8 @@
+ #include <antlr/config.hpp>
+ 
+ #include <map>
++#include <cstdio>
++#include <cstring>
+ 
+ #ifdef HAS_NOT_CCTYPE_H
+ #include <ctype.h>
+diff --git a/scripts/config.make.in b/scripts/config.make.in
+index c23dd5c..6057309 100644
+--- a/scripts/config.make.in
++++ b/scripts/config.make.in
+@@ -38,7 +38,7 @@ MAKEOVERRIDES := $(patsubst SUBDIRS=%,,$(MAKEOVERRIDES))
+ all clean distclean test install force-target clean-target :: 
+ 	@dirs="$(SUBDIRS)" ; \
+ 	test -z "$${dirs}" && { \
+-		dirs=`/bin/ls` ; \
++		dirs=`ls` ; \
+   } ; \
+ 	for d in . $${dirs} ; do \
+ 		case $${d} in \

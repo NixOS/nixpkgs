@@ -1,0 +1,25 @@
+diff --git a/frb_codegen/src/commands.rs b/frb_codegen/src/commands.rs
+index 91b05ca..41aba36 100644
+--- a/frb_codegen/src/commands.rs
++++ b/frb_codegen/src/commands.rs
+@@ -174,8 +174,6 @@ fn ffigen(
+     let repo = DartRepository::from_str(dart_root).unwrap();
+     let res = command_run!(
+         call_shell[Some(dart_root)],
+-        *repo.toolchain.as_run_command(),
+-        "run",
+         "ffigen",
+         "--config",
+         config_file.path()
+@@ -229,8 +227,6 @@ pub fn build_runner(dart_root: &str) -> Result {
+     let repo = DartRepository::from_str(dart_root).unwrap();
+     let out = command_run!(
+         call_shell[Some(dart_root)],
+-        *repo.toolchain.as_run_command(),
+-        "run",
+         "build_runner",
+         "build",
+         "--delete-conflicting-outputs",
+-- 
+2.47.1
+

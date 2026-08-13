@@ -1,0 +1,47 @@
+{
+  acl,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "laurel";
+  version = "0.8.2";
+
+  src = fetchFromGitHub {
+    owner = "threathunters-io";
+    repo = "laurel";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z457Ht8533DYuak2gSLE+q8pUlZja7F1QdltKH+za4w=";
+  };
+
+  cargoHash = "sha256-SBhhRw+gx3iNyEPSHTRHXZq194otxoxeHG7/vE/g+J4=";
+
+  postPatch = ''
+    # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
+    # for their CI which breaks compiling on aarch64 in nixpkgs:
+    #  error: linker `aarch64-linux-gnu-gcc` not found
+    rm .cargo/config.toml
+  '';
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  buildInputs = [ acl ];
+
+  checkFlags = [
+    # Nix' build sandbox does not allow setting ACLs:
+    # https://github.com/NixOS/nix/blob/2.28.3/src/libstore/unix/build/local-derivation-goal.cc#L1760-L1769
+    # Skip the tests that are failing with "Operation not supported (os error 95)" because of this:
+    "--skip=rotate::test::existing"
+    "--skip=rotate::test::fresh_file"
+  ];
+
+  meta = {
+    description = "Transform Linux Audit logs for SIEM usage";
+    homepage = "https://github.com/threathunters-io/laurel";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ emilylange ];
+    platforms = lib.platforms.linux;
+  };
+})

@@ -1,0 +1,41 @@
+# vim: set syntax=nix:
+let
+  flake = builtins.getFlake ''${flake_path}'';
+  configuration = flake.${flake_attr};
+  motd = ''
+    $${"\n"}
+    Hello and welcome to the NixOS configuration
+        ${flake_attr}
+        in ${flake_path}
+
+    The following is loaded into nix repl's scope:
+
+        - ${blue}config${reset}   All option values
+        - ${blue}options${reset}  Option data and metadata
+        - ${blue}pkgs${reset}     Nixpkgs package set
+        - ${blue}lib${reset}      Nixpkgs library functions
+        - other module arguments
+
+        - ${blue}flake${reset}    Flake outputs, inputs and source info of ${flake}
+
+    Use tab completion to browse around ${blue}config${reset}.
+
+    Use ${bold}:r${reset} to ${bold}reload${reset} everything after making a change in the flake.
+      (assuming ${flake_path} is a mutable flake ref)
+
+    See ${bold}:?${reset} for more repl commands.
+
+    ${attention}warning:${reset} nixos-rebuild repl does not currently enforce pure evaluation.
+  '';
+  scope =
+    assert configuration._type or null == ''configuration'';
+    assert configuration.class or ''nixos'' == ''nixos'';
+    configuration._module.args
+    // configuration._module.specialArgs
+    // {
+      inherit (configuration) config options;
+      lib = configuration.lib or configuration.pkgs.lib;
+      inherit flake;
+    };
+in
+builtins.seq scope builtins.trace motd scope

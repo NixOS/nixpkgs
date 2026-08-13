@@ -1,0 +1,95 @@
+From 0073156cc16cecc597902e9294e4996dafacc1a3 Mon Sep 17 00:00:00 2001
+From: hiaselhans <simon.klemenc@gmail.com>
+Date: Wed, 21 May 2025 08:12:37 +0200
+Subject: [PATCH] update cmake to work with newer versions
+
+---
+ .gitignore     |  1 +
+ CMakeLists.txt | 61 +++++++++-----------------------------------------
+ 2 files changed, 11 insertions(+), 51 deletions(-)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..c795b05
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1 @@
++build
+\ No newline at end of file
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03e1cc7..26ec718 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,61 +1,20 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+-
+-CMAKE_POLICY(SET CMP0048 OLD)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.12...5.0)
+ 
+ SET(PROJECT_NAME "LEMON")
+-PROJECT(${PROJECT_NAME})
+-
+-INCLUDE(FindPythonInterp)
+-INCLUDE(FindWget)
+ 
+-IF(EXISTS ${PROJECT_SOURCE_DIR}/cmake/version.cmake)
+-  INCLUDE(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
+-ELSEIF(DEFINED ENV{LEMON_VERSION})
++IF(DEFINED ENV{LEMON_VERSION})
+   SET(LEMON_VERSION $ENV{LEMON_VERSION} CACHE STRING "LEMON version string.")
++ELSEIF(EXISTS ${CMAKE_SOURCE_DIR}/cmake/version.cmake)
++  INCLUDE(${CMAKE_SOURCE_DIR}/cmake/version.cmake)
+ ELSE()
+-  EXECUTE_PROCESS(
+-    COMMAND
+-    hg log -r. --template "{latesttag}"
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+-    OUTPUT_VARIABLE HG_REVISION_TAG
+-    ERROR_QUIET
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
+-  EXECUTE_PROCESS(
+-    COMMAND
+-    hg log -r. --template "{latesttagdistance}"
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+-    OUTPUT_VARIABLE HG_REVISION_DIST
+-    ERROR_QUIET
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
+-  EXECUTE_PROCESS(
+-    COMMAND
+-    hg log -r. --template "{node|short}"
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+-    OUTPUT_VARIABLE HG_REVISION_ID
+-    ERROR_QUIET
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
++  MESSAGE(FATAL_ERROR "LEMON_VERSION is not defined. Please set it in the environment")
++ENDIF()
+ 
+-  IF(HG_REVISION_TAG STREQUAL "")
+-    SET(HG_REVISION_ID "hg-tip")
+-  ELSE()
+-    IF(HG_REVISION_TAG STREQUAL "null")
+-      SET(HG_REVISION_TAG "trunk")
+-    ELSEIF(HG_REVISION_TAG MATCHES "^r")
+-      STRING(SUBSTRING ${HG_REVISION_TAG} 1 -1 HG_REVISION_TAG)
+-    ENDIF()
+-    IF(HG_REVISION_DIST STREQUAL "0")
+-      SET(HG_REVISION ${HG_REVISION_TAG})
+-    ELSE()
+-      SET(HG_REVISION
+-	"${HG_REVISION_TAG}+${HG_REVISION_DIST}-${HG_REVISION_ID}")
+-    ENDIF()
+-  ENDIF()
+ 
+-  SET(LEMON_VERSION ${HG_REVISION} CACHE STRING "LEMON version string.")
+-ENDIF()
++PROJECT(${PROJECT_NAME} VERSION ${LEMON_VERSION})
++
++find_package(Python3 REQUIRED COMPONENTS Interpreter)
++INCLUDE(FindWget)
+ 
+ SET(PROJECT_VERSION ${LEMON_VERSION})
+ 

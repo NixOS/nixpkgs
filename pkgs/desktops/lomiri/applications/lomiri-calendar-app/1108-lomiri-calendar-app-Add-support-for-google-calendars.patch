@@ -1,0 +1,32 @@
+From b6369a317d8c5e3c654071382092dca18f543e8f Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Fri, 20 Dec 2024 10:28:32 +0100
+Subject: [PATCH] Add support for google-calendars
+
+---
+ lomiri-calendar-app.application | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/lomiri-calendar-app.application b/lomiri-calendar-app.application
+index 684c14b6..37d1e0ef 100644
+--- a/lomiri-calendar-app.application
++++ b/lomiri-calendar-app.application
+@@ -5,10 +5,13 @@
+ 
+   <service-types>
+     <service-type id="calendar">
+-      <description>Syncronize your calendar</description>
++      <description>Synchronize your calendar</description>
+     </service-type>
+     <service-type id="caldav">
+-        <description>Syncronize your calendar</description>
++      <description>Synchronize your calendar</description>
++    </service-type>
++    <service-type id="google-calendars">
++      <description>Synchronize your calendar</description>
+     </service-type>
+   </service-types>
+ 
+-- 
+GitLab
+

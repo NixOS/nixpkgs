@@ -1,0 +1,52 @@
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 0735d27..32c5cdb 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -26,16 +26,8 @@ endif()
+ 
+ set(FETCHCONTENT_QUIET OFF)
+ 
+-FetchContent_Declare(
+-  unity
+-  GIT_REPOSITORY "https://github.com/throwtheswitch/unity.git"
+-  GIT_PROGRESS TRUE
+-  PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+-                ${CMAKE_CURRENT_LIST_DIR}/unity_config.h ./src/)
+-
+-FetchContent_MakeAvailable(unity)
+-target_compile_definitions(unity PUBLIC UNITY_INCLUDE_CONFIG_H
+-                                        UNITY_USE_COMMAND_LINE_ARGS)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(UNITY REQUIRED unity)
+ 
+ function(create_test_runner)
+   set(options)
+@@ -52,7 +44,7 @@ function(create_test_runner)
+   add_custom_command(
+     OUTPUT test_${TEST_RUNNER_NAME}_runner.c
+     COMMAND
+-      ${RUBY_EXECUTABLE} ${unity_SOURCE_DIR}/auto/generate_test_runner.rb
++      @UNITY-GENERATE-TEST-RUNNER@
+       ${CMAKE_CURRENT_SOURCE_DIR}/test_${TEST_RUNNER_NAME}.c
+       test_${TEST_RUNNER_NAME}_runner.c ${CMAKE_CURRENT_LIST_DIR}/unity-config.yml
+     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/test_${TEST_RUNNER_NAME}.c
+@@ -62,10 +54,18 @@ function(create_test_runner)
+                                           test_${TEST_RUNNER_NAME}_runner.c)
+   foreach(TARGET_TYPE ${TARGET_TYPES})
+     # if BUILD_STATIC_LIBS=ON shared takes precedence
++    target_include_directories(
++      test_${TEST_RUNNER_NAME}
++      PUBLIC
++      ${UNITY_INCLUDE_DIRS})
++    target_compile_options(
++      test_${TEST_RUNNER_NAME}
++      PUBLIC
++      ${UNITY_CFLAGS_OTHER})
+     target_link_libraries(
+       test_${TEST_RUNNER_NAME}
+       ${PROJECT_NAME}-${TARGET_TYPE}
+-      unity)
++      ${UNITY_LIBRARIES})
+   endforeach()
+ endfunction()
+ 

@@ -1,0 +1,12 @@
+Fixes an error in nrgtool.
+--- a/nrgtool
++++ b/nrgtool
+@@ -162,7 +162,7 @@ sub process_file {
+ 	}
+ 	seek $nrg, 0, SEEK_SET if ($iff_only);
+ 	seek $nrg, $offset, SEEK_SET unless ($iff_only);
+-	while (my $_ = read_chunk($nrg, $iff)) {
++	while ($_ = read_chunk($nrg, $iff)) {
+ 		if ($_ < -1) {
+ 			warn  "ERROR while reading an IFF chunk; aborting\n";
+ 			return;

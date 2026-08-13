@@ -1,0 +1,15 @@
+diff --git a/src/Makefile b/src/Makefile
+index 3bc9f11c0..a4b23d986 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -229,8 +229,8 @@ endif
+ 
+ ifeq ($(MALLOC),jemalloc)
+ 	DEPENDENCY_TARGETS+= jemalloc
+-	FINAL_CFLAGS+= -DUSE_JEMALLOC -I../deps/jemalloc/include
+-	FINAL_LIBS := ../deps/jemalloc/lib/libjemalloc.a $(FINAL_LIBS)
++	FINAL_CFLAGS+= -DUSE_JEMALLOC -DJEMALLOC_NO_DEMANGLE -I/usr/include/jemalloc
++	FINAL_LIBS := -ljemalloc $(FINAL_LIBS)
+ endif
+ 
+ ifeq ($(BUILD_TLS),yes)

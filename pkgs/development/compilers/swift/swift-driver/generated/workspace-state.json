@@ -1,0 +1,93 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser.git",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+            "version": "1.2.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-llbuild",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-llbuild.git",
+          "name": "llbuild"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.10",
+            "revision": "fd7c2e0d9279edd023ced6b0a590f8407f5472f9"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-llbuild"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-system",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-system.git",
+          "name": "swift-system"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "836bc4557b74fe6d2660218d56e3ce96aff76574",
+            "version": "1.1.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-system"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-tools-support-core",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-tools-support-core.git",
+          "name": "swift-tools-support-core"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.10",
+            "revision": "90bdc2a157ebacc5d3de0c83e085d05d22ca5fa0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-tools-support-core"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "yams",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/jpsim/Yams.git",
+          "name": "Yams"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "01835dc202670b5bb90d07f3eae41867e9ed29f6",
+            "version": "5.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Yams"
+      }
+    ]
+  },
+  "version": 6
+}

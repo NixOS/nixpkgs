@@ -1,0 +1,35 @@
+From 960b6b30a9c7e9e4451031c30f362fd01d2ce7c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Kettunen?= <bjorn.kettunen@thaodan.de>
+Date: Fri, 28 Nov 2025 19:41:02 +0200
+Subject: [PATCH] Fix building with Pipewire 1.5.81 and later. Resolves #167
+
+---
+ .../desktop_capture/linux/wayland/shared_screencast_stream.cc   | 2 ++
+ modules/video_capture/linux/pipewire_session.cc             | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc b/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
+index 71ea4d9f5..7ef1a030e 100644
+--- a/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
++++ b/modules/desktop_capture/linux/wayland/shared_screencast_stream.cc
+@@ -13,6 +13,8 @@
+ #include <fcntl.h>
+ #include <libdrm/drm_fourcc.h>
+ #include <pipewire/pipewire.h>
++#include <spa/pod/parser.h>
++#include <spa/pod/iter.h>
+ #include <spa/param/video/format-utils.h>
+ #include <sys/mman.h>
+ 
+diff --git a/modules/video_capture/linux/pipewire_session.cc b/modules/video_capture/linux/pipewire_session.cc
+index d2d8eeaf8..c16d511ba 100644
+--- a/modules/video_capture/linux/pipewire_session.cc
++++ b/modules/video_capture/linux/pipewire_session.cc
+@@ -15,6 +15,7 @@
+ #include <spa/param/format.h>
+ #include <spa/param/video/raw.h>
+ #include <spa/pod/parser.h>
++#include <spa/pod/iter.h>
+ 
+ #include "common_video/libyuv/include/webrtc_libyuv.h"
+ #include "modules/video_capture/device_info_impl.h"

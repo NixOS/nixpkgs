@@ -1,0 +1,23 @@
+diff --git a/numpy/core/tests/test_umath.py b/numpy/core/tests/test_umath.py
+index 6951d41e4..eefe86ad4 100644
+--- a/numpy/core/tests/test_umath.py
++++ b/numpy/core/tests/test_umath.py
+@@ -4180,7 +4180,17 @@ def test_against_cmath(self):
+     )
+     @pytest.mark.xfail(IS_MUSL, reason="gh23049")
+     @pytest.mark.xfail(IS_WASM, reason="doesn't work")
+-    @pytest.mark.parametrize('dtype', [np.complex64, np.complex_, np.longcomplex])
++    @pytest.mark.parametrize('dtype', [
++        np.complex64,
++        np.complex_,
++        pytest.param(
++            np.longcomplex,
++            marks=pytest.mark.skipif(
++                sys.platform == "darwin" and platform.machine() == "x86_64",
++                reason="doesn’t work under Rosetta 2",
++            ),
++        ),
++    ])
+     def test_loss_of_precision(self, dtype):
+         """Check loss of precision in complex arc* functions"""
+ 

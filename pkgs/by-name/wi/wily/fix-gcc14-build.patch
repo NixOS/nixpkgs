@@ -1,0 +1,123 @@
+diff --git a/include/libc.h b/include/libc.h
+index d056f70..1a2679d 100644
+--- a/include/libc.h
++++ b/include/libc.h
+@@ -60,3 +60,8 @@ extern	int	notify (void(*)(void *, char *));
+ extern	int	errstr(char *);
+ extern	char*	getuser(void);
+ extern	void	exits(char*);
++
++#include <string.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <unistd.h>
+diff --git a/libXg/arith.c b/libXg/arith.c
+index 5cf6f65..5fe0703 100644
+--- a/libXg/arith.c
++++ b/libXg/arith.c
+@@ -107,17 +107,20 @@ rshift(Rectangle r, int a)
+ 	return r;
+ }
+ 
++int
+ eqpt(Point p, Point q)
+ {
+ 	return p.x==q.x && p.y==q.y;
+ }
+ 
++int
+ eqrect(Rectangle r, Rectangle s)
+ {
+ 	return r.min.x==s.min.x && r.max.x==s.max.x &&
+ 	       r.min.y==s.min.y && r.max.y==s.max.y;
+ }
+ 
++int
+ rectXrect(Rectangle r, Rectangle s)
+ {
+ 	return r.min.x<s.max.x && s.min.x<r.max.x &&
+@@ -134,6 +137,7 @@ rectinrect(Rectangle r, Rectangle s)
+ 	return r.max.x<=s.max.x && r.max.y<=s.max.y;
+ }
+ 
++int
+ ptinrect(Point p, Rectangle r)
+ {
+ 	return p.x>=r.min.x && p.x<r.max.x &&
+diff --git a/libXg/clipline.c b/libXg/clipline.c
+index b8bbaad..dd3870a 100644
+--- a/libXg/clipline.c
++++ b/libXg/clipline.c
+@@ -133,6 +133,7 @@ gsetline(Point *pp0, Point *pp1, Linedesc *l)
+  */
+ 
+ static
++int
+ code(Point *p, Rectangle *r)
+ {
+ 	return( (p->x<r->min.x? 1 : p->x>=r->max.x? 2 : 0) |
+diff --git a/libXg/gcs.c b/libXg/gcs.c
+index 4d7d3d6..959cfbe 100644
+--- a/libXg/gcs.c
++++ b/libXg/gcs.c
+@@ -160,7 +160,7 @@ GC
+ _getgc(Bitmap *b, unsigned long gcvm, XGCValues *pgcv)
+ {
+ 	static GC gc0, gcn;
+-	static clipset = 0;
++	static int clipset = 0;
+ 	GC g;
+ 	XRectangle xr;
+ 
+diff --git a/libXg/gwin.c b/libXg/gwin.c
+index 24abb61..172cb46 100644
+--- a/libXg/gwin.c
++++ b/libXg/gwin.c
+@@ -25,6 +25,9 @@ static void Keyaction(Widget, XEvent *, String *, Cardinal*);
+ static void Mouseaction(Widget, XEvent *, String *, Cardinal*);
+ static String SelectSwap(Widget, String);
+ 
++long unicode(unsigned char *k);
++long latin1(unsigned char *k);
++
+ /* Data */
+ 
+ #define Offset(field) XtOffsetOf(GwinRec, gwin.field)
+diff --git a/libXg/rectclip.c b/libXg/rectclip.c
+index 9e03614..ae01bf6 100644
+--- a/libXg/rectclip.c
++++ b/libXg/rectclip.c
+@@ -2,6 +2,7 @@
+ #include <libc.h>
+ #include <libg.h>
+ 
++int
+ rectclip(Rectangle *rp, Rectangle b)		/* first by reference, second by value */
+ {
+ 	Rectangle *bp = &b;
+diff --git a/libXg/xtbinit.c b/libXg/xtbinit.c
+index a711319..2870805 100644
+--- a/libXg/xtbinit.c
++++ b/libXg/xtbinit.c
+@@ -127,6 +127,12 @@ ioerr(Display *d)
+ 	return 0;
+ }
+ 
++static
++int ioerr_wrapped(Display *d, XErrorEvent *_)
++{
++    return ioerr(d);
++}
++
+ void
+ xtbinit(Errfunc f, char *class, int *pargc, char **argv, char **fallbacks)
+ {
+@@ -174,7 +180,7 @@ xtbinit(Errfunc f, char *class, int *pargc, char **argv, char **fallbacks)
+ 	XtSetArg(args[n], XtNcomposeMod, &compose);	n++;
+ 	XtGetValues(widg, args, n);
+ 	XSetIOErrorHandler(ioerr);
+-	XSetErrorHandler(ioerr);
++	XSetErrorHandler(ioerr_wrapped);
+ 
+ 	if (compose < 0 || compose > 5) {
+ 		n = 0;

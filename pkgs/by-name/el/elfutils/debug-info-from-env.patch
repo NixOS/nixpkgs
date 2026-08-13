@@ -1,0 +1,27 @@
+Look up .build-id files relative to the directories in the
+colon-separated environment variable NIX_DEBUG_INFO_DIRS, unless
+overriden by --debuginfo-path.
+
+diff -ru elfutils-0.169-orig/libdwfl/argp-std.c elfutils-0.169/libdwfl/argp-std.c
+--- elfutils-0.169-orig/libdwfl/argp-std.c	2017-05-02 23:05:52.000000000 +0200
++++ elfutils-0.169/libdwfl/argp-std.c	2017-07-28 16:08:06.739558106 +0200
+@@ -376,5 +376,7 @@
+ const struct argp *
+ dwfl_standard_argp (void)
+ {
++  debuginfo_path = getenv("NIX_DEBUG_INFO_DIRS");
++
+   return &libdwfl_argp;
+ }
+diff -ru elfutils-0.169-orig/src/stack.c elfutils-0.169/src/stack.c
+--- elfutils-0.169-orig/src/stack.c	2017-02-24 11:55:28.000000000 +0100
++++ elfutils-0.169/src/stack.c	2017-07-28 15:50:06.743196696 +0200
+@@ -631,6 +631,8 @@
+   /* Set locale.  */
+   (void) setlocale (LC_ALL, "");
+ 
++  debuginfo_path = getenv("NIX_DEBUG_INFO_DIRS");
++
+   const struct argp_option options[] =
+     {
+       { NULL, 0, NULL, 0, N_("Input selection options:"), 0 },

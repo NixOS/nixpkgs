@@ -1,0 +1,12 @@
+diff --git a/src/OdfGenerator.cxx b/src/OdfGenerator.cxx
+index adf176b0a4..79de4dd2b7 100644
+--- a/src/OdfGenerator.cxx
++++ b/src/OdfGenerator.cxx
+@@ -33,6 +33,7 @@
+ #include <math.h>
+
+ #include <cctype>
++#include <cstdint>
+ #include <limits>
+ #include <string>
+ #include <stack>

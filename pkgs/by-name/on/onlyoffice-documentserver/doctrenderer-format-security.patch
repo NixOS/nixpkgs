@@ -1,0 +1,26 @@
+diff --git a/DesktopEditor/doctrenderer/docbuilder_p.h b/DesktopEditor/doctrenderer/docbuilder_p.h
+index d955b3fb33..64ece3555a 100644
+--- a/DesktopEditor/doctrenderer/docbuilder_p.h
++++ b/DesktopEditor/doctrenderer/docbuilder_p.h
+@@ -1400,7 +1400,7 @@ namespace NSDoctRenderer
+ 			FILE* pFile = oFile.OpenFileNative(sFile, append ? L"a+" : L"a");
+ 			if (pFile)
+ 			{
+-				fprintf(pFile, sValueA.c_str());
++				fprintf(pFile, "%s", sValueA.c_str());
+ 				fclose(pFile);
+ 			}
+ 		}
+diff --git a/DesktopEditor/doctrenderer/js_internal/js_logger.cpp b/DesktopEditor/doctrenderer/js_internal/js_logger.cpp
+index b59ce98b0d..795dcb9ec0 100644
+--- a/DesktopEditor/doctrenderer/js_internal/js_logger.cpp
++++ b/DesktopEditor/doctrenderer/js_internal/js_logger.cpp
+@@ -21,7 +21,7 @@ namespace NSJSBase
+ 
+ 		if (g_logger_file.length() == 1)
+ 		{
+-			printf(details);
++			printf("%s", details);
+ 			printf(": %d\n", (int)(dwCur - g_logger_time));
+ 		}
+ 		else

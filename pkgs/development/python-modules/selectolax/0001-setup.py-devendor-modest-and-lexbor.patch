@@ -1,0 +1,40 @@
+From f0e18a73f15f9cf0d60a25304e212e10bc206c53 Mon Sep 17 00:00:00 2001
+From: Marcel <me@m4rc3l.de>
+Date: Fri, 21 Nov 2025 03:29:50 +0100
+Subject: [PATCH] setup.py: devendor modest and lexbor
+
+---
+ setup.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 618e989..bf7028e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -163,9 +163,9 @@ def make_extensions():
+                 files_to_compile,
+                 language="c",
+                 include_dirs=[
+-                    "modest/include/",
++                    "@modest@/include/",
+                 ],
+-                extra_objects=extra_objects,
++                libraries=["modest"],
+                 extra_compile_args=compile_arguments,
+             )
+         )
+@@ -177,9 +177,9 @@ def make_extensions():
+                 files_to_compile_lxb,
+                 language="c",
+                 include_dirs=[
+-                    "lexbor/source/",
++                    "@lexbor@/include/",
+                 ],
+-                extra_objects=extra_objects_lxb,
++                libraries=["lexbor"],
+                 extra_compile_args=compile_arguments_lxb,
+             )
+         )
+-- 
+2.50.1
+

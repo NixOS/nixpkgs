@@ -1,0 +1,11 @@
+--- a/cupsfilters/ghostscript.c
++++ b/cupsfilters/ghostscript.c
+@@ -629,7 +629,7 @@ gs_spawn (const char *filename,
+     }
+ 
+     // Execute Ghostscript command line ...
+-    execvpe(filename, gsargv, envp);
++    execve(filename, gsargv, envp);
+     if (log) log(ld, CF_LOGLEVEL_ERROR,
+ 		 "cfFilterGhostscript: Unable to launch Ghostscript: %s: %s",
+ 		 filename, strerror(errno));

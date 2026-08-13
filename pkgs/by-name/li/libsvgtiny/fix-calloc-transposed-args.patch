@@ -1,0 +1,11 @@
+--- a/src/svgtiny.c
++++ b/src/svgtiny.c
+@@ -586,7 +586,7 @@
+ {
+ 	struct svgtiny_diagram *diagram;
+ 
+-	diagram = calloc(sizeof(*diagram), 1);
++	diagram = calloc(1, sizeof(*diagram));
+ 	if (!diagram)
+ 		return 0;
+ 

@@ -1,0 +1,73 @@
+{
+ "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
+ "!version": 1,
+ "https://repo.maven.apache.org/maven2": {
+  "com/googlecode/json-simple#json-simple/1.1.1": {
+   "jar": "sha256-TmlpaJK4i0HFXUmrL9zCHurZK/VKzFiMAFBZbDt1GZw=",
+   "pom": "sha256-Zl9jWQ3vtj1irdIdNSU2LPk3z2ocBeSwFFuujailf4M="
+  },
+  "org/apiguardian#apiguardian-api/1.1.0": {
+   "jar": "sha256-qarp/4rj4XoqGPeRdegrFiZ8JG+708qd+7spCwjc/dQ=",
+   "pom": "sha256-qUW5y1zZt3sscRhE5lnEPsBw71nZ9Qn6n0wYYbSGJxE="
+  },
+  "org/javassist#javassist/3.28.0-GA": {
+   "jar": "sha256-V9Cp6ShvgvTqqFESUYaZf4Eb784OIGD/ChWnf1qd2ac=",
+   "pom": "sha256-w2p8E9o6SFKqiBvfnbYLnk0a8UbsKvtTmPltWYP21d0="
+  },
+  "org/junit#junit-bom/5.7.0": {
+   "module": "sha256-Jd5FSzrdZ2VNZpG1PedZO1ApZ7X/VJVHsQTXlh8aUr0=",
+   "pom": "sha256-NfsV+NC+4rWQCiKDJ2I2ZVL5o0nFbO1guhI85Hc4/wA="
+  },
+  "org/junit/jupiter#junit-jupiter-api/5.7.0": {
+   "jar": "sha256-sD944Nru0td6Cvm81mK0zblpP37nLgGlObUIuExj0YI=",
+   "module": "sha256-0ae65s1ErW2WcVJhQQ7vIziklENtZnKA0Tc6R8F+JBw=",
+   "pom": "sha256-oPgj1RPI1GkpNfJML+bnfMSnthR6nopRj3IuULv4YTg="
+  },
+  "org/junit/jupiter#junit-jupiter-engine/5.7.0": {
+   "jar": "sha256-36Jq+UZErCYS3eZiWFL8tVCg0hyqJDJX3lTLpzi6h68=",
+   "module": "sha256-w2vaSCKO71xAzcmp1jA7uEg4LNsIhLNnfUkYK07HoaQ=",
+   "pom": "sha256-twLiUIddMx7jxriPNymfvpUfQ5kvSy5KjxROLkzyx+g="
+  },
+  "org/junit/platform#junit-platform-commons/1.7.0": {
+   "jar": "sha256-UzDuh8x1hubiUXWjTpJRYk/xL/UlJp00FdC0ylGbb+o=",
+   "module": "sha256-sKXHobfkCdH1zJY9muocd8NLkOFj1oQqRInGqgf/juI=",
+   "pom": "sha256-DNfE+b7mWZEqwdzkbxI80G9Au7c6sxa9lBHHkuPGgKI="
+  },
+  "org/junit/platform#junit-platform-engine/1.7.0": {
+   "jar": "sha256-dfIaINxZSv3IdXNnJbQIzsbQNEh00p80st0wdVACNvI=",
+   "module": "sha256-ZRCp+ogc70LUFIVTjbxUdJQm2x4LFOxDORXqXyRIB5o=",
+   "pom": "sha256-IluZxQMv0cuM7Noui1p1Jtal+B+5iimldVf39czanRI="
+  },
+  "org/msgpack#msgpack/0.6.12": {
+   "jar": "sha256-4JymXYUgSI6ApdxCaEior8z9QPSi6zuWRgQlldO9m14=",
+   "pom": "sha256-lEl9jwL43oFZpbfVE24BD1f12axliGES7O2GlcUFbe4="
+  },
+  "org/opentest4j#opentest4j/1.2.0": {
+   "jar": "sha256-WIEt5giY2Xb7ge87YtoFxmBMGP1KJJ9QRCgkefwoavI=",
+   "pom": "sha256-qW5nGBbB/4gDvex0ySQfAlvfsnfaXStO4CJmQFk2+ZQ="
+  },
+  "org/postgresql#pgjdbc-core-parent/1.1.2": {
+   "pom": "sha256-K5B1vOVrI8vfRwy80/7rwgivBf1XfNxcmjbadTRsZ50="
+  },
+  "org/postgresql#pgjdbc-core-parent/1.1.5": {
+   "pom": "sha256-XtK0rdiF6e4eY3opfLNHlPT/LtVCb/zStL3N1uJiPrc="
+  },
+  "org/postgresql#pgjdbc-versions/1.1.2": {
+   "pom": "sha256-FJIccV6cNLFOpOtn1O6cPUGtxYj1639F01f89xgv3P4="
+  },
+  "org/postgresql#pgjdbc-versions/1.1.5": {
+   "pom": "sha256-fktof5IZOQGPdV6TUwtvO/pkOH9zJIiTXAsFo2PEkFw="
+  },
+  "org/postgresql#postgresql/42.2.5": {
+   "jar": "sha256-f/pG+MYZN3zevNF3IbayHs9mWYUBeflv7D0QNc9aDNw=",
+   "pom": "sha256-QeLEYQz6+o+46jOfZeUECMDzGDV6eKP0hOKi8bUq0ew="
+  },
+  "org/postgresql#postgresql/9.4.1212": {
+   "jar": "sha256-DLKhWL4xrPIY4KThjI89usaKO8NIBkaHc/xECUsMNl0=",
+   "pom": "sha256-3WEi1R5mRIHFMgl7hzPLJAW6oqrhsgqOrr6jlLErb1A="
+  },
+  "org/sonatype/oss#oss-parent/7": {
+   "pom": "sha256-tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
+  }
+ }
+}

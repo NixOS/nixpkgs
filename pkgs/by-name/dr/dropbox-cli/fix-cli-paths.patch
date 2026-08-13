@@ -1,0 +1,11 @@
+--- a/dropbox.in
++++ b/dropbox.in
+@@ -71,7 +71,7 @@
+ 
+ PARENT_DIR = os.path.expanduser("~")
+ DROPBOX_DIST_PATH = "%s/.dropbox-dist" % PARENT_DIR
+-DROPBOXD_PATH = os.path.join(DROPBOX_DIST_PATH, "dropboxd")
++DROPBOXD_PATH = "@dropboxd@"
+ DESKTOP_FILE = "@DESKTOP_FILE_DIR@/dropbox.desktop"
+ 
+ enc = locale.getpreferredencoding()

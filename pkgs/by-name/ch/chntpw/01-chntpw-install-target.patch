@@ -1,0 +1,20 @@
+--- chntpw-140201/Makefile	2022-04-21 00:14:45.000000000 +0200
++++ chntpw-140201.new/Makefile	2022-04-21 09:15:42.000000000 +0200
+@@ -6,10 +6,16 @@
+ # See INSTALL for more info.
+ #
+ 
++PREFIX ?= /usr
++
+ CFLAGS= -DUSEOPENSSL -g -I. -Wall
+ 
++BINARIES := chntpw cpnt reged samusrgrp sampasswd
+ 
+-all: chntpw chntpw.static cpnt reged reged.static samusrgrp samusrgrp.static sampasswd sampasswd.static
++all: $(BINARIES)
++install: $(BINARIES)
++	mkdir -p $(PREFIX)/bin
++	cp $^ $(PREFIX)/bin
+ 
+ chntpw: chntpw.o ntreg.o edlib.o libsam.o
+ 	$(CC) $(CFLAGS) -o chntpw chntpw.o ntreg.o edlib.o libsam.o $(LIBS)

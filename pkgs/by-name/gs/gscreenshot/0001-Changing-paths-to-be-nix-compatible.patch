@@ -1,0 +1,25 @@
+From a4822ee9e894f5f5b3110f41f65a698dd845a41d Mon Sep 17 00:00:00 2001
+From: Richard Davis <davisrichard437@gmail.com>
+Date: Fri, 24 Mar 2023 11:45:23 -0400
+Subject: [PATCH] Changing paths to be nix-compatible.
+
+---
+ dist/desktop/gscreenshot.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dist/desktop/gscreenshot.desktop b/dist/desktop/gscreenshot.desktop
+index a5d2bcd..9d289e2 100644
+--- a/dist/desktop/gscreenshot.desktop
++++ b/dist/desktop/gscreenshot.desktop
+@@ -2,7 +2,7 @@
+ Type=Application
+ Name=gscreenshot
+ Comment=A simple screenshot utility
+-TryExec=/usr/bin/gscreenshot
++TryExec=gscreenshot
+ Exec=gscreenshot
+ Icon=gscreenshot
+ Categories=Graphics;
+-- 
+2.39.2
+

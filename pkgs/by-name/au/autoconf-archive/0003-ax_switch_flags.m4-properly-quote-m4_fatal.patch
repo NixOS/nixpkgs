@@ -1,0 +1,32 @@
+From 3a23daa3da0eb1a256fda631867e19345d5f6e3a Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz93@gmail.com>
+Date: Sat, 19 Oct 2024 21:58:52 -0400
+Subject: [PATCH 3/3] ax_switch_flags.m4: properly quote m4_fatal
+
+It needs to only run as an argument of m4_if, not all the time.
+
+Fixes: 2adff78e224c908fd58df91852c8301c25777a8f
+---
+ m4/ax_switch_flags.m4 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/m4/ax_switch_flags.m4 b/m4/ax_switch_flags.m4
+index dc79d1e..777aeb0 100644
+--- a/m4/ax_switch_flags.m4
++++ b/m4/ax_switch_flags.m4
+@@ -36,10 +36,10 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 5
++#serial 6
+ 
+ AC_DEFUN([AX_SWITCH_FLAGS], [
+-  m4_if($1, [], m4_fatal([$0: namespace is empty]))
++  m4_if($1, [], [m4_fatal([$0: namespace is empty])])
+   AC_REQUIRE(AX_SAVE_FLAGS)
+   AC_REQUIRE(AX_RESTORE_FLAGS)
+   AX_SAVE_FLAGS($1[])
+-- 
+2.46.1
+

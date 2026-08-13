@@ -1,0 +1,17 @@
+--- a/crates/cli/src/commands/launch/strategy/compat_tool.rs
++++ b/crates/cli/src/commands/launch/strategy/compat_tool.rs
+@@ -260,10 +260,10 @@
+             tool = parent_tool;
+         }
+ 
+-        let mut command = Command::new(
+-            args.pop_front()
+-                .ok_or_eyre("Compat Tool produced invalid command")?,
+-        );
++        let program = args.pop_front()
++            .ok_or_eyre("Compat Tool produced invalid command")?;
++        let mut command = Command::new("@steamRun@");
++        command.arg(program);
+         command.args(args);
+         command.arg(exe);
+         command.arg("--");

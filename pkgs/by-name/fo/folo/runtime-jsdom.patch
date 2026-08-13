@@ -1,0 +1,29 @@
+diff --git a/package.json b/package.json
+index 35810cc..145d8aa 100644
+--- a/package.json
++++ b/package.json
+@@ -32,6 +32,9 @@
+     "test": "cross-env CI=1 pnpm --recursive run test",
+     "typecheck": "turbo typecheck"
+   },
++  "dependencies": {
++    "jsdom": "29.1.1"
++  },
+   "devDependencies": {
+     "@electron-toolkit/tsconfig": "2.0.0",
+     "@eslint/compat": "2.1.0",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 98165cf..3d07d0a 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -82,6 +82,10 @@ importers:
+ 
+   .:
++    dependencies:
++      jsdom:
++        specifier: 29.1.1
++        version: 29.1.1(@noble/hashes@2.0.1)
+     devDependencies:
+       '@electron-toolkit/tsconfig':
+         specifier: 2.0.0
+         version: 2.0.0(@types/node@26.1.1)

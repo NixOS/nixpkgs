@@ -1,0 +1,29 @@
+diff --git a/src/io.github.flattool.Ignition.in b/src/io.github.flattool.Ignition.in
+index 40b474b..e8e5cd7 100755
+--- a/src/io.github.flattool.Ignition.in
++++ b/src/io.github.flattool.Ignition.in
+@@ -1,9 +1,10 @@
+-#!@GJS@ -m
++#!/usr/bin/env gjs -m
+ 
+ import Gio from "gi://Gio?version=2.0"
+ 
+ import { exit, programArgs, programInvocationName } from "system"
+ 
++imports.package._findEffectiveEntryPointName = () => 'io.github.flattool.Ignition';
+ imports.package.init({
+        name: "@PACKAGE_NAME@",
+        version: "@VERSION@",
+diff --git a/src/meson.build b/src/meson.build
+index dc242fb..7334af7 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -37,7 +37,6 @@ install_subdir(
+ )
+ 
+ bin_conf = configuration_data()
+-bin_conf.set('GJS', find_program('gjs').full_path())
+ bin_conf.set('PACKAGE_VERSION', meson.project_version())
+ bin_conf.set('PACKAGE_NAME', meson.project_name())
+ bin_conf.set('prefix', get_option('prefix'))
+

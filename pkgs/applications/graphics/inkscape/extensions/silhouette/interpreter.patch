@@ -1,0 +1,24 @@
+diff --git a/sendto_silhouette.inx b/sendto_silhouette.inx
+index 55a3278..d780730 100644
+--- a/sendto_silhouette.inx
++++ b/sendto_silhouette.inx
+@@ -188,6 +188,6 @@ Always use the least amount of blade possible.
+   </effect>
+ 
+   <script>
+-      <command location="inx" interpreter="python">sendto_silhouette.py</command>
++      <command location="inx" interpreter="shell">sendto_silhouette.sh</command>
+   </script>
+ </inkscape-extension>
+diff --git a/silhouette_multi.inx b/silhouette_multi.inx
+index f6fd2ed..2d9dba6 100644
+--- a/silhouette_multi.inx
++++ b/silhouette_multi.inx
+@@ -31,6 +31,6 @@
+   </effect>
+   
+   <script>
+-      <command location="inx" interpreter="python">silhouette_multi.py</command>
++      <command location="inx" interpreter="shell">silhouette_multi.sh</command>
+   </script>
+ </inkscape-extension>
