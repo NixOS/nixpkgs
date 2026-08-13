@@ -25,23 +25,7 @@
 let
   # Patch for airshipper to install veloren client
   patchVoxygen =
-    let
-      runtimeLibs = [
-        udev
-        alsa-lib
-        (lib.getLib stdenv.cc.cc)
-        libxkbcommon
-        libxcb
-        libx11
-        libxcursor
-        libxrandr
-        libxi
-        vulkan-loader
-        libGL
-        wayland
-        wayland-protocols
-      ];
-    in
+    runtimeLibs:
     writeShellScript "voxygen-patch" ''
       echo "making veloren-voxygen executable"
       chmod +x veloren-voxygen
@@ -98,6 +82,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444    "client/assets/net.veloren.airshipper.png"  "$out/share/icons/net.veloren.airshipper.png"
   '';
 
+  passthru = {
+    inherit patchVoxygen patchServer;
+    runtimeLibs = [
+      udev
+      alsa-lib
+      (lib.getLib stdenv.cc.cc)
+      libxkbcommon
+      libxcb
+      libx11
+      libxcursor
+      libxrandr
+      libxi
+      vulkan-loader
+      libGL
+      wayland
+      wayland-protocols
+    ];
+  };
+
   postFixup = ''
     ${patchelf}/bin/patchelf \
       --set-rpath ${
@@ -110,8 +113,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         )
       } "$out/bin/airshipper"
     wrapProgram "$out/bin/airshipper" \
-      --set VELOREN_VOXYGEN_PATCHER "${patchVoxygen}" \
-      --set VELOREN_SERVER_CLI_PATCHER "${patchServer}"
+      --set VELOREN_VOXYGEN_PATCHER "${finalAttrs.passthru.patchVoxygen finalAttrs.passthru.runtimeLibs}" \
+      --set VELOREN_SERVER_CLI_PATCHER "${finalAttrs.passthru.patchServer}"
   '';
 
   doCheck = false;
