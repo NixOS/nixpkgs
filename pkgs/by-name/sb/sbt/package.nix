@@ -4,6 +4,7 @@
   fetchurl,
   jre,
   autoPatchelfHook,
+  makeWrapper,
   zlib,
   ncurses,
 }:
@@ -39,16 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
       echo -java-home ${jre.home} >>conf/sbtopts
     '';
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc # libstdc++.so.6
     zlib
-  ];
-
-  propagatedBuildInputs = [
-    # for infocmp
-    ncurses
   ];
 
   installPhase = ''
@@ -56,10 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
-    ln -sT ../share/sbt/bin/sbt $out/bin/sbt
+
+    # The native client shells out to infocmp; a wrapper is what actually puts
+    # it on the PATH of a running sbt.
+    makeWrapper $out/share/sbt/bin/sbt $out/bin/sbt \
+      --prefix PATH : ${lib.makeBinPath [ ncurses ]}
   ''
   + lib.optionalString (nativeClient != null) ''
-    ln -sT ../share/sbt/bin/${nativeClient} $out/bin/sbtn
+    makeWrapper $out/share/sbt/bin/${nativeClient} $out/bin/sbtn \
+      --prefix PATH : ${lib.makeBinPath [ ncurses ]}
   ''
   + ''
     runHook postInstall
