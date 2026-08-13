@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   coreutils,
   bash,
@@ -56,9 +56,13 @@ let
     lib.concatStringsSep "\n" ((lib.unique imageLayers) ++ [ imageConfig ])
   );
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   builder = ./fetchdocker-builder.sh;
-  buildInputs = [ coreutils ];
+  nativeBuildInputs = [ coreutils ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   preferLocalBuild = true;
 
   inherit
