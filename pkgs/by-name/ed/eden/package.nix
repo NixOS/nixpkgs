@@ -10,10 +10,11 @@
   cubeb,
   enet,
   fetchFromGitea,
-  fetchpatch,
+  fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
-  fmt,
+  # FIXME: unpin when upstream supports fmt 12
+  fmt_11,
   frozen-containers,
   gamemode,
   glslang,
@@ -54,6 +55,20 @@ let
   };
 
   nx_tzdb = callPackage ./nx_tzdb.nix { };
+
+  # eden broken by latest httplib version bump
+  # upstream likely not interested in fixes, actively looking to remove the dependency (https://git.eden-emu.dev/eden-emu/eden/issues/4194)
+  # pin httplib for now, hopefully can entirely drop in next eden release
+  httplib' = httplib.overrideAttrs (finalAttrs: {
+    version = "0.30.2";
+
+    src = fetchFromGitHub {
+      owner = "yhirose";
+      repo = "cpp-httplib";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-psVyn14QHMXG/x9SOOiR7ZBt8dHqa2A/w92WQQDukKM=";
+    };
+  });
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     cubeb
     enet
     ffmpeg-headless
-    fmt
+    fmt_11
     frozen-containers
     gamemode
-    httplib
+    httplib'
     kdePackages.quazip
     libopus
     libusb1

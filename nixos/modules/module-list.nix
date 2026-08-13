@@ -185,6 +185,7 @@
   ./programs/bcc.nix
   ./programs/benchexec.nix
   ./programs/browserpass.nix
+  ./programs/btrfs-heatmap.nix
   ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
@@ -196,6 +197,7 @@
   ./programs/cnping.nix
   ./programs/comma.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/compsize.nix
   ./programs/coolercontrol.nix
   ./programs/corefreq.nix
   ./programs/cpu-energy-meter.nix
@@ -326,6 +328,7 @@
   ./programs/skim.nix
   ./programs/slock.nix
   ./programs/sniffnet.nix
+  ./programs/solaar.nix
   ./programs/soundmodem.nix
   ./programs/ssh.nix
   ./programs/starship.nix
@@ -548,6 +551,7 @@
   ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb2.nix
   ./services/databases/influxdb.nix
+  ./services/databases/kvrocks.nix
   ./services/databases/lldap.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix

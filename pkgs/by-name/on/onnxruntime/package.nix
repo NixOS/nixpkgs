@@ -25,7 +25,7 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
-  openvinoSupport ? stdenv.isLinux,
+  openvinoSupport ? stdenv.hostPlatform.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,

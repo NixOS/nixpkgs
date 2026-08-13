@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/eepers \
       --add-needed libwayland-client.so \
       --add-needed libwayland-cursor.so \

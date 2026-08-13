@@ -103,7 +103,16 @@ in
   };
 
   fmt_12 = generic {
-    version = "12.1.0";
-    hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
+    version = "12.2.0";
+    hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
+
+    patches = lib.optionals stdenv.hostPlatform.is32bit [
+      # fix build on 32-bit targets
+      # FIXME: remove in next update
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/588b3a0f8f6a8bcf2a959cae882d5b2703e86737.patch";
+        hash = "sha256-DiE3nwYrtNDJ6cqYreU499Y0auH6dsAW21TRPe16Tx8=";
+      })
+    ];
   };
 }

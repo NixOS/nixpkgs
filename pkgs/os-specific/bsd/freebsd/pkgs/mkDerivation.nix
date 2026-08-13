@@ -122,7 +122,10 @@ lib.makeOverridable (
       installPhase = "includesPhase";
       dontBuild = true;
     }
-    // (removeAttrs attrs [ "env" ])
+    // (removeAttrs attrs [
+      "env"
+      "meta"
+    ])
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (

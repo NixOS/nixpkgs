@@ -25,7 +25,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation (finalAttrs: {
   pname = "grpc";
-  version = "1.82.1"; # N.B: if you change this, please update:
+  version = "1.83.0"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grpc";
     repo = "grpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w4tl1y1GITlfeHTsSAZm45d8HQVzqSBVEQXoEqO0h5g=";
+    hash = "sha256-A2QtLdsunMOulbpyaSOoAID9caK0tpuiyZJ5C5zrr+k=";
     fetchSubmodules = true;
   };
 

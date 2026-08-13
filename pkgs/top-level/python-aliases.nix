@@ -511,6 +511,7 @@ mapAliases {
   pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
   pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
+  pymedio = throw "pymedio was removed, as it is archived since 2025 in upstream. The modules 'dicom-numpy' and 'simpleitk' can be used as alternatives."; # added 2026-09-11
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   pymsteams = throw "'pymsteams' was removed because API used was discontinued"; # Added 2026-06-04
   pymvglive = throw "'pymvglive' has been removed because it was unmaintained upstream and non-functional due to API changes"; # added 2026-06-10
@@ -518,6 +519,7 @@ mapAliases {
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
   pymystem3 = throw "'pymystem3' has been removed because it is broken and unmaintained"; # Added 2026-04-19
   pynotifier = py-notifier; # Added 2026-07-27
+  pynslookup = throw "'pynslookup' has been renamed to 'nslookup'"; # Added 2026-08-10
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
   pyosmium = warnAlias "'pyosmium' has been renamed to 'osmium'" osmium; # Added 2026-07-27
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31

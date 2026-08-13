@@ -59,6 +59,7 @@ let
       "overlength-strings"
       "prefix"
       "suffix"
+      "prefix-dedup-last"
     ] makeGoldenTest
     // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       cross =

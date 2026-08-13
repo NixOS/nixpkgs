@@ -1,23 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   sdcc,
   libusb1,
   setuptools-scm,
   crcmod,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fx2";
-  version = "0.14";
+  version = "0.16";
   format = "setuptools";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "GlasgowEmbedded";
     repo = "libfx2";
-    rev = "v${version}";
-    hash = "sha256-uMgf1VL3yvkLUfRlBn9NKcerfHfcFg9yEgHGWmwyh8I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0AHFjb3dhkr3VVFHFNB/gpQKcqh0oGST1NoeZhdtT6o=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
     mainProgram = "fx2tool";
-    homepage = "https://github.com/GlasgowEmbedded/libfx2";
+    homepage = "https://codeberg.org/GlasgowEmbedded/libfx2";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

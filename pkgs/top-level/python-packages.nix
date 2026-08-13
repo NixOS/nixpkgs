@@ -5527,6 +5527,8 @@ self: super: with self; {
 
   enturclient = callPackage ../development/python-modules/enturclient { };
 
+  enum-tools = callPackage ../development/python-modules/enum-tools { };
+
   env-canada = callPackage ../development/python-modules/env-canada { };
 
   environ-config = callPackage ../development/python-modules/environ-config { };
@@ -11950,6 +11952,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nslookup = callPackage ../development/python-modules/nslookup { };
+
   nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
 
   nsz = callPackage ../development/python-modules/nsz { };
@@ -13288,6 +13292,8 @@ self: super: with self; {
 
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
 
+  pillow-jxl-plugin = callPackage ../development/python-modules/pillow-jxl-plugin { };
+
   pillowfight = callPackage ../development/python-modules/pillowfight { };
 
   pims = callPackage ../development/python-modules/pims { };
@@ -13637,6 +13643,8 @@ self: super: with self; {
   ppscore = callPackage ../development/python-modules/ppscore { };
 
   pq = callPackage ../development/python-modules/pq { };
+
+  pqc-audit = callPackage ../development/python-modules/pqc-audit { };
 
   praat-parselmouth = callPackage ../development/python-modules/praat-parselmouth { };
 
@@ -14740,6 +14748,8 @@ self: super: with self; {
 
   pygeocodio = callPackage ../development/python-modules/pygeocodio { };
 
+  pygeosphere-warnings = callPackage ../development/python-modules/pygeosphere-warnings { };
+
   pygerber = callPackage ../development/python-modules/pygerber { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
@@ -15149,8 +15159,6 @@ self: super: with self; {
 
   pymediaroom = callPackage ../development/python-modules/pymediaroom { };
 
-  pymedio = callPackage ../development/python-modules/pymedio { };
-
   pymee = callPackage ../development/python-modules/pymee { };
 
   pymeeus = callPackage ../development/python-modules/pymeeus { };
@@ -15312,8 +15320,6 @@ self: super: with self; {
   pynputfix = callPackage ../development/python-modules/pynputfix { };
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
-
-  pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 
@@ -16036,6 +16042,8 @@ self: super: with self; {
   pyspx = callPackage ../development/python-modules/pyspx { };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
+
+  pysquashfsimage = callPackage ../development/python-modules/pysquashfsimage { };
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 

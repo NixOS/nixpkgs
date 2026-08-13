@@ -88,6 +88,8 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccNoLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -99,6 +101,11 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          # The split package set can express the two rungs separately, the way
+          # the LLVM set does: no libgcc above, libgcc but no libc here. The
+          # monolithic `gccCrossLibcStdenv` has to serve both.
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -1848,12 +1855,11 @@ with pkgs;
 
   comet-gog_heroic = callPackage ../by-name/co/comet-gog/package.nix { comet-gog_kind = "heroic"; };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
-
-  # The coreutils above are built with dependencies from
-  # bootstrapping. We cannot override it here, because that pulls in
-  # openssl from the previous stage as well.
-  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
+  # The `coreutils` package (in pkgs/by-name) is built with dependencies from
+  # bootstrapping. We cannot override it for `coreutils-full`, because that
+  # pulls in openssl from the previous stage as well.
+  # `coreutils-prefixed` does not use openssl, though, so it can be overridden.
+  coreutils-full = callPackage ../by-name/co/coreutils/package.nix { minimal = false; };
   coreutils-prefixed = coreutils.override {
     withPrefix = true;
     singleBinary = false;
@@ -1996,7 +2002,7 @@ with pkgs;
 
   exiftool = perlPackages.ImageExifTool;
 
-  expect = tclPackages.expect;
+  expect = tcl8Packages.expect_5;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
@@ -3245,9 +3251,11 @@ with pkgs;
       # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
       gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
       gccNGPackages_15 = gccNGPackagesSet."15";
+      gccNGPackages = gccNGPackagesSet.${toString default-gcc-version};
       mkGCCNGPackages = gccNGPackagesSet.mkPackage;
     })
     gccNGPackages_15
+    gccNGPackages
     mkGCCNGPackages
     ;
 
@@ -3257,7 +3265,7 @@ with pkgs;
       ccWrapper.override (prev: {
         cc = prev.cc.override {
           reproducibleBuild = false;
-          profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
+          profiledCompiler = with stdenv.hostPlatform; (!isDarwin && isx86);
         };
       })
     else
@@ -4106,8 +4114,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
-  smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj { };
 
   squeak = callPackage ../development/compilers/squeak {
@@ -5625,11 +5631,22 @@ with pkgs;
     if stdenv.hostPlatform != stdenv.buildPlatform then
       {
         stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
-        libgcc = callPackage ../development/libraries/gcc/libgcc {
-          gcc = gccCrossLibcStdenv.cc;
-          glibc = glibc.override { libgcc = null; };
-          stdenvNoLibs = gccCrossLibcStdenv;
-        };
+        # glibc `dlopen`s `libgcc_s.so` without consulting the usual search
+        # path, so it has to name one that already exists. The monolithic
+        # build gets there by building glibc twice: the inner `libgcc = null`
+        # one names no libgcc at all, and is used for nothing but building the
+        # libgcc the real one names. The split package set already has that
+        # rung as a package of its own — `libgcc-no-libc` is what exists
+        # before any libc does — so there is nothing left to open-code here.
+        libgcc =
+          if stdenv.hostPlatform.useGccNG or false then
+            gccNGPackages.libgcc-no-libc
+          else
+            callPackage ../development/libraries/gcc/libgcc {
+              gcc = gccCrossLibcStdenv.cc;
+              glibc = glibc.override { libgcc = null; };
+              stdenvNoLibs = gccCrossLibcStdenv;
+            };
       }
     else
       {
@@ -6078,9 +6095,6 @@ with pkgs;
   };
 
   libunistring = callPackage ../development/libraries/libunistring { };
-
-  libunique = callPackage ../development/libraries/libunique { };
-  libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
@@ -7005,14 +7019,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.5"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_6 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.6"; };
     faslExt = "fasl";
@@ -7021,7 +7027,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_6;
+  sbcl_2_6_7 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_7;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -7350,6 +7364,11 @@ with pkgs;
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
+
+  mdbook-rss-feed-full = mdbook-rss-feed.override {
+    withAtom = true;
+    withJsonFeed = true;
+  };
 
   micro-full = micro.wrapper.override {
     extraPackages = [
@@ -8785,6 +8804,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/scenefx { })
     scenefx_0_4
     scenefx_0_5
+    scenefx
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
@@ -9668,11 +9688,11 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  xmonad_log_applet_mate = xmonad_log_applet.override {
+  xmonad-log-applet-mate = xmonad-log-applet.override {
     desktopSupport = "mate";
   };
 
-  xmonad_log_applet_xfce = xmonad_log_applet.override {
+  xmonad-log-applet-xfce = xmonad-log-applet.override {
     desktopSupport = "xfce4";
   };
 

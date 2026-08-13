@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
-  prePatch = lib.optional withWebSocket ''
+  prePatch = lib.optionalString withWebSocket ''
     ln -s ${websocketpp}/include/websocketpp websocketpp
   '';
 

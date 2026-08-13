@@ -274,6 +274,25 @@ lib.makeScope
 
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+        libgmp = callPackage ./gcc/gmp.nix {
+          gcc-buildbuild = gcc-latest;
+          gcc = gcc-latest;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpc = callPackage ./gcc/mpc.nix {
+          gcc = gcc-latest;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpfr = callPackage ./gcc/mpfr.nix {
+          gcc = gcc-latest;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         linux-headers = callPackage ./linux-headers {
           gcc = gcc-latest;
           gnumake = gnumake-musl;
@@ -301,6 +320,12 @@ lib.makeScope
         musl = callPackage ./musl {
           gcc = gcc46;
           gnumake = gnumake-musl;
+        };
+
+        musl-headers = callPackage ./musl/headers.nix {
+          gcc = gcc46;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
         };
 
         musl-static = callPackage ./musl/static.nix {
@@ -470,6 +495,13 @@ lib.makeScope
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           gnugrep = gnugrep-static;
+        };
+
+        glibc-headers = callPackage ./glibc/headers.nix {
+          gcc = gcc-latest;
+          binutils-build = binutils;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
         };
       }
     )

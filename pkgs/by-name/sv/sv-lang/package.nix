@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   boost,
   catch2_3,
   cmake,
@@ -22,6 +23,20 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-popHzwX0qwv2POAl7/qX3e//OwJRXGtSl9xogpSn2LI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fmt-12.2.patch";
+      url = "https://github.com/MikePopoloski/slang/commit/5a898b4b9225d281902fcd59fe4732b1561677d2.patch";
+      excludes = [ "tests/unittests/diagnostics/WaiverTests.cpp" ];
+      hash = "sha256-Y+GG8UINWXh7eTXEweM42oPY8ByP4DQYgTjSLukz4I4=";
+    })
+  ];
+
+  patchFlags = [
+    "-p1"
+    "-F3"
+  ];
 
   cmakeFlags = [
     # fix for https://github.com/NixOS/nixpkgs/issues/144170
