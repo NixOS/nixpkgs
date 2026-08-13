@@ -68,6 +68,7 @@ let
     ghc984
     ghc9103
     ghc9125
+    ghc9141
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -525,11 +526,18 @@ let
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
-        # time < 1.13 conflicts with time == 1.14.*
+        # time < 1.13 conflicts with time == 1.14.* || == 1.15.*
         compilerNames.ghc9125
+        compilerNames.ghc9141
       ] released;
-      Cabal_3_12_1_0 = released;
-      Cabal_3_14_2_0 = released;
+      Cabal_3_12_1_0 = lib.subtractLists [
+        # time < 1.15 conflicts with time == 1.15.*
+        compilerNames.ghc9141
+      ] released;
+      Cabal_3_14_2_0 = lib.subtractLists [
+        # time < 1.15 conflicts with time == 1.15.*
+        compilerNames.ghc9141
+      ] released;
       Cabal_3_16_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
@@ -547,11 +555,16 @@ let
         compilerNames.ghc910
       ];
       haskell-debugger = [
+        compilerNames.ghc9141
         compilerNames.ghc9142
       ];
       haskell-language-server = released;
       hoogle = released;
-      hlint = released;
+      hlint = lib.subtractLists [
+        # https://github.com/ndmitchell/hlint/issues/1672
+        # https://github.com/ndmitchell/hlint/pull/1673
+        compilerNames.ghc9141
+      ] released;
       hpack = released;
       hsdns = released;
       iserv-proxy = released;
@@ -564,10 +577,14 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = released;
-      ghc-tags = released;
+      ghc-tags = lib.subtractLists [
+        # https://github.com/arybczak/ghc-tags/pull/31
+        compilerNames.ghc9141
+      ] released;
       hashable = released;
       primitive = released;
       scrod = [
+        compilerNames.ghc9141
         compilerNames.ghc9142
       ];
       semaphore-compat = [
@@ -575,7 +592,11 @@ let
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
-      weeder = released;
+      weeder = lib.subtractLists [
+        # Currently (2026-08-13) blocked on
+        # https://github.com/kcsongor/generic-lens/issues/174
+        compilerNames.ghc9141
+      ] released;
 
       # MicroHs core packages
       ghc-compat = [
