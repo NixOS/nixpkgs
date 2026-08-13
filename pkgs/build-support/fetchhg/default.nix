@@ -24,6 +24,9 @@ lib.extendMkDerivation {
       builder = ./builder.sh;
       nativeBuildInputs = [ mercurial ];
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
       subrepoClause = lib.optionalString fetchSubrepos "S";
