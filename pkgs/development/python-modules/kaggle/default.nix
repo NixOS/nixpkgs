@@ -1,30 +1,37 @@
 {
-  bleach,
+  lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  bleach,
   jupytext,
   kagglesdk,
-  lib,
   packaging,
   protobuf,
   python-dateutil,
   python-dotenv,
   python-slugify,
-  pytestCheckHook,
   requests,
   six,
   tqdm,
   urllib3,
+
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "kaggle";
   version = "2.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
@@ -52,8 +59,13 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    versionCheckHook
     # kaggle creates its config dir at import time; needs a writable HOME.
     writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/var/empty/.kaggle'
+    "HOME"
   ];
 
   # kaggle authenticates at import time; fake creds for the offline checks.
@@ -64,11 +76,13 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kaggle" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Official Kaggle CLI";
     mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-cli";
-    changelog = "https://github.com/Kaggle/kaggle-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Kaggle/kaggle-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
