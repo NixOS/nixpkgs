@@ -7,6 +7,7 @@
   makeWrapper,
   zlib,
   ncurses,
+  runCommand,
 }:
 
 let
@@ -79,6 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/sbt --version --allow-empty | grep -q "${finalAttrs.version}"
 
     runHook postInstallCheck
+  '';
+
+  passthru.tests.version = runCommand "${finalAttrs.pname}-version" { } ''
+    export HOME="$TMPDIR"
+    ${lib.getExe finalAttrs.finalPackage} --version --allow-empty > version.txt
+    grep -q 'sbt runner version: ${finalAttrs.version}' version.txt
+    touch $out
   '';
 
   meta = {
