@@ -1,0 +1,16 @@
+diff --git a/audiosource b/audiosource
+index e2f034c..b6efc34 100755
+--- a/audiosource
++++ b/audiosource
+@@ -82,9 +82,9 @@ install() {
+ 
+ 	echo '[+] Installing Audio Source'
+ 
+-	adb install -rtg "$AUDIOSOURCE_APK" || {
++	adb install -r -t -g "$AUDIOSOURCE_APK" || {
+ 		adb uninstall "$AUDIOSOURCE_PKG"
+-		adb install -tg "$AUDIOSOURCE_APK"
++		adb install -t -g "$AUDIOSOURCE_APK"
+ 	}
+ }
+ 

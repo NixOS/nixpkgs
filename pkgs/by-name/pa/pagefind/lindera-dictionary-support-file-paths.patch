@@ -1,0 +1,41 @@
+diff --git a/src/assets.rs b/src/assets.rs
+index 58afc4c..d5813e6 100644
+--- a/src/assets.rs
++++ b/src/assets.rs
+@@ -93,6 +93,28 @@ async fn download_with_retry(
+ 
+         for url in urls {
+             debug!("Attempting to download from {}", url);
++            if let Some(path) = url.strip_prefix("file://") {
++                let content = std::fs::read(path)?;
++
++                // Calculate MD5 hash
++                let mut context = Context::new();
++                context.consume(&content);
++                let actual_md5 = format!("{:x}", context.compute());
++                debug!("Expected MD5: {}", expected_md5);
++                debug!("Actual   MD5: {}", actual_md5);
++
++                if actual_md5 == expected_md5 {
++                    debug!("MD5 check passed from {}", url);
++                    return Ok(content);
++                } else {
++                    warn!(
++                        "MD5 mismatch from {}! Expected {}, got {}",
++                        url, expected_md5, actual_md5
++                    );
++                    // continue to next url
++                }
++            }
++            else {
+             match client.get(url).send().await {
+                 Ok(resp) if resp.status().is_success() => {
+                     debug!("HTTP download successful from {}", url);
+@@ -127,6 +149,7 @@ async fn download_with_retry(
+                     // continue to next url
+                 }
+             }
++            }
+         }
+ 
+         sleep(Duration::from_secs(1)).await;

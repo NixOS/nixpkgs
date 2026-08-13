@@ -1,0 +1,22 @@
+From 9d3f6e9ff5e66af90a5d187d902f7893fb91c24b Mon Sep 17 00:00:00 2001
+From: "Kirill A. Korinsky" <kirill@korins.ky>
+Date: Fri, 1 Jul 2022 12:23:37 +0200
+Subject: [PATCH] Always check for pkg-config
+
+---
+ build/moz.configure/pkg.configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletions(-)
+
+diff --git a/build/moz.configure/pkg.configure b/build/moz.configure/pkg.configure
+index 418331b874f47..09cc40eda03fa 100644
+--- a/build/moz.configure/pkg.configure
++++ b/build/moz.configure/pkg.configure
+@@ -12,7 +12,7 @@ def pkg_config(prefixes):
+ 
+ @depends(compile_environment, target)
+ def use_pkg_config(compile_environment, target):
+-    return compile_environment and target.os not in ("WINNT", "OSX", "Android")
++    return compile_environment
+ 
+ 
+ pkg_config = check_prog(

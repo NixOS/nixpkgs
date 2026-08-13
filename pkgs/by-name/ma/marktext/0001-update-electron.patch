@@ -1,0 +1,45 @@
+From d9ee8be58200be1bcf1cf16dda44de811a9e4660 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Fri, 8 Nov 2024 09:06:22 +0800
+Subject: [PATCH] update electron
+
+---
+ package.json | 2 +-
+ yarn.lock    | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package.json b/package.json
+index 3b8e07a8..b4956d9d 100644
+--- a/package.json
++++ b/package.json
+@@ -34,7 +34,7 @@
+     "deobfuscateStackTrace": "node tools/deobfuscateStackTrace.js"
+   },
+   "dependencies": {
+-    "@electron/remote": "^2.0.8",
++    "@electron/remote": "^2.1.2",
+     "@hfelix/electron-localshortcut": "^4.0.1",
+     "@marktext/file-icons": "^1.0.6",
+     "@octokit/rest": "^18.12.0",
+diff --git a/yarn.lock b/yarn.lock
+index 4abf622d..d2310b45 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -1589,10 +1589,10 @@
+     global-agent "^3.0.0"
+     global-tunnel-ng "^2.7.1"
+ 
+-"@electron/remote@^2.0.8":
+-  version "2.0.8"
+-  resolved "https://registry.yarnpkg.com/@electron/remote/-/remote-2.0.8.tgz#85ff321f0490222993207106e2f720273bb1a5c3"
+-  integrity sha512-P10v3+iFCIvEPeYzTWWGwwHmqWnjoh8RYnbtZAb3RlQefy4guagzIwcWtfftABIfm6JJTNQf4WPSKWZOpLmHXw==
++"@electron/remote@^2.1.2":
++  version "2.1.2"
++  resolved "https://registry.yarnpkg.com/@electron/remote/-/remote-2.1.2.tgz#52a97c8faa5b769155b649ef262f2f8c851776e6"
++  integrity sha512-EPwNx+nhdrTBxyCqXt/pftoQg/ybtWDW3DUWHafejvnB1ZGGfMpv6e15D8KeempocjXe78T7WreyGGb3mlZxdA==
+ 
+ "@electron/universal@1.2.1":
+   version "1.2.1"
+-- 
+2.47.0
+

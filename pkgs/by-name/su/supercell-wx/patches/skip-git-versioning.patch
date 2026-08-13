@@ -1,0 +1,99 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index ed40e428..5d5676ad 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -642,6 +642,12 @@ else()
+     set(SCWX_BUILD_NUM 0)
+ endif()
+ 
++if (NOT SCWX_RELEASE_DATE)
++    message(FATAL_ERROR
++            "SCWX_RELEASE_DATE must be set to YYYY-MM-DD "
++            "(e.g. -DSCWX_RELEASE_DATE=2026-07-18)")
++endif()
++
+ if (WIN32)
+     add_custom_command(OUTPUT  ${VERSIONS_HEADER}
+                                ${RESOURCE_OUTPUT}
+@@ -655,6 +661,7 @@ if (WIN32)
+                                -i ${VERSIONS_INPUT}
+                                -o ${VERSIONS_HEADER}
+                                -b ${SCWX_BUILD_NUM}
++                               --release-date ${SCWX_RELEASE_DATE}
+                                --input-resource ${RESOURCE_INPUT}
+                                --output-resource ${RESOURCE_OUTPUT}
+                                --input-metainfo ${METAINFO_INPUT}
+@@ -671,6 +678,7 @@ else()
+                                -i ${VERSIONS_INPUT}
+                                -o ${VERSIONS_HEADER}
+                                -b ${SCWX_BUILD_NUM}
++                               --release-date ${SCWX_RELEASE_DATE}
+                                --input-metainfo ${METAINFO_INPUT}
+                                --output-metainfo ${METAINFO_OUTPUT})
+ endif()
+diff --git a/scwx-qt/tools/generate_versions.py b/scwx-qt/tools/generate_versions.py
+index 61b7cc1f..32ec482e 100644
+--- a/scwx-qt/tools/generate_versions.py
++++ b/scwx-qt/tools/generate_versions.py
+@@ -1,6 +1,5 @@
+ import argparse
+ import datetime
+-import git
+ import json
+ import os
+ import pathlib
+@@ -64,6 +63,13 @@ kKeys_ = [Keys.BuildNumber,
+           Keys.VersionCommas,
+           Keys.VersionString]
+ 
++def ParseReleaseDate(value: str) -> str:
++    try:
++        return datetime.date.fromisoformat(value).strftime("%Y-%m-%d")
++    except ValueError as ex:
++        raise argparse.ArgumentTypeError(
++            f"invalid release date '{value}'; expected YYYY-MM-DD") from ex
++
+ def ParseArguments():
+     parser = argparse.ArgumentParser(description='Generate versions')
+     parser.add_argument("-c", "--cache",
+@@ -126,6 +132,12 @@ def ParseArguments():
+                         dest     = "version_",
+                         type     = str,
+                         required = True)
++    parser.add_argument("--release-date",
++                        metavar  = "YYYY-MM-DD",
++                        help     = "release date (YYYY-MM-DD)",
++                        dest     = "releaseDate_",
++                        type     = ParseReleaseDate,
++                        required = True)
+     return parser.parse_args()
+ 
+ def CollectVersionInfo(args):
+@@ -133,24 +145,12 @@ def CollectVersionInfo(args):
+ 
+     versionInfo = VersionInfo()
+ 
+-    repo = git.Repo(args.gitRepo_, search_parent_directories = True)
+-
+-    commitString = str(repo.head.commit)[:10]
+-    releaseDate  = datetime.datetime.fromtimestamp(
+-        repo.head.commit.committed_date, tz=datetime.timezone.utc).strftime("%Y-%m-%d")
+-
+-    if not repo.is_dirty(submodules = False):
+-        copyrightYear = datetime.datetime.fromtimestamp(repo.head.commit.committed_date).year
+-    else:
+-        commitString  = commitString + "+dirty"
+-        copyrightYear = datetime.date.today().year
+-
+     resourceDir = str(args.gitRepo_).replace("\\", "\\\\")
+ 
+     versionInfo.buildNumber_   = args.buildNumber_
+-    versionInfo.commitString_  = commitString
+-    versionInfo.copyrightYear_ = copyrightYear
+-    versionInfo.releaseDate_   = releaseDate
++    versionInfo.commitString_  = "@rev@"
++    versionInfo.copyrightYear_ = datetime.date.fromisoformat(args.releaseDate_).year
++    versionInfo.releaseDate_   = args.releaseDate_
+     versionInfo.resourceDir_   = resourceDir
+     versionInfo.versionString_ = args.version_
+ 

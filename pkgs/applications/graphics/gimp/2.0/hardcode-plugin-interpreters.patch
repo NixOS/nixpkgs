@@ -1,0 +1,11 @@
+--- a/plug-ins/pygimp/Makefile.am
++++ b/plug-ins/pygimp/Makefile.am
+@@ -157,7 +157,7 @@ install-interp-file:
+ 	echo 'python=$(PYBIN_PATH)' > '$(DESTDIR)$(pyinterpfile)'
+ 	echo 'python2=$(PYBIN_PATH)' >> '$(DESTDIR)$(pyinterpfile)'
+ 	echo '/usr/bin/python=$(PYBIN_PATH)' >> '$(DESTDIR)$(pyinterpfile)'
+-	echo ":Python:E::py::`basename $(PYTHON)`:" >> '$(DESTDIR)$(pyinterpfile)'
++	echo ":Python:E::py::$(PYTHON):" >> '$(DESTDIR)$(pyinterpfile)'
+ 
+ install-data-local: install-env-file install-interp-file
+ 

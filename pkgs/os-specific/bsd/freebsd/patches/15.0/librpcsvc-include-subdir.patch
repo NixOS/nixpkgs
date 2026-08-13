@@ -1,0 +1,11 @@
+--- a/lib/librpcsvc/Makefile
++++ b/lib/librpcsvc/Makefile
+@@ -20,7 +20,7 @@ OTHERSRCS+= yp_passwd.c yp_update.c
+ 
+ RPCCOM=	RPCGEN_CPP=${CPP:Q} rpcgen -C
+ 
+-INCDIRS= -I${SYSROOT:U${DESTDIR}}/usr/include/rpcsvc
++INCDIRS= -I${INCLUDEDIR}/rpcsvc
+ 
+ CFLAGS+= -DYP ${INCDIRS}
+ 

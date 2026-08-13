@@ -1,0 +1,13 @@
+diff --git a/kcms/access/kcmaccess.cpp b/kcms/access/kcmaccess.cpp
+index 4f8d3e2..a96f755 100644
+--- a/kcms/access/kcmaccess.cpp
++++ b/kcms/access/kcmaccess.cpp
+@@ -176,7 +176,7 @@ void KAccessConfig::launchOrcaConfiguration()
+                                       QStringLiteral("screen-reader-enabled"),
+                                       QStringLiteral("true")};
+ 
+-    int ret = QProcess::execute(QStringLiteral("gsettings"), gsettingArgs);
++    int ret = QProcess::execute(QStringLiteral("@gsettings@"), gsettingArgs);
+     if (ret) {
+         const QString errorStr = QLatin1String("gsettings ") + gsettingArgs.join(QLatin1Char(' '));
+         setOrcaLaunchFeedback(i18n("Could not set gsettings for Orca: \"%1\" failed", errorStr));

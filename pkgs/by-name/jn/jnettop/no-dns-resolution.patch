@@ -1,0 +1,13 @@
+When built in a chroot, `configure' fails to resolve `localhost'.
+Furthermore that test appears to be useless.
+
+--- jnettop-0.13.0/configure.ac	2006-04-29 15:34:09.000000000 +0200
++++ jnettop-0.13.0/configure.ac	2008-12-03 15:11:28.000000000 +0100
+@@ -63,7 +63,6 @@ AC_NETTOP_CHECK_IN6_ADDR
+ 
+ LDFLAGS="$LDFLAGS $NSL_LIBS $SOCKET_LIBS"
+ 
+-AC_NETTOP_CHECK_WORKING_RESOLVER
+ AC_NETTOP_CHECK_GETHOSTBYADDR_R
+ 
+ AM_PATH_GLIB_2_0(2.0.1,, AC_MSG_ERROR("glib >= 2.0.1 library required"), gthread)

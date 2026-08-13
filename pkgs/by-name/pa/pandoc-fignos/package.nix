@@ -1,0 +1,35 @@
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
+
+python3Packages.buildPythonApplication rec {
+  pname = "pandoc-fignos";
+  version = "2.4.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "tomduck";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-eDwAW0nLB4YqrWT3Ajt9bmX1A43wl+tOPm2St5VpCLk=";
+  };
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+  ];
+
+  propagatedBuildInputs = with python3Packages; [ pandoc-xnos ];
+
+  # Different pandoc executables are not available
+  doCheck = false;
+
+  meta = {
+    description = "Standalone pandoc filter from the pandoc-xnos suite for numbering figures and figure references";
+    homepage = "https://github.com/tomduck/pandoc-fignos";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ppenguin ];
+    mainProgram = "pandoc-fignos";
+  };
+}

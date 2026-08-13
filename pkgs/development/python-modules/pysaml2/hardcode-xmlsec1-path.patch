@@ -1,0 +1,39 @@
+diff --git a/src/saml2/sigver.py b/src/saml2/sigver.py
+index 59fe2dee..0c24fbcc 100644
+--- a/src/saml2/sigver.py
++++ b/src/saml2/sigver.py
+@@ -165,33 +165,7 @@ def get_xmlsec_binary(paths=None):
+     :return: full name of the xmlsec1 binary found. If no binaries are
+         found then an exception is raised.
+     """
+-    if os.name == "posix":
+-        bin_name = ["xmlsec1"]
+-    elif os.name == "nt":
+-        bin_name = ["xmlsec.exe", "xmlsec1.exe"]
+-    else:  # Default !?
+-        bin_name = ["xmlsec1"]
+-
+-    if paths:
+-        for bname in bin_name:
+-            for path in paths:
+-                fil = os.path.join(path, bname)
+-                try:
+-                    if os.lstat(fil):
+-                        return fil
+-                except OSError:
+-                    pass
+-
+-    for path in os.environ["PATH"].split(os.pathsep):
+-        for bname in bin_name:
+-            fil = os.path.join(path, bname)
+-            try:
+-                if os.lstat(fil):
+-                    return fil
+-            except OSError:
+-                pass
+-
+-    raise SigverError(f"Cannot find {bin_name}")
++    return '@xmlsec@/bin/xmlsec1'
+ 
+ 
+ def _get_xmlsec_cryptobackend(path=None, search_paths=None):

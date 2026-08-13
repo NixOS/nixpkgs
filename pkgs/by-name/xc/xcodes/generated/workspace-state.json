@@ -1,0 +1,245 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "big-num",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/adam-fowler/big-num",
+          "name": "big-num"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "5c5511ad06aeb2b97d0868f7394e14a624bfb1c7",
+            "version": "2.0.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "big-num"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "data",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/xcodereleases/data",
+          "name": "XcodeReleases"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "fcf527b187817f67c05223676341f3ab69d4214d"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "data"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "foundation",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/PromiseKit/Foundation.git",
+          "name": "PMKFoundation"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "985f17fa69ee0e5b7eb3ff9be87ffc4e05fc0927",
+            "version": "3.4.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Foundation"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "keychainaccess",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+          "name": "KeychainAccess"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "8d33ffd6f74b3bcfc99af759d4204c6395a3f918",
+            "version": "3.2.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "KeychainAccess"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "legibleerror",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/LegibleError.git",
+          "name": "LegibleError"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "bc596702d7ff618c3f90ba480eeb48b3e83a2fbe",
+            "version": "1.0.6"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "LegibleError"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "path.swift",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/Path.swift.git",
+          "name": "Path.swift"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "dac007e907a4f4c565cfdc55a9ce148a761a11d5",
+            "version": "0.16.3"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Path.swift"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "promisekit",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/PromiseKit.git",
+          "name": "PromiseKit"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "8a98e31a47854d3180882c8068cc4d9381bf382d",
+            "version": "6.22.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "PromiseKit"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "rainbow",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/onevcat/Rainbow.git",
+          "name": "Rainbow"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "626c3d4b6b55354b4af3aa309f998fae9b31a3d9",
+            "version": "3.2.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Rainbow"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "9f39744e025c7d377987f30b03770805dcb0bcd1",
+            "version": "1.1.4"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-crypto",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-crypto",
+          "name": "swift-crypto"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
+            "version": "1.1.7"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-crypto"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-srp",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/xcodesOrg/swift-srp",
+          "name": "swift-srp"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "543aa0122a0257b992f6c7d62d18a26e3dffb8fe"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-srp"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swiftsoup",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/scinfu/SwiftSoup.git",
+          "name": "SwiftSoup"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "aeb5b4249c273d1783a5299e05be1b26e061ea81",
+            "version": "2.0.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "SwiftSoup"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "version",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/Version.git",
+          "name": "Version"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "087c91fedc110f9f833b14ef4c32745dabca8913",
+            "version": "1.0.3"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Version"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "yams",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/jpsim/Yams",
+          "name": "Yams"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "01835dc202670b5bb90d07f3eae41867e9ed29f6",
+            "version": "5.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Yams"
+      }
+    ]
+  },
+  "version": 6
+}

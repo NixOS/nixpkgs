@@ -1,0 +1,17 @@
+diff --git i/Makefile.am w/Makefile.am
+index 9c2bbf3..0b0023e 100644
+--- i/Makefile.am
++++ w/Makefile.am
+@@ -30,12 +30,6 @@ tricklectl_LDADD = @ERRO@ $(LIBOBJS)
+ 
+ AM_CFLAGS = -Wall -Icompat @EVENTINC@
+ 
+-overloaddir = $(libdir)
+-overload_DATA = libtrickle.so
+-
+-libtrickle.so: trickle-overload.c atomicio.c
+-$(overload_DATA):
+-
+ CLEANFILES = *.so
+ 
+ EXTRA_DIST = LICENSE README strlcat.c strlcpy.c err.c Makefile.am.inc	\

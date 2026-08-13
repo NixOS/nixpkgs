@@ -1,0 +1,27 @@
+Fix po4a compatibility with gettext >= 1.0
+
+gettext 1.0 changed msginit behavior: when the output file already
+exists, msginit now merges into it (like msgmerge) instead of
+overwriting. This causes problems when po4a passes an empty PO file as
+the output target, because msginit produces a PO with stripped headers
+and corrupted UTF-8 content.
+
+Fix by removing the output file before calling msginit, ensuring
+msginit creates a fresh PO file with proper headers.
+
+See: https://github.com/mquinson/po4a/issues/636
+See: https://savannah.gnu.org/news/?id=10853
+
+--- a/po4a
++++ b/po4a
+@@ -1875,6 +1875,10 @@
+                 }
+
+                 my $read_pot_filename = find_input_file($pot_filename);
++                # Remove the output file if it exists (e.g. as an empty file),
++                # because gettext >= 1.0's msginit merges into existing files
++                # instead of overwriting, producing broken PO headers.
++                unlink $outfile if ( -e $outfile && -z $outfile );
+                 my $cmd =
+                   "msginit$Config{_exe} -i \"$read_pot_filename\" --locale $lang -o \"$outfile\" --no-translator >$devnull";
+                 run_cmd($cmd);

@@ -1,0 +1,20 @@
+diff --git a/vendor/framework7-react/build/build.js b/vendor/framework7-react/build/build.js
+index 50828275f1..48a609e033 100644
+--- a/build/build.js
++++ b/build/build.js
+@@ -12,14 +12,13 @@ Promise.all([
+     const { default: ora } = oramodule,
+         { default: chalk } = chalkmodule;
+ 
+-    const spinner = ora(env === 'production' ? 'building for production...' : 'building development version...').start();
++    console.log(env === 'production' ? 'building for production...' : 'building development version...');
+ 
+     rm('./www/', (removeErr) => {
+       if (removeErr) throw removeErr;
+ 
+       webpack(config, (err, stats) => {
+         if (err) throw err;
+-        spinner.stop();
+ 
+         process.stdout.write(`${stats.toString({
+           colors: true,

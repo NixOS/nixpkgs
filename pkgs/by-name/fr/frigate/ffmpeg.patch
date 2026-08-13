@@ -1,0 +1,47 @@
+diff --git a/frigate/config/camera/ffmpeg.py b/frigate/config/camera/ffmpeg.py
+index 2c1e4cdca..d1a1f7065 100644
+--- a/frigate/config/camera/ffmpeg.py
++++ b/frigate/config/camera/ffmpeg.py
+@@ -1,4 +1,5 @@
+ from enum import Enum
++from os.path import join
+ from typing import Union
+ 
+ from pydantic import Field, field_validator
+@@ -71,21 +72,11 @@ class FfmpegConfig(FrigateBaseModel):
+ 
+     @property
+     def ffmpeg_path(self) -> str:
+-        if self.path == "default":
+-            return f"/usr/lib/ffmpeg/{DEFAULT_FFMPEG_VERSION}/bin/ffmpeg"
+-        elif self.path in INCLUDED_FFMPEG_VERSIONS:
+-            return f"/usr/lib/ffmpeg/{self.path}/bin/ffmpeg"
+-        else:
+-            return f"{self.path}/bin/ffmpeg"
++        return join(self.path, "bin/ffmpeg")
+ 
+     @property
+     def ffprobe_path(self) -> str:
+-        if self.path == "default":
+-            return f"/usr/lib/ffmpeg/{DEFAULT_FFMPEG_VERSION}/bin/ffprobe"
+-        elif self.path in INCLUDED_FFMPEG_VERSIONS:
+-            return f"/usr/lib/ffmpeg/{self.path}/bin/ffprobe"
+-        else:
+-            return f"{self.path}/bin/ffprobe"
++        return join(self.path, "bin/ffprobe")
+ 
+ 
+ class CameraRoleEnum(str, Enum):
+diff --git a/frigate/record/export.py b/frigate/record/export.py
+index d4b49bb4b..bbcccff61 100644
+--- a/frigate/record/export.py
++++ b/frigate/record/export.py
+@@ -127,7 +127,7 @@ class RecordingExporter(threading.Thread):
+             minutes = int(diff / 60)
+             seconds = int(diff % 60)
+             ffmpeg_cmd = [
+-                "/usr/lib/ffmpeg/7.0/bin/ffmpeg",  # hardcode path for exports thumbnail due to missing libwebp support
++                self.config.ffmpeg.ffmpeg_path,  # hardcode path for exports thumbnail due to missing libwebp support
+                 "-hide_banner",
+                 "-loglevel",
+                 "warning",

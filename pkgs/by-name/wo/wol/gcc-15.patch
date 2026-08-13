@@ -1,0 +1,19 @@
+diff --git a/lib/realloc.c b/lib/realloc.c
+index d0d3e4a..6e9e539 100644
+--- a/lib/realloc.c
++++ b/lib/realloc.c
+@@ -24,8 +24,12 @@
+ 
+ #include <sys/types.h>
+ 
+-char *malloc ();
+-char *realloc ();
++#if STDC_HEADERS
++# include <stdlib.h>
++#else
++void *malloc ();
++void *realloc ();
++#endif
+ 
+ /* Change the size of an allocated block of memory P to N bytes,
+    with error checking.  If N is zero, change it to 1.  If P is NULL,

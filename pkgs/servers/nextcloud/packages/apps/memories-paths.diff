@@ -1,0 +1,32 @@
+diff --git a/lib/Settings/SystemConfig.php b/lib/Settings/SystemConfig.php
+index 7814f071..bb1309fa 100644
+--- a/lib/Settings/SystemConfig.php
++++ b/lib/Settings/SystemConfig.php
+@@ -124,6 +125,14 @@ class SystemConfig
+      */
+     public static function get(string $key, mixed $default = null): mixed
+     {
++        switch ($key) {
++          case "memories.exiftool": return "@exiftool@";
++          case "memories.exiftool_no_local": return false;
++          case "memories.vod.ffmpeg": return "@ffmpeg@";
++          case "memories.vod.ffprobe": return "@ffprobe@";
++          case "memories.vod.path": return "@go-vod@";
++        }
++
+         if (!\array_key_exists($key, self::DEFAULTS)) {
+             throw new \InvalidArgumentException("Invalid system config key: {$key}");
+         }
+@@ -154,6 +161,12 @@ public static function get(string $key, mixed $default = null): mixed
+      */
+     public static function set(string $key, mixed $value): void
+     {
++        // Ignore those paths and always use the nix paths.
++        // We cannot return a proper error message except a 500 here without changing the code to much.
++        if (in_array($key, array("memories.exiftool", "memories.exiftool_no_local", "memories.vod.ffmpeg", "memories.vod.ffprobe", "memories.vod.path"))) {
++            throw new \InvalidArgumentException("Cannot set nix-managed key: {$key}");
++        }
++
+         // Check if the key is valid
+         if (!\array_key_exists($key, self::DEFAULTS)) {
+             throw new \InvalidArgumentException("Invalid system config key: {$key}");

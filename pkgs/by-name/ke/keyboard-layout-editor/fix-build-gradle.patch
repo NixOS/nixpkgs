@@ -1,0 +1,95 @@
+diff --git a/build.gradle b/build.gradle
+index b411200..a558065 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -1,5 +1,17 @@
++buildscript {
++    repositories {
++        maven {
++            url "https://plugins.gradle.org/m2/"
++        }
++    }
++    dependencies {
++        classpath 'org.openjfx:javafx-plugin:0.1.0'
++    }
++}
++
+ plugins {
+     id 'java'
++    id 'org.openjfx.javafxplugin' version '0.1.0'
+ }
+ 
+ group 'cz.gresak'
+@@ -12,22 +24,26 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+-    compile group: 'org.apache.commons', name: 'commons-exec', version: '1.3'
+-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
++    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
++    implementation group: 'org.apache.commons', name: 'commons-exec', version: '1.3'
++    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
++    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+ 
+-    testCompile group: 'junit', name: 'junit', version: '4.12'
++    testImplementation group: 'junit', name: 'junit', version: '4.12'
+ }
+ 
+ compileJava {
+     options.encoding = 'UTF-8'
+ }
+ 
++javafx {
++    modules = [ 'javafx.base', 'javafx.graphics', 'javafx.fxml' ]
++}
++
+ jar {
+     manifest {
+         attributes(
+-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
++                'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+                 'Main-Class': 'cz.gresak.keyboardeditor.Main'
+         )
+     }
+@@ -40,7 +56,8 @@ task fatJar(type: Jar) {
+                 'Implementation-Version': version,
+                 'Main-Class': 'cz.gresak.keyboardeditor.Main'
+     }
+-    baseName = project.name + '-all'
+-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
++    archiveBaseName = project.name + '-all'
++    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
++    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+     with jar
+ }
+\ No newline at end of file
+diff --git a/src/main/java/cz/gresak/keyboardeditor/component/Key.java b/src/main/java/cz/gresak/keyboardeditor/component/Key.java
+index d81d66d..9530faf 100644
+--- a/src/main/java/cz/gresak/keyboardeditor/component/Key.java
++++ b/src/main/java/cz/gresak/keyboardeditor/component/Key.java
+@@ -170,8 +170,8 @@ public class Key extends Pane {
+         bottomLeftChar.setLayoutY(bottomLine);
+         bottomRightChar.setLayoutY(bottomLine);
+         // horizontal alignment (needed only for the right column)
+-        double topLeftWidth = fontLoader.computeStringWidth(topLeftChar.getText(), topLeftChar.getFont());
+-        double bottomLeftWidth = fontLoader.computeStringWidth(bottomLeftChar.getText(), bottomLeftChar.getFont());
++        double topLeftWidth = 0.0; // fontLoader.computeStringWidth(topLeftChar.getText(), topLeftChar.getFont());
++        double bottomLeftWidth = 0.0; // fontLoader.computeStringWidth(bottomLeftChar.getText(), bottomLeftChar.getFont());
+         double maxLeftColumnLayoutX = Math.max(topLeftChar.getLayoutX(), bottomLeftChar.getLayoutX());
+         double xOffset = Math.max(
+                 (getWidth() / 2 - HPADDING) + KEY_COLUMN_SPACE, // center of the key
+diff --git a/src/main/java/cz/gresak/keyboardeditor/service/impl/FontProviderImpl.java b/src/main/java/cz/gresak/keyboardeditor/service/impl/FontProviderImpl.java
+index 4804505..a91ef5c 100644
+--- a/src/main/java/cz/gresak/keyboardeditor/service/impl/FontProviderImpl.java
++++ b/src/main/java/cz/gresak/keyboardeditor/service/impl/FontProviderImpl.java
+@@ -81,7 +81,7 @@ public class FontProviderImpl implements FontProvider {
+     @Override
+     public double getFontSize(String text, Font font, double widthToFit, double heightToFit) {
+         FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+-        double sampleWidth = fontLoader.computeStringWidth(text, font);
++        double sampleWidth = 0.0; // fontLoader.computeStringWidth(text, font);
+         double fontSizeWidth = (widthToFit / sampleWidth) * font.getSize();
+ 
+         FontMetrics fontMetrics = fontLoader.getFontMetrics(font);

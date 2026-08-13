@@ -1,0 +1,36 @@
+commit c4aab1ba6aadd6985fcd271679d2118f094ec876
+Author: Emilio Cobos Álvarez <emilio@crisal.io>
+Date:   Tue Jun 9 22:04:44 2026 +0000
+
+    Bug 2046162 - Remove some redundant pub qualifiers. r=gfx-reviewers,aosmond
+    
+    The enum is not public so this doesn't change behavior but a patch I'm
+    working on in cbindgen gets a bit confused with this.
+    
+    Differential Revision: https://phabricator.services.mozilla.com/D305678
+
+diff --git a/gfx/wr/webrender/src/texture_cache.rs b/gfx/wr/webrender/src/texture_cache.rs
+index e14c26bd3190..77e1f3a312ac 100644
+--- a/gfx/wr/webrender/src/texture_cache.rs
++++ b/gfx/wr/webrender/src/texture_cache.rs
+@@ -273,9 +273,9 @@ enum BudgetType {
+ }
+ 
+ impl BudgetType {
+-    pub const COUNT: usize = 7;
++    const COUNT: usize = 7;
+ 
+-    pub const VALUES: [BudgetType; BudgetType::COUNT] = [
++    const VALUES: [BudgetType; BudgetType::COUNT] = [
+         BudgetType::SharedColor8Linear,
+         BudgetType::SharedColor8Nearest,
+         BudgetType::SharedColor8Glyphs,
+@@ -285,7 +285,7 @@ impl BudgetType {
+         BudgetType::Standalone,
+     ];
+ 
+-    pub const PRESSURE_COUNTERS: [usize; BudgetType::COUNT] = [
++    const PRESSURE_COUNTERS: [usize; BudgetType::COUNT] = [
+         profiler::ATLAS_COLOR8_LINEAR_PRESSURE,
+         profiler::ATLAS_COLOR8_NEAREST_PRESSURE,
+         profiler::ATLAS_COLOR8_GLYPHS_PRESSURE,

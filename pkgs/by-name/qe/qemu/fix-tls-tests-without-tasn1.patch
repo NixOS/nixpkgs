@@ -1,0 +1,31 @@
+diff --git a/tests/qtest/migration/tls-tests.c b/tests/qtest/migration/tls-tests.c
+index 827cc7bcf8..9bdb1165af 100644
+--- a/tests/qtest/migration/tls-tests.c
++++ b/tests/qtest/migration/tls-tests.c
+@@ -492,6 +492,7 @@ static void test_precopy_tcp_no_tls(char *name, MigrateCommon *args)
+     test_precopy_common(args);
+ }
+ 
++#ifdef CONFIG_TASN1
+ static void *
+ migrate_hook_start_tls_x509_no_host(QTestState *from, QTestState *to)
+ {
+@@ -519,7 +520,6 @@ static void test_precopy_tcp_tls_no_hostname(char *name, MigrateCommon *args)
+     test_precopy_common(args);
+ }
+ 
+-#ifdef CONFIG_TASN1
+ static void test_precopy_tcp_tls_x509_default_host(char *name,
+                                                    MigrateCommon *args)
+ {
+@@ -719,8 +719,10 @@ void migration_test_add_tls(MigrationTestEnv *env)
+ 
+     migration_test_add("/migration/precopy/tcp/no-tls",
+                        test_precopy_tcp_no_tls);
++#ifdef CONFIG_TASN1
+     migration_test_add("/migration/precopy/tcp/tls/no-hostname",
+                        test_precopy_tcp_tls_no_hostname);
++#endif /* CONFIG_TASN1 */
+ 
+     migration_test_add("/migration/precopy/unix/tls/psk",
+                        test_precopy_unix_tls_psk);

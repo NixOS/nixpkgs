@@ -1,0 +1,32 @@
+diff --git a/Makefile b/Makefile
+index eac2291..1b1df0a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,12 +46,12 @@ install: install-common
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/password-store" && install -m 0644 -v "$(PLATFORMFILE)" "$(DESTDIR)$(LIBDIR)/password-store/platform.sh"
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/password-store/extensions"
+ 	@install -v -d "$(DESTDIR)$(BINDIR)/"
+-	@trap 'rm -f src/.pass' EXIT; sed 's:.*PLATFORM_FUNCTION_FILE.*:source "$(LIBDIR)/password-store/platform.sh":;s:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR="$(LIBDIR)/password-store/extensions":' src/password-store.sh > src/.pass && \
++	@trap 'rm -f src/.pass' EXIT; sed 's:.*PLATFORM_FUNCTION_FILE.*:source "$(LIBDIR)/password-store/platform.sh":;' src/password-store.sh > src/.pass && \
+ 	install -v -d "$(DESTDIR)$(BINDIR)/" && install -m 0755 -v src/.pass "$(DESTDIR)$(BINDIR)/pass"
+ else
+ install: install-common
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/password-store/extensions"
+-	@trap 'rm -f src/.pass' EXIT; sed '/PLATFORM_FUNCTION_FILE/d;s:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR="$(LIBDIR)/password-store/extensions":' src/password-store.sh > src/.pass && \
++	@trap 'rm -f src/.pass' EXIT; sed '/PLATFORM_FUNCTION_FILE/d;' src/password-store.sh > src/.pass && \
+ 	install -v -d "$(DESTDIR)$(BINDIR)/" && install -m 0755 -v src/.pass "$(DESTDIR)$(BINDIR)/pass"
+ endif
+ 
+diff --git a/src/password-store.sh b/src/password-store.sh
+index 68551a4..2f3b5b7 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -656,7 +656,7 @@ cmd_extension_or_show() {
+ 	fi
+ }
+ 
+-SYSTEM_EXTENSION_DIR=""
++SYSTEM_EXTENSION_DIR="${SYSTEM_EXTENSION_DIR:-@out@/lib/password-store/extensions}"
+ cmd_extension() {
+ 	check_sneaky_paths "$1"
+ 	local user_extension system_extension extension

@@ -1,0 +1,16 @@
+diff --git a/src/Platform_Posix.c b/src/Platform_Posix.c
+index bca992d..3540afa 100644
+--- a/src/Platform_Posix.c
++++ b/src/Platform_Posix.c
+@@ -440,9 +440,8 @@ void Platform_LoadSysFonts(void) {
+ 		String_FromConst("/Library/Fonts")
+ 	};
+ #else
+-	static const cc_string dirs[] = {
+-		String_FromConst("/usr/share/fonts"),
+-		String_FromConst("/usr/local/share/fonts")
++	static const cc_string dirs[] = {
++		String_FromConst("%NIXPKGS_FONT_PATH%")
+ 	};
+ #endif
+ 	for (i = 0; i < Array_Elems(dirs); i++) {

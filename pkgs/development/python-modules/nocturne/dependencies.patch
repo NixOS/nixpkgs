@@ -1,0 +1,27 @@
+diff --git a/nocturne/cpp/CMakeLists.txt b/nocturne/cpp/CMakeLists.txt
+index c67815f..e1f825b 100644
+--- a/nocturne/cpp/CMakeLists.txt
++++ b/nocturne/cpp/CMakeLists.txt
+@@ -62,8 +62,7 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+   googletest
+-  GIT_REPOSITORY https://github.com/google/googletest.git
+-  GIT_TAG main
++  SOURCE_DIR @gtest_src@
+ )
+ 
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+diff --git a/setup.py b/setup.py
+index 4863ae6..b5d3545 100644
+--- a/setup.py
++++ b/setup.py
+@@ -92,6 +92,8 @@ def main():
+     # with open("./requirements.txt", "r") as f:
+     #     requires = f.read().splitlines()
+     setup(
++        # Adding `packages=` is necessary to get `python setup.py install` to work
++        packages=["nocturne", "cfgs"],
+         ext_modules=[CMakeExtension("nocturne", "./nocturne")],
+         cmdclass=dict(build_ext=CMakeBuild),
+     )

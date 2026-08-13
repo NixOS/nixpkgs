@@ -1,0 +1,130 @@
+From 979a92d10731bae90e611b98d29be8d187f0f1f8 Mon Sep 17 00:00:00 2001
+From: Hraban Luyat <hraban@0brg.net>
+Date: Sat, 13 Apr 2024 15:39:58 -0400
+Subject: [PATCH 2/2] test: dynamic space size envvar and precedence
+
+---
+ tests/memory-args.test.sh | 22 ++++++++++++++++++
+ tests/save7.test.sh       | 49 ++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 65 insertions(+), 6 deletions(-)
+ create mode 100755 tests/memory-args.test.sh
+
+diff --git a/tests/memory-args.test.sh b/tests/memory-args.test.sh
+new file mode 100755
+index 000000000..72ef0cc79
+--- /dev/null
++++ b/tests/memory-args.test.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++
++. ./subr.sh
++
++use_test_subdirectory
++
++set -e
++
++# Allow slight shrinkage if heap relocation has to adjust for alignment
++NIX_SBCL_DYNAMIC_SPACE_SIZE=234mb run_sbcl_with_args --script <<EOF
++(assert (<= 0 (- (* 234 1024 1024) (sb-ext:dynamic-space-size)) 65536))
++EOF
++
++NIX_SBCL_DYNAMIC_SPACE_SIZE=555mb run_sbcl_with_args --dynamic-space-size 234mb --script <<EOF
++(assert (<= 0 (- (* 234 1024 1024) (sb-ext:dynamic-space-size)) 65536))
++EOF
++
++run_sbcl_with_args --dynamic-space-size 234mb --script <<EOF
++(assert (<= 0 (- (* 234 1024 1024) (sb-ext:dynamic-space-size)) 65536))
++EOF
++
++exit $EXIT_TEST_WIN
+diff --git a/tests/save7.test.sh b/tests/save7.test.sh
+index dd112f220..d56bddbc2 100644
+--- a/tests/save7.test.sh
++++ b/tests/save7.test.sh
+@@ -25,6 +25,9 @@ echo "::: Success"
+ 
+ run_sbcl_with_args --noinform --control-stack-size 384KB --dynamic-space-size 260MB \
+     --disable-debugger --no-userinit --no-sysinit --noprint <<EOF
++  ; allow slight shrinkage if heap relocation has to adjust for alignment
++  (defun dynamic-space-size-good-p (expected-mb)
++    (<= 0 (- (* expected-mb 1024 1024) (dynamic-space-size)) 65536))
+   (save-lisp-and-die "$tmpcore" :executable t :save-runtime-options :accept-runtime-options)
+ EOF
+ chmod u+x "$tmpcore"
+@@ -57,6 +60,29 @@ if [ $? -ne 0 ]; then
+ fi
+ echo "::: Success"
+ 
++echo "::: Running :DYNAMIC-SPACE-SIZE-ENV-ACCEPT"
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --no-userinit --no-sysinit --noprint <<EOF
++  (when (dynamic-space-size-good-p 432)
++    (exit :code 42))
++EOF
++if [ $? -ne 42 ]; then
++  exit 1
++fi
++echo "::: Success"
++
++echo "::: Running :DYNAMIC-SPACE-SIZE-PRECEDENCE"
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"$tmpcore" --dynamic-space-size 333MB \
++  --no-userinit --no-sysinit --noprint <<EOF
++  (when (dynamic-space-size-good-p 333))
++    (exit :code 42))
++EOF
++status=$?
++if [ $status -ne 42 ]; then
++    echo "saved core should have prioritized memory specification from arg"
++    exit 1
++fi
++echo "::: Success"
++
+ echo "::: Running :DYNAMIC-SPACE-SIZE-ARG"
+ run_sbcl_with_core "$tmpcore" --noinform --control-stack-size 640KB \
+     --tls-limit 5000 \
+@@ -64,10 +90,7 @@ run_sbcl_with_core "$tmpcore" --noinform --control-stack-size 640KB \
+   (assert (eql (extern-alien "thread_control_stack_size" unsigned) (* 640 1024)))
+   (assert (eql (extern-alien "dynamic_values_bytes" (unsigned 32))
+                (* 5000 sb-vm:n-word-bytes)))
+-  ; allow slight shrinkage if heap relocation has to adjust for alignment
+-  (defun dynamic-space-size-good-p ()
+-    (<= 0 (- (* 260 1048576) (dynamic-space-size)) 65536))
+-  (assert (dynamic-space-size-good-p))
++  (assert (dynamic-space-size-good-p 260))
+   (save-lisp-and-die "${tmpcore}2" :executable t :save-runtime-options t)
+ EOF
+ chmod u+x "${tmpcore}2"
+@@ -76,15 +99,29 @@ echo "::: INFO: prepared test core"
+   (when (and (eql (extern-alien "thread_control_stack_size" unsigned) (* 640 1024))
+              (eql (extern-alien "dynamic_values_bytes" (unsigned 32))
+                   (* 5000 sb-vm:n-word-bytes))
+-             (dynamic-space-size-good-p))
++             (dynamic-space-size-good-p 260))
+     (exit :code 42))
+ EOF
+ status=$?
+-rm "$tmpcore" "${tmpcore}2"
+ if [ $status -ne 42 ]; then
+     echo "re-saved executable used wrong memory size options"
+     exit 1
+ fi
+ echo "::: Success"
+ 
++echo "::: Running :DYNAMIC-SPACE-SIZE-ENV-IGNORE"
++NIX_SBCL_DYNAMIC_SPACE_SIZE=432MB ./"${tmpcore}2" --no-userinit --no-sysinit --noprint <<EOF
++  (when (dynamic-space-size-good-p 260)
++    (exit :code 42))
++EOF
++status=$?
++if [ $status -ne 42 ]; then
++    echo "re-saved executable should have ignored memory specification from env"
++    exit 1
++fi
++echo "::: Success"
++rm "$tmpcore" "${tmpcore}2"
++
++
++
+ exit $EXIT_TEST_WIN
+-- 
+2.48.1
+

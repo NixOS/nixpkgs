@@ -1,0 +1,41 @@
+diff --git a/build.gradle b/build.gradle
+index 97fd54f..128a269 100755
+--- a/build.gradle
++++ b/build.gradle
+@@ -5,8 +5,8 @@ group 'com.reandroid.apkeditor'
+ version '1.4.1'
+ 
+ java {
+-    sourceCompatibility JavaVersion.VERSION_1_8
+-    targetCompatibility JavaVersion.VERSION_1_8
++    sourceCompatibility JavaVersion.VERSION_17
++    targetCompatibility JavaVersion.VERSION_17
+ }
+ 
+ if (JavaVersion.current().isJava8Compatible()) {
+@@ -22,13 +22,13 @@ repositories {
+ 
+ dependencies {
+     //implementation("io.github.reandroid:ARSCLib:+")
+-    compile(files("$rootProject.projectDir/libs/ARSCLib.jar"))
++    implementation(files("$rootProject.projectDir/libs/ARSCLib.jar"))
+ 
+     // built from: https://github.com/REAndroid/smali-lib
+-    compile(files("$rootProject.projectDir/libs/smali.jar"))
++    implementation(files("$rootProject.projectDir/libs/smali.jar"))
+ 
+     // built from: https://github.com/REAndroid/JCommand
+-    compile(files("$rootProject.projectDir/libs/JCommand.jar"))
++    implementation(files("$rootProject.projectDir/libs/JCommand.jar"))
+ }
+ 
+ processResources {
+@@ -52,7 +52,7 @@ task fatJar(type: Jar) {
+                 'Main-Class': 'com.reandroid.apkeditor.Main'
+         )
+     }
+-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
++    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+     with jar
+ }
+ 

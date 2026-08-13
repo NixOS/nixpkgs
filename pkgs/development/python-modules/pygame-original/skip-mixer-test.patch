@@ -1,0 +1,12 @@
+diff --git a/test/mixer_test.py b/test/mixer_test.py
+index 0b11c5a3..2d5b2cd5 100644
+--- a/test/mixer_test.py
++++ b/test/mixer_test.py
+@@ -809,6 +809,7 @@ class ChannelTypeTest(unittest.TestCase):
+         with self.assertRaisesRegex(pygame.error, "mixer not initialized"):
+             channel.unpause()
+ 
++    @unittest.skip("call to get_busy() returns true")
+     def test_queue(self):
+         """
+         Ensure the Channel.queue() works correctly

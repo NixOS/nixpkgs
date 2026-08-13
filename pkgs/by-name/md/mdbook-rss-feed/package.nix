@@ -1,0 +1,39 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  withAtom ? false,
+  withJsonFeed ? false,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "mdbook-rss-feed";
+  version = "1.8.1";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "saylesss88";
+    repo = "mdbook-rss-feed";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EABRjqnNRNRyfbZBwzh8NMpFuE+voxAr2ugSB+8sIBw=";
+  };
+
+  cargoHash = "sha256-UkoNcwEq2Ga3PEF04Xly++VdBekdCBKSHggIGXjTMXU=";
+
+  buildFeatures = lib.optional withAtom [ "atom" ] ++ lib.optional withJsonFeed [ "json-feed" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "mdBook preprocessor that generates a full-content RSS 2.0 feed";
+    homepage = "https://github.com/saylesss88/mdbook-rss-feed";
+    changelog = "https://github.com/saylesss88/mdbook-rss-feed/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      pinage404
+    ];
+    mainProgram = "mdbook-rss-feed";
+  };
+})

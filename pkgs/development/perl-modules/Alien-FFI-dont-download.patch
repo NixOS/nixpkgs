@@ -1,0 +1,29 @@
+diff --git a/alienfile b/alienfile
+index 18d6b42..5ccf296 100644
+--- a/alienfile
++++ b/alienfile
+@@ -11,12 +11,6 @@ plugin 'PkgConfig'    => 'libffi';
+ 
+ share {
+ 
+-  plugin 'Download::GitHub' => (
+-    github_user => 'libffi',
+-    github_repo => 'libffi',
+-    asset => 1,
+-  );
+-
+   plugin 'Build::Autoconf' => ();
+ 
+   my $configure = '--disable-shared --enable-static --disable-builddir';
+diff --git a/t/00_diag.t b/t/00_diag.t
+index 51dd784..2bc314c 100644
+--- a/t/00_diag.t
++++ b/t/00_diag.t
+@@ -13,7 +13,6 @@ $modules{$_} = $_ for qw(
+   Alien::Base
+   Alien::Build
+   Alien::Build::MM
+-  Alien::Build::Plugin::Download::GitHub
+   Alien::Build::Plugin::Probe::Vcpkg
+   Capture::Tiny
+   ExtUtils::MakeMaker

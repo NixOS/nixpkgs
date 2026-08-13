@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 10ef443..5db6d37 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,7 +28,7 @@ endif()
+ find_package(Qt6 COMPONENTS Widgets Core)
+ if(BUILD_OUT_OF_TREE)
+   if(OS_LINUX OR OS_FREEBSD OR OS_OPENBSD)
+-    find_package(Qt6 REQUIRED Gui)
++    find_package(Qt6 REQUIRED GuiPrivate)
+   endif()
+ endif()
+ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core Qt::Widgets)

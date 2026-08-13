@@ -1,0 +1,9 @@
+--- SDL-ttf-0.6.3.0/Graphics/UI/SDL/TTF/Version.hsc.orig	2021-08-06 01:31:39.000000000 +0200
++++ SDL-ttf-0.6.3.0/Graphics/UI/SDL/TTF/Version.hsc	2021-08-06 01:32:03.000000000 +0200
+@@ -1,4 +1,6 @@
+ #include "SDL_ttf.h"
++-- override SDL_main.h redefining main to SDL_main on darwin
++#define main main
+ module Graphics.UI.SDL.TTF.Version
+     ( compiledFor
+     , linkedWith

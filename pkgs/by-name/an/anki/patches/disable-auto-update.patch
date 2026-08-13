@@ -1,0 +1,15 @@
+diff --git a/qt/aqt/main.py b/qt/aqt/main.py
+index 6c634132d..f3f3d4d10 100644
+--- a/qt/aqt/main.py
++++ b/qt/aqt/main.py
+@@ -1421,6 +1421,8 @@ title="{}" {}>{}</button>""".format(
+     ##########################################################################
+
+     def setup_auto_update(self, _log: list[DownloadLogEntry]) -> None:
++        return
++
+         from aqt.update import check_for_update
+
+         check_for_update()
+--
+2.42.0

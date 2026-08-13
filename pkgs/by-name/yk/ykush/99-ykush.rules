@@ -1,0 +1,14 @@
+# Yepkit YKUSH3.
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="f11b", MODE="0666"
+
+# Yepkit YKUSH2.
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="efed", MODE="0666"
+
+# Yepkit YKUSHXs
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="f0cd", MODE="0666"
+
+# Yepkit YKUSH(1).
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="f2f7", MODE="0666"
+
+# Yepkit YKUSH-legacy.
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="0042", MODE="0666"

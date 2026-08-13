@@ -1,0 +1,79 @@
+diff --git a/encutils/__init__.py b/encutils/__init__.py
+index 02922be..8a85574 100644
+--- a/encutils/__init__.py
++++ b/encutils/__init__.py
+@@ -442,7 +442,7 @@ def tryEncodings(text, log=None):  # noqa: C901
+ 
+         encoding = chardet.detect(text)["encoding"]
+ 
+-    except ImportError:
++    except (ImportError, AttributeError):
+         msg = 'Using simplified encoding detection, you might want to install chardet.'
+         if log:
+             log.warn(msg)
+encutils-1.0.0 on  main [!] is 📦 v1.0.0 via 🐍 v3.13.13 
+❯ hx encutils/__init__.py
+encutils-1.0.0 on  main [!] is 📦 v1.0.0 via 🐍 v3.13.13 took 59s 
+❯ git diff
+diff --git a/encutils/__init__.py b/encutils/__init__.py
+index 02922be..100e06e 100644
+--- a/encutils/__init__.py
++++ b/encutils/__init__.py
+@@ -441,6 +441,8 @@ def tryEncodings(text, log=None):  # noqa: C901
+         import chardet
+ 
+         encoding = chardet.detect(text)["encoding"]
++        if encoding is not None:
++            return encoding
+ 
+     except ImportError:
+         msg = 'Using simplified encoding detection, you might want to install chardet.'
+@@ -449,27 +451,27 @@ def tryEncodings(text, log=None):  # noqa: C901
+         else:
+             print(msg)
+ 
+-        encodings = (
+-            'ascii',
+-            'iso-8859-1',
+-            # 'windows-1252', # test later
+-            'utf-8',
+-        )
+-        encoding = None
+-        for e in encodings:
+-            try:
+-                text.decode(e)
+-            except UnicodeDecodeError:
+-                pass
+-            else:
+-                if 'iso-8859-1' == e:
+-                    try:
+-                        if '€' in text.decode('windows-1252'):
+-                            return 'windows-1252'
+-                    except UnicodeDecodeError:
+-                        pass
+-
+-                return e
++    encodings = (
++        'ascii',
++        'iso-8859-1',
++        # 'windows-1252', # test later
++        'utf-8',
++    )
++    encoding = None
++    for e in encodings:
++        try:
++            text.decode(e)
++        except UnicodeDecodeError:
++            pass
++        else:
++            if 'iso-8859-1' == e:
++                try:
++                    if '€' in text.decode('windows-1252'):
++                        return 'windows-1252'
++                except UnicodeDecodeError:
++                    pass
++
++            return e
+ 
+     return encoding
+ 
