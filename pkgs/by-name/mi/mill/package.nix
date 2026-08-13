@@ -62,17 +62,23 @@ stdenvNoCC.mkDerivation rec {
   # this is mostly downloading a pre-built artifact
   preferLocalBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  # the daemon mill starts is Java 17 bytecode; upstream's "every JVM from 11
+  # onward" is about the JVMs a build may target, not the one mill runs on
+  installPhase =
+    assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
+      mill requires Java 17 or newer, but ${jre.name} is ${jre.version}
+    '';
+    ''
+      runHook preInstall
 
-    install -Dm 555 $src $out/bin/.mill-wrapped
-    # can't use wrapProgram because it sets --argv0
-    makeWrapper $out/bin/.mill-wrapped $out/bin/mill \
-      --prefix PATH : "${lib.makeBinPath [ jre ]}" \
-      --set JAVA_HOME "${jre.home}"
+      install -Dm 555 $src $out/bin/.mill-wrapped
+      # can't use wrapProgram because it sets --argv0
+      makeWrapper $out/bin/.mill-wrapped $out/bin/mill \
+        --prefix PATH : "${lib.makeBinPath [ jre ]}" \
+        --set JAVA_HOME "${jre.home}"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   passthru.updateScript = {
     command = lib.getExe (writeShellApplication {
