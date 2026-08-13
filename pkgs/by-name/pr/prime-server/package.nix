@@ -33,8 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
   ];
 
-  # https://github.com/kevinkreiser/prime_server/issues/95
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=unused-variable" ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # https://github.com/kevinkreiser/prime_server/issues/95
+      "-Wno-error=unused-variable"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # logging.hpp calls sprintf, which the macOS SDK marks deprecated. The
+      # build uses -Werror, so the deprecation stops it.
+      "-Wno-error=deprecated-declarations"
+    ]
+  );
 
   meta = {
     description = "Non-blocking (web)server API for distributed computing and SOA based on zeromq";

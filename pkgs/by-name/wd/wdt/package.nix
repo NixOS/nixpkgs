@@ -51,11 +51,14 @@ stdenv.mkDerivation {
     };
   };
 
+  # We must increase the pinned C++ standard since headers from Folly
+  # v2026.07.27.00 require at least C++20
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
       --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
-        "find_package(Boost COMPONENTS filesystem REQUIRED)"
+        "find_package(Boost COMPONENTS filesystem REQUIRED)" \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
   '';
 
   meta = {

@@ -151,7 +151,24 @@ let
           );
 
         # Derived meta-data
-        useLLVM = final.isFreeBSD || final.isOpenBSD;
+        useLLVM =
+          final.isFreeBSD
+          || final.isOpenBSD
+          || final.isUefi
+          || final.isMsvc
+          ||
+            # because GCC does not support this platform yet
+            (with final; isWindows && isAarch64);
+
+        # Use the split GCC package set (`gccNGPackages`) instead of the
+        # monolithic `gcc`. No platform selects it yet; it is opt-in, set
+        # explicitly on a platform spec, so that the split set can be exercised
+        # before anything depends on it.
+        #
+        # I (@Ericson2314) plan on making obscure low-tier platforms (e.g.
+        # NetBSD) use it soon, so we can dogfood GCC NG and thereby iron out its
+        # bugs.
+        useGccNG = false;
 
         libc =
           if final.isDarwin then
@@ -176,9 +193,7 @@ let
             "uclibc"
           else if final.isAndroid then
             "bionic"
-          else if
-            final.isLinux # default
-          then
+          else if final.isLinux then
             "glibc"
           else if final.isFreeBSD then
             "fblibc"
@@ -189,6 +204,8 @@ let
           else if final.isAvr then
             "avrlibc"
           else if final.isGhcjs then
+            null
+          else if final.isUefi then
             null
           else if final.isNone then
             "newlib"

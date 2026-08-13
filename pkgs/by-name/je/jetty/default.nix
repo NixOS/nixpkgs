@@ -6,7 +6,7 @@
 }:
 
 let
-  common =
+  generic =
     { version, hash }:
     stdenvNoCC.mkDerivation rec {
       pname = "jetty";
@@ -51,12 +51,7 @@ let
 
 in
 {
-  jetty_11 = common {
-    version = "11.0.26";
-    hash = "sha256-uJgh/+/uGjchTgtoF38f7jIvbdrwdToAsqqVOlYtMIM=";
-  };
-
-  jetty_12 = common {
+  jetty_12 = generic {
     version = "12.1.11";
     hash = "sha256-fkXPjyO6xFZ/r5RiSzrEPgrrSSXLklQJ52BAmQocvpw=";
   };

@@ -27,11 +27,18 @@
   texinfo,
   which,
   gettext,
+  flex,
+  bison,
+  # Whether `monorepoSrc` is a VCS checkout rather than a release tarball. A
+  # checkout lacks the generated sources (gengtype-lex.cc and friends) that a
+  # tarball ships pre-built, so they have to be regenerated with flex and bison.
+  fromVCS ? false,
   getVersionFile,
   buildGccPackages,
-  targetPackages,
-  libc,
   bintools,
+  # Build the shared runtime libraries, and so have the driver's specs emit
+  # `-lgcc_s`. Derived the way the monolithic build derives it.
+  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries,
 }:
 let
   inherit (stdenv) targetPlatform hostPlatform;
@@ -81,6 +88,36 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
     })
 
+    # Not upstream yet; a follow-up to the series above (drop the `/raw` to
+    # read them). They extend that series' `<target>-as` preference to `PATH`,
+    # where we put the cross toolchain, so a cross compiler finds its tools
+    # the way a native one does. See below for the problems `--with-as` and
+    # `--with-ld` cause, and thus why we want to avoid them.
+    (fetchpatch {
+      name = "driver-factor-out-env-path-parsing.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-1-git@JohnEricson.me/raw";
+      hash = "sha256-2qUUMWuyxX4mVaBPeNnHIiMl/aN7ejWM5stTSFWxD7g=";
+    })
+    (fetchpatch {
+      name = "driver-search-PATH-ourselves.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
+      # The posted patch is against trunk, which spells this cast with the C++
+      # operator.  GCC 15 still uses the CONST_CAST macro, and the line is
+      # context rather than a change, so it cannot fuzz-match.  Rewrite it
+      # here rather than keeping a forked copy of the whole patch.
+      postFetch = ''
+        substituteInPlace "$out" \
+          --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
+                         'string, CONST_CAST (char **, commands[i].argv),'
+      '';
+      hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
+    })
+    (fetchpatch {
+      name = "driver-search-PATH-machine-prefix.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
+      hash = "sha256-Q5CJpJKD11kadIKselQdHgNe26GqojpyAAmlAyHnsB0=";
+    })
+
     (getVersionFile "gcc/fix-collect2-paths.diff")
   ];
 
@@ -93,12 +130,39 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  # The target assembler and linker have to be *runnable here*, during
+  # configure. GCC probes them for capabilities, and a probe it cannot run is
+  # not an error -- it silently records "no". Without the target `ld` on
+  # `PATH`, every `gcc_cv_ld_*` probe fails that way, and the two that matter
+  # most are `HAVE_GAS_HIDDEN` (which needs `gcc_cv_as_hidden` *and*
+  # `gcc_cv_ld_hidden`) and `HAVE_LD_EH_FRAME_HDR`.
+  #
+  # Losing `HAVE_GAS_HIDDEN` is the nasty one: `-fvisibility=hidden` degrades
+  # into a no-op that merely warns, so every symbol stays preemptible and GCC's
+  # own same-translation-unit `R_X86_64_PC32` references become invalid when
+  # linking a shared library.
+  #
+  # The *unwrapped* bintools: `as` and `ld` proper carry no target-libc
+  # reference, so the decoupling this package set exists for still holds.
+  #
+  # Note this is `PATH` rather than `--with-as`/`--with-ld` on purpose. We want
+  # configure to *ask* the real tools what they support, and we want it to bake
+  # nothing else: those flags record `DEFAULT_ASSEMBLER`/`DEFAULT_LINKER` as
+  # absolute store paths, and the driver then runs exactly those binaries
+  # instead of the wrapped ones it is meant to defer to.
+  depsBuildTarget = [ (bintools.bintools or bintools) ];
+
   nativeBuildInputs = [
     texinfo
     which
     gettext
   ]
-  ++ lib.optional (perl != null) perl;
+  ++ lib.optional (perl != null) perl
+  ++ lib.optionals fromVCS [
+    flex
+    bison
+  ];
 
   buildInputs = [
     gmp
@@ -197,7 +261,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-install-libiberty"
     "--disable-multilib"
     "--disable-nls"
-    "--disable-shared"
+    # Derived rather than forced off: the driver's specs only emit `-lgcc_s`
+    # for a target that has shared libraries, so hardcoding this leaves every
+    # throwing C++ program unlinkable even though `libgcc_s.so` is built and
+    # findable. Same predicate the monolithic build uses.
+    (lib.enableFeature enableTargetShared "shared")
     "--enable-default-pie"
     "--enable-languages=${
       lib.concatStrings (
@@ -218,12 +286,26 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-headers"
     "--with-gnu-as"
     "--with-gnu-ld"
-    "--with-as=${lib.getExe' bintools "${bintools.targetPrefix}as"}"
+    # Deliberately no `--with-as` / `--with-ld`. Those bake
+    # `DEFAULT_ASSEMBLER` and `DEFAULT_LINKER` -- absolute store paths -- into
+    # the compiler, so the driver runs exactly those binaries and stops
+    # deferring to the wrapped tools it is meant to use.
+    #
+    # Nothing has to be baked. At configure time the tools are on `PATH` via
+    # `depsBuildTarget`, which is what the capability probes need; at use time
+    # the driver finds them on `PATH` under their target-prefixed names, via
+    # the `find_a_program` patches above.
     "--with-system-zlib"
     "--without-included-gettext"
     "--enable-linker-build-id"
-    "--with-sysroot=${lib.getDev (targetPackages.libc or libc)}"
-    "--with-native-system-header-dir=/include"
+    # Deliberately *no* `--with-sysroot` / `--with-native-system-header-dir`
+    # pointing at the target libc. Baking a libc store path into the compiler
+    # makes every libc change rebuild the compiler, which is precisely the
+    # coupling this split package set exists to remove. cc-wrapper already
+    # supplies the target libc (`-idirafter <libc.dev>/include` and the
+    # corresponding `-B`/`-L` flags), so the compiler proper does not need to
+    # know about it -- exactly as in the LLVM package set, where `clang`
+    # likewise carries no libc reference (`--without-headers` above).
   ]
   ++ lib.optionals enablePlugin [
     "--enable-plugin"
@@ -235,6 +317,20 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
       "--with-multilib-list="
     ];
+
+  # `LIMITS_H_TEST` decides whether gcc's generated `syslimits.h` chains to the
+  # target libc's `limits.h` (`#include_next`) or is emitted self-contained. It
+  # defaults to a `[ -f $(BUILD_SYSTEM_HEADER_DIR)/limits.h ]` probe, which
+  # necessarily fails here: we deliberately do not point the compiler at a
+  # sysroot (see `configureFlags`), so there is no libc for it to find at build
+  # time.
+  #
+  # Self-contained is the wrong answer regardless. Every target in this package
+  # set is hosted, and cc-wrapper always supplies a libc, so the chained header
+  # is what resolves correctly at *use* time. Without it, anything the libc's
+  # `limits.h` defines and gcc's does not -- `PATH_MAX` being the common one --
+  # goes missing from every libgcc source that needs it.
+  makeFlags = [ "LIMITS_H_TEST=true" ];
 
   doCheck = false;
 

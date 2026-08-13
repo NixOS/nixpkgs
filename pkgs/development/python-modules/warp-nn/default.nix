@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "warp-nn";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "warp-nn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dziGJhuuLHy8gEB39tvpLTHjPOwz6YVhsCB6KbIb7vI=";
+    hash = "sha256-bs0YXYXPIwXKlFrsiZ5hdJ/E4uT4x3Ex/dJEWfurVcg=";
   };
 
   build-system = [
