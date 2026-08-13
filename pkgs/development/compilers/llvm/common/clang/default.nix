@@ -216,6 +216,8 @@ stdenv.mkDerivation (
       };
     };
 
+    __structuredAttrs = true;
+
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
