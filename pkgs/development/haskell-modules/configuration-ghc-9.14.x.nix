@@ -81,6 +81,9 @@ with haskellLib;
   #
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_14_1_0;
+  ghc-lib = doDistribute self.ghc-lib_9_14_1_20251220;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_14_1_20251220;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
 
   #
   # Jailbreaks
