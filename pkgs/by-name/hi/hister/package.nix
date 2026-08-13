@@ -10,6 +10,7 @@
   nix-update-script,
   pkg-config,
   versionCheckHook,
+  nixosTests,
 }:
 buildGoModule (finalAttrs: {
   pname = "hister";
@@ -87,6 +88,7 @@ buildGoModule (finalAttrs: {
         "frontend"
       ];
     };
+    tests = { inherit (nixosTests) hister; };
   };
 
   meta = {
