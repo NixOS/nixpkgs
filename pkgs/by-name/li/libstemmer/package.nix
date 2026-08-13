@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ perl ];
 
+  strictDeps = true;
+
   prePatch = ''
     patchShebangs .
   ''
