@@ -208,7 +208,13 @@ in
       abi <abi/4.0>,
       include <tunables/global>
 
-      profile ${cfg.package}/bin/miniflux {
+      # Flag `attach_disconnected` is necessary
+      # because the PostgreSQL socket path appears
+      # as a "disconnected" path: `run/postgresql/.s.PGSQL.XXXX`,
+      # without the trailing slash, which AppArmor can't resolve.
+      # The flag prepends a `/`, which isn't recommended,
+      # but there aren't any alternative currently.
+      profile ${cfg.package}/bin/miniflux flags=(attach_disconnected) {
         include <abstractions/base>
         include <abstractions/nameservice>
         include <abstractions/ssl_certs>
@@ -216,6 +222,8 @@ in
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         ${cfg.package}/bin/miniflux r,
         /run/miniflux/** rw,
+        /run/postgresql/.s.PGSQL.* rw,
+        /run/credentials/** r,
         include if exists <local/bin.miniflux>
       }
     '';
