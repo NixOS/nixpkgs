@@ -28,6 +28,9 @@ lib.fetchers.withNormalizedHash
       builder = ./builder.sh;
       nativeBuildInputs = [ curl ];
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       # New-style output content requirements.
       inherit outputHash outputHashAlgo;
       outputHashMode = "recursive";
