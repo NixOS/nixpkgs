@@ -51,6 +51,11 @@ let
       installPhase = ''
         install -Dm755 $src $out/bin/amm
 
+        # Upstream ships a .bat/.sh polyglot with no interpreter directive, so
+        # without this execve gives ENOEXEC to every caller that does not retry
+        # under /bin/sh the way a shell does. patchShebangs pins it afterwards.
+        sed -i '1i #!/bin/sh' $out/bin/amm
+
         # The launcher prefers $JAVA_HOME over its own default, so both branches
         # have to be pinned; patching only the default leaves `override { jre = ...; }`
         # with no effect in any shell that sets JAVA_HOME. sed rather than
@@ -69,7 +74,6 @@ let
       ''
       + lib.optionalString disableRemoteLogging ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
-        sed -i '1i #!/bin/sh' $out/bin/amm
       '';
 
       passthru = {
