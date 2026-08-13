@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.scala-sbt.org/";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
