@@ -158,5 +158,9 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    # https://github.com/keybase/client/blob/19f9cfeddb22d7206404987aed5300bfd667d7df/shared/package.json#L172
+    knownVulnerabilities = [
+      "Electron 23 is EOL"
+    ];
   };
 }
