@@ -14,6 +14,7 @@
   restinio,
   llhttp,
   openssl,
+  simdutf,
   fmt,
   nix-update-script,
   enableProxyServerAndClient ? false,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opendht";
-  version = "3.5.4";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnnd6yATIk/TEuFG/M98d+pfeh42IKWBBYjkTP52xeM=";
+    hash = "sha256-LquXkbJUBgZfb7cc+Lc1lejO2NxFur83iI0QOuOg5bE=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     restinio
     llhttp
     openssl
+    simdutf
   ];
 
   cmakeFlags =
