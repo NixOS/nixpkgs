@@ -2524,17 +2524,13 @@ let
         };
       in
       old.immunotation.overrideAttrs (attrs: {
-        patches = [ ./patches/immunotation.patch ];
-        postPatch = ''
-          substituteInPlace "R/external_resources_input.R" --replace-fail \
-            "nix-NetMHCpan-4.1-allele-list" ${MHC41alleleList}
-
-          substituteInPlace "R/external_resources_input.R" --replace-fail \
-            "nix-NETMHCIIpan-4.0-alleles-name-list" ${MHCII40alleleList}
-
-          substituteInPlace "R/AFND_interface.R" --replace-fail \
-            "nix-valid-geographics" ${validGeographics}
-        '';
+        patches = [
+          (pkgs.replaceVars ./patches/immunotation.patch {
+            "mhc41_allele_list" = MHC41alleleList;
+            "mhcii40_alleles_name_list" = MHCII40alleleList;
+            "valid_geographics" = validGeographics;
+          })
+        ];
       });
 
     iscream = old.iscream.overrideAttrs (attrs: {
