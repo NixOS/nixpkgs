@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     ninja
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dsysprofd=none"
     "-Dgtk=false"
