@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
+  pytestCheckHook,
   setuptools-scm,
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ThorlabsPM100" ];
 
