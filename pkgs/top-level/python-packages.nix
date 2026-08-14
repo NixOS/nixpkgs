@@ -2153,6 +2153,8 @@ self: super: with self; {
 
   bagit = callPackage ../development/python-modules/bagit { };
 
+  bahttext = callPackage ../development/python-modules/bahttext { };
+
   baidu-aip = callPackage ../development/python-modules/baidu-aip { };
 
   baize = callPackage ../development/python-modules/baize { };
@@ -6397,6 +6399,8 @@ self: super: with self; {
   formulae = callPackage ../development/python-modules/formulae { };
 
   formulaic = callPackage ../development/python-modules/formulaic { };
+
+  formulas = callPackage ../development/python-modules/formulas { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
@@ -19363,6 +19367,8 @@ self: super: with self; {
       { };
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp { };
+
+  sphinxcontrib-restbuilder = callPackage ../development/python-modules/sphinxcontrib-restbuilder { };
 
   sphinxcontrib-seqdiag = callPackage ../development/python-modules/sphinxcontrib-seqdiag { };
 
