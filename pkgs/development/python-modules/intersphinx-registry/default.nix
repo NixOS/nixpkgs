@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   flit-core,
@@ -32,6 +33,10 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-yFpk3NZO2iCjuJ43WvssbDYxNJ6G6KfY5pcTCilsGQs=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     flit-core
