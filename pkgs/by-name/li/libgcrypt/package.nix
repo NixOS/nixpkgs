@@ -15,13 +15,12 @@
 }:
 
 assert enableCapabilities -> stdenv.hostPlatform.isLinux;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgcrypt";
   version = "1.12.2";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/libgcrypt/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-fOM8JJIiGgQ2+WqFACFenz49y1/SanV81BXnqEO6vV4=";
   };
 
@@ -125,11 +124,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/libgcrypt/";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${finalAttrs.pname}.git;a=blob;f=NEWS;hb=refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
     description = "General-purpose cryptographic library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
-}
+})
