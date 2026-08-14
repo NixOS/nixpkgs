@@ -16,7 +16,7 @@
 
 let
   pname = "flclash";
-  version = "0.8.94";
+  version = "0.8.95";
 
   src = fetchFromGitHub {
     owner = "chen08209";
@@ -27,7 +27,7 @@ let
       export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
       export GIT_CONFIG_VALUE_0=git@github.com:
     '';
-    hash = "sha256-kLSyLsnTzYspPQ2IZRGdUjHouFKvZWTvuYdcGxLWPdw=";
+    hash = "sha256-i8s4GPwiFOMa4bZ9NUYZU9qEbDMtUJs2UreKQcHDQdo=";
     fetchSubmodules = true;
   };
 
@@ -44,7 +44,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-sf8PXdkqgq/0hxbxP26a73XLT88tGiH5NDV6LoiHuZM=";
+    vendorHash = "sha256-7OqFIaxIyhu5bOY5i7hzNO1D6QJxMUc2kNieMuCI4gw=";
 
     env.CGO_ENABLED = 0;
 
@@ -64,7 +64,7 @@ let
 
     sourceRoot = "${src.name}/plugins/rust_api/rust";
 
-    cargoHash = "sha256-8zY3VkbEatU78qUTDIocasw4ca/jC94NUjDvcKnkxAA=";
+    cargoHash = "sha256-Os8N7HGQvpm6VQ9ZnVZ6xp0xyZSGP+E2m9hR5tzxYqo=";
 
     installPhase = ''
       runHook preInstall
@@ -119,6 +119,9 @@ flutter344.buildFlutterApplication {
   ];
 
   customSourceBuilders = {
+    sqlcipher_flutter_libs = { src, ... }: src;
+    sqlite3_flutter_libs = { src, ... }: src;
+
     setup =
       { version, src, ... }:
       stdenv.mkDerivation {
