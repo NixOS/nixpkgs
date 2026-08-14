@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [
     ];
+    # https://github.com/GetPublii/Publii/blob/b84444700eee742d1cd5631c2c4ca5d38efcb8db/package.json#L46
+    knownVulnerabilities = [
+      "Electron version 37 is EOL"
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
