@@ -70,6 +70,7 @@ if minbootSupported then
             ln -s ${libcPackage}/lib $out/lib
             ln -s ${libcPackage}/include $out/include
           '';
+          __structuredAttrs = true;
           passthru.isFromBootstrapFiles = true;
         };
         gcc-unwrapped = compilerPackage;
@@ -157,6 +158,7 @@ else
           + lib.optionalString (localSystem.libc == "musl") ''
             ln -s ${bootstrapTools}/include-libc $out/include
           '';
+          __structuredAttrs = true;
           passthru.isFromBootstrapFiles = true;
         };
         gcc-unwrapped = bootstrapTools;
