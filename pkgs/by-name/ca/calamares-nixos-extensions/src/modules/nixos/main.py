@@ -259,9 +259,6 @@ cfgmisc = """\
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
-
-    # Use the WirePlumber session manager
-    #wireplumber.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
