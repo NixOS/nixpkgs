@@ -160,5 +160,9 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
+    # https://github.com/beekeeper-studio/beekeeper-studio/blob/a19c6bc11aaad4692d44f303be150443734c7fb7/apps/studio/package.json#L200
+    knownVulnerabilities = [
+      "Electron 39 is EOL"
+    ];
   };
 })
