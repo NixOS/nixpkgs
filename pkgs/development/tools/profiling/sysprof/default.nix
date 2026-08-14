@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "System-wide profiler for Linux";
     homepage = "https://gitlab.gnome.org/GNOME/sysprof";
