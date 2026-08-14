@@ -970,6 +970,9 @@ mapAliases {
   gh-copilot = throw "'gh-copilot' has been removed since it has been deprecated and archived upstream. Consider using 'github-copilot-cli' instead"; # Added 2026-01-20
   gImageReader = gimagereader; # Added 2026-02-08
   gImageReader-qt = gimagereader-qt; # Added 2026-02-08
+  gimp2 = throw "'gimp2' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp' instead."; # Added 2026-08-14
+  gimp2-with-plugins = throw "'gimp2-with-plugins' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp-with-plugins' instead."; # Added 2026-08-14
+  gimp2Plugins = throw "'gimp2Plugins' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp3' plus 'gimpPlugins' instead."; # Added 2026-08-14
   gimp3 = gimp; # Added 2025-10-03
   gimp3-with-plugins = gimp-with-plugins; # Added 2025-10-03
   gimp3Plugins = gimpPlugins; # Added 2025-10-03
