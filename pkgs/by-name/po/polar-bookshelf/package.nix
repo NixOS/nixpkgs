@@ -131,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    knownVulnerabilities = [
+      "Electron version 7 is EOL"
+    ];
   };
 
 })
