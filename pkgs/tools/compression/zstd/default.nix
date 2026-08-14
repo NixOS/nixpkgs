@@ -38,12 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bashNonInteractive;
+
+  strictDeps = true;
 
   patches = [
     # This patches makes sure we do not attempt to use the MD5 implementation
@@ -143,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Zstandard real-time compression algorithm";
