@@ -81,5 +81,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jupyterlite/jupyterlite-sphinx/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
 })

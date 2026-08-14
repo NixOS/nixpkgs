@@ -78,5 +78,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "intersphinx-registry";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
 })
