@@ -8145,6 +8145,13 @@
     githubId = 7494394;
     name = "Karim Elatov";
   };
+  eldios = {
+    email = "emanuele.lele.calo@gmail.com";
+    github = "eldios";
+    githubId = 483767;
+    name = "Emanuele 'Lele' Calo";
+    keys = [ { fingerprint = "AA6B C774 3F8F 9AD8 4BBA  15C7 2CCB F4B7 1EFF DD46"; } ];
+  };
   eleanor = {
     email = "dejan@proteansec.com";
     github = "proteansec";
