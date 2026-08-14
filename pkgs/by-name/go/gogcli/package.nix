@@ -23,15 +23,15 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steipete/gogcli/internal/cmd.version=v${finalAttrs.version}"
-    "-X github.com/steipete/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
-    "-X github.com/steipete/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/openclaw/gogcli/internal/cmd.version=v${finalAttrs.version}"
+    "-X github.com/openclaw/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
+    "-X github.com/openclaw/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "gog --version";
-    version = "v${finalAttrs.version}";
+    version = "v${finalAttrs.version} (${finalAttrs.src.rev} 1970-01-01T00:00:00Z)";
   };
 
   meta = {
