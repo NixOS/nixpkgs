@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Real-time network diagnostics in your terminal.";
-    homepage = "https://github.com/matthart1983/netwatch";
-    changelog = "https://github.com/matthart1983/netwatch/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://www.netwatchlabs.com/labs/netwatch";
+    changelog = "https://github.com/matthart1983/netwatch/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "netwatch";
     maintainers = with lib.maintainers; [ tomasrivera ];
