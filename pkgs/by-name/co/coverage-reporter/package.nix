@@ -7,13 +7,13 @@
 }:
 crystal_1_17.buildCrystalPackage rec {
   pname = "coverage-reporter";
-  version = "0.6.17";
+  version = "0.6.18";
 
   src = fetchFromGitHub {
     owner = "coverallsapp";
     repo = "coverage-reporter";
     tag = "v${version}";
-    hash = "sha256-wbxPjNAUubbL9TJnyqR7aYkMmADkIuD2PF00xI2wa84=";
+    hash = "sha256-X/BD3w7c7xxeozYJ41K26X3gSgFaSnM+ocoTuM44ncE=";
   };
 
   shardsFile = ./shards.nix;
