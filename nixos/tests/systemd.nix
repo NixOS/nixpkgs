@@ -50,7 +50,7 @@
             )
           }
           mkdir -p /tmp/shared
-          mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
+          mount -t virtiofs shared /tmp/shared
           touch /tmp/shared/shutdown-test
           umount /tmp/shared
         '';
