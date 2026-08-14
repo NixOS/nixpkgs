@@ -8,6 +8,7 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
+  graphviz,
   gts,
   hdf5,
   libGLU,
@@ -133,6 +134,7 @@ freecad-utils.makeCustomizable (
     qtWrapperArgs =
       let
         binPath = lib.makeBinPath [
+          graphviz
           libredwg
           which # for locating tools
         ];
