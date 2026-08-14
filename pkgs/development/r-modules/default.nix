@@ -2529,7 +2529,6 @@ let
     iscream = old.iscream.overrideAttrs (attrs: {
       # https://huishenlab.github.io/iscream/articles/htslib.html
       # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
-      nativeBuildInputs = builtins.filter (el: el.pname != "Rhtslib") attrs.nativeBuildInputs;
       propagatedBuildInputs = builtins.filter (el: el.pname != "Rhtslib") attrs.propagatedBuildInputs;
 
       buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.htslib ];
