@@ -1481,13 +1481,13 @@
     "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "vpsfreecz_vpsadmin": {
-    "hash": "sha256-Yi5mFhJsGGPg3IyOdgV2mTfj5ZVd76vu3/JFNrh5+Wc=",
+    "hash": "sha256-T+az9OH9/ZMSJewZpC9VLSXOZ5N/wz00VRnl9Ab4aeI=",
     "homepage": "https://registry.terraform.io/providers/vpsfreecz/vpsadmin",
     "owner": "vpsfreecz",
     "repo": "terraform-provider-vpsadmin",
-    "rev": "v1.2.0",
+    "rev": "v1.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
+    "vendorHash": "sha256-98lrEH7j4Fl0oSEoL75e0h+8ySLacPK2k0OehY3jqhA="
   },
   "vultr_vultr": {
     "hash": "sha256-hK4/Pzj0UtWDLQS3cRMC73ZRr20HCWqI+jUlTUHcHaw=",
