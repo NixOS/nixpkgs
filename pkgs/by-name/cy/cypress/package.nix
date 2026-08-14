@@ -127,5 +127,9 @@ stdenv.mkDerivation rec {
       Crafter
       jonhermansen
     ];
+    # https://github.com/cypress-io/cypress/blob/3cbfbe76b02816280e1d9fa5bf1d30e0e39aaaf1/package.json#L144
+    knownVulnerabilities = [
+      "Electron 33 is EOL"
+    ];
   };
 }
