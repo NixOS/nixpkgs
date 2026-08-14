@@ -519,6 +519,18 @@
     githubId = 908758;
     name = "Abigail Bunyan";
   };
+  abkein = {
+    email = "rickbatra0z@gmail.com";
+    githubId = 55838194;
+    github = "abkein";
+    matrix = "@ab-kein:matrix.org";
+    name = "Ab Kein";
+    keys = [
+      {
+        fingerprint = "1702 7FA2 CDE2 89D5 D161  3C39 94A8 4F22 E630 CA42";
+      }
+    ];
+  };
   aboseley = {
     email = "adam.boseley@gmail.com";
     github = "aboseley";
