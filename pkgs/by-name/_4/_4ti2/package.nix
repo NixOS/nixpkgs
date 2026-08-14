@@ -12,6 +12,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
   version = "1.6.15";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
@@ -33,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     glpk
     gmp
   ];
+
+  enableParallelBuilding = true;
 
   installFlags = [ "install-exec" ];
 
