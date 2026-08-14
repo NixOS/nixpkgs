@@ -1,0 +1,13 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/sandbox/LinuxSandboxedSpawnRunner.java b/src/main/java/com/google/devtools/build/lib/sandbox/LinuxSandboxedSpawnRunner.java
+index dc188b4ce2..46d338c9af 100644
+--- a/src/main/java/com/google/devtools/build/lib/sandbox/LinuxSandboxedSpawnRunner.java
++++ b/src/main/java/com/google/devtools/build/lib/sandbox/LinuxSandboxedSpawnRunner.java
+@@ -106,7 +106,7 @@ final class LinuxSandboxedSpawnRunner extends AbstractSandboxSpawnRunner {
+     ImmutableList<String> linuxSandboxArgv =
+         LinuxSandboxCommandLineBuilder.commandLineBuilder(linuxSandbox)
+             .setTimeout(options.getLocalSigkillGraceSeconds())
+-            .buildForCommand(ImmutableList.of("/bin/true"));
++            .buildForCommand(ImmutableList.of("@binTrue@"));
+     ImmutableMap<String, String> env = ImmutableMap.of();
+     Path execRoot = cmdEnv.getExecRoot();
+     File cwd = execRoot.getPathFile();

@@ -1,0 +1,295 @@
+diff --git a/.github/workflows/push-master.yml b/.github/workflows/push-master.yml
+index 6007f64..a98a23c 100644
+--- a/.github/workflows/push-master.yml
++++ b/.github/workflows/push-master.yml
+@@ -2,7 +2,7 @@ name: HyperHDR CI Build
+ 
+ on:
+   push:
+-#  pull_request:
++  pull_request:
+ 
+ env:
+     USE_CACHE: ${{ vars.USE_CACHE && vars.USE_CACHE || true }}
+@@ -109,6 +109,7 @@ jobs:
+ 
+       - name: Clear branch ccache storage
+         uses: yumemi-inc/clean-cache-action@v1
++        continue-on-error: true
+         with:
+           ref: ${{ github.event.ref }}
+           key: ${{ matrix.linuxVersion }}-${{ matrix.dockerImage }}-ccache-
+@@ -193,6 +194,7 @@ jobs:
+ 
+       - name: Clear branch ccache storage
+         uses: yumemi-inc/clean-cache-action@v1
++        continue-on-error: true
+         with:
+           ref: ${{ github.event.ref }}
+           key: macOS-ccache-${{ matrix.NICE_NAME }}
+@@ -284,6 +286,7 @@ jobs:
+ 
+       - name: Clear branch ccache storage
+         uses: yumemi-inc/clean-cache-action@v1
++        continue-on-error: true
+         with:
+           ref: ${{ github.event.ref }}
+           key: ${{ runner.os }}-ccache
+diff --git a/BUILDING.md b/BUILDING.md
+index 0347079..759cd6a 100644
+--- a/BUILDING.md
++++ b/BUILDING.md
+@@ -44,6 +44,10 @@ Use -D prefix when configuring the build.
+   * USE_CCACHE_CACHING = ON | OFF, enable CCache support if available
+   * USE_SYSTEM_MQTT_LIBS = ON | OFF, prefer system qMQTT libs
+   * USE_SYSTEM_FLATBUFFERS_LIBS = ON | OFF, prefer system Flatbuffers libs
++  * USE_SYSTEM_SDBUS_CPP_LIBS = ON | OFF, prefer system sdbus_c++ libs
++  * USE_SYSTEM_LUNASVG_LIBS = ON | OFF, prefer system lunasvg libs
++  * USE_SYSTEM_NANOPB_LIBS = ON | OFF, prefer system nanopb libs
++  * USE_SYSTEM_STB_LIBS = ON | OFF, prefer system stb libs
+   * USE_STATIC_QT_PLUGINS = ON | OFF, embed static QT-plugins into the application
+   * USE_STANDARD_INSTALLER_NAME = ON | OFF, use standard Linux package naming
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b918a81..fbf8d6b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,6 +34,10 @@ SET ( DEFAULT_PROTOBUF                    ON  )
+ SET ( DEFAULT_WS281XPWM                   OFF )
+ SET ( DEFAULT_USE_SYSTEM_FLATBUFFERS_LIBS ON  )
+ SET ( DEFAULT_USE_SYSTEM_MQTT_LIBS        OFF )
++SET ( DEFAULT_USE_SYSTEM_SDBUS_CPP_LIBS   OFF )
++SET ( DEFAULT_USE_SYSTEM_LUNASVG_LIBS     OFF )
++SET ( DEFAULT_USE_SYSTEM_NANOPB_LIBS      OFF )
++SET ( DEFAULT_USE_SYSTEM_STB_LIBS         OFF )
+ SET ( DEFAULT_MF                          OFF )
+ SET ( DEFAULT_DX                          OFF )
+ SET ( DEFAULT_AVF                         OFF )
+@@ -509,6 +513,18 @@ colorMe("USE_SYSTEM_MQTT_LIBS = " ${USE_SYSTEM_MQTT_LIBS})
+ option(USE_SYSTEM_FLATBUFFERS_LIBS "Use system flatbuffers libs" ${DEFAULT_USE_SYSTEM_FLATBUFFERS_LIBS})
+ colorMe("USE_SYSTEM_FLATBUFFERS_LIBS = " ${USE_SYSTEM_FLATBUFFERS_LIBS})
+ 
++option(USE_SYSTEM_SDBUS_CPP_LIBS "Use system sdbus-c++ libs" ${DEFAULT_USE_SYSTEM_SDBUS_CPP_LIBS})
++colorMe("USE_SYSTEM_SDBUS_CPP_LIBS = " ${USE_SYSTEM_SDBUS_CPP_LIBS})
++
++option(USE_SYSTEM_LUNASVG_LIBS "Use system lunasvg libs" ${DEFAULT_USE_SYSTEM_LUNASVG_LIBS})
++colorMe("USE_SYSTEM_LUNASVG_LIBS = " ${USE_SYSTEM_LUNASVG_LIBS})
++
++option(USE_SYSTEM_NANOPB_LIBS "Use system nanopb libs" ${DEFAULT_USE_SYSTEM_NANOPB_LIBS})
++colorMe("USE_SYSTEM_NANOPB_LIBS = " ${USE_SYSTEM_NANOPB_LIBS})
++
++option(USE_SYSTEM_STB_LIBS "Use system stb libs" ${DEFAULT_USE_SYSTEM_STB_LIBS})
++colorMe("USE_SYSTEM_STB_LIBS = " ${USE_SYSTEM_STB_LIBS})
++
+ option(USE_STATIC_QT_PLUGINS "Enable static QT plugins" ${DEFAULT_STATIC_QT_PLUGINS})
+ colorMe("USE_STATIC_QT_PLUGINS = " ${USE_STATIC_QT_PLUGINS})
+ 
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index b4d23ad..38acea2 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -38,7 +38,7 @@ set_target_properties(sqlite3 PROPERTIES
+ target_compile_definitions(sqlite3 PUBLIC
+ 	SQLITE_THREADSAFE=2
+ 	SQLITE_DEFAULT_MEMSTATUS=0
+-	SQLITE_DEFAULT_SYNCHRONOUS=3	
++	SQLITE_DEFAULT_SYNCHRONOUS=3
+ 	SQLITE_OMIT_AUTHORIZATION
+ 	SQLITE_OMIT_DEPRECATED
+ )
+@@ -47,23 +47,32 @@ target_compile_definitions(sqlite3 PUBLIC
+ # Protobuf-nanopb
+ #=============================================================================
+ 
+-set(PROTOBUF-NANOPB-SOURCES
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb.h
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_common.h
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_common.c
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_encode.h
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_encode.c
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_decode.h
+-		${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_decode.c)
+-
+-add_library(protobuf-nanopb OBJECT ${PROTOBUF-NANOPB-SOURCES})
+-set_target_properties(protobuf-nanopb PROPERTIES OUTPUT_NAME protobuf-nanopb)
+-install(TARGETS protobuf-nanopb EXPORT nanopb-targets
+-	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++if (USE_SYSTEM_NANOPB_LIBS)
++	find_package(nanopb)
++	if (NOT nanopb_FOUND)
++		message(WARNING "Could NOT find nanopb system libraries. Fallback to nanopb submodule.")
++	endif()
++endif()
+ 
+-target_include_directories(protobuf-nanopb INTERFACE
+-	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/nanopb>
+-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
++if (NOT USE_SYSTEM_NANOPB_LIBS OR NOT nanopb_FOUND)
++	set(PROTOBUF-NANOPB-SOURCES
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb.h
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_common.h
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_common.c
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_encode.h
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_encode.c
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_decode.h
++			${CMAKE_CURRENT_SOURCE_DIR}/nanopb/pb_decode.c)
++
++	add_library(protobuf-nanopb OBJECT ${PROTOBUF-NANOPB-SOURCES})
++	set_target_properties(protobuf-nanopb PROPERTIES OUTPUT_NAME protobuf-nanopb)
++	install(TARGETS protobuf-nanopb EXPORT nanopb-targets
++		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++
++	target_include_directories(protobuf-nanopb INTERFACE
++		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/nanopb>
++		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
++endif()
+ 
+ #=============================================================================
+ # RPi ws281x
+@@ -75,7 +84,7 @@ if(ENABLE_WS281XPWM)
+ 	string(REPLACE "configure_file(version.h.in version.h)" [=[configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h)]=] FILE_CONTENTS "${FILE_CONTENTS}")
+ 	file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/rpi_ws281x/CMakeLists.txt" "${FILE_CONTENTS}")
+ 
+-	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rpi_ws281x)			
++	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rpi_ws281x)
+ endif()
+ 
+ #=============================================================================
+@@ -90,11 +99,22 @@ target_include_directories(linalg INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/linalg"
+ # LUNASVG
+ #=============================================================================
+ 
+-
+ set(no_dev_warnings_backup "$CACHE{CMAKE_WARN_DEPRECATED}")
+ set(CMAKE_WARN_DEPRECATED OFF CACHE INTERNAL "" FORCE)
+-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lunasvg)
+-set_target_properties(lunasvg PROPERTIES POSITION_INDEPENDENT_CODE ON)
++
++if (USE_SYSTEM_LUNASVG_LIBS)
++	find_package(lunasvg GLOBAL)
++	if (NOT lunasvg_FOUND)
++		message(WARNING "Could NOT find lunasvg system libraries. Fallback to lunasvg submodule.")
++	endif()
++endif()
++
++if (NOT USE_SYSTEM_LUNASVG_LIBS OR NOT lunasvg_FOUND)
++	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lunasvg)
++	set_target_properties(lunasvg PROPERTIES POSITION_INDEPENDENT_CODE ON)
++	set_target_properties(plutovg PROPERTIES POSITION_INDEPENDENT_CODE ON)
++endif()
++
+ set(CMAKE_WARN_DEPRECATED ${no_dev_warnings_backup} CACHE INTERNAL "" FORCE)
+ 
+ #=============================================================================
+@@ -125,7 +145,7 @@ if (NOT USE_SYSTEM_FLATBUFFERS_LIBS OR CMAKE_CROSSCOMPILING)
+ 	cmake_policy(PUSH)
+ 
+ 	set(CMAKE_POLICY_DEFAULT_CMP0071 NEW)
+-	set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "")	
++	set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "")
+ 
+ 	if (NOT CMAKE_CROSSCOMPILING AND USE_PRECOMPILED_HEADERS)
+ 		set(FLATBUFFERS_ENABLE_PCH ON CACHE BOOL "")
+@@ -142,7 +162,7 @@ if (NOT USE_SYSTEM_FLATBUFFERS_LIBS OR CMAKE_CROSSCOMPILING)
+ 		unset(FLATBUFFERS_FLATC_EXECUTABLE)
+ 		set(FLATBUFFERS_BUILD_FLATC OFF CACHE BOOL "")
+ 		set(FLATBUFFERS_BUILD_FLATHASH OFF CACHE BOOL "")
+-		set(FLATBUFFERS_HOST_FLATBUFFERS_DIR ${CMAKE_CURRENT_BINARY_DIR}/host_flatc)		
++		set(FLATBUFFERS_HOST_FLATBUFFERS_DIR ${CMAKE_CURRENT_BINARY_DIR}/host_flatc)
+ 		file(MAKE_DIRECTORY ${FLATBUFFERS_HOST_FLATBUFFERS_DIR})
+ 
+ 		EXECUTE_PROCESS ( WORKING_DIRECTORY ${FLATBUFFERS_HOST_FLATBUFFERS_DIR} RESULT_VARIABLE EXEC_RES
+@@ -168,7 +188,7 @@ if (NOT USE_SYSTEM_FLATBUFFERS_LIBS OR CMAKE_CROSSCOMPILING)
+ 		set(FLATBUFFERS_FLATC_EXECUTABLE "$<TARGET_FILE:flatc>")
+ 	else()
+ 		message( STATUS "Using host flatc compiler: ${FLATBUFFERS_FLATC_EXECUTABLE}")
+-	endif()	
++	endif()
+ 
+ 	cmake_policy(POP)
+ endif()
+@@ -177,7 +197,7 @@ set(FLATBUFFERS_FLATC_EXECUTABLE ${FLATBUFFERS_FLATC_EXECUTABLE} PARENT_SCOPE)
+ set(FLATBUFFERS_INCLUDE_DIRS ${FLATBUFFERS_INCLUDE_DIRS} PARENT_SCOPE)
+ include_directories(${FLATBUFFERS_INCLUDE_DIRS})
+ 
+-if (FLATBUFFERS_INCLUDE_DIRS AND EXISTS "${FLATBUFFERS_INCLUDE_DIRS}/../package.json")		
++if (FLATBUFFERS_INCLUDE_DIRS AND EXISTS "${FLATBUFFERS_INCLUDE_DIRS}/../package.json")
+ 		file(STRINGS "${FLATBUFFERS_INCLUDE_DIRS}/../package.json" _FLATBUFFERS_VERSION_STRING REGEX "^[ \t\r\n]+\"version\":[ \t\r\n]+\"[0-9]+.[0-9]+.[0-9]+\",")
+ 		string(REGEX REPLACE "^[ \t\r\n]+\"version\":[ \t\r\n]+\"([0-9]+.[0-9]+.[0-9]+)\"," "\\1" FLATBUFFERS_PARSE_VERSION "${_FLATBUFFERS_VERSION_STRING}")
+ 		message(STATUS "Using flatbuffers libraries version: \"${FLATBUFFERS_PARSE_VERSION}\"")
+@@ -220,7 +240,7 @@ if ( ENABLE_MQTT )
+ 		# HyperHDR workaround for fixed Qt5 version
+ 		file(READ "${CMAKE_CURRENT_SOURCE_DIR}/qmqtt/CMakeLists.txt" FILE_CONTENTS)
+ 		string(REPLACE "Qt5" "Qt${Qt_VERSION}" FILE_CONTENTS "${FILE_CONTENTS}")
+-		string(REPLACE "find_package" "#find_package" FILE_CONTENTS "${FILE_CONTENTS}")		
++		string(REPLACE "find_package" "#find_package" FILE_CONTENTS "${FILE_CONTENTS}")
+ 		file(WRITE "${CMAKE_CURRENT_SOURCE_DIR}/qmqtt/CMakeLists.txt" "${FILE_CONTENTS}")
+ 
+ 		cmake_policy(PUSH)
+@@ -261,17 +281,41 @@ ENDIF()
+ #=============================================================================
+ 
+ if (UNIX AND NOT APPLE AND (ENABLE_POWER_MANAGEMENT OR ENABLE_PIPEWIRE))
+-	set(SDBUSCPP_BUILD_DOCS OFF CACHE BOOL "No doc")
+-	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/sdbus-cpp)
+-	set_target_properties(sdbus-c++-objlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
++	if (USE_SYSTEM_SDBUS_CPP_LIBS)
++		pkg_check_modules (sdbus-c++ sdbus-c++>=2.0.0)
++
++		if(NOT sdbus-c++_FOUND)
++			message( WARNING "Could not find: sdbus-c++>=2.0.0. Fallback to sdbus-c++ submodule." )
++		endif()
++	endif()
++
++	if(NOT sdbus-c++_FOUND)
++		message( "Using sdbus-c++ submodule." )
++		set(SDBUSCPP_BUILD_DOCS OFF CACHE BOOL "No doc")
++		add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/sdbus-cpp)
++		set_target_properties(sdbus-c++-objlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
++	endif()
+ endif()
+ 
+ #=============================================================================
+ # STB
+ #=============================================================================
+ 
+-add_library(stb INTERFACE )
+-target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
++add_library(stb INTERFACE)
++
++if (USE_SYSTEM_STB_LIBS)
++	find_path(STB_INCLUDE_DIR stb_image.h PATH_SUFFIXES stb)
++	if (NOT STB_INCLUDE_DIR)
++		message(WARNING "Could NOT find system STB libraries. Falling back to embedded STB.")
++		target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
++	else()
++		message(STATUS "Found system STB libraries: ${STB_INCLUDE_DIR}")
++		target_include_directories(stb INTERFACE ${STB_INCLUDE_DIR})
++	endif()
++else()
++	target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
++endif()
++
+ target_compile_definitions(stb INTERFACE
+ 	STB_IMAGE_WRITE_IMPLEMENTATION
+ 	STB_IMAGE_IMPLEMENTATION
+diff --git a/sources/utils-image/CMakeLists.txt b/sources/utils-image/CMakeLists.txt
+index b5ad570..5c9b506 100644
+--- a/sources/utils-image/CMakeLists.txt
++++ b/sources/utils-image/CMakeLists.txt
+@@ -29,13 +29,13 @@ else()
+ 	add_library(utils-image STATIC ${utils_image_SOURCES})
+ endif()
+ 
+-target_include_directories(utils-image PRIVATE stb lunasvg TurboJPEG::TurboJPEG)
++target_include_directories(utils-image PRIVATE stb lunasvg::lunasvg TurboJPEG::TurboJPEG)
+ 
+ target_link_libraries(utils-image PRIVATE
+ 	Qt${Qt_VERSION}::Core
+ 	Qt${Qt_VERSION}::Network
+ 	stb
+-	lunasvg
++	lunasvg::lunasvg
+ 	image
+ 	TurboJPEG::TurboJPEG
+ )

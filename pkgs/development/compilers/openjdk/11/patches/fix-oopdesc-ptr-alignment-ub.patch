@@ -1,0 +1,2622 @@
+From 55ce9f824ab06507e7253e7de6e57c7baac5ae45 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20N=C3=BCrnberger?=
+ <stefan.nuernberger@cyberus-technology.de>
+Date: Thu, 18 Jun 2026 20:21:59 +0200
+Subject: [PATCH] fix undefined behavior in markOop
+
+A smaller version of https://github.com/openjdk/jdk11u-dev/pull/1284
+to fix https://bugs.openjdk.java.net/browse/JDK-8229258
+
+Only fixes x86 and aarch64. Other architectures will not build.
+
+Co-authored-by: Campbell Jones <git@serebit.com>
+Co-authored-by: Reilly Brogan <reilly@reillybrogan.com>
+
+---
+ src/hotspot/cpu/aarch64/aarch64.ad            |   2 +-
+ .../cpu/aarch64/c1_MacroAssembler_aarch64.cpp |   2 +-
+ .../cpu/aarch64/templateTable_aarch64.cpp     |   2 +-
+ src/hotspot/cpu/x86/c1_MacroAssembler_x86.cpp |   2 +-
+ src/hotspot/cpu/x86/macroAssembler_x86.cpp    |   8 +-
+ src/hotspot/cpu/x86/templateTable_x86.cpp     |   2 +-
+ src/hotspot/cpu/zero/cppInterpreter_zero.cpp  |   2 +-
+ src/hotspot/share/classfile/altHashing.cpp    |   2 +-
+ .../gc/cms/concurrentMarkSweepGeneration.cpp  |  32 +--
+ src/hotspot/share/gc/cms/freeChunk.hpp        |   8 +-
+ .../share/gc/cms/parOopClosures.inline.hpp    |   4 +-
+ src/hotspot/share/gc/cms/promotionInfo.cpp    |   2 +-
+ .../share/gc/g1/g1FullGCCompactionPoint.cpp   |   4 +-
+ .../share/gc/g1/g1FullGCMarker.inline.hpp     |   2 +-
+ .../gc/g1/g1FullGCOopClosures.inline.hpp      |   4 +-
+ .../share/gc/g1/g1OopClosures.inline.hpp      |   4 +-
+ .../share/gc/g1/g1ParScanThreadState.cpp      |  12 +-
+ .../gc/g1/g1ParScanThreadState.inline.hpp     |   4 +-
+ .../gc/parallel/psMarkSweepDecorator.cpp      |  10 +-
+ .../gc/parallel/psPromotionManager.inline.hpp |   6 +-
+ src/hotspot/share/gc/serial/markSweep.cpp     |   2 +-
+ .../share/gc/serial/markSweep.inline.hpp      |  10 +-
+ .../share/gc/shared/preservedMarks.inline.hpp |   2 +-
+ src/hotspot/share/gc/shared/space.inline.hpp  |   6 +-
+ .../share/gc/shenandoah/shenandoahAsserts.cpp |   2 +-
+ .../shenandoahForwarding.inline.hpp           |  16 +-
+ .../gc/shenandoah/shenandoahStringDedup.cpp   |   6 +-
+ .../share/interpreter/bytecodeInterpreter.cpp |  18 +-
+ .../jfr/leakprofiler/chains/bfsClosure.cpp    |   4 +-
+ .../jfr/leakprofiler/chains/dfsClosure.cpp    |   2 +-
+ .../jfr/leakprofiler/chains/edgeStore.cpp     |   4 +-
+ .../jfr/leakprofiler/chains/edgeUtils.cpp     |   2 +-
+ .../chains/objectSampleMarker.hpp             |   6 +-
+ .../leakprofiler/checkpoint/eventEmitter.cpp  |   2 +-
+ .../leakprofiler/utilities/saveRestore.cpp    |   8 +-
+ src/hotspot/share/memory/metaspaceShared.cpp  |   2 +-
+ src/hotspot/share/memory/universe.cpp         |   2 +-
+ src/hotspot/share/memory/virtualspace.cpp     |   4 +-
+ src/hotspot/share/oops/klass.cpp              |   2 +-
+ src/hotspot/share/oops/klass.hpp              |   1 +
+ src/hotspot/share/oops/klass.inline.hpp       |   2 +-
+ src/hotspot/share/oops/markOop.hpp            |  62 ++++--
+ src/hotspot/share/oops/markOop.inline.hpp     |   8 +-
+ src/hotspot/share/oops/oop.cpp                |   4 +-
+ src/hotspot/share/oops/oop.hpp                |   1 +
+ src/hotspot/share/oops/oop.inline.hpp         |  65 +++---
+ src/hotspot/share/oops/oopsHierarchy.hpp      |   2 -
+ src/hotspot/share/opto/macro.cpp              |   2 +-
+ src/hotspot/share/prims/jvmtiEnvBase.cpp      |   8 +-
+ src/hotspot/share/prims/jvmtiTagMap.cpp       |  10 +-
+ src/hotspot/share/prims/whitebox.cpp          |   2 +-
+ src/hotspot/share/runtime/basicLock.cpp       |   8 +-
+ src/hotspot/share/runtime/basicLock.hpp       |  10 +-
+ src/hotspot/share/runtime/biasedLocking.cpp   |  84 ++++----
+ src/hotspot/share/runtime/deoptimization.cpp  |   8 +-
+ src/hotspot/share/runtime/objectMonitor.hpp   |   1 +
+ .../share/runtime/objectMonitor.inline.hpp    |  10 +-
+ src/hotspot/share/runtime/sharedRuntime.cpp   |   4 +-
+ src/hotspot/share/runtime/synchronizer.cpp    | 191 +++++++++---------
+ src/hotspot/share/runtime/vframe.cpp          |  22 +-
+ src/hotspot/share/runtime/vmStructs.cpp       |   4 +-
+ 69 files changed, 394 insertions(+), 345 deletions(-)
+
+diff --git a/src/hotspot/cpu/aarch64/aarch64.ad b/src/hotspot/cpu/aarch64/aarch64.ad
+index 27ba4e10d..0e7f17588 100644
+--- a/src/hotspot/cpu/aarch64/aarch64.ad
++++ b/src/hotspot/cpu/aarch64/aarch64.ad
+@@ -3565,7 +3565,7 @@ encode %{
+       // lock. The fast-path monitor unlock code checks for
+       // markOopDesc::monitor_value so use markOopDesc::unused_mark which has the
+       // relevant bit set, and also matches ObjectSynchronizer::slow_enter.
+-      __ mov(tmp, (address)markOopDesc::unused_mark());
++      __ mov(tmp, (address)markOopDesc::unused_mark().value());
+       __ str(tmp, Address(box, BasicLock::displaced_header_offset_in_bytes()));
+     }
+ 
+diff --git a/src/hotspot/cpu/aarch64/c1_MacroAssembler_aarch64.cpp b/src/hotspot/cpu/aarch64/c1_MacroAssembler_aarch64.cpp
+index 218113b78..97791fb63 100644
+--- a/src/hotspot/cpu/aarch64/c1_MacroAssembler_aarch64.cpp
++++ b/src/hotspot/cpu/aarch64/c1_MacroAssembler_aarch64.cpp
+@@ -176,7 +176,7 @@ void C1_MacroAssembler::initialize_header(Register obj, Register klass, Register
+     ldr(t1, Address(klass, Klass::prototype_header_offset()));
+   } else {
+     // This assumes that all prototype bits fit in an int32_t
+-    mov(t1, (int32_t)(intptr_t)markOopDesc::prototype());
++    mov(t1, (int32_t)(intptr_t)markOopDesc::prototype().value());
+   }
+   str(t1, Address(obj, oopDesc::mark_offset_in_bytes()));
+ 
+diff --git a/src/hotspot/cpu/aarch64/templateTable_aarch64.cpp b/src/hotspot/cpu/aarch64/templateTable_aarch64.cpp
+index 6fd216b95..a3c082f49 100644
+--- a/src/hotspot/cpu/aarch64/templateTable_aarch64.cpp
++++ b/src/hotspot/cpu/aarch64/templateTable_aarch64.cpp
+@@ -3611,7 +3611,7 @@ void TemplateTable::_new() {
+     if (UseBiasedLocking) {
+       __ ldr(rscratch1, Address(r4, Klass::prototype_header_offset()));
+     } else {
+-      __ mov(rscratch1, (intptr_t)markOopDesc::prototype());
++      __ mov(rscratch1, (intptr_t)markOopDesc::prototype().value());
+     }
+     __ str(rscratch1, Address(r0, oopDesc::mark_offset_in_bytes()));
+     __ store_klass_gap(r0, zr);  // zero klass gap for compressed oops
+diff --git a/src/hotspot/cpu/x86/c1_MacroAssembler_x86.cpp b/src/hotspot/cpu/x86/c1_MacroAssembler_x86.cpp
+index 25353446f..0e611a18a 100644
+--- a/src/hotspot/cpu/x86/c1_MacroAssembler_x86.cpp
++++ b/src/hotspot/cpu/x86/c1_MacroAssembler_x86.cpp
+@@ -154,7 +154,7 @@ void C1_MacroAssembler::initialize_header(Register obj, Register klass, Register
+     movptr(Address(obj, oopDesc::mark_offset_in_bytes()), t1);
+   } else {
+     // This assumes that all prototype bits fit in an int32_t
+-    movptr(Address(obj, oopDesc::mark_offset_in_bytes ()), (int32_t)(intptr_t)markOopDesc::prototype());
++    movptr(Address(obj, oopDesc::mark_offset_in_bytes ()), (int32_t)(intptr_t)markOopDesc::prototype().value());
+   }
+ #ifdef _LP64
+   if (UseCompressedClassPointers) { // Take care not to kill klass
+diff --git a/src/hotspot/cpu/x86/macroAssembler_x86.cpp b/src/hotspot/cpu/x86/macroAssembler_x86.cpp
+index ccde5ec7f..3e8098320 100644
+--- a/src/hotspot/cpu/x86/macroAssembler_x86.cpp
++++ b/src/hotspot/cpu/x86/macroAssembler_x86.cpp
+@@ -1556,7 +1556,7 @@ void MacroAssembler::rtm_inflated_locking(Register objReg, Register boxReg, Regi
+   int owner_offset = OM_OFFSET_NO_MONITOR_VALUE_TAG(owner);
+ 
+   // Without cast to int32_t a movptr will destroy r10 which is typically obj
+-  movptr(Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark()));
++  movptr(Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark().value()));
+   movptr(boxReg, tmpReg); // Save ObjectMonitor address
+ 
+   if (RTMRetryCount > 0) {
+@@ -1727,7 +1727,7 @@ void MacroAssembler::fast_lock(Register objReg, Register boxReg, Register tmpReg
+   if (EmitSync & 1) {
+       // set box->dhw = markOopDesc::unused_mark()
+       // Force all sync thru slow-path: slow_enter() and slow_exit()
+-      movptr (Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark()));
++      movptr (Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark().value()));
+       cmpptr (rsp, (int32_t)NULL_WORD);
+   } else {
+     // Possible cases that we'll encounter in fast_lock
+@@ -1879,7 +1879,7 @@ void MacroAssembler::fast_lock(Register objReg, Register boxReg, Register tmpReg
+        //   Invariant: m->_recursions should already be 0, so we don't need to explicitly set it.
+        // Intentional fall-through into DONE_LABEL ...
+     } else {
+-       movptr(Address(boxReg, 0), intptr_t(markOopDesc::unused_mark()));  // results in ST-before-CAS penalty
++       movptr(Address(boxReg, 0), intptr_t(markOopDesc::unused_mark().value()));  // results in ST-before-CAS penalty
+        movptr(boxReg, tmpReg);
+ 
+        // Using a prefetchw helps avoid later RTS->RTO upgrades and cache probes
+@@ -1926,7 +1926,7 @@ void MacroAssembler::fast_lock(Register objReg, Register boxReg, Register tmpReg
+     cmpxchgptr(r15_thread, Address(scrReg, OM_OFFSET_NO_MONITOR_VALUE_TAG(owner)));
+     // Unconditionally set box->_displaced_header = markOopDesc::unused_mark().
+     // Without cast to int32_t movptr will destroy r10 which is typically obj.
+-    movptr(Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark()));
++    movptr(Address(boxReg, 0), (int32_t)intptr_t(markOopDesc::unused_mark().value()));
+     // Intentional fall-through into DONE_LABEL ...
+     // Propagate ICC.ZF from CAS above into DONE_LABEL.
+ #endif // _LP64
+diff --git a/src/hotspot/cpu/x86/templateTable_x86.cpp b/src/hotspot/cpu/x86/templateTable_x86.cpp
+index 311a54f1b..785b675cb 100644
+--- a/src/hotspot/cpu/x86/templateTable_x86.cpp
++++ b/src/hotspot/cpu/x86/templateTable_x86.cpp
+@@ -4103,7 +4103,7 @@ void TemplateTable::_new() {
+       __ movptr(Address(rax, oopDesc::mark_offset_in_bytes ()), rbx);
+     } else {
+       __ movptr(Address(rax, oopDesc::mark_offset_in_bytes ()),
+-                (intptr_t)markOopDesc::prototype()); // header
++                (intptr_t)markOopDesc::prototype().value()); // header
+       __ pop(rcx);   // get saved klass back in the register.
+     }
+ #ifdef _LP64
+diff --git a/src/hotspot/cpu/zero/cppInterpreter_zero.cpp b/src/hotspot/cpu/zero/cppInterpreter_zero.cpp
+index 9331d02ce..04c59d9b6 100644
+--- a/src/hotspot/cpu/zero/cppInterpreter_zero.cpp
++++ b/src/hotspot/cpu/zero/cppInterpreter_zero.cpp
+@@ -274,7 +274,7 @@ int CppInterpreter::native_entry(Method* method, intptr_t UNUSED, TRAPS) {
+   if (method->is_synchronized()) {
+     monitor = (BasicObjectLock*) istate->stack_base();
+     oop lockee = monitor->obj();
+-    markOop disp = lockee->mark()->set_unlocked();
++    markOop disp = lockee->mark().set_unlocked();
+ 
+     monitor->lock()->set_displaced_header(disp);
+     if (lockee->cas_set_mark((markOop)monitor, disp) != disp) {
+diff --git a/src/hotspot/share/classfile/altHashing.cpp b/src/hotspot/share/classfile/altHashing.cpp
+index 253266c16..d7f3e7090 100644
+--- a/src/hotspot/share/classfile/altHashing.cpp
++++ b/src/hotspot/share/classfile/altHashing.cpp
+@@ -55,7 +55,7 @@
+ // objects.  We don't want to call the synchronizer hash code to install
+ // this value because it may safepoint.
+ static intptr_t object_hash(Klass* k) {
+-  intptr_t hc = k->java_mirror()->mark()->hash();
++  intptr_t hc = k->java_mirror()->mark().hash();
+   return hc != markOopDesc::no_hash ? hc : os::random();
+ }
+ 
+diff --git a/src/hotspot/share/gc/cms/concurrentMarkSweepGeneration.cpp b/src/hotspot/share/gc/cms/concurrentMarkSweepGeneration.cpp
+index d4e9253ab..a3d91a6aa 100644
+--- a/src/hotspot/share/gc/cms/concurrentMarkSweepGeneration.cpp
++++ b/src/hotspot/share/gc/cms/concurrentMarkSweepGeneration.cpp
+@@ -7773,7 +7773,7 @@ bool CMSCollector::take_from_overflow_list(size_t num, CMSMarkStack* stack) {
+   const markOop proto = markOopDesc::prototype();
+   NOT_PRODUCT(ssize_t n = 0;)
+   for (oop next; i > 0 && cur != NULL; cur = next, i--) {
+-    next = oop(cur->mark_raw());
++    next = oop(cur->mark_raw().to_pointer());
+     cur->set_mark_raw(proto);   // until proven otherwise
+     assert(oopDesc::is_oop(cur), "Should be an oop");
+     bool res = stack->push(cur);
+@@ -7857,8 +7857,8 @@ bool CMSCollector::par_take_from_overflow_list(size_t num,
+   size_t i = num;
+   oop cur = prefix;
+   // Walk down the first "num" objects, unless we reach the end.
+-  for (; i > 1 && cur->mark_raw() != NULL; cur = oop(cur->mark_raw()), i--);
+-  if (cur->mark_raw() == NULL) {
++  for (; i > 1 && cur->mark_raw().to_pointer() != NULL; cur = oop(cur->mark_raw().to_pointer()), i--);
++  if (cur->mark_raw().to_pointer() == NULL) {
+     // We have "num" or fewer elements in the list, so there
+     // is nothing to return to the global list.
+     // Write back the NULL in lieu of the BUSY we wrote
+@@ -7868,9 +7868,9 @@ bool CMSCollector::par_take_from_overflow_list(size_t num,
+     }
+   } else {
+     // Chop off the suffix and return it to the global list.
+-    assert(cur->mark_raw() != BUSY, "Error");
+-    oop suffix_head = cur->mark_raw(); // suffix will be put back on global list
+-    cur->set_mark_raw(NULL);           // break off suffix
++    assert(cur->mark_raw().to_pointer() != (void*)BUSY, "Error");
++    oop suffix_head = oop(cur->mark_raw().to_pointer()); // suffix will be put back on global list
++    cur->set_mark_raw(markOop::from_pointer(NULL));           // break off suffix
+     // It's possible that the list is still in the empty(busy) state
+     // we left it in a short while ago; in that case we may be
+     // able to place back the suffix without incurring the cost
+@@ -7890,18 +7890,18 @@ bool CMSCollector::par_take_from_overflow_list(size_t num,
+       // Too bad, someone else sneaked in (at least) an element; we'll need
+       // to do a splice. Find tail of suffix so we can prepend suffix to global
+       // list.
+-      for (cur = suffix_head; cur->mark_raw() != NULL; cur = (oop)(cur->mark_raw()));
++      for (cur = suffix_head; cur->mark_raw().to_pointer() != NULL; cur = (oop)(cur->mark_raw().to_pointer()));
+       oop suffix_tail = cur;
+-      assert(suffix_tail != NULL && suffix_tail->mark_raw() == NULL,
++      assert(suffix_tail != NULL && suffix_tail->mark_raw().to_pointer() == NULL,
+              "Tautology");
+       observed_overflow_list = _overflow_list;
+       do {
+         cur_overflow_list = observed_overflow_list;
+         if (cur_overflow_list != BUSY) {
+           // Do the splice ...
+-          suffix_tail->set_mark_raw(markOop(cur_overflow_list));
++          suffix_tail->set_mark_raw(markOop::from_pointer((void*)cur_overflow_list));
+         } else { // cur_overflow_list == BUSY
+-          suffix_tail->set_mark_raw(NULL);
++          suffix_tail->set_mark_raw(markOop::from_pointer(NULL));
+         }
+         // ... and try to place spliced list back on overflow_list ...
+         observed_overflow_list =
+@@ -7917,7 +7917,7 @@ bool CMSCollector::par_take_from_overflow_list(size_t num,
+   oop next;
+   NOT_PRODUCT(ssize_t n = 0;)
+   for (cur = prefix; cur != NULL; cur = next) {
+-    next = oop(cur->mark_raw());
++    next = oop(cur->mark_raw().to_pointer());
+     cur->set_mark_raw(proto);   // until proven otherwise
+     assert(oopDesc::is_oop(cur), "Should be an oop");
+     bool res = work_q->push(cur);
+@@ -7936,7 +7936,7 @@ void CMSCollector::push_on_overflow_list(oop p) {
+   NOT_PRODUCT(_num_par_pushes++;)
+   assert(oopDesc::is_oop(p), "Not an oop");
+   preserve_mark_if_necessary(p);
+-  p->set_mark_raw((markOop)_overflow_list);
++  p->set_mark_raw(markOop::from_pointer(_overflow_list));
+   _overflow_list = p;
+ }
+ 
+@@ -7950,9 +7950,9 @@ void CMSCollector::par_push_on_overflow_list(oop p) {
+   do {
+     cur_overflow_list = observed_overflow_list;
+     if (cur_overflow_list != BUSY) {
+-      p->set_mark_raw(markOop(cur_overflow_list));
++      p->set_mark_raw(markOop::from_pointer((void*)cur_overflow_list));
+     } else {
+-      p->set_mark_raw(NULL);
++      p->set_mark_raw(markOop::from_pointer(NULL));
+     }
+     observed_overflow_list =
+       Atomic::cmpxchg((oopDesc*)p, &_overflow_list, (oopDesc*)cur_overflow_list);
+@@ -7985,14 +7985,14 @@ void CMSCollector::preserve_mark_work(oop p, markOop m) {
+ // Single threaded
+ void CMSCollector::preserve_mark_if_necessary(oop p) {
+   markOop m = p->mark_raw();
+-  if (m->must_be_preserved(p)) {
++  if (m.must_be_preserved(p)) {
+     preserve_mark_work(p, m);
+   }
+ }
+ 
+ void CMSCollector::par_preserve_mark_if_necessary(oop p) {
+   markOop m = p->mark_raw();
+-  if (m->must_be_preserved(p)) {
++  if (m.must_be_preserved(p)) {
+     MutexLockerEx x(ParGCRareEvent_lock, Mutex::_no_safepoint_check_flag);
+     // Even though we read the mark word without holding
+     // the lock, we are assured that it will not change
+diff --git a/src/hotspot/share/gc/cms/freeChunk.hpp b/src/hotspot/share/gc/cms/freeChunk.hpp
+index a48a6dd1f..02bce8602 100644
+--- a/src/hotspot/share/gc/cms/freeChunk.hpp
++++ b/src/hotspot/share/gc/cms/freeChunk.hpp
+@@ -62,8 +62,8 @@ class FreeChunk {
+   FreeChunk* _prev;
+   FreeChunk* _next;
+ 
+-  markOop mark()     const volatile { return (markOop)_size; }
+-  void set_mark(markOop m)          { _size = (size_t)m; }
++  markOop mark()     const volatile { return markOop((uintptr_t)_size); }
++  void set_mark(markOop m)          { _size = (size_t)m.value(); }
+ 
+  public:
+   NOT_PRODUCT(static const size_t header_size();)
+@@ -79,7 +79,7 @@ class FreeChunk {
+   }
+ 
+   bool is_free() const volatile {
+-    LP64_ONLY(if (UseCompressedOops) return mark()->is_cms_free_chunk(); else)
++    LP64_ONLY(if (UseCompressedOops) return mark().is_cms_free_chunk(); else)
+     return (((intptr_t)_prev) & 0x1) == 0x1;
+   }
+   bool cantCoalesce() const {
+@@ -100,7 +100,7 @@ class FreeChunk {
+   debug_only(void* size_addr() const { return (void*)&_size; })
+ 
+   size_t size() const volatile {
+-    LP64_ONLY(if (UseCompressedOops) return mark()->get_size(); else )
++    LP64_ONLY(if (UseCompressedOops) return mark().get_size(); else )
+     return _size;
+   }
+   void set_size(size_t sz) {
+diff --git a/src/hotspot/share/gc/cms/parOopClosures.inline.hpp b/src/hotspot/share/gc/cms/parOopClosures.inline.hpp
+index 609a14868..e73659121 100644
+--- a/src/hotspot/share/gc/cms/parOopClosures.inline.hpp
++++ b/src/hotspot/share/gc/cms/parOopClosures.inline.hpp
+@@ -47,7 +47,7 @@ template <class T> inline void ParScanWeakRefClosure::do_oop_work(T* p) {
+     OrderAccess::loadload();
+     markOop m = obj->mark_raw();
+     oop new_obj;
+-    if (m->is_marked()) { // Contains forwarding pointer.
++    if (m.is_marked()) { // Contains forwarding pointer.
+       new_obj = ParNewGeneration::real_forwardee(obj);
+     } else {
+       size_t obj_sz = obj->size_given_klass(objK);
+@@ -112,7 +112,7 @@ inline void ParScanClosure::do_oop_work(T* p,
+       OrderAccess::loadload();
+       markOop m = obj->mark_raw();
+       oop new_obj;
+-      if (m->is_marked()) { // Contains forwarding pointer.
++      if (m.is_marked()) { // Contains forwarding pointer.
+         new_obj = ParNewGeneration::real_forwardee(obj);
+         RawAccess<IS_NOT_NULL>::oop_store(p, new_obj);
+         log_develop_trace(gc, scavenge)("{%s %s ( " PTR_FORMAT " ) " PTR_FORMAT " -> " PTR_FORMAT " (%d)}",
+diff --git a/src/hotspot/share/gc/cms/promotionInfo.cpp b/src/hotspot/share/gc/cms/promotionInfo.cpp
+index 971368c12..50bb470d5 100644
+--- a/src/hotspot/share/gc/cms/promotionInfo.cpp
++++ b/src/hotspot/share/gc/cms/promotionInfo.cpp
+@@ -95,7 +95,7 @@ void PromotionInfo::track(PromotedObject* trackOop, Klass* klassOfOop) {
+   // make a copy of header as it may need to be spooled
+   markOop mark = oop(trackOop)->mark_raw();
+   trackOop->clear_next();
+-  if (mark->must_be_preserved_for_cms_scavenge(klassOfOop)) {
++  if (mark.must_be_preserved_for_cms_scavenge(klassOfOop)) {
+     // save non-prototypical header, and mark oop
+     saveDisplacedHeader(mark);
+     trackOop->setDisplacedMark();
+diff --git a/src/hotspot/share/gc/g1/g1FullGCCompactionPoint.cpp b/src/hotspot/share/gc/g1/g1FullGCCompactionPoint.cpp
+index 76e9e77d7..8dbf7e8cb 100644
+--- a/src/hotspot/share/gc/g1/g1FullGCCompactionPoint.cpp
++++ b/src/hotspot/share/gc/g1/g1FullGCCompactionPoint.cpp
+@@ -117,10 +117,10 @@ void G1FullGCCompactionPoint::forward(oop object, size_t size) {
+       // Make sure object has the correct mark-word set or that it will be
+       // fixed when restoring the preserved marks.
+       assert(object->mark_raw() == markOopDesc::prototype_for_object(object) || // Correct mark
+-             object->mark_raw()->must_be_preserved(object) || // Will be restored by PreservedMarksSet
++             object->mark_raw().must_be_preserved(object) || // Will be restored by PreservedMarksSet
+              (UseBiasedLocking && object->has_bias_pattern_raw()), // Will be restored by BiasedLocking
+              "should have correct prototype obj: " PTR_FORMAT " mark: " PTR_FORMAT " prototype: " PTR_FORMAT,
+-             p2i(object), p2i(object->mark_raw()), p2i(markOopDesc::prototype_for_object(object)));
++             p2i(object), object->mark_raw().value(), markOopDesc::prototype_for_object(object).value());
+     }
+     assert(object->forwardee() == NULL, "should be forwarded to NULL");
+   }
+diff --git a/src/hotspot/share/gc/g1/g1FullGCMarker.inline.hpp b/src/hotspot/share/gc/g1/g1FullGCMarker.inline.hpp
+index 98a2fe7f1..e0976fd5c 100644
+--- a/src/hotspot/share/gc/g1/g1FullGCMarker.inline.hpp
++++ b/src/hotspot/share/gc/g1/g1FullGCMarker.inline.hpp
+@@ -51,7 +51,7 @@ inline bool G1FullGCMarker::mark_object(oop obj) {
+ 
+   // Marked by us, preserve if needed.
+   markOop mark = obj->mark_raw();
+-  if (mark->must_be_preserved(obj) &&
++  if (mark.must_be_preserved(obj) &&
+       !G1ArchiveAllocator::is_open_archive_object(obj)) {
+     preserved_stack()->push(obj, mark);
+   }
+diff --git a/src/hotspot/share/gc/g1/g1FullGCOopClosures.inline.hpp b/src/hotspot/share/gc/g1/g1FullGCOopClosures.inline.hpp
+index f19a57846..7e0feaf83 100644
+--- a/src/hotspot/share/gc/g1/g1FullGCOopClosures.inline.hpp
++++ b/src/hotspot/share/gc/g1/g1FullGCOopClosures.inline.hpp
+@@ -77,10 +77,10 @@ template <class T> inline void G1AdjustClosure::adjust_pointer(T* p) {
+   if (forwardee == NULL) {
+     // Not forwarded, return current reference.
+     assert(obj->mark_raw() == markOopDesc::prototype_for_object(obj) || // Correct mark
+-           obj->mark_raw()->must_be_preserved(obj) || // Will be restored by PreservedMarksSet
++           obj->mark_raw().must_be_preserved(obj) || // Will be restored by PreservedMarksSet
+            (UseBiasedLocking && obj->has_bias_pattern_raw()), // Will be restored by BiasedLocking
+            "Must have correct prototype or be preserved, obj: " PTR_FORMAT ", mark: " PTR_FORMAT ", prototype: " PTR_FORMAT,
+-           p2i(obj), p2i(obj->mark_raw()), p2i(markOopDesc::prototype_for_object(obj)));
++           p2i(obj), obj->mark_raw().value(), markOopDesc::prototype_for_object(obj).value());
+     return;
+   }
+ 
+diff --git a/src/hotspot/share/gc/g1/g1OopClosures.inline.hpp b/src/hotspot/share/gc/g1/g1OopClosures.inline.hpp
+index c25491323..81f9e1d0e 100644
+--- a/src/hotspot/share/gc/g1/g1OopClosures.inline.hpp
++++ b/src/hotspot/share/gc/g1/g1OopClosures.inline.hpp
+@@ -250,8 +250,8 @@ void G1ParCopyClosure<barrier, do_mark_object>::do_oop_work(T* p) {
+   if (state.is_in_cset()) {
+     oop forwardee;
+     markOop m = obj->mark_raw();
+-    if (m->is_marked()) {
+-      forwardee = (oop) m->decode_pointer();
++    if (m.is_marked()) {
++      forwardee = (oop) m.decode_pointer();
+     } else {
+       forwardee = _par_scan_state->copy_to_survivor_space(state, obj, m);
+     }
+diff --git a/src/hotspot/share/gc/g1/g1ParScanThreadState.cpp b/src/hotspot/share/gc/g1/g1ParScanThreadState.cpp
+index 72a607168..fde1efffc 100644
+--- a/src/hotspot/share/gc/g1/g1ParScanThreadState.cpp
++++ b/src/hotspot/share/gc/g1/g1ParScanThreadState.cpp
+@@ -188,8 +188,8 @@ HeapWord* G1ParScanThreadState::allocate_in_next_plab(InCSetState const state,
+ 
+ InCSetState G1ParScanThreadState::next_state(InCSetState const state, markOop const m, uint& age) {
+   if (state.is_young()) {
+-    age = !m->has_displaced_mark_helper() ? m->age()
+-                                          : m->displaced_mark_helper()->age();
++    age = !m.has_displaced_mark_helper() ? m.age()
++                                          : m.displaced_mark_helper().age();
+     if (age < _tenuring_threshold) {
+       return state;
+     }
+@@ -274,15 +274,15 @@ oop G1ParScanThreadState::copy_to_survivor_space(InCSetState const state,
+       if (age < markOopDesc::max_age) {
+         age++;
+       }
+-      if (old_mark->has_displaced_mark_helper()) {
++      if (old_mark.has_displaced_mark_helper()) {
+         // In this case, we have to install the mark word first,
+         // otherwise obj looks to be forwarded (the old mark word,
+         // which contains the forward pointer, was copied)
+         obj->set_mark_raw(old_mark);
+-        markOop new_mark = old_mark->displaced_mark_helper()->set_age(age);
+-        old_mark->set_displaced_mark_helper(new_mark);
++        markOop new_mark = old_mark.displaced_mark_helper().set_age(age);
++        old_mark.set_displaced_mark_helper(new_mark);
+       } else {
+-        obj->set_mark_raw(old_mark->set_age(age));
++        obj->set_mark_raw(old_mark.set_age(age));
+       }
+       _age_table.add(age, word_sz);
+     } else {
+diff --git a/src/hotspot/share/gc/g1/g1ParScanThreadState.inline.hpp b/src/hotspot/share/gc/g1/g1ParScanThreadState.inline.hpp
+index 10754bafa..78cabd806 100644
+--- a/src/hotspot/share/gc/g1/g1ParScanThreadState.inline.hpp
++++ b/src/hotspot/share/gc/g1/g1ParScanThreadState.inline.hpp
+@@ -42,8 +42,8 @@ template <class T> void G1ParScanThreadState::do_oop_evac(T* p) {
+   const InCSetState in_cset_state = _g1h->in_cset_state(obj);
+   if (in_cset_state.is_in_cset()) {
+     markOop m = obj->mark_raw();
+-    if (m->is_marked()) {
+-      obj = (oop) m->decode_pointer();
++    if (m.is_marked()) {
++      obj = (oop) m.decode_pointer();
+     } else {
+       obj = copy_to_survivor_space(in_cset_state, obj, m);
+     }
+diff --git a/src/hotspot/share/gc/parallel/psMarkSweepDecorator.cpp b/src/hotspot/share/gc/parallel/psMarkSweepDecorator.cpp
+index eed0fa51b..43c336892 100644
+--- a/src/hotspot/share/gc/parallel/psMarkSweepDecorator.cpp
++++ b/src/hotspot/share/gc/parallel/psMarkSweepDecorator.cpp
+@@ -113,8 +113,8 @@ void PSMarkSweepDecorator::precompact() {
+   const intx interval = PrefetchScanIntervalInBytes;
+ 
+   while (q < t) {
+-    assert(oop(q)->mark_raw()->is_marked() || oop(q)->mark_raw()->is_unlocked() ||
+-           oop(q)->mark_raw()->has_bias_pattern(),
++    assert(oop(q)->mark_raw().is_marked() || oop(q)->mark_raw().is_unlocked() ||
++           oop(q)->mark_raw().has_bias_pattern(),
+            "these are the only valid states during a mark sweep");
+     if (oop(q)->is_gc_marked()) {
+       /* prefetch beyond q */
+@@ -259,7 +259,7 @@ bool PSMarkSweepDecorator::insert_deadspace(size_t& allowed_deadspace_words,
+   if (allowed_deadspace_words >= deadlength) {
+     allowed_deadspace_words -= deadlength;
+     CollectedHeap::fill_with_object(q, deadlength);
+-    oop(q)->set_mark_raw(oop(q)->mark_raw()->set_marked());
++    oop(q)->set_mark_raw(oop(q)->mark_raw().set_marked());
+     assert((int) deadlength == oop(q)->size(), "bad filler object size");
+     // Recall that we required "q == compaction_top".
+     return true;
+@@ -350,7 +350,7 @@ void PSMarkSweepDecorator::compact(bool mangle_free_space ) {
+       q = t;
+     } else {
+       // $$$ Funky
+-      q = (HeapWord*) oop(_first_dead)->mark_raw()->decode_pointer();
++      q = (HeapWord*) oop(_first_dead)->mark_raw().decode_pointer();
+     }
+   }
+ 
+@@ -361,7 +361,7 @@ void PSMarkSweepDecorator::compact(bool mangle_free_space ) {
+     if (!oop(q)->is_gc_marked()) {
+       // mark is pointer to next marked oop
+       debug_only(prev_q = q);
+-      q = (HeapWord*) oop(q)->mark_raw()->decode_pointer();
++      q = (HeapWord*) oop(q)->mark_raw().decode_pointer();
+       assert(q > prev_q, "we should be moving forward through memory");
+     } else {
+       // prefetch beyond q
+diff --git a/src/hotspot/share/gc/parallel/psPromotionManager.inline.hpp b/src/hotspot/share/gc/parallel/psPromotionManager.inline.hpp
+index 1ef900783..15c95e3ea 100644
+--- a/src/hotspot/share/gc/parallel/psPromotionManager.inline.hpp
++++ b/src/hotspot/share/gc/parallel/psPromotionManager.inline.hpp
+@@ -119,13 +119,13 @@ inline oop PSPromotionManager::copy_to_survivor_space(oop o) {
+   markOop test_mark = o->mark_raw();
+ 
+   // The same test as "o->is_forwarded()"
+-  if (!test_mark->is_marked()) {
++  if (!test_mark.is_marked()) {
+     bool new_obj_is_tenured = false;
+     size_t new_obj_size = o->size();
+ 
+     // Find the objects age, MT safe.
+-    uint age = (test_mark->has_displaced_mark_helper() /* o->has_displaced_mark() */) ?
+-      test_mark->displaced_mark_helper()->age() : test_mark->age();
++    uint age = (test_mark.has_displaced_mark_helper() /* o->has_displaced_mark() */) ?
++      test_mark.displaced_mark_helper().age() : test_mark.age();
+ 
+     if (!promote_immediately) {
+       // Try allocating obj in to-space (unless too old)
+diff --git a/src/hotspot/share/gc/serial/markSweep.cpp b/src/hotspot/share/gc/serial/markSweep.cpp
+index fcc4f40ec..c799afbe5 100644
+--- a/src/hotspot/share/gc/serial/markSweep.cpp
++++ b/src/hotspot/share/gc/serial/markSweep.cpp
+@@ -131,7 +131,7 @@ template <class T> inline void MarkSweep::follow_root(T* p) {
+   T heap_oop = RawAccess<>::oop_load(p);
+   if (!CompressedOops::is_null(heap_oop)) {
+     oop obj = CompressedOops::decode_not_null(heap_oop);
+-    if (!obj->mark_raw()->is_marked()) {
++    if (!obj->mark_raw().is_marked()) {
+       mark_object(obj);
+       follow_object(obj);
+     }
+diff --git a/src/hotspot/share/gc/serial/markSweep.inline.hpp b/src/hotspot/share/gc/serial/markSweep.inline.hpp
+index 25a5a315f..e021d8b17 100644
+--- a/src/hotspot/share/gc/serial/markSweep.inline.hpp
++++ b/src/hotspot/share/gc/serial/markSweep.inline.hpp
+@@ -39,9 +39,9 @@ inline void MarkSweep::mark_object(oop obj) {
+   // some marks may contain information we need to preserve so we store them away
+   // and overwrite the mark.  We'll restore it at the end of markSweep.
+   markOop mark = obj->mark_raw();
+-  obj->set_mark_raw(markOopDesc::prototype()->set_marked());
++  obj->set_mark_raw(markOopDesc::prototype().set_marked());
+ 
+-  if (mark->must_be_preserved(obj)) {
++  if (mark.must_be_preserved(obj)) {
+     preserve_mark(obj, mark);
+   }
+ }
+@@ -50,7 +50,7 @@ template <class T> inline void MarkSweep::mark_and_push(T* p) {
+   T heap_oop = RawAccess<>::oop_load(p);
+   if (!CompressedOops::is_null(heap_oop)) {
+     oop obj = CompressedOops::decode_not_null(heap_oop);
+-    if (!obj->mark_raw()->is_marked()) {
++    if (!obj->mark_raw().is_marked()) {
+       mark_object(obj);
+       _marking_stack.push(obj);
+     }
+@@ -79,11 +79,11 @@ template <class T> inline void MarkSweep::adjust_pointer(T* p) {
+     oop obj = CompressedOops::decode_not_null(heap_oop);
+     assert(Universe::heap()->is_in(obj), "should be in heap");
+ 
+-    oop new_obj = oop(obj->mark_raw()->decode_pointer());
++    oop new_obj = oop(obj->mark_raw().decode_pointer());
+ 
+     assert(new_obj != NULL ||                         // is forwarding ptr?
+            obj->mark_raw() == markOopDesc::prototype() || // not gc marked?
+-           (UseBiasedLocking && obj->mark_raw()->has_bias_pattern()),
++           (UseBiasedLocking && obj->mark_raw().has_bias_pattern()),
+            // not gc marked?
+            "should be forwarded");
+ 
+diff --git a/src/hotspot/share/gc/shared/preservedMarks.inline.hpp b/src/hotspot/share/gc/shared/preservedMarks.inline.hpp
+index e246a8a5b..42691d63b 100644
+--- a/src/hotspot/share/gc/shared/preservedMarks.inline.hpp
++++ b/src/hotspot/share/gc/shared/preservedMarks.inline.hpp
+@@ -31,7 +31,7 @@
+ #include "utilities/stack.inline.hpp"
+ 
+ inline bool PreservedMarks::should_preserve_mark(oop obj, markOop m) const {
+-  return m->must_be_preserved_for_promotion_failure(obj);
++  return m.must_be_preserved_for_promotion_failure(obj);
+ }
+ 
+ inline void PreservedMarks::push(oop obj, markOop m) {
+diff --git a/src/hotspot/share/gc/shared/space.inline.hpp b/src/hotspot/share/gc/shared/space.inline.hpp
+index ad22b6c42..3732606bc 100644
+--- a/src/hotspot/share/gc/shared/space.inline.hpp
++++ b/src/hotspot/share/gc/shared/space.inline.hpp
+@@ -118,7 +118,7 @@ public:
+       _allowed_deadspace_words -= dead_length;
+       CollectedHeap::fill_with_object(dead_start, dead_length);
+       oop obj = oop(dead_start);
+-      obj->set_mark_raw(obj->mark_raw()->set_marked());
++      obj->set_mark_raw(obj->mark_raw().set_marked());
+ 
+       assert(dead_length == (size_t)obj->size(), "bad filler object size");
+       log_develop_trace(gc, compaction)("Inserting object to dead space: " PTR_FORMAT ", " PTR_FORMAT ", " SIZE_FORMAT "b",
+@@ -165,8 +165,8 @@ inline void CompactibleSpace::scan_and_forward(SpaceType* space, CompactPoint* c
+ 
+   while (cur_obj < scan_limit) {
+     assert(!space->scanned_block_is_obj(cur_obj) ||
+-           oop(cur_obj)->mark_raw()->is_marked() || oop(cur_obj)->mark_raw()->is_unlocked() ||
+-           oop(cur_obj)->mark_raw()->has_bias_pattern(),
++           oop(cur_obj)->mark_raw().is_marked() || oop(cur_obj)->mark_raw().is_unlocked() ||
++           oop(cur_obj)->mark_raw().has_bias_pattern(),
+            "these are the only valid states during a mark sweep");
+     if (space->scanned_block_is_obj(cur_obj) && oop(cur_obj)->is_gc_marked()) {
+       // prefetch beyond cur_obj
+diff --git a/src/hotspot/share/gc/shenandoah/shenandoahAsserts.cpp b/src/hotspot/share/gc/shenandoah/shenandoahAsserts.cpp
+index 1f8b79d5e..d9ecdc8f7 100644
+--- a/src/hotspot/share/gc/shenandoah/shenandoahAsserts.cpp
++++ b/src/hotspot/share/gc/shenandoah/shenandoahAsserts.cpp
+@@ -60,7 +60,7 @@ void ShenandoahAsserts::print_obj(ShenandoahMessageBuffer& msg, oop obj) {
+   r->print_on(&ss);
+ 
+   stringStream mw_ss;
+-  obj->mark()->print_on(&mw_ss);
++  obj->mark().print_on(&mw_ss);
+ 
+   ShenandoahMarkingContext* const ctx = heap->marking_context();
+ 
+diff --git a/src/hotspot/share/gc/shenandoah/shenandoahForwarding.inline.hpp b/src/hotspot/share/gc/shenandoah/shenandoahForwarding.inline.hpp
+index 50d9c5015..4db606bfc 100644
+--- a/src/hotspot/share/gc/shenandoah/shenandoahForwarding.inline.hpp
++++ b/src/hotspot/share/gc/shenandoah/shenandoahForwarding.inline.hpp
+@@ -40,8 +40,8 @@ inline HeapWord* ShenandoahForwarding::get_forwardee_raw_unchecked(oop obj) {
+   // fwdptr. That object is still not forwarded, and we need to return
+   // the object itself.
+   markOop mark = obj->mark_raw();
+-  if (mark->is_marked()) {
+-    HeapWord* fwdptr = (HeapWord*) mark->clear_lock_bits();
++  if (mark.is_marked()) {
++    HeapWord* fwdptr = (HeapWord*) mark.clear_lock_bits().to_pointer();
+     if (fwdptr != NULL) {
+       return fwdptr;
+     }
+@@ -55,8 +55,8 @@ inline oop ShenandoahForwarding::get_forwardee_mutator(oop obj) {
+   assert(Thread::current()->is_Java_thread(), "Must be a mutator thread");
+ 
+   markOop mark = obj->mark_raw();
+-  if (mark->is_marked()) {
+-    HeapWord* fwdptr = (HeapWord*)mark->clear_lock_bits();
++  if (mark.is_marked()) {
++    HeapWord* fwdptr = (HeapWord*)mark.clear_lock_bits().to_pointer();
+     assert(fwdptr != NULL, "Forwarding pointer is never null here");
+     return oop(fwdptr);
+   } else {
+@@ -70,13 +70,13 @@ inline oop ShenandoahForwarding::get_forwardee(oop obj) {
+ }
+ 
+ inline bool ShenandoahForwarding::is_forwarded(oop obj) {
+-  return obj->mark_raw()->is_marked();
++  return obj->mark_raw().is_marked();
+ }
+ 
+ inline oop ShenandoahForwarding::try_update_forwardee(oop obj, oop update) {
+   markOop old_mark = obj->mark_raw();
+-  if (old_mark->is_marked()) {
+-    return (oop) old_mark->clear_lock_bits();
++  if (old_mark.is_marked()) {
++    return (oop) old_mark.clear_lock_bits().to_pointer();
+   }
+ 
+   markOop new_mark = markOopDesc::encode_pointer_as_mark(update);
+@@ -84,7 +84,7 @@ inline oop ShenandoahForwarding::try_update_forwardee(oop obj, oop update) {
+   if (prev_mark == old_mark) {
+     return update;
+   } else {
+-    return (oop) prev_mark->clear_lock_bits();
++    return (oop) prev_mark.clear_lock_bits().to_pointer();
+   }
+ }
+ 
+diff --git a/src/hotspot/share/gc/shenandoah/shenandoahStringDedup.cpp b/src/hotspot/share/gc/shenandoah/shenandoahStringDedup.cpp
+index edcb7724f..b7c4665b9 100644
+--- a/src/hotspot/share/gc/shenandoah/shenandoahStringDedup.cpp
++++ b/src/hotspot/share/gc/shenandoah/shenandoahStringDedup.cpp
+@@ -50,14 +50,14 @@ void ShenandoahStringDedup::enqueue_candidate(oop java_string) {
+     const markOop mark = java_string->mark();
+ 
+     // Having/had displaced header, too risk to deal with them, skip
+-    if (mark == markOopDesc::INFLATING() || mark->has_displaced_mark_helper()) {
++    if (mark == markOopDesc::INFLATING() || mark.has_displaced_mark_helper()) {
+       return;
+     }
+ 
+     // Increase string age and enqueue it when it rearches age threshold
+-    markOop new_mark = mark->incr_age();
++    markOop new_mark = mark.incr_age();
+     if (mark == java_string->cas_set_mark(new_mark, mark)) {
+-      if (mark->age() == StringDeduplicationAgeThreshold) {
++      if (mark.age() == StringDeduplicationAgeThreshold) {
+         StringDedupQueue::push(ShenandoahWorkerSession::worker_id(), java_string);
+       }
+     }
+diff --git a/src/hotspot/share/interpreter/bytecodeInterpreter.cpp b/src/hotspot/share/interpreter/bytecodeInterpreter.cpp
+index cea137469..3ebdc7714 100644
+--- a/src/hotspot/share/interpreter/bytecodeInterpreter.cpp
++++ b/src/hotspot/share/interpreter/bytecodeInterpreter.cpp
+@@ -668,7 +668,7 @@ BytecodeInterpreter::run(interpreterState istate) {
+         markOop mark = rcvr->mark();
+         intptr_t hash = (intptr_t) markOopDesc::no_hash;
+         // Implies UseBiasedLocking.
+-        if (mark->has_bias_pattern()) {
++        if (mark.has_bias_pattern()) {
+           uintptr_t thread_ident;
+           uintptr_t anticipated_bias_locking_value;
+           thread_ident = (uintptr_t)istate->thread();
+@@ -730,7 +730,7 @@ BytecodeInterpreter::run(interpreterState istate) {
+ 
+         // Traditional lightweight locking.
+         if (!success) {
+-          markOop displaced = rcvr->mark()->set_unlocked();
++          markOop displaced = rcvr->mark().set_unlocked();
+           mon->lock()->set_displaced_header(displaced);
+           bool call_vm = UseHeavyMonitors;
+           if (call_vm || rcvr->cas_set_mark((markOop)mon, displaced) != displaced) {
+@@ -854,7 +854,7 @@ BytecodeInterpreter::run(interpreterState istate) {
+       markOop mark = lockee->mark();
+       intptr_t hash = (intptr_t) markOopDesc::no_hash;
+       // implies UseBiasedLocking
+-      if (mark->has_bias_pattern()) {
++      if (mark.has_bias_pattern()) {
+         uintptr_t thread_ident;
+         uintptr_t anticipated_bias_locking_value;
+         thread_ident = (uintptr_t)istate->thread();
+@@ -916,7 +916,7 @@ BytecodeInterpreter::run(interpreterState istate) {
+ 
+       // traditional lightweight locking
+       if (!success) {
+-        markOop displaced = lockee->mark()->set_unlocked();
++        markOop displaced = lockee->mark().set_unlocked();
+         entry->lock()->set_displaced_header(displaced);
+         bool call_vm = UseHeavyMonitors;
+         if (call_vm || lockee->cas_set_mark((markOop)entry, displaced) != displaced) {
+@@ -1794,7 +1794,7 @@ run:
+           markOop mark = lockee->mark();
+           intptr_t hash = (intptr_t) markOopDesc::no_hash;
+           // implies UseBiasedLocking
+-          if (mark->has_bias_pattern()) {
++          if (mark.has_bias_pattern()) {
+             uintptr_t thread_ident;
+             uintptr_t anticipated_bias_locking_value;
+             thread_ident = (uintptr_t)istate->thread();
+@@ -1859,7 +1859,7 @@ run:
+ 
+           // traditional lightweight locking
+           if (!success) {
+-            markOop displaced = lockee->mark()->set_unlocked();
++            markOop displaced = lockee->mark().set_unlocked();
+             entry->lock()->set_displaced_header(displaced);
+             bool call_vm = UseHeavyMonitors;
+             if (call_vm || lockee->cas_set_mark((markOop)entry, displaced) != displaced) {
+@@ -1890,7 +1890,7 @@ run:
+             BasicLock* lock = most_recent->lock();
+             markOop header = lock->displaced_header();
+             most_recent->set_obj(NULL);
+-            if (!lockee->mark()->has_bias_pattern()) {
++            if (!lockee->mark().has_bias_pattern()) {
+               bool call_vm = UseHeavyMonitors;
+               // If it isn't recursive we either must swap old header or call the runtime
+               if (header != NULL || call_vm) {
+@@ -3030,7 +3030,7 @@ run:
+           markOop header = lock->displaced_header();
+           end->set_obj(NULL);
+ 
+-          if (!lockee->mark()->has_bias_pattern()) {
++          if (!lockee->mark().has_bias_pattern()) {
+             // If it isn't recursive we either must swap old header or call the runtime
+             if (header != NULL) {
+               markOop old_header = markOopDesc::encode(lock);
+@@ -3105,7 +3105,7 @@ run:
+             markOop header = lock->displaced_header();
+             base->set_obj(NULL);
+ 
+-            if (!rcvr->mark()->has_bias_pattern()) {
++            if (!rcvr->mark().has_bias_pattern()) {
+               base->set_obj(NULL);
+               // If it isn't recursive we either must swap old header or call the runtime
+               if (header != NULL) {
+diff --git a/src/hotspot/share/jfr/leakprofiler/chains/bfsClosure.cpp b/src/hotspot/share/jfr/leakprofiler/chains/bfsClosure.cpp
+index e436746e8..d14d67962 100644
+--- a/src/hotspot/share/jfr/leakprofiler/chains/bfsClosure.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/chains/bfsClosure.cpp
+@@ -131,7 +131,7 @@ void BFSClosure::closure_impl(const oop* reference, const oop pointee) {
+   if (!_mark_bits->is_marked(pointee)) {
+     _mark_bits->mark_obj(pointee);
+     // is the pointee a sample object?
+-    if (NULL == pointee->mark()) {
++    if (NULL == pointee->mark().to_pointer()) {
+       add_chain(reference, pointee);
+     }
+ 
+@@ -148,7 +148,7 @@ void BFSClosure::closure_impl(const oop* reference, const oop pointee) {
+ 
+ void BFSClosure::add_chain(const oop* reference, const oop pointee) {
+   assert(pointee != NULL, "invariant");
+-  assert(NULL == pointee->mark(), "invariant");
++  assert(NULL == pointee->mark().to_pointer(), "invariant");
+   Edge leak_edge(_current_parent, reference);
+   _edge_store->put_chain(&leak_edge, _current_parent == NULL ? 1 : _current_frontier_level + 2);
+ }
+diff --git a/src/hotspot/share/jfr/leakprofiler/chains/dfsClosure.cpp b/src/hotspot/share/jfr/leakprofiler/chains/dfsClosure.cpp
+index c347901bf..b1a1fca20 100644
+--- a/src/hotspot/share/jfr/leakprofiler/chains/dfsClosure.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/chains/dfsClosure.cpp
+@@ -121,7 +121,7 @@ void DFSClosure::closure_impl(const oop* reference, const oop pointee) {
+   assert(_mark_bits->is_marked(pointee), "invariant");
+ 
+   // is the pointee a sample object?
+-  if (NULL == pointee->mark()) {
++  if (NULL == pointee->mark().to_pointer()) {
+     add_chain();
+   }
+ 
+diff --git a/src/hotspot/share/jfr/leakprofiler/chains/edgeStore.cpp b/src/hotspot/share/jfr/leakprofiler/chains/edgeStore.cpp
+index ad549f486..b9f09fa9a 100644
+--- a/src/hotspot/share/jfr/leakprofiler/chains/edgeStore.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/chains/edgeStore.cpp
+@@ -237,8 +237,8 @@ StoredEdge* EdgeStore::associate_leak_context_with_candidate(const Edge* edge) {
+   StoredEdge* const leak_context_edge = put(edge->reference());
+   oop sample_object = edge->pointee();
+   assert(sample_object != NULL, "invariant");
+-  assert(NULL == sample_object->mark(), "invariant");
+-  sample_object->set_mark(markOop(leak_context_edge));
++  assert(NULL == sample_object->mark().to_pointer(), "invariant");
++  sample_object->set_mark(markOop::from_pointer(leak_context_edge));
+   return leak_context_edge;
+ }
+ 
+diff --git a/src/hotspot/share/jfr/leakprofiler/chains/edgeUtils.cpp b/src/hotspot/share/jfr/leakprofiler/chains/edgeUtils.cpp
+index 699fd4ac4..f4c925004 100644
+--- a/src/hotspot/share/jfr/leakprofiler/chains/edgeUtils.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/chains/edgeUtils.cpp
+@@ -36,7 +36,7 @@
+ #include "runtime/handles.inline.hpp"
+ 
+ bool EdgeUtils::is_leak_edge(const Edge& edge) {
+-  return (const Edge*)edge.pointee()->mark() == &edge;
++  return (const Edge*)edge.pointee()->mark().to_pointer() == &edge;
+ }
+ 
+ static bool is_static_field(const oop ref_owner, const InstanceKlass* ik, int offset) {
+diff --git a/src/hotspot/share/jfr/leakprofiler/chains/objectSampleMarker.hpp b/src/hotspot/share/jfr/leakprofiler/chains/objectSampleMarker.hpp
+index 9a97a373f..2c2616feb 100644
+--- a/src/hotspot/share/jfr/leakprofiler/chains/objectSampleMarker.hpp
++++ b/src/hotspot/share/jfr/leakprofiler/chains/objectSampleMarker.hpp
+@@ -45,7 +45,7 @@ class ObjectSampleMarker : public StackObj {
+                         const markOop mark_oop) : _obj(obj),
+                                                   _mark_oop(mark_oop) {}
+    public:
+-    ObjectSampleMarkOop() : _obj(NULL), _mark_oop(NULL) {}
++    ObjectSampleMarkOop() : _obj(NULL), _mark_oop(markOop::zero()) {}
+   };
+ 
+   GrowableArray<ObjectSampleMarkOop>* _store;
+@@ -72,9 +72,9 @@ class ObjectSampleMarker : public StackObj {
+     // This is an "impossible" state during a safepoint,
+     // hence we will use it to quickly identify sample objects
+     // during the reachability search from gc roots.
+-    assert(NULL == markOopDesc::INFLATING(), "invariant");
++    assert(NULL == markOopDesc::INFLATING().to_pointer(), "invariant");
+     obj->set_mark(markOopDesc::INFLATING());
+-    assert(NULL == obj->mark(), "invariant");
++    assert(NULL == obj->mark().to_pointer(), "invariant");
+   }
+ };
+ 
+diff --git a/src/hotspot/share/jfr/leakprofiler/checkpoint/eventEmitter.cpp b/src/hotspot/share/jfr/leakprofiler/checkpoint/eventEmitter.cpp
+index 02d9c2d9c..438f91763 100644
+--- a/src/hotspot/share/jfr/leakprofiler/checkpoint/eventEmitter.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/checkpoint/eventEmitter.cpp
+@@ -111,7 +111,7 @@ void EventEmitter::write_event(const ObjectSample* sample, EdgeStore* edge_store
+   traceid gc_root_id = 0;
+   const Edge* edge = NULL;
+   if (SafepointSynchronize::is_at_safepoint()) {
+-    edge = (const Edge*)(*object_addr)->mark();
++    edge = (const Edge*)(*object_addr)->mark().to_pointer();
+   }
+   if (edge == NULL) {
+     // In order to dump out a representation of the event
+diff --git a/src/hotspot/share/jfr/leakprofiler/utilities/saveRestore.cpp b/src/hotspot/share/jfr/leakprofiler/utilities/saveRestore.cpp
+index 3cfff5a70..14055853e 100644
+--- a/src/hotspot/share/jfr/leakprofiler/utilities/saveRestore.cpp
++++ b/src/hotspot/share/jfr/leakprofiler/utilities/saveRestore.cpp
+@@ -27,7 +27,7 @@
+ #include "jfr/leakprofiler/utilities/saveRestore.hpp"
+ #include "oops/oop.inline.hpp"
+ 
+-MarkOopContext::MarkOopContext() : _obj(NULL), _mark_oop(NULL) {}
++MarkOopContext::MarkOopContext() : _obj(NULL), _mark_oop(markOop::zero()) {}
+ 
+ MarkOopContext::MarkOopContext(const oop obj) : _obj(obj), _mark_oop(obj->mark()) {
+   assert(_obj->mark() == _mark_oop, "invariant");
+@@ -36,9 +36,9 @@ MarkOopContext::MarkOopContext(const oop obj) : _obj(obj), _mark_oop(obj->mark()
+   // This is an "impossible" state during a safepoint,
+   // hence we will use it to quickly identify objects
+   // during the reachability search from gc roots.
+-  assert(NULL == markOopDesc::INFLATING(), "invariant");
++  assert(markOop::zero() == markOopDesc::INFLATING(), "invariant");
+   _obj->set_mark(markOopDesc::INFLATING());
+-  assert(NULL == obj->mark(), "invariant");
++  assert(markOop::zero() == obj->mark(), "invariant");
+ }
+ 
+ MarkOopContext::~MarkOopContext() {
+@@ -48,7 +48,7 @@ MarkOopContext::~MarkOopContext() {
+   }
+ }
+ 
+-MarkOopContext::MarkOopContext(const MarkOopContext& rhs) : _obj(NULL), _mark_oop(NULL) {
++MarkOopContext::MarkOopContext(const MarkOopContext& rhs) : _obj(NULL), _mark_oop(markOop::zero()) {
+   swap(const_cast<MarkOopContext&>(rhs));
+ }
+ 
+diff --git a/src/hotspot/share/memory/metaspaceShared.cpp b/src/hotspot/share/memory/metaspaceShared.cpp
+index c636ddbe9..b9aa49171 100644
+--- a/src/hotspot/share/memory/metaspaceShared.cpp
++++ b/src/hotspot/share/memory/metaspaceShared.cpp
+@@ -1865,7 +1865,7 @@ void MetaspaceShared::dump_open_archive_heap_objects(
+ }
+ 
+ unsigned MetaspaceShared::obj_hash(oop const& p) {
+-  assert(!p->mark()->has_bias_pattern(),
++  assert(!p->mark().has_bias_pattern(),
+          "this object should never have been locked");  // so identity_hash won't safepoin
+   unsigned hash = (unsigned)p->identity_hash();
+   return hash;
+diff --git a/src/hotspot/share/memory/universe.cpp b/src/hotspot/share/memory/universe.cpp
+index eab9576bc..933b17676 100644
+--- a/src/hotspot/share/memory/universe.cpp
++++ b/src/hotspot/share/memory/universe.cpp
+@@ -1315,7 +1315,7 @@ uintptr_t Universe::verify_mark_mask() {
+ 
+ uintptr_t Universe::verify_mark_bits() {
+   intptr_t mask = verify_mark_mask();
+-  intptr_t bits = (intptr_t)markOopDesc::prototype();
++  intptr_t bits = (intptr_t)markOopDesc::prototype().value();
+   assert((bits & ~mask) == 0, "no stray header bits");
+   return bits;
+ }
+diff --git a/src/hotspot/share/memory/virtualspace.cpp b/src/hotspot/share/memory/virtualspace.cpp
+index d67f624ca..691838c70 100644
+--- a/src/hotspot/share/memory/virtualspace.cpp
++++ b/src/hotspot/share/memory/virtualspace.cpp
+@@ -628,9 +628,9 @@ ReservedHeapSpace::ReservedHeapSpace(size_t size, size_t alignment, bool large,
+     initialize(size, alignment, large, NULL, false);
+   }
+ 
+-  assert(markOopDesc::encode_pointer_as_mark(_base)->decode_pointer() == _base,
++  assert(markOopDesc::encode_pointer_as_mark(_base).decode_pointer() == _base,
+          "area must be distinguishable from marks for mark-sweep");
+-  assert(markOopDesc::encode_pointer_as_mark(&_base[size])->decode_pointer() == &_base[size],
++  assert(markOopDesc::encode_pointer_as_mark(&_base[size]).decode_pointer() == &_base[size],
+          "area must be distinguishable from marks for mark-sweep");
+ 
+   if (base() != NULL) {
+diff --git a/src/hotspot/share/oops/klass.cpp b/src/hotspot/share/oops/klass.cpp
+index 4b97cf7eb..cacfaf82f 100644
+--- a/src/hotspot/share/oops/klass.cpp
++++ b/src/hotspot/share/oops/klass.cpp
+@@ -682,7 +682,7 @@ void Klass::oop_print_on(oop obj, outputStream* st) {
+ 
+   if (WizardMode) {
+      // print header
+-     obj->mark()->print_on(st);
++     obj->mark().print_on(st);
+   }
+ 
+   // print class
+diff --git a/src/hotspot/share/oops/klass.hpp b/src/hotspot/share/oops/klass.hpp
+index 3ade5867a..9094ff0a9 100644
+--- a/src/hotspot/share/oops/klass.hpp
++++ b/src/hotspot/share/oops/klass.hpp
+@@ -28,6 +28,7 @@
+ #include "classfile/classLoaderData.hpp"
+ #include "memory/iterator.hpp"
+ #include "memory/memRegion.hpp"
++#include "oops/markOop.hpp"
+ #include "oops/metadata.hpp"
+ #include "oops/oop.hpp"
+ #include "oops/oopHandle.hpp"
+diff --git a/src/hotspot/share/oops/klass.inline.hpp b/src/hotspot/share/oops/klass.inline.hpp
+index 560998057..89917e4f6 100644
+--- a/src/hotspot/share/oops/klass.inline.hpp
++++ b/src/hotspot/share/oops/klass.inline.hpp
+@@ -30,7 +30,7 @@
+ #include "oops/markOop.hpp"
+ 
+ inline void Klass::set_prototype_header(markOop header) {
+-  assert(!header->has_bias_pattern() || is_instance_klass(), "biased locking currently only supported for Java instances");
++  assert(!header.has_bias_pattern() || is_instance_klass(), "biased locking currently only supported for Java instances");
+   _prototype_header = header;
+ }
+ 
+diff --git a/src/hotspot/share/oops/markOop.hpp b/src/hotspot/share/oops/markOop.hpp
+index 649217c88..036b42372 100644
+--- a/src/hotspot/share/oops/markOop.hpp
++++ b/src/hotspot/share/oops/markOop.hpp
+@@ -101,10 +101,9 @@ class BasicLock;
+ class ObjectMonitor;
+ class JavaThread;
+ 
+-class markOopDesc: public oopDesc {
++class markOop {
+  private:
+-  // Conversion
+-  uintptr_t value() const { return (uintptr_t) this; }
++  uintptr_t _value;
+ 
+  public:
+   // Constants
+@@ -117,6 +116,29 @@ class markOopDesc: public oopDesc {
+          epoch_bits               = 2
+   };
+ 
++  explicit markOop(uintptr_t value) : _value(value) {}
++
++  markOop() { /* uninitialized */}
++
++  // It is critical for performance that this class be trivially
++  // destructable, copyable, and assignable.
++
++  static markOop from_pointer(void* ptr) {
++    return markOop((uintptr_t)ptr);
++  }
++  void* to_pointer() const {
++    return (void*)_value;
++  }
++
++  bool operator==(const markOop& other) const {
++    return _value == other._value;
++  }
++  bool operator!=(const markOop& other) const {
++    return !operator==(other);
++  }
++  // Conversion
++  uintptr_t value() const { return _value; }
++
+   // The biased locking code currently requires that the age bits be
+   // contiguous to the lock bits.
+   enum { lock_shift               = 0,
+@@ -164,6 +186,9 @@ class markOopDesc: public oopDesc {
+ 
+   enum { max_bias_epoch           = epoch_mask };
+ 
++  // Creates a markOop with all bits set to zero.
++  static markOop zero() { return markOop(uintptr_t(0)); }
++
+   // Biased Locking accessors.
+   // These must be checked by all code which calls into the
+   // ObjectSynchronizer and other code. The biasing is not understood
+@@ -224,7 +249,7 @@ class markOopDesc: public oopDesc {
+   // check for and avoid overwriting a 0 value installed by some
+   // other thread.  (They should spin or block instead.  The 0 value
+   // is transient and *should* be short-lived).
+-  static markOop INFLATING() { return (markOop) 0; }    // inflate-in-progress
++  static markOop INFLATING() { return zero(); }    // inflate-in-progress
+ 
+   // Should this header be preserved during GC?
+   inline bool must_be_preserved(oop obj_containing_mark) const;
+@@ -294,17 +319,17 @@ class markOopDesc: public oopDesc {
+   markOop copy_set_hash(intptr_t hash) const {
+     intptr_t tmp = value() & (~hash_mask_in_place);
+     tmp |= ((hash & hash_mask) << hash_shift);
+-    return (markOop)tmp;
++    return markOop(tmp);
+   }
+   // it is only used to be stored into BasicLock as the
+   // indicator that the lock is using heavyweight monitor
+   static markOop unused_mark() {
+-    return (markOop) marked_value;
++    return markOop(marked_value);
+   }
+   // the following two functions create the markOop to be
+   // stored into object header, it encodes monitor info
+   static markOop encode(BasicLock* lock) {
+-    return (markOop) lock;
++    return from_pointer(lock);
+   }
+   static markOop encode(ObjectMonitor* monitor) {
+     intptr_t tmp = (intptr_t) monitor;
+@@ -330,7 +355,7 @@ class markOopDesc: public oopDesc {
+     assert((v & ~age_mask) == 0, "shouldn't overflow age field");
+     return markOop((value() & ~age_mask_in_place) | (((uintptr_t)v & age_mask) << age_shift));
+   }
+-  markOop incr_age()          const { return age() == max_age ? markOop(this) : set_age(age() + 1); }
++  markOop incr_age()          const { return age() == max_age ? markOop(_value) : set_age(age() + 1); }
+ 
+   // hash operations
+   intptr_t hash() const {
+@@ -353,10 +378,10 @@ class markOopDesc: public oopDesc {
+   void print_on(outputStream* st) const;
+ 
+   // Prepare address of oop for placement into mark
+-  inline static markOop encode_pointer_as_mark(void* p) { return markOop(p)->set_marked(); }
++  inline static markOop encode_pointer_as_mark(void* p) { return from_pointer(p).set_marked(); }
+ 
+   // Recover address of oop from encoded form used in mark
+-  inline void* decode_pointer() { if (UseBiasedLocking && has_bias_pattern()) return NULL; return clear_lock_bits(); }
++  inline void* decode_pointer() { if (UseBiasedLocking && has_bias_pattern()) return NULL; return (void*)clear_lock_bits().value(); }
+ 
+   // These markOops indicate cms free chunk blocks and not objects.
+   // In 64 bit, the markOop is set to distinguish them from oops.
+@@ -375,7 +400,7 @@ class markOopDesc: public oopDesc {
+ 
+ #ifdef _LP64
+   static markOop cms_free_prototype() {
+-    return markOop(((intptr_t)prototype() & ~cms_mask_in_place) |
++    return markOop(((intptr_t)prototype().value() & ~cms_mask_in_place) |
+                    ((cms_free_chunk_pattern & cms_mask) << cms_shift));
+   }
+   uintptr_t cms_encoding() const {
+@@ -389,10 +414,23 @@ class markOopDesc: public oopDesc {
+   size_t get_size() const       { return (size_t)(value() >> size_shift); }
+   static markOop set_size_and_free(size_t size) {
+     assert((size & ~size_mask) == 0, "shouldn't overflow size field");
+-    return markOop(((intptr_t)cms_free_prototype() & ~size_mask_in_place) |
++    return markOop(((intptr_t)cms_free_prototype().value() & ~size_mask_in_place) |
+                    (((intptr_t)size & size_mask) << size_shift));
+   }
+ #endif // _LP64
+ };
+ 
++// Add an alias for the Desc type to minimize code churn.
++typedef class markOop markOopDesc;
++
++// Support atomic operations.
++template<>
++struct PrimitiveConversions::Translate<markOop> : public TrueType {
++  typedef markOop Value;
++  typedef uintptr_t Decayed;
++
++  static Decayed decay(const Value& x) { return x.value(); }
++  static Value recover(Decayed x) { return Value(x); }
++};
++
+ #endif // SHARE_VM_OOPS_MARKOOP_HPP
+diff --git a/src/hotspot/share/oops/markOop.inline.hpp b/src/hotspot/share/oops/markOop.inline.hpp
+index 77d2fee0e..f0e042070 100644
+--- a/src/hotspot/share/oops/markOop.inline.hpp
++++ b/src/hotspot/share/oops/markOop.inline.hpp
+@@ -39,7 +39,7 @@ inline bool markOopDesc::must_be_preserved_with_bias(oop obj_containing_mark) co
+     return false;
+   }
+   markOop prototype_header = prototype_for_object(obj_containing_mark);
+-  if (prototype_header->has_bias_pattern()) {
++  if (prototype_header.has_bias_pattern()) {
+     // Individual instance which has its bias revoked; must return
+     // true for correctness
+     return true;
+@@ -68,7 +68,7 @@ inline bool markOopDesc::must_be_preserved_with_bias_for_promotion_failure(oop o
+   // BiasedLocking::preserve_marks() / restore_marks() in the middle
+   // of a scavenge when a promotion failure has first been detected.
+   if (has_bias_pattern() ||
+-      prototype_for_object(obj_containing_mark)->has_bias_pattern()) {
++      prototype_for_object(obj_containing_mark).has_bias_pattern()) {
+     return true;
+   }
+   return (!is_unlocked() || !has_no_hash());
+@@ -89,7 +89,7 @@ inline bool markOopDesc::must_be_preserved_with_bias_for_cms_scavenge(Klass* kla
+   assert(UseBiasedLocking, "unexpected");
+   // CMS scavenges preserve mark words in similar fashion to promotion failures; see above
+   if (has_bias_pattern() ||
+-      klass_of_obj_containing_mark->prototype_header()->has_bias_pattern()) {
++      klass_of_obj_containing_mark->prototype_header().has_bias_pattern()) {
+     return true;
+   }
+   return (!is_unlocked() || !has_no_hash());
+@@ -106,7 +106,7 @@ inline bool markOopDesc::must_be_preserved_for_cms_scavenge(Klass* klass_of_obj_
+ inline markOop markOopDesc::prototype_for_object(oop obj) {
+ #ifdef ASSERT
+   markOop prototype_header = obj->klass()->prototype_header();
+-  assert(prototype_header == prototype() || prototype_header->has_bias_pattern(), "corrupt prototype header");
++  assert(prototype_header == prototype() || prototype_header.has_bias_pattern(), "corrupt prototype header");
+ #endif
+   return obj->klass()->prototype_header();
+ }
+diff --git a/src/hotspot/share/oops/oop.cpp b/src/hotspot/share/oops/oop.cpp
+index 0470cbbde..ab598d767 100644
+--- a/src/hotspot/share/oops/oop.cpp
++++ b/src/hotspot/share/oops/oop.cpp
+@@ -130,7 +130,7 @@ bool oopDesc::is_oop(oop obj, bool ignore_mark_word) {
+   if (ignore_mark_word) {
+     return true;
+   }
+-  if (obj->mark_raw() != NULL) {
++  if (obj->mark_raw().value() != 0) {
+     return true;
+   }
+   return !SafepointSynchronize::is_at_safepoint();
+@@ -145,7 +145,7 @@ bool oopDesc::is_oop_or_null(oop obj, bool ignore_mark_word) {
+ // used only for asserts
+ bool oopDesc::is_unlocked_oop() const {
+   if (!Universe::heap()->is_in_reserved(this)) return false;
+-  return mark()->is_unlocked();
++  return mark().is_unlocked();
+ }
+ #endif // PRODUCT
+ 
+diff --git a/src/hotspot/share/oops/oop.hpp b/src/hotspot/share/oops/oop.hpp
+index 4430530e5..6311ee908 100644
+--- a/src/hotspot/share/oops/oop.hpp
++++ b/src/hotspot/share/oops/oop.hpp
+@@ -28,6 +28,7 @@
+ #include "memory/iterator.hpp"
+ #include "memory/memRegion.hpp"
+ #include "oops/access.hpp"
++#include "oops/markOop.hpp"
+ #include "oops/metadata.hpp"
+ #include "runtime/atomic.hpp"
+ #include "utilities/macros.hpp"
+diff --git a/src/hotspot/share/oops/oop.inline.hpp b/src/hotspot/share/oops/oop.inline.hpp
+index 6c631f545..dfeecb9c5 100644
+--- a/src/hotspot/share/oops/oop.inline.hpp
++++ b/src/hotspot/share/oops/oop.inline.hpp
+@@ -44,23 +44,24 @@
+ // We need a separate file to avoid circular references
+ 
+ markOop  oopDesc::mark()      const {
+-  return HeapAccess<MO_VOLATILE>::load_at(as_oop(), mark_offset_in_bytes());
++  uintptr_t v = HeapAccess<MO_VOLATILE>::load_at(as_oop(), mark_offset_in_bytes());
++  return markOop(v);
+ }
+ 
+ markOop  oopDesc::mark_raw()  const {
+-  return _mark;
++  return Atomic::load(&_mark);;
+ }
+ 
+ markOop* oopDesc::mark_addr_raw() const {
+   return (markOop*) &_mark;
+ }
+ 
+-void oopDesc::set_mark(volatile markOop m) {
+-  HeapAccess<MO_VOLATILE>::store_at(as_oop(), mark_offset_in_bytes(), m);
++void oopDesc::set_mark(markOop m) {
++  HeapAccess<MO_VOLATILE>::store_at(as_oop(), mark_offset_in_bytes(), m.value());
+ }
+ 
+-void oopDesc::set_mark_raw(volatile markOop m) {
+-  _mark = m;
++void oopDesc::set_mark_raw(markOop m) {
++  Atomic::store(m, &_mark);
+ }
+ 
+ void oopDesc::set_mark_raw(HeapWord* mem, markOop m) {
+@@ -68,11 +69,12 @@ void oopDesc::set_mark_raw(HeapWord* mem, markOop m) {
+ }
+ 
+ void oopDesc::release_set_mark(markOop m) {
+-  HeapAccess<MO_RELEASE>::store_at(as_oop(), mark_offset_in_bytes(), m);
++  HeapAccess<MO_RELEASE>::store_at(as_oop(), mark_offset_in_bytes(), m.value());
+ }
+ 
+ markOop oopDesc::cas_set_mark(markOop new_mark, markOop old_mark) {
+-  return HeapAccess<>::atomic_cmpxchg_at(new_mark, as_oop(), mark_offset_in_bytes(), old_mark);
++  uintptr_t v = HeapAccess<>::atomic_cmpxchg_at(new_mark.value(), as_oop(), mark_offset_in_bytes(), old_mark.value());
++  return markOop(v);
+ }
+ 
+ markOop oopDesc::cas_set_mark_raw(markOop new_mark, markOop old_mark, atomic_memory_order order) {
+@@ -318,31 +320,31 @@ inline jdouble oopDesc::double_field(int offset) const              { return Hea
+ inline void    oopDesc::double_field_put(int offset, jdouble value) { HeapAccess<>::store_at(as_oop(), offset, value); }
+ 
+ bool oopDesc::is_locked() const {
+-  return mark()->is_locked();
++  return mark().is_locked();
+ }
+ 
+ bool oopDesc::is_unlocked() const {
+-  return mark()->is_unlocked();
++  return mark().is_unlocked();
+ }
+ 
+ bool oopDesc::has_bias_pattern() const {
+-  return mark()->has_bias_pattern();
++  return mark().has_bias_pattern();
+ }
+ 
+ bool oopDesc::has_bias_pattern_raw() const {
+-  return mark_raw()->has_bias_pattern();
++  return mark_raw().has_bias_pattern();
+ }
+ 
+ // Used only for markSweep, scavenging
+ bool oopDesc::is_gc_marked() const {
+-  return mark_raw()->is_marked();
++  return mark_raw().is_marked();
+ }
+ 
+ // Used by scavengers
+ bool oopDesc::is_forwarded() const {
+   // The extra heap check is needed since the obj might be locked, in which case the
+   // mark would point to a stack location and have the sentinel bit cleared
+-  return mark_raw()->is_marked();
++  return mark_raw().is_marked();
+ }
+ 
+ // Used by scavengers
+@@ -355,7 +357,7 @@ void oopDesc::forward_to(oop p) {
+          !MetaspaceShared::is_archive_object(p),
+          "forwarding archive object");
+   markOop m = markOopDesc::encode_pointer_as_mark(p);
+-  assert(m->decode_pointer() == p, "encoding must be reversable");
++  assert(m.decode_pointer() == p, "encoding must be reversable");
+   set_mark_raw(m);
+ }
+ 
+@@ -366,7 +368,7 @@ bool oopDesc::cas_forward_to(oop p, markOop compare, atomic_memory_order order)
+   assert(Universe::heap()->is_in_reserved(p),
+          "forwarding to something not in heap");
+   markOop m = markOopDesc::encode_pointer_as_mark(p);
+-  assert(m->decode_pointer() == p, "encoding must be reversable");
++  assert(m.decode_pointer() == p, "encoding must be reversable");
+   return cas_set_mark_raw(m, compare, order) == compare;
+ }
+ 
+@@ -375,10 +377,10 @@ oop oopDesc::forward_to_atomic(oop p, atomic_memory_order order) {
+   markOop forwardPtrMark = markOopDesc::encode_pointer_as_mark(p);
+   markOop curMark;
+ 
+-  assert(forwardPtrMark->decode_pointer() == p, "encoding must be reversable");
++  assert(forwardPtrMark.decode_pointer() == p, "encoding must be reversable");
+   assert(sizeof(markOop) == sizeof(intptr_t), "CAS below requires this.");
+ 
+-  while (!oldMark->is_marked()) {
++  while (!oldMark.is_marked()) {
+     curMark = cas_set_mark_raw(forwardPtrMark, oldMark, order);
+     assert(is_forwarded(), "object should have been forwarded");
+     if (curMark == oldMark) {
+@@ -396,33 +398,32 @@ oop oopDesc::forward_to_atomic(oop p, atomic_memory_order order) {
+ // The forwardee is used when copying during scavenge and mark-sweep.
+ // It does need to clear the low two locking- and GC-related bits.
+ oop oopDesc::forwardee() const {
+-  return (oop) mark_raw()->decode_pointer();
++  return (oop) mark_raw().decode_pointer();
+ }
+ 
+ // Note that the forwardee is not the same thing as the displaced_mark.
+ // The forwardee is used when copying during scavenge and mark-sweep.
+ // It does need to clear the low two locking- and GC-related bits.
+ oop oopDesc::forwardee_acquire() const {
+-  markOop m = OrderAccess::load_acquire(&_mark);
+-  return (oop) m->decode_pointer();
++  return (oop) OrderAccess::load_acquire(&_mark).decode_pointer();
+ }
+ 
+ // The following method needs to be MT safe.
+ uint oopDesc::age() const {
+   assert(!is_forwarded(), "Attempt to read age from forwarded mark");
+   if (has_displaced_mark_raw()) {
+-    return displaced_mark_raw()->age();
++    return displaced_mark_raw().age();
+   } else {
+-    return mark_raw()->age();
++    return mark_raw().age();
+   }
+ }
+ 
+ void oopDesc::incr_age() {
+   assert(!is_forwarded(), "Attempt to increment age of forwarded mark");
+   if (has_displaced_mark_raw()) {
+-    set_displaced_mark_raw(displaced_mark_raw()->incr_age());
++    set_displaced_mark_raw(displaced_mark_raw().incr_age());
+   } else {
+-    set_mark_raw(mark_raw()->incr_age());
++    set_mark_raw(mark_raw().incr_age());
+   }
+ }
+ 
+@@ -489,25 +490,25 @@ intptr_t oopDesc::identity_hash() {
+   // Fast case; if the object is unlocked and the hash value is set, no locking is needed
+   // Note: The mark must be read into local variable to avoid concurrent updates.
+   markOop mrk = mark();
+-  if (mrk->is_unlocked() && !mrk->has_no_hash()) {
+-    return mrk->hash();
+-  } else if (mrk->is_marked()) {
+-    return mrk->hash();
++  if (mrk.is_unlocked() && !mrk.has_no_hash()) {
++    return mrk.hash();
++  } else if (mrk.is_marked()) {
++    return mrk.hash();
+   } else {
+     return slow_identity_hash();
+   }
+ }
+ 
+ bool oopDesc::has_displaced_mark_raw() const {
+-  return mark_raw()->has_displaced_mark_helper();
++  return mark_raw().has_displaced_mark_helper();
+ }
+ 
+ markOop oopDesc::displaced_mark_raw() const {
+-  return mark_raw()->displaced_mark_helper();
++  return mark_raw().displaced_mark_helper();
+ }
+ 
+ void oopDesc::set_displaced_mark_raw(markOop m) {
+-  mark_raw()->set_displaced_mark_helper(m);
++  mark_raw().set_displaced_mark_helper(m);
+ }
+ 
+ #endif // SHARE_VM_OOPS_OOP_INLINE_HPP
+diff --git a/src/hotspot/share/oops/oopsHierarchy.hpp b/src/hotspot/share/oops/oopsHierarchy.hpp
+index d419aa156..f5ae4084b 100644
+--- a/src/hotspot/share/oops/oopsHierarchy.hpp
++++ b/src/hotspot/share/oops/oopsHierarchy.hpp
+@@ -40,7 +40,6 @@ typedef juint narrowOop; // Offset instead of address for an oop within a java o
+ typedef juint  narrowKlass;
+ 
+ typedef void* OopOrNarrowOopStar;
+-typedef class   markOopDesc*                markOop;
+ 
+ #ifndef CHECK_UNHANDLED_OOPS
+ 
+@@ -120,7 +119,6 @@ public:
+   operator oopDesc* () const volatile { return obj(); }
+   operator intptr_t* () const         { return (intptr_t*)obj(); }
+   operator PromotedObject* () const   { return (PromotedObject*)obj(); }
+-  operator markOop () const volatile  { return markOop(obj()); }
+   operator address   () const         { return (address)obj(); }
+ 
+   // from javaCalls.cpp
+diff --git a/src/hotspot/share/opto/macro.cpp b/src/hotspot/share/opto/macro.cpp
+index 155c6893e..933adcb3e 100644
+--- a/src/hotspot/share/opto/macro.cpp
++++ b/src/hotspot/share/opto/macro.cpp
+@@ -1773,7 +1773,7 @@ PhaseMacroExpand::initialize_object(AllocateNode* alloc,
+   if (UseBiasedLocking && (length == NULL)) {
+     mark_node = make_load(control, rawmem, klass_node, in_bytes(Klass::prototype_header_offset()), TypeRawPtr::BOTTOM, T_ADDRESS);
+   } else {
+-    mark_node = makecon(TypeRawPtr::make((address)markOopDesc::prototype()));
++    mark_node = makecon(TypeRawPtr::make((address)markOopDesc::prototype().value()));
+   }
+   rawmem = make_store(control, rawmem, object, oopDesc::mark_offset_in_bytes(), mark_node, T_ADDRESS);
+ 
+diff --git a/src/hotspot/share/prims/jvmtiEnvBase.cpp b/src/hotspot/share/prims/jvmtiEnvBase.cpp
+index 093c79042..28ef47815 100644
+--- a/src/hotspot/share/prims/jvmtiEnvBase.cpp
++++ b/src/hotspot/share/prims/jvmtiEnvBase.cpp
+@@ -965,16 +965,16 @@ JvmtiEnvBase::get_object_monitor_usage(JavaThread* calling_thread, jobject objec
+     {
+       markOop mark = hobj()->mark();
+ 
+-      if (!mark->has_monitor()) {
++      if (!mark.has_monitor()) {
+         // this object has a lightweight monitor
+ 
+-        if (mark->has_locker()) {
+-          owner = (address)mark->locker(); // save the address of the Lock word
++        if (mark.has_locker()) {
++          owner = (address)mark.locker(); // save the address of the Lock word
+         }
+         // implied else: no owner
+       } else {
+         // this object has a heavyweight monitor
+-        mon = mark->monitor();
++        mon = mark.monitor();
+ 
+         // The owner field of a heavyweight monitor may be NULL for no
+         // owner, a JavaThread * or it may still be the address of the
+diff --git a/src/hotspot/share/prims/jvmtiTagMap.cpp b/src/hotspot/share/prims/jvmtiTagMap.cpp
+index 1baa32c33..aa8f5230e 100644
+--- a/src/hotspot/share/prims/jvmtiTagMap.cpp
++++ b/src/hotspot/share/prims/jvmtiTagMap.cpp
+@@ -1645,7 +1645,7 @@ class RestoreMarksClosure : public ObjectClosure {
+   void do_object(oop o) {
+     if (o != NULL) {
+       markOop mark = o->mark();
+-      if (mark->is_marked()) {
++      if (mark.is_marked()) {
+         o->init_mark();
+       }
+     }
+@@ -1723,23 +1723,23 @@ void ObjectMarker::done() {
+ // mark an object
+ inline void ObjectMarker::mark(oop o) {
+   assert(Universe::heap()->is_in(o), "sanity check");
+-  assert(!o->mark()->is_marked(), "should only mark an object once");
++  assert(!o->mark().is_marked(), "should only mark an object once");
+ 
+   // object's mark word
+   markOop mark = o->mark();
+ 
+-  if (mark->must_be_preserved(o)) {
++  if (mark.must_be_preserved(o)) {
+     _saved_mark_stack->push(mark);
+     _saved_oop_stack->push(o);
+   }
+ 
+   // mark the object
+-  o->set_mark(markOopDesc::prototype()->set_marked());
++  o->set_mark(markOopDesc::prototype().set_marked());
+ }
+ 
+ // return true if object is marked
+ inline bool ObjectMarker::visited(oop o) {
+-  return o->mark()->is_marked();
++  return o->mark().is_marked();
+ }
+ 
+ // Stack allocated class to help ensure that ObjectMarker is used
+diff --git a/src/hotspot/share/prims/whitebox.cpp b/src/hotspot/share/prims/whitebox.cpp
+index 82a811062..29f67a28e 100644
+--- a/src/hotspot/share/prims/whitebox.cpp
++++ b/src/hotspot/share/prims/whitebox.cpp
+@@ -1689,7 +1689,7 @@ WB_END
+ 
+ WB_ENTRY(jboolean, WB_IsMonitorInflated(JNIEnv* env, jobject wb, jobject obj))
+   oop obj_oop = JNIHandles::resolve(obj);
+-  return (jboolean) obj_oop->mark()->has_monitor();
++  return (jboolean) obj_oop->mark().has_monitor();
+ WB_END
+ 
+ WB_ENTRY(void, WB_ForceSafepoint(JNIEnv* env, jobject wb))
+diff --git a/src/hotspot/share/runtime/basicLock.cpp b/src/hotspot/share/runtime/basicLock.cpp
+index 5d69b30ae..2090e4906 100644
+--- a/src/hotspot/share/runtime/basicLock.cpp
++++ b/src/hotspot/share/runtime/basicLock.cpp
+@@ -29,8 +29,8 @@
+ void BasicLock::print_on(outputStream* st) const {
+   st->print("monitor");
+   markOop moop = displaced_header();
+-  if (moop != NULL)
+-    moop->print_on(st);
++  if (moop.value() != 0)
++    moop.print_on(st);
+ }
+ 
+ void BasicLock::move_to(oop obj, BasicLock* dest) {
+@@ -62,7 +62,7 @@ void BasicLock::move_to(oop obj, BasicLock* dest) {
+   // is small (given the support for inflated fast-path locking in the fast_lock, etc)
+   // we'll leave that optimization for another time.
+ 
+-  if (displaced_header()->is_neutral()) {
++  if (displaced_header().is_neutral()) {
+     ObjectSynchronizer::inflate_helper(obj);
+     // WARNING: We can not put check here, because the inflation
+     // will not update the displaced header. Once BasicLock is inflated,
+@@ -75,6 +75,6 @@ void BasicLock::move_to(oop obj, BasicLock* dest) {
+     // we can find any flavor mark in the displaced mark.
+   }
+ // [RGV] The next line appears to do nothing!
+-  intptr_t dh = (intptr_t) displaced_header();
++  intptr_t dh = (intptr_t) displaced_header().value();
+   dest->set_displaced_header(displaced_header());
+ }
+diff --git a/src/hotspot/share/runtime/basicLock.hpp b/src/hotspot/share/runtime/basicLock.hpp
+index 68fd6c332..388741734 100644
+--- a/src/hotspot/share/runtime/basicLock.hpp
++++ b/src/hotspot/share/runtime/basicLock.hpp
+@@ -26,6 +26,7 @@
+ #define SHARE_VM_RUNTIME_BASICLOCK_HPP
+ 
+ #include "oops/markOop.hpp"
++#include "runtime/atomic.hpp"
+ #include "runtime/handles.hpp"
+ 
+ class BasicLock {
+@@ -34,8 +35,13 @@ class BasicLock {
+  private:
+   volatile markOop _displaced_header;
+  public:
+-  markOop      displaced_header() const               { return _displaced_header; }
+-  void         set_displaced_header(markOop header)   { _displaced_header = header; }
++  markOop displaced_header() const {
++    return Atomic::load(&_displaced_header);
++  }
++
++  void set_displaced_header(markOop header) {
++    Atomic::store(header, &_displaced_header);
++  }
+ 
+   void print_on(outputStream* st) const;
+ 
+diff --git a/src/hotspot/share/runtime/biasedLocking.cpp b/src/hotspot/share/runtime/biasedLocking.cpp
+index a324120d8..2c23a4288 100644
+--- a/src/hotspot/share/runtime/biasedLocking.cpp
++++ b/src/hotspot/share/runtime/biasedLocking.cpp
+@@ -150,27 +150,27 @@ static GrowableArray<MonitorInfo*>* get_or_compute_monitor_info(JavaThread* thre
+   return info;
+ }
+ 
+-// After the call, *biased_locker will be set to obj->mark()->biased_locker() if biased_locker != NULL,
++// After the call, *biased_locker will be set to obj->mark().biased_locker() if biased_locker != NULL,
+ // AND it is a living thread. Otherwise it will not be updated, (i.e. the caller is responsible for initialization).
+ static BiasedLocking::Condition revoke_bias(oop obj, bool allow_rebias, bool is_bulk, JavaThread* requesting_thread, JavaThread** biased_locker) {
+   markOop mark = obj->mark();
+-  if (!mark->has_bias_pattern()) {
++  if (!mark.has_bias_pattern()) {
+     if (log_is_enabled(Info, biasedlocking)) {
+       ResourceMark rm;
+       log_info(biasedlocking)("  (Skipping revocation of object " INTPTR_FORMAT
+                               ", mark " INTPTR_FORMAT ", type %s"
+                               ", requesting thread " INTPTR_FORMAT
+                               " because it's no longer biased)",
+-                              p2i((void *)obj), (intptr_t) mark,
++                              p2i((void *)obj), (intptr_t) mark.value(),
+                               obj->klass()->external_name(),
+                               (intptr_t) requesting_thread);
+     }
+     return BiasedLocking::NOT_BIASED;
+   }
+ 
+-  uint age = mark->age();
+-  markOop   biased_prototype = markOopDesc::biased_locking_prototype()->set_age(age);
+-  markOop unbiased_prototype = markOopDesc::prototype()->set_age(age);
++  uint age = mark.age();
++  markOop   biased_prototype = markOopDesc::biased_locking_prototype().set_age(age);
++  markOop unbiased_prototype = markOopDesc::prototype().set_age(age);
+ 
+   // Log at "info" level if not bulk, else "trace" level
+   if (!is_bulk) {
+@@ -179,9 +179,9 @@ static BiasedLocking::Condition revoke_bias(oop obj, bool allow_rebias, bool is_
+                             INTPTR_FORMAT ", type %s, prototype header " INTPTR_FORMAT
+                             ", allow rebias %d, requesting thread " INTPTR_FORMAT,
+                             p2i((void *)obj),
+-                            (intptr_t) mark,
++                            (intptr_t) mark.value(),
+                             obj->klass()->external_name(),
+-                            (intptr_t) obj->klass()->prototype_header(),
++                            (intptr_t) obj->klass()->prototype_header().value(),
+                             (allow_rebias ? 1 : 0),
+                             (intptr_t) requesting_thread);
+   } else {
+@@ -190,14 +190,14 @@ static BiasedLocking::Condition revoke_bias(oop obj, bool allow_rebias, bool is_
+                              INTPTR_FORMAT " , type %s , prototype header " INTPTR_FORMAT
+                              " , allow rebias %d , requesting thread " INTPTR_FORMAT,
+                              p2i((void *)obj),
+-                             (intptr_t) mark,
++                             (intptr_t) mark.value(),
+                              obj->klass()->external_name(),
+-                             (intptr_t) obj->klass()->prototype_header(),
++                             (intptr_t) obj->klass()->prototype_header().value(),
+                              (allow_rebias ? 1 : 0),
+                              (intptr_t) requesting_thread);
+   }
+ 
+-  JavaThread* biased_thread = mark->biased_locker();
++  JavaThread* biased_thread = mark.biased_locker();
+   if (biased_thread == NULL) {
+     // Object is anonymously biased. We can get here if, for
+     // example, we revoke the bias due to an identity hash code
+@@ -279,7 +279,7 @@ static BiasedLocking::Condition revoke_bias(oop obj, bool allow_rebias, bool is_
+     // Must release storing the lock address for platforms without TSO
+     // ordering (e.g. ppc).
+     obj->release_set_mark(markOopDesc::encode(highest_lock));
+-    assert(!obj->mark()->has_bias_pattern(), "illegal mark state: stack lock used bias bit");
++    assert(!obj->mark().has_bias_pattern(), "illegal mark state: stack lock used bias bit");
+     // Log at "info" level if not bulk, else "trace" level
+     if (!is_bulk) {
+       log_info(biasedlocking)("  Revoked bias of currently-locked object");
+@@ -320,7 +320,7 @@ enum HeuristicsResult {
+ 
+ static HeuristicsResult update_heuristics(oop o, bool allow_rebias) {
+   markOop mark = o->mark();
+-  if (!mark->has_bias_pattern()) {
++  if (!mark.has_bias_pattern()) {
+     return HR_NOT_BIASED;
+   }
+ 
+@@ -381,7 +381,7 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+                           INTPTR_FORMAT " , mark " INTPTR_FORMAT " , type %s",
+                           (bulk_rebias ? "rebias" : "revoke"),
+                           p2i((void *) o),
+-                          (intptr_t) o->mark(),
++                          (intptr_t) o->mark().value(),
+                           o->klass()->external_name());
+ 
+   jlong cur_time = os::javaTimeMillis();
+@@ -405,10 +405,10 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+       // try to update the epoch -- assume another VM operation came in
+       // and reset the header to the unbiased state, which will
+       // implicitly cause all existing biases to be revoked
+-      if (klass->prototype_header()->has_bias_pattern()) {
+-        int prev_epoch = klass->prototype_header()->bias_epoch();
+-        klass->set_prototype_header(klass->prototype_header()->incr_bias_epoch());
+-        int cur_epoch = klass->prototype_header()->bias_epoch();
++      if (klass->prototype_header().has_bias_pattern()) {
++        int prev_epoch = klass->prototype_header().bias_epoch();
++        klass->set_prototype_header(klass->prototype_header().incr_bias_epoch());
++        int cur_epoch = klass->prototype_header().bias_epoch();
+ 
+         // Now walk all threads' stacks and adjust epochs of any biased
+         // and locked objects of this data type we encounter
+@@ -418,10 +418,10 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+             MonitorInfo* mon_info = cached_monitor_info->at(i);
+             oop owner = mon_info->owner();
+             markOop mark = owner->mark();
+-            if ((owner->klass() == k_o) && mark->has_bias_pattern()) {
++            if ((owner->klass() == k_o) && mark.has_bias_pattern()) {
+               // We might have encountered this object already in the case of recursive locking
+-              assert(mark->bias_epoch() == prev_epoch || mark->bias_epoch() == cur_epoch, "error in bias epoch adjustment");
+-              owner->set_mark(mark->set_bias_epoch(cur_epoch));
++              assert(mark.bias_epoch() == prev_epoch || mark.bias_epoch() == cur_epoch, "error in bias epoch adjustment");
++              owner->set_mark(mark.set_bias_epoch(cur_epoch));
+             }
+           }
+         }
+@@ -429,7 +429,7 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+ 
+       // At this point we're done. All we have to do is potentially
+       // adjust the header of the given object to revoke its bias.
+-      revoke_bias(o, attempt_rebias_of_object && klass->prototype_header()->has_bias_pattern(), true, requesting_thread, NULL);
++      revoke_bias(o, attempt_rebias_of_object && klass->prototype_header().has_bias_pattern(), true, requesting_thread, NULL);
+     } else {
+       if (log_is_enabled(Info, biasedlocking)) {
+         ResourceMark rm;
+@@ -450,7 +450,7 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+           MonitorInfo* mon_info = cached_monitor_info->at(i);
+           oop owner = mon_info->owner();
+           markOop mark = owner->mark();
+-          if ((owner->klass() == k_o) && mark->has_bias_pattern()) {
++          if ((owner->klass() == k_o) && mark.has_bias_pattern()) {
+             revoke_bias(owner, false, true, requesting_thread, NULL);
+           }
+         }
+@@ -467,17 +467,17 @@ static BiasedLocking::Condition bulk_revoke_or_rebias_at_safepoint(oop o,
+   BiasedLocking::Condition status_code = BiasedLocking::BIAS_REVOKED;
+ 
+   if (attempt_rebias_of_object &&
+-      o->mark()->has_bias_pattern() &&
+-      klass->prototype_header()->has_bias_pattern()) {
+-    markOop new_mark = markOopDesc::encode(requesting_thread, o->mark()->age(),
+-                                           klass->prototype_header()->bias_epoch());
++      o->mark().has_bias_pattern() &&
++      klass->prototype_header().has_bias_pattern()) {
++    markOop new_mark = markOopDesc::encode(requesting_thread, o->mark().age(),
++                                           klass->prototype_header().bias_epoch());
+     o->set_mark(new_mark);
+     status_code = BiasedLocking::BIAS_REVOKED_AND_REBIASED;
+     log_info(biasedlocking)("  Rebiased object toward thread " INTPTR_FORMAT, (intptr_t) requesting_thread);
+   }
+ 
+-  assert(!o->mark()->has_bias_pattern() ||
+-         (attempt_rebias_of_object && (o->mark()->biased_locker() == requesting_thread)),
++  assert(!o->mark().has_bias_pattern() ||
++         (attempt_rebias_of_object && (o->mark().biased_locker() == requesting_thread)),
+          "bug in bulk bias revocation");
+ 
+   return status_code;
+@@ -523,13 +523,13 @@ public:
+     // there is nothing to do and we avoid a safepoint.
+     if (_obj != NULL) {
+       markOop mark = (*_obj)()->mark();
+-      if (mark->has_bias_pattern()) {
++      if (mark.has_bias_pattern()) {
+         return true;
+       }
+     } else {
+       for ( int i = 0 ; i < _objs->length(); i++ ) {
+         markOop mark = (_objs->at(i))()->mark();
+-        if (mark->has_bias_pattern()) {
++        if (mark.has_bias_pattern()) {
+           return true;
+         }
+       }
+@@ -629,7 +629,7 @@ BiasedLocking::Condition BiasedLocking::revoke_and_rebias(Handle obj, bool attem
+   // update the heuristics because doing so may cause unwanted bulk
+   // revocations (which are expensive) to occur.
+   markOop mark = obj->mark();
+-  if (mark->is_biased_anonymously() && !attempt_rebias) {
++  if (mark.is_biased_anonymously() && !attempt_rebias) {
+     // We are probably trying to revoke the bias of this object due to
+     // an identity hash code computation. Try to revoke the bias
+     // without a safepoint. This is possible if we can successfully
+@@ -637,15 +637,15 @@ BiasedLocking::Condition BiasedLocking::revoke_and_rebias(Handle obj, bool attem
+     // the object, meaning that no other thread has raced to acquire
+     // the bias of the object.
+     markOop biased_value       = mark;
+-    markOop unbiased_prototype = markOopDesc::prototype()->set_age(mark->age());
++    markOop unbiased_prototype = markOopDesc::prototype().set_age(mark.age());
+     markOop res_mark = obj->cas_set_mark(unbiased_prototype, mark);
+     if (res_mark == biased_value) {
+       return BIAS_REVOKED;
+     }
+-  } else if (mark->has_bias_pattern()) {
++  } else if (mark.has_bias_pattern()) {
+     Klass* k = obj->klass();
+     markOop prototype_header = k->prototype_header();
+-    if (!prototype_header->has_bias_pattern()) {
++    if (!prototype_header.has_bias_pattern()) {
+       // This object has a stale bias from before the bulk revocation
+       // for this data type occurred. It's pointless to update the
+       // heuristics at this point so simply update the header with a
+@@ -654,9 +654,9 @@ BiasedLocking::Condition BiasedLocking::revoke_and_rebias(Handle obj, bool attem
+       // with it.
+       markOop biased_value       = mark;
+       markOop res_mark = obj->cas_set_mark(prototype_header, mark);
+-      assert(!obj->mark()->has_bias_pattern(), "even if we raced, should still be revoked");
++      assert(!obj->mark().has_bias_pattern(), "even if we raced, should still be revoked");
+       return BIAS_REVOKED;
+-    } else if (prototype_header->bias_epoch() != mark->bias_epoch()) {
++    } else if (prototype_header.bias_epoch() != mark.bias_epoch()) {
+       // The epoch of this biasing has expired indicating that the
+       // object is effectively unbiased. Depending on whether we need
+       // to rebias or revoke the bias of this object we can do it
+@@ -667,14 +667,14 @@ BiasedLocking::Condition BiasedLocking::revoke_and_rebias(Handle obj, bool attem
+       if (attempt_rebias) {
+         assert(THREAD->is_Java_thread(), "");
+         markOop biased_value       = mark;
+-        markOop rebiased_prototype = markOopDesc::encode((JavaThread*) THREAD, mark->age(), prototype_header->bias_epoch());
++        markOop rebiased_prototype = markOopDesc::encode((JavaThread*) THREAD, mark.age(), prototype_header.bias_epoch());
+         markOop res_mark = obj->cas_set_mark(rebiased_prototype, mark);
+         if (res_mark == biased_value) {
+           return BIAS_REVOKED_AND_REBIASED;
+         }
+       } else {
+         markOop biased_value       = mark;
+-        markOop unbiased_prototype = markOopDesc::prototype()->set_age(mark->age());
++        markOop unbiased_prototype = markOopDesc::prototype().set_age(mark.age());
+         markOop res_mark = obj->cas_set_mark(unbiased_prototype, mark);
+         if (res_mark == biased_value) {
+           return BIAS_REVOKED;
+@@ -689,8 +689,8 @@ BiasedLocking::Condition BiasedLocking::revoke_and_rebias(Handle obj, bool attem
+   } else if (heuristics == HR_SINGLE_REVOKE) {
+     Klass *k = obj->klass();
+     markOop prototype_header = k->prototype_header();
+-    if (mark->biased_locker() == THREAD &&
+-        prototype_header->bias_epoch() == mark->bias_epoch()) {
++    if (mark.biased_locker() == THREAD &&
++        prototype_header.bias_epoch() == mark.bias_epoch()) {
+       // A thread is trying to revoke the bias of an object biased
+       // toward it, again likely due to an identity hash code
+       // computation. We can again avoid a safepoint in this case
+@@ -814,7 +814,7 @@ void BiasedLocking::preserve_marks() {
+             oop owner = mon_info->owner();
+             if (owner != NULL) {
+               markOop mark = owner->mark();
+-              if (mark->has_bias_pattern()) {
++              if (mark.has_bias_pattern()) {
+                 _preserved_oop_stack->push(Handle(cur, owner));
+                 _preserved_mark_stack->push(mark);
+               }
+diff --git a/src/hotspot/share/runtime/deoptimization.cpp b/src/hotspot/share/runtime/deoptimization.cpp
+index 7ca0d9154..5f1d44355 100644
+--- a/src/hotspot/share/runtime/deoptimization.cpp
++++ b/src/hotspot/share/runtime/deoptimization.cpp
+@@ -1121,14 +1121,14 @@ void Deoptimization::relock_objects(GrowableArray<MonitorInfo*>* monitors, JavaT
+       if (!mon_info->owner_is_scalar_replaced()) {
+         Handle obj(thread, mon_info->owner());
+         markOop mark = obj->mark();
+-        if (UseBiasedLocking && mark->has_bias_pattern()) {
++        if (UseBiasedLocking && mark.has_bias_pattern()) {
+           // New allocated objects may have the mark set to anonymously biased.
+           // Also the deoptimized method may called methods with synchronization
+           // where the thread-local object is bias locked to the current thread.
+-          assert(mark->is_biased_anonymously() ||
+-                 mark->biased_locker() == thread, "should be locked to current thread");
++          assert(mark.is_biased_anonymously() ||
++                 mark.biased_locker() == thread, "should be locked to current thread");
+           // Reset mark word to unbiased prototype.
+-          markOop unbiased_prototype = markOopDesc::prototype()->set_age(mark->age());
++          markOop unbiased_prototype = markOopDesc::prototype().set_age(mark.age());
+           obj->set_mark(unbiased_prototype);
+         }
+         BasicLock* lock = mon_info->lock();
+diff --git a/src/hotspot/share/runtime/objectMonitor.hpp b/src/hotspot/share/runtime/objectMonitor.hpp
+index d73c8a947..eba6075a2 100644
+--- a/src/hotspot/share/runtime/objectMonitor.hpp
++++ b/src/hotspot/share/runtime/objectMonitor.hpp
+@@ -27,6 +27,7 @@
+ 
+ #include "memory/allocation.hpp"
+ #include "memory/padded.hpp"
++#include "oops/markOop.hpp"
+ #include "runtime/os.hpp"
+ #include "runtime/park.hpp"
+ #include "runtime/perfData.hpp"
+diff --git a/src/hotspot/share/runtime/objectMonitor.inline.hpp b/src/hotspot/share/runtime/objectMonitor.inline.hpp
+index 951d6472e..abb8cc554 100644
+--- a/src/hotspot/share/runtime/objectMonitor.inline.hpp
++++ b/src/hotspot/share/runtime/objectMonitor.inline.hpp
+@@ -25,6 +25,8 @@
+ #ifndef SHARE_VM_RUNTIME_OBJECTMONITOR_INLINE_HPP
+ #define SHARE_VM_RUNTIME_OBJECTMONITOR_INLINE_HPP
+ 
++#include "runtime/atomic.hpp"
++
+ inline intptr_t ObjectMonitor::is_entered(TRAPS) const {
+   if (THREAD == _owner || THREAD->is_lock_owned((address) _owner)) {
+     return 1;
+@@ -33,7 +35,7 @@ inline intptr_t ObjectMonitor::is_entered(TRAPS) const {
+ }
+ 
+ inline markOop ObjectMonitor::header() const {
+-  return _header;
++  return Atomic::load(&_header);
+ }
+ 
+ inline volatile markOop* ObjectMonitor::header_addr() {
+@@ -42,7 +44,7 @@ inline volatile markOop* ObjectMonitor::header_addr() {
+ }
+ 
+ inline void ObjectMonitor::set_header(markOop hdr) {
+-  _header = hdr;
++  Atomic::store(hdr, &_header);
+ }
+ 
+ inline jint ObjectMonitor::count() const {
+@@ -58,14 +60,14 @@ inline void* ObjectMonitor::owner() const {
+ }
+ 
+ inline void ObjectMonitor::clear() {
+-  assert(_header, "Fatal logic error in ObjectMonitor header!");
++  assert(Atomic::load(&_header).value() != 0, "Fatal logic error in ObjectMonitor header!");
+   assert(_count == 0, "Fatal logic error in ObjectMonitor count!");
+   assert(_waiters == 0, "Fatal logic error in ObjectMonitor waiters!");
+   assert(_recursions == 0, "Fatal logic error in ObjectMonitor recursions!");
+   assert(_object != NULL, "Fatal logic error in ObjectMonitor object!");
+   assert(_owner == 0, "Fatal logic error in ObjectMonitor owner!");
+ 
+-  _header = NULL;
++  Atomic::store(markOop::zero(), &_header);
+   _object = NULL;
+ }
+ 
+diff --git a/src/hotspot/share/runtime/sharedRuntime.cpp b/src/hotspot/share/runtime/sharedRuntime.cpp
+index 595ff7495..cee41fcd7 100644
+--- a/src/hotspot/share/runtime/sharedRuntime.cpp
++++ b/src/hotspot/share/runtime/sharedRuntime.cpp
+@@ -3080,10 +3080,10 @@ JRT_LEAF(intptr_t*, SharedRuntime::OSR_migration_begin( JavaThread *thread) )
+     if (kptr2->obj() != NULL) {         // Avoid 'holes' in the monitor array
+       BasicLock *lock = kptr2->lock();
+       // Inflate so the displaced header becomes position-independent
+-      if (lock->displaced_header()->is_unlocked())
++      if (lock->displaced_header().is_unlocked())
+         ObjectSynchronizer::inflate_helper(kptr2->obj());
+       // Now the displaced header is free to move
+-      buf[i++] = (intptr_t)lock->displaced_header();
++      buf[i++] = (intptr_t)lock->displaced_header().value();
+       buf[i++] = cast_from_oop<intptr_t>(kptr2->obj());
+     }
+   }
+diff --git a/src/hotspot/share/runtime/synchronizer.cpp b/src/hotspot/share/runtime/synchronizer.cpp
+index e7b32723e..2da0b02e9 100644
+--- a/src/hotspot/share/runtime/synchronizer.cpp
++++ b/src/hotspot/share/runtime/synchronizer.cpp
+@@ -160,14 +160,14 @@ bool ObjectSynchronizer::quick_notify(oopDesc * obj, Thread * self, bool all) {
+   if (obj == NULL) return false;  // slow-path for invalid obj
+   const markOop mark = obj->mark();
+ 
+-  if (mark->has_locker() && self->is_lock_owned((address)mark->locker())) {
++  if (mark.has_locker() && self->is_lock_owned((address)mark.locker())) {
+     // Degenerate notify
+     // stack-locked by caller so by definition the implied waitset is empty.
+     return true;
+   }
+ 
+-  if (mark->has_monitor()) {
+-    ObjectMonitor * const mon = mark->monitor();
++  if (mark.has_monitor()) {
++    ObjectMonitor * const mon = mark.monitor();
+     assert(mon->object() == obj, "invariant");
+     if (mon->owner() != self) return false;  // slow-path for IMS exception
+ 
+@@ -210,8 +210,8 @@ bool ObjectSynchronizer::quick_enter(oop obj, Thread * Self,
+   if (obj == NULL) return false;       // Need to throw NPE
+   const markOop mark = obj->mark();
+ 
+-  if (mark->has_monitor()) {
+-    ObjectMonitor * const m = mark->monitor();
++  if (mark.has_monitor()) {
++    ObjectMonitor * const m = mark.monitor();
+     assert(m->object() == obj, "invariant");
+     Thread * const owner = (Thread *) m->_owner;
+ 
+@@ -273,7 +273,7 @@ void ObjectSynchronizer::fast_enter(Handle obj, BasicLock* lock,
+       assert(!attempt_rebias, "can not rebias toward VM thread");
+       BiasedLocking::revoke_at_safepoint(obj);
+     }
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   slow_enter(obj, lock, THREAD);
+@@ -283,10 +283,10 @@ void ObjectSynchronizer::fast_exit(oop object, BasicLock* lock, TRAPS) {
+   markOop mark = object->mark();
+   // We cannot check for Biased Locking if we are racing an inflation.
+   assert(mark == markOopDesc::INFLATING() ||
+-         !mark->has_bias_pattern(), "should not see bias pattern here");
++         !mark.has_bias_pattern(), "should not see bias pattern here");
+ 
+   markOop dhw = lock->displaced_header();
+-  if (dhw == NULL) {
++  if (dhw.value() == 0) {
+     // If the displaced header is NULL, then this exit matches up with
+     // a recursive enter. No real work to do here except for diagnostics.
+ #ifndef PRODUCT
+@@ -294,10 +294,10 @@ void ObjectSynchronizer::fast_exit(oop object, BasicLock* lock, TRAPS) {
+       // Only do diagnostics if we are not racing an inflation. Simply
+       // exiting a recursive enter of a Java Monitor that is being
+       // inflated is safe; see the has_monitor() comment below.
+-      assert(!mark->is_neutral(), "invariant");
+-      assert(!mark->has_locker() ||
+-             THREAD->is_lock_owned((address)mark->locker()), "invariant");
+-      if (mark->has_monitor()) {
++      assert(!mark.is_neutral(), "invariant");
++      assert(!mark.has_locker() ||
++             THREAD->is_lock_owned((address)mark.locker()), "invariant");
++      if (mark.has_monitor()) {
+         // The BasicLock's displaced_header is marked as a recursive
+         // enter and we have an inflated Java Monitor (ObjectMonitor).
+         // This is a special case where the Java Monitor was inflated
+@@ -306,7 +306,7 @@ void ObjectSynchronizer::fast_exit(oop object, BasicLock* lock, TRAPS) {
+         // Monitor owner's stack and update the BasicLocks because a
+         // Java Monitor can be asynchronously inflated by a thread that
+         // does not own the Java Monitor.
+-        ObjectMonitor * m = mark->monitor();
++        ObjectMonitor * m = mark.monitor();
+         assert(((oop)(m->object()))->mark() == mark, "invariant");
+         assert(m->is_entered(THREAD), "invariant");
+       }
+@@ -315,10 +315,10 @@ void ObjectSynchronizer::fast_exit(oop object, BasicLock* lock, TRAPS) {
+     return;
+   }
+ 
+-  if (mark == (markOop) lock) {
++  if (mark == markOop::from_pointer(lock)) {
+     // If the object is stack-locked by the current thread, try to
+     // swing the displaced header from the BasicLock back to the mark.
+-    assert(dhw->is_neutral(), "invariant");
++    assert(dhw.is_neutral(), "invariant");
+     if (object->cas_set_mark(dhw, mark) == mark) {
+       TEVENT(fast_exit: release stack-lock);
+       return;
+@@ -338,22 +338,22 @@ void ObjectSynchronizer::fast_exit(oop object, BasicLock* lock, TRAPS) {
+ // failed in the interpreter/compiler code.
+ void ObjectSynchronizer::slow_enter(Handle obj, BasicLock* lock, TRAPS) {
+   markOop mark = obj->mark();
+-  assert(!mark->has_bias_pattern(), "should not see bias pattern here");
++  assert(!mark.has_bias_pattern(), "should not see bias pattern here");
+ 
+-  if (mark->is_neutral()) {
++  if (mark.is_neutral()) {
+     // Anticipate successful CAS -- the ST of the displaced mark must
+     // be visible <= the ST performed by the CAS.
+     lock->set_displaced_header(mark);
+-    if (mark == obj()->cas_set_mark((markOop) lock, mark)) {
++    if (mark == obj()->cas_set_mark(markOop::from_pointer(lock), mark)) {
+       TEVENT(slow_enter: release stacklock);
+       return;
+     }
+     // Fall through to inflate() ...
+-  } else if (mark->has_locker() &&
+-             THREAD->is_lock_owned((address)mark->locker())) {
+-    assert(lock != mark->locker(), "must not re-lock the same lock");
+-    assert(lock != (BasicLock*)obj->mark(), "don't relock with same BasicLock");
+-    lock->set_displaced_header(NULL);
++  } else if (mark.has_locker() &&
++             THREAD->is_lock_owned((address)mark.locker())) {
++    assert(lock != mark.locker(), "must not re-lock the same lock");
++    assert(lock != (BasicLock*)obj->mark().value(), "don't relock with same BasicLock");
++    lock->set_displaced_header(markOop::from_pointer(NULL));
+     return;
+   }
+ 
+@@ -391,7 +391,7 @@ intptr_t ObjectSynchronizer::complete_exit(Handle obj, TRAPS) {
+   TEVENT(complete_exit);
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   ObjectMonitor* monitor = ObjectSynchronizer::inflate(THREAD,
+@@ -406,7 +406,7 @@ void ObjectSynchronizer::reenter(Handle obj, intptr_t recursion, TRAPS) {
+   TEVENT(reenter);
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   ObjectMonitor* monitor = ObjectSynchronizer::inflate(THREAD,
+@@ -423,7 +423,7 @@ void ObjectSynchronizer::jni_enter(Handle obj, TRAPS) {
+   TEVENT(jni_enter);
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+   THREAD->set_current_pending_monitor_is_from_java(false);
+   ObjectSynchronizer::inflate(THREAD, obj(), inflate_cause_jni_enter)->enter(THREAD);
+@@ -438,7 +438,7 @@ void ObjectSynchronizer::jni_exit(oop obj, Thread* THREAD) {
+     BiasedLocking::revoke_and_rebias(h_obj, false, THREAD);
+     obj = h_obj();
+   }
+-  assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++  assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+ 
+   ObjectMonitor* monitor = ObjectSynchronizer::inflate(THREAD,
+                                                        obj,
+@@ -479,7 +479,7 @@ ObjectLocker::~ObjectLocker() {
+ int ObjectSynchronizer::wait(Handle obj, jlong millis, TRAPS) {
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+   if (millis < 0) {
+     TEVENT(wait - throw IAX);
+@@ -502,7 +502,7 @@ int ObjectSynchronizer::wait(Handle obj, jlong millis, TRAPS) {
+ void ObjectSynchronizer::waitUninterruptibly(Handle obj, jlong millis, TRAPS) {
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+   if (millis < 0) {
+     TEVENT(wait - throw IAX);
+@@ -516,11 +516,11 @@ void ObjectSynchronizer::waitUninterruptibly(Handle obj, jlong millis, TRAPS) {
+ void ObjectSynchronizer::notify(Handle obj, TRAPS) {
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   markOop mark = obj->mark();
+-  if (mark->has_locker() && THREAD->is_lock_owned((address)mark->locker())) {
++  if (mark.has_locker() && THREAD->is_lock_owned((address)mark.locker())) {
+     return;
+   }
+   ObjectSynchronizer::inflate(THREAD,
+@@ -532,11 +532,11 @@ void ObjectSynchronizer::notify(Handle obj, TRAPS) {
+ void ObjectSynchronizer::notifyall(Handle obj, TRAPS) {
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(obj, false, THREAD);
+-    assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   markOop mark = obj->mark();
+-  if (mark->has_locker() && THREAD->is_lock_owned((address)mark->locker())) {
++  if (mark.has_locker() && THREAD->is_lock_owned((address)mark.locker())) {
+     return;
+   }
+   ObjectSynchronizer::inflate(THREAD,
+@@ -583,14 +583,14 @@ static volatile int ForceMonitorScavenge = 0; // Scavenge required and pending
+ 
+ static markOop ReadStableMark(oop obj) {
+   markOop mark = obj->mark();
+-  if (!mark->is_being_inflated()) {
++  if (!mark.is_being_inflated()) {
+     return mark;       // normal fast-path return
+   }
+ 
+   int its = 0;
+   for (;;) {
+     markOop mark = obj->mark();
+-    if (!mark->is_being_inflated()) {
++    if (!mark.is_being_inflated()) {
+       return mark;    // normal fast-path return
+     }
+ 
+@@ -716,7 +716,7 @@ intptr_t ObjectSynchronizer::FastHashCode(Thread * Self, oop obj) {
+     // been checked to make sure they can handle a safepoint. The
+     // added check of the bias pattern is to avoid useless calls to
+     // thread-local storage.
+-    if (obj->mark()->has_bias_pattern()) {
++    if (obj->mark().has_bias_pattern()) {
+       // Handle for oop obj in case of STW safepoint
+       Handle hobj(Self, obj);
+       // Relaxing assertion for bug 6320749.
+@@ -725,7 +725,7 @@ intptr_t ObjectSynchronizer::FastHashCode(Thread * Self, oop obj) {
+              "biases should not be seen by VM thread here");
+       BiasedLocking::revoke_and_rebias(hobj, false, JavaThread::current());
+       obj = hobj();
+-      assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++      assert(!obj->mark().has_bias_pattern(), "biases should be revoked by now");
+     }
+   }
+ 
+@@ -744,15 +744,15 @@ intptr_t ObjectSynchronizer::FastHashCode(Thread * Self, oop obj) {
+   markOop mark = ReadStableMark(obj);
+ 
+   // object should remain ineligible for biased locking
+-  assert(!mark->has_bias_pattern(), "invariant");
++  assert(!mark.has_bias_pattern(), "invariant");
+ 
+-  if (mark->is_neutral()) {
+-    hash = mark->hash();              // this is a normal header
++  if (mark.is_neutral()) {
++    hash = mark.hash();              // this is a normal header
+     if (hash) {                       // if it has hash, just return it
+       return hash;
+     }
+     hash = get_next_hash(Self, obj);  // allocate a new hash code
+-    temp = mark->copy_set_hash(hash); // merge the hash code into header
++    temp = mark.copy_set_hash(hash); // merge the hash code into header
+     // use (machine word version) atomic operation to install the hash
+     test = obj->cas_set_mark(temp, mark);
+     if (test == mark) {
+@@ -761,19 +761,19 @@ intptr_t ObjectSynchronizer::FastHashCode(Thread * Self, oop obj) {
+     // If atomic operation failed, we must inflate the header
+     // into heavy weight monitor. We could add more code here
+     // for fast path, but it does not worth the complexity.
+-  } else if (mark->has_monitor()) {
+-    monitor = mark->monitor();
++  } else if (mark.has_monitor()) {
++    monitor = mark.monitor();
+     temp = monitor->header();
+-    assert(temp->is_neutral(), "invariant");
+-    hash = temp->hash();
++    assert(temp.is_neutral(), "invariant");
++    hash = temp.hash();
+     if (hash) {
+       return hash;
+     }
+     // Skip to the following code to reduce code size
+-  } else if (Self->is_lock_owned((address)mark->locker())) {
+-    temp = mark->displaced_mark_helper(); // this is a lightweight monitor owned
+-    assert(temp->is_neutral(), "invariant");
+-    hash = temp->hash();              // by current thread, check if the displaced
++  } else if (Self->is_lock_owned((address)mark.locker())) {
++    temp = mark.displaced_mark_helper(); // this is a lightweight monitor owned
++    assert(temp.is_neutral(), "invariant");
++    hash = temp.hash();              // by current thread, check if the displaced
+     if (hash) {                       // header contains hash code
+       return hash;
+     }
+@@ -792,19 +792,20 @@ intptr_t ObjectSynchronizer::FastHashCode(Thread * Self, oop obj) {
+   monitor = ObjectSynchronizer::inflate(Self, obj, inflate_cause_hash_code);
+   // Load displaced header and check it has hash code
+   mark = monitor->header();
+-  assert(mark->is_neutral(), "invariant");
+-  hash = mark->hash();
++  assert(mark.is_neutral(), "invariant");
++  hash = mark.hash();
+   if (hash == 0) {
+     hash = get_next_hash(Self, obj);
+-    temp = mark->copy_set_hash(hash); // merge hash code into header
+-    assert(temp->is_neutral(), "invariant");
+-    test = Atomic::cmpxchg(temp, monitor->header_addr(), mark);
++    temp = mark.copy_set_hash(hash); // merge hash code into header
++    assert(temp.is_neutral(), "invariant");
++    uintptr_t t = Atomic::cmpxchg(temp.value(), (volatile uintptr_t*)monitor->header_addr(), mark.value());
++    test = markOop(t);
+     if (test != mark) {
+       // The only update to the header in the monitor (outside GC)
+       // is install the hash code. If someone add new usage of
+       // displaced header, please update this code
+-      hash = test->hash();
+-      assert(test->is_neutral(), "invariant");
++      hash = test.hash();
++      assert(test.is_neutral(), "invariant");
+       assert(hash != 0, "Trivial unexpected object/monitor header usage.");
+     }
+   }
+@@ -823,7 +824,7 @@ bool ObjectSynchronizer::current_thread_holds_lock(JavaThread* thread,
+                                                    Handle h_obj) {
+   if (UseBiasedLocking) {
+     BiasedLocking::revoke_and_rebias(h_obj, false, thread);
+-    assert(!h_obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!h_obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   assert(thread == JavaThread::current(), "Can only be called on current thread");
+@@ -832,16 +833,16 @@ bool ObjectSynchronizer::current_thread_holds_lock(JavaThread* thread,
+   markOop mark = ReadStableMark(obj);
+ 
+   // Uncontended case, header points to stack
+-  if (mark->has_locker()) {
+-    return thread->is_lock_owned((address)mark->locker());
++  if (mark.has_locker()) {
++    return thread->is_lock_owned((address)mark.locker());
+   }
+   // Contended case, header points to ObjectMonitor (tagged pointer)
+-  if (mark->has_monitor()) {
+-    ObjectMonitor* monitor = mark->monitor();
++  if (mark.has_monitor()) {
++    ObjectMonitor* monitor = mark.monitor();
+     return monitor->is_entered(thread) != 0;
+   }
+   // Unlocked case, header in place
+-  assert(mark->is_neutral(), "sanity check");
++  assert(mark.is_neutral(), "sanity check");
+   return false;
+ }
+ 
+@@ -859,10 +860,10 @@ ObjectSynchronizer::LockOwnership ObjectSynchronizer::query_lock_ownership
+ 
+   // Possible mark states: neutral, biased, stack-locked, inflated
+ 
+-  if (UseBiasedLocking && h_obj()->mark()->has_bias_pattern()) {
++  if (UseBiasedLocking && h_obj()->mark().has_bias_pattern()) {
+     // CASE: biased
+     BiasedLocking::revoke_and_rebias(h_obj, false, self);
+-    assert(!h_obj->mark()->has_bias_pattern(),
++    assert(!h_obj->mark().has_bias_pattern(),
+            "biases should be revoked by now");
+   }
+ 
+@@ -871,23 +872,23 @@ ObjectSynchronizer::LockOwnership ObjectSynchronizer::query_lock_ownership
+   markOop mark = ReadStableMark(obj);
+ 
+   // CASE: stack-locked.  Mark points to a BasicLock on the owner's stack.
+-  if (mark->has_locker()) {
+-    return self->is_lock_owned((address)mark->locker()) ?
++  if (mark.has_locker()) {
++    return self->is_lock_owned((address)mark.locker()) ?
+       owner_self : owner_other;
+   }
+ 
+   // CASE: inflated. Mark (tagged pointer) points to an objectMonitor.
+   // The Object:ObjectMonitor relationship is stable as long as we're
+   // not at a safepoint.
+-  if (mark->has_monitor()) {
+-    void * owner = mark->monitor()->_owner;
++  if (mark.has_monitor()) {
++    void * owner = mark.monitor()->_owner;
+     if (owner == NULL) return owner_none;
+     return (owner == self ||
+             self->is_lock_owned((address)owner)) ? owner_self : owner_other;
+   }
+ 
+   // CASE: neutral
+-  assert(mark->is_neutral(), "sanity check");
++  assert(mark.is_neutral(), "sanity check");
+   return owner_none;           // it's unlocked
+ }
+ 
+@@ -899,7 +900,7 @@ JavaThread* ObjectSynchronizer::get_lock_owner(ThreadsList * t_list, Handle h_ob
+     } else {
+       BiasedLocking::revoke_and_rebias(h_obj, false, JavaThread::current());
+     }
+-    assert(!h_obj->mark()->has_bias_pattern(), "biases should be revoked by now");
++    assert(!h_obj->mark().has_bias_pattern(), "biases should be revoked by now");
+   }
+ 
+   oop obj = h_obj();
+@@ -908,13 +909,13 @@ JavaThread* ObjectSynchronizer::get_lock_owner(ThreadsList * t_list, Handle h_ob
+   markOop mark = ReadStableMark(obj);
+ 
+   // Uncontended case, header points to stack
+-  if (mark->has_locker()) {
+-    owner = (address) mark->locker();
++  if (mark.has_locker()) {
++    owner = (address) mark.locker();
+   }
+ 
+   // Contended case, header points to ObjectMonitor (tagged pointer)
+-  if (mark->has_monitor()) {
+-    ObjectMonitor* monitor = mark->monitor();
++  if (mark.has_monitor()) {
++    ObjectMonitor* monitor = mark.monitor();
+     assert(monitor != NULL, "monitor should be non-null");
+     owner = (address) monitor->owner();
+   }
+@@ -927,7 +928,7 @@ JavaThread* ObjectSynchronizer::get_lock_owner(ThreadsList * t_list, Handle h_ob
+   // Unlocked case, header in place
+   // Cannot have assertion since this object may have been
+   // locked by another thread when reaching here.
+-  // assert(mark->is_neutral(), "sanity check");
++  // assert(mark.is_neutral(), "sanity check");
+ 
+   return NULL;
+ }
+@@ -1374,10 +1375,10 @@ static void post_monitor_inflate_event(EventJavaMonitorInflate* event,
+ // Fast path code shared by multiple functions
+ ObjectMonitor* ObjectSynchronizer::inflate_helper(oop obj) {
+   markOop mark = obj->mark();
+-  if (mark->has_monitor()) {
+-    assert(ObjectSynchronizer::verify_objmon_isinpool(mark->monitor()), "monitor is invalid");
+-    assert(mark->monitor()->header()->is_neutral(), "monitor must record a good object header");
+-    return mark->monitor();
++  if (mark.has_monitor()) {
++    assert(ObjectSynchronizer::verify_objmon_isinpool(mark.monitor()), "monitor is invalid");
++    assert(mark.monitor()->header().is_neutral(), "monitor must record a good object header");
++    return mark.monitor();
+   }
+   return ObjectSynchronizer::inflate(Thread::current(),
+                                      obj,
+@@ -1397,7 +1398,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+ 
+   for (;;) {
+     const markOop mark = object->mark();
+-    assert(!mark->has_bias_pattern(), "invariant");
++    assert(!mark.has_bias_pattern(), "invariant");
+ 
+     // The mark can be in one of the following states:
+     // *  Inflated     - just return
+@@ -1407,9 +1408,9 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+     // *  BIASED       - Illegal.  We should never see this
+ 
+     // CASE: inflated
+-    if (mark->has_monitor()) {
+-      ObjectMonitor * inf = mark->monitor();
+-      assert(inf->header()->is_neutral(), "invariant");
++    if (mark.has_monitor()) {
++      ObjectMonitor * inf = mark.monitor();
++      assert(inf->header().is_neutral(), "invariant");
+       assert(inf->object() == object, "invariant");
+       assert(ObjectSynchronizer::verify_objmon_isinpool(inf), "monitor is invalid");
+       return inf;
+@@ -1446,7 +1447,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+     // before or after the CAS(INFLATING) operation.
+     // See the comments in omAlloc().
+ 
+-    if (mark->has_locker()) {
++    if (mark.has_locker()) {
+       ObjectMonitor * m = omAlloc(Self);
+       // Optimistically prepare the objectmonitor - anticipate successful CAS
+       // We do this before the CAS in order to minimize the length of time
+@@ -1484,7 +1485,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+       // drop the lock (restoring the header from the basiclock to the object)
+       // while inflation is in-progress.  This protocol avoids races that might
+       // would otherwise permit hashCode values to change or "flicker" for an object.
+-      // Critically, while object->mark is 0 mark->displaced_mark_helper() is stable.
++      // Critically, while object->mark is 0 mark.displaced_mark_helper() is stable.
+       // 0 serves as a "BUSY" inflate-in-progress indicator.
+ 
+ 
+@@ -1492,18 +1493,18 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+       // The owner can't die or unwind past the lock while our INFLATING
+       // object is in the mark.  Furthermore the owner can't complete
+       // an unlock on the object, either.
+-      markOop dmw = mark->displaced_mark_helper();
+-      assert(dmw->is_neutral(), "invariant");
++      markOop dmw = mark.displaced_mark_helper();
++      assert(dmw.is_neutral(), "invariant");
+ 
+       // Setup monitor fields to proper values -- prepare the monitor
+       m->set_header(dmw);
+ 
+-      // Optimization: if the mark->locker stack address is associated
++      // Optimization: if the mark.locker stack address is associated
+       // with this thread we could simply set m->_owner = Self.
+       // Note that a thread can inflate an object
+       // that it has stack-locked -- as might happen in wait() -- directly
+       // with CAS.  That is, we can avoid the xchg-NULL .... ST idiom.
+-      m->set_owner(mark->locker());
++      m->set_owner(mark.locker());
+       m->set_object(object);
+       // TODO-FIXME: assert BasicLock->dhw != 0.
+ 
+@@ -1520,7 +1521,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+         if (object->is_instance()) {
+           ResourceMark rm;
+           log_debug(monitorinflation)("Inflating object " INTPTR_FORMAT " , mark " INTPTR_FORMAT " , type %s",
+-                                      p2i(object), p2i(object->mark()),
++                                      p2i(object), object->mark().value(),
+                                       object->klass()->external_name());
+         }
+       }
+@@ -1540,7 +1541,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+     // An inflateTry() method that we could call from fast_enter() and slow_enter()
+     // would be useful.
+ 
+-    assert(mark->is_neutral(), "invariant");
++    assert(mark.is_neutral(), "invariant");
+     ObjectMonitor * m = omAlloc(Self);
+     // prepare m for installation - set monitor to initial state
+     m->Recycle();
+@@ -1571,7 +1572,7 @@ ObjectMonitor* ObjectSynchronizer::inflate(Thread * Self,
+       if (object->is_instance()) {
+         ResourceMark rm;
+         log_debug(monitorinflation)("Inflating object " INTPTR_FORMAT " , mark " INTPTR_FORMAT " , type %s",
+-                                    p2i(object), p2i(object->mark()),
++                                    p2i(object), object->mark().value(),
+                                     object->klass()->external_name());
+       }
+     }
+@@ -1623,8 +1624,8 @@ bool ObjectSynchronizer::deflate_monitor(ObjectMonitor* mid, oop obj,
+   bool deflated;
+   // Normal case ... The monitor is associated with obj.
+   guarantee(obj->mark() == markOopDesc::encode(mid), "invariant");
+-  guarantee(mid == obj->mark()->monitor(), "invariant");
+-  guarantee(mid->header()->is_neutral(), "invariant");
++  guarantee(mid == obj->mark().monitor(), "invariant");
++  guarantee(mid->header().is_neutral(), "invariant");
+ 
+   if (mid->is_busy()) {
+     if (ClearResponsibleAtSTW) mid->_Responsible = NULL;
+@@ -1639,7 +1640,7 @@ bool ObjectSynchronizer::deflate_monitor(ObjectMonitor* mid, oop obj,
+         ResourceMark rm;
+         log_debug(monitorinflation)("Deflating object " INTPTR_FORMAT " , "
+                                     "mark " INTPTR_FORMAT " , type %s",
+-                                    p2i(obj), p2i(obj->mark()),
++                                    p2i(obj), obj->mark().value(),
+                                     obj->klass()->external_name());
+       }
+     }
+diff --git a/src/hotspot/share/runtime/vframe.cpp b/src/hotspot/share/runtime/vframe.cpp
+index cca364217..7dfb2e4a2 100644
+--- a/src/hotspot/share/runtime/vframe.cpp
++++ b/src/hotspot/share/runtime/vframe.cpp
+@@ -222,7 +222,7 @@ void javaVFrame::print_lock_info_on(outputStream* st, int frame_count) {
+       if (monitor->owner() != NULL) {
+         // the monitor is associated with an object, i.e., it is locked
+ 
+-        markOop mark = NULL;
++        markOop mark = markOop::zero();
+         const char *lock_state = "locked"; // assume we have the monitor locked
+         if (!found_first_monitor && frame_count == 0) {
+           // If this is the first frame and we haven't found an owned
+@@ -231,17 +231,17 @@ void javaVFrame::print_lock_info_on(outputStream* st, int frame_count) {
+           // an inflated monitor that is first on the monitor list in
+           // the first frame can block us on a monitor enter.
+           mark = monitor->owner()->mark();
+-          if (mark->has_monitor() &&
++          if (mark.has_monitor() &&
+               ( // we have marked ourself as pending on this monitor
+-                mark->monitor() == thread()->current_pending_monitor() ||
++                mark.monitor() == thread()->current_pending_monitor() ||
+                 // we are not the owner of this monitor
+-                !mark->monitor()->is_entered(thread())
++                !mark.monitor()->is_entered(thread())
+               )) {
+             lock_state = "waiting to lock";
+           } else {
+             // We own the monitor which is not as interesting so
+             // disable the extra printing below.
+-            mark = NULL;
++            mark = markOop::zero();
+           }
+         } else if (frame_count != 0) {
+           // This is not the first frame so we either own this monitor
+@@ -250,23 +250,23 @@ void javaVFrame::print_lock_info_on(outputStream* st, int frame_count) {
+           // numbered frame on the stack, we have to check all the
+           // monitors on the list for this frame.
+           mark = monitor->owner()->mark();
+-          if (mark->has_monitor() &&
++          if (mark.has_monitor() &&
+               ( // we have marked ourself as pending on this monitor
+-                mark->monitor() == thread()->current_pending_monitor() ||
++                mark.monitor() == thread()->current_pending_monitor() ||
+                 // we are not the owner of this monitor
+-                !mark->monitor()->is_entered(thread())
++                !mark.monitor()->is_entered(thread())
+               )) {
+             lock_state = "waiting to re-lock in wait()";
+           } else {
+             // We own the monitor which is not as interesting so
+             // disable the extra printing below.
+-            mark = NULL;
++            mark = markOop::zero();
+           }
+         }
+         print_locked_object_class_name(st, Handle(THREAD, monitor->owner()), lock_state);
+-        if (ObjectMonitor::Knob_Verbose && mark != NULL) {
++        if (ObjectMonitor::Knob_Verbose && mark.to_pointer() != NULL) {
+           st->print("\t- lockbits=");
+-          mark->print_on(st);
++          mark.print_on(st);
+           st->cr();
+         }
+ 
+diff --git a/src/hotspot/share/runtime/vmStructs.cpp b/src/hotspot/share/runtime/vmStructs.cpp
+index adce6da6a..b161a6ec1 100644
+--- a/src/hotspot/share/runtime/vmStructs.cpp
++++ b/src/hotspot/share/runtime/vmStructs.cpp
+@@ -1285,7 +1285,6 @@ typedef PaddedEnd<ObjectMonitor>              PaddedObjectMonitor;
+     declare_type(arrayOopDesc, oopDesc)                                   \
+       declare_type(objArrayOopDesc, arrayOopDesc)                         \
+     declare_type(instanceOopDesc, oopDesc)                                \
+-    declare_type(markOopDesc, oopDesc)                                    \
+                                                                           \
+   /**************************************************/                    \
+   /* MetadataOopDesc hierarchy (NOTE: some missing) */                    \
+@@ -1325,7 +1324,6 @@ typedef PaddedEnd<ObjectMonitor>              PaddedObjectMonitor;
+   /* Oops */                                                              \
+   /********/                                                              \
+                                                                           \
+-  declare_oop_type(markOop)                                               \
+   declare_oop_type(objArrayOop)                                           \
+   declare_oop_type(oop)                                                   \
+   declare_oop_type(narrowOop)                                             \
+@@ -1983,6 +1981,8 @@ typedef PaddedEnd<ObjectMonitor>              PaddedObjectMonitor;
+             declare_type(BitMapView, BitMap)                              \
+                                                                           \
+    declare_integer_type(AccessFlags)  /* FIXME: wrong type (not integer) */\
++   declare_integer_type(markOop)                                          \
++   declare_type(markOopDesc, markOop)                                    \
+   declare_toplevel_type(address)      /* FIXME: should this be an integer type? */\
+    declare_integer_type(BasicType)   /* FIXME: wrong type (not integer) */\
+   JVMTI_ONLY(declare_toplevel_type(BreakpointInfo))                       \
+-- 
+2.54.0
+

@@ -1,0 +1,13 @@
+Submodule third-party/sentencepiece contains modified content
+diff --git a/third-party/sentencepiece/src/sentencepiece_processor.h b/third-party/sentencepiece/src/sentencepiece_processor.h
+index dd3f092..553fbff 100644
+--- a/third-party/sentencepiece/src/sentencepiece_processor.h
++++ b/third-party/sentencepiece/src/sentencepiece_processor.h
+@@ -16,6 +16,7 @@
+ #define SENTENCEPIECE_PROCESSOR_H_
+ 
+ #include <cstring>
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <string_view>

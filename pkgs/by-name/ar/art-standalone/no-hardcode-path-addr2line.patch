@@ -1,0 +1,26 @@
+diff --git a/art/runtime/native_stack_dump.cc b/art/runtime/native_stack_dump.cc
+index 150fa782..2fca7caf 100644
+--- a/art/runtime/native_stack_dump.cc
++++ b/art/runtime/native_stack_dump.cc
+@@ -76,7 +76,7 @@ std::string FindAddr2line() {
+       return std::string(env_value) + kAddr2linePrebuiltPath;
+     }
+   }
+-  return std::string("/usr/bin/addr2line");
++  return std::string("addr2line");
+ }
+ 
+ ALWAYS_INLINE
+diff --git a/art/tools/timeout_dumper/timeout_dumper.cc b/art/tools/timeout_dumper/timeout_dumper.cc
+index 08d2f4c0..513324ad 100644
+--- a/art/tools/timeout_dumper/timeout_dumper.cc
++++ b/art/tools/timeout_dumper/timeout_dumper.cc
+@@ -122,7 +122,7 @@ std::unique_ptr<std::string> FindAddr2line() {
+     }
+   }
+ 
+-  constexpr const char* kHostAddr2line = "/usr/bin/addr2line";
++  constexpr const char* kHostAddr2line = "addr2line";
+   if (access(kHostAddr2line, F_OK) == 0) {
+     return std::make_unique<std::string>(kHostAddr2line);
+   }

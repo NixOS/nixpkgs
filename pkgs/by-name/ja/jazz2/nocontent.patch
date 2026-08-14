@@ -1,0 +1,12 @@
+diff --git a/cmake/ncine_installation.cmake b/cmake/ncine_installation.cmake
+index 9ccb707..89c350f 100644
+--- a/cmake/ncine_installation.cmake
++++ b/cmake/ncine_installation.cmake
+@@ -195,7 +195,6 @@ endif()
+ #endif()
+ 
+ if(NOT EMSCRIPTEN)
+-	install(DIRECTORY "${NCINE_ROOT}/Content/" DESTINATION ${DATA_INSTALL_DESTINATION})
+ else()
+ 	install(FILES "${CMAKE_BINARY_DIR}/${CPACK_EXECUTABLE_NAME}.html" DESTINATION ".")
+ 	install(FILES "${CMAKE_BINARY_DIR}/${CPACK_EXECUTABLE_NAME}.data" DESTINATION ".")

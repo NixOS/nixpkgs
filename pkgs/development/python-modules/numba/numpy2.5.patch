@@ -1,0 +1,26 @@
+diff --git a/numba/np/arrayobj.py b/numba/np/arrayobj.py
+index ae81627ec..dd69a2a45 100644
+--- a/numba/np/arrayobj.py
++++ b/numba/np/arrayobj.py
+@@ -6639,7 +6639,7 @@ def impl_np_vstack(tup):
+         return impl
+ 
+ 
+-if numpy_version >= (2, 0):
++if (2, 0) <= numpy_version < (2, 5):
+     overload(np.row_stack)(impl_np_vstack)
+ 
+ 
+diff --git a/numba/tests/test_dyn_array.py b/numba/tests/test_dyn_array.py
+index 99328052c..dfbf57589 100644
+--- a/numba/tests/test_dyn_array.py
++++ b/numba/tests/test_dyn_array.py
+@@ -36,7 +36,7 @@ def np_vstack(a, b, c):
+     return np.vstack((a, b, c))
+ 
+ def np_row_stack(a, b, c):
+-    return np.row_stack((a, b, c))
++    return np.vstack((a, b, c))
+ 
+ def np_dstack(a, b, c):
+     return np.dstack((a, b, c))

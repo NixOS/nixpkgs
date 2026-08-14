@@ -1,0 +1,21 @@
+From a6498278654792d46ebef4f918b8a1c7b663a2d9 Mon Sep 17 00:00:00 2001
+From: Herwig Hochleitner <herwig@bendlas.net>
+Date: Mon, 14 Apr 2025 15:11:37 +0200
+Subject: [PATCH] fix use-after-free during init
+
+---
+ src/state.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/state.c b/src/state.c
+index 6ee4099..48e0b30 100644
+--- a/src/state.c
++++ b/src/state.c
+@@ -234,6 +234,7 @@ void s_clear_history()
+     }
+     g_list_free(history);
+     history = NULL;
++    undo_pos = NULL;
+     s_history_add("Initial state");
+     undo_pos = history->next;
+     //s_restore_state((s_state *)history->data);

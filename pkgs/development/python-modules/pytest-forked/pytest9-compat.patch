@@ -1,0 +1,30 @@
+From a4e8e78f2ba6d44b6255e2cb9eb4d4b0655b8e56 Mon Sep 17 00:00:00 2001
+From: Scott Talbert <swt@techie.net>
+Date: Sun, 14 Dec 2025 22:25:51 -0500
+Subject: [PATCH] Adapt tests to pytest 9 output format
+
+---
+ testing/test_xfail_behavior.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/testing/test_xfail_behavior.py b/testing/test_xfail_behavior.py
+index 2b8946a..fdad433 100644
+--- a/testing/test_xfail_behavior.py
++++ b/testing/test_xfail_behavior.py
+@@ -8,6 +8,7 @@
+ FAILED_WORD = "FAILED" if IS_PYTEST4_PLUS else "FAIL"
+ PYTEST_GTE_7_2 = hasattr(pytest, "version_tuple") and pytest.version_tuple >= (7, 2)  # type: ignore[attr-defined]
+ PYTEST_GTE_8_0 = hasattr(pytest, "version_tuple") and pytest.version_tuple >= (8, 0)  # type: ignore[attr-defined]
++PYTEST_GTE_9_0 = hasattr(pytest, "version_tuple") and pytest.version_tuple >= (9, 0)  # type: ignore[attr-defined]
+ 
+ pytestmark = pytest.mark.skipif(  # pylint: disable=invalid-name
+     not hasattr(os, "fork"),  # noqa: WPS421
+@@ -72,6 +73,8 @@ def test_xfail(is_crashing, is_strict, testdir):
+     )
+     if expected_lowercase == "xfailed" and PYTEST_GTE_7_2:
+         short_test_summary += " - " + reason_string
++    if expected_lowercase == "failed" and PYTEST_GTE_9_0:
++        short_test_summary += " - [XPASS(strict)] The process gets termin..."
+     total_summary_line = f"*==== 1 {expected_lowercase!s} in 0.*s* ====*"
+ 
+     expected_lines = (

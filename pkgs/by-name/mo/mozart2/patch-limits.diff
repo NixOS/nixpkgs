@@ -1,0 +1,10 @@
+--- mozart2-2.0.1.orig/vm/vm/main/core-forward-decl.hh	2018-09-05 03:16:51.000000000 +0200
++++ mozart2-2.0.1/vm/vm/main/core-forward-decl.hh	2021-08-03 10:31:50.281476430 +0200
+@@ -36,6 +36,7 @@
+ #include <cstdint>
+ #include <ostream>
+ #include <functional>
++#include <limits>
+ #include <memory>
+ #include <cassert>
+ 

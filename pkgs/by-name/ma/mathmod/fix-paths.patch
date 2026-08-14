@@ -1,0 +1,14 @@
+diff --git a/MathMod.pro b/MathMod.pro
+index 2e2fbf1..bb8f8bd 100644
+--- a/MathMod.pro
++++ b/MathMod.pro
+@@ -63,7 +63,5 @@ OTHER_FILES     += \
+                 mathmodcollection.js \
+                 mathmodconfig.js
+ # install
+-target.path    = $TARGET
+-sources.files  = $$SOURCES $$HEADERS $$RESOURCES $$FORMS mathmod.pro
+-sources.path   = $TARGET
+-INSTALLS      += target sources
++target.path    = @out@/bin
++INSTALLS      += target

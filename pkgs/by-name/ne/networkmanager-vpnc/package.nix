@@ -1,0 +1,79 @@
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchurl,
+  replaceVars,
+  vpnc,
+  pkg-config,
+  networkmanager,
+  libsecret,
+  gtk3,
+  gtk4,
+  withGnome ? true,
+  gnome,
+  glib,
+  kmod,
+  file,
+  libnma,
+  libnma-gtk4,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "NetworkManager-vpnc";
+  version = "1.4.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/NetworkManager-vpnc-${version}.tar.xz";
+    sha256 = "47KpiIAnWht1FUvDF6eGQ8/fnqfnDfTu2WSPKeolNzA=";
+  };
+
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      inherit vpnc kmod;
+    })
+    # https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/-/merge_requests/19
+    ./export_nm_vpn_editor_factory_vpnc.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    file
+    glib
+  ];
+
+  buildInputs = [
+    vpnc
+    networkmanager
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
+
+  configureFlags = [
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
+    "--enable-absolute-paths"
+  ];
+
+  strictDeps = true;
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      attrPath = "networkmanager-vpnc";
+      versionPolicy = "odd-unstable";
+    };
+    networkManagerPlugin = "VPN/nm-vpnc-service.name";
+  };
+
+  meta = {
+    description = "NetworkManager's VPNC plugin";
+    inherit (networkmanager.meta) maintainers teams platforms;
+    license = lib.licenses.gpl2Plus;
+  };
+}

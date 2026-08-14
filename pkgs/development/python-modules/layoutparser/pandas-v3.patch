@@ -1,0 +1,13 @@
+diff --git a/src/layoutparser/io/basic.py b/src/layoutparser/io/basic.py
+index 0b2df36..26dcccc 100644
+--- a/src/layoutparser/io/basic.py
++++ b/src/layoutparser/io/basic.py
+@@ -127,7 +127,7 @@ def load_dataframe(df: pd.DataFrame, block_type: str = None) -> Layout:
+     """
+     df = df.copy()
+     if "points" in df.columns:
+-        if df["points"].dtype == object:
++        if df["points"].dtype == object or isinstance(df["points"].dtype, pd.StringDtype):
+             df["points"] = df["points"].map(
+                 lambda x: ast.literal_eval(x) if not pd.isna(x) else x
+             )
