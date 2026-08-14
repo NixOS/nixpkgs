@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = [
     coreutils
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Comments indicate the respective
   # package the command is contained in.
-  ppdFileCommands = [
+  env.ppdFileCommands = lib.join " " [
     "cat" # coreutils
     "date"
     "printf" # coreutils

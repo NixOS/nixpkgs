@@ -53,6 +53,7 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = [
     coreutils
@@ -80,7 +81,7 @@ stdenv.mkDerivation {
 
   # Comments indicate the respective
   # package the command is contained in.
-  ppdFileCommands = [
+  env.ppdFileCommands = lib.join " " [
     "cat" # coreutils
     "echo" # coreutils
     "foomatic-rip" # cups-filters or foomatic-filters
