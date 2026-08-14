@@ -47,6 +47,10 @@ let
       "x86_64-darwin"
     ];
     maintainers = [ ];
+    # https://github.com/wavetermdev/waveterm/blob/f6c47f9da51b1ed8bf9da65988cba433d40f8029/package.json#L52
+    knownVulnerabilities = [
+      "Uses EOL Electron 38"
+    ];
   };
 
   linux = stdenv.mkDerivation {
