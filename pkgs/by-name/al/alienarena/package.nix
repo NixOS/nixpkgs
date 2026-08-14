@@ -8,24 +8,32 @@
   libogg,
   libvorbis,
   libx11,
+  libxext,
   libxxf86vm,
+  makeWrapper,
+  mesa,
   openal,
   pkg-config,
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alienarena";
   version = "7.71.7";
 
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
-    rev = version;
-    hash = "sha256-ri0p/0onI5DU7kDxwdFxRyT1LQLVe89VNEYPXPgilOs=";
+    tag = finalAttrs.version;
+    hash = "sha256-uuCjpmU7ZrWrO79bhDRUzZF1pXkHHZRjf5UFKoHmh4A=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types -Wno-return-mismatch -Wno-int-conversion";
 
   buildInputs = [
     curl
@@ -35,9 +43,26 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     libx11
+    libxext
     libxxf86vm
     openal
   ];
+
+  postFixup = ''
+    glPath=${
+      lib.makeLibraryPath [
+        libGL
+        mesa
+      ]
+    }
+    for bin in alienarena alienarena-ded; do
+      wrapProgram $out/bin/$bin \
+        --prefix LD_LIBRARY_PATH : "$glPath" \
+        --prefix LIBGL_DRIVERS_PATH : "${mesa}/lib/dri" \
+        --prefix LIBGL_DRIVERS_PATH : "/run/opengl-driver/lib/dri" \
+        --set-default __GLX_VENDOR_LIBRARY_NAME mesa
+    done
+  '';
 
   patchPhase = ''
     substituteInPlace ./configure \
@@ -46,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
+    changelog = "https://github.com/alienarena/alienarena/releases/tag/${finalAttrs.version}";
     description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
@@ -63,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})
