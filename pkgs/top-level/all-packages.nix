@@ -3219,6 +3219,7 @@ with pkgs;
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter347 = flutterPackages.v3_47;
   flutter344 = flutterPackages.v3_44;
   flutter341 = flutterPackages.v3_41;
   flutter338 = flutterPackages.v3_38;
