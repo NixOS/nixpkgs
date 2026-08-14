@@ -38,7 +38,10 @@ let
   ++ cfg.extraArgs;
 in
 {
-  meta.maintainers = with maintainers; [ oddlama ];
+  meta.maintainers = with maintainers; [
+    oddlama
+    tmarkus
+  ];
 
   options.services.esphome = {
     enable = mkEnableOption "ESPHome Device Builder, for making custom firmwares for ESP32/ESP8266";

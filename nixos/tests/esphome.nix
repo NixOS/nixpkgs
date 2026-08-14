@@ -7,7 +7,10 @@ let
 in
 {
   name = "esphome";
-  meta.maintainers = with lib.maintainers; [ oddlama ];
+  meta.maintainers = with lib.maintainers; [
+    oddlama
+    tmarkus
+  ];
 
   nodes = {
     esphomeTcp =
