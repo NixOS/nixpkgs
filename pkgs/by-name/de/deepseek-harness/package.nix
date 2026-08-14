@@ -513,12 +513,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     landlock="$(
       LANDLOCK_ENTRY="$app/node_modules/@deepseek-ai/node-addon-landlock-run/lib/index.js" \
-        ${lib.getExe runtimeNode} --input-type=module <<'NODE'
-      import { pathToFileURL } from "node:url";
-
-      const entry = await import(pathToFileURL(process.env.LANDLOCK_ENTRY));
-      process.stdout.write(entry.launcherPath());
-      NODE
+        ${lib.getExe runtimeNode} --input-type=module --eval \
+          'import { pathToFileURL } from "node:url"; const entry = await import(pathToFileURL(process.env.LANDLOCK_ENTRY)); process.stdout.write(entry.launcherPath());'
     )"
 
     test -x "$landlock"
