@@ -12,7 +12,6 @@
   pytestCheckHook,
   setuptools,
   six,
-  fetchpatch2,
   legacy-cgi,
 }:
 
@@ -31,10 +30,7 @@ buildPythonPackage (finalAttrs: {
   patches = [
     # replace use of imp module for Python >= 3.12
     # https://github.com/xmendez/wfuzz/pull/365
-    (fetchpatch2 {
-      url = "https://github.com/xmendez/wfuzz/commit/f4c028b9ada4c36dabf3bc752f69f6ddc110920f.patch?full_index=1";
-      hash = "sha256-t7pUMcdFmwAsGUNBRdZr+Jje/yR0yzeGIgeYNEq4hFE=";
-    })
+    ./Update-loader.py.patch
     # replace removed `pipes` stdlib module with `shlex` for Python >= 3.13
     # https://github.com/xmendez/wfuzz/issues/380
     ./python-313-shlex.patch
