@@ -4,9 +4,6 @@
   R,
   xvfb-run,
   util-linux,
-  gettext,
-  gfortran,
-  libiconv,
 }:
 
 attrs:
@@ -25,25 +22,10 @@ stdenv.mkDerivation (
       (attrs.nativeBuildInputs or [ ])
       ++ [
         R
-        gettext
       ]
       ++ lib.optionals finalAttrs.requireX [
         util-linux
         xvfb-run
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        gfortran
-      ];
-
-    buildInputs =
-      (attrs.buildInputs or [ ])
-      ++ [
-        R
-        gettext
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        gfortran
-        libiconv
       ];
 
     enableParallelBuilding = true;
@@ -123,7 +105,6 @@ stdenv.mkDerivation (
     # if not listed, the passed value will override the default value
     "name"
     "nativeBuildInputs"
-    "buildInputs"
     "env"
     "installFlags"
     "postFixup"
