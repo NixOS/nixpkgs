@@ -22,8 +22,8 @@ buildGoModule (finalAttrs: {
     mkdir -p $out/lib/legit/templates
     mkdir -p $out/lib/legit/static
 
-    cp -r $src/templates/* $out/lib/legit/templates
-    cp -r $src/static/* $out/lib/legit/static
+    cp -r templates/* $out/lib/legit/templates
+    cp -r static/* $out/lib/legit/static
   '';
 
   passthru.tests = { inherit (nixosTests) legit; };
