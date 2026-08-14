@@ -260,7 +260,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
-    changelog = "https://github.com/mozilla/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
+    changelog = "https://github.com/mozilla/nss/blob/master/doc/src/releases/nss_${underscoreVersion}.md";
     maintainers = with lib.maintainers; [
       hexa
       ajs124
