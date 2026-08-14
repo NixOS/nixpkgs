@@ -74,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.9.0";
+  version = "0.9.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3p/e7UZ8BLwT+dpb61NmzX2Z1QxxEgkgjlNzv5lWybM=";
+    hash = "sha256-5W/CBFw28xBC7GnbpQ9jxRAdxXBtTdsD3X/YNR6z6iI=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           ""
     '';
 
-  cargoHash = "sha256-TULJ3mEAWp1ktPDPeBbUJGHhsEuo5T2qh3/JpS+8+ds=";
+  cargoHash = "sha256-VivnZNtIjnu1JOKaE7nEIse8300oB9oqGP0aly+9/OQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -241,6 +241,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # When started, mistralrs tries to load libcuda.so from the driver which is not available in the sandbox
   # mistralrs: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
   doInstallCheck = !cudaSupport;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {
