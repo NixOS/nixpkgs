@@ -53,6 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LzBuO6T13J7oG4mvsOG2faBIkbN7b636iaLrUuLDDvA=";
   };
 
+  # Upstream requires Bun >= 1.3.14, but Nixpkgs currently provides Bun 1.3.13.
+  # Bypass the strict semver check to allow running under pkgs.bun until Nixpkgs updates Bun.
+  postPatch = ''
+    substituteInPlace packages/coding-agent/src/cli.ts \
+      --replace-fail 'if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0)' 'if (false)'
+  '';
+
   # required until https://github.com/NixOS/nixpkgs/issues/255890 & https://github.com/NixOS/nixpkgs/issues/#335534 are fixed
   passthru.node_modules = stdenv.mkDerivation {
     pname = "oh-my-pi-node_modules";
