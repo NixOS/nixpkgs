@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "install"
     "install-lib-headers"
   ]
-  ++ lib.optionals (!enableStatic) [
+  ++ lib.optionals (!enableStatic && !stdenv.hostPlatform.isWindows) [
     "install-lib-so-link"
   ];
 

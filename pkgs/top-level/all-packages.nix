@@ -2608,10 +2608,6 @@ with pkgs;
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
 
-  openmvs = callPackage ../applications/science/misc/openmvs {
-    inherit (llvmPackages) openmp;
-  };
-
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";

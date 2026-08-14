@@ -109,7 +109,6 @@ makeScopeWithSplicing' {
         bintools = binutils;
       };
 
-      libbacktrace = callPackage ./libbacktrace { };
       libiberty = callPackage ./libiberty { };
       libsanitizer = callPackage ./libsanitizer { };
       libquadmath = callPackage ./libquadmath { };

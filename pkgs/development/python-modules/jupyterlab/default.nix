@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterlab";
-  version = "4.5.8";
+  version = "4.5.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OtytFZdgGzbQF3icglwRpAn0HhJNyjI6oNS01gfpzkA=";
+    hash = "sha256-MEAZNahss5NpHJmYVFCTRvcdSq2Rx4xP6p8k5zeWyCg=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/jupyterlab/staging";
-    hash = "sha256-wgqwEl01VinYU5haL1X8Na1lNNcyqCfRaRBze4ypPPo=";
+    hash = "sha256-i0ZoLjUt0w/C62XzoN4wp6l7m3M8Nz/VfyDFIRYSSE0=";
   };
 
   preBuild = ''
@@ -77,7 +77,7 @@ buildPythonPackage (finalAttrs: {
   makeWrapperArgs = [
     "--set"
     "JUPYTERLAB_DIR"
-    "$out/share/jupyter/lab"
+    "${placeholder "out"}/share/jupyter/lab"
   ];
 
   # Depends on npm
