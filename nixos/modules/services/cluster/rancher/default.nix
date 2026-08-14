@@ -849,13 +849,22 @@ let
                 "L+".argument = "${manifest.source}";
               };
             };
-            # Make a systemd-tmpfiles rule for a container image
-            mkImageRule = image: {
-              name = "${imageDir}/${image.name}";
-              value = {
-                "L+".argument = "${image}";
-              };
-            };
+            # Build a single store directory containing symlinks to all
+            # container images declared in the NixOS configuration. The
+            # directory's store path changes whenever any image changes, so
+            # ${name} re-imports images on every generation switch. It is
+            # exposed under ${imageDir}/nixos so that ${imageDir} itself
+            # remains a normal directory that users can still populate manually.
+            agentImagesDir = pkgs.linkFarm "${name}-agent-images" (
+              map (image: {
+                # The store-path hash is included in the link name so that two
+                # different images with the same tarball base name do not
+                # collide. The context is discarded because tmpfiles link names
+                # must not carry store-path references.
+                name = builtins.unsafeDiscardStringContext (builtins.baseNameOf image);
+                path = image;
+              }) cfg.images
+            );
             # Merge charts with charts contained in enabled auto deploying charts
             helmCharts =
               (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
@@ -873,7 +882,14 @@ let
             };
           in
           (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
-          // (builtins.listToAttrs (map mkImageRule cfg.images))
+          // (lib.optionalAttrs (cfg.images != [ ]) {
+            ${imageDir} = {
+              "d".argument = "";
+            };
+            "${imageDir}/nixos" = {
+              "L+".argument = "${agentImagesDir}";
+            };
+          })
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";

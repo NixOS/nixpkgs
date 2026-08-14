@@ -100,6 +100,7 @@ let
       auto-deploy = mkTests ./auto-deploy.nix;
       configuration = mkTests ./configuration.nix;
       etcd = mkTests ./etcd.nix;
+      image-upgrade = mkTests ./image-upgrade.nix;
       multi-node = mkTests ./multi-node.nix;
       single-node = mkTests ./single-node.nix;
     };
