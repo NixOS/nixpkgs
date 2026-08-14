@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "columnize";
-  version = "3.11";
+  version = "0.3.11";
   pyproject = true;
 
   # 3.11 is the git tag for the 0.3.11 version
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "pycolumnize";
-    tag = version;
+    tag = "3.11";
     hash = "sha256-YJEIujoRpLvUM4H4CB1nEJaYStFOSVKIGzchnptlt7M=";
   };
 
