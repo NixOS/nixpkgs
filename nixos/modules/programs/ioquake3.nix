@@ -30,7 +30,7 @@ let
     postBuild = ''
       makeBinaryWrapper ${lib.getExe cfg.package} \
         $out/bin/${baseNameOf (lib.getExe cfg.package)} \
-        --add-flags "+set fs_basepath ${cfg.baseq3} +set fs_cdpath ${fsBasepath} +exec settings.cfg"
+        --add-flags "+set fs_basepath ${cfg.baseq3} +set fs_homepath ${fsBasepath} +exec settings.cfg"
     '';
 
     meta.mainProgram = baseNameOf (lib.getExe cfg.package);
