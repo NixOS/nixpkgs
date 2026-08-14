@@ -7,15 +7,15 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.45.4";
+  version = "1.46.0";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-y3yCRGjrWlEacvCOYpHQncivEuCg/9wlMu4/drsMrXw=";
+    hash = "sha256-rDleT/07Y7hqJC79Z5JXUD5GNEW6n5ibUU2dOzQsRWo=";
   };
 
   postPatch = ''
-    substituteInPlace includes/installer/CliInstaller.php \
+    substituteInPlace includes/Installer/CliInstaller.php \
       --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
