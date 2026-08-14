@@ -123,6 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
+    isIbusEngine = true;
     description = "Modern app for programmable keyboards and input devices";
     longDescription = ''
       Entropy is a desktop app with a modern, minimalist, and intuitive
