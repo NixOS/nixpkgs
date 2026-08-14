@@ -978,6 +978,10 @@ runTests {
     expr = isFunction { __functor = _: null; };
     expected = false;
   };
+  testIsFunctionAttrsWithNonFunctionFunctor = {
+    expr = isFunction { __functor = null; };
+    expected = false;
+  };
 
   testIsStorePath = {
     expr =
