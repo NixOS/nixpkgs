@@ -90,12 +90,21 @@ in
               as_token = "$AS_TOKEN";
               hs_token = "$HS_TOKEN";
 
-              database = {
-                type = "postgres";
-                uri = "postgres:///mautrix-meta-instagram?host=/var/run/postgresql";
+              bot = {
+                username = botUserName;
+                avatar = "";
               };
+            };
 
-              bot.username = botUserName;
+            database = {
+              type = "postgres";
+              uri = "postgres:///mautrix-meta-instagram?host=/var/run/postgresql";
+            };
+
+            encryption = {
+              allow = false;
+              default = false;
+              require = false;
             };
 
             bridge.permissions."@${userName}:server" = "user";
@@ -127,13 +136,14 @@ in
               import functools
               import asyncio
 
-              from nio import AsyncClient, RoomMessageNotice, RoomCreateResponse, RoomInviteResponse
+              from nio import AsyncClient, RoomMessageText, RoomCreateResponse, RoomInviteResponse
 
 
-              async def message_callback(matrix: AsyncClient, msg: str, _r, e):
+              async def message_callback(matrix: AsyncClient, expected_msg: str, expected_sender: str, _r, e):
                   print("Received matrix text message: ", e)
-                  assert msg in e.body
-                  exit(0)  # Success!
+                  if getattr(e, "sender", "") == expected_sender and expected_msg in getattr(e, "body", ""):
+                      print("Success!")
+                      exit(0)  # Success!
 
 
               async def run(homeserver: str):
@@ -151,9 +161,9 @@ in
                   assert isinstance(response, RoomInviteResponse)
 
                   callback = functools.partial(
-                      message_callback, matrix, "Hello, I'm an Instagram bridge bot."
+                      message_callback, matrix, "Hello, I'm a Instagram bridge bot.", "@${botUserName}:${homeserverDomain}"
                   )
-                  matrix.add_event_callback(callback, RoomMessageNotice)
+                  matrix.add_event_callback(callback, RoomMessageText)
 
                   print("Waiting for matrix message...")
                   await matrix.sync_forever(timeout=30000)
@@ -171,11 +181,10 @@ in
     def extract_token(data):
         stdout = data[1]
         stdout = stdout.strip()
-        line = stdout.split('\n')[-1]
-        return line.split(':')[-1].strip("\" '\n")
+        return stdout.split(':')[-1].strip("\" '\n")
 
     def get_token_from(token, file):
-        data = server.execute(f"cat {file} | grep {token}")
+        data = server.execute(f"grep -E '^\\s*{token}:' {file}")
         return extract_token(data)
 
     def get_as_token_from(file):
