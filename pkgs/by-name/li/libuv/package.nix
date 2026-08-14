@@ -151,8 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
-      # https://github.com/libuv/libuv/issues/4794
-      substituteInPlace Makefile.am --replace-fail -lutil "-lutil -lm"
     '';
 
   nativeBuildInputs = [
