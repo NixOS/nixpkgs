@@ -7981,6 +7981,12 @@
     githubId = 1365692;
     name = "Will Fancher";
   };
+  elzorrorebelde = {
+    name = "Jorge Javier Araya Navarro";
+    email = "jorge@esavara.cr";
+    github = "elzorrorebelde";
+    githubId = 1055216;
+  };
   emaiax = {
     email = "github@emaiax.dev";
     github = "emaiax";
@@ -25129,12 +25135,6 @@
     githubId = 5512096;
     name = "Sébastien Guimmara";
   };
-  shackra = {
-    name = "Jorge Javier Araya Navarro";
-    email = "jorge@esavara.cr";
-    github = "shackra";
-    githubId = 1055216;
-  };
   shadaj = {
     github = "shadaj";
     githubId = 543055;
@@ -29897,6 +29897,13 @@
     github = "womfoo";
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
+  };
+  WOnder93 = {
+    email = "omosnacek@gmail.com";
+    github = "WOnder93";
+    githubId = 3041388;
+    matrix = "@omos:fedora.im";
+    name = "Ondrej Mosnáček";
   };
   workflow = {
     email = "4farlion@gmail.com";
