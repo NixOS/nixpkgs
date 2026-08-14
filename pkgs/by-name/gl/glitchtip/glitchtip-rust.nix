@@ -1,31 +1,34 @@
 {
   lib,
   buildPythonPackage,
+  django-vpg,
   fetchFromGitLab,
   rustPlatform,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "glitchtip-rust";
-  version = "0.3.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0FG+seIWqfyOG3JR0WF4ICnxMAPx9FO0JyFSB43CttU=";
+    hash = "sha256-XQoJJ3w1HTyOtzjnsU2OD2IkOMLUSvIf+9Xd0sF9s5E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-14j7h4TgQhTE5oihnvjAxtGZhPajuTRD4Cga8xzN9Lg=";
+    hash = "sha256-vXRcONfyrHCjcdfjHjpauoRTgiqcHgkBsNIS6VDPWpo=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  dependencies = [ django-vpg ];
 
   pythonImportsCheck = [ "gt_rust" ];
 
