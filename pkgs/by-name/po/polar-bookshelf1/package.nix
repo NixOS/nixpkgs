@@ -117,5 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.dansbandit ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      "Electron version 7 is EOL"
+    ];
   };
 })
