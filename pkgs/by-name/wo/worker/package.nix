@@ -2,25 +2,59 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
+  avfs,
+  dbus,
+  file, # for libmagic
+  imlib2,
+  libice,
+  libsm,
   libx11,
+  libxft,
+  libxinerama,
+  lua,
+  openssl,
+  udisks2,
+  luaSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "worker";
-  version = "5.2.2";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "http://www.boomerangsworld.de/cms/worker/downloads/worker-${finalAttrs.version}.tar.gz";
-    hash = "sha256-xJxdOb6eEr8suf3u/vouYCGzTFugJpLtoKyCMeuoJv4=";
+    hash = "sha256-tH/EFfj2bx0LwiyN7FQIjH8xR270A1opV7Zror0Zk7I=";
   };
 
-  buildInputs = [ libx11 ];
+  nativeBuildInputs = [
+    avfs
+    pkg-config
+  ];
+
+  buildInputs = [
+    avfs
+    dbus
+    file
+    imlib2
+    libice
+    libsm
+    libx11
+    libxft
+    libxinerama
+    openssl
+    udisks2
+  ]
+  ++ lib.optionals luaSupport [
+    lua
+  ];
 
   outputs = [
     "out"
     "man"
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   meta = {
