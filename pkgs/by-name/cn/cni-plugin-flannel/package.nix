@@ -44,6 +44,9 @@ buildGoModule rec {
     homepage = "https://github.com/flannel-io/cni-plugin/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [
+      abbe
+      antoineco
+    ];
   };
 }
