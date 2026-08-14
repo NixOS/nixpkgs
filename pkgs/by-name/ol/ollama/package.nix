@@ -377,6 +377,7 @@ goBuild (finalAttrs: {
       service-rocm = nixosTests.ollama-rocm;
       service-vulkan = nixosTests.ollama-vulkan;
     };
+    updateScript = ./update.sh;
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 
