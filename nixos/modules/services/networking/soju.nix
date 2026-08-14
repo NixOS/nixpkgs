@@ -139,6 +139,7 @@ in
     ];
 
     environment.systemPackages = [ sojuctl ];
+    environment.etc."soju.conf".source = cfg.configFile;
 
     systemd.services.soju = {
       description = "soju IRC bouncer";
