@@ -37,11 +37,10 @@
   libbacktrace,
   autoreconfHook269,
   bintools,
-  # Build the shared runtime libraries, and so have the driver's specs emit
-  # `-lgcc_s`. Derived the way the monolithic build derives it, including its
-  # exclusion of Cygwin: there the specs would also emit `-lgcc_eh`, and no
-  # stage of this package set produces one, so every C++ link performed while
-  # building the libc fails on a library that does not exist.
+  enableShared ? stdenv.hostPlatform.hasSharedLibraries,
+  # Whether the driver's specs emit `-lgcc_s`. Derived as the monolithic build
+  # derives it, Cygwin excluded: there they would also emit `-lgcc_eh`, which no
+  # stage of this package set produces.
   enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries && !stdenv.targetPlatform.isCygwin,
 }:
 let
@@ -296,10 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-install-libiberty"
     "--disable-multilib"
     "--disable-nls"
-    # Derived rather than forced off: the driver's specs only emit `-lgcc_s`
-    # for a target that has shared libraries, so hardcoding this leaves every
-    # throwing C++ program unlinkable even though `libgcc_s.so` is built and
-    # findable. Same predicate the monolithic build uses.
+    (lib.enableFeature enableShared "host-shared")
     (lib.enableFeature enableTargetShared "shared")
     "--enable-default-pie"
     "--enable-languages=${
