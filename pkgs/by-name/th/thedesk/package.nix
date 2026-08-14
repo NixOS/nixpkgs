@@ -67,5 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "thedesk";
+    knownVulnerabilities = [
+      "Electron version 37 is EOL"
+    ];
   };
 })
