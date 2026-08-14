@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -44,6 +45,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # line 23: 92372 Trace/BPT trap: 5
+    "test_to_hist_empty"
   ];
 
   pythonImportsCheck = [ "hist" ];
