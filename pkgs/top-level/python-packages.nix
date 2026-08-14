@@ -6400,6 +6400,8 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
+  formulas = callPackage ../development/python-modules/formulas { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   fortune = callPackage ../development/python-modules/fortune { };
