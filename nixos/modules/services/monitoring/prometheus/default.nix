@@ -60,6 +60,8 @@ let
   # This becomes the main config file for Prometheus
   promConfig = {
     global = filterValidPrometheus cfg.globalConfig;
+    otlp = filterValidPrometheus cfg.otlpConfig;
+    storage = filterValidPrometheus cfg.storageConfig;
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
@@ -106,7 +108,6 @@ let
         ]
     )
     ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
     ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
@@ -231,6 +232,167 @@ let
 
       query_log_file = mkOpt types.str ''
         Path to the file prometheus should write its query log to.
+      '';
+    };
+  };
+
+  # https://prometheus.io/docs/guides/opentelemetry/
+  promTypes.otlp = types.submodule {
+    options = {
+      promote_resource_attributes = mkDefOpt (types.listOf types.str) "[ ]" ''
+        Promote specific list of resource attributes to labels.
+        It cannot be configured simultaneously with 'promote_all_resource_attributes: true'.
+      '';
+
+      promote_all_resource_attributes = mkDefOpt types.bool "false" ''
+        Promoting all resource attributes to labels, except for the ones configured with 'ignore_resource_attributes'.
+        Be aware that changes in attributes received by the OTLP endpoint may result in time series churn and lead to high memory usage by the Prometheus server.
+        It cannot be set to 'true' simultaneously with 'promote_resource_attributes'.
+      '';
+
+      ignore_resource_attributes = mkDefOpt (types.listOf types.str) "[]" ''
+        Which resource attributes to ignore, can only be set when 'promote_all_resource_attributes' is true.
+      '';
+
+      translation_strategy =
+        mkDefOpt
+          (types.enum [
+            "UnderscoreEscapingWithSuffixes"
+            "NoUTF8EscapingWithSuffixes"
+            "UnderscoreEscapingWithoutSuffixes"
+            "NoTranslation"
+          ])
+          "UnderscoreEscapingWithSuffixes"
+          ''
+            Configures translation of OTLP metrics when received through the OTLP metrics
+            endpoint. Available values:
+            - "UnderscoreEscapingWithSuffixes" refers to commonly agreed normalization used
+              by OpenTelemetry in https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/pkg/translator/prometheus
+            - "NoUTF8EscapingWithSuffixes" is a mode that relies on UTF-8 support in Prometheus.
+              It preserves all special characters like dots, but still adds required metric name suffixes
+              for units and _total, as UnderscoreEscapingWithSuffixes does.
+            - "UnderscoreEscapingWithoutSuffixes" translates metric name characters that
+              are not alphanumerics/underscores/colons to underscores, and label name
+              characters that are not alphanumerics/underscores to underscores, but
+              unlike UnderscoreEscapingWithSuffixes it does not append any suffixes to
+              the names.
+            - (EXPERIMENTAL) "NoTranslation" is a mode that relies on UTF-8 support in Prometheus.
+              It preserves all special character like dots and won't append special suffixes for metric
+              unit and type.
+
+              WARNING: The "NoTranslation" setting has significant known risks and limitations (see https://prometheus.io/docs/practices/naming/
+              for details):
+                  * Impaired UX when using PromQL in plain YAML (e.g. alerts, rules, dashboard, autoscaling configuration).
+                  * Series collisions which in the best case may result in OOO errors, in the worst case a silently malformed
+                    time series. For instance, you may end up in situation of ingesting `foo.bar` series with unit
+                    `seconds` and a separate series `foo.bar` with unit `milliseconds`.
+          '';
+
+      keep_identifying_resource_attributes = mkDefOpt types.bool "false" ''
+        Enables adding "service.name", "service.namespace" and "service.instance.id"
+        resource attributes to the "target_info" metric, on top of converting
+        them into the "instance" and "job" labels.
+      '';
+
+      convert_histograms_to_nhcb = mkDefOpt types.bool "false" ''
+        Configures optional translation of OTLP explicit bucket histograms into native histograms with custom buckets.
+      '';
+
+      promote_scope_metadata = mkDefOpt types.bool "false" ''
+        Enables promotion of OTel scope metadata (i.e. name, version, schema URL, and attributes) to metric labels.
+        This is disabled by default for backwards compatibility, but according to OTel spec, scope metadata _should_ be identifying, i.e. translated to metric labels.
+      '';
+
+      label_name_underscore_sanitization = mkDefOpt types.bool "true" ''
+        Controls whether to enable prepending of 'key_' to labels starting with '_'.
+        Reserved labels starting with '__' are not modified.
+        This is only relevant when translation_strategy uses underscore escaping
+        (e.g., "UnderscoreEscapingWithSuffixes" or "UnderscoreEscapingWithoutSuffixes").
+      '';
+
+      label_name_preserve_multiple_underscores = mkDefOpt types.bool "true" ''
+        Enables preserving of multiple consecutive underscores in label names when
+        translation_strategy uses underscore escaping. When true (default), multiple
+        consecutive underscores are preserved during label name sanitization.
+      '';
+    };
+  };
+
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#storage
+  promTypes.storage_tsdb_retention = types.submodule {
+    options = {
+      time = mkOpt types.str ''
+        How long to retain samples in storage. If neither this option nor the size option
+        is set, the retention time defaults to 15d. Setting this to 0 disables time-based retention.
+        This option takes precedence over the deprecated command-line flag --storage.tsdb.retention.time.
+      '';
+
+      size = mkDefOpt types.str "0" ''
+        Maximum number of bytes that can be stored for blocks. A unit is required,
+        supported units: B, KB, MB, GB, TB, PB, EB. Ex: "512MB". Based on powers-of-2, so 1KB is 1024B.
+        If set to 0 or not set, size-based retention is disabled.
+        This option takes precedence over the deprecated command-line flag --storage.tsdb.retention.size.
+      '';
+
+      percentage = mkDefOpt types.int "0" ''
+        Maximum percent of total disk space allowed for storage of blocks. Alternative to `size` and
+        behaves the same as if size was calculated by hand as a percentage of the total storage capacity.
+        Prometheus will fail to start if this config is enabled, but it fails to query the total storage capacity.
+        The total disk space allowed will automatically adapt to volume resize.
+        If set to 0 or not set, percentage-based retention is disabled.
+
+        This is an experimental feature, this behaviour could change or be removed in the future.
+      '';
+    };
+  };
+
+  promTypes.storage_tsdb = types.submodule {
+    options = {
+      out_of_order_time_window = mkDefOpt types.str "0s" ''
+        Configures how old an out-of-order/out-of-bounds sample can be w.r.t. the TSDB max time.
+        An out-of-order/out-of-bounds sample is ingested into the TSDB as long as the timestamp
+        of the sample is >= TSDB.MaxTime-out_of_order_time_window.
+
+        When out_of_order_time_window is >0, the errors out-of-order and out-of-bounds are
+        combined into a single error called 'too-old'; a sample is either (a) ingestible
+        into the TSDB, i.e. it is an in-order sample or an out-of-order/out-of-bounds sample
+        that is within the out-of-order window, or (b) too-old, i.e. not in-order
+        and before the out-of-order window.
+
+        When out_of_order_time_window is greater than 0, it also affects experimental agent. It allows
+        the agent's WAL to accept out-of-order samples that fall within the specified time window relative
+        to the timestamp of the last appended sample for the same series.
+      '';
+
+      stale_series_compaction_threshold = mkDefOpt types.float "0" ''
+        Configures the trigger point for compacting the stale series from the memory into persistent blocks
+        and remove those stale series from the memory.
+
+        The threshold is a number between 0.0 and 1.0. It represents the ratio of stale series in the memory
+        to the total series in the memory. The stale series compaction is triggered when this ratio crosses
+        the configured threshold. It may not trigger the stale series compaction if the usual head compaction
+        is about to happen soon.
+
+        If set to 0, stale series compaction is disabled.
+
+        This is an experimental feature, this behaviour could change or be removed in the future.
+      '';
+
+      retention = mkOpt promTypes.storage_tsdb_retention ''
+        Configures data retention settings for TSDB.
+
+        Note: When retention is changed at runtime, the retention
+        settings are updated immediately, but block deletion based on the new retention policy
+        occurs during the next block reload cycle. This happens automatically within 1 minute
+        or when a compaction completes, whichever comes first.
+      '';
+    };
+  };
+
+  promTypes.storageConfig = types.submodule {
+    options = {
+      tsdb = mkOpt promTypes.storage_tsdb ''
+        Storage related settings that are runtime reloadable.
       '';
     };
   };
@@ -1736,6 +1898,10 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
+    (mkRenamedOptionModule
+      [ "services" "prometheus" "retentionTime" ]
+      [ "services" "prometheus" "storageConfig" "tsdb" "retention" "time" ]
+    )
     (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
       "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`."
     )
@@ -1816,6 +1982,24 @@ in
       description = ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
+      '';
+    };
+
+    otlpConfig = mkOption {
+      type = promTypes.otlp;
+      default = { };
+      description = ''
+        Settings related to the OTLP receiver feature.
+        See [the official documentation](https://prometheus.io/docs/guides/opentelemetry/) for best practices.
+      '';
+    };
+
+    storageConfig = mkOption {
+      type = promTypes.storageConfig;
+      default = { };
+      description = ''
+        Storage related settings that are runtime reloadable.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#storage) for more information.
       '';
     };
 
@@ -1922,15 +2106,6 @@ in
         and it will report errors, despite a correct configuration.
         To resolve this, you may set this option to `"syntax-only"`
         in order to only syntax check the Prometheus configuration.
-      '';
-    };
-
-    retentionTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "15d";
-      description = ''
-        How long to retain samples in storage.
       '';
     };
   };
