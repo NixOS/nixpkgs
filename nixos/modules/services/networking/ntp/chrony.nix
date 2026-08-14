@@ -63,7 +63,9 @@ let
       chmod +x $out
       patchShebangs $out
     ''
-  ) { };
+   ) {
+     runCommand = pkgs.buildPackages.runCommand;
+   };
 in
 {
   options = {

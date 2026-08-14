@@ -71,7 +71,7 @@
         ln -s ${config.system.build.inhibitSwitch} $out/switch-inhibitors
       '';
 
-      build.inhibitSwitch = pkgs.writers.writeJSON "switch-inhibitors" config.system.switch.inhibitors;
+      build.inhibitSwitch = pkgs.buildPackages.writers.writeJSON "switch-inhibitors" config.system.switch.inhibitors;
 
       preSwitchChecks.switchInhibitors =
         let
