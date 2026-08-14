@@ -38,7 +38,16 @@ buildPythonPackage (finalAttrs: {
     # replace removed `pipes` stdlib module with `shlex` for Python >= 3.13
     # https://github.com/xmendez/wfuzz/issues/380
     ./python-313-shlex.patch
+    # https://github.com/xmendez/wfuzz/pull/382
+    ./Drop-pkg_resources-from-filter-help-loader.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/wfuzz/__init__.py \
+      --replace-fail \
+        '__version__ = "3.1.0"' \
+        '__version__ = "${finalAttrs.version}"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -49,7 +58,6 @@ buildPythonPackage (finalAttrs: {
     netaddr # src/wfuzz/plugins/payloads/{iprange,ipnet}.py
     pycurl
     pyparsing
-    setuptools
     six
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
