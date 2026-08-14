@@ -13,6 +13,7 @@
   setuptools,
   six,
   legacy-cgi,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -61,11 +62,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     netaddr
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # The tests are requiring a local web server
