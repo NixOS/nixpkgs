@@ -4,12 +4,16 @@ let
   shared =
     { pkgs, ... }:
     {
-      services.mediawiki.enable = true;
-      services.mediawiki.httpd.virtualHost.hostName = "localhost";
-      services.mediawiki.httpd.virtualHost.adminAddr = "root@example.com";
-      services.mediawiki.passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";
-      services.mediawiki.extensions = {
-        ParserFunctions = null;
+      services.mediawiki = {
+        enable = true;
+        httpd.virtualHost = {
+          hostName = "localhost";
+          adminAddr = "root@example.com";
+        };
+        passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";
+        extensions = {
+          ParserFunctions = null;
+        };
       };
     };
 
