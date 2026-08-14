@@ -21,7 +21,7 @@ let
     t:
     runTest {
       imports = [
-        { nodes.machine.imports = [ shared ]; }
+        { containers.machine.imports = [ shared ]; }
         t
       ];
     };
@@ -29,7 +29,7 @@ in
 {
   mysql = makeTest {
     name = "mediawiki-mysql";
-    nodes.machine = {
+    containers.machine = {
       services.mediawiki.database.type = "mysql";
     };
     testScript = ''
@@ -44,7 +44,7 @@ in
 
   postgresql = makeTest {
     name = "mediawiki-postgres";
-    nodes.machine = {
+    containers.machine = {
       services.mediawiki.database.type = "postgres";
     };
     testScript = ''
@@ -59,7 +59,7 @@ in
 
   sqlite = makeTest {
     name = "mediawiki-sqlite";
-    nodes.machine = {
+    containers.machine = {
       services.mediawiki.database.type = "sqlite";
     };
     testScript = ''
@@ -74,29 +74,29 @@ in
 
   nohttpd = makeTest {
     name = "mediawiki-nohttpd";
-    nodes.machine = {
+    containers.machine = {
       services.mediawiki.webserver = "none";
     };
     testScript =
-      { nodes, ... }:
+      { containers, ... }:
       ''
         start_all()
         machine.wait_for_unit("phpfpm-mediawiki.service")
         env = (
           "SCRIPT_NAME=/index.php",
-          "SCRIPT_FILENAME=${nodes.machine.services.mediawiki.finalPackage}/share/mediawiki/index.php",
+          "SCRIPT_FILENAME=${containers.machine.services.mediawiki.finalPackage}/share/mediawiki/index.php",
           "REMOTE_ADDR=127.0.0.1",
           'QUERY_STRING=title=Main_Page',
           "REQUEST_METHOD=GET",
         );
-        page = machine.succeed(f"{' '.join(env)} ${lib.getExe nodes.machine.nixpkgs.pkgs.fcgi} -bind -connect ${nodes.machine.services.phpfpm.pools.mediawiki.socket}")
+        page = machine.succeed(f"{' '.join(env)} ${lib.getExe containers.machine.nixpkgs.pkgs.fcgi} -bind -connect ${containers.machine.services.phpfpm.pools.mediawiki.socket}")
         assert "MediaWiki has been installed" in page, f"no 'MediaWiki has been installed' in:\n{page}"
       '';
   };
 
   nginx = makeTest {
     name = "mediawiki-nginx";
-    nodes.machine = {
+    containers.machine = {
       services.mediawiki.webserver = "nginx";
     };
     testScript = ''
