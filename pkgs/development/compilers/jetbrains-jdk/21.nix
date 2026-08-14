@@ -21,6 +21,5 @@ callPackage ./common.nix
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
     sourceDateEpoch = 1765114563;
     srcHash = "sha256-Qmffu7p6frBoH2Zh+EiqvEoMNNBE79qfkgLSC3+XuI0=";
-    homePath = "${jetbrains.jdk-21}/lib/openjdk";
     jcefPackage = jetbrains.jcef-21;
   }

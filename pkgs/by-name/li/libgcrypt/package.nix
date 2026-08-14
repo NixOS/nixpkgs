@@ -104,12 +104,17 @@ stdenv.mkDerivation rec {
     sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $lib/lib/libgcrypt.la
   '';
 
-  # TODO: figure out why this is even necessary and why the missing dylib only crashes
-  # random instead of every test
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
-    mkdir -p $lib/lib
-    cp src/.libs/libgcrypt.20.dylib $lib/lib
-  '';
+  preCheck =
+    # glibc loads libgcc_s dynamically when a thread exits
+    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.cc.isClang) ''
+      export LD_LIBRARY_PATH="${buildPackages.stdenv.cc.cc.libgcc}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    ''
+    # TODO: figure out why this is even necessary and why the missing dylib only crashes
+    # random instead of every test
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
+      mkdir -p $lib/lib
+      cp src/.libs/libgcrypt.20.dylib $lib/lib
+    '';
 
   doCheck = true;
   enableParallelChecking = true;

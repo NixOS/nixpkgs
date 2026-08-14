@@ -7464,6 +7464,21 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  herdr-splits-nvim = buildVimPlugin {
+    pname = "herdr-splits.nvim";
+    version = "0.5.2";
+    src = fetchFromGitHub {
+      owner = "lmilojevicc";
+      repo = "herdr-splits.nvim";
+      tag = "v0.5.2";
+      hash = "sha256-2h9HGQcIwKIE5uKuRVwtIfKNn0urQttvg5b95kavzgo=";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/lmilojevicc/herdr-splits.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   hex-nvim = buildVimPlugin {
     pname = "hex.nvim";
     version = "0-unstable-2025-07-27";
