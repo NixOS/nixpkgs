@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.36.0";
+  version = "5.39.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-eIpmAwyJSw4/MAQdNpbeHKsheqALVbUbe8cAt71yobE=";
+    hash = "sha256-luLTaOHRjqc5FhHCwpCjUXJqqYeqWjQt21MrMKqJgyE=";
   };
 
   pythonRelaxDeps = true;
@@ -80,6 +80,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     google-api-python-client
     google-auth-httplib2
     h2
+    huaweicloudsdkcore
+    huaweicloudsdkcts
+    huaweicloudsdkecs
+    huaweicloudsdkelb
+    huaweicloudsdkevs
+    huaweicloudsdkiam
+    huaweicloudsdkkms
+    huaweicloudsdkobs
+    huaweicloudsdkrds
+    huaweicloudsdkvpc
+    huaweicloudsdkwaf
     jsonschema
     kubernetes
     linode-api4
