@@ -19181,6 +19181,12 @@
     githubId = 75925945;
     name = "Andrew Semeykin";
   };
+  mopigames = {
+    email = "mopigames2.0@gmail.com";
+    github = "MopigamesYT";
+    githubId = 95306417;
+    name = "Margot Prego";
+  };
   moraxyc = {
     name = "Moraxyc Xu";
     email = "i@qaq.li";
