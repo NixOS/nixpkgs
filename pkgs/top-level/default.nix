@@ -216,6 +216,7 @@ let
       overlays
       crossOverlays
       ;
+    inherit (pkgs) mkStdenvDevShell mkBootstrapDevShell;
   };
 
   fixedPoint = boot stages;

@@ -14,7 +14,7 @@ let
   # N.B. Keep in sync with default arg for stdenv/generic.
   defaultMkDerivationFromStdenv =
     let
-      makeDerivationFile = import ./generic/make-derivation.nix lib config;
+      makeDerivationFile = import ./generic/make-derivation.nix lib config pkgs.mkStdenvDevShell;
     in
     stdenv: (makeDerivationFile stdenv).mkDerivation;
 
