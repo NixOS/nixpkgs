@@ -20,14 +20,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-ASLnsmuWpfQKwpNNLUgI32Gdn/j+jUW5IBLlT8RUmcE=";
+    hash = "sha256-h8tv7deIB3PW1Mt8FU5b9HRavL5ZK9Q0Dx828/uSA1o=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -39,7 +39,7 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-akkoma";
     inherit src version;
-    hash = "sha256-O9A7XuQSSczGMcLMc6Fk0eh7PkjQ6sYJKSwdqoEPJJI=";
+    hash = "sha256-GNkTDCcU3nUw3vA0hamJDTcQ7FWZHuI3EI6hLtzzP3k=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \
