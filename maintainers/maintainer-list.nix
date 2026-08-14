@@ -17129,6 +17129,12 @@
     githubId = 36235154;
     name = "Sean Haugh";
   };
+  maartenbehn = {
+    email = "nixpkgs@stroby.org";
+    name = "Maarten Behn";
+    github = "MaartenBehn";
+    githubId = 46872913;
+  };
   mabster314 = {
     name = "Max Haland";
     email = "max@haland.org";

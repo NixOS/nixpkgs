@@ -214,6 +214,21 @@
   "module-services-tdarr-server-only": [
     "index.html#module-services-tdarr-server-only"
   ],
+  "module-services-wanderer": [
+    "index.html#module-services-wanderer"
+  ],
+  "module-services-wanderer-basic-usage": [
+    "index.html#module-services-wanderer-basic-usage"
+  ],
+  "module-services-wanderer-external-meiliserach": [
+    "index.html#module-services-wanderer-external-meiliserach"
+  ],
+  "module-services-wanderer-reverse-proxy-configuration": [
+    "index.html#module-services-wanderer-reverse-proxy-configuration"
+  ],
+  "module-services-wanderer-sops": [
+    "index.html#module-services-wanderer-sops"
+  ],
   "module-services-zapret2": [
     "index.html#module-services-zapret2"
   ],
