@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mQEOV+NJId5h/hYOL+2JrEHjqM77qRExDNeqZ0IyA08=";
   };
 
+  strictDeps = true;
+
   buildInputs = [
     coreutils
     cups

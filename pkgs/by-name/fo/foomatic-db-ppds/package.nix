@@ -52,6 +52,8 @@ stdenv.mkDerivation {
     lib.lists.head
   ];
 
+  strictDeps = true;
+
   buildInputs = [
     coreutils
     cups-filters

@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cRZH0CXg03FEqUJdxaNnPVXjf8+ct86PjhL59WQbw60=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoconf
     automake
