@@ -144,7 +144,8 @@ stdenvNoCC.mkDerivation (
               ]
             } \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration" \
+            --add-flags "-data \$HOME/.eclipse-mat/${finalAttrs.version}/workspace"
 
           unzip -j -q mat/plugins/org.eclipse.mat.ui.rcp_*.jar "icons/memory_analyzer_*.png" -d icons
           for size in 32 48 64 128 256; do
