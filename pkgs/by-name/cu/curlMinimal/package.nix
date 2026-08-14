@@ -105,8 +105,36 @@ stdenv.mkDerivation (finalAttrs: {
   # necessary for FreeBSD code path in configure
   postPatch = ''
     substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
-    patchShebangs scripts
-  '';
+  ''
+  # `wcurl` is the one thing in `scripts` that is installed, so it is the one
+  # whose shebang has to suit the host platform. The rest are only used during
+  # the build, and want this platform's shell. Say which is which rather than
+  # patch them all one way and correct it afterwards.
+  #
+  # Where the host has no shell at all, `patchShebangs --host` finds nothing
+  # and leaves the shebang as shipped, which is the best available answer.
+  #
+  # TODO: take the first branch unconditionally --- in the spirit of strictDeps,
+  # it is good to always be defensive rather than do something unnecessarily
+  # that we can only get away with when build == host.
+  + (
+    if isCross then
+      ''
+        local f flag
+        for f in scripts/*; do
+          if [[ "$f" == scripts/wcurl ]]; then
+            flag=--host
+          else
+            flag=--build
+          fi
+          patchShebangs "$flag" "$f"
+        done
+      ''
+    else
+      ''
+        patchShebangs scripts
+      ''
+  );
 
   outputs = [
     "bin"
@@ -247,19 +275,27 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
   ''
-  # The wcurl shell script found in `''${!outputBin}/bin`, is located in the
-  # source along with all the scripts patched in `postPatch` above.
-  # `patchShebangs` at that stage causes the host intended wcurl script to get
-  # the buildPlatform's runtimeShell shebang, instead of the hostPlatform's. To
-  # make sure this doesn't happen we disallow it, and fix it above in the
-  # postInstall, and also with the conditional hostPlatform's
-  # runtimeShellPackage added in buildInputs.
+  # `postPatch` above should have pointed everything installed at the host's
+  # shell already. Do it again over what was installed, defensively.
   + lib.optionalString isCross ''
-    patchShebangs --update --host "''${!outputBin}/bin"
+    patchShebangs --host "''${!outputBin}/bin"
   '';
+
+  # Whether we patch the shebangs in the installed script or not, we should not
+  # have build platform software in the final runtime closure.
   outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
   outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
-  buildInputs = lib.optional isCross runtimeShellPackage;
+
+  # Some hosts have no shell for the scripts to point at: MinGW is the one in
+  # tree, where `bash` is marked unsupported because it needs a POSIX layer. We
+  # cannot patch shebangs in that case.
+  #
+  # TODO: drop the isCross part of the condition --- in the spirit of
+  # `strictDeps` it is good to have the dep (when it is available), even if it
+  # is gratuitous in the `build = host` case.
+  buildInputs = lib.optional (
+    isCross && lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage
+  ) runtimeShellPackage;
 
   passthru =
     let
