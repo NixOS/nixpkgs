@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgbrd-grabber";
-  version = "7.13.0";
+  version = "7.14.0";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7EIXmqfTADG95vxKU1cFGnzZD3NJJN28HOF71YZD6nI=";
+    hash = "sha256-HvbbUZTyrT+3aZLSNk8I34gg7p4crfauHE3qC065+AI=";
     fetchSubmodules = true;
   };
 
