@@ -14599,6 +14599,8 @@ self: super: with self; {
 
   pyemd = callPackage ../development/python-modules/pyemd { };
 
+  pyemf3 = callPackage ../development/python-modules/pyemf3 { };
+
   pyemoncms = callPackage ../development/python-modules/pyemoncms { };
 
   pyemvue = callPackage ../development/python-modules/pyemvue { };
