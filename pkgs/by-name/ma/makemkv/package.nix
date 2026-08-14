@@ -4,7 +4,7 @@
   curl,
   expat,
   fetchurl,
-  ffmpeg,
+  ffmpeg_8,
   lib,
   stdenv,
   qt5,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (
     ];
     buildInputs = [
       expat
-      ffmpeg
+      ffmpeg_8
       openssl
       qt5.qtbase
       zlib
