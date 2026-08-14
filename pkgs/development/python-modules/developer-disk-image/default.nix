@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "developer-disk-image";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   # GitHub archive is way too large
   src = fetchPypi {
     pname = "developer_disk_image";
     inherit version;
-    hash = "sha256-21aLIuwznYtWsprptCAjDq4yL+ab50zZn9Dv+w7y4o8=";
+    hash = "sha256-H7mEHcxc+B5pe24KnBSQnAWcGJPWdbODmKkcCMt7qLw=";
   };
 
   build-system = [
