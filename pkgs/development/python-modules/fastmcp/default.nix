@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   writableTmpDirAsHomeHook,
 
   # build-system
@@ -29,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "3.3.1";
+  version = "3.4.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,8 +38,18 @@ buildPythonPackage (finalAttrs: {
     owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1W5NbWIULxFXGSozZEeITcPt1EbY6IsJLQdyevcn9BI=";
+    hash = "sha256-EysVbtFbop5ENupc9T5EmtUSZ8osVtQSzpwa6rea/OQ=";
   };
+
+  patches = [
+    # Fix python 3.14 compatibility (https://github.com/PrefectHQ/fastmcp/pull/4796)
+    # TODO: remove when updating to the next release
+    (fetchpatch {
+      url = "https://github.com/PrefectHQ/fastmcp/commit/6be0ac8e15d35ff8f5121266855bc34c1158c9a1.patch";
+      includes = [ "fastmcp_slim/fastmcp/tools/function_tool.py" ];
+      hash = "sha256-7N86b5sslWLgoB2dS2Xh3JfZX3oTHeXfeSJOaWKI5b0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -108,8 +119,11 @@ buildPythonPackage (finalAttrs: {
     "test_nested_streamable_http_server_resolves_correctly"
 
     # Requires prefab-ui (optional dependency)
+    # https://github.com/NixOS/nixpkgs/pull/510123 adds the prefab-ui package.
     "TestPrefabAppConfig"
     "test_doc_examples_quality"
+    "test_run_dev_apps_with_host"
+    "test_run_dev_apps_log_panel_propagation"
 
     # AssertionError: assert 'INFO' == 'DEBUG'
     "test_temporary_settings"
@@ -119,6 +133,14 @@ buildPythonPackage (finalAttrs: {
     "test_multi_server"
     "test_server_starts_without_auth"
     "test_canonical_multi_client_with_transforms"
+
+    # Server startup is flaky when the suite runs with pytest-xdist
+    "test_unauthorized_access"
+
+    # Timing-sensitive and flaky
+    "test_rate_limiting_recovery_over_time"
+    "test_rate_limiting_with_different_operations"
+    "test_timeout"
 
     # RuntimeError: Attempted to exit a cancel scope that isn't the current tasks's current cancel scope
     "test_stateful_proxy"

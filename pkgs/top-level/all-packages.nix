@@ -88,6 +88,8 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccNoLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -99,6 +101,11 @@ with pkgs;
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
+        else if stdenvNoCC.hostPlatform.useGccNG or false then
+          # The split package set can express the two rungs separately, the way
+          # the LLVM set does: no libgcc above, libgcc but no libc here. The
+          # monolithic `gccCrossLibcStdenv` has to serve both.
+          overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibgcc
         else
           gccCrossLibcStdenv
       )
@@ -1995,7 +2002,7 @@ with pkgs;
 
   exiftool = perlPackages.ImageExifTool;
 
-  expect = tclPackages.expect;
+  expect = tcl8Packages.expect_5;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
@@ -2074,7 +2081,7 @@ with pkgs;
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
+    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gnome3;
   };
   gnupg = gnupg24;
   gnupgMinimal = gnupg.override {
@@ -2729,7 +2736,6 @@ with pkgs;
   inherit (callPackages ../tools/security/pinentry { })
     pinentry-curses
     pinentry-emacs
-    pinentry-gtk2
     pinentry-gnome3
     pinentry-qt
     pinentry-tty
@@ -3244,9 +3250,11 @@ with pkgs;
       # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
       gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
       gccNGPackages_15 = gccNGPackagesSet."15";
+      gccNGPackages = gccNGPackagesSet.${toString default-gcc-version};
       mkGCCNGPackages = gccNGPackagesSet.mkPackage;
     })
     gccNGPackages_15
+    gccNGPackages
     mkGCCNGPackages
     ;
 
@@ -3256,7 +3264,7 @@ with pkgs;
       ccWrapper.override (prev: {
         cc = prev.cc.override {
           reproducibleBuild = false;
-          profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
+          profiledCompiler = with stdenv.hostPlatform; (!isDarwin && isx86);
         };
       })
     else
@@ -4103,8 +4111,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
-  smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj { };
 
   squeak = callPackage ../development/compilers/squeak {
@@ -5622,11 +5628,22 @@ with pkgs;
     if stdenv.hostPlatform != stdenv.buildPlatform then
       {
         stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
-        libgcc = callPackage ../development/libraries/gcc/libgcc {
-          gcc = gccCrossLibcStdenv.cc;
-          glibc = glibc.override { libgcc = null; };
-          stdenvNoLibs = gccCrossLibcStdenv;
-        };
+        # glibc `dlopen`s `libgcc_s.so` without consulting the usual search
+        # path, so it has to name one that already exists. The monolithic
+        # build gets there by building glibc twice: the inner `libgcc = null`
+        # one names no libgcc at all, and is used for nothing but building the
+        # libgcc the real one names. The split package set already has that
+        # rung as a package of its own — `libgcc-no-libc` is what exists
+        # before any libc does — so there is nothing left to open-code here.
+        libgcc =
+          if stdenv.hostPlatform.useGccNG or false then
+            gccNGPackages.libgcc-no-libc
+          else
+            callPackage ../development/libraries/gcc/libgcc {
+              gcc = gccCrossLibcStdenv.cc;
+              glibc = glibc.override { libgcc = null; };
+              stdenvNoLibs = gccCrossLibcStdenv;
+            };
       }
     else
       {
@@ -7300,12 +7317,9 @@ with pkgs;
 
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
-  inherit (callPackages ../servers/http/jetty { })
-    jetty_11
+  inherit (callPackages ../by-name/je/jetty { })
     jetty_12
     ;
-
-  jetty = jetty_12;
 
   inherit
     ({
@@ -8784,6 +8798,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/scenefx { })
     scenefx_0_4
     scenefx_0_5
+    scenefx
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });

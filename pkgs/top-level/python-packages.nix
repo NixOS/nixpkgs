@@ -3779,6 +3779,8 @@ self: super: with self; {
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
 
+  cryptomobile = callPackage ../development/python-modules/cryptomobile { };
+
   cryptoparser = callPackage ../development/python-modules/cryptoparser { };
 
   crysp = callPackage ../development/python-modules/crysp { };
@@ -6135,7 +6137,7 @@ self: super: with self; {
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
-  flashinfer = callPackage ../development/python-modules/flashinfer { };
+  flashinfer-python = callPackage ../development/python-modules/flashinfer-python { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
 
@@ -11952,6 +11954,8 @@ self: super: with self; {
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
+  nslookup = callPackage ../development/python-modules/nslookup { };
+
   nsw-fuel-api-client = callPackage ../development/python-modules/nsw-fuel-api-client { };
 
   nsz = callPackage ../development/python-modules/nsz { };
@@ -13224,10 +13228,6 @@ self: super: with self; {
 
   pi1wire = callPackage ../development/python-modules/pi1wire { };
 
-  piano-transcription-inference =
-    callPackage ../development/python-modules/piano-transcription-inference
-      { };
-
   piccata = callPackage ../development/python-modules/piccata { };
 
   piccolo = callPackage ../development/python-modules/piccolo { };
@@ -13289,6 +13289,8 @@ self: super: with self; {
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
+
+  pillow-jxl-plugin = callPackage ../development/python-modules/pillow-jxl-plugin { };
 
   pillowfight = callPackage ../development/python-modules/pillowfight { };
 
@@ -13694,7 +13696,7 @@ self: super: with self; {
 
   primepy = callPackage ../development/python-modules/primepy { };
 
-  primer3 = callPackage ../development/python-modules/primer3 { };
+  primer3-py = callPackage ../development/python-modules/primer3-py { };
 
   primp = callPackage ../development/python-modules/primp { };
 
@@ -14383,6 +14385,8 @@ self: super: with self; {
 
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
 
+  pycrate = callPackage ../development/python-modules/pycrate { };
+
   pycrdt = callPackage ../development/python-modules/pycrdt { };
 
   pycrdt-store = callPackage ../development/python-modules/pycrdt-store { };
@@ -14743,6 +14747,8 @@ self: super: with self; {
   pygelf = callPackage ../development/python-modules/pygelf { };
 
   pygeocodio = callPackage ../development/python-modules/pygeocodio { };
+
+  pygeosphere-warnings = callPackage ../development/python-modules/pygeosphere-warnings { };
 
   pygerber = callPackage ../development/python-modules/pygerber { };
 
@@ -15315,8 +15321,6 @@ self: super: with self; {
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 
-  pynslookup = callPackage ../development/python-modules/pynslookup { };
-
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynut2 = callPackage ../development/python-modules/pynut2 { };
@@ -15837,6 +15841,8 @@ self: super: with self; {
 
   pyscss = callPackage ../development/python-modules/pyscss { };
 
+  pysctp = callPackage ../development/python-modules/pysctp { };
+
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
@@ -16038,6 +16044,8 @@ self: super: with self; {
   pyspx = callPackage ../development/python-modules/pyspx { };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
+
+  pysquashfsimage = callPackage ../development/python-modules/pysquashfsimage { };
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
@@ -17798,7 +17806,7 @@ self: super: with self; {
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
-  retinaface = callPackage ../development/python-modules/retinaface { };
+  retina-face = callPackage ../development/python-modules/retina-face { };
 
   retry = callPackage ../development/python-modules/retry { };
 
@@ -18644,8 +18652,6 @@ self: super: with self; {
 
   show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
 
-  showit = callPackage ../development/python-modules/showit { };
-
   shtab = callPackage ../development/python-modules/shtab { };
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
@@ -18861,8 +18867,6 @@ self: super: with self; {
   );
 
   slh-dsa = callPackage ../development/python-modules/slh-dsa { };
-
-  slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicer = callPackage ../development/python-modules/slicer { };
 

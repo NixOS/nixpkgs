@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   outputs = [
     "out"
@@ -31,16 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gTf3NgxCYaIJ4ubkPKrPct4D6IsHnTZRAzrDHoErDNM=";
+    hash = "sha256-RcLdBurFB4Zk479EHeGZHdNKvSMO1M54HDbxHVEFa7Y=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
-    ./increase-test-discovery-timeout.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -93,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2 py)' \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2)'
+
+    # this header was missing. this is likely a consequence of fmt v12.2.0
+    # changing the definition of its fmt/core.h header, which is included in
+    # the same file.
+    sed -e '1i #include <string>' -i eden/common/utils/String.h
   '';
 
   passthru.updateScript = nix-update-script { };

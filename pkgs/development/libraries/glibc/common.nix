@@ -278,6 +278,11 @@ stdenv.mkDerivation (
     passthru = {
       inherit version;
       minorRelease = version;
+
+      # glibc's threads are POSIX threads. `libgcc` and `libstdc++` have to be
+      # configured for the same threading model as each other, so rather than
+      # have each guess, they take it from the libc they are built against.
+      threadModel = "posix";
     };
   }
 

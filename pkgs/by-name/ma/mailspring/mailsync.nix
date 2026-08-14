@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     xz
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     # Transforms 'NAMES libfoo.a libfoo' into 'NAMES foo'
     sed -i -E 's/NAMES lib([a-zA-Z0-9]+)\.a lib\1/NAMES \1/g' CMakeLists.txt
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # UUID_LIB is provided by system frameworks
     substituteInPlace CMakeLists.txt \
       --replace-fail "find_library(UUID_LIB NAMES uuid)" "set(UUID_LIB \"\")"

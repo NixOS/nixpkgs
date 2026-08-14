@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ pcsclite ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Bash completion: patch two clap_complete quirks:
@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           pkg-config
           llvmPackages.libclang
         ];
-        buildInputs = lib.optionals stdenv.isLinux [ pcsclite ];
+        buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
         LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
         BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.release_version}/include";

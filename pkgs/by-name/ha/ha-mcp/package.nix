@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ha-mcp";
-  version = "7.8.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HhtHeSQlK1jd/4/x1d54Etvrs8e+pQkIGvJV39ZZBw=";
+    hash = "sha256-JjZyHfqSbo3T6uMd8JVvEDVpYIDpJQcd4fViNo5wrY8=";
   };
 
   build-system = with python3Packages; [
@@ -29,11 +29,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cryptography
       fastmcp
       httpx
+      packaging
       pydantic
       pydantic-monty
       python-dotenv
       truststore
-      websockets
+      tzdata
     ]
     ++ httpx.optional-dependencies.socks;
 
