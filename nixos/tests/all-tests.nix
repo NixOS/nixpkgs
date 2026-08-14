@@ -785,9 +785,7 @@ in
   healthchecks = runTest ./web-apps/healthchecks.nix;
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
-  # 9pnet_virtio used to mount /nix partition doesn't support
-  # hibernation. This test happens to work on x86_64-linux but
-  # not on other platforms.
+  # This test happens to work on x86_64-linux but not on other platforms.
   hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix {
     systemdStage1 = false;
   };
