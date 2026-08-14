@@ -19615,6 +19615,8 @@ self: super: with self; {
 
   stanza = callPackage ../development/python-modules/stanza { };
 
+  starfile = callPackage ../development/python-modules/starfile { };
+
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
   starlark = callPackage ../development/python-modules/starlark { };
