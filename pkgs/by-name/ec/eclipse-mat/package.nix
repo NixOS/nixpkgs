@@ -103,6 +103,7 @@ stdenvNoCC.mkDerivation (
           "Development"
           "Profiling"
         ];
+        startupWMClass = "Eclipse Memory Analyzer";
       })
     ];
 
