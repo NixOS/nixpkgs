@@ -27,10 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ cargo-c ];
 
+  # Keep the static archive intact while removing non-exported symbols from the shared library.
+  stripDebugFlags = if stdenv.hostPlatform.isDarwin then [ "-x" ] else [ "--strip-unneeded" ];
+  stripExclude = [ "lib/libsecretspec_ffi.a" ];
+
   buildPhase = ''
     runHook preBuild
     ${buildPackages.rust.envVars.setEnv} cargo cbuild -p secretspec-ffi -j $NIX_BUILD_CORES \
-      --release --frozen --prefix=${placeholder "out"} \
+      --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
   '';
@@ -38,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
     ${buildPackages.rust.envVars.setEnv} cargo cinstall -p secretspec-ffi -j $NIX_BUILD_CORES \
-      --release --frozen --prefix=${placeholder "out"} \
+      --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
   '';
@@ -46,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkPhase = ''
     runHook preCheck
     ${buildPackages.rust.envVars.setEnv} cargo ctest -p secretspec-ffi -j $NIX_BUILD_CORES \
-      --release --frozen --prefix=${placeholder "out"} \
+      --profile dist --frozen --prefix=${placeholder "out"} \
       --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
   '';
