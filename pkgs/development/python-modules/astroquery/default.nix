@@ -19,7 +19,7 @@
   pytestCheckHook,
   pyvo,
   astropy-helpers,
-  setuptools,
+  setuptools_80,
   writableTmpDirAsHomeHook,
 }:
 
@@ -42,12 +42,14 @@ buildPythonPackage rec {
     filterwarnings_new=$(printf 'filterwarnings =\n    error\n    ignore:astropy.samp.*deprecated:Warning')
     substituteInPlace setup.cfg \
       --replace-fail "$filterwarnings_old" "$filterwarnings_new"
+    # Disable automatic update of the astropy-helper module
+    substituteInPlace setup.cfg --replace-fail "auto_use = True" "auto_use = False"
   '';
 
   build-system = [
-    astropy-helpers
+    (astropy-helpers.override { setuptools = setuptools_80; })
     pkg-resources-backport
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
@@ -59,7 +61,9 @@ buildPythonPackage rec {
     pyvo
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = [
     boto3
     matplotlib
     pillow
