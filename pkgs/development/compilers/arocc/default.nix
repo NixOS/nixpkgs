@@ -8,12 +8,12 @@ let
   versions = [
     {
       inherit zig;
-      version = "0-unstable-2025-11-09";
+      version = "0-unstable-2026-04-02";
       src = fetchFromGitHub {
         owner = "Vexu";
         repo = "arocc";
-        rev = "3fb778c201718bd82bf1f08cd46ea133c4697b76";
-        hash = "sha256-Hac+rhf7wB3KTs2OIfdcGVq2+H/81yXMl3cq//LUeRk=";
+        rev = "5f5a050569a95ecc40a426f0c3666ae7ef987ede";
+        hash = "sha256-f8Z0SXWx5Uia2TCMB5SUpcO8+xUnaWk32Oknva7xcxw=";
       };
     }
   ];
