@@ -13,6 +13,7 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = final.django_6;
+      django-allauth-async = final.callPackage ./django-allauth-async.nix { };
       glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
     };
   };
@@ -130,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit frontend python;
-    inherit (python.pkgs) glitchtip-rust;
+    inherit (python.pkgs) django-allauth-async glitchtip-rust;
     tests = { inherit (nixosTests) glitchtip; };
     updateScript = ./update.sh;
   };
