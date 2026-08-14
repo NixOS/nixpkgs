@@ -2134,15 +2134,6 @@ with haskellLib;
       );
 
   darcs = lib.pipe (super.darcs.override { fgl = null; }) [
-    (overrideCabal (drv: {
-      # fgl isn’t used; removing it avoids cross-compilation failures.
-      #
-      # See: https://hub.darcs.net/darcs/darcs-reviewed/patch/3a8e57ef9fed776f62a3538f8842b6593546e368
-      postPatch = (drv.postPatch or "") + ''
-        substituteInPlace darcs.cabal \
-          --replace-fail "fgl               >= 5.5.2.3 && < 5.9," ""
-      '';
-    }))
     (appendPatches [
       # Cabal 3.12 support in Setup.hs
       # https://hub.darcs.net/darcs/darcs-reviewed/patch/50d9b0b402a896c83aa7929a50a0e0449838600f
@@ -2154,6 +2145,12 @@ with haskellLib;
       ./patches/darcs-cabal-3.14.patch
       # Lift bounds for GHC 9.12 / Stackage Nightly 2026-06-16
       ./patches/darcs-stackage-nightly-2026-06-16.patch
+      # fgl isn’t used; removing it avoids cross-compilation failures.
+      # https://hub.darcs.net/darcs/darcs-reviewed/patch/3a8e57ef9fed776f62a3538f8842b6593546e368
+      ./patches/darcs-remove-fgl-dependency.patch
+      # Allow tls >= 2.2, http-client-tls >= 0.4
+      # https://hub.darcs.net/darcs/darcs-screened/patch/523d0a3a5480024ea35fd5d17b35a05e9d3334a0
+      ./patches/darcs-tls-2.2.patch
     ])
   ];
 
