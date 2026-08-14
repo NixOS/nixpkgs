@@ -77,7 +77,7 @@ buildPythonPackage (finalAttrs: {
   makeWrapperArgs = [
     "--set"
     "JUPYTERLAB_DIR"
-    "$out/share/jupyter/lab"
+    "${placeholder "out"}/share/jupyter/lab"
   ];
 
   # Depends on npm
