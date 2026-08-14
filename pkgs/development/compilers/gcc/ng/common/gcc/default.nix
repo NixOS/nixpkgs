@@ -16,7 +16,6 @@
   langObjCpp ? stdenv.targetPlatform.isDarwin,
   langJit ? false,
   enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform,
-  runCommand,
   buildPackages,
   isl,
   zlib,
@@ -35,6 +34,8 @@
   fromVCS ? false,
   getVersionFile,
   buildGccPackages,
+  libbacktrace,
+  autoreconfHook269,
   bintools,
   # Build the shared runtime libraries, and so have the driver's specs emit
   # `-lgcc_s`. Derived the way the monolithic build derives it.
@@ -119,9 +120,43 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     (getVersionFile "gcc/fix-collect2-paths.diff")
+
+    # From the posting to gcc-patches, which covers every component that links
+    # libbacktrace. Take only this component's non-generated files: the
+    # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
+    # slightly different from the one the patch was made against.
+    (fetchpatch {
+      name = "system-libbacktrace.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
+      includes = [
+        "config/libbacktrace.m4"
+        "gcc/configure.ac"
+        "gcc/Makefile.in"
+      ];
+      hash = "sha256-i+J4B5f+zrXERPqJxwjEm/JHZhDsV6Gmxx/n9+G0shM=";
+    })
   ];
 
   enableParallelBuilding = true;
+
+  # The patches above touch `gcc/configure.ac`, and this is the one component
+  # whose `configure` nothing regenerates on its own -- it has no
+  # `Makefile.am`, so it is not part of any `autoreconf` the other packages
+  # run. Only `gcc` is named, because reconfiguring the whole monorepo is both
+  # slow and unnecessary.
+  #
+  # Regenerating rather than carrying `configure` in the patch keeps that patch
+  # to what was actually written, and lets it apply to a tree whose generated
+  # files have moved on.
+  autoreconfFlags = "--verbose --force gcc";
+
+  # `aclocal` finds the macro added under `config/` through `ACLOCAL_AMFLAGS`
+  # in a `Makefile.am`, which `gcc` does not have. Without this the macro is
+  # simply undefined, and `autoconf` leaves its name in the script as literal
+  # shell rather than failing.
+  preAutoreconf = ''
+    export ACLOCAL_PATH="$PWD/config''${ACLOCAL_PATH:+:$ACLOCAL_PATH}"
+  '';
 
   hardeningDisable = [
     "format" # Some macro-indirect formatting in e.g. libcpp
@@ -154,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildTarget = [ (bintools.bintools or bintools) ];
 
   nativeBuildInputs = [
+    autoreconfHook269
     texinfo
     which
     gettext
@@ -165,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libbacktrace
     gmp
     libmpc
     mpfr
@@ -210,11 +247,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Cannot configure from src dir
     + ''
       cd "$buildRoot"
-
-      mkdir -p "$buildRoot/libbacktrace/.libs"
-      cp ${buildGccPackages.libbacktrace}/lib/libbacktrace.a "$buildRoot/libbacktrace/.libs/libbacktrace.a"
-      cp -r ${buildGccPackages.libbacktrace}/lib/*.la "$buildRoot/libbacktrace"
-      cp -r ${buildGccPackages.libbacktrace.dev}/include/*.h "$buildRoot/libbacktrace"
 
       mkdir -p "$buildRoot/libiberty/pic"
       cp ${buildGccPackages.libiberty}/lib/libiberty.a "$buildRoot/libiberty"
@@ -296,6 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
     # the driver finds them on `PATH` under their target-prefixed names, via
     # the `find_a_program` patches above.
     "--with-system-zlib"
+    "--with-system-libbacktrace"
     "--without-included-gettext"
     "--enable-linker-build-id"
     # Deliberately *no* `--with-sysroot` / `--with-native-system-header-dir`
