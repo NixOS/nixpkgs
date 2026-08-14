@@ -7,6 +7,7 @@
   makeWrapper,
   zlib,
   ncurses,
+  callPackage,
   runCommand,
 }:
 
@@ -81,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = {
+    command = lib.getExe (callPackage ./update.nix { });
+    supportedFeatures = [ "commit" ];
+  };
 
   passthru.tests.version = runCommand "${finalAttrs.pname}-version" { } ''
     export HOME="$TMPDIR"
