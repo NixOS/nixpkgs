@@ -6,7 +6,7 @@
   node-gyp,
   nodejs_24,
   nodejs-slim_24,
-  pkgsMusl,
+  pkgsStatic,
   pnpmConfigHook,
   pnpm_11,
   python3,
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
   version = "0.1.0-rc.5";
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
@@ -60,10 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace native/landlock-run/scripts/build.ts \
-      --replace-fail \
-        "'musl-gcc'" \
-        "'${lib.getExe pkgsMusl.stdenv.cc}'"
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace native/landlock-run/scripts/build.ts \
+        --replace-fail \
+          "'musl-gcc'" \
+          "'${lib.getExe pkgsStatic.stdenv.cc}'"
+    ''}
 
     # Keep virtual CSS module IDs relative so Rolldown does not embed the build root.
     substituteInPlace packages/client/tsdown.client.ts \
