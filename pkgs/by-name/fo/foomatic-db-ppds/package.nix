@@ -5,6 +5,7 @@
   buildEnv,
   foomatic-db-engine,
   stdenv,
+  coreutils,
   cups-filters,
   ghostscript,
   netpbm,
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    coreutils
     cups-filters
     ghostscript
     netpbm
@@ -77,7 +79,7 @@ stdenv.mkDerivation {
   # Comments indicate the respective
   # package the command is contained in.
   ppdFileCommands = [
-    "cat"
+    "cat" # coreutils
     "echo" # coreutils
     "foomatic-rip" # cups-filters or foomatic-filters
     "gs" # ghostscript

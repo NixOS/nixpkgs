@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  coreutils,
   cups,
   cups-filters,
   ghostscript,
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    coreutils
     cups
     cups-filters
     ghostscript
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Comments indicate the respective
   # package the command is contained in.
   ppdFileCommands = [
-    "cat"
+    "cat" # coreutils
     "date"
     "printf" # coreutils
     "rastertohp" # cups
