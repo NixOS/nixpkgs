@@ -63,13 +63,18 @@ buildPythonPackage.override { inherit (nixl) stdenv; } (finalAttrs: {
     torch
   ];
 
-  # Install the `nixl` shim module (re-exports nixl_cu{12,13}).
-  # Upstream builds this as a separate wheel via `uv build` (nixl-meta), but that doesn't work in
+  # Install the `nixl` shim module (re-exports nixl_cu{12,13}) along with its `nixl_meta_utils`
+  # helper.
+  # Upstream builds these as a separate wheel via `uv build` (nixl-meta), but that doesn't work in
   # the sandbox.
   postInstall = ''
     install -Dm644 \
       src/bindings/python/nixl-meta/nixl/__init__.py \
       "$out/${python.sitePackages}/nixl/__init__.py"
+
+    install -Dm644 \
+      src/bindings/python/nixl-meta/nixl_meta_utils.py \
+      "$out/${python.sitePackages}/nixl_meta_utils.py"
   '';
 
   pythonImportsCheck = [
