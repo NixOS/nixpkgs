@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "thorlabspm100";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clade";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-X4qEow6u4aE0sbFwZfK3YEso2RS0c9j4iaWJPHaPQV4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
