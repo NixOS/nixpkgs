@@ -23,25 +23,25 @@ let
   inputtino-src = fetchFromGitHub {
     owner = "games-on-whales";
     repo = "inputtino";
-    rev = "f4ce2b0df536ef309e9ff318f75b460f7097d7c1";
-    hash = "sha256-mAAXbIK7aNSLyN7OZX9YeesMvT6OZmT9uAx0md6pyRM=";
+    rev = "d28ec79eb63324e68d73a7de22bcb5ff0a6f6bf8";
+    hash = "sha256-xzDsJggQVX5e1twwNvqw5hDXei6OMYA4s5zU4zfp/H0=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.13.5";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DwRUVMAm4fSqZu6jECeasiRpnwBt7thWkXzztNRIjcs=";
+    hash = "sha256-TvL3s738wooQwZfBKyCqp0V8qcYFtJL98tsxlSX8fLM=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  cargoHash = "sha256-M/VNPnccqK3koa0TeMd+tml79O7BKLxHmrGcGPemGhI=";
+  cargoHash = "sha256-PAC8PcGOXxFNN8Eeiik4JrXeH2H+YcqRaBpJVtUoZ44=";
 
   # Build Moonshine binary and Vulkan layer
   cargoBuildFlags = [
@@ -88,6 +88,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # udev rules for input
     install -Dm644 dist/60-moonshine.rules "$out/lib/udev/rules.d/60-moonshine.rules"
+
+    # polkit rule for sleep inhibitor
+    install -Dm644 dist/50-moonshine-inhibit-sleep.rules \
+      "$out/share/polkit-1/rules.d/50-moonshine-inhibit-sleep.rules"
   '';
 
   postFixup = ''
@@ -118,7 +122,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hgaiser/moonshine";
     changelog = "https://github.com/hgaiser/moonshine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ neobrain ];
+    maintainers = with lib.maintainers; [
+      neobrain
+      anish
+    ];
     mainProgram = "moonshine";
     platforms = lib.platforms.linux;
   };

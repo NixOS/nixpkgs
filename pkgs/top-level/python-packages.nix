@@ -9069,6 +9069,8 @@ self: super: with self; {
 
   langchain-protocol = callPackage ../development/python-modules/langchain-protocol { };
 
+  langchain-sail = callPackage ../development/python-modules/langchain-sail { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
@@ -19612,6 +19614,8 @@ self: super: with self; {
   stanio = callPackage ../development/python-modules/stanio { };
 
   stanza = callPackage ../development/python-modules/stanza { };
+
+  starfile = callPackage ../development/python-modules/starfile { };
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 

@@ -14,8 +14,9 @@
   libtiff,
   mpfr,
   nanoflann,
+  nix-update-script,
+  llvmPackages,
   opencv,
-  openmp,
   pkg-config,
   python3Packages,
   stdenv,
@@ -28,29 +29,31 @@ let
     buildInputs = old.buildInputs ++ [ zstd ];
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
-    rev = "v${version}";
-    hash = "sha256-0tL2tqHYBQMGL9k+NqTUxieWuDP3YB6X9DcXYnlGWWg=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-0tL2tqHYBQMGL9k+NqTUxieWuDP3YB6X9DcXYnlGWWg=";
   };
-
-  # SSE is enabled by default
-  cmakeFlags = [
-    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3Packages.python))
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail \
       'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options system serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})' \
       'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})'
   '';
+
+  cmakeFlags = [
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3Packages.python))
+  ]
+  # SSE is enabled by default
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    (lib.cmakeBool "OpenMVS_USE_SSE" false)
+  ];
 
   buildInputs = [
     boostWithZstd
@@ -66,7 +69,7 @@ stdenv.mkDerivation rec {
     mpfr
     nanoflann
     opencv
-    openmp
+    llvmPackages.openmp
     vcg
   ];
 
@@ -94,9 +97,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
     homepage = "https://github.com/cdcseacave/openMVS";
+    changelog = "https://github.com/cdcseacave/openMVS/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -104,4 +110,4 @@ stdenv.mkDerivation rec {
       miniharinn
     ];
   };
-}
+})
