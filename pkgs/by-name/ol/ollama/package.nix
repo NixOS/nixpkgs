@@ -225,6 +225,10 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
+    if [[ ${llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+      exit 1
+    fi
     cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
