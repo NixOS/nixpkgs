@@ -1307,6 +1307,7 @@ in
       "d ${cfg.statePath}/custom_hooks/post-receive.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/update.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path} 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/agent_plan_content 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/artifacts 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/packages 0750 ${cfg.user} ${cfg.group} -"
