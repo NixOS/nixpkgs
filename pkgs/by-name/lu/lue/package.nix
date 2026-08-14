@@ -3,7 +3,6 @@
   python3,
   fetchFromGitHub,
   ffmpeg,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -44,8 +43,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "lue" ];
 
   makeWrapperArgs = [ "--prefix PATH :${lib.makeBinPath [ ffmpeg ]}" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal eBook Reader with Text-to-Speech";
