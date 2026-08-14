@@ -2530,9 +2530,15 @@ let
     iscream = old.iscream.overrideAttrs (attrs: {
       # https://huishenlab.github.io/iscream/articles/htslib.html
       # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
-      propagatedBuildInputs =
-        builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
-        ++ [ pkgs.htslib ];
+      nativeBuildInputs = builtins.filter (el: el.pname != "Rhtslib") attrs.nativeBuildInputs;
+      propagatedBuildInputs = builtins.filter (el: el.pname != "Rhtslib") attrs.propagatedBuildInputs;
+
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.htslib ];
+
+      postPatch = ''
+        substituteInPlace "DESCRIPTION" \
+          --replace-fail ", Rhtslib" ""
+      '';
     });
 
     littler = old.littler.overrideAttrs (attrs: {
