@@ -6137,7 +6137,7 @@ self: super: with self; {
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
-  flashinfer = callPackage ../development/python-modules/flashinfer { };
+  flashinfer-python = callPackage ../development/python-modules/flashinfer-python { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
 
@@ -13228,10 +13228,6 @@ self: super: with self; {
 
   pi1wire = callPackage ../development/python-modules/pi1wire { };
 
-  piano-transcription-inference =
-    callPackage ../development/python-modules/piano-transcription-inference
-      { };
-
   piccata = callPackage ../development/python-modules/piccata { };
 
   piccolo = callPackage ../development/python-modules/piccolo { };
@@ -18656,8 +18652,6 @@ self: super: with self; {
 
   show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
 
-  showit = callPackage ../development/python-modules/showit { };
-
   shtab = callPackage ../development/python-modules/shtab { };
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
@@ -18873,8 +18867,6 @@ self: super: with self; {
   );
 
   slh-dsa = callPackage ../development/python-modules/slh-dsa { };
-
-  slicedimage = callPackage ../development/python-modules/slicedimage { };
 
   slicer = callPackage ../development/python-modules/slicer { };
 

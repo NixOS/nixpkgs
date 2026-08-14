@@ -9,6 +9,7 @@
   edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
@@ -47,6 +48,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-LR4UO2xrTLKmemDVsJWtEQoV2bDy6U2ahxTtA+SDymI=";
   };
 
+  nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
   npmDepsHash = "sha256-EBectG1zNdUb30SlhAzy9rCwF/mYHAV4HZTRbk2CbDY=";
 

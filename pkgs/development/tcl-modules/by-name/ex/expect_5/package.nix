@@ -80,7 +80,7 @@ tcl.mkTclDerivation rec {
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     mainProgram = "expect";
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ fgaz ];
     broken = tcl.isTcl9;
   };
 }

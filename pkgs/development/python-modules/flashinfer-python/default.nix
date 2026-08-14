@@ -31,7 +31,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "flashinfer";
+  pname = "flashinfer-python";
   version = "0.6.4";
   pyproject = true;
 

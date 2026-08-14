@@ -1,0 +1,30 @@
+diff --git a/libwignernj.pc.in b/libwignernj.pc.in
+index 7be95cd..ad1fbfa 100644
+--- a/libwignernj.pc.in
++++ b/libwignernj.pc.in
+@@ -2,8 +2,8 @@
+ # Copyright (c) 2026 Susi Lehtola
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
+ 
+ Name: libwignernj
+ Description: Exact Wigner 3j/6j/9j symbols and related coefficients via prime factorization
+diff --git a/libwignernj_f03.pc.in b/libwignernj_f03.pc.in
+index 0850d25..10d34e9 100644
+--- a/libwignernj_f03.pc.in
++++ b/libwignernj_f03.pc.in
+@@ -2,8 +2,8 @@
+ # Copyright (c) 2026 Susi Lehtola
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
+ moddir=${includedir}/wignernj/fortran
+ 
+ Name: libwignernj_f03

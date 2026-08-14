@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patroni";
-  version = "4.1.4";
+  version = "4.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patroni";
     repo = "patroni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KCixqBMXJTl+Ins8B+VQ3qRxNSgEGlZz3XRYp4qDUHs=";
+    hash = "sha256-tb5FkGfZJdNZKybWJjpZ327sFcnXiqF3UdbUj0i1oc8=";
   };
 
   build-system = with python3Packages; [ setuptools ];
