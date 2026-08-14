@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dolt";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "dolthub";
     repo = "dolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XAc584mxGsadxmY1Jf4JgaaBAUg9hXainGkaWIgdp5A=";
+    hash = "sha256-ho0mUdiwYTmczU7791pyD3MpCMje2a/IVt40QIiCJd4=";
   };
 
   modRoot = "./go";
