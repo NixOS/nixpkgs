@@ -114,6 +114,19 @@ in
         '';
       };
 
+      kexecReboot = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Reboot the system using kexec. This can reduce reboot times by skipping
+          firmware (BIOS/UEFI).
+          ::: {.note}
+          Kexec might not work correctly on some hardware (like PCIe devices e.g. GPUs).
+          If in doubt test if the machine reboots correctly by running {command}`systemctl start kexec.target --job-mode=replace-irreversibly --no-block`.
+          :::
+        '';
+      };
+
       randomizedDelaySec = lib.mkOption {
         default = "0";
         type = lib.types.str;
@@ -212,6 +225,12 @@ in
           The option 'system.autoUpgrade.runGarbageCollection = true' requires 'nix.enable = true'.
         '';
       }
+      {
+        assertion = cfg.kexecReboot -> cfg.allowReboot;
+        message = ''
+          The option 'system.autoUpgrade.kexecReboot = true' requires 'system.autoUpgrade.allowReboot = true'.
+        '';
+      }
     ];
 
     system.autoUpgrade.flags = (
@@ -263,6 +282,14 @@ in
           date = "${pkgs.coreutils}/bin/date";
           readlink = "${pkgs.coreutils}/bin/readlink";
           shutdown = "${config.systemd.package}/bin/shutdown";
+          reboot =
+            if cfg.kexecReboot then
+              # see man systemctl(5) kexec. using systemctl kexec won't work for systems that use UKIs
+              # as systemd won't find the kernel image, which gets loaded by `prepare-kexec.service`,
+              # which is a dependency of kexec.target
+              "${config.systemd.package}/bin/systemctl start kexec.target --job-mode=replace-irreversibly --no-block"
+            else
+              "${shutdown} -r +1";
           upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) "--upgrade";
         in
         if cfg.allowReboot then
@@ -303,7 +330,7 @@ in
                 echo "Outside of configured reboot window, skipping."
             ''}
             else
-              ${shutdown} -r +1
+               ${reboot}
             fi
           ''
         else
