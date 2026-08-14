@@ -370,6 +370,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
+
+    # State this rather than leave it to be inferred (see below): configure
+    # works it out from `host != target` alone, so a native build of the
+    # pre-libc stage would come out `false` and compile every file against a
+    # libc that is not there yet. A value given here wins, since configure only
+    # defaults it, with `: ${inhibit_libc=false}`.
+    "inhibit_libc=${if libc == null then "true" else "false"}"
   ]
   # `gcc/configure` sets `inhibit_libc=true` when host != target and
   # `$target_header_dir/stdio.h` does not exist. `inhibit_libc` makes
