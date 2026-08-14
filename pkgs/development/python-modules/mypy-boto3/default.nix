@@ -51,8 +51,8 @@ in
       "sha256-wIu+Vhh/OnDbSzvZFC7VP2IGvYAK5ZZ2KKfNKIgz3h8=";
 
   mypy-boto3-acm =
-    buildMypyBoto3Package "acm" "1.43.38"
-      "sha256-m4sUtL3riEkcXGeWgD0vAkKx78R2SYrwHycxz1Fjxw8=";
+    buildMypyBoto3Package "acm" "1.43.71"
+      "sha256-24QBYMB1qkzU/bHWHz03FngomwqTAcSK8YlQ5r5g8DE=";
 
   mypy-boto3-acm-pca =
     buildMypyBoto3Package "acm-pca" "1.43.65"
@@ -147,8 +147,8 @@ in
       "sha256-0QMHGUpHVdAUf8hw4RtgU3wManp26riDDbx49a9929U=";
 
   mypy-boto3-autoscaling =
-    buildMypyBoto3Package "autoscaling" "1.43.66"
-      "sha256-nGqCwROsgVdCEJeQwhy8J+rk7tyaYMIrQSu+fFAl3EU=";
+    buildMypyBoto3Package "autoscaling" "1.43.71"
+      "sha256-GhIrY9z01NrjuTORm/Wset7cZ0BXmQ0axaWqoZxNlfc=";
 
   mypy-boto3-autoscaling-plans =
     buildMypyBoto3Package "autoscaling-plans" "1.43.0"
@@ -207,8 +207,8 @@ in
       "sha256-Ees/nrPLKM8p6FqVewgRkC/1w/8kZrDGgxUb3AwDgeo=";
 
   mypy-boto3-cleanrooms =
-    buildMypyBoto3Package "cleanrooms" "1.43.69"
-      "sha256-UMO+vnUE/SSE4hJBDSdsSjWuX8IwBrFjPdT5tftkXY8=";
+    buildMypyBoto3Package "cleanrooms" "1.43.71"
+      "sha256-8JDXNTdGbq1n+Lsoaf7pfQEti+whMs8tx8PO9AFrBqI=";
 
   mypy-boto3-cloud9 =
     buildMypyBoto3Package "cloud9" "1.43.39"
@@ -271,8 +271,8 @@ in
       "sha256-wslSfhGAP7FLmfRb+9Ez1eHm2kYScWzbm1DjaH9t5Qk=";
 
   mypy-boto3-codecommit =
-    buildMypyBoto3Package "codecommit" "1.43.0"
-      "sha256-0g9BWShZat95aZvymEAJdKsKjZhSoye/YBi7L2KauPo=";
+    buildMypyBoto3Package "codecommit" "1.43.71"
+      "sha256-YnE8vRO1bzaGSCHM102N3ChinXrxj2/+vnHqst4pPbo=";
 
   mypy-boto3-codedeploy =
     buildMypyBoto3Package "codedeploy" "1.43.0"
@@ -335,8 +335,8 @@ in
       "sha256-3JYcWKFk0dKJg/qn+EBvxeAO5xh5PXCU3dTEWDr1oXI=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.69"
-      "sha256-lXq62mDozVi49JkQz8v21NAXkNiOz1D10Op1U/bIuy4=";
+    buildMypyBoto3Package "connect" "1.43.71"
+      "sha256-BPpZx74PK6uCZJ05qw+r6DmPSXjG/9Sl5jRK9p1T/gA=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.0"
@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.65"
-      "sha256-PGBd4GFY05uWSu/FPyn5yRegtj/z3Os1wRsXS817o8o=";
+    buildMypyBoto3Package "glue" "1.43.70"
+      "sha256-pqDemzHe572FSrm+PziJi6A88xKvwZTMxVNw3wIDBBo=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
@@ -602,8 +602,8 @@ in
       "sha256-Zde0x4srUNvEiM4dLYdavgn3bVWRV/LNEuNoFaml0j4=";
 
   mypy-boto3-iam =
-    buildMypyBoto3Package "iam" "1.43.64"
-      "sha256-EUU75nZ9iJzC7j7SFCNjPBYXN6MUac7hZw9ekzkt3zk=";
+    buildMypyBoto3Package "iam" "1.43.70"
+      "sha256-aL9OaJDsqudoUtUBCQuP0LBDhCQAkIKiC/5hL5PeKPo=";
 
   mypy-boto3-identitystore =
     buildMypyBoto3Package "identitystore" "1.43.0"
@@ -854,8 +854,8 @@ in
       "sha256-Ob9sh8Ng8I3sWiy/qwu+lfSvf+W2KQiprWX6QCNiSLM=";
 
   mypy-boto3-mediaconnect =
-    buildMypyBoto3Package "mediaconnect" "1.43.35"
-      "sha256-ZlvcxMsMtkPwzyBpxGWffcD2g73aNIU6WG7jYn66ZjU=";
+    buildMypyBoto3Package "mediaconnect" "1.43.70"
+      "sha256-NKaLJpv0Fx1Af3AWW2nWtAyCmoSBDMZ+JwZ2XeYHzJY=";
 
   mypy-boto3-mediaconvert =
     buildMypyBoto3Package "mediaconvert" "1.43.63"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.62"
-      "sha256-+OasKLJhOVR7NtZuUYL79KQKyV4ztY6kgooTgDIvLmU=";
+    buildMypyBoto3Package "quicksight" "1.43.70"
+      "sha256-qMXg+rGG5ubCyKEGZhJyCOtjk1/mz3row6qf09MaDzY=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
@@ -1398,8 +1398,8 @@ in
       "sha256-8hUgFNVUOcsjOyECvMlw0S0uG6A8XTv2EBWi06Cj2QY=";
 
   mypy-boto3-wellarchitected =
-    buildMypyBoto3Package "wellarchitected" "1.43.0"
-      "sha256-FL52LqxnJxTErc99qpdB2O3NWq6mVudmHQ2QVDe1/k8=";
+    buildMypyBoto3Package "wellarchitected" "1.43.70"
+      "sha256-1keASWD6rDl/MuQDcaxfPZlN8U5/a2K7sFGdWLwrrEE=";
 
   mypy-boto3-wisdom =
     buildMypyBoto3Package "wisdom" "1.43.0"
