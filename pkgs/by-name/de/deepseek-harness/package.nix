@@ -17,15 +17,11 @@
 let
   runtimeNode = nodejs-slim_24;
   pnpm = pnpm_11.override { nodejs-slim = runtimeNode; };
-
-  landlockPackage =
-    if stdenv.hostPlatform.isAarch64 then
-      "node-addon-landlock-run-linux-arm64"
-    else
-      "node-addon-landlock-run-linux-x64";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
+
+  # rc.5 is pinned because rc.6 was published without matching public source and lockfile.
   version = "0.1.0-rc.5";
 
   __structuredAttrs = true;
@@ -54,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  disallowedReferences = [
+  outputChecks.out.disallowedRequisites = [
     node-gyp
     nodejs_24
     python3
@@ -62,13 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Upstream hard-codes musl-gcc; use Nixpkgs' static-musl compiler in the sandbox.
       substituteInPlace native/landlock-run/scripts/build.ts \
         --replace-fail \
           "'musl-gcc'" \
           "'${lib.getExe pkgsStatic.stdenv.cc}'"
     ''}
 
-    # Keep virtual CSS module IDs relative so Rolldown does not embed the build root.
+    # Keep CSS IDs relative to avoid build-root references and sort exports for deterministic bundles.
     substituteInPlace packages/client/tsdown.client.ts \
       --replace-fail \
         'return CSS_VIRTUAL_PREFIX + abs + CSS_VIRTUAL_SUFFIX' \
@@ -84,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # pnpmConfigHook installs with lifecycle scripts disabled; rebuild the upstream allowlist.
+    # CI mode prevents the root postinstall from mutating Git hooks.
     GITHUB_ACTIONS=true pnpm rebuild
     pnpm run build
     pnpm --dir native/landlock-run run build:native
@@ -95,55 +94,211 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     deployDir="$NIX_BUILD_TOP/dsh-deploy"
+    packDir="$NIX_BUILD_TOP/dsh-packs"
     app="$out/lib/node_modules/@deepseek-ai/dsh"
 
-    npm_config_ignore_scripts=true \
-      pnpm \
-        --offline \
-        --ignore-scripts \
-        --filter @deepseek-ai/dsh \
-        --prod \
-        --config.inject-workspace-packages=true \
-        --config.link-workspace-packages=true \
-        --config.node-linker=hoisted \
-        deploy "$deployDir"
+    mkdir -p "$packDir"
 
-    # dsh-app-boot imports this peer, but apps/cli does not declare it.
-    cp -a \
-      vendor/group \
-      "$deployDir/node_modules/@deepseek-ai/cordis-plugin-group"
+    # Use pnpm's lockfile-aware deploy path. Injection is required by pnpm 11;
+    # the hoisted layout mirrors the npm installation shape upstream publishes for.
+    pnpm \
+      --offline \
+      --ignore-scripts \
+      --filter @deepseek-ai/dsh \
+      --prod \
+      --config.inject-workspace-packages=true \
+      --config.node-linker=hoisted \
+      deploy "$deployDir"
 
-    rm -rf \
-      "$deployDir/node_modules/@deepseek-ai/cordis-plugin-group/node_modules"
+    # pnpm deploy can omit workspace packages that are required only through
+    # peerDependencies. Derive the required peer closure from upstream manifests
+    # and materialize only missing packages through pnpm pack, matching upstream's
+    # published payload transformation instead of maintaining a downstream list.
+    DEPLOY_DIR="$deployDir" PACK_DIR="$packDir" \
+      node --input-type=module <<'NODE'
+    import {
+      existsSync,
+      globSync,
+      mkdirSync,
+      readFileSync,
+      rmSync,
+    } from "node:fs";
+    import { dirname, join } from "node:path";
+    import { spawnSync } from "node:child_process";
 
-    # Several workspace packages import runtime dependencies declared as devDependencies.
-    for package in \
-      packages/code-runtime/code-runtime \
-      packages/compaction/compaction \
-      packages/core/scope \
-      packages/fs/fs \
-      packages/identity/anonymous-user-id \
-      packages/sandbox/sandbox \
-      packages/session/session-telemetry \
-      packages/session/session-title-llm \
-      packages/shell/bash-local \
-      packages/shell/shell \
-      packages/spill/spill \
-      packages/subagent/subagent-in-process-driver \
-      packages/subprocess/subprocess \
-      packages/util/atomic-write \
-      packages/util/output-retention \
-      packages/util/timeout \
-      packages/workflow/workflow
-    do
-      name="$(node -p "require('./$package/package.json').name.split('/')[1]")"
-      mkdir -p "$deployDir/node_modules/@deepseek-ai/$name"
-      cp -a \
-        "$package/package.json" \
-        "$package/lib" \
-        "$deployDir/node_modules/@deepseek-ai/$name/"
-    done
+    const deployDir = process.env.DEPLOY_DIR;
+    const packDir = process.env.PACK_DIR;
 
+    if (deployDir === undefined || packDir === undefined) {
+      throw new Error("missing deployment paths");
+    }
+
+    const workspace = new Map();
+
+    for (const manifestPath of [
+      ...globSync("vendor/*/package.json"),
+      ...globSync("packages/*/*/package.json"),
+      ...globSync("native/landlock-run/packages/*/package.json"),
+      ...globSync("apps/*/package.json"),
+    ].sort()) {
+      const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+
+      if (typeof manifest.name !== "string") {
+        throw new Error("workspace manifest has no package name: " + manifestPath);
+      }
+
+      if (workspace.has(manifest.name)) {
+        throw new Error("duplicate workspace package name: " + manifest.name);
+      }
+
+      workspace.set(manifest.name, {
+        dir: dirname(manifestPath),
+        manifest,
+      });
+    }
+
+    const rootName = "@deepseek-ai/dsh";
+    const packagePath = name =>
+      join(deployDir, "node_modules", ...name.split("/"));
+
+    if (!workspace.has(rootName)) {
+      throw new Error("CLI workspace manifest not found");
+    }
+
+    const run = (command, args, options = {}) => {
+      const result = spawnSync(command, args, {
+        cwd: process.cwd(),
+        env: process.env,
+        stdio: "inherit",
+        ...options,
+      });
+
+      if (result.error !== undefined || result.status !== 0) {
+        throw new Error(command + " failed: " + args.join(" "));
+      }
+    };
+
+    const materialize = name => {
+      const entry = workspace.get(name);
+
+      if (entry === undefined) {
+        throw new Error("workspace package not found: " + name);
+      }
+
+      const optionalDependencies = Object.keys(
+        entry.manifest.optionalDependencies ?? {},
+      );
+
+      if (optionalDependencies.length > 0) {
+        throw new Error(
+          name
+            + " is missing from pnpm deploy but has optional dependencies: "
+            + optionalDependencies.join(", "),
+        );
+      }
+
+      const requiredExternal = [
+        ...Object.keys(entry.manifest.dependencies ?? {}),
+        ...Object.keys(entry.manifest.peerDependencies ?? {}).filter(
+          peer => entry.manifest.peerDependenciesMeta?.[peer]?.optional !== true,
+        ),
+      ]
+        .filter(dependency => !workspace.has(dependency))
+        .filter(dependency => !existsSync(packagePath(dependency)));
+
+      if (requiredExternal.length > 0) {
+        throw new Error(
+          name
+            + " requires external runtime packages absent from pnpm deploy: "
+            + [...new Set(requiredExternal)].sort().join(", "),
+        );
+      }
+
+      const archive = join(
+        packDir,
+        name.replace(/^@/, "").replaceAll("/", "-") + ".tgz",
+      );
+      rmSync(archive, { force: true });
+
+      run(
+        "pnpm",
+        ["--dir", entry.dir, "pack", "--out", archive],
+        {
+          env: {
+            ...process.env,
+            pnpm_config_ignore_scripts: "true",
+          },
+        },
+      );
+
+      const destination = packagePath(name);
+      rmSync(destination, { force: true, recursive: true });
+      mkdirSync(destination, { recursive: true });
+
+      run(
+        "tar",
+        [
+          "-xzf",
+          archive,
+          "--strip-components=1",
+          "-C",
+          destination,
+        ],
+      );
+
+      rmSync(archive);
+    };
+
+    const materialized = [];
+
+    while (true) {
+      const missing = new Set();
+
+      for (const [name, entry] of workspace) {
+        if (name !== rootName && !existsSync(packagePath(name))) {
+          continue;
+        }
+
+        const runtimeEdges = new Set(
+          Object.keys(entry.manifest.dependencies ?? {}),
+        );
+
+        for (const peer of Object.keys(entry.manifest.peerDependencies ?? {})) {
+          if (entry.manifest.peerDependenciesMeta?.[peer]?.optional !== true) {
+            runtimeEdges.add(peer);
+          }
+        }
+
+        for (const dependency of runtimeEdges) {
+          if (
+            workspace.has(dependency)
+            && !existsSync(packagePath(dependency))
+          ) {
+            missing.add(dependency);
+          }
+        }
+      }
+
+      if (missing.size === 0) {
+        break;
+      }
+
+      for (const name of [...missing].sort()) {
+        materialize(name);
+        materialized.push(name);
+      }
+    }
+
+    if (materialized.length > 0) {
+      console.log(
+        "materialized workspace runtime peers: "
+          + materialized.join(", "),
+      );
+    }
+    NODE
+
+    # deploy runs with lifecycle scripts disabled; recreate only native/runtime
+    # artifacts needed by the final closure.
     if [[ -d "$deployDir/node_modules/koffi" ]]; then
       (
         cd "$deployDir/node_modules/koffi"
@@ -171,13 +326,17 @@ stdenv.mkDerivation (finalAttrs: {
     fi
 
     mkdir -p "$app" "$out/bin"
-    cp -a "$deployDir/." "$app/"
+    cp -a "$deployDir/node_modules" "$app/"
 
-    # pnpm deploy rewrites workspace dependencies to build-directory file URLs.
-    cp apps/cli/package.json "$app/package.json"
+    # pnpm deploy can preserve workspace: ranges in package.json. Install the CLI
+    # from its upstream pack payload so the manifest matches what DeepSeek publishes.
+    cliTar="$packDir/dsh-cli.tgz"
+    pnpm_config_ignore_scripts=true \
+      pnpm --dir apps/cli pack --out "$cliTar"
+    tar -xzf "$cliTar" --strip-components=1 -C "$app"
 
     rm -f \
-      "$app/pnpm-lock.yaml" \
+      "$cliTar" \
       "$app/node_modules/.modules.yaml" \
       "$app/node_modules/.pnpm/lock.yaml" \
       "$app/node_modules/.pnpm-workspace-state-v1.json"
@@ -196,15 +355,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -rf "$app/node_modules/node-pty/node-addon-api"
 
-    ${lib.optionalString stdenv.hostPlatform.isx86_64 ''
-      rm -rf \
-        "$app/node_modules/@deepseek-ai/node-addon-landlock-run-linux-arm64"
-    ''}
-
-    ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      rm -rf \
-        "$app/node_modules/@deepseek-ai/node-addon-landlock-run-linux-x64"
-    ''}
+    # Only x86_64-linux is declared below; drop the unused arm64 optional package.
+    rm -rf "$app/node_modules/@deepseek-ai/node-addon-landlock-run-linux-arm64"
 
     # Nix-built Node currently needs this for the HMR loader used by dsh web.
     makeBinaryWrapper ${lib.getExe runtimeNode} "$out/bin/dsh" \
@@ -354,12 +506,60 @@ stdenv.mkDerivation (finalAttrs: {
     });
     NODE
 
-    landlock="$app/node_modules/@deepseek-ai/${landlockPackage}/bin/landlock-run"
+    if grep -q 'workspace:' "$app/package.json"; then
+      echo "packed CLI manifest still contains workspace: dependencies" >&2
+      exit 1
+    fi
+
+    landlock="$(
+      LANDLOCK_ENTRY="$app/node_modules/@deepseek-ai/node-addon-landlock-run/lib/index.js" \
+        ${lib.getExe runtimeNode} --input-type=module <<'NODE'
+      import { pathToFileURL } from "node:url";
+
+      const entry = await import(pathToFileURL(process.env.LANDLOCK_ENTRY));
+      process.stdout.write(entry.launcherPath());
+      NODE
+    )"
 
     test -x "$landlock"
 
-    "$landlock" --probe \
-      | grep -Eq '^landlock: (fully|partially) enforced$'
+    landlockProbe="$(mktemp)"
+
+    if "$landlock" --probe > "$landlockProbe" 2>&1; then
+      grep -Eq '^landlock: (fully|partially) enforced' "$landlockProbe"
+
+      allowedDir="$(mktemp -d)"
+      deniedDir="$(mktemp -d)"
+      printf 'allowed\n' > "$allowedDir/readable"
+      printf 'denied\n' > "$deniedDir/blocked"
+
+      "$landlock" \
+        --ro /nix/store \
+        --rw /dev/null \
+        --rw "$allowedDir" \
+        -- \
+        "${stdenv.shell}" \
+        -c '
+          printf "written\n" > "$1/writable"
+          test "$(cat "$1/readable")" = allowed
+          test "$(cat "$1/writable")" = written
+
+          if cat "$2/blocked" > /dev/null 2>&1; then
+            exit 1
+          fi
+
+          if : > "$2/created" 2> /dev/null; then
+            exit 1
+          fi
+        ' \
+        _ \
+        "$allowedDir" \
+        "$deniedDir"
+    else
+      probeStatus=$?
+      test "$probeStatus" -eq 125
+      grep -q '^landlock-run: ' "$landlockProbe"
+    fi
 
     if find "$out" -xtype l -print -quit | grep -q .; then
       find "$out" -xtype l -print >&2
@@ -377,10 +577,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alephcasara ];
     mainProgram = "dsh";
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
