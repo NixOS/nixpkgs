@@ -517,13 +517,13 @@
     "vendorHash": "sha256-zqirPhQ8sklb21OKGzRIjEJRangPPT2pna+FBNC5+0A="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-J7nmxCcI7nWMMWZjbm0N/B+HpDjruJuaIukgI0Rtsuk=",
+    "hash": "sha256-KDnW5wmuiDlMrAnEv8eOhRwQWuhS1GubTnFCg7GeBj4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.95.0",
+    "rev": "v1.97.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-e0zIqMHzbVd3Qx2tBD8B15162a53RdENNo/7ENJJ4oQ="
+    "vendorHash": "sha256-eCl2pxVCLROSvtnKbhYzEnCDLQk0EuRlfi/wJXWjbF0="
   },
   "hashicorp_azuread": {
     "hash": "sha256-mEYEZIztDjyqWSJFoJPXtV0E9YikumtwGVtZA4Jfw3U=",
