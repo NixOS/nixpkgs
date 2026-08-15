@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yazi";
-  version = "26.5.6";
+  version = "26.8.15";
 
   srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  cargoHash = "sha256-gc0uEMNJ+eCIymXK10+Swi11xuyP5cj6MbLLB/ZDgXw=";
+  cargoHash = "sha256-YV986OaXk7+0jw0DnD/ydKJTmO0pOGjkVyq6OR3nTOE=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2026-05-05";
+  env.VERGEN_BUILD_DATE = "2026-08-15";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "sxyazi";
       repo = "yazi";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-sdaqZwLb+fBTg5Pd6WWfOWKCavsXWSSZrBEXuYuc8iM=";
+      hash = "sha256-/BD8rpnje3sIQjQe6fSYJY8u9ypJmUPrX9rNnDS86Ns=";
     };
 
     man_src = fetchFromGitHub {

@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast-beta";
-  version = "0.68.0.0";
+  version = "0.71.5.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     {
       aarch64-darwin = fetchurl {
         name = "Raycast_Beta.dmg";
-        url = "https://x-r2.raycast-releases.com/Raycast_Beta_0.68.0.0_c991260b0f_arm64.dmg";
-        hash = "sha256-GD2iZeBBUhRbkbLaAw1EJtlOlBFqeMHUDdzNUk1DxO0=";
+        url = "https://x-r2.raycast-releases.com/Raycast_Beta_0.71.5.0_7520eff523_arm64.dmg";
+        hash = "sha256-KveiWuyeNuMGwDAeyPMqUxMzFTei23NnEOBVL5HKXMk=";
       };
     }
     .${stdenvNoCC.system} or (throw "raycast-beta: ${stdenvNoCC.system} is unsupported.");

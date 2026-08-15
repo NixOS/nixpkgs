@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.70"
-      "sha256-pqDemzHe572FSrm+PziJi6A88xKvwZTMxVNw3wIDBBo=";
+    buildMypyBoto3Package "glue" "1.43.72"
+      "sha256-RVRPMIAv+0iaJxpv/Xnj8dPt9HNIIOfPNe4yTQqspVI=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
@@ -1090,16 +1090,16 @@ in
       "sha256-11kfuBIlPjrL6NdBeo+23xYQfL9eeu+C7Gfi2aorNDI=";
 
   mypy-boto3-redshift =
-    buildMypyBoto3Package "redshift" "1.43.53"
-      "sha256-2/74JuGL951aTIggrp5nLVT8nP3aigA0kI06e1wfows=";
+    buildMypyBoto3Package "redshift" "1.43.72"
+      "sha256-eXyFcW9uM9yHFRr1uZKjtNSuUmnPULO/NafAUewNmYo=";
 
   mypy-boto3-redshift-data =
     buildMypyBoto3Package "redshift-data" "1.43.55"
       "sha256-7tnl8u+aOsURS0nIdDto8EpGaylEVX7jub12yo66PZE=";
 
   mypy-boto3-redshift-serverless =
-    buildMypyBoto3Package "redshift-serverless" "1.43.47"
-      "sha256-VaYGoE0AFuPeosL6DzjUMOL057iZw65IUQfG85aEjAo=";
+    buildMypyBoto3Package "redshift-serverless" "1.43.72"
+      "sha256-Gog58PHcbuCkEhKO52P4SOLGijuvaa55t0L0Zo7Qitw=";
 
   mypy-boto3-rekognition =
     buildMypyBoto3Package "rekognition" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.68"
-      "sha256-ta4JKDQQcZWhHcWTCFF+TASEH5VbxX7j487ptP8W1X8=";
+    buildMypyBoto3Package "sagemaker" "1.43.72"
+      "sha256-MjqwKD3VmNLZYCejBRw3/6f61QfrxTNQOV5A0PB5lq4=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
