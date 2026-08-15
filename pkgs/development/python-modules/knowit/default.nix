@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "knowit";
-  version = "0.5.11";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "knowit";
     tag = version;
-    hash = "sha256-JqzCLdXEWZyvqXpeTJRW0zhY+wVcHLuBYrJbuSqfgkg=";
+    hash = "sha256-krrAeroM1eQZXi2onV4FdrKIQdPLkZS+/ypyY0Kc+Pw=";
   };
 
   matroska_test_zip = fetchzip {
