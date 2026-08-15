@@ -11,6 +11,7 @@
   makeFontsConf,
   cinnamon,
   gnome-shell,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     # You will need to patch gdm to make use of this.
     "-Dgnome_shell_gresource=true"
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
