@@ -9,7 +9,10 @@
 
 stdenv.mkDerivation {
   pname = "footswitch";
-  version = "unstable-2023-10-10";
+  version = "1.0-unstable-2023-10-10";
+
+  __finalAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "rgerganov";
