@@ -33,6 +33,9 @@ let
   version = "6.6.17";
 in
 stdenv.mkDerivation {
+  strictDeps = true;
+  __structuredAttrs = true;
+
   inherit pname version;
 
   src = fetchurl {
