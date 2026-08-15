@@ -112,6 +112,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
+    changelog = "https://github.com/fail2ban/fail2ban/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       Deric-W
