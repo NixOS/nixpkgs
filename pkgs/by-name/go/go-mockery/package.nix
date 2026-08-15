@@ -38,6 +38,10 @@ buildGoModule (finalAttrs: {
     gotestsum
   ];
 
+  # the e2e remote template tests serve fixtures from an httptest server on
+  # loopback, which the darwin sandbox blocks by default
+  __darwinAllowLocalNetworking = true;
+
   prePatch = ''
     # remove test.ci's dependency on lint since we don't need it and
     # it tries to use remote golangci-lint
