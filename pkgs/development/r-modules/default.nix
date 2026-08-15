@@ -717,6 +717,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    httpuv = [ pkgs.pkg-config ];
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_textlinedetector = [ pkgs.pkg-config ];
@@ -1374,7 +1375,10 @@ let
     hadron = [ pkgs.gsl ];
     haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib ];
-    httpuv = [ pkgs.zlib ];
+    httpuv = with pkgs; [
+      libuv
+      zlib
+    ];
     hypergeo2 = with pkgs; [
       gmp
       mpfr
