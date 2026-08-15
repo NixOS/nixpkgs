@@ -320,6 +320,9 @@ in
       The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
       and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
     '')
+    (mkRemovedOptionModule [ "services" "pfix-srsd" ] ''
+      The pfixtools project is dormant and does not support pcre2.  `services.postsrsd` is the recommended replacement for Sender Rewriting Scheme support with Postfix.
+    '')
     (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
       The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
     '')
