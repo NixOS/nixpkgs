@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
+  strictDeps = true;
+
   hardeningDisable = [
     "strictflexarrays3"
   ]
@@ -139,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://libarchive.org";
