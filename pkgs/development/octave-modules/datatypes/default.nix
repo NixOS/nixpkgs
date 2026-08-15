@@ -2,6 +2,9 @@
   buildOctavePackage,
   lib,
   fetchFromGitHub,
+  zip,
+  unzip,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -15,6 +18,12 @@ buildOctavePackage rec {
     tag = "release-${version}";
     sha256 = "sha256-8gOBjU9YJbS90iR/dgUzg5DHdb3x5PmEqmaDUbRZAyM=";
   };
+
+  nativeOctavePkgTestInputs = [
+    zip
+    unzip
+    writableTmpDirAsHomeHook
+  ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
 
