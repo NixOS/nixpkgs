@@ -27582,6 +27582,12 @@
     githubId = 1939855;
     name = "Kimmo Suominen";
   };
+  suorcd = {
+    email = "fair.sand8703@fastmail.com";
+    github = "suorcd";
+    githubId = 60907848;
+    name = "suorcd";
+  };
   supa = {
     email = "supa.codes@gmail.com";
     github = "0Supa";

@@ -43,6 +43,9 @@ callPackage ../nginx/generic.nix args rec {
     mainProgram = "angie";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ izorkin suorcd ];
+    maintainers = with lib.maintainers; [
+      izorkin
+      suorcd
+    ];
   };
 }
