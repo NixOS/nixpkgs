@@ -4,21 +4,21 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "1b0e6a07425a3e460666e88bf1c949ccc7bb0116ad562ce94a1eca60fe820725",
+        "sha256": "9a3386eea899815698dd55995277cf7cb8572ee52b399a6edfb7ae2b50e5fc19",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "103.0.0"
+      "version": "105.0.0"
     },
     "analyzer": {
       "dependency": "direct main",
       "description": {
         "name": "analyzer",
-        "sha256": "61c04d0c1bfed555c681ea079519933f071a5a026578ff73c4ff0df2d3462e5e",
+        "sha256": "62993bed6eadbe9596c5c20d5c167e7bc563c5fe266657a04ddeb93bdb84f4c9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "13.3.0"
+      "version": "14.1.0"
     },
     "args": {
       "dependency": "direct main",
@@ -451,7 +451,7 @@
       "version": "1.9.1"
     },
     "pool": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "pool",
         "sha256": "978783255c543aa3586a1b3c21f6e9d720eb315376a915872c61ef8b5c20177d",

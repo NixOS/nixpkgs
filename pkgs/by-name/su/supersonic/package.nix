@@ -23,20 +23,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "supersonic";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner = "dweymouth";
+    owner = "supersonic-app";
     repo = "supersonic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ynw/NLDk2AVmn30llFtt/A9hEheUZ+/VZqXOIdiUSxQ=";
+    hash = "sha256-cK5iFVvu7aGtxQXdFN13EWHoxfC1CPIUqLglfdMq+Ww=";
   };
 
-  vendorHash = "sha256-W5Uwma72lqJB+QHkSasi7WArsYlfXLVPph9TlDSxFEk=";
-
-  # "go mod vendor" fails to build; go-gl/glfw fails with an error like:
-  # xdg-shell-client-protocol.h: No such file or directory
-  proxyVendor = true;
+  vendorHash = "sha256-2mbWUaHB+jJkuwYrZ0xqrl5Ndj4Kuh07t1LSz66SWO8=";
 
   nativeBuildInputs = [
     copyDesktopItems
