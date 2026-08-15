@@ -109,6 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       k900
       aacebedo
       yuannan
+      luytan
     ];
   };
 })
