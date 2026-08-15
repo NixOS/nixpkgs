@@ -1,0 +1,182 @@
+Index: autosetup/sqlite-config.tcl
+==================================================================
+--- a/autosetup/sqlite-config.tcl	
++++ b/autosetup/sqlite-config.tcl	
+@@ -245,17 +245,26 @@
+               test code require a canonical tclsh.}
+         with-tcl:DIR
+           => {Directory containing tclConfig.sh or a directory one level up from
+               that, from which we can derive a directory containing tclConfig.sh.
+               A dir name of "prefix" is equivalent to the directory specified by
+-              the --prefix flag.}
++              the --prefix flag.
++
++              This determines the TCL that SQLite will link against. It
++              does not affect the TCL that is executed as part of the
++              build.}
+         with-tclsh:PATH
+-          => {Full pathname of tclsh to use.  It is used for (A) trying to find
+-              tclConfig.sh and (B) all TCL-based code generation. Use --with-tcl
+-              unless you have a specific need for this flag. Warning: if its
+-              containing dir has multiple tclsh versions, it may select the
+-              wrong tclConfig.sh!}
++          => {Full pathname of tclsh to use.  It is used for all TCL-based
++              code generation.
++
++              Additionally, when doing a native (build = host) build, it
++              may also be used as a legacy fallback to find tclConfig.sh
++              if --with-tcl does not say where that is. Relying on that
++              is not recommended. Warning: if its containing dir has
++              multiple tclsh versions, it may select the wrong
++              tclConfig.sh! The safe thing is to only pass --with-tclsh
++              if one also passes --with-tcl.}
+         static-tclsqlite3=0
+           => {Statically-link tclsqlite3. This only works if TCL support is
+               enabled and all requisite libraries are available in
+               static form. Note that glibc is unable to fully statically
+               link certain libraries required by tclsqlite3, so this won't
+@@ -1914,28 +1923,47 @@
+ #
+ # sqlite-check-tcl performs most of the --with-tcl and --with-tclsh
+ # handling. Some related bits and pieces are performed before and
+ # after that function is called.
+ #
+-# Important [define]'d vars:
+-#
+-#  - HAVE_TCL indicates whether we have a tclsh suitable for building
+-#    the TCL SQLite extension and, by extension, the testing
+-#    infrastructure. This must only be 1 for environments where
+-#    tclConfig.sh can be found.
+-#
+-#  - TCLSH_CMD is the path to the canonical tclsh or "". It never
+-#    refers to jimtcl.
++# Important [define]'d vars. They can be split into library and tool vars.
++#
++# TCL library vars:
++#
++#  - HAVE_TCL indicates whether we have the TCL that the SQLite TCL
++#    extension will be linked with, and so whether that extension is
++#    built. This is 1 for environments where tclConfig.sh can be found.
++#    That file describes a library to link against, so whether any tclsh
++#    can be run is a separate matter, and none is needed for this.
+ #
+ #  - TCL_CONFIG_SH is the path to tclConfig.sh or "".
+ #
+ #  - TCLLIBDIR is the dir to which libtclsqlite3 gets installed.
+ #
++# TCL tool vars:
++#
++#  - TCLSH_CMD is the path to the canonical tclsh or "". It never
++#    refers to jimtcl.
++#
+ #  - BTCLSH = the path to the tcl interpreter used for in-tree code
+-#    generation.  It may be jimtcl or the canonical tclsh but may not
+-#    be empty - this tree requires TCL to generated numerous
++#    generation.  It may be jimtcl or the canonical tclsh but may not be
++#    empty, as TCL code is run as part of the build to generate numerous
+ #    components.
++#
++# The two configure CLI flags are separated by which set of variables
++# they affect. --with-tcl affects only TCL library vars, and
++# --with-tclsh almost only affects TCL tool vars. There is just one
++# exception: when compiling natively, a tclsh is asked where its own
++# tclConfig.sh is if --with-tcl is not passed.
++#
++# This distinction is good in any event to separate concerns, but it is
++# especially important for cross compilation. In that case, the TCL that
++# SQLite links against will be one that runs on the host platform, while
++# the TCL that SQLite's build scripts use at build time will run on the
++# build platform. Mixing up the two flags and the two kinds of vars is
++# likely to break cross compilation; that is why the one exception to
++# the separation is strictly confined to the native compilation case.
+ #
+ # If --tcl or --with-tcl are provided but no TCL is found, this
+ # function fails fatally. If they are not explicitly provided then
+ # failure to find TCL is not fatal but a loud warning will be emitted.
+ #
+@@ -1979,24 +2007,34 @@
+     proc-debug "with_tclsh=${with_tclsh}"
+   }
+ 
+   set doConfigLookup 1 ; # set to 0 to test the tclConfig.sh-not-found cases
+   if {"" ne $with_tclsh} {
+-    # --with-tclsh was provided or found above. Validate it and use it
+-    # to trump any value passed via --with-tcl=DIR.
++    # --with-tclsh was provided or found above. Validate it and, if
++    # nothing better is to be had, ask it where its tclConfig.sh is.
++    # The two name different things: the shell runs here, whereas
++    # tclConfig.sh describes the library the extension is linked
++    # against. The shell is a guide to that only when neither
++    # --with-tcl=DIR says where it is nor cross compiling puts it on
++    # another platform entirely.
+     if {![file-isexec $with_tclsh]} {
+       proj-fatal "TCL shell $with_tclsh is not executable"
+     } else {
+       define TCLSH_CMD $with_tclsh
+       #msg-result "Using tclsh: $with_tclsh"
+     }
+-    if {$doConfigLookup &&
++    # Only worth asking when --with-tcl has not already said, and when
++    # the answer would be about the right platform: this tclsh runs
++    # here, so cross compiling the tclConfig.sh beside it describes a
++    # library for here, not for what is being built for.
++    if {$doConfigLookup && "" eq $with_tcl
++        && !$::sqliteConfig(is-cross-compiling) &&
+         [catch {exec $with_tclsh $::autosetup(libdir)/find_tclconfig.tcl} result] == 0} {
+       set with_tcl $result
+     }
+     if {"" ne $with_tcl && [file isdir $with_tcl]} {
+-      msg-result "$with_tclsh recommends the tclConfig.sh from $with_tcl"
++      msg-result "Using the tclConfig.sh from $with_tcl"
+     } else {
+       proj-warn "$with_tclsh is unable to recommend a tclConfig.sh"
+       set use_tcl 0
+     }
+   }
+@@ -2099,15 +2137,18 @@
+     define TCLLIBDIR $tcllibdir
+   }; # find TCLLIBDIR
+ 
+   if {[file-isexec $with_tclsh]} {
+     msg-result "Using tclsh: $with_tclsh"
+-    if {$cfg ne ""} {
+-      define HAVE_TCL 1
+-    } else {
+-      proj-warn "Found tclsh but no tclConfig.sh."
+-    }
++  }
++  # What the extension is built against is what tclConfig.sh describes.
++  # Whether a tclsh can be run here is a separate question, and bears on
++  # code generation and the tests rather than on this.
++  if {$cfg ne ""} {
++    define HAVE_TCL 1
++  } elseif {[file-isexec $with_tclsh]} {
++    proj-warn "Found tclsh but no tclConfig.sh."
+   }
+   show-notices
+   # If TCL is not found: if it was explicitly requested then fail
+   # fatally, else just emit a warning. If we can find the APIs needed
+   # to generate a working JimTCL then that will suffice for build-time
+@@ -2147,13 +2188,18 @@
+ proc sqlite-determine-codegen-tcl {} {
+   msg-result "Checking for TCL to use for code generation... "
+   define CFLAGS_JIMSH [proj-get-env CFLAGS_JIMSH {-O1}]
+   set cgtcl [opt-val with-tclsh jimsh]
+   if {"jimsh" ne $cgtcl} {
+-    # When --with-tclsh=X is used, use that for all TCL purposes,
+-    # including in-tree code generation, per developer request.
+-    define BTCLSH "\$(TCLSH_CMD)"
++    # When --with-tclsh=X is used, generate code with X rather than with
++    # the in-tree jimsh, per developer request.
++    #
++    # Name it directly rather than through $(TCLSH_CMD). That is set to
++    # "false" when the extension is not built, which is no reason not to
++    # generate code, and code generation is the one thing that must
++    # happen whatever the extension does.
++    define BTCLSH $cgtcl
+     return $cgtcl
+   }
+   set flagsToRestore {CC CFLAGS AS_CFLAGS CPPFLAGS AS_CPPFLAGS LDFLAGS LINKFLAGS LIBS CROSS}
+   define-push $flagsToRestore {
+     # We have to swap CC to CC_FOR_BUILD for purposes of the various
+
