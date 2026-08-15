@@ -20767,6 +20767,8 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  toppra = callPackage ../development/python-modules/toppra { };
+
   toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
 
   torch = callPackage ../development/python-modules/torch/source { };
