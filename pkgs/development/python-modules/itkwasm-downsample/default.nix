@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "itkwasm-downsample";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "itkwasm_downsample";
     inherit (finalAttrs) version;
-    hash = "sha256-LP9sg4VFc1/niioRzAR9cbwdl6fiEkrOpGT7vjj+6LQ=";
+    hash = "sha256-2X//X492VXmV8t2w4BO936XjjkRTBLvPQ+7G82RLonk=";
   };
 
   build-system = [
