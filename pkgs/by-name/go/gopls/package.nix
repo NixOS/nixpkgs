@@ -11,7 +11,7 @@
 
 buildGoLatestModule (finalAttrs: {
   pname = "gopls";
-  version = "0.23.0";
+  version = "0.23.0-pre.2";
 
   src = fetchFromGitHub {
     owner = "golang";
