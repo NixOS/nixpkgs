@@ -73,7 +73,6 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
     homepage = "https://github.com/MolSSI/QCElemental";
     changelog = "https://github.com/MolSSI/QCElemental/blob/v${version}/docs/changelog.rst";
