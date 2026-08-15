@@ -234,3 +234,5 @@ let
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 });
+in 
+openvino
