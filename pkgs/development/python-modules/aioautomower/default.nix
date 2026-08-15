@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -8,13 +9,13 @@
   ical,
   mashumaro,
   orjson,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
+  pyprojectVersionPatchHook,
   syrupy,
   time-machine,
   tzlocal,
@@ -22,26 +23,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "2.7.6";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oQyKIwcVMNW9ez7T0jNGUbPOJoJL6idP9ZgRVwDPX3A=";
+    hash = "sha256-+Glgh4MIbr1kZUvUzJ43G1sKTCZRGlBknEOBKY4q3iE=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
+  build-system = [ hatchling ];
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -54,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     freezegun
     pytest-asyncio
