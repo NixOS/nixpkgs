@@ -6,6 +6,7 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
+  pandoc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,12 +25,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
     installShellFiles
+    pandoc
   ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  # https://github.com/sharkdp/hexyl/blob/6ecc29b9c8c84d08a7e860f7f69c22b113b480ea/README.md?plain=1#L161-L163
+  postInstall = ''
+    installManPage --name hexyl.1 <(pandoc -s -f markdown -t man -o - doc/hexyl.1.md)
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hexyl \
       --bash <($out/bin/hexyl --completion bash) \
       --fish <($out/bin/hexyl --completion fish) \
