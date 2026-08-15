@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -124,6 +125,13 @@ buildPythonPackage (finalAttrs: {
     # Our h5py is built with hdf5 that is built without szip support, so we
     # skip these tests
     "not szip"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests spin up a dask.distributed scheduler and workers that
+    # communicate over loopback TCP, which the Darwin build sandbox blocks
+    # (PermissionError: [Errno 1] Operation not permitted).
+    "xarray/tests/test_distributed.py"
   ];
 
   pythonImportsCheck = [ "xarray" ];
