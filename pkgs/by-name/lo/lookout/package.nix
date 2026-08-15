@@ -26,6 +26,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookout";
   version = "0.3.10";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "hackclub";
     repo = "lookout";
@@ -61,8 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  env.LIBCLANG_PATH = "${libclang.lib}/lib";
-  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${stdenv.cc.libc.dev}/include -isystem ${libclang.lib}/lib/clang/${lib.versions.major libclang.version}/include";
+  env = {
+    LIBCLANG_PATH = "${libclang.lib}/lib";
+    BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${stdenv.cc.libc.dev}/include -isystem ${libclang.lib}/lib/clang/${lib.versions.major libclang.version}/include";
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
