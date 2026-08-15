@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "harmonist";
   version = "1.0.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "anaseto";
     repo = "harmonist";
