@@ -57,6 +57,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
     changelog = "https://github.com/eternnoir/pyTelegramBotAPI/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 })
