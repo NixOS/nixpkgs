@@ -35,6 +35,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4ZVNd1cHqM3tuGcOxlBN8WX9i9u3XFlJ0zr06n7zpmI=";
   };
 
+  # pyprojectVersionPatchHook does not make it to _version.py
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '[tool.versioningit]'$'\n'default-version' = "0.0"' \
+        '[tool.versioningit]'$'\n'default-version' = "${finalAttrs.version}"'
+  '';
+
   build-system = [
     setuptools
     versioningit
