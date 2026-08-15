@@ -20,7 +20,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "otpclient";
-  version = "5.1.1";
+  version = "5.1.7";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "paolostivanin";
     repo = "otpclient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sKXxujzHNQUZj9XloQLsZR12ZhyiY+512FOqgkTrxyQ=";
+    hash = "sha256-UDEsCdkIRAAtGCuXXJdse6HrIl2wiaapKUvcI0GDGWM=";
   };
 
   nativeBuildInputs = [
