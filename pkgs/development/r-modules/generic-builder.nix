@@ -91,8 +91,23 @@ stdenv.mkDerivation (
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/library
-      $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' ''${installFlags[@]} --configure-args="''${configureFlags[@]}" -l $out/library .
+
+      mkdir -p "$out/library"
+
+      # logic inside R CMD INSTALL essentially just expands `./configure $configureArgs` and runs it in a system shell
+      # so we need to escape configureFlags if we want to support things like spaces in arguments
+      local configureArgs=""
+      if ((''${#configureFlags[@]})); then
+        printf -v configureArgs '%q ' "''${configureFlags[@]}"
+      fi
+
+      $rCommand CMD INSTALL \
+        --library="$out/library" \
+        --built-timestamp='1970-01-01 00:00:00 UTC' \
+        --configure-args="$configureArgs" \
+        "''${installFlags[@]}" \
+        .
+
       runHook postInstall
     '';
 
