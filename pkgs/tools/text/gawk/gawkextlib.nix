@@ -42,12 +42,12 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "gawkextlib-${name}";
-      version = "unstable-2022-10-20";
+      version = "0-unstable-2024-01-21";
 
       src = fetchgit {
         url = "git://git.code.sf.net/p/gawkextlib/code";
-        rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
-        sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
+        rev = "9f5761589277bc1270ff671aa3afcca5bbc45e57";
+        hash = "sha256-NxkgVkA9YHhHOb2weQ+veVk8/VD0YpaDPwK2cGkQRKQ=";
       };
 
       inherit patches;
@@ -118,9 +118,6 @@ let
     errno = buildExtension {
       inherit gawkextlib;
       name = "errno";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
     };
     gd = buildExtension {
       inherit gawkextlib;
@@ -149,15 +146,7 @@ let
     lmdb = buildExtension {
       inherit gawkextlib;
       name = "lmdb";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
       extraBuildInputs = [ lmdb ];
-      #  mdb_env_open(env, /dev/null)
-      #! No such device
-      #  mdb_env_open(env, /dev/null)
-      #! Operation not supported by device
-      doCheck = !stdenv.hostPlatform.isDarwin;
     };
     mbs = buildExtension {
       inherit gawkextlib;
@@ -183,6 +172,10 @@ let
       name = "pgsql";
       extraBuildInputs = [ libpq ];
     };
+    reclen = buildExtension {
+      inherit gawkextlib;
+      name = "reclen";
+    };
     redis = buildExtension {
       inherit gawkextlib;
       name = "redis";
@@ -191,13 +184,6 @@ let
     select = buildExtension {
       inherit gawkextlib;
       name = "select";
-      extraPostPatch = ''
-        substituteInPlace Makefile.am --replace-fail 'cpp -M' '${stdenv.cc.targetPrefix}cpp -M'
-      '';
-    };
-    timex = buildExtension {
-      inherit gawkextlib;
-      name = "timex";
     };
     xml = buildExtension {
       inherit gawkextlib;
