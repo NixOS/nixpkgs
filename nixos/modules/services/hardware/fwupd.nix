@@ -205,6 +205,12 @@ in
     systemd = {
       packages = [ cfg.package ];
 
+      # fwupd looks for its EFI app in /run/fwupd-efi so that signed variants can
+      # be placed next to it; `C+` keeps those signed files across a rebuild.
+      tmpfiles.rules = [
+        "C+ /run/fwupd-efi - - - - ${cfg.package.fwupd-efi}/libexec/fwupd/efi"
+      ];
+
       # The upstream unit runs as User=fwupd-refresh; ensure it can take
       # ownership of /var/lib/fwupd.
       services.fwupd-refresh.serviceConfig = {
