@@ -8,19 +8,23 @@
   ncurses,
   alsa-lib,
   buildPackages,
+  versionCheckHook,
 
   ## Additional optional output modes
   enableVorbis ? false,
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timidity";
   version = "2.15.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
-    url = "mirror://sourceforge/timidity/TiMidity++-${version}.tar.bz2";
-    sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
+    url = "mirror://sourceforge/timidity/TiMidity++-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Fh/AOVrxa1H3EXrQB8PkNMglowj6Ka1Etibuj5uxyPU=";
   };
 
   patches = [
@@ -63,7 +67,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-ncurses"
-    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
+    ("--enable-audio=" + builtins.concatStringsSep "," finalAttrs.enabledOutputModes)
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
   ]
@@ -108,10 +112,20 @@ stdenv.mkDerivation rec {
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
     substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
-    # All but one of the symlinks in the instruments tarball have their permissions set to 0000.
-    # This causes problems on systems like Darwin that actually use symlink permissions.
-    chmod -Rh u+rwX $out/share/timidity/
+  ''
+  # All but one of the symlinks in the instruments tarball have their permissions set to 0000.
+  # This causes problems on systems like Darwin that actually use symlink permissions.
+  # Nix chowns the output to root but never canonicalises symlink modes, so this has to grant
+  # read to everyone: with u+rwX only root could readlink(), which breaks NAR serialisation
+  # (`nix copy`, `nix-copy-closure`) for unprivileged users.
+  + ''
+    chmod -Rh a+rX $out/share/timidity/
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.tests = nixosTests.timidity;
 
@@ -123,4 +137,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "timidity";
   };
-}
+})

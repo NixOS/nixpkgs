@@ -33,6 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dlinfo" ];
 
+  # all tests are broken, see:
+  # https://github.com/fphammerle/python-dlinfo/pull/64
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   meta = {
     changelog = "https://github.com/fphammerle/python-dlinfo/blob/${src.tag}/CHANGELOG.md";
     description = "Python wrapper for libc's dlinfo and dyld_find on Mac";
