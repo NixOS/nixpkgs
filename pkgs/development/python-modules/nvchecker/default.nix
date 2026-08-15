@@ -18,6 +18,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-httpbin,
+  pytest-rerunfailures,
   pythonOlder,
   setuptools,
   structlog,
@@ -27,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nvchecker";
-  version = "2.21";
+  version = "2.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "nvchecker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQrroiuDM9ISmfQLUbYIAzBOSYtO6q1MXqMfC3X8BUI=";
+    hash = "sha256-QNcL1zlcFkQgJwrBnk9ubDPUyNYvAsaZ0kZHl71AqEU=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -56,6 +57,7 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     # vercmp = [ pyalpm ];
     awesomeversion = [ awesomeversion ];
+    # portage = [ portage ];
     pypi = [ packaging ];
     htmlparser = [ lxml ];
     rpmrepo = [ lxml ] ++ lib.optionals (pythonOlder "3.14") [ zstandard ];
@@ -72,6 +74,7 @@ buildPythonPackage (finalAttrs: {
     flaky
     pytest-asyncio
     pytest-httpbin
+    pytest-rerunfailures
     pytestCheckHook
   ]
   ++ builtins.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies);
