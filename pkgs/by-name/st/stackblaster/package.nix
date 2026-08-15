@@ -22,7 +22,7 @@ buildGoModule {
   nativeCheckInputs = [ git ];
 
   meta = with lib; {
-    description = "TODO";
+    description = "Graphite-flavored CLI for GitHub stacked PRs";
     homepage = "https://github.com/fjij/stackblaster";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ ];
