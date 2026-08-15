@@ -34,6 +34,11 @@ buildPythonPackage (finalAttrs: {
       url = "https://github.com/tomasriveral/ShazamIO/commit/23dd6f2b4195616cbfa5dd98339265e4e5959be6.patch";
       hash = "sha256-h7fVAiUJVJk/gItUsyUyDz2q9++UzRoga7NG/IL+MIY=";
     })
+    # renames all the occurances of dataclass-factory to adaptix
+    (fetchpatch {
+      url = "https://github.com/tomasriveral/ShazamIO/commit/cd448fd8736cc47841fc566b0007304189b95490.patch";
+      hash = "sha256-2qJM3kynMnZtNTPRXdpgqBv0qo88He61/Sc1a14fstM=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -54,6 +59,19 @@ buildPythonPackage (finalAttrs: {
     ffmpeg
     pytest-asyncio
     pytestCheckHook
+  ];
+
+
+  /*
+  pythonRuntimeDepsCheckHook has a lot of false positives.
+  */
+  pythonRemoveDeps = [
+    "adaptix"
+    "aiofiles"
+    "aiohttp-retry"
+    "anyio"
+    "dataclass-factory"
+    "shazamio-core"
   ];
 
   disabledTests = [
