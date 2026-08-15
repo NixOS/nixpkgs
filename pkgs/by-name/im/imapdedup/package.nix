@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/quentinsf/IMAPdedup";
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.gpl2Only;
+    changelog = "https://github.com/quentinsf/IMAPdedup/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "imapdedup";
   };
 })
