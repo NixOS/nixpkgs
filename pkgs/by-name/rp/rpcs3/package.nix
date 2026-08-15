@@ -64,7 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KTF2Oj1p+EplRgWQ/We8mqu60h161/1gniKWjVAvAso=";
   };
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--use-github-releases"
+    ];
+  };
 
   patches = [
     # FFmpeg 9 removed AVCodec.pix_fmts; drop the check (RPCS3/rpcs3@a8dd0535935a).
