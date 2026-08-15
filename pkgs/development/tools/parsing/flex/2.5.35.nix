@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/westes/flex/archive/flex-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.tar.gz";
-    sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
+    hash = "sha256-9XM3gfdIODfcZ338TpMCIxbc5lpOTIJV4KQt1KM1AHI=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
