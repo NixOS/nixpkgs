@@ -14,16 +14,16 @@ let
 in
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.19.3";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     tag = "v${version}";
-    hash = "sha256-6HYVNtjGOQICiby4je3iYG9mPGMEXWTY+87HuUMaA2A=";
+    hash = "sha256-zAHDBLQJa0FFX2esz7jVRnIY6aBwnoGp6Kr2jWDX+lg=";
   };
 
-  npmDepsHash = "sha256-FiWtZBixg7iz/9YgqnhIIG6MYNql7ITOUXH7aBBv7Co=";
+  npmDepsHash = "sha256-J/3m6HN2/gndtTrxf4rwhZtBAQUv1oQYbo8HeNLV8Xw=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [
@@ -55,22 +55,24 @@ buildNpmPackage rec {
   # Otherwise it stores config in ~/.config/Electron
   patches = [ ./config-dir.patch ];
 
-  # Replace hardcoded ffmpeg and ytdlp paths
-  # Also stop it from downloading ytdlp
   postPatch = ''
-    substituteInPlace src/renderer.js \
-      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
-      --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
-      --replace-fail 'let ytDlpIsPresent = false;' 'let ytDlpIsPresent = true;'
     # Disable auto-updates
     substituteInPlace src/preferences.js \
       --replace-warn 'const autoUpdateDisabled = getId("autoUpdateDisabled");' 'const autoUpdateDisabled = "true";'
   '';
 
   postInstall = ''
+    # Set paths to use system ffmpeg and yt-dlp to prevent downloading
     makeWrapper ${electron}/bin/electron $out/bin/ytdownloader \
         --add-flags $out/lib/node_modules/ytdownloader/main.js \
-        --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
+        --set YTDOWNLOADER_FFMPEG_PATH "${lib.getExe ffmpeg-headless}" \
+        --set YTDOWNLOADER_YTDLP_PATH "${lib.getExe yt-dlp}" \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            ffmpeg-headless
+            yt-dlp
+          ]
+        }
 
     install -Dm444 assets/images/icon.png $out/share/icons/hicolor/512x512/apps/ytdownloader.png
   '';
