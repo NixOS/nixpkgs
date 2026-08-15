@@ -33,6 +33,7 @@ buildGoModule (finalAttrs: {
       management and character building, relying on items and player
       adaptability for character progression.
     '';
+    changelog = "https://codeberg.org/anaseto/harmonist/src/tag/v${finalAttrs.version}/CHANGES.md";
     homepage = "https://harmonist.tuxfamily.org/";
     license = lib.licenses.isc;
     maintainers = [ ];
