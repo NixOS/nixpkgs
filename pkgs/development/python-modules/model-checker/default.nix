@@ -8,14 +8,14 @@
   z3-solver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-checker";
   version = "1.3.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "model_checker";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Hg7i55s31qyauErTUIcZkkLs0KOI77DMhqRVI6Xkc5Y=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
