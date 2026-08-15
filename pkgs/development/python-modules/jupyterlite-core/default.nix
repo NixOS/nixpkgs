@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "jupyter-lite";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
 })
