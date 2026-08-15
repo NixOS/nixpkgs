@@ -46,7 +46,7 @@ let
 
   stagesCross = import ./cross (commonArgs // { inherit crossOverlays; });
 
-  stagesCustom = import ./custom commonArgs;
+  stagesCustom = import ./custom (commonArgs // { inherit crossOverlays; });
 
 in
 # Select the appropriate stages for the platform `system'.

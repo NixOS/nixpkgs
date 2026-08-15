@@ -81,6 +81,55 @@ self: super: {
     else
       throw "Musl libc only supports 64-bit Linux systems, and i686-linux.";
 
+  pkgsUutils =
+    if
+      stdenv.hostPlatform.isLinux
+      && stdenv.buildPlatform.is64bit
+      && stdenv.hostPlatform == stdenv.buildPlatform
+    then
+      nixpkgsFun {
+        overlays = [
+          (self': _: {
+            pkgsUutils = self';
+          })
+        ]
+        ++ overlays;
+        localSystem = stdenv.hostPlatform;
+        config = super.config // {
+          replaceStdenv =
+            { pkgs }:
+            let
+              bintools = pkgs.wrapBintoolsWith {
+                bintools = pkgs.stdenv.cc.bintools.bintools;
+                coreutils = pkgs.uutils-coreutils;
+              };
+            in
+            pkgs.stdenv.override {
+              cc = pkgs.stdenv.cc.override {
+                coreutils = pkgs.uutils-coreutils;
+                inherit bintools;
+              };
+
+              initialPath = (lib.remove pkgs.coreutils pkgs.stdenv.initialPath) ++ [ pkgs.uutils-coreutils ];
+              allowedRequisites = lib.mapNullable (
+                rs:
+                (lib.remove [
+                  pkgs.bintools
+                  pkgs.expand-response-params
+                  pkgs.coreutils
+                ] rs)
+                ++ [
+                  pkgs.bintools
+                  pkgs.expand-response-params
+                  pkgs.uutils-coreutils
+                ]
+              ) (pkgs.stdenv.allowedRequisites or null);
+            };
+        };
+      }
+    else
+      throw "uutils only supports 64-bit Linux systems.";
+
   # Full package set with rocm on cuda off
   # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
   pkgsRocm = nixpkgsFun {
