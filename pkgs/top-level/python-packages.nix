@@ -16144,8 +16144,6 @@ self: super: with self; {
 
   pysindy = callPackage ../development/python-modules/pysindy { };
 
-  pysingleton = callPackage ../development/python-modules/pysingleton { };
-
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
