@@ -4,6 +4,7 @@
   glib,
   lib,
   libxcb,
+  microsoft-edge,
   nspr,
   nss,
   stdenvNoCC,
@@ -52,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "WebDriver implementation that controls an Edge browser running on the local machine";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ cholli ];
+    maintainers = microsoft-edge.meta.maintainers;
     platforms = [
       "x86_64-linux"
     ];
