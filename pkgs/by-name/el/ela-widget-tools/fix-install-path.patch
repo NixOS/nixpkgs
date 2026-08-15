@@ -1,0 +1,90 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d04794e..b686747 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,11 +10,6 @@ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+ 
+-#在这里配置QT路径 例如 D:/Qt/6.6.2/msvc2019_64 D:/Qt/5.15.2/msvc2019_64 /home/liniyous/Qt/5.15.2/gcc_64
+-SET(QT_SDK_DIR D:/Qt/5.15.2/msvc2019_64 CACHE PATH "QT SDK DIR" FORCE)
+-message("在CMAKE中配置 QT_SDK_DIR 选项指定QT路径; 当前路径: ${QT_SDK_DIR}")
+-SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/Install CACHE PATH "Installation path" FORCE)
+-
+ option(BUILD_ELAPACKETIO "Build ElaPacketIO" OFF)
+ list(APPEND CMAKE_PREFIX_PATH ${QT_SDK_DIR})
+ 
+diff --git a/ElaWidgetTools/CMakeLists.txt b/ElaWidgetTools/CMakeLists.txt
+index 0f61edd..7b075f1 100644
+--- a/ElaWidgetTools/CMakeLists.txt
++++ b/ElaWidgetTools/CMakeLists.txt
+@@ -46,9 +46,9 @@ if (MSVC)
+     set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
+ endif ()
+ 
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+ target_link_libraries(${PROJECT_NAME} PUBLIC
+     Qt${QT_VERSION_MAJOR}::Widgets
+ )
+@@ -63,13 +63,6 @@ endif ()
+ install(
+     TARGETS ${PROJECT_NAME}
+     EXPORT ${PROJECT_NAME}
+-    ARCHIVE DESTINATION ${PROJECT_NAME}/lib
+-    LIBRARY DESTINATION ${PROJECT_NAME}/lib
+-    RUNTIME DESTINATION ${PROJECT_NAME}/bin
+-)
+-install(TARGETS ${PROJECT_NAME}
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/ElaWidgetToolsExample
+-    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/ElaWidgetToolsExample
+ )
+ if (MSVC AND NOT LIB_TYPE STREQUAL "STATIC")
+     install(
+@@ -87,7 +80,7 @@ set(LIB_DIR lib)
+ install(
+     EXPORT ${PROJECT_NAME}
+     FILE ${PROJECT_NAME}Targets.cmake
+-    DESTINATION ${PROJECT_NAME}/lib/cmake
++    DESTINATION lib/cmake
+ )
+ 
+ include(CMakePackageConfigHelpers)
+@@ -102,7 +95,6 @@ configure_package_config_file(
+     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+     INSTALL_DESTINATION lib/cmake
+     PATH_VARS INCLUDE_DIRS LIBRARIES LIB_DIR
+-    INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}
+ )
+ 
+ install(
+diff --git a/ElaWidgetToolsExample/CMakeLists.txt b/ElaWidgetToolsExample/CMakeLists.txt
+index 7330ed1..3cd0cc7 100644
+--- a/ElaWidgetToolsExample/CMakeLists.txt
++++ b/ElaWidgetToolsExample/CMakeLists.txt
+@@ -41,9 +41,9 @@ else ()
+     )
+ endif ()
+ 
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+ 
+ if (WIN32)
+     target_include_directories(${PROJECT_NAME} PUBLIC
+@@ -93,8 +93,6 @@ endif ()
+ 
+ include(GNUInstallDirs)
+ install(TARGETS ${PROJECT_NAME}
+-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}
+-    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}
+ )
+ if (MSVC)
+     install(

@@ -1,0 +1,17 @@
+{
+  "elp-linux-aarch64-unknown-linux-gnu-otp-26.2": "sha256-t9Ka7V1M7BYjoqgmhD3x5b6b39Dq35RjkgWwZkT1D2Y=",
+  "elp-linux-aarch64-unknown-linux-gnu-otp-27.3": "sha256-65BdH9LJSzRQQqFQvAKbDMJvQtpuM+QDN3HbpPC6Zws=",
+  "elp-linux-aarch64-unknown-linux-gnu-otp-28": "sha256-RJmkxEJJenWR7hyL5hTX53CmWi8FE3DGnGT/uWrYEkU=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-26.2": "sha256-CFFOhI1aYs+gc/vMUml+/1sPT4O4rOHynL/yIq4aTN8=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-27.3": "sha256-c4DXTD0VxIdGFsxp4PKgq6PZlv9CUi2DteZ77Qs9lV0=",
+  "elp-linux-x86_64-unknown-linux-gnu-otp-28": "sha256-72kcw8OqSdkl2vL33qd3Fpk2UsRVl6mF5MgWMlnjjCU=",
+  "elp-macos-aarch64-apple-darwin-otp-26.2": "sha256-DsB7Y5yJ9dcD9kIrdwwFRxkQ/0hUxJ7cgpYKJLi8k5Q=",
+  "elp-macos-aarch64-apple-darwin-otp-27.3": "sha256-brx8NyWhloBo88RGAxqYWgbEEkcMOKgCglgX9xyTBNs=",
+  "elp-macos-aarch64-apple-darwin-otp-28": "sha256-rHbXbB0tmPz4BEjJ9AAvns4qvkpH2d3j7qFR7H6rlvc=",
+  "elp-macos-x86_64-apple-darwin-otp-26.2": "sha256-wfhlLbWIc9Rgv8cgipuiaL36BSmGE3SSBm8I7jvZHrk=",
+  "elp-macos-x86_64-apple-darwin-otp-27.3": "sha256-pgNKP2Eh5f9pREYzLsXZZNZvPYtnx/6vJsibCWsibDA=",
+  "elp-macos-x86_64-apple-darwin-otp-28": "sha256-crMKoxhhcOxquiyu5TBd6dF1tsdN7VqHd3hHAT1/iac=",
+  "elp-windows-x86_64-pc-windows-msvc-otp-26.2": "sha256-4U9XGA3b6aI8f2sHMGec87KghnAyY8auqKq4U3joEKY=",
+  "elp-windows-x86_64-pc-windows-msvc-otp-27.3": "sha256-HrgOkCM54va380X7w+5FMszXC3mb8F6kZa73zNspX+0=",
+  "elp-windows-x86_64-pc-windows-msvc-otp-28": "sha256-egwPYf8MfGWLj+Ruk/tPQmWKRaOFMUNLtNJkSJl3RPw="
+}

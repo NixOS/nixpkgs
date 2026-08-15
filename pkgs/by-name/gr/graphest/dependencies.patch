@@ -1,0 +1,25 @@
+diff --git a/rust/graphest-flint-sys/build.rs b/rust/graphest-flint-sys/build.rs
+index 14c0039..b1b0f6a 100644
+--- a/rust/graphest-flint-sys/build.rs
++++ b/rust/graphest-flint-sys/build.rs
+@@ -50,6 +50,7 @@ fn load_cache(env: &Environment) {
+ }
+ 
+ fn build_flint(env: &Environment) {
++    let _ = copy_dir_all("@flint@", env.out_dir.clone());
+     if env.lib_dir.join("libflint.a").exists() {
+         return;
+     }
+diff --git a/rust/graphest-fftw-sys/build.rs b/rust/graphest-fftw-sys/build.rs
+index 2e3247d..a4ac573 100644
+--- a/rust/graphest-fftw-sys/build.rs
++++ b/rust/graphest-fftw-sys/build.rs
+@@ -53,6 +53,8 @@ fn load_cache(env: &Environment) {
+ }
+ 
+ fn build(env: &Environment) {
++    let _ = copy_dir_all("@fftwLib@", env.out_dir.clone());
++    let _ = copy_dir_all("@fftwDev@", env.out_dir.clone());
+     if env.lib_dir.join("libfftw3f.a").exists() {
+         return;
+     }

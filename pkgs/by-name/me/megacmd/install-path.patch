@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -135,7 +135,6 @@ if(UNIX AND NOT APPLE)
+     # Note: using cmake --install --prefix /some/prefix will not set rpath relative to that prefix
+     # The above can be used for building packages: in which install dir is a path construction folder that will not be there in packages
+     set(CMAKE_INSTALL_LIBDIR "opt/megacmd/lib")
+-    set(CMAKE_INSTALL_BINDIR "usr/bin") #override default "bin"
+ 
+     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+         message(STATUS "Overriding default CMAKE_INSTALL_PREFIX to /")
+@@ -430,9 +429,9 @@ endif()
+ if (APPLE)
+     install(TARGETS ${all_targets}
+         BUNDLE
+-        DESTINATION "./"
++        DESTINATION "Applications/"
+     )
+ elseif(NOT WIN32)
+     set(PERMISSIONS755
+          OWNER_READ
+          OWNER_WRITE

@@ -1,0 +1,10 @@
+/path/to/write-nix-expression.sh Group::Module::Submodule
+
+It will output Nix assignment formatted for placing into
+all-packages.nix amongst all the perl packages, like perlAlgorithmDiff.
+Actually it will grab distribution unit Group-Module-Submodule via
+search.cpan.org, and make some effort to write correct dependencies.
+If among requirements there are some that have empty META.yml, or if
+any of requirements acannot be installed by just getting distribution
+unit whose name can be guessed by replacing :: with -, manual editing
+will be needed.

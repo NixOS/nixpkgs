@@ -1,0 +1,21 @@
+diff -ru megam_0.92/Makefile megam_0.92-b/Makefile
+--- megam_0.92/Makefile	2007-10-08 18:06:04.000000000 +0100
++++ megam_0.92-b/Makefile	2013-11-25 10:14:20.000000000 +0000
+@@ -41,7 +41,7 @@
+ #
+ # The Caml compilers. #
+ # You may fix here the path to access the Caml compiler on your machine
+-CAMLC = ocamlc -g
++CAMLC = ocamlc -g $(WITHCLIBS)
+ CAMLOPT = ocamlopt -unsafe -ccopt -O4 -ccopt -ffast-math -inline 99999 
+ CAMLDEP = ocamldep
+ CAMLLEX = ocamllex
+@@ -70,7 +70,7 @@
+ WITHDBM =dbm.cma -cclib -lmldbm -cclib -lndbm
+ 
+ #WITHCLIBS =-I /usr/lib/ocaml/3.09.2/caml
+-WITHCLIBS =-I /usr/lib/ocaml/caml
++WITHCLIBS =-I $(CAML_INCLUDES) -I +unix -I +str
+ 
+ ################ End of user's variables #####################
+ 

@@ -1,0 +1,16 @@
+prefix=@out@
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: sparrow3d
+Description: a software renderer for different open handhelds like the gp2x, wiz, caanoo and pandora
+URL: https://github.com/theZiz/sparrow3d
+Version: @version@
+Requires: \
+  sdl \
+  SDL_image \
+  SDL_ttf \
+  SDL_mixer \
+  SDL_net
+Cflags: -isystem${includedir}
+Libs: -L${libdir} -lsparrow3d -lsparrowNet -lsparrowSound

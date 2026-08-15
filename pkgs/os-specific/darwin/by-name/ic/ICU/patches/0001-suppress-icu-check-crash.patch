@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 8 May 2026 21:00:49 -0400
+Subject: [PATCH] suppress-icu-check-crash
+
+---
+ icu/icu4c/source/test/cintltst/cmsgtst.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/icu/icu4c/source/test/cintltst/cmsgtst.c b/icu/icu4c/source/test/cintltst/cmsgtst.c
+index 16263b5c7..fccc2753d 100644
+--- a/icu/icu4c/source/test/cintltst/cmsgtst.c
++++ b/icu/icu4c/source/test/cintltst/cmsgtst.c
+@@ -231,7 +231,7 @@ static void MessageFormatTest( void )
+                         austrdup(result), austrdup(testResultStrings[i]) );
+                 }
+ 
+-#if (U_PLATFORM == U_PF_LINUX || U_PLATFORM == U_PF_QNX) /* add platforms here .. */
++#if (U_PLATFORM == U_PF_LINUX || U_PLATFORM == U_PF_DARWIN || U_PLATFORM == U_PF_QNX) /* add platforms here .. */
+                 log_verbose("Skipping potentially crashing test for mismatched varargs.\n");
+ #else
+                 log_verbose("Note: the next is a platform dependent test. If it crashes, add an exclusion for your platform near %s:%d\n", __FILE__, __LINE__); 
+-- 
+2.51.2
+

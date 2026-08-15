@@ -1,0 +1,102 @@
+diff --git i/src/common/types.ts w/src/common/types.ts
+index 1e6f8172..7e8e8b22 100644
+--- i/src/common/types.ts
++++ w/src/common/types.ts
+@@ -84,7 +84,6 @@ export interface Config {
+   captureFrameQuality: number,
+   captureFrameFileNameFormat: 'timestamp' | 'index',
+   enableNativeHevc: boolean,
+-  enableUpdateCheck: boolean,
+   cleanupChoices: {
+     trashTmpFiles: boolean, askForCleanup: boolean, closeFile: boolean, cleanupAfterExport?: boolean | undefined,
+   },
+diff --git i/src/main/configStore.ts w/src/main/configStore.ts
+index 3a80d2aa..b95546a9 100644
+--- i/src/main/configStore.ts
++++ w/src/main/configStore.ts
+@@ -154,7 +154,6 @@ const defaults: Config = {
+   captureFrameQuality: 0.95,
+   captureFrameFileNameFormat: 'timestamp',
+   enableNativeHevc: true,
+-  enableUpdateCheck: true,
+   cleanupChoices: {
+     trashTmpFiles: true, askForCleanup: true, closeFile: true, cleanupAfterExport: false,
+   },
+diff --git i/src/main/index.ts w/src/main/index.ts
+index 9144ddae..9b23f6ea 100644
+--- i/src/main/index.ts
++++ w/src/main/index.ts
+@@ -30,7 +30,6 @@ import HttpServer from './httpServer.js';
+ import isDev from './isDev.js';
+ import isStoreBuild from './isStoreBuild.js';
+ import { getAboutPanelOptions } from './aboutPanel.js';
+-import { checkNewVersion } from './updateChecker.js';
+ import * as i18nCommon from './i18nCommon.js';
+ import './i18n.js';
+ import type { ApiActionRequest } from '../common/types.js';
+@@ -371,14 +370,6 @@ async function init() {
+     createWindow();
+     // will also updateMenu and set about panel options
+     await changeLanguage(language);
+-
+-    const enableUpdateCheck = configStore.get('enableUpdateCheck');
+-
+-    if (!disableNetworking && enableUpdateCheck && !isStoreBuild) {
+-      newVersion = await checkNewVersion();
+-      // newVersion = '1.2.3';
+-      if (newVersion) updateMenu();
+-    }
+   } catch (err) {
+     logger.error('Failed to initialize', err);
+   }
+diff --git i/src/renderer/src/components/Settings.tsx w/src/renderer/src/components/Settings.tsx
+index b91b562e..36f779db 100644
+--- i/src/renderer/src/components/Settings.tsx
++++ w/src/renderer/src/components/Settings.tsx
+@@ -76,7 +76,7 @@ function Settings({
+ }) {
+   const { t } = useTranslation();
+ 
+-  const { customOutDir, changeOutDir, keyframeCut, toggleKeyframeCut, timecodeFormat, setTimecodeFormat, invertCutSegments, setInvertCutSegments, askBeforeClose, setAskBeforeClose, enableImportChapters, setEnableImportChapters, enableAskForFileOpenAction, setEnableAskForFileOpenAction, autoSaveProjectFile, setAutoSaveProjectFile, invertTimelineScroll, setInvertTimelineScroll, language, setLanguage, hideNotifications, setHideNotifications, hideOsNotifications, setHideOsNotifications, autoLoadTimecode, setAutoLoadTimecode, enableAutoHtml5ify, setEnableAutoHtml5ify, customFfPath, setCustomFfPath, storeProjectInWorkingDir, mouseWheelZoomModifierKey, setMouseWheelZoomModifierKey, mouseWheelFrameSeekModifierKey, setMouseWheelFrameSeekModifierKey, mouseWheelKeyframeSeekModifierKey, setMouseWheelKeyframeSeekModifierKey, segmentMouseModifierKey, setSegmentMouseModifierKey, captureFrameMethod, setCaptureFrameMethod, captureFrameQuality, setCaptureFrameQuality, captureFrameFileNameFormat, setCaptureFrameFileNameFormat, enableNativeHevc, setEnableNativeHevc, enableUpdateCheck, setEnableUpdateCheck, allowMultipleInstances, setAllowMultipleInstances, preferStrongColors, setPreferStrongColors, treatInputFileModifiedTimeAsStart, setTreatInputFileModifiedTimeAsStart, treatOutputFileModifiedTimeAsStart, setTreatOutputFileModifiedTimeAsStart, exportConfirmEnabled, toggleExportConfirmEnabled, storeWindowBounds, setStoreWindowBounds, reducedMotion, setReducedMotion } = useUserSettings();
++  const { customOutDir, changeOutDir, keyframeCut, toggleKeyframeCut, timecodeFormat, setTimecodeFormat, invertCutSegments, setInvertCutSegments, askBeforeClose, setAskBeforeClose, enableImportChapters, setEnableImportChapters, enableAskForFileOpenAction, setEnableAskForFileOpenAction, autoSaveProjectFile, setAutoSaveProjectFile, invertTimelineScroll, setInvertTimelineScroll, language, setLanguage, hideNotifications, setHideNotifications, hideOsNotifications, setHideOsNotifications, autoLoadTimecode, setAutoLoadTimecode, enableAutoHtml5ify, setEnableAutoHtml5ify, customFfPath, setCustomFfPath, storeProjectInWorkingDir, mouseWheelZoomModifierKey, setMouseWheelZoomModifierKey, mouseWheelFrameSeekModifierKey, setMouseWheelFrameSeekModifierKey, mouseWheelKeyframeSeekModifierKey, setMouseWheelKeyframeSeekModifierKey, segmentMouseModifierKey, setSegmentMouseModifierKey, captureFrameMethod, setCaptureFrameMethod, captureFrameQuality, setCaptureFrameQuality, captureFrameFileNameFormat, setCaptureFrameFileNameFormat, enableNativeHevc, setEnableNativeHevc, allowMultipleInstances, setAllowMultipleInstances, preferStrongColors, setPreferStrongColors, treatInputFileModifiedTimeAsStart, setTreatInputFileModifiedTimeAsStart, treatOutputFileModifiedTimeAsStart, setTreatOutputFileModifiedTimeAsStart, exportConfirmEnabled, toggleExportConfirmEnabled, storeWindowBounds, setStoreWindowBounds, reducedMotion, setReducedMotion } = useUserSettings();
+ 
+   const onLangChange = useCallback<ChangeEventHandler<HTMLSelectElement>>((e) => {
+     const { value } = e.target;
+@@ -204,7 +204,7 @@ function Settings({
+           <Row>
+             <KeyCell>{t('Check for updates on startup?')}</KeyCell>
+             <td>
+-              <Switch checked={enableUpdateCheck} onCheckedChange={setEnableUpdateCheck} />
++              (always disabled in nixpkgs build)
+             </td>
+           </Row>
+         )}
+diff --git i/src/renderer/src/hooks/useUserSettingsRoot.ts w/src/renderer/src/hooks/useUserSettingsRoot.ts
+index 4f8b8e0a..e67b1cd0 100644
+--- i/src/renderer/src/hooks/useUserSettingsRoot.ts
++++ w/src/renderer/src/hooks/useUserSettingsRoot.ts
+@@ -166,8 +166,6 @@ export default function useUserSettingsRoot() {
+   useEffect(() => safeSetConfig({ captureFrameFileNameFormat }), [captureFrameFileNameFormat]);
+   const [enableNativeHevc, setEnableNativeHevc] = useState(safeGetConfigInitial('enableNativeHevc'));
+   useEffect(() => safeSetConfig({ enableNativeHevc }), [enableNativeHevc]);
+-  const [enableUpdateCheck, setEnableUpdateCheck] = useState(safeGetConfigInitial('enableUpdateCheck'));
+-  useEffect(() => safeSetConfig({ enableUpdateCheck }), [enableUpdateCheck]);
+   const [cleanupChoices, setCleanupChoices] = useState(safeGetConfigInitial('cleanupChoices'));
+   useEffect(() => safeSetConfig({ cleanupChoices }), [cleanupChoices]);
+   const [allowMultipleInstances, setAllowMultipleInstances] = useState(safeGetConfigInitial('allowMultipleInstances'));
+@@ -280,7 +278,6 @@ export default function useUserSettingsRoot() {
+     captureFrameQuality,
+     captureFrameFileNameFormat,
+     enableNativeHevc,
+-    enableUpdateCheck,
+     cleanupChoices,
+     allowMultipleInstances,
+     darkMode,
+@@ -356,7 +353,6 @@ export default function useUserSettingsRoot() {
+     setCaptureFrameQuality,
+     setCaptureFrameFileNameFormat,
+     setEnableNativeHevc,
+-    setEnableUpdateCheck,
+     setCleanupChoices,
+     setAllowMultipleInstances,
+     toggleDarkMode,

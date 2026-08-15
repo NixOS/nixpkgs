@@ -1,0 +1,47 @@
+Ignore EINVAL errors.  This matters within user namespaces.
+
+See:
+https://github.com/NixOS/nixpkgs/issues/25901
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=802612
+https://github.com/NixOS/nixpkgs/issues/10496
+
+diff --git a/libfakeroot.c b/libfakeroot.c
+index 68a95fb..70da8bc 100644
+--- a/libfakeroot.c
++++ b/libfakeroot.c
+@@ -792,7 +792,7 @@ int chown(const char *path, uid_t owner, gid_t group){
+     r=next_lchown(path,owner,group);
+   else
+     r=0;
+-  if(r&&(errno==EPERM))
++  if(r&&(errno==EPERM||errno==EINVAL))
+     r=0;
+
+   return r;
+@@ -819,7 +819,7 @@ int lchown(const char *path, uid_t owner, gid_t group){
+     r=next_lchown(path,owner,group);
+   else
+     r=0;
+-  if(r&&(errno==EPERM))
++  if(r&&(errno==EPERM||errno==EINVAL))
+     r=0;
+
+   return r;
+@@ -843,7 +843,7 @@ int fchown(int fd, uid_t owner, gid_t group){
+   else
+     r=0;
+
+-  if(r&&(errno==EPERM))
++  if(r&&(errno==EPERM||errno==EINVAL))
+     r=0;
+
+   return r;
+@@ -870,7 +870,7 @@ int fchownat(int dir_fd, const char *path, uid_t owner, gid_t group, int flags)
+   else
+     r=0;
+
+-  if(r&&(errno==EPERM))
++  if(r&&(errno==EPERM||errno==EINVAL))
+     r=0;
+
+   return r;

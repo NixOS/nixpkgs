@@ -1,0 +1,23 @@
+diff --git a/PluginManager.cpp b/PluginManager.cpp
+index 157b6cd5..42d9b59d 100644
+--- a/PluginManager.cpp
++++ b/PluginManager.cpp
+@@ -59,6 +59,18 @@ void PluginManager::ScanAndLoadPlugins()
+     filesystem::path plugins_dir = ResourceManager::get()->GetConfigurationDirectory() / plugins_path;
+     ScanAndLoadPluginsFrom(plugins_dir, false);
+ 
++    /*---------------------------------------------------------*\
++    | Get the system plugins directory from the environment     |
++    |                                                           |
++    | Allow setting a system plugin directory during runtime,   |
++    | e.g. by Nixpkgs' `withPlugins` wrapper.                   |
++    \*---------------------------------------------------------*/
++    const char* system_plugins_dir = std::getenv("OPENRGB_SYSTEM_PLUGIN_DIRECTORY");
++    if(system_plugins_dir && *system_plugins_dir)
++    {
++        ScanAndLoadPluginsFrom(system_plugins_dir, true);
++    }
++
+ #ifdef OPENRGB_SYSTEM_PLUGIN_DIRECTORY
+     /*---------------------------------------------------------*\
+     | Get the system plugins directory                          |
