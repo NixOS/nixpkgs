@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace GNUmakefile \
-      --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
+      --replace-fail './snowball ' '${lib.getExe' buildPackages.libstemmer "snowball"} '
   '';
 
   makeTarget = "libstemmer.a";
