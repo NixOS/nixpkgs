@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.9.2";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tqdm";
     repo = "shtab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+9M0IfiD5CJcg4AHqCfq1UON/E63etwzvx7Gc82H0PE=";
+    hash = "sha256-mbki7g0BuMfrSa107nXuvySbxp1AVhGfWFJSVQe6sYE=";
   };
 
   nativeBuildInputs = [
