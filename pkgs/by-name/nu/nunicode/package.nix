@@ -11,6 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nunicode";
   version = "1.11.1";
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "sqlite"
@@ -37,10 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
       'install(TARGETS nusqlite3 DESTINATION "${placeholder "sqlite"}/lib")'
   '';
 
-  nativeBuildInputs = [
-    cmake
-    sqlite
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ sqlite ];
+
+  nativeCheckInputs = [ sqlite ];
 
   # avoid name-clash on case-insensitive filesystems
   cmakeBuildDir = "build-dir";
