@@ -6,16 +6,17 @@
   fetchurl,
   automake,
   autoconf,
+  cmake,
   versionCheckHook,
 }:
 let
-  version = "2026.1";
+  version = "2026.2";
   src = fetchFromGitHub {
     owner = "smlnj";
     repo = "smlnj";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-n5oWhignhFl8B/cXSO3g/KQXInZqT1A0Mp8GzLeGqNc=";
+    hash = "sha256-1oiDdiGZvg8Dlz3InFLjOilvBTShuTFHz91Xmc1onMA=";
   };
 
   llvm = callPackage ./llvm.nix { inherit src version; };
@@ -24,12 +25,12 @@ let
     if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isx86_64 then
       fetchurl {
         url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.amd64-unix.tgz";
-        hash = "sha256-caFguKkhFOjgJDtcOcF6YAbzFl2nQYXbtWCjvaBjL6o=";
+        hash = "sha256-ug2Busk6aYeqEGh923ZG8c3xw1Cjmct2Fxv7K44cjOs=";
       }
     else if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.arm64-unix.tgz";
-        hash = "sha256-qygH0n163jiwm4CsltPeCCpHqnBxCHKP5O20GZyq1/0=";
+        hash = "sha256-UQ8GxaabgJ3QoH6hlnWCNSsxyR73H2VdKsbsgt376k0=";
       }
     else
       throw "Unsupported host platform: ${stdenv.hostPlatform.config}";
@@ -42,28 +43,27 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf
     automake
+    cmake
   ];
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  patchPhase = ''
-    runHook prePatch
-
-    unpackFile ${bootFile}
-    mkdir -pv runtime/bin runtime/lib
-    ln -s ${llvm}/bin/llvm-config     runtime/bin/llvm-config
-    ln -s ${llvm}/lib/libCFGCodeGen.a runtime/lib/libCFGCodeGen.a
-
-    runHook postPatch
-  '';
+  dontUseCmakeConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    export INSTALLDIR=$out
-    mkdir -pv $out
-    ./build.sh
+    unpackFile ${bootFile}
+    mkdir -pv $out/bin $out/lib bin lib
+    ln -s ${llvm}/bin/llvm-config     bin/llvm-config
+    ln -s ${llvm}/bin/llvm-config     $out/bin/llvm-config
+    ln -s ${llvm}/lib/libCFGCodeGen.a lib/libCFGCodeGen.a
+    ln -s ${llvm}/lib/libCFGCodeGen.a $out/lib/libCFGCodeGen.a
+
+    ./build.sh -install $out
+
+    rm $out/bin/llvm-config $out/lib/libCFGCodeGen.a
 
     runHook postBuild
   '';
