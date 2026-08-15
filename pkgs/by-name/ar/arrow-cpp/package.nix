@@ -329,7 +329,16 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      ctestArgs=(
+        -L unittest
+        --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      )
+
+      # Match ci/scripts/cpp_test.sh to fight flakiness.
+      # https://github.com/apache/arrow/issues/40121
+      ctestArgs+=(--repeat until-pass:3)
+
+      ctest "''${ctestArgs[@]}"
 
       runHook postInstallCheck
     '';
