@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.46.3";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms264556";
     repo = "aioruckus";
     tag = "v${version}";
-    hash = "sha256-17vcYdggtoeAtGShshseBMB4PSiIOf00nRNIHOAP9Jw=";
+    hash = "sha256-tfoMjZbQ/8uzTHka//LAwUZZuPuqSmPyuYqFr2TVPxY=";
   };
 
   build-system = [
