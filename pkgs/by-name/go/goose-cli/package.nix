@@ -163,6 +163,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "goose";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      asiantuntija
       cloudripper
       thardin
       brittonr
