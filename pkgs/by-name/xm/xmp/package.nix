@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Extended module player";
     homepage = "https://xmp.sourceforge.net/";
+    changelog = "https://github.com/libxmp/xmp-cli/blob/${src.rev}/Changelog";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "xmp";
