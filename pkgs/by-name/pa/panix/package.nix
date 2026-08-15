@@ -1,12 +1,14 @@
 {
   lib,
+  pkgs,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "panix";
-  version = "0.7.0";
+  version = "0.9.1";
 
   __structuredAttrs = true;
 
@@ -14,7 +16,7 @@ buildGoModule rec {
     owner = "mihakrumpestar";
     repo = "panix";
     rev = "v${version}";
-    hash = "sha256-Nran1Kop3BXYcUFoAb97WUOOL20PqAFA4sq3N/utv2U=";
+    hash = "sha256-foGW2i4py/qzPbcnmVGYvOiOB5n1NkCIk84m8OqL9jo=";
   };
 
   subPackages = [ "cmd/panix" ];
@@ -27,10 +29,25 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  vendorHash = "sha256-S1lLVTo03NH3beLeduyyHBdPZohntCAD05E6myHIwj0=";
+  doCheck = false;
+
+  vendorHash = "sha256-q9pUwV9JGYNIDTemgu28eG2SBH2mNQ2BQO/u73f42xM=";
+
+  nativeBuildInputs =
+    pkgs.lib.optionals (pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform)
+      [
+        pkgs.installShellFiles
+      ];
+
+  postInstall = pkgs.lib.optionalString (pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform) ''
+    installShellCompletion --cmd panix \
+      --bash <($out/bin/panix completion -c bash) \
+      --fish <($out/bin/panix completion -c fish) \
+      --zsh <($out/bin/panix completion -c zsh)
+  '';
 
   meta = with lib; {
-    description = "Universal NixOS Deployment Tool";
+    description = "Universal Nix Deployment Orchestrator";
     homepage = "https://github.com/mihakrumpestar/panix";
     changelog = "https://github.com/mihakrumpestar/panix/releases/tag/v${version}";
     license = licenses.agpl3Only;
