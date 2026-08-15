@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -182,6 +183,17 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.argcomplete
     ]))
+  ];
+
+  patches = [
+    # Fix HDR corruption by reverting this commit. See:
+    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4952
+    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4967
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/a1ae71798ef1ab2e0d2f753f5c98b38b1039b056.patch";
+      hash = "sha256-J2eKhM3YEFEVmcpMq2SxSOsPeEWrJTv+UcBDO+gRC4M=";
+      revert = true;
+    })
   ];
 
   postPatch = ''
