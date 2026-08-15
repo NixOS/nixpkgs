@@ -237,8 +237,17 @@ let
         # default is 8080 but it's better to be explicit
         "ceph config set mgr mgr/dashboard/server_port 8080",
     )
-    monA.wait_for_open_port(8080)
-    monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
+
+    # The dashboard does not listen on localhost:
+    `server_addr` defaults to the wildcard address, but the dashboard module
+    # resolves that to the active mgr's own IP and binds only to it,
+    # so loopback is never bound.
+    # See https://github.com/ceph/ceph/blob/v20.2.2/src/pybind/mgr/dashboard/module.py#L213-L214
+    # Therefore address the dashboard via the mgr's IP instead of localhost.
+    dashboard = "http://${cfg.monA.ip}:8080"
+
+    monA.wait_for_open_port(8080, addr="${cfg.monA.ip}")
+    monA.wait_until_succeeds(f"curl -q --fail {dashboard}")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     # Initialize dashboard creds
@@ -251,19 +260,19 @@ let
     # Get dashboard auth token
     auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
     auth_response = json.loads(monA.succeed(
-        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' http://localhost:8080/api/auth",
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' {dashboard}/api/auth",
     ))
     token = auth_response["token"]
 
     # Check cluster health via dashboard API
     health = json.loads(monA.succeed(
-        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' http://localhost:8080/api/health/minimal",
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/health/minimal",
     ))
     assert health["health"]["status"] == "HEALTH_OK"
 
     # List daemons via REST API
     rgw_daemons = json.loads(monA.succeed(
-        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' http://localhost:8080/api/rgw/daemon",
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/rgw/daemon",
     ))
     assert rgw_daemons[0]["id"] == "a"
   '';
