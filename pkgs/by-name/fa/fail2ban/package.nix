@@ -13,6 +13,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "1.1.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
