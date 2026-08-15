@@ -1,7 +1,9 @@
 {
   lib,
+  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
+  installShellFiles,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -24,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools
     setuptools-scm
   ];
@@ -37,6 +40,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "shtab" ];
+
+  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    installShellCompletion --cmd shtab \
+        --bash <("$out/bin/shtab" --print-own-completion bash) \
+        --fish <("$out/bin/shtab" --print-own-completion fish) \
+        --zsh <("$out/bin/shtab" --print-own-completion zsh)
+  '';
 
   meta = {
     description = "Automagic shell tab completion for Python CLI applications";
