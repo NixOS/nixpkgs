@@ -303,7 +303,8 @@ mapAliases {
   androidndkPkgs_26 = throw "androidndkPkgs_26 has been removed, as it is EOL"; # Added 2025-08-09
   andromeda-gtk-theme = throw "'andromeda-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   anew = throw "'anew' has been removed, as it has been unmaintained upstream since March 2022"; # Added 2026-01-01
-  anime-downloader = throw "'anime-downloader' has been removed as it was broken and unmaintained. Consider using 'animdl' instead"; # Added 2026-05-03
+  animdl = throw "'animdl' has been removed as it was unmaintained upstream since June 2024 and its scraper providers no longer work"; # Added 2026-08-16
+  anime-downloader = throw "'anime-downloader' has been removed as it was broken and unmaintained"; # Added 2026-05-03
   anonymousPro = anonymous-pro-fonts; # Added 2026-02-08
   ansible-later = throw "ansible-later has been discontinued. The author recommends switching to ansible-lint"; # Added 2025-08-24
   ansible_2_16 = throw "ansible_2_16 has been removed, as it is EOL"; # Added 2025-11-10
