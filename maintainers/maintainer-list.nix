@@ -7597,12 +7597,6 @@
     githubId = 81854406;
     name = "Chew Cheng Hong";
   };
-  drew-dirac = {
-    email = "drew@diracinc.com";
-    github = "drew-dirac";
-    githubId = 187309685;
-    name = "Drew Council";
-  };
   drperceptron = {
     github = "drperceptron";
     githubId = 92106371;
@@ -17001,6 +16995,17 @@
     githubId = 1208273;
     matrix = "@lux:ontheblueplanet.com";
     name = "Lux";
+  };
+  luytan = {
+    email = "luytan@khora.me";
+    github = "luytan";
+    githubId = 221864923;
+    name = "Luytan";
+    keys = [
+      {
+        fingerprint = "E7B7 215C 0DFB 3D8C 17EE  95E0 E0AD 187A 4F2B 41EF";
+      }
+    ];
   };
   luz = {
     email = "luz666@daum.net";

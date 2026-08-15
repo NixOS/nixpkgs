@@ -3,6 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+
+  # full SMART attribute tables. Else, fallback to basic verified/failing flag from diskutil
+  withSmartmontools ? false,
+  smartmontools,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,16 +26,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ versionCheckHook ];
 
-  doInstallCheck = true;
+  buildInputs = lib.optionals withSmartmontools [ smartmontools ];
 
-  versionCheckProgramArg = [ "-V" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Single-host, read-only disk diagnostics TUI";
-    homepage = "https://github.com/matthart1983/diskwatch";
+    homepage = "https://www.netwatchlabs.com/labs/diskwatch";
     changelog = "https://github.com/matthart1983/diskwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      tomasrivera
+    ];
     mainProgram = "diskwatch";
   };
 })
