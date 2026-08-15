@@ -11820,6 +11820,8 @@ self: super: with self; {
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
 
+  nemo-relay = callPackage ../development/python-modules/nemo-relay { };
+
   nemosis = callPackage ../development/python-modules/nemosis { };
 
   nengo = callPackage ../development/python-modules/nengo { };
