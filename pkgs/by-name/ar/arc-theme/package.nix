@@ -47,13 +47,25 @@ stdenv.mkDerivation {
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   mesonFlags = [
-    # Exclude gtk2 since it's no longer supported
-    "-Dthemes=cinnamon,gnome-shell,gtk3,gtk4,metacity,plank,unity,xfwm"
-    # "-Dvariants=light,darker,dark,lighter"
-    "-Dcinnamon_version=${cinnamon.version}"
-    "-Dgnome_shell_version=${gnome-shell.version}"
+    (lib.mesonOption "themes" (
+      lib.concatStringsSep "," [
+        "cinnamon"
+        "gnome-shell"
+        # "gtk2" (no longer supported)
+        "gtk3"
+        "gtk4"
+        "metacity"
+        "plank"
+        "unity"
+        "xfwm"
+      ]
+    ))
+
+    (lib.mesonOption "cinnamon_version" cinnamon.version)
+    (lib.mesonOption "gnome_shell_version" gnome-shell.version)
+
     # You will need to patch gdm to make use of this.
-    "-Dgnome_shell_gresource=true"
+    (lib.mesonBool "gnome_shell_gresource" true)
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
