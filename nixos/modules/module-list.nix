@@ -350,6 +350,7 @@
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
+  ./programs/upki.nix
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/virt-manager.nix
@@ -683,6 +684,7 @@
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
   ./services/hardware/buffyboard.nix
+  ./services/hardware/cardwired.nix
   ./services/hardware/ddccontrol.nix
   ./services/hardware/deepcool-digital-linux.nix
   ./services/hardware/dell-bios-fan-control.nix

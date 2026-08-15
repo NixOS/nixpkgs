@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "dummylabs";
   domain = "watchman";
-  version = "0.8.3";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "dummylabs";
     repo = "thewatchman";
     tag = "v${version}";
-    hash = "sha256-5BXIKh8uPKuxsLbxu0fUbuCR2LYOXk1HpOvrqehg0u0=";
+    hash = "sha256-y9Qug+ftJDZXUHCsmx+/KqauczoHPPHiCtnnngdJBu8=";
   };
 
   ignoreVersionRequirement = [

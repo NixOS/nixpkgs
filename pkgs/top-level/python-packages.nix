@@ -2153,6 +2153,8 @@ self: super: with self; {
 
   bagit = callPackage ../development/python-modules/bagit { };
 
+  bahttext = callPackage ../development/python-modules/bahttext { };
+
   baidu-aip = callPackage ../development/python-modules/baidu-aip { };
 
   baize = callPackage ../development/python-modules/baize { };
@@ -6398,6 +6400,8 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
+  formulas = callPackage ../development/python-modules/formulas { };
+
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
   fortune = callPackage ../development/python-modules/fortune { };
@@ -7811,6 +7815,198 @@ self: super: with self; {
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
+  inherit (callPackage ../development/python-modules/huaweicloudsdk { })
+    huaweicloudsdkaad
+    huaweicloudsdkagentarts
+    huaweicloudsdkagentidentity
+    huaweicloudsdkantiddos
+    huaweicloudsdkaom
+    huaweicloudsdkaos
+    huaweicloudsdkapig
+    huaweicloudsdkapm
+    huaweicloudsdkas
+    huaweicloudsdkasm
+    huaweicloudsdkastrozero
+    huaweicloudsdkbcc
+    huaweicloudsdkbcs
+    huaweicloudsdkbms
+    huaweicloudsdkbss
+    huaweicloudsdkbssintl
+    huaweicloudsdkcae
+    huaweicloudsdkcampusgo
+    huaweicloudsdkcbh
+    huaweicloudsdkcbr
+    huaweicloudsdkcbs
+    huaweicloudsdkcc
+    huaweicloudsdkcce
+    huaweicloudsdkccm
+    huaweicloudsdkcdm
+    huaweicloudsdkcdn
+    huaweicloudsdkces
+    huaweicloudsdkcfw
+    huaweicloudsdkclassroom
+    huaweicloudsdkclouddc
+    huaweicloudsdkcloudide
+    huaweicloudsdkcloudpond
+    huaweicloudsdkcloudrtc
+    huaweicloudsdkcloudtable
+    huaweicloudsdkcloudtest
+    huaweicloudsdkcoc
+    huaweicloudsdkcodeartsartifact
+    huaweicloudsdkcodeartsbuild
+    huaweicloudsdkcodeartscheck
+    huaweicloudsdkcodeartsdeploy
+    huaweicloudsdkcodeartsgovernance
+    huaweicloudsdkcodeartside
+    huaweicloudsdkcodeartsinspector
+    huaweicloudsdkcodeartspipeline
+    huaweicloudsdkcodeartsrepo
+    huaweicloudsdkcodecraft
+    huaweicloudsdkconfig
+    huaweicloudsdkcpcs
+    huaweicloudsdkcph
+    huaweicloudsdkcpts
+    huaweicloudsdkcse
+    huaweicloudsdkcsms
+    huaweicloudsdkcss
+    huaweicloudsdkcts
+    huaweicloudsdkdas
+    huaweicloudsdkdataartsfabric
+    huaweicloudsdkdataartsfabricep
+    huaweicloudsdkdataartsstudio
+    huaweicloudsdkdbss
+    huaweicloudsdkdc
+    huaweicloudsdkdcc
+    huaweicloudsdkdcos
+    huaweicloudsdkdcs
+    huaweicloudsdkddm
+    huaweicloudsdkdds
+    huaweicloudsdkdeh
+    huaweicloudsdkdevstar
+    huaweicloudsdkdgc
+    huaweicloudsdkdis
+    huaweicloudsdkdlf
+    huaweicloudsdkdli
+    huaweicloudsdkdns
+    huaweicloudsdkdris
+    huaweicloudsdkdrs
+    huaweicloudsdkdsc
+    huaweicloudsdkdwr
+    huaweicloudsdkdws
+    huaweicloudsdkec
+    huaweicloudsdkecs
+    huaweicloudsdkedgesec
+    huaweicloudsdkeg
+    huaweicloudsdkeihealth
+    huaweicloudsdkeip
+    huaweicloudsdkelb
+    huaweicloudsdkeps
+    huaweicloudsdker
+    huaweicloudsdkesw
+    huaweicloudsdkevs
+    huaweicloudsdkfrs
+    huaweicloudsdkfunctiongraph
+    huaweicloudsdkga
+    huaweicloudsdkgaussdb
+    huaweicloudsdkgaussdbfornosql
+    huaweicloudsdkgaussdbforopengauss
+    huaweicloudsdkgeip
+    huaweicloudsdkges
+    huaweicloudsdkgsl
+    huaweicloudsdkhilens
+    huaweicloudsdkhss
+    huaweicloudsdkiam
+    huaweicloudsdkiamaccessanalyzer
+    huaweicloudsdkidentitycenter
+    huaweicloudsdkidentitycenteroidc
+    huaweicloudsdkidentitycenterportalapi
+    huaweicloudsdkidentitycenterscim
+    huaweicloudsdkidentitycenterstore
+    huaweicloudsdkidme
+    huaweicloudsdkidmeclassicapi
+    huaweicloudsdkiec
+    huaweicloudsdkief
+    huaweicloudsdkimage
+    huaweicloudsdkimagesearch
+    huaweicloudsdkims
+    huaweicloudsdkiotanalytics
+    huaweicloudsdkiotda
+    huaweicloudsdkiotdm
+    huaweicloudsdkiotedge
+    huaweicloudsdkivs
+    huaweicloudsdkkafka
+    huaweicloudsdkkms
+    huaweicloudsdkkoomessage
+    huaweicloudsdkkps
+    huaweicloudsdkkvs
+    huaweicloudsdklakeformation
+    huaweicloudsdklive
+    huaweicloudsdklts
+    huaweicloudsdkmapds
+    huaweicloudsdkmas
+    huaweicloudsdkmastudio
+    huaweicloudsdkmeeting
+    huaweicloudsdkmetastudio
+    huaweicloudsdkmodelarts
+    huaweicloudsdkmoderation
+    huaweicloudsdkmpc
+    huaweicloudsdkmrs
+    huaweicloudsdkmsgsms
+    huaweicloudsdkmssi
+    huaweicloudsdknat
+    huaweicloudsdknlp
+    huaweicloudsdkobs
+    huaweicloudsdkocr
+    huaweicloudsdkoctopus
+    huaweicloudsdkoms
+    huaweicloudsdkoptverse
+    huaweicloudsdkorganizations
+    huaweicloudsdkorgid
+    huaweicloudsdkoroas
+    huaweicloudsdkosm
+    huaweicloudsdkpangulargemodels
+    huaweicloudsdkprojectman
+    huaweicloudsdkrabbitmq
+    huaweicloudsdkram
+    huaweicloudsdkrc
+    huaweicloudsdkrds
+    huaweicloudsdkres
+    huaweicloudsdkrfs
+    huaweicloudsdkrgc
+    huaweicloudsdkrms
+    huaweicloudsdkrocketmq
+    huaweicloudsdkroma
+    huaweicloudsdksa
+    huaweicloudsdkscm
+    huaweicloudsdksdrs
+    huaweicloudsdksecmaster
+    huaweicloudsdkservicestage
+    huaweicloudsdksfsturbo
+    huaweicloudsdksis
+    huaweicloudsdksmn
+    huaweicloudsdksmnglobal
+    huaweicloudsdksms
+    huaweicloudsdksmsapi
+    huaweicloudsdksts
+    huaweicloudsdkswr
+    huaweicloudsdktics
+    huaweicloudsdktms
+    huaweicloudsdkucs
+    huaweicloudsdkugo
+    huaweicloudsdkvas
+    huaweicloudsdkvcm
+    huaweicloudsdkversatile
+    huaweicloudsdkvod
+    huaweicloudsdkvpc
+    huaweicloudsdkvpcep
+    huaweicloudsdkvpn
+    huaweicloudsdkwaf
+    huaweicloudsdkworkspace
+    huaweicloudsdkworkspaceapp
+    ;
+
+  huaweicloudsdkcore = callPackage ../development/python-modules/huaweicloudsdkcore { };
+
   hueble = callPackage ../development/python-modules/hueble { };
 
   huepy = callPackage ../development/python-modules/huepy { };
@@ -9069,6 +9265,8 @@ self: super: with self; {
 
   langchain-protocol = callPackage ../development/python-modules/langchain-protocol { };
 
+  langchain-sail = callPackage ../development/python-modules/langchain-sail { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
@@ -10240,7 +10438,12 @@ self: super: with self; {
 
   material-color-utilities = callPackage ../development/python-modules/material-color-utilities { };
 
-  materialx = callPackage ../development/python-modules/materialx { };
+  materialx = toPythonModule (
+    pkgs.materialx.override {
+      python3Packages = self;
+      pythonSupport = true;
+    }
+  );
 
   materialyoucolor = callPackage ../development/python-modules/materialyoucolor { };
 
@@ -15019,6 +15222,8 @@ self: super: with self; {
 
   pyld = callPackage ../development/python-modules/pyld { };
 
+  pyldapsearch = callPackage ../development/python-modules/pyldapsearch { };
+
   pyldavis = callPackage ../development/python-modules/pyldavis { };
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
@@ -19362,6 +19567,8 @@ self: super: with self; {
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp { };
 
+  sphinxcontrib-restbuilder = callPackage ../development/python-modules/sphinxcontrib-restbuilder { };
+
   sphinxcontrib-seqdiag = callPackage ../development/python-modules/sphinxcontrib-seqdiag { };
 
   sphinxcontrib-serializinghtml =
@@ -19612,6 +19819,8 @@ self: super: with self; {
   stanio = callPackage ../development/python-modules/stanio { };
 
   stanza = callPackage ../development/python-modules/stanza { };
+
+  starfile = callPackage ../development/python-modules/starfile { };
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 

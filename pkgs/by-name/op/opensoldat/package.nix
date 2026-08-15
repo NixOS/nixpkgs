@@ -17,9 +17,9 @@
 }:
 
 let
-  base = stdenv.mkDerivation rec {
+  base = stdenv.mkDerivation (finalAttrs: {
     pname = "opensoldat-base";
-    version = "unstable-2025-10-16";
+    version = "0.4-unstable-2025-10-15";
 
     src = fetchFromGitHub {
       name = "base";
@@ -44,15 +44,15 @@ let
       description = "Opensoldat's base game content";
       license = lib.licenses.cc-by-40;
       platforms = lib.platforms.all;
-      inherit (src.meta) homepage;
+      inherit (finalAttrs.src.meta) homepage;
     };
-  };
+  });
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensoldat";
-  version = "unstable-2025-10-21";
+  version = "1.8-unstable-2025-10-16";
 
   src = fetchFromGitHub {
     name = "opensoldat";
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
       lib.licenses.mit
       base.meta.license
     ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = [
       "x86_64-linux"
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     # aarch64 and arm support should be possible:
     # https://github.com/opensoldat/opensoldat/issues/45
   };
-}
+})

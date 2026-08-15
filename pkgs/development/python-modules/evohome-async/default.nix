@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6J61wNwNg87dFFxvvh0aFNJp3g9BzAcOmwTIZFOBvkM=";
+    hash = "sha256-1wWUYhDj8lO8q8YF251z9uQDQTozTf5kIUjrNLrNdQA=";
   };
 
   build-system = [

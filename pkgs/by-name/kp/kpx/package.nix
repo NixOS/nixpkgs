@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kpx";
-  version = "1.13.0";
+  version = "1.13.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "momiji";
     repo = "kpx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D5SfWE/58L9G2miwx+hmcGCTCq6kHMOEnZ/4z0bMVzs=";
+    hash = "sha256-vsvSux1Gc9DvFnSPX06bfGuNc6Vj005pieQcS47qXDg=";
   };
 
   vendorHash = null;

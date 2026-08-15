@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "linuxpy";
-  version = "0.23.0";
+  version = "0.24.0";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-q3gPUJL8M1krSjcPZokmMNxE+g1WLWFJYP4g6Q5/APc=";
+    sha256 = "sha256-K0RDTSjUklfoWaSDAmeiWqS1Gx0in5X3nQJa5/Gl0w4=";
   };
 
   pythonImportsCheck = [ "linuxpy" ];

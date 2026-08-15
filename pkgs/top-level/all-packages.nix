@@ -1641,8 +1641,6 @@ with pkgs;
 
   kaggle = with python3Packages; toPythonApplication kaggle;
 
-  materialx = with python3Packages; toPythonApplication materialx;
-
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
   # example of an error which this fixes
@@ -2608,10 +2606,6 @@ with pkgs;
 
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
 
-  openmvs = callPackage ../applications/science/misc/openmvs {
-    inherit (llvmPackages) openmp;
-  };
-
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";
@@ -3217,11 +3211,9 @@ with pkgs;
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
-  flutterPackages-source = recurseIntoAttrs (
-    callPackage ../development/compilers/flutter { useNixpkgsEngine = true; }
-  );
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter347 = flutterPackages.v3_47;
   flutter344 = flutterPackages.v3_44;
   flutter341 = flutterPackages.v3_41;
   flutter338 = flutterPackages.v3_38;
@@ -10069,14 +10061,6 @@ with pkgs;
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 
-  expidus = recurseIntoAttrs (
-    callPackages ../desktops/expidus {
-      # Use the Nix built Flutter Engine for testing.
-      # Also needed when we eventually package Genesis Shell.
-      flutterPackages = flutterPackages-source;
-    }
-  );
-
   gnome = recurseIntoAttrs (callPackage ../desktops/gnome { });
 
   inherit (callPackage ../desktops/gnome/extensions { })
@@ -10446,14 +10430,6 @@ with pkgs;
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   ### SCIENCE / PHYSICS
-
-  hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
-    python = null;
-  };
-
-  pythia = callPackage ../development/libraries/physics/pythia {
-    hepmc = hepmc2;
-  };
 
   yoda-with-root = lowPrio (
     yoda.override {
