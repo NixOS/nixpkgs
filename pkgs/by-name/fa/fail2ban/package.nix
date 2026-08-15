@@ -11,12 +11,15 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fail2ban";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
   };
 
@@ -35,16 +38,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     (builtins.any lib.id)
   ]) [ "doc" ];
 
+  build-system = [ python3.pkgs.setuptools ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  pythonPath =
+  dependencies =
     with python3.pkgs;
-    lib.optionals stdenv.hostPlatform.isLinux [
+    [ distutils ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       systemd-python
       pyinotify
-
-      # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
-      setuptools
     ];
 
   preConfigure = ''
@@ -109,6 +112,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
+    changelog = "https://github.com/fail2ban/fail2ban/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       Deric-W
