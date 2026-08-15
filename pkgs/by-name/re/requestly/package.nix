@@ -6,11 +6,11 @@
 
 let
   pname = "requestly";
-  version = "1.6.0";
+  version = "26.6.29";
 
   src = fetchurl {
     url = "https://github.com/requestly/requestly-desktop-app/releases/download/v${version}/Requestly-${version}.AppImage";
-    hash = "sha256-aUhgn6QeCHcs3yi1KKzw+yOUucbTOeNqObTYZTkKqrs=";
+    hash = "sha256-TnHEt5CCGNb75KtDEzuDbkqba6V5Kqkl1JkPfHT6dPI=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

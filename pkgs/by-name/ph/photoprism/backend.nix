@@ -8,6 +8,7 @@
   pkg-config,
   vips,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
@@ -48,7 +49,7 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-mF07Lz61IIvUi4SLIMkMlKMH9zm6Zrp/KAdutl+mUzI=";
+  vendorHash = "sha256-coFrVxlriIlHe06BrzuyuB297pCLEMZnGiAgActEIcM=";
 
   subPackages = [ "cmd/photoprism" ];
 
@@ -56,6 +57,8 @@ buildGoModule {
   CGO_CFLAGS = "-Wno-return-local-addr -I${libtensorflow}/include";
 
   CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://photoprism.app";

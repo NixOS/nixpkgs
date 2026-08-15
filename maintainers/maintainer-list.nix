@@ -10120,6 +10120,11 @@
     name = "Kirill Samoylenkov";
     keys = [ { fingerprint = "955B 97C5 78A3 DF03 D818  25EB 8E40 5DD2 CF84 CCE0"; } ];
   };
+  gefla = {
+    name = "Gerd Flaig";
+    github = "gefla";
+    githubId = 56790;
+  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";

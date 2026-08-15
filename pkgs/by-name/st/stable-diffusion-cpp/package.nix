@@ -41,7 +41,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-797-5ef4a75";
+  version = "master-820-de298c2";
 
   outputs = [
     "out"
@@ -51,8 +51,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "master-797-5ef4a75";
-    hash = "sha256-Bfft6ZqEK1+U6SoEZNKorPDNVDQNPQnt7kb+hQj6qbQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-pUrTZSVWGJLwTk/I8t6xAjB08PXuedAnPfrh1hDXV5A=";
     fetchSubmodules = true;
   };
 
@@ -121,6 +121,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       adriangl
+      jk
     ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;

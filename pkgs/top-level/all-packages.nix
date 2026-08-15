@@ -1895,28 +1895,6 @@ with pkgs;
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
 
-  curlFull = curl.override {
-    ldapSupport = true;
-    gsaslSupport = true;
-    rtmpSupport = true;
-    pslSupport = true;
-    websocketSupport = true;
-  };
-
-  curl = curlMinimal.override {
-    idnSupport = true;
-    pslSupport = true;
-    zstdSupport = true;
-    http3Support = true;
-    brotliSupport = true;
-  };
-
-  curlWithGnuTls = curl.override {
-    gnutlsSupport = true;
-    opensslSupport = false;
-    ngtcp2 = ngtcp2-gnutls;
-  };
-
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   inherit (callPackages ../applications/networking/p2p/deluge { })
