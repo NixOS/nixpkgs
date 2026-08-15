@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromCodeberg,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,8 +27,10 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Stealth coffee-break roguelike game";
