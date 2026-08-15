@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Parsers for ONVIF events";
     homepage = "https://github.com/openvideolibs/onvif-parsers";
-    changelog = "https://github.com/openvideolibs/onvif-parsers/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/openvideolibs/onvif-parsers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
