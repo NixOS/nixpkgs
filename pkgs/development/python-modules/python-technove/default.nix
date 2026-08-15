@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-technove";
   version = "2.1.2";
   pyproject = true;
@@ -23,15 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Hbwrfib+ugjpYnVCuZZfbr+9eBeLN4q7WE5G2xGD0nk=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -53,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interact with TechnoVE local device API";
     homepage = "https://github.com/Moustachauve/pytechnove";
-    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${src.tag}";
+    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
