@@ -4,9 +4,8 @@
   fetchFromGitLab,
   portaudio,
   boost,
-  ganv,
-  gtkmm2,
   libjack2,
+  libsigcxx,
   lilv,
   pkg-config,
   python3,
@@ -39,9 +38,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    ganv
-    gtkmm2
     libjack2
+    libsigcxx
     lilv
     portaudio
     raul
@@ -52,8 +50,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  # lv2specgen.py is not packaged in lv2 but required to build docs
-  mesonFlags = [ "-Ddocs=disabled" ];
+  mesonFlags = [
+    # lv2specgen.py is not packaged in lv2 but required to build docs
+    (lib.mesonEnable "docs" false)
+    # Requires the deprecated gtk2 via ganv and gtkmm2
+    (lib.mesonEnable "gui" false)
+  ];
 
   pythonPath = [
     python3
@@ -62,7 +64,6 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
-    wrapProgram "$out/bin/ingen" --set INGEN_UI_PATH "$out/share/ingen/ingen_gui.ui"
   '';
 
   meta = {

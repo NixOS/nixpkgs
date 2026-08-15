@@ -8,7 +8,7 @@
   rustc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-c";
   version = "1.9.0"; # nixpkgs-update: no auto update
 
@@ -22,13 +22,22 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
+    inherit (finalAttrs) src pname version;
     hash = "sha256-7xWu9wgZqDzd60buMnF9B6Y5LRkG5C2JWiG7VwgSCvU=";
   };
 
   outputs = [
     "out"
     "dev"
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    # Those features are used by
+    # https://github.com/ros2/rmw_zenoh/blob/rolling/zenoh_cpp_vendor/CMakeLists.txt
+    (lib.cmakeBool "ZENOHC_BUILD_WITH_SHARED_MEMORY" true)
+    (lib.cmakeBool "ZENOHC_BUILD_WITH_UNSTABLE_API" true)
+    (lib.cmakeFeature "ZENOHC_CARGO_FLAGS" "--features=zenoh/transport_serial")
   ];
 
   nativeBuildInputs = [
@@ -38,10 +47,16 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
+  # ref. https://github.com/eclipse-zenoh/zenoh-c/pull/1314
   postInstall = ''
     substituteInPlace $out/lib/pkgconfig/zenohc.pc \
       --replace-fail "\''${prefix}/" ""
+    substituteInPlace $out/lib/cmake/zenohc/zenohcConfig.cmake \
+      --replace-fail "''${PACKAGE_PREFIX_DIR}" "$out"
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "C API for zenoh";
@@ -52,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

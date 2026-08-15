@@ -281,6 +281,7 @@ mapAliases {
   afterstep = throw "'afterstep' has been removed as it was unmaintained upstream and depends on the deprecated GTK2 engine."; # Added 2026-07-23
   afuse = throw "'afuse' has been removed as it is unmaintained upstream, and depends on fuse2, which is deprecated"; # Added 2026-05-05
   agrep = throw "'agrep' has been removed due to lack of upstream maintenance. Consider using 'tre' or 'ugrep' instead."; # Added 2025-12-28
+  ahoviewer = throw "'ahoviewer' has been removed as it was unmaintained upstream and the packaged version depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   akkoma-emoji = throw "'akkoma-emoji' has been renamed to/replaced by 'blobs_gg'"; # Converted to throw 2025-10-27
   akkoma-frontends.admin-fe = throw "'akkoma-frontends.admin-fe' has been renamed to/replaced by 'akkoma-admin-fe'"; # Converted to throw 2025-10-27
   akkoma-frontends.akkoma-fe = throw "'akkoma-frontends.akkoma-fe' has been renamed to/replaced by 'akkoma-fe'"; # Converted to throw 2025-10-27
@@ -767,6 +768,7 @@ mapAliases {
   enyo-doom = throw "'enyo-doom' has been renamed to/replaced by 'enyo-launcher'"; # Converted to throw 2025-10-27
   epapirus-icon-theme = throw "'epapirus-icon-theme' has been removed because 'papirus-icon-theme' no longer supports building with elementaryOS icon support"; # Added 2025-06-15
   epick = throw "'epick' has been removed as it has been unmaintained upstream since November 2022"; # Added 2026-02-07
+  eq10q = throw "'eq10q' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   equilux-theme = throw "'equilux-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
@@ -917,6 +919,7 @@ mapAliases {
   gamecube-tools = throw "gamecube-tools was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   gamehub = throw "'gamehub' has been removed as it was archived upstream and depended on webkitgtk 4.0"; # Added 2026-06-07
   gandi-cli = throw "'gandi-cli' has been removed as it is unmaintained upstream"; # Added 2026-01-11
+  ganv = throw "'ganv' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   garage-webui = throw "'garage-webui' has been removed as it is unmaintained upstream"; # Added 2026-06-23
   garage_0_8 = throw "'garage_0_8' has been removed as it is unmaintained upstream"; # Added 2025-06-23
   garage_0_8_7 = throw "'garage_0_8_7' has been removed as it is unmaintained upstream"; # Added 2025-06-23
@@ -944,6 +947,8 @@ mapAliases {
   gencfsm = throw "'gnecfsm' has been removed as it depends on encfs, which depends on the deprecated fuse2"; # Added 2026-05-05
   gensgs = throw "gensgs has been removed as it was unmaintained, abandoned upstream since 2009 and relied on gtk2"; # Added 2025-10-29
   geos_3_9 = throw "geos_3_9 has been removed from nixpkgs. Please use a more recent 'geos' instead."; # Added 2025-09-21
+  gepetto-viewer = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
+  gepetto-viewer-corba = throw "'gepetto-viewer-corba' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   gfie = throw "'gfie' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   gfn-electron = throw "gfn-electron has been removed from Nixpkgs as it's abandoned upstream"; # Added 2025-11-05
   gfortran9 = throw "gfortran9 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
@@ -1073,6 +1078,7 @@ mapAliases {
   gtkgnutella = gtk-gnutella; # Added 2026-05-21
   gtkimageview = throw "'gtkimageview' has been removed, as it depended on GTK 2."; # Added 2026-08-10
   gtklp = throw "'gtklp' has been removed, as it depended on GTK 2. Consider using 'system-config-printer' instead."; # Added 2026-05-22
+  gtkmm2 = throw "'gtkmm2' has been removed as it depended on the deprecated gtk2. Consider using 'gtkmm3' or 'gtkmm4' instead."; # Added 2026-08-09
   gtkradiant = throw "'gtkradiant' has been removed, as it relies on gtk2"; # Added 2026-06-18
   gtkspell2 = throw "'gtkspell2' has been removed as it depended on the deprecated GTK2 engine. Consider using 'gtkspell3' instead"; # Added 2026-07-23
   gtuber = throw "'gtuber' has been removed due to being discontinued by upstream."; # Added 2025-12-12
@@ -1536,6 +1542,7 @@ mapAliases {
   luminanceHDR = throw "'luminanceHDR' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
   lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lunatic = throw "'lunatic' has been removed, as it is unmaintained"; # Added 2026-05-04
+  lv2-cpp-tools = throw "'lv2-cpp-tools' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   lxappearance-gtk2 = throw "'lxappearance-gtk2' was removed because it depended on the deprecated GTK2 engine. Consider using the GTK3-based 'lxappearance' instead."; # Added 2026-07-22
   lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
@@ -1763,6 +1770,7 @@ mapAliases {
   nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
   nip2 = throw "'nip2' has been removed due to lack of maintenance and relying on gtk2.";
+  nitrogen = throw "'nitrogen' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
@@ -1885,6 +1893,7 @@ mapAliases {
   orogene = throw "'orogene' uses a wasm-specific fork of async-tar that is vulnerable to CVE-2025-62518, which is not supported by its upstream"; # Added 2025-10-24
   ortp = throw "'ortp' has been moved to 'linphonePackages.ortp'"; # Added 2025-09-20
   OSCAR = throw "'OSCAR' has been renamed to/replaced by 'oscar'"; # Converted to throw 2025-10-27
+  osgqt = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-08-15
   osl = openshadinglanguage; # Added 2026-01-04
   osm2xmap = throw "osm2xmap has been removed, as it is unmaintained upstream and depended on old dependencies with broken builds"; # Added 2025-09-16
   osmtogeojson = throw "'osmtogeojson' has been removed as it was unmaintained upstream"; # Added 2026-02-22
@@ -1904,9 +1913,11 @@ mapAliases {
   paperless-ng = throw "'paperless-ng' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2025-10-27
   parcellite = throw "'parcellite' was remove due to lack of maintenance and relying on gtk2"; # Added 2025-10-03
   pascube = throw "pascube has been merged into goverlay"; # added 2026-06-29
+  patchage = throw "'patchage' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   patchelfStable = throw "'patchelfStable' has been renamed to/replaced by 'patchelf'"; # Converted to throw 2025-10-27
   path-of-building = lib.warnOnInstantiate "'path-of-building' has been replaced by 'rusty-path-of-building'" rusty-path-of-building; # Added 2025-10-30
   paup = throw "'paup' has been renamed to/replaced by 'paup-cli'"; # Converted to throw 2025-10-27
+  pcb2gcode = throw "'pcb2gcode' has been removed as it depended on the deprecated gtk2 via gerbv"; # Added 2026-08-09
   pcb = throw "'pcb' has been removed as it is unmaintained upstream."; # Added 2026-07-26
   pcmanx-gtk2 = throw "'pcmanx-gtk2' has been removed has gtk2 has reach end of life"; # Added 2026-03-19
   pcmciaUtils = warnAlias "'pcmciaUtils' has been renamed to 'pcmciautils'" pcmciautils; # Added 2026-02-12
@@ -2496,6 +2507,7 @@ mapAliases {
   util-linuxCurses = throw "'util-linuxCurses' has been renamed to/replaced by 'util-linux'"; # Converted to throw 2025-10-27
   utillinux = warnAlias "'utillinux' has been renamed to/replaced by 'util-linux'" util-linux; # Converted to warning 2025-10-28
   utilmacros = util-macros; # Added 2025-02-04
+  utsushi = throw "'utsushi' has been removed as it was archived upstream and depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   vaapiIntel = throw "'vaapiIntel' has been renamed to/replaced by 'intel-vaapi-driver'"; # Converted to throw 2025-10-27
   vaapiVdpau = throw "'vaapiVdpau' has been renamed to/replaced by 'libva-vdpau-driver'"; # Converted to throw 2025-10-27
   vacuum = throw "'vacuum' has been removed as upstream Vacuum-IM has been unmaintained since December 2021"; # Added 2026-04-26
@@ -2538,6 +2550,7 @@ mapAliases {
   vkdt-wayland = throw "'vkdt-wayland' has been renamed to/replaced by 'vkdt'"; # Converted to throw 2025-10-27
   vmfs-tools = throw "'vmfs-tools' has been removed as it depends on unsupported fuse2 and is unmaintained upstream"; # Added 2026-06-07
   vncdo = warnAlias "'vncdo' has been renamed to 'vncdotool'" vncdotool; # Added 2026-06-30
+  vocproc = throw "'vocproc' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   vokoscreen = throw "'vokoscreen' has been replaced by vokoscreen-ng"; # Added 2025-10-21
   volk_2 = throw "'volk_2' has been removed after not being used by any package for a long time"; # Added 2025-10-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream. Consider using 'rumno' instead."; # Added 2024-12-04
