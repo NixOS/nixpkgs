@@ -3,6 +3,9 @@
   lib,
   fetchFromGitHub,
   control,
+  gnuplot,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -20,6 +23,15 @@ buildOctavePackage rec {
   requiredOctavePackages = [
     control
   ];
+
+  nativeOctavePkgTestInputs = [
+    gnuplot
+    writableTmpDirAsHomeHook
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/signal/";
