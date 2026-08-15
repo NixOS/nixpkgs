@@ -91,6 +91,9 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
+  # the wheel declares setuptools<82, which torch does not import at runtime
+  pythonRelaxDeps = [ "setuptools" ];
+
   pythonRemoveDeps = [
     "cuda-toolkit"
     "nvidia-cublas"
