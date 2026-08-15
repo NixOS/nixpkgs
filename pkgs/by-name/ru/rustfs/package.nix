@@ -10,13 +10,15 @@
   protobuf,
   cacert,
   tzdata,
+  nix-update,
   nixosTests,
+  writeShellApplication,
 }:
 
 let
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.20";
+    version = "0.1.21";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -24,13 +26,13 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-EUyjYPDkHmD8RRmusFnWsWiKbRRSzZ0c4pbMr+2PJdE=";
+      hash = "sha256-0C8wVKscxR5t7cL/3likG6FJ80PX3VKkp5A+5S+rdLA=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 4;
-      hash = "sha256-ox4hKm3f4QVpxfx4g0uNDRY7w6O3L3AVz2nmHhs8UHM=";
+      hash = "sha256-wfaUMWTa8eFkzY/wCD5o7+G2OiSTWCqm+py3sgqDI04=";
     };
 
     nativeBuildInputs = [
@@ -50,29 +52,31 @@ let
     '';
   });
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.0-rc.1";
+  version = "1.0.0-rc.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
-    tag = version;
-    hash = "sha256-iVAIsq/SAabdBjnNYLF7oQRagUILRN5HEUumnVqp1CM=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZQIQ+ov9GVoeVZsQ8fMiJ9Cz62TU+Vo7TLkIQF4JzPU=";
   };
 
   postPatch = ''
     rm -rf ./rustfs/static
-    cp -rL ${console} ./rustfs/static
+    cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-W6+6Ypw9WTbprQbDVbhdvB+hEW71oPOHYQV5bZKtJhc=";
+  cargoHash = "sha256-UM0Fewx87npHYCZU5K/MQ5FofoojuAaQ7g/dEIF3KF4=";
 
   nativeBuildInputs = [
     protobuf
     cacert
   ];
+
+  inherit console;
 
   env = {
     RUSTFLAGS = "--cfg tokio_unstable";
@@ -90,15 +94,27 @@ rustPlatform.buildRustPackage rec {
   # upstream uses nexttest to run tests in separate processes
   useNextest = true;
 
-  passthru.tests = {
-    inherit (nixosTests) rustfs;
+  passthru = {
+    tests = {
+      inherit (nixosTests) rustfs;
+    };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "rustfs-update-script";
+      runtimeInputs = [ nix-update ];
+      text = ''
+        nix-update rustfs
+        nix-update rustfs.console
+      '';
+    });
   };
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";
     homepage = "https://github.com/rustfs/rustfs";
+    changelog = "https://github.com/rustfs/rustfs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marcel ];
     mainProgram = "rustfs";
   };
-}
+})
