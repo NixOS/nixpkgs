@@ -79,7 +79,7 @@ buildNpmPackage rec {
     description = "Modern GUI video and audio downloader";
     homepage = "https://github.com/aandrew-me/ytDownloader";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Holiu618 ];
     platforms = lib.platforms.all;
     mainProgram = "ytdownloader";
   };
