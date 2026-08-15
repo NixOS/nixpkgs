@@ -8,13 +8,13 @@
 
 buildOctavePackage rec {
   pname = "signal";
-  version = "1.4.7";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-signal";
-    tag = "${version}";
-    sha256 = "sha256-4E57x2hweO1TfpjBRRvsyQA/o83XJLrRKa5vqUA0t3s=";
+    tag = version;
+    sha256 = "sha256-0Nq/3TDsJ9b14so99z8Y9864JZThfORn4Bc8rtfMnBk=";
   };
 
   requiredOctavePackages = [
