@@ -3,7 +3,6 @@
   aiohttp,
   aresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
@@ -12,19 +11,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  python-backoff,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-technove";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
     tag = "v${version}";
-    hash = "sha256-TAB70EVrjxpl+vm3ncg45l2duaIXHjn7YKOURkS6k0k=";
+    hash = "sha256-Hbwrfib+ugjpYnVCuZZfbr+9eBeLN4q7WE5G2xGD0nk=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
+    python-backoff
     cachetools
     yarl
   ];
