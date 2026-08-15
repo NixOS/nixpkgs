@@ -23,12 +23,15 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   unpackPhase = ''
+    runHook preUnpack
     mkdir -p $out/xml/dtd/docbook
     cd $out/xml/dtd/docbook
     unpackFile $src
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
     find . -type f -exec chmod -x {} \;
     runHook postInstall
   '';
