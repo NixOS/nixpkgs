@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cyclonedx-gomod";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-gomod";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x0/Sei1uY8dDTYCFOgI2e6pe/5BjXLgt8YKKvSMBG4I=";
+    hash = "sha256-9EjmYoOBn8BbSo+1L+9AO0Q2G7UmY6lp2LobJhKACu4=";
   };
 
-  vendorHash = "sha256-x2aP+tGG5cn7ePeIbo+3XuPdWTScdY4dYvEKSJjxoSo=";
+  vendorHash = "sha256-py0K2ReoWY7q19P3VJE8jtDZ/1EgMPNIVnCs2/nz7wg=";
 
   ldflags = [
     "-w"
