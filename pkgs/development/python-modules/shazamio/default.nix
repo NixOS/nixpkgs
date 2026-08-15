@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   wheel,
   aiofiles,
@@ -26,6 +27,14 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-beEEr9Y8w0XlC/0+mNL/oWscmnfwt9KChlZ7Ullyk3E=";
   };
+
+  patches = [
+    # fixes the version 0.8.0 -> 0.8.1 in the pyproject file
+    (fetchpatch {
+      url = "https://github.com/tomasriveral/ShazamIO/commit/23dd6f2b4195616cbfa5dd98339265e4e5959be6.patch";
+      hash = "sha256-h7fVAiUJVJk/gItUsyUyDz2q9++UzRoga7NG/IL+MIY=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
