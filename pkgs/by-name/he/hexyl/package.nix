@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -19,10 +21,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-/+0oRyA9gfucfBTdkN9Q5eUZOWNDIAOj634yAc7Hzn0=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    installShellFiles
+  ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd hexyl \
+      --bash <($out/bin/hexyl --completion bash) \
+      --fish <($out/bin/hexyl --completion fish) \
+      --zsh <($out/bin/hexyl --completion zsh)
+  '';
 
   meta = {
     description = "Command-line hex viewer";
