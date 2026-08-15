@@ -31206,6 +31206,13 @@
     githubId = 68678258;
     name = "Renato German Chavez Chicoma";
   };
+  xdan7 = {
+    email = "dev@xda7.de";
+    github = "xDAN7";
+    githubId = 29778928;
+    matrix = "@xda7:matrix.org";
+    name = "Daniel";
+  };
   xddxdd = {
     email = "b980120@hotmail.com";
     github = "xddxdd";
