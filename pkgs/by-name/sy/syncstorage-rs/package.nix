@@ -33,7 +33,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
-  version = "0.22.2";
+  version = "0.23.3";
 
   __structuredAttrs = true;
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "syncstorage-rs";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-hEDa9hk00QvMY86zrtTq3+UOmbNehDb7Ya8St9u6IuA=";
+    hash = "sha256-d0rA/bWuo4gXvqI2inlvRI9NBP6ZRNSwLPkszNIkmhE=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoHash = "sha256-lTjvRTenmxYAYS5HB32x19DLkdd09jeWOhUbzt7TQ4Y=";
+  cargoHash = "sha256-BJ5+6o57WlwsTerKCmOPXATPHQfjr5cRYMbqC8CIPg0=";
 
   # almost all tests need a DB to test against
   doCheck = false;
