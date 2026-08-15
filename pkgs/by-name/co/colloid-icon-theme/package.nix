@@ -44,13 +44,13 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-07-19";
+    version = "2026-08-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
       tag = version;
-      hash = "sha256-CzFEMY3oJE3sHdIMQQi9qizG8jKo72gR8FlVK0w0p74=";
+      hash = "sha256-JNnTcHIvRf9Ymox2POjatY2gYvkPD6+nd/cN48tC6X4=";
     };
 
     nativeBuildInputs = [
