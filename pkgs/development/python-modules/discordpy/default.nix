@@ -10,20 +10,20 @@
   pynacl,
   setuptools,
   withVoice ? true,
+  aiodns,
+  brotli,
+  orjson,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "discord.py";
   version = "2.6.4";
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = "discord.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-glFXgTNdOQ3cG/jlvi/1ASon2HpcoKli45IhLhjpIvA=";
   };
 
@@ -33,9 +33,18 @@ buildPythonPackage {
     aiohttp
     audioop-lts
   ]
-  ++ lib.optionals withVoice [ pynacl ];
+  ++ lib.optionals withVoice finalAttrs.passthru.optional-dependencies.voice;
 
-  patchPhase = lib.optionalString withVoice ''
+  optional-dependencies = {
+    speed = [
+      aiodns
+      brotli
+      orjson
+    ];
+    voice = [ pynacl ];
+  };
+
+  postPatch = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \
       --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
 
@@ -59,8 +68,8 @@ buildPythonPackage {
   meta = {
     description = "Python wrapper for the Discord API";
     homepage = "https://discordpy.rtfd.org/";
-    changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
+    changelog = "https://github.com/Rapptz/discord.py/blob/${finalAttrs.src.tag}/docs/whats_new.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getpsyched ];
   };
-}
+})
