@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
 
   # rc.5 is pinned because rc.6 was published without matching public source and lockfile.
-  version = "0.1.0-rc.5";
+  version = "0-unstable-2026-08-13";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -377,6 +377,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = "--version";
+
+  preVersionCheck = ''
+    export version=0.1.0-rc.5
+  '';
 
   postInstallCheck = ''
     app="$out/lib/node_modules/@deepseek-ai/dsh"
