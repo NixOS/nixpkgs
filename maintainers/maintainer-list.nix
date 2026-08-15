@@ -10220,6 +10220,12 @@
       { fingerprint = "8102 3AF7 84FC 4DA7 B9D7  ECFF A0AF 4AD2 D44C C6FE"; }
     ];
   };
+  gestalt337 = {
+    email = "haoyuan.shi322@outlook.com";
+    github = "Gestalt337";
+    githubId = 97210329;
+    name = "Gestalt337";
+  };
   getchoo = {
     name = "Seth Flynn";
     email = "getchoo@tuta.io";
