@@ -76,8 +76,9 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      simonvandel
+      kira-bruneau
       romildo
+      simonvandel
     ];
   };
 }
