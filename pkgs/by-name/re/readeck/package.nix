@@ -6,32 +6,39 @@
   nodejs_22,
   npmHooks,
   python3,
+  templ,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.22.3";
+  version = "0.23.0";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-F4aj+vgCmwCnSBNa72kgCINNtmS6Zk1oeILZVXF5G+Y=";
+    hash = "sha256-NH1d3kf0Q9IOAlI3qYpmttXTQsrciMrQJkWGF+Ji62I=";
   };
 
   nativeBuildInputs = [
     nodejs_22
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
+    templ
   ];
 
   npmRoot = "web";
 
   env.NODE_PATH = "$npmDeps";
 
+  postPatch = ''
+    substituteInPlace go.mod --replace-fail "1.26.6" "1.26.5"
+    templ generate
+  '';
+
   preBuild = ''
-    make generate
+    make TEMPL=templ generate
   '';
 
   subPackages = [ "." ];
@@ -62,10 +69,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-ysDEkoL0e84udmCmvfTMA5lWS08aSyyTuCq+/8s3FMw=";
+    hash = "sha256-y+bma874Xd/N2urPia8vYFzavgBJsM29VuSS5iQWayA=";
   };
 
-  vendorHash = "sha256-cfd52pO2uUT5fdqCXM2rreXztb63FzUWv0s5/wbKXDw=";
+  vendorHash = "sha256-hAqQRtlaHcMrtatMowL/lmS5U+Jx6AmF0Q2tuiXqTTs=";
 
   passthru.updateScript = nix-update-script { };
 
