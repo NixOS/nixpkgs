@@ -28245,6 +28245,11 @@
     name = "phani";
     githubId = 125972587;
   };
+  tpansino = {
+    name = "Tom Pansino";
+    github = "tpansino";
+    githubId = 2768420;
+  };
   tpw_rules = {
     name = "Thomas Watson";
     email = "twatson52@icloud.com";
