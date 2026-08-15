@@ -1,4 +1,5 @@
 {
+  bashInteractive,
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
@@ -65,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
           "'${lib.getExe pkgsStatic.stdenv.cc}'"
     ''}
 
+    # NixOS does not provide /bin/bash; use the packaged interactive shell locally.
+    substituteInPlace packages/terminal/terminal-bash/src/config.ts \
+      --replace-fail \
+        "shellPath: z.string().default('/bin/bash')" \
+        "shellPath: z.string().default('${lib.getExe bashInteractive}')"
+
     # Keep CSS IDs relative to avoid build-root references and sort exports for deterministic bundles.
     substituteInPlace packages/client/tsdown.client.ts \
       --replace-fail \
@@ -122,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdirSync,
       readFileSync,
       rmSync,
+      writeFileSync,
     } from "node:fs";
     import { dirname, join } from "node:path";
     import { spawnSync } from "node:child_process";
@@ -176,6 +184,32 @@ stdenv.mkDerivation (finalAttrs: {
       if (result.error !== undefined || result.status !== 0) {
         throw new Error(command + " failed: " + args.join(" "));
       }
+    };
+
+    const dependencyFields = [
+      "dependencies",
+      "devDependencies",
+      "optionalDependencies",
+      "peerDependencies",
+      "peerDependenciesMeta",
+    ];
+
+    const canonicalizeManifest = manifestPath => {
+      const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+
+      for (const field of dependencyFields) {
+        if (manifest[field] === undefined) {
+          continue;
+        }
+
+        manifest[field] = Object.fromEntries(
+          Object.entries(manifest[field]).sort(([a], [b]) =>
+            a < b ? -1 : a > b ? 1 : 0,
+          ),
+        );
+      }
+
+      writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
     };
 
     const materialize = name => {
@@ -246,6 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
         ],
       );
 
+      canonicalizeManifest(join(destination, "package.json"));
       rmSync(archive);
     };
 
@@ -335,6 +370,35 @@ stdenv.mkDerivation (finalAttrs: {
       pnpm --dir apps/cli pack --out "$cliTar"
     tar -xzf "$cliTar" --strip-components=1 -C "$app"
 
+    APP="$app" ${lib.getExe runtimeNode} --input-type=module <<'NODE'
+    import { readFileSync, writeFileSync } from "node:fs";
+    import { join } from "node:path";
+
+    const dependencyFields = [
+      "dependencies",
+      "devDependencies",
+      "optionalDependencies",
+      "peerDependencies",
+      "peerDependenciesMeta",
+    ];
+    const manifestPath = join(process.env.APP, "package.json");
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+
+    for (const field of dependencyFields) {
+      if (manifest[field] === undefined) {
+        continue;
+      }
+
+      manifest[field] = Object.fromEntries(
+        Object.entries(manifest[field]).sort(([a], [b]) =>
+          a < b ? -1 : a > b ? 1 : 0,
+        ),
+      );
+    }
+
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+    NODE
+
     rm -f \
       "$cliTar" \
       "$app/node_modules/.modules.yaml" \
@@ -364,6 +428,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$app/lib/bin.js" \
       --prefix PATH : ${
         lib.makeBinPath [
+          bashInteractive
           runtimeNode
           pnpm
         ]
@@ -386,6 +451,14 @@ stdenv.mkDerivation (finalAttrs: {
     app="$out/lib/node_modules/@deepseek-ai/dsh"
 
     "$out/bin/dsh" --help > /dev/null
+
+    terminalBash="$app/node_modules/@deepseek-ai/dsh-terminal-bash/lib/index.js"
+    grep -F ${lib.escapeShellArg (lib.getExe bashInteractive)} "$terminalBash" > /dev/null
+
+    if grep -F 'default("/bin/bash")' "$terminalBash" > /dev/null; then
+      echo "terminal-bash still defaults to /bin/bash" >&2
+      exit 1
+    fi
 
     runtimeHome="$(mktemp -d)"
 
