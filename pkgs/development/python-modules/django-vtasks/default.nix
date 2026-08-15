@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "django-vtasks";
-  version = "2.1.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-vtasks";
     tag = "v${version}";
-    hash = "sha256-L2desiA5ZSdW6KcWuJ4UmtqDVuvAFeRplLgJex7inVM=";
+    hash = "sha256-Ny6dgW8XOpBsGi4wdxVGGFYH9ZQxtKKdRa0LHxlJMrU=";
   };
 
   postPatch = ''

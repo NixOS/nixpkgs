@@ -88,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flycast";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
   };
 })
