@@ -349,6 +349,7 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
+  ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
   ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
