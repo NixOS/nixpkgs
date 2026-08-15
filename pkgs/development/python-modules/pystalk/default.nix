@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pystalk";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-cX5P0KAjbyjJU6EcL0gvifNNlCGHTc89jacGWhVgFH0=";
+    hash = "sha256-s6mPn5+DI1b8l746+mEtZDzAHhqM3MaEhZAjJbfW/q8=";
   };
 
   build-system = [ setuptools ];
