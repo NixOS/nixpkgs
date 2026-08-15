@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       quickly and easily; perfect for anyone who wants a fast, secure website in a flash.
     '';
     homepage = "https://getpublii.com";
-    changelog = "https://github.com/getpublii/publii/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [
     ];
