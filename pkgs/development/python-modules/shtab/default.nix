@@ -8,6 +8,7 @@
   pytest-cov-stub,
   setuptools,
   setuptools-scm,
+  versionCheckHook,
   bashInteractive,
   fish,
   zsh,
@@ -36,6 +37,7 @@ buildPythonPackage (finalAttrs: {
     fish
     pytestCheckHook
     pytest-cov-stub
+    versionCheckHook
     zsh
   ];
 
