@@ -4,6 +4,8 @@
   fetchFromGitHub,
 }:
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "yargen-go";
   version = "0.1.0";
 
