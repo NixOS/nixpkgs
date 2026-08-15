@@ -30,13 +30,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "famistudio";
-  version = "4.5.2";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     tag = finalAttrs.version;
-    hash = "sha256-KWICbVN2930hn3gHF2Wo/s941+yhNFy5zqV74MVoDcM=";
+    hash = "sha256-7TH6UqMYNJKr7UO286jl8V5utCSPGcOl4qJKPElR/2E=";
   };
 
   postPatch =
