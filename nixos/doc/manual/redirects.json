@@ -250,6 +250,42 @@
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
+  "module-services-traefik": [
+    "index.html#module-services-traefik"
+  ],
+  "module-services-traefik-environment": [
+    "index.html#module-services-traefik-environment"
+  ],
+  "module-services-traefik-usage": [
+    "index.html#module-services-traefik-usage"
+  ],
+  "module-services-traefik-usage-install": [
+    "index.html#module-services-traefik-usage-install"
+  ],
+  "module-services-traefik-usage-install-file": [
+    "index.html#module-services-traefik-usage-install-file"
+  ],
+  "module-services-traefik-usage-install-settings": [
+    "index.html#module-services-traefik-usage-install-settings"
+  ],
+  "module-services-traefik-usage-routing": [
+    "index.html#module-services-traefik-usage-routing"
+  ],
+  "module-services-traefik-usage-routing-dir": [
+    "index.html#module-services-traefik-usage-routing-dir"
+  ],
+  "module-services-traefik-usage-routing-extrafiles": [
+    "index.html#module-services-traefik-usage-routing-extrafiles"
+  ],
+  "module-services-traefik-usage-routing-file": [
+    "index.html#module-services-traefik-usage-routing-file"
+  ],
+  "module-services-traefik-usage-routing-settings": [
+    "index.html#module-services-traefik-usage-routing-settings"
+  ],
+  "module-services-traefik-migrating-to-26.11": [
+    "index.html#module-services-traefik-migrating-to-26.11"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
