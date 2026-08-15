@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.70"
-      "sha256-pqDemzHe572FSrm+PziJi6A88xKvwZTMxVNw3wIDBBo=";
+    buildMypyBoto3Package "glue" "1.43.72"
+      "sha256-RVRPMIAv+0iaJxpv/Xnj8dPt9HNIIOfPNe4yTQqspVI=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.11"
       "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
