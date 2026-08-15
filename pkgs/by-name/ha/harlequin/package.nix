@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gDK+QpAJzyjIBH1YcoYy7CXSy8yn0OxAc2V1jI/DAUs=";
+    hash = "sha256-3GpchONAU+FAFh82E1vZ2tXqo536qpQaVbECyjnH6K4=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [ glibcLocales ];
 
   pythonRelaxDeps = [
+    "click"
     "questionary"
     "tomlkit"
   ];
