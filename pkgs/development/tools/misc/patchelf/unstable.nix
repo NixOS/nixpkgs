@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "NixOS";
     repo = "patchelf";
     rev = "b49de1b3384e7928bf0df9a889fe5a4e7b3fbddf";
-    sha256 = "sha256-0AGK+ZPZDc7zTVAmG6jAAynQhh4nP8skVwOEV5hZKh0=";
+    hash = "sha256-0AGK+ZPZDc7zTVAmG6jAAynQhh4nP8skVwOEV5hZKh0=";
   };
 
   # Drop test that fails on musl (?)
@@ -27,6 +27,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
       url = "https://github.com/NixOS/patchelf.git";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/NixOS/patchelf";

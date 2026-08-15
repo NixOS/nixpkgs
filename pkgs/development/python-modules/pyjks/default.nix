@@ -6,20 +6,25 @@
   # pythonPackages
   pyasn1-modules,
   pycryptodomex,
+  setuptools,
   twofish,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyjks";
   version = "20.0.0";
-  format = "setuptools";
+
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0378cec15fb11b2ed27ba54dad9fd987d48e6f62f49fcff138f5f7a8b312b044";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-A3jOwV+xGy7Se6VNrZ/Zh9SOb2L0n8/xOPX3qLMSsEQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyasn1-modules
     pycryptodomex
     twofish
@@ -30,8 +35,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pure-Python Java Keystore (JKS) library";
+    changelog = "https://github.com/kurtbrose/pyjks/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/kurtbrose/pyjks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };
-}
+})

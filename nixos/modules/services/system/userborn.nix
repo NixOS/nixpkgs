@@ -96,6 +96,20 @@ in
       '';
     };
 
+    importLegacyState = lib.mkOption {
+      type = lib.types.bool;
+      default = !cfg.static;
+      defaultText = lib.literalExpression "!config.services.userborn.static";
+      description = ''
+        Whether to include one-shot migration services that import the state
+        left behind by the perl activation script (`update-users-groups.pl`),
+        so id and subid allocations survive the switch to userborn.
+
+        Disable this if you want to keep the migration tooling out of your
+        system closure.
+      '';
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -140,6 +154,33 @@ in
               _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
             ) userCfg.users
           );
+
+      # One-shot import of update-users-groups.pl state. Runs before
+      # userborn so removed users' ids are reserved before allocation.
+      # Remove once the perl path has been gone for two releases.
+      services.userborn-import-legacy = lib.mkIf cfg.importLegacyState {
+        wantedBy = [ "sysinit.target" ];
+        requiredBy = [ "userborn.service" ];
+        before = [
+          "userborn.service"
+          "shutdown.target"
+        ];
+        after = [ "systemd-remount-fs.service" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig = {
+          Description = "Import legacy update-users-groups.pl state for userborn";
+          DefaultDependencies = false;
+          ConditionPathExists = [
+            "/var/lib/nixos/uid-map"
+            "!/var/lib/userborn"
+          ];
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${lib.getExe pkgs.userborn-import-legacy} --nogroup-gid ${toString config.ids.gids.nogroup} ${cfg.passwordFilesLocation}";
+        };
+      };
 
       services.userborn = lib.mkIf (!cfg.static) {
         wantedBy = [ "sysinit.target" ];
