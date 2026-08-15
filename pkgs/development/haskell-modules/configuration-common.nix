@@ -333,6 +333,16 @@ with haskellLib;
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
 
+  # ghc-paths needs a compat patch for Cabal 3.18 until a new version is released
+  # https://github.com/simonmar/ghc-paths/pull/35 krank:ignore-line
+  ghc-paths = appendPatches [
+    (pkgs.fetchpatch {
+      name = "ghc-paths-Cabal-3.18-compat.patch";
+      url = "https://github.com/simonmar/ghc-paths/commit/3b29418f632e6523858fc6441737d923a431a7d8.patch";
+      hash = "sha256-TKbEPGr1Vpaz3RdLwq92dTlp7Y8nKPghukZGVcMXQ6Y=";
+    })
+  ] super.ghc-paths;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
