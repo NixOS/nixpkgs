@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "credhub-cli";
-  version = "2.9.54";
+  version = "2.9.59";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "credhub-cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-qp7Oj207uu2P/Jt9O5tZM0ra9fMx+DfuHPaKr5z+ef0=";
+    sha256 = "sha256-jHMVLkRDEIch8naxEbCkfD2sTChbfiejcaoliQTZqt0=";
   };
 
   # these tests require network access that we're not going to give them
