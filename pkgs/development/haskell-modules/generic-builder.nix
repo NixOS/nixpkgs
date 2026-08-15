@@ -122,7 +122,8 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  # Cabal does not build the profiled dynamic objects required by wasm TH.
+  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm,
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
