@@ -135,6 +135,26 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
 
+    # CVE-2026-15268
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/f74495c7a157618e3df6fa61079678084c4cc685.patch";
+      hash = "sha256-ZOC7ApQiowMyLC0iB51rwDe4dIDwRmpFHpdAdHnEjHY=";
+    })
+    # CVE-2026-18917
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/5a62cbf2907d4590283597b46da9c0f41e7b4d4f.patch";
+      hash = "sha256-EjNp97J2++Wn7MLFaC99HPsJYUj4Nid8Fuk8fGq3Cis=";
+    })
+    # CVE-2026-63622
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/801160fd414ca2cc402bc01ead09b7ed4c3b8f5b.patch";
+      hash = "sha256-balBw0Rs2fSrnOeeiaqKRDnloXIWA1eITuciaZQ7zsk=";
+    })
+    # CVE-2026-63623
+    (fetchpatch {
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/69335a484768d550854da1133d5490074695e825.patch";
+      hash = "sha256-3UCMOVOq//bKkKfRsn9NVq1j9rN3CZlBOsEeYQufleU=";
+    })
     # CVE-2026-61478
     (fetchpatch {
       url = "https://gitlab.com/libvirt/libvirt/-/commit/68da70aae766c6271b8d3b466374d3cc7d1a8afb.patch";
