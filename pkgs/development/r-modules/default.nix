@@ -2221,11 +2221,21 @@ let
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     Rserve = old.Rserve.overrideAttrs (attrs: {
-      patches = [ ./patches/Rserve.patch ];
       configureFlags = [
         "--with-server"
         "--with-client"
       ];
+
+      patches = [
+        # Don't try to copy the Rserve binaries into $R_HOME/bin
+        ./patches/Rserve.patch
+      ];
+
+      # Instead, we symlink them into $out/bin
+      postInstall = ''
+        mkdir -p "$out/bin/"
+        ln -s "$out"/library/Rserve/libs/Rserve{,.dbg} "$out/bin/"
+      '';
     });
 
     SAIGEgds = old.SAIGEgds.overrideAttrs (attrs: {
