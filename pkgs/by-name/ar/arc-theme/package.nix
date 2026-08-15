@@ -14,15 +14,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "arc-theme";
-  version = "20221218";
+  version = "20221218-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = "arc-theme";
-    tag = finalAttrs.version;
-    hash = "sha256-7VmqsUCeG5GwmrVdt9BJj0eZ/1v+no/05KwGFb7E9ns=";
+    rev = "94ac8c7d67d68de0cc688bbd4c3105b9815b446e";
+    hash = "sha256-vvZvJmsmeYcJT3xVQLg4tmYXEgHprWJls1fbxA3Jxnw=";
   };
 
   nativeBuildInputs = [
@@ -68,4 +68,4 @@ stdenv.mkDerivation (finalAttrs: {
       romildo
     ];
   };
-})
+}
