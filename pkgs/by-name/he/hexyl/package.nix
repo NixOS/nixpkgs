@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-/+0oRyA9gfucfBTdkN9Q5eUZOWNDIAOj634yAc7Hzn0=";
 
+  __structuredAttrs = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
     installShellFiles
