@@ -30,6 +30,7 @@
   procps,
   psmisc,
   nixosTests,
+  nix-update-script,
 }:
 
 # NOTES:
@@ -237,6 +238,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit dirName;
     tests = nixosTests.zoneminder;
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   postInstall = ''
