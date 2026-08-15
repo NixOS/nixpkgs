@@ -1208,6 +1208,8 @@ in
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
+      # With the PostgreSQL update to 17.6, the default was no longer enough.
+      settings.max_locks_per_transaction = lib.mkDefault 128;
     };
 
     # Enable rotation of log files
