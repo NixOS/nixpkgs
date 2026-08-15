@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   imgui,
   ninja,
@@ -35,6 +36,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional withCurl curl
     ++ lib.optional withNcurses ncurses;
 
+  patches = [
+    # update for keyboard interaction in imgui >=1.91.5
+    (fetchpatch {
+      url = "https://github.com/ggerganov/imtui/commit/54e92c15176cfe05d854ccc1d1f071111c80de7f.patch";
+      hash = "sha256-qEdprfmierPn1K2jAJkoMs1agla7Ra1Xk0MhYHnUXu0=";
+    })
+  ];
   postPatch = ''
     cp -r ${imgui.src}/* third-party/imgui/imgui
     chmod -R u+w third-party/imgui
