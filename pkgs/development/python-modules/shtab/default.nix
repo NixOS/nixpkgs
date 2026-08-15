@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-timeout,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -29,7 +28,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     bashInteractive
-    pytest-timeout
     pytestCheckHook
     pytest-cov-stub
   ];
