@@ -7,6 +7,8 @@
   setuptools,
   setuptools-scm,
   bashInteractive,
+  fish,
+  zsh,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -28,8 +30,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     bashInteractive
+    fish
     pytestCheckHook
     pytest-cov-stub
+    zsh
   ];
 
   pythonImportsCheck = [ "shtab" ];
