@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/westes/flex/releases/download/v${finalAttrs.version}/flex-${finalAttrs.version}.tar.gz";
-    sha256 = "15g9bv236nzi665p9ggqjlfn4dwck5835vf0bbw2cz7h5c1swyp8";
+    hash = "sha256-6HquAyvwfCb4WsDtMlCZjDdiHZX4vXSLMfFbM8Re6ZU=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/westes/flex/commit/24fd0551333e
       name = "glibc-2.26.patch";
       url = "https://raw.githubusercontent.com/lede-project/source/0fb14a2b1ab2f82ce63f4437b062229d73d90516/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
-      sha256 = "0mpp41zdg17gx30kcpj83jl8hssks3adbks0qzbhcz882b9c083r";
+      hash = "sha256-eSDA0hIIfQbXx0DP1dTQU2uIqBxIXjbB6O+E134g91Y=";
     })
     (fetchurl {
       name = "gcc-15.patch";
