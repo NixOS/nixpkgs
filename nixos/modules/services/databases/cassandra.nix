@@ -69,7 +69,7 @@ let
     cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
     cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
 
-    passAsFile = [ "extraEnvSh" ];
+    __structuredAttrs = true;
     inherit (cfg) extraEnvSh package;
 
     buildCommand = ''
@@ -80,7 +80,7 @@ let
 
       ( cat "$cassandraEnvPkg"
         echo "# lines from services.cassandra.extraEnvSh: "
-        cat "$extraEnvShPath"
+        printf "%s" "$extraEnvSh"
       ) > "$out/cassandra-env.sh"
 
       # Delete default JMX Port, otherwise we can't set it using env variable
