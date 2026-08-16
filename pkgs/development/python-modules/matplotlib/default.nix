@@ -110,6 +110,7 @@ buildPythonPackage (finalAttrs: {
     ffmpeg-headless
     freetype
     qhull
+    pybind11
     libraqm
   ]
   ++ lib.optionals enableGtk3 [
@@ -123,7 +124,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     certifi
     numpy
-    pybind11
     meson-python
     setuptools-scm
   ];
