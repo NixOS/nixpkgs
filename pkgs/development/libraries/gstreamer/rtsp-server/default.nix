@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  testers,
   meson,
   ninja,
   pkg-config,
@@ -73,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = directoryListingUpdater { odd-unstable = true; };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
@@ -81,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       A library on top of GStreamer for building an RTSP server.
     '';
+    pkgConfigModules = [ "gstreamer-rtsp-server-1.0" ];
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bkchr ];
