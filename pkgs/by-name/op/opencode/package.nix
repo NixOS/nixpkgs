@@ -2,6 +2,7 @@
   lib,
   stdenv,
   bun,
+  callPackage,
   darwin,
   fetchFromGitHub,
   makeBinaryWrapper,
@@ -206,6 +207,10 @@ stdenv.mkDerivation (finalAttrs: {
       tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
     node_modules = node_modules finalAttrs;
+    # Pre-built upstream `opencode-linux-x64-baseline.tar.gz` for hosts that
+    # can't run the v3 native build (e.g. Ivy Bridge, no BMI2/AVX2). Boots
+    # from V8's `SHLX` trap; see ./baseline.nix for details.
+    baseline = callPackage ./baseline.nix { };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
