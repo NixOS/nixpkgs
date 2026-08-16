@@ -125,28 +125,13 @@ let
           type = lib.types.path;
         };
 
-        deploy = lib.mkOption {
+        local = lib.mkOption {
           description = ''
-            Whether the file should be deployed to the target machine. Disable
-            this if the generated file is only used as an input to other
-            generators.
-
-            This option is not currently used by the CLI.
+            Files with this flag will not be included in the file list passed to
+            the `deploy` script.
           '';
           type = lib.types.bool;
-          default = true;
-        };
-
-        secret = lib.mkOption {
-          description = ''
-            Whether the file should be treated as a secret. Backends might
-            treat such files differently (e.g. they might choose not to encrypt
-            them).
-
-            This option is not currently used by the CLI.
-          '';
-          type = lib.types.bool;
-          default = true;
+          default = false;
         };
       };
     };
