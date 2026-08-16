@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  enableParallelBuilding = true;
-
   buildInputs = [
     bashNonInteractive # for strace-log-merge shebang
     # libunwind for -k.
@@ -41,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   # -kk
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
+  enableParallelBuilding = true;
   strictDeps = true;
 
   configureFlags = [
@@ -53,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/strace/strace.git";
     rev-prefix = "v";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://strace.io/";
