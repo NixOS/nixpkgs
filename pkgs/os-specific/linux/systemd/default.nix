@@ -366,7 +366,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals (withHomed || withCryptsetup || withFido2) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (
