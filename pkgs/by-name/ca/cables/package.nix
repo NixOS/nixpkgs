@@ -5,29 +5,19 @@
   stdenv,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "cables";
   version = "0.10.6";
 
   src = fetchurl {
-    url = "https://github.com/cables-gl/cables_electron/releases/download/v${version}/cables-${version}-linux-x64.AppImage";
+    url = "https://github.com/cables-gl/cables_electron/releases/download/v${finalAttrs.version}/cables-${finalAttrs.version}-linux-x64.AppImage";
     sha256 = "sha256-Pk6rtWzIWzAlp5WwI7cKAjAlhjqLZJUO+39v44ZD93k=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-    postExtract = ''
-      substituteInPlace $out/cables-${version}.desktop --replace 'Exec=AppRun' 'Exec=cables'
-    '';
-  };
-
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/cables-${version}.desktop $out/share/applications/cables.desktop
-    install -m 444 -D ${appimageContents}/cables-${version}.png $out/share/icons/hicolor/512x512/apps/cables.png
+    install -m 444 -D ${finalAttrs.contents}/cables-${finalAttrs.version}.desktop $out/share/applications/cables.desktop
+    install -m 444 -D ${finalAttrs.contents}/cables-${finalAttrs.version}.png $out/share/icons/hicolor/512x512/apps/cables.png
+      substituteInPlace $out/share/applications/cables.desktop --replace-fail 'Exec=AppRun' 'Exec=cables'
   '';
 
   meta = {
@@ -40,4 +30,4 @@ appimageTools.wrapType2 {
     broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
     mainProgram = "cables";
   };
-}
+})
