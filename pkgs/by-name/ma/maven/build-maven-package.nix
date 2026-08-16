@@ -112,7 +112,8 @@ let
             runHook postBuild
           '';
 
-          # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+          # Preserve .meta because Tycho needs p2-artifacts.properties for offline builds.
+          # Maven Resolver's cached prefix indexes are volatile, so remove them and their checksums.
           installPhase = ''
             runHook preInstall
 
@@ -121,7 +122,7 @@ let
               -o -name resolver-status.properties \
               -o -name _remote.repositories \) \
               -delete
-            rm -rf $out/.m2/.meta
+            rm -f "$out"/.m2/.meta/prefixes-*.txt{,.*}
 
             runHook postInstall
           '';
