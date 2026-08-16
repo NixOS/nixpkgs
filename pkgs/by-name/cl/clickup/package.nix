@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   appimageTools,
   fetchurl,
   makeWrapper,
@@ -9,7 +8,8 @@
   common-updater-scripts,
   desktop-file-utils,
 }:
-let
+
+appimageTools.wrapType2 (finalAttrs: {
   pname = "clickup";
   version = "3.5.262";
 
@@ -19,46 +19,32 @@ let
     hash = "sha256-8stmEBpvU75JSMBZCjcObLndq+51bqTYb0PK1Yypudc=";
   };
 
-  appimage = appimageTools.wrapType2 {
-    inherit pname version src;
-    extraPkgs = pkgs: [ pkgs.libxkbfile ];
-  };
-
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
-
-  src = appimage;
+  extraPkgs = pkgs: [
+    pkgs.libxkbfile
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     desktop-file-utils
   ];
 
-  installPhase = ''
-    runHook preInstall
+  extraInstallCommands = ''
+    mkdir -p $out/share/clickup
+    cp -r ${finalAttrs.contents}/locales $out/share/clickup
+    cp -r ${finalAttrs.contents}/resources $out/share/clickup
 
-    mkdir -p $out/
-    cp -r bin $out/bin
-
-    mkdir -p $out/share/${pname}
-    cp -r ${appimageContents}/locales $out/share/${pname}
-    cp -r ${appimageContents}/resources $out/share/${pname}
-    cp -r --no-preserve=mode ${appimageContents}/usr/share/icons $out/share/
+    cp -r --no-preserve=mode ${finalAttrs.contents}/usr/share/icons $out/share/
     find $out/share/icons -name desktop.png -execdir mv {} clickup.png \;
 
-    install -m 444 -D ${appimageContents}/desktop.desktop $out/share/applications/clickup.desktop
+    install -m 444 -D ${finalAttrs.contents}/desktop.desktop $out/share/applications/clickup.desktop
 
     desktop-file-edit \
       --set-key=Exec --set-value=clickup \
       --set-key=Icon --set-value=clickup \
       "$out/share/applications/clickup.desktop"
 
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/clickup \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} --no-update"
-
-    runHook postInstall
   '';
 
   passthru.updateScript = lib.getExe (writeShellApplication {
@@ -100,4 +86,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ heisfer ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
