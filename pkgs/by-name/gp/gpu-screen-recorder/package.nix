@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
     platforms = lib.platforms.linux;
   };
