@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       softisp-gpu = withSoftispGPU;
       libunwind = false;
       libdw = false;
-      lc-compliance = false; # tries unconditionally to download gtest when enabled
+      lc-compliance = true;
 
       # Documentation breaks binary compatibility.
       # Given that upstream also provides public documentation,
