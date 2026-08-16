@@ -16,7 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
-  clang = if enableLibcxx then libcxxClang else clang;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -41,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       cp $toolPath $out/bin/$toolName-unwrapped
-      substituteAll ${./wrapper} $out/bin/$toolName
+      substitute ${./wrapper} $out/bin/$toolName \
+        --replace-fail "@clang@" "${if enableLibcxx then libcxxClang else clang}" \
+        --replace-fail "@out@" "$out"
       chmod +x $out/bin/$toolName
     done
 
