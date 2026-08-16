@@ -121,12 +121,18 @@ stdenv.mkDerivation (finalAttrs: {
     "localstatedir=\${TMPDIR}"
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace autogen.sh \
       --replace-fail "which" "${buildPackages.busybox}/bin/which"
 
     substituteInPlace src/shared-data-manager.c \
       --replace-fail /bin/rm ${busybox}/bin/rm
+
+    # Fix switching users
+    # https://github.com/ubuntu/lightdm/pull/454
+    substituteInPlace src/lightdm.c --replace-fail \
+      "gboolean can_multi_session = login1_seat_get_can_multi_session (login1_seat);" \
+      "gboolean can_multi_session = TRUE;"
   '';
 
   postInstall = ''
