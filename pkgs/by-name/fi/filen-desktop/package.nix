@@ -14,7 +14,7 @@
 }:
 let
   packageName = "filen-desktop";
-  packageVersion = "3.0.47";
+  packageVersion = "3.0.53";
   desktopName = "Filen Desktop";
   appName = "Filen";
 
@@ -46,7 +46,7 @@ buildNpmPackage {
     owner = "FilenCloudDienste";
     repo = packageName;
     rev = "v${packageVersion}";
-    hash = "sha256-WS9JqErfsRtt6zF+LrKkpiscJ25MRXmRxmIm3GH6xf0=";
+    hash = "sha256-uWh9/HOqSlin5kgVErLjRMHBZFY+eNxkKDKk4/AGUdg=";
   };
 
   npmDepsHash = "sha256-+Ul2z6faZvAeCHq35janVTUNoqTQ5JNDeLbCV220nFU=";
