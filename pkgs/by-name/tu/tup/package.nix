@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fuse3,
   macfuse-stubs,
   pkg-config,
@@ -41,8 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fusermount-setuid.patch
-    # Taken from https://github.com/gittup/tup/issues/518#issuecomment-3014825681
-    ./fix_newer_fuse3_file_reads.patch
+    # Fixes file reads with fuse >= 3.17.1, https://github.com/gittup/tup/issues/518
+    (fetchpatch {
+      name = "disable-FUSE_CAP_READDIRPLUS.patch";
+      url = "https://github.com/gittup/tup/commit/b131d82bf31bdbe159b8b26cc812e7b7b3fc33e0.patch";
+      hash = "sha256-rgvpMbzN8CpMCSdzm4nUhcCR/yUNVdjI/XL05RMkf1Y=";
+    })
   ];
 
   configurePhase = ''
@@ -106,6 +111,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gittup.org/tup/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
