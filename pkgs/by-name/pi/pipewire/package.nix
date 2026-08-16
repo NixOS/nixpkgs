@@ -9,6 +9,7 @@
   meson,
   ninja,
   freebsd,
+  logindSupport ? udevSupport,
   elogind,
   libinotify-kqueue,
   epoll-shim,
@@ -23,6 +24,7 @@
   alsa-lib,
   libjack2,
   libusb1,
+  udevSupport ? stdenv.hostPlatform.isLinux,
   udev,
   libsndfile,
   vulkanSupport ? true,
@@ -155,17 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     bashNonInteractive
   ]
-  ++ (
-    if enableSystemd then
-      [ systemdLibs ]
-    else if stdenv.hostPlatform.isLinux then
-      [
-        elogind
-        udev
-      ]
-    else
-      [ ]
-  )
+  ++ lib.optional enableSystemd systemdLibs
+  ++ lib.optional (!enableSystemd && udevSupport) udev
+  ++ lib.optional (!enableSystemd && logindSupport) elogind
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libinotify-kqueue
     epoll-shim
@@ -222,14 +216,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gstreamer" true)
     (lib.mesonEnable "gstreamer-device-provider" true)
     (lib.mesonOption "logind-provider" (if enableSystemd then "libsystemd" else "libelogind"))
-    (lib.mesonEnable "logind" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "logind" logindSupport)
     (lib.mesonEnable "selinux" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "avb" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
-    (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "udev" udevSupport)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)
     (lib.mesonEnable "bluez5" bluezSupport)
