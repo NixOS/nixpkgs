@@ -76,6 +76,10 @@ with haskellLib;
 
   scrod = doDistribute (unmarkBroken super.scrod);
 
+  # haskell-debugger only works with ghc 9.14+
+  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+  haskell-debugger = doDistribute (doJailbreak super.haskell-debugger); # hie-bios < 0.18, random >=1.3.1
+
   #
   # Version upgrades
   #
@@ -130,9 +134,6 @@ with haskellLib;
     ] super.serialise
   );
 
-  # haskell-debugger only works with ghc 9.14+
-  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
-  haskell-debugger = doDistribute (doJailbreak super.haskell-debugger); # hie-bios < 0.18, random >=1.3.1
 
   ghc-exactprint_1_14_1_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
