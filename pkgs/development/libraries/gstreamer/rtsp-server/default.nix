@@ -57,11 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    glib_debug = false; # cast checks should be disabled on stable releases
+    examples = false; # requires many dependencies and probably not useful for our users
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \
