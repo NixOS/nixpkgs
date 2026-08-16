@@ -47,6 +47,19 @@
   libsOnly ? false,
 }:
 
+let
+  withSupports =
+    lib.optional withPulse "pulse"
+    ++ lib.optional withLibao "libao"
+    ++ lib.optional withPipewire "pipewire"
+    ++ lib.optional withAlsa "alsa"
+    ++ lib.optional withOss "oss"
+    ++ lib.optional withEspeak "espeak-ng"
+    ++ lib.optional withFlite "flite"
+    ++ lib.optional withPico "pico";
+  hasOptionalSupports = withSupports != [ ];
+  withOptionalSupports = lib.optionalString hasOptionalSupports " with ${lib.strings.concatStringsSep " and " withSupports} supports";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
   version = "0.12.1";
@@ -178,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description =
       "Common high-level interface to speech synthesis"
+      + withOptionalSupports
       + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
     changelog = "https://github.com/brailcom/speechd/blob/${finalAttrs.version}/NEWS";
