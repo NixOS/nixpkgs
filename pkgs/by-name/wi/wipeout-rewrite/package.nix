@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't rely on sdl2-config (gives issues with strictDeps & cross)
     ''
       substituteInPlace Makefile \
-        --replace-fail 'sdl2-config' 'pkg-config sdl2'
+        --replace-fail 'sdl2-config' "$PKG_CONFIG sdl2"
     ''
     # Hardcode path to our sdl_gamecontrollerdb (with a check to make sure it actually exists)
     + ''
