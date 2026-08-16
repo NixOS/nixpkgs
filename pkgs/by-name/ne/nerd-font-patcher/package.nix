@@ -25,10 +25,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share $out/lib
     install -Dm755 font-patcher $out/bin/nerd-font-patcher
     cp -ra src/glyphs $out/share/
     cp -ra bin/scripts/{braille,name_parser} $out/lib/
+    runHook postInstall
   '';
 
   meta = {
