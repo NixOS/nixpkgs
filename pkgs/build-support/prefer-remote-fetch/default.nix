@@ -16,6 +16,7 @@ let
     orig:
     (if self.lib.isAttrs orig then orig else { })
     // self.lib.extendMkDerivation {
+      calculateExpectDrvArgs = orig ? expectDrvArgs;
       constructDrv = orig;
       extendDrvArgs =
         finalAttrs:
