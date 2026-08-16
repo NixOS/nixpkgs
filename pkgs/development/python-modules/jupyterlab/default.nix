@@ -125,6 +125,8 @@ buildPythonPackage (finalAttrs: {
     "TestBuildAPI"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Jupyter lab environment notebook server extension";
     homepage = "https://jupyter.org/";
