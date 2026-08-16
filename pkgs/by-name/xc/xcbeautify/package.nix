@@ -1,0 +1,43 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "xcbeautify";
+  version = "3.2.1";
+
+  src = fetchurl {
+    url = "https://github.com/cpisciotta/xcbeautify/releases/download/${version}/xcbeautify-${version}-${stdenv.hostPlatform.darwinArch}-apple-macosx.zip";
+    hash = lib.getAttr stdenv.hostPlatform.darwinArch {
+      arm64 = "sha256-7TKXLkG8OqGViPiw9KAgnvcMZjrWC79K2Eot5zNV1jc=";
+      x86_64 = "sha256-umXo78Lr6MbxM5Oq64ig/4SSeNlIDuFJav+qPbeBrG4=";
+    };
+  };
+
+  nativeBuildInputs = [ unzip ];
+
+  unpackPhase = ''
+    unzip $src
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D xcbeautify $out/bin/xcbeautify
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Little beautifier tool for xcodebuild";
+    homepage = "https://github.com/cpisciotta/xcbeautify";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    mainProgram = "xcbeautify";
+    maintainers = with lib.maintainers; [ siddarthkay ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+}

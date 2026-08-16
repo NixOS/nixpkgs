@@ -1,0 +1,105 @@
+#! @shell@
+
+STORE_DIR="${NIX_STORE_DIR:-/nix/store}"
+MASS_QUERY=0
+PRIORITY=75
+COMPRESSION=bzip2
+KEY=
+KEYNAME=na
+
+export NIX_REMOTE=daemon
+
+config="${NIX_BINARY_CACHE_CONFIG:-${HTTP_NIX_BINARY_CACHE_CONFIG:-/etc/nix/nix-binary-cache.cgi.conf}}"
+config="$(cd "$(@coreutils@/dirname "$config")";
+  @coreutils@/pwd)/$(@coreutils@/basename "$config")"
+@coreutils@/test -e "$config" && . "$config"
+
+header(){
+	echo "Content-Type: text/plain; charset=utf-8"
+	echo
+}
+
+header404(){
+	echo "Status: 404 Not Found"
+	echo
+}
+
+clean_path() {
+	@gnused@/sed -re "s@^$STORE_DIR/?@@" | @findutils@/xargs
+}
+
+storeq(){
+	@nix@/nix-store -q "$@"
+}
+
+sign(){
+	test -n "$1" &&
+	  @coreutils@/sha256sum | @gnused@/sed -e 's/ .*//' |
+	  @openssl@/openssl rsautl -sign -inkey "$@" | @coreutils@/base64 -w 0
+}
+
+case "$QUERY_STRING" in
+	"")
+		header
+		echo "Hello, this is a dynamically-generated Nix binary cache"
+		;;
+	/debug)
+		header
+		set
+		;;
+	/nix-cache-info)
+		header
+		echo "StoreDir: $STORE_DIR"
+		echo "WantMassQuery: $MASS_QUERY"
+		echo "Priority: $PRIORITY"
+		;;
+	*.narinfo)
+		hash=${QUERY_STRING%.narinfo}
+		hash=${hash#/}
+		path="$(echo "$STORE_DIR/$hash-"* | @coreutils@/sort | @coreutils@/head -n 1)"
+		if [ -n "$path" ] && [ -e "$path" ]; then
+			header
+			info="$(
+			echo "StorePath: $path"
+			echo "URL: $(@coreutils@/basename "$path"
+			  ).nar.$COMPRESSION"
+			echo "Compression: $COMPRESSION"
+			echo "NarHash: $(storeq --hash "$path")"
+			echo "NarSize: $(storeq --size "$path")"
+			echo "References: $(storeq --references "$path" |
+			  @coreutils@/tac | clean_path )"
+			echo "Deriver: $(storeq --deriver "$path" |
+			  clean_path )"
+			)"
+			signature="$(echo "$info" | sign "$KEY")"
+
+			echo "$info"
+			echo "Signature: 1;$KEYNAME;$signature"
+
+		else
+			header404
+			exit 1
+		fi
+		;;
+	*.nar.xz)
+		path="$STORE_DIR${QUERY_STRING%.nar.xz}"
+		if [ -n "$path" ] && [ -e "$path" ]; then
+			header
+			@nix@/nix-store --dump "$path" | @xz@/xz
+		else
+			header404
+			exit 1
+		fi
+		;;
+	*.nar.bzip2)
+		path="$STORE_DIR${QUERY_STRING%.nar.bzip2}"
+		echo "$path" >&2;
+		if [ -n "$path" ] && [ -e "$path" ]; then
+			header
+			@nix@/nix-store --dump "$path" | @bzip2@/bzip2
+		else
+			header404
+			exit 1
+		fi
+		;;
+esac

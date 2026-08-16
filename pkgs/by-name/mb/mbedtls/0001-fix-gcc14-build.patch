@@ -1,0 +1,25 @@
+From 4e49b690260e40bb16ae74a951ef3562a047cfe3 Mon Sep 17 00:00:00 2001
+From: azban <me@azban.net>
+Date: Mon, 13 Apr 2026 18:37:00 -0600
+Subject: [PATCH] fix gcc14 build
+
+---
+ core/tf_psa_crypto_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tf-psa-crypto/core/tf_psa_crypto_common.h b/tf-psa-crypto/core/tf_psa_crypto_common.h
+index 3aaf5c983..3e485d3d4 100644
+--- a/tf-psa-crypto/core/tf_psa_crypto_common.h
++++ b/tf-psa-crypto/core/tf_psa_crypto_common.h
+@@ -242,7 +242,7 @@ static inline void mbedtls_xor(unsigned char *r,
+         uint8x16_t x = veorq_u8(v1, v2);
+         vst1q_u8(r + i, x);
+     }
+-#if defined(__IAR_SYSTEMS_ICC__)
++#if defined(__IAR_SYSTEMS_ICC__) || (defined(MBEDTLS_COMPILER_IS_GCC) && MBEDTLS_GCC_VERSION >= 140100)
+     /* This if statement helps some compilers (e.g., IAR) optimise out the byte-by-byte tail case
+      * where n is a constant multiple of 16.
+      * For other compilers (e.g. recent gcc and clang) it makes no difference if n is a compile-time
+-- 
+2.51.2
+

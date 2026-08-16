@@ -1,0 +1,89 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioningit,
+
+  # dependencies
+  autobahn,
+  cffi,
+  packaging,
+  pandas,
+  python-dotenv,
+  qcodes,
+
+  # tests
+  pytest-mock,
+  pytestCheckHook,
+  pyvisa-sim,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "qcodes-contrib-drivers";
+  version = "0.25.0";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "QCoDeS";
+    repo = "Qcodes_contrib_drivers";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4ZVNd1cHqM3tuGcOxlBN8WX9i9u3XFlJ0zr06n7zpmI=";
+  };
+
+  postPatch =
+    # versioningit derives the version from git, which is unavailable in the sandbox
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          'default-version = "0.0"' \
+          'default-version = "${finalAttrs.version}"'
+    '';
+
+  build-system = [
+    setuptools
+    versioningit
+  ];
+
+  dependencies = [
+    autobahn
+    cffi
+    packaging
+    pandas
+    python-dotenv
+    qcodes
+    versioningit
+  ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+    pyvisa-sim
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "qcodes_contrib_drivers" ];
+
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
+      "test_stability_diagram_external"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # AssertionError: assert ['outp:trig4:...9999996', ...] == ['outp:trig4:...t 0.266', ...]
+      "test_stability_diagram_external"
+    ];
+
+  meta = {
+    description = "User contributed drivers for QCoDeS";
+    homepage = "https://github.com/QCoDeS/Qcodes_contrib_drivers";
+    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
+  };
+})

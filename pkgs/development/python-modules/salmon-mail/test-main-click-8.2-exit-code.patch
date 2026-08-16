@@ -1,0 +1,12 @@
+--- a/tests/test_command.py
++++ b/tests/test_command.py
+@@ -48,7 +48,8 @@
+     def test_main(self):
+         runner = CliRunner()
+         result = runner.invoke(commands.main)
+-        self.assertEqual(result.exit_code, 0)
++        # click 8.2 changed the exit code when no_args_is_help displays help: 0 -> 2.
++        self.assertEqual(result.exit_code, 2)
+
+     @patch('salmon.queue.Queue')
+     def test_queue_command(self, MockQueue):

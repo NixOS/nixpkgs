@@ -1,0 +1,22 @@
+diff --git a/src/actdiag/tests/test_generate_diagram.py b/src/actdiag/tests/test_generate_diagram.py
+index c5ee3d5..a74a151 100644
+--- a/src/actdiag/tests/test_generate_diagram.py
++++ b/src/actdiag/tests/test_generate_diagram.py
+@@ -16,16 +16,6 @@
+ import os
+ 
+ from blockdiag.tests.test_generate_diagram import (get_diagram_files,
+-                                                   testcase_generator)
++                                                   test_generate_with_separate)
+ 
+-import actdiag.command
+ 
+-
+-def test_generate():
+-    mainfunc = actdiag.command.main
+-    basepath = os.path.dirname(__file__)
+-    files = get_diagram_files(basepath)
+-    options = []
+-
+-    for testcase in testcase_generator(basepath, mainfunc, files, options):
+-        yield testcase

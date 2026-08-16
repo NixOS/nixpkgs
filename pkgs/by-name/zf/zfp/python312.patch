@@ -1,0 +1,43 @@
+From 6610107a865ddaf988a29fe0f07ece05949a0c77 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Wed, 30 Oct 2024 18:20:51 +0800
+Subject: [PATCH] a
+
+---
+ python/scikit-build-cmake/FindPythonExtensions.cmake | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/python/scikit-build-cmake/FindPythonExtensions.cmake b/python/scikit-build-cmake/FindPythonExtensions.cmake
+index 59b30c2..d06c9ad 100644
+--- a/python/scikit-build-cmake/FindPythonExtensions.cmake
++++ b/python/scikit-build-cmake/FindPythonExtensions.cmake
+@@ -254,7 +254,7 @@ endif()
+ include(targetLinkLibrariesWithDynamicLookup)
+ 
+ set(_command "
+-import distutils.sysconfig
++import sysconfig
+ import itertools
+ import os
+ import os.path
+@@ -266,7 +266,7 @@ rel_result = None
+ candidate_lists = []
+ 
+ try:
+-    candidate_lists.append((distutils.sysconfig.get_python_lib(),))
++    candidate_lists.append((sysconfig.get_paths()['purelib'],))
+ except AttributeError: pass
+ 
+ try:
+@@ -293,7 +293,7 @@ sys.stdout.write(\";\".join((
+     sys.prefix,
+     result,
+     rel_result,
+-    distutils.sysconfig.get_config_var('EXT_SUFFIX')
++    sysconfig.get_config_var('EXT_SUFFIX')
+ )))
+ ")
+ 
+-- 
+2.46.1
+

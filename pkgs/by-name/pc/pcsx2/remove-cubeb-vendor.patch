@@ -1,0 +1,16 @@
+diff --git a/cmake/SearchForStuff.cmake b/cmake/SearchForStuff.cmake
+index ff66f9c..e177c90 100644
+--- a/cmake/SearchForStuff.cmake
++++ b/cmake/SearchForStuff.cmake
+@@ -100,9 +100,8 @@ if(USE_VULKAN)
+ 	add_subdirectory(3rdparty/vulkan EXCLUDE_FROM_ALL)
+ endif()
+ 
+-add_subdirectory(3rdparty/cubeb EXCLUDE_FROM_ALL)
+-disable_compiler_warnings_for_target(cubeb)
+-disable_compiler_warnings_for_target(speex)
++find_package(cubeb REQUIRED GLOBAL)
++add_library(cubeb ALIAS cubeb::cubeb)
+ 
+ # Find the Qt components that we need.
+ find_package(Qt6 6.7.2 COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets LinguistTools REQUIRED)

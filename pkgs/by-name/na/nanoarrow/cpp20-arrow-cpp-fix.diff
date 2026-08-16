@@ -1,0 +1,13 @@
+diff --git i/meson.build w/meson.build
+index 5c3032d..5ec2e56 100644
+--- i/meson.build
++++ w/meson.build
+@@ -22,7 +22,7 @@ project(
+     version: '0.8.0',
+     license: 'Apache-2.0',
+     meson_version: '>=0.58.0',
+-    default_options: ['c_std=c99', 'warning_level=2', 'cpp_std=c++17'],
++    default_options: ['c_std=c99', 'warning_level=2', 'cpp_std=c++20'],
+ )
+ 
+ cc = meson.get_compiler('c')

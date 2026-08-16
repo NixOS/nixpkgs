@@ -1,0 +1,10 @@
+--- origsrc/Lib/distutils/unixccompiler.py.orig	2012-11-27 07:44:15.409993500 -0500
++++ src/Lib/distutils/unixccompiler.py	2012-11-27 08:09:57.801770900 -0500
+@@ -141,6 +141,7 @@
+     static_lib_format = shared_lib_format = dylib_lib_format = "lib%s%s"
+     if sys.platform == "cygwin":
+         exe_extension = ".exe"
++        dylib_lib_extension = ".dll.a"
+ 
+     def preprocess(self, source,
+                    output_file=None, macros=None, include_dirs=None,
