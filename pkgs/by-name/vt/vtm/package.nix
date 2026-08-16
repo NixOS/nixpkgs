@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/directvt/vtm";
     license = lib.licenses.mit;
     mainProgram = "vtm";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     platforms = lib.platforms.all;
   };
 })
