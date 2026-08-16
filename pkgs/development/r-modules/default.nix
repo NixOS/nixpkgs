@@ -427,10 +427,6 @@ let
     DirichletMultinomial = [ pkgs.gsl ]; # for gsl-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
-    HilbertVisGUI = with pkgs; [
-      pkg-config
-      which
-    ];
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
@@ -1068,7 +1064,6 @@ let
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HiSpaR = [ pkgs.armadillo ];
-    HilbertVisGUI = [ pkgs.gtkmm2 ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw ];
     LOMAR = [ pkgs.gmp ];
@@ -1960,6 +1955,7 @@ let
     # keep-sorted start
     "HIBAG"
     "HierO"
+    "HilbertVisGUI" # depends on the deprecated gtk2 via gtkmm2
     "HiveR"
     "NetLogoR"
     "av"
@@ -2071,10 +2067,6 @@ let
     });
 
     HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
-      hardeningDisable = [ "format" ];
-    });
-
-    HilbertVisGUI = old.HilbertVisGUI.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
 

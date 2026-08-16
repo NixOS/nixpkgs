@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "usacloud";
   version = "1.22.8";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
@@ -22,7 +24,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/sacloud/usacloud/pkg/version.Revision=${finalAttrs.src.rev}"
   ];
 

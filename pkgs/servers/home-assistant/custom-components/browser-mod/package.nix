@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "thomasloven";
   domain = "browser_mod";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-browser_mod";
     tag = "v${version}";
-    hash = "sha256-85s68pLPQJApVyTVd6XCL5SMBuzmGVwTXbiGHd/6FGU=";
+    hash = "sha256-G/cxktjreZq2rC0oo54hDAUcFuZTz7LZM8+5Hb2PBKA=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildHomeAssistantComponent rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-MbTb2x4uUGUGtAD600yPfnjdxmhR2ujeP3LqJTcjDHE=";
+    hash = "sha256-L7SgaFMhDvFNFWcxjArghveXF3w7pgIHbppfPppq+hs=";
   };
 
   npmBuildScript = "build";

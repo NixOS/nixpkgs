@@ -53,7 +53,6 @@
   pytest-asyncio,
   pytest-httpbin,
   pytest-rerunfailures,
-  pytest-xdist,
   writableTmpDirAsHomeHook,
   anyio,
   fontconfig,
@@ -71,7 +70,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.36.0";
+  version = "0.37.0";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile-extras`
 
@@ -81,8 +80,12 @@ buildPythonPackage (finalAttrs: {
     owner = "qtile";
     repo = "qtile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yFh9h3djV52zdZjPYwOWaMzN9ZNhFdZYyxFJreoJBCk=";
+    hash = "sha256-04oSoqKzr9OKb7xOTmLzRUJl8x6aQzH7t9d4LYlgkO8=";
   };
+
+  patches = [
+    ./restore-generic-desktop-file.patch
+  ];
 
   build-system = [
     setuptools
@@ -154,7 +157,6 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-httpbin
     pytest-rerunfailures
-    pytest-xdist
     writableTmpDirAsHomeHook
     anyio
     gdk-pixbuf
@@ -176,26 +178,27 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTests = [
-    # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
-    "test_defaults"
-    "test_device_actions"
-    "test_adapter_actions"
-    "test_statusnotifier_defaults"
-    "test_custom_symbols"
-    "test_statusnotifier_defaults_vertical_bar"
-    "test_default_show_battery"
-    "test_statusnotifier_icon_size"
-    "test_missing_adapter"
-    "test_statusnotifier_left_click"
-    "test_default_text"
-    "test_statusnotifier_left_click_vertical_bar"
-    "test_default_device"
-
+    # Client disconnect prematurely
+    "test_repl_server_executes_code"
+    # Import Error
+    "test_init_import_error_no_fallback"
+    # Misising corresponding device (Headphone / BT)
+    "test_defaults[1-x11]"
+    "test_device_actions[1-x11]"
+    "test_adapter_actions[1-x11]"
+    "test_custom_symbols[1-x11-bluetooth_manager0]"
+    "test_default_show_battery[1-x11-bluetooth_manager0]"
+    "test_missing_adapter[1-x11-bluetooth_manager0]"
+    "test_default_text[1-x11-bluetooth_manager0]"
+    "test_default_device[1-x11-bluetooth_manager0]"
+    # Runtime window has not appeared yet
+    "test_statusnotifier_defaults[1-x11]"
+    "test_statusnotifier_defaults_vertical_bar[1-x11]"
+    "test_statusnotifier_icon_size[1-x11-sni_config0]"
+    "test_statusnotifier_left_click[1-x11]"
+    "test_statusnotifier_left_click_vertical_bar[1-x11]"
     # PermissionError: [Errno 13] Permission denied: '/var'
     "test_thermal_zone_getting_value"
-
-    # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
-    "test_urgent_hook_fire"
   ];
 
   passthru = {
@@ -204,8 +207,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   postInstall = ''
-    install resources/qtile.desktop -Dt $out/share/xsessions
-    install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
+    install resources/qtile-generic.desktop -Dt $out/share/xsessions
+    install resources/qtile-generic.desktop -Dt $out/share/wayland-sessions
   '';
 
   meta = {

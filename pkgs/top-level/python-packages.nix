@@ -4897,6 +4897,8 @@ self: super: with self; {
 
   django-vite = callPackage ../development/python-modules/django-vite { };
 
+  django-vpg = callPackage ../development/python-modules/django-vpg { };
+
   django-vtasks = callPackage ../development/python-modules/django-vtasks { };
 
   django-waffle = callPackage ../development/python-modules/django-waffle { };
@@ -6732,14 +6734,6 @@ self: super: with self; {
   geotorch = callPackage ../development/python-modules/geotorch { };
 
   gepa = callPackage ../development/python-modules/gepa { };
-
-  gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
-
-  gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
-
-  gepetto-viewer-corba = toPythonModule (
-    pkgs.gepetto-viewer-corba.override { python3Packages = self; }
-  );
 
   gerbonara = callPackage ../development/python-modules/gerbonara { };
 
@@ -17592,7 +17586,7 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
-  qtile = callPackage ../development/python-modules/qtile { wlroots = pkgs.wlroots_0_19; };
+  qtile = callPackage ../development/python-modules/qtile { wlroots = pkgs.wlroots_0_20; };
 
   qtile-bonsai = callPackage ../development/python-modules/qtile-bonsai { };
 
@@ -20774,6 +20768,8 @@ self: super: with self; {
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
+
+  toppra = callPackage ../development/python-modules/toppra { };
 
   toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
 

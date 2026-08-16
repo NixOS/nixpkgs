@@ -84,6 +84,21 @@ rustPlatform.buildRustPackage {
     pango
   ];
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail in sandbox because netdev tries to read SystemConfiguration
+    "--skip=connect::args::tests::deprecated_profile_override_flags_do_not_affect_os_profile"
+    "--skip=connect::args::tests::stdin_host_id_sets_profile_runtime_identity_seed"
+    "--skip=hip::tests::host_info_os_vendor_is_linux_for_linux_profile"
+    "--skip=hip::tests::host_info_os_vendor_is_apple_for_mac_profile"
+    "--skip=hip::tests::host_info_os_vendor_is_microsoft_for_windows_profile"
+    "--skip=hip::tests::host_info_host_id_comes_from_os_profile"
+    "--skip=hip::tests::host_info_host_id_independent_of_runtime_for_each_os"
+    "--skip=hip::tests::hip_os_version_argument_is_ignored"
+    "--skip=hip::tests::host_id_argument_sets_profile_runtime_identity"
+    "--skip=hip::tests::host_info_uses_host_id_argument_for_native_profile"
+    "--skip=session::tests::builds_session_context_from_os_profile"
+  ];
+
   postPatch = ''
     substituteInPlace crates/openconnect/src/vpn_utils.rs \
       --replace-fail /usr/local/libexec/gpclient/vpnc-script $out/libexec/gpclient/vpnc-script \

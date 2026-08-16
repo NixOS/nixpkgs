@@ -891,6 +891,12 @@
     githubId = 6055037;
     name = "Alexander Hirner";
   };
+  AhmedAmr = {
+    email = "ahmedamr24680@gmail.com";
+    github = "AhmedAmrNabil";
+    githubId = 43810060;
+    name = "Ahmed Amr";
+  };
   ahoneybun = {
     email = "aaronhoneycutt@proton.me";
     github = "ahoneybun";
@@ -10114,6 +10120,11 @@
     name = "Kirill Samoylenkov";
     keys = [ { fingerprint = "955B 97C5 78A3 DF03 D818  25EB 8E40 5DD2 CF84 CCE0"; } ];
   };
+  gefla = {
+    name = "Gerd Flaig";
+    github = "gefla";
+    githubId = 56790;
+  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";
@@ -10160,7 +10171,12 @@
     github = "gepbird";
     githubId = 29818440;
     name = "Gutyina Gergő";
+    matrix = "@gepbird:matrix.org";
     keys = [
+      { fingerprint = "hEzYpII9pUMfbhhr1LbUaLoGKGKX7UJQ1i9QU5SIssQ"; }
+      { fingerprint = "MnieeyZ1Y02OB4PMrkM5xrk3ZXq3XTahcSocDyqzmFg"; }
+      { fingerprint = "YfsHXlTvwc3HmLzQPi4g9nn4bKCj/mV/xgg9dxxxdnU"; }
+      { fingerprint = "2NGbD6uF4OYtqjaYvN4foZFooT7XTAHODUaNxGVuJdk"; }
       { fingerprint = "RoAfvqa6w1l8Vdm3W60TDXurYwJ6h03VEGD+wDNGEwc"; }
       { fingerprint = "MP2UpIRtJpbFFqyucP431H/FPCfn58UhEUTro4lXtRs"; }
     ];
@@ -16958,6 +16974,13 @@
         fingerprint = "6E69 6A19 4BD8 BFAE 7362  ACDB 6437 4619 95CA 7F16";
       }
     ];
+  };
+  lunkentuss = {
+    email = "peter.hansson17@gmail.com";
+    matrix = "@lunkentuss:matrix.org";
+    github = "lunkentuss";
+    githubId = 9850798;
+    name = "Peter Hansson";
   };
   LunNova = {
     email = "nixpkgs-maintainer@lunnova.dev";

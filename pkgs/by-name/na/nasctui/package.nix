@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "nasctui";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "parnoldx";
     repo = "nascTUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h9tdoQv/Uj9r3RSvmUBGa+aFHxAlhpy4yIrKhrg/aAE=";
+    hash = "sha256-tR9widOs0/ZO/dP9KidqieXyiKqssEd/9umK0Z8c5uM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
