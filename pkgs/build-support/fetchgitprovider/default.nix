@@ -37,6 +37,10 @@ let
   # fetchzip may not be overridable when using external tools, for example nix-prefetch
   fetchzip =
     if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
+
+  checkRevTag =
+    rev: tag:
+    lib.throwIfNot (lib.xor (tag == null) (rev == null)) "fetchFromGitProvider requires one of either `rev` or `tag` to be provided (not both).";
 in
 lib.extendMkDerivation rec {
   constructDrv = {
@@ -48,8 +52,21 @@ lib.extendMkDerivation rec {
         # We prefer fetchzip in cases we don't need submodules as the hash
         # is more stable in that case.
         fetcher = if useFetchGit then fetchgit else fetchzip;
+        result = fetcher (finalAttrs: lib.removeAttrs (fpArgsExtended finalAttrs) [ "useFetchGit" ]);
       in
-      fetcher (finalAttrs: lib.removeAttrs (fpArgsExtended finalAttrs) [ "useFetchGit" ]);
+      if useFetchGit then
+        result.overrideAttrs (
+          finalAttrs: previousAttrs:
+          {
+            # Check revWithTag for fetchgit-constructed result derivation.
+            rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (fetchgit.getRevWithTag {
+              inherit (finalAttrs) tag;
+              rev = finalAttrs.revCustom;
+            });
+          }
+        )
+      else
+        result;
     __functionArgs = lib.functionArgs fetchzip // lib.functionArgs fetchgit // faUseFetchGit;
   };
 
@@ -211,11 +228,14 @@ lib.extendMkDerivation rec {
             tag
             ;
 
-        # This rev is revWithTag
-          rev = fetchgit.getRevWithTag {
+          # This rev is revWithTag
+          # The checked attribute will only survive in the fetchzip branch (useFetchGit == false)
+          # but will be shadowed in the fetchgit branch.
+          # Special care need to be taken for the fetchgit constructor.
+          rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (fetchgit.getRevWithTag {
             inherit (finalAttrs) tag;
             rev = finalAttrs.revCustom;
-          };
+          });
           revCustom = rev;
         };
 
