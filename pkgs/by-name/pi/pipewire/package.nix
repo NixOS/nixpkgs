@@ -12,8 +12,8 @@
   elogind,
   libinotify-kqueue,
   epoll-shim,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.highghlow.
+  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs, # enableSystemd=false maintained by maintainers.highghlow.
   pkg-config,
   docutils,
   doxygen,
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (
     if enableSystemd then
-      [ systemd ]
+      [ systemdLibs ]
     else if stdenv.hostPlatform.isLinux then
       [
         elogind
