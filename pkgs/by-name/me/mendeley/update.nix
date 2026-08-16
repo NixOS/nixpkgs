@@ -27,7 +27,7 @@ writeScript "update-mendeley" ''
     exit 1
   fi
 
-  if grep -q -F "$amd64V" ${./default.nix}; then
+  if grep -q -F "$amd64V" ${./package.nix}; then
     echo "No new version yet, nothing to do."
     echo "Have a nice day!"
     exit 0
