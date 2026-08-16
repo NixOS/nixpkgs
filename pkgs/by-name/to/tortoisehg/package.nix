@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "7.0.1";
+  version = "7.2.2";
 in
 python3Packages.buildPythonApplication {
   pname = "tortoisehg";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-    hash = "sha256-rCDLZ2ppD3Y71c31UNir/1pW1QBJViMP9JdoJiWf0nk=";
+    hash = "sha256-KBLXbiQ2p+mvMM0/U22EQwSj2NIO2i2vI0ZhmF8gc4M=";
   };
 
   build-system = with python3Packages; [ setuptools ];
