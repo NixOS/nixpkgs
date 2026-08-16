@@ -21635,6 +21635,8 @@ self: super: with self; {
 
   types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
 
+  types-jsonschema = callPackage ../development/python-modules/types-jsonschema { };
+
   types-lxml = callPackage ../development/python-modules/types-lxml { };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
