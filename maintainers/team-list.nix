@@ -711,7 +711,6 @@ with lib.maintainers;
 
   sage = {
     members = [
-      timokau
       raskin
       collares
     ];
