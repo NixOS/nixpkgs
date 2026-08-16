@@ -86,8 +86,8 @@ in
   julia_112 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.12.6";
-        hash = "sha256-cR86qNbsXJAEWT6489U+NWTNdZrLqK1K2ulnr8IDMsw=";
+        version = "1.12.7";
+        hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
         patches = lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch
