@@ -16084,6 +16084,8 @@ self: super: with self; {
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
+  pyshacl = callPackage ../development/python-modules/pyshacl { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
