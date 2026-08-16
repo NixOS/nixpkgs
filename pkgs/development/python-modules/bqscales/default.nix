@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
 
   # frontend
   nodejs,
   yarn-berry_3,
 
   # build-system
+  hatch,
   hatchling,
   hatch-build-scripts,
   hatch-jupyter-builder,
@@ -25,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   pname = "bqscales";
   version = "0.3.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bqplot";
@@ -32,10 +35,6 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-AAKnOEwdycSlxJEK0qbFJp2Dpiw/rEIk7fUa3NTymqQ=";
   };
-
-  postPatch = ''
-    sed -i "/\"hatch\"/d" pyproject.toml
-  '';
 
   missingHashes = ./missing-hashes.json;
 
@@ -50,11 +49,22 @@ buildPythonPackage (finalAttrs: {
     yarn-berry_3
   ];
 
-  preBuild = ''
-    npm run build
-  '';
+  preBuild =
+    # `jupyter labextension build` looks up `@jupyterlab/core-meta` in `node_modules` and
+    # downloads it from npm when missing. Seed it with the core package definition shipped
+    # by our `jupyterlab`, which is what the upstream `@jupyter/builder` devDependency
+    # would provide.
+    ''
+      mkdir -p node_modules/@jupyterlab/core-meta
+      cp ${jupyterlab}/${python.sitePackages}/jupyterlab/staging/package.json \
+        node_modules/@jupyterlab/core-meta/core.package.json
+    ''
+    + ''
+      npm run build
+    '';
 
   build-system = [
+    hatch
     hatch-build-scripts
     hatch-jupyter-builder
     hatch-nodejs-version
