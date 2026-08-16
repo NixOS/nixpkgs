@@ -18798,6 +18798,8 @@ self: super: with self; {
 
   sh = callPackage ../development/python-modules/sh { };
 
+  shacl2code = callPackage ../development/python-modules/shacl2code { };
+
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
   shap = callPackage ../development/python-modules/shap { };
