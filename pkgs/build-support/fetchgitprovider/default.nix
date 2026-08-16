@@ -164,13 +164,6 @@ mirrorArgs (
             inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
-            derivationArgs = derivationArgs // {
-              inherit
-                domain
-                owner
-                repo
-                ;
-            };
           }
         else
           let
@@ -194,19 +187,6 @@ mirrorArgs (
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-            derivationArgs = derivationArgs // {
-              inherit
-                domain
-                owner
-                repo
-                tag
-                ;
-              rev = fetchgit.getRevWithTag {
-                inherit (finalAttrs) tag;
-                rev = finalAttrs.revCustom;
-              };
-              revCustom = rev;
-            };
             passthru = {
               inherit gitRepoUrl;
             }
@@ -215,6 +195,22 @@ mirrorArgs (
       )
       // privateAttrs
       // {
+        derivationArgs = derivationArgs // {
+          inherit
+            domain
+            owner
+            repo
+            tag
+            ;
+
+        # This rev is revWithTag
+          rev = fetchgit.getRevWithTag {
+            inherit (finalAttrs) tag;
+            rev = finalAttrs.revCustom;
+          };
+          revCustom = rev;
+        };
+
         # TODO(@ShamrockLee): Change back to `inherit name;` after reconstruction with lib.extendMkDerivation
         name =
           args.name
