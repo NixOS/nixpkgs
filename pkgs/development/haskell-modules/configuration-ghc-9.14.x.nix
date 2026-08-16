@@ -136,6 +136,14 @@ with haskellLib;
 
   # https://github.com/maoe/ghc-trace-events/pull/17
   ghc-trace-events = doJailbreak super.ghc-trace-events; # base < 4.22
+  # HLS, for some reason, decided to remove the hie-compat library from its tree
+  # in https://github.com/haskell/haskell-language-server/pull/4613
+  # even though hiedb (a dependency of HLS) unconditionally depends on it
+  # for all GHC versions. As a result, no one has updated the base bound
+  # of hie-compat to allow building it with GHC 9.14 neither in tree
+  # (which no longer exists) nor on Hackage. Instead, HLS is updating their
+  # cabal.project: https://github.com/haskell/haskell-language-server/blob/a4cfaa80ca94beded6f01547a161b37be7b33558/cabal.project#L78
+  hie-compat = doJailbreak super.hie-compat; # base < 4.22
 
   ghc-exactprint_1_14_1_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
