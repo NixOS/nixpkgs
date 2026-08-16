@@ -7,6 +7,11 @@
   withJsonFeed ? false,
 }:
 
+let
+  buildFeatures = lib.optional withAtom "atom" ++ lib.optional withJsonFeed "json-feed";
+  hasOptionalFeatures = buildFeatures != [ ];
+  withOptionalFeatures = lib.optionalString hasOptionalFeatures " with ${lib.strings.concatStringsSep " and " buildFeatures} features";
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-rss-feed";
   version = "1.8.1";
@@ -21,12 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-UkoNcwEq2Ga3PEF04Xly++VdBekdCBKSHggIGXjTMXU=";
 
-  buildFeatures = lib.optional withAtom [ "atom" ] ++ lib.optional withJsonFeed [ "json-feed" ];
+  inherit buildFeatures;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "mdBook preprocessor that generates a full-content RSS 2.0 feed";
+    description =
+      "mdBook preprocessor that generates a full-content RSS 2.0 feed" + withOptionalFeatures;
     homepage = "https://github.com/saylesss88/mdbook-rss-feed";
     changelog = "https://github.com/saylesss88/mdbook-rss-feed/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
