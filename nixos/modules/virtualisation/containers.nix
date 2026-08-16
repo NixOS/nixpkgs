@@ -78,7 +78,7 @@ in
         description = ''
           List of repositories to search.
 
-          Deprecated, examine {option}`virtualisation.registries.settings` instead.
+          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
         '';
       };
 
@@ -89,7 +89,7 @@ in
         description = ''
           List of insecure repositories.
 
-          Deprecated, examine {option}`virtualisation.registries.settings` instead.
+          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
         '';
       };
 
@@ -100,7 +100,7 @@ in
         description = ''
           List of blocked repositories.
 
-          Deprecated, examine {option}`virtualisation.registries.settings` instead.
+          Deprecated, examine {option}`virtualisation.containers.registries.settings` instead.
         '';
       };
 
@@ -145,7 +145,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional oldRegistriesOptionsUsed "the options virtualisation.registries.search / insecure / block are deprecated. See virtualisation.registries.settings instead.";
+    warnings = lib.optional oldRegistriesOptionsUsed "the options virtualisation.containers.registries.search / insecure / block are deprecated. See virtualisation.containers.registries.settings instead.";
 
     virtualisation.containers.registries.settings = lib.mkIf oldRegistriesOptionsUsed {
       registries = {
