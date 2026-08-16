@@ -87,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gstreamer-rtsp-server-1.0" ];
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bkchr ];
+    maintainers = with lib.maintainers; [
+      bkchr
+      tmarkus
+    ];
   };
 })
