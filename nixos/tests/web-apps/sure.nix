@@ -1,7 +1,12 @@
-_: {
+{ lib, ... }:
+{
   name = "sure";
+  meta.maintainers = with lib.maintainers; [
+    _74k1
+    pjrm
+  ];
 
-  nodes.machine = _: {
+  containers.machine = _: {
     services.sure = {
       enable = true;
       localDomain = "localhost";
@@ -9,10 +14,10 @@ _: {
   };
 
   testScript =
-    { nodes, ... }:
+    { containers, ... }:
     let
-      webPort = toString nodes.machine.services.sure.webPort;
-      url = "${nodes.machine.services.sure.localDomain}:${webPort}";
+      webPort = toString containers.machine.services.sure.webPort;
+      url = "${containers.machine.services.sure.localDomain}:${webPort}";
     in
 
     ''
