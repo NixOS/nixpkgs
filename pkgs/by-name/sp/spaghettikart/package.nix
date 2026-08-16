@@ -239,6 +239,10 @@ stdenv.mkDerivation (finalAttrs: {
     # We need to use GetAppDirectoryPath on nix or else it crashes
     substituteInPlace src/port/GameExtractor.cpp \
     --replace-fail "const std::string assets_path = Ship::Context::GetAppBundlePath();" "const std::string assets_path = Ship::Context::GetAppDirectoryPath();"
+
+    # fix building with fmt_12
+    substituteInPlace torch/lib/miniz/zip_file.hpp \
+    --replace-fail '#include <cstdint>' '#include <cstdint>''\n#include <cstring>'
   '';
 
   postBuild = ''
