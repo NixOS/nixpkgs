@@ -2,25 +2,19 @@
   lib,
   appimageTools,
   fetchurl,
-  stdenvNoCC,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "chatzone-desktop";
   version = "5.7.0";
+
   src = fetchurl {
     url = "https://ir.ozone.ru/s3/chatzone-clients/ci/5.7.0/1258/chatzone-desktop-linux-5.7.0.AppImage";
     hash = "sha256-t8qAdrvs1M9NuaQYZj+pCaYiSb4TZc7rY1rJVjSYaAE=";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
-
-  src = appimageTools.wrapType2 { inherit pname version src; };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -46,20 +40,13 @@ stdenvNoCC.mkDerivation {
     })
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/
-    cp -r bin $out/bin
-
+  extraInstallCommands = ''
     mkdir -p $out/share/chatzone-desktop/
-    cp ${appimageContents}/app_icon.png $out/share/chatzone-desktop/
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    cp ${finalAttrs.contents}/app_icon.png $out/share/chatzone-desktop/
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
 
     wrapProgram $out/bin/chatzone-desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-
-    runHook postInstall
   '';
 
   meta = {
@@ -72,4 +59,4 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.progrm_jarvis ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
