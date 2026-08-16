@@ -25,7 +25,7 @@
 
     generators.example = {
       prompts = [ "example" ];
-      files.example.deploy = false;
+      files.example.local = true;
       script =
         pkgs:
         pkgs.writeScript "gen-example" ''
@@ -38,7 +38,7 @@
     generators.derived = {
       backend = "age";
       dependencies = [ "example" ];
-      files.derived.deploy = true;
+      files.derived.local = false;
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''
@@ -55,7 +55,7 @@
 
     generators.derivedPlain = {
       dependencies = [ "derived" ];
-      files.derived.deploy = false;
+      files.derived.local = true;
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''
