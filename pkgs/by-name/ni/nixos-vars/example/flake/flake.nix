@@ -1,5 +1,5 @@
 {
-  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  inputs.nixpkgs.url = "github:starlitcanopy/nixpkgs?ref=master";
 
   outputs = inputs: {
     nixosConfigurations.example = inputs.nixpkgs.lib.nixosSystem {

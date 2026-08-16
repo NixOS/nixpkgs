@@ -89,7 +89,7 @@ else
       inherit (generator) prompts dependencies backend;
       script = evalDeferredPackage generator.script;
       files = lib.mapAttrs (_: file: {
-        inherit (file) name deploy secret;
+        inherit (file) name local;
       }) generator.files;
     }) cfg.generators;
   }

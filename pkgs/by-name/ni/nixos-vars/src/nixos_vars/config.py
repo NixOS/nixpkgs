@@ -59,8 +59,7 @@ class VarsGeneratorBackend:
 @dataclass
 class VarsFile:
     name: str
-    deploy: bool
-    secret: bool
+    local: bool
 
     def from_jsom(name: str, json: Any) -> Self:
         return VarsFile(name=name, deploy=json["deploy"], secret=json["secret"])
@@ -158,7 +157,9 @@ class VarsConfig:
         return result
 
     def files_for_backend(
-        self: Self, backend: VarsGeneratorBackend
+        self: Self,
+        backend: VarsGeneratorBackend,
+        no_local: bool = False,
     ) -> List[tuple[str, str]]:
         files = []
         for generator in self.generators.values():
@@ -166,7 +167,7 @@ class VarsConfig:
                 continue
 
             for file in generator.files.values():
-                if file.deploy:
+                if no_local and file.local:
                     files.append((generator.name, file.name))
 
         return files
