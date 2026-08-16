@@ -56,9 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \
