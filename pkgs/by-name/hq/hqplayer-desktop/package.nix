@@ -1,20 +1,21 @@
 {
-  stdenv,
   alsa-lib,
   autoPatchelfHook,
   dpkg,
   evince,
   fetchurl,
   flac,
+  gccForLibs,
+  imagemagick,
+  kdePackages,
   lib,
   libmicrohttpd,
   libogg,
   libusb-compat-0_1,
   llvmPackages,
   mpfr,
+  stdenvNoCC,
   wavpack,
-  kdePackages,
-  imagemagick,
 }:
 
 let
@@ -33,47 +34,48 @@ let
     };
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "hqplayer-desktop";
   inherit version;
 
-  src =
-    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src = with stdenvNoCC.hostPlatform; srcs.${system} or (throw "Unsupported system: ${system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    kdePackages.wrapQtAppsHook
     imagemagick
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     flac
-    stdenv.cc.cc.lib
     libmicrohttpd
     libogg
     libusb-compat-0_1
     llvmPackages.openmp
     mpfr
-    kdePackages.qtcharts
-    kdePackages.qtdeclarative
-    kdePackages.qtwayland
-    kdePackages.qtwebengine
-    kdePackages.qtwebview
+    gccForLibs
     wavpack
-  ];
+  ]
+  ++ (with kdePackages; [
+    qtcharts
+    qtdeclarative
+    qtwayland
+    qtwebengine
+    qtwebview
+  ]);
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
+  # doc has dependencies on evince that is not required by main app
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    # main executable
-    mkdir -p "$out"/bin
-    mv ./usr/bin/* "$out"/bin
+    install -D usr/bin/* --target-directory="$out"/bin
 
     # The binary links against libomp.so.5, which is not provided by
     # `llvmPackages.openmp`; provide it as a symlink so that
@@ -85,36 +87,36 @@ stdenv.mkDerivation {
     addAutoPatchelfSearchPath "$out"/lib
 
     # documentation
-    mkdir -p "$doc/share/doc/hqplayer-desktop" "$doc/share/applications"
-    mv ./usr/share/doc/hqplayer6desktop/* "$doc/share/doc/hqplayer-desktop"
-    mv ./usr/share/applications/hqplayer6desktop-manual.desktop "$doc/share/applications"
+    install -Dm644 usr/share/doc/hqplayer${majorVersion}desktop/* \
+      --target-directory="$doc"/share/doc/hqplayer-desktop
+    gunzip "$doc"/share/doc/hqplayer-desktop/*.gz
+    install -Dm644 \
+      usr/share/applications/hqplayer${majorVersion}desktop-manual.desktop \
+      --target-directory="$doc"/share/applications
 
     # desktop files
-    mkdir -p "$out/share/applications"
-    mv ./usr/share/applications/* "$out/share/applications"
+    install -Dm644 usr/share/applications/* \
+      --target-directory="$out"/share/applications
 
     # icons
-    mkdir -p $out/share/icons/hicolor/96x96/apps
-    install -D ./usr/share/pixmaps/hqplayer6client.png -t $out/share/icons/hicolor/128x128/apps
-    install -D ./usr/share/pixmaps/hqplayer6desktop.png -t $out/share/icons/hicolor/128x128/apps
-    magick ./usr/share/pixmaps/hqplayer6desktop-manual.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/hqplayer6desktop-manual.png
-    runHook postInstall
-  '';
+    install -Dm644 usr/share/pixmaps/hqplayer${majorVersion}{client,desktop}.png \
+      --target-directory="$out"/share/icons/hicolor/128x128/apps
+    mkdir --parents "$out"/share/icons/hicolor/96x96/apps
+    magick mogrify -path "$_" -resize 96x96 \
+      usr/share/pixmaps/hqplayer${majorVersion}desktop-manual.png
 
-  # doc has dependencies on evince that is not required by main app
-  outputs = [
-    "out"
-    "doc"
-  ];
-
-  postInstall = ''
-    for desktopFile in $out/share/applications/hqplayer6{client,desktop}.desktop; do
+    for desktopFile in \
+      "$out"/share/applications/hqplayer${majorVersion}{client,desktop}.desktop; do
       substituteInPlace "$desktopFile" \
-        --replace /usr/bin "$out"/bin
+        --replace-fail /usr/bin "$out"/bin
     done
-    substituteInPlace "$doc/share/applications/hqplayer6desktop-manual.desktop" \
-        --replace /usr/share/doc/hqplayer6desktop "$doc/share/doc/hqplayer-desktop" \
-        --replace evince "${evince}/bin/evince"
+
+    substituteInPlace "$doc"/share/applications/hqplayer${majorVersion}desktop-manual.desktop \
+      --replace-fail /usr/share/doc/hqplayer${majorVersion}desktop "$doc"/share/doc/hqplayer-desktop \
+      --replace-fail .pdf.gz .pdf \
+      --replace-fail evince ${lib.getExe evince}
+
+    runHook postInstall
   '';
 
   meta = {
