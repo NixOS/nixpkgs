@@ -50,9 +50,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-  linux = appimageTools.wrapType2 {
+  linux = appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
@@ -64,19 +62,22 @@ let
     extraPkgs = pkgs: [ pkgs.libthai ];
 
     extraInstallCommands = ''
-      install -m 444 -D ${appimageContents}/caido.desktop \
+      install -m 444 -D ${finalAttrs.contents}/caido.desktop \
         -t $out/share/applications
+
       substituteInPlace $out/share/applications/caido.desktop \
         --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
-      install -m 444 -D ${appimageContents}/caido.png \
+
+      install -m 444 -D ${finalAttrs.contents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
-      wrapProgram $out/bin/${pname} \
+
+      wrapProgram $out/bin/caido-desktop \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     '';
-  };
+  });
 
-  darwin = stdenv.mkDerivation {
+  darwin = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
@@ -91,7 +92,7 @@ let
 
     unpackPhase = ''
       runHook preUnpack
-      7zz x $src || true
+      7zz x ${finalAttrs.src} || true
       runHook postUnpack
     '';
 
@@ -101,11 +102,12 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Caido.app $out/bin
       cp -R . $out/Applications/Caido.app/
+
       makeWrapper $out/Applications/Caido.app/Contents/MacOS/Caido \
-        $out/bin/${pname}
+        $out/bin/caido-desktop
       runHook postInstall
     '';
-  };
+  });
 
 in
 if stdenv.hostPlatform.isLinux then
