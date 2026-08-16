@@ -40,7 +40,9 @@ let
 
   checkRevTag =
     rev: tag:
-    lib.throwIfNot (lib.xor (tag == null) (rev == null)) "fetchFromGitProvider requires one of either `rev` or `tag` to be provided (not both).";
+    lib.throwIfNot (lib.xor (tag == null) (
+      rev == null
+    )) "fetchFromGitProvider requires one of either `rev` or `tag` to be provided (not both).";
 
   nullIfNot = condition: if condition then v: v else v: null;
 in
@@ -58,13 +60,14 @@ lib.extendMkDerivation rec {
       in
       if useFetchGit then
         result.overrideAttrs (
-          finalAttrs: previousAttrs:
-          {
+          finalAttrs: previousAttrs: {
             # Check revWithTag for fetchgit-constructed result derivation.
-            rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (fetchgit.getRevWithTag {
-              inherit (finalAttrs) tag;
-              rev = finalAttrs.revCustom;
-            });
+            rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (
+              fetchgit.getRevWithTag {
+                inherit (finalAttrs) tag;
+                rev = finalAttrs.revCustom;
+              }
+            );
           }
         )
       else
@@ -92,157 +95,165 @@ lib.extendMkDerivation rec {
   ++ (lib.attrNames faUseFetchGit);
 
   extendDrvArgs =
-  finalAttrs:
-  {
-    owner,
-    repo,
-    tag ? null,
-    rev ? null,
-    providerName,
-    functionName ? "fetchFrom${finalAttrs.providerName}",
-    name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) (lib.toLower finalAttrs.providerName),
-    private ? false,
-    domain,
-    varPrefix ? null,
-    # For example, fetchFromGitHub's varBase defaults to
-    # NIX_GITHUB_PRIVATE if varPrefix == null, or otherwise
-    # NIX_${varPrefix}_GITHUB_PRIVATE
-    varBase ? "NIX${lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"}_${lib.toUpper finalAttrs.providerName}_PRIVATE_",
-    netrcMachineName ? finalAttrs.domain,
-    browsableUrl ? null,
-    archiveUrl,
-    gitRepoUrl ? "https://${finalAttrs.domain}/${finalAttrs.owner}/${finalAttrs.repo}.git",
-    passthru ? { },
-    meta ? { },
-    derivationArgs ? { },
-    ... # For hash agility and additional fetchgit arguments
-  }@args:
+    finalAttrs:
+    {
+      owner,
+      repo,
+      tag ? null,
+      rev ? null,
+      providerName,
+      functionName ? "fetchFrom${finalAttrs.providerName}",
+      name ? repoRevToNameMaybe finalAttrs.repo (lib.revOrTag finalAttrs.revCustom finalAttrs.tag) (
+        lib.toLower finalAttrs.providerName
+      ),
+      private ? false,
+      domain,
+      varPrefix ? null,
+      # For example, fetchFromGitHub's varBase defaults to
+      # NIX_GITHUB_PRIVATE if varPrefix == null, or otherwise
+      # NIX_${varPrefix}_GITHUB_PRIVATE
+      varBase ? "NIX${
+        lib.optionalString (finalAttrs.varPrefix != null) "_${finalAttrs.varPrefix}"
+      }_${lib.toUpper finalAttrs.providerName}_PRIVATE_",
+      netrcMachineName ? finalAttrs.domain,
+      browsableUrl ? null,
+      archiveUrl,
+      gitRepoUrl ? "https://${finalAttrs.domain}/${finalAttrs.owner}/${finalAttrs.repo}.git",
+      passthru ? { },
+      meta ? { },
+      derivationArgs ? { },
+      ... # For hash agility and additional fetchgit arguments
+    }@args:
 
-  assert (
-    lib.xor (tag == null) (rev == null)
-    || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
-  );
-
-  let
-    useFetchGit =
-      lib.mapAttrs (
-        name: nonNullDefault:
-        if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
-          args.${name}
-        else
-          nonNullDefault
-      ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
-
-    useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
-
-    position = (
-      if args.meta.description or null != null then
-        builtins.unsafeGetAttrPos "description" args.meta
-      else if tag != null then
-        builtins.unsafeGetAttrPos "tag" args
-      else
-        builtins.unsafeGetAttrPos "rev" args
+    assert (
+      lib.xor (tag == null) (rev == null)
+      || throw "${functionName} requires one of either `rev` or `tag` to be provided (not both)."
     );
-    newMeta =
-      meta
-      // {
-        ${if finalAttrs.browsableUrl != null then "homepage" else null} = meta.homepage or finalAttrs.browsableUrl;
-        identifiers = {
-          purlParts = {
-            type = "generic";
-            # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-            spec = "${finalAttrs.repo}?vcs_url=${finalAttrs.gitRepoUrl}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
-          };
-        }
-        // meta.identifiers or { };
-      }
-      // lib.optionalAttrs (position != null) {
-        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-        position = "${position.file}:${toString position.line}";
-      };
-    privateAttrs = {
-      netrcPhase = args.netrcPhase or (
-        # When using private repos:
-        # - Fetching with git works using https://github.com but not with the GitHub API endpoint
-        # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
-        nullIfNot finalAttrs.private ''
-          if [ -z "''$${finalAttrs.varBase}USERNAME" -o -z "''$${finalAttrs.varBase}PASSWORD" ]; then
-            echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
-            exit 1
-          fi
-          cat > netrc <<EOF
-          machine $netrcMachineName
-                  login ''$${finalAttrs.varBase}USERNAME
-                  password ''$${finalAttrs.varBase}PASSWORD
-          EOF
-        ''
-      );
-      netrcImpureEnvVars = args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
-        "${finalAttrs.varBase}USERNAME"
-        "${finalAttrs.varBase}PASSWORD"
-      ]);
-    };
 
-    fetcherArgs =
-      (
-        if useFetchGit then
-          useFetchGitArgsWDPassing
-          // {
-            inherit tag rev;
-          }
+    let
+      useFetchGit =
+        lib.mapAttrs (
+          name: nonNullDefault:
+          if args ? ${name} && (useFetchGitArgsDefaultNullable ? ${name} -> args.${name} != null) then
+            args.${name}
+          else
+            nonNullDefault
+        ) useFetchGitargsDefaultNonNull != useFetchGitargsDefaultNonNull;
+
+      useFetchGitArgsWDPassing = lib.overrideExisting (removeAttrs useFetchGitArgsDefault excludeUseFetchGitArgNames) args;
+
+      position = (
+        if args.meta.description or null != null then
+          builtins.unsafeGetAttrPos "description" args.meta
+        else if tag != null then
+          builtins.unsafeGetAttrPos "tag" args
         else
-          {
-            extension = "tar.gz";
+          builtins.unsafeGetAttrPos "rev" args
+      );
+      newMeta =
+        meta
+        // {
+          ${if finalAttrs.browsableUrl != null then "homepage" else null} =
+            meta.homepage or finalAttrs.browsableUrl;
+          identifiers = {
+            purlParts = {
+              type = "generic";
+              # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+              spec = "${finalAttrs.repo}?vcs_url=${finalAttrs.gitRepoUrl}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
+            };
           }
-      )
-      // privateAttrs
-      // {
-        inherit
-          name
-          passthru
-          ;
+          // meta.identifiers or { };
+        }
+        // lib.optionalAttrs (position != null) {
+          # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+          position = "${position.file}:${toString position.line}";
+        };
+      privateAttrs = {
+        netrcPhase =
+          args.netrcPhase or (
+            # When using private repos:
+            # - Fetching with git works using https://github.com but not with the GitHub API endpoint
+            # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
+            nullIfNot finalAttrs.private ''
+              if [ -z "''$${finalAttrs.varBase}USERNAME" -o -z "''$${finalAttrs.varBase}PASSWORD" ]; then
+                echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+                exit 1
+              fi
+              cat > netrc <<EOF
+              machine $netrcMachineName
+                      login ''$${finalAttrs.varBase}USERNAME
+                      password ''$${finalAttrs.varBase}PASSWORD
+              EOF
+            ''
+          );
+        netrcImpureEnvVars =
+          args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
+            "${finalAttrs.varBase}USERNAME"
+            "${finalAttrs.varBase}PASSWORD"
+          ]);
+      };
 
-        derivationArgs = derivationArgs // {
+      fetcherArgs =
+        (
+          if useFetchGit then
+            useFetchGitArgsWDPassing
+            // {
+              inherit tag rev;
+            }
+          else
+            {
+              extension = "tar.gz";
+            }
+        )
+        // privateAttrs
+        // {
           inherit
-            archiveUrl
-            browsableUrl
-            domain
-            gitRepoUrl
-            netrcMachineName
-            owner
-            private
-            providerName
-            repo
-            tag
-            useFetchGit
-            varBase
-            varPrefix
+            name
+            passthru
             ;
 
-          # This rev is revWithTag
-          # The checked attribute will only survive in the fetchzip branch (useFetchGit == false)
-          # but will be shadowed in the fetchgit branch.
-          # Special care need to be taken for the fetchgit constructor.
-          rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (fetchgit.getRevWithTag {
-            inherit (finalAttrs) tag;
-            rev = finalAttrs.revCustom;
-          });
-          revCustom = rev;
+          derivationArgs = derivationArgs // {
+            inherit
+              archiveUrl
+              browsableUrl
+              domain
+              gitRepoUrl
+              netrcMachineName
+              owner
+              private
+              providerName
+              repo
+              tag
+              useFetchGit
+              varBase
+              varPrefix
+              ;
+
+            # This rev is revWithTag
+            # The checked attribute will only survive in the fetchzip branch (useFetchGit == false)
+            # but will be shadowed in the fetchgit branch.
+            # Special care need to be taken for the fetchgit constructor.
+            rev = checkRevTag finalAttrs.revCustom finalAttrs.tag (
+              fetchgit.getRevWithTag {
+                inherit (finalAttrs) tag;
+                rev = finalAttrs.revCustom;
+              }
+            );
+            revCustom = rev;
+          };
+
+          url = if finalAttrs.useFetchGit then finalAttrs.gitRepoUrl else finalAttrs.archiveUrl;
+
+          meta = newMeta;
         };
-
-        url = if finalAttrs.useFetchGit then finalAttrs.gitRepoUrl else finalAttrs.archiveUrl;
-
-        meta = newMeta;
-      };
-  in
-  fetcherArgs // { inherit useFetchGit; };
+    in
+    fetcherArgs // { inherit useFetchGit; };
 
   transformDrv =
     drv:
     drv.overrideAttrs (
-      finalAttrs: previousAttrs:
-      {
-        passthru =  removeAttrs previousAttrs.passthru [ "gitRepoUrl" ];
+      finalAttrs: previousAttrs: {
+        passthru = removeAttrs previousAttrs.passthru [ "gitRepoUrl" ];
       }
     );
 }
