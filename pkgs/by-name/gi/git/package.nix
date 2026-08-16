@@ -615,6 +615,8 @@ stdenv.mkDerivation (finalAttrs: {
       withInstallCheck = finalAttrs.finalPackage.overrideAttrs (_: {
         doInstallCheck = true;
       });
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       buildbot-integration = nixosTests.buildbot;
     }
     // lib.optionalAttrs svnSupport {
