@@ -2,13 +2,11 @@
   lib,
   pkgs,
   config,
-  options,
   ...
 }:
 
 let
   cfg = config.services.sure;
-  opt = options.services.sure;
 
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
@@ -29,7 +27,7 @@ let
     SELF_HOSTED = "true";
 
     RAILS_FORCE_SSL = toString cfg.forceSSL;
-    RAILS_ASSUME_SSL = toString cfg.assumeSSL;
+    RAILS_ASSUME_SSL = toString cfg.forceSSL;
 
     DB_HOST = cfg.database.host;
     DB_PORT = toString cfg.database.port;
@@ -114,7 +112,7 @@ let
   commonUnits =
     lib.optional cfg.redis.createLocally "redis-sure.service"
     ++ lib.optional cfg.database.createLocally "postgresql.target"
-    ++ lib.optional cfg.automaticMigrations "sure-init-db.service";
+    ++ [ "sure-init-db.service" ];
 
   defaultSecretKeyBaseFile = "${cfg.statePath}/secrets/secret-key-base";
   needsGenCredentialsUnit = cfg.secretKeyBaseFile == null;
@@ -134,7 +132,7 @@ let
 
     text =
       let
-        sourceExtraEnv = lib.concatMapStrings (p: "source ${p}\n") cfg.extraEnvFiles;
+        sourceExtraEnv = lib.concatMapStrings (p: "source ${p}\n") cfg.environmentFiles;
         command = pkgs.writeShellScript "sure-rails-unwrapped" ''
           ${sourceExtraEnv}
           ${loadCredentialsIntoEnv}
@@ -168,9 +166,6 @@ let
           ${command} "$@"
       '';
   };
-  sureConsole = pkgs.writeShellScriptBin "sure-console" ''
-    exec ${lib.getExe sureRails} console "$@"
-  '';
 
 in
 {
@@ -184,7 +179,7 @@ in
           Configure nginx as a reverse proxy for Sure.
           Alternatively you can configure a reverse-proxy of your choice to serve these paths:
 
-          `/ -> ''${pkgs.sure}/public`
+          `/ -> ''${cfg.package}/public`
 
           `/ -> 127.0.0.1:{{ webPort }} `(If there was no file in the directory above.)
 
@@ -222,21 +217,14 @@ in
         description = ''
           Worker threads used by the Sure Sidekiq service.
         '';
-        type = lib.types.int;
+        type = lib.types.ints.positive;
         default = 5;
       };
 
       forceSSL = lib.mkOption {
         description = ''
-          Whether to force SSL via Rails. When enabled, all requests are redirected to HTTPS.
-        '';
-        type = lib.types.bool;
-        default = false;
-      };
-
-      assumeSSL = lib.mkOption {
-        description = ''
-          Whether to assume SSL is terminated at the proxy. This sets the X-Forwarded-Proto header.
+          Whether to force SSL via Rails and assume SSL is terminated at the proxy.
+          When enabled, all requests are redirected to HTTPS and the X-Forwarded-Proto header is set.
         '';
         type = lib.types.bool;
         default = false;
@@ -353,7 +341,7 @@ in
         '';
       };
 
-      extraEnvFiles = lib.mkOption {
+      environmentFiles = lib.mkOption {
         type = with lib.types; listOf path;
         default = [ ];
         description = ''
@@ -366,12 +354,6 @@ in
         description = "Path where Sure stores its state.";
         type = lib.types.str;
         default = "/var/lib/sure";
-      };
-
-      automaticMigrations = lib.mkOption {
-        description = "Whether to perform database migrations automatically.";
-        type = lib.types.bool;
-        default = true;
       };
     };
   };
@@ -389,22 +371,44 @@ in
         ];
 
         environment.systemPackages = [
-          sureConsole
           sureRails
         ];
 
         systemd = {
-          tmpfiles.rules = [
-            "d /run/sure 0750 ${cfg.user} ${cfg.group} -"
-            "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
-            "d ${cfg.statePath}/tmp 0750 ${cfg.user} ${cfg.group} -"
-            "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
-            "d ${cfg.statePath}/storage 0750 ${cfg.user} ${cfg.group} -"
-
-            "L+ /run/sure/tmp - - - - ${cfg.statePath}/tmp"
-            "L+ /run/sure/log - - - - ${cfg.statePath}/log"
-            "L+ /run/sure/storage - - - - ${cfg.statePath}/storage"
-          ];
+          tmpfiles.settings."sure" = {
+            "/run/sure/".d = {
+              inherit (cfg) user group;
+              mode = "0750";
+            };
+            "${cfg.statePath}/".d = {
+              inherit (cfg) user group;
+              mode = "0750";
+            };
+            "${cfg.statePath}/tmp/".d = {
+              inherit (cfg) user group;
+              mode = "0750";
+            };
+            "${cfg.statePath}/log/".d = {
+              inherit (cfg) user group;
+              mode = "0750";
+            };
+            "${cfg.statePath}/storage/".d = {
+              inherit (cfg) user group;
+              mode = "0750";
+            };
+            "/run/sure/tmp"."L+" = {
+              inherit (cfg) user group;
+              argument = "${cfg.statePath}/tmp";
+            };
+            "/run/sure/log"."L+" = {
+              inherit (cfg) user group;
+              argument = "${cfg.statePath}/log";
+            };
+            "/run/sure/storage"."L+" = {
+              inherit (cfg) user group;
+              argument = "${cfg.statePath}/storage";
+            };
+          };
 
           targets.sure = {
             description = "Target for all Sure services";
@@ -413,10 +417,7 @@ in
           };
 
           services.sure-init-credentials = lib.mkIf needsGenCredentialsUnit {
-            script = ''
-              umask 077
-            ''
-            + lib.optionalString (cfg.secretKeyBaseFile == null) ''
+            script = lib.optionalString (cfg.secretKeyBaseFile == null) ''
               if ! test -f ${defaultSecretKeyBaseFile}; then
                 mkdir -p $(dirname ${defaultSecretKeyBaseFile})
                 ${lib.getExe pkgs.openssl} rand -hex 64 > ${defaultSecretKeyBaseFile}
@@ -424,18 +425,18 @@ in
             '';
 
             environment = env;
-            serviceConfig = {
+            serviceConfig = cfgService // {
               Type = "oneshot";
               SyslogIdentifier = "sure-init-credentials";
+              UMask = "0077";
               # System Call Filtering
               SystemCallFilter = [ "~@resources" ] ++ systemCallFilter;
-            }
-            // cfgService;
+            };
 
             after = [ "network.target" ];
           };
 
-          services.sure-init-db = lib.mkIf cfg.automaticMigrations {
+          services.sure-init-db = {
             script = ''
               ${loadCredentialsIntoEnv}
 
@@ -447,7 +448,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               LoadCredential = loadCredentials;
-              EnvironmentFile = cfg.extraEnvFiles;
+              EnvironmentFile = cfg.environmentFiles;
               WorkingDirectory = cfg.package;
               # System Call Filtering
               SystemCallFilter = [ "~@resources" ] ++ systemCallFilter;
@@ -485,7 +486,7 @@ in
               Restart = "always";
               RestartSec = 20;
               LoadCredential = loadCredentials;
-              EnvironmentFile = cfg.extraEnvFiles;
+              EnvironmentFile = cfg.environmentFiles;
               WorkingDirectory = cfg.package;
               # Runtime directory and mode
               RuntimeDirectory = "sure-web";
@@ -515,7 +516,7 @@ in
               Restart = "always";
               RestartSec = 20;
               LoadCredential = loadCredentials;
-              EnvironmentFile = cfg.extraEnvFiles;
+              EnvironmentFile = cfg.environmentFiles;
               WorkingDirectory = cfg.package;
               LimitNOFILE = "1024000";
             }
