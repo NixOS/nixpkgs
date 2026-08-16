@@ -3,6 +3,7 @@
   haskellPackages,
   installShellFiles,
   lib,
+  extraComposeFunctions ? [ ],
 }:
 let
   inherit (haskell.lib.compose) justStaticExecutables overrideCabal;
@@ -27,7 +28,10 @@ let
   };
   raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
 in
-lib.pipe raw-pkg [
-  (overrideCabal overrides)
-  justStaticExecutables
-]
+lib.pipe raw-pkg (
+  [
+    (overrideCabal overrides)
+    justStaticExecutables
+  ]
+  ++ extraComposeFunctions
+)
