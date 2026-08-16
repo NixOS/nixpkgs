@@ -6,15 +6,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "aws-signing-helper";
-  version = "1.7.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "rolesanywhere-credential-helper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6EtWOcSFSxvOkDXf1/OL6IoHv25+FMGGCbh/vjzkH6U=";
+    hash = "sha256-cGzQ2rek0EA3ZaPfFOePhkYdKYj4cWZ1b40LAddf5TY=";
   };
-  vendorHash = "sha256-acr1A+Yj+azdTaGHlNVW1ADMEFTpAVhUAP1yWkUpJ38=";
+  vendorHash = "sha256-rYoBYPHWixvM2iGn/jf4Op7/xkBnV0zKYSJtDnI3ulQ=";
 
   checkPhase = ''
     runHook preCheck

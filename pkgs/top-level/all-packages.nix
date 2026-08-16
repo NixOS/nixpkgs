@@ -5484,8 +5484,6 @@ with pkgs;
       ;
   };
 
-  vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
-
   enchant = enchant_2;
 
   factorPackages-0_99 = callPackage ./factor-packages.nix {
