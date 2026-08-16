@@ -56,10 +56,10 @@ stdenv.mkDerivation {
     freetype
     glib
     harfbuzz
-    libICE
-    libSM
-    libX11
-    libXext
+    libice
+    libsm
+    libx11
+    libxext
     libxcb
     libxcb-cursor
     libxcb-keysyms
