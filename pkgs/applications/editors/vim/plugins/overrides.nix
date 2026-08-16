@@ -4153,6 +4153,10 @@ assertNoAdditions {
     };
   });
 
+  slang-server-nvim = super.slang-server-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
+  };
+
   slimline-nvim = super.slimline-nvim.overrideAttrs {
     nvimSkipModules = [
       # Component modules read the user-supplied slimline.config at require time.

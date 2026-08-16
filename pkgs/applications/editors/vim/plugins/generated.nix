@@ -16353,6 +16353,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  slang-server-nvim = buildVimPlugin {
+    pname = "slang-server.nvim";
+    version = "0-unstable-2026-06-22";
+    src = fetchFromGitHub {
+      owner = "hudson-trading";
+      repo = "slang-server.nvim";
+      rev = "fedf769c407b4f36335f758d2c152ccae21a928b";
+      hash = "sha256-+Xb0tqhql3/yObLQ/yNtPfYTw9HEy2nWaQp+Or/YZ0Q=";
+    };
+    meta.homepage = "https://github.com/hudson-trading/slang-server.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   slimline-nvim = buildVimPlugin {
     pname = "slimline.nvim";
     version = "2.10.0";
