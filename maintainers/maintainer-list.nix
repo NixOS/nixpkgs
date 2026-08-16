@@ -13627,6 +13627,12 @@
     githubId = 32305209;
     name = "John Children";
   };
+  johnhamelink = {
+    email = "me@johnhame.link";
+    github = "johnhamelink";
+    githubId = 101739;
+    name = "John Hamelink";
+  };
   johnjohnstone = {
     email = "jjohnstone@riseup.net";
     github = "johnjohnstone";
