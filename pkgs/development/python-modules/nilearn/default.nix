@@ -29,6 +29,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nilearn";
   version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
