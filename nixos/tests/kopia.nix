@@ -2,8 +2,10 @@
 let
   passwordFile = "${pkgs.writeText "kopia-password" "test-password"}";
   webPasswordFile = "${pkgs.writeText "kopia-web-password" "test-web-pass"}";
-  s3AccessKeyIdFile = "${pkgs.writeText "s3-access-key-id" "minioadmin"}";
-  s3SecretAccessKeyFile = "${pkgs.writeText "s3-secret-access-key" "minioadmin"}";
+  s3AccessKeyId = "GKb4b3dbabb51f80da0644ccce";
+  s3AccessKeyIdFile = "${pkgs.writeText "s3-access-key-id" s3AccessKeyId}";
+  s3SecretAccessKey = "f86c04c56334e76c6adeb3d5e9c46f98adb2721bccae15450a6d4d56e4f113ae";
+  s3SecretAccessKeyFile = "${pkgs.writeText "s3-secret-access-key" s3SecretAccessKey}";
   webdavPasswordFile = "${pkgs.writeText "webdav-password" "kopia-webdav-pass"}";
   sftpPasswordFile = "${pkgs.writeText "sftp-password" "kopia-sftp-pass"}";
 
@@ -39,18 +41,24 @@ in
         createHome = true;
       };
 
-      services.minio = {
+      services.garage = {
         enable = true;
-        rootCredentialsFile = pkgs.writeText "minio-credentials" ''
-          MINIO_ROOT_USER=minioadmin
-          MINIO_ROOT_PASSWORD=minioadmin
-        '';
+        package = pkgs.garage;
+        settings = {
+          rpc_bind_addr = "[::]:3901";
+          rpc_secret = "4425f5c26c5e11581d3223904324dcb5b5d5dfb14e5e7f35e38c595424f5f1e6";
+
+          replication_factor = 1;
+
+          s3_api.api_bind_addr = "[::]:3900";
+          s3_api.s3_region = "garage";
+        };
       };
 
-      # Open MinIO and WebDAV ports
+      # Open WebDAV and garage(s3) ports
       networking.firewall.allowedTCPPorts = [
         8080
-        9000
+        3900
       ];
 
       systemd.tmpfiles.rules = [
@@ -171,11 +179,12 @@ in
           };
         };
 
-        # Test: S3 backend (via MinIO)
+        # Test: S3 backend (via Garage)
         s3 = {
           repository.s3 = {
             bucket = "kopia-test";
-            endpoint = "server:9000";
+            endpoint = "server:3900";
+            region = "garage";
             accessKeyIdFile = s3AccessKeyIdFile;
             secretAccessKeyFile = s3SecretAccessKeyFile;
             disableTLS = true;
@@ -349,13 +358,19 @@ in
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 
-    with subtest("s3: repository connect and snapshot over S3 (via MinIO)"):
-        server.wait_for_unit("minio.service")
-        server.wait_for_open_port(9000)
+    with subtest("s3: repository connect and snapshot over S3 (via Garage)"):
+        server.wait_for_unit("garage.service")
+        server.wait_for_open_port(3900)
+        node_id = server.succeed("garage status | tail -n1 | awk '{ print $1 }'")
         server.succeed(
-            "${pkgs.minio-client}/bin/mc alias set local http://localhost:9000 minioadmin minioadmin"
+          "garage status",
+          f"garage layout assign -c 1GB -z garage {node_id}",
+          "garage layout apply --version 1",
+          "garage key import ${s3AccessKeyId} ${s3SecretAccessKey} --yes",
+          "garage bucket create kopia-test",
+          "garage key list >&2",
+          "garage bucket allow --read --write --owner kopia-test --key ${s3AccessKeyId}"
         )
-        server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test")
         machine.succeed("systemctl start kopia-snapshot-s3-default.service")
         machine.succeed(
             "${kopiaEnv "s3"}"
