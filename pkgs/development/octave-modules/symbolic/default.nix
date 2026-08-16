@@ -17,15 +17,15 @@ let
   ]);
 
 in
-buildOctavePackage rec {
+buildOctavePackage {
   pname = "symbolic";
   version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "cbm755";
     repo = "octsympy";
-    tag = "v${version}";
-    hash = "sha256-7SrTLb2DNeBIDC3yHRs+/ttSR/tCDhBD9lXCHuue6fw=";
+    rev = "0206197f77f6663720a0510c761110abeb2041cd";
+    hash = "sha256-P9E0ZgB06Y/bvYCWD7W9kYZVWfZPWyBKnXw+X5H4yLI=";
   };
 
   propagatedBuildInputs = [ pythonEnv ];
