@@ -2,15 +2,16 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  nix-update-script,
   _7zz,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unnaturalscrollwheels";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://github.com/ther0n/UnnaturalScrollWheels/releases/download/${finalAttrs.version}/UnnaturalScrollWheels-${finalAttrs.version}.dmg";
-    sha256 = "1c6vlf0kc7diz0hb1fmrqaj7kzzfvr65zcchz6xv5cxf0md4n70r";
+    hash = "sha256-KJQnV/XWM+JpW3O29nyGo64Jte6Gw3I54bXfFSAkUrc=";
   };
   sourceRoot = ".";
 
@@ -26,12 +27,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Invert scroll direction for physical scroll wheels";
     homepage = "https://github.com/ther0n/UnnaturalScrollWheels";
+    changelog = "https://github.com/ther0n/UnnaturalScrollWheels/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      jesssullivan
+    ];
     platforms = lib.platforms.darwin;
   };
 })

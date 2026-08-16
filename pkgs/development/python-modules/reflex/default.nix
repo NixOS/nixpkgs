@@ -47,6 +47,7 @@
   ruff,
   starlette-admin,
   uvicorn,
+  gitMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -72,7 +73,7 @@ let
     buildPythonPackage {
       inherit pname version src;
       pyproject = true;
-      sourceRoot = "${src.name}/packages/${pname}";
+      sourceRoot = workspace.sourceRoot or "${src.name}/packages/${pname}";
 
       build-system = [
         hatchling
@@ -80,6 +81,8 @@ let
         ruff
       ]
       ++ lib.optional (pname != "hatch-reflex-pyi") subPkgs.hatch-reflex-pyi;
+
+      pythonRelaxDeps = [ "rich" ];
 
       preBuild = ''
         # for .ruff_cache and whatnot, written by hatch-reflex-pyi
@@ -98,20 +101,39 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.1";
+  version = "0.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YYy/K4AXeh9wS4Vodg3NOqwolPYHTgpP5/yWkutMsxo=";
+    hash = "sha256-r7lajRhNXe+cquCT6zzP/0lnnTZ6xN2BFaediUFCafQ=";
   };
 
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
+
+  pythonRelaxDeps = [
+    # pinned to satisfy pyright
+    # https://github.com/reflex-dev/reflex/commit/67489196035bacb2e4bb2fe6ae165088bc6db988
+    "wrapt"
+    # preemptive upper bound, doesn't seem breaking
+    "redis"
+    "rich"
+  ];
+  # pythonRelaxDeps is not sufficient
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"redis >=6.4,<8.0"' \
+        '"redis >=6.4,<9.0"' \
+      --replace-fail \
+        '"wrapt >=1.17.0,<2.2"' \
+        '"wrapt >=1.17.0"'
+  '';
 
   nativeBuildInputs = [
     ruff
@@ -168,6 +190,7 @@ buildPythonPackage (finalAttrs: {
     starlette-admin
     uvicorn
     versionCheckHook
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
@@ -193,18 +216,33 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError (mocked_open.call_count == 2)
     "test_delete_token_from_config"
+
+    # circular imports (reflex-docgen)
+    "test_compiling_docs_does_not_evaluate_upload"
+    "test_enterprise_parent_breadcrumb_uses_overview_route"
   ];
 
   disabledTestPaths = [
     "tests/benchmarks/"
     "tests/integration/"
 
+    # unable to import agent_files (should be in docs/app/agent_files/)
+    "docs/app/tests/test_agent_files.py"
+
     # circular imports (reflex-docgen)
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
+    "tests/units/docgen/test_reflex_transformer.py"
+    "docs/app/tests/test_breadcrumbs.py"
+    "docs/app/tests/test_changelogs.py"
+    "docs/app/tests/test_doc_description.py"
+    "docs/app/tests/test_doc_links.py"
     "docs/app/tests/test_docgen_double_eval.py"
 
-    # circular imports (reflex_site_shared)
+    # circular imports (reflex-integrations-docs)
+    "docs/app/tests/test_integrations.py"
+
+    # circular imports (reflex-site-shared)
     "docs/app/tests/test_routes.py"
   ];
 
@@ -257,7 +295,8 @@ buildPythonPackage (finalAttrs: {
         hatch-reflex-pyi.dependencies = [
           hatchling
         ];
-        integrations-docs.dependencies = [
+        reflex-integrations-docs.sourceRoot = "${finalAttrs.src.name}/packages/integrations-docs";
+        reflex-integrations-docs.dependencies = [
         ];
         reflex-base.dependencies = [
           packaging
@@ -364,7 +403,6 @@ buildPythonPackage (finalAttrs: {
           mistletoe
           pyyaml
           finalAttrs.finalPackage # reflex
-          typing-extensions
           typing-inspection
         ];
         reflex-hosting-cli.dependencies = [
@@ -394,6 +432,7 @@ buildPythonPackage (finalAttrs: {
           subPkgs.reflex-components-recharts
           subPkgs.reflex-components-sonner
           subPkgs.reflex-hosting-cli
+          subPkgs.reflex-integrations-docs
           ruff
           ruff-format
         ];
@@ -410,10 +449,12 @@ buildPythonPackage (finalAttrs: {
     );
 
     tests = {
+      # overridePythonAttrs does not exist for finalAttrs.finalPackage
       reflex-no-checks = finalAttrs.finalPackage.overrideAttrs (old: {
-        pname = "${old.pname}-sans-checks-phase";
+        pname = "${old.pname}-sans-check-phase";
         doCheck = false;
-        nativeCheckInputs = [ ];
+        doInstallCheck = false;
+        dontCheckPythonMetadata = true;
       });
     }
     // finalAttrs.passthru.subPkgs;

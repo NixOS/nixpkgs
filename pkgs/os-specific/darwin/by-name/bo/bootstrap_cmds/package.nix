@@ -5,27 +5,15 @@
   flex,
   meson,
   mkAppleDerivation,
-  pkgs,
+  sourceRelease,
   replaceVars,
   stdenv,
   stdenvNoCC,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  Libc = bootstrapSourceRelease "Libc";
-  xnu = bootstrapSourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";

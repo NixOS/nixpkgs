@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
   nodejs_24,
@@ -21,16 +22,16 @@ let
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "24.1.4";
+  version = "25.1.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-NFZoJVhixD67dqLq0tVB2GtMHl0n6qngw1uj/Qqxz8w=";
+    hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
   };
 
-  npmDepsHash = "sha256-yGPn9sJ5dsNIvrofqL1/F9E3T/vhI04RmZEQwjsHQa0=";
+  npmDepsHash = "sha256-HAOZlCRcPjX0u9GBLaYR03Jb+bvg679MqcGGHkQ2FPM=";
 
   makeCacheWritable = true;
 
@@ -45,6 +46,10 @@ buildNpmPackage' rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
+
+  postInstall = ''
+    cp ${lib.getExe balena-compose-parser} $out/lib/node_modules/balena-cli/node_modules/@balena/compose-parser/bin/
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -71,7 +76,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

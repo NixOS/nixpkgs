@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-webserver";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.9.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-webserver";
     tag = finalAttrs.version;
-    hash = "sha256-R+MLM42m3UTBFHqCAGezU4jz0Hi1+X2W1Yje7+ctl6k=";
+    hash = "sha256-U2xcx3TVPkEgea2gdSdbEa+jDI6h6vftLUi8AZPY3fU=";
   };
 
-  cargoHash = "sha256-/WVMdSGEawvAJ0viV/2eVhWGlvgaGUpe9ZHDCBUOc1I=";
+  cargoHash = "sha256-PLmmOw2ZMPn/ODBJn1NBvWyeGEPOcKB+aepoDqhqzZc=";
 
   meta = {
     description = "Implements an HTTP server mapping URLs to zenoh paths";
@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

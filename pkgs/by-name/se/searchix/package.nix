@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
@@ -18,17 +18,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.7";
+  version = "0.4.10";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mvE68j+rozEePbAqIuit+zFZ/nQkiR6VlesD4/ilo8=";
+    hash = "sha256-TO+PaNovMJ6WzZoc6iYJ9jfLzZXZ3y4GwqcMm+afD/o=";
   };
 
-  vendorHash = "sha256-BG6v4HsXtSCmEmzdawH1YfEfDMbXNH8XGMF+jJgy+3w=";
+  vendorHash = "sha256-TveAe1aUYLUQuZQXCBYYFx0d0+Ql+IxFn9C9cFNsRAw=";
 
   overrideModAttrs = old: {
     # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.

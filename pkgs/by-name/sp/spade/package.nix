@@ -16,18 +16,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-jdcwIn/CiibWiYhh4yICa1LWXZCI0r2w3AFDRO0ZbFw=";
+    hash = "sha256-HSRttrf4Dsl9iatqVr9YH4MoKPwe9XJWJYqNRchFLY0=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-JnyICAJ+W9ZwQpJnSVkEb5dSvkrcnx6PZ/IgQMEOsag=";
+  cargoHash = "sha256-koMnkwgQtVMvxlslvC5dZAhr3K/66XWyp5UPW7yZtio=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [

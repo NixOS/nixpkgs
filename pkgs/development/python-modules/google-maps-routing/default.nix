@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-maps-routing";
-  version = "3.31.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "google-maps-routing-v${version}";
+    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${src.name}/packages/google-maps-routing";
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  passthru.skipBulkUpdate = true; # picks wrong tag
   passthru.updateScript = gitUpdater { rev-prefix = "google-maps-routing-v"; };
 
   meta = {

@@ -24,12 +24,12 @@ buildPecl rec {
 
   configureFlags = [
     "--with-zlib-dir=${zlib.dev}"
-    "--with-libmemcached-dir=${libmemcached}"
   ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cyrus_sasl
+    libmemcached
     zlib
   ];
 

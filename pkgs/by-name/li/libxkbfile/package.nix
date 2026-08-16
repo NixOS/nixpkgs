@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  meson,
+  ninja,
   pkg-config,
   xorgproto,
   libx11,
@@ -10,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbfile";
-  version = "1.1.3";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -19,12 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libxkbfile-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qbY+6pl6u57mqLT7tRWDHIQfRxr4RaCd5EOygAOHS+w=";
+    hash = "sha256-f3GITl+vVvsOgj84SFmc+bWpr85RyQmCuutk9jUjPr8=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     xorgproto

@@ -121,6 +121,10 @@ let
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
+    tree-sitter.builtGrammars =
+      mapAttrs (_: _: nativePlatforms)
+        (pkgsForCross systems.examples.wasm32-wasip1 (builtins.head supportedSystems))
+        .tree-sitter.builtGrammars;
     zlib = nativePlatforms;
   };
 
@@ -197,8 +201,8 @@ in
 
   crossIphone32 = mapTestOnCross systems.examples.iphone32 darwinCommon;
 
-  # Test some cross builds to the Sheevaplug
-  crossSheevaplugLinux = mapTestOnCross systems.examples.sheevaplug (
+  # Test some cross builds to ARMv5
+  armv5tel = mapTestOnCross systems.examples.armv5tel-multiplatform (
     linuxCommon
     // {
       ubootSheevaplug = nativePlatforms;
@@ -235,8 +239,6 @@ in
   # Linux on armv7l-hf
   armv7l-hf = mapTestOnCross systems.examples.armv7l-hf-multiplatform linuxCommon;
 
-  pogoplug4 = mapTestOnCross systems.examples.pogoplug4 linuxCommon;
-
   # Linux on aarch64
   aarch64 = mapTestOnCross systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross systems.examples.aarch64-multiplatform-musl linuxCommon;
@@ -268,6 +270,7 @@ in
   android64 = mapTestOnCross systems.examples.aarch64-android-prebuilt linuxCommon;
   android32 = mapTestOnCross systems.examples.armv7a-android-prebuilt linuxCommon;
 
+  wasm32-wasip1 = mapTestOnCross systems.examples.wasm32-wasip1 wasiCommon;
   wasi32 = mapTestOnCross systems.examples.wasi32 wasiCommon;
 
   msp430 = mapTestOnCross systems.examples.msp430 embedded;

@@ -124,10 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath ${onetbb}/lib $out/lib/libtiledb.dylib
-  '';
-
   meta = {
     description = "Allows you to manage massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";

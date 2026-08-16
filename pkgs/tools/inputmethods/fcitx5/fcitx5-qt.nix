@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   fcitx5,
   gettext,
   qtbase,
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5-qt${majorVersion}";
-  version = "5.1.13";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    hash = "sha256-CrrQQPtWQwE6eZOJB+uLVUjPJMKW/sz/tij41dyEe0U=";
+    hash = "sha256-fyqejCb6c6VuPb44UPQDLrdZ93mHTxlX29jCN6KcZ5I=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     wrapQtAppsHook
   ];

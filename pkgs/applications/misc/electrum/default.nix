@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  protobuf,
   wrapQtAppsHook,
   python3,
   zbar,
@@ -21,14 +20,14 @@ let
     else
       "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "electrum";
-  version = "4.7.2";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-qzA/HLw+QPTdE6qsg8TNqr0DuOgfMrs8UcEnfp1uBpc=";
+    url = "https://download.electrum.org/${finalAttrs.version}/Electrum-${finalAttrs.version}.tar.gz";
+    hash = "sha256-z14bzs81eJNTMSWSBLTyCmsljDNztG54SVkoTcSqvsM=";
   };
 
   build-system = with python3.pkgs; [
@@ -36,7 +35,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    protobuf
     python3.pkgs.pythonRelaxDepsHook
   ]
   ++ lib.optionals enableQt [
@@ -101,11 +99,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_qml_types.py"
   ];
 
-  postPatch = ''
-    # Upstream tarball omits regenerated protobuf bindings in some releases.
-    protoc --python_out=. electrum/paymentrequest.proto
-  ''
-  + (
+  postPatch =
     if enableQt then
       ''
         substituteInPlace ./electrum/qrscanner.py \
@@ -114,8 +108,7 @@ python3.pkgs.buildPythonApplication rec {
     else
       ''
         sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-      ''
-  );
+      '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
@@ -175,4 +168,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "electrum";
   };
-}
+})

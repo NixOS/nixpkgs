@@ -8,7 +8,6 @@
 let
   cfg = config.services.prometheus.exporters.nvidia-gpu;
   inherit (lib)
-    types
     concatStringsSep
     ;
 in

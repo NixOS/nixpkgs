@@ -35,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "amberol-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-OFZd9nKRqXJMHSIIP8tlSNtFAQzk/f/6SBeEvbdPVK0=";
   };
 

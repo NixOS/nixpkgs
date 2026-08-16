@@ -3,6 +3,7 @@
 }:
 
 rsyslog.override {
+  withLibyaml = false;
   withKrb5 = false;
   withSystemd = false;
   withJemalloc = false;

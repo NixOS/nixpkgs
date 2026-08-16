@@ -8,6 +8,7 @@
   fetchFromGitHub,
   habluetooth,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -15,19 +16,23 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioshelly";
-  version = "13.24.0";
+  version = "13.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioshelly";
-    tag = version;
-    hash = "sha256-yb6oZlrB3MBafKoga9vRrcixXlZeknVRsMztX4hV3PA=";
+    tag = finalAttrs.version;
+    hash = "sha256-YMBIM5OK6eHrQB47zlEce/caU43NGVz71id/hT3VLPs=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp
@@ -50,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to control Shelly";
     homepage = "https://github.com/home-assistant-libs/aioshelly";
-    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

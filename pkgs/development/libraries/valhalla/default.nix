@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_SINGLE_FILES_WERROR" false)
     (lib.cmakeBool "PREFER_EXTERNAL_DEPS" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # On darwin Valhalla only looks at the Homebrew paths
+    (lib.cmakeFeature "SQLITE3_INCLUDE_DIR" "${lib.getDev sqlite}/include")
+    (lib.cmakeFeature "SQLITE3_LIBRARY" "${lib.getLib sqlite}/lib/libsqlite3.dylib")
   ];
 
   buildInputs = [
@@ -83,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Thra11 ];
     pkgConfigModules = [ "libvalhalla" ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

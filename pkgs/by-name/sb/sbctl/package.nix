@@ -68,7 +68,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Pokeylooted
-      raitobezarius
       Scrumplex
     ];
     # go-uefi does not support darwin at the moment:

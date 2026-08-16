@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { execFileSync } = require('node:child_process')
   const { classify } = require('../supportedBranches.js')

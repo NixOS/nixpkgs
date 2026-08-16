@@ -4,20 +4,23 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-language-server";
-  version = "0.17.30";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
     tag = "svelte-language-server@${finalAttrs.version}";
-    hash = "sha256-BuDWp+eC6IIKkZCzvGk62E1Kgecns4fciu3BquJ58zo=";
+    hash = "sha256-FTOkJPXbsG6R53yr4n0/IR2lzFCovrdV0+epOi07lBQ=";
   };
 
   pnpmWorkspaces = [ "svelte-language-server..." ];
@@ -29,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 2;
-    hash = "sha256-v2X2WOEdrDwGO2q9IEjONpHeDFqVp3jGFYYjZ5uFLSE=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-fY3hrCkr/soJk1gp39/jec8lT2ZJI27xRBCZi006oWA=";
   };
 
   nativeBuildInputs = [

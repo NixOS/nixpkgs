@@ -66,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
+  patches = [
+    # FFmpeg 9 removed AVCodec.pix_fmts; drop the check (RPCS3/rpcs3@a8dd0535935a).
+    ./ffmpeg-9-pix-fmts.patch
+  ];
+
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
     #define RPCS3_GIT_VERSION "nixpkgs-${lib.sources.shortRev finalAttrs.src.rev}"
@@ -76,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
     (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)

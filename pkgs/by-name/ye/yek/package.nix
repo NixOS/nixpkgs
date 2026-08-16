@@ -8,20 +8,20 @@
   versionCheckHook,
 }:
 let
-  version = "0.25.2";
+  version = "0.25.5";
 in
 rustPlatform.buildRustPackage {
   pname = "yek";
   version = version;
 
   src = fetchFromGitHub {
-    owner = "bodo-run";
+    owner = "mohsen1";
     repo = "yek";
     tag = "v${version}";
-    hash = "sha256-2gt/leOEhdvj5IXp0Kl3ooUk8eclsMkt6JCIvPsKhMI=";
+    hash = "sha256-CuTIBAZjlAnacrCEUf8zwclyNQHNUPhjc+9Uk2QQ5HY=";
   };
 
-  cargoHash = "sha256-gjDcw8mMZgoy7kjXlBYHhOgYXOV+XoMgflkZoggz42Q=";
+  cargoHash = "sha256-FHniPaUfdbjSRsBccOfe1ea6WbhfQyBIxWqpNiCEkcA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -48,8 +48,8 @@ rustPlatform.buildRustPackage {
     longDescription = ''
       Tool to read text-based files, chunk them, and serialize them for LLM consumption.
     '';
-    homepage = "https://github.com/bodo-run/yek";
-    changelog = "https://github.com/bodo-run/yek/releases/tag/v${version}";
+    homepage = "https://github.com/mohsen1/yek";
+    changelog = "https://github.com/mohsen1/yek/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "yek";
     maintainers = with lib.maintainers; [ louis-thevenet ];

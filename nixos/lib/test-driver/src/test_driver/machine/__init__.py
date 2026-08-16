@@ -1,4 +1,5 @@
 import base64
+import datetime as dt
 import io
 import os
 import platform
@@ -22,6 +23,13 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.duration import (
+    Duration,
+    _warn_if_numeric_duration,
+    as_seconds,
+    as_timedelta,
+)
+from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine.ocr import (
@@ -98,24 +106,46 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
-def retry(fn: Callable, timeout_seconds: int = 900) -> None:
+def retry(
+    fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
+    timeout: dt.timedelta | None = None,
+) -> None:
     """Call the given function repeatedly, with a one second interval between
     retries, until it returns True or a timeout is reached.
 
     Note that the timeout shown will include the time of the last attempted run.
+
+    Has a default timeout of 15 minutes which can be modified.
+    The ``timeout_seconds`` argument is deprecated. Use ``timeout`` instead.
     """
+    if timeout_seconds is not None:
+        if timeout is not None:
+            raise TypeError(
+                "retry() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
+            )
+        if not isinstance(timeout_seconds, dt.timedelta):
+            warnings.warn(
+                "retry(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
+            )
+        timeout = as_timedelta(timeout_seconds)
+
+    if timeout is None:
+        timeout = dt.timedelta(minutes=15)
     start_time = time.monotonic()
 
-    while time.monotonic() - start_time < timeout_seconds:
+    def elapsed() -> dt.timedelta:
+        return dt.timedelta(seconds=time.monotonic() - start_time)
+
+    while elapsed() < timeout:
         if fn(False):
             return
         time.sleep(1)
 
-    elapsed = time.monotonic() - start_time
-
     if not fn(True):
         raise RequestedAssertionFailed(
-            f"action timed out after {elapsed:.2f} seconds (timeout={timeout_seconds})"
+            f"action timed out after {elapsed().total_seconds():.2f} seconds "
+            f"(timeout={timeout.total_seconds()})"
         )
 
 
@@ -192,6 +222,7 @@ class QemuStartCommand:
     def build_environment(
         state_dir: Path,
         shared_dir: Path,
+        efi_vars_path: Path | None = None,
     ) -> dict:
         # We make a copy to not update the current environment
         env = dict(os.environ)
@@ -202,6 +233,13 @@ class QemuStartCommand:
                 "USE_TMPDIR": "1",
             }
         )
+        if efi_vars_path is not None:
+            env.update(
+                {
+                    "NIX_EFI_VARS": str(efi_vars_path),
+                }
+            )
+
         return env
 
     def run(
@@ -212,6 +250,7 @@ class QemuStartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
+        efi_vars_path: Path | None = None,
         vsock_guest: Path | None = None,
     ) -> subprocess.Popen:
         return subprocess.Popen(
@@ -227,7 +266,9 @@ class QemuStartCommand:
             stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
-            env=self.build_environment(state_dir, shared_dir),
+            env=self.build_environment(
+                state_dir, shared_dir, efi_vars_path=efi_vars_path
+            ),
         )
 
 
@@ -329,13 +370,17 @@ class BaseMachine(ABC):
         return self.execute(f"systemctl {q}")
 
     def wait_for_unit(
-        self, unit: str, user: str | None = None, timeout: int = 900
+        self,
+        unit: str,
+        user: str | None = None,
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as after
         timing out.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_unit")
 
         def check_active(_last_try: bool) -> bool:
             state = self.get_unit_property(unit, "ActiveState", user)
@@ -357,7 +402,7 @@ class BaseMachine(ABC):
             f"waiting for unit {unit}"
             + (f" with user {user}" if user is not None else "")
         ):
-            retry(check_active, timeout)
+            retry(check_active, as_timedelta(timeout))
 
     def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
         """
@@ -431,13 +476,14 @@ class BaseMachine(ABC):
                     f"'{require_state}' but it is in state '{state}'"
                 )
 
-    def succeed(self, *commands: str, timeout: int | None = None) -> str:
+    def succeed(self, *commands: str, timeout: Duration | None = None) -> str:
         """
         Execute a shell command, raising an exception if the exit status is
         not zero, otherwise returning the standard output. Similar to `execute`,
         except that the timeout is `None` by default. See `execute` for details on
         command execution.
         """
+        _warn_if_numeric_duration(timeout, "succeed")
         output = ""
         for command in commands:
             with self.nested(f"must succeed: {command}"):
@@ -450,11 +496,12 @@ class BaseMachine(ABC):
                 output += out
         return output
 
-    def fail(self, *commands: str, timeout: int | None = None) -> str:
+    def fail(self, *commands: str, timeout: Duration | None = None) -> str:
         """
         Like `succeed`, but raising an exception if the command returns a zero
         status.
         """
+        _warn_if_numeric_duration(timeout, "fail")
         output = ""
         for command in commands:
             with self.nested(f"must fail: {command}"):
@@ -466,14 +513,23 @@ class BaseMachine(ABC):
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(
+        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> str:
         """
-        Repeat a shell command with 1-second intervals until it succeeds.
-        Has a default timeout of 900 seconds which can be modified, e.g.
-        `wait_until_succeeds(cmd, timeout=10)`. See `execute` for details on
-        command execution.
+        Repeat a shell command on 1-second intervals until it succeeds.
+        Has a default timeout of 15 minutes which can be modified.
+        Example:
+            ```py
+            import datetime as dt
+
+            wait_until_succeeds(cmd, timeout=dt.timedelta(seconds=10))
+            ```
+        A bare number is still accepted and interpreted as a number of seconds.
+        See `execute` for details on command execution.
         Throws an exception on timeout.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_succeeds")
         output = ""
 
         def check_success(_last_try: bool) -> bool:
@@ -482,13 +538,16 @@ class BaseMachine(ABC):
             return status == 0
 
         with self.nested(f"waiting for success: {command}"):
-            retry(check_success, timeout)
+            retry(check_success, as_timedelta(timeout))
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(
+        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> str:
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_fails")
         output = ""
 
         def check_failure(_last_try: bool) -> bool:
@@ -497,47 +556,76 @@ class BaseMachine(ABC):
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
-            retry(check_failure, timeout)
+            retry(check_failure, as_timedelta(timeout))
             return output
 
-    def sleep(self, secs: int) -> None:
-        # We want to sleep in *guest* time, not *host* time.
-        self.succeed(f"sleep {secs}")
+    def sleep(
+        self,
+        secs: dt.timedelta | int | None = None,
+        duration: dt.timedelta | None = None,
+    ) -> None:
+        if secs is not None:
+            if duration is not None:
+                raise TypeError(
+                    "sleep() got both 'duration' and 'secs'. Pass only 'duration'"
+                )
+            if not isinstance(secs, dt.timedelta):
+                warnings.warn(
+                    "sleep(): The 'secs' argument is deprecated. Use 'duration' instead.",
+                )
+            duration = as_timedelta(secs)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+        if duration is None:
+            raise TypeError("sleep() missing required argument 'duration'")
+
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {as_seconds(duration)}")
+
+    def wait_for_file(
+        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_file")
 
         def check_file(_last_try: bool) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
-            retry(check_file, timeout)
+            retry(check_file, as_timedelta(timeout))
 
     def wait_for_open_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self,
+        port: int,
+        addr: str = "localhost",
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
         (default `localhost`).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_open_port")
 
         def port_is_open(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
 
         with self.nested(f"waiting for TCP port {port} on {addr}"):
-            retry(port_is_open, timeout)
+            retry(port_is_open, as_timedelta(timeout))
 
     def wait_for_open_unix_socket(
-        self, addr: str, is_datagram: bool = False, timeout: int = 900
+        self,
+        addr: str,
+        is_datagram: bool = False,
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until a process is listening on the given UNIX-domain socket
         (default to a UNIX-domain stream socket).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_open_unix_socket")
 
         nc_flags = [
             "-z",
@@ -551,22 +639,26 @@ class BaseMachine(ABC):
         with self.nested(
             f"waiting for UNIX-domain {'datagram' if is_datagram else 'stream'} on '{addr}'"
         ):
-            retry(socket_is_open, timeout)
+            retry(socket_is_open, as_timedelta(timeout))
 
     def wait_for_closed_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self,
+        port: int,
+        addr: str = "localhost",
+        timeout: Duration = dt.timedelta(minutes=15),
     ) -> None:
         """
         Wait until nobody is listening on the given TCP port and IP address
         (default `localhost`).
         """
+        _warn_if_numeric_duration(timeout, "wait_for_closed_port")
 
         def port_is_closed(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
 
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
-            retry(port_is_closed, timeout)
+            retry(port_is_closed, as_timedelta(timeout))
 
     def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         """
@@ -585,7 +677,7 @@ class BaseMachine(ABC):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: Duration | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
@@ -615,16 +707,23 @@ class BaseMachine(ABC):
         the machine and would therefore break the pipe that would be used for
         retrieving the return code.
 
-        A timeout for the command can be specified (in seconds) using the optional
-        `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
-        `execute(cmd, timeout=None)`. The default is 900 seconds.
+        Has a default timeout of 15 minutes which can be modified.
+        Example:
+            ```py
+            import datetime as dt
+
+            execute(cmd, timeout=dt.timedelta(seconds=10))
+            execute(cmd, timeout=None)
+            ```
+        A bare number is still accepted and interpreted as a number of seconds.
         """
+        _warn_if_numeric_duration(timeout, "execute")
         self.run_callbacks()
         return self._execute(
             command=command,
             check_return=check_return,
             check_output=check_output,
-            timeout=timeout,
+            timeout=as_timedelta(timeout) if timeout is not None else None,
         )
 
     @abstractmethod
@@ -633,7 +732,7 @@ class BaseMachine(ABC):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]: ...
 
     def run_callbacks(self) -> None:
@@ -648,25 +747,22 @@ class BaseMachine(ABC):
     def copy_from_machine(self, source: str, target_dir: str = "") -> None:
         """Copy a file from the machine (specified by an in-machine source path) to a path
         relative to `$out`. The file is copied via the `shared_dir` shared among
-        all the machines (using a temporary directory).
+        all the machines.
         """
         # Compute the source, target, and intermediate shared file names
         vm_src = Path(source)
-        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = Path(shared_td)
-            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
-            vm_intermediate = vm_shared_temp / vm_src.name
-            intermediate = shared_temp / vm_src.name
-            # Copy the file to the shared directory inside machines
-            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
-            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = self.out_dir / target_dir / vm_src.name
-            abs_target.parent.mkdir(exist_ok=True, parents=True)
-            # Copy the file from the shared directory outside machines
-            if intermediate.is_dir():
-                shutil.copytree(intermediate, abs_target)
-            else:
-                shutil.copy(intermediate, abs_target)
+        vm_intermediate = Path("/tmp/shared") / target_dir / vm_src.name
+        intermediate = self.shared_dir / target_dir / vm_src.name
+        # Copy the file to the shared directory inside machines
+        self.succeed(make_command(["mkdir", "-p", vm_intermediate.parent]))
+        self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+        abs_target = self.out_dir / target_dir / vm_src.name
+        abs_target.parent.mkdir(exist_ok=True, parents=True)
+        # Copy the file from the shared directory outside machines
+        if intermediate.is_dir():
+            shutil.copytree(intermediate, abs_target)
+        else:
+            shutil.copy(intermediate, abs_target)
 
     @warnings.deprecated("Use copy_from_machine() instead")
     def copy_from_vm(self, source: str, target_dir: str = "") -> None:
@@ -750,6 +846,9 @@ class QemuMachine(BaseMachine):
     # Store all console output for full log retrieval
     full_console_log: list[str]
 
+    efi_vars_path: Path
+    efi_vars: EfiVars
+
     def __init__(
         self,
         out_dir: Path,
@@ -790,6 +889,9 @@ class QemuMachine(BaseMachine):
 
         self.booted = False
         self.connected = False
+
+        self.efi_vars_path = self.state_dir / f"{self.name}-efi-vars.fd"
+        self.efi_vars = EfiVars(self.efi_vars_path, self)
 
     def ssh_backdoor_command(self) -> str:
         assert self.vsock_host is not None
@@ -846,10 +948,13 @@ class QemuMachine(BaseMachine):
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
+        _warn_if_numeric_duration(timeout, "wait_until_tty_matches")
         matcher = re.compile(regexp)
 
         def tty_matches(last_try: bool) -> bool:
@@ -862,7 +967,7 @@ class QemuMachine(BaseMachine):
             return len(matcher.findall(text)) > 0
 
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
-            retry(tty_matches, timeout)
+            retry(tty_matches, as_timedelta(timeout))
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
@@ -873,7 +978,7 @@ class QemuMachine(BaseMachine):
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         self.connect()
 
@@ -882,7 +987,7 @@ class QemuMachine(BaseMachine):
 
         timeout_str = ""
         if timeout is not None:
-            timeout_str = f"timeout {timeout}"
+            timeout_str = f"timeout {timeout.total_seconds()}"
 
         # While sh is bash on NixOS, this is not the case for every distro.
         # We explicitly call bash here to allow for the driver to boot other distros as well.
@@ -908,6 +1013,7 @@ class QemuMachine(BaseMachine):
 
         return (rc, output.decode(errors="replace"))
 
+    @warnings.deprecated("Use the SSH backdoor instead")
     def shell_interact(self, address: str | None = None) -> None:
         """
         Allows you to directly interact with the guest shell. This should
@@ -973,7 +1079,9 @@ class QemuMachine(BaseMachine):
             self.connected = False
 
     def wait_for_qmp_event(
-        self, event_filter: Callable[[dict[str, Any]], bool], timeout: int = 60 * 10
+        self,
+        event_filter: Callable[[dict[str, Any]], bool],
+        timeout: Duration = dt.timedelta(minutes=10),
     ) -> dict[str, Any]:
         """
         Wait for a QMP event which you can filter with the `event_filter` function.
@@ -983,55 +1091,64 @@ class QemuMachine(BaseMachine):
         It will skip all events received in the meantime, if you want to keep them,
         you have to do the bookkeeping yourself and store them somewhere.
 
-        By default, it will wait up to 10 minutes, `timeout` is in seconds.
+        By default, it will wait up to 10 minutes.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_qmp_event")
         if self.qmp_client is None:
             raise RuntimeError("QMP API is not ready yet, is the VM ready?")
 
-        start = time.time()
+        timeout = as_timedelta(timeout)
+        start = time.monotonic()
         while True:
             evt = self.qmp_client.wait_for_event(timeout=timeout)
             if event_filter(evt):
                 return evt
 
-            elapsed = time.time() - start
+            elapsed = dt.timedelta(seconds=time.monotonic() - start)
             if elapsed >= timeout:
                 raise TimeoutError
 
-    def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
+    def send_chars(
+        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
+    ) -> None:
         r"""
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
         followed by the Enter key.
         """
+        _warn_if_numeric_duration(delay, "send_chars")
         with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
                 self.send_key(char, delay, log=False)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+    def wait_for_file(
+        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_file")
 
         def check_file(_last_try: bool) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
-            retry(check_file, timeout)
+            retry(check_file, as_timedelta(timeout))
 
     def connect(self) -> None:
         """
         Wait for a connection to the guest root shell
         """
 
-        def shell_ready(timeout_secs: int) -> bool:
+        def shell_ready(timeout: dt.timedelta) -> bool:
             """We sent some data from the backdoor service running on the guest
             to indicate that the backdoor shell is ready.
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
-            (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
+            assert self.shell
+            (ready, _, _) = select.select([self.shell], [], [], timeout.total_seconds())
             return bool(ready)
 
         if self.connected:
@@ -1043,12 +1160,16 @@ class QemuMachine(BaseMachine):
             assert self.shell
 
             tic = time.time()
-            # TODO: do we want to bail after a set number of attempts?
-            while not shell_ready(timeout_secs=30):
+
+            for _ in range(10):
+                if shell_ready(timeout=dt.timedelta(seconds=30)):
+                    break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
                     "  To debug, enter the VM and run 'systemctl status backdoor.service'."
                 )
+            else:
+                raise RuntimeError("Shell did not start in time")
 
             while True:
                 chunk = self.shell.recv(1024)
@@ -1126,7 +1247,9 @@ class QemuMachine(BaseMachine):
         with self._managed_screenshot() as screenshot_path:
             return perform_ocr_on_screenshot(screenshot_path)
 
-    def wait_for_text(self, regex: str, timeout: int = 900) -> None:
+    def wait_for_text(
+        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
@@ -1136,6 +1259,7 @@ class QemuMachine(BaseMachine):
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "wait_for_text")
 
         def screen_matches(last_try: bool) -> bool:
             variants = self.get_screen_text_variants()
@@ -1149,9 +1273,11 @@ class QemuMachine(BaseMachine):
             return False
 
         with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches, timeout)
+            retry(screen_matches, as_timedelta(timeout))
 
-    def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
+    def wait_for_console_text(
+        self, regex: str, timeout: Duration | None = None
+    ) -> None:
         """
         Wait until the supplied regular expressions match a line of the
         serial console output.
@@ -1159,28 +1285,30 @@ class QemuMachine(BaseMachine):
 
         When this method returns, the console output that includes the match has already become part of get_console_log().
         """
+        _warn_if_numeric_duration(timeout, "wait_for_console_text")
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
 
-        def console_matches(_last_try: bool) -> bool:
+        def console_matches(_last_try: bool, block: bool = False) -> bool:
             nonlocal console
             try:
-                # This will return as soon as possible and
-                # sleep 1 second.
-                console.write(self.last_lines.get(block=False))
+                while True:
+                    # This will return as soon as possible and
+                    # sleep 1 second.
+                    console.write(self.last_lines.get(block=block))
+                    console.seek(0)
+                    matches = re.search(regex, console.read())
+                    if matches is not None:
+                        return True
             except queue.Empty:
-                pass
-            console.seek(0)
-            matches = re.search(regex, console.read())
-            return matches is not None
+                return False
 
         with self.nested(f"waiting for {regex} to appear on console"):
             if timeout is not None:
-                retry(console_matches, timeout)
+                retry(console_matches, as_timedelta(timeout))
             else:
-                while not console_matches(False):
-                    pass
+                console_matches(False, block=True)
 
     def get_console_log(self) -> str:
         """
@@ -1190,7 +1318,10 @@ class QemuMachine(BaseMachine):
         return "\n".join(self.full_console_log)
 
     def send_key(
-        self, key: str, delay: float | None = 0.01, log: bool | None = True
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
     ) -> None:
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
@@ -1199,12 +1330,13 @@ class QemuMachine(BaseMachine):
         Please also refer to the QEMU documentation for more information on the
         input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
         """
+        _warn_if_numeric_duration(delay, "send_key")
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
         with context:
             self.send_monitor_command(f"sendkey {key}")
             if delay is not None:
-                time.sleep(delay)
+                time.sleep(as_seconds(delay))
 
     def send_console(self, chars: str) -> None:
         r"""
@@ -1247,6 +1379,7 @@ class QemuMachine(BaseMachine):
             self.qmp_path,
             self.shell_path,
             allow_reboot,
+            self.efi_vars_path,
             self.vsock_guest,
         )
 
@@ -1332,10 +1465,11 @@ class QemuMachine(BaseMachine):
         self.send_key("ctrl-alt-delete")
         self.connected = False
 
-    def wait_for_x(self, timeout: int = 900) -> None:
+    def wait_for_x(self, timeout: Duration = dt.timedelta(minutes=15)) -> None:
         """
         Wait until it is possible to connect to the X server.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_x")
 
         def check_x(_last_try: bool) -> bool:
             cmd = (
@@ -1349,18 +1483,21 @@ class QemuMachine(BaseMachine):
             return status == 0
 
         with self.nested("waiting for the X11 server"):
-            retry(check_x, timeout)
+            retry(check_x, as_timedelta(timeout))
 
     def get_window_names(self) -> list[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
+    def wait_for_window(
+        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
         """
+        _warn_if_numeric_duration(timeout, "wait_for_window")
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -1374,7 +1511,7 @@ class QemuMachine(BaseMachine):
             return any(pattern.search(name) for name in names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible, timeout)
+            retry(window_is_visible, as_timedelta(timeout))
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """
@@ -1431,6 +1568,28 @@ class QemuMachine(BaseMachine):
         self.connected = False
         self.connect()
 
+    def dump_efi_vars(self) -> None:
+        for var in self.read_efi_vars():
+            var.print()
+
+    def read_efi_vars(self) -> list[EfiVariable]:
+        config = self.efi_vars.read_content()
+        if not config:
+            return []
+
+        out = []
+        for vendor, variables in config.items():
+            for name, v in variables.items():
+                out.append(v)
+
+        return out
+
+    def create_efi_vars(self) -> None:
+        self.efi_vars.create_empty()
+
+    def write_efi_vars(self, add: list[EfiVariable]) -> None:
+        self.efi_vars.write(add)
+
 
 class NspawnMachine(BaseMachine):
     """
@@ -1445,6 +1604,7 @@ class NspawnMachine(BaseMachine):
 
     machine_sock_path: Path
     machine_sock: socket.socket | None
+    notify_thread: threading.Thread | None
 
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
@@ -1475,7 +1635,12 @@ class NspawnMachine(BaseMachine):
 
         self.start_command = start_command
         self.process = None
-        self.pid = None
+        self.notify_thread = None
+        # State maintained by the notify-socket drainer thread (see
+        # `_drain_notify_socket`). Guarded by `_notify_lock`.
+        self._notify_lock = threading.Lock()
+        self._notify_ready = False
+        self._notify_leader_pid: int | None = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
@@ -1486,56 +1651,99 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
-        if self.pid is None:
+        if self.process is None:
             return
 
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
-        assert self.process is not None
+        self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.process.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
         return self.process is not None
 
-    def _poll_socket(self) -> tuple[bool, int | None]:
-        """Non-blocking check of container status via socket.
-        Returns (is_ready, leader_pid).
+    def _drain_notify_socket(self) -> None:
+        """Continuously drain the container's `sd_notify` socket (NOTIFY_SOCKET)
+        for the whole lifetime of the container, recording readiness and the
+        leader PID as they arrive.
+
+        Draining must not stop after boot: the container's PID 1 re-sends
+        `READY=1` on every `systemctl daemon-reexec` (the same Manager.Reexecute
+        that switch-to-configuration issues on a systemd change). If nothing
+        reads the socket, its receive buffer fills and PID 1 blocks in
+        `sendmsg()` to NOTIFY_SOCKET while re-executing -- it never finishes
+        re-initializing, and every later `systemctl` call inside the container
+        hangs or fails with `Transport endpoint is not connected`.
         """
         assert self.machine_sock is not None
-        ready = False
-        leader_pid = None
-        try:
-            data, _ = self.machine_sock.recvfrom(4096)
-            msg = data.decode()
-            for line in msg.splitlines():
+        sock = self.machine_sock
+        proc = self.process
+        assert proc is not None
+        # Bound the thread to the container's lifetime: on
+        # `wait_for_shutdown()` only non-None `proc.poll()` ends the loop.
+        # On exit of PID 1, any datagrams still queued are stale, so drop them.
+        while proc.poll() is None:
+            try:
+                # Block (with a timeout so we notice the container exiting)
+                # rather than busy-poll; we just need to keep the buffer empty.
+                sock.settimeout(0.5)
+                data, _ = sock.recvfrom(4096)
+            except (TimeoutError, BlockingIOError):
+                continue
+            except OSError:
+                break
+            ready = False
+            leader_pid = None
+            for line in data.decode(errors="replace").splitlines():
                 if line == "READY=1":
                     ready = True
                 if line.startswith("X_NSPAWN_LEADER_PID="):
                     leader_pid = int(line.split("=")[1])
-        except OSError:
-            pass
-        return ready, leader_pid
+            if ready or leader_pid is not None:
+                with self._notify_lock:
+                    if ready:
+                        self._notify_ready = True
+                    if leader_pid is not None:
+                        self._notify_leader_pid = leader_pid
 
     @cached_property
     def get_systemd_process(self) -> int:
-        """Block until startup is complete and return the PID of the container's systemd process."""
-        assert self.process is not None
+        """Block until startup is complete and return the PID of the container's systemd process.
 
-        container_pid: int | None = None
-        is_ready = False
+        Readiness and the leader PID are reported over NOTIFY_SOCKET, which is
+        drained by `_drain_notify_socket` (started in `start()`); we just wait
+        for that thread to record both.
+        """
+        assert self.process is not None
 
         start_time = time.monotonic()
         last_warning = start_time
         delay = 0.01
         max_delay = 0.5
 
-        while not is_ready or container_pid is None:
-            # Poll the socket until we have the container leader PID
+        # Poll the socket until we have the container leader PID
+        while True:
             if self.process.poll() is not None:
                 raise MachineError("systemd-nspawn process exited unexpectedly")
+
+            with self._notify_lock:
+                is_ready = self._notify_ready
+                container_pid = self._notify_leader_pid
+            if is_ready and container_pid is not None:
+                return container_pid
 
             # Print periodic warnings every 10s so the user knows we aren't deadlocked
             now = time.monotonic()
@@ -1545,25 +1753,15 @@ class NspawnMachine(BaseMachine):
                 )
                 last_warning = now
 
-            # Poll and update our local tracking variables
-            ready_now, pid_now = self._poll_socket()
-            if ready_now:
-                is_ready = True
-            if pid_now:
-                container_pid = pid_now
-
-            if not (is_ready and container_pid):
-                time.sleep(delay)
-                delay = min(delay * 2, max_delay)
-
-        return container_pid
+            time.sleep(delay)
+            delay = min(delay * 2, max_delay)
 
     def _execute(
         self,
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         self.start()
 
@@ -1577,7 +1775,7 @@ class NspawnMachine(BaseMachine):
         # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
         # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
         # will continue to use the original /etc/profile.
-        command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
+        command = f"set -eo pipefail; USER=root HOME=/root source /etc/profile; set -u; {command}"
 
         cp = subprocess.run(
             [
@@ -1595,7 +1793,7 @@ class NspawnMachine(BaseMachine):
                 command,
             ],
             env={},
-            timeout=timeout,
+            timeout=timeout.total_seconds() if timeout is not None else None,
             stdout=subprocess.PIPE,
             text=True,
         )
@@ -1670,10 +1868,10 @@ class NspawnMachine(BaseMachine):
 
         self.machine_sock = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_DGRAM)
         self.machine_sock.bind(str(self.machine_sock_path))
-        self.machine_sock.setblocking(False)
 
         self.process = subprocess.Popen(
             [self.start_command],
+            cwd=self.state_dir,
             env={
                 "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
                 "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),
@@ -1683,9 +1881,14 @@ class NspawnMachine(BaseMachine):
             stdout=subprocess.PIPE,
         )
 
-        self.pid = self.process.pid
+        self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        # Keep the notify socket drained for the container's whole lifetime, so
+        # PID 1 never blocks re-sending `READY=1` on `daemon-reexec`.
+        self.notify_thread = threading.Thread(
+            target=self._drain_notify_socket, daemon=True
+        )
+        self.notify_thread.start()
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
@@ -1710,3 +1913,18 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+
+
+class MachineDeprecationWrapper:
+    def __init__(self, msg: str, machine: QemuMachine | NspawnMachine):
+        self.msg = msg
+        self.machine = machine
+
+    def __getattribute__(self, name: str):
+        if name in ("msg", "machine"):
+            return object.__getattribute__(self, name)
+        typename = self.machine.__class__.__name__
+        warnings.warn(
+            f"invoking '{typename}.{name}' is deprecated: {self.msg}",
+        )
+        return self.machine.__getattribute__(name)

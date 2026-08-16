@@ -85,16 +85,20 @@ in
 
     (mkIf inInitrd {
       boot.initrd.kernelModules = [ "btrfs" ];
-      boot.initrd.availableKernelModules = [
-        "crc32c"
-      ]
-      ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
-        # The canonical names of these modules are not very stable, so use the algorithm names that the btrfs module expects.
-        # See: https://github.com/torvalds/linux/blob/v6.19-rc1/fs/btrfs/super.c#L2705-L2708
-        "xxhash64"
-        "sha256" # Should be baked into our kernel, just to be sure
-        "blake2b-256"
-      ];
+      boot.initrd.availableKernelModules = (
+        mkIf (config.boot.kernelPackages.kernel.kernelOlder "7.0") (
+          [
+            "crc32c"
+          ]
+          ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
+            # The canonical names of these modules are not very stable, so use the algorithm names that the btrfs module expects.
+            # See: https://github.com/torvalds/linux/blob/v6.19-rc1/fs/btrfs/super.c#L2705-L2708
+            "xxhash64"
+            "sha256" # Should be baked into our kernel, just to be sure
+            "blake2b-256"
+          ]
+        )
+      );
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs

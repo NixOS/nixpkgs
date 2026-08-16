@@ -10,19 +10,14 @@
 }:
 stdenv.mkDerivation {
   pname = "stabber-unstable";
-  version = "2020-06-08";
+  version = "2026-03-05";
 
   src = fetchFromGitHub {
-    owner = "boothj5";
+    owner = "profanity-im";
     repo = "stabber";
-    rev = "3e5c2200715666aad403d0076e8ab584b329965e";
-    sha256 = "0042nbgagl4gcxa5fj7bikjdi1gbk0jwyqnzc5lswpb0l5y0i1ql";
+    rev = "ba6ca0707833c70ab38681bcc28bfff025c491f1";
+    hash = "sha256-q3WfPjqD4AotdDukVMNg9Hz/Ns2PgBaoNk06sFm0E68=";
   };
-
-  postPatch = ''
-    # New toolchainsd like gcc-13 trigger warnings and fail the build.
-    substituteInPlace configure.ac --replace "-Werror" ""
-  '';
 
   preAutoreconf = ''
     mkdir m4

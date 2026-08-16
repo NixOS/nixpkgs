@@ -7,53 +7,50 @@
   pkg-config,
   electron,
   chromium,
+  libicns,
+  cacert,
   clojure,
+  git,
   vips,
+  python3,
 
   writeShellScriptBin,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
-  replaceVars,
-
-  vulkan-loader,
 
   nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.13";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YqBbhx5WDAElfNpPpSf1qXddK3kZhqGnHhXu/qVl1BA=";
+    hash = "sha256-uHGF/SEbKZF6Ax1yrXYoAjXH5k6PzKF4aB85TXGJvk4=";
   };
 
   patches = [
-    (replaceVars ./hardcode-git-paths.patch {
-      clj-kdtree_src = fetchFromGitHub {
-        owner = "abscondment";
-        repo = "clj-kdtree";
-        rev = "5ec321c5e8006db00fa8b45a8ed9eb0b8f3dd56d";
-        hash = "sha256-ZOv+9TxBsOnSSbfM7kJLP3cQH9FpgA15aETszg7YSes=";
-      };
-    })
-    # outputHash of manvenDeps changes each time `clojure` is updated
+    # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
+    ./0001-disable-auto-update-check.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-uTcHerTZwzeTFhjNs5ExgJU6u2fjDT5YlZemo3qNQOg=";
+  npmDepsHash = "sha256-LBzauu5lpyfwOpnncsjPP4NpnoKqqcvX+HbK0YWNerA=";
 
   nativeBuildInputs = [
-    finalAttrs.passthru.clojureWithCache
+    finalAttrs.passthru.clojureWithHome
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   # For 'sharp' dependency, otherwise it will try to build it
@@ -62,34 +59,43 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
     PUPPETEER_SKIP_DOWNLOAD = true;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   postPatch = ''
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
+
+    substituteInPlace src/renderer/shell/impl/python.cljs \
+      --replace-fail '"/pyodide/pyodide.js"' '"pyodide/pyodide.js"' \
+      --replace-fail '(js/loadPyodide)' '(js/loadPyodide #js {:indexURL "pyodide/"})'
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    # electronDist needs to be modifiable
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
     npm run build
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p build
+      png2icns build/icon.icns resources/public/img/icon.png
+    ''}
     npm exec electron-builder -- --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.icon=build/icon.icns"}
 
     runHook postBuild
   '';
 
+  # NOTE: use "--set-default ELECTRON_ENABLE_LOGGING 1" to debug
   installPhase = ''
     runHook preInstall
 
@@ -99,7 +105,8 @@ buildNpmPackage (finalAttrs: {
         ''
           mkdir -p $out/Applications
           cp -r "dist/mac"*"/Repath Studio.app" "$out/Applications"
-          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio"
+          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio" \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
         ''
       else
         # bash
@@ -112,6 +119,7 @@ buildNpmPackage (finalAttrs: {
             --add-flags "$out/share/repath-studio/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
             --inherit-argv0
         ''
     }
@@ -121,9 +129,9 @@ buildNpmPackage (finalAttrs: {
 
   # chromium package not available for darwin
   doCheck = stdenv.hostPlatform.isLinux;
-  checkPhase = ''
+  checkPhase = lib.optionalString (stdenv.hostPlatform.isLinux) /* sh */ ''
     runHook preCheck
-    export ELECTRON_OVERRIDE_DIST_PATH=electron-dist/
+    export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
     export CHROME_BIN=${chromium}/bin/chromium
     npm run test
@@ -146,48 +154,72 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     # this was taken and adapted from "logseq" package's nixpkgs derivation
-    mavenRepo = stdenv.mkDerivation {
-      name = "repath-studio-${finalAttrs.version}-maven-deps";
+    clojureHome = stdenv.mkDerivation {
+      name = "repath-studio-${finalAttrs.version}-clojure-home";
       inherit (finalAttrs) src patches;
 
-      nativeBuildInputs = [ clojure ];
+      nativeBuildInputs = [
+        cacert
+        clojure
+        git
+      ];
 
       buildPhase = ''
         runHook preBuild
 
-        export HOME="$(mktemp -d)"
         mkdir -p "$out"
+        export HOME="$out"
+        export JAVA_TOOL_OPTIONS="-Duser.home=$out"
 
         # -P       -> resolve all normal deps
         # -M:alias -> resolve extra-deps of the listed aliases
-        clj -Sdeps "{:mvn/local-repo \"$out\"}" -P -M:dev:cljs
+        clojure -P -M:dev:cljs
 
         runHook postBuild
       '';
 
-      # copied from buildMavenPackage
-      # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
       installPhase = ''
         runHook preInstall
 
-        find $out -type f \( \
+        # copied from buildMavenPackage
+        # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+        find "$out/.m2/repository" -type f \( \
           -name \*.lastUpdated \
           -o -name resolver-status.properties \
           -o -name _remote.repositories \) \
           -delete
+
+        # remove .git pointers to the bare repos in _repos
+        find "$out/.gitlibs/libs" -type f -name .git -delete
+
+        # keep only the bare repo config files so the clojure CLI doesn't want to fetch the repos again
+        # but make them be empty for reproducibility
+        find "$out/.gitlibs/_repos" -type f -name "config" -print0 | while read -d "" f; do
+          rm -rf "$(dirname "$f")"
+          mkdir "$(dirname "$f")"
+          touch "$f"
+        done
+
+        # recreate .clojure with empty settings
+        rm -r "$out/.clojure"
+        mkdir -p "$out/.clojure/tools"
+        echo "{}" > "$out/.clojure/deps.edn"
+        echo "{}" > "$out/.clojure/tools/tools.edn"
 
         runHook postInstall
       '';
 
       dontFixup = true;
 
-      outputHash = "sha256-rh9dcgk4qZkBDguUGFCE6ZcPnqBG/v4jlT8py1PUHYM=";
+      outputHash = "sha256-0+7pPY/f7Cn+wgGZyM5gKS7g3dsL4j57oQE4GWdCpu0=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
 
-    clojureWithCache = writeShellScriptBin "clojure" ''
-      exec ${lib.getExe' clojure "clojure"} -Sdeps '{:mvn/local-repo "${finalAttrs.passthru.mavenRepo}"}' "$@"
+    clojureWithHome = writeShellScriptBin "clojure" ''
+      export HOME="${finalAttrs.passthru.clojureHome}"
+      export JAVA_TOOL_OPTIONS="-Duser.home=${finalAttrs.passthru.clojureHome}"
+      exec ${lib.getExe' clojure "clojure"} "$@"
     '';
 
     updateScript = ./update.sh;

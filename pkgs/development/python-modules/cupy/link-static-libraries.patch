@@ -1,0 +1,30 @@
+Instead of looking up static libraries by hand in `$CUDA_PATH/lib{64,}` (which does not work with
+the split CUDA redistributables), link them like any other library, so that the compiler wrapper
+finds them in the (nix) `buildInputs`.
+
+--- a/install/cupy_builder/cupy_setup_build.py
++++ b/install/cupy_builder/cupy_setup_build.py
+@@ -423,10 +423,7 @@
+
+         s = copy.deepcopy(settings)
+         if not no_cuda:
+-            s['libraries'] = module.libraries
+-            s['extra_objects'] = [
+-                _find_static_library(name) for name in module.static_libraries
+-            ]
++            s['libraries'] = module.static_libraries + module.libraries
+
+         compile_args = s.setdefault('extra_compile_args', [])
+         link_args = s.setdefault('extra_link_args', [])
+@@ -490,9 +487,8 @@
+             if (not no_cuda and not use_hip
+                     and PLATFORM_LINUX
+                     and f == 'cupy.cuda.function'):
+-                s_file['extra_objects'] = (
+-                    s_file.get('extra_objects', [])
+-                    + [_find_static_library('cufilt')])
++                s_file['libraries'] = (
++                    ['cufilt'] + s_file.get('libraries', []))
+
+             sources = module_extension_sources(f, use_cython, no_cuda)
+             extension = setuptools.Extension(name, sources, **s_file)

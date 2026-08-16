@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  click,
   cloudpathlib,
   confection,
   httpx,
@@ -38,6 +39,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
+    click
     cloudpathlib
     confection
     httpx

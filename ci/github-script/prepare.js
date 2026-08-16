@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { classify } = require('../supportedBranches.js')
 const { postReview, dismissReviews } = require('./reviews.js')
 const reviewKey = 'prepare'
@@ -181,9 +182,9 @@ module.exports = async ({ github, context, core, dry }) => {
           event: 'REQUEST_CHANGES',
           reviewKey,
         })
+      } else {
+        await dismissReviews({ github, context, core, dry, reviewKey })
       }
-    } else {
-      await dismissReviews({ github, context, core, dry, reviewKey })
     }
 
     let mergedSha, targetSha

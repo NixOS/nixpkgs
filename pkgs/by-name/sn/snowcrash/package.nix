@@ -20,14 +20,14 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postFixup = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/SNOWCRASH $out/bin/${pname}
   '';
 
   meta = {
     description = "Polyglot payload generator";
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "SNOWCRASH";
   };

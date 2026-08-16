@@ -2,25 +2,31 @@
   lib,
   fetchurl,
   appimageTools,
+  makeWrapper,
   writeScript,
 }:
 let
   pname = "remnote";
-  version = "1.26.0";
+  version = "1.27.32";
   src = fetchurl {
     url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
-    hash = "sha256-9SLFc2giE0AjD88OJz0z7mn9j/pN7Fd8/xWub6FDs/U=";
+    hash = "sha256-CwiQFMu/N+Dj8pntSMy8OjjCfbgZBSV2pEBRPk7njfs=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/remnote.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
     install -Dm444 ${appimageContents}/remnote.png -t $out/share/icons/hicolor/512x512/apps
+
+    wrapProgram $out/bin/remnote \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
@@ -39,7 +45,8 @@ appimageTools.wrapType2 {
   meta = {
     description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with lib.maintainers; [ chewblacka ];
+    changelog = "https://feedback.remnote.com/changelog";
+    maintainers = with lib.maintainers; [ talal ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";

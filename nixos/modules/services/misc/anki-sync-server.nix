@@ -108,7 +108,7 @@ in
     assertions = [
       {
         assertion = (builtins.length usersWithIndexesFile) + (builtins.length usersWithIndexesNoFile) > 0;
-        message = "At least one username-password pair must be set.";
+        message = "At least one username-password pair must be set in services.anki-sync-server.users.";
       }
     ];
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];

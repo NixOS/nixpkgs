@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -31,6 +30,7 @@
   # tests
   freezegun,
   pytest-asyncio,
+  pytest-benchmark,
   pytestCheckHook,
 
   withContribRequires ? false,
@@ -38,28 +38,17 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     tag = "v${version}";
-    hash = "sha256-M+ojGXJOnrBipjSA9hd3++yTS70kCjPru9FG/rm7zI8=";
+    hash = "sha256-OAyBYzMEFyVMlxN5UjrKk1x2rSayLyAIAC5h96JeqK0=";
   };
 
   sourceRoot = "${src.name}/${pname}";
-
-  patches = [
-    # Upstream PR: https://github.com/quantumlib/Cirq/pull/7761
-    (fetchpatch {
-      name = "python-3.14.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/9aea3bad824cac77031c163d6d6f5cf3e01cfe80.patch";
-      stripLen = 1;
-      includes = [ "cirq/ops/linear_combinations_test.py" ];
-      hash = "sha256-Ggcaswrdx6mOfNOwlbWE2ix7aZWt3/Fljb4i1ow+lUU=";
-    })
-  ];
 
   pythonRelaxDeps = [ "matplotlib" ];
 
@@ -91,6 +80,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytest-asyncio
+    pytest-benchmark
     pytestCheckHook
   ];
 

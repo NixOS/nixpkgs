@@ -18,15 +18,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.1-unstable-2025-10-05-03";
+  version = "0.8.1-unstable-2026-01-02";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-
-    # update to include latest patch for newer cmake support
-    rev = "1667b4e6301d7ad47b340dcdcd6e9969bf57d843";
-    hash = "sha256-UCpYBUb2k1bHy1z2Mvmv+1ZX1BloSsPrTydFV3Ga3Os=";
+    rev = "1551ea0d39ce546b32a15808b9b1241018a89fc8";
+    hash = "sha256-k1ocvnkgmucewWeUgj7hY8hj9gOBl3G2iH9KM2h/Sck=";
   };
 
   nativeBuildInputs = [

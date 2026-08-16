@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-aATnNDUogNS4jBoWxUAFYFMa2ZS0+th3XH+1KWqwfWQ=";
   };
   vendorHash = "sha256-RH55yfIO9jHLbjtEdUF5QpL5ILV5ctX2hBYBJWutmUA=";
-  doCheck = false; # Uses network, unsuprisingly.
+  doCheck = false; # Uses network, unsurprisingly.
   meta = {
     changelog = "https://github.com/dnslink-std/go/releases/tag/v${finalAttrs.version}";
     description = "Reference implementation for DNSLink in golang";

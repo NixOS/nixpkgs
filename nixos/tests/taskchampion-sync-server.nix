@@ -41,7 +41,7 @@
       client.succeed("task sync")
 
       # Useful for debugging
-      client.copy_from_vm("/root/.task", "client")
-      server.copy_from_vm("${cfg.dataDir}", "server")
+      client.copy_from_machine("/root/.task", "client")
+      server.copy_from_machine("${cfg.dataDir}", "server")
     '';
 }

@@ -10,15 +10,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "commit-notifier";
-  version = "0-unstable-2026-02-07";
+  version = "0-unstable-2026-05-31";
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "commit-notifier";
-    rev = "93ad526940c60d3a7be65239e6ff8604ce8c6e17";
-    hash = "sha256-2U1Pp6v68fAxG6pVztHvCGe8FP714o9V2WQFMSmChBQ=";
+    rev = "82d9177bc494f946d5fcdae14578908b5b7fb2f5";
+    hash = "sha256-tlYXx9gtHv3HSlmdtGIZ70CsL19nmhoi8DbzQu30izQ=";
   };
 
-  cargoHash = "sha256-IezbCVH3C7i7COZ8Fw7aXym7Q64hy6jxo98aohxgOyA=";
+  cargoHash = "sha256-VOemLMuCa1AEwbFnngimO9xtpi/ZGcX6ZstwKEaOdvA=";
 
   nativeBuildInputs = [ pkg-config ];
 

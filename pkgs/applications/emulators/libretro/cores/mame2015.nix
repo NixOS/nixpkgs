@@ -22,7 +22,8 @@ mkLibretroCore {
   extraBuildInputs = [ alsa-lib ];
   makefile = "Makefile";
   # Build failures when this is set to a bigger number
-  NIX_BUILD_CORES = 8;
+  env.NIX_BUILD_CORES = 8;
+
   meta = {
     description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
     homepage = "https://github.com/libretro/mame2015-libretro";

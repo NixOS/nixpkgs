@@ -1,10 +1,11 @@
 {
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
-  libgit2,
   libgpg-error,
   lua5_4,
   makeWrapper,
@@ -18,18 +19,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.28.6";
+  version = "0.40.5";
 
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AzERusMBjc1pQbG1Sbu9LijfVIaWhXetm0LbGTmDYx8=";
+    hash = "sha256-QBhXHj+8SnqouWxLi0MmoRnDfcznuh80lL1+ly8nGmI=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-JbSTMFRbj4y3DeTF54eRXPTRQGOg2A8bK/coFEWbOgs=";
+  cargoHash = "sha256-1R/rENLCUYn3d41cg6M2drdMjxrprI89i0wKA2j+QbY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -47,14 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gnupg
     gpgme
-    libgit2
     libgpg-error
     lua5_4
     openssl
   ];
 
   env = {
-    LIBGIT2_NO_VENDOR = 1;
     LIBSSH2_SYS_USE_PKG_CONFIG = 1;
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
@@ -68,14 +67,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nix
   ];
 
-  postBuild = ''
-    cargo xtask dist-man
-    cargo xtask dist-completions
-  '';
-
   postInstall = ''
-    installManPage target/dist/lx.1
-    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+    ${
+      # Using lx to generate man pages and completions is faster than xtask
+      if stdenv.hostPlatform.emulatorAvailable buildPackages then
+        let
+          lx = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lx";
+        in
+        ''
+          ${lx} util man --target-dir="target/dist"
+          ${lx} util completion --target-dir="target/dist"
+        ''
+      else
+        ''
+          cargo xtask dist-man
+          cargo xtask dist-completions
+        ''
+    }
+      installManPage target/dist/*.1
+      installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {

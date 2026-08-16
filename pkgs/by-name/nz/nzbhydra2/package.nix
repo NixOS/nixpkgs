@@ -35,16 +35,16 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "nzbhydra2";
-  version = "8.8.0";
+  version = "8.9.0";
 
   src = fetchFromGitHub {
     owner = "theotherp";
     repo = "nzbhydra2";
     tag = "v${version}";
-    hash = "sha256-BndOpHEcesrfequErt193F3Bapm8E4jwZ9gPxuvWDi0=";
+    hash = "sha256-c8rQ53YROPx+YZo/YdaKs/51ZZQpwwbSLk/bMGY0m2c=";
   };
 
-  mvnHash = "sha256-mZ/mOF9k5URheNNxmrKkCiklP26zeTGKhDGxqRiDBuk=";
+  mvnHash = "sha256-Z+Y97yd9TQMuTyqtWOOZZ52rgp4KomID/ns0gGG5rvg=";
 
   mvnFetchExtraArgs.preBuild = ''
     mvn -nsu "${timestampParameter}" --projects org.nzbhydra:github-release-plugin "-Dmaven.repo.local=$out/.m2" clean install

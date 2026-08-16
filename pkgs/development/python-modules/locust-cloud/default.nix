@@ -44,6 +44,10 @@ buildPythonPackage rec {
     tomli
   ];
 
+  pythonRelaxDeps = [
+    "gevent"
+  ];
+
   nativeCheckInputs = [
     flask
     gevent-websocket
@@ -58,17 +62,13 @@ buildPythonPackage rec {
     export LOCUSTCLOUD_PASSWORD=dummy
   '';
 
-  disabledTests = [
-    # AssertionError
-    "test_recursive_imports"
-    "test_from_import_file"
-  ];
-
   disabledTestPaths = [
     # Tests require network access
     "tests/web_login_test.py"
     "tests/cloud_test.py"
     "tests/websocket_test.py"
+    # AssertionError
+    "tests/import_finder_test.py"
   ];
 
   meta = {

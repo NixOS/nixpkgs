@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  isPy27,
   libopus,
   pytestCheckHook,
   lib,
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "opuslib";
   version = "3.0.3";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "orion-labs";

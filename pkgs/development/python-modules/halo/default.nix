@@ -2,7 +2,6 @@
   buildPythonPackage,
   colorama,
   fetchPypi,
-  isPy27,
   lib,
   log-symbols,
   six,
@@ -14,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "halo";
   version = "0.0.31";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

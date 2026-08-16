@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -13,22 +14,19 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "music-assistant-client";
-  version = "1.3.3";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
-    tag = version;
-    hash = "sha256-f5+25MWuovG/g3PscWt0jls/5Y/Qdt2kq9Ai7/9P4aI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M14H28TABXwJrr3OjcWyvNufEItXeJLfEL78anGLj7o=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
-  '';
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
@@ -47,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client to interact with the Music Assistant Server API";
     homepage = "https://github.com/music-assistant/client";
-    changelog = "https://github.com/music-assistant/client/releases/tag/${src.tag}";
+    changelog = "https://github.com/music-assistant/client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

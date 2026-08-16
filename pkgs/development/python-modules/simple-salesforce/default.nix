@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "simple-salesforce";
-  version = "1.12.9";
+  version = "1.12.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eMO/K6W9ROljYxR3gK9QjCHdlbAuN4DYjOyTO1WcalQ=";
+    hash = "sha256-6Aj4ha1OtYEr7CxXWvSjYDU88tNZE6Fz5oRYyVpWVPI=";
   };
 
   nativeBuildInputs = [ setuptools ];

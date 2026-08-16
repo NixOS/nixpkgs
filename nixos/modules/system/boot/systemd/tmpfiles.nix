@@ -25,6 +25,8 @@ let
     " "
     "\\"
   ];
+  hasTmpfilesPrefix = lib.hasPrefix "tmpfiles.d/";
+  removeTmpFilesPrefix = lib.removePrefix "tmpfiles.d/";
 
   settingsOption = {
     description = ''
@@ -299,8 +301,8 @@ in
           ''
           + concatMapStrings (
             name:
-            optionalString (hasPrefix "tmpfiles.d/" name) ''
-              rm -f $out/${removePrefix "tmpfiles.d/" name}
+            optionalString (hasTmpfilesPrefix name) ''
+              rm -f $out/${removeTmpFilesPrefix name}
             ''
           ) config.system.build.etc.passthru.targets;
         })
@@ -317,6 +319,7 @@ in
         mkdir -p $out/lib/tmpfiles.d
         cd $out/lib/tmpfiles.d
 
+        ln -s "${systemd}/example/tmpfiles.d/credstore.conf"
         ln -s "${systemd}/example/tmpfiles.d/home.conf"
         ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
         ln -s "${systemd}/example/tmpfiles.d/portables.conf"

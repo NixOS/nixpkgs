@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
   leptonica,
   qt6,
   tesseract,
@@ -33,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.qttools
     qt6.wrapQtAppsHook
   ];

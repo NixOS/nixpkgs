@@ -31,15 +31,15 @@
   writeScript,
 }:
 let
-  id = "373278730";
+  id = "490012920";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "2.7.1";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "https://releases.multiviewer.app/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-BKXw8a4fUT+B7KBc6p/Heo+sAtWAG5b/D2iohuNOotY=";
+    hash = "sha256-yYCbWRnh66vIZo7/RNAaj/0wuwIJcYxqquuDEfkua7g=";
   };
 
   nativeBuildInputs = [

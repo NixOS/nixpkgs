@@ -29,7 +29,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # this is still needed for when the version is overrided
+  # this is still needed for when the version is overridden
   pythonNamespaces = [ "azure.mgmt" ];
 
   # Tests are only available in the mono-repo

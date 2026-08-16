@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  mock,
   pyyaml,
 
   # for passthru.tests
@@ -17,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-multipart";
-  version = "0.0.22";
+  version = "0.0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
     tag = finalAttrs.version;
-    hash = "sha256-UegnwGxiXQalbp18t1dl2JOQH6BY975cpBa9uo3SOuk=";
+    hash = "sha256-zw6SHzbbjyRCGfUldxdki+wKwmTAgmd9ZAu/2zU+pFw=";
   };
 
   build-system = [ hatchling ];
@@ -33,7 +32,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
     pyyaml
   ];
 
@@ -52,6 +50,9 @@ buildPythonPackage (finalAttrs: {
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      ris
+    ];
   };
 })

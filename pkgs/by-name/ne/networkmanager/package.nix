@@ -1,74 +1,93 @@
 {
-  lib,
-  stdenv,
   fetchurl,
-  replaceVars,
-  gettext,
-  pkg-config,
-  dbus,
   gitUpdater,
-  libuuid,
-  polkit,
-  gnutls,
-  ppp,
-  dhcpcd,
-  iptables,
-  nftables,
-  python3,
-  vala,
-  libgcrypt,
-  dnsmasq,
-  bluez5,
-  readline,
-  libselinux,
-  audit,
-  gobject-introspection,
-  perl,
-  modemmanager,
-  openresolv,
-  libndp,
-  newt,
-  ethtool,
-  gnused,
-  iputils,
-  kmod,
-  jansson,
+  lib,
+  nixosTests,
+  replaceVars,
+  stdenv,
+
+  # build
+  bpftools,
+  clang,
   elfutils,
-  gtk-doc,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  docbook_xml_dtd_42,
-  docbook_xml_dtd_43,
-  curl,
+  gettext,
+  gnused,
   meson,
   mesonEmulatorHook,
   ninja,
-  libnvme,
-  libpsl,
-  mobile-broadband-provider-info,
+  perl,
+  pkg-config,
+  vala,
   runtimeShell,
   buildPackages,
-  nixosTests,
+
+  # libs
+  audit,
+  curl,
+  dbus,
+  gnutls,
+  gobject-introspection,
+  jansson,
+  libbpf,
+  libnvme,
+  libpsl,
+  libselinux,
+  libuuid,
+  polkit,
+  readline,
+  slang,
   systemd,
   udev,
-  udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+
+  # external deps
+  bluez5,
+  dhcpcd,
+  dnsmasq,
+  ethtool,
+  iptables,
+  kmod,
+  libgcrypt,
+  libndp,
+  modemmanager,
+  mobile-broadband-provider-info,
+  newt,
+  nftables,
+  openresolv,
+  ppp,
+
+  # docs
+  docbook_xml_dtd_412,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  gtk-doc,
+  libxslt,
+  python3,
+
+  # install tests
+  udevCheckHook,
+
   # NBFT (NVMe Boot Firmware Table) support, opt-in due to closure size
   # https://github.com/NixOS/nixpkgs/pull/446121#discussion_r2380598419
   withNbft ? false,
 }:
 
 let
+  inherit (lib)
+    mesonBool
+    mesonOption
+    ;
+
   pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.56.0";
+  version = "1.58.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WaMtOFzB564m5DeYxvEtB/9hmKvQQewGILOgjPwCHMw=";
+    hash = "sha256-DG8nA6LJsBfNaPv+HS6KGl1/8FE3x1HsQhy6NulFRro=";
   };
 
   outputs = [
@@ -79,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  # TODO: only disable for clang used for bpf builds
+  # this breaks clang target bpf, which does not support -fzero-call-used-regs=used-gpr
+  hardeningDisable = [ "zerocallusedregs" ];
+
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
@@ -86,53 +109,52 @@ stdenv.mkDerivation (finalAttrs: {
     # System paths
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (lib.mesonOption "systemdsystemunitdir" (
+    (mesonOption "systemdsystemunitdir" (
       if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
     ))
     # to enable link-local connections
-    "-Dudev_dir=${placeholder "out"}/lib/udev"
-    "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Dkernel_firmware_dir=/run/current-system/firmware"
+    (mesonOption "udev_dir" "${placeholder "out"}/lib/udev")
+    (mesonOption "dbus_conf_dir" "${placeholder "out"}/share/dbus-1/system.d")
+    (mesonOption "kernel_firmware_dir" "/run/current-system/firmware")
 
     # Platform
-    "-Dmodprobe=${kmod}/bin/modprobe"
-    (lib.mesonOption "session_tracking" (if withSystemd then "systemd" else "no"))
-    (lib.mesonBool "systemd_journal" withSystemd)
-    "-Dlibaudit=yes-disabled-by-default"
-    "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
+    (mesonOption "modprobe" (lib.getExe' kmod "modprobe"))
+    (mesonOption "session_tracking" (if withSystemd then "systemd" else "no"))
+    (mesonBool "systemd_journal" withSystemd)
+    (mesonOption "libaudit" "yes-disabled-by-default")
+    (mesonOption "polkit_agent_helper_1" "/run/wrappers/bin/polkit-agent-helper-1")
 
     # Features
-    # Allow using iwd when configured to do so
-    "-Diwd=true"
-    "-Dpppd=${ppp}/bin/pppd"
-    "-Diptables=${iptables}/bin/iptables"
-    "-Dnft=${nftables}/bin/nft"
-    "-Dmodem_manager=true"
-    "-Dnmtui=true"
-    "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
-    "-Dqt=false"
-    (lib.mesonBool "nbft" withNbft)
+    (mesonBool "clat" (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) # fails to find UAPI headers
+    (mesonBool "iwd" true)
+    (mesonOption "pppd" (lib.getExe' ppp "pppd"))
+    (mesonOption "iptables" (lib.getExe iptables))
+    (mesonOption "nft" (lib.getExe nftables))
+    (mesonBool "modem_manager" true)
+    (mesonBool "nmtui" true)
+    (mesonOption "dnsmasq" (lib.getExe dnsmasq))
+    (mesonBool "qt" false)
+    (mesonBool "nbft" withNbft)
 
     # Handlers
-    "-Dresolvconf=${openresolv}/bin/resolvconf"
+    (mesonOption "resolvconf" (lib.getExe openresolv))
 
     # DHCP clients
-    "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
+    (mesonOption "dhcpcd" (lib.getExe dhcpcd))
 
     # Miscellaneous
     # almost cross-compiles, however fails with
     # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
-    "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dman=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dtests=no"
-    "-Dcrypto=gnutls"
-    "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
+    (mesonBool "docs" (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform))
+    (mesonBool "man" (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform))
+    (mesonOption "tests" "no")
+    (mesonOption "crypto" "gnutls")
+    (mesonOption "mobile_broadband_provider_info_database" "${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml")
   ];
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit
-        iputils
         ethtool
         gnused
         ;
@@ -144,24 +166,52 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-install-paths.patch
   ];
 
+  nativeBuildInputs = [
+    bpftools
+    clang
+    elfutils # used to find jansson soname
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    perl
+    pkg-config
+    vala
+    udevCheckHook
+
+    # Docs
+    gtk-doc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    pythonForDocs
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
   buildInputs = [
-    (if withSystemd then systemd else udev)
-    libselinux
     audit
+    bluez5
+    curl
+    dbus # used to get directory paths with pkg-config during configuration
+    dnsmasq
+    jansson
+    libbpf
+    libndp
     libpsl
+    libselinux
     libuuid
+    mobile-broadband-provider-info
+    modemmanager
+    newt
     polkit
     ppp
-    libndp
-    curl
-    mobile-broadband-provider-info
-    bluez5
-    dnsmasq
-    modemmanager
     readline
-    newt
-    jansson
-    dbus # used to get directory paths with pkg-config during configuration
+    slang
+    (if withSystemd then systemd else udev)
   ]
   ++ lib.optionals withNbft [
     libnvme
@@ -172,28 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    gettext
-    pkg-config
-    vala
-    gobject-introspection
-    perl
-    elfutils # used to find jansson soname
-    # Docs
-    gtk-doc
-    libxslt
-    docbook_xsl
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    pythonForDocs
-    udevCheckHook
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   doCheck = false; # requires /sys, the net
 
@@ -207,7 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withSystemd ''
     substituteInPlace data/NetworkManager.service.in \
-      --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
+      --replace-fail /usr/bin/busctl ${lib.getExe' systemd "busctl"}
   '';
 
   preBuild = ''
@@ -219,7 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
-  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postFixup = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     cp -r ${buildPackages.networkmanager.devdoc} $devdoc
     cp -r ${buildPackages.networkmanager.man} $man
   '';
@@ -231,9 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       odd-unstable = true;
       url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager.git";
     };
-    tests = {
-      inherit (nixosTests.networking) networkmanager;
-    };
+    tests = nixosTests.networking.networkmanager;
   };
 
   meta = {

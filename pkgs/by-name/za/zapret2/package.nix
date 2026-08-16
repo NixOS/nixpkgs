@@ -16,11 +16,12 @@
   libnetfilter_queue,
   systemdLibs,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret2";
-  version = "0.9.5.1";
+  version = "1.0.4";
 
   outputs = [
     "out"
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bol-van";
     repo = "zapret2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uKLHzsi/AYQ8OLj2g8pszSCyD485Sg/s45Ko8gKN5z8=";
+    hash = "sha256-C3TOpbqt805N/aiHO/G9VocwGjOGvxobi/Sfi7ZX38k=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -130,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) zapret2; };
 
   meta = {
     description = "Anti-DPI software for bypassing DPI systems";

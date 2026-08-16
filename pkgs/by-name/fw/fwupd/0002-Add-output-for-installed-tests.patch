@@ -3,6 +3,8 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Tue, 15 Oct 2024 14:49:53 +0200
 Subject: [PATCH] Add output for installed tests
 
+Installed tests are installed to different output we also cannot have
+fwupd-tests.conf in $out/etc since it would form a cycle.
 ---
  data/tests/meson.build             | 2 +-
  meson.build                        | 5 +++--
@@ -11,7 +13,7 @@ Subject: [PATCH] Add output for installed tests
  4 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/data/tests/meson.build b/data/tests/meson.build
-index e15cab2fa..bad033dbf 100644
+index 377ba2ccaa5e13a87443cbe65406eb5a9a3af79b..2dfb5f251383464c38e2f3202c9dfb1107ac7798 100644
 --- a/data/tests/meson.build
 +++ b/data/tests/meson.build
 @@ -139,7 +139,7 @@ configure_file(
@@ -22,12 +24,12 @@ index e15cab2fa..bad033dbf 100644
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
  
- if umockdev_integration_tests.allowed()
+ if umockdev.found()
 diff --git a/meson.build b/meson.build
-index c7bf2c9aa..bf77bf6d6 100644
+index 0cfca8e45b7ed6cc63be470ac0df916639ef52c4..1561d1837a73425d9dda510d0ba25d16f92ed7f7 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -241,8 +241,8 @@ else
+@@ -243,8 +243,8 @@ else
    includedir = join_paths(prefix, get_option('includedir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
@@ -38,7 +40,7 @@ index c7bf2c9aa..bf77bf6d6 100644
    daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
-@@ -722,6 +722,7 @@ gnome = import('gnome')
+@@ -707,6 +707,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -47,10 +49,10 @@ index c7bf2c9aa..bf77bf6d6 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index eb57391eb..420997355 100644
+index 6fe15e8beb8a85acdaca15f212bd3a917990ced2..b89ba371cee9dccf8457414f316ca697ef33216a 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -198,6 +198,11 @@ option(
+@@ -193,6 +193,11 @@ option(
    value: 'fwupd-refresh',
    description: 'User account to use for fwupd-refresh.service (empty for DynamicUser)',
  )
@@ -63,7 +65,7 @@ index eb57391eb..420997355 100644
    'tests',
    type: 'boolean',
 diff --git a/src/tests/host-emulate/meson.build b/src/tests/host-emulate/meson.build
-index c36da65cd..f0b70d4d6 100644
+index c36da65cd67e6081a758ed2ab7327276fb82d804..f0b70d4d68de6f534f1c1ecd37e51619ad1d85e7 100644
 --- a/src/tests/host-emulate/meson.build
 +++ b/src/tests/host-emulate/meson.build
 @@ -9,7 +9,7 @@ if build_standalone

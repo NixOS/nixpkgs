@@ -1,29 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+
+  setuptools,
   coloredlogs,
   executor,
-  fetchFromGitHub,
   humanfriendly,
   naturalsort,
   property-manager,
-  pytestCheckHook,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "update-dotdee";
   version = "6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-update-dotdee";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2k7FdgWM0ESHQb2za87yhXGaR/rbMYLVcv10QexUH1A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     coloredlogs
     executor
     humanfriendly
@@ -36,7 +42,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --cov --showlocals --verbose" ""
+      --replace-fail " --cov --showlocals --verbose" ""
   '';
 
   pythonImportsCheck = [ "update_dotdee" ];
@@ -50,7 +56,8 @@ buildPythonPackage rec {
     description = "Generic modularized configuration file manager";
     mainProgram = "update-dotdee";
     homepage = "https://github.com/xolox/python-update-dotdee";
+    changelog = "https://github.com/xolox/python-update-dotdee/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})

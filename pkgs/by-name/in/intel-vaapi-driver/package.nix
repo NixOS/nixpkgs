@@ -20,15 +20,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-vaapi-driver";
-  version = "2.4.1-unstable-2024-10-29";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
-    owner = "intel";
+    owner = "irql-notlessorequal";
     repo = "intel-vaapi-driver";
-    rev = "fd727a4e9cb8b2878a1e93d4dddc8dd1c1a4e0ea";
-    hash = "sha256-OMFdRjzpUKdxB9eK/1OLYLaOC3NHnzZVxmh6yKrbYoE=";
+    tag = finalAttrs.version;
+    hash = "sha256-exQBA42jCmwybE7WIfF83cjmzBdtluDzUtOdqt49HSg=";
   };
 
   # Set the correct install path:
@@ -67,10 +67,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://01.org/linuxmedia";
+    homepage = "https://github.com/irql-notlessorequal/intel-vaapi-driver";
+    changelog = "https://github.com/irql-notlessorequal/intel-vaapi-driver/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.mit;
     description = "VA-API user mode driver for Intel GEN Graphics family";
     longDescription = ''
@@ -89,4 +90,4 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

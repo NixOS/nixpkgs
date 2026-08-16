@@ -14,18 +14,19 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "pijul";
-  version = "1.0.0-beta.11";
+  version = "1.0.0-beta.21";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-+rMMqo2LBYlCFQJv8WFCSEJgDUbMi8DnVDKXIWm3tIk=";
+    hash = "sha256-IC47l6FzlopoiVZmKojPzIQzBS6UzdgE397no6GzrR4=";
   };
 
-  cargoHash = "sha256-IhArTiReUdj49bA+XseQpOiszK801xX5LdLj8vXD8rs=";
+  cargoHash = "sha256-Ldb+CpKiVvNOeMhdD/hfQfAAMwdwUy/npY85VBPBq5k=";
 
-  patches = [ ./fix-rand-0.9-sanakirja-imports.patch ];
-
+  # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       gal_bolle
       dywedir

@@ -4,8 +4,8 @@
   fetchurl,
   pkg-config,
   libglut,
-  gtk2,
   libGLU,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,14 +30,18 @@ stdenv.mkDerivation (finalAttrs: {
     libglut
     libGLU
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace "tools/tinyxml/Makefile.linux" \
         --replace-warn "-Wno-format" "-Wno-format -Wno-format-security"
       substituteInPlace "tools/Makefile.linux" \
-        --replace-warn "-lglut" "-lglut -lGL -lGLU"
+        --replace-warn "-lglut" "-lglut -lGL -lGLU" \
+        --replace-fail "all: ctmconv ctmviewer ctmbench" "all: ctmconv ctmbench"
+      substituteInPlace "Makefile.linux" \
+        --replace-fail "$""(CP) tools/ctmviewer $""(BINDIR)" "" \
+        --replace-fail "$""(CP) doc/ctmviewer.1 $""(MAN1DIR)" ""
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace "lib/Makefile.macosx" \

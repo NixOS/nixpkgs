@@ -37,6 +37,18 @@ in
       "ollama"
       "acceleration"
     ] "Set `services.ollama.package` to one of `pkgs.ollama[,-vulkan,-rocm,-cuda,-cpu]` instead.")
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "ollama"
+        "models"
+      ]
+      [
+        "services"
+        "ollama"
+        "modelsDir"
+      ]
+    )
   ];
 
   options = {
@@ -91,7 +103,7 @@ in
           The home directory that the ollama service is started in.
         '';
       };
-      models = lib.mkOption {
+      modelsDir = lib.mkOption {
         type = types.str;
         default = "${cfg.home}/models";
         defaultText = "\${config.services.ollama.home}/models";
@@ -207,7 +219,7 @@ in
         cfg.environmentVariables
         // {
           HOME = cfg.home;
-          OLLAMA_MODELS = cfg.models;
+          OLLAMA_MODELS = cfg.modelsDir;
           OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
         }
         // lib.optionalAttrs (cfg.rocmOverrideGfx != null) {
@@ -226,7 +238,7 @@ in
           StateDirectory = [ "ollama" ];
           ReadWritePaths = [
             cfg.home
-            cfg.models
+            cfg.modelsDir
           ];
 
           CapabilityBoundingSet = [ "" ];
@@ -306,15 +318,17 @@ in
       script =
         let
           binaryInputs = lib.mapAttrs (_: lib.getExe) {
-            parallel = pkgs.parallel;
             awk = pkgs.gawk;
             sed = pkgs.gnused;
           };
+
           inherit (binaryInputs)
-            parallel
             awk
             sed
             ;
+
+          nproc = lib.getExe' pkgs.coreutils "nproc";
+          xargs = lib.getExe' pkgs.findutils "xargs";
 
           declaredModelsRegex = lib.pipe cfg.loadModels [
             (map lib.escapeRegex)
@@ -344,7 +358,7 @@ in
             fi
           ''}
 
-          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs cfg.loadModels}
+          printf "%s\0" ${lib.escapeShellArgs cfg.loadModels} | '${xargs}' -0 -r -n 1 -P "$('${nproc}')" '${ollama}' pull
         '';
     };
 

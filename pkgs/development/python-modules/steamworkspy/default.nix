@@ -65,12 +65,7 @@ buildPythonPackage {
     license = with lib.licenses; [
       mit
       # For steamworks headers and libsteamapi.so
-      (
-        unfreeRedistributable
-        // {
-          url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
-        }
-      )
+      valveSDK
     ];
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];

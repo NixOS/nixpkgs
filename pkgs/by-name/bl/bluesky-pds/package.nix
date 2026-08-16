@@ -4,39 +4,48 @@
   removeReferencesTo,
   srcOnly,
   python3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs_24,
   vips,
   pkg-config,
   nixosTests,
   lib,
   nix-update-script,
   cctools,
+  fetchpatch2,
 }:
 
 let
-  # build failure against better-sqlite3, so we use nodejs_22; upstream
-  # bluesky-pds uses 20
-  nodejs = nodejs_22;
+  # upstream bluesky-social/atproto uses nodejs 22+
+  nodejs = nodejs_24;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
+  pnpm = pnpm_10;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.219";
+  version = "0.4.5009";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zXNg1rtXN9qdTBvRlSiPlRu6k1Pv3T8nhROsEarev5U=";
+    hash = "sha256-3IEbVn7ThiVL7E2fXMHzsRSLT7Tm1eiX8bPQ88rJCvs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
+
+  patchFlags = [ "-p2" ];
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bluesky-social/pds/commit/f8de5f08900c42023b01a4d10995556f16d05145.patch?full_index=1";
+      hash = "sha256-E0mWvLWQ4lFjkFgqtmMIESpNH7PSAB/QpSqxIwsj6Q8=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -44,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm
     removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -60,10 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      patchFlags
+      patches
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-rZpimxX4oDXIaUdAkkNPEff6qYJ9C8KptsPWJKwPiFo=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-BTSMmGhLpQ6KrI7/XfinRwe8ap7btIrPa55f6HB63M8=";
   };
 
   buildPhase = ''
@@ -76,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/pds" \
       --add-flags --enable-source-maps \
-      --add-flags "$out/lib/pds/index.js" \
+      --add-flags "$out/lib/pds/index.ts" \
       --set-default NODE_ENV production
 
     runHook postBuild
@@ -87,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/pds}
     mv node_modules $out/lib/pds
-    mv index.js $out/lib/pds
+    mv index.ts $out/lib/pds
 
     runHook postInstall
   '';

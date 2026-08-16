@@ -6,8 +6,9 @@
 }:
 
 stdenv.mkDerivation {
+  # TODO deprecate in favor of "plum" (https://github.com/rime/plum)
   pname = "brise";
-  version = "unstable-2017-09-16";
+  version = "0-unstable-2016-12-02";
 
   src = fetchFromGitHub {
     owner = "rime";

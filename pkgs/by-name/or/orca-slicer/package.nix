@@ -1,5 +1,5 @@
 {
-  stdenv,
+  clangStdenv,
   lib,
   binutils,
   fetchFromGitHub,
@@ -13,7 +13,7 @@
   curl,
   dbus,
   draco,
-  eigen,
+  eigen_5,
   expat,
   ffmpeg,
   gcc-unwrapped,
@@ -28,30 +28,26 @@
   hicolor-icon-theme,
   libsecret,
   libpng,
-  makeFontsConf,
   mpfr,
-  nanum,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
-  wxwidgets_3_1,
+  wxwidgets_3_3,
   libx11,
   libnoise,
-  withSystemd ? stdenv.hostPlatform.isLinux,
+  withSystemd ? clangStdenv.hostPlatform.isLinux,
   withNvidiaGLWorkaround ? false,
 }:
 let
   wxGTK' =
-    (wxwidgets_3_1.override {
-      withCurl = true;
+    (wxwidgets_3_3.override {
       withPrivateFonts = true;
       withWebKit = true;
-      withEGL = false;
+      withEGL = true;
     }).overrideAttrs
       (old: {
         buildInputs = old.buildInputs ++ [ libsecret ];
@@ -61,23 +57,23 @@ let
           "--enable-secretstore"
         ];
       });
-
-  # Workaround for crash due to missing font
-  # https://github.com/OrcaSlicer/OrcaSlicer/issues/11641
-  fontsConf = makeFontsConf {
-    fontDirectories = [ nanum ];
-  };
 in
-stdenv.mkDerivation (finalAttrs: {
+# Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
+# on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
+# with --cores 32 on clang).
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.3.2";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1WTODLrXGtyJWkEueOz5jHhPbA/JFcMeAwhpvoKnKo=";
+    hash = "sha256-gUwLC0XkeohEdL0EScdOrA8MWXGuR8kUfezoQsk9i/A=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -103,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     draco
-    eigen
+    eigen_5
     expat
     ffmpeg
     gcc-unwrapped
@@ -115,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gtk3
     hicolor-icon-theme
     libsecret
@@ -124,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
     opencascade-occt_7_6
     openvdb
-    pcre
     onetbb
     webkitgtk_4_1
     wxGTK'
@@ -144,8 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Allows disabling the update nag screen
     (fetchpatch {
       name = "pr-7650-configurable-update-check.patch";
-      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
-      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/300df7c99b0a2173f645c8bf40e8758eb5f2c486.patch";
+      hash = "sha256-hgQeagPhS3aNQoFSq0S+Ch60ygm81uHMIvGopw/AZT8=";
     })
 
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
@@ -160,32 +155,24 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NLOPT = nlopt;
 
-    NIX_CFLAGS_COMPILE = toString (
-      [
-        "-Wno-ignored-attributes"
-        "-I${opencv.out}/include/opencv4"
-        "-Wno-error=incompatible-pointer-types"
-        "-Wno-template-id-cdtor"
-        "-Wno-uninitialized"
-        "-Wno-unused-result"
-        "-Wno-deprecated-declarations"
-        "-Wno-use-after-free"
-        "-Wno-format-overflow"
-        "-Wno-stringop-overflow"
-        "-DBOOST_ALLOW_DEPRECATED_HEADERS"
-        "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
-        "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
-        "-DBOOST_MATH_DISABLE_FLOAT128"
-        "-DBOOST_MATH_NO_QUAD_SUPPORT"
-        "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
-        "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
-        "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
-      ]
-      # Making it compatible with GCC 14+, see https://github.com/SoftFever/OrcaSlicer/pull/7710
-      ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14") [
-        "-Wno-error=template-id-cdtor"
-      ]
-    );
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-ignored-attributes"
+      "-I${opencv.out}/include/opencv4"
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=format-security"
+      "-Wno-uninitialized"
+      "-Wno-unused-result"
+      "-Wno-deprecated-declarations"
+      "-Wno-format-overflow"
+      "-DBOOST_ALLOW_DEPRECATED_HEADERS"
+      "-DBOOST_MATH_DISABLE_STD_FPCLASSIFY"
+      "-DBOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS"
+      "-DBOOST_MATH_DISABLE_FLOAT128"
+      "-DBOOST_MATH_NO_QUAD_SUPPORT"
+      "-DBOOST_MATH_MAX_FLOAT128_DIGITS=0"
+      "-DBOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT"
+      "-DBOOST_MATH_DISABLE_FLOAT128_BUILTIN_FPCLASSIFY"
+    ];
 
     NIX_LDFLAGS = toString [
       (lib.optionalString withSystemd "-ludev")
@@ -227,7 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-      --set FONTCONFIG_FILE "${fontsConf}"
       ${lib.optionalString withNvidiaGLWorkaround ''
         --set __GLX_VENDOR_LIBRARY_NAME mesa
         --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
@@ -252,6 +238,7 @@ stdenv.mkDerivation (finalAttrs: {
       ovlach
       pinpox
       liberodark
+      zraexy
     ];
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;

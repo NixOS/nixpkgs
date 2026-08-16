@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.9.3";
+  version = "1.9.11";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vm1yz0iKErkw/l4cGPedVVaoBGLV0h4O7xA56e3IoqM=";
+    hash = "sha256-NbjFPHMh8LSqUv3wpXI/hBU9aJFe76l5UyoZ2XqX0hg=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-cBZymB2eI93ui8rdQzBibdf44lXJC/KGwoz0EyeOk2A=";
+    hash = "sha256-9Vx4WzQjwNxPAkz+FjjqnMQxJviP4e0EhkQBN9Y+ujo=";
   };
 
   nativeBuildInputs = [
@@ -159,6 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cherry-studio";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
-    license = with lib.licenses; [ agpl3Only ];
+    license = lib.licenses.agpl3Only;
   };
 })

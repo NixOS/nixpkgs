@@ -9,7 +9,6 @@ let
 
   boolToString = b: if b then "true" else "false";
   formatList = l: lib.concatStringsSep "," l;
-  formatDuration = d: d.String;
 in
 {
   options.services.cloudflare-ddns = {
@@ -266,7 +265,6 @@ in
           let
             toEnv = name: value: "${name}=\"${toString value}\"";
             toEnvList = name: value: "${name}=\"${formatList value}\"";
-            toEnvDuration = name: value: "${name}=\"${formatDuration value}\"";
             toEnvBool = name: value: "${name}=\"${boolToString value}\"";
             toEnvMaybe =
               pred: name: value:

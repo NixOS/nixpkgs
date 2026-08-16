@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logurich";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "logurich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rQuASijZnIPM5+00U7n4+rTBiUILCcCH+UW56NCTr2k=";
+    hash = "sha256-VYlmwDws8YjjcWGugD/CMqCoutKQj0W7J8NHkMzsX8U=";
   };
 
   postPatch = ''

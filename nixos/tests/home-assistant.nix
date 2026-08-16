@@ -11,7 +11,10 @@ in
   meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass =
-    { pkgs, ... }:
+    {
+      pkgs,
+      ...
+    }:
     {
       services.postgresql = {
         enable = true;
@@ -23,6 +26,9 @@ in
           }
         ];
       };
+
+      # required for dbus activation in the bluetooth component
+      hardware.bluetooth.enable = true;
 
       services.home-assistant = {
         enable = true;
@@ -65,6 +71,11 @@ in
           mini-graph-card
         ];
 
+        # test loading themes
+        themes = with pkgs.home-assistant-themes; [
+          material-you-theme
+        ];
+
         config = {
           homeassistant = {
             name = "Home";
@@ -77,9 +88,30 @@ in
           # configure the recorder component to use the postgresql db
           recorder.db_url = "postgresql://@/hass";
 
-          # without these some components that are loaded anyway fail to find
-          # their dependencies
-          default_config = { };
+          # this is effecitvely default_config (2026.5.0), but with components
+          # skipped that would cause ERRORs in the sandbox
+          bluetooth = { };
+          cloud = { };
+          conversation = { };
+          dhcp = { };
+          energy = { };
+          file = { };
+          # Requires go2rtc service
+          # go2rtc = { };
+          history = { };
+          # Requires DNS and HTTP queries
+          # homeassistant_alerts = { };
+          logbook = { };
+          media_source = { };
+          mobile_app = { };
+          my = { };
+          ssdp = { };
+          stream = { };
+          sun = { };
+          usage_prediction = { };
+          usb = { };
+          webhook = { };
+          zeroconf = { };
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
@@ -222,6 +254,11 @@ in
       with subtest("Check that lovelace modules are referenced and fetchable"):
           hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
           hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
+
+      with subtest("Check that themes are referenced and installed"):
+          hass.succeed("grep -q '!include_dir_merge_named.*themes' '${configDir}/configuration.yaml'")
+          themes_dir = hass.succeed("sed -n 's/.*!include_dir_merge_named \\(.*\\)/\\1/p' '${configDir}/configuration.yaml'").strip()
+          hass.succeed(f"test -f {themes_dir}/material_you.yaml")
 
       with subtest("Check that optional dependencies are in the PYTHONPATH"):
           env = get_unit_property("Environment")

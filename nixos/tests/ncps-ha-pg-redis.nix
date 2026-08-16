@@ -180,7 +180,7 @@ in
 
       start_all()
 
-      harmonia.wait_for_unit("harmonia.service")
+      harmonia.wait_for_unit("harmonia.socket")
 
       ncps0.wait_for_unit("ncps.service")
       ncps1.wait_for_unit("ncps.service")

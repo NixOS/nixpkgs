@@ -2,10 +2,9 @@
   buildPythonPackage,
   lib,
   fetchurl,
-  fetchpatch,
   stdenv,
 
-  boost189,
+  boost191,
   cairomm,
   cgal,
   expat,
@@ -22,35 +21,31 @@
   pygobject3,
   python,
   scipy,
-  sparsehash,
   zstandard,
+
+  writableTmpDirAsHomeHook,
+
   gitUpdater,
 }:
 
 let
-  boost' = boost189.override {
-    patches = [
-      # required to build against Clang >= 21 (https://github.com/boostorg/lexical_cast/pull/87)
-      # TODO: drop when upgrading to Boost >= 1.90
-      (fetchpatch {
-        name = "Reduce-dependency-on-Boost.TypeTraits-now-that-C-11-.patch";
-        url = "https://github.com/boostorg/lexical_cast/commit/8fc8a19931c8cb452400af907959fdacbbdd8ec1.patch";
-        relative = "include";
-        hash = "sha256-OO39ejR+I5ufjqinrMJ6HgjTE7Ph+XBu50PqcIKaIQo=";
-      })
-    ];
+  boost' = boost191.override {
     enablePython = true;
     inherit python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
-  version = "2.98";
+  version = "3.6";
   pyproject = false;
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-7vGUi5N/XwQ3Se7nX+DG1+jwNlUdlF6dVeN4cLBsxSc=";
+    url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-KFKitvz3zFEQAi8hkvIBC0c5QTRmOJRamdV0cyMbejU=";
   };
 
   postPatch =
@@ -75,6 +70,16 @@ buildPythonPackage rec {
       cgal = lib.getDev cgal;
       python-module-path = "$(out)/${python.sitePackages}";
     }
+    ++ [
+      # CXXFLAGS defaults to "-g -O2", if unset.
+      # "-g" produces debugging information, which significantly increases
+      # resource requirements during compilation, but is not necessary as we
+      # subsequently strip the binaries.
+      # "-ftemplate-backtrace-limit=1" reduces the number of template
+      # instantiation notes per warning in order to reduce the log file size.
+      # "-O3" is also used by upstream.
+      "CXXFLAGS=-ftemplate-backtrace-limit=1 -O3"
+    ]
     ++
       lib.optionals stdenv.cc.isGNU
         # enable GCC's link-time optimizer in order to reduce compilation time and memory usage during compilation
@@ -93,7 +98,6 @@ buildPythonPackage rec {
     cgal
     expat
     mpfr
-    sparsehash
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
@@ -109,10 +113,11 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ gobject-introspection ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   preInstallCheck =
     # avoid warnings about Matplotlib and Fontconfig configuration issues
     ''
-      export HOME=$(mktemp -d)
       export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     '';
 
@@ -126,8 +131,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for manipulation and statistical analysis of graphs";
     homepage = "https://graph-tool.skewed.de";
-    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
+    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

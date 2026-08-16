@@ -18,16 +18,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "habluetooth";
-  version = "5.11.2";
+  version = "6.26.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
-    tag = "v${version}";
-    hash = "sha256-/5oJOSNP3vbmX7V8m6LLomNAvRzV2hM0vMCbwjFBmbg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IM3M4fWTdD4wT3UsNiLZq7QX3p9pf+lR3x84vuOICMM=";
   };
 
   build-system = [
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
-    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

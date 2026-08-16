@@ -6,21 +6,24 @@
   pyspnego,
   pytestCheckHook,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-credssp";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "requests-credssp";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HHLEmQ+mNjMjpR6J+emrKFM+2PiYq32o7Gnoo0gUrNA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     pyspnego
     requests
@@ -40,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

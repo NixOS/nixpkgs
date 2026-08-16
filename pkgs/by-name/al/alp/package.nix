@@ -8,15 +8,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "alp";
-  version = "1.1.18";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gernotfeichter";
     repo = "alp";
     tag = finalAttrs.version;
-    hash = "sha256-tE8qKNXLKvFcnDULVkJJ/EJyEsvATCk/3YFkZCmpHSo=";
+    hash = "sha256-ITrvSKjRCNwUuFYrK0+D4bmSqEG7/7NPMLMaitxZgKM=";
   };
-  vendorHash = "sha256-AHPVhtm6La7HWuxJfpxTsS5wFTUZUJoVyebLGYhNKTg=";
+  vendorHash = "sha256-JTm40N0x5ucLbmS6fEsrGUNJy5rqjPUSOU+CXzAcGEw=";
 
   sourceRoot = "${finalAttrs.src.name}/linux";
 

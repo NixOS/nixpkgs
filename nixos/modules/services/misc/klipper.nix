@@ -14,7 +14,14 @@ let
         lib.generators.mkValueStringDefault { } (lib.head l)
       else
         lib.concatMapStrings (s: "\n  ${lib.generators.mkValueStringDefault { } s}") l;
-    mkKeyValue = lib.generators.mkKeyValueDefault { } ":";
+    mkKeyValue =
+      key: value:
+      lib.generators.mkKeyValueDefault { } ":" key (
+        if builtins.isString value && lib.hasInfix "\n" value then
+          "\n  ${lib.replaceString "\n" "\n  " value}"
+        else
+          value
+      );
   };
   firmwareSubmodule = lib.types.submodule (
     { name, ... }@local:
@@ -33,10 +40,26 @@ let
         '';
         serial = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          description = "Path to serial port this printer is connected to. Derived from `service.klipper.settings` by default.";
+          description = "Path to serial port this mcu is connected to. Derived from `service.klipper.settings` by default.";
           defaultText = lib.literalExpression "config.services.klipper.settings.<name>.serial";
           default =
             if lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings then cfg.settings."${mcu}".serial else null;
+        };
+        canbus_uuid = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "CAN bus uuid of this mcu. Derived from `service.klipper.settings` by default.";
+          defaultText = lib.literalExpression "config.services.klipper.settings.<name>.canbus_uuid";
+          default =
+            if lib.hasAttrByPath [ "${mcu}" "canbus_uuid" ] cfg.settings then
+              cfg.settings."${mcu}".canbus_uuid
+            else
+              null;
+        };
+        canbusNetwork = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "CAN bus network this mcu is connected to. Defaults to can0 if canbus_uuid is set.";
+          defaultText = lib.literalExpression ''if canbus_uuid != null then "can0" else null'';
+          default = if subcfg.canbus_uuid != null then "can0" else null;
         };
         configFile = lib.mkOption {
           type = lib.types.path;
@@ -71,6 +94,8 @@ let
               klipper-firmware = subcfg.package;
               mcu = lib.strings.sanitizeDerivationName mcu;
               flashDevice = subcfg.serial;
+              canbusDevice = subcfg.canbus_uuid;
+              canbusNetwork = subcfg.canbusNetwork;
               firmwareConfig = subcfg.configFile;
             }
           else
@@ -217,12 +242,15 @@ in
       }
     ]
     ++ lib.mapAttrsToList (mcu: firmware: {
-      assertion = firmware.enableKlipperFlash -> firmware.serial != null;
+      assertion =
+        firmware.enableKlipperFlash -> (firmware.serial != null || firmware.canbus_uuid != null);
       message = ''
-        Unable to determine the serial connection for services.klipper.firmwares."${mcu}". Please set one of the following:
+        Unable to determine the serial or canbus connection for services.klipper.firmwares."${mcu}". Please set one of the following:
 
           - services.klipper.firmwares."${mcu}".serial
+          - services.klipper.firmwares."${mcu}".canbus_uuid
           - services.klipper.settings."${mcu}".serial
+          - services.klipper.settings."${mcu}".canbus_uuid
       '';
     }) cfg.firmwares;
 
@@ -301,7 +329,6 @@ in
 
     environment.systemPackages =
       let
-        default = a: b: if a != null then a else b;
         genconf = pkgs.klipper-genconf.override {
           klipper = cfg.package;
         };

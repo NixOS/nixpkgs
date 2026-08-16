@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -18,7 +19,6 @@
   # test dependencies
   pytest-aiohttp,
   pytest-cov-stub,
-  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
 
@@ -30,43 +30,52 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "4.4.0";
+  version = "6.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-7edFCGNbECW5rrTbF7vJ4lJUc2IrQZD9VTR3IxJRP08=";
+    hash = "sha256-veX6MZSqEQb+tEqZTEgdCObLdaVPJEdTFW5Ivmb0TNQ=";
   };
 
-  # https://github.com/Sendspin/aiosendspin/blob/4.4.0/pyproject.toml#L7
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+    # too narrow timeouts, so remove pytest-timeout
+    sed -i "/addopts/d" pyproject.toml
   '';
 
   build-system = [
     setuptools
   ];
 
+  nativeBuildInputs = [
+    # https://github.com/Sendspin/aiosendspin/blob/5.3.0/pyproject.toml#L27
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     aiohttp
-    av
     mashumaro
-    numpy
     orjson
-    pillow
     zeroconf
   ];
+
+  optional-dependencies = {
+    server = [
+      av
+      numpy
+      pillow
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytest-cov-stub
-    pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.server;
 
   pythonImportsCheck = [
     "aiosendspin"

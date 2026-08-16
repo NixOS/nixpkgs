@@ -11,11 +11,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.39.1";
+  version = "0.42.0";
 
   src = fetchzip {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini-cli-bundle.zip";
-    hash = "sha256-mDKBquxjdeIpNOFOrL2Nnsxwr9Fz8FH/Ulhpiwrv1TA=";
+    hash = "sha256-Qkb39ehFabpRGxqpl3wCzoK3A2z5TMnKswngLz6kP/s=";
     stripRoot = false;
   };
 
@@ -92,6 +92,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
+    problems.removal = {
+      message = "Unpaid tier and Google AI Pro/Ultra users: Gemini CLI was replaced by Antigravity CLI.";
+      urls = [
+        "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+      ];
+    };
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ljxfstorm ];
     mainProgram = "gemini";

@@ -22,17 +22,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
-  version = "0-unstable-2025-10-09";
+  version = "0-unstable-2026-08-03";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "art_standalone";
-    rev = "e78bf68917bcaaf58fef3960cd88793b3b7f39cc";
-    hash = "sha256-0r6Ap41AMSHhZpMJ5QoWiGGcHPj35et4kiA20xs9uLs=";
+    rev = "66a5d9079b159e9c5819bfeef4a6fff6a5f32719";
+    hash = "sha256-4dRKghsPP8XLCcCe6bQDzJVlggBdFWe3l2/ge35HIXA=";
   };
 
   patches = [
-    # Do not hardocde addr2line binary path
+    # Do not hardcode addr2line binary path
     ./no-hardcode-path-addr2line.patch
     ./remove-wolfssljni.patch
   ];

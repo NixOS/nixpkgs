@@ -101,7 +101,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/unikraft/kraftkit";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      dit7ya
       cloudripper
     ];
     mainProgram = "kraft";

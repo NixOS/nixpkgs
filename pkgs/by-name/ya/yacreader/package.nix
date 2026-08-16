@@ -2,50 +2,86 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ctestCheckHook,
   libGLU,
   libunarr,
-  libsForQt5,
-  pkg-config,
+  expat,
+  libdeflate,
+  lerc,
+  xz,
+  libwebp,
+  qtwebapp,
+  pipewire,
+  qt6Packages,
+  onlyServer ? false,
 }:
-
+let
+  qtPackages = qt6Packages;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
-  version = "9.16.3";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
     tag = finalAttrs.version;
-    hash = "sha256-3mLmH6HJnH+LH/NkqI4G8Si5od3YiWnQ/kv5rmPFhlE=";
+    hash = "sha256-nJ4S4ej/I+ifDNa3CPpusFpDsEwZwYDt0JLaebptjuU=";
   };
 
   patches = [
-    # make the unarr backend logic use pkg-config even on Darwin
-    ./darwin-unarr-use-pkg-config.patch
+    # Devendor qtwebapp, use pkg-config instead
+    ./qtwebapp-devendor.patch
   ];
 
-  qmakeFlags = [
+  # Ensure devendor works
+  postPatch = ''
+    rm -rf third_party/QtWebApp
+  '';
+
+  # Pipewire is dlopen'd, so we must tell it where to look
+  preConfigure = ''
+    qtWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ pipewire ]}")
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  cmakeFlags = [
     # force unarr backend on all platforms
-    "CONFIG+=unarr"
+    (lib.cmakeBool "BUILD_SERVER_STANDALONE" onlyServer)
+    (lib.cmakeFeature "PDF_BACKEND" "poppler")
+    (lib.cmakeFeature "DECOMPRESSION_BACKEND" "unarr")
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools # for translations
-    libsForQt5.wrapQtAppsHook
+    cmake
     pkg-config
+    qtPackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     libGLU
-    libsForQt5.poppler
-    libsForQt5.qtgraphicaleffects # imported, but not declared as a dependency
-    libsForQt5.qtmultimedia
-    libsForQt5.qtquickcontrols2
     libunarr
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libsForQt5.qtmacextras # can be removed when using qt6
+    expat
+    libdeflate
+    lerc
+    xz
+    libwebp
+    qtwebapp
+    qtPackages.qtbase
+    qtPackages.qttools
+    qtPackages.qtmultimedia
+    qtPackages.qtspeech
+    qtPackages.poppler
+    qtPackages.qt5compat
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   # custom Darwin install instructions taken from the upstream compileOSX.sh script

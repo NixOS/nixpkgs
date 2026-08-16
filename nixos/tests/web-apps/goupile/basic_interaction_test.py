@@ -1,13 +1,22 @@
 import os
 import openpyxl
 import tempfile
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Page
 
 BASE_URL = "http://localhost:8889"
 
 # NOTE: these are the passwords
 ADMIN_PASSWD = "car-shop-in-the-mall"
 ALICE_PASSWD = "user-goes-to-the-car-shop"
+
+
+def click_save_and_wait(page: Page):
+    save_btn = page.get_by_role("button", name="Save")
+    with page.expect_response(
+        lambda r: r.request.method in ["POST", "PUT", "PATCH"] and r.status < 400
+    ):
+        save_btn.click()
+    page.wait_for_selector(".ui_busy", state="hidden", timeout=30000)
 
 
 def run_test():
@@ -20,6 +29,8 @@ def run_test():
         )
         # more default timeout for slow nixos test vms
         context.set_default_timeout(90 * 1000)
+        context.tracing.start(screenshots=True, snapshots=True, sources=True)
+
         page = context.new_page()
 
         page.goto(f"{BASE_URL}/admin")
@@ -48,10 +59,17 @@ def run_test():
         page.get_by_role("button", name="No", exact=True).click()
         page.get_by_role("textbox", name="Password *").fill(ALICE_PASSWD)
         page.get_by_role("textbox", name="Confirmation").fill(ALICE_PASSWD)
-        page.get_by_role("button", name="Create").click()
+
+        with page.expect_response(
+            lambda r: r.request.method == "POST" and r.status < 400
+        ):
+            page.get_by_role("button", name="Create").click()
 
         # give alice, permissions to access the project
-        page.get_by_role("button", name="Assign").nth(1).click()
+        assign_button = page.get_by_role("button", name="Assign").nth(1)
+        assign_button.wait_for(state="visible")
+        assign_button.click()
+
         page.get_by_text("Read", exact=True).click()
         page.get_by_text("Save", exact=True).click()
         page.get_by_text("Export", exact=True).click()
@@ -71,25 +89,23 @@ def run_test():
         page1.get_by_role("textbox", name="Inclusion date *").fill("2000-01-01")
         page1.get_by_role("spinbutton", name="Age *").click()
         page1.get_by_role("spinbutton", name="Age *").fill("1")
-        page1.get_by_role("button", name="Save").click()
-        page1.wait_for_timeout(1000)
+        click_save_and_wait(page1)
 
         page1.get_by_role("button", name="Advanced").click()
         page1.get_by_role("spinbutton", name="Age *").click()
         page1.get_by_role("spinbutton", name="Age *").fill("1")
-        page1.get_by_role("button", name="Save").click()
-        page1.wait_for_timeout(1000)
+        click_save_and_wait(page1)
 
         page1.get_by_role("button", name="Page layout").click()
         page1.get_by_role("spinbutton", name="Variable A1").fill("1")
-        page1.get_by_role("button", name="Save").click()
-        page1.wait_for_timeout(1000)
+        click_save_and_wait(page1)
 
         # create export #1
         page1.get_by_role("button", name="Data").click()
-        page1.wait_for_timeout(1000)
 
+        page1.get_by_role("button", name="Data exports").wait_for(state="visible")
         page1.get_by_role("button", name="Data exports").click()
+
         with page1.expect_download() as download_info:
             page1.get_by_role("button", name="Create export").click()
 
@@ -115,26 +131,24 @@ def run_test():
         page2.get_by_role("textbox", name="Inclusion date *").fill("2000-01-01")
         page2.get_by_role("spinbutton", name="Age *").click()
         page2.get_by_role("spinbutton", name="Age *").fill("2")
-        page2.get_by_role("button", name="Save").click()
-        page2.wait_for_timeout(1000)
+        click_save_and_wait(page2)
 
         page2.get_by_role("button", name="Advanced").click()
         page2.get_by_role("spinbutton", name="Age *").click()
         page2.get_by_role("spinbutton", name="Age *").fill("2")
-        page2.get_by_role("button", name="Save").click()
-        page2.wait_for_timeout(1000)
+        click_save_and_wait(page2)
 
         page2.get_by_role("button", name="Page layout").click()
         page2.get_by_role("spinbutton", name="Variable A1").click()
         page2.get_by_role("spinbutton", name="Variable A1").fill("2")
-        page2.get_by_role("button", name="Save").click()
-        page2.wait_for_timeout(1000)
+        click_save_and_wait(page2)
 
         # create export #2
         page2.get_by_role("button", name="Data").click()
-        page2.wait_for_timeout(1000)
 
+        page2.get_by_role("button", name="Data exports").wait_for(state="visible")
         page2.get_by_role("button", name="Data exports").click()
+
         page2.get_by_role("button", name="Previous exports").click()
 
         with page2.expect_download() as download1_info:
@@ -156,18 +170,19 @@ def run_test():
 
         print(f"exported all records to {save_path2}")
 
+        context.tracing.stop(path="/tmp/videos/trace.zip")
+
         context.close()
         browser.close()
 
     # check that exported files have correct entries
-
     wb1 = openpyxl.load_workbook(save_path1)
-    for sheet, cell in zip(["intro", "advanced", "layout"], ["D2", "D2", "C2"]):
+    for sheet, cell in zip(["intro", "advanced", "layout"], ["E2", "E2", "D2"]):
         val = wb1[sheet][cell].value
         assert val == 1, f"Sheet {sheet}, Cell {cell}: Expected 1 (admin), got {val}"
 
     wb2 = openpyxl.load_workbook(save_path2)
-    for sheet, cell in zip(["intro", "advanced", "layout"], ["D3", "D3", "C3"]):
+    for sheet, cell in zip(["intro", "advanced", "layout"], ["E3", "E3", "D3"]):
         val = wb2[sheet][cell].value
         assert val == 2, f"Sheet {sheet}, Cell {cell}: Expected 2 (alice), got {val}"
 

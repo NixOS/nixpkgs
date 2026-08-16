@@ -150,7 +150,7 @@ in
         Restart = "on-failure";
         StateDirectory = "spire/agent";
         StateDirectoryMode = "0700";
-        RuntimeDirectory = "spire/agent";
+        RuntimeDirectory = "spire/agent/public";
 
         # TODO: Switch to DynamicUser once https://github.com/NixOS/nixpkgs/issues/299476 lands
         # Without it, the systemd plugin can not talk to dbus

@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "bfscripts";
-  version = "unstable-2025-06-27";
+  version = "3.9.7-1-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "Mellanox";

@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  postInstall = ''
+  preInstall = ''
     rm -r "__MACOSX"
   '';
 

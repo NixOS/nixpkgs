@@ -70,6 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     substitute $src/contrib/systemd/mako.service $out/lib/systemd/user/mako.service \
       --replace-fail '/usr/bin' "$out/bin"
     chmod 0644 $out/lib/systemd/user/mako.service
+
+    # Route D-Bus activation through the unit installed above, so it
+    # waits for graphical-session.target instead of exec'ing mako
+    # before the compositor is up.
+    echo "SystemdService=mako.service" \
+      >> $out/share/dbus-1/services/fr.emersion.mako.service
   '';
 
   meta = {

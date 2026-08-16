@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "For relaying IP packets between two devices to build a IP bridge between them";
+    description = "For relaying IP packets between two devices to build an IP bridge between them";
     longDescription = ''
       A kernel module that relays ethernet packets between two devices (similar to a bridge),
       but without any MAC address checks.

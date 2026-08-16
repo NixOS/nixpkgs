@@ -31,6 +31,7 @@
   libx11,
   libxext,
   livekit-libwebrtc,
+  lld,
   testers,
   writableTmpDirAsHomeHook,
 
@@ -97,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.0.0";
+  version = "1.15.0";
 
   outputs = [
     "out"
@@ -110,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D5V0pvL3WCwhcC8dnNKTXRdnFq8LMZZ0/GDjw8xf95g=";
+    hash = "sha256-oHFcYIWshXQdZP2J936a+bBe4MY55aj50YfMh9E2qz4=";
   };
 
   postPatch = ''
@@ -133,13 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
-
-  cargoHash = "sha256-xtw7r7VluCEqXWKnxpVk8BPqr+mJV5rB3Eq/PvsKPBk=";
+  cargoHash = "sha256-yk+scR1GUD2f/IPSu/zorqyHuktjCnP7rFzap90xjN8=";
 
   __structuredAttrs = true;
 
@@ -152,6 +147,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    lld
     rustPlatform.bindgenHook
   ];
 
@@ -175,6 +171,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [
@@ -208,6 +208,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   preBuild = ''

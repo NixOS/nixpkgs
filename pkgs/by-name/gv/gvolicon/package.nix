@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2014-04-28";
 
   src = fetchFromGitHub {
-    owner = "Unia";
+    owner = "Hjdskes";
     repo = "gvolicon";
     rev = "0d65a396ba11f519d5785c37fec3e9a816217a07";
     sha256 = "sha256-lm5OfryV1/1T1RgsVDdp0Jg5rh8AND8M3ighfrznKes=";
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple and lightweight volume icon that sits in your system tray";
-    homepage = "https://github.com/Unia/gvolicon";
+    homepage = "https://github.com/Hjdskes/gvolicon";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.bennofs ];

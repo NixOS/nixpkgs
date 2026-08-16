@@ -5,8 +5,9 @@
   nix-update-script,
   stdenv,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   openssl,
+  cacert,
   mpv-unwrapped,
   yt-dlp-light,
 
@@ -14,22 +15,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bilibili-tui";
-  version = "1.0.9";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "MareDevi";
     repo = "bilibili-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LACNDpVhlYEgT3fN+Ff2MVipblUqPlqwOUpTLaXSCbk=";
+    hash = "sha256-u7jSOsXJDghyrHdfOkMiwCtN1Pugjc7RRJVvjtR4LOE=";
   };
 
-  cargoHash = "sha256-q3jRjmzQA64sZjVShoEmu1x2CFOAgBGgZYyTq7Lg4is=";
+  cargoHash = "sha256-Xxsfa33dRqObwfPFVHezlXOy5bvjQTaQ9FSuU+F1V5U=";
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pkg-config;
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) openssl;
 
   env.OPENSSL_NO_VENDOR = true;
+
+  nativeCheckInputs = [ cacert ];
 
   # Wrap mpv as fallback; users should prefer their system's mpv in PATH
   postInstall = lib.optionalString withMpv ''

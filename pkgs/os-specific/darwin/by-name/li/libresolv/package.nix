@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   mkAppleDerivation,
   sourceRelease,
   stdenvNoCC,
@@ -8,13 +7,7 @@
 
 let
   configd = sourceRelease "configd";
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  dyld = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "dyld";
-    rev = "dyld-1160.6";
-    hash = "sha256-6P/Da6xP19vmaCROoYv9pl7DaW3/U+qZBJT8PD33bn0=";
-  };
+  dyld = sourceRelease "dyld";
   Libinfo = sourceRelease "Libinfo";
   Libnotify = sourceRelease "Libnotify";
 
@@ -29,8 +22,12 @@ let
         '${dyld}/include/mach-o/dyld_priv.h'
 
       substituteInPlace "$out/include/mach-o/dyld_priv.h" \
-        --replace-fail ', bridgeos(3.0)' "" \
-        --replace-fail '//@VERSION_DEFS@' 'const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };'
+        --replace-fail ', bridgeos(3.0)' ""
+
+      cat <<EOF > "$out/include/mach-o/dyld_version_defines.h"
+      #pragma once
+      const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };
+      EOF
     '';
   };
 in
@@ -51,7 +48,7 @@ mkAppleDerivation {
       --replace-fail '<md5.h>' '<CommonCrypto/CommonDigest.h>'
   '';
 
-  xcodeHash = "sha256-Q5jHee9rxge6HJtf9/sFK15FsS02GQmx7L0BBDiyGIs=";
+  xcodeHash = "sha256-pQ1eFMPnSy8M3pfvv+sPyale9xDlVCMif0EWO8PO7zg=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include -I${configd}/dnsinfo -I${Libinfo}/lookup.subproj -I${Libnotify}";
 

@@ -147,7 +147,7 @@ in
       ];
     };
 
-    boot.kernelModules = [ "uinput" ];
+    hardware.uinput.enable = true;
 
     services.udev.packages = [ cfg.package ];
 

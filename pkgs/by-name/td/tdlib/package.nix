@@ -38,7 +38,7 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
-  version = "1.8.63";
+  version = "1.8.66";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "f06b0bac65278b03d26414c096080e7bfecfef52";
-    hash = "sha256-SzUDAZqdEIrIj1qUUD0MvzbCYxKLJwoX2+T0chud/rQ=";
+    rev = "a9966eb3704a3351568c28013fed67d797c17828";
+    hash = "sha256-lCfQIehcH5jNQ7rOR6U4Ht+LCcmQRqkRtl0TFuYVdJg=";
   };
 
   buildInputs = [
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
-    license = [ lib.licenses.boost ];
+    license = lib.licenses.boost;
     platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.vyorkin

@@ -10,13 +10,21 @@
   bzip2,
   curl,
   xz,
+  zlib,
 }:
 
 stdenv.mkDerivation (
   finalAttrs:
   let
     # Used on Windows, where libpsl doesn't compile, yet
-    curlDep = curl.override { pslSupport = false; };
+    curlDep = (curl.override { pslSupport = false; }).overrideAttrs (finalCurlAttrs: {
+      buildInputs = [ ]; # Does not need runtimeShellPackage, which is Bash and unsupported on MinGW targets
+      # This is the shell script that requires runtimeShellPackage on systems, but we are
+      # only interested in the library here, not the binaries
+      postInstall = finalCurlAttrs.postInstall + ''
+        rm "''${!outputBin}/bin/wcurl"
+      '';
+    });
   in
   {
     pname = "sword";
@@ -70,6 +78,7 @@ stdenv.mkDerivation (
       "--with-xz"
       "--with-bzip2"
       "--with-icuregex"
+      "--without-zlib"
     ]);
 
     makeFlags = lib.optionals stdenv.hostPlatform.isWindows [

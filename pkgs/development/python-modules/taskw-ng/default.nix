@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bergercookie/taskw-ng";
     changelog = "https://github.com/bergercookie/taskw-ng/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

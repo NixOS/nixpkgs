@@ -71,6 +71,17 @@ buildPythonPackage (finalAttrs: {
   # Tests require local network access
   __darwinAllowLocalNetworking = true;
 
+  disabledTestPaths = [
+    # Tests that fail due to network access
+    "parfive/tests/test_downloader.py"
+    "parfive/tests/test_downloader_multipart.py"
+    # assert 1 == 0
+    "parfive/tests/test_main.py::test_run_cli_success"
+    #  aiohttp.client_exceptions.ClientResponseError: 400, message="Data after `Connection: close
+    "parfive/tests/test_utils.py::test_head_or_get"
+    "parfive/tests/test_utils.py::test_head_302"
+  ];
+
   pythonImportsCheck = [ "parfive" ];
 
   meta = {

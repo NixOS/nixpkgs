@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Compute special values of symmetric power elliptic curve L-functions";
+    homepage = "https://gitlab.com/rezozer/forks/sympow";
     mainProgram = "sympow";
     license = {
       shortName = "sympow";

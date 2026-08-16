@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI application for removing noise (hiss, pops and clicks) from audio files";
     homepage = "https://github.com/AlisterH/gwc/";
-    changelog = "https://github.com/AlisterH/gwc/blob/${finalAttrs.version}/Changelog";
+    changelog = "https://github.com/AlisterH/gwc/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;

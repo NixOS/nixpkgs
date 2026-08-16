@@ -19,7 +19,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Comprehensive high-performance computer vision library for AMD processors";
     homepage = "https://github.com/ROCm/rpp";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

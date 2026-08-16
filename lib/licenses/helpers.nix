@@ -1,4 +1,23 @@
 { lib }:
+
+let
+  inherit (lib) all any elem;
+  handleComplexProperty =
+    evaluateSubProperty: AND: OR: license:
+    if license.licenseType == "compound" then
+      if license.operator == "OR" then
+        OR evaluateSubProperty license.licenses
+      else if license.operator == "AND" then
+        AND evaluateSubProperty license.licenses
+      else
+        throw "Unknown license operator"
+    else if license.licenseType == "exception" then
+      evaluateSubProperty license.license && evaluateSubProperty license.exception
+    else if license.licenseType == "plus" then
+      evaluateSubProperty license.license
+    else
+      throw "Unknown license type or legacy license";
+in
 rec {
   /**
     Evaluate a license expression for a given predicate.
@@ -21,29 +40,45 @@ rec {
     - [license] license expression to check
   */
   evaluateProperty =
-    predicate: permissive: license:
+    predicate: permissive:
     let
-      OR = if permissive then lib.any else lib.all;
-      AND = if permissive then lib.all else lib.any;
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
+      evaluateComplexProperty = handleComplexProperty (evaluateProperty predicate permissive) AND OR;
     in
-    if license.licenseType == "simple" then
-      predicate license
-    else if license.licenseType == "compound" then
-      if license.operator == "OR" then
-        OR (x: evaluateProperty predicate permissive x) license.licenses
-      else if license.operator == "AND" then
-        AND (x: evaluateProperty predicate permissive x) license.licenses
-      else
-        throw "Unknown license operator"
-    else if license.licenseType == "exception" then
-      AND (x: evaluateProperty predicate permissive x) [
-        license.license
-        license.exception
-      ]
-    else if license.licenseType == "plus" then
-      evaluateProperty predicate permissive license.license
-    else
-      throw "Unknown license type or legacy license";
+    license:
+    if license.licenseType == "simple" then predicate license else evaluateComplexProperty license;
+
+  /**
+    Evaluate a license expression for a given property name. The property must
+    be defined as a boolean attribute of all licenses passed.
+
+    # Example
+
+    ```nix
+    evaluateNamedProperty "deprecated" true (with lib.licenses; AND [ ncsa (WITH asl20 llvm-exception) ])
+    ```
+    # Type
+
+    ```
+    evaluateProperty :: String -> Bool -> AttrSet -> Bool
+    ```
+
+    # Arguments
+
+    - [name] name of the attribute to check
+    - [permissive] whether to apply checks permissive or reciprocal
+    - [license] license expression to check
+  */
+  evaluateNamedProperty =
+    name: permissive:
+    let
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
+      evaluateComplexProperty = handleComplexProperty (evaluateNamedProperty name permissive) AND OR;
+    in
+    license:
+    if license.licenseType == "simple" then license.${name} else evaluateComplexProperty license;
 
   /**
     Check whether a license expression is free.
@@ -65,7 +100,7 @@ rec {
 
     - [license] License expression to check if free
   */
-  isFree = evaluateProperty (x: x.free) true;
+  isFree = evaluateNamedProperty "free" true;
 
   /**
     Check whether a license expression is redistributable.
@@ -87,7 +122,7 @@ rec {
 
     - [license] License expression to check if redistributable
   */
-  isRedistributable = evaluateProperty (x: x.redistributable) true;
+  isRedistributable = evaluateNamedProperty "redistributable" true;
 
   /**
     Check whether any of the given licenses is required in the license expression.
@@ -110,7 +145,7 @@ rec {
     - [licenses] List of licenses to look
     - [license] License expression to check
   */
-  containsLicenses = licenses: evaluateProperty (x: lib.lists.elem x licenses) false;
+  containsLicenses = licenses: evaluateProperty (x: elem x licenses) false;
 
   /**
     Convert a license expression to an SPDX license expression string.

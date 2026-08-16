@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
-      azahi
       lassulus
       Gliczy
       r4v3n6101

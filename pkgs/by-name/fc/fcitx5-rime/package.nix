@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   zstd,
   fcitx5,
@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.1.13";
+  version = "5.1.14";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
-    hash = "sha256-KB4IOLq6mRB1ZnOPg4Avpk6vp29xbLkDGYXvCdtrjA8=";
+    hash = "sha256-dHiBH74dTnzabm23TrDAXV/oHSGMqdyBtrf0uyuwjWI=";
   };
 
   cmakeFlags = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     gettext
     zstd

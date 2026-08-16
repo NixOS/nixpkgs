@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       dbus-python
       pygobject3
       setproctitle
-      xlib
+      python-xlib
     ])
     ++ [ rofi ];
 

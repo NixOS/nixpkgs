@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     cmake
     gettext
     makeWrapper
+    pkg-config
   ];
 
   buildInputs = [

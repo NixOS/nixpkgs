@@ -42,6 +42,8 @@ buildPythonPackage rec {
     wrapt
   ];
 
+  pythonRelaxDeps = [ "wrapt" ];
+
   optional-dependencies = {
     serial = [ pyserial ];
     seeedstudio = [ pyserial ];

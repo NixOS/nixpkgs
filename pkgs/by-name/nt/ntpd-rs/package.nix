@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ntpd-rs";
-  version = "1.7.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xH9Z/aOfqY51GxbJeTidsEIbbKNaqNa/okIInvPKxp0=";
+    hash = "sha256-LGjG2wO6/CXgpYnGzWY4r0KWs/rXKxZfxmWeGHdNbVI=";
   };
 
-  cargoHash = "sha256-9NeNBoq8OzSUilZVvYC1jL9Mf3pLKAsFBMWiSO/ky7I=";
+  cargoHash = "sha256-aA8gRfYuor6vVGDn1UO2a6nJgoq1caP0CDUNVH/1XmU=";
 
   nativeBuildInputs = [
     pandoc
@@ -33,24 +33,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # These fail based on timestamp issues with bundled certificates
   # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
-  checkFlags = [
-    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
-    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
-    "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
-    "--skip=daemon::ntp_source::tests::test_timeroundtrip"
-    "--skip=daemon::server::tests::test_server_serves"
-    "--skip=nts::tests::test_key_exchange_roundtrip_no_cookies"
-    "--skip=nts::tests::test_keyexchange_fixed_key_no_permission"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
-    "--skip=nts::tests::test_keyexchange_roundtrip_supports"
-    "--skip=nts::tests::test_keyexchange_roundtrip_upgrading"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v4"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v5"
-    "--skip=nts::tests::test_keyexchange_supports_no_permission"
+  checkFlags = map (t: "--skip=${t}") [
+    "daemon::keyexchange::tests::key_exchange_connection_limiter"
+    "daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
+    "daemon::ntp_source::tests::test_deny_stops_poll"
+    "daemon::ntp_source::tests::test_timeroundtrip"
+    "daemon::server::tests::test_server_serves"
+    "daemon::spawn::nts::tests::allow_srv_direct_name_resolution"
+    "daemon::spawn::standard::tests::reresolves_on_unreachable"
+    "nts::tests::test_key_exchange_roundtrip_no_cookies"
+    "nts::tests::test_keyexchange_fixed_key_no_permission"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
+    "nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
+    "nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
+    "nts::tests::test_keyexchange_roundtrip_supports"
+    "nts::tests::test_keyexchange_roundtrip_upgrading"
+    "nts::tests::test_keyexchange_roundtrip_v4"
+    "nts::tests::test_keyexchange_roundtrip_v5"
+    "nts::tests::test_keyexchange_supports_no_permission"
   ];
 
   postPatch = ''

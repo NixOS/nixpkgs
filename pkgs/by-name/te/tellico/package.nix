@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tellico";
-  version = "4.2";
+  version = "4.2.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "tellico";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4bwx5zWJT8jD+kRshHKROx8hc+zuysGTd0HOwU7Ena0=";
+    hash = "sha256-CVZ3iicTMjg/uRQj09aB+215gucs/gwJW89BcIlBeto=";
   };
 
   nativeBuildInputs = [

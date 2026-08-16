@@ -6,8 +6,8 @@
 
 skawarePackages.buildPackage {
   pname = "s6-portable-utils";
-  version = "2.3.1.1";
-  sha256 = "sha256-zwjXGWPA6hcIzdgr1ArTARVLzMWbaO77Qoqnm0InMkI=";
+  version = "2.3.1.2";
+  sha256 = "sha256-z7kBhtDA6yBOHlxvk3nplBPFRrzPOLtudhd/gjcao6o=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-portable-utils-man-pages";

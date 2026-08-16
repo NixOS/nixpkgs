@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gren";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "gren-lang";
     repo = "compiler";
     tag = finalAttrs.version;
-    hash = "sha256-eWs2Qsg3jCrBWAP7GAtBkG8RSoljjES6EpdN4IfpxaA=";
+    hash = "sha256-GLqDBTNu7jTy+WTbPrK7d/AIjHKWTidsf19AP4WwEQo=";
   };
 
   buildInputs = [ nodejs ];

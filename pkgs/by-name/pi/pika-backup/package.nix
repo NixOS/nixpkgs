@@ -18,24 +18,25 @@
   gtk4,
   libadwaita,
   libsecret,
+  openssl,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.7.6";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     tag = version;
-    hash = "sha256-tWTINRYCAhPV2srZWIYJeH4NAQIv/ED0bBdeKKgkC78=";
+    hash = "sha256-7Nr/KmjI7zcocfsPxVsYRC+Tye9Qu7pa+14f6nAPgRk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Ut7dFhm67tcpELZzQPwyIs9/3YNHofi2VF9RxQCD7qo=";
+    hash = "sha256-tQz+2+6Yeqenis7QDRlmMTQIaLRE1uOC4tTRUrEeyXw=";
   };
 
   patches = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+    openssl
   ];
 
   passthru = {

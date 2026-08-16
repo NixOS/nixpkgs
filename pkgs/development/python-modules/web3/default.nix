@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -39,15 +40,25 @@
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "7.15.0";
+  version = "7.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
     tag = "v${version}";
-    hash = "sha256-BStkLH7lCnhVs2Fc3c0EBXzyZtEgI8ywA01OEBYLUeQ=";
+    hash = "sha256-Dgkmmx4gmVJa4P26X1waaQaKc75COC17OSeJz43EZZ0=";
   };
+
+  patches = [
+    # fix Python 3.14, avoid copying itertools.count, which is no longer supported
+    # https://github.com/ethereum/web3.py/pull/3779
+    (fetchpatch {
+      url = "https://github.com/ethereum/web3.py/commit/9923ee46cab6a49af4d7bdb3f922c4f8d9670633.patch";
+      includes = [ "web3/_utils/module_testing/utils.py" ];
+      hash = "sha256-N6v3QVDN0fCEWqs34uZ+B18+WXOPoY+Lyk9rIM+btjk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     zenity
   ];
 
-  appimageContents = appimageTools.extractType2 { inherit (finalAttrs) pname version src; };
+  appimageContents = appimageTools.extract { inherit (finalAttrs) pname version src; };
 
   installPhase = ''
     runHook preInstall

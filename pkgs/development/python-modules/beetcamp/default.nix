@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beetcamp";
-  version = "0.24.2";
+  version = "0.24.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "beetcamp";
     tag = finalAttrs.version;
-    hash = "sha256-AMHj7rsPAxUUvVg6vri2NnkO9+5NAVwGrWLvNvOtlLs=";
+    hash = "sha256-kKFYuTJys4j67+cak2PDmn6z2vNzVitFXIZXy2bClY8=";
   };
 
   patches = [
@@ -75,6 +75,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Bandcamp autotagger source for beets (http://beets.io)";
     homepage = "https://github.com/snejus/beetcamp";
+    changelog = "https://github.com/snejus/beetcamp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = [
       lib.maintainers._9999years

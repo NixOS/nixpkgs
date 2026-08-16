@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation {
   pname = "dasher";
-  version = "unstable-2021-04-25";
+  version = "5.0-beta-unstable-2021-04-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "dasher";
     rev = "90c753b87564fa3f42cb2d04e1eb6662dc8e0f8f";
-    sha256 = "sha256-aM05CV68pCRlhfIPyhuHWeRL+tDroB3fVsoX08OU8hY=";
+    hash = "sha256-aM05CV68pCRlhfIPyhuHWeRL+tDroB3fVsoX08OU8hY=";
   };
 
   prePatch = ''

@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.0.1";
 
   src = fetchFromGitHub {
-    owner = "chneukirchen";
+    owner = "leahneukirchen";
     repo = "lr";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-zpHThIB1FS45RriE214SM9ZQJ1HyuBkBi/+PTeJjEFc=";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    homepage = "https://github.com/chneukirchen/lr";
+    homepage = "https://github.com/leahneukirchen/lr";
     description = "List files recursively";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

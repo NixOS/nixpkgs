@@ -23,12 +23,13 @@
   optipng,
   piper-tts,
   pkg-config,
-  podofo_0_10,
+  podofo0,
   poppler-utils,
   python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
+  versionCheckHook,
   xdg-utils,
   wrapGAppsHook3,
   popplerSupport ? true,
@@ -40,16 +41,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.7.0";
+  version = "9.13.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FmEflROGdI6DSBlCPgk4k1dV5AIwHvB6pY+E9ItpQgE=";
+    hash = "sha256-ONfYjXq8vGLG/jV1SD+1STzpYtJhqXihpNtNWLxLN5M=";
   };
 
   patches =
     let
-      debian-source = "ds+_0.10.5-1";
+      debian-source = "ds+_0.10.6-1";
       debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
@@ -57,15 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "0001-only-plugin-update-${debian-tag}.patch";
         url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
-        hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
+        hash = "sha256-2QhNf9CBxvoMiK9ZqBWnA/zdcIYpY+HGG0uguUZbinw=";
       })
       (fetchpatch {
         name = "0007-Hardening-Qt-code-${debian-tag}.patch";
         url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-        hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
+        hash = "sha256-ItJalYmBhK4Qgz6QDGbPpBMaa6oGQetQvg5ie3oxFMM=";
       })
-    ]
-    ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+    ];
+
+  postPatch =
+    lib.optionalString (!unrarSupport)
+      # Don't build the unrar plugin
+      ''
+        substituteInPlace src/calibre/ebooks/metadata/archive.py \
+          --replace-fail \
+            "file_types = {'zip', 'rar', '7z'}" \
+            "file_types = {'zip', '7z'}"
+      '';
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -82,10 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    # `pdftotext`/`pdftohtml` are run by the test suite
+    poppler-utils
     python3Packages.python
     qt6.qmake
     qt6.wrapQtAppsHook
     wrapGAppsHook3
+    # `xdg-icon-resource` & co. are run by the desktop integration setup in `installPhase`
+    xdg-utils
   ];
 
   buildInputs = [
@@ -103,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     onnxruntime
-    podofo_0_10
+    podofo0
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -123,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
         dnspython
         faust-cchardet
         feedparser
+        feedparser-sgmllib
         html2text
         html5-parser
         lxml
@@ -170,8 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     MAGICK_LIB = "${lib.getLib imagemagick}/lib";
     FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
     FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
-    PODOFO_INC_DIR = "${lib.getDev podofo_0_10}/include/podofo";
-    PODOFO_LIB_DIR = "${lib.getLib podofo_0_10}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo0}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo0}/lib";
     XDG_DATA_HOME = "${placeholder "out"}/share";
     XDG_UTILS_INSTALL_MODE = "user";
   }
@@ -235,6 +253,11 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckInputs = with python3Packages; [
     psutil
   ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # `calibre --version` drops a trailing `.0`, so check against a binary reporting the full version
+  versionCheckProgram = "${placeholder "out"}/bin/ebook-convert";
   installCheckPhase =
     let
       excludedTestNames = [
@@ -244,10 +267,17 @@ stdenv.mkDerivation (finalAttrs: {
         "test_import_of_all_python_modules" # explores actual file paths, gets confused
         "test_websocket_basic" # flaky
 
+        # Flaky: asserts on page-granularity RSS deltas, which are 0 (assertion skipped)
+        # on most runs and allocator noise otherwise
+        "test_mem_leaks"
+
         # hangs with cuda enabled, also:
         # eglInitialize: Failed to get system egl display
         # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
         "test_recipe_browser_webengine"
+        # Flaky test, occasionally errors with python exception:
+        # urllib.error.URLError: <urlopen error NetworkError.RemoteHostClosedError: Connection closed>
+        "test_recipe_browser_qt"
       ]
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         # https://github.com/microsoft/onnxruntime/issues/10038
@@ -285,6 +315,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
+    mainProgram = "calibre";
     longDescription = ''
       calibre is a powerful and easy to use e-book manager. Users say it’s
       outstanding and a must-have. It’ll allow you to do nearly everything and

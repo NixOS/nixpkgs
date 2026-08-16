@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -29,19 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmWorkspaces = [ "*" ];
   pnpmRoot = "packages/web";
   pnpmDeps = fetchPnpmDeps {
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 2;
-    hash = "sha256-p8AdAYqaHoKaWirNy9uPLs/kRDVNDcXBJQ1y29MVAA0=";
+    hash = "sha256-0o/g5FVzSGX9xtQ8DZGjakwOnPXvlA95tdD/VNymB1M=";
   };
 
   nativeBuildInputs = [
-    pnpm_9
+    pnpm_10
     pnpmConfigHook
     nodejs
   ];

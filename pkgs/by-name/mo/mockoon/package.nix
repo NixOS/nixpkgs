@@ -13,7 +13,7 @@ let
     hash = "sha256-Y6DmoWGvNp0cvRYgDDMHul5K6CzhiWxMxVTR+W9PE5E=";
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     homepage = "https://mockoon.com";
     changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "mockoon";
     platforms = [ "x86_64-linux" ];
   };

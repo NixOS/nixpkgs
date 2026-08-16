@@ -19,13 +19,13 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   pname = "c3c${optionalString debug "-debug"}";
-  version = "0.7.11";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M6lx7MHhR1ghR+stRGJB7NL2SwHoyFOfU2tKu9Hh2oU=";
+    hash = "sha256-zOKAXagdhtz8GZn5ss4v0kB8mdPbs6ki3JyL6vRGavE=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -59,7 +59,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   doCheck =
     lib.elem llvmPackages.stdenv.system [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ]
     && checks;

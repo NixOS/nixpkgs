@@ -19,17 +19,20 @@
   sqlite,
   unstableGitUpdater,
   nixosTests,
+
+  # flags
+  withSCTP ? lib.meta.availableOn stdenv.hostPlatform lksctp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solanum";
-  version = "0-unstable-2026-04-09";
+  version = "0-unstable-2026-07-26";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "54286cf59235c8688104ee20d4e1d74fe8934317";
-    hash = "sha256-0som1lYheX/GVbqwEXwpIWonYKYqFwpAfcRRojlHlmc=";
+    rev = "115b1e2e8c3d94a490cdcb0fc1f7a4448cefc6bf";
+    hash = "sha256-xy3nRooKpTmEr8WRdU8Xs4bmNwLv9oTk2y5KvpZjfDc=";
   };
 
   postPatch = ''
@@ -50,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "mbedtls" false)
     (lib.mesonEnable "openssl" true)
     (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "sctp" withSCTP)
   ];
 
   nativeBuildInputs = [
@@ -67,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     vectorscan
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals withSCTP [
     lksctp-tools
   ];
 
@@ -81,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = lib.licenses.gpl2Plus;

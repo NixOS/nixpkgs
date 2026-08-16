@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   version = "2.0";
 
   src = fetchFromGitHub {
-    owner = "gapophustu";
-    repo = "4D-Minesweeper";
+    owner = "Alzager";
+    repo = "4D-Minesweeper-Archived";
     rev = "db176d8aa5981a597bbae6a1a74aeebf0f376df4";
     hash = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
   };
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = {
-    homepage = "https://github.com/gapophustu/4D-Minesweeper";
+    homepage = "https://github.com/Alzager/4D-Minesweeper-Archived";
     description = "4D Minesweeper game written in Godot";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;

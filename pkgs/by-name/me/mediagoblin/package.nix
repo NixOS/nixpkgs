@@ -5,12 +5,18 @@
   gobject-introspection,
   gst_all_1,
   poppler-utils,
-  python3,
+  python3Packages,
   lndir,
 }:
 
 let
-  python = python3;
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      paste = prev.paste.override { setuptools = prev.setuptools_80; };
+    }
+  );
+
+  inherit (pythonPackages.python) sitePackages;
 
   version = "0.15.0";
   src = fetchFromSourcehut {
@@ -35,7 +41,7 @@ let
     '';
   };
 in
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
@@ -53,15 +59,15 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3.pkgs.babel
+    pythonPackages.babel
     lndir
   ];
 
-  build-system = with python.pkgs; [
+  build-system = with pythonPackages; [
     setuptools
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with pythonPackages; [
     alembic
     babel
     bcrypt
@@ -96,7 +102,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   optional-dependencies =
-    with python.pkgs;
+    with pythonPackages;
     let
       # not really documented in python build system
       gst = with gst_all_1; [
@@ -123,16 +129,16 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    lndir -silent ${extlib}/node_modules $out/${python.sitePackages}/mediagoblin/static/extlib/
+    lndir -silent ${extlib}/node_modules $out/${sitePackages}/mediagoblin/static/extlib/
 
-    ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/jquery/dist/jquery.js $out/${python.sitePackages}/mediagoblin/static/js/extlib/jquery.js
-    ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.css $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.css
-    ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.js $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.js
-    ln -rs $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/dist/images/ $out/${python.sitePackages}/mediagoblin/static/extlib/leaflet/
+    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/jquery/dist/jquery.js $out/${sitePackages}/mediagoblin/static/js/extlib/jquery.js
+    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.css $out/${sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.css
+    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/leaflet.js $out/${sitePackages}/mediagoblin/static/extlib/leaflet/leaflet.js
+    ln -rs $out/${sitePackages}/mediagoblin/static/extlib/leaflet/dist/images/ $out/${sitePackages}/mediagoblin/static/extlib/leaflet/
   '';
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
       pytest-forked
       pytest-xdist
@@ -146,7 +152,7 @@ python.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "mediagoblin" ];
 
   passthru = {
-    inherit extlib python;
+    inherit extlib pythonPackages;
   };
 
   meta = {

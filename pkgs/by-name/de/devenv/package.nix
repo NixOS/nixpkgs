@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  applyPatches,
   gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
@@ -18,6 +16,7 @@
   pkg-config,
   glibcLocalesUtf8,
   boehmgc,
+  libghostty-vt,
   llvmPackages,
   nixd,
   bash,
@@ -25,27 +24,16 @@
 }:
 
 let
-  version = "2.0.6";
-  devenvNixVersion = "2.32";
-  devenvNixRev = "e127c1c94cefe02d8ca4cca79ef66be4c527510e";
+  version = "2.2.1";
+  devenvNixVersion = "2.34";
+  devenvNixRev = "f33db89fd6db6edc337d93212f6628ab6d25f407";
 
-  devenvNixSrc = applyPatches {
+  devenvNixSrc = fetchFromGitHub {
     name = "devenv-nix-${devenvNixVersion}-source";
-    src = fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = devenvNixRev;
-      hash = "sha256-MRNVInSmvhKIg3y0UdogQJXe+omvKijGszFtYpd5r9k=";
-    };
-    patches = [
-      # Lowdown 3.0 compatibility; devenv's nix fork (2.32-based) predates
-      # the upstream fix.
-      (fetchpatch {
-        name = "nix-lowdown-3.0-support.patch";
-        url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
-        hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
-      })
-    ];
+    owner = "cachix";
+    repo = "nix";
+    rev = devenvNixRev;
+    hash = "sha256-JSD8lPe5kalvPKx5X+inX8ZZdGLeXkAbd3Jiv7UDf+I=";
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -61,16 +49,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v${version}";
-    hash = "sha256-i1G6n/7Z5fO9RhplzXQSTiLyh1Cs0GhoCoEStFLARtA=";
+    tag = "v2.2.1";
+    hash = "sha256-S4baMekJYJGWDCo1yOYxZkmgBlAruQ5MLi+h3Zo8als=";
   };
 
-  cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
-
-  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
-  postPatch = ''
-    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
-  '';
+  cargoHash = "sha256-2SQbXhDOoXQ33RYB5ik2rSdP3LxNR77lp/B9R1abUl0=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
@@ -97,6 +80,7 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
+    libghostty-vt
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c

@@ -31,10 +31,6 @@ let
         url = "https://desktop.userapi.com/rpm/master/vk-${version}.x86_64.rpm";
         sha256 = "spDw9cfDSlIuCwOqREsqXC19tx62TiAz9fjIS9lYjSQ=";
       };
-      x86_64-darwin = fetchurl {
-        url = "https://web.archive.org/web/20220302083827/https://desktop.userapi.com/mac/master/vk.dmg";
-        sha256 = "hxK8I9sF6njfCxSs1KBCHfnG81JGKUgHKAeFLtuCNe0=";
-      };
     }
     .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
@@ -47,7 +43,6 @@ let
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
   };
 

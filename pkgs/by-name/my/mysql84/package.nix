@@ -23,15 +23,16 @@
   libtirpc,
   rpcsvc-proto,
   curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.8";
+  version = "8.4.11";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vp2Wzfh/J2lSos3ZYPEGuWCohg5GwRXtOcG18uA4eiA=";
+    hash = "sha256-6zBRFk1iXdNGqCA/duDV1dmuxR2+nVF4jjnsaz8TlMI=";
   };
 
   nativeBuildInputs = [
@@ -111,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+    tests = {
+      mysql =
+        nixosTests.mysql."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+      mysql-secure-root-by-default =
+        nixosTests.mysql-secure-root.secure-by-default."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+      mysql-root-can-be-kept-insecure =
+        nixosTests.mysql-secure-root.can-be-insecure."mysql${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}";
+    };
   };
 
   meta = {

@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock-plugin";
-  version = "1.8.6";
+  version = "1.8.7";
   src = fetchFromGitHub {
     owner = "mstoeckl";
     repo = "swaylock-plugin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JSFxWpSUt6ekX/owk9I6CdGBTF6F1pOTtFAls7kZrsc=";
+    hash = "sha256-JWZ8aZeS8XXjRPhwyJXptwdMU2y/uFG1KlZh+v92/0c=";
   };
 
   strictDeps = true;
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Screen locker for Wayland, forked from swaylock";
     longDescription = ''
-      swaylock-pulgins is a fork of swaylock, a screen locking utility for Wayland compositors.
+      swaylock-plugin is a fork of swaylock, a screen locking utility for Wayland compositors.
       On top of the usual swaylock features, it allow you to use a
       subcommand to generate the lockscreen background.
 

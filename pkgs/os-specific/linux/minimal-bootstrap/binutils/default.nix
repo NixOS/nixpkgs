@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
     "--with-sysroot=/"
     "--disable-dependency-tracking"
+    "--disable-nls"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"
@@ -53,6 +54,8 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
+    "--disable-gold"
+    "--disable-plugins"
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -112,4 +115,8 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install
+
+    # gprof/addr2line/elfedit + man pages are unused downstream.
+    rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
+    rm -rf $out/share/info $out/share/man
   ''

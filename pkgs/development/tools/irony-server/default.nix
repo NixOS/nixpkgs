@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     description = "Server part of irony";
     mainProgram = "irony-server";
     homepage = "https://melpa.org/#/irony";
-    maintainers = [ lib.maintainers.deepfire ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.free;
   };

@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocfft";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

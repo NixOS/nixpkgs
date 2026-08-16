@@ -26,7 +26,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "myst-parser";
-  version = "5.0.0";
+  version = "5.1.0-unstable-2026-07-12";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -34,8 +34,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "myst-parser";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0lGejdGVVvZar3sPBbvThXzJML7PcR5+shyDHTTtVEY=";
+    rev = "e843b5ff61d9834b4864a95bf6a668909c2de3a6";
+    hash = "sha256-lt2AECSVfakN63EcheYSdkHsQGl9pfcLhS9+lkMqQ7w=";
   };
 
   build-system = [ flit-core ];
@@ -73,7 +73,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
-    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/${finalAttrs.src.tag}/CHANGELOG.md";
+    # changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
   };

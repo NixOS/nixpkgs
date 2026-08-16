@@ -19,14 +19,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
-  version = "0.9.0";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-8Xf2S85yNsP/HhpCw9UqdoDdeDHdggvYcnvJbilAVuU=";
+    hash = "sha256-IJJ4zgwkLP7CnU330X1K6p/We3A+tm/Veu64C2XhPS8=";
   };
 
   build-system = [
@@ -54,6 +55,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Hangs forever
     "test_spawn_agent_process_roundtrip"
+  ];
+
+  disabledTestPaths = [
+    # Optional HTTP transport dependencies are not packaged here.
+    "tests/http"
   ];
 
   __darwinAllowLocalNetworking = true;

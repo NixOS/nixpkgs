@@ -17,7 +17,6 @@
   kaitaistruct,
   ldap3,
   mitmproxy-rs,
-  msgpack,
   nixosTests,
   publicsuffix2,
   pyopenssl,
@@ -40,29 +39,22 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.2";
+  version = "12.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-WhWXybzBuI7hB54TuqxOmOoHUUIqf0uiC8+KDbvbqgA=";
+    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
   };
 
-  pythonRelaxDeps = [
-    # requested by maintainer
-    "brotli"
-    # just keep those
-    "typing-extensions"
+  # pins many dependencies way to strict
+  pythonRelaxDeps = true;
 
-    "urwid"
-    "asgiref"
-    "pyparsing"
-    "ruamel.yaml"
-    "tornado"
-    "wsproto"
-  ];
+  # msgpack is unused and was removed upstream:
+  # https://github.com/mitmproxy/mitmproxy/pull/8319
+  pythonRemoveDeps = [ "msgpack" ];
 
   build-system = [ setuptools ];
 
@@ -81,7 +73,6 @@ buildPythonPackage rec {
     kaitaistruct
     ldap3
     mitmproxy-rs
-    msgpack
     publicsuffix2
     pyopenssl
     pyparsing

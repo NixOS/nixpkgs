@@ -10,7 +10,7 @@
 
 let
   pname = "jetbrains-toolbox";
-  version = "3.1.0.62320";
+  version = "3.6.4.86641";
 
   updateScript = ./update.sh;
 
@@ -19,12 +19,14 @@ let
     homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ ners ];
+    maintainers = with lib.maintainers; [
+      ners
+      fabiob
+    ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     mainProgram = "jetbrains-toolbox";
   };
@@ -55,10 +57,9 @@ let
         aarch64 = "-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-Fmnj1mYMpsiBpnERiWPAwQaH7qLqkrTICn0mxX0h+2U=";
-        aarch64-linux = "sha256-ogLaPN9nxZFQ09qmIF2mEi5o9LVgjoGtmYclc6KmrNU=";
-        x86_64-darwin = "sha256-hO5J9I8ZrzsgGtb9dMg2SeI/PrxpkFRjDRUdrjqMnPw=";
-        aarch64-darwin = "sha256-xA0LbwDKR6/64K9uUJHvrPC+0mRLGM/axz8+Knc+X8A=";
+        x86_64-linux = "sha256-UqEhoaH8vB6tcy+GcxUy+VupJPbv//q3wEQ8CwMUdic=";
+        aarch64-linux = "sha256-UQwFDdZNPxjtG/kK5imupGZ0xE4oyThCTLFxb0i2fTw=";
+        aarch64-darwin = "sha256-jPlYLiKabVew1kxd+TJ0W0WuT82R0p+yIAPxuIVEYRA=";
       };
     in
     selectKernel {
@@ -87,14 +88,14 @@ selectKernel {
         with pkgs;
         [
           icu
-          libappindicator-gtk3
+          libappindicator
         ]
         ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";
 
       extraInstallCommands = ''
         install -Dm0644 ${src}/bin/jetbrains-toolbox.desktop -t $out/share/applications
-        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/jetbrains-toolbox.png
+        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/icons/hicolor/32x32/apps/jetbrains-toolbox.png
       '';
     };
 

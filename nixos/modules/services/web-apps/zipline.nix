@@ -51,6 +51,14 @@ in
             default = 3000;
             example = 8000;
           };
+
+          CORE_TEMP_DIRECTORY = lib.mkOption {
+            type = lib.types.path;
+            description = "The temporary directory to use for file uploads.";
+            defaultText = lib.literalExpression ''
+              "''${config.services.zipline.settings.DATASOURCE_LOCAL_DIRECTORY}/.tmp"
+            '';
+          };
         };
       };
     };
@@ -78,6 +86,7 @@ in
       DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://zipline@localhost/zipline?host=/run/postgresql";
       DATASOURCE_TYPE = lib.mkDefault "local";
       DATASOURCE_LOCAL_DIRECTORY = lib.mkDefault "/var/lib/zipline/uploads"; # created automatically by zipline
+      CORE_TEMP_DIRECTORY = lib.mkDefault "${cfg.settings.DATASOURCE_LOCAL_DIRECTORY}/.tmp";
     };
 
     services.postgresql = lib.mkIf cfg.database.createLocally {

@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2026.4.0";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/FT5UP+Usd1vyAyRnXOBs5iT76sqdiSBhoyC4bGKmEw=";
+    hash = "sha256-dtZrVsXXpy70aJvMqs/IUPsvRd52FKpm9I5XuZSLwCY=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';
 
-  # dlopened libgcc requires the rpath not to be shrinked
+  # dlopened libgcc requires the rpath not to be shrunk
   dontPatchELF = true;
 
   meta = {

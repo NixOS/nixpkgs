@@ -21,6 +21,7 @@
   liburing,
   numactl,
   taskflow,
+  tomlplusplus,
   ucx,
 
   # passthru
@@ -35,7 +36,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.0.1";
+  version = "1.4.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -44,7 +45,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mDpDqwUwI0baIDDpt9/wgIP3saBWY8yWKgwzHgrzJiU=";
+    hash = "sha256-fOtPutRgKscP396J0Rh6V9PIQ+LsE7h71vtduviHvWI=";
   };
 
   postPatch =
@@ -62,17 +63,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace src/plugins/ucx/ucx_backend.cpp \
         --replace-fail 'io_->post(' 'asio::post(*io_, '
-    ''
-    # Fix UB: explicit destructor call on lock_guard (GCC 15 -Werror=maybe-uninitialized)
-    # Replace lock_guard + manual destructor with unique_lock + unlock()
-    + ''
-      substituteInPlace src/plugins/libfabric/libfabric_backend.cpp \
-        --replace-fail \
-          'std::lock_guard<std::mutex> lock(connection_state_mutex_);' \
-          'std::unique_lock<std::mutex> lock(connection_state_mutex_);' \
-        --replace-fail \
-          'lock.~lock_guard();' \
-          'lock.unlock();'
     ''
     # Fix GDS plugin: Nix uses lib/ not lib64/
     + ''
@@ -103,6 +93,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     liburing
     numactl
     taskflow
+    tomlplusplus
     ucx
 
     python3Packages.python

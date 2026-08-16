@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   ponyc,
   nix-update-script,
 }:
@@ -16,6 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-WblwyUm7mTdh3GvuSvO9bW6txbJeSS4qrvP4TeYk1uw=";
   };
+
+  patches = [
+    # Should be in the next release, fixes compile on newer versions
+    (fetchpatch {
+      url = "https://github.com/ponylang/corral/commit/10b85e36e5c7ec4503ecb80ff51aa2342e459805.patch";
+      hash = "sha256-wDvoW1t/F3ieNlwS+HtxVzhlFX4TDTbAnxJnJnsCvtc=";
+      includes = [ "corral/semver/version/compare_versions.pony" ];
+    })
+  ];
 
   env.arch =
     if stdenv.hostPlatform.isx86_64 then

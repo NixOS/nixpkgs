@@ -6,7 +6,6 @@
   ncurses,
   gettext,
   pigeon,
-  go-mockery,
   protoc-go-inject-tag,
   libxcrypt,
   vips,
@@ -20,7 +19,8 @@ let
   bingoBinsMakefile = builtins.concatStringsSep "\n" (
     lib.mapAttrsToList (n: v: "${n} := ${v}\n\\$(${n}):") {
       GO_XGETTEXT = "xgettext";
-      MOCKERY = "mockery";
+      # no need to generate mocks, as they are in-repo already
+      MOCKERY = "true";
       PIGEON = "pigeon";
       PROTOC_GO_INJECT_TAG = "protoc-go-inject-tag";
     }
@@ -28,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opencloud";
-  version = "6.1.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vQ7p+2AbLTcHvHn2RSYAMmCa9RxPfRXn2eRVp+QLWFI=";
+    hash = "sha256-/j3aXAzsIWPHNIRcHLlbi6Y53be5d5GBqrVIZCk0bEw=";
   };
 
   postPatch = ''
@@ -76,7 +76,6 @@ buildGoModule (finalAttrs: {
     ncurses
     gettext
     pigeon
-    go-mockery
     protoc-go-inject-tag
     pkg-config
   ];

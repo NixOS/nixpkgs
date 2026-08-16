@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
@@ -11,6 +11,7 @@
   cairo,
   epoll-shim,
   glaze,
+  glslang,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
@@ -18,19 +19,23 @@
   hyprutils,
   hyprwire,
   hyprwayland-scanner,
+  lcms2,
   libGL,
   libdrm,
+  libei,
   libexecinfo,
+  libgbm,
   libinput,
   libuuid,
   libxkbcommon,
-  libgbm,
+  lua5_5,
   muparser,
   pango,
   pciutils,
   pkgconf,
   python3,
   re2,
+  readline,
   systemd,
   tomlplusplus,
   uwsm,
@@ -45,14 +50,13 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn gcc16Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
 }:
 let
   inherit (builtins)
     foldl'
     ;
-  inherit (lib.asserts) assertMsg;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists)
     concatLists
@@ -73,27 +77,32 @@ let
   # which would be controlled by the `debug` flag
   # Condition on darwin to avoid breaking eval for darwin in CI,
   # even though darwin is not supported anyway.
-  adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
+  adapters = lib.optionals (!gcc16Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
-  customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
+  customStdenv = foldl' (acc: adapter: adapter acc) gcc16Stdenv adapters;
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.54.3";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e+mVjQL3V+xoaH1c3YqAzRq9wwiuEYQTOgZlK0LwfYA=";
+    hash = "sha256-jOcfiv+Zs2iz5oTIQcJXZ0+5MfqW0oLgGxD0cKdmXpE=";
   };
 
   postPatch = ''
+    # Relax glaze dependency
+    # FIXME: this shouldn't be needed once the upstream code will adopt it
+    substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
+      --replace-fail "glaze 7...<8" "glaze"
+
     # Fix hardcoded paths to /usr installation
-    substituteInPlace src/render/OpenGL.cpp \
+    substituteInPlace src/render/types.hpp \
       --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
@@ -146,21 +155,26 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
+      glslang
       hyprcursor.dev
       hyprgraphics
       hyprlang
       hyprutils
+      lcms2
       libGL
       libdrm
+      libei
       libgbm
       libinput
       libuuid
       libxcursor
       libxkbcommon
+      lua5_5
       muparser
       pango
       pciutils
       re2
+      readline
       tomlplusplus
       wayland
       wayland-protocols
@@ -180,6 +194,7 @@ customStdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
+  separateDebugInfo = !debug;
   strictDeps = true;
 
   cmakeFlags = mapAttrsToList cmakeBool {
@@ -212,6 +227,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/Hyprland";
+    changelog = "https://github.com/hyprwm/Hyprland/releases/tag/${finalAttrs.src.tag}";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];

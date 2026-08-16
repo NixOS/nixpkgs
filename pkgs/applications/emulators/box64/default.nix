@@ -16,18 +16,21 @@
 assert
   withDynarec
   -> (
-    stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
+    stdenv.hostPlatform.isAarch64
+    || stdenv.hostPlatform.isRiscV64
+    || stdenv.hostPlatform.isLoongArch64
+    || (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
   );
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ihg7sos2pyyZjXiYMct/gg/ianiu0yagNtXio+A7J3c=";
+    hash = "sha256-XESbBWXSj2vrwVaHsVIU+m/Ru/hOXcx9ywrA2WqXG/o=";
   };
 
   # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target
@@ -60,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Arch dynarec
     (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
     (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
+    (lib.cmakeBool "PPC64LE_DYNAREC" (
+      withDynarec && (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
+    ))
     (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
   ];
 

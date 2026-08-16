@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -8,7 +8,7 @@
   pkg-config,
   hyprlang,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qt-support";
   version = "0.1.0";
 

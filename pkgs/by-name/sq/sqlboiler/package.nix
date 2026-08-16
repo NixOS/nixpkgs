@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "4.19.7";
 
   src = fetchFromGitHub {
-    owner = "volatiletech";
+    owner = "aarondl";
     repo = "sqlboiler";
     tag = "v${finalAttrs.version}";
     hash = "sha256-I67MRrsFCLVdslMFwFnrx1EvyR4eUsupRsqD0T9ZCQg=";
@@ -34,8 +34,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Generate a Go ORM tailored to your database schema";
-    homepage = "https://github.com/volatiletech/sqlboiler";
-    changelog = "https://github.com/volatiletech/sqlboiler/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/aarondl/sqlboiler";
+    changelog = "https://github.com/aarondl/sqlboiler/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mrityunjaygr8 ];
     mainProgram = "sqlboiler";

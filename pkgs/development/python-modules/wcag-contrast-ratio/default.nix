@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   hypothesis,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wcag-contrast-ratio";
   version = "0.9";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aRkrjlwKfQ3F/xGH7rPjmBQWM6S95RxpyH9Y/oftNhw=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
@@ -31,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

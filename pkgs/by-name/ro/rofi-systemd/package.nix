@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "IvanMalison";
+    owner = "colonelpanic8";
     repo = "rofi-systemd";
     tag = "v${version}";
     sha256 = "1zwbw119mblp5b6dj4h92fi0y2ymimlgh4bawi5ks2051hpq6c1a";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Control your systemd units using rofi";
-    homepage = "https://github.com/IvanMalison/rofi-systemd";
+    homepage = "https://github.com/colonelpanic8/rofi-systemd";
     maintainers = with lib.maintainers; [ imalison ];
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;

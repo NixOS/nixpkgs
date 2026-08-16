@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemctl-tui";
-  version = "0.5.2";
+  version = "0.8.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rgwood";
     repo = "systemctl-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r9bbEItk+DzVh6oFybaa8LZAAe35TyvvT6tuXOQlCSQ=";
+    hash = "sha256-vsllvCDHQy9EH0X1RRp5N3DISTrWFi6rywUp3wL42ks=";
   };
 
-  cargoHash = "sha256-XLISZFxC3v0Hf0QX3P1HmrzACMBwFvB5hrAsZgYE7ig=";
+  cargoHash = "sha256-kb56IKlwPW5VMdFMz+6tgfqBTeqJbDECO2LXNAQleuI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

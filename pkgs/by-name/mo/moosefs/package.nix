@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  fuse,
+  fuse3,
   pkg-config,
   libpcap,
   zlib,
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.59.0";
+  version = "4.59.2";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-l4KtrGyV4qy9QFj1SL73n0tRKEATfgDfjTxES9ws+Zw=";
+    sha256 = "sha256-kWJI0lsVy4KmCIUbuIHswuN/lnMgG/eR6goya+keoy0=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     libpcap
     zlib
     python3

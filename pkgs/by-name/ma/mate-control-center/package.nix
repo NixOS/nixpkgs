@@ -89,6 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--disable-update-mimedb" ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/mate-font-viewer.thumbnailer \
+      --replace-fail "TryExec=mate-thumbnail-font" "TryExec=$out/bin/mate-thumbnail-font" \
+      --replace-fail "Exec=mate-thumbnail-font" "Exec=$out/bin/mate-thumbnail-font"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       # WM keyboard shortcuts

@@ -40,15 +40,11 @@
   "bazel": {
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
-    "maintainers": {
-    },
+    "maintainers": {},
     "members": {
-      "aherrmann": 732652,
       "avdv": 3471749,
-      "ethercrow": 222467,
       "groodt": 343415,
-      "kalbasit": 87115,
-      "mboes": 51356
+      "kalbasit": 87115
     },
     "name": "Bazel"
   },
@@ -63,20 +59,28 @@
       "adamcstephens": 2071575,
       "ankhers": 750786,
       "gleber": 33185,
-      "minijackson": 1200507,
       "yurrriq": 1866448
     },
     "name": "Beam"
+  },
+  "boot-security": {
+    "description": "Maintain support for boot security technologies like Secure Boot",
+    "id": 18686947,
+    "maintainers": {},
+    "members": {
+      "ElvishJerricco": 1365692,
+      "emilazy": 18535642
+    },
+    "name": "Boot security"
   },
   "bootstrapping": {
     "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
     "id": 9141350,
     "maintainers": {
+      "philiptaron": 43863,
       "zeuner": 2545850
     },
-    "members": {
-      "philiptaron": 43863
-    },
+    "members": {},
     "name": "bootstrapping"
   },
   "categorization": {
@@ -91,8 +95,8 @@
       "fgaz": 8182846,
       "natsukium": 25083790,
       "philiptaron": 43863,
-      "pyrotelekinetic": 29682759,
-      "tomodachi94": 68489118
+      "tomodachi94": 68489118,
+      "tr3foil": 29682759
     },
     "members": {},
     "name": "Categorization"
@@ -128,9 +132,7 @@
       "HeitorAugustoLN": 44377258,
       "Pandapip1": 45835846,
       "a-kenji": 65275785,
-      "ahoneybun": 4884946,
       "drakon64": 6444703,
-      "michaelBelsanti": 62124625,
       "thefossguy": 44400303
     },
     "name": "COSMIC"
@@ -157,6 +159,7 @@
       "samuela": 226872
     },
     "members": {
+      "ethancedwards8": 60861925,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -183,11 +186,12 @@
     "members": {
       "0xMRTT": 105598867,
       "21CSM": 81891917,
+      "4evy": 57304299,
       "Aleksanaa": 42209822,
+      "Br1ght0ne": 12615679,
       "CorbanR": 1918683,
       "Emin017": 99674037,
       "Et7f3": 29592775,
-      "FlameFlag": 57304299,
       "Guanran928": 68757440,
       "LnL7": 689294,
       "Mastermindaxe": 33257997,
@@ -195,6 +199,7 @@
       "Prince213": 25235514,
       "Samasaur1": 30577766,
       "Steven0351": 24440751,
+      "TyceHerrman": 22066434,
       "afh": 16507,
       "azuwis": 9315,
       "booxter": 90200,
@@ -202,9 +207,9 @@
       "cideM": 4246921,
       "cidkidnix": 67574902,
       "copumpkin": 2623,
+      "delafthi": 50531499,
       "devusb": 4951663,
       "domenkozar": 126339,
-      "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
       "emilazy": 18535642,
@@ -213,7 +218,6 @@
       "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
-      "groodt": 343415,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
@@ -295,7 +299,6 @@
       "mdarocha": 11572618
     },
     "members": {
-      "GGG-KILLER": 5892127,
       "IvarWithoutBones": 41924494,
       "JamieMagee": 1358764,
       "anpin": 6060545,
@@ -313,8 +316,7 @@
     "members": {
       "AndersonTorres": 5954806,
       "adisbladis": 63286,
-      "panchoh": 471059,
-      "ttuegel": 563054
+      "panchoh": 471059
     },
     "name": "emacs"
   },
@@ -373,9 +375,11 @@
   "freedesktop": {
     "description": "Maintain Freedesktop.org packages for graphical desktop.",
     "id": 3806136,
-    "maintainers": {},
-    "members": {
+    "maintainers": {
       "jtojnar": 705123
+    },
+    "members": {
+      "Hythera": 87016780
     },
     "name": "Freedesktop"
   },
@@ -411,14 +415,28 @@
   "gnome": {
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
-    "maintainers": {},
-    "members": {
+    "maintainers": {
       "bobby285271": 20080233,
-      "dasj19": 7589338,
-      "hedning": 71978,
       "jtojnar": 705123
     },
+    "members": {
+      "nekowinston": 79978224,
+      "theCapypara": 3512122,
+      "thunze": 22795263
+    },
     "name": "GNOME"
+  },
+  "gnome-circle": {
+    "description": "Maintain GNOME Circle applications.",
+    "id": 18234720,
+    "maintainers": {
+      "Aleksanaa": 42209822,
+      "Hythera": 87016780,
+      "getchoo": 48872998,
+      "michaelgrahamevans": 5932424
+    },
+    "members": {},
+    "name": "GNOME Circle"
   },
   "golang": {
     "description": "Maintain Golang compilers",
@@ -565,8 +583,8 @@
     "members": {
       "Ericson2314": 1055245,
       "emilazy": 18535642,
-      "rrbutani": 7833358,
-      "sternenseemann": 3154475
+      "peterwaller-arm": 52030119,
+      "rrbutani": 7833358
     },
     "name": "LLVM"
   },
@@ -595,6 +613,8 @@
       "7c6f434c": 1891350,
       "Shados": 338268,
       "khaneliman": 1778670,
+      "lolbinarycat": 19915050,
+      "mrcjkb": 12857160,
       "spencerpogo": 34356756
     },
     "name": "lua"
@@ -697,14 +717,15 @@
     "description": "",
     "id": 174820,
     "maintainers": {
-      "Ericson2314": 1055245,
-      "tomberek": 178444
+      "Ericson2314": 1055245
     },
     "members": {
       "Mic92": 96200,
       "Radvendii": 1239929,
       "edolstra": 1148549,
+      "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
+      "tomberek": 178444,
       "xokdvium": 145775305
     },
     "name": "Nix team"
@@ -732,16 +753,6 @@
       "mdaniels5757": 8762511
     },
     "name": "Nixpkgs CI"
-  },
-  "nixpkgs-core": {
-    "description": "Provides leadership for and has authority over Nixpkgs.",
-    "id": 14317027,
-    "maintainers": {
-      "alyssais": 2768870,
-      "emilazy": 18535642
-    },
-    "members": {},
-    "name": "Nixpkgs core"
   },
   "nixpkgs-merge-bot": {
     "description": "This team exists as a target for triggering the nixpkgs merge bot.",
@@ -821,14 +832,13 @@
     "description": "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects",
     "id": 4341481,
     "maintainers": {
-      "ttuegel": 563054
+      "K900": 386765,
+      "NickCao": 15247171,
+      "SuperSandro2000": 7258858
     },
     "members": {
       "FRidh": 2129135,
-      "K900": 386765,
       "LunNova": 782440,
-      "NickCao": 15247171,
-      "SuperSandro2000": 7258858,
       "bkchr": 5718007,
       "ilya-fedin": 17829319,
       "mjm": 1181,
@@ -850,19 +860,31 @@
     },
     "name": "Radicle"
   },
+  "redis": {
+    "description": "Maintain Redis, related packages, module, and tests.",
+    "id": 17932473,
+    "maintainers": {
+      "Hythera": 87016780,
+      "MiniHarinn": 52773156,
+      "debtquity": 225436867,
+      "kybe236": 118068228
+    },
+    "members": {},
+    "name": "Redis"
+  },
   "reproducible": {
     "description": "Team that is interested in reproducible builds",
     "id": 7625643,
     "maintainers": {
-      "raboof": 131856,
-      "zimbatm": 3248
+      "raboof": 131856
     },
     "members": {
       "Artturin": 56650223,
       "Atemu": 18599032,
       "RaitoBezarius": 314564,
       "davidak": 91113,
-      "mschwaig": 3856390
+      "mschwaig": 3856390,
+      "zimbatm": 3248
     },
     "name": "reproducible"
   },
@@ -898,8 +920,7 @@
     "id": 7304571,
     "maintainers": {
       "Mic92": 96200,
-      "winterqt": 78392041,
-      "zowoq": 59103226
+      "winterqt": 78392041
     },
     "members": {},
     "name": "rust"
@@ -934,10 +955,11 @@
     "description": "Reviews changes to core packages for Nixpkgs security vulnerabilities: https://github.com/NixOS/nixpkgs/issues/494349",
     "id": 16430758,
     "maintainers": {
-      "balsoft": 18467667,
-      "infinisil": 20525370
+      "balsoft": 18467667
     },
     "members": {
+      "andir": 638836,
+      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -966,13 +988,12 @@
     "description": "Maintain the standard environment and its surrounding logic.",
     "id": 11265412,
     "maintainers": {
-      "RossComputerGuy": 19699320
+      "RossComputerGuy": 19699320,
+      "philiptaron": 43863
     },
     "members": {
-      "Artturin": 56650223,
       "Ericson2314": 1055245,
       "emilazy": 18535642,
-      "philiptaron": 43863,
       "reckenrode": 7413633
     },
     "name": "stdenv"
@@ -991,6 +1012,17 @@
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "test-driver": {
+    "description": "Maintain the NixOS integration test driver.",
+    "id": 18201265,
+    "maintainers": {
+      "Ma27": 6025220,
+      "kmein": 10352507,
+      "tfc": 29044
+    },
+    "members": {},
+    "name": "test-driver"
   },
   "xen-project": {
     "description": "Maintain the Xen Project Hypervisor and the related tooling ecosystem. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",

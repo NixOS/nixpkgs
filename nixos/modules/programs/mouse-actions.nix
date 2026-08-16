@@ -17,9 +17,7 @@ in
         Note that only users in the "uinput" group will be able to use the package
       '';
     };
-    package = lib.mkPackageOption pkgs "mouse-actions" {
-      example = "mouse-actions-gui";
-    };
+    package = lib.mkPackageOption pkgs "mouse-actions" { };
     autorun = lib.mkOption {
       type = lib.types.bool;
       default = false;

@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-1p3dCLLo+MTPxf/Y3zjxTagUi+tq7nZSj4ZB/aakJGY=";
 
   patches = [
-    # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
+    # patch out debug.ReadBuildInfo since version information is not available with buildGoModule
     (replaceVars ./version.patch {
       inherit (finalAttrs) version;
     })

@@ -1,5 +1,6 @@
 {
   lib,
+  ast-serialize,
   black,
   buildPythonPackage,
   cachecontrol,
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    ast-serialize
     cachecontrol
     mistune
     mypy

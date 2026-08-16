@@ -5,6 +5,7 @@
   gettext,
   pkg-config,
   which,
+  util-linux,
   glib,
   gtk3,
   wrapGAppsHook3,
@@ -14,19 +15,20 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "dvdisaster";
-  version = "0.79.10-pl5";
+  version = "0.79.10-pl6";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "dvdisaster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lWvZDB08lZb87l4oEbrdtc6Me4mWHiW3DFNXYoYR3a0=";
+    hash = "sha256-yQldvTvmbZgIOLKzdubd1zomSRKvAkTnS6hpEYWPr8A=";
   };
 
   nativeBuildInputs = [
     gettext
     pkg-config
     which
+    util-linux
     wrapGAppsHook3
   ];
 
@@ -69,7 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail /dev/shm "$TMP/log" \
       --replace-fail /var/tmp "$TMP"
 
-    ./runtests.sh
+    # Cap parallelism: upstream defaults MAX_JOBS to nproc (16 on Hydra),
+    # which piles too many large test images into $TMP and exhausts disk.
+    MAX_JOBS=4 ./runtests.sh
 
     popd
     runHook postCheck

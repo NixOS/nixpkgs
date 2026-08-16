@@ -161,10 +161,10 @@ diff --color -Naur ventoy-1.1.12-old/tool/VentoyWorker.sh ventoy-1.1.12-new/tool
  
      check_umount_disk "$DISK"
      
-diff --color -Naur ventoy-1.1.12-old/Ventoy2Disk.sh ventoy-1.1.12-new/Ventoy2Disk.sh
---- ventoy-1.1.12-old/Ventoy2Disk.sh	2026-04-24 18:49:51.366082120 +0100
-+++ ventoy-1.1.12-new/Ventoy2Disk.sh	2026-04-24 20:19:55.219025537 +0100
-@@ -32,66 +32,4 @@
+diff --color -Naur ventoy-1.1.17-old/Ventoy2Disk.sh ventoy-1.1.17-new/Ventoy2Disk.sh
+--- ventoy-1.1.17-old/Ventoy2Disk.sh	2026-08-13 01:33:02.176591073 +0300
++++ ventoy-1.1.17-new/Ventoy2Disk.sh	2026-08-13 01:33:02.179127365 +0300
+@@ -30,59 +30,4 @@
  echo '**********************************************'
  echo ''
  
@@ -223,13 +223,6 @@ diff --color -Naur ventoy-1.1.12-old/Ventoy2Disk.sh ventoy-1.1.12-new/Ventoy2Dis
 -    /bin/bash ./tool/VentoyWorker.sh $*
 -else
 -    ash ./tool/VentoyWorker.sh $*
--fi
--
--if [ -n "$OLDDIR" ]; then 
--    CURDIR=$(pwd)
--    if [ "$CURDIR" != "$OLDDIR" ]; then
--        cd "$OLDDIR"
--    fi
 -fi
 +./tool/VentoyWorker.sh $*
 diff --color -Naur ventoy-1.1.12-old/VentoyPlugson.sh ventoy-1.1.12-new/VentoyPlugson.sh

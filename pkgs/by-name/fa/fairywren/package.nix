@@ -22,13 +22,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2026-04-27";
+    version = "0-unstable-2026-07-21";
 
     src = fetchFromGitLab {
-      owner = "aiyahm";
+      owner = "FreshDoctor";
       repo = "FairyWren-Icons";
-      rev = "480e57a9ee90f8de05189f92dc5651fced9bc913";
-      hash = "sha256-1iz7Sv4XjoFcpo7XqB5iRHmki0hPE0kqqkH+ATVTPpY=";
+      rev = "6d578aac69b897ca4afa3bc0981cb93fa0e0df4c";
+      hash = "sha256-vvE5p8l7K2jI5tw8tfX3WnjGSCVElZHB5PFX3gdT3lk=";
     };
 
     propagatedBuildInputs = [
@@ -51,11 +51,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
 
     dontFixup = true;
 
-    passthru.updateScript = unstableGitUpdater { };
+    passthru.updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
 
     meta = {
       description = "FairyWren Icon Set";
-      homepage = "https://gitlab.com/aiyahm/FairyWren-Icons";
+      homepage = "https://gitlab.com/FreshDoctor/FairyWren-Icons";
       maintainers = with lib.maintainers; [ iamanaws ];
       platforms = lib.platforms.all;
       license = lib.licenses.gpl3Plus;

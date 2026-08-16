@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/precice/config-visualizer";
     description = "Small python tool for visualizing the preCICE xml configuration";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
     mainProgram = "precice-config-visualizer";
   };
 }

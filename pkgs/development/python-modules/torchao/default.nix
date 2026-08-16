@@ -77,19 +77,14 @@ buildPythonPackage (finalAttrs: {
     cpuinfo
   ];
 
-  propagatedBuildInputs = lib.optionals isDarwin [
-    # Otherwise, torch will fail to include `omp.h`:
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # OpenMP support not found.
-    llvmPackages.openmp
-  ];
-
   dependencies = [
     torch
   ];
 
   env = {
     USE_SYSTEM_LIBS = true;
+    # if this is unset, build script will append '+git' to the version number
+    VERSION_SUFFIX = "";
   };
 
   # Otherwise, the tests are loading the python module from the source instead of the installed one
@@ -325,6 +320,7 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
     "test/quantization/quantize_/workflows/float8/test_float8_tensor.py"
+    "test/test_low_bit_optim.py::TestOptim::test_subclass_appearance_dtype_subclass2_device_mps"
 
     # AssertionError: Torch not compiled with CUDA enabled
     "test/integration/test_integration.py"

@@ -17,7 +17,7 @@
   udev,
   udevCheckHook,
   onlyLib ? stdenv.hostPlatform.isStatic,
-  # Otherwise we have a infinity recursion during static compilation
+  # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
   util-linux,
   enableVDO ? false,
@@ -231,6 +231,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://gitlab.com/lvmteam/lvm2/-/blob/v${
+      lib.replaceString "." "_" version
+    }/WHATS_NEW";
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = lib.platforms.linux;

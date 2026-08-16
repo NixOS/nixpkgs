@@ -13,7 +13,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -31,13 +31,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.13.6";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-47uokwYsEg5D0lyHdpqfvKlsuXZK0sm5YIWwNjVGsKQ=";
+    hash = "sha256-9PpUh02d0av3mPvDbNSIJeVqN5pG/8K6WHa/pT0Jems=";
   };
 
   patches = [
@@ -61,20 +61,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-spotless.patch
   ];
 
-  cargoPatches = [
-    # Cidre 0.11.3 currently fails to build on darwin. Updating it to the latest version
-    # resolves this issue.
-    # Upstream PR is https://github.com/modrinth/code/pull/5862
-    ./update-cidre.patch
-  ];
-
   # Let the app know about our actual version number
   postPatch = ''
     substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-GwangszzKTEYvflibPgkIyUkHlpfMgenD/mq3my5LIY=";
+  cargoHash = "sha256-grrFXOZtno6Z7deTYn8DcOkQ9y2LEOvKi8+cezh0RXQ=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -83,9 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-Hk32LBD20F2LRgqNs8f1j3VdUxKoTPWs3yJvOghsEbI=";
+    hash = "sha256-mMoNSvA0GZ7lUfXY3Yqpi3CWifTfwGDQJKG6dJbAhOc=";
   };
 
   nativeBuildInputs = [
@@ -96,9 +89,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
     xcbuild
   ];

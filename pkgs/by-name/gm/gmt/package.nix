@@ -7,7 +7,7 @@
   apple-sdk,
   fftwSinglePrec,
   netcdf,
-  pcre,
+  pcre2,
   gdal,
   blas,
   lapack,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     netcdf
-    pcre
+    pcre2
     dcw-gmt
     gshhg-gmt
   ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DCW_ROOT" "${dcw-gmt.out}/share/dcw-gmt")
     (lib.cmakeFeature "GDAL_ROOT" "${gdal.out}")
     (lib.cmakeFeature "NETCDF_ROOT" "${netcdf.out}")
-    (lib.cmakeFeature "PCRE_ROOT" "${pcre.out}")
+    (lib.cmakeFeature "PCRE2_ROOT" "${pcre2.out}")
     (lib.cmakeBool "GMT_INSTALL_TRADITIONAL_FOLDERNAMES" false)
     (lib.cmakeBool "GMT_ENABLE_OPENMP" true)
     (lib.cmakeBool "GMT_INSTALL_MODULE_LINKS" false)

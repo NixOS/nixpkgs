@@ -11,11 +11,11 @@
   jemalloc,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs-slim_22,
   pango,
   pixman,
   pkg-config,
-  pnpm_10,
+  pnpm_10_34_0,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -24,18 +24,18 @@
 }:
 
 let
-  pnpm = pnpm_10.override { nodejs = nodejs_22; };
+  pnpm = pnpm_10_34_0.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
-  version = "2025.4.6";
+  version = "2025.4.7";
 
   src = fetchFromGitLab {
     domain = "activitypub.software";
     owner = "TransFem-org";
     repo = "Sharkey";
     tag = finalAttrs.version;
-    hash = "sha256-TtwlveTIjzDYpFR+F5c0If6E1D2E5MI9I2IoDIV0u7E=";
+    hash = "sha256-Gfn/oB9cc7LCeQxrfxuCmF7Z9A3VUGZwnhBip07c0kY=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs_22
+    nodejs-slim_22
     pkg-config
     pnpmConfigHook
     pnpm
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # rebuild some node modules that have native dependencies
-    export npm_config_nodedir=${nodejs_22}
+    export npm_config_nodedir=${nodejs-slim_22}
 
     pushd node_modules/.pnpm/node_modules/re2
     pnpm rebuild
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       binPath = lib.makeBinPath [
         bash
-        nodejs_22
+        nodejs-slim_22
         pnpm
       ];
       libPath = lib.makeLibraryPath [

@@ -88,7 +88,15 @@ update_codex_pins() {
   local tmp
   tmp="$(mktemp)"
 
-  awk -v codex_rev="$CODEX_REV" -v codex_hash="$CODEX_HASH" '
+  awk \
+    -v latest_version="$latest_version" \
+    -v codex_tag="$CODEX_TAG" \
+    -v codex_rev="$CODEX_REV" \
+    -v codex_hash="$CODEX_HASH" '
+    /# codex-acp [^ ]+ pins openai\/codex rust-v[0-9.]+ in Cargo.lock\./ {
+      comment_count++
+      sub(/# codex-acp [^ ]+ pins openai\/codex rust-v[0-9.]+ in Cargo.lock\./, "# codex-acp " latest_version " pins openai/codex " codex_tag " in Cargo.lock.")
+    }
     /codexRev = "[0-9a-f]+";/ {
       rev_count++
       sub(/codexRev = "[0-9a-f]+";/, "codexRev = \"" codex_rev "\";")
@@ -99,6 +107,10 @@ update_codex_pins() {
     }
     { print }
     END {
+      if (comment_count != 1) {
+        print "Failed to update codex pin comment in package.nix" > "/dev/stderr"
+        exit 1
+      }
       if (rev_count != 1) {
         print "Failed to update codexRev in package.nix" > "/dev/stderr"
         exit 1
@@ -129,7 +141,6 @@ fetchurl {
     {
       x86_64-linux = "${V8_HASH_X86_64_LINUX}";
       aarch64-linux = "${V8_HASH_AARCH64_LINUX}";
-      x86_64-darwin = "${V8_HASH_X86_64_DARWIN}";
       aarch64-darwin = "${V8_HASH_AARCH64_DARWIN}";
     }
     .\${stdenv.hostPlatform.system}
@@ -186,9 +197,8 @@ export CODEX_HASH
 
 V8_HASH_X86_64_LINUX="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz")"
 V8_HASH_AARCH64_LINUX="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz")"
-V8_HASH_X86_64_DARWIN="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_x86_64-apple-darwin.a.gz")"
 V8_HASH_AARCH64_DARWIN="$(prefetch_sri "https://github.com/denoland/rusty_v8/releases/download/v${V8_VERSION}/librusty_v8_release_aarch64-apple-darwin.a.gz")"
-export V8_VERSION V8_HASH_X86_64_LINUX V8_HASH_AARCH64_LINUX V8_HASH_X86_64_DARWIN V8_HASH_AARCH64_DARWIN
+export V8_VERSION V8_HASH_X86_64_LINUX V8_HASH_AARCH64_LINUX V8_HASH_AARCH64_DARWIN
 
 update-source-version "$ATTR_PATH" "$latest_version" "$src_hash" --ignore-same-version
 update_codex_pins

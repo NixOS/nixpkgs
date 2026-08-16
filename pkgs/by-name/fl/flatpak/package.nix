@@ -80,7 +80,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.16.6";
+  version = "1.18.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HmPn8/5EtgLzTZKm/kb9ijvGvpRgwDwmgeV5dsZY7sM=";
+    hash = "sha256-vGg/yRbtIcBSS7Bk81jCrBhYa47IjHby9/KJh3UhYxw=";
   };
 
   patches = [
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
     # https://github.com/flatpak/flatpak/issues/1460
     (replaceVars ./fix-test-paths.patch {

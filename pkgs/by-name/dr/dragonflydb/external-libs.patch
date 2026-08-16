@@ -1,5 +1,5 @@
 diff --git a/src/external_libs.cmake b/src/external_libs.cmake
-index 62e6e879..8934777f 100644
+index 5a98540..1c5ab6d 100644
 --- a/src/external_libs.cmake
 +++ b/src/external_libs.cmake
 @@ -1,7 +1,6 @@
@@ -11,11 +11,13 @@ index 62e6e879..8934777f 100644
    CONFIGURE_COMMAND echo
    BUILD_IN_SOURCE 1
    BUILD_COMMAND ${DFLY_TOOLS_MAKE} all
-@@ -19,18 +18,16 @@ endif()
+@@ -19,20 +18,16 @@ endif()
  
  add_third_party(
    dconv
--  URL https://github.com/google/double-conversion/archive/refs/tags/v3.3.0.tar.gz
+-  GIT_REPOSITORY https://github.com/google/double-conversion
+-  # URL https://github.com/google/double-conversion/archive/refs/tags/v3.3.1.tar.gz
+-  GIT_TAG 0604b4c
 -  PATCH_COMMAND ${SED_REPL} "/static const std::ctype/d"
 -                <SOURCE_DIR>/double-conversion/string-to-double.cc
 -  COMMAND ${SED_REPL} "/std::use_facet</d" <SOURCE_DIR>/double-conversion/string-to-double.cc
@@ -35,12 +37,12 @@ index 62e6e879..8934777f 100644
    CONFIGURE_COMMAND <SOURCE_DIR>/configure --disable-avx2 --prefix=${THIRD_PARTY_LIB_DIR}/reflex
            CXX=${CMAKE_CXX_COMPILER} CC=${CMAKE_C_COMPILER}
  )
-@@ -41,16 +38,14 @@ set(REFLEX "${THIRD_PARTY_LIB_DIR}/reflex/bin/reflex")
+@@ -41,16 +36,14 @@ set(REFLEX "${THIRD_PARTY_LIB_DIR}/reflex/bin/reflex")
  
  add_third_party(
    jsoncons
 -  GIT_REPOSITORY https://github.com/dragonflydb/jsoncons
--  GIT_TAG Dragonfly.178
+-  GIT_TAG Dragonfly1.5.0
 -  GIT_SHALLOW 1
 +  DOWNLOAD_COMMAND cp -r ${CMAKE_BINARY_DIR}/deps-nixpkgs/jsoncons/. <SOURCE_DIR>
    CMAKE_PASS_FLAGS "-DJSONCONS_BUILD_TESTS=OFF -DJSONCONS_HAS_POLYMORPHIC_ALLOCATOR=ON"
@@ -54,7 +56,7 @@ index 62e6e879..8934777f 100644
  
    BUILD_IN_SOURCE 1
    CONFIGURE_COMMAND echo skip
-@@ -65,7 +60,7 @@ set(MIMALLOC_C_FLAGS "-O3 -g -DMI_STAT=1 -DNDEBUG")
+@@ -65,7 +58,7 @@ set(MIMALLOC_C_FLAGS "-O3 -g -DMI_STAT=1 -DNDEBUG")
  file(MAKE_DIRECTORY ${MIMALLOC_INCLUDE_DIR})
  
  ExternalProject_Add(mimalloc2_project
@@ -63,7 +65,7 @@ index 62e6e879..8934777f 100644
    DOWNLOAD_DIR ${THIRD_PARTY_DIR}/mimalloc2
    SOURCE_DIR ${THIRD_PARTY_DIR}/mimalloc2
    # INSTALL_DIR ${MIMALLOC_ROOT_DIR}
-@@ -118,21 +113,21 @@ set_target_properties(TRDP::mimalloc2 PROPERTIES IMPORTED_LOCATION ${MIMALLOC_RO
+@@ -119,23 +112,21 @@ set_target_properties(TRDP::mimalloc2 PROPERTIES IMPORTED_LOCATION ${MIMALLOC_RO
  
  add_third_party(
    croncpp
@@ -78,17 +80,28 @@ index 62e6e879..8934777f 100644
 -    URL https://github.com/uni-algo/uni-algo/archive/refs/tags/v1.0.0.tar.gz
 +    DOWNLOAD_COMMAND cp -r ${CMAKE_BINARY_DIR}/deps-nixpkgs/uni-algo/. <SOURCE_DIR>
  
-     CMAKE_PASS_FLAGS "-DCMAKE_CXX_STANDARD:STRING=17"
+     CMAKE_PASS_FLAGS "-DCMAKE_CXX_STANDARD:STRING=20"
    )
  
    add_third_party(
      hnswlib
--    URL https://github.com/nmslib/hnswlib/archive/refs/tags/v0.7.0.tar.gz
+-    GIT_REPOSITORY https://github.com/dragonflydb/hnswlib.git
+-    # HEAD of dragonfly branch
+-    GIT_TAG d07dd1da2bf48b85d2f03b8396193ad7120f75c2
 +    DOWNLOAD_COMMAND cp -r ${CMAKE_BINARY_DIR}/deps-nixpkgs/hnswlib/. <SOURCE_DIR>
  
      BUILD_COMMAND echo SKIP
      INSTALL_COMMAND cp -R <SOURCE_DIR>/hnswlib ${THIRD_PARTY_LIB_DIR}/hnswlib/include/
-@@ -142,21 +137,20 @@ endif()
+@@ -145,7 +136,7 @@ if (WITH_SEARCH)
+   # No autoconf/cmake/install in upstream Makefile; manual install copy.
+   add_third_party(
+     stemmer
+-    URL https://github.com/snowballstem/snowball/archive/refs/tags/v3.0.1.tar.gz
++    DOWNLOAD_COMMAND cp -r ${CMAKE_BINARY_DIR}/deps-nixpkgs/stemmer/. <SOURCE_DIR>
+     BUILD_IN_SOURCE 1
+     CONFIGURE_COMMAND echo skip
+     BUILD_COMMAND ${DFLY_TOOLS_MAKE} -j4 CFLAGS=-O3\ -fPIC libstemmer.a
+@@ -159,21 +150,20 @@ endif()
  
  add_third_party(
    fast_float

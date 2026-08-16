@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyrra";
-  version = "0.9.5";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "pyrra-dev";
     repo = "pyrra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xy+obHLxu8qQSKtZXSIO/JP8C7w548WeTYa2f1W99kw=";
+    hash = "sha256-szIDkCLp0zCjrWguw7UpC1p/BiN5orvtBmyPvcgbeeU=";
   };
 
-  vendorHash = "sha256-E2/OrAC2Wkv7OYPjs9ROE1RL4UUXYTByJZRY1qZB3gE=";
+  vendorHash = "sha256-/IKzAsA3/2ygW7RocxFq4KmJj1z8ZSdx7wyxWeULet8=";
 
   ui = buildNpmPackage {
     inherit (finalAttrs) version;
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     pname = "${finalAttrs.pname}-ui";
     src = "${finalAttrs.src}/ui";
 
-    npmDepsHash = "sha256-gbVKnz1F1qfyD0/FAYn0YkIkejv3bvoxyzRsZhqw7Ws=";
+    npmDepsHash = "sha256-jQez9MWqt+NK4Ot6/sA3ROlPe6Jq6Z63DXXzRP+ymxs=";
 
     installPhase = ''
       runHook preInstall

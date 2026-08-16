@@ -25,5 +25,6 @@ buildGoModule {
     homepage = "https://github.com/glerchundi/sqlboiler-crdb/";
     maintainers = with lib.maintainers; [ dgollings ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
   };
 }

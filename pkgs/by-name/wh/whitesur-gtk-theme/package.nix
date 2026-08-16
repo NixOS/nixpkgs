@@ -94,13 +94,13 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
   stdenv.mkDerivation
   rec {
     pname = "whitesur-gtk-theme";
-    version = "2025-07-24";
+    version = "2026-07-07";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "whitesur-gtk-theme";
       rev = version;
-      hash = "sha256-tuon9XxMdrz9XNTp50sbss2gtx6H9hEZh8t2jSoqx28=";
+      hash = "sha256-Um+OAg8fz5d/IXNHF6R6ECDealZKzgyBRODuyinujNc=";
     };
 
     nativeBuildInputs = [

@@ -3,15 +3,12 @@
 let
   inherit (lib)
     any
-    attrNames
-    filter
-    foldl
+    foldl'
     hasInfix
     isAttrs
     isList
     mapAttrs
     optional
-    optionalAttrs
     optionalString
     removeSuffix
     replaceString
@@ -20,12 +17,17 @@ let
 
   inherit (lib.strings) toJSON;
 
+  inherit (lib.trivial)
+    oldestSupportedReleaseIsAtLeast
+    ;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  rustc-target-env = import ./rustc-target-env.nix;
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -36,17 +38,31 @@ let
     compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
     or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
 
-    Hence a custom equality test.
+    To solve this, the elaborated systems also store a version of their data
+    without any functions to be compared.
 
     Note that this does not canonicalize the systems, so you'll want to make sure
     both arguments have been `elaborate`-d.
   */
-  equals =
-    let
-      # System attrs are never __functor-style attrsets, so builtins.isFunction suffices.
-      removeFunctions = a: removeAttrs a (filter (n: builtins.isFunction a.${n}) (attrNames a));
-    in
-    a: b: removeFunctions a == removeFunctions b;
+  equals = a: b: a._withoutFunctions == b._withoutFunctions;
+
+  /**
+    The attribute names within an elaborated system that store functions.
+
+    Due to object identity semantics, `systems.equals` needs a way to compare
+    all non-function attributes. It does this by storing a version of itself
+    without any functions under the attribute name `_withoutFunctions`. The
+    attribute names that contain functions are exposed for regression testing.
+  */
+  functionNames = [
+    "canExecute"
+    "emulator"
+    "emulatorAvailable"
+    "staticEmulatorAvailable"
+  ];
+
+  # Avoiding infrec
+  ignoredNames = functionNames ++ [ "_withoutFunctions" ];
 
   /**
     List of all Nix system doubles the nixpkgs flake will expose the package set
@@ -74,17 +90,42 @@ let
     let
       allArgs = systemToAttrs systemOrArgs;
 
-      # Those two will always be derived from "config", if given, so they should NOT
-      # be overridden further down with "// args".
+      # These attributes are derived from other inputs, so they should NOT be
+      # overridden further down with "// args".
       args = removeAttrs allArgs [
         "parsed"
         "system"
+        "_withoutFunctions"
       ];
 
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
       rust = args.rust or args.rustc or { };
 
+      selectEmulator =
+        pkgs:
+        let
+          wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
+        in
+        # Note: we guarantee that the return value is either `null` or a path
+        # to an emulator program. That is, if an emulator requires additional
+        # arguments, a wrapper should be used.
+        if pkgs.stdenv.hostPlatform.canExecute final then
+          lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
+        else if final.isWindows then
+          "${wine}/bin/wine"
+        else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
+          "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
+        else if final.isWasi then
+          "${pkgs.wasmtime}/bin/wasmtime"
+        else if final.isGhcjs then
+          "${pkgs.nodejs-slim}/bin/node"
+        else if final.isMmix then
+          "${pkgs.mmixware}/bin/mmix"
+        else
+          null;
+
       final = {
+        _withoutFunctions = removeAttrs final ignoredNames;
         # Prefer to parse `config` as it is strictly more informative.
         parsed = parse.mkSystemFromString (args.config or allArgs.system);
         # This can be losslessly-extracted from `parsed` iff parsing succeeds.
@@ -109,11 +150,25 @@ let
               )
           );
 
-        isCompatible =
-          _:
-          throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
         # Derived meta-data
-        useLLVM = final.isFreeBSD || final.isOpenBSD;
+        useLLVM =
+          final.isFreeBSD
+          || final.isOpenBSD
+          || final.isUefi
+          || final.isMsvc
+          ||
+            # because GCC does not support this platform yet
+            (with final; isWindows && isAarch64);
+
+        # Use the split GCC package set (`gccNGPackages`) instead of the
+        # monolithic `gcc`. No platform selects it yet; it is opt-in, set
+        # explicitly on a platform spec, so that the split set can be exercised
+        # before anything depends on it.
+        #
+        # I (@Ericson2314) plan on making obscure low-tier platforms (e.g.
+        # NetBSD) use it soon, so we can dogfood GCC NG and thereby iron out its
+        # bugs.
+        useGccNG = false;
 
         libc =
           if final.isDarwin then
@@ -132,13 +187,13 @@ let
             "relibc"
           else if final.isMusl then
             "musl"
+          else if final.isPicolibc then
+            "picolibc"
           else if final.isUClibc then
             "uclibc"
           else if final.isAndroid then
             "bionic"
-          else if
-            final.isLinux # default
-          then
+          else if final.isLinux then
             "glibc"
           else if final.isFreeBSD then
             "fblibc"
@@ -149,6 +204,8 @@ let
           else if final.isAvr then
             "avrlibc"
           else if final.isGhcjs then
+            null
+          else if final.isUefi then
             null
           else if final.isNone then
             "newlib"
@@ -178,21 +235,19 @@ let
             if final.isx86_64 || final.isMips64 || final.isPower64 then "lib64" else "lib"
           else
             null;
-        extensions =
-          optionalAttrs final.hasSharedLibraries {
-            sharedLibrary =
-              if final.isDarwin then
-                ".dylib"
-              else if (final.isWindows || final.isCygwin) then
-                ".dll"
-              else
-                ".so";
-          }
-          // {
-            staticLibrary = if final.isWindows then ".lib" else ".a";
-            library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
-            executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
-          };
+        extensions = {
+          staticLibrary = if final.isWindows then ".lib" else ".a";
+          library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
+          executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
+
+          ${if final.hasSharedLibraries then "sharedLibrary" else null} =
+            if final.isDarwin then
+              ".dylib"
+            else if (final.isWindows || final.isCygwin) then
+              ".dll"
+            else
+              ".so";
+        };
         # Misc boolean options
         useAndroidPrebuilt = false;
         useiOSPrebuilt = false;
@@ -209,7 +264,7 @@ let
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
-              wasi = "Wasi";
+              wasip1 = "WasiP1";
               redox = "Redox";
               genode = "Genode";
             }
@@ -268,12 +323,10 @@ let
         inherit
           (
             {
-              linux-kernel = args.linux-kernel or { };
               gcc = args.gcc or { };
             }
             // platforms.select final
           )
-          linux-kernel
           gcc
           ;
 
@@ -373,48 +426,21 @@ let
         # Handle Android SDK and NDK versions.
         androidSdkVersion = args.androidSdkVersion or null;
         androidNdkVersion = args.androidNdkVersion or null;
+
+        emulatorAvailable = pkgs: selectEmulator pkgs != null;
+
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable =
+          pkgs: final.emulatorAvailable pkgs && (final.isLinux || final.isWasi || final.isMmix);
+
+        emulator =
+          pkgs:
+          if (final.emulatorAvailable pkgs) then
+            selectEmulator pkgs
+          else
+            throw "Don't know how to run ${final.config} executables.";
+
       }
-      // (
-        let
-          selectEmulator =
-            pkgs:
-            let
-              wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
-            in
-            # Note: we guarantee that the return value is either `null` or a path
-            # to an emulator program. That is, if an emulator requires additional
-            # arguments, a wrapper should be used.
-            if pkgs.stdenv.hostPlatform.canExecute final then
-              lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
-            else if final.isWindows then
-              "${wine}/bin/wine"
-            else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
-              "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
-            else if final.isWasi then
-              "${pkgs.wasmtime}/bin/wasmtime"
-            else if final.isGhcjs then
-              "${pkgs.nodejs-slim}/bin/node"
-            else if final.isMmix then
-              "${pkgs.mmixware}/bin/mmix"
-            else
-              null;
-        in
-        {
-          emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
-
-          # whether final.emulator pkgs.pkgsStatic works
-          staticEmulatorAvailable =
-            pkgs: final.emulatorAvailable pkgs && (final.isLinux || final.isWasi || final.isMmix);
-
-          emulator =
-            pkgs:
-            if (final.emulatorAvailable pkgs) then
-              selectEmulator pkgs
-            else
-              throw "Don't know how to run ${final.config} executables.";
-
-        }
-      )
       // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args
@@ -447,12 +473,24 @@ let
                 else
                   final.parsed.cpu.name;
 
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_env
+              # Accomodate system definitions written before Nixpkgs learned about target_env.
+              env =
+                if rust ? platform.env then
+                  rust.platform.env
+                else if rustc-target-env ? ${final.rust.rustcTargetSpec} then
+                  rustc-target-env.${final.rust.rustcTargetSpec}
+                else
+                  "";
+
               # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
               os =
                 if rust ? platform then
                   rust.platform.os or "none"
                 else if final.isDarwin then
                   "macos"
+                else if final.isWasi then
+                  "wasi"
                 else if final.isWasm && !final.isWasi then
                   "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
                 else
@@ -511,11 +549,7 @@ let
                   abi.name;
 
               inferred =
-                if final.isWasi then
-                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-                  # We cannot know which subversion does the user want, and
-                  # currently use WASI 0.1 as default for compatibility. Custom
-                  # users can set `rust.rustcTargetSpec` to override it.
+                if final.isWasiP1 then
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
@@ -556,8 +590,6 @@ let
             "-uefi"
           ];
         };
-      }
-      // {
         go = {
           # See https://pkg.go.dev/internal/platform for a list of known platforms
           GOARCH =
@@ -570,6 +602,7 @@ let
               "i686" = "386";
               "loongarch64" = "loong64";
               "mips" = "mips";
+              "mips64" = "mips64";
               "mips64el" = "mips64le";
               "mipsel" = "mipsle";
               "powerpc64" = "ppc64";
@@ -580,7 +613,7 @@ let
               "wasm32" = "wasm";
             }
             .${final.parsed.cpu.name} or null;
-          GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
+          GOOS = if final.isWasiP1 then "wasip1" else final.parsed.kernel.name;
 
           # See https://go.dev/wiki/GoArm
           GOARM = toString (lib.intersectLists [ (final.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
@@ -630,10 +663,76 @@ let
             else
               null;
         };
+
+        nim = {
+          # See these locations for a known list of cpu/os idntifeiers:
+          # - https://nim-lang.org/docs/system.html#hostCPU
+          # - https://nim-lang.org/docs/system.html#hostOS
+          cpu =
+            if final.isAarch32 then
+              "arm"
+            else if final.isAarch64 then
+              "arm64"
+            else if final.isAlpha then
+              "alpha"
+            else if final.isAvr then
+              "avr"
+            else if final.isMips && final.is32Bit then
+              "mips"
+            else if final.isMips && final.is64Bit then
+              "mips64"
+            else if final.isMsp430 then
+              "msp430"
+            else if final.isPower && final.is32bit then
+              "powerpc"
+            else if final.isPower && final.is64bit then
+              "powerpc64"
+            else if final.isRiscV && final.is64bit then
+              "riscv64"
+            else if final.isSparc then
+              "sparc"
+            else if final.isx86_32 then
+              "i386"
+            else if final.isx86_64 then
+              "amd64"
+            else
+              null;
+          os =
+            if final.isAndroid then
+              "Android"
+            else if final.isDarwin then
+              "MacOSX"
+            else if final.isFreeBSD then
+              "FreeBSD"
+            else if final.isGenode then
+              "Genode"
+            else if final.isLinux then
+              "Linux"
+            else if final.isNetBSD then
+              "NetBSD"
+            else if final.isNone then
+              "Standalone"
+            else if final.isOpenBSD then
+              "OpenBSD"
+            else if final.isWindows then
+              "Windows"
+            else if final.isiOS then
+              "iOS"
+            else
+              null;
+        };
       };
     in
+    # Platforms elaborated by pre-26.11 Nixpkgs will include the `linux-kernel` attr,
+    # so we can't assert its absence until 26.11 is the oldest supported release.
+    # Assertion will activate during the 27.05 cycle, when 26.05 support ends.
+    # TODO: Remove assertion in the 27.11 cycle.
+    assert
+      oldestSupportedReleaseIsAtLeast 2611 && args ? linux-kernel
+      -> throw "lib.systems.elaborate: linux-kernel has been removed; see the 26.11 release notes";
+
     assert final.useAndroidPrebuilt -> final.isAndroid;
-    assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
+    assert foldl' (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]
     );
     final;
@@ -649,6 +748,7 @@ in
     equals
     examples
     flakeExposed
+    functionNames
     inspect
     parse
     platforms

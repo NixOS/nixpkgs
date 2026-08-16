@@ -7,6 +7,7 @@
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
   six,
   stdenv,
@@ -56,6 +57,11 @@ buildPythonPackage rec {
     "testEmptyArray"
   ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    # testutils.script_to_py3 imports lib2to3, removed in 3.13
+    "psycopg2cffi/tests/psycopg2_tests/test_notify.py"
+  ];
+
   env = {
     PGDATABASE = "psycopg2_test";
   };
@@ -65,7 +71,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the psycopg2 module using cffi";
     homepage = "https://pypi.org/project/psycopg2cffi/";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

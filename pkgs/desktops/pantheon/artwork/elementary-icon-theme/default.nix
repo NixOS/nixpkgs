@@ -12,15 +12,15 @@
   librsvg,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "elementary-icon-theme";
-  version = "8.2.0";
+  version = "8.2.0-unstable-2026-07-06"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
-    tag = version;
-    hash = "sha256-ntv+efkyfB66HL3tWEkiOj+MFRGqhfMo1/FUO2fIqBM=";
+    rev = "82b7dac6d3661d35fe3e4b32594dc7c7918028e9";
+    hash = "sha256-KoMisPzS/LJVjh1TyyzB8RI+A6dtD+K5+WwhC5jOOnQ=";
   };
 
   nativeBuildInputs = [

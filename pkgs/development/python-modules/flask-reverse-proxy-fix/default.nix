@@ -38,9 +38,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     homepage = "https://github.com/antarctica/flask-reverse-proxy-fix";
 
-    license = {
-      fullName = "Open Government Licence";
-      url = "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
-    };
+    license = lib.licenses.ogluk30;
   };
 }

@@ -56,13 +56,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.0.4";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-7/QB0lvpjZnGXo4vjKSYogjhi66S/QRRpypsqEMLGj0=";
+    hash = "sha256-nPf4DDK5fRU+jrWqWIqf3ZHSXZFmGNJ29Zp3Nff+NKE=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
   ]
-  ++ optional enableAirplay2 [
+  ++ optionals enableAirplay2 [
     libplist.bin
     unixtools.xxd
   ];
@@ -153,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [
-      lnl7
       jordanisaacs
     ];
     platforms = lib.platforms.unix;

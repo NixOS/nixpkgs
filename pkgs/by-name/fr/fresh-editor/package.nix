@@ -7,21 +7,24 @@
   pkg-config,
   openssl,
   gitMinimal,
+  python3,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.3.2";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1i87gZgAicFKEIfI3aqek8pHT+iDI7Y4awyBGzLcggo=";
+    hash = "sha256-jL8msC8YTmrD/FHcGHbyuBGqnZmYkYr+pZb3HKYrvQw=";
   };
 
-  cargoHash = "sha256-l88eXpCoMQV63iZ1tLwjeM+TVH/Juibr5MHX3sL6jLA=";
+  cargoHash = "sha256-hWFGKvob0DuIX2rP20Iq15nTSTpUBxLURiVwI5LNBII=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     gzip
@@ -30,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    python3
     gitMinimal
     rustPlatform.bindgenHook
   ];
@@ -44,7 +48,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
-      --add-flags "--no-upgrade-check"
+      --add-flags "--no-upgrade-check" \
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
     rm -rf $out/bin/fresh.dSYM
   '';
 

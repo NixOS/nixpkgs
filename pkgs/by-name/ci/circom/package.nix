@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/iden3/circom";
     changelog = "https://github.com/iden3/circom/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 })

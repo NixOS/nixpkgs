@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fricas";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "fricas";
     repo = "fricas";
-    rev = finalAttrs.version;
-    sha256 = "sha256-GUGJR65K1bPC0D36l4Yyj3GOsWtUrSKLu6JnlfjHzDc=";
+    tag = finalAttrs.version;
+    hash = "sha256-vpClJwB91pCgc6DWy0I2XTfSWkt+7nEAkUK9zz4qh4A=";
   };
 
   buildInputs = [
@@ -34,23 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
   ];
 
-  # Remove when updating to next version
-  configurePhase = ''
-    runHook preConfigure
-
-    ./configure --prefix=$out --with-lisp='sbcl --dynamic-space-size 3072'
-
-    runHook postConfigure
-  '';
-
   dontStrip = true;
 
   meta = {
     homepage = "https://fricas.github.io";
     description = "Advanced computer algebra system";
+    changelog = "https://github.com/fricas/fricas/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.bsd3;
 
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.sprock ];
+    maintainers = [ ];
+    mainProgram = "fricas";
   };
 })

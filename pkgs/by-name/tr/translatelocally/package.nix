@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./version_without_git.patch
+    ./gcc15_compat_vnd_marian_missing_include.patch
   ];
 
   postPatch = ''

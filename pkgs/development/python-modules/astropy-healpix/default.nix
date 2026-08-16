@@ -42,6 +42,10 @@ buildPythonPackage (finalAttrs: {
     hypothesis
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = lib.optional (!stdenv.hostPlatform.isDarwin) "test_interpolate_bilinear_skycoord";
 
   # tests must be run in the build directory

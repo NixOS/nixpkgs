@@ -6,6 +6,7 @@
   pam,
   pkg-config,
   qtwayland,
+  kirigami-addons,
   freerdp,
 }:
 mkKdeDerivation {
@@ -20,6 +21,8 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwayland
+
+    kirigami-addons
 
     freerdp
     pam

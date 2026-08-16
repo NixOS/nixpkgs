@@ -2,7 +2,7 @@
 
 The `nix-shell` command has popularized the concept of transient shell environments for development or testing purposes.
 <!--
-  We should try to document the product, not its development process in the Nixpkgs reference manual,
+  We should try to document the product, not its development process in the Nixpkgs manual,
   but *something* needs to be said to provide context for this library.
   This is the most future proof sentence I could come up with while Nix itself does not yet make use of this.
   Relevant is the current status of the devShell attribute "project": https://github.com/NixOS/nix/issues/7501

@@ -7,7 +7,7 @@
   openssl,
   boost,
   testers,
-  asioVersion ? "1.36.0",
+  asioVersion ? "1.38.0",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,11 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
         # Preserve 1.32.0 because some project depends on asio/io_service.hpp
         "1.32.0" = "sha256-PBoa4OAOOmHas9wCutjz80rWXc3zGONntb9vTQk3FNY=";
         "1.36.0" = "sha256-BhJpE5+t0WXsuQ5CtncU0P8Kf483uFoV+OGlFLc7TpQ=";
+        "1.38.0" = "sha256-pkSu8XMibmRPMoS3v5hO34oJb077bYc9KWELj3t8D6M=";
       }
       .${asioVersion} or (throw "Unsupported asio version. Please use overrideAttrs directly");
   };
 
-  sourceRoot = "${finalAttrs.src.name}/asio";
+  sourceRoot =
+    finalAttrs.src.name + lib.optionalString (lib.versionOlder finalAttrs.version "1.38.0") "/asio";
 
   patches = [
     # Linking against `boost_system` fails because the stub compiled library

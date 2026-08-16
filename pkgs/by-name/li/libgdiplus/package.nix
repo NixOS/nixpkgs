@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitLab,
   pkg-config,
   glib,
   cairo,
@@ -17,19 +17,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgdiplus";
-  version = "6.1";
+  version = "6.2";
 
-  # Using source archive to avoid fetching Git submodules.
-  # Git repo: https://github.com/mono/libgdiplus
-  src = fetchzip {
-    url = "https://download.mono-project.com/sources/libgdiplus/libgdiplus-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+lP9ETlw3s0RUliQT1uBWZ2j6o3V9EECBQSppOYFq4Q=";
+  src = fetchFromGitLab {
+    domain = "gitlab.winehq.org";
+    owner = "mono";
+    repo = "libgdiplus";
+    tag = finalAttrs.version;
+    hash = "sha256-otWdHiS/Ws+2tq5wQlcSfBUOc8Mfhpz5PLmMDgtld1Q=";
   };
 
   patches = [
     # Fix pkg-config lookup when cross-compiling.
     ./configure-pkg-config.patch
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace-fail "all: update_submodules" "all:"
+  '';
 
   env.NIX_LDFLAGS = "-lgif";
 
@@ -70,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://gitlab.winehq.org/mono/libgdiplus/-/releases/${finalAttrs.src.tag}";
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
     homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
     platforms = lib.platforms.unix;

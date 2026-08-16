@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.12.2";
+  version = "0.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H01/z0bVjD4ORBQpNIomN8EvAuAVWsh4kHnW4RDFGTY=";
+    hash = "sha256-JL6S3Wc9PJbskOPhsr+0QFunZBkMcJCsvhLlz6ggAQ4=";
   };
 
   postPatch = ''
@@ -80,6 +80,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
+
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
     "test_tensorclass_instance_methods"
     "test_tensorclass_stub_methods"

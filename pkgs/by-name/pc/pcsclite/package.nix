@@ -88,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
+  __structuredAttrs = true;
+  separateDebugInfo = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja

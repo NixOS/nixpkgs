@@ -9,7 +9,6 @@ let
   platformFiles = {
     aarch64-darwin = "macos_config.janet";
     aarch64-linux = "linux_config.janet";
-    x86_64-darwin = "macos_config.janet";
     x86_64-linux = "linux_config.janet";
   };
 

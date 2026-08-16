@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/AmbitionEng/django-pgactivity";
     changelog = "https://github.com/AmbitionEng/django-pgactivity/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

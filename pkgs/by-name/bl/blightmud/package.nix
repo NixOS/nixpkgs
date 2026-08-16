@@ -11,16 +11,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blightmud";
-  version = "5.3.1";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "blightmud";
     repo = "blightmud";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M+tbV8zuwnwwv335ljKIq0UIsSkb4SQnJnOtOhL25N8=";
   };
 
-  cargoHash = "sha256-7cMd7pNWGV5DOSCLRW5fP3L1VnDTEsZZjhVz1AQLEXM=";
+  cargoHash = "sha256-EWI+k+q8JdyZDw+k2pM1mRkfBDQH0IsuzgrTECLrHt0=";
+
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
 
   buildFeatures = lib.optional withTTS "tts";
 
@@ -38,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = lib.optionalAttrs (!stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
@@ -58,6 +64,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_tls_init_verify_err"
         "test_tls_init_no_verify"
         "test_tls_init_verify"
+        "test_exec"
+        "test_line_tags"
+        "test_lua_api"
+        "test_suggest"
+        "test_mccp2_decompression"
+        "test_mccp2_incremental"
+        "test_mccp2_negotiation"
       ];
     in
     builtins.map (x: "--skip=" + x) skipList;

@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.3.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-cli/v${finalAttrs.version}";
-    hash = "sha256-ZBlkp6nhTKEAWxCPDq9NIoOullwWartpU3eL0QIGFpw=";
+    hash = "sha256-PyCVebWLtDeYFDxAE2mZ8tGaVQF60czU8ZyVbSyVONo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
@@ -23,9 +23,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace src/pyhanko/cli/version.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
+
+  nativeBuildInputs = [
+    python3Packages.pyprojectVersionPatchHook
+  ];
 
   build-system = [ python3Packages.setuptools ];
 
@@ -46,6 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ (with python3Packages; [
     pytestCheckHook
+    pytest-asyncio
     pyhanko.testData
     requests-mock
     freezegun

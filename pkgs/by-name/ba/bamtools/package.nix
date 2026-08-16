@@ -19,6 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3kIa407YgBpulh2koQQFK/RLmGEZvEvTnZyWKm+pngg=";
   };
 
+  # jsoncpp 1.9.7 only exports its std::string_view overloads, which require C++17 callers.
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "CXX_STANDARD 11" "CXX_STANDARD 17"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

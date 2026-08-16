@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Debugger support for control of execution and inspection state of AMD's GPU architectures";
     homepage = "https://github.com/ROCm/ROCdbgapi";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

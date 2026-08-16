@@ -143,6 +143,10 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     maintainers = with lib.maintainers; [
       messemar
     ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

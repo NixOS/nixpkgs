@@ -988,8 +988,9 @@ in
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
 
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
 
       startLimitBurst = 4;
       startLimitIntervalSec = 5 * 60; # 5 mins

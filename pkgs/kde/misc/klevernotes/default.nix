@@ -9,11 +9,11 @@
 }:
 mkKdeDerivation rec {
   pname = "klevernotes";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/klevernotes/${version}/klevernotes-${version}.tar.xz";
-    hash = "sha256-UK0LwCmAh93TR3/n4IEyTfMKMFhoy7IuVCoI2mk13e0=";
+    hash = "sha256-34w59TT+vY6pJGW3HgPfNAS8hJzPRPMgC4oPKeUfytQ=";
   };
 
   extraBuildInputs = [
@@ -27,7 +27,7 @@ mkKdeDerivation rec {
     bsd3
     cc-by-sa-40
     cc0
-    # TODO: add FSFAP license
+    fsfap
     gpl2Plus
     gpl3Only
     gpl3Plus

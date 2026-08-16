@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "gettext for the smarty3 framework";
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/kikimosha/smarty3-i18n";
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

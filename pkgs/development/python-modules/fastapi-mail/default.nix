@@ -12,6 +12,7 @@
   poetry-core,
   pydantic-settings,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   redis,
@@ -21,25 +22,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-mail";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oWm2FvXCyz+0QRvClcJoKF17rWggAtQasa5h1pZ6N4Y=";
+    hash = "sha256-7Of7PSfY5lFbuxqBM5IyCnOa1CwbOijruSSrRylz3S8=";
   };
 
-  pythonRelaxDeps = [
-    "aiosmtplib"
-    "cryptography"
-    "email-validator"
-    "regex"
-    "pydantic"
-  ];
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiosmtplib
@@ -47,6 +42,7 @@ buildPythonPackage (finalAttrs: {
     cryptography
     email-validator
     fakeredis
+    httpx
     jinja2
     pydantic
     pydantic-settings
@@ -55,7 +51,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    httpx = [ httpx ];
     redis = [ redis ];
   };
 

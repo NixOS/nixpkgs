@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.3.16";
+  version = "3.3.21";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -18,7 +18,6 @@ let
     {
       x86_64-linux = "linux_x86_64.AppImage";
       aarch64-linux = "linux_arm64.AppImage";
-      x86_64-darwin = "mac_x64.dmg";
       aarch64-darwin = "mac_arm64.dmg";
     }
     .${system} or throwSystem;
@@ -27,10 +26,9 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-zwAGZHNbD58s5dsn2N76VQJlyCuYUtNNEEMJJh/yxqc=";
-        aarch64-linux = "sha256-AEY1s7K/HKEmWYU16ibE3qXZL2EyETsr6Wzhz2hiSdk=";
-        x86_64-darwin = "sha256-HXcrlOwHqYASVobtoES1+A1jXvGBPI/hPNp3MSjSRjg=";
-        aarch64-darwin = "sha256-a4S/9U/wc9XGiWh1YS7AeEP3bAGwCLcgGWJ+qL7cTJA=";
+        x86_64-linux = "sha256-NmhV+x5HrKBO7BX1bJyjChKQF/j38kQqJ3x0amSXzGU=";
+        aarch64-linux = "sha256-IU4hF/ol4pyh+ABTri2aqwqaB+cfrHLtsF7wrqE+wEY=";
+        aarch64-darwin = "sha256-9CTGpCPJY6sq6JWDpoCTyOTt/vtCazDaoDzFFUzR9zg=";
       }
       .${system} or throwSystem;
   };
@@ -39,7 +37,7 @@ let
     updateScript = ./update.sh;
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -53,13 +51,10 @@ let
     '';
     homepage = "https://notesnook.com";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      keysmashes
-    ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "notesnook";
@@ -84,7 +79,7 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';

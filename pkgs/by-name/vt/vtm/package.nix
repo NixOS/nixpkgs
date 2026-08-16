@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.9.99.61";
 
   src = fetchFromGitHub {
-    owner = "netxs-group";
+    owner = "directvt";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IlJbJw2c2Zgl+W5Jh01Iga8duiLgl/GurT620IhPh68=";

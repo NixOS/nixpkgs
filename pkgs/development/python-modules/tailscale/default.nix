@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -10,19 +10,22 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  rich,
+  syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.6.2";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-tailscale";
     tag = "v${version}";
-    hash = "sha256-azqvMAluhThfteLEZObApnJjtnT3NzO+VVwTzmxuaFY=";
+    hash = "sha256-Lvtx3/tYJO8qCQhVjJTV0qu064duH7MI+A+a+pdeoHI=";
   };
 
   postPatch = ''
@@ -31,21 +34,30 @@ buildPythonPackage rec {
       --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
     yarl
   ];
 
+  optional-dependencies = {
+    cli = [
+      rich
+      typer
+    ];
+  };
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+    syrupy
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "tailscale" ];
 
@@ -54,6 +66,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/frenck/python-tailscale";
     changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "tailscale";
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlever";
-  version = "0.5.46";
+  version = "0.5.48";
 
   src = fetchFromGitHub {
     owner = "ad-freiburg";
     repo = "qlever";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UUfSWy1mImmyL7Ha2xCbxm9srdY/rTJS4oUJbJiDtwQ=";
+    hash = "sha256-CqrwsUXjM5VwsNkLDkXgT6ZfqFZIuz2oPKVqO4z2t3A=";
     fetchSubmodules = true;
   };
 

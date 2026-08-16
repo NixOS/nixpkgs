@@ -1,13 +1,15 @@
-{ callPackage }:
+{ callPackage, ccextractor }:
 
 callPackage ./common.nix { } {
   pname = "tdarr-node";
   component = "node";
 
   hashes = {
-    linux_x64 = "sha256-3dd8ouRfThm481rDJDnxxUuSkqNlFR+2aywPzyy7xrw=";
-    linux_arm64 = "sha256-LD/cQECal9dLZY/FQSFztOVzd7MaeHL1rdbMUJ2DPNY=";
-    darwin_x64 = "sha256-icgzoHqZ+P6gXJ8jQTau3O2D6uRvET4MtNoWJI/JnvM=";
-    darwin_arm64 = "sha256-Rw478IpDLLe+Ek3Jt5Duaq1sHL1D3pE0HkVqk+v1ECE=";
+    linux_x64 = "sha256-77u5Rjd0v3yFPZb0n/lpmpLta6mAxtiDicjECCv17rI=";
+    linux_arm64 = "sha256-lmU6UO+K9N9HnXl/3xa12b946ESnSr895MEYhQyKdjs=";
+    darwin_x64 = "sha256-wwmZdDClYAyHS2xUF7bU+FzrckV/gKcD6KECEJTkinM=";
+    darwin_arm64 = "sha256-j1c+z6v0a7I/k1JM+BUpPrSA/xRpZOZ9+2Rv7Ywgw38=";
   };
+
+  includeInPath = [ ccextractor ];
 }

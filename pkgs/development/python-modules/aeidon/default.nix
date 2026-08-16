@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/otsaloma/gaupol/releases/tag/${version}";
-    description = "Reading, writing and manipulationg text-based subtitle files";
+    description = "Reading, writing and manipulating text-based subtitle files";
     homepage = "https://github.com/otsaloma/gaupol";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ erictapen ];

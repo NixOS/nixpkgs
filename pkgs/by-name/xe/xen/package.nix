@@ -36,7 +36,7 @@
   withIPXE ? true,
   ipxe,
   withOVMF ? true,
-  OVMF,
+  OVMF-xen,
   withSeaBIOS ? true,
   seabios-qemu,
 
@@ -173,9 +173,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.2";
+  version = "4.20.4";
 
-  # This attribute can be overriden to correct the file paths in
+  # This attribute can be overridden to correct the file paths in
   # `passthru` when building an unstable Xen.
   upstreamVersion = finalAttrs.version;
   # Useful for further identifying downstream Xen variants. (i.e. Qubes)
@@ -185,32 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
-
-    # XSA #477
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa477.patch";
-      hash = "sha256-c9i61GvHPiLwMGvd+5IKgUwyu/NPub+mtnxUPHW/HhI=";
-    })
-
-    # XSA #479
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa479.patch";
-      hash = "sha256-2o6RYyT4Nrg1le6BUOQ3AwedorCvxvKao2uMYWrUV1Y=";
-    })
-
-    # XSA #480
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa480.patch";
-      hash = "sha256-mHoY+Y8klwLYOo4LZCwYcNsB1BcBbSa1nQOn3NueDdI=";
-    })
-
-    # XSA #481
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa481.patch";
-      hash = "sha256-QpRXS4rFuML2TawH7yhUmg8U4C1ATt4xiLLs91duuO8=";
-    })
-
-    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+  ]
+  ++ optionals (versionOlder finalAttrs.version "4.21") [
+    # Patch `libxl` to search for `qemu-system-i386` properly.
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
       hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
@@ -228,8 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xen-project";
     repo = "xen";
-    tag = "RELEASE-4.20.2";
-    hash = "sha256-ZDPjsEAEH5bW0156MVvOKUeqg+mwdce0GFdUTBH39Qc=";
+    tag = "RELEASE-${finalAttrs.version}";
+    hash = "sha256-dO9Y7W6NIVbXwWdlnQawpmV6MtemczwgbZdi9gGu190=";
   };
 
   strictDeps = true;
@@ -276,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-qemu-traditional"
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
+    (if withOVMF then "--with-system-ovmf=${OVMF-xen.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];

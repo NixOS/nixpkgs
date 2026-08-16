@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "e-imzo";
-  version = "6.3.7";
+  version = "6.4.7";
 
   src = fetchurl {
     url = "https://cdn.xinux.uz/e-imzo/E-IMZO-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-XjS9FAIqMc9tV1aeO8D6dP9hg7ppPE/iRHX/pmzfZmM=";
+    hash = "sha256-wHcVIGTNRMit5LqHcXcGGi7foDmiwHVXUcxl4ZlhGnY=";
   };
 
   nativeBuildInputs = [

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "threatest";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "threatest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BMx+6InL5FF2MH83C6UJ50CSm0Zd69Fs6uwFnunvmqs=";
+    hash = "sha256-MmCAP1UUqNDCoG1xxuDkjzx8Exh421yT//bB2L75yac=";
   };
 
   proxyVendor = true;

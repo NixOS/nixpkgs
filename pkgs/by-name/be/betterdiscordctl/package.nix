@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "betterdiscordctl";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bAHO+2urgbL2LXiP0UZpvszX73PYtKbTOeLDyFwOYlw=";
+    hash = "sha256-SA2z1dqtc/whGe75Zbn9St7ekYnEr2xDuWowRMICYu0=";
   };
 
   postPatch = ''

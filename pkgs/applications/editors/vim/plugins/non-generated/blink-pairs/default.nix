@@ -3,25 +3,26 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  vimPlugins,
   vimUtils,
   stdenv,
   nix-update-script,
 }:
 let
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
     tag = "v${version}";
-    hash = "sha256-IfnFSusQMm6LujE1AmihK9wEF2RSGfKYwpV2fedg0fc=";
+    hash = "sha256-XWrsZAH0tIPyRjr3PnAS2QAGE3+1z00jdnsxkKG0qPE=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {
     pname = "blink-pairs";
     inherit version src;
 
-    cargoHash = "sha256-Cn9zRsQkBwaKbBD/JEpFMBOF6CBZTDx7fQa6Aoic4YU=";
+    cargoHash = "sha256-XLlluprxhVueHhkIufJa7fJXvFxpJJzh89+yL9PZ4GI=";
 
     env = {
       RUSTC_BOOTSTRAP = 1;
@@ -42,14 +43,22 @@ vimUtils.buildVimPlugin {
   pname = "blink.pairs";
   inherit version src;
 
+  dependencies = [ vimPlugins.blink-lib ];
+
   preInstall =
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
-      mkdir -p target/release
-      ln -s ${blink-pairs-lib}/lib/libblink_pairs${ext} target/release/
+      mkdir -p lib
+      ln -s ${blink-pairs-lib}/lib/libblink_pairs_parser${ext} lib/
     '';
+
+  nvimSkipModules = [
+    # a module to quickly setup a minimal reproduction environment for testing
+    # bugs. therefore mostly useless from a consumer side
+    "repro"
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -65,6 +74,9 @@ vimUtils.buildVimPlugin {
     homepage = "https://github.com/Saghen/blink.pairs";
     changelog = "https://github.com/Saghen/blink.pairs/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      isabelroses
+      saadndm
+    ];
   };
 }

@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "pylint";
-    version = "2026.4.0";
-    hash = "sha256-yWp7poC1PCoou+1XADmW0ftzyQDtJbqb3YyMf24Jprc=";
+    version = "2026.6.0";
+    hash = "sha256-lJl+nQyLjnkuMfewYXcrU+Nne7R2foUPn50TtE9OqDA=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-python.pylint/changelog";

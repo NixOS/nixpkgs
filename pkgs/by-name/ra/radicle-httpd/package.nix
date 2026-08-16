@@ -15,22 +15,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.25.0";
+  version = "0.27.0";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
-  # You must update the radicle-explorer source hash when changing this.
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/${finalAttrs.version}";
-    sparseCheckout = [ "radicle-httpd" ];
-    hash = "sha256-gejNiCQ511OGGItmqXoyB+TmsUw+ozoEmOWooBXBkQ8=";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/crates"
+      "/Cargo.toml"
+      "/Cargo.lock"
+    ];
+    hash = "sha256-OJrHV5WdFNzoYrOkqpN1ctrJDB3JTJhH54q/C6IV9ZU=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/radicle-httpd";
-
-  cargoHash = "sha256-Oawin/2R5dZ46pf3SarwNgILF9dXSkw02Z4gYQ4HtzE=";
+  cargoHash = "sha256-FjYhw27pAX9Tilgm/Tg18Vkv4/K5kEFJAbhv1mDY0rg=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -78,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       repositories on a Radicle node via their web browser.
     '';
     homepage = "https://radicle.dev";
-    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/radicle-httpd/CHANGELOG.md";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only

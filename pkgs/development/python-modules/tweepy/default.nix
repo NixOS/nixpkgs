@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "4.16.0";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tweepy";
     repo = "tweepy";
     tag = "v${version}";
-    hash = "sha256-9rJrZb9X3twVtfnQTFjWLH/TttfUNm4KA3/6AIHDKc0=";
+    hash = "sha256-Jr/62vXxBIiZGQeM5bbqnHDP9GCxrbJmCF2oiYglLbE=";
   };
 
   build-system = [ flit-core ];

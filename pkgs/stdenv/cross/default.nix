@@ -4,7 +4,7 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
+  crossOverlays,
 }:
 
 let
@@ -127,6 +127,8 @@ lib.init bootStages
                 buildPackages.zig.cc
               else if crossSystem.useArocc or false then
                 buildPackages.arocc
+              else if crossSystem.useGccNG or false then
+                buildPackages.gccNGPackages.gcc
               else
                 buildPackages.gcc;
 

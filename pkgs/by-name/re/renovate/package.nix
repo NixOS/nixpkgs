@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs_24,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -15,18 +15,23 @@
   yq-go,
   cctools,
 }:
+
 let
   nodejs = nodejs_24;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "43.150.1";
+  version = "44.24.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-yCkwlPf6jLM906U7BdY1h5IcaOSe6aureYIKXQk+re0=";
+    hash = "sha256-nseiP9ccsKrE2030bTJ4hJ+5HCdF2pqPi8JPXfl2c0k=";
   };
 
   postPatch = ''
@@ -38,20 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     cctools # contains libtool, required by better-sqlite3
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-gDffEtUWqSWbwr4S0HZIPTvSrXDvl/q2Y5QuA+U6Ndk=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-mLFGCdj4lAbpZJGqUUrhZ0mdprh4FvWrJ0jnKZWKgQI=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -61,31 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     # relax nodejs version
     yq '.engines.node = "${nodejs.version}"' -i package.json
+  ''
+  # pnpm install gets run with --ignore-scripts so we need to manually build native dependencies (e.g. re2)
+  # Keep https://github.com/renovatebot/renovate/blob/main/pnpm-workspace.yaml#L9 in mind when updating,
+  # new native dependencies could bloat up binary size.
+  + ''
+    pnpm rebuild
+    rm -rf node_modules/.pnpm/re2*/node_modules/re2/build/Release/{obj.target,.deps} \
+      node_modules/.pnpm/re2*/node_modules/re2/vendor
 
     pnpm build
-    find -name 'node_modules' -type d -exec rm -rf {} \; || true
-    pnpm install --offline --prod --ignore-scripts
-  ''
-  # The optional dependencies re2 and better-sqlite3 are not built by pnpm and need to be built manually.
-  # If re2 is not built, you will get an annoying warning when you run renovate.
-  # better-sqlite3 is required.
-  + ''
-    pushd node_modules/.pnpm/re2*/node_modules/re2
-
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-    npm run rebuild
-    rm -rf build/Release/{obj.target,.deps} vendor
-
-    popd
-
-    pushd node_modules/.pnpm/better-sqlite3*/node_modules/better-sqlite3
-    npm run build-release
-    rm -rf build/Release/{obj.target,sqlite3.a,.deps} deps
-
-    popd
+    pnpm prune --prod --ignore-scripts
 
     runHook postBuild
   '';

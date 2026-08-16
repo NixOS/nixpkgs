@@ -69,6 +69,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fretboard";
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

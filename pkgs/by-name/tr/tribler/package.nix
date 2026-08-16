@@ -6,7 +6,7 @@
   buildNpmPackage,
   nodejs_24,
   wrapGAppsHook3,
-  libappindicator-gtk3,
+  libappindicator,
 }:
 let
   version = "8.2.3-unstable-2025-10-14";
@@ -82,7 +82,7 @@ python3.pkgs.buildPythonApplication {
     sphinx-rtd-theme
     astroid
     # tray icon deps
-    libappindicator-gtk3
+    libappindicator
     # test phase requirements
     pytestCheckHook
   ];
@@ -120,7 +120,7 @@ python3.pkgs.buildPythonApplication {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ libappindicator-gtk3 ]}"
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ libappindicator ]}"
     )
   '';
 

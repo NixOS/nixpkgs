@@ -35,7 +35,6 @@
   libpwquality,
   librsvg,
   libsecret,
-  libwacom,
   libxml2,
   libxslt,
   meson,
@@ -69,14 +68,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UiKMYLQ44U4w9MdSTp/AJg3scOoSCeG6gXUBCrM9pc8=";
+    hash = "sha256-y/3qXIn8HI4S7K02ovZGT4ec/KJ93k/U82g4Rw3ZJQA=";
   };
 
   patches = [
@@ -127,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libpwquality
     libsecret
-    libwacom
     libxml2
     modemmanager
     networkmanager

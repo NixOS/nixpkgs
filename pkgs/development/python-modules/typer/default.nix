@@ -17,21 +17,21 @@
 
   # tests
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   writableTmpDirAsHomeHook,
   procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.24.0";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-ha/cT2+I9/WUjb7ZXSKqLSocZ3vq0N1fm4RvRpsXIDc=";
+    hash = "sha256-HIvXseuR7zUXFuTWzntDfHhAp8BcFjxo35gn0i4+03w=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

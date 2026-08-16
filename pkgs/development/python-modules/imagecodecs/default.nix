@@ -29,7 +29,7 @@
 }:
 
 let
-  version = "2026.3.6";
+  version = "2026.6.26";
 in
 buildPythonPackage rec {
   pname = "imagecodecs";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "cgohlke";
     repo = "imagecodecs";
     tag = "v${version}";
-    hash = "sha256-UOyhTzejLJ1HnwHtvFe9Mo8nxOkLNANnJL2z/SSRjXs=";
+    hash = "sha256-0o4zSf1iCzxph9tQ+b2nShaRWeCBuszf/r85Zg1BGTY=";
   };
 
   build-system = [

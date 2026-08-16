@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

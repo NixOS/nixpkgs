@@ -8,23 +8,23 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzipper";
-  version = "0.3.6";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danifus";
     repo = "pyzipper";
-    tag = "v${version}";
-    hash = "sha256-+fZXoAUeB/bUI3LrIFlMTktJgn+GNFBiDHvH2Jgo0pg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-an+DmsyoIAwYvYXGFnJ/3+KIf6sqNJlA7uJp0leV18I=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pycryptodomex ];
+  dependencies = [ pycryptodomex ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python zipfile extensions";
     homepage = "https://github.com/danifus/pyzipper";
-    changelog = "https://github.com/danifus/pyzipper/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/danifus/pyzipper/blob/v${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cairo,
   meson,
   ninja,
@@ -28,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.11";
+  version = "1.28.5";
 
   outputs = [
     "out"
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Vl9IU4jJSYr+v3gAQYPN/xATEhEoZBqlbtql6pRBK+I=";
+    hash = "sha256-dFkEXbMdbkRgC8vgEdySV1AmiHDnuQ9+ego69KIcCeU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -46,8 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
       cargoRoot
       ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-sqN1IBkbrT3pQqUQKU2pr8G1t4kNMKk0NR7NH7dTvAE=";
+    hash = "sha256-5VYzDwAMyVN2HR/sS8rCwTR7UW/tt60AS7wZMjx+w74=";
   };
+
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   depsBuildBuild = [
     pkg-config
@@ -84,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    # dots-viewer requires nix 0.23.2, which is too old to build on loongarch64
+    (lib.mesonEnable "dots_viewer" (!stdenv.hostPlatform.isLoongArch64))
   ];
 
   cargoRoot = "dots-viewer";
@@ -91,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript =
       let
-        updateSource = directoryListingUpdater { };
+        updateSource = directoryListingUpdater { odd-unstable = true; };
 
         updateLockfile = {
           command = [

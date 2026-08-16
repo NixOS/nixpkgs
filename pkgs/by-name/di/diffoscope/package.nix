@@ -7,6 +7,7 @@
   apksigcopier,
   apksigner,
   apktool,
+  asar,
   binutils-unwrapped-all-targets,
   bzip2,
   cbfstool,
@@ -23,10 +24,10 @@
   enableBloat ? true,
   enjarify,
   fetchurl,
+  ffmpeg,
   file,
   findutils,
   fontforge-fonttools,
-  ffmpeg,
   fpc,
   gettext,
   ghc,
@@ -54,6 +55,7 @@
   oggvideotools,
   openssh,
   openssl,
+  p7zip,
   pdftk,
   perl,
   pgpdump,
@@ -75,7 +77,6 @@
   xz,
   zip,
   zstd,
-  binwalk,
   # updater only
   writeScript,
 }:
@@ -84,8 +85,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # version 2 breaks dataset and thus androguard
-      sqlalchemy = prev.sqlalchemy_1_4;
       # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
@@ -99,6 +98,11 @@ let
             tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
+
+          postPatch = ''
+            substituteInPlace py_ext/setup.py \
+              --replace-fail "0.2.0" "${version}"
+          '';
         }
       );
     };
@@ -108,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "316";
+  version = "328";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-6YLeNNWVMbvL2xymsdsxUPnknOScqGc1egl8VKtWXz4=";
+    hash = "sha256-7cQyrdXldqS9vkGGs+Lgc6gojtYFv8WdJMO1ObZ3NSs=";
   };
 
   outputs = [
@@ -121,14 +125,14 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  patches = [ ./ignore_links.patch ];
+  patches = [
+    ./androguard-4.1.4.patch
+    ./ignore_links.patch
+  ];
 
   postPatch = ''
     # When generating manpage, use the installed version
     substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
-
-    substituteInPlace diffoscope/comparators/apk.py \
-      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
   '';
 
   nativeBuildInputs = [
@@ -140,23 +144,19 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
-  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  # To help figuring out what's missing from the list, run: ./pkgs/by-name/di/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
   # Android-specific tools:
   # dexdump
-  # Darwin-specific tools:
+  # Darwin-specific tools (llvm-lipo and llvm-otool don't suffice):
   # lipo
   # otool
   # Other tools:
-  # docx2txt <- makes tests broken:
-  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
-  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # docx2txt (needs Debian's package called this, not the python package)
   # radare2
-  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
-  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
-  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
-  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - KeyError: 'offset'
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - KeyError: 'offset'
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
@@ -197,13 +197,13 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ (with python.pkgs; [
       argcomplete
-      python-debian
       defusedxml
       jsbeautifier
       jsondiff
       libarchive-c
-      progressbar33
+      progressbar
       pypdf
+      python-debian
       python-magic
       pyxattr
       rpm
@@ -214,6 +214,7 @@ python.pkgs.buildPythonApplication rec {
         abootimg
         apksigcopier
         apksigner
+        asar
         cbfstool
         colord
         enjarify
@@ -232,7 +233,9 @@ python.pkgs.buildPythonApplication rec {
         mono
         ocaml
         odt2txt
+        oggvideotools
         openssh
+        p7zip
         pdftk
         perl
         poppler-utils
@@ -244,7 +247,6 @@ python.pkgs.buildPythonApplication rec {
         ubootTools
         wabt
         xmlbeans
-        binwalk
       ]
       ++ (with python.pkgs; [
         androguard
@@ -253,13 +255,10 @@ python.pkgs.buildPythonApplication rec {
         h5py
         pdfminer-six
         r2pipe
-        # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
-      # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
       # Causes an eval failure
       # See https://github.com/NixOS/nixpkgs/issues/463873
-      ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isAarch64) [
         aapt
         apktool
       ]
@@ -272,6 +271,20 @@ python.pkgs.buildPythonApplication rec {
     # Always show more information when tests fail
     "-vv"
   ];
+
+  preCheck = lib.optionalString (enableBloat && stdenv.hostPlatform.isDarwin) ''
+    # h5dump is in hdf5's bin output, but its dylibs are in the out output.
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ hdf5 ]}''${DYLD_LIBRARY_PATH:+:''${DYLD_LIBRARY_PATH}}"
+  '';
+
+  makeWrapperArgs = lib.optionals enableBloat (
+    [
+      "--prefix PATH : ${lib.makeBinPath [ hdf5 ]}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ hdf5 ]}"
+    ]
+  );
 
   postInstall = ''
     make -C doc
@@ -317,12 +330,12 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = writeScript "update-diffoscope" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
-      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      newVersion="$(curl -s https://diffoscope.org/ | pcre2grep -o1 'Latest release: ([0-9]+)')"
       update-source-version ${pname} "$newVersion"
     '';
   };
@@ -344,7 +357,7 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       danielfullmer
-      raitobezarius
+      mdaniels5757
     ];
     platforms = lib.platforms.unix;
     mainProgram = "diffoscope";

@@ -7,6 +7,7 @@
   ciso8601,
   async-timeout,
   kasa-crypt,
+  msgpack,
   orjson,
   requests,
   websocket-client,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sense-energy";
-  version = "0.14.1";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
     tag = finalAttrs.version;
-    hash = "sha256-xHI4HuPZFVqBNCC9+bILRVLoZ1LFBW9N0tVT8UzYClw=";
+    hash = "sha256-Ug58qKlFBe4DpAKMWNup7A2QTslGaaY2OMPyJtnfWfM=";
   };
 
   postPatch = ''
@@ -36,6 +37,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     async-timeout
     kasa-crypt
+    msgpack
     orjson
     ciso8601
     requests

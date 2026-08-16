@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   cirq-core,
+  pytest-benchmark,
   pytestCheckHook,
   setuptools,
 }:
@@ -16,7 +17,10 @@ buildPythonPackage rec {
 
   dependencies = [ cirq-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_web" ];

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.20";
+  version = "1.8.21";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
-    hash = "sha256-0h2VQU5eYb0heXSFmKnwAFW0jcWc+bYllhwxfdzkGWc=";
+    hash = "sha256-7XM476tfL6QLCHB1kwlbN/dmlgnjuTE+ulQ9yOHfgEE=";
   };
 
   patches = [
@@ -87,7 +87,6 @@ buildPythonPackage rec {
           "i686-linux" = "-shared -o attach_linux_x86.so";
           "aarch64-linux" = "-shared -o attach_linux_arm64.so";
           "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
-          "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
           "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
         }
         .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -121,11 +120,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
-    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -133,9 +128,6 @@ buildPythonPackage rec {
   postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
-
-  # Override default arguments in pytest.ini
-  pytestFlags = [ "--timeout=0" ];
 
   disabledTests = [
     # hanging test (flaky)
@@ -163,7 +155,6 @@ buildPythonPackage rec {
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "riscv64-linux"
     ];

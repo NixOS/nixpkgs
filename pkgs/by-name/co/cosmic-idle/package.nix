@@ -16,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-idle";
-  version = "1.0.10";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -26,7 +26,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0tcrOfVT5b57ev3b5F2U78F2QPGFwp94bqFVNyKH0Yk=";
   };
 
+  postPatch = ''
+    substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
+  '';
+
   cargoHash = "sha256-wAjFC6qAC3nllbnZf0KVaZTEztNYo6GTvwcp5FYmXLw=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just
@@ -44,10 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  postPatch = ''
-    substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
-  '';
 
   passthru = {
     tests = {

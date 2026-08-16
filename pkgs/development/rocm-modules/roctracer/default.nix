@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/roctracer";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = lib.licenses.mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
+  desktopToDarwinBundle,
   gtk3,
   libglvnd,
   libxxf86vm,
@@ -35,6 +37,11 @@ buildGoModule rec {
     copyDesktopItems
     pkg-config
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Generate Applications/EasyLPAC.app from the desktop item, so the
+    # app shows up in Spotlight/Launchpad instead of being CLI-only.
+    desktopToDarwinBundle
   ];
 
   buildInputs = [

@@ -1,25 +1,29 @@
 {
   lib,
   stdenv,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   libredirect,
   iana-etc,
   versionCheckHook,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "scip";
-  version = "0.6.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "sourcegraph";
+    owner = "scip-code";
     repo = "scip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l68xhOMgwt+ySChk7BCyklcuC6r51GgobAg3lRLvOCU=";
+    hash = "sha256-3iUDxZAde1aVpZNFKvuITHg/b+3+sXHQvmjq/f6AIzM=";
   };
 
-  vendorHash = "sha256-8HgeG/SXkM7ptOwKSi/PUH3VySxFqqoIpXI7bZtbO4A=";
+  vendorHash = "sha256-p4/YFp+FY83c0HO+8DBI8qQu4EV0DbXa2rEdfkgfsI4=";
+
+  subPackages = [ "cmd/scip" ];
+
+  env.GOWORK = "off";
 
   ldflags = [
     "-s"
@@ -27,15 +31,6 @@ buildGo125Module (finalAttrs: {
   ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
-
-  checkFlags =
-    let
-      skippedTests = [
-        "TestParseCompat" # could not locate sample indexes directory starting from parents of working directory
-        "TestParseSymbol_ZeroAllocationsIfMemoryAvailable"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -50,9 +45,9 @@ buildGo125Module (finalAttrs: {
   meta = {
     description = "SCIP Code Intelligence Protocol CLI";
     mainProgram = "scip";
-    homepage = "https://github.com/sourcegraph/scip";
-    changelog = "https://github.com/sourcegraph/scip/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/scip-code/scip";
+    changelog = "https://github.com/scip-code/scip/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ nicolas-guichard ];
   };
 })

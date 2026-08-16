@@ -18,13 +18,13 @@ assert lib.xor withLibiodbc withUnixODBC;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "psqlodbc";
-  version = "17.00.0008";
+  version = "18.00.0002";
 
   src = fetchFromGitHub {
     owner = "postgresql-interfaces";
     repo = "psqlodbc";
     tag = "REL-${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-eYt4RwnYfSHz2nGBW94Gkdt3E+j6eS1Ky2KPol3cLkI=";
+    hash = "sha256-qzbyo9P/o784Ux3KDA8NDMbcm0EbnfG8LiBLRk6n698=";
   };
 
   buildInputs = [

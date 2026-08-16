@@ -20,14 +20,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.18.1";
+  version = "3.19.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     tag = "v${version}";
-    hash = "sha256-4HIIgTNcNAMCpHyT6zBcmxXeFbMrt38Z7PtT9Onvz+U=";
+    hash = "sha256-ASLnsmuWpfQKwpNNLUgI32Gdn/j+jUW5IBLlT8RUmcE=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -36,20 +36,10 @@ beamPackages.mixRelease rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ file ];
 
-  patches = [
-    # See <https://akkoma.dev/AkkomaGang/akkoma/pulls/854>
-    # Akkoma uses the deprecated “convert” command instead of “magick”, which
-    # results in the logs being spammed with warning messages. Upstream is
-    # reluctant to change this, to ensure compatibility with Debian stable,
-    # which does not yet provide ImageMagick 7.
-    # Remove this patch once merged upstream.
-    ./akkoma-imagemagick.patch
-  ];
-
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-akkoma";
     inherit src version;
-    hash = "sha256-igXEX6I+7G7tNCLjEf0VBOaii0r7jXCdF6x78LMcUv0=";
+    hash = "sha256-O9A7XuQSSczGMcLMc6Fk0eh7PkjQ6sYJKSwdqoEPJJI=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \

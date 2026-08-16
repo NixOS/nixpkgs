@@ -45,5 +45,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/colonelpanic8/quill-qr";
     maintainers = with lib.maintainers; [ imalison ];
     platforms = with lib.platforms; linux;
+    license = lib.licenses.unfree;
   };
 }

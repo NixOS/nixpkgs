@@ -6,6 +6,7 @@
   autoconf,
   automake,
   libtool,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +28,11 @@ stdenv.mkDerivation {
     libtool
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing -DHAVE_GETOPT_H=1";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "ReplayGain for AAC files";

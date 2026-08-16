@@ -37,15 +37,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zarr";
-  version = "3.1.5";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
     repo = "zarr-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Kx8gN1JiaY4eHmwpdilvJ8+NdnzxhDvn7YZjphgtZw=";
+    hash = "sha256-WExQT/Je+esq0dv9HtPxGt7ioJgIwW8cGNuPwM+ANEc=";
   };
+
+  # Avoid requiring pytest-benchmark - we don't care about these
+  preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--benchmark-columns", "min,mean,stddev,outliers,rounds,iterations",' "" \
+      --replace-fail '"--benchmark-disable",' "" \
+  '';
 
   build-system = [
     hatchling
@@ -94,6 +101,8 @@ buildPythonPackage (finalAttrs: {
     "tests/test_examples.py::test_scripts_can_run[script_path0]"
     # Requires zarr==2.x to generate zarr stores for the tests
     "tests/test_regression"
+    # See also preBuild above.
+    "tests/benchmarks/"
   ];
 
   pythonImportsCheck = [ "zarr" ];

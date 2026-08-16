@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -10,14 +11,19 @@
   libgbm,
   makeWrapper,
   playwright-driver,
+  withImageSupport ? lib.meta.availableOn stdenv.hostPlatform libdrm,
 }:
+
+assert lib.assertMsg (
+  withImageSupport -> lib.meta.availableOn stdenv.hostPlatform libdrm
+) "d2: withImageSupport is not supported on ${stdenv.hostPlatform.system} (requires libdrm)";
 
 buildGoModule (finalAttrs: {
   pname = "d2";
   version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "terrastruct";
+    owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ZRAvMcJKQmvcBbT2foKDYS0gTeqOZqFu3V3iXIbfLsQ=";
@@ -38,7 +44,8 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals libdrm.meta.available [
+  # playwright-drivers.browsers pulls down ~2GB+ for Webkit, Chrome, Firefox etc
+  buildInputs = lib.optionals withImageSupport [
     libgbm
     playwright-driver.browsers
   ];
@@ -49,13 +56,13 @@ buildGoModule (finalAttrs: {
     installManPage ci/release/template/man/d2.1
   ''
   # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-  + lib.optionalString (finalAttrs.buildInputs != [ ]) ''
+  + lib.optionalString withImageSupport ''
     wrapProgram $out/bin/d2 \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   preCheck = ''
-    # See https://github.com/terrastruct/d2/blob/master/docs/CONTRIBUTING.md#running-tests.
+    # See https://github.com/d2lang/d2/blob/master/docs/CONTRIBUTING.md#running-tests.
     export TESTDATA_ACCEPT=1
   '';
 
@@ -68,10 +75,9 @@ buildGoModule (finalAttrs: {
     description = "Modern diagram scripting language that turns text to diagrams";
     mainProgram = "d2";
     homepage = "https://d2lang.com";
-    changelog = "https://github.com/terrastruct/d2/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/d2lang/d2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

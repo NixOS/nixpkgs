@@ -78,7 +78,7 @@ let
     python-dateutil
     pytz
     pyyaml
-    qscintilla-qt6
+    pyqt6-qscintilla
     requests
     setuptools
     sip
@@ -89,14 +89,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qgis-unwrapped";
-  version = "4.0.1";
+  version = "4.0.3";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-pH48EhH2kmlscFPYiLStGIqXrmO9zgpidtkWVf1K5Mo=";
+    hash = "sha256-vHKDc+OeIVfi+7Gp1ROUDYon+wKb24Nr5nCVfmhknvc=";
   };
 
   passthru = {
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   patches = [
     (replaceVars ./set-pyqt6-package-dirs.patch {
       pyQt6PackageDir = "${py.pkgs.pyqt6}/${py.pkgs.python.sitePackages}";
-      qsciPackageDir = "${py.pkgs.qscintilla-qt6}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.pyqt6-qscintilla}/${py.pkgs.python.sitePackages}";
     })
     (replaceVars ./spatialite-path.patch {
       spatialiteLib = "${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -36,7 +36,7 @@
       ]
       null;
   release = {
-    "0.1.0".sha256 = "sha256-diDUTj0l4vliov9+Lg8lNRdkLE7JAfJn8OU7J/HgmDE=";
+    "0.1.0".hash = "sha256-diDUTj0l4vliov9+Lg8lNRdkLE7JAfJn8OU7J/HgmDE=";
   };
   releaseRev = v: "v${v}";
 

@@ -24,6 +24,7 @@
   prometheus-client,
   protobuf,
   psutil,
+  pyasn1,
   pydantic,
   python-dateutil,
   python-multipart,
@@ -59,7 +60,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.18.0";
+  version = "0.20.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -67,16 +68,21 @@ buildPythonPackage (finalAttrs: {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qmv6DzYA/c/uGS4LNTdn3PnzhtLrhprF6r9ccngsUTU=";
+    hash = "sha256-XSEdhYrsSdrKjHnFCoMPoS0nAZ+Fa8JGj+izVw3wl0o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
+
+  build-system = [
+    setuptools
+  ];
 
   pythonRelaxDeps = [
     "cryptography"
     "fastapi"
     "httpx"
     "numpy"
+    "pandas"
     "prometheus-client"
     "protobuf"
     "psutil"
@@ -84,11 +90,6 @@ buildPythonPackage (finalAttrs: {
     "starlette"
     "uvicorn"
   ];
-
-  build-system = [
-    setuptools
-  ];
-
   dependencies = [
     aiohttp
     cloudevents
@@ -106,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     prometheus-client
     protobuf
     psutil
+    pyasn1
     pydantic
     python-dateutil
     python-multipart
@@ -177,6 +179,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: Cannot interpret '<StringDtype(na_value=nan)>' as a data type
+    "test_fp16_input_as_binary_data"
+
     # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
     "test_health_handler"
     "test_list_handler"

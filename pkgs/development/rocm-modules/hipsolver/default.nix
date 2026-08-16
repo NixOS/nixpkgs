@@ -21,7 +21,7 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm SOLVER marshalling library";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsolver";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

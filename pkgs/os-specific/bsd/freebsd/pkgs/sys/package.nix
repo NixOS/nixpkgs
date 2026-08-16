@@ -26,6 +26,7 @@
   kldxref,
   ctfconvert,
   ctfmerge,
+  dtc,
 }:
 let
   baseConfigFile =
@@ -35,7 +36,7 @@ let
       extraConfig
     else
       writeText "extraConfig" extraConfig;
-  hostArchBsd = freebsd-lib.mkBsdArch stdenv;
+  hostMachineBsd = freebsd-lib.mkBsdMachine stdenv;
   filteredSource = filterSource {
     pname = "sys";
     path = "sys";
@@ -57,7 +58,7 @@ let
       done
     ''
     + lib.optionalString (baseConfigFile != null) ''
-      cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+      cat ${baseConfigFile} >>sys/${hostMachineBsd}/conf/${baseConfig}
     '';
   };
 
@@ -93,7 +94,9 @@ mkDerivation rec {
     kldxref
     ctfconvert
     ctfmerge
-  ];
+  ]
+  # Device trees are built in the same sys package
+  ++ lib.optional (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) dtc;
 
   # --dynamic-linker /red/herring is used when building the kernel.
   NIX_ENFORCE_PURITY = 0;
@@ -125,7 +128,8 @@ mkDerivation rec {
 
   KODIR = "${placeholder "out"}/kernel";
   KMODDIR = "${placeholder "out"}/kernel";
-  DTBDIR = "${placeholder "out"}/dbt";
+  DTBDIR = "${placeholder "out"}/dtb";
+  DTBODIR = "${placeholder "out"}/dtb/overlays";
 
   KERN_DEBUGDIR = "${placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
@@ -136,7 +140,7 @@ mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    cd ${hostArchBsd}/conf
+    cd ${hostMachineBsd}/conf
     config ${baseConfig}
 
     runHook postConfigure

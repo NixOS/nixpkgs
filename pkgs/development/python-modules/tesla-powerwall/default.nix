@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrester";
     repo = "tesla_powerwall";
     tag = "v${version}";
-    hash = "sha256-cAsJKFM0i0e7w2T4HP4a5ybJGuDvBAGCGmPEKFzNFAY=";
+    hash = "sha256-IFJ3NmQtMTPUQ4FA3CQOEPgqAhoW0V9p+JSGx+8WF+A=";
   };
 
   nativeBuildInputs = [ setuptools ];

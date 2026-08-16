@@ -12,18 +12,20 @@
   libadwaita,
   desktop-file-utils,
   libGL,
+  appstream,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "livi";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "guidog";
     repo = "livi";
     domain = "gitlab.gnome.org";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2hDQS5f+KAWal8AbtB4IV4/B6Rq+n1vAcWA9eoDS3y4=";
+    hash = "sha256-2GeukYT4hF68bD6h03mDLK1pIXJ/EKyB+2w7pjKa/+M=";
   };
   nativeBuildInputs = [
     meson
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
+    appstream
+    wayland-scanner
   ];
 
   buildInputs = [

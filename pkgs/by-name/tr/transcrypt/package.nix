@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/elasticdog/transcrypt";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.elasticdog ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

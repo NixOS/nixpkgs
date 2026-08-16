@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spyder-kernels";
-  version = "3.1.4";
+  version = "3.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HMkenC9a+UZ0VCFx+q9K6KQ8BdTvpc4nHukhEqCLGXo=";
+    hash = "sha256-FdZKWtMRTLq16rULc4lQx4GywtyZ+ori2z85PgK1geM=";
   };
 
   build-system = [ setuptools ];

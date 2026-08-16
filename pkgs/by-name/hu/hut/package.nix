@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromSourcehut,
   scdoc,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,6 +19,14 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-7N+Zn7tzEG3dGeqNWmY98XUUKV7Y6g8wFZcQP9wea/8=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
+
   nativeBuildInputs = [
     scdoc
   ];
@@ -25,8 +34,8 @@ buildGoModule (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   ldflags = [
-    # Recommended in 0.8.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.8.0
-    "-X main.version=v${finalAttrs.version}"
+    # Recommended in 0.7.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.7.0
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postBuild = ''

@@ -7,7 +7,7 @@ grafanaPlugin {
   meta = {
     description = "Redis Data Source for Grafana";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

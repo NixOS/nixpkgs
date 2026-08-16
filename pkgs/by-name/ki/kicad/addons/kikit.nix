@@ -7,6 +7,7 @@
   python3,
   addonName,
   addonPath,
+  strip-nondeterminism,
 }:
 let
   # This python is only used when building the package, it's not the python
@@ -38,12 +39,14 @@ stdenv.mkDerivation {
     python
     bc
     zip
+    strip-nondeterminism
   ];
   propagatedBuildInputs = [ kikit-module ];
 
   buildPhase = ''
     patchShebangs scripts/setJson.py
     make ${targetSpec.makeTarget}
+    strip-nondeterminism --type zip build/${targetSpec.resultZip}
   '';
 
   installPhase = ''

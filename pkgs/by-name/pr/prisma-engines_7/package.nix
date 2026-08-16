@@ -11,16 +11,16 @@
 # function correctly.
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_7";
-  version = "7.8.0";
+  version = "7.9.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     tag = finalAttrs.version;
-    hash = "sha256-nquIcOmFz+ikD0x/YEPZ5NVKCFPCdR5MSCHldn+b9jI=";
+    hash = "sha256-bGtVKGoWZc/3s0lhTXksp+6fM/Q461ve/HQsRPxWD0Q=";
   };
 
-  cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
+  cargoHash = "sha256-zLl2ErsCTXZVShPFLH94GLJ0q2FrMnfnecnfKD7VDL4=";
 
   # Use system openssl.
   env.OPENSSL_NO_VENDOR = 1;
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://www.prisma.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    mainProgram = "prisma";
+    mainProgram = "schema-engine";
     maintainers = with lib.maintainers; [
       aqrln
     ];

@@ -58,7 +58,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/argoproj/argo-workflows";
     changelog = "https://github.com/argoproj/argo-workflows/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ groodt ];
+    maintainers = with lib.maintainers; [
+      groodt
+      joibel
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -84,12 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  # glibc valgrind can't measure musl binaries (and vice versa)
+  doCheck = stdenv.hostPlatform.libc == stdenv.buildPlatform.libc;
 
   postPatch = ''
     # Substitute the path to this derivation in the patch we apply.
     substituteInPlace src/umockdev-wrapper \
       --subst-var-by 'LIBDIR' "''${!outputLib}/lib"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace src/libumockdev-preload.c \
+      --replace-fail libc.so.6 libc.so
   '';
 
   preCheck = ''

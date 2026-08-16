@@ -2,37 +2,36 @@
   lib,
   stdenv,
   rustPlatform,
+
   fetchFromGitHub,
   git,
   pkg-config,
-  openssl,
-  erlang,
+  beamPackages,
   nodejs,
   bun,
   deno,
   versionCheckHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.16.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/AYtZ/nd0PIAaf9z/Uk8tw9ziczczerQO8D3g7n5sJo=";
+    hash = "sha256-974B+22Lvd7KB9M0yuuxkolLtRmg42NrAX5CIrIc3Ac=";
   };
 
-  cargoHash = "sha256-3B8RSow/aLzv0wl+eMCnS42+DnUa6NdG2TuR7aAJCA8=";
+  cargoHash = "sha256-as+2oyOpGA71oPDGTuZhfPccr8AjsUZJFtnRLYRxFOI=";
 
   nativeBuildInputs = [
     pkg-config
-    erlang
+    beamPackages.erlang
   ];
-
-  buildInputs = [ openssl ];
 
   nativeCheckInputs = [
     # used by several tests
@@ -42,11 +41,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     bun
     deno
+
+    writableTmpDirAsHomeHook
   ];
 
   checkFlags = [
-    # Makes a network request
+    # These tests make network requests
     "--skip=tests::echo::echo_dict"
+    "--skip=tests::escript_success_with_dependency"
+    # checks files that would be gitignored, but we're not in a git repo
+    "--skip=tests::all_files_have_copyright_notice"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Snapshot tests fail because a warning is shown on stdout
@@ -78,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Statically typed language for the Erlang VM";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
-    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/changelog/v${lib.versions.majorMinor finalAttrs.version}.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       philtaken

@@ -616,7 +616,7 @@ in
       ++ lib.optional (cfg.database.type != "sqlite" && cfg.database.path != null) ''
         The services.mediawiki.database.path option will be ignored because services.mediawiki.database.type is not "sqlite".
       ''
-      ++ lib.optional (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+      ++ lib.optional (cfg.database.type != "mysql" && cfg.database.tablePrefix != null) ''
         The services.mediawiki.database.tablePrefix option has no effect when the services.mediawiki.database.type is not "mysql".
       '';
 

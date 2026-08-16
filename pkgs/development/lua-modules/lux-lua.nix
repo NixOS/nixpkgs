@@ -3,7 +3,6 @@
   gpgme,
   isLuaJIT,
   lib,
-  libgit2,
   libgpg-error,
   lua,
   lux-cli,
@@ -43,7 +42,6 @@ toLuaModule (
     buildInputs = [
       gnupg
       gpgme
-      libgit2
       libgpg-error
       openssl
     ];
@@ -60,7 +58,6 @@ toLuaModule (
     ];
 
     env = {
-      LIBGIT2_NO_VENDOR = 1;
       LIBSSH2_SYS_USE_PKG_CONFIG = 1;
       LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
       # Allow undefined symbols on Darwin - they must be provided by the Lua runtime

@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication {
       maintainers
       license
       ;
-    description = "Power-rofiles-daemon like DBus interface for TLP";
+    description = "Power-profiles-daemon like DBus interface for TLP";
     mainProgram = "tlp-pd";
   };
 }

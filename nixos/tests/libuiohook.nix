@@ -8,7 +8,7 @@
   nodes.client =
     { nodes, ... }:
     let
-      user = nodes.client.config.users.users.alice;
+      user = nodes.client.users.users.alice;
     in
     {
       imports = [
@@ -24,7 +24,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.client.config.users.users.alice;
+      user = nodes.client.users.users.alice;
     in
     ''
       client.wait_for_x()

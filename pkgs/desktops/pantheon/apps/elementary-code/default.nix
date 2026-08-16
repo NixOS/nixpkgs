@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.2.0";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     tag = version;
-    hash = "sha256-nLGjW7aVf+fkrYgqhj1fVhMU3aNpVUlPhBsSOAXGqWs=";
+    hash = "sha256-qN21zTE++yQi8kQ7gY+FIpkSdHUlsP/aldinZADjh8Y=";
   };
 
   strictDeps = true;

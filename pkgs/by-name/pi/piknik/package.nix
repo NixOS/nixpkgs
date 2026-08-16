@@ -36,7 +36,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/jedisct1/piknik";
     changelog = "https://github.com/jedisct1/piknik/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "piknik";
   };
 })

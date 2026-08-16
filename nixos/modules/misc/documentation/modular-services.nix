@@ -19,6 +19,10 @@ let
 
   modularServicesModule = {
     options = {
+      "<imports = [ pkgs.autopush-rs.services.autoconnect ]>" =
+        fakeSubmodule pkgs.autopush-rs.services.autoconnect;
+      "<imports = [ pkgs.autopush-rs.services.autoendpoint ]>" =
+        fakeSubmodule pkgs.autopush-rs.services.autoendpoint;
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
       "<imports = [ pkgs.ktls-utils.services.default ]>" = fakeSubmodule pkgs.ktls-utils.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;

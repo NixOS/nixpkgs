@@ -2,24 +2,24 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fragment-mono";
   version = "1.21";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://github.com/weiweihuanghuang/fragment-mono/releases/download/${finalAttrs.version}/fragment-mono-${finalAttrs.version}.zip";
     hash = "sha256-H5s4rYDN2d0J+zVRgBzg8vfZXCA/jjHrGBV8o8Dxutc=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 fonts/ttf/*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/weiweihuanghuang/fragment-mono";

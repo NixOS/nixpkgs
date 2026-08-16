@@ -5,25 +5,29 @@
   gitUpdater,
   pytestCheckHook,
   fonttools,
+  hatch-vcs,
   hatchling,
   biplist,
 }:
 
 buildPythonPackage rec {
   pname = "opentype-feature-freezer";
-  version = "1.0.1";
+  version = "1.32.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twardoch";
     repo = "fonttools-opentype-feature-freezer";
     tag = "v${version}";
-    hash = "sha256-8aJYQyUpcEOyzVHZ0LXfGJ1Tsxe5HICcfkFUdsI+/GI=";
+    hash = "sha256-uwU9lsTK6XlKwar46DLTzjwtD/zQDJnC+Kq/sVNCNE0=";
   };
 
   build-system = [
+    hatch-vcs
     hatchling
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [ fonttools ];
 
@@ -39,15 +43,6 @@ buildPythonPackage rec {
     "app/dmgbuild_settings.py"
     # Missing module
     "app/OTFeatureFreezer.py"
-  ];
-
-  disabledTests = [
-    # File not found
-    "test_freeze"
-    # AssertionError: assert '' == '# Scripts an...m,pnum,tnum\n'
-    "test_report"
-    # assert False
-    "test_warn_substituting_glyphs_without_unicode"
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

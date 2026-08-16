@@ -14,6 +14,7 @@
   redis,
 
   # test
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "4.1.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
     tag = "v${version}";
-    hash = "sha256-2gWbabdRqwWiC4xbMx/VGBwwMcygVMKJswXgd4Ia+xE=";
+    hash = "sha256-DT4WyGrayI12Sid6yLOit68vW/YT4cHsRYjd4oo0/J8=";
   };
 
   build-system = [
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
     filelock
     pytestCheckHook
     pytest-asyncio

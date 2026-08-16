@@ -1,16 +1,17 @@
 {
   lib,
   buildDunePackage,
-  dune_3,
+  ocaml,
+  dune,
   csexp,
+  version ? if lib.versionAtLeast ocaml.version "4.13" then dune.version else "3.22.2",
 }:
 
 buildDunePackage {
   pname = "dune-configurator";
+  inherit version;
 
-  inherit (dune_3) src version patches;
-
-  minimalOCamlVersion = "4.05";
+  inherit (dune.override { inherit version; }) src;
 
   dontAddPrefix = true;
 

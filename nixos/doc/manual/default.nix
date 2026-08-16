@@ -201,8 +201,9 @@ rec {
           --script ./highlightjs/loader.js \
           --script ./anchor.min.js \
           --script ./anchor-use.js \
-          --toc-depth 1 \
-          --chunk-toc-depth 1 \
+          --sidebar-depth 2 \
+          --header ${./header.html}\
+          --no-navheader \
           ./manual.md \
           $dst/${common.indexPath}
 
@@ -250,17 +251,17 @@ rec {
             </chapter>
           </book>
         '';
-        passAsFile = [ "doc" ];
+        __structuredAttrs = true;
       }
       ''
         # Generate the epub manual.
         dst=$out/${common.outputPath}
 
-        xsltproc \
+        printf "%s" "$doc" | xsltproc \
           --param chapter.autolabel 0 \
           --nonet --xinclude --output $dst/epub/ \
           ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
-          $docPath
+          -
 
         echo "application/epub+zip" > mimetype
         manual="$dst/nixos-manual.epub"

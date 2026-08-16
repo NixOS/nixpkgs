@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcu";
-  version = "1.1.119";
+  version = "1.1.128";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "bcu";
     tag = "bcu_${finalAttrs.version}";
-    hash = "sha256-GVnUkIoqHED/9c3Tr4M29DB+t6Q8OPDcxVWKNn/lU/8=";
+    hash = "sha256-8q9xJYEZfyC8ETNi3q8YQOtBGMmI4EQLp7LKxPaU65Q=";
   };
 
   patches = [ ./darwin-install.patch ];

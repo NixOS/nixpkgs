@@ -14,17 +14,25 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.10";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-wq0uqS0gNM4w6E+1pTPU6C8Mx4j8/MNp+0Oiw1kbwck=";
+    hash = "sha256-uqsxqza8b/D0EwnT/E8tWJkLzUGSjc4hnZuRvFBRAuk=";
   };
 
-  cargoHash = "sha256-Kj+eaTMHMQQHN0X3prIuZm1wvfnaV7BUlUKem6JLtc8=";
+  postPatch = ''
+    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
+    substituteInPlace justfile \
+      --replace-fail \
+      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
+      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
+  '';
+
+  cargoHash = "sha256-pQmWdt53G/JJN37jTkGBYb1lfOT6aiwwNXKZGA9Es7w=";
 
   buildFeatures = [ "nixos" ];
 
@@ -35,6 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Reported this issue upstream in:
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env = {
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+    DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  };
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -48,18 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  postPatch = ''
-    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
-    substituteInPlace justfile \
-      --replace-fail \
-      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
-      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
-  '';
-
-  preFixup = ''
-    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
-  '';
-
   dontUseJustBuild = true;
   dontUseJustCheck = true;
 
@@ -72,7 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
+  '';
 
   passthru = {
     tests = {

@@ -6,16 +6,14 @@
 }:
 buildGoModule {
   pname = "mozhi";
-  version = "0-unstable-2026-04-09";
+  version = "0-unstable-2026-06-11";
 
   src = fetchFromCodeberg {
     owner = "aryak";
     repo = "mozhi";
-    rev = "bab94055f993ee64e2320d7e8d1f974d75f5b6e7";
-    hash = "sha256-XAz+YkuRXbSIliXrZTvw6ieRaSHd5b9zZqf/NasEys0=";
+    rev = "095c73f04bc24f51dcb4a0155a5f10f87f768a8c";
+    hash = "sha256-c792IEMToojcLgsCpMizsszVwymZldvRVP9eWuEO5sY=";
   };
-
-  patches = [ ./go-modules.patch ];
 
   vendorHash = "sha256-ZFbgq/zeBTK6wb5VHHyTNrq8RuNhWTy8PyA1mZcbKYc=";
 

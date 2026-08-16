@@ -116,7 +116,11 @@ let
       # the sourceRoot if it weren't for the patch.
       postPatch =
         commonPostPatch
+        # cython 3.1 dropped the python 2 `long` builtin
         + ''
+          substituteInPlace src/monosat/api/python/monosat/monosat_p.pyx \
+            --replace-fail '(int, long)' 'int' \
+            --replace-fail '(int,long)' 'int'
           cd src/monosat/api/python
         ''
         +

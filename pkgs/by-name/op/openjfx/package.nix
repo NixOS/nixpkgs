@@ -13,7 +13,6 @@
   python3,
   ruby,
 
-  gtk2,
   gtk3,
   libxtst,
   libxxf86vm,
@@ -91,6 +90,14 @@ stdenv.mkDerivation {
           ];
           hash = "sha256-WuJtzPy0IV4xvn+i5xeDqekWO0VR2GIfsYKkEmh8KKU=";
         })
+        # Drop GTK2 support
+        (fetchpatch2 {
+          url = "https://github.com/openjdk/jfx/commit/63635ee8160ba6507d625c44320b58e2f9bfb87a.patch?full_index=1";
+          includes = [
+            "buildSrc/linux.gradle"
+          ];
+          hash = "sha256-p2vRy8jA/JJBGCC5irV3gGbcJqChFNi+ViMeQ1wjtU0=";
+        })
       ]
   );
 
@@ -105,7 +112,6 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
     libxtst
     libxxf86vm

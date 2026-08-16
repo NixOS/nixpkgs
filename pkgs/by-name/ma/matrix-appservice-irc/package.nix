@@ -5,7 +5,7 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   node-gyp-build,
-  nodejs-slim,
+  nodejs-slim_22,
   matrix-sdk-crypto-nodejs,
   nixosTests,
   nix-update-script,
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs-slim
+    nodejs-slim_22
     yarn
     node-gyp-build
   ];

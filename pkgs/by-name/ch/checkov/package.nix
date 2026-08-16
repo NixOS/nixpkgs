@@ -35,18 +35,19 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.2.525";
+  version = "3.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-IphJb4D9xSddvyXRKYoZZD5qRi7dAccWQJCaLnWEwDs=";
+    hash = "sha256-XbfuMOXpG1sQgqiq42kJB3zmcKrBGhgLaopvSV0fFVY=";
   };
 
   pythonRelaxDeps = [
     "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
+    "aiohttp"
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -96,6 +97,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     docker
     dockerfile-parse
     dpath
+    ecdsa
     flake8
     gitpython
     igraph
@@ -204,9 +206,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     mainProgram = "checkov";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhdle14
-      fab
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 })

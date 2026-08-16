@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "118";
+  version = "120";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-SasoLZ8Ay+aqBItT/O8RMGEbPXxXsL//ssvttMcnZnQ=";
+    hash = "sha256-/J2neHRfyplsdEBp8ziNiOT5mLBKYobxJ0/oeSRw4g0=";
   };
 
   postPatch = ''

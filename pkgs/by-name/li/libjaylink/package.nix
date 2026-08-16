@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
   version = "0.4.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";

@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
+    hash = "sha256-EE4JuiiwgdQlTsX6dE8KRjcGZHRiQVDXlDVFHchfyYs=";
   };
 
   build-system = [ setuptools ];
@@ -125,6 +125,17 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+
+    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
+    # self.subTest(dtype=...) when shipping subtest reports between workers.
+    # The assertions themselves pass; the failure is a harness artifact of running with
+    # --numprocesses.
+    # New test in jax 0.10.2 (tests/random_impl_test.py).
+    "test_random_bits"
+
+    # Jax uses deprecated numpy logic as an oracle. Fixed upstream in jax 0.11.0, can't be properly backported.
+    # https://github.com/jax-ml/jax/commit/d219f03b589a1075f499148113aa9c647e1be0b9
+    "testCross"
   ]
   ++ lib.optionals usingMKL [
     # See

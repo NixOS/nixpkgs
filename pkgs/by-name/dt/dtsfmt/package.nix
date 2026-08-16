@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Auto formatter for device tree files";
     homepage = "https://github.com/mskelton/dtsfmt";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ toodeluna ];
+    maintainers = with lib.maintainers; [ luna-the-tuna ];
     mainProgram = "dtsfmt";
   };
 })

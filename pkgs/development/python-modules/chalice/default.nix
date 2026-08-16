@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -25,16 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chalice";
-  version = "1.32.0";
+  version = "1.33.0";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
     tag = finalAttrs.version;
-    hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
+    hash = "sha256-c5xzgrxRFRlvgMnf/L8rhG7rYJLtuMvDZHYsPaHkdRs=";
   };
 
   build-system = [ setuptools ];
@@ -78,7 +75,6 @@ buildPythonPackage (finalAttrs: {
     "test_can_import_env_vars"
     "test_stack_trace_printed_on_error"
     # Don't build
-    "test_can_generate_pipeline_for_all"
     "test_build_wheel"
     # Tests require dist
     "test_setup_tar_gz_hyphens_in_name"

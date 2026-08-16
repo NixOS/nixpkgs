@@ -10,11 +10,11 @@
 buildKodiAddon rec {
   pname = "trakt";
   namespace = "script.trakt";
-  version = "3.8.2";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-75neHPVWpHhzMIOfNFvvX/Xqy3n1DO3SGg16zv/r9dU=";
+    sha256 = "sha256-kjA3kk1Ii3PylfwgiKpLCRe6TGMNDgOppFJM38rgVWU=";
   };
 
   propagatedBuildInputs = [

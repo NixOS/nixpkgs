@@ -6,13 +6,13 @@
 }:
 let
   pname = "hydralauncher";
-  version = "3.9.5";
+  version = "4.1.1";
   src = fetchurl {
     url = "https://github.com/hydralauncher/hydra/releases/download/v${version}/hydralauncher-${version}.AppImage";
-    hash = "sha256-FFF5k+eGKg066zYYc9GvRMCsXdu092h9SQGvO6S8rBA=";
+    hash = "sha256-Xmo8pY5Aj45hOJW2OSvcpw6Jh6bc/znR0Q6jo6AWkVc=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+  appimageContents = appimageTools.extract { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit pname src version;

@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 LATEST_DEB=$(curl -s https://repo.cider.sh/apt/pool/main/ | \
-    grep -oP 'cider-v(\d+\.\d+\.\d+)-linux-x64\.deb' | \
+    grep -oP 'cider-v(\d+\.\d+\.\d+(?:\.\d+)?)-linux-x64\.deb' | \
     sort -rV | head -n 1)
 
 if [[ -z "$LATEST_DEB" ]]; then

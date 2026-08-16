@@ -58,23 +58,38 @@ let
 
   amnezia-xray = callPackage ./xray-lib.nix { };
 
-  amneziaPremiumConfig = fetchurl {
-    url = "https://raw.githubusercontent.com/amnezia-vpn/amnezia-client-lite/f45d6b242c1ac635208a72914e8df76ccb3aa44c/macos-signed-build.sh";
-    hash = "sha256-PnaPVPlyglUphhknWwP7ziuwRz+WOz0k9WRw6Q0nG2c=";
-    postFetch = ''
-      sed -nri '/PROD_AGW_PUBLIC_KEY|PROD_S3_ENDPOINT/p' $out
-    '';
-  };
+  # Amnezia Gateway (AGW) public keys for premium server list verification.
+  # These PEM-formatted RSA public keys are hardcoded in the upstream binary
+  # and used to verify signatures on server list responses from the AGW service.
+  # The original values were extracted from the upstream linux binary using
+  # `strings` command, as they are not present in any public source files.
+  # Newlines are escaped (\n -> \\n) to prevent Makefile generation failures
+  # during build when these variables are exported via preConfigure.
+  dev-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (builtins.readFile ./dev_agw_public_key);
+  dev-agw-endpoint = "http://gw.dev.amzsvc.com:80/";
+  dev-s3-endpoint = "https://s3.eu-north-1.amazonaws.com/amnezia-dev/";
+
+  prod-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (
+    builtins.readFile ./prod_agw_public_key
+  );
+  prod-s3-endpoint = lib.concatStringsSep ", " [
+    "https://s3.eu-north-1.amazonaws.com/amnezia/"
+    "https://amnzstrg01.blob.core.windows.net/lambda-list/"
+    "https://storage.googleapis.com/lambda-list/"
+    "https://objectstorage.eu-zurich-1.oraclecloud.com/n/zrhfyaq6qxvh/b/lambda-list/o/"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.14.5";
+  version = "4.8.21.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-ijo6PC1Be06K8hxvgjybLvU80xEYUPahBV4f5JqabLc=";
+    hash = "sha256-xNmbXLl+71DhzbGdSobkV1aYbj1XqC9A/3VPjDLsF7A=";
     fetchSubmodules = true;
   };
 
@@ -94,6 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "int nVersion = 1;" "int nVersion = 0;"
     substituteInPlace client/ui/qautostart.cpp \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
+    # https://github.com/amnezia-vpn/amnezia-client/pull/2372
+    substituteInPlace client/ui/systemtray_notificationhandler.cpp \
+      --replace-fail 'm_systemTrayIcon.show();' ''' \
+      --replace-fail 'setTrayState(Vpn::ConnectionState::Disconnected);' 'setTrayState(Vpn::ConnectionState::Disconnected); m_systemTrayIcon.show();'
+    substituteInPlace client/main.cpp \
+      --replace-fail '#include "version.h"' $'#include "version.h"\n#include <QIcon>' \
+      --replace-fail 'app.setApplicationDisplayName(APPLICATION_NAME);' $'app.setApplicationDisplayName(APPLICATION_NAME);\n    app.setWindowIcon(QIcon::fromTheme("AmneziaVPN"));'
     substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/icons/hicolor/512x512/apps/AmneziaVPN.png"
     substituteInPlace deploy/data/linux/AmneziaVPN.service \
@@ -132,8 +154,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
   ];
 
+  # These environment variables are baked into the binary at build time.
+  # They configure which Amnezia Gateway servers and S3 endpoints the client
+  # uses for fetching verified server lists (premium functionality).
   preConfigure = ''
-    source ${amneziaPremiumConfig}
+    export DEV_AGW_PUBLIC_KEY="${dev-agw-public-key}"
+    export DEV_AGW_ENDPOINT="${dev-agw-endpoint}"
+    export DEV_S3_ENDPOINT="${dev-s3-endpoint}"
+    export PROD_AGW_PUBLIC_KEY="${prod-agw-public-key}"
+    export PROD_S3_ENDPOINT="${prod-s3-endpoint}"
   '';
 
   installPhase = ''
@@ -147,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Amnezia VPN Client";

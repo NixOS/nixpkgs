@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -43,15 +44,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optuna";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DgmNIq4LksG3YRQLSbshMzGGRW/qAxMccs/oCRxI5tc=";
+    hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
   };
+
+  patches = [
+    # Fix test for pytest logger behavior changes
+    (fetchpatch {
+      url = "https://github.com/optuna/optuna/commit/ba57cff4a1990f3943cf250edc32d34e6ddd436d.patch";
+      hash = "sha256-SGsZcl+F62JN7LEAfmyanswl/tUZfZv4doh3lS5JSkQ=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -114,13 +124,29 @@ buildPythonPackage (finalAttrs: {
     "test_get_timeline_plot_with_killed_running_trials"
     # times out under load
     "test_optimize_with_progbar_timeout"
+
+    # pytest >= 9 leaves its logging handlers (including duplicate LogCaptureHandlers) attached to
+    # the `optuna` logger, breaking these assertions on handler state
+    "test_default_handler"
+    "test_filter_inf_trials_message"
+    "test_propagation"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ValueError: Failed to start Kaleido subprocess. Error stream
     # kaleido/executable/kaleido: line 5:  5956 Illegal instruction: 4  ./bin/kaleido $@
+    "test_edf_plot_no_trials"
+    "test_edf_plot_no_trials_studies"
     "test_get_optimization_history_plot"
+    "test_get_timeline_plot"
+    "test_plot_contour"
+    "test_plot_edf_with_multiple_studies"
+    "test_plot_edf_with_target"
+    "test_plot_edf_with_target_name"
     "test_plot_intermediate_values"
+    "test_plot_parallel_coordinate"
+    "test_plot_param_importances"
     "test_plot_rank"
+    "test_plot_slice"
     "test_plot_terminator_improvement"
   ];
 

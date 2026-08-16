@@ -39,8 +39,8 @@ let
       dnsmasq
       e2fsprogs
       findutils
-      getent
       gawk
+      getent
       gnugrep
       gnused
       gnutar
@@ -50,32 +50,28 @@ let
       iptables
       iw
       kmod
+      lego
       libxfs
       lvm2
-      lz4
       lxcfs
+      lz4
       nftables
       qemu-utils
       qemu_kvm
       rsync
+      skopeo
       squashfs-tools-ng
       squashfsTools
       sshfs
       swtpm
       systemd
       thin-provisioning-tools
+      umoci
       util-linux
       virtiofsd
       xdelta
       xz
       zstd
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-      skopeo
-      umoci
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
-      lego
     ]
     ++ lib.optionals config.security.apparmor.enable [
       apparmor-bin-utils
@@ -98,9 +94,8 @@ let
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
     ]
-    ++ lib.optionals cfg.bucketSupport [
-      minio
-      minio-client
+    ++ lib.optionals cfg.storage.truenas.enable [
+      truenas-incus-ctl
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
@@ -213,13 +208,6 @@ in
         description = "The incus client package to use. This package is added to PATH.";
       };
 
-      bucketSupport = lib.mkOption {
-        type = lib.types.bool;
-        description = "Enable bucket support using minio, which is an insecure and unmaintained S3 provider.";
-        default = if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;
-        defaultText = lib.literalExpression ''if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;'';
-      };
-
       softDaemonRestart = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -299,6 +287,8 @@ in
         '';
       };
 
+      storage.truenas.enable = lib.mkEnableOption "TrueNAS storage driver support";
+
       ui = {
         enable = lib.mkEnableOption "Incus Web UI";
 
@@ -328,6 +318,10 @@ in
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
+      }
+      {
+        assertion = cfg.storage.truenas.enable -> config.services.openiscsi.enable;
+        messages = "`virtualisation.incus.storage.truenas.enable` requires `services.openiscsi.enable`";
       }
     ];
 
@@ -361,6 +355,9 @@ in
 
       # gui console support
       pkgs.spice-gtk
+    ]
+    ++ lib.optionals cfg.storage.truenas.enable [
+      pkgs.truenas-incus-ctl
     ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
@@ -378,22 +375,28 @@ in
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
         "incusd".profile = ''
-          # This profile allows everything and only exists to give the
-          # application a name instead of having the label "unconfined"
+          # incusd is deliberatly left unconfined, with NO named profile attached to the binary.
+          # Incus checks its own confinement at startup by reading /proc/self/attr/current
+          # (https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/sys/apparmor.go).
+          # Anything other than "unconfined" makes Incus believe that the host process is
+          # itself confined, which sends every container down the "reuse my own profile" branch in
+          # https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/instance/drivers/driver_lxc.go
+          # instead of generating a "proper" per-container profile. Furthermore,
+          # that branch only strips " (enforce)" suffix before handing the string to lxc.apparmor.profile
+          # (https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/instance/drivers/driver_lxc.go#L96),
+          # so the named profile with flags=(unconfined) produces a literal string
+          # "incusd (unconfined)", which the kernel rejects at change_profile() time
+          # with "label not found", failing every `incus start` when AppArmor is enabled.
+          # This was not caught before as AppArmor was stifled by bpf.
+
+          # We keep this policy to pull in the per-container /
+          # per-archive profiles incusd generates at runtime so
+          # apparmor_parser loads them.
 
           abi <abi/4.0>,
           include <tunables/global>
 
-          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
-            userns,
-
-            include "/var/lib/incus/security/apparmor/cache"
-
-            # Site-specific additions and overrides. See local/README for details.
-            include if exists <local/incusd>
-          }
-
-          include "/var/lib/incus/security/apparmor/profiles"
+          include if exists "/var/lib/incus/security/apparmor/profiles"
         '';
       };
       includes."abstractions/base" = ''
@@ -442,6 +445,8 @@ in
         "network-online.target"
       ]
       ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
+
+      stopIfChanged = lib.mkIf cfg.softDaemonRestart false;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -501,6 +506,7 @@ in
 
       # restarting this service will affect instances
       restartIfChanged = false;
+      stopIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
@@ -573,4 +579,10 @@ in
 
     virtualisation.lxc.lxcfs.enable = true;
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "incus" "bucketSupport" ] ''
+      The option was only a temporary workaround to gate the insecure minio dependency until it could be dropped.
+    '')
+  ];
 }

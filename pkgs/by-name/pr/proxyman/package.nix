@@ -1,61 +1,68 @@
 {
   lib,
-  appimageTools,
-  fetchurl,
-  asar,
-  nix-update-script,
+  stdenv,
+  callPackage,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 let
   pname = "proxyman";
-  version = "3.11.0";
 
-  src = fetchurl {
-    url = "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/${version}/Proxyman-${version}.AppImage";
-    hash = "sha256-hzpSei0gR9apcJ6AVNoiqSUJLMvP0V/6STmGKeUg5vI=";
-  };
+  updateScript = {
+    command = writeShellScript "proxyman-update-script" ''
+      set -euo pipefail
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-    postExtract = ''
-      ${asar}/bin/asar extract $out/resources/app.asar app
+      updateArtifact() {
+        local repo=$1 url=$2 file=$3 system=$4 label=$5
+        local version hash
+        version=$(${lib.getExe curl} --fail -s ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
+          "https://api.github.com/repos/$repo/releases/latest" | ${lib.getExe jq} -r .tag_name)
+        if [[ -z "$version" || "$version" == "null" ]]; then
+          echo "could not determine latest release of $repo" >&2
+          return 1
+        fi
+        if grep -q "version = \"$version\";" "$file"; then
+          echo '[]'
+          return
+        fi
+        url=''${url//@version@/$version}
+        hash=$(nix store prefetch-file --json "$url" | ${lib.getExe jq} -r .hash)
+        ${lib.getExe' common-updater-scripts "update-source-version"} proxyman "$version" "$hash" \
+          --file="$file" --system="$system" --print-changes \
+          | ${lib.getExe jq} --arg label "$label" \
+              'map(.commitMessage = "proxyman: (\($label)) \(.oldVersion) -> \(.newVersion)")'
+      }
 
-      # This will fix the issue with Proxyman not detecting NixOS as a valid Linux environment
-      substituteInPlace app/dist/main/main.js --replace-fail "/etc/ca-certificates/trust-source/anchors/" "/etc/ssl/certs/"
+      # Electron app for Linux
+      linuxChanges=$(updateArtifact ProxymanApp/proxyman-windows-linux \
+        "https://github.com/ProxymanApp/proxyman-windows-linux/releases/download/@version@/Proxyman-@version@.AppImage" \
+        pkgs/by-name/pr/proxyman/linux.nix x86_64-linux linux)
 
-      # This will permanently mark the certificate as installed, as this should be done through Nix config rather than
-      # placing / editing a file in /etc like Proxyman would expect.
-      # Configure the certificate located in "~/.config/Proxyman/certificate/certs/ca.pem" using security.pki.certificates in your nix config
-      substituteInPlace app/dist/main/main.js --replace-fail "return this.isFile(this.getNewCertPath(e))" "return true"
+      # Native macOS app (independent versioning)
+      darwinChanges=$(updateArtifact ProxymanApp/Proxyman \
+        "https://github.com/ProxymanApp/Proxyman/releases/download/@version@/Proxyman_@version@.dmg" \
+        pkgs/by-name/pr/proxyman/darwin.nix aarch64-darwin darwin)
 
-      ${asar}/bin/asar pack app $out/resources/app.asar
+      ${lib.getExe jq} -n "$linuxChanges + $darwinChanges"
     '';
-  };
-
-in
-appimageTools.wrapAppImage {
-  inherit pname version;
-  src = appimageContents;
-
-  extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/proxyman.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/proxyman.png -t $out/share/icons/hicolor/256x256/apps
-    substituteInPlace $out/share/applications/proxyman.desktop \
-      --replace-fail "Exec=AppRun" "Exec=proxyman --"
-  '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-    inherit src; # needed for nix-update to find the GitHub URL
+    supportedFeatures = [ "commit" ];
   };
 
   meta = {
     description = "Capture, inspect, and manipulate HTTP(s) requests/responses with ease";
     homepage = "https://proxyman.com";
-    changelog = "https://proxyman.com/changelog-windows";
     license = lib.licenses.unfree;
     mainProgram = "proxyman";
-    maintainers = with lib.maintainers; [ nilathedragon ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      nilathedragon
+      matteopacini
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit pname updateScript meta; }
+else
+  callPackage ./linux.nix { inherit pname updateScript meta; }

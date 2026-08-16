@@ -6,7 +6,6 @@
   pkg-config,
   fftw,
   file,
-  gnome2,
   openexrSupport ? true,
   openexr,
   libzipSupport ? true,
@@ -15,7 +14,6 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  # libxmu is not used if libunique is.
   libXmuSupport ? false,
   libxmu,
   libxsltSupport ? true,
@@ -24,11 +22,10 @@
   cfitsio,
   zlibSupport ? true,
   zlib,
-  libuniqueSupport ? true,
-  libunique,
   libpngSupport ? true,
   libpng,
   openglSupport ? !stdenv.hostPlatform.isDarwin,
+  gtkglext,
   libGL,
 }:
 
@@ -50,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ]
   ++ lib.optionals openglSupport [
-    gnome2.gtkglext
+    gtkglext
     libGL
   ]
   ++ lib.optional openexrSupport openexr
@@ -61,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libwebpSupport libwebp
   ++ lib.optional zlibSupport zlib
-  ++ lib.optional libuniqueSupport libunique
   ++ lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly

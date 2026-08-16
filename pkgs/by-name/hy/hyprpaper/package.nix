@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   hyprwayland-scanner,
@@ -27,7 +27,6 @@
   libwebp,
   libxdmcp,
   pango,
-  pcre,
   pcre2,
   wayland,
   wayland-protocols,
@@ -35,7 +34,7 @@
   versionCheckHook,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
   version = "0.8.4";
 
@@ -80,7 +79,6 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxdmcp
     pango
-    pcre
     pcre2
     wayland
     wayland-protocols
@@ -90,13 +88,16 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = gcc15Stdenv.hostPlatform.isDarwin;
+    broken = gcc16Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

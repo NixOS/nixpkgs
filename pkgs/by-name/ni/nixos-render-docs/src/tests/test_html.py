@@ -149,6 +149,14 @@ def test_footnotes() -> None:
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' }, {})
     assert c._render(sample1) == unpretty("""
+        <div class="note">
+          <h3 class="title">Note</h3>
+          <p>This is a <span class="emphasis"><em>GFM</em></span> note.</p>
+          <div class="caution">
+            <h3 class="title">Caution</h3>
+            <p>This is a <span class="strong"><strong>nested</strong></span> GFM alert.</p>
+          </div>
+        </div>
         <div class="warning">
          <h3 class="title">Warning</h3>
          <p>foo</p>

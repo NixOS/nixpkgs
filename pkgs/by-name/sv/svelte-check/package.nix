@@ -4,20 +4,23 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-check";
-  version = "4.3.1";
+  version = "4.7.5";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
-    tag = "svelte-check-${finalAttrs.version}";
-    hash = "sha256-+KDl7tTyXo6QMQpMGA4hSChDaPrfqfVKJXGunTlo9Rg=";
+    tag = "svelte-check@${finalAttrs.version}";
+    hash = "sha256-9fpWKLmuH9TZAyARYgBxQYlx6qz36fU3HueKAGR0H6E=";
   };
 
   pnpmWorkspaces = [ "svelte-check..." ];
@@ -29,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 2;
-    hash = "sha256-3bsY31sp5hjTYhRiZniAMVb3kZ1EqOlbyOvljU8jHlY=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-lzphyVC1fpT5EFIuVz7ZMAiSLeyXhjSuOpAqSklh6QU=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     extraArgs = [
       "--use-github-releases"
       "--version-regex"
-      "svelte-check-(.*)"
+      "svelte-check@(.*)"
     ];
   };
 

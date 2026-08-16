@@ -60,6 +60,7 @@ lib.checkListOfEnum "${pname}: color variants"
     # Package may install many small files.
     dontPatchELF = true;
     dontRewriteSymlinks = true;
+    dontWrapQtApps = true;
 
     # FIXME: https://github.com/yeyushengfan258/Reversal-icon-theme/issues/108
     dontCheckForBrokenSymlinks = true;

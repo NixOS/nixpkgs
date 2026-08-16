@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwd";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xwd";
     tag = "xwd-${finalAttrs.version}";
-    hash = "sha256-cEKm0c50qwWzGSkH1sdovNfN3dW1hmnaEDwuJKwxGdo=";
+    hash = "sha256-F88okvK9OjnYA9WY09vhnFocKLoLUNZTZI2PfhyD98M=";
   };
 
   strictDeps = true;

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  extra-cmake-modules,
+  cmake,
   kdePackages,
   qtbase,
   qtdeclarative,
@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MluY8nkMtg1uLAStDZFDxyJoeDrcp3smZ4U5IG5sXMk=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    kdePackages.extra-cmake-modules
+  ];
   buildInputs = [
     kdePackages.kirigami
     qtbase

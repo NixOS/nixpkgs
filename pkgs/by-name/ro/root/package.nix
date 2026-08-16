@@ -1,7 +1,9 @@
 {
   stdenv,
   lib,
+  blas,
   callPackage,
+  curl,
   fetchFromGitHub,
   fetchurl,
   makeWrapper,
@@ -14,7 +16,6 @@
   fftw,
   ftgl,
   gl2ps,
-  glew,
   gnugrep,
   gnused,
   gsl,
@@ -50,11 +51,12 @@
   patchRcPathPosix,
   onetbb,
   xrootd,
+  freetype,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.38.02";
+  version = "6.40.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
-    hash = "sha256-d9NNK8oOpyCs/UN5i8tdCaKFhAE7TQopEII8hn1L+kI=";
+    hash = "sha256-Z2+P3okmzgWQK+f0TOfUkqSiBgAi/KsOPRxE9twPveg=";
   };
 
   clad_src = fetchFromGitHub {
@@ -70,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    tag = "v2.0";
-    hash = "sha256-Oj7gGSvnGuYdggonPWjrwPn/06cD+ig3eefRh7xaiPs=";
+    tag = "v2.3";
+    hash = "sha256-gEJlQ2Vg9EUX1tslI4HaUnusvdSomsYHiE8mZMygEOw=";
   };
 
   # ROOT requires a patched version of clang
@@ -88,12 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     finalAttrs.clang
+    blas
+    curl
     davix
     fftw
     ftgl
     giflib
     gl2ps
-    glew
     gsl
     libjpeg
     libpng
@@ -115,7 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk.privateFrameworksHook
+    freetype
+  ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGLU
     libGL
@@ -135,11 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
     patchShebangs cmake/unix/
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Eliminate impure reference to /System/Library/PrivateFrameworks
-    substituteInPlace core/macosx/CMakeLists.txt \
-      --replace-fail "-F/System/Library/PrivateFrameworks " ""
   ''
   +
     lib.optionalString
@@ -167,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
+    for prog in rooteventselector rootmv rootprint rootslimtree; do
       wrapProgram "$out/bin/$prog" \
         --set PYTHONPATH "$out/lib"
     done

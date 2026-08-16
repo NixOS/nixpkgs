@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "garnet";
-  version = "1.1.5";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
     tag = "v${version}";
-    hash = "sha256-YMfeY5VaC9brkiaK5UAkTlAUy7jFgbKBXPml9GYDsUs=";
+    hash = "sha256-bzmB7PbYp09Jo7WZO1e4yipaonFljnLJfkucA+qAF/4=";
   };
 
   projectFile = "main/GarnetServer/GarnetServer.csproj";

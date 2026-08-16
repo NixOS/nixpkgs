@@ -1,0 +1,22 @@
+From: "Matthias J. Kannwischer" <matthias@zerorisc.com>
+Date: Sat, 30 May 2026 16:37:44 +0800
+Subject: pa_j: accept camlp5 8.05 for OCaml 5.4
+
+Signed-off-by: Matthias J. Kannwischer <matthias@zerorisc.com>
+---
+ pa_j/chooser.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pa_j/chooser.sh b/pa_j/chooser.sh
+index 5ec8d00..de5c8c8 100755
+--- a/pa_j/chooser.sh
++++ b/pa_j/chooser.sh
+@@ -20,7 +20,7 @@ CAMLP5_FULL_VERSION=`camlp5 -v 2>&1 | cut -f3 -d' ' | cut -f1-3 -d'.' | cut -f1
+ 
+ if test ${OCAML_BINARY_VERSION} = "3.0"
+ then echo "pa_j_${OCAML_VERSION}.ml"
+-elif test ${CAMLP5_FULL_VERSION} = "8.04.00"
++elif test ${CAMLP5_BINARY_VERSION} = "8.04" -o ${CAMLP5_BINARY_VERSION} = "8.05"
+ then
+   if test ${OCAML_BINARY_VERSION} = "5.4"
+   then echo "pa_j_5.4_8.04.00.ml"

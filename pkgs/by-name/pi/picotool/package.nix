@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picotool";
-  version = "2.2.0-a4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "picotool";
     tag = finalAttrs.version;
-    hash = "sha256-kIB/ODAvwWWoAQDq2cMiFuNWjzzLgPuRQv0NluWYU+Y=";
+    hash = "sha256-w9kVCdwevEjc12NNZWztehp6SSgsd9ehSaxqc9sg4O4=";
   };
 
   postPatch = ''
@@ -62,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/raspberrypi/picotool/releases/tag/${finalAttrs.version}";
     mainProgram = "picotool";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = with lib.maintainers; [
+      muscaln
+      nulleric
+    ];
     platforms = lib.platforms.unix;
   };
 })

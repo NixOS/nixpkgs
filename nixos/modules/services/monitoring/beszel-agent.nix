@@ -16,6 +16,11 @@ in
   options.services.beszel.agent = {
     enable = lib.mkEnableOption "beszel agent";
     package = lib.mkPackageOption pkgs "beszel" { };
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/beszel-agent";
+      description = "Data directory of beszel-agent.";
+    };
     openFirewall = (lib.mkEnableOption "") // {
       description = "Whether to open the firewall port (default 45876).";
     };
@@ -126,7 +131,7 @@ in
 
       environment = lib.mapAttrs (
         _: value: if lib.isBool value then (lib.boolToString value) else value
-      ) cfg.environment;
+      ) (cfg.environment // { DATA_DIR = cfg.dataDir; });
 
       path =
         cfg.extraPath
@@ -147,6 +152,7 @@ in
         '';
 
         EnvironmentFile = cfg.environmentFile;
+        StateDirectory = baseNameOf cfg.dataDir;
 
         # adds ability to monitor docker/podman containers
         SupplementaryGroups =

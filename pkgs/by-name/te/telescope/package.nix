@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11";
 
   src = fetchFromGitHub {
-    owner = "omar-polo";
+    owner = "telescope-browser";
     repo = "telescope";
     tag = finalAttrs.version;
     hash = "sha256-GKeUXa4RKYkoywrCrpenfLt10Rdj9L0xYI3tf2hFAbk=";

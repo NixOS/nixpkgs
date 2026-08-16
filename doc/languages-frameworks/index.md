@@ -2,6 +2,10 @@
 
 The [standard build environment](#chap-stdenv) makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accommodated by overriding the appropriate phases of `stdenv`. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
 
+::: {.tip}
+New to packaging? Start with [](#chap-first-package), then return here for the ecosystem you need.
+:::
+
 Each supported language or software ecosystem has its own package set named `<language or ecosystem>Packages`, which can be explored in various ways:
 
 - Search on [search.nixos.org](https://search.nixos.org/packages)
@@ -56,7 +60,6 @@ android.section.md
 astal.section.md
 beam.section.md
 chicken.section.md
-rocq.section.md
 cosmic.section.md
 crystal.section.md
 cuda.section.md
@@ -92,6 +95,7 @@ pkg-config.section.md
 python.section.md
 qt.section.md
 r.section.md
+rocq.section.md
 ruby.section.md
 rust.section.md
 scheme.section.md

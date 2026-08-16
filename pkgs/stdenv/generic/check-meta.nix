@@ -4,45 +4,52 @@
 {
   lib,
   config,
-  hostPlatform,
 }:
 
 let
   inherit (lib)
-    all
     attrValues
+    concatMap
     concatMapStrings
     concatStrings
+    concatStringsSep
     filter
     findFirst
+    foldl'
     getName
-    isDerivation
+    isAttrs
+    isFunction
+    isString
     length
-    concatMap
     mutuallyExclusive
     optional
     optionalString
-    isAttrs
-    isString
+    seq
+    unsafeGetAttrPos
     warn
-    foldl'
+    all
     ;
 
   inherit (lib.lists)
     any
-    toList
-    isList
     elem
+    isList
+    toList
     unique
     ;
 
   inherit (lib.meta)
-    platformMatch
     cpeFullVersionWithVendor
+    platformMatch
     ;
 
   inherit (lib.generators)
     toPretty
+    ;
+
+  inherit (lib.licenses)
+    containsLicenses
+    isFree
     ;
 
   inherit (builtins)
@@ -52,6 +59,7 @@ let
   inherit (import ./problems.nix { inherit lib; })
     problemsType
     genCheckProblems
+    completeMetaProblems
     ;
   checkProblems = genCheckProblems config;
 
@@ -71,7 +79,9 @@ let
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
+  nonEmptyAllowList = allowlist != [ ];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+  nonEmptyBlocklist = blocklist != [ ];
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -83,7 +93,7 @@ let
     assert areLicenseListsValid;
     list:
     let
-      containsListLicenses = lib.licenses.containsLicenses list;
+      containsListLicenses = containsLicenses list;
     in
     attrs:
     attrs ? meta.license
@@ -105,8 +115,9 @@ let
 
   isUnfree =
     licenses:
-    if isAttrs licenses && licenses ? "licenseType" then
-      !(lib.licenses.isFree licenses)
+    # ? is non-strict in its type, so it doubles as performing an isAttrs check
+    if licenses ? licenseType then
+      !(isFree licenses)
     else if isAttrs licenses then
       !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
@@ -116,7 +127,8 @@ let
     else if isString licenses then
       false
     else
-      any (l: !(l.free or true)) licenses;
+      # on a list, check if any of the licenses weren't free (boolean AND)
+      any (l: !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
@@ -124,50 +136,83 @@ let
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
-    let
-      anyHostPlatform = any (platformMatch hostPlatform);
-    in
-    pkg:
-    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+    if allowUnsupportedSystem then
+      _: _: false
+    else
+      hostPlatform:
+      let
+        containsHostSystem = elem hostPlatform.system;
+        matchesHostPlatform = any (platformMatch hostPlatform);
+      in
+      pkg:
+      # in almost all cases, platforms are a simple list of strings, and we
+      # can just check if they contains the current system. we only run the more
+      # intensive platformMatch if necessary
+      (
+        pkg ? meta.platforms
+        && !(containsHostSystem pkg.meta.platforms || matchesHostPlatform pkg.meta.platforms)
+      )
+      || (
+        pkg ? meta.badPlatforms
+        && (containsHostSystem pkg.meta.badPlatforms || matchesHostPlatform pkg.meta.badPlatforms)
+      );
 
-  isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
+  isMarkedInsecure =
+    attrs: attrs ? meta.knownVulnerabilities && attrs.meta.knownVulnerabilities != [ ];
 
-  # Allow granular checks to allow only some unfree packages
+  # Check whether unfree packages are allowed and if not, whether the
+  # package has an unfree license and is not explicitly allowed by the
+  # `allowUnfreePredicate` function.
+  #
   # Example:
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
+  #   allowUnfreePackages = [ "steam" ];
   # }
-  # Defaults to allow all names defined in config.allowUnfreePackages
-  allowUnfreePredicate =
-    let
-      listPredicate = pkg: builtins.elem (lib.getName pkg) (config.allowUnfreePackages or [ ]);
-
-      # Be robust against misconfigured allowUnfreePredicate values such as null
-      explicitPredicate =
-        let
-          raw = config.allowUnfreePredicate or null;
-        in
-        if builtins.isFunction raw then raw else (_: false);
-    in
-    pkg: (listPredicate pkg) || (explicitPredicate pkg);
-
-  # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitly allowed by the
-  # `allowUnfreePredicate` function.
+  # Defaults to allow all names defined in config.allowUnfreePackages, and all
+  # packages that match the unfree predicate function
   hasDeniedUnfreeLicense =
-    attrs: hasUnfreeLicense attrs && !allowUnfree && !allowUnfreePredicate attrs;
+    if allowUnfree then
+      _: false
+    else
+      let
+        listPredicate = pkg: elem (getName pkg) config.allowUnfreePackages;
+        definedListPredicate = config.allowUnfreePackages or [ ] != [ ];
 
-  allowInsecureDefaultPredicate =
-    x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
-  allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
+        explicitPredicate = config.allowUnfreePredicate;
+        # Be robust against misconfigured allowUnfreePredicate values such as null
+        definedExplicitPredicate = isFunction (config.allowUnfreePredicate or null);
+      in
+      if definedListPredicate then
+        if definedExplicitPredicate then
+          attrs: hasUnfreeLicense attrs && !(listPredicate attrs || explicitPredicate attrs)
+        else
+          attrs: hasUnfreeLicense attrs && !listPredicate attrs
+      else if definedExplicitPredicate then
+        attrs: hasUnfreeLicense attrs && !explicitPredicate attrs
+      else
+        hasUnfreeLicense;
 
   allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
   hasDisallowedInsecure =
-    attrs: isMarkedInsecure attrs && !allowInsecure && !allowInsecurePredicate attrs;
+    if allowInsecure then
+      _: false
+    else if config ? allowInsecurePredicate then
+      let
+        inherit (config) allowInsecurePredicate;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else if config ? permittedInsecurePackages then
+      let
+        inherit (config) permittedInsecurePackages;
+        allowInsecurePredicate = x: elem (getNameWithVersion x) permittedInsecurePackages;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else
+      isMarkedInsecure;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
@@ -287,9 +332,9 @@ let
       missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
     in
     ''
-      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${concatStringsSep ", " expectedOutputs}
 
-      however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+      however ${getNameWithVersion attrs} only has the outputs: ${concatStringsSep ", " actualOutputs}
 
       and is missing the following outputs:
 
@@ -298,22 +343,21 @@ let
 
   metaType =
     let
-      types = import ./meta-types.nix { inherit lib; };
+      types = import ../../../lib/meta-types.nix { inherit lib; };
       inherit (types)
         str
-        union
+        either
         int
         attrs
-        attrsOf
         any
         listOf
         bool
         record
+        both
+        not
+        derivation
         ;
-      platforms = listOf (union [
-        str
-        (attrsOf any)
-      ]); # see lib.meta.platformMatch
+      platforms = listOf (either str attrs); # see lib.meta.platformMatch
     in
     record {
       # These keys are documented
@@ -321,31 +365,20 @@ let
       mainProgram = str;
       longDescription = str;
       branch = str;
-      homepage = union [
-        (listOf str)
-        str
-      ];
+      homepage = either str (listOf str);
+      donationPage = str;
       downloadPage = str;
-      changelog = union [
-        (listOf str)
-        str
-      ];
+      changelog = either str (listOf str);
       license =
         let
           # TODO disallow `str` licenses, use a module
-          licenseType = union [
-            (attrsOf any)
-            str
-          ];
+          licenseType = either (both attrs (not derivation)) str;
         in
-        union [
-          (listOf licenseType)
-          licenseType
-        ];
+        either licenseType (listOf licenseType);
       sourceProvenance = listOf attrs;
-      maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
-      nonTeamMaintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
-      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
+      maintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      nonTeamMaintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
@@ -408,6 +441,10 @@ let
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity =
+    hostPlatform:
+    let
+      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+    in
     attrs:
     if !attrs ? meta then
       null
@@ -432,13 +469,13 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(allowlist != [ ] && hasAllowlistedLicense attrs) then
+    else if hasDeniedUnfreeLicense attrs && !(nonEmptyAllowList && hasAllowlistedLicense attrs) then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
-    else if blocklist != [ ] && hasBlocklistedLicense attrs then
+    else if nonEmptyBlocklist && hasBlocklistedLicense attrs then
       {
         reason = "blocklisted";
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
@@ -450,7 +487,7 @@ let
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
       }
-    else if hasUnsupportedPlatform attrs && !allowUnsupportedSystem then
+    else if hasUnsupportedPlatform' attrs then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
@@ -482,7 +519,7 @@ let
     let
       values = attrValues cpeParts;
     in
-    (length values == 11) && !any isNull values;
+    (length values == 11) && !any (v: v == null) values;
   makeCPE =
     {
       part,
@@ -510,9 +547,13 @@ let
   # passed to the builder and is not a dependency.  But since we
   # include it in the result, it *is* available to nix-env for queries.
   # Example:
-  #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
-  #   validity = checkMeta.assertValidity { inherit meta attrs; };
+  #   meta = checkMeta.commonMeta hostPlatform { inherit validity attrs pos references; };
+  #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
+    hostPlatform:
+    let
+      hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
+    in
     {
       validity,
       attrs,
@@ -521,9 +562,9 @@ let
     }:
     let
       outputs = attrs.outputs or [ "out" ];
-      hasOutput = out: builtins.elem out outputs;
-      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
-      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+      hasOutput = out: elem out outputs;
+      maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -571,8 +612,9 @@ let
       );
 
       # Needed for CI to be able to avoid requesting reviews from individual
-      # team members
-      nonTeamMaintainers = attrs.meta.maintainers or [ ];
+      # team members.
+      # Prefer nonTeamMaintainers in case meta is copied from another package
+      nonTeamMaintainers = attrs.meta.nonTeamMaintainers or attrs.meta.maintainers or [ ];
 
       identifiers =
         let
@@ -614,21 +656,46 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purlPartsFormatted =
+            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
+
+          # search for a PURL in the following order:
+          purl =
+            # 1) locally set through API
+            if purlPartsFormatted != null then purlPartsFormatted else null;
+
+          # search for a PURL in the following order:
+          purls =
+            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
+            attrs.meta.identifiers.purls or (
+              # 2) locally set through API
+              if purlPartsFormatted != null then [ purlPartsFormatted ] else [ ]
+            );
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
       broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform attrs;
+      unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
+
+      problems = completeMetaProblems config attrs;
 
       available =
         validity.valid != "no"
@@ -644,13 +711,13 @@ let
     }:
     let
       withError =
-        if isNull error then
+        if error == null then
           true
         else
           let
             msg =
               "Refusing to evaluate package '${getNameWithVersion attrs}' in ${pos_str meta} because it ${error.msg}"
-              + lib.optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
+              + optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
           in
           if config ? handleEvalIssue then
             if error.reason == "problem" then
@@ -665,28 +732,32 @@ let
         let
           msg =
             "Package '${getNameWithVersion attrs}' in ${pos_str meta} ${warning.msg}"
-            + lib.optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
+            + optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
         in
         warn msg acc;
     in
     # Give all warnings first, then error if any
-    builtins.seq (foldl' giveWarning null warnings) withError;
+    seq (foldl' giveWarning null warnings) withError;
 
   assertValidity =
+    hostPlatform:
+    let
+      checkValidity' = checkValidity hostPlatform;
+    in
     { meta, attrs }:
     let
-      invalid = checkValidity attrs;
+      invalid = checkValidity' attrs;
       problems = checkProblems attrs;
     in
-    if isNull invalid then
-      if isNull problems then
+    if invalid == null then
+      if problems == null then
         {
           valid = "yes";
           handled = true;
         }
       else
         {
-          valid = if isNull problems.error then "warn" else "no";
+          valid = if problems.error == null then "warn" else "no";
           handled = handle {
             inherit attrs meta;
             inherit (problems) error warnings;

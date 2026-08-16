@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-ui-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-9NeUiiQ595lE6M/tD5G20l5W9PoInSPM2DgRqK92Bsk=";
+    hash = "sha256-Oibi7+LJK7K1a1fFN2SKy4XiA0gSC4u7Wmk0t86SHaw=";
   };
 
   patches = [

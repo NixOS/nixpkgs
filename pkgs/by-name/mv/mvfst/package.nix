@@ -10,6 +10,7 @@
   folly,
   gflags,
   glog,
+  openssl,
 
   fizz,
 
@@ -22,10 +23,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   outputs = [
-    "bin"
     "out"
     "dev"
   ];
@@ -34,12 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K4rskeF66EHchsBj8wIP3BYBa7SvQ1ohnOV0HPu+y80=";
+    hash = "sha256-H5T039YtYWP01UFtg7Y/7uGt9jhYEa7Q7j/9JhhSDfw=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     folly
     gflags
     glog
+    openssl
   ];
 
   propagatedBuildInputs = [

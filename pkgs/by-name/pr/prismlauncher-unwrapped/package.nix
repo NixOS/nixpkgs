@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   cmark,
-  extra-cmake-modules,
   gamemode,
   jdk17,
   kdePackages,
@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "11.0.2";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-GvAfrZxQSlBnCJ59nvK87jDTVo60D8n25K42SokE1q8=";
+    hash = "sha256-0o31pLKnYY0mulLrZKzZtaTPzCviGsgCnEcBt0Y/aG4=";
   };
 
   postUnpack = ''
@@ -42,10 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
+  # Ensure that instance shortucts point to our final wrapper, rather than this unwrapped version
+  postPatch = ''
+    substituteInPlace launcher/minecraft/ShortcutUtils.cpp \
+      --replace-fail 'QApplication::applicationFilePath()' 'QProcessEnvironment::systemEnvironment().value("NIX_LAUNCHER_WRAPPER", "${placeholder "out"}/bin/prismlauncher")'
+  '';
+
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     jdk17
     stripJavaArchivesHook
   ];

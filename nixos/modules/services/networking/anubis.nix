@@ -374,6 +374,10 @@ in
       anubis = { };
     };
 
+    systemd.slices.system-anubis = {
+      description = "Anubis AI Firewall System Slice";
+      documentation = [ "https://anubis.techaro.lol" ];
+    };
     systemd.services = lib.mapAttrs' (
       name: instance:
       lib.nameValuePair "${instanceName name}" {
@@ -396,6 +400,7 @@ in
         );
 
         serviceConfig = {
+          Slice = "system-anubis.slice";
           User = instance.user;
           Group = instance.group;
           DynamicUser = true;

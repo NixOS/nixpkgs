@@ -13,9 +13,9 @@
   path ? null,
   max-workers ? null,
   include-overlays ? false,
-  keep-going ? null,
-  commit ? null,
-  skip-prompt ? null,
+  keep-going ? false,
+  commit ? false,
+  skip-prompt ? false,
   order ? null,
 }:
 
@@ -206,18 +206,18 @@ let
 
     to increase the number of jobs in parallel, or
 
-        --argstr keep-going true
+        --arg keep-going true
 
     to continue running when a single update fails.
 
     You can also make the updater automatically commit on your behalf from updateScripts
     that support it by adding
 
-        --argstr commit true
+        --arg commit true
 
-    to skip prompt:
+    To skip the prompt, you can add
 
-        --argstr skip-prompt true
+        --arg skip-prompt true
 
     By default, the updater will update the packages in arbitrary order. Alternately, you can force a specific order based on the packages’ dependency relations:
 
@@ -250,11 +250,15 @@ let
   # JSON file with data for update.py.
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
+  # Allow boolean arguments to be provided with either --arg or --argstr.
+  # The ability to use the string "true" will be deprecated.
+  isTrue = arg: arg == true || arg == "true";
+
   optionalArgs =
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
-    ++ lib.optional (keep-going == "true") "--keep-going"
-    ++ lib.optional (commit == "true") "--commit"
-    ++ lib.optional (skip-prompt == "true") "--skip-prompt"
+    ++ lib.optional (isTrue keep-going) "--keep-going"
+    ++ lib.optional (isTrue commit) "--commit"
+    ++ lib.optional (isTrue skip-prompt) "--skip-prompt"
     ++ lib.optional (order != null) "--order=${order}";
 
   args = [ packagesJson ] ++ optionalArgs;

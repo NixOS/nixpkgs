@@ -6,7 +6,7 @@
   autoreconfHook,
   curl,
   apacheHttpd,
-  pcre,
+  pcre2,
   apr,
   aprutil,
   libxml2,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     apacheHttpd
-    pcre
+    pcre2
     apr
     aprutil
     libxml2
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-static"
     "--with-curl=${curl.dev}"
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-    "--with-pcre=${pcre.dev}"
+    "--with-pcre2=${lib.getDev pcre2}/bin/pcre2-config"
     "--with-apr=${apr.dev}"
     "--with-apu=${aprutil.dev}/bin/apu-1-config"
     "--with-libxml=${libxml2.dev}"

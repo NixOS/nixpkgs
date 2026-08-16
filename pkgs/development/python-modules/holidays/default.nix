@@ -3,6 +3,7 @@
   buildPythonPackage,
   chameleon,
   fetchFromGitHub,
+  gitpython,
   importlib-metadata,
   lingva,
   numpy,
@@ -15,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "holidays";
-  version = "0.95";
+  version = "0.102";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MyTOCHQw/TYvH9Xm3UcXHjza2f/2ICbb3vcTGt1Cpgg=";
+    hash = "sha256-RQJR2+ltaDoNjB+vixOy+4hBGJyn5Ih5Iyw/ktSOxQI=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage (finalAttrs: {
     # l10n
     lingva
     chameleon
+    gitpython
     polib
   ];
 

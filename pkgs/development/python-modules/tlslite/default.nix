@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pure Python implementation of SSL and TLS";
-    homepage = "https://pypi.python.org/pypi/tlslite";
+    homepage = "https://pypi.org/project/tlslite/";
     license = lib.licenses.bsd3;
   };
 }

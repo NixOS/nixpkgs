@@ -34,7 +34,7 @@ buildGoModule {
   tags = [
     "sqlite_omit_load_extension"
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "netgo"
     "osusergo"
   ];
@@ -77,7 +77,7 @@ buildGoModule {
   meta = {
     description = "MCAP CLI tool to inspect and fix MCAP files";
     homepage = "https://github.com/foxglove/mcap";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       therishidesai
     ];

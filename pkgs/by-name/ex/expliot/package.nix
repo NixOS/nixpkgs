@@ -21,6 +21,7 @@ buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "cmd2"
     "cryptography"
     "paho-mqtt"
     "pynetdicom"

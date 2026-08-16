@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkcapi";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "libkcapi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
+    hash = "sha256-xNhN6MWSNU8eufI5J/NOxhvw21nS0s7+V/Feg4N65jg=";
   };
 
   outputs = [

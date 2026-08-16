@@ -15,18 +15,16 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests";
-  version = "2.33.1";
+  version = "2.34.2";
   pyproject = true;
-
-  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "psf";
     repo = "requests";
-    tag = "v${version}";
-    hash = "sha256-cQnCTMmpdkvWwt7RFAIhAfmhVwGVn0Y8Z5Tr6lzDmS8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J2/sNpFUDHkNBeN7BfiMamv7YaWixZAZHxaqmPVEptc=";
   };
 
   build-system = [ setuptools ];
@@ -49,7 +47,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ optional-dependencies.socks;
+  ++ finalAttrs.passthru.optional-dependencies.socks;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin
@@ -79,11 +77,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
-    changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/psf/requests/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

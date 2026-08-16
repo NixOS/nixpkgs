@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
-  enableTests ? true,
+  enableTests ? lib.meta.availableOn stdenv.buildPlatform jre,
   gtest,
   jre,
   pkg-config,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.29";
+  version = "9.0.37";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VhVPLDD7KHRxD7adOyYGxVxfI3n77QCk5pLPtN8YfPQ=";
+    hash = "sha256-RBYLcJdnf+n4Bq+mw8EyWjJGNr6lTOHMmduV8YXKLQs=";
   };
 
   patches = [
@@ -45,15 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    protobuf
   ]
   ++ lib.optionals enableTests [
-    gtest
     jre
   ];
 
   buildInputs = [
     icu
     protobuf
+  ]
+  ++ lib.optionals enableTests [
+    gtest
   ];
 
   propagatedBuildInputs = lib.optionals enableTests [
@@ -77,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
     (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
   ];
+
+  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";

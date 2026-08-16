@@ -4,26 +4,38 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   nodejs,
+  nodejs-slim_latest,
   nix-update-script,
   makeBinaryWrapper,
 }:
+let
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627.
+  pnpm = pnpm_11.override {
+    nodejs-slim = nodejs-slim_latest;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.2.6";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Igy7Tc2rWbLX7jeuQm8MYbgeKfPYA1a92E8B11CrUyo=";
+    hash = "sha256-+jtnbSZFvRwl03iW6u6pZXMuql1LxIQZaPPaQUL+saQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-koRJkT/JloptmtQKLprqms53TL/Q4XHaktIl/6PIasw=";
+    inherit (finalAttrs)
+      pname
+      src
+      version
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-OAPNM8Ngx9x3XcWIq6pw7LWadcGWhl29AjGjqoIEveo=";
   };
 
   nativeBuildInputs = [

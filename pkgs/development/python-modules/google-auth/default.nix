@@ -7,8 +7,10 @@
   cryptography,
   flask,
   freezegun,
+  gitUpdater,
   grpcio,
   mock,
+  packaging,
   pyasn1-modules,
   pyjwt,
   pyopenssl,
@@ -20,25 +22,28 @@
   responses,
   rsa,
   setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.47.0";
+  version = "2.50.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "google-auth-library-python";
-    tag = "v${version}";
-    hash = "sha256-kgiqKeS8NTlz56yYKE8U/eKFQjHD6CJHOH5IKLgOeDk=";
+    repo = "google-cloud-python";
+    tag = "google-auth-v${version}";
+    hash = "sha256-Z3TsDEtDDfXO23gOlmEM5O4a9qS2+fTB7g0vJ4dOFH4=";
   };
+
+  sourceRoot = "${src.name}/packages/google-auth";
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cryptography
     pyasn1-modules
-    rsa
   ];
 
   optional-dependencies = {
@@ -46,20 +51,23 @@ buildPythonPackage rec {
       aiohttp
       requests
     ];
+    cryptography = [ cryptography ];
     enterprise_cert = [
-      cryptography
       pyopenssl
     ];
     pyopenssl = [
-      cryptography
       pyopenssl
     ];
     pyjwt = [
-      cryptography
       pyjwt
     ];
     reauth = [ pyu2f ];
     requests = [ requests ];
+    rsa = [ rsa ];
+    urllib3 = [
+      packaging
+      urllib3
+    ];
   };
 
   pythonRelaxDeps = [ "cachetools" ];
@@ -78,10 +86,7 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
-    "samples/"
     "system_tests/"
-    # Requires a running aiohttp event loop
-    "tests_async/"
 
     # cryptography 44 compat issue
     "tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
@@ -94,14 +99,18 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-auth-v";
+  };
+
   meta = {
     description = "Google Auth Python Library";
     longDescription = ''
       This library simplifies using Google's various server-to-server
       authentication mechanisms to access Google APIs.
     '';
-    homepage = "https://github.com/googleapis/google-auth-library-python";
-    changelog = "https://github.com/googleapis/google-auth-library-python/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-auth/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

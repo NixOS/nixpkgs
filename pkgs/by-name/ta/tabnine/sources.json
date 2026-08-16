@@ -8,10 +8,6 @@
     "aarch64-darwin": {
       "name": "aarch64-apple-darwin",
       "hash": "sha256-8bwrbMQJkBMLgWt0n6R6uc+s6SxZr8JiGM+2ni5lgqY="
-    },
-    "x86_64-darwin": {
-      "name": "x86_64-apple-darwin",
-      "hash": "sha256-C0zePvocvgm8gP0C++7xJ5yb8MLb7kY/5HNsbEeZu6Q="
     }
   }
 }

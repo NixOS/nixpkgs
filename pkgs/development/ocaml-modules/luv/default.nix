@@ -14,12 +14,12 @@ let
       version,
       sha256,
     }:
-    buildDunePackage rec {
+    buildDunePackage (finalAttrs: {
       pname = "luv";
       inherit version;
 
       src = fetchurl {
-        url = "https://github.com/aantron/luv/releases/download/${version}/luv-${version}.tar.gz";
+        url = "https://github.com/aantron/luv/releases/download/${finalAttrs.version}/luv-${finalAttrs.version}.tar.gz";
         inherit sha256;
       };
 
@@ -52,7 +52,7 @@ let
           sternenseemann
         ];
       };
-    };
+    });
 in
 {
   luv-0-5-12 = generic {

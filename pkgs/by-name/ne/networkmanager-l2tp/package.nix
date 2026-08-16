@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
-    repo = "network-manager-l2tp";
+    repo = "NetworkManager-l2tp";
     rev = version;
     hash = "sha256-5EIG/5fexhrcOOQE+31+TJKMtINGVL+EI32m9tEhYVo=";
   };
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
-    homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
+    homepage = "https://github.com/nm-l2tp/NetworkManager-l2tp";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       obadz

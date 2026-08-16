@@ -46,7 +46,6 @@ let
     setAttrByPath
     substring
     take
-    throwIfNot
     trace
     typeOf
     types
@@ -567,7 +566,7 @@ let
         let
           keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
         in
-        map (attrs: attrs.module) (genericClosure {
+        catAttrs "module" (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
@@ -589,7 +588,8 @@ let
     in
     modulesPath: initialModules: args: {
       modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
-      # Intentionally not shared with `modules` above: this allows `collected`
+      # Intentionally not shared with `modules` above: this allows
+      # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
       graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
     };
@@ -679,8 +679,11 @@ let
           config = addFreeformType (addMeta (m.config or { }));
         }
     else
-      # shorthand syntax
-      throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module." {
+    # shorthand syntax
+    if !isAttrs m then
+      throw "module ${file} (${key}) does not look like a module."
+    else
+      {
         _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
@@ -1017,38 +1020,16 @@ let
           mergedType = t.typeMerge t'.functor;
           typesMergeable = mergedType != null;
 
-          # TODO: Remove this when all downstream reliances of internals: 'functor.wrapped' are sufficiently migrated.
-          # A function that adds the deprecated wrapped message to a type.
-          addDeprecatedWrapped =
-            t:
-            t
-            // {
-              functor = t.functor // {
-                wrapped = t.functor.wrappedDeprecationMessage {
-                  inherit loc;
-                };
-              };
-            };
-
           typeSet =
-            if opt.options ? type then
-              if res ? type then
-                if typesMergeable then
-                  {
-                    type =
-                      if mergedType ? functor.wrappedDeprecationMessage then
-                        addDeprecatedWrapped mergedType
-                      else
-                        mergedType;
-                  }
-                else
-                  # Keep in sync with the same error below!
-                  throw
-                    "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
-              else if opt.options.type ? functor.wrappedDeprecationMessage then
-                { type = addDeprecatedWrapped opt.options.type; }
+            if opt.options ? type && res ? type then
+              if typesMergeable then
+                {
+                  type = mergedType;
+                }
               else
-                { }
+                # Keep in sync with the same error below!
+                throw
+                  "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
             else
               { };
 
@@ -1157,16 +1138,18 @@ let
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
       warnDeprecation =
-        warnIf (opt.type.deprecationMessage != null)
-          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+        if (opt.type.deprecationMessage != null) then
+          warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}"
+        else
+          x: x;
 
     in
     warnDeprecation opt
     // {
       value = addErrorContext "while evaluating the option `${showOption loc}':" value;
       inherit (res.defsFinal') highestPrio;
-      definitions = map (def: def.value) res.defsFinal;
-      files = map (def: def.file) res.defsFinal;
+      definitions = catAttrs "value" res.defsFinal;
+      files = catAttrs "file" res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
       inherit (res.checkedAndMerged) valueMeta;
@@ -1432,18 +1415,27 @@ let
   filterOverrides = defs: (filterOverrides' defs).values;
 
   filterOverrides' =
-    defs:
     let
       getPrio =
         def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip =
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
-    {
-      values = map strip (filter (def: getPrio def == highestPrio) defs);
-      inherit highestPrio;
-    };
+    defs:
+    # Optimize for the singleton case, equivalent to the `else` clause.
+    if length defs == 1 then
+      {
+        values = map strip defs;
+        highestPrio = getPrio (head defs);
+      }
+    else
+      let
+        highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+      in
+      {
+        values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
+        inherit highestPrio;
+      };
 
   /**
     Sort a list of properties.  The sort priority of a property is
@@ -1588,6 +1580,28 @@ let
     inherit priority content;
   };
 
+  /**
+    Applies a function to the value inside a definition,
+    preserving all surrounding properties (`mkForce`, `mkOrder`, `mkIf`, etc.).
+  */
+  mapDefinitionValue =
+    f: def:
+    if def ? _type then
+      if def._type == "merge" then
+        def // { contents = map (mapDefinitionValue f) def.contents; }
+      else if def._type == "if" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "override" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "order" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "definition" then
+        def // { value = mapDefinitionValue f def.value; }
+      else
+        f def
+    else
+      f def;
+
   mkBefore = mkOrder 500;
   defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
@@ -1716,11 +1730,21 @@ let
 
     `from`
 
-    : 1\. Function argument
+    : The "from" option path as list of strings.
+      Option must not exist in the current module set.
 
     `to`
 
-    : 2\. Function argument
+    : The "to" option path as list of strings.
+      Option must already exist in the current module set.
+
+    # Limitations
+
+    - The "to" option must already be declared.
+    - The "from" option should not be declared, as this function will declare it.
+    - "to" Options whose types don't support merging at any level of their structure (like `types.raw`,
+      or `types.attrsOf types.raw` where the attribute values can't merge) are not well-supported
+      because this function wraps aliased definitions in `mkMerge`.
   */
   mkRenamedOptionModule =
     from: to:
@@ -2282,6 +2306,7 @@ private
     importApply
     importJSON
     importTOML
+    mapDefinitionValue
     mergeDefinitions
     mergeAttrDefinitionsWithPrio
     mergeOptionDecls # should be private?

@@ -787,9 +787,10 @@ in
       options = [ "mode=0755" ];
     };
 
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1
-    # init script.
+    # With systemd stage 1, the ISO is identified by its volume label.
+    # With the scripted stage 1, /dev/root is a symlink to the actual
+    # root device specified on the kernel command line, created by the
+    # stage 1 init script.
     "/iso" = lib.mkImageMediaOverride {
       device =
         if config.boot.initrd.systemd.enable then

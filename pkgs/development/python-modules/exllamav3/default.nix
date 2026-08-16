@@ -7,9 +7,8 @@
 
   setuptools,
 
-  flash-attn,
-  formatron,
-  kbnf,
+  flash-linear-attention,
+  llguidance,
   marisa-trie,
   ninja,
   numpy,
@@ -25,16 +24,16 @@
 let
   newerThanTuring = lib.filter (version: lib.versionOlder "7.9" version) torch.cudaCapabilities;
 in
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "0.0.25";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CltM0bQ3mvQwUYulsVByS7mcIIy6O/P1+nq4h5UAO6E=";
+    hash = "sha256-6TzJbLGcp3rmlpIRiz26bYVbW2ZORrsJF3257Iv2QZc=";
   };
 
   pythonRelaxDeps = [
@@ -58,9 +57,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    flash-attn
-    formatron
-    kbnf
+    flash-linear-attention
+    llguidance
     marisa-trie
     numpy
     pillow

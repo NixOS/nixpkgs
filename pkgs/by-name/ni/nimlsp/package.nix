@@ -3,25 +3,17 @@
   buildNimPackage,
   fetchFromGitHub,
   srcOnly,
-  nim-2_0,
-  nim-unwrapped-2_0,
+  nim-unwrapped,
 }:
-
-let
-  buildNimPackage' = buildNimPackage.override {
-    # Do not build with Nim-2.2.x.
-    nim2 = nim-2_0;
-  };
-in
-buildNimPackage' (finalAttrs: {
+buildNimPackage (finalAttrs: {
   pname = "nimlsp";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MCtpCx8jMQp0VXuMowh69d1DQreU5cDftBf0lww7PUM=";
+    hash = "sha256-jUNW+tukZXv41HTWP2F2BdEn7nesFXVg2TffKPWfSss=";
   };
 
   lockFile = ./lock.json;
@@ -40,7 +32,7 @@ buildNimPackage' (finalAttrs: {
 
   nimFlags = [
     "--threads:on"
-    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2_0}"
+    "-d:explicitSourcePath=${srcOnly nim-unwrapped}"
     "-d:tempDir=/tmp"
   ];
 

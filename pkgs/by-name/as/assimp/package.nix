@@ -3,13 +3,16 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pugixml,
+  rapidjson,
+  utf8cpp,
   zlib,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
-  version = "6.0.4";
+  version = "6.0.5";
   outputs = [
     "out"
     "lib"
@@ -20,8 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "assimp";
     repo = "assimp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ryTgsN0z9BZBz7i9aUMKuneN5oqfxpduwJlb+Q0q3Mk=";
+    hash = "sha256-QWBi1pl5C76UtPhB6SmFipm9oEdnfhELMT3MqfV6oxg=";
   };
+
+  # assimp vendors many libraries that we have available in Nixpkgs, and offers no good way of pulling them from non-vendored sources.
+  # We thus patch the CMake declarations to do so.
+  # https://github.com/assimp/assimp/issues/5286
+  # also see:
+  # https://src.fedoraproject.org/rpms/assimp/blob/e0ca8c040bfd661b6d68551b6dc189ba33ffdac1/f/assimp-unbundle.patch
+  # https://salsa.debian.org/debian/assimp/-/tree/c60e93150d63590d671d9aab165cf259c71f5df9/debian/patches
+  patches = [ ./use-system-libraries.patch ];
 
   postPatch = ''
     # nix build sandbox does not set /var/tmp up:
@@ -33,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    pugixml
+    rapidjson
+    utf8cpp
     zlib
   ];
 
@@ -42,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
     (lib.cmakeBool "ASSIMP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ASSIMP_WARNINGS_AS_ERRORS" false)
   ];
 
   # Some matrix tests fail on non-86_64-linux:

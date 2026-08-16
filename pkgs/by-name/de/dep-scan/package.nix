@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.1.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Drp9DIu4ORNDMqYnCU7CJYpD65RW0da1g4bUIXlPfBA=";
+    hash = "sha256-DQo8GLO2d9QqS44zwkAt5I3GWk/pi4HAF/CChKf1SB4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -79,6 +79,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.ngi ];
-    mainProgram = "dep-scan";
+    mainProgram = "depscan";
   };
 })

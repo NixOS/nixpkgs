@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.03";
 
   # Ensure compatibility with OCaml ≥ 5.0
-  preConfigure = lib.optional (lib.versionAtLeast ocaml.version "4.08") ''
+  preConfigure = lib.optionalString (lib.versionAtLeast ocaml.version "4.08") ''
     substituteInPlace src/dune --replace '(libraries bytes bigarray)' ""
   '';
 

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pylatexenc";
-  version = "2.10";
+  version = "2.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "phfaist";
     repo = "pylatexenc";
     rev = "v${version}";
-    hash = "sha256-3Ho04qrmCtmmrR+BUJNbtdCZcK7lXhUGJjm4yfCTUkM=";
+    hash = "sha256-Zv3Sjx0YpSCnoHHf3CSiGaFMS7FNgUUwvIxNX/k9tOg=";
   };
 
   pythonImportsCheck = [ "pylatexenc" ];

@@ -3,17 +3,18 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-0PjIRf8M4wmn2zm7I9P1o8Zp2CRgZHxt5p6L8bTqJbE=";
+    hash = "sha256-I4GGlkEirqxiwIqczsCe9ns0ImOOalqg+pWKXx3o1Fo=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -28,12 +29,12 @@ buildDotnetModule rec {
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Vehicle service records and maintainence tracker";
+    description = "Vehicle service records and maintenance tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
-
-      LubeLogger by Hargata Softworks is licensed under the MIT License for individual and personal use. Commercial users and/or corporate entities are required to maintain an active subscription in order to continue using LubeLogger.
     '';
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";

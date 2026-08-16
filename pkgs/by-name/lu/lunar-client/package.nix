@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.6.7";
+  version = "3.7.14";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}-ow.AppImage";
-    hash = "sha512-/RCRbD+OSaxvWDaJL1WqKidz6/N2R5dxb/SE30YIYrBZVHEOC2MaXSk8Oldm7yr7pqC+oXyuJbRRq2G0YAOcgA==";
+    hash = "sha512-UmaMEDkLMU/V0Rddu4IATsH8LrmyV7KOQE1ac0rWHWld7tE1ZU9vp+/VTR68KFkxfTm0wNMxy4ilAP84GVA7pQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ appimageTools.wrapType2 rec {
       wrapProgram $out/bin/lunarclient \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
-      install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
+      install -Dm444 ${contents}/lunarclient.png -t $out/share/icons
       substituteInPlace $out/share/applications/lunarclient.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient'
     '';
@@ -34,7 +34,7 @@ appimageTools.wrapType2 rec {
   meta = {
     description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
-    license = with lib.licenses; [ unfree ];
+    license = lib.licenses.unfree;
     mainProgram = "lunarclient";
     maintainers = with lib.maintainers; [
       Technical27

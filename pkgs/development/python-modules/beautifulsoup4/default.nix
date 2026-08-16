@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.14.3";
+  version = "4.15.0";
   pyproject = true;
 
   outputs = [
@@ -45,17 +45,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YpKxxRhtNWu6Zp759/BRdXCZVlrZraXdYwvZ3l+n+4Y=";
+    hash = "sha256-KI48p9VLBvKsGRlwvCdcGTnLRtRQslW/ZxiwSqN6tPc=";
   };
-
-  patches = [
-    # Fix tests with python 3.13.10 / 3.14.1
-    (fetchpatch {
-      url = "https://git.launchpad.net/beautifulsoup/patch/?id=55f655ffb7ef03bdd1df0f013743831fe54e3c7a";
-      excludes = [ "CHANGELOG" ];
-      hash = "sha256-DJl1pey0NdJH+SyBH9+y6gwUvQCmou0D9xcRAEV8OBw=";
-    })
-  ];
 
   build-system = [ hatchling ];
 

@@ -43,7 +43,7 @@ When reviewing a modular service, you should check the following. Details and ra
 ### NixOS VM test
 
 See the initial [Modular Services PR](https://github.com/NixOS/nixpkgs/pull/372170) for an [example](https://github.com/NixOS/nixpkgs/pull/372170/files#diff-e7fe16489cf3cd08ecc22b2c7896039d407a329b75691c046c95447423b3153f) of a NixOS VM test.
-TBD: describe best practices here.
+Best practices: keep tests minimal and focused (boot a VM, enable the service, and assert a basic request succeeds). For general guidance, see the [NixOS Tests chapter](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests).
 
 ### `_class = "service"`
 

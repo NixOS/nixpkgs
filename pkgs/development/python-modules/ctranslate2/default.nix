@@ -37,12 +37,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ctranslate2-cpp ];
-
   dependencies = [
     numpy
     pyyaml
   ];
+
+  env.CTRANSLATE2_ROOT = "${ctranslate2-cpp}";
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 

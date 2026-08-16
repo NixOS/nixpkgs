@@ -1,6 +1,5 @@
 {
   stdenv,
-  runCommand,
   fetchurl,
   fetchgit,
   fetchpatch2,
@@ -112,6 +111,7 @@
   gpgmepp,
   libwebp,
   abseil-cpp,
+  libfreehand,
   libepubgen,
   libetonyek,
   libpng,
@@ -181,6 +181,7 @@ assert builtins.elem variant [
   "fresh"
   "still"
   "collabora"
+  "collabora-coda"
 ];
 
 let
@@ -372,7 +373,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + (
-    if (variant != "collabora") then
+    if (variant != "collabora" && variant != "collabora-coda") then
       ''
         ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
         ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
@@ -397,12 +398,40 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
+
+    # Fix build with Poppler 26.02
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
+      hash = "sha256-IInhSoqTemDITB+AtkvVa9eGbodTbUGSpMMpC9N/mmg=";
+    })
+    # Fix build with Poppler 26.04
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.04.0.patch";
+      hash = "sha256-I9owj/NTCTi6ISszuasH410NLlhunPn/Ig22tenu8tw=";
+    })
+    # Fix build with Poppler 26.05
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.05.0.patch";
+      hash = "sha256-7wdiciTf/LrTk0MibBBYGliWRCvK1rtTGESgH7db1I4=";
+    })
+    # Fix build with Poppler 26.06
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
+      hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
+    })
   ]
-  ++ lib.optionals (variant != "collabora") [
+  ++ lib.optionals (variant != "fresh") [
+    # Fix build with Poppler 26.01
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
+      hash = "sha256-5JTTvJFIV5MG0Gz7y46wAr3q9tWdSVoZ9TJQlMJVqBc=";
+    })
+  ]
+  ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
   ]
-  ++ lib.optionals (variant == "collabora") [
+  ++ lib.optionals (variant == "collabora" || variant == "collabora-coda") [
     # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
@@ -518,6 +547,7 @@ stdenv.mkDerivation (finalAttrs: {
       libatomic_ops
       libcdr
       libcmis
+      libfreehand
       libe-book
       libepoxy
       libepubgen
@@ -572,7 +602,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals withJava [
       jre'
     ]
-    ++ optionals (variant == "collabora") [
+    ++ optionals (variant == "collabora" || variant == "collabora-coda") [
       fast-float
       liborcus_0_19
       mdds_2_1
@@ -662,6 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
+    "--with-system-libfreehand"
     "--with-system-libepubgen"
     "--with-system-libetonyek"
     "--with-system-liblangtag"
@@ -679,7 +710,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
     "--without-system-libeot"
-    "--without-system-libfreehand"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
     "--without-system-libpagemaker"
@@ -733,6 +763,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export HOME=$(pwd)
+  ''
+  + lib.optionalString (variant == "collabora" || variant == "collabora-coda") ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+
+    # tests try to access x11 and fail
+    export GST_GL_WINDOW=dummy
+    export GST_VIDEOSINK=fakesink
+    export GST_AUDIOSINK=fakesink
   '';
 
   checkTarget = concatStringsSep " " [
@@ -741,7 +779,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--keep-going" # easier to debug test failures
   ];
 
-  postInstall = optionalString (variant != "collabora") ''
+  postInstall = optionalString (variant != "collabora" && variant != "collabora-coda") ''
     mkdir -p $out/{include,share/icons}
 
     cp -r include/LibreOfficeKit $out/include/
@@ -767,10 +805,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Wrapping is done in ./wrapper.nix
   dontWrapQtApps = true;
 
+  __structuredAttrs = true;
+
   strictDeps = true;
 
   passthru = {
     inherit srcs;
+    inherit withJava;
     jdk = if withJava then jre' else null;
     python = python3; # for unoconv
     updateScript = [

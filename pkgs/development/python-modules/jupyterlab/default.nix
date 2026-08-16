@@ -21,16 +21,17 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab";
-  version = "4.5.3";
+  version = "4.5.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
-    tag = "v${version}";
-    hash = "sha256-QQ8g1+nB5aeXSrjwuL22L49S84cm2oiiNCqWj+dk7XI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MEAZNahss5NpHJmYVFCTRvcdSq2Rx4xP6p8k5zeWyCg=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +44,9 @@ buildPythonPackage rec {
   '';
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    inherit src;
-    sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-a+pTp1IqY/RLCjClKbb7LMvUblYULChtT/knGgTlI7U=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/jupyterlab/staging";
+    hash = "sha256-i0ZoLjUt0w/C62XzoN4wp6l7m3M8Nz/VfyDFIRYSSE0=";
   };
 
   preBuild = ''
@@ -76,7 +77,7 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     "--set"
     "JUPYTERLAB_DIR"
-    "$out/share/jupyter/lab"
+    "${placeholder "out"}/share/jupyter/lab"
   ];
 
   # Depends on npm
@@ -85,11 +86,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyterlab" ];
 
   meta = {
-    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
     license = lib.licenses.bsd3;
     homepage = "https://jupyter.org/";
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
-}
+})

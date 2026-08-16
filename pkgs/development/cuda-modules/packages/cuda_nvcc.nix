@@ -5,7 +5,7 @@
   setupCudaHook,
   cudaAtLeast,
   cudaOlder,
-  cuda_cccl,
+  cccl,
   glibc,
   lib,
   libnvvm,
@@ -120,7 +120,7 @@ buildRedist (finalAttrs: {
         substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
           --replace-fail \
             '$(TOP)/$(_TARGET_DIR_)/include/cccl' \
-            "${lib.getOutput "include" cuda_cccl}/include"
+            "${lib.getOutput "include" cccl}/include"
       ''
       # Unconditional patching to switch to the correct include paths.
       # NOTE: _TARGET_DIR_ appears to be used for the target architecture, which is relevant for cross-compilation.

@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.0.0";
 
   src = fetchFromGitHub {
-    owner = "freundlich";
+    owner = "cpreh";
     repo = "fcppt";
     rev = finalAttrs.version;
     hash = "sha256-8dBG6LdSngsutBboqb3WVVg3ylayoUYDOJV6p/ZFkoE=";

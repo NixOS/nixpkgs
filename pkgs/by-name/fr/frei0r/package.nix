@@ -1,38 +1,54 @@
 {
-  lib,
-  config,
-  stdenv,
-  fetchFromGitHub,
   cairo,
   cmake,
+  config,
+  fetchFromGitHub,
+  gavl,
+  lib,
   opencv,
   pkg-config,
-  cudaSupport ? config.cudaSupport,
+  stdenv,
   cudaPackages,
+  cudaSupport ? config.cudaSupport,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frei0r-plugins";
-  version = "2.5.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3gUWvO5izOrJt+XwcNBNiLfu+iMqo4nuPbx++TYzao0=";
+    hash = "sha256-eBaaEE+4mKYr5VCXUnoS/4aE6EV8DnXFJLFYsrk3gs0=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
   buildInputs = [
     cairo
     opencv
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gavl
+  ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_nvcc
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITHOUT_GAVL" (!stdenv.hostPlatform.isLinux))
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDAToolkit_ROOT" "${lib.getBin cudaPackages.cuda_nvcc}")
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -42,10 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
+    homepage = "https://frei0r.dyne.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
   };
 })

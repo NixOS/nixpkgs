@@ -53,6 +53,7 @@ executable(
         '-DCOLLATE_DEBUG',
         '-DYY_NO_UNPUT',
     ],
+    include_directories: [ 'wall' ],
     install : true,
     sources : [
         'talkd/announce.c',

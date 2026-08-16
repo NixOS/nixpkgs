@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ecsk";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "yukiarrr";
     repo = "ecsk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1nrV7NslOIXQDHsc7c5YfaWhoJ8kfkEQseoVVeENrHM=";
+    hash = "sha256-wCv3wyD2KM4Jzawd6Z4JFLCafsDp0W40ygbB05h7r0I=";
     fetchSubmodules = true;
   };
 

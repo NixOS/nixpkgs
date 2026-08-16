@@ -8,16 +8,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moreorless";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thatch";
     repo = "moreorless";
-    tag = "v${version}";
-    hash = "sha256-VCvvPxDWriaeKeRaj/YbPLPfNL7fipGwCydr6K0HMjc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uFcNjQLr/rO2hf2ujWWSsOVxfwgAeIxDZ0yskOfBSe4=";
   };
 
   build-system = [ setuptools-scm ];
@@ -31,18 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moreorless" ];
 
-  enabledTestPaths = [
-    "moreorless/tests/click.py"
-    "moreorless/tests/combined.py"
-    "moreorless/tests/general.py"
-    "moreorless/tests/patch.py"
-  ];
-
   meta = {
-    changelog = "https://github.com/thatch/moreorless/releases/tag/${src.tag}";
     description = "Wrapper to make difflib.unified_diff more fun to use";
     homepage = "https://github.com/thatch/moreorless/";
+    changelog = "https://github.com/thatch/moreorless/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

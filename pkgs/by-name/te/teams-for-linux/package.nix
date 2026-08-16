@@ -6,63 +6,73 @@
   alsa-utils,
   copyDesktopItems,
   electron_41,
+  libicns,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  vulkan-loader,
   which,
 }:
 
+let
+  electron = electron_41;
+in
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.8.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-kD04SMErq92k+F4/3v6bpoJf2lfaGM6bAn+bCa9ACbA=";
+    hash = "sha256-PYRl0Q7vsx7nKz7pkoCg3f3rRIcgCAvGiALQxHEOIjE=";
   };
 
-  npmDepsHash = "sha256-497bL7l3OIAgkbXP3FkeFFpPz2VtRENrw6sQmJsnXBY=";
+  npmDepsHash = "sha256-FPnkCO1zf5Ts2arOa0InC7l4esRs4AuXYlVF/OYR6AI=";
 
   nativeBuildInputs = [
     makeWrapper
     versionCheckHook
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libicns ];
 
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  env = {
-    # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  };
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_41.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
+    electron_builder_args=(
+      --dir
+      -c.npmRebuild=true
+      -c.asarUnpack="**/*.node"
+      -c.electronDist="$electron_dist"
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
+
   ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    png2icns build/icon.icns \
+      build/icons/16x16.png \
+      build/icons/32x32.png \
+      build/icons/128x128.png \
+      build/icons/256x256.png \
+      build/icons/512x512.png \
+      build/icons/1024x1024.png
+    electron_builder_args+=(-c.mac.icon=build/icon.icns)
   ''
   + ''
 
-    npm exec electron-builder -- \
-        --dir \
-        -c.npmRebuild=true \
-        -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_41.version} \
-        -c.mac.identity=null
+    npm exec electron-builder -- "''${electron_builder_args[@]}"
 
     runHook postBuild
   '';
@@ -83,7 +93,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
@@ -125,6 +135,7 @@ buildNpmPackage rec {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       muscaln

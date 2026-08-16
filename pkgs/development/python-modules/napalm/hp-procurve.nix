@@ -11,15 +11,15 @@
   standard-telnetlib,
 }:
 
-buildPythonPackage rec {
-  pname = "napalm-hp-procurve";
+buildPythonPackage (finalAttrs: {
+  pname = "napalm-procurve";
   version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napalm-automation-community";
     repo = "napalm-hp-procurve";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cO4kxI90krj1knzixRKWxa77OAaxjO8dLTy02VpkV9M=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # Dependency installation in setup.py doesn't work
     echo -n > requirements.txt
     substituteInPlace setup.cfg \
-      --replace " --pylama" ""
+      --replace-fail " --pylama" ""
   '';
 
   build-system = [
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "HP ProCurve Driver for NAPALM automation frontend";
     homepage = "https://github.com/napalm-automation-community/napalm-hp-procurve";
-    changelog = "https://github.com/napalm-automation-community/napalm-hp-procurve/releases/tag/${src.tag}";
+    changelog = "https://github.com/napalm-automation-community/napalm-hp-procurve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

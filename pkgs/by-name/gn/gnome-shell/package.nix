@@ -56,7 +56,6 @@
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
-  gnome-tecla,
   bash-completion,
   lcms2,
   libgbm,
@@ -74,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "49.4";
+  version = "50.4";
 
   outputs = [
     "out"
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nW8MovAUDBFPEU9nB0E2EfYU+x6mwxeo0fzEDDxZWwg=";
+    hash = "sha256-xTGTlTnbMWpBrvI2cDcKvRMw0yVPhLyw+fTa5dbjYs8=";
   };
 
   patches = [
@@ -91,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
       unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
@@ -199,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
+
+    substituteInPlace meson.build subprojects/extensions-app/meson.build \
+      --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
   '';
 
   preInstall = ''
@@ -254,6 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gnome-shell";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Core user interface for the GNOME 3 desktop";

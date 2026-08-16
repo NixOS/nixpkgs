@@ -11,18 +11,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "kopia";
-  version = "0.22.3";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
+    hash = "sha256-yjeLV7N/U88oVdP4iJYgSM/QJLAMREaB/2jBcbTDWkA=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-szlCiZOLU0KVWb2YX3Wmicrumn+fNm2AWdPxaJZZT90=";
+  vendorHash = "sha256-5p/MUNkqNb+iAFxXXYRR2NB1WiGVIcNrTADsd/VjapU=";
 
   subPackages = [ "." ];
 

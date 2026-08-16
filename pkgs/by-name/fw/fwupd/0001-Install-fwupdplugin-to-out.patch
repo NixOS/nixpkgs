@@ -3,15 +3,17 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Mon, 28 Oct 2024 12:07:51 +0100
 Subject: [PATCH] Install fwupdplugin to out
 
+Install plug-ins and libfwupdplugin to $out output, they are not really
+part of the library.
 ---
  meson.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index 1a56d3308..c7bf2c9aa 100644
+index 0d756bc0e748ba1c7be64bb9357f28fe8c5342e6..0cfca8e45b7ed6cc63be470ac0df916639ef52c4 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -734,7 +734,7 @@ if build_standalone
+@@ -719,7 +719,7 @@ if build_standalone
    if host_machine.system() == 'windows'
      libdir_pkg = bindir
    else

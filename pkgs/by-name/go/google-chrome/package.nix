@@ -79,11 +79,6 @@
   bzip2,
   libcap,
 
-  # Fonts (See issue #463615)
-  makeFontsConf,
-  noto-fonts-cjk-sans,
-  noto-fonts-cjk-serif,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
@@ -184,12 +179,26 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "147.0.7727.137";
+    version = "151.0.7922.137";
 
-    src = fetchurl {
-      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-2QKA8nk+O10cGr0gGOMSlLkxpO+WHFG1yul9a3VGq64=";
-    };
+    src =
+      let
+        debArch =
+          {
+            aarch64-linux = "arm64";
+            x86_64-linux = "amd64";
+          }
+          .${stdenvNoCC.hostPlatform.system};
+      in
+      fetchurl {
+        url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_${debArch}.deb";
+        hash =
+          {
+            amd64 = "sha256-5tq/BEz5zQJ5z+hu+kMWgsGL/AbQYznOBVqqh66HFyc=";
+            arm64 = "sha256-0Omn4kXbMG80PWYw5NSs14JcUysN91wG0iWMgyFoD6E=";
+          }
+          .${debArch};
+      };
 
     # With strictDeps on, some shebangs were not being patched correctly
     # ie, $out/share/google/chrome/google-chrome
@@ -219,13 +228,6 @@ let
 
     rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
     binpath = lib.makeBinPath deps;
-
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-      ];
-    };
 
     installPhase = ''
       runHook preInstall
@@ -278,14 +280,10 @@ let
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-        --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
-
-      # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-      patchelf --set-rpath $rpath $out/share/google/$appname/lib*GL*
 
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
@@ -302,11 +300,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "147.0.7727.138";
+    version = "151.0.7922.138";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/ackheqvxll25dzx6s76qfgpa4oxa_147.0.7727.138/GoogleChrome-147.0.7727.138.dmg";
-      hash = "sha256-1WOkBxAs79ByJ3quXgh+ZR64ysIE2/2wMeIhl3sYh5o=";
+      url = "http://dl.google.com/release2/chrome/guybfazgqqaxifu4eaufmhd2i4_151.0.7922.138/GoogleChrome-151.0.7922.138.dmg";
+      hash = "sha256-9iXev++hJo/uFY/UnR1NRijIdVy6ARAyiDt4rLUFdvU=";
     };
 
     dontPatch = true;
@@ -351,7 +349,10 @@ let
       iedame
       mdaniels5757
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
   };

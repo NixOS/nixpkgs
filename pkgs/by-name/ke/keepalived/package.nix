@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests.keepalived = nixosTests.keepalived;
+  passthru.tests = nixosTests.keepalived;
 
   nativeBuildInputs = [
     pkg-config

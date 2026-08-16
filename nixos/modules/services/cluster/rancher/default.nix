@@ -29,7 +29,7 @@ let
       containerdConfigTemplateFile = "/var/lib/rancher/${name}/agent/etc/containerd/config.toml.tmpl";
       staticContentChartDir = "/var/lib/rancher/${name}/server/static/charts";
 
-      manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml { };
+      manifestFormat = if jsonManifests then pkgs.formats.json { } else pkgs.formats.yaml_1_2 { };
       # Manifests need a valid suffix to be respected
       mkManifestTarget =
         name:

@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;

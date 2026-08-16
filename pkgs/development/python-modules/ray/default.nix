@@ -60,6 +60,8 @@
   scipy,
   # serve
   fastapi,
+  jinja2,
+  mmh3,
   starlette,
   uvicorn,
   watchfiles,
@@ -73,9 +75,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.55.1";
+  version = "2.57.0";
   format = "wheel";
-  __structuredAttres = true;
+  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.15";
 
@@ -91,22 +93,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-1TgtoYHAPuL1Au9Gzwrku8MBV7W9mmfXZR9qJyUoqFo=";
-          cp312 = "sha256-JjcF9rqynnYiqU+C2iX9f5zq12zfiaB6qyj3nN+PnZU=";
-          cp313 = "sha256-E4DgQ+tXzeabfpGZxvJVjO648PxByX0dXlDqBCEV8wI=";
-          cp314 = "sha256-FW7T5yrZW2RdIAbNcajd28yJtWv8AAJ/YiWt94vZy3Q=";
+          cp311 = "sha256-sMw9Q1vvbn/+hIgW5zadMO4pfojEwavGMjzJOD/zgm8=";
+          cp312 = "sha256-WV0Iix/RrdZGVMbOviA+JZA3h7ZQ01xKPcAI1FHkikE=";
+          cp313 = "sha256-caocUv54AM0he2Ab+f9VfCo//l+tWwD2eS2ppniyyRQ=";
+          cp314 = "sha256-AssrX99BJG9rkwbIUkfucTG/7unTak7a5UZT4C7XiQw=";
         };
         aarch64-linux = {
-          cp311 = "sha256-DqL2cKdyWDOtIzOoxGq2mGWtBsjl3p9laV4PjzUzHOw=";
-          cp312 = "sha256-JlQfabtVYH74M1uqx1su0S/yzgLVYxMhmyntoAMDkiE=";
-          cp313 = "sha256-tBXVkOBi8kiQfg/kKZSUPxFya3F4/PSxz1VGch+xpfg=";
-          cp314 = "sha256-TmGNYeGxS2/emlhhUfP9nUNbC4UEi5l7yqf0pTN0eys=";
+          cp311 = "sha256-epgm4zv69GUhmrMp4F8D4/apGfzl0haS9axWakQnfLM=";
+          cp312 = "sha256-7rHRrbYb0div/cX7VVrwSU/tj+xTuDV21MYPgR4GvpQ=";
+          cp313 = "sha256-Xi2SWPdRZ291gdwK0wfC2RKQglRCNmEoye0MzQ9guEU=";
+          cp314 = "sha256-4kiTkpbwyPRrPnNCFVV3YJSXKx28c9SAJHm5kXfCJp4=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-AFP9W0APesViY6obvT1o+3k0Gwi43Gl8iHgtWsp7PtQ=";
-          cp312 = "sha256-E3+QBu7ijKq4JggDzKMU83u9o/yU/foxx3C10Bliatg=";
-          cp313 = "sha256-+YRKknLvLm61dxAlhmByz0I0z0x8waMeI1t95xEYZL4=";
-          cp314 = "sha256-sGIEXGTCvOOaUWYWJPcpLHu/MPKp2Hhieq4x1G2lcS0=";
+          cp311 = "sha256-oBbWJYtTVxlS8qglFXGy1z2PawmBvmxh4WDMkBtxGHE=";
+          cp312 = "sha256-jvWRV1xTF5P+t/d3RMUsNFCf9YtIsw0KO8tqFmYlawI=";
+          cp313 = "sha256-IbZ+3cdRuoxl3u6GVAdcK0KFEQTJNs5CynlExLbsR5k=";
+          cp314 = "sha256-eYoe4k5O3jnpAPzJNdhttfCA0np0xX4yOKUAS6kXEgA=";
         };
       };
     in
@@ -117,7 +119,7 @@ buildPythonPackage (finalAttrs: {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
@@ -215,10 +217,16 @@ buildPythonPackage (finalAttrs: {
     serve = lib.unique (
       [
         fastapi
+        # Undeclared upstream: `ray.serve._private.haproxy`, imported by the serve controller since
+        # 2.57.0, needs it
+        jinja2
+        mmh3
         requests
         starlette
         uvicorn
         watchfiles
+        # `ray-haproxy` (upstream, linux-only) is not packaged: it only ships an HAProxy binary, and
+        # ray falls back to `haproxy` from PATH
       ]
       ++ self.default
     );

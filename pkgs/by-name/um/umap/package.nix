@@ -4,7 +4,6 @@
   fetchFromGitHub,
   writeShellScript,
   makeWrapper,
-  umap,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
@@ -16,16 +15,20 @@ let
       django = prev.django_5.override { withGdal = true; };
     };
   };
+
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "umap";
   version = "3.7.3";
   pyproject = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-rM1o83/udkqiVD0nSiAjNVAzriJr2ztvSXh45wxmYzU=";
   };
 
@@ -69,7 +72,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    pythonPath = "${umap}/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}";
+    pythonPath = "${finalAttrs.finalPackage}/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}";
   };
 
   nativeBuildInputs = [
@@ -78,6 +81,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
       start_script = writeShellScript "umap-serve" ''
         ${lib.getExe python3.pkgs.uvicorn} "$@" umap.asgi:application;
       '';
@@ -85,7 +89,7 @@ python.pkgs.buildPythonApplication rec {
     ''
       makeWrapper ${start_script} $out/bin/umap-serve \
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
-        --prefix PYTHONPATH : "${python.pkgs.makePythonPath dependencies}";
+        --prefix PYTHONPATH : "${pythonPath}"
     '';
 
   nativeCheckInputs =
@@ -139,4 +143,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "umap";
   };
-}
+})

@@ -48,7 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/intgr/ego";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       mio
     ];
     mainProgram = "ego";

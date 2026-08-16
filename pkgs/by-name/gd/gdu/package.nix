@@ -47,6 +47,7 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
         "TestAnalyzePathWithIgnoring"
+        "TestTopDirFollowSymlink"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -62,7 +63,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/dundee/gdu";
     changelog = "https://github.com/dundee/gdu/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       zowoq

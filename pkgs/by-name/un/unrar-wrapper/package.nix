@@ -8,14 +8,24 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "unrar-wrapper";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "unrar_wrapper";
-    rev = "unrar_wrapper-${finalAttrs.version}";
+    tag = "unrar_wrapper-${finalAttrs.version}";
     sha256 = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
   };
+
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+  ];
 
   makeWrapperArgs = [
     "--prefix"

@@ -9,10 +9,10 @@
 }:
 
 let
-  version = "2.8.6";
-  srcHash = "sha256-pKP4g2pTMYtx/B/Y3ow7tvDdhCSuwbszzeLVXB0W7Bo=";
-  vendorHash = "sha256-VBafft9/AuXaHWvZymy7P9gaSuO8D6IZHfK68Ixp3mI=";
-  manifestsHash = "sha256-h/HR/rJwPWXiuoj9T+LajdsdT4Jo8/EuN+O1I7e9sjI=";
+  version = "2.9.4";
+  srcHash = "sha256-7Suhsg1tWn6gzkPDQT4BII0hTCM3HCCZTTtFVNumA9A=";
+  vendorHash = "sha256-3CMj5MI5cILnyWoWkcBzD5X626nsQ6nfipeqN35IQEk=";
+  manifestsHash = "sha256-+187K4w//AxtSYcrA3NoVCSFpTkjNqZmfOlbdzD9YmI=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -85,7 +85,6 @@ buildGoModule rec {
       ryan4yin
       SchahinRohani
       stealthybox
-      superherointj
     ];
     mainProgram = "flux";
   };

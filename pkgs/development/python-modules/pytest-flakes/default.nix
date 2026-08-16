@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     license = lib.licenses.mit;
-    homepage = "https://pypi.python.org/pypi/pytest-flakes";
+    homepage = "https://pypi.org/project/pytest-flakes/";
     description = "Pytest plugin to check source code with pyflakes";
   };
 })

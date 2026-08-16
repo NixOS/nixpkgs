@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.15";
+  version = "1.1.16";
   pyproject = true;
 
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-yrcPLNN15hB4WMkB8TSNWU9QnV8sEh8EL9HNQrrXPd8=";
+    hash = "sha256-6y8EOxxXuqsDTAHW0wKOq4D17GjqouyJy5VyEHwzaiI=";
   };
 
   build-system = [

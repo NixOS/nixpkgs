@@ -56,6 +56,12 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
+  disabledTests = [
+    # Uses outdated pandas API as an oracle
+    "nanargmin"
+    "nanargmax"
+  ];
+
   meta = {
     description = "Fast N-dimensional aggregation functions with Numba";
     homepage = "https://github.com/numbagg/numbagg";

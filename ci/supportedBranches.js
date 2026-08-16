@@ -2,6 +2,7 @@
 /*
 #!nix-shell -i node -p nodejs
 */
+// @ts-nocheck
 
 const typeConfig = {
   master: ['development', 'primary'],

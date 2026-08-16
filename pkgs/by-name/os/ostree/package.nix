@@ -38,8 +38,8 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   replaceVars,
   openssl,
   ostree-full,
@@ -55,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2026.1";
+  version = "2026.2";
 
   outputs = [
     "out"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jnfChd1vpexfsGMTA5CXe+cn/hEQczXth3ikA4UGnpU=";
+    hash = "sha256-ooHy22MfNyHs1Lnid5oer1bi0D8sxHYpqfARfxIBaoM=";
   };
 
   patches = [
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

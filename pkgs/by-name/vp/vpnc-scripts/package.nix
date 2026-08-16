@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
-  version = "unstable-2023-01-03";
+  version = "unstable-2026-06-29";
 
   src = fetchgit {
     url = "https://gitlab.com/openconnect/vpnc-scripts.git";
-    rev = "22756827315bc875303190abb3756b5b1dd147ce";
-    hash = "sha256-EWrDyXg47Ur9mFutaG8+oYOCAW9AZowzwwJp3YbogIY=";
+    rev = "ce9e961bd0f6b867e1c7c35f78f6fb973f6ff101";
+    hash = "sha256-Gbu+UCw6uSXH5pGpzLx9mc8D1/tpRNwfF5h5QdEBbYE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

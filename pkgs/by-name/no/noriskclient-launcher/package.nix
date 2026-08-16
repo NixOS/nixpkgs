@@ -5,6 +5,7 @@
   glib,
   glib-networking,
   gsettings-desktop-schemas,
+  jdk25,
   jdk17,
   jdk21,
   jdk8,
@@ -12,6 +13,7 @@
     jdk8
     jdk17
     jdk21
+    jdk25
   ],
   lib,
   libGL,
@@ -84,7 +86,7 @@ symlinkJoin {
 
     glibPostInstallHook
     gappsWrapperArgsHook
-    wrapGAppsHook
+    wrapGApp "$out/bin/noriskclient-launcher-v3"
   '';
 
   meta = {

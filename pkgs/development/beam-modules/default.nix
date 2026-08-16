@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   erlang,
@@ -88,7 +89,6 @@ let
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
-      webdriver = callPackage ./webdriver { };
 
       inherit (callPackages ./hooks { })
         beamCopySourceHook
@@ -99,6 +99,10 @@ let
         rebar3CompileHook
         rebarDevendorPatchHook
         ;
+
+    }
+    // lib.optionalAttrs config.allowAliases {
+      webdriver = throw "'beamPackages.webdriver' has been removed."; # added 2026-07-29
     };
 in
 makeExtensible packages

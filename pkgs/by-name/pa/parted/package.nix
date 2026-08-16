@@ -38,23 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libuuid
-  ]
-  ++ lib.optional (readline != null) readline
-  ++ lib.optional (gettext != null) gettext
-  ++ lib.optional (lvm2 != null) lvm2;
+    readline
+    gettext
+    lvm2
+  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
-  configureFlags =
-    (if (readline != null) then [ "--with-readline" ] else [ "--without-readline" ])
-    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ lib.optional enableStatic "--enable-static";
+  configureFlags = lib.optional enableStatic "--enable-static";
 
   enableParallelBuilding = true;
 
-  # Tests were previously failing due to Hydra running builds as uid 0.
-  # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; # translation test
   nativeCheckInputs = [
     check

@@ -63,6 +63,12 @@ in
     ];
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+    knownVulnerabilities = [
+      ''
+        This version of PyCharm has multiple known security vulnerabilities, see NIXPKGS-2026-2269: https://tracker.security.nixos.org/issues/NIXPKGS-2026-2269.
+        The package `jetbrains.pycharm-oss` is currently not receiving updates in nixpkgs, consider using `jetbrains.pycharm`.
+      ''
+    ];
   };
 }).overrideAttrs
   pyCharmCommonOverrides

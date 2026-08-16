@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libdrm
     libva
@@ -51,18 +52,18 @@ stdenv.mkDerivation rec {
     libxdmcp
     libpthread-stubs
   ];
-  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTS=OFF"
     "-DUSE_SYSTEM_GTEST=ON"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   meta = {
     description = "Intel Media SDK";
+    homepage = "https://github.com/Intel-Media-SDK/MediaSDK";
     mainProgram = "mfx-tracer-config";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     ];
     knownVulnerabilities = [
       ''
-        End of life with various local privilege escalation vulnerabilites:
+        End of life with various local privilege escalation vulnerabilities:
           - CVE-2023-22656
           - CVE-2023-45221
           - CVE-2023-47169

@@ -16,19 +16,19 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2025.3.4.6"; # "Android Studio Panda 4 | 2025.3.4"
-    sha256Hash = "sha256-Mqf/CayqOLSNYciIK+5+ITAiqLoNHxbABzOA+stQn9M=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.6/android-studio-panda4-linux.tar.gz";
+    version = "2026.1.3.8"; # "Android Studio Quail 3 | 2026.1.3 Patch 1"
+    sha256Hash = "sha256-W9XuXW50exP4L7oyQTgL01jML0qEeBXI6GB1ffE9w18=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.3.8/android-studio-quail3-patch1-linux.tar.gz";
   };
   betaVersion = {
-    version = "2025.3.4.5"; # "Android Studio Panda 4 | 2025.3.4 RC 1"
-    sha256Hash = "sha256-NiNq1j+rzPU4KsLKYymfi5/Vx2Bn3hK8I3OVIUFloX0=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.5/android-studio-panda4-rc1-linux.tar.gz";
+    version = "2026.1.3.6"; # "Android Studio Quail 3 | 2026.1.3 RC 2"
+    sha256Hash = "sha256-Mgwy+Cbx5yBCHWUEcvMfAsC1zMk3j7A5fWtMrVJgmAk=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.3.6/android-studio-quail3-rc2-linux.tar.gz";
   };
   latestVersion = {
-    version = "2026.1.1.2"; # "Android Studio Quail 1 | 2026.1.1 Canary 2"
-    sha256Hash = "sha256-jdbxyK7V4EJI5sCk31oo77lH6uXTM0QjljUgWn5Bl3M=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.2/android-studio-quail1-canary2-linux.tar.gz";
+    version = "2026.1.4.4"; # "Android Studio Quail 4 | 2026.1.4 Canary 4"
+    sha256Hash = "sha256-gcVlZzJ1/euSsKVrmYLXHt1Ym2kNghTzIk6crZXhGKQ=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.4.4/android-studio-quail4-canary4-linux.tar.gz";
   };
 in
 {

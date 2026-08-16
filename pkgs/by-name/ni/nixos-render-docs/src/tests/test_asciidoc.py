@@ -45,6 +45,18 @@ f
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })
     assert c._render(sample1) == """\
+[NOTE]
+====
+This is a __GFM__ note{zwsp}.
+
+[CAUTION]
+=====
+This is a **nested** GFM alert{zwsp}.
+=====
+
+====
+
+
 [WARNING]
 ====
 foo

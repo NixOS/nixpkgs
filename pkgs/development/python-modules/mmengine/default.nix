@@ -6,7 +6,7 @@
   fetchpatch,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   addict,
@@ -71,7 +71,8 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "import numpy.compat" ""
     '';
 
-  build-system = [ setuptools ];
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict
@@ -109,6 +110,11 @@ buildPythonPackage (finalAttrs: {
     '';
 
   disabledTestPaths = [
+    # MlflowVisBackend uses the deprecated mlflow filesystem store, which is
+    # throws an error since mlflow 3.13. See upstream issue:
+    # https://github.com/open-mmlab/mmengine/issues/1687
+    "tests/test_visualizer/test_vis_backend.py::TestMLflowVisBackend"
+
     # Require unpackaged aim
     "tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
@@ -160,6 +166,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: No valid profiler activities found
+    "test_with_runner"
+
     # Require network access
     "test_fileclient"
     "test_http_backend"
@@ -204,7 +213,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
 })

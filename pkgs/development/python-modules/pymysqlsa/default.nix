@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "PyMySQL dialect for SQL Alchemy";
-    homepage = "https://pypi.python.org/pypi/pymysql_sa";
+    homepage = "https://pypi.org/project/pymysql_sa/";
     license = lib.licenses.mit;
   };
 }

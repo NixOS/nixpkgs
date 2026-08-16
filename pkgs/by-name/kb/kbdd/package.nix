@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "kbdd";
-  version = "unstable-2021-04-26";
+  version = "unstable-2025-08-10";
 
   src = fetchFromGitHub {
     owner = "qnikst";
     repo = "kbdd";
-    rev = "3145099e1fbbe65b27678be72465aaa5b5872874";
-    sha256 = "1gzcjnflgdqnjgphiqpzwbcx60hm0h2cprncm7i8xca3ln5q6ba1";
+    rev = "b87e44afd5859157245eee22b11827605bfa09b9";
+    hash = "sha256-cbMcB6jgssfMUjemBOiE06zJK2TbzOWt1Rvt41V33Mo=";
   };
 
   nativeBuildInputs = [

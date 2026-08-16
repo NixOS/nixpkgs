@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "defuddle";
-  version = "0.17.0";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "kepano";
     repo = "defuddle";
     tag = version;
-    hash = "sha256-w1V2xdaE8Htl6NeDyfKLFHOt3UEUuI4eBPW433qD1WI=";
+    hash = "sha256-Cabf8hxlZdKM5A+YCpbZrqv+odxtaWMsVneb+ZlCKEI=";
   };
 
-  npmDepsHash = "sha256-D+Gn9Dcc+YNeRonnKjEcp3BzpxIdwy7J4lJvxefJSvs=";
+  npmDepsHash = "sha256-foGObUvMGqZ2ZDDSqzkxUrFxD4ZXGoHlIAOf8N/5diY=";
 
   # jsdom is both a peerDependency and devDependency; pruning
   # devDependencies removes it, but the CLI needs it at runtime.

@@ -25,7 +25,7 @@
   glib,
   gtk3,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libdrm,
   libnotify,
   libpulseaudio,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       glib
       gtk3
       libGL
-      libappindicator-gtk3
+      libappindicator
       libdrm
       libnotify
       libpulseaudio
@@ -150,6 +150,10 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
+
+    # Move the icon to a spec-compliant location
+    mkdir -p $out/share/icons/hicolor/512x512
+    mv $out/share/{pixmaps,icons/hicolor/512x512/apps}
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \

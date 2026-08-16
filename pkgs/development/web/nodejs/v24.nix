@@ -9,10 +9,16 @@
 }:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix (
+    {
+      inherit openssl;
+      python = python3;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # libcxx21 makes FD tracking unreliable on Darwin. Pinning to libcxx20:
+      stdenv = buildPackages.llvmPackages_20.libcxxStdenv;
+    }
+  );
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -23,22 +29,13 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.14.1";
-  sha256 = "7822507713f202cf2a551899d250259643f477b671706db421a6fb55c4aa0991";
+  version = "24.19.0";
+  sha256 = "f6d95e10a0431ee1067fc6aabe9f762908b4716dd35324e1ddb4b1466b76659f";
   patches =
-    (
-      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-        [
-          ./configure-emulator.patch
-        ]
-      else
-        [
-          (fetchpatch2 {
-            url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
-            hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
-          })
-        ]
-    )
+    (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
+      hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
+    }))
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # This patch is concerning.
       # https://github.com/nodejs/node/issues/54576
@@ -56,18 +53,6 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove this when included in a next release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
-        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
-        includes = [ "test/*" ];
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/59a522af24173b244cb86829de145d46b143a45c.patch?full_index=1";
-        hash = "sha256-mjxl4rIio8lgjvxqfKrVwdhOUHUUDH2PMh0n8BowXIQ=";
-        includes = [ "src/*" ];
-      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
@@ -78,13 +63,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # TODO: remove once included in an future upstream release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/f13d7bf69a7f1642fb5b1b624eff1a50ceb71849.patch?full_index=1";
-        hash = "sha256-4PZq1gG/K+FwAM06VIXYoSNJeOYe37kfKW0jqczeXbc=";
-      })
     ];
 }

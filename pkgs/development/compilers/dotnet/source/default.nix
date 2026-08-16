@@ -65,7 +65,7 @@ let
           releaseManifestFile
           tarballHash
           ;
-        bootstrapSdk = bootstrapSdk.unwrapped;
+        inherit bootstrapSdk;
         hasRuntime = false;
       }
     else
@@ -75,7 +75,7 @@ let
           tarballHash
           depsFile
           ;
-        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
+        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
           passthru = old.passthru or { } // {
             inherit artifacts;
           };

@@ -6,7 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  ffmpeg,
+  jellyfin-ffmpeg,
   handbrake,
   mkvtoolnix,
   ccextractor,
@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -24,6 +23,11 @@
   libxfixes,
   tesseract4,
   perl,
+  apprise,
+  openssl,
+  nixosTests,
+  pnpm_10,
+  nodejs,
 }:
 {
   pname,
@@ -38,7 +42,6 @@ let
     {
       x86_64-linux = "linux_x64";
       aarch64-linux = "linux_arm64";
-      x86_64-darwin = "darwin_x64";
       aarch64-darwin = "darwin_arm64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -51,8 +54,10 @@ let
 
   binPath = lib.makeBinPath (
     [
-      ffmpeg
+      jellyfin-ffmpeg
       mkvtoolnix
+      pnpm_10
+      nodejs
     ]
     ++ includeInPath
     # ! Handbrake is currently marked as broken on darwin
@@ -77,15 +82,13 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${ffmpeg}/bin/ffmpeg"
+      "${jellyfin-ffmpeg}/bin/ffmpeg"
       "--set-default"
       "ffprobePath"
-      "${ffmpeg}/bin/ffprobe"
+      "${jellyfin-ffmpeg}/bin/ffprobe"
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
-    ]
-    ++ lib.optionals (component == "server") [
       "--set-default"
       "ccextractorPath"
       "${ccextractor}/bin/ccextractor"
@@ -100,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.66.01";
+  version = "2.85.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -112,16 +115,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
     gtk3
     libayatana-appindicator
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
@@ -129,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxfixes
+    apprise
+    openssl
   ];
 
   postPatch = ''
@@ -141,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     # * exiftool-vendored checks for /usr/bin/perl existence; when missing (NixOS), it sets ignoreShebang=true which breaks spawn by using shell:true with an env lacking PATH. Since we patched the shebang, force ignoreShebang to false.
     substituteInPlace node_modules/exiftool-vendored/dist/ExifTool.js \
       --replace-fail '!_fs.existsSync("/usr/bin/perl")' 'false'
+
+    # * Substitute in nixpkgs version of pnpm as autopatchelf breaks the bundled copy see: https://github.com/NixOS/nixpkgs/issues/544841
+    rm ./runtime/pnpm
+    makeWrapper ${pnpm_10}/bin/pnpm ./runtime/pnpm \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   preInstall = ''
@@ -159,6 +168,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    # Remove musl-only prebuilt Node addons on glibc systems.
+    # autoPatchelf scans all ELF files in $out and fails if musl libc is missing.
+    ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) ''
+      find $out/share/${pname} -type f -name '*.musl.node' -delete
+    ''}
+
     makeWrapper $out/share/${pname}/${componentName} $out/bin/${pname} ${commonWrapperArgs}
     makeWrapper $out/share/${pname}/${componentTrayName} $out/bin/${pname}-tray ${commonWrapperArgs}
   ''
@@ -174,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + "";
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       desktopName = "Tdarr ${componentUpper} Tray";
       name = "Tdarr ${componentUpper} Tray";
@@ -191,6 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       command = [ ./update-hashes.sh ];
       supportedFeatures = [ "commit" ];
     };
+    tests.nixos = nixosTests.tdarr;
   }
   // passthru;
 
@@ -201,7 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [ mistyttm ];

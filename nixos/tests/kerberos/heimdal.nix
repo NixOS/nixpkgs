@@ -169,7 +169,7 @@ import ../make-test-python.nix (
         with subtest("Server: initialize host principal with keytab"):
           server.send_chars("sudo ktutil get -p alice/admin host/server.foo.bar\n")
           server.wait_until_tty_matches("1", "password for alice:")
-          server.send_chars("${nodes.server.config.users.users.alice.password}\n")
+          server.send_chars("${nodes.server.users.users.alice.password}\n")
           server.wait_until_tty_matches("1", "alice/admin@FOO.BAR's Password:")
           server.send_chars(f'{alice_krb_admin_pw}\n')
           server.wait_for_file("/etc/krb5.keytab")
@@ -194,7 +194,7 @@ import ../make-test-python.nix (
 
           client.send_chars("sudo ktutil get -p alice/admin host/client.foo.bar\n")
           client.wait_until_tty_matches("1", "password for alice:")
-          client.send_chars("${nodes.client.config.users.users.alice.password}\n")
+          client.send_chars("${nodes.client.users.users.alice.password}\n")
           client.wait_until_tty_matches("1", "alice/admin@FOO.BAR's Password:")
           client.send_chars(f"{alice_krb_admin_pw}\n")
           client.wait_for_file("/etc/krb5.keytab")

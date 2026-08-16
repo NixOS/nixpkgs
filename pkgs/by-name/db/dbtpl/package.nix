@@ -10,16 +10,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "dbtpl";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "dbtpl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r0QIgfDSt7HWnIDnJWGbwkqkXWYWGXoF5H/+zS6gEtE=";
+    hash = "sha256-mY3UyTDlofSgkOjlJTVCtJz26DVoxzOjzZ9paFBpB3M=";
   };
 
-  vendorHash = "sha256-scJRJaaccQovxhzC+/OHuPR4NRaE8+u57S1JY40bif8=";
+  vendorHash = "sha256-Gr2gNIasf5/CGqUx1ONkqICcjJvOQyC322S/lH+a0U0=";
 
   nativeBuildInputs = [
     installShellFiles

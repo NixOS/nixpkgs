@@ -11,20 +11,20 @@
   python3,
   srcOnly,
   removeReferencesTo,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-++aNTkLOkwgkzRxg/WdrHfchXQwUUir0qqmb7WfdZJ0=";
+    hash = "sha256-/rEVeNxLgqeoxJTyzArZAGzAbJjfOjHuG+zpOnf40Mk=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     node-gyp
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildInputs = [
@@ -52,20 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version;
-    pnpm = pnpm_9;
-
-    # We need to pass the patched source code, so pnpm sees the patched version
-    src = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-patched-source";
-      inherit (finalAttrs) src patches;
-      installPhase = ''
-        cp -pr --reflink=auto -- . $out
-      '';
-    };
-
-    fetcherVersion = 3;
-    hash = "sha256-+MbKG0h3cD0kZua0OkdQsUeTjAY4ysK41KXUSaOSKHA=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-0ExBj87CbzgTis9/Z0J2d82051SXlEOgwXO+jAWxCi4=";
   };
   buildPhase = ''
     runHook preBuild

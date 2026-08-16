@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs,
+  nodejs_22,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -25,7 +25,9 @@
 }:
 
 let
-  yarn-berry = yarn-berry_4;
+  # nodejs pin should be obsolete once #522655 is in master
+  nodejs = nodejs_22;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
 
   releaseData = lib.importJSON ./release-data.json;
 in
@@ -43,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
@@ -50,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
+    inherit (finalAttrs)
+      src
+      missingHashes
+      ;
     hash = releaseData.deps_hash;
   };
 
@@ -217,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "@joplin/app-desktop";
+      startupWMClass = "joplin-app-desktop";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];

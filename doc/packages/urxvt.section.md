@@ -22,7 +22,7 @@ rxvt-unicode.override {
 
 If the `configure` function returns an attrset without the `plugins` attribute, `availablePlugins` will be used automatically.
 
-In order to add plugins but also keep all default plugins installed, it is possible to use the following method:
+To add plugins but also keep all default plugins installed, it is possible to use the following method:
 
 ```nix
 rxvt-unicode.override {

@@ -54,6 +54,9 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace get_dependencies.sh \
       --replace-fail 'sudo apt' 'echo Skipping sudo apt'
+
+    substituteInPlace sipsimple/__info__.py \
+      --replace-fail '__version__ = "5.3.3"' '__version__ = "${finalAttrs.version}"'
   '';
 
   strictDeps = true;

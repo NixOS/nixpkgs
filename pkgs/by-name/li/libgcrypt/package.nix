@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gettext,
   libgpg-error,
   enableCapabilities ? false,
@@ -17,12 +18,22 @@ assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.11.2";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-a6Wd0ZInDowdIt20GgfZXc28Hw+wLQPEtUsjWBQzCqw=";
+    hash = "sha256-fOM8JJIiGgQ2+WqFACFenz49y1/SanV81BXnqEO6vV4=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Remove in next release
+    # https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5
+    # zvkned AES corrupts CBC/CFB/CTR/OCB/XTS output on VLEN>128 hardware
+    (fetchpatch {
+      url = "https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5.patch";
+      hash = "sha256-1LSrIwsN0n5IBRDZ+9MJTEjzY+/T6LQO6hX1ke8hSuc=";
+    })
+  ];
 
   outputs = [
     "bin"
@@ -73,17 +84,6 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     sed -i configure \
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
-  ''
-  # The cipher/simd-common-riscv.h wasn't added to the release tarball, please remove this hack on next version update
-  # https://dev.gnupg.org/T7647
-  + lib.optionalString stdenv.hostPlatform.isRiscV ''
-    cp ${
-      fetchurl {
-        url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob_plain;f=cipher/simd-common-riscv.h;h=8381000f9ac148c60a6963a1d9ec14a3fee1c576;hb=81ce5321b1b79bde6dfdc3c164efb40c13cf656b";
-        hash = "sha256-Toe15YLAOYULnLc2fGMMv/xzs/q1t3LsyiqtL7imc+8=";
-        name = "simd-common-riscv.h";
-      }
-    } cipher/simd-common-riscv.h
   '';
 
   enableParallelBuilding = true;
@@ -104,12 +104,17 @@ stdenv.mkDerivation rec {
     sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $lib/lib/libgcrypt.la
   '';
 
-  # TODO: figure out why this is even necessary and why the missing dylib only crashes
-  # random instead of every test
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
-    mkdir -p $lib/lib
-    cp src/.libs/libgcrypt.20.dylib $lib/lib
-  '';
+  preCheck =
+    # glibc loads libgcc_s dynamically when a thread exits
+    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.cc.isClang) ''
+      export LD_LIBRARY_PATH="${buildPackages.stdenv.cc.cc.libgcc}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    ''
+    # TODO: figure out why this is even necessary and why the missing dylib only crashes
+    # random instead of every test
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
+      mkdir -p $lib/lib
+      cp src/.libs/libgcrypt.20.dylib $lib/lib
+    '';
 
   doCheck = true;
   enableParallelChecking = true;

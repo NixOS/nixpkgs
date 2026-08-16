@@ -14,7 +14,7 @@
   libarchive,
   libdmapsharing,
   libsoup_3,
-  librest_1_0,
+  librest,
   gnome,
   libxml2,
   lua5_4,
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    # libgdata
     lua5_4
     liboauth
     sqlite
@@ -91,7 +90,7 @@ stdenv.mkDerivation rec {
     libarchive
     libdmapsharing
     libsoup_3
-    librest_1_0
+    librest
     gmime
     gom
     json-glib

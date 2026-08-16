@@ -34,7 +34,6 @@
   pytest-celery,
   pytest-click,
   pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   python-memcached,
@@ -156,11 +155,6 @@ buildPythonPackage (finalAttrs: {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Using `pytest-xdist` leads to incomplete tests which hang `pytestRemoveBytecode`
-    # under `sandbox=false` (the default on Darwin).
-    pytest-xdist
-  ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
@@ -187,7 +181,7 @@ buildPythonPackage (finalAttrs: {
     "test_stamping_headers_in_options"
     "test_stamping_with_replace"
     # pymongo api compat
-    # TypeError: InvalidDocument.__init__() missing 1 required positional argumen...
+    # TypeError: InvalidDocument.__init__() missing 1 required positional argument...
     "test_store_result"
     "test_store_result_with_request"
 
@@ -203,6 +197,9 @@ buildPythonPackage (finalAttrs: {
 
     # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
     "test_check_privileges_without_c_force_root_and_no_group_entry"
+
+    # click 8.4 error message flag quoting changes
+    "test_preload_options"
   ]
   ++ lib.optionals (lib.versionAtLeast django.version "6.0") [
     "test_is_pickled"

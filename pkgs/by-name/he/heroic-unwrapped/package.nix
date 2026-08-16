@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -21,7 +21,7 @@
 }:
 
 let
-  pnpm = pnpm_10_29_2;
+  pnpm = pnpm_10;
 
   legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rgLmm9krjPYjSn/wGAYbnFw7kqvuu9IBipb4ibOClOw=";
+    hash = "sha256-RDJDeL5exEzF2BhEWoiXWsTpV5hytrB6RDoXV0mTWTw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-O3QQsk8pvF9U5QvuMebCsy/iYz1oZIMkPeMtWohqW3w=";
+    hash = "sha256-lPHL6pA39hvEtq5WkcAXfcY3a0VPseQL/nI+oEjIZeE=";
   };
 
   nativeBuildInputs = [

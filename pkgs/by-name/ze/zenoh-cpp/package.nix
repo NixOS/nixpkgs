@@ -2,24 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   zenoh-c,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-cpp";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.9.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-rznvif87UZbYzZB4yHG4R850qm6Z3beJ1NSG4wrf58M=";
+    hash = "sha256-MwQKTxrQqfoASCRk+vBeS9EHvmh6sqrpqygQVrdGkWw=";
   };
 
+  patches = [
+    # ref. https://github.com/eclipse-zenoh/zenoh-cpp/pull/790 merged upstream
+    (fetchpatch2 {
+      name = "fix-cmake-exports-and-pc.patch";
+      url = "https://github.com/eclipse-zenoh/zenoh-cpp/commit/a55543277ce93fa3d0871b5b30fb18c04a283db2.patch?full_index=true";
+      hash = "sha256-oaCeLTrQ7veWzpTEKGo4pDmNLKmnBIjBkuX71vRtjoo=";
+    })
+  ];
+
   cmakeFlags = [
-    "-DZENOHCXX_ZENOHC=ON"
-    "-DZENOHCXX_ZENOHPICO=OFF"
+    (lib.cmakeBool "ZENOHCXX_ZENOHC" true)
+    (lib.cmakeBool "ZENOHCXX_ZENOHPICO" false)
   ];
 
   nativeBuildInputs = [
@@ -30,10 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     zenoh-c
   ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/zenohcxx.pc \
-      --replace-fail "\''${prefix}/" ""
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ API for zenoh";

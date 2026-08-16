@@ -34,11 +34,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "5.0.3";
+      version = "5.0.4";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "5.0.3";
-        sha256 = "sha256-nGWgQqVCYwB0K4mueG9ynWshjyFFyzYLi7x807Powmw=";
+        version = "5.0.4";
+        sha256 = "sha256-fgzg0yNrG1afDvE5jrJzIf2GNnJy4LFPOJDQQTrMPpo=";
       };
       beamDeps = [ katana_code ];
     };

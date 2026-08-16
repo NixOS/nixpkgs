@@ -61,6 +61,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   enabledTestPaths = [ "skops" ];
+  # Override the overly strict pyproject.toml:tool.pytest.ini_options.filterwarnings
+  # https://github.com/skops-dev/skops/issues/523
+  pytestFlags = [
+    "-W"
+    "ignore::FutureWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # fairlearn is not available in nixpkgs

@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lists.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # <nv/target> and <cuda/std/type_traits>
+      cccl # <nv/target> and <cuda/std/type_traits>
       cuda_cudart # cuda_runtime.h
       libcublas # cublas_v2.h
       libcusparse # cusparse.h

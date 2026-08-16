@@ -17,19 +17,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncpraw";
-  version = "7.8.1-unstable-2025-10-08";
+  version = "8.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncpraw";
-    rev = "9221cbef5d94fce9ecc92376cbab084f0082502d";
-    hash = "sha256-/7x7XYw1JDVaoc2+wKWW3iUkyfI6MVtBNP9G1AEUp4Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lVRIZP9XsUEM1Czl4YC10EdSC8RmO5ugPgo3THyqi9A=";
   };
 
   pythonRelaxDeps = [
-    "coverage"
     "defusedxml"
+    "update-checker"
   ];
 
   build-system = [ hatchling ];
@@ -38,12 +38,12 @@ buildPythonPackage (finalAttrs: {
     aiofiles
     aiohttp
     asyncprawcore
-    coverage
     defusedxml
     update-checker
   ];
 
   nativeCheckInputs = [
+    coverage
     pytestCheckHook
     pytest-asyncio
     pytest-vcr

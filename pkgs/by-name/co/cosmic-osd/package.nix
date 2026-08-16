@@ -15,17 +15,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.10";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-TniUR2CwqHkouQ1OPYi8z3jxDiXJoWYqUjheKtmggD8=";
+    hash = "sha256-a1+JJILBiiUZywXD5iuxlrph0lsAAAtK/J4biMtfQ3Y=";
   };
 
-  cargoHash = "sha256-Q6nsaYlAZwSoANsrrdaIrNdnzaJiBRMUzZdbtHLupio=";
+  cargoHash = "sha256-5hput7WMstON8YG9GNNU61T+bQevGV72mAHYMtJJXng=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   nativeBuildInputs = [
     just
@@ -51,8 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   passthru = {
     tests = {

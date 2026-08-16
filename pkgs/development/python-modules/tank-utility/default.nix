@@ -6,7 +6,7 @@
   pytestCheckHook,
   requests,
   responses,
-  setuptools,
+  setuptools_80,
   urllib3,
 }:
 
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     urllib3
   ];

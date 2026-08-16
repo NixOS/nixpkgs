@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "smtprelay";
-  version = "1.13.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "decke";
     repo = "smtprelay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CKE0KYzLBp3nS4gIUqQ1jyu9c4uBi3x9WcLA1zxTemY=";
+    hash = "sha256-tvmspqXzsBTEmW8b87FtqGgF4pMWpssN0AH5OoeQR44=";
   };
 
-  vendorHash = "sha256-kiFPTm46Ws3orwmm/pIz8amcYOq7038exLQ5fU9QqI8=";
+  vendorHash = "sha256-QowoS+qQy/AhhyW8F6OWYaMQ4BubszIPom1wt3Tzdxc=";
 
   subPackages = [
     "."

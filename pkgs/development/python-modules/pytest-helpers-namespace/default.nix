@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  isPy27,
   lib,
   setuptools,
   setuptools-declarative-requirements,
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-helpers-namespace";
   version = "2021.12.29";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

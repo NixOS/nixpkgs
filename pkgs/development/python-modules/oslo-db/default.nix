@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "18.0.0";
+  version = "18.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_db";
     inherit version;
-    hash = "sha256-lL/zJBrTie9YZsFpGd4AWuDlud8YFO65TUAnxXUnCSM=";
+    hash = "sha256-B16GziPAwh2x01CR8dyyGwVEnInDpDJtpPLT+4MwIj8=";
   };
 
   build-system = [
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     oslo-utils
     sqlalchemy
     stevedore
-  ];
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     aiosqlite
@@ -58,7 +59,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "oslo_db.tests.sqlalchemy.test_utils.TestModelQuery.test_project_filter_allow_none")
+    stestr run
     runHook postCheck
   '';
 

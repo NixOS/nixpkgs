@@ -25,6 +25,7 @@
   vte,
   xxhash,
   zlib,
+  zydis,
   useX11 ? false,
   rubyBindings ? false,
   luaBindings ? false,
@@ -40,26 +41,26 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.4.2"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-JN27SkDqHtX83d1CPUF9hbVKwE/dwhDgn5MlCX9RPrc=";
+    tag = "2.5.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-TSZGAzryZcVHJPnCx7zrP1+nschsOm1zmkCJyqA4kbk=";
   };
 
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "3087a2ce5bcb66cc1fcd9f34d3e5ce3bd43a67d9"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
-    hash = "sha256-Z6DUe/W1+3SYPRPCiL3oNL5ovXCsW3dsFuGkA9WF3W4=";
+    rev = "9d15fb60b67c45fd0de413bb49e48f8dacebac16"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-TH139/44X2FPUTqEdqB09QSUE+QJhudnA+dQF8f8BN0=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.4";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
-    owner = "radare";
+    owner = "radareorg";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-3MwBtjR3XQMhbJHnD30OVedUEKcje5jDPszNynkGCT8=";
+    hash = "sha256-7BCNdPWzsjUuVftbxUZ6iChR5KDp2yKVjKi+1oHt9O8=";
   };
 
   mesonFlags = [
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "use_sys_openssl" true)
     (lib.mesonBool "use_sys_xxhash" true)
     (lib.mesonBool "use_sys_zip" true)
+    (lib.mesonBool "use_sys_zydis" true)
     (lib.mesonBool "use_sys_zlib" true)
     (lib.mesonOption "r2_gittap" finalAttrs.version)
   ];
@@ -97,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     readline
     zlib
+    zydis
   ]
   ++ lib.optionals useX11 [
     gtkdialog

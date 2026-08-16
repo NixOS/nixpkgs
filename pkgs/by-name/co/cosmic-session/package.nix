@@ -12,28 +12,34 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.10";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-t7BUBJ9MjTSd2rSkKtiYkltbfcpOcXl2smXxV84l3GY=";
+    hash = "sha256-lL8is6WveKxOn/Ej3SrMfLrulnb+Qw9QAPcCbdLo07E=";
   };
-
-  cargoHash = "sha256-wFh9AYQRZB9qK0vCrhW9Zk61Yg+VY3VPAqJRD47NbK4=";
 
   postPatch = ''
     substituteInPlace data/start-cosmic \
-      --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
+      --replace-fail '/usr/bin/cosmic-session' "$out/bin/cosmic-session" \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
     substituteInPlace data/cosmic.desktop \
-      --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
+      --replace-fail '/usr/bin/start-cosmic' "$out/bin/start-cosmic"
   '';
 
-  buildInputs = [ bash ];
+  cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.ORCA = "orca"; # get orca from $PATH
+
   nativeBuildInputs = [ just ];
+
+  buildInputs = [ bash ];
 
   dontUseJustBuild = true;
 
@@ -48,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.ORCA = "orca"; # get orca from $PATH
 
   passthru = {
     providedSessions = [ "cosmic" ];

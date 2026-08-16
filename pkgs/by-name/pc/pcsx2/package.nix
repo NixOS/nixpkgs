@@ -5,8 +5,8 @@
   cmake,
   cubeb,
   curl,
-  extra-cmake-modules,
-  ffmpeg,
+  kdePackages,
+  ffmpeg_8,
   gtk3,
   libxrandr,
   libaio,
@@ -75,7 +75,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapGAppsHook3
@@ -84,8 +84,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     curl
-    ffmpeg
+    ffmpeg_8
     gtk3
     libaio
     libbacktrace

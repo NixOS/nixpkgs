@@ -6,20 +6,28 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   nixosTests,
+  testers,
+  upterm,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "upterm";
-  version = "0.20.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qTw8bYROAAB7FwKCCQamIbWGbqSexXl87DdvSNsFZ/I=";
+    hash = "sha256-b52Rny6mYkmfF6Umn2tzlnUhNkENHPFpCzp55OWj92w=";
   };
 
-  vendorHash = "sha256-5OAS7s9A95h5LihXgOwkOXAMylS7g+lqjaI3MKTvlW0=";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/owenthereal/upterm/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  vendorHash = "sha256-UkZnLbxn0dPT43ycuevcwMw0dXnX1OPHLh5F1XMHWDI=";
 
   subPackages = [
     "cmd/upterm"
@@ -47,7 +55,14 @@ buildGoModule (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) uptermd; };
+  passthru.tests = {
+    inherit (nixosTests) uptermd;
+    version = testers.testVersion {
+      package = upterm;
+      command = "HOME=$PWD upterm version"; # upterm tries to write to $HOME
+      version = "Upterm version ${finalAttrs.version}";
+    };
+  };
 
   __darwinAllowLocalNetworking = true;
 

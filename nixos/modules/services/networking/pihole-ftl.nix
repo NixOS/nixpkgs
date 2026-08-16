@@ -9,6 +9,7 @@ with {
   inherit (lib)
     elemAt
     getExe
+    getExe'
     hasAttrByPath
     mkEnableOption
     mkIf
@@ -409,6 +410,17 @@ in
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;
+          # Avoid creating an empty database file if it doesn't yet exist
+          ConditionFileNotEmpty = cfg.settings.files.database;
+          ExecStart =
+            let
+              days = toString cfg.queryLogDeleter.age;
+              database = cfg.settings.files.database;
+            in
+            [
+              "${getExe' pkgs.coreutils "echo"} 'Deleting query logs older than ${days} days'"
+              "${getExe cfg.package} sqlite3 '${database}' 'DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1'"
+            ];
           # Hardening
           NoNewPrivileges = true;
           PrivateTmp = true;
@@ -427,22 +439,6 @@ in
           MemoryDenyWriteExecute = true;
           LockPersonality = true;
         };
-        script =
-          let
-            days = toString cfg.queryLogDeleter.age;
-            database = cfg.settings.files.database;
-          in
-          ''
-            set -euo pipefail
-
-            # Avoid creating an empty database file if it doesn't yet exist
-            if [ ! -f "${database}" ]; then
-              exit 0;
-            fi
-
-            echo "Deleting query logs older than ${days} days"
-            ${getExe cfg.package} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
-          '';
       };
     };
 
@@ -491,11 +487,18 @@ in
 
     users.groups.${cfg.group} = { };
 
-    environment.etc."pihole/pihole.toml" = {
-      source = settingsFile;
-      user = cfg.user;
-      group = cfg.group;
-      mode = "400";
+    environment.etc = {
+      "pihole/pihole.toml" = {
+        source = settingsFile;
+        user = cfg.user;
+        group = cfg.group;
+        mode = "400";
+      };
+
+      "pihole/versions".text = ''
+        CORE_VERSION=${cfg.piholePackage.src.src.tag}
+        FTL_VERSION=${cfg.package.src.tag}
+      '';
     };
 
     environment.systemPackages = [ cfg.pihole ];

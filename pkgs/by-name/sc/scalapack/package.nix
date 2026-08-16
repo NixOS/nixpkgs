@@ -61,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
   ];
 
-  # xslu and xsllt tests seem to time out on x86_64-darwin.
-  # this line is left so those who force installation on x86_64-darwin can still build
-  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
+  doCheck = true;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -93,7 +91,5 @@ stdenv.mkDerivation (finalAttrs: {
       markuskowa
       gdinh
     ];
-    # xslu and xsllt tests fail on x86 darwin
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

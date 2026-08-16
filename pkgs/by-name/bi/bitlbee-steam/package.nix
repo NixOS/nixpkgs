@@ -15,10 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
-    rev = "v${finalAttrs.version}";
     owner = "bitlbee";
     repo = "bitlbee-steam";
-    sha256 = "121r92mgwv445wwxzh35n19fs5k81ihr0j19k256ia5502b1xxaq";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WPUelgClqGiKmClIkGEMaBbtUrBlwN85L4Rs/qpIOYg=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
     ./autogen.sh
   '';
+
+  # Source uses `bool` as a variable name, reserved in C23.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   meta = {
     description = "Steam protocol plugin for BitlBee";

@@ -5,24 +5,24 @@
 }:
 let
   pname = "nbping";
-  version = "0.6.1";
+  version = "0.7.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "hanshuaikang";
-    repo = "Nping";
+    repo = "NBping";
     tag = "v${version}";
-    hash = "sha256-6eUsvNMQoJ5TUWPkOlmcJqdmxaXoBStnhiXiya+0nV8=";
+    hash = "sha256-QaJTV5RNvsYuBUPrWcmbBj1QSKtfDNTvHd5fMfuoU3c=";
   };
 
-  cargoHash = "sha256-6+drbq9dQ5/Atzoz9VPS4BoYEPeM5OqPXUuM1AXP72g=";
+  cargoHash = "sha256-H0FG3BE/iP3knosnUVzJtNXt8hQ9E8Jh/2MTmviNhfA=";
 
   meta = {
     description = "Ping Tool in Rust with Real-Time Data and Visualizations";
-    homepage = "https://github.com/hanshuaikang/Nping";
-    changelog = "https://github.com/hanshuaikang/Nping/releases/";
+    homepage = "https://github.com/hanshuaikang/NBping";
+    changelog = "https://github.com/hanshuaikang/NBping/releases/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "nbping";

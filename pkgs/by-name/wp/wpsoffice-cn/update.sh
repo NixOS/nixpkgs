@@ -17,18 +17,15 @@ linux_version=$(echo "$linux_payload" | grep -oP '(?<=banner_txt">)[^<]+')
 darwin_version=$(echo "$darwin_payload" | grep -oP '(?<=\s)\d+(?:\.\d+)+(?=/)')
 
 linux_amd64_url=$(echo "$linux_payload" | grep -oP "downLoad\('[^']*'" | head -1 | sed "s/downLoad('//;s/'$//")
-darwin_amd64_url="https://package.mac.wpscdn.cn/mac_wps_pkg/${darwin_version}/WPS_Office_${darwin_version}(${darwin_version##*.})_x64.dmg"
 darwin_arm64_url="https://package.mac.wpscdn.cn/mac_wps_pkg/${darwin_version}/WPS_Office_${darwin_version}(${darwin_version##*.})_arm64.dmg"
 
 timestamp10=$(date '+%s')
 linux_amd64_md5hash=($(printf '%s' "$SECURITY_KEY${linux_amd64_url#$prefix}$timestamp10" | md5sum))
 
 linux_amd64_hash=$(nix-prefetch-url --name "wpsoffice-cn-$linux_version.deb" "$linux_amd64_url?t=$timestamp10&k=$linux_amd64_md5hash")
-darwin_amd64_hash=$(nix-prefetch-url --name "wpsoffice-cn-$darwin_version.dmg" "$darwin_amd64_url")
 darwin_arm64_hash=$(nix-prefetch-url --name "wpsoffice-cn-$darwin_version.dmg" "$darwin_arm64_url")
 
 linux_amd64_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$linux_amd64_hash")
-darwin_amd64_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$darwin_amd64_hash")
 darwin_arm64_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$darwin_arm64_hash")
 
 cat > sources.nix << EOF
@@ -40,10 +37,6 @@ cat > sources.nix << EOF
   x86_64-linux = {
     url = "$linux_amd64_url";
     hash = "$linux_amd64_hash";
-  };
-  x86_64-darwin = {
-    url = "$darwin_amd64_url";
-    hash = "$darwin_amd64_hash";
   };
   aarch64-darwin = {
     url = "$darwin_arm64_url";

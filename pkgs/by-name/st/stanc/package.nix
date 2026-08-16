@@ -6,7 +6,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.38.0";
+  version = "2.39.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "stan-dev";
     repo = "stanc3";
     tag = "v${version}";
-    hash = "sha256-j05PMQKIqkM9UWJzSVnkYWe6d+iUnmFOh1W8pZ7Fdyk=";
+    hash = "sha256-ZAH9uFEZu75BC2xYGUXg62RHiADmKYBYP2Nt8bwEVRY=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

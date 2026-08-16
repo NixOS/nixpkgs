@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Get list of common stop words in various languages in Python";
     homepage = "https://github.com/Alir3z4/python-stop-words";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lavafroth ];
   };
 }

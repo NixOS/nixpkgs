@@ -2,21 +2,33 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anchor";
-  version = "1.0.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
-    owner = "solana-foundation";
+    owner = "otter-sec";
     repo = "anchor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpLNocNrSWkf/b34PCmUKqFumdo3LcOyGMtN8O2ciEU=";
+    hash = "sha256-/aDNw+Up48NZZIjEKXj4M2UIbcCt766Tv0eOlFau2gQ=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Nx5g+X9cPL71Gf9J/Zp5u6H8rrbDQW6KqTc/Ti+mzow=";
+  cargoHash = "sha256-oEgWfklxjP8+TxrhDKJgcTsanpqJpEiHXJyir8neYj8=";
+
+  # Upstream patch to fix cargo metadata discovery on macOS Nix sandboxes.
+  # Replaces fragile subprocess-cwd approach with in-process manifest path
+  # resolution. Remove on next version bump (included in v1.1.3+).
+  # See: https://github.com/otter-sec/anchor/pull/4757
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/otter-sec/anchor/commit/25bf2112b67d84e5bc406d7eac2919c90d8e54ed.patch";
+      hash = "sha256-q5OGNoUGPuCNHgaZNo9fmUxqQnFH2MhRW4ZefX+Of0Y=";
+    })
+  ];
 
   # Only build the anchor-cli package
   cargoBuildFlags = [
@@ -32,8 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Solana Sealevel Framework";
-    homepage = "https://github.com/solana-foundation/anchor";
-    changelog = "https://github.com/solana-foundation/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/otter-sec/anchor";
+    changelog = "https://github.com/otter-sec/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       Denommus

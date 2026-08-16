@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx-retries";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "will-ockmore";
     repo = "httpx-retries";
     tag = finalAttrs.version;
-    hash = "sha256-LElTcIWNsb2AVbk3dXcCnXeB8JhyM7Y64nTZGZWlVm8=";
+    hash = "sha256-9AQqyveBAqD159J1VhIhp8GrZJLQhJ22A5cFjpaa7o0=";
   };
 
   build-system = [

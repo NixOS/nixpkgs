@@ -1,7 +1,7 @@
-# Data flow for testing CRX2RNX and RNX2CRX (file type after each step in paranthesis):
+# Data flow for testing CRX2RNX and RNX2CRX (file type after each step in parenthesis):
 # Example file --(.crx.gz)--> unzip --(.crx)--> CRX2RNX --(.rnx)--> RNX2CRX --(.crx)--> compare two crx files
 
-# Data flow for testing CRZ2RNX and RNX2CRZ (file type after each step in paranthesis):
+# Data flow for testing CRZ2RNX and RNX2CRZ (file type after each step in parenthesis):
 # Example files --(.crx.gz)--> CRZ2RNX --(.rnx)--> RNX2CRZ --(.crx.gz)--> unzip --(.crx)--v
 #                         \--> unzip --(.crx)-------------------------------------------> compare crx files
 # The last unzip step is needed because the .crx files themselves contain

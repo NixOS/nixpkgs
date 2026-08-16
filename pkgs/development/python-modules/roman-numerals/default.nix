@@ -24,6 +24,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   pythonImportsCheck = [ "roman_numerals" ];
 
   meta = {

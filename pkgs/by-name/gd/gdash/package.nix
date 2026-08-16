@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
   ];
 
-  env.NIX_CFLAGS_COMPILE = " -I${SDL2_image}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = " -I${lib.getInclude SDL2_image}/include/SDL2";
 
   doCheck = true;
 

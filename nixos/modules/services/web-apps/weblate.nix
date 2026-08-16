@@ -9,6 +9,7 @@ let
   cfg = config.services.weblate;
 
   dataDir = "/var/lib/weblate";
+  cacheDir = "${dataDir}/cache";
   settingsDir = "${dataDir}/settings";
 
   finalPackage = cfg.package.overridePythonAttrs (old: {
@@ -362,6 +363,18 @@ in
       ];
       inherit environment;
       path = weblatePath;
+      # Weblate generates SSH wrappers with some preset options that use the
+      # absolute paths of the ssh and scp binaries internally.
+      # As the wrapper is only regenerated when the generator itself is changed,
+      # this absolute nix store path becomes unusable once ssh is updated and
+      # the path is garbage collected.
+      # As generating the wrappers is a quick operation, simply deleting the
+      # wrapper directory before service start ensures they are up to date.
+      preStart = ''
+        if [ -d "${cacheDir}/ssh" ]; then
+          rm -r "${cacheDir}/ssh"
+        fi
+      '';
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "all";

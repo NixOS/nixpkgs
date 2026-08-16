@@ -4,6 +4,8 @@
 {
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
+  advanced-browser = callPackage ./advanced-browser { };
+
   ajt-card-management = callPackage ./ajt-card-management { };
 
   anki-connect = callPackage ./anki-connect { };

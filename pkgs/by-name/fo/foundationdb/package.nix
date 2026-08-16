@@ -16,9 +16,11 @@
   jemalloc,
   doctest,
   zlib,
+  llvm,
 }:
 let
   boost = boost186;
+  isDarwin = stdenv.hostPlatform.isDarwin;
   # Only even numbered versions compile on aarch64; odd numbered versions have avx enabled.
   avxEnabled =
     version:
@@ -27,6 +29,8 @@ let
       patch = lib.toInt (lib.versions.patch version);
     in
     isOdd patch;
+  # ".so" on Linux, ".dylib" on Darwin - used to point CMake at the right OpenSSL libs.
+  sharedLibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 stdenv.mkDerivation rec {
   pname = "foundationdb";
@@ -93,9 +97,23 @@ stdenv.mkDerivation rec {
     openjdk
     pkg-config
     python3
-  ];
+  ]
+  # On Darwin FDB archives LTO objects with llvm-ar/llvm-ranlib (Linux uses
+  # gold + gcc-ar).
+  ++ lib.optional isDarwin llvm;
 
-  separateDebugInfo = true;
+  # The vendored fmt 8.1.1 fails to compile its consteval format-string checks
+  # under the non-Apple LLVM clang used on Darwin ("call to consteval function
+  # ... is not a constant expression"). fmt only enables the consteval path when
+  # __apple_build_version__ is undefined - true here - so defining FMT_CONSTEVAL
+  # empty drops back to runtime checks, which clang accepts. Kept in an
+  # optionalAttrs so non-Darwin derivations are untouched.
+  env = lib.optionalAttrs isDarwin {
+    NIX_CFLAGS_COMPILE = "-DFMT_CONSTEVAL=";
+  };
+
+  # separateDebugInfo relies on objcopy and ELF; it is a no-op / unsupported on Darwin.
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   cmakeFlags = [
     "-DFDB_RELEASE=TRUE"
@@ -118,15 +136,20 @@ stdenv.mkDerivation rec {
     # LTO brings up overall build time, but results in much smaller
     # binaries for all users and the cache.
     "-DUSE_LTO=ON"
-
-    # Gold helps alleviate the link time, especially when LTO is
-    # enabled. But even then, it still takes a majority of the time.
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Gold helps alleviate the link time, especially when LTO is enabled. But
+    # even then, it still takes a majority of the time. Gold is a binutils/ELF
+    # linker: on Darwin FDB would pass "-fuse-ld=gold -Wl,--disable-new-dtags",
+    # neither of which the system linker (ld64) understands, so leave USE_LD at
+    # its default (the system linker) there.
     "-DUSE_LD=GOLD"
-
+  ]
+  ++ [
     # FIXME: why can't openssl be found automatically?
     "-DOPENSSL_USE_STATIC_LIBS=FALSE"
-    "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto.so"
-    "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl.so"
+    "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto${sharedLibExt}"
+    "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl${sharedLibExt}"
   ];
 
   # the install phase for cmake is pretty wonky right now since it's not designed to
@@ -173,7 +196,13 @@ stdenv.mkDerivation rec {
     description = "Open source, distributed, transactional key-value store";
     homepage = "https://www.foundationdb.org";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (!(avxEnabled version)) [
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     # Fails when cross-compiling with "/bin/sh: gcc-ar: not found"
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
     maintainers = with lib.maintainers; [

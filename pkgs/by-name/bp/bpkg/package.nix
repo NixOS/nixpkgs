@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bpkg";
-  version = "0.17.0";
+  version = "0.18.0";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Yw6wvTqO+VfCo91B2BUT0A8OIN0MVhGK1USYM7hgGMs=";
+    hash = "sha256-EcDxvQ3P182gkZWkE3qI586vIlJXlDrYC2DoU0Out18=";
   };
 
   strictDeps = true;

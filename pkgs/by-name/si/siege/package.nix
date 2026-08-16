@@ -18,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   env =
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
       NIX_LDFLAGS = toString [ "-lgcc_s" ];
+      NIX_CFLAGS_COMPILE = "-std=gnu17";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       # Borrowed solution from homebrew: https://github.com/Homebrew/homebrew-core/blob/1c7c95183c0984a84b1680422afab6578c300a27/Formula/s/siege.rb#L31

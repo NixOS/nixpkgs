@@ -13,8 +13,8 @@ let
 
 in
 symlinkJoin {
-
-  name = "vdr-with-plugins-${lib.getVersion vdr}";
+  pname = "vdr-with-plugins";
+  inherit (vdr) version;
 
   paths = [ vdr ] ++ plugins;
 

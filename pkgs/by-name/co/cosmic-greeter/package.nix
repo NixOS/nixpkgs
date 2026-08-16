@@ -19,21 +19,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.10";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-59t0jKXspmhwnTYPa96tNkYrOuCFZ80g/VJsyrZ0s10=";
+    hash = "sha256-QQfV8M/Bh5zEgzcMUcUmO1eP/PoZzFPYZEO/4n1d/lU=";
   };
 
-  cargoHash = "sha256-MZmbwmc1DPCZ9g4OM9gy0IuXgy/zxreujEYY3Ji5Ad8=";
+  postPatch = ''
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
+  '';
 
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  cargoHash = "sha256-5A+7sgZqJcXjK51i5thAm9LK1SrW9ly8NHyf3IZfWQA=";
 
   cargoBuildFlags = [ "--all" ];
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -61,11 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  postPatch = ''
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
-  '';
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(

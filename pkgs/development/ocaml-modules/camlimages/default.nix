@@ -6,15 +6,12 @@
   dune-configurator,
   cppo,
   graphics,
-  lablgtk,
   stdio,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "camlimages";
   version = "5.0.5";
-
-  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitLab {
     owner = "camlspotter";
@@ -31,17 +28,15 @@ buildDunePackage (finalAttrs: {
     dune-configurator
     findlib
     graphics
-    lablgtk
     stdio
   ];
 
   meta = {
     branch = "5.0";
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://gitlab.com/camlspotter/camlimages";
     description = "OCaml image processing library";
     license = lib.licenses.lgpl2;
     maintainers = [
-      lib.maintainers.vbgl
       lib.maintainers.mt-caret
     ];
   };

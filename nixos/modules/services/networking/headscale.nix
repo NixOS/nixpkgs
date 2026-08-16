@@ -36,8 +36,10 @@ in
       configFile = lib.mkOption {
         type = lib.types.path;
         readOnly = true;
-        default = settingsFormat.generate "headscale.yaml" cfg.settings;
-        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" config.services.headscale.settings'';
+        default = settingsFormat.generate "headscale.yaml" (
+          lib.filterAttrsRecursive (n: v: v != null) cfg.settings
+        );
+        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" (lib.filterAttrsRecursive (n: v: v != null) config.services.headscale.settings)'';
         description = ''
           Path to the configuration file of headscale.
         '';
@@ -90,6 +92,18 @@ in
       };
 
       settings = lib.mkOption {
+        apply =
+          settings:
+          lib.showWarnings settings.warnings (
+            (lib.removeAttrs settings [
+              "assertions"
+              "ephemeral_node_inactivity_timeout"
+              "warnings"
+            ])
+            // {
+              dns = lib.removeAttrs settings.dns [ "split" ];
+            }
+          );
         description = ''
           Overrides to {file}`config.yaml` as a Nix attribute set.
           Check the [example config](https://github.com/juanfont/headscale/blob/main/config-example.yaml)
@@ -97,6 +111,15 @@ in
         '';
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
+
+          imports = [
+            ../../misc/assertions.nix
+            (lib.mkRenamedOptionModule [ "dns" "split" ] [ "dns" "nameservers" "split" ])
+            (lib.mkRenamedOptionModule
+              [ "ephemeral_node_inactivity_timeout" ]
+              [ "node" "ephemeral" "inactivity_timeout" ]
+            )
+          ];
 
           options = {
             server_url = lib.mkOption {
@@ -199,7 +222,7 @@ in
               };
             };
 
-            ephemeral_node_inactivity_timeout = lib.mkOption {
+            node.ephemeral.inactivity_timeout = lib.mkOption {
               type = lib.types.str;
               default = "30m";
               description = ''
@@ -344,17 +367,17 @@ in
                     List of nameservers to pass to Tailscale clients.
                   '';
                 };
-              };
 
-              split = lib.mkOption {
-                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-                default = { };
-                description = ''
-                  Split DNS configuration (map of domains and which DNS server to use for each).
-                  See <https://tailscale.com/kb/1054/dns/>.
-                '';
-                example = {
-                  "foo.bar.com" = [ "1.1.1.1" ];
+                split = lib.mkOption {
+                  type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                  default = { };
+                  description = ''
+                    Split DNS configuration (map of domains and which DNS server to use for each).
+                    See <https://tailscale.com/kb/1054/dns/>.
+                  '';
+                  example = {
+                    "foo.bar.com" = [ "1.1.1.1" ];
+                  };
                 };
               };
 
@@ -396,6 +419,16 @@ in
                     example = "100.64.0.3";
                   } ]
                 '';
+              };
+
+              extra_records_path = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = ''
+                  Path to a JSON file containing extra DNS records.
+                  This is mutually exclusive with {option}`extra_records`.
+                '';
+                example = "/run/headscale/records.json";
               };
 
               search_domains = lib.mkOption {
@@ -599,7 +632,7 @@ in
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
-      [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
+      [ "services" "headscale" "settings" "node" "ephemeral" "inactivity_timeout" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]
@@ -656,6 +689,10 @@ in
       {
         assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
         message = "dns.nameservers.global must be set when overriding local DNS";
+      }
+      {
+        assertion = with cfg.settings; dns.extra_records_path == null || dns.extra_records == null;
+        message = "dns.extra_records and dns.extra_records_path are mutually exclusive";
       }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
       (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")

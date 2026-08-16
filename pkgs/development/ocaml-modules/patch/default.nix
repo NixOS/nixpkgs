@@ -7,7 +7,7 @@
   crowbar,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "patch";
   version = "3.0.0";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "hannesm";
     repo = "patch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WIleUxfGp8cvQHYAyRRI6S/MSP4u0BbEyAqlRxCb/To=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.isc;
   };
-}
+})

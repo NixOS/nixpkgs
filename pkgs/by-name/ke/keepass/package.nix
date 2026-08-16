@@ -14,7 +14,6 @@
   coreutils,
   unixtools,
   glib,
-  gtk2,
   makeDesktopItem,
   plugins ? [ ],
 }:
@@ -52,14 +51,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.60";
+  version = "2.61.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-AraAdneAkLTS1wZ7pWC0Mm51m50s2hCy6wN74nlUtxo=";
+    hash = "sha256-cRvZ7HB2ZhZ4Rp5Ruuh23rrAegjDLxscazuP5edhwTo=";
   };
 
   sourceRoot = ".";
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     unzip
@@ -119,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
   binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
-
-  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   installPhase = ''
     runHook preInstall

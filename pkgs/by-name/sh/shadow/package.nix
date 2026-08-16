@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.19.4";
+  version = "4.20.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     tag = finalAttrs.version;
-    hash = "sha256-vR6dwB3EttGY2DgQ20nOr9kNhF+nsAaBEyklcJAZ20Y=";
+    hash = "sha256-UafTyfK+pmW2wyAQnvHov9KIorf1HSc6haskfv7auHs=";
   };
 
   outputs = [
@@ -139,7 +139,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     shellPath = "/bin/nologin";
-    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
+    # Package the upstream system test framework for use in nixosTests
+    testFramework = stdenv.mkDerivation {
+      name = "shadow-test-framework";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/tests/system";
+      installPhase = ''
+        cp -r . $out/
+      '';
+      dontBuild = true;
+      postPatch = ''
+        # Replace the gshadow existence check in the test framework with a more NixOS-friendly one, since NixOS does not have /etc/gshadow as a regular file
+        substituteInPlace framework/hosts/shadow.py \
+          --replace-fail 'getent gshadow > /dev/null 2>&1' 'test -f /etc/gshadow'
+
+        # Remove the backup entry for gshadow, since it's not being used in the tests running on NixOS
+        sed -i '/{"origin": "\/etc\/gshadow", "backup": "gshadow"}/d' framework/hosts/shadow.py
+
+        # Replace the Debian-specific check in the useradd test with a NixOS-specific one
+        substituteInPlace tests/test_useradd.py \
+          --replace-fail 'if "Debian" in shadow.host.distro_name:' 'if "NixOS" in shadow.host.distro_name:'
+      '';
+    };
   };
 })

@@ -13,14 +13,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.92.1";
+  version = "0.97.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gAXLt0e2k5PA6PgFRQa22oGuNLM7TGkOKQnYtFhn8I8=";
+    hash = "sha256-p9NIt+n7MTsYWAFS+FOuSGMJUZi8rBlTb6ATgVJ+uU8=";
   };
 
   postPatch =
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
   };
 
-  cargoHash = "sha256-TqYxkkzlbgrc7jkAubz3TsXhcU8Do5IFaLRqSPiZVR0=";
+  cargoHash = "sha256-JtNGubDMrUINCCiawrAW63L1trcBCAIibFpojK8mzhc=";
 
   cargoBuildFlags = [
     "-p"

@@ -3,26 +3,25 @@
   pkgs,
   fetchFromGitHub,
   rustPlatform,
-  pythonImportsCheckHook,
   buildPythonPackage,
   pkg-config,
   heimdal,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-kadmin-rs";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authentik-community";
     repo = "kadmin-rs";
-    rev = "kadmin/version/${version}";
-    hash = "sha256-7aRbpQblRFoCmuZJgm2mrGoUNL0BBcIpzlKblCnHVPc=";
+    tag = "kadmin/version/${finalAttrs.version}";
+    hash = "sha256-zl0N6cIcRFsShKOc3aazYsTlEBXpnymP9nsdaBky1OE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-dzTcB5GfeUbgikznq4YFEzZ75z0zvz4I1/+5UCQ0e2o=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-NXPc8hssmMXcmuK15oF5CIV+cUAmRoml6BXYhIkRdvI=";
   };
 
   # The include directories of krb5 and heimdal contain overlapping paths.
@@ -60,7 +59,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    pythonImportsCheckHook
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
@@ -73,11 +71,11 @@ buildPythonPackage rec {
   meta = {
     description = "Rust and Python interfaces to the Kerberos administration interface (kadm5)";
     homepage = "https://github.com/authentik-community/kadmin-rs";
-    changelog = "https://github.com/authentik-community/kadmin-rs/releases/tag/kadmin%2Fversion%2F${version}";
+    changelog = "https://github.com/authentik-community/kadmin-rs/releases/tag/kadmin%2Fversion%2F${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jvanbruegge
       risson
     ];
   };
-}
+})

@@ -1,7 +1,5 @@
 {
   lib,
-  pkgs,
-  pkg-config,
   mkCoqDerivation,
   coq,
   wasmcert,
@@ -41,13 +39,9 @@ mkCoqDerivation {
       ]
       null;
   release = {
-    "0.9.1+9.1".sha256 = "sha256-YsweBaoq8+QG63e7Llp/4bHldAFnSQSyMumJkb+Bsp0=";
+    "0.9.1+9.1".hash = "sha256-YsweBaoq8+QG63e7Llp/4bHldAFnSQSyMumJkb+Bsp0=";
   };
   releaseRev = v: "v${v}";
-
-  buildInputs = [
-    pkgs.clang
-  ];
 
   propagatedBuildInputs = [
     wasmcert
@@ -57,10 +51,17 @@ mkCoqDerivation {
     metarocq-safechecker-plugin
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./configure.sh
     patchShebangs ./clean_extraction.sh
     patchShebangs ./make_plugin.sh
+
+    # drop after  https://github.com/CertiRocq/certirocq/pull/162
+    substituteInPlace runtime/Makefile \
+      --replace-fail "gcc -I /opt/homebrew/include" '$(CC)'
+    substituteInPlace clean_extraction.sh \
+      --replace-fail "mv aST.ml AST.ml" "mv aST.ml AST.ml.tmp && mv AST.ml.tmp AST.ml" \
+      --replace-fail "mv aST.mli AST.mli" "mv aST.mli AST.mli.tmp && mv AST.mli.tmp AST.mli"
   '';
 
   configurePhase = ''

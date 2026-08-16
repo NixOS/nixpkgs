@@ -19,6 +19,9 @@ let
       buildInputs = [ vdr ];
       preConfigure = "cd PLUGINS/src/${name}";
       installFlags = [ "DESTDIR=$(out)" ];
+      meta = {
+        homepage = "https://git.tvdr.de/?p=vdr.git";
+      };
     };
 in
 {
@@ -41,7 +44,7 @@ in
 
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
-    version = "1.8.3";
+    version = "1.8.4";
 
     buildInputs = [ vdr ];
 
@@ -51,7 +54,7 @@ in
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
       rev = version;
-      sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
+      sha256 = "sha256-EFPY1Pt79reL05Tdu14HYE9E+CnT9mdUYifGzTsNpMA=";
     };
 
     meta = {

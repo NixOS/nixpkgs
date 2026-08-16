@@ -1,5 +1,3 @@
-(stack trace truncated; use '--show-trace' to show the full, detailed trace)
-
 error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:16 because it has problems:
 - broken: This package is broken.
 

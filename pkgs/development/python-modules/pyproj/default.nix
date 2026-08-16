@@ -43,14 +43,6 @@ buildPythonPackage rec {
       url = "https://github.com/pyproj4/pyproj/pull/1560.diff?full_index=1";
       hash = "sha256-fr+lvDeVFDagc9aHzaQhyZtWK2sy5kR7iImJsuxW8Z4=";
     })
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1568.diff?full_index=1";
-      hash = "sha256-fVFg3/ikOk6LiRHA/u14g+ZFsROGE7me878Vvq4mxG4=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/pyproj4/pyproj/pull/1581.diff?full_index=1";
-      hash = "sha256-EdzUCt4P99ENS2qCBU30FUNnJYD0B2CqcmZXwEYLdVA=";
-    })
   ];
 
   build-system = [
@@ -90,6 +82,10 @@ buildPythonPackage rec {
     "test_sync__source_id__list"
     "test_sync_download"
     "test_transformer_group__download_grids"
+    # https://github.com/pyproj4/pyproj/issues/1588
+    "test_coordinate_operation__from_string"
+    "test_transformer_from_pipeline__input_types"
+    "test_transformer_from_pipeline__wkt_json"
   ];
 
   pythonImportsCheck = [

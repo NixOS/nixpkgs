@@ -31,7 +31,10 @@ buildGoModule (finalAttrs: {
     description = "Prometheus exporter based on eBPF";
     homepage = "https://github.com/coroot/coroot-node-agent";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ errnoh ];
+    maintainers = with lib.maintainers; [
+      errnoh
+      allsimon
+    ];
     mainProgram = "coroot-node-agent";
   };
 })

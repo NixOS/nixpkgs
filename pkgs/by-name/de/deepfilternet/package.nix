@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Noise supression using deep filtering";
+    description = "Noise suppression using deep filtering";
     homepage = "https://github.com/Rikorose/DeepFilterNet";
     license = with lib.licenses; [
       mit

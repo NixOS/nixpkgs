@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       course, this applies mostly for digital goods, as the merchant does not need
       to know the customer's physical address.
     '';
-    homepage = "https://taler.net/";
+    homepage = "https://www.taler.net/en/";
     changelog = "https://git-www.taler.net/merchant.git/tree/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];

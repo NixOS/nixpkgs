@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   fcitx5,
   gobject-introspection,
   glib,
@@ -11,7 +12,6 @@
   gtk3,
   gtk4,
   fmt,
-  pcre,
   libuuid,
   libselinux,
   libsepol,
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.1.6";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-4v3XWXXlTYOO2/SKnEBTr5WsGxqFLjsPgCE7goVrFGY=";
+    hash = "sha256-ddXMkk1pQhFCOSzDbRWi/VDWtxqqKhMM4AnVFBGCOyA=";
   };
 
   outputs = [
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     gtk4
     fmt
     fcitx5
-    pcre
     libuuid
     libselinux
     libsepol
@@ -71,7 +70,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gobject-introspection
   ];
 

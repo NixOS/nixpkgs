@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "GSL_LITE_OPT_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "GSL_LITE_OPT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # Building tests is broken on Darwin.

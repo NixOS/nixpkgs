@@ -2,6 +2,7 @@
   lib,
   aio-geojson-client,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -11,16 +12,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.8";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
-    tag = "v${version}";
-    hash = "sha256-JOvmUWrmYQt2hJ9u08Aliv9ImI3AOTk4uBx3Pv8/7/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oZLpmEqsZewPVCKo1HwKK1vzAF0Vr+Vw0bhWV5c0uCw=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
@@ -44,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for accessing the NSW Rural Fire Service incidents feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents";
-    changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

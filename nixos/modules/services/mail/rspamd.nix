@@ -506,6 +506,7 @@ in
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;

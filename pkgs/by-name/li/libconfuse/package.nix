@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
     rev = "v${finalAttrs.version}";
     repo = "libconfuse";
-    owner = "martinh";
+    owner = "libconfuse";
   };
 
   patches = [

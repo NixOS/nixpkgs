@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "which";
-  version = "2.23";
+  version = "2.25";
 
   src = fetchurl {
     url = "mirror://gnu/which/which-${finalAttrs.version}.tar.gz";
-    hash = "sha256-osVYIm/E2eTOMxvS/Tw/F/lVEV0sAORHYYpO+ZeKKnM=";
+    hash = "sha256-HLg+T3AuYLghGrXsTCr7qxsd7IAglFan0vr3WE7SJeo=";
   };
   patches = [
     ./gcc15.patch
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     "info"
     "man"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/which/";

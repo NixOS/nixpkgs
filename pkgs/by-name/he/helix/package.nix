@@ -6,10 +6,13 @@
   helix-unwrapped,
   removeReferencesTo,
   pkgs,
-  tree-sitter,
+  tree-sitter-grammars,
   lockedGrammars ? lib.importJSON ./grammars.json,
   grammarsOverlay ? (
     final: prev: {
+      tree-sitter-agda = prev.tree-sitter-agda.override {
+        excludeBrokenTreeSitterJson = false;
+      };
       tree-sitter-beancount = prev.tree-sitter-beancount.override {
         excludeBrokenTreeSitterJson = false;
       };
@@ -27,6 +30,21 @@
       };
       tree-sitter-sql = prev.tree-sitter-sql.override {
         generate = false;
+      };
+      tree-sitter-strace = prev.tree-sitter-strace.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tact = prev.tree-sitter-tact.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-vue = prev.tree-sitter-vue.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-wit = prev.tree-sitter-wit.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-yuck = prev.tree-sitter-yuck.override {
+        excludeBrokenTreeSitterJson = false;
       };
     }
   ),
@@ -48,13 +66,9 @@ let
         }
     ) prev;
 
-  tree-sitter-grammars =
+  helixTreeSitterGrammars =
     lib.filterAttrs (drvName: _: lib.hasAttr (lib.removePrefix "tree-sitter-" drvName) lockedGrammars)
-      (
-        tree-sitter.grammarsScope.overrideScope (
-          lib.composeExtensions lockedVersionsOverlay grammarsOverlay
-        )
-      );
+      (tree-sitter-grammars.overrideScope (lib.composeExtensions lockedVersionsOverlay grammarsOverlay));
 
   # Dynamic libraries for the grammars always use the `.so` extension, also on Darwin (should use `.dylib`)
   # See here: https://github.com/helix-editor/helix/pull/14982
@@ -64,7 +78,7 @@ let
     lib.concatMapAttrsStringSep "\n" (_: grammar: ''
       install -D ${grammar}/parser $out/${grammar.language}.so
       ${lib.getExe removeReferencesTo} -t ${grammar} $out/${grammar.language}.so
-    '') (lib.filterAttrs (_: lib.isDerivation) tree-sitter-grammars)
+    '') helixTreeSitterGrammars
   );
 
   lockedGrammarsCount = lib.length (lib.attrNames lockedGrammars);
@@ -95,7 +109,7 @@ symlinkJoin {
   passthru = {
     updateScript = ./update.sh;
     runtime = runtimeDir;
-    inherit tree-sitter-grammars;
+    tree-sitter-grammars = helixTreeSitterGrammars;
   };
 
   meta = {

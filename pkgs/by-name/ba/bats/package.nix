@@ -27,15 +27,15 @@
   packcc,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "bats";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
-    rev = "v${version}";
-    hash = "sha256-5VCkOzyaUOBW+HVVHDkH9oCWDI/MJW6yrLTQG60Ralk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pUuSjXxMCFLlsTvErgerHLnaQmcA9eXuKZKRkuOGJ8k=";
   };
 
   patchPhase = ''
@@ -153,7 +153,7 @@ resholve.mkDerivation rec {
           --suffix BATS_LIB_PATH : "$out/share/bats"
       '';
 
-      inherit meta;
+      meta = removeAttrs finalAttrs.meta [ "position" ];
     };
 
   passthru.tests = {
@@ -281,4 +281,4 @@ resholve.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

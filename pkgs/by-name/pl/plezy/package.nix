@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -21,17 +21,19 @@
   _7zz,
   makeBinaryWrapper,
   runCommand,
+  noto-fonts-cjk-sans ? null,
+  use16kPagesizeWorkaround ? false,
 }:
 
 let
   pname = "plezy";
-  version = "1.30.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-9bB9L9f2s0i2xF4JIe4vlEpt/bmF1gf3gxcoHdCrYqc=";
+    hash = "sha256-pSGHB2sN/iySd3WKskvZeBo9H9M3YrsLtfw1LoW15tA=";
   };
 
   simdutf = fetchurl {
@@ -46,16 +48,16 @@ let
   '';
 
   meta = {
-    description = "Modern cross-platform Plex client built with Flutter";
+    description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -63,12 +65,16 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter344.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
+
+    patches = lib.optionals use16kPagesizeWorkaround [
+      ./16k-font-workaround.patch
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -97,6 +103,12 @@ let
       substituteInPlace linux/CMakeLists.txt \
         --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
                        "URL file://${simdutf}"
+    ''
+    + lib.optionalString use16kPagesizeWorkaround ''
+      # Opt-in workaround for invisible text on aarch64-linux systems with 16K page size kernels
+      # (e.g. Asahi Linux). Text was invisible; bundling the font as a Dart asset fixed it,
+      # likely related to libflutter_linux_gtk.so being compiled with 4K page alignment only.
+      install -Dm644 ${noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansCJK-VF.otf.ttc assets/fonts/NotoSans.ttc
     '';
 
     desktopItems = [
@@ -134,7 +146,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-a3LvwWZvLPD7yKKbC+oYXSgoHXUS+mOojzfDyW7/QOE=";
+      hash = "sha256-BF9jKIOzQYpQnJUXD8d2e2GSgIc6ZsjZaqceAc01QI0=";
     };
 
     nativeBuildInputs = [

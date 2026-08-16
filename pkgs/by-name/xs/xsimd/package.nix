@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "13.2.0";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     tag = finalAttrs.version;
-    hash = "sha256-L4ttJxP46uNwQAEUMoJ8rsc51Le2GeIGbT1kX7ZzcPA=";
+    hash = "sha256-0m9gUDCgGh58lf9uPp1Obw4rsqWEL1RffWYB6s315p0=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://github.com/xtensor-stack/xsimd/issues/1030
-    ./disable-test_error_gamma.patch
-
-    # https://github.com/xtensor-stack/xsimd/issues/1063
-    ./relax-asin-precision.diff
-  ];
 
   # strictDeps raises the chance that xsimd will be able to be cross compiled
   strictDeps = true;

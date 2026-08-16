@@ -33,8 +33,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.38.3";
+  version = "3.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
@@ -43,8 +44,15 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-+yfALDxNIjQUgzEJ3/ZtvLIGNmx6bPYRQ9zGXFbcMNM=";
+    hash = "sha256-m+uAf5K7biExv8rmOsyCMAVoKSSRAgm0ugw54s2JvMs=";
   };
+
+  # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
+  # SciPy 1.18.0 and will be removed in SciPy 1.20.0
+  postPatch = ''
+    substituteInPlace pytensor/link/numba/dispatch/linalg/decomposition/qr.py \
+      --replace-fail "lwork=lwork," ""
+  '';
 
   build-system = [
     setuptools
@@ -52,6 +60,9 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "numba"
+  ];
   dependencies = [
     cons
     etuples
@@ -85,15 +96,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTests = [
-    # TypeError: jax_funcified_fgraph() takes 2 positional arguments but 3 were given
-    "test_jax_Reshape_shape_graph_input"
-
-    # AssertionError: equal_computations failed
-    "test_infer_shape_db_handles_xtensor_lowering"
-
-    # Crashes with jax>=0.9.0
-    # in .../jax/_src/compiler.py", line 362 in backend_compile_and_load
-    "test_higher_order_derivatives"
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error

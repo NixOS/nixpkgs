@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pict-rs";
-  version = "0.5.19";
+  version = "0.5.24";
 
   src = fetchFromGitea {
     domain = "git.asonix.dog";
     owner = "asonix";
     repo = "pict-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
+    sha256 = "sha256-jKUDrYBGaWyumnlzMyj+oC41rx8kVnkkUxixSCwFp3Y=";
   };
 
-  cargoHash = "sha256-wZRWusETLl32BJy5lza4Bvix500VkpXLUpQb5aO8yJ0=";
+  cargoHash = "sha256-W4Bj+juON8mPyXDHgFpTBBFOvQlmYIKihXHBHwelah4=";
 
   env = {
     # needed for internal protobuf c wrapper library
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple image hosting service";
     mainProgram = "pict-rs";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 })

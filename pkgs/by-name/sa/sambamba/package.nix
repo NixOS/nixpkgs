@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   which,
   ldc,
@@ -29,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     lz4
+  ];
+
+  patches = [
+    # remove on next release; add missing break
+    (fetchpatch {
+      url = "https://github.com/biod/sambamba/commit/5fdcf6f3015cb17b805514397223f7513bc92613.patch";
+      hash = "sha256-9iJmR9rJgGKH1kSFTnUCqZ4IU+Xz923SIloeBiYmIk4=";
+    })
   ];
 
   buildFlags = [

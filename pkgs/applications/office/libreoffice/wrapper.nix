@@ -118,6 +118,11 @@ let
         fi
       '')
     ]
+    ++ lib.optionals unwrapped.withJava [
+      "--set"
+      "JAVA_HOME"
+      "${unwrapped.jdk.home}"
+    ]
     ++ [
       "--inherit-argv0"
     ]

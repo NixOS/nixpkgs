@@ -4,17 +4,15 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pbrt";
-  version = "2.4";
-
-  minimalOCamlVersion = "4.03";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "mransan";
     repo = "ocaml-protoc";
-    rev = "${version}.0";
-    hash = "sha256-EXugdcjALukSjB31zAVG9WiN6GMGXi2jlhHWaZ+p+uM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UrgrzI5Pgi79C/OhqYxwSNfqsoBULUZ13XVaB71fGes=";
   };
 
   meta = {
@@ -23,4 +21,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})

@@ -42,7 +42,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "wtsexporter";
     maintainers = with lib.maintainers; [
       bbenno
-      EstebanMacanek
     ];
   };
 }

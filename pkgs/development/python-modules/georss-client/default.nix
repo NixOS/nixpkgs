@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "georss-client";
-  version = "0.19";
+  version = "2026.6.1";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";
     tag = "v${version}";
-    hash = "sha256-+CmauNb+5mDbZXQCd8ZxZCz6FSfEPAnktkMjvQueiO0=";
+    hash = "sha256-3JaFZY6c5wlJs2yE3KJITJIeCgifzurW7chOfQubQ5w=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-client";
     changelog = "https://github.com/exxamalte/python-georss-client/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

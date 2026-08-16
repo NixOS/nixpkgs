@@ -87,8 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       peterhoeg
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://cvs.savannah.gnu.org/viewvc/global/global/NEWS?view=markup&pathrev=VERSION-${
-      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }";
+    changelog = "https://www.gnu.org/software/global/whatsnew.html";
   };
 })

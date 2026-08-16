@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  pkgs,
+  fetchFromGitHub,
+  fetchDebianPatch,
   glib,
   gtk3,
   gtksourceview3,
@@ -18,12 +19,22 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.8.3";
   pname = "gummi";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
     rev = finalAttrs.version;
     sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
+
+  patches = [
+    (fetchDebianPatch {
+      pname = "gummi";
+      version = "0.8.3+really0.8.3";
+      debianRevision = "6";
+      patch = "0002-build-with-gcc-15.patch";
+      hash = "sha256-YNOVgZHJIVy7y60FOZRI8N8qxoOkUsResLo0PNZ0dkY=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

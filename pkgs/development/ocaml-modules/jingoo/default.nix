@@ -3,7 +3,6 @@
   buildDunePackage,
   fetchFromGitHub,
   menhir,
-  ppxlib,
   ppx_deriving,
   re,
   uutf,
@@ -13,18 +12,17 @@
 
 buildDunePackage (finalAttrs: {
   pname = "jingoo";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "tategakibunko";
     repo = "jingoo";
     tag = finalAttrs.version;
-    hash = "sha256-1357XOYZseItCrIm/qNP46aL8tQyX8CFh77CBycL1ew=";
+    hash = "sha256-FltjCOGGztYm3tFqRkdWmNmopmC8DDhhmY0LqfYgh40=";
   };
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
-    ppxlib
     ppx_deriving
     re
     uutf

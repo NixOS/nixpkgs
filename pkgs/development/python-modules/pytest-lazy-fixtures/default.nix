@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest,
   pytest-fixture-classes,
   pytestCheckHook,
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   '';
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [ pytest ];
 

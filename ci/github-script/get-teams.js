@@ -1,3 +1,4 @@
+// @ts-nocheck
 const excludeTeams = [
   /^voters.*$/,
   /^nixpkgs-maintainers$/,

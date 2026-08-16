@@ -109,7 +109,6 @@ makeScopeWithSplicing' {
         bintools = binutils;
       };
 
-      libbacktrace = callPackage ./libbacktrace { };
       libiberty = callPackage ./libiberty { };
       libsanitizer = callPackage ./libsanitizer { };
       libquadmath = callPackage ./libquadmath { };
@@ -131,6 +130,7 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
+          "-B${targetGccPackages.libstdcxx}/lib"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -163,10 +163,20 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
           "-B${targetGccPackages.libgomp}/lib"
+          # `libcxx` above tells cc-wrapper where the C++ *headers* are; it does
+          # not put the library itself on the link path for a GNU compiler. So
+          # every C++ link failed with `cannot find -lstdc++` until this was
+          # added, in the same style as the other runtime libraries.
+          "-B${targetGccPackages.libstdcxx}/lib"
           "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
+      # Stage 1 of the bootstrap chain; see ../README.md.
+      #
+      # No `libc` is passed: `wrapCCWith` defaults it to `bintools.libc`, and
+      # `binutilsNoLibc` carries `preLibcHeaders`. That is the only place the
+      # pre-libc stage is written down.
       gccNoLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
@@ -177,8 +187,49 @@ makeScopeWithSplicing' {
         ];
       };
 
-      libgcc = callPackage ./libgcc {
+      # Built before there is a libc, and not intended for use beyond getting
+      # one built. Note the two differ only by `stdenv`: which stage this is
+      # follows from the compiler, never from an argument.
+      libgcc-no-libc = callPackage ./libgcc {
         stdenv = overrideCC stdenv buildGccPackages.gccNoLibgcc;
+      };
+
+      # The real one, built against the finished libc, so it can use that
+      # libc's threads. This is what everything above the libc gets.
+      libgcc-libc = callPackage ./libgcc {
+        stdenv = overrideCC stdenv buildGccPackages.gccWithLibcAndBasicLibgcc;
+      };
+
+      libgcc =
+        if stdenv.hostPlatform.libc == null then gccPackages.libgcc-no-libc else gccPackages.libgcc-libc;
+
+      # Stage 2: libgcc available, libc not yet — what compiling a libc needs.
+      # `binutilsNoLibc` is what keeps the libc out, so nothing here refers to
+      # a libc derivation and the cycle stays broken.
+      gccWithLibgcc = wrapCCWith {
+        cc = gccPackages.gcc-unwrapped;
+        libcxx = null;
+        bintools = binutilsNoLibc;
+        extraPackages = [
+          targetGccPackages.libgcc-no-libc
+        ];
+        nixSupport.cc-cflags = [
+          "-B${targetGccPackages.libgcc-no-libc}/lib"
+        ];
+      };
+
+      # Stage 3: real libc, bootstrap libgcc still. The finished libgcc is what
+      # this is about to build.
+      gccWithLibcAndBasicLibgcc = wrapCCWith {
+        cc = gccPackages.gcc-unwrapped;
+        libcxx = null;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc-no-libc
+        ];
+        nixSupport.cc-cflags = [
+          "-B${targetGccPackages.libgcc-no-libc}/lib"
+        ];
       };
 
       gccWithLibc = wrapCCWith {

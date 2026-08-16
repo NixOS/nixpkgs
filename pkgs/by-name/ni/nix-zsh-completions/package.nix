@@ -37,9 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       olejorgenb
-      hedning
       ma27
-      sebtm
     ];
   };
 })

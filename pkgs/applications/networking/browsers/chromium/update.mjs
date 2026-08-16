@@ -72,11 +72,7 @@ for (const attr_path of Object.keys(lockfile)) {
       DEPS: {},
     }
 
-    // The DEPS schema was modified in https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/7007552
-    // and https://chromium-review.googlesource.com/c/chromium/src/+/7683270. And while the breaking change itself got
-    // backported to M147 (and M146 fwiw), the necessary depot_tools roll was not.
-    // So for now we simply resort to whatever depot_tools is currently pinned on chromium's main branch.
-    const depot_tools = await fetch_depot_tools(/* chromium_rev */ 'main', lockfile_initial[attr_path].deps.depot_tools)
+    const depot_tools = await fetch_depot_tools(chromium_rev, lockfile_initial[attr_path].deps.depot_tools)
     lockfile[attr_path].deps.depot_tools = {
       rev: depot_tools.rev,
       hash: depot_tools.hash,
@@ -174,6 +170,9 @@ async function fetch_chromedriver_binaries(version) {
   const url = (platform) => `https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chromedriver-${platform}.zip`
   return {
     version,
+    // Do not remove x86_64-darwin from the update script/lockfile until 26.05 is EOL, as
+    // chromium bumps (which chromedriver is part of) are annoying to backport otherwise.
+    // See https://github.com/NixOS/nixpkgs/pull/541166#discussion_r3599248819
     hash_darwin: await prefetch(url('mac-x64')),
     hash_darwin_aarch64: await prefetch(url('mac-arm64')),
   }

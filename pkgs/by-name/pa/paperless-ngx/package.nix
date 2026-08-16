@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchPypi,
-  node-gyp,
-  nodejs,
+  fetchurl,
+  linkFarm,
+  callPackage,
   nixosTests,
   gettext,
-  python3,
-  giflib,
+  python3Packages,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -16,49 +15,26 @@
   pngquant,
   qpdf,
   tesseract5,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  pnpm,
   poppler-utils,
   liberation_ttf,
-  xcbuild,
-  pango,
-  pkg-config,
   symlinkJoin,
   nltk-data,
   lndir,
+  nix-update-script,
+  extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  version = "2.20.15";
+  defaultPythonPackageOverrides = final: prev: {
+    django = prev.django_5;
 
-  src = fetchFromGitHub {
-    owner = "paperless-ngx";
-    repo = "paperless-ngx";
-    tag = "v${version}";
-    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
+    # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
+    ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
   };
 
-  python = python3.override {
-    self = python;
-    packageOverrides = final: prev: {
-      django = prev.django_5;
-
-      fido2 = prev.fido2.overridePythonAttrs {
-        version = "1.2.0";
-
-        src = fetchPypi {
-          pname = "fido2";
-          version = "1.2.0";
-          hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
-        };
-
-        pytestFlags = [ ];
-      };
-
-      # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
-      ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
-    };
-  };
+  pythonPackages = python3Packages.overrideScope (
+    final: prev:
+    lib.composeManyExtensions [ defaultPythonPackageOverrides extraPythonPackageOverrides ] final prev
+  );
 
   path = lib.makeBinPath [
     ghostscript_headless
@@ -71,99 +47,46 @@ let
     poppler-utils
   ];
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "paperless-ngx-frontend";
-    inherit version;
-
-    src = src + "/src-ui";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit pnpm;
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
-    };
-
-    nativeBuildInputs = [
-      node-gyp
-      nodejs
-      pkg-config
-      pnpmConfigHook
-      pnpm
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
-
-    buildInputs = [
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-    ];
-
-    CYPRESS_INSTALL_BINARY = "0";
-    NG_CLI_ANALYTICS = "false";
-
-    buildPhase = ''
-      runHook preBuild
-
-      pushd node_modules/canvas
-      node-gyp rebuild
-      popd
-
-      # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
-      pnpm run build --configuration production | cat
-
-      runHook postBuild
-    '';
-
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
-
-      pnpm run test | cat
-
-      runHook postCheck
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib/paperless-ui
-      mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-      runHook postInstall
-    '';
-  });
-
   nltkDataDir = symlinkJoin {
-    name = "paperless_ngx_nltk_data";
+    name = "paperless-ngx-nltk-data";
     paths = with nltk-data; [
       punkt-tab
       snowball-data
       stopwords
     ];
   };
+
+  # The paperless_ai want tiktoken's cl100k_base tokenizer. If not provided, they would try to download them and fail.
+  # Seed tiktoken's on-disk cache instead so the tests can run and succeed offline; it keys cached files by sha1 of the download URL.
+  tiktokenCacheDir = linkFarm "paperless-ngx-tiktoken-cache" [
+    {
+      name = "9b5ad71b2ce5302211f9c61530b329a4922fc6a4";
+      path = fetchurl {
+        url = "https://web.archive.org/web/20260723164258/https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken";
+        hash = "sha256-Ijkht27pm96ZW3/3OFE+7xAPtR0YyTWXoRO8/+hlsqc=";
+      };
+    }
+  ];
 in
-python.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
+  version = "3.0.5";
   pyproject = true;
 
-  inherit version src;
+  src = fetchFromGitHub {
+    owner = "paperless-ngx";
+    repo = "paperless-ngx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ByITplmCoZNt38gZXDc2DPlo5B+bjDpxsfby0TbWB5M=";
+  };
 
   postPatch = ''
-    # pytest-xdist with to many threads makes the tests flaky
-    if (( $NIX_BUILD_CORES > 3)); then
-      NIX_BUILD_CORES=3
-    fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
       --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
   nativeBuildInputs = [
     gettext
@@ -171,26 +94,26 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "celery"
     "django-allauth"
-    "django-auditlog"
-    "django-cachalot"
+    "django-filter"
     "drf-spectacular-sidecar"
-    "python-dotenv"
-    "gotenberg-client"
     "redis"
-    "scikit-learn"
-    "tika-client"
+    "torch"
+    "zxing-cpp"
+    "zxing-cpp"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
+    "filelock"
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
+      azure-ai-documentintelligence
       babel
       bleach
+      celery
       channels
       channels-redis
       concurrent-log-handler
@@ -199,13 +122,13 @@ python.pkgs.buildPythonApplication rec {
       django-allauth
       django-auditlog
       django-cachalot
-      django-celery-results
       django-compression-middleware
       django-cors-headers
       django-extensions
       django-filter
       django-guardian
       django-multiselectfield
+      django-rich
       django-soft-delete
       django-treenode
       djangorestframework
@@ -218,13 +141,20 @@ python.pkgs.buildPythonApplication rec {
       gotenberg-client
       granian
       httpx-oauth
+      ijson
       imap-tools
-      inotifyrecursive
       jinja2
       langdetect
+      llama-index-core
+      llama-index-embeddings-huggingface
+      llama-index-embeddings-ollama
+      llama-index-embeddings-openai-like
+      llama-index-llms-ollama
+      llama-index-llms-openai-like
       mysqlclient
       nltk
       ocrmypdf
+      openai
       pathvalidate
       pdf2image
       psycopg
@@ -234,16 +164,18 @@ python.pkgs.buildPythonApplication rec {
       python-gnupg
       python-ipware
       python-magic
-      pyzbar
       rapidfuzz
       redis
+      regex
       scikit-learn
+      sentence-transformers
       setproctitle
+      sqlite-vec
+      tantivy
       tika-client
-      tqdm
-      watchdog
+      torch
+      watchfiles
       whitenoise
-      whoosh-reloaded
       zxing-cpp
     ]
     ++ django-allauth.optional-dependencies.mfa
@@ -251,32 +183,35 @@ python.pkgs.buildPythonApplication rec {
     ++ redis.optional-dependencies.hiredis;
 
   postBuild = ''
+    # v3 rejects the default secret key at import, which the manage.py calls below hit.
+    export PAPERLESS_SECRET_KEY=super-safe-secret-key
+
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
   installPhase =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = pythonPackages.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       runHook preInstall
 
       mkdir -p $out/lib/paperless-ngx/static/frontend
       cp -r {src,static,LICENSE} $out/lib/paperless-ngx
-      lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
+      lndir -silent ${finalAttrs.passthru.frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
       chmod +x $out/lib/paperless-ngx/src/manage.py
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
         --prefix PATH : "${path}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+      makeWrapper ${lib.getExe pythonPackages.celery} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
         --prefix PATH : "${path}"
 
@@ -288,9 +223,10 @@ python.pkgs.buildPythonApplication rec {
     find $out/lib/paperless-ngx -type d -name tests -exec rm -rv {} +
   '';
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with pythonPackages; [
     daphne
     factory-boy
+    faker
     imagehash
     pytest-cov-stub
     pytest-django
@@ -300,6 +236,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
+    time-machine
   ];
 
   # manually managed in postPatch
@@ -317,7 +254,7 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-    export PAPERLESS_NLTK_DIR=${passthru.nltkDataDir}
+    export PAPERLESS_NLTK_DIR=${finalAttrs.passthru.nltkDataDir}
     # Limit threads per worker based on NIX_BUILD_CORES, capped at 256
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
@@ -325,6 +262,11 @@ python.pkgs.buildPythonApplication rec {
 
     # the generated pyc files conflict when running the tests
     rm -r build/lib
+  ''
+  # Use the seeded tiktoken cache so the paperless_ai tests tokenize offline, see above.
+  # Gated to avoid the download on runs with tests disabled.
+  + lib.optionalString finalAttrs.doInstallCheck ''
+    export TIKTOKEN_CACHE_DIR=${tiktokenCacheDir}
   '';
 
   disabledTests = [
@@ -349,20 +291,30 @@ python.pkgs.buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
+    frontend = callPackage ./frontend.nix {
+      inherit (finalAttrs) src version;
+      meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
+    };
     inherit
-      frontend
       nltkDataDir
       path
-      python
       tesseract5
+      tiktokenCacheDir
       ;
+    inherit (pythonPackages) python;
     tests = { inherit (nixosTests) paperless; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
@@ -372,4 +324,4 @@ python.pkgs.buildPythonApplication rec {
       erikarvstedt
     ];
   };
-}
+})

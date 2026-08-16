@@ -19,7 +19,7 @@
   google-pasta,
   grpcio,
   h5py,
-  libclang,
+  clang,
   numpy,
   opt-einsum,
   packaging,
@@ -95,7 +95,7 @@ buildPythonPackage (finalAttrs: {
     google-pasta
     grpcio
     h5py
-    libclang
+    clang
     ml-dtypes
     numpy
     opt-einsum
@@ -240,7 +240,6 @@ buildPythonPackage (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = [ ];
-    badPlatforms = [ "x86_64-darwin" ];
     # unsupported combination
     broken = stdenv.hostPlatform.isDarwin && cudaSupport;
   };

@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows

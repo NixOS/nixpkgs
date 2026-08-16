@@ -7,11 +7,8 @@
   autoconf,
   automake,
   libtool,
-  gtk2,
   m4,
   pkg-config,
-  libGLU,
-  libGL,
   makeWrapper,
 }:
 
@@ -29,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [ ./libx11.patch ] ++ [
     ./format.patch
     ./gcc6.patch
-    ./gtk.patch
     # These patches remove use of the `register` storage class specifier,
     # allowing smpeg to build with clang 16, which defaults to C++17.
     (fetchpatch {
@@ -50,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  configureFlags = [
+    "--enable-gtk-player=no"
+    "--enable-opengl-player=no"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
@@ -61,11 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gtk2
-    libGLU
-    libGL
   ];
 
   outputs = [
@@ -92,10 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH ":" "${pkg-config}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
-
-  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    NIX_LDFLAGS = "-lX11";
-  };
 
   meta = {
     homepage = "https://icculus.org/smpeg/";

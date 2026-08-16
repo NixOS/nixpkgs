@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-aggregator";
   version = "4.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acsone";
@@ -17,11 +17,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-sZYh3CN15WTCQ59W24ERJdP48EJt571cbkswLQ3JL2g=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     argcomplete
     colorama
     gitMinimal

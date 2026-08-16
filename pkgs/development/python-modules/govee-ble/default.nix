@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "govee-ble";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+qzSNwV+2h75LVly7kZaaulKQp5Hp0N8k05BauN1TXo=";
+    hash = "sha256-Y1iSU6G/+0qSLgFQNKeCuhpVv6mJYXivk0wNGNMBd6U=";
   };
 
   build-system = [ poetry-core ];

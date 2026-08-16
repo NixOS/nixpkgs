@@ -15,7 +15,7 @@ buildDartApplication (finalAttrs: {
   # Fetch the whole monorepo
   src = fetchFromGitHub {
     owner = "google";
-    repo = "mono_repo";
+    repo = "mono_repo.dart";
     tag = "mono_repo-v${finalAttrs.version}";
     hash = "sha256-2/YJ2S3I9K5Xzje787HdJ/KxfbiBEGKU8feuHnOizn8=";
   };

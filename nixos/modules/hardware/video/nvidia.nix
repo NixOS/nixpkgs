@@ -482,7 +482,7 @@ in
               combineIcdPkgs =
                 icd: pkgs:
                 pkgs.symlinkJoin {
-                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.hostPlatform.is32bit "-x32"}";
                   paths = lib.attrVals icd pkgs;
                   # Remediate reversed priorities in pre-595 drivers,
                   # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793

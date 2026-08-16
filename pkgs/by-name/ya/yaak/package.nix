@@ -104,7 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       archPlatforms =
         {
           "aarch64-darwin" = "aarch64-apple-darwin";
-          "x86_64-darwin" = "x86_64-apple-darwin";
           "aarch64-linux" = "aarch64-unknown-linux-gnu";
           "x86_64-linux" = "x86_64-unknown-linux-gnu";
         }
@@ -150,7 +149,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

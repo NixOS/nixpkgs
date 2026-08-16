@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   aiohttp,
   mashumaro,
   orjson,
@@ -25,6 +26,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Gpyhp+d27/IxDOTFxcN9ltYbOJOg9scf17qVb/ArBw0=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

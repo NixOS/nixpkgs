@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-jet";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "go-jet";
     repo = "jet";
     rev = "v${version}";
-    sha256 = "sha256-BwhatFakmd2ksLQv7OLwvkuDHqnZI4HRnldfyJhR+i8=";
+    sha256 = "sha256-f3BqcXRugw19LQI3Jz8v1dY0bLUhtFKeVBsfQ9rZEow=";
   };
 
-  vendorHash = "sha256-fgYZULAz3orhK637cJNYK7bw9hsQ9PuLH1nMDLVwoGM=";
+  vendorHash = "sha256-NSuZNq5nHuekzEgjG+x8ieb8dkKmWeZNERP6759f01Q=";
 
   subPackages = [ "cmd/jet" ];
 

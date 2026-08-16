@@ -12,7 +12,6 @@
   libsForQt5,
   qt6,
   ncurses,
-  gtk2,
   gcr,
   withLibsecret ? true,
   libsecret,
@@ -26,10 +25,6 @@ let
     curses = {
       flag = "curses";
       buildInputs = [ ncurses ];
-    };
-    gtk2 = {
-      flag = "gtk2";
-      buildInputs = [ gtk2 ];
     };
     gnome3 = {
       flag = "gnome3";
@@ -93,12 +88,6 @@ let
       patches = [
         ./autoconf-ar.patch
         ./gettext-0.25.patch
-      ]
-      ++ lib.optionals (lib.elem "gtk2" buildFlavors) [
-        (fetchpatch {
-          url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
-          sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
-        })
       ];
 
       configureFlags = [
@@ -159,11 +148,6 @@ in
     "curses"
     "tty"
   ];
-  pinentry-gtk2 = buildPinentry "gtk2" [
-    "gtk2"
-    "curses"
-    "tty"
-  ];
   pinentry-qt5 = buildPinentry "qt5" [
     "qt5"
     "curses"
@@ -178,7 +162,6 @@ in
   pinentry-all = buildPinentry "all" [
     "curses"
     "tty"
-    "gtk2"
     "gnome3"
     "qt"
     "emacs"

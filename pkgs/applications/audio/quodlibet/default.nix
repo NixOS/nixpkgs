@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   tag ? "",
 
@@ -18,7 +19,7 @@
   gtksourceview,
   kakasi,
   keybinder3,
-  libappindicator-gtk3,
+  libappindicator,
   libmodplug,
   librsvg,
   libsoup_3,
@@ -91,7 +92,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gtksourceview
     kakasi
     keybinder3
-    libappindicator-gtk3
+    libappindicator
     libmodplug
     libsoup_3
   ]
@@ -196,5 +197,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

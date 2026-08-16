@@ -9,24 +9,24 @@
   fixup-yarn-lock,
   prefetch-yarn-deps,
   nixosTests,
-  nodejs_20,
-  nodejs-slim_20,
-  remarshal_0_17,
+  nodejs_24,
+  nodejs-slim_24,
+  remarshal,
   nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.3.1";
+  version = "4.5.10";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
     tag = finalAttrs.version;
-    hash = "sha256-EvyRLa+qUFPzmU2k5CVK8WH3D3vmcj9F8fzj3LEjYgg=";
+    hash = "sha256-oHTe2vilrtvApLQ7x8L+upTgkhz2TsXsbA8KcvsZg64=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-EMns5J8rM4qOfrACoX6lttOXh/RUtZjaKtd+BpsS6Xs=";
+    hash = "sha256-43z3gn58eb7Dh9QXLDoeAJAViCQX+8IeSN4xx+hYfPI=";
   };
 
   passthru = {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   # the way the client parses things
   # - Instead, we use `remarshal` to convert it to yaml
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
-  preBuild = lib.optional (settings != { }) ''
+  preBuild = lib.optionalString (settings != { }) ''
     echo "Writing settings override..."
     json2yaml '${builtins.toFile "conf.json" (builtins.toJSON settings)}' user-data/conf.yml
     yarn validate-config --offline
@@ -56,19 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
     # but they've been overridden for the sake of consistency/in case future updates to dashy/node would cause issues with differing major versions
     (yarnConfigHook.override {
       fixup-yarn-lock = fixup-yarn-lock.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       prefetch-yarn-deps = prefetch-yarn-deps.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       yarn = yarn.override {
-        nodejs = nodejs_20;
+        nodejs = nodejs_24;
       };
     })
     yarnBuildHook
-    nodejs_20
+    nodejs_24
     # For yaml conversion
-    remarshal_0_17
+    remarshal
   ];
   doDist = false;
   meta = {

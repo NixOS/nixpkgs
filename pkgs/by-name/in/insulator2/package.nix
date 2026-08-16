@@ -34,14 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3eDA+pwchnwWtweGeSDlf+Vt0Hoylmanf4hnvJ2YOGU=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/andrewinci/insulator2/blob/main/package.json#L105
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3BgvOoGMY86xzSHf6S0265PYOPEgLv77nT6CO9IGdwc=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-IechRla3epfANBESCYgti5/8B3QaPCv6Gp2I4eZNiyI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = finalAttrs.src.name + "/backend";
     hash = "sha256-u5WFV7luvqSQQtEJFlN//GH6iNcQpH/o01ME1dPtOB4=";
   };

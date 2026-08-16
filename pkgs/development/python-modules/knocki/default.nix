@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pytest-aiohttp,
   pytest-cov-stub,
@@ -27,6 +28,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

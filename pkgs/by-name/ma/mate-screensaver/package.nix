@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   gtk3,
@@ -9,6 +11,7 @@
   libxscrnsaver,
   libnotify,
   libxml2,
+  mate-common,
   mate-desktop,
   mate-menus,
   mate-panel,
@@ -20,17 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-screensaver";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-screensaver-${finalAttrs.version}.tar.xz";
-    sha256 = "ag8kqPhKL5XhARSrU+Y/1KymiKVf3FA+1lDgpBDj6nA=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-screensaver";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MTu5W+JBBlFzsv/IbygaE3+i7Df1YRGGoeZNSSSwbXM=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
     libxml2 # provides xmllint
+    mate-common # mate-common.m4 macros
     wrapGAppsHook3
   ];
 
@@ -53,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-screensaver";
     odd-unstable = true;
     rev-prefix = "v";
   };

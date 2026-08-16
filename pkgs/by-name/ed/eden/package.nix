@@ -10,9 +10,11 @@
   cubeb,
   enet,
   fetchFromGitea,
+  fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
-  fmt,
+  # FIXME: unpin when upstream supports fmt 12
+  fmt_11,
   frozen-containers,
   gamemode,
   glslang,
@@ -21,9 +23,6 @@
   libopus,
   libusb1,
   lz4,
-  mcl-cpp-utility-lib,
-  mbedtls,
-  nix-update-script,
   nlohmann_json,
   oaknut,
   openssl,
@@ -34,7 +33,6 @@
   simpleini,
   sirit,
   spirv-headers,
-  spirv-tools,
   stb,
   unordered_dense,
   vulkan-headers,
@@ -44,7 +42,9 @@
   xbyak,
   zlib,
   zstd,
-  tzdata,
+  writeScript,
+  callPackage,
+  wrapGAppsHook3,
 }:
 
 let
@@ -54,51 +54,37 @@ let
     hash = "sha256-OC22KdawYK9yKiffqc1rtgrBanVExYMi9jqhvkwMD6w=";
   };
 
-  nx_tzdb = stdenv.mkDerivation (finalAttrs: {
-    name = "tzdb_to_nx";
-    version = "120226";
+  nx_tzdb = callPackage ./nx_tzdb.nix { };
 
-    src = fetchFromGitea {
-      domain = "git.crueter.xyz";
-      owner = "misc";
-      repo = "tzdb_to_nx";
-      tag = finalAttrs.version;
-      hash = "sha256-egPu8UVbj73RQ0Z5JMTjd5HVdy47WTfkUMlQaS0wUTg=";
+  # eden broken by latest httplib version bump
+  # upstream likely not interested in fixes, actively looking to remove the dependency (https://git.eden-emu.dev/eden-emu/eden/issues/4194)
+  # pin httplib for now, hopefully can entirely drop in next eden release
+  httplib' = httplib.overrideAttrs (finalAttrs: {
+    version = "0.30.2";
+
+    src = fetchFromGitHub {
+      owner = "yhirose";
+      repo = "cpp-httplib";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-psVyn14QHMXG/x9SOOiR7ZBt8dHqa2A/w92WQQDukKM=";
     };
-
-    nativeBuildInputs = [
-      cmake
-      ninja
-    ];
-
-    cmakeFlags = [
-      (lib.cmakeFeature "TZDB2NX_ZONEINFO_DIR" "${tzdata}/share/zoneinfo")
-      (lib.cmakeFeature "TZDB2NX_VERSION" tzdata.version)
-    ];
-
-    ninjaFlags = [ "x80e" ];
-
-    installPhase = ''
-      runHook preInstall
-
-      cp -r src/tzdb/nx $out
-
-      runHook postInstall
-    '';
   });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eden";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitea {
     domain = "git.eden-emu.dev";
     owner = "eden-emu";
     repo = "eden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkro7ZHgn2809Utf/Li5+OiseywyQKH15eqphxlJZQQ=";
+    hash = "sha256-79/JmIRWysoc3psJqMFyiNc2gjTY4VhJfdNaiTvisMk=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -108,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6.qttools
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -116,32 +103,30 @@ stdenv.mkDerivation (finalAttrs: {
     cubeb
     enet
     ffmpeg-headless
-    fmt
+    fmt_11
     frozen-containers
     gamemode
-    httplib
+    httplib'
     kdePackages.quazip
     libopus
     libusb1
     # intentionally omitted: LLVM - heavy, only used for stack traces in the debugger
     lz4
-    mcl-cpp-utility-lib
     nlohmann_json
     openssl
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtwayland
     qt6.qtwebengine
+    qt6.qtcharts
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     stb
     simpleini
-    spirv-tools
     spirv-headers
     vulkan-headers
     vulkan-memory-allocator
     vulkan-utility-libraries
-    mbedtls
     sirit
     unordered_dense
     zlib
@@ -154,11 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     oaknut
   ];
 
-  patches = [
-    # https://git.eden-emu.dev/eden-emu/eden/issues/3484
-    ./aarch64-disable-fastmem.patch
-  ];
-
   doCheck = true;
 
   checkInputs = [
@@ -166,21 +146,19 @@ stdenv.mkDerivation (finalAttrs: {
     oaknut
   ];
 
-  __structuredAttrs = true;
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "YUZU_TESTS" false) # some timer tests are flaky
 
     # use system libraries
     (lib.cmakeBool "CPMUTIL_FORCE_SYSTEM" true)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_SDL2" false)
-    (lib.cmakeBool "YUZU_USE_BUNDLED_FFMPEG" false)
     (lib.cmakeFeature "YUZU_TZDB_PATH" "${nx_tzdb}")
 
     # enable some optional features
     (lib.cmakeBool "YUZU_USE_QT_WEB_ENGINE" true)
     (lib.cmakeBool "YUZU_USE_QT_MULTIMEDIA" true)
     (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
+    (lib.cmakeBool "ENABLE_LTO" true)
 
     # We dont want to bother upstream with potentially outdated compat reports
     (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
@@ -209,7 +187,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nx_tzdb compat-list;
 
-    updateScript = nix-update-script { };
+    updateScript = writeScript "update-eden" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix-update
+
+      set -eu -o pipefail
+
+      nix-update eden
+      nix-update eden.nx_tzdb
+    '';
   };
 
   meta = {
@@ -232,9 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-40
       cc-by-sa-30
       cc0
-
-      # Timezone data
-      publicDomain
 
       # Vendored/incorporated libs
       apsl20

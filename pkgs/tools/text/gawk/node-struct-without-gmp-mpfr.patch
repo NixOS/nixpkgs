@@ -1,0 +1,79 @@
+From bf85f8a3175af703597082d4c7e0abc2066a44d3 Mon Sep 17 00:00:00 2001
+From: "Arnold D. Robbins" <arnold@skeeve.com>
+Date: Tue, 14 Jul 2026 10:14:50 +0300
+Subject: [PATCH] Workaround fix for systems without MPFR and GMP.
+
+---
+ ChangeLog |  8 ++++++++
+ awk.h     | 23 ++++++++++++++---------
+ 2 files changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 6a955eed..42bd2c48 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,14 @@
+ 	* builtin.c (do_dump_node): Add the size of each object to
+ 	the printout.
+ 
++	Unrelated: Make things works when built on systems without
++	the GMP and MPFR libraries.  Thanks to Thomas Trepl <ttrepl@yahoo.de>
++	and Bruce Dubbs <bdubbs@linuxfromscratch.org> for the reports.
++
++	* awk.h (struct exp_node): Add alignment padding when we don't
++	have MPFR. This is a hack, pending a total refactoring of
++	the NODE structure.
++
+ 2026-07-08         Arnold D. Robbins     <arnold@skeeve.com>
+ 
+ 	* 5.4.1: Release tar ball made.
+diff --git a/awk.h b/awk.h
+index dbad0d81..f4a84300 100644
+--- a/awk.h
++++ b/awk.h
+@@ -406,17 +406,24 @@ typedef struct exp_node {
+ 		} nodep;
+ 
+ 		struct {
+-#ifdef HAVE_MPFR
+ 			union {
+ 				AWKNUM fltnum;
++#ifdef HAVE_MPFR
+ 				mpfr_t mpnum;
+ 				mpz_t mpi;
+-			} nm;
+-			int rndmode;
+ #else
+-			AWKNUM fltnum;
+-			int for_alignment_only;	// especially on 32-bit
+-#endif
++				// 7/2026:
++				// This is a workaround for systems that build
++				// gawk without MPFR and GMP.  The NODE struct
++				// desperately needs to be refactored.
++#if SIZEOF_VOID_P == 4
++				char alignment[28];
++#else	// SIZEOF_VOID_P != 4
++				char alignment[48];
++#endif	// SIZEOF_VOID_P != 4
++#endif	// HAVE_MPFR
++			} nm;
++			int rndmode;	// only used for MPFR.
+ 			char *sp;
+ 			size_t slen;
+ 			int idx;
+@@ -561,10 +568,8 @@ typedef struct exp_node {
+ #ifdef HAVE_MPFR
+ #define mpg_numbr	sub.val.nm.mpnum
+ #define mpg_i		sub.val.nm.mpi
+-#define numbr		sub.val.nm.fltnum
+-#else
+-#define numbr		sub.val.fltnum
+ #endif
++#define numbr		sub.val.nm.fltnum
+ #define typed_re	sub.val.typre
+ 
+ /*
+-- 
+2.54.0
+

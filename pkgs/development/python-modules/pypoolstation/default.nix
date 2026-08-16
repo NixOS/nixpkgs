@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pypoolstation" ];
 
   meta = {
-    description = "Python library to interact the the Poolstation platform";
+    description = "Python library to interact with the Poolstation platform";
     homepage = "https://github.com/cibernox/PyPoolstation";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

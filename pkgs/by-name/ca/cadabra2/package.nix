@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "PACKAGING_MODE" true)
 
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [

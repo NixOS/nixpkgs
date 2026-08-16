@@ -18,13 +18,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
+  # https://github.com/Tw1sm/spraycharles/pull/34
+  pythonRemoveDeps = [ "pymsteams" ];
+  patches = [ ./drop-teams.patch ];
+
   build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     discord-webhook
     impacket
     numpy
-    pymsteams
     pyyaml
     requests
     requests-ntlm

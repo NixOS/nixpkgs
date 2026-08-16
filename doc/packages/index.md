@@ -25,6 +25,7 @@ etc-files.section.md
 nginx.section.md
 nrfutil.section.md
 opengl.section.md
+packer.section.md
 shell-helpers.section.md
 python-tree-sitter.section.md
 treefmt.section.md

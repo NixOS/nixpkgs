@@ -136,7 +136,7 @@ let
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
     (cuda_nvprune.__spliced.buildHost or cuda_nvprune)
-    cuda_cccl # block_load.cuh
+    cccl # block_load.cuh
     cuda_cudart # cuda.h
     cuda_cupti # cupti.h
     cuda_nvcc # See https://github.com/google/jax/issues/19811
@@ -526,7 +526,6 @@ let
               "sha256-ty5+51BwHWE1xR4/0WcWTp608NzSAS/iiyN+9zx7/wI="
             else
               "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
-          x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
           aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
         }
         .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");

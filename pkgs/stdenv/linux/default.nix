@@ -59,8 +59,6 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
-
   bootstrapFiles ?
     let
       table = {
@@ -121,6 +119,8 @@
 assert crossSystem == localSystem;
 
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
 
   isFromNixpkgs = pkg: !(isFromBootstrapFiles pkg);
@@ -174,12 +174,18 @@ let
     }:
 
     let
-      thisStdenv = import ../generic {
+      thisStdenv = genericStdenv {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config extraNativeBuildInputs;
+        # Every real (post-dummy) stage needs this hook so configure scripts
+        # can recognise architectures (LoongArch, RISC-V, etc.).
+        extraNativeBuildInputs =
+          extraNativeBuildInputs
+          ++ lib.optional (
+            prevStage ? updateAutotoolsGnuConfigScriptsHook
+          ) prevStage.updateAutotoolsGnuConfigScriptsHook;
         inherit (stage0) initialPath;
         preHook = ''
           # Don't patch #!/interpreter because it leads to retained
@@ -275,11 +281,7 @@ in
     stageFun prevStage {
       name = "bootstrap-stage1";
 
-      # Rebuild binutils to use from stage2 onwards.
       overrides = self: super: {
-        binutils-unwrapped = super.binutils-unwrapped.override {
-          enableGold = false;
-        };
         inherit (prevStage)
           ccWrapperStdenv
           gcc-unwrapped
@@ -309,9 +311,6 @@ in
           };
         });
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -342,6 +341,8 @@ in
           gnum4
           perl
           patchelf
+          nukeReferences
+          libxcrypt
           ;
         ${localSystem.libc} = prevStage.${localSystem.libc};
         gmp = super.gmp.override { cxx = false; };
@@ -425,9 +426,6 @@ in
               '';
             });
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -459,10 +457,10 @@ in
           bison
           texinfo
           which
+          nukeReferences
+          autoconf269
+          libxcrypt
           ;
-        dejagnu = super.dejagnu.overrideAttrs (a: {
-          doCheck = false;
-        });
 
         # Avoids infinite recursion, as this is in the build-time dependencies of libc.
         libiconv = self.libcIconv prevStage.libc;
@@ -529,10 +527,6 @@ in
         );
 
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -574,6 +568,9 @@ in
             libidn2
             libunistring
             libxcrypt
+            nukeReferences
+            autoconf269
+            python3Minimal
             ;
           # We build a special copy of libgmp which doesn't use libstdc++, because
           # xgcc++'s libstdc++ references the bootstrap-files (which is what
@@ -603,8 +600,6 @@ in
         };
       extraNativeBuildInputs = [
         prevStage.patchelf
-        # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        prevStage.updateAutotoolsGnuConfigScriptsHook
       ];
     }
   )
@@ -640,6 +635,7 @@ in
           linuxHeaders
           libidn2
           libunistring
+          python3Minimal
           ;
         ${localSystem.libc} = prevStage.${localSystem.libc};
         # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
@@ -647,10 +643,6 @@ in
           # Build expand-response-params with last stage like below
           inherit (prevStage) expand-response-params;
         };
-
-        # To allow users' overrides inhibit dependencies too heavy for
-        # bootstrap, like guile: https://github.com/NixOS/nixpkgs/issues/181188
-        gnumake = super.gnumake.override { inBootstrap = true; };
 
         gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
@@ -673,8 +665,6 @@ in
       extraNativeBuildInputs = [
         prevStage.patchelf
         prevStage.xz
-        # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        prevStage.updateAutotoolsGnuConfigScriptsHook
       ];
     }
   )
@@ -700,13 +690,12 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
       inherit config overlays;
-      stdenv = import ../generic rec {
+      stdenv = genericStdenv rec {
         name = "stdenv-linux";
 
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config;
 
         preHook = commonPreHook;
 
@@ -843,7 +832,6 @@ in
               xz
               bashNonInteractive
               coreutils
-              diffutils
               findutils
               gawk
               gnused
@@ -869,8 +857,6 @@ in
                 libunistring
                 ;
             };
-
-            gnumake = super.gnumake.override { inBootstrap = false; };
           }
           // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
             # Need to get rid of these when cross-compiling.

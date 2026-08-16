@@ -70,6 +70,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Arcade-style fire fighting game";
+    homepage = "https://github.com/SimonLarsen/mrrescue";
     mainProgram = "mrrescue";
     maintainers = [ ];
     platforms = love.meta.platforms;

@@ -15,13 +15,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "immudb";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-RsDM+5/a3huBJ6HfaALpw+KpcIfg198gZfC4c4DsDlU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-S+X52zxIJj9uJhvSk0aGrEvLKKoa0BciQW5nAgPRtrc=";
   };
 
   postPatch = ''
@@ -36,10 +36,10 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     mkdir -p webconsole/dist
     cp -r ${webconsoleDist}/* ./webconsole/dist
-    go generate -tags webconsole ./webconsole
+    go generate -mod=mod -tags webconsole ./webconsole
   '';
 
-  vendorHash = "sha256-6DHmJrE+xkf8K38a8h1VSD33W6qj594Q5bJJXnfSW0Q=";
+  vendorHash = "sha256-7/TR+YjeeTQk+kY2WjYBeiP94onLJXrjJijYl5N6cPc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -64,9 +64,13 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/codenotary/immudb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
     homepage = "https://github.com/codenotary/immudb";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license = with lib.licenses; [
+      asl20
+      bsl11
+    ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })

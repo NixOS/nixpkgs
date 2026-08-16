@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   callPackage,
   fetchurl,
@@ -9,11 +8,11 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "140.10.1esr";
+  version = "140.13.0esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "aa3481dbdda0a302acefff52007ba2e6927962523408b942a7df673e80618fc381faf1ca70ebaac3760645bf7cb382b85658af49beca705cd636ce9de58349a5";
+    sha512 = "937a4103d71c5e1e4bf051821729f6ea70b5c18d444930a487695cc23d74712a0134047248f6ac02305e01becb705426a55b9d89739f02a01eda01ecf5bc27f1";
   };
 
   meta = {
@@ -22,9 +21,6 @@ buildMozillaMach rec {
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.unix;
-    broken = stdenv.buildPlatform.is32bit;
-    # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-    # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";

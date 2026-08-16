@@ -15,4 +15,5 @@ makeSetupHook {
       coreutils
     ];
   };
+  meta.license = lib.licenses.mit;
 } ./dotnet-hook.sh

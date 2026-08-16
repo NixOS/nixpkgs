@@ -13,15 +13,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "seryrzu";
-    repo = "tandem_aligner";
+    repo = "unialigner";
     rev = "v${finalAttrs.version}";
     hash = "sha256-iMDj1HZ8LzmZckuAM3lbG3eSJSd/5JGVA6SBs7+AgX8=";
   };
 
   patches = [
     (fetchpatch {
-      # https://github.com/seryrzu/tandem_aligner/pull/4
-      url = "https://github.com/seryrzu/tandem_aligner/commit/8b516c94f90aaa9cb84278aa811285d4204b03a9.patch";
+      # https://github.com/seryrzu/unialigner/pull/4
+      url = "https://github.com/seryrzu/unialigner/commit/8b516c94f90aaa9cb84278aa811285d4204b03a9.patch";
       hash = "sha256-kD46SykXklG/avK0+sc61YKFw9Bes8ZgFAjVXmcpN8k=";
       stripLen = 1;
     })
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Parameter-free algorithm for sequence alignment";
-    homepage = "https://github.com/seryrzu/tandem_aligner";
-    changelog = "https://github.com/seryrzu/tandem_aligner/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/seryrzu/unialigner";
+    changelog = "https://github.com/seryrzu/unialigner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.linux;

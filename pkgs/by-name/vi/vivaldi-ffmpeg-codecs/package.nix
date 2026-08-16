@@ -9,21 +9,23 @@
 # downloads at https://vivaldi.com/download/
 
 let
+  # IMPORTANT: Use the maintainer's update script to update these. The build number suffixes are unique to
+  # each platform and must be updated together. The actual version number requires unpacking the snap.
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_82.snap";
-      hash = "sha256-G9RcOuFjkLDJUNlw2G8GiONpWHYvyTnv3Nr0JSdW0As=";
+      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_118.snap";
+      hash = "sha256-NYSbCLPCr2oxrVUokEC8g1BiZfIcQLaNKeMBkMNCsaI=";
     };
     aarch64-linux = fetchurl {
-      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_83.snap";
-      hash = "sha256-6XMdH4dnvYB1FaJLMi/MFnTzkelmOHMedVcIg/Fh7h4=";
+      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_119.snap";
+      hash = "sha256-ehepMMrt0GO9zoi40fFbO4sEQSgRJjbQax6efQnmF60=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chromium-codecs-ffmpeg-extra";
 
-  version = "120726";
+  version = "0-unstable-2026-05-18"; # Do not update by hand, use the update script
 
   src = sources."${stdenv.hostPlatform.system}";
 
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -vD chromium-ffmpeg-${finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
+    install -vD chromium-ffmpeg-git-${lib.removePrefix "0-unstable-" finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
   '';
 
   passthru = {
@@ -51,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       betaboon
       cawilliamson
       fptje
-      sarahec
+      brw
     ];
     platforms = [
       "x86_64-linux"

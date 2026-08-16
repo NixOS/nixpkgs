@@ -12,16 +12,19 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.7.2";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a12Rq4fd3XEW6ZTsm8ISklpMu0ZKpeBrZXNh9My3vUQ=";
+    hash = "sha256-LcZa9BxP99lI7Hqt3seyBeFNn4oLtR31yjq3Ap/IwUE=";
   };
   pyproject = true;
 
-  # remove supervisor from dependencies
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  # remove supervisor from dependencies, we use systemd
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
   '';
@@ -49,7 +52,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
       ruamel-yaml
       whitenoise
 
-      # dependecies required for django collectstatic
+      # dependencies required for django collectstatic
       cryptography
       pyjwt
       requests
@@ -62,6 +65,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    python.pkgs.pyprojectVersionPatchHook
   ];
 
   optional-dependencies = {
@@ -107,9 +111,13 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   env.PDFDING_OUT_DIR = "${placeholder "out"}/${python.sitePackages}/pdfding";
 
   makeWrapperArgs = [
-    "--set-default DATA_DIR /var/lib/pdfding"
+    "--set-default"
+    "DATA_DIR"
+    "/var/lib/pdfding"
     # allow for gunicorn processes to have access to Python packages
-    "--prefix PYTHONPATH : "
+    "--prefix"
+    "PYTHONPATH"
+    ":"
     "${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}:${finalAttrs.env.PDFDING_OUT_DIR}"
   ];
 
@@ -117,21 +125,23 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     mkdir -p $out/bin
 
     makeWrapper "$PDFDING_OUT_DIR/manage.py" $out/bin/pdfding-manage \
-      $makeWrapperArgs
+      "''${makeWrapperArgs[@]}"
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/pdfding-start \
       --add-flags '--bind ''${HOST_IP:-127.0.0.1}:''${HOST_PORT:-8080} core.wsgi:application' \
-      $makeWrapperArgs
+      "''${makeWrapperArgs[@]}"
   '';
 
+  # NOTE: don't undo relaxing of any of these, they are bound to break again
   pythonRelaxDeps = [
-    "rapidfuzz"
     "django"
+    "django-allauth"
     "gunicorn"
+    "huey"
     "nh3"
+    "psycopg2-binary"
     "pypdf"
     "pypdfium2"
-    "whitenoise"
   ];
 
   checkInputs = with python.pkgs; [

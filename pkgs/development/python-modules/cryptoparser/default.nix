@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptoparser";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptoparser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zd305BFM3G8LMQqDwtbwRPy6ooNXJ61UzWBwVewh0F4=";
+    hash = "sha256-thhpXfLH5yB3pMUKFrMUJ8+8IGchF813ApKUrN+UuZA=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
-    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     teams = with lib.teams; [ ngi ];
   };

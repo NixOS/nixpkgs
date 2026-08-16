@@ -11,12 +11,12 @@
 
 buildGoModule (finalAttrs: {
   pname = "imgproxy";
-  version = "3.31.2";
+  version = "3.31.3";
 
   src = fetchFromGitHub {
     owner = "imgproxy";
     repo = "imgproxy";
-    hash = "sha256-gKSSdBtmCSiiBPon3Fj+TGyGSITND5C+hUW9xdjJPZs=";
+    hash = "sha256-sfxHtg6vpMuUeMA8/mh+x6Mrn3tzGYBsggAS6IhTpKo=";
     rev = "v${finalAttrs.version}";
   };
 

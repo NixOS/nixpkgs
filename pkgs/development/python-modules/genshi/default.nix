@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  setuptools_80,
   pytestCheckHook,
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-hbDbETYlMU8PRPP+bvDrJWTWw03S7lZ3tJXRUUK7SXM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

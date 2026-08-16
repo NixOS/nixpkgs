@@ -16,7 +16,7 @@
 melpaBuild (finalAttrs: {
 
   pname = "eaf-browser";
-  version = "0-unstable-2025-06-14";
+  version = "0-unstable-2025-06-13";
 
   src = fetchFromGitHub {
     owner = "emacs-eaf";

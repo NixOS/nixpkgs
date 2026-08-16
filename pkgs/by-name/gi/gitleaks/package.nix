@@ -28,6 +28,10 @@ buildGoModule rec {
     "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
   ];
 
+  subPackages = [
+    "."
+  ];
+
   nativeBuildInputs = [
     installShellFiles
     versionCheckHook

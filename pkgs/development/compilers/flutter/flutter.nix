@@ -1,16 +1,6 @@
 {
-  useNixpkgsEngine ? false,
   version,
   engineVersion,
-  engineHashes ? { },
-  engineUrl ? "https://github.com/flutter/flutter.git@${engineVersion}",
-  enginePatches ? [ ],
-  engineRuntimeModes ? [
-    "release"
-    "debug"
-  ],
-  engineSwiftShaderHash,
-  engineSwiftShaderRev,
   patches,
   channel,
   dart,
@@ -26,28 +16,12 @@
   which,
   jq,
   writableTmpDirAsHomeHook,
+  installShellFiles,
   flutterTools ? null,
 }@args:
 
 let
-  engine =
-    if args.useNixpkgsEngine or false then
-      callPackage ./engine/default.nix {
-        inherit (args) dart;
-        dartSdkVersion = args.dart.version;
-        flutterVersion = version;
-        swiftshaderRev = engineSwiftShaderRev;
-        swiftshaderHash = engineSwiftShaderHash;
-        version = engineVersion;
-        hashes = engineHashes;
-        url = engineUrl;
-        patches = enginePatches;
-        runtimeModes = engineRuntimeModes;
-      }
-    else
-      null;
-
-  dart = if args.useNixpkgsEngine or false then engine.dart else args.dart;
+  dart = args.dart;
 
   flutterTools =
     args.flutterTools or (callPackage ./flutter-tools.nix {
@@ -70,8 +44,11 @@ let
       makeWrapper
       jq
       gitMinimal
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+
+    __structuredAttrs = true;
     strictDeps = true;
 
     preConfigure = ''
@@ -158,6 +135,12 @@ let
       runHook postInstall
     '';
 
+    postInstall = ''
+      $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      installShellCompletion --bash "$TMPDIR/flutter.bash"
+      installShellCompletion --zsh "$TMPDIR/flutter.bash"
+    '';
+
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
@@ -187,13 +170,9 @@ let
       # When other derivations wrap this one, any unmodified files
       # found here should be included as-is, for tooling compatibility.
       sdk = unwrapped;
-    }
-    // lib.optionalAttrs (engine != null) {
-      inherit engine;
     };
 
     meta = {
-      broken = (lib.versionOlder version "3.32") && useNixpkgsEngine;
       description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
       longDescription = ''
         Flutter is Google's SDK for crafting beautiful,
@@ -201,13 +180,10 @@ let
       '';
       homepage = "https://flutter.dev";
       license = lib.licenses.bsd3;
-      sourceProvenance =
-        with lib.sourceTypes;
-        if useNixpkgsEngine then [ fromSource ] else [ binaryNativeCode ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
       mainProgram = "flutter";

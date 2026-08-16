@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simple-scan";
-  version = "49.1";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/simple-scan/${lib.versions.major finalAttrs.version}/simple-scan-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mujUFR7K+VhF65+ZtDbVecg48s8Cdj+6O8A3gCUb4zQ=";
+    hash = "sha256-zDK1Ya4icYLTGpRGZjLjEXI3VuOskFOMPH4qLJqqSgk=";
   };
 
   nativeBuildInputs = [

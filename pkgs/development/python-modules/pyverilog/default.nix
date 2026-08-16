@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyHDI/Pyverilog";
     description = "Python-based Hardware Design Processing Toolkit for Verilog HDL";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
   };
 }

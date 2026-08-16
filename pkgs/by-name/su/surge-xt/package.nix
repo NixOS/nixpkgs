@@ -96,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "LV2, VST3 & CLAP synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
     license = lib.licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [
       magnetophon
       mrtnvgr

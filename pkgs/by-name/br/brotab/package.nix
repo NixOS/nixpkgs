@@ -1,10 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  # https://github.com/balta2ar/brotab/issues/138
+  python313Packages,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "brotab";
   version = "1.5.0";
   pyproject = true;
@@ -16,11 +17,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-Pv5tEDL11brc/n3TuFcad9kTr7Jb/Bt7JFb29HuX/28=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with python313Packages; [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     flask
     psutil
     requests
@@ -50,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python313Packages; [
     pytestCheckHook
   ];
 

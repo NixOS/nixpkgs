@@ -24,9 +24,10 @@ in
   options = {
     virtualisation.kvmgt = {
       enable = mkEnableOption ''
-        KVMGT (iGVT-g) VGPU support. Allows Qemu/KVM guests to share host's Intel integrated graphics card.
-        Currently only one graphical device can be shared. To allow users to access the device without root add them
-        to the kvm group: `users.extraUsers.<yourusername>.extraGroups = [ "kvm" ];`
+        KVMGT (iGVT-g) VGPU support.
+        When enabled on a host, allows Qemu/KVM guests to share host's Intel integrated graphics card.
+        Currently only one graphical device can be shared.
+        To allow host users to access the device without root add them to the kvm group: `users.extraUsers.<yourusername>.extraGroups = [ "kvm" ];`
       '';
       # multi GPU support is under the question
       device = mkOption {
@@ -38,8 +39,8 @@ in
         default = { };
         type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
         description = ''
-          Virtual GPUs to be used in Qemu. You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types`
-          and find info about device via {command}`cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description`
+          Virtual GPUs of the host to be used in Qemu.
+          You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types` and find info about device via {command}`cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description`
         '';
         example = {
           i915-GVTg_V5_8.uuid = [ "a297db4a-f4c2-11e6-90f6-d3b88d6c9525" ];

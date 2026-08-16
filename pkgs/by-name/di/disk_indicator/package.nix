@@ -3,11 +3,15 @@
   stdenv,
   fetchFromGitHub,
   libx11,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation {
   pname = "disk-indicator";
-  version = "unstable-2018-12-18";
+  version = "0.2.1-unstable-2018-12-18";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MeanEYE";
@@ -18,30 +22,27 @@ stdenv.mkDerivation {
 
   buildInputs = [ libx11 ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     # avoid -Werror
-    substituteInPlace Makefile --replace "-Werror" ""
+    substituteInPlace Makefile --replace-fail "-Werror" ""
     # avoid host-specific options
-    substituteInPlace Makefile --replace "-march=native" ""
+    substituteInPlace Makefile --replace-fail "-march=native" ""
     # fix signal handler signature
     substituteInPlace src/main.c --replace-fail "void handle_signal()" "void handle_signal(int sig)"
   '';
 
-  postConfigure = ''
-    patchShebangs ./configure.sh
-    ./configure.sh --all
-  '';
+  configureScript = "./configure.sh";
 
   makeFlags = [
-    "COMPILER=${stdenv.cc.targetPrefix}cc"
+    "COMPILER=${lib.getExe stdenv.cc}"
   ];
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p "$out/bin"
-    cp ./disk_indicator "$out/bin/"
-
+    mkdir -p $out/bin
+    installBin disk_indicator
     runHook postInstall
   '';
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
       Small program for Linux that will turn your Scroll, Caps or Num Lock LED
       or LED on your ThinkPad laptop into a hard disk activity indicator.
     '';
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
 }

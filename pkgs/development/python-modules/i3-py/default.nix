@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.6.4";
-  format = "setuptools";
+  pyproject = true;
   pname = "i3-py";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1sgl438jrb4cdyl7hbc3ymwsf7y3zy09g1gh7ynilxpllp37jc8y";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-HjF5xqX0dhqtP/CFl4D/wx+nefWDLXiob4ysLNEg9Ok=";
   };
+
+  build-system = [ setuptools ];
 
   # no tests in tarball
   doCheck = false;
@@ -23,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
-}
+})

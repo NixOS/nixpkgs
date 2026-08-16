@@ -1,12 +1,12 @@
 {
+  lib,
   fetchFromGitHub,
   python3Packages,
-  lib,
 }:
+
 python3Packages.buildPythonPackage rec {
   pname = "garmin-grafana";
   version = "0.5.0";
-
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -16,9 +16,9 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-NrT4erpdWwqFBUumQdd5GqpmhIayszzkPd8fUgDRwXY=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
+
+  nativeBuildInputs = with python3Packages; [ pyprojectVersionPatchHook ];
 
   dependencies = with python3Packages; [
     fitparse

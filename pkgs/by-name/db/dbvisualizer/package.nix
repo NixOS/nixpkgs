@@ -4,7 +4,7 @@
   fetchurl,
   makeDesktopItem,
   makeWrapper,
-  openjdk17,
+  openjdk25,
   stdenv,
 }:
 
@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "25.3.3";
+  version = "26.1.3";
 
   src =
     let
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://www.dbvis.com/product_download/dbvis-${finalAttrs.version}/media/dbvis_linux_${underscoreVersion}.tar.gz";
-      hash = "sha256-rvS2NczwmT1+/JIfpLI518I0/2AaIJEQAOwmKUK2FQs=";
+      hash = "sha256-ifD6pNWsw0n+aiPvQXG0pjNp/NMIAbr+bxzzntDahhs=";
     };
 
   strictDeps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/icons/hicolor/128x128/apps/dbvisualizer.png
 
     ln -s $out/dbvis $out/bin/
-    wrapProgram $out/bin/dbvis --set INSTALL4J_JAVA_HOME ${openjdk17}
+    wrapProgram $out/bin/dbvis --set INSTALL4J_JAVA_HOME ${openjdk25}
 
     runHook postInstall
   '';

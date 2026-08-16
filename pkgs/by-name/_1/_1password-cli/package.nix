@@ -24,15 +24,14 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.34.0";
-  sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-LuOI9r1VRnL9IGsK4vy4ENOS64xdpIZ+ZskIkUJ0s34=" "zip";
-    i686-linux = fetch "linux_386" "sha256-VvqEyDHEIY3BsgubiJKXql1WEnwXHkSHpFvCcKBIeYw=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-sbydXPoT0Vo3r2gyZBdl4OMtOejbhvra5JM4wB6Ex5s=" "zip";
+  version = "2.38.1";
+  sources = {
+    aarch64-linux = fetch "linux_arm64" "sha256-RmpJkrrLrKwbmbw50+sTg0aFa0+M2EFPZ6+QSc3aV5M=" "zip";
+    i686-linux = fetch "linux_386" "sha256-hnpVsbNgofmfw/XobVZ2MnbGIcAjxH1MvVJNc5T1kuk=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-k268YiTC/2MJZhVqMI/e9bsrf4Sr4Wj8M/h/hbmmcqY=" "zip";
     aarch64-darwin =
-      fetch "apple_universal" "sha256-9h+Z7INYcJcWeVQ9QnXKjtT5QyV2J+dP857qSOpBAy8="
+      fetch "apple_universal" "sha256-pLlEsqCL5j9QCuLkQxK/Mmz647lKbCYhOUiPch2MMuE="
         "pkg";
-    x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
   mainProgram = "op";
@@ -51,7 +50,7 @@ stdenv.mkDerivation {
     versionCheckHook
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xar
     cpio
   ];

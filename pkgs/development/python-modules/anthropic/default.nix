@@ -38,14 +38,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.94.0";
+  version = "0.109.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gh7My8ftI2o0CxrwuVsbr8tdZ2MtKdRw0mfQxb7REJk=";
+    hash = "sha256-H+blENPgkKhoGPJmAtdszFsJDkAzgprlDso0o2fhwz8=";
   };
 
   postPatch = ''
@@ -98,6 +99,13 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
+    # Tests try to launch bash and fail
+    "test_bash_session_persistence"
+    "test_bash_timeout"
+    "test_bash_sentinel_not_spoofable"
+    "test_bash_stdin_redirect"
+    "test_bash_session_closed_property"
+    "test_bash_outer_cancel_closes_subprocess_no_stale_state"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs

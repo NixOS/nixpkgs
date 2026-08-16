@@ -10,4 +10,7 @@ fetchurl (finalAttrs: {
   pname = "all-cabal-hashes";
   version = lib.substring 0 7 pin.commit;
   passthru.updateScript = ../../../../maintainers/scripts/haskell/update-hackage.sh;
+  meta = {
+    license = lib.licenses.mit;
+  };
 })

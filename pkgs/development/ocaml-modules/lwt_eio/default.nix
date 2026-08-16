@@ -5,7 +5,6 @@
   eio,
   lwt,
 }:
-
 buildDunePackage (finalAttrs: {
   pname = "lwt_eio";
   version = if lib.versionAtLeast lwt.version "6.0.0" then "0.6" else "0.5.1";
@@ -31,6 +30,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/ocaml-multicore/lwt_eio";
     changelog = "https://github.com/ocaml-multicore/lwt_eio/raw/v${finalAttrs.version}/CHANGES.md";
     description = "Use Lwt libraries from within Eio";
-    license = with lib.licenses; [ isc ];
+    license = lib.licenses.isc;
   };
 })

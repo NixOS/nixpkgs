@@ -15,13 +15,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.13.0";
+  version = "2.15.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-gxZ20qpG3iXwY21fY2lvafWudcnsqN6hOml1UR9fPKQ=";
+    hash = "sha256-WW64fwh0xR4lEVwmrv00tP9mo6b49aCNgLLH/P0YS8k=";
   };
 
   outputs = [
@@ -61,19 +64,21 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isStatic ''
+  postFixup =
     # rdkafka changes the library names for static libraries but users in pkgsStatic aren't likely to be aware of this
     # make sure the libraries are findable with both names
-    for pc in rdkafka{,++}; do
-      ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
-    done
-  '';
+    lib.optionalString stdenv.hostPlatform.isStatic ''
+      for pc in rdkafka{,++}; do
+        ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
+      done
+    '';
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Apache Kafka C/C++ client library";
     homepage = "https://github.com/confluentinc/librdkafka";
+    changelog = "https://github.com/confluentinc/librdkafka/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ commandodev ];

@@ -5,6 +5,7 @@
   pkg-config,
   libuuid,
   libsodium,
+  libunwind,
   keyutils,
   kmod,
   liburcu,
@@ -18,6 +19,7 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -29,18 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.0";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARSrlQozhefNV4K75aiaKxgfKIkE9mPrDksDhuvXfA4=";
+    hash = "sha256-KJBzVbK5DL+ZK27Oyyn8vCWRQUHrIAelrex1oX+fWq4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-dtGRtJxsVvltjPdMl0KZMaAqnNppwGCtL/XnYbc1PyQ=";
+    hash = "sha256-Yb2DaFLuhAkwYED+s9SRKsjxluWoES4RSvKPKfd/kyE=";
   };
 
   postPatch = ''
@@ -57,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
     makeWrapper
     installShellFiles
   ];
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     keyutils
     lz4
     libsodium
+    libunwind
     liburcu
     libuuid
     zstd
@@ -98,6 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
   };
+
+  # Workaround for RISCV cross-compilation issue
+  # https://github.com/koverstreet/bcachefs-tools/issues/850
+  preBuild = lib.optionalString stdenv.hostPlatform.isRiscV ''
+    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS --target=riscv64-unknown-linux-gnu -march=rv64gc"
+  '';
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
@@ -149,6 +159,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
-    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

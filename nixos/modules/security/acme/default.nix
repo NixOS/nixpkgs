@@ -2,13 +2,11 @@
   config,
   lib,
   pkgs,
-  options,
   ...
 }:
 let
 
   cfg = config.security.acme;
-  opt = options.security.acme;
   user = if cfg.useRoot then "root" else "acme";
 
   # Used to calculate timer accuracy for coalescing
@@ -441,18 +439,6 @@ let
               chown -R ${user}:${data.group} "$fixpath"
             fi
           done
-
-          ${lib.optionalString (data.webroot != null) ''
-            # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
-            # Lego will fail if the webroot does not exist at all.
-            (
-              mkdir -p '${data.webroot}/.well-known/acme-challenge' \
-              && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
-            ) || (
-              echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
-              && exit 1
-            )
-          ''}
         '';
       };
 
@@ -838,8 +824,8 @@ let
           type = lib.types.attrsOf (lib.types.path);
           inherit (defaultAndText "credentialFiles" { }) default defaultText;
           description = ''
-            Environment variables suffixed by "_FILE" to set for the cert's service
-            for your selected dnsProvider.
+            Environment variables suffixed by "_FILE" or "_PATH" to set for the
+            cert's service for your selected dnsProvider.
             To find out what values you need to set, consult the documentation at
             <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
             This allows to securely pass credential files to lego by leveraging systemd
@@ -1198,10 +1184,13 @@ in
               }
             )
             {
-              assertion = lib.all (lib.hasSuffix "_FILE") (lib.attrNames data.credentialFiles);
+              assertion = lib.all (n: lib.hasSuffix "_FILE" n || lib.hasSuffix "_PATH" n) (
+                lib.attrNames data.credentialFiles
+              );
+
               message = ''
                 Option `security.acme.certs.${cert}.credentialFiles` can only be
-                used for variables suffixed by "_FILE".
+                used for variables suffixed by "_FILE" or "_PATH".
               '';
             }
 
@@ -1277,6 +1266,21 @@ in
           ) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
         in
         accountTargets;
+
+      systemd.tmpfiles.settings."10-acme" =
+        lib.genAttrs
+          (lib.concatMap (dir: [
+            dir
+            (dir + "/.well-known")
+            (dir + "/.well-known/acme-challenge")
+          ]) webroots)
+          (dir: {
+            "d" = {
+              inherit user;
+              group = "acme";
+              mode = "0755";
+            };
+          });
     })
   ];
 

@@ -10,44 +10,37 @@
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
+
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.5.2";
+  version = "2.8.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ea8fR+tsur/tIQwfUS88HvjCADv8VgEjHD7JnR44Twk=";
+    hash = "sha256-gDK+QpAJzyjIBH1YcoYy7CXSy8yn0OxAc2V1jI/DAUs=";
   };
-
-  pythonRelaxDeps = [
-    "click"
-    "numpy"
-    "pyarrow"
-    "questionary"
-    "rich-click"
-    "textual"
-    "tomlkit"
-    "tree-sitter"
-    "tree-sitter-sql"
-  ];
 
   build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
+  pythonRelaxDeps = [
+    "questionary"
+    "tomlkit"
+  ];
   dependencies =
     with python3Packages;
     [
       click
       duckdb
-      importlib-metadata
-      numpy
-      packaging
+      pandas
       platformdirs
       pyarrow
+      pyperclip
       questionary
       rich-click
       sqlfmt
@@ -55,7 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       textual-fastdatatable
       textual-textarea
       tomlkit
-      tree-sitter-sql
+      wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
@@ -72,7 +65,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   nativeCheckInputs = with python3Packages; [
+    flaky
     pytest-asyncio
+    pytest-textual-snapshot
+    pytest-xdist
     pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -82,10 +78,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
-
-    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
-    # AssertionError
-    "test_bad_adapter_opt"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
@@ -100,7 +92,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];

@@ -2,18 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "versiontools";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1xhl6kl7f4srgnw6zw4lr8j2z5vmrbaa83nzn2c9r2m1hwl36sd9";
+    pname = "versiontools";
+    inherit (finalAttrs) version;
+    hash = "sha256-qWkzKIehipyYsN8OpNTKdZcvJMqU8G+4fVkTd+g0FPY=";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = (!isPy3k);
 
@@ -22,4 +28,4 @@ buildPythonPackage rec {
     description = "Smart replacement for plain tuple used in __version__";
     license = lib.licenses.lgpl2;
   };
-}
+})

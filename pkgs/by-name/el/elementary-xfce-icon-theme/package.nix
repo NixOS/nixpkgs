@@ -9,7 +9,6 @@
   gtk3,
   pantheon,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

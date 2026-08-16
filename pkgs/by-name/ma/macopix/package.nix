@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Workaround build failure on -fno-common toolchains:
     #   ld: dnd.o:src/main.h:136: multiple definition of
     #     `MENU_EXT'; main.o:src/main.h:136: first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    NIX_CFLAGS_COMPILE = "-fcommon -std=gnu99";
     NIX_LDFLAGS = "-lX11";
   };
 

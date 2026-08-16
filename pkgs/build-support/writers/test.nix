@@ -471,13 +471,17 @@ recurseIntoAttrs {
     toml = expectDataEqual {
       file = writeTOML "data.toml" { hello = "world"; };
       expected = ''
-        hello = 'world'
+        hello = "world"
       '';
     };
 
     yaml = expectDataEqual {
       file = writeYAML "data.yaml" { hello = "world"; };
-      expected = "hello: world\n";
+      expected = ''
+        %YAML 1.1
+        ---
+        hello: world
+      '';
     };
   };
 

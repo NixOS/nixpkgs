@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hstr";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
-    owner = "dvorka";
+    owner = "dvorka-oss";
     repo = "hstr";
-    rev = finalAttrs.version;
-    hash = "sha256-OuLy1aiEwUJDGy3+UXYF1Vx1nNXic46WIZEM1xrIPfA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c+YUpry96OGJ7nmBw180W2r0z4EBd2Cl3SyOQrNxP+o=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--prefix=$(out)" ];
 
   meta = {
-    homepage = "https://github.com/dvorka/hstr";
+    homepage = "https://github.com/dvorka-oss/hstr";
     description = "Shell history suggest box - easily view, navigate, search and use your command history";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.matthiasbeyer ];

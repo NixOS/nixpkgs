@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinfoil-cli";
-  version = "0.13.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "tinfoilsh";
     repo = "tinfoil-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HfKcuonVpUzE2aTR1GX4jrlhrNPBotbZuEjRvJs0Xkc=";
+    hash = "sha256-ET6fPEE6LKbB3UmMgSGC9/EuzdmNRe4ELmJegrWJpZU=";
   };
 
   vendorHash = "sha256-b6UmayV913SVyV5+1BMZiRM7SV/Asau6xkx87DWTf9k=";

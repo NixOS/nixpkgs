@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # https://github.com/giampaolo/psutil/issues/1715
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  # In addition to the issues listed above there are some that occure due to
+  # In addition to the issues listed above there are some that occur due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sandboxing (missing specific errors)

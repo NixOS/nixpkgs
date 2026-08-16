@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "5.0.6";
+  version = "6.0.6";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-QW8wnNBBJs8nHsNuczZZevm6ELqtljsDdL21qtFo6pM=";
+    npmDepsHash = "sha256-kvWxM0Omq5y6y3vuwFs2Tb2/u9AAwxvmBJWeVhAQagk=";
 
     dontBuild = true;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-1lsM/qyNS1rRj0D45mSTtTz7ba+OZggdE0t9N4SHLBU=";
+    hash = "sha256-yb8TcrVQC2Qbpe55+WXnruxTg6bmPX4bTmKPQOYlj54=";
     rev = version;
   };
 
@@ -79,8 +79,14 @@ stdenv.mkDerivation rec {
 
         patchShebangs .
 
-        # emscripten 5.0.0 expects LLVM tip-of-tree instead of LLVM 22
-        sed -i -e "s/EXPECTED_LLVM_VERSION = 23/EXPECTED_LLVM_VERSION = 22/g" tools/shared.py
+        # Emscripten requires an unreleased LLVM version. Set the check to the
+        # LLVM version that this package supplies. The --replace-fail flag stops
+        # the build if Emscripten changes this constant. A sed command for a
+        # fixed version does not give an error. It leaves the check at an LLVM
+        # version that this package does not have.
+        substituteInPlace tools/shared.py \
+          --replace-fail "EXPECTED_LLVM_VERSION = 24" \
+            "EXPECTED_LLVM_VERSION = ${lib.versions.major llvmPackages.llvm.version}"
 
         # fixes cmake support
         sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -209,7 +215,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       qknight
-      raitobezarius
       willcohen
     ];
     license = lib.licenses.ncsa;

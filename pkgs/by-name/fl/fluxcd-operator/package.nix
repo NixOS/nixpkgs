@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator";
-  version = "0.40.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
-    repo = "fluxcd-operator";
+    repo = "flux-operator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-31C+QsuXTQEPUKe3h/u52RXF9FxHidQxIZkrhLvOcuU=";
+    hash = "sha256-qY+uxYGkeiffU5UTsh7oVL1Cp8uKMj4/F6+Y62BSUPY=";
   };
 
-  vendorHash = "sha256-pbEdlq1qOKuxRqLTY4NE/+yfjph8PKcsJOiRc/Tw+Og=";
+  vendorHash = "sha256-uTj6P6UZtfFf7jBrRZMWJ3HObiSR/tPlFICk6Cw12WQ=";
 
   ldflags = [
     "-s"
@@ -61,6 +61,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       mattfield
+      stealthybox
     ];
     mainProgram = "flux-operator";
   };

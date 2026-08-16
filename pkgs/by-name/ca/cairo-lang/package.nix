@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Turing-complete language for creating provable programs for general computation";
     homepage = "https://github.com/starkware-libs/cairo";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 })

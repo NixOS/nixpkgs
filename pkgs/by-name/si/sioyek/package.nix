@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2026-04-08";
+  version = "2.0.0-unstable-2026-08-05";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "a0650b5a71c15692c4797fec2908cc55c5aafd12";
-    hash = "sha256-9g1JhZEqBz6x2gv690efXaV7TNggyRvOq1xn8phubEY=";
+    rev = "cd319eb4804115792ea3e8799dcb5c1332515460";
+    hash = "sha256-b3kH/s9rIZjQvqHaCh+P97LFJZ/akc/uo+WH0qJYgyY=";
   };
 
   buildInputs = [
@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       podocarp
       stephen-huan
       xyven1
+      stephsi
     ];
     platforms = lib.platforms.unix;
   };

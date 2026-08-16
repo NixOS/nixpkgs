@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       to a lack of system features, then that builder would also not be able to
       build `<originalDerivation>.inputDerivation`.
 
-      That was an aribtrary (and probably accidental) limitation. Building
+      That was an arbitrary (and probably accidental) limitation. Building
       input derivations never requires any system features. This test checks to
       make sure that that limitation no longer exists.
     '';

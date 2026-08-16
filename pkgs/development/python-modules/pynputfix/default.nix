@@ -11,7 +11,7 @@
   sphinx,
 
   # dependencies
-  xlib,
+  python-xlib,
   evdev,
   six,
 
@@ -52,7 +52,7 @@ buildPythonPackage {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     evdev
-    xlib
+    python-xlib
   ];
 
   doCheck = false; # requires running X server

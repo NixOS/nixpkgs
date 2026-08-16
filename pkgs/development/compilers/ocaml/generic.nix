@@ -21,6 +21,7 @@ in
   ncurses,
   binutils,
   buildEnv,
+  pkgsBuildBuild,
   libunwind,
   fetchpatch,
   libx11,
@@ -177,6 +178,7 @@ stdenv.mkDerivation (
         ]
       else
         [ "nixpkgs_world" ];
+    nativeBuildInputs = optional (stdenv.hostPlatform != stdenv.targetPlatform) pkgsBuildBuild.ocaml;
     buildInputs =
       optional (lib.versionOlder version "4.07") ncurses
       ++ optionals useX11 [
@@ -214,10 +216,7 @@ stdenv.mkDerivation (
     meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with lib.licenses; [
-        qpl # compiler
-        lgpl2 # library
-      ];
+      license = lib.licenses.lgpl21;
       description = "OCaml is an industrial-strength programming language supporting functional, imperative and object-oriented styles";
 
       maintainers = [ lib.maintainers.georgyo ];

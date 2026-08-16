@@ -26,6 +26,7 @@
   pynndescent,
   scikit-learn,
   scipy,
+  scverse-misc,
   seaborn,
   session-info2,
   statsmodels,
@@ -63,14 +64,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.1";
+  version = "1.12.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-r8kicjCFyEKLxQtFYuZg0NKK7gRBoaLSSFGWqcQtBqM=";
+    hash = "sha256-/QkkKNwc8RS4dYSkptqJDwRmmP9WDBpBoPtufqKvwqw=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -105,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     pynndescent
     scikit-learn
     scipy
+    scverse-misc
     seaborn
     session-info2
     statsmodels
@@ -181,7 +184,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pytestFlags = [
-    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # UserWarning: 'where' used without 'out', expect uninitialized memory in output.
     # If this is intentional, use out=None.
     "-Wignore::UserWarning"
   ];
@@ -206,6 +209,7 @@ buildPythonPackage (finalAttrs: {
     "test_burczynski06"
     "test_clip"
     "test_doc_shape"
+    "test_download_atomic"
     "test_download_failure"
     "test_ebi_expression_atlas"
     "test_mean_var"
@@ -235,6 +239,10 @@ buildPythonPackage (finalAttrs: {
     # 'write/test.h5ad', errno = 2, error message = 'No such file or directory', flags = 13, o_flags
     # = 242)
     "test_write"
+
+    # numba thread-count assertions that depend on the host's thread settings
+    "test_numba_thread_limit_restores_previous_value"
+    "test_set_numba_threads_from_settings"
 
     # Snapshot tests failing because of warnings in output
     "scanpy.datasets._datasets.krumsiek11"

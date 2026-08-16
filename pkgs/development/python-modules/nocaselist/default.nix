@@ -6,6 +6,7 @@
   setuptools,
   setuptools-scm,
   six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ six ];
+  dependencies = [
+    six
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -6,7 +6,7 @@
   pkg-config,
   gtk3,
   glib,
-  libappindicator-gtk3,
+  libappindicator,
   libpthread-stubs,
   libxdmcp,
   libxkbcommon,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     glib
-    libappindicator-gtk3
+    libappindicator
     libpthread-stubs
     libxdmcp
     libxkbcommon

@@ -34,10 +34,10 @@
 }@pkgs:
 
 let
-  defaultVersion = "2026.04";
+  defaultVersion = "2026.07";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-rHwEuLcASSOwCk5dZpnF300hIzusn9ppDYz7wgn/8v0=";
+    hash = "sha256-eOi/w4L+OI+bVaodr4xWNSKgN3ebXUw0nRQV44HxJD4=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -115,14 +115,12 @@ let
         ]
         ++ extraMakeFlags;
 
-        passAsFile = [ "extraConfig" ];
-
         configurePhase = ''
           runHook preConfigure
 
           make -j$NIX_BUILD_CORES ${defconfig}
 
-          cat $extraConfigPath >> .config
+          printf "%s" "$extraConfig" >> .config
 
           runHook postConfigure
         '';
@@ -145,17 +143,17 @@ let
 
         dontStrip = true;
 
-        meta =
+        __structuredAttrs = true;
 
-          {
-            homepage = "https://www.denx.de/wiki/U-Boot/";
-            description = "Boot loader for embedded systems";
-            license = lib.licenses.gpl2Plus;
-            maintainers = with lib.maintainers; [
-              lopsided98
-            ];
-          }
-          // extraMeta;
+        meta = {
+          homepage = "https://www.denx.de/wiki/U-Boot/";
+          description = "Boot loader for embedded systems";
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [
+            lopsided98
+          ];
+        }
+        // extraMeta;
       }
       // removeAttrs args [
         "extraMeta"
@@ -366,14 +364,7 @@ in
       '';
     };
 
-  ubootNanoPCT4 = buildUBoot rec {
-    rkbin = fetchFromGitHub {
-      owner = "armbian";
-      repo = "rkbin";
-      rev = "3bd0321cae5ef881a6005fb470009ad5a5d1462d";
-      sha256 = "09r4dzxsbs3pff4sh70qnyp30s3rc7pkc46v1m3152s7jqjasp31";
-    };
-
+  ubootNanoPCT4 = buildUBoot {
     defconfig = "nanopc-t4-rk3399_defconfig";
 
     extraMeta = {
@@ -385,10 +376,6 @@ in
       "u-boot.itb"
       "idbloader.img"
     ];
-    postBuild = ''
-      ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img
-      cat ${rkbin}/rk33/rk3399_miniloader_v1.19.bin >> idbloader.img
-    '';
   };
 
   ubootNanoPCT6 = buildUBoot {
@@ -793,6 +780,23 @@ in
     filesToInstall = [ "u-boot.bin" ];
   };
 
+  ubootRock3C = buildUBoot {
+    defconfig = "rock-3c-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    strictDeps = true;
+    env = {
+      BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3566;
+    };
+    filesToInstall = [
+      "idbloader.img"
+      "idbloader-spi.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
   ubootRock4CPlus = buildUBoot {
     defconfig = "rock-4c-plus-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
@@ -815,6 +819,20 @@ in
       "idbloader.img"
       "u-boot-rockchip.bin"
       "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootRock5ModelC = buildUBoot {
+    defconfig = "rock-5c-rk3588s_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    env = {
+      BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    };
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+      "u-boot-rockchip.bin"
     ];
   };
 

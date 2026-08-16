@@ -77,6 +77,60 @@ let
           ];
         };
       };
+      # The default `flagFormat`, and one flag of every supported value kind.
+      flagsDefault = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flags = {
+            "--bool-off" = false;
+            "--bool-on" = true;
+            "--config" = ./test.nix;
+            "--count" = 3;
+            "--name" = "example";
+            "--unset" = null;
+          };
+        };
+      };
+      # A `flagFormat` that joins with `=` and spells out booleans.
+      flagsCustomFormat = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flagFormat = name: {
+            option = "--${name}";
+            sep = "=";
+            explicitBool = true;
+          };
+          flags = {
+            port = 8080;
+            quiet = false;
+            verbose = true;
+          };
+        };
+      };
+      # The list form, which allows a flag to be repeated.
+      flagsRepeated = {
+        process = {
+          argv = [ "/bin/flagged" ];
+          flags = [
+            { "--host" = "a"; }
+            { "--host" = "b"; }
+          ];
+        };
+      };
+      # `argv` and `flags` share one `lib.mkOrder` space.
+      flagsOrdering = {
+        process = {
+          argv = lib.mkMerge [
+            (lib.mkBefore [ "/bin/gt" ])
+            (lib.mkOrder 800 [ "server" ])
+            (lib.mkAfter [ "TRAILING" ])
+          ];
+          flags = lib.mkMerge [
+            { "--listen" = "a"; }
+            { "--disable-landlock" = lib.mkOrder 600 true; }
+          ];
+        };
+      };
     };
   };
 
@@ -91,10 +145,16 @@ let
     ];
   };
 
+  # Every service carries some assertions that hold; only the violated ones are of interest here.
+  failures = lib.filter (a: !a.assertion);
+
   filterEval =
     config:
     lib.optionalAttrs (config ? process) {
-      inherit (config) assertions warnings process;
+      inherit (config) warnings;
+      assertions = failures config.assertions;
+      # Only `argv` is relevant here; `process` also carries the reload options.
+      process = { inherit (config.process) argv; };
     }
     // {
       services = lib.mapAttrs (k: filterEval) config.services;
@@ -156,6 +216,65 @@ let
             assertions = [ ];
             warnings = [ ];
           };
+          flagsDefault = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--bool-on"
+                "--config"
+                "${./test.nix}"
+                "--count"
+                "3"
+                "--name"
+                "example"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsCustomFormat = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--port=8080"
+                "--quiet=false"
+                "--verbose=true"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsRepeated = {
+            process = {
+              argv = [
+                "/bin/flagged"
+                "--host"
+                "a"
+                "--host"
+                "b"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
+          flagsOrdering = {
+            process = {
+              argv = [
+                "/bin/gt"
+                "--disable-landlock"
+                "server"
+                "--listen"
+                "a"
+                "TRAILING"
+              ];
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
         };
       };
 
@@ -165,7 +284,7 @@ let
       ];
 
     assert
-      portable-lib.getAssertions [ "service1" ] exampleEval.config.services.service1 == [
+      failures (portable-lib.getAssertions [ "service1" ] exampleEval.config.services.service1) == [
         {
           message = "in service1: you can't enable this for that reason";
           assertion = false;
@@ -177,7 +296,7 @@ let
         "in service3.services.exclacow: The `bar' service is deprecated and will go away soon!"
       ];
     assert
-      portable-lib.getAssertions [ "service3" ] exampleEval.config.services.service3 == [
+      failures (portable-lib.getAssertions [ "service3" ] exampleEval.config.services.service3) == [
         {
           message = "in service3.services.exclacow: you can't enable this for such reason";
           assertion = false;

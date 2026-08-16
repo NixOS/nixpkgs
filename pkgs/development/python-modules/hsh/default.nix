@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/chrissimpkins/hsh";
     downloadPage = "https://github.com/chrissimpkins/hsh/releases";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

@@ -10,13 +10,11 @@ let
   suffix =
     {
       x86_64-linux = "lin64_standalone";
-      x86_64-darwin = "mac64_standalone";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
   hash =
     {
       x86_64-linux = "sha256-ucG6oR4gBRUjMmHRr9QNenc04ENvwLvyCzSAqIoAiwM=";
-      x86_64-darwin = "sha256-BObRSSGUra1y/oo3ZFfIGi2PdHDX2gZy315x7R9DQPk=";
     }
     .${stdenv.hostPlatform.system} or throwSystem;
 in
@@ -60,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Advanced memory forensics framework";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ ivyfanchiang ];
     license = lib.licenses.gpl2Plus;

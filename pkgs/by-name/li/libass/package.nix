@@ -44,10 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     harfbuzz
   ]
-  ++ lib.optional fontconfigSupport fontconfig
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  ++ lib.optional fontconfigSupport fontconfig;
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";

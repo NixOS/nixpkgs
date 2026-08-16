@@ -24,6 +24,9 @@ let
       rc-manager = if config.networking.resolvconf.enable then "resolvconf" else "unmanaged";
     };
     keyfile = {
+      # NM's compiled-in default; made explicit so the tmpfiles rule below
+      # can follow it when the user redirects the keyfile store elsewhere.
+      path = "/etc/NetworkManager/system-connections";
       unmanaged-devices = if cfg.unmanaged == [ ] then null else lib.concatStringsSep ";" cfg.unmanaged;
     };
     logging = {
@@ -601,13 +604,27 @@ in
 
     systemd.packages = packages;
 
-    systemd.tmpfiles.rules = [
-      "d /etc/NetworkManager/system-connections 0700 root root -"
-      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    systemd.tmpfiles.settings.networkmanager = {
+      ${configAttrs.keyfile.path}.d = {
+        mode = "0700";
+        user = "root";
+        group = "root";
+      };
+      # for dnsmasq.leases
+      "/var/lib/misc".d = {
+        mode = "0755";
+        user = "root";
+        group = "root";
+      };
       # ppp isn't able to mkdir that directory at runtime
-      "d /run/pppd/lock 0700 root root -"
-    ]
-    ++ pluginTmpfilesRules;
+      "/run/pppd/lock".d = {
+        mode = "0700";
+        user = "root";
+        group = "root";
+      };
+    };
+
+    systemd.tmpfiles.rules = pluginTmpfilesRules;
 
     systemd.services.NetworkManager = {
       wantedBy = [ "multi-user.target" ];

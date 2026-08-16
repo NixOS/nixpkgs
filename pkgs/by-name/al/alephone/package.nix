@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
     mainProgram = "alephone";
     homepage = "https://alephone.lhowon.org/";
-    license = [ lib.licenses.gpl3 ];
+    license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
 

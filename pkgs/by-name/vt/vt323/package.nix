@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,16 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Abq0/hU/BXJMxQxzhZG1SEGIZYt+qofuXwy5/A9byQ8=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp fonts/ttf/VT323-Regular.ttf $out/share/fonts/truetype
+  nativeBuildInputs = [ installFonts ];
+
+  preInstall = ''
+    rm -r old
   '';
 
   meta = {
     changelog = "https://github.com/phoikoi/VT323/releases/tag/v${finalAttrs.version}";
     description = "Monospaced typeface designed to look like the VT320 text terminal glyphs";
     homepage = "https://github.com/phoikoi/VT323";
-    license = with lib.licenses; [ ofl ];
+    license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ marcel ];
   };
 })

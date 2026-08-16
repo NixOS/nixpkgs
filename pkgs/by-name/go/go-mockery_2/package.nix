@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/vektra/mockery/v${lib.versions.major finalAttrs.version}/pkg/logging.SemVer=v${finalAttrs.version}"
   ];
 
-  env.CGO_ENABLED = false;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "." ];
 

@@ -15,14 +15,12 @@
   kmapper,
   tadasets,
   pytest,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-tda";
   version = "1.1.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";

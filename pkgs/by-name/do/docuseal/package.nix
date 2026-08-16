@@ -4,10 +4,10 @@
   fetchFromGitHub,
   bundlerEnv,
   nixosTests,
-  ruby_3_4,
+  ruby_4_0,
   pdfium-binaries,
+  leptonica,
   makeWrapper,
-  bundler,
   fetchYarnDeps,
   yarn,
   yarnConfigHook,
@@ -16,23 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.4.4";
-
-  bundler = bundler.override { ruby = ruby_3_4; };
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-GjWR0jxVRTs5KNbFDEcgCbG/HTJlJGYpbKf8+0YBSmk=";
+    hash = "sha256-yWy5mRrNHMZPimIPIVKyCXQDw5JlEhdgNZjOQ7mq8mY=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
 
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
-    ruby = ruby_3_4;
-    inherit (finalAttrs) bundler;
+    ruby = ruby_4_0;
     gemdir = ./.;
   };
 
@@ -111,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/rails \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium-binaries ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          pdfium-binaries
+          leptonica
+        ]
+      }"
   '';
 
   passthru = {

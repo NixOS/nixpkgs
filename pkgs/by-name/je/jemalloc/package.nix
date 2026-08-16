@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  autogen,
-  autoconf,
-  automake,
+  autoreconfHook,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -40,13 +38,13 @@ assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.0-unstable-2025-09-12";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "jemalloc";
     repo = "jemalloc";
-    rev = "c0889acb6c286c837530fdbeb96007b0dee8b776";
-    hash = "sha256-lBNgvUhuiRPgzr8JC4zSSCT2KpDBktBVX72zfvAEHvo=";
+    tag = finalAttrs.version;
+    hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
   };
 
   patches = [
@@ -54,21 +52,35 @@ stdenv.mkDerivation (finalAttrs: {
     # `rtree_read.constprop.0` shows up in some builds but
     # not others, so we fall back to O2:
     ./o3-to-o2.patch
+
+    # Active profiling may make xallocx decline to grow non-page-aligned
+    # allocations, so test/integration/extent can observe decommit without
+    # the matching commit on platforms with real decommit/commit.
+    #
+    # A (longer) patch addressing the failure posted upstream at:
+    # https://github.com/jemalloc/jemalloc/pull/2954
+    ./skip-extent-test-with-prof-active.patch
+
+    # the nonstandard `std::__throw_bad_alloc` is no longer exposed in gcc 16.
+    # this makes it conditional on exceptions and defers to either
+    # `throw std::bad_alloc()` or `std::terminate` as appropriate.
+    # https://github.com/jemalloc/jemalloc/pull/2900
+    (fetchpatch {
+      name = "jemalloc-dont-use-nonstandard-throw-bad-alloc.patch";
+      url = "https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea.patch";
+      hash = "sha256-pL9fo8UMSbFlHCo3LFFkw0qBsdrVHcEJIkLutZYa2Yg=";
+    })
   ];
 
   nativeBuildInputs = [
-    autogen
-    autoconf
-    automake
+    autoreconfHook
   ];
 
-  # TODO: switch to autoreconfHook when updating beyond 5.3.0
-  # https://github.com/jemalloc/jemalloc/issues/2346
-  configureScript = "./autogen.sh";
-
   configureFlags = [
-    "--with-version=${lib.versions.majorMinor finalAttrs.version}.0-0-g${finalAttrs.src.rev}"
+    "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
+    # Profiling is inert unless enabled at runtime
+    "--enable-prof"
   ]
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="
@@ -98,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://jemalloc.net/";
+    downloadPage = "https://github.com/jemalloc/jemalloc";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

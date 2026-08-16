@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.82.428.g0ac8be2b";
+  version = "1.2.92.147.g5b8f9367";
 
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "92";
+  rev = "97";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
-    hash = "sha512-/9lB4gLotYvM2QkHt8cKS8P4IXrBVzgoXEk4bWR3GQum0OnJqK/qCC9evmCZ7PAqbbyh5/8vSblM+QXXXiQiMA==";
+    hash = "sha512-Gk0/WjfgJZIG+2w4teaznAk/7evOXUsuCikDvOhmhAQ5ksQV99VeiYnE+OJf7hHnrPaHoueERvIkk7Psed/kwA==";
   };
 
   nativeBuildInputs = [
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : "$librarypath" \
       --prefix PATH : "${zenity}/bin" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+      --run 'if [[ "''${NIXOS_OZONE_WL:-default}" == "1" ]]; then unset DISPLAY; fi'
 
     runHook postFixup
   '';
@@ -249,7 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = meta // {
     maintainers = with lib.maintainers; [
-      ftrvxmtrx
       timokau
       ma27
     ];

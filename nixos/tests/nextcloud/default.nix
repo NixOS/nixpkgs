@@ -136,6 +136,8 @@ let
     map callNextcloudTest (
       [
         ./basic.nix
+        ./home-bindmount.nix
+        ./home-mount.nix
         ./with-declarative-redis-and-secrets.nix
         ./with-mysql-and-memcached.nix
         ./with-postgresql-and-redis.nix
@@ -149,5 +151,6 @@ listToAttrs (
   concatMap genTests [
     32
     33
+    34
   ]
 )

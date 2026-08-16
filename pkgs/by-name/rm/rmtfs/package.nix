@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmtfs";
-  version = "1.1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "rmtfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ehd8SbKNOpyVoF9oc7e5uYmJOHI+Q6woLyvwO8hhKEc=";
+    hash = "sha256-j92qz4x5KTYXjcvFGPp4YbmcM0pz2pUlV2tCsT8FV0I=";
   };
 
   buildInputs = [

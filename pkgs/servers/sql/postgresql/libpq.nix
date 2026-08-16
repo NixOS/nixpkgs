@@ -40,14 +40,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "18.2";
+  version = "18.4";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_18_2";
-    hash = "sha256-cvBXxA7/kEwDGxFv/YoZCIh17jzUujrCtfKAmtSxKTw=";
+    rev = "refs/tags/REL_18_4";
+    hash = "sha256-Ac/Dqcj8vjcW3my5vsnKaMiQqTq/HPtUzckJ3SMyrfA=";
   };
 
   __structuredAttrs = true;
@@ -163,7 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # PostgreSQL always builds both shared and static libs, so we delete those we don't want.
-  postInstall = if stdenv.hostPlatform.isStatic then "touch $out/empty" else "rm -rfv $dev/lib/*.a";
+  # Honour the `dontDisableStatic` convention (see `generic.nix`) so consumers can keep
+  # the static archives in `$dev/lib` alongside the shared libraries in `$out/lib`.
+  postInstall =
+    if stdenv.hostPlatform.isStatic then
+      "touch $out/empty"
+    else
+      lib.optionalString (!(finalAttrs.dontDisableStatic or false)) "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
 

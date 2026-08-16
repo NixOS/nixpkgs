@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotlsaflare";
-  version = "2.8.2";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "Stenstromen";
     repo = "gotlsaflare";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r2stN75+5BLCogEXWFCnWKuUl26SXIrjxENbmU6zlXc=";
+    hash = "sha256-LDUrLeIgEr0IaYUHRdPtk2soYGbPAycQcroIUMrmVKg=";
   };
 
-  vendorHash = "sha256-Hr8SK4kHhXn8mxZrmyxZgs95tt1x2nBUoe4CW+4fOXA=";
+  vendorHash = "sha256-btvgwiYm+ccT9BPVO42bxidKfOBDrBMT3WidDlMi17k=";
 
   nativeBuildInputs = [ installShellFiles ];
 

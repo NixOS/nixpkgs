@@ -47,7 +47,7 @@ The first steps to all these are the same:
 
     Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
 
-    You may want to throw in a `nix-channel --update` for good measure.
+    You must run `$ nix-channel --update` for the channel change to take effect.
 
 1.  Install the NixOS installation tools:
 

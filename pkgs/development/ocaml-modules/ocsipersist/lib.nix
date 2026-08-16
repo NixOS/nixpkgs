@@ -1,41 +1,30 @@
 {
   lib,
   buildDunePackage,
-  applyPatches,
-  fetchpatch,
   fetchFromGitHub,
+  js_of_ocaml,
   lwt_ppx,
   lwt,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "ocsipersist-lib";
-  version = "2.0.0";
+  version = "2.1.0";
 
-  src = applyPatches {
+  minimalOCamlVersion = "4.13";
 
-    src = fetchFromGitHub {
-      owner = "ocsigen";
-      repo = "ocsipersist";
-      tag = finalAttrs.version;
-      hash = "sha256-7CKKwJxqxUpCMNs4xGbsMZ6Qud9AnczBStTXS+N21DU=";
-    };
-
-    patches = [
-      # Migrate to logs
-      (fetchpatch {
-        url = "https://github.com/ocsigen/ocsipersist/commit/1fc0088b4dc2226f01863dd25f8ed56528c5543d.patch";
-        hash = "sha256-WR7SW8jAAo47AIQ7UMQNF8FTXgj6FbxIqFjrLhu7wFs=";
-        excludes = [
-          "*.opam"
-          "dune-project"
-        ];
-      })
-    ];
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "ocsipersist";
+    tag = finalAttrs.version;
+    hash = "sha256-YJzfgeyNXgBXAK607ROUXUmSpMKYx63ofZaBB8dnsq4=";
   };
 
   buildInputs = [ lwt_ppx ];
-  propagatedBuildInputs = [ lwt ];
+  propagatedBuildInputs = [
+    js_of_ocaml
+    lwt
+  ];
 
   meta = {
     description = "Persistent key/value storage (for Ocsigen) - support library";

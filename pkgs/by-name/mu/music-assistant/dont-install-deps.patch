@@ -43,7 +43,7 @@ index 0ac8a70f..5d74e25b 100644
          """Set up the YTMusic provider."""
          logging.getLogger("yt_dlp").setLevel(self.logger.level + 10)
 -        await self._install_packages()
-         self._cookie = self.config.get_value(CONF_COOKIE)
+         self._cookie = str(self.config.get_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.config.get_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
 @@ -1103,8 +1102,6 @@ async def _install_packages(self) -> None:

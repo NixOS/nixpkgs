@@ -51,6 +51,8 @@ buildDunePackage {
     ipaddr
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkInputs = [
     ounit

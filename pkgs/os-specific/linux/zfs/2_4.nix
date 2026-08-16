@@ -13,15 +13,31 @@ callPackage ./generic.nix args {
   kernelModuleAttribute = "zfs_2_4";
 
   kernelMinSupportedMajorMinor = "4.18";
-  kernelMaxSupportedMajorMinor = "6.19";
+  kernelMaxSupportedMajorMinor = "7.0";
 
   # this package should point to the latest release.
-  version = "2.4.1";
+  version = "2.4.3";
+
+  # if adding a patch here, check if it also needs to be applied to zfs_unstable
+  extraPatches = [
+    # https://github.com/openzfs/zfs/issues/18366
+    # dedup data corruption fix unreleased as of OpenZFS 2.4.3
+    (fetchpatch {
+      url = "https://github.com/openzfs/zfs/commit/6fb72fda0f60d9efb591e320f83f78b19ec451cc.patch?full_index=1";
+      hash = "sha256-UuSVmO61Ux5S3F+JAtRnHyeVS4EFobDTKBuD5s8PI+k=";
+    })
+    # backport kernel memory corruption fix
+    # https://github.com/openzfs/zfs/issues/18787
+    (fetchpatch {
+      url = "https://github.com/openzfs/zfs/commit/223b8bc446851e5e796e5446ac24d03bbf468f43.patch?full_index=1";
+      hash = "sha256-I29A+NLYLzy7cMC8FQpBdSYbjFu/kscgTW8mAauPVf4=";
+    })
+  ];
 
   tests = {
     inherit (nixosTests.zfs) series_2_4;
   }
-  // lib.optionalAttrs stdenv.isx86_64 {
+  // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
     inherit (nixosTests.zfs) installer;
   };
 
@@ -30,5 +46,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-gapM2PNVOjhwGw6TAZF6QDxLza7oqOf1tpj7q0EN9Vg=";
+  hash = "sha256-I1wLbstr0cFiGsyynP9kJ9ATRp/2b+fnnsdz0up+IzM=";
 }

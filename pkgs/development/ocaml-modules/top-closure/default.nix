@@ -1,12 +1,12 @@
-{ buildDunePackage, dune_3 }:
+{ buildDunePackage, dune }:
 
 buildDunePackage {
   pname = "top-closure";
-  inherit (dune_3) version src;
+  inherit (dune) version src;
 
   dontAddPrefix = true;
 
-  meta = dune_3.meta // {
+  meta = dune.meta // {
     description = "Dune's topological closure library";
   };
 }

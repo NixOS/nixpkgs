@@ -109,6 +109,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     # Include gobject-introspection typelibs in the wrapper.
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # TexText probes for a GUI toolkit by spawning a subprocess
+    # (`sys.executable -c "import gi; gi.require_version('Gtk', '3.0'); ..."`)
+    # instead of importing in-process. The Python wrapper makes runtime
+    # dependencies importable via a site.addsitedir preamble and deliberately
+    # does not export PYTHONPATH, so the spawned probe interpreter cannot import
+    # gi and TexText aborts with "Neither GTK nor TkInter has been found".
+    # Export PYTHONPATH so the probe subprocess inherits the dependencies too.
+    # See https://github.com/NixOS/nixpkgs/issues/384042
+    makeWrapperArgs+=(--prefix PYTHONPATH : "${
+      lib.makeSearchPath python3.sitePackages (
+        finalAttrs.propagatedBuildInputs ++ [ python3.pkgs.pycairo ]
+      )
+    }")
   '';
 
   postFixup = ''

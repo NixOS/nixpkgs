@@ -236,14 +236,12 @@ in
         description = "BigClown MQTT to InfluxDB bridge";
         wantedBy = [ "multi-user.target" ];
         wants = lib.mkIf config.services.mosquitto.enable [ "mosquitto.service" ];
-        preStart = ''
-          umask 077
-          ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
-        '';
         serviceConfig = {
           EnvironmentFile = cfg.environmentFiles;
+          ExecStartPre = lib.mkIf envConfig "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o \"${finalConfig}\"";
           ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
           RuntimeDirectory = "mqtt2influxdb";
+          RuntimeDirectoryMode = "0700";
         };
       };
   };

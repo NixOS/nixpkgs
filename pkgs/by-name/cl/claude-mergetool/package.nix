@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/9999years/claude-mergetool";
     changelog = "https://github.com/9999years/claude-mergetool/releases/tag/v${version}";
     description = "Resolve Git/jj merge conflicts automatically with claude-code";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "claude-mergetool";
   };

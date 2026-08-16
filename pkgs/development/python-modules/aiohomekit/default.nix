@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.20";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
+    hash = "sha256-ptfL6MPnjAtKqYbsILzE6u+wkse3/Js4ZME4So3tVmU=";
   };
 
   build-system = [ poetry-core ];

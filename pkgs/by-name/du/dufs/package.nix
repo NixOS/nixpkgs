@@ -4,24 +4,29 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dufs";
-  version = "0.45.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-83lFnT4eRYaBe4e2o6l6AGQycm/oK96n5DXutBNvBsE=";
+    hash = "sha256-Be7aJ5Bo5JSMcyyWsZ3ZamQ691TSIO4Ylxzil7UNJxk=";
   };
 
-  cargoHash = "sha256-WdjqG2URtloh5OnpBBnEWHD3WKGkCKLDcCyWRVGIXto=";
+  cargoHash = "sha256-H2ew+sb60UnXe3Dls9MSKwAk4hT/yLSbgZz6pVOkHQQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.

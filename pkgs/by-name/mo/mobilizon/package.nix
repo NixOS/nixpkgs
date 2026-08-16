@@ -1,10 +1,11 @@
 {
   lib,
   callPackage,
-  writeScript,
+  writeShellScriptBin,
   beam,
   mix2nix,
   fetchFromGitHub,
+  applyPatches,
   git,
   cmake,
   nixosTests,
@@ -18,10 +19,12 @@ let
   common = callPackage ./common.nix { };
 in
 beamPackages.mixRelease rec {
-  inherit (common) pname version src;
-
-  # A typo that is a build failure on elixir 1.18
-  patches = [ ./alias.patch ];
+  inherit (common)
+    pname
+    version
+    src
+    patches
+    ;
 
   nativeBuildInputs = [
     git
@@ -51,8 +54,8 @@ beamPackages.mixRelease rec {
             repo = "cldr";
             rev = "v${old.version}";
             hash =
-              assert old.version == "2.47.2";
-              "sha256-XiShurm4i/Qxop1nE4Z/8tMj5953kUqn+4kBrILxO+Y=";
+              assert old.version == "2.47.4";
+              "sha256-LIQK6pZRAW1T3Ej2XAjnuPo82hPJ2KiMPWYmHWgx008=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
@@ -141,12 +144,18 @@ beamPackages.mixRelease rec {
 
   passthru = {
     tests = { inherit (nixosTests) mobilizon; };
-    updateScript = writeScript "update-mobilizon" ''
-      set -euo pipefail
+    updateScript =
+      let
+        patchedSource = applyPatches {
+          inherit src patches;
+        };
+      in
+      writeShellScriptBin "update-mobilizon" ''
+        set -euo pipefail
 
-      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
-      ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
-    '';
+        ${lib.getExe mix2nix} '${patchedSource}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
+        ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
+      '';
     elixirPackage = beamPackages.elixir;
     inherit mixNixDeps;
   };
@@ -157,7 +166,6 @@ beamPackages.mixRelease rec {
     changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      minijackson
       erictapen
     ];
   };

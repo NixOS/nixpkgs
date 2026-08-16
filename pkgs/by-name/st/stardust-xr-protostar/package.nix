@@ -7,18 +7,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-protostar";
-  version = "0-unstable-2024-12-29";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "protostar";
-    rev = "9b73eb1e128b49a6d40a27a4cde7715d8cbd2674";
-    hash = "sha256-9KJO1Z3Aq0+hh9QqufWBxpMmfFOmdgMUJxfgGZMg2n4=";
+    rev = finalAttrs.version;
+    hash = "sha256-mL7LnBvc2B9Y56NCDeNyqIDQsuWb4iMehZ7koR1KkX8=";
   };
 
   env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  cargoHash = "sha256-9XJ+nnvpTzr/3ii9dFkfZDex/++W5Mq9k0bh2Y6tueA=";
+  cargoHash = "sha256-6NiEKm6m4xX6ZSF9Gp7APG/lku3fKoobPSS4AodjCI8=";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   checkFlags = [
     # ---- xdg::test_get_desktop_files stdout ----
@@ -39,18 +42,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=xdg::test_render_svg_to_png"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Prototype application launchers for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
-    platforms = lib.platforms.linux;
+    teams = with lib.teams; [ stardust-xr ];
+    platforms = lib.platforms.unix;
   };
 })

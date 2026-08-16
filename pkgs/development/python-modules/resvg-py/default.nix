@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "resvg-py";
-  version = "0.3.1";
+  version = "0.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baseplate-admin";
     repo = "resvg-py";
     tag = finalAttrs.version;
-    hash = "sha256-YWu05lYHKWnofnfP6TDvc1yJV5GPwDKJ87twbvKW+Ak=";
+    hash = "sha256-SRY22I4wK3v8RrwkS3/5YjBe+IRLnUS/KYYThDUByXY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-9v3GtXeeKMw49SCYlTVBvyECNr8gw+D/hVHQWOoUDHc=";
+    hash = "sha256-5gyzo48SEct7kaN9ckectoHsuS1EJcJOdT+dxpKw+QQ=";
   };
 
   build-system = [
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     pytest
     pyperclip
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     xclip
     xvfb-run
   ];

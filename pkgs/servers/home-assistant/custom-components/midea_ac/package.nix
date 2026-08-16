@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "mill1000";
   domain = "midea_ac";
-  version = "2026.4.0";
+  version = "2026.7.2";
 
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-ac-py";
     tag = version;
-    hash = "sha256-XYajDvp7K1pBlVhT553Rqa8Hi/mA8AWwchTUN4PZ+iw=";
+    hash = "sha256-ErQDCU17qJ3hO7PBawNEn8mj/Gt9kWns6PV5T9OFYqw=";
   };
 
   dependencies = [ msmart-ng ];
@@ -24,12 +24,6 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     pytest-homeassistant-custom-component
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # tests try to open sockets
-    "test_manual_flow_ac_device"
-    "test_manual_flow_cc_device"
   ];
 
   meta = {

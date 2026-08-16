@@ -14,24 +14,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timr-tui";
-  version = "1.8.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "sectore";
     repo = "timr-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9HaKBrW0MkNzDErEIINztLyGpN4mkGF5RpmXohgbK6A=";
+    hash = "sha256-/XsYDAvtkbGEtHz68ar2MqONAXyP3i5X0iZ08lnYOu4=";
   };
 
-  cargoHash = "sha256-J6Zi8oEAsbxMQe+oCk9T6Ic1hPdNXI9iFmn4Z0d0lFE=";
+  cargoHash = "sha256-DnjKH1EnOY9YnApJDO4R0M7XhxYs5k1f4hoa3J3J32c=";
 
   # Enable upstream "sound" feature when requested
   buildFeatures = lib.optionals enableSound [ "sound" ];
 
-  nativeBuildInputs = lib.optionals (enableSound && stdenv.isLinux) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [ pkg-config ];
 
   # Runtime/FFI deps for the sound feature (Linux)
-  buildInputs = lib.optionals (enableSound && stdenv.isLinux) [
+  buildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [
     (alsa-lib-with-plugins.override {
       plugins = [
         alsa-plugins

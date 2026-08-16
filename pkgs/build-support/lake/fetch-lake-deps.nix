@@ -13,83 +13,88 @@
   jq,
 }:
 
-{
-  name,
-  src,
-  hash,
-  sourceRoot ? "",
-  patches ? [ ],
-  prePatch ? "",
-  postPatch ? "",
-  # Package names to skip (e.g. already packaged in nix).
-  excludePackages ? [ ],
-}:
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-stdenvNoCC.mkDerivation {
-  name = "${name}-lake-deps";
-
-  inherit
-    src
-    sourceRoot
-    patches
-    prePatch
-    postPatch
-    ;
-
-  nativeBuildInputs = [
-    gitMinimal
-    cacert
-    jq
+  excludeDrvArgNames = [
+    "excludePackages"
   ];
 
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND"
-    "SOCKS_SERVER"
-  ];
+  extendDrvArgs =
+    finalAttrs:
+    {
+      pname,
+      version,
+      src,
+      hash,
+      sourceRoot ? "",
+      patches ? [ ],
+      prePatch ? "",
+      postPatch ? "",
+      # Package names to skip (e.g. already packaged in nix).
+      excludePackages ? [ ],
+    }:
+    {
+      strictDeps = true;
+      __structuredAttrs = true;
 
-  dontConfigure = true;
+      pname = "${pname}-lake-deps";
 
-  buildPhase = ''
-    runHook preBuild
+      nativeBuildInputs = [
+        gitMinimal
+        cacert
+        jq
+      ];
 
-    if [ ! -f lake-manifest.json ]; then
-      echo "fetchLakeDeps: lake-manifest.json not found" >&2
-      exit 1
-    fi
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
 
-    export HOME="$TMPDIR"
-    export GIT_SSL_CAINFO="$NIX_SSL_CERT_FILE"
+      dontConfigure = true;
 
-    mkdir -p "$TMPDIR/packages"
+      buildPhase = ''
+        runHook preBuild
 
-    jq -c --argjson exclude ${lib.escapeShellArg (builtins.toJSON excludePackages)} \
-      '.packages[] | select(.type == "git") | select(.name as $n | $exclude | index($n) | not)' \
-      lake-manifest.json | while IFS= read -r pkg; do
-      name=$(echo "$pkg" | jq -r '.name')
-      url=$(echo "$pkg" | jq -r '.url')
-      rev=$(echo "$pkg" | jq -r '.rev')
+        if [ ! -f lake-manifest.json ]; then
+          echo "fetchLakeDeps: lake-manifest.json not found" >&2
+          exit 1
+        fi
 
-      echo "fetchLakeDeps: cloning $name ($url @ $rev)"
+        export HOME="$TMPDIR"
+        export GIT_SSL_CAINFO="$NIX_SSL_CERT_FILE"
 
-      git clone --filter=blob:none --no-checkout "$url" "$TMPDIR/packages/$name"
-      git -C "$TMPDIR/packages/$name" checkout "$rev" --quiet
+        mkdir -p "$TMPDIR/packages"
 
-      # Remove .git to make output deterministic
-      rm -rf "$TMPDIR/packages/$name/.git"
-    done
+        jq -c --argjson exclude ${lib.escapeShellArg (builtins.toJSON excludePackages)} \
+          '.packages[] | select(.type == "git") | select(.name as $n | $exclude | index($n) | not)' \
+          lake-manifest.json | while IFS= read -r pkg; do
+          name=$(echo "$pkg" | jq -r '.name')
+          url=$(echo "$pkg" | jq -r '.url')
+          rev=$(echo "$pkg" | jq -r '.rev')
 
-    runHook postBuild
-  '';
+          echo "fetchLakeDeps: cloning $name ($url @ $rev)"
 
-  installPhase = ''
-    runHook preInstall
-    mv "$TMPDIR/packages" "$out"
-    runHook postInstall
-  '';
+          git clone --filter=blob:none --no-checkout "$url" "$TMPDIR/packages/$name"
+          git -C "$TMPDIR/packages/$name" checkout "$rev" --quiet
 
-  dontFixup = true;
+          # Remove .git to make output deterministic
+          rm -rf "$TMPDIR/packages/$name/.git"
+        done
 
-  outputHashMode = "recursive";
-  outputHash = hash;
-  outputHashAlgo = if hash == "" then "sha256" else null;
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mv "$TMPDIR/packages" "$out"
+        runHook postInstall
+      '';
+
+      dontFixup = true;
+
+      outputHashMode = "recursive";
+      outputHash = hash;
+      outputHashAlgo = if hash == "" then "sha256" else null;
+    };
 }

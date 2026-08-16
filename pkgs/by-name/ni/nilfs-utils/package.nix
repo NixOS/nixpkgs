@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "NILFS utilities";
+    homepage = "https://github.com/nilfs-dev/nilfs-utils";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

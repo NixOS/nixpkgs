@@ -17,7 +17,9 @@ let
     warn
     map
     isList
+    foldl'
     ;
+  hasRootPrefix = hasPrefix "/";
 in
 
 rec {
@@ -61,6 +63,8 @@ rec {
     let
       # prevent infinite recursion for the default stdenv value
       defaultStdenv = stdenv;
+      defaultPassAsFile = [ "buildCommand" ];
+      removedNames = [ "passAsFile" ];
     in
     {
       # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
@@ -78,9 +82,7 @@ rec {
       {
         enableParallelBuilding = true;
         inherit buildCommand name;
-        passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
-      }
-      // {
+        passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
         ${if !derivationArgs ? meta then "pos" else null} =
           let
             args = builtins.attrNames derivationArgs;
@@ -92,85 +94,106 @@ rec {
         ${if runLocal then "preferLocalBuild" else null} = true;
         ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs removedNames
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
-  writeTextFile =
-    {
-      name,
-      text,
-      executable ? false,
-      destination ? "",
-      checkPhase ? "",
-      meta ? { },
-      passthru ? { },
-      allowSubstitutes ? false,
-      preferLocalBuild ? true,
-      derivationArgs ? { },
-      pos ? builtins.unsafeGetAttrPos "name" args,
-    }@args:
-    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
-      destination must be an absolute path, relative to the derivation's out path,
-      got '${destination}' instead.
+  writeTextFile = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with a / and specifies at least the filename.
-    '';
+    excludeDrvArgNames = [
+      "derivationArgs"
+    ];
 
-    let
-      matches = builtins.match "/bin/([^/]+)" destination;
-    in
-    runCommand name
-      (
-        {
-          inherit
-            pos
-            text
-            executable
-            checkPhase
-            allowSubstitutes
-            preferLocalBuild
-            ;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
-          meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
-          passthru = passthru // derivationArgs.passthru or { };
-        }
-        // removeAttrs derivationArgs [
+    extendDrvArgs =
+      let
+        defaultPassAsFile = [ "text" ];
+        removedDerivationNames = [
           "passAsFile"
           "meta"
           "passthru"
-        ]
-      )
-      ''
-        target=$out${lib.escapeShellArg destination}
-        mkdir -p "$(dirname "$target")"
+        ];
+      in
+      finalAttrs:
+      {
+        name,
+        text,
+        executable ? false,
+        destination ? "",
+        checkPhase ? "",
+        meta ? { },
+        passthru ? { },
+        allowSubstitutes ? false,
+        preferLocalBuild ? true,
+        derivationArgs ? { },
+        pos ? builtins.unsafeGetAttrPos "name" args,
+      }@args:
+      {
+        inherit
+          pos
+          name
+          text
+          executable
+          checkPhase
+          allowSubstitutes
+          preferLocalBuild
+          ;
+        destination =
+          assert
+            (destination != "" -> (hasRootPrefix destination && destination != "/"))
+            || throw ''
+              destination must be an absolute path, relative to the derivation's out path,
+              got '${destination}' instead.
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
+              Ensure that the path starts with a / and specifies at least the filename.
+            '';
+          destination;
+        passAsFile = defaultPassAsFile ++ derivationArgs.passAsFile or [ ];
 
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
+        buildCommand = ''
+          target=$out$destination
+          mkdir -p "$(dirname "$target")"
 
-        eval "$checkPhase"
-      '';
+          if [ -e "$textPath" ]; then
+            mv "$textPath" "$target"
+          else
+            printf "%s" "$text" > "$target"
+          fi
+
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
+
+          eval "$checkPhase"
+        '';
+
+        meta =
+          let
+            matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+            isProgram = finalAttrs.executable && matches != null;
+          in
+          {
+            ${if isProgram then "mainProgram" else null} = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
+        passthru = passthru // derivationArgs.passthru or { };
+      }
+      // removeAttrs derivationArgs removedDerivationNames;
+
+    # `writeTextFile`'s set pattern doesn't have ellipses.
+    inheritFunctionArgs = false;
+  };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText =
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
-    assert lib.assertMsg (lib.strings.isConvertibleWithToString text)
-      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
+    assert
+      lib.strings.isConvertibleWithToString text
+      || throw "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
     lib.warnIf (!lib.isString text)
       "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
@@ -333,10 +356,10 @@ rec {
       {
         inherit pname code;
         executable = true;
-        passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        __structuredAttrs = true;
         meta = {
           mainProgram = pname;
         };
@@ -344,7 +367,7 @@ rec {
       ''
         n=$out/bin/${pname}
         mkdir -p "$(dirname "$n")"
-        mv "$codePath" code.c
+        printf "%s" "$code" > code.c
         $CC -x c code.c -o "$n"
       '';
 
@@ -516,26 +539,6 @@ rec {
     ];
 
     extendDrvArgs =
-      finalAttrs:
-      args@{
-        name ?
-          assert lib.assertMsg (
-            finalAttrs ? pname && finalAttrs ? version
-          ) "symlinkJoin requires either a `name` OR `pname` and `version`";
-          "${finalAttrs.pname}-${finalAttrs.version}",
-        paths,
-        stripPrefix ? "",
-        preferLocalBuild ? true,
-        allowSubstitutes ? false,
-        postBuild ? "",
-        failOnMissing ? stripPrefix == "",
-        ...
-      }:
-      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
-        stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
-
-        Ensure that the path starts with / and specifies path to the subdirectory.
-      '';
       let
         mapPaths =
           f:
@@ -548,26 +551,50 @@ rec {
             else
               f path
           );
-      in
-      {
-        enableParallelBuilding = true;
-        inherit name allowSubstitutes preferLocalBuild;
-        passAsFile = [
+        defaultPassAsFile = [
           "buildCommand"
           "paths"
         ];
+      in
+      finalAttrs:
+      args@{
+        name ?
+          assert
+            (finalAttrs ? pname && finalAttrs ? version)
+            || throw "symlinkJoin requires either a `name` OR `pname` and `version`";
+          "${finalAttrs.pname}-${finalAttrs.version}",
+        paths,
+        stripPrefix ? "",
+        preferLocalBuild ? true,
+        allowSubstitutes ? false,
+        postBuild ? "",
+        failOnMissing ? stripPrefix == "",
+        ...
+      }:
+      assert
+        (stripPrefix != "" -> (hasRootPrefix stripPrefix && stripPrefix != "/"))
+        || throw ''
+          stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+          Ensure that the path starts with / and specifies path to the subdirectory.
+        '';
+      {
+        enableParallelBuilding = true;
+        inherit name allowSubstitutes preferLocalBuild;
+        passAsFile = defaultPassAsFile;
         paths = mapPaths (path: "${path}${stripPrefix}") paths;
         buildCommand = ''
           mkdir -p $out
-          for i in $(cat $pathsPath); do
+          if [ -n "''${pathsPath:-}" ] && [ -f "$pathsPath" ]; then
+            mapfile -d " " -t paths < "$pathsPath"
+          fi
+          for i in "''${paths[@]}"; do
             ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
               optionalString (!failOnMissing) "; fi"
             }
           done
           ${postBuild}
         '';
-      }
-      // {
         ${if !args ? meta then "pos" else null} =
           if args ? pname then
             builtins.unsafeGetAttrPos "pname" args
@@ -610,9 +637,17 @@ rec {
       entries' =
         if (lib.isAttrs entries) then
           entries
-        # We do this foldl to have last-wins semantics in case of repeated entries
         else if (lib.isList entries) then
-          lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+          # listToAttrs takes the first attribute with a given name, so we
+          # reverse the list to get last-wins semantics in case of repeated entries
+          lib.listToAttrs (
+            lib.reverseList (
+              map (entry: {
+                inherit (entry) name;
+                value = entry.path;
+              }) entries
+            )
+          )
         else
           throw "linkFarm entries must be either attrs or a list!";
 
@@ -700,6 +735,7 @@ rec {
       meta ? { },
       passthru ? { },
       substitutions ? { },
+      __structuredAttrs ? false,
     }@args:
     script:
     runCommand name
@@ -712,9 +748,9 @@ rec {
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
-          __structuredAttrs = false;
+          inherit __structuredAttrs;
           pname = name;
-          version = lib.trivial.release + "pre-git";
+          version = "26.05pre-git";
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
@@ -869,7 +905,7 @@ rec {
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile = lib.extendMkDerivation {
-    constructDrv = stdenv.mkDerivation;
+    constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
       "hash"
@@ -890,6 +926,7 @@ rec {
         url ? null,
         message ? null,
         hashMode ? "flat",
+        meta ? { },
       }@args:
       assert (message != null) || (url != null);
       assert (sha256 != null) || (sha1 != null) || (hash != null);
@@ -933,6 +970,10 @@ rec {
           printf '%s' ${lib.escapeShellArg msg}
           exit 1
         '';
+        meta = {
+          license = lib.licenses.unfree;
+        }
+        // meta;
       }
       // (lib.optionalAttrs (name == null) {
         # The case of providing `url`, but not `name`. This has
@@ -989,12 +1030,9 @@ rec {
         src,
         ...
       }@args:
-      assert lib.assertMsg (
-        !args ? meta
-      ) "applyPatches will not merge 'meta', change it in 'src' instead";
-      assert lib.assertMsg (
-        !args ? passthru
-      ) "applyPatches will not merge 'passthru', change it in 'src' instead";
+      assert !args ? meta || throw "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert
+        !args ? passthru || throw "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
         keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
         # enables tools like nix-update to determine what src attributes to replace

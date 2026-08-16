@@ -1,44 +1,72 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
+  fetchpatch,
   fftwFloat,
-  gtk2,
+  gtk3,
   ladspaPlugins,
   libjack2,
   liblo,
   libxml2,
+  autoconf,
+  automake,
+  intltool,
+  libtool,
   makeWrapper,
   pkg-config,
   perlPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.95.0";
   pname = "jamin";
+  version = "0.98.9-unstable-2015-01-14";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/jamin/jamin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-di/uiGgvJ4iORt+wE6mrXnmFM7m2dkP/HXdgUBk5uzw=";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/jamin/code";
+    rev = "199091a6e3709e2890eaf2c8b4e57c6749776cdc";
+    hash = "sha256-wiIBymvpPxY+z/nZi+dH0hXEuhO5FYQjon6VfJaTwC0=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/j/jamin/0.98.9~git20170111~199091~repack1-3/debian/patches/gcc15.patch";
+      hash = "sha256-dH0NI12Xfw9Rl7Iwm4QzDvXIHT7XzBC8Ly0lQOpDD84=";
+    })
+    # https://github.com/bendlas/jamin/commit/a6498278654792d46ebef4f918b8a1c7b663a2d9.patch
+    ./fix-crash.patch
   ];
 
-  buildInputs = [
-    fftwFloat
-    gtk2
-    ladspaPlugins
-    libjack2
-    liblo
-    libxml2
+  postPatch = ''
+    patchShebangs --build controller/xml2c.pl
+    # for whatever reason the default config file is gzipped
+    mv examples/default.jam{,.gz}
+    gunzip examples/default.jam.gz
+  '';
+
+  preConfigure = "./autogen.sh";
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    intltool
+    libtool
+    pkg-config
+    makeWrapper
   ]
   ++ (with perlPackages; [
     perl
     XMLParser
   ]);
+
+  buildInputs = [
+    fftwFloat
+    gtk3
+    ladspaPlugins
+    libjack2
+    liblo
+    libxml2
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

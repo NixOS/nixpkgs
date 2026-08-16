@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qutip";
-  version = "5.2.3";
+  version = "5.2.3.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y3yQf6rCjK0342WnUBieBmCLOWXjBAkxPe+G7TzZKio=";
+    hash = "sha256-9OcRV3BmRdDOCmov2cK3eoFutQI3Bf6w2QRPpFTZKCU=";
   };
 
   build-system = [
@@ -62,7 +62,6 @@ buildPythonPackage (finalAttrs: {
   # This is due to the Cython-compiled modules not being in the correct location
   # of the source tree.
   preCheck = ''
-    export OMP_NUM_THREADS=$NIX_BUILD_CORES
     mkdir -p test && cd test
   '';
 

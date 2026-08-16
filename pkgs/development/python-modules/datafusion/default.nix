@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonOlder,
 
   # nativeBuildInputs
   protoc,
@@ -12,6 +13,7 @@
   protobuf,
 
   # dependencies
+  cloudpickle,
   pyarrow,
   typing-extensions,
 
@@ -25,8 +27,10 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datafusion";
-  version = "52.3.0";
+  # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
+  version = "54.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
@@ -35,12 +39,12 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-kyJoG65XKSF+RElZlsdfVTZp/ufWiUw0YdCpQ8Qcg78=";
+    hash = "sha256-Kh8w8L3AJCs9a3KA9RHaA0btbJEBdYZge1VK7AX0lX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-7/YWJORUjhhZSLyyBT6NFD0RzARJ3SKd11gn4kJ7aYw=";
+    hash = "sha256-s4+Y2axZKL7wKiw8Z6c12eWAnf1zGPAFFvWS45vFrlo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -54,7 +58,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    cloudpickle
     pyarrow
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 
@@ -92,7 +99,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://arrow.apache.org/datafusion/";
     changelog = "https://github.com/apache/datafusion-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
 })

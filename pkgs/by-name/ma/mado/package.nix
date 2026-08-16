@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mado";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "akiomik";
     repo = "mado";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAuV4w0dKfUbJVLTdp59/u4y13SPy3wkRfTlpvyE/zY=";
+    hash = "sha256-UpkzUeFSLpTjTcf5yEpQDJVDZXL9DEuvw0Hx4r0hG7o=";
   };
 
-  cargoHash = "sha256-fkalUnPkjjzhLaACh+WQP4tG5VzZ7wmrh5T1DVgSDwM=";
+  cargoHash = "sha256-3Wtr+o59SqAjDPLZxTcjK92FF/+O0eXwehnJIRfV2zQ=";
 
   nativeBuildInputs = [
     pkg-config

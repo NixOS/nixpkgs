@@ -40,7 +40,7 @@
   wayland-scanner,
   zenity,
   # for passthru.tests
-  SDL_compat,
+  sdl12-compat,
   sdl2-compat,
   sdl3-image,
   sdl3-ttf,
@@ -70,7 +70,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.2";
+  version = "3.4.12";
 
   outputs = [
     "lib"
@@ -83,14 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-ev0QiKyj0O6gtk7cK/V0X5Noft0Zo/fMS+oM6emwynE=";
+    hash = "sha256-b6l3HgdhqIe9LazJmLivbCJgbKPAS8S54fuB9xvgalI=";
   };
 
   postPatch =
-    # Tests timeout on Darwin
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      # intermittent test failure
+      # https://github.com/libsdl-org/SDL/issues/15346
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 20)' \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 300)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
@@ -238,11 +245,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      SDL_compat.tests
+      sdl12-compat.tests
       // sdl2-compat.tests
       // {
         inherit
-          SDL_compat
+          sdl12-compat
           sdl2-compat
           sdl3-image
           sdl3-ttf

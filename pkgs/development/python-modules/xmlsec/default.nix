@@ -40,6 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "lxml==" "lxml>=" \
       --replace-fail "setuptools==" "setuptools>="
   '';
 

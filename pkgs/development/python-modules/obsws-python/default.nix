@@ -8,7 +8,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "obsws-python";
-  version = "5.5";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {

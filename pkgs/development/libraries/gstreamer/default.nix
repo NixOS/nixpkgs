@@ -37,8 +37,6 @@ lib.makeScope newScope (
 
     gst-editing-services = callPackage ./ges { };
 
-    gst-vaapi = callPackage ./vaapi { };
-
     icamerasrc-ipu6 = callPackage ./icamerasrc { };
     icamerasrc-ipu6ep = callPackage ./icamerasrc {
       ipu6-camera-hal = ipu6ep-camera-hal;
@@ -51,5 +49,6 @@ lib.makeScope newScope (
   }
   // lib.optionalAttrs config.allowAliases {
     gst-plugins-viperfx = throw "'gst_all_1.gst-plugins-viperfx' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
+    gst-vaapi = throw "'gst_all_1.gst-vaapi' has been removed in GStreamer 1.28. Users are recommended to switch to gst-plugins-bad, however it is not an in-place upgrade."; # Added 2026-06-28
   }
 )

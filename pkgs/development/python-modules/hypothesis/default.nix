@@ -3,27 +3,44 @@
   buildPythonPackage,
   isPyPy,
   fetchFromGitHub,
-  setuptools,
   attrs,
+  gitMinimal,
   pexpect,
   doCheck ? true,
   pytestCheckHook,
   pytest-xdist,
+  rustPlatform,
   sortedcontainers,
-  pythonAtLeast,
+  syrupy,
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hypothesis";
-  version = "6.151.10";
+  version = "6.156.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
-    tag = "hypothesis-python-${version}";
-    hash = "sha256-zxX4zF6huOF7sTpVFAiN0iElxsW2C5BE0kiZbpPzXpc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z3LffzA+tsJtvXebTayfRZo32b0LcU2RFDS6bAdCDqU=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/hypothesis";
+
+  cargoRoot = "rust";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      cargoRoot
+      ;
+    hash = "sha256-WEuCK1jpemnNpO+UxsfpdAkFLSM0v2WRjZr3qmSLBJI=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -39,9 +56,13 @@ buildPythonPackage rec {
     sed -i -e '/sphinx_selective_exclude.eager_only/ d' docs/conf.py
   '';
 
-  postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+  ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    rustPlatform.maturinBuildHook
+  ];
 
   dependencies = [
     attrs
@@ -49,9 +70,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     pexpect
     pytest-xdist
     pytestCheckHook
+    (syrupy.overridePythonAttrs { doCheck = false; })
   ]
   ++ lib.optionals isPyPy [ tzdata ];
 
@@ -65,7 +88,12 @@ buildPythonPackage rec {
   preCheck = ''
     rm tox.ini
     export HYPOTHESIS_PROFILE=ci
+    export TMPDIR=$(mktemp -d)
   '';
+
+  pytestFlags = [
+    "-p no:cacheprovider"
+  ];
 
   enabledTestPaths = [ "tests/cover" ];
 
@@ -82,46 +110,13 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   disabledTests = [
-    # racy, fails to find a file sometimes
-    "test_recreate_charmap"
-    "test_uses_cached_charmap"
     # fail when using CI profile
     "test_given_does_not_pollute_state"
     "test_find_does_not_pollute_state"
     "test_does_print_on_reuse_from_database"
     "test_prints_seed_only_on_healthcheck"
-    # calls script with the naked interpreter
-    "test_constants_from_running_file"
-    # fails consistenly
     "test_prints_seed_on_very_slow_shrinking"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    # AssertionError: assert [b'def      \...   f(): pass'] == [b'def\\', b'    f(): pass']
-    # https://github.com/HypothesisWorks/hypothesis/issues/4355
-    "test_clean_source"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    "test_attrs_inference_builds"
-    "test_bound_missing_dot_access_forward_ref"
-    "test_bound_missing_forward_ref"
-    "test_bound_type_checking_only_forward_ref_wrong_type"
-    "test_bound_type_cheking_only_forward_ref"
-    "test_builds_suggests_from_type"
-    "test_bytestring_not_treated_as_generic_sequence"
-    "test_evil_prng_registration_nonsense"
-    "test_issue_4194_regression"
-    "test_passing_referenced_instance_within_function_scope_warns"
-    "test_registering_a_Random_is_idempotent"
-    "test_register_random_within_nested_function_scope"
-    "test_resolve_fwd_refs"
-    "test_resolves_forwardrefs_to_builtin_types"
-    "test_resolving_standard_collection_as_generic"
-    "test_resolving_standard_container_as_generic"
-    "test_resolving_standard_contextmanager_as_generic"
-    "test_resolving_standard_iterable_as_generic"
-    "test_resolving_standard_reversible_as_generic"
-    "test_resolving_standard_sequence_as_generic"
-    "test_specialised_collection_types"
+    "test_regex_output_should_print_as_string"
   ]
   ++ lib.optionals isPyPy [
     # hypothesis.errors.Unsatisfiable: Could not find any examples from datetimes(min_value=datetime.datetime(2003, 1, 1, 0, 0), max_value=datetime.datetime(2005, 12, 31, 23, 59, 59, 999999)) that satisfied lambda x: x.month == 2 and x.day == 29
@@ -135,11 +130,11 @@ buildPythonPackage rec {
     mainProgram = "hypothesis";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.mpl20;
     maintainers = [
       lib.maintainers.fliegendewurst
     ];
   };
-}
+})

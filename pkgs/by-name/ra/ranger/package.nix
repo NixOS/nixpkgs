@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.4-unstable-2026-04-14";
+  version = "1.9.4-unstable-2026-08-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "9f671c6a577d19520ee3afd6e1a93bb35c10582c";
-    hash = "sha256-lZqVi8NakD7a0xCXLNWrbU3Rt1sR6EsWULsBvFM5Klc=";
+    rev = "d45f14c04dd5cee64cdd6d1c560a1e3e1e9efd05";
+    hash = "sha256-Y+kEHp5eEi+ydf87WIwK6xzzohCNrmM5Q5Bv9/RmjdQ=";
   };
 
   build-system = with python3Packages; [
@@ -93,7 +93,6 @@ python3Packages.buildPythonApplication {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       toonn
-      lucasew
     ];
     mainProgram = "ranger";
   };

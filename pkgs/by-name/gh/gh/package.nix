@@ -4,22 +4,24 @@
   buildGoModule,
   installShellFiles,
   stdenv,
-  testers,
+  versionCheckHook,
   makeWrapper,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.92.0";
+  version = "2.97.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/7EiX4ZZPhSNgY/D5OVOako/c0ujHq05GMj3UB11bqQ=";
+    hash = "sha256-yG3bo7YVs1Q//9PePusU0m4TilujQMxI4Faz26iAb5g=";
   };
 
-  vendorHash = "sha256-pBLRCIRjN3VoXbTFSq+R9/N3uAUCEjvPtk8LKKKS51s=";
+  vendorHash = "sha256-XeXHMEhe1ZVWtenyYIzaYjNovaArvI0xBRWVabUF9KU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,7 +38,7 @@ buildGoModule (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 bin/gh -t $out/bin
+    installBin bin/gh
     wrapProgram $out/bin/gh \
       --set-default GH_TELEMETRY false
   ''
@@ -55,9 +57,8 @@ buildGoModule (finalAttrs: {
   # most tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "GitHub CLI tool";

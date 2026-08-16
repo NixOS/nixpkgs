@@ -7,6 +7,7 @@
   async-timeout,
   yarl,
   aresponses,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -27,6 +28,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-iNGYFyAF3Qo6x2VaBsyrLTSYPn6OZ6TWfXDTXqbovhE=";
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Search through all your files";
     homepage = "https://github.com/luleyleo/clapgrep";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "clapgrep";

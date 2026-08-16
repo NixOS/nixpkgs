@@ -21,6 +21,7 @@ let
       forceGrubReinstallCount ? 0,
       withTestInstrumentation ? true,
       clevisTest,
+      clevisAskpassTest ? false,
     }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
@@ -40,7 +41,7 @@ let
         documentation.enable = false;
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
-        system.extraDependencies = with pkgs; [ stdenvNoCC ];
+        system.extraDependencies = with pkgs; [ stdenvNoCC hello ];
 
         boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
@@ -73,7 +74,12 @@ let
           boot.kernelParams = [ "console=tty0" "ip=192.168.1.1:::255.255.255.0::eth1:none" ];
           boot.initrd = {
             availableKernelModules = [ "tpm_tis" ];
-            clevis = { enable = true; useTang = true; };
+            ${
+              if clevisAskpassTest then
+                "clevisLuksAskpass = { enable = true; useTang = true; };"
+              else
+                "clevis = { enable = true; useTang = true; };"
+            }
             network.enable = true;
           };
         ''}
@@ -108,6 +114,7 @@ let
       testFlakeSwitch,
       testByAttrSwitch,
       clevisTest,
+      clevisAskpassTest ? false,
       clevisFallbackTest,
       disableFileSystems,
     }:
@@ -190,6 +197,7 @@ let
                     grubUseEfi
                     extraConfig
                     clevisTest
+                    clevisAskpassTest
                     ;
                 }
               }",
@@ -197,11 +205,20 @@ let
           )
           installer.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
-      ${optionalString clevisTest ''
-        with subtest("Create the Clevis secret with Tang"):
+      ${optionalString (clevisTest && !clevisAskpassTest)
+        ''
+          with subtest("Create the Clevis secret with Tang"):
+               installer.systemctl("start network-online.target")
+               installer.wait_for_unit("network-online.target")
+               installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''
+      }
+
+      ${optionalString clevisAskpassTest ''
+        with subtest("Bind Clevis to LUKS header"):
              installer.systemctl("start network-online.target")
              installer.wait_for_unit("network-online.target")
-             installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
+             installer.succeed("echo -n password | clevis luks bind -y -k - -d /dev/vda3 sss '{\"t\": 2, \"pins\": {\"tpm2\": {}, \"tang\": {\"url\": \"http://192.168.1.2\"}}}'")
+      ''}
 
       ${optionalString clevisFallbackTest ''
         with subtest("Shutdown Tang to check fallback to interactive prompt"):
@@ -261,14 +278,14 @@ let
           target.succeed("nix-store --verify --check-contents >&2")
 
       with subtest("Check whether the channel works"):
-          target.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in target.succeed("type -tP ps | tee /dev/stderr")
+          target.succeed("nix-env -iA nixos.hello >&2")
+          assert ".nix-profile" in target.succeed("type -tP hello | tee /dev/stderr")
 
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "
           "(this will build a new profile generation through the daemon)"
       ):
-          target.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
+          target.succeed("su alice -l -c 'nix-env -iA nixos.hello' >&2")
 
       with subtest("Configure system with writable Nix store on next boot"):
           # we're not using copy_from_host here because the installer image
@@ -283,6 +300,7 @@ let
                     grubUseEfi
                     extraConfig
                     clevisTest
+                    clevisAskpassTest
                     ;
                   forceGrubReinstallCount = 1;
                 }
@@ -316,6 +334,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 2;
             }
@@ -384,6 +403,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
               withTestInstrumentation = false;
@@ -482,6 +502,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
             }
@@ -518,6 +539,7 @@ let
                 grubUseEfi
                 extraConfig
                 clevisTest
+                clevisAskpassTest
                 ;
               forceGrubReinstallCount = 1;
               withTestInstrumentation = false;
@@ -637,6 +659,7 @@ let
       testFlakeSwitch ? false,
       testByAttrSwitch ? false,
       clevisTest ? false,
+      clevisAskpassTest ? false,
       clevisFallbackTest ? false,
       disableFileSystems ? false,
       selectNixPackage ? pkgs: pkgs.nixVersions.stable,
@@ -654,7 +677,6 @@ let
         # non-EFI tests can only run on x86
         platforms = mkIf (!isEfi) [
           "x86_64-linux"
-          "x86_64-darwin"
           "i686-linux"
         ];
         inherit broken;
@@ -722,9 +744,11 @@ let
                   desktop-file-utils
                   docbook5
                   docbook_xsl_ns
+                  hello
                   kbd.dev
                   kmod.dev
                   libarchive.dev
+                  libcap-text-verifier
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
@@ -770,7 +794,6 @@ let
                 ++ optionals (bootLoader == "systemd-boot") [
                   pkgs.zstd.bin
                   pkgs.mypy
-                  config.boot.bootspec.package
                 ]
                 ++ optionals clevisTest [ pkgs.klibc ]
                 ++ optional systemdStage1 config.system.nixos-init.package;
@@ -820,6 +843,7 @@ let
           testFlakeSwitch
           testByAttrSwitch
           clevisTest
+          clevisAskpassTest
           clevisFallbackTest
           disableFileSystems
           ;
@@ -1044,6 +1068,43 @@ let
       '';
     };
 
+  mkClevisLuksAskpassTest =
+    {
+      fallback ? false,
+    }:
+    makeInstallerTest "clevis-luks-askpass${optionalString fallback "-fallback"}" {
+      clevisTest = true;
+      clevisAskpassTest = true;
+      clevisFallbackTest = fallback;
+      enableOCR = fallback;
+      extraInstallerConfig = {
+        environment.systemPackages = with pkgs; [ clevis ];
+      };
+      createPartitions = ''
+        installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 100MB"
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s",
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
+          "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
+          "mkfs.ext3 -L nixos /dev/mapper/crypt-root",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+          "udevadm settle")
+      '';
+      postBootCommands = optionalString fallback ''
+        target.wait_for_text("Please enter")
+        target.send_chars("password\n")
+      '';
+    };
+
   mkClevisZfsTest =
     {
       fallback ? false,
@@ -1057,6 +1118,7 @@ let
         enableOCR = fallback;
         extraInstallerConfig = {
           boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
           environment.systemPackages = with pkgs; [ clevis ];
         };
         createPartitions = ''
@@ -1147,9 +1209,9 @@ in
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 100MiB"  # /boot
+          + " mkpart ESP fat32 1M 170MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 100MiB 1024MiB"
+          + " mkpart primary linux-swap 170MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -1215,6 +1277,7 @@ in
   separateBootZfs = makeInstallerTest "separateBootZfs" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
@@ -1287,6 +1350,7 @@ in
   zfsroot = makeInstallerTest "zfs-root" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
@@ -1404,7 +1468,6 @@ in
   # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
   # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
-    broken = true;
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
@@ -1445,6 +1508,53 @@ in
     '';
     enableOCR = true;
     postBootCommands = ''
+      target.wait_for_text("Enter passphrase for")
+      # GRUB's EFI keyboard input appears to drop characters when typed at the
+      # default speed (producing an "Invalid passphrase" error), so type slowly.
+      target.send_chars("supersecret\n", 0.2)
+    '';
+  };
+
+  # Root, kernel and initrd encrypted using GRUB cryptodisk, MBR/legacy BIOS,
+  # plain LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  grubCryptodiskLegacyBios = makeInstallerTest "grubCryptodiskLegacyBios" {
+    meta.maintainers = [ maintainers.tomfitzhenry ];
+    createPartitions = ''
+      installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos mkpart primary ext4 1MiB -1GiB mkpart primary linux-swap -1GiB 100%",
+          "udevadm settle",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda1 -",
+          "echo -n supersecret | cryptsetup luksOpen /dev/vda1 cryptroot",
+          "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
+          "mkswap -L swap /dev/vda2",
+          "swapon -L swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/etc/nixos",
+          # Add a keyfile so stage 1 can unlock the root device without a second,
+          # interactive prompt. This keeps the test independent of the stage 1
+          # implementation, which matters because the scripted and systemd
+          # initrds word their passphrase prompts differently. Only GRUB (which
+          # is stage 1 independent) then prompts interactively.
+          "dd if=/dev/urandom of=/mnt/etc/nixos/luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda1 /mnt/etc/nixos/luks.key",
+      )
+    '';
+    bootLoader = "grub";
+    # GRUB draws its cryptodisk passphrase prompt on the console terminal
+    # without a trailing newline, so the line-based wait_for_console_text can
+    # never observe it. Use OCR (wait_for_text) to read it off the screen.
+    enableOCR = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.initrd.secrets."/luks.key" = "/etc/nixos/luks.key";
+      boot.initrd.luks.devices.cryptroot = {
+        device = lib.mkForce "/dev/vda1";
+        keyFile = "/luks.key";
+      };
+    '';
+    postBootCommands = ''
+      # GRUB has to unlock the disk to read /boot before it can boot the kernel;
+      # stage 1 then unlocks the root device with the embedded keyfile.
       target.wait_for_text("Enter passphrase for")
       target.send_chars("supersecret\n")
     '';
@@ -1741,6 +1851,9 @@ in
   };
 }
 // optionalAttrs systemdStage1 {
+  clevisLuksAskpass = mkClevisLuksAskpassTest { };
+  clevisLuksAskpassFallback = mkClevisLuksAskpassTest { fallback = true; };
+
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
       installer.succeed(

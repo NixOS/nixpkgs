@@ -6,22 +6,23 @@
   installShellFiles,
   bc,
   ncurses,
-  testers,
-  fzf,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fzf";
-  version = "0.72.0";
+  version = "0.74.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rUxbC2+VASAEBmL8WOpywk0SD0gyHArisl4pxnqK32I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b/dQOebD8pbg+oX2Q9n4hNqdKgW/xLp4HhoGKp6BaTM=";
   };
 
-  vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";
+  vendorHash = "sha256-NojjUf/3c4q4B96eQ/qcI+GdRvHakHUyMRaQ6/IZpEw=";
 
   env.CGO_ENABLED = 0;
 
@@ -75,9 +76,8 @@ buildGoModule (finalAttrs: {
     chmod +x $out/bin/fzf-share
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = fzf;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/junegunn/fzf/blob/${finalAttrs.src.rev}/CHANGELOG.md";

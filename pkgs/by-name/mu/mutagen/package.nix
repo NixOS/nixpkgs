@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mutagen";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = "mutagen";
     rev = "v${version}";
-    hash = "sha256-/UigWQMk+VDMGna/ixctU8MR7VNPpOTOGNUtuYx8DS0=";
+    hash = "sha256-eT1B2ifs1BA2wcVyz9C9F8YoSbGcpGghu5Z3UrjfBOc=";
   };
 
-  vendorHash = "sha256-J92LzjIsLlBOhnkWrp8MRgoe+4NzXyBgqQRigse5GQk=";
+  vendorHash = "sha256-RVVUeNfp/HWd3/5uCyaDGw6bXFJvfomhu//829jO+qE=";
 
   agents = fetchzip {
     name = "mutagen-agents-${version}";
@@ -27,7 +27,7 @@ buildGoModule rec {
     postFetch = ''
       rm $out/mutagen # Keep only mutagen-agents.tar.gz.
     '';
-    hash = "sha256-EGMBsv6WjmWj/tOhtOORd6eqHmdfJb5pxPrb3zr/ynI=";
+    hash = "sha256-ltObD3MCSYE7IJaEDyB35CqmtUKintsaD0sMQdFAfYY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

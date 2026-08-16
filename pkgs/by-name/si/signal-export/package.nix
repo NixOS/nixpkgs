@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "signal-export";
-  version = "3.8.3";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "signal_export";
-    hash = "sha256-V6yo1nimjQJgbf17A/RSe/vykfCxcFFL0xZaQY3k0Tk=";
+    hash = "sha256-iJfbeY1xVWsg95TpZqauTyy9uywWp6jZAdMlZaPDDmQ=";
   };
 
   build-system = with python3.pkgs; [
@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     typer
     beautifulsoup4
     emoji
+    filetype
     markdown
     pycryptodome
     sqlcipher3-wheels

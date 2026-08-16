@@ -9,6 +9,7 @@
   fluidsynth,
   freetype,
   glib,
+  libGL,
   libicns,
   libpcap,
   libpng,
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.05.02";
+  version = "2026.07.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-4P6NH3LZgnV3CpakdKQhW+29hQl2Q30N5fScZgdk84E=";
+    hash = "sha256-HO5JJQHeEJYXU7TtNCXZALgqkNbIMGI+TjDwbvs5L8w=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    libGL
     libxkbfile
     libxrandr
   ];
@@ -86,11 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
 
-  configureFlags = [ "--enable-sdl2" ];
+  configureFlags = [ (lib.strings.enableFeature true "sdl2") ];
 
   enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ]; # https://github.com/joncampbell123/dosbox-x/issues/4436
 
   # Build optional App Bundle target, which needs at least one arch-suffixed binary
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''

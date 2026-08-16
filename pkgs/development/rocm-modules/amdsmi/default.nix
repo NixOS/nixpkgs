@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "7.2.2";
+  version = "7.2.3";
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/amdsmi";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];

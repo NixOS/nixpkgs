@@ -15,10 +15,8 @@ let
   plat =
     {
       x86_64-linux = "linux-x64";
-      x86_64-darwin = "darwin-x64";
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
-      armv7l-linux = "linux-armhf";
       loongarch64-linux = "linux-loong64";
     }
     .${system} or throwSystem;
@@ -27,12 +25,10 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-CP4tIZhDoC56T6N0RUebNRw3CjxG82odHt4WY8rgmS8=";
-      x86_64-darwin = "sha256-4EWKIXc+CKQLot7eN6Bkd/xigByEGafLMKJ832EOSwA=";
-      aarch64-linux = "sha256-5EwENP1lpHzqiWWeXNQzQOp/zAAEanSbDhWcMeup2sY=";
-      aarch64-darwin = "sha256-9n7kVtknqfSfTc2MmFps5bxSqMnL6KNhZgTb+DVUkhY=";
-      armv7l-linux = "sha256-aXGqp7ljvqDJNb5BMiBIm2CluIr70oiNPmR7BULLsv8=";
-      loongarch64-linux = "sha256-XPEssw+7NVKljyrWcc+Q2HzRr31seDwbdNn3EtyHlSY=";
+      x86_64-linux = "sha256-rfNUjfBV0Y5HbN7oh0iLp0hrh5rZmjGlRsa1xf8pbCQ=";
+      aarch64-linux = "sha256-c9h9RtTcII/hLASX3GB6qwpuK/My9UoLaCajoaoyvDQ=";
+      aarch64-darwin = "sha256-8h7lJinrXjnAVdrqcBGLemBVxjmuzz2tBeGZeprYOsA=";
+      loongarch64-linux = "sha256-p8hwOg5BbVvJGeQoBrgtd4gHsYmwEhsF/I+bk8gzIo4=";
     }
     .${system} or throwSystem;
 
@@ -43,7 +39,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.112.01907";
+  version = "1.126.04524";
+  vscodeVersion = "1.126.0";
   pname = "vscodium";
 
   executableName = "codium";
@@ -78,6 +75,7 @@ buildVscode rec {
     '';
     homepage = "https://github.com/VSCodium/vscodium";
     downloadPage = "https://github.com/VSCodium/vscodium/releases";
+    changelog = "https://github.com/VSCodium/vscodium/releases/tag/${version}";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
@@ -86,10 +84,8 @@ buildVscode rec {
     mainProgram = "codium";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
-      "armv7l-linux"
       "loongarch64-linux"
     ];
     # requires libc.so.6 and other glibc specifics

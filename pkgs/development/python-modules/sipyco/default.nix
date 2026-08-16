@@ -5,6 +5,7 @@
   setuptools,
   pytestCheckHook,
   numpy,
+  openssl,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,10 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    openssl
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sipyco" ];
 

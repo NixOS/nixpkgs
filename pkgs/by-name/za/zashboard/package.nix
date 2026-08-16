@@ -3,21 +3,22 @@
   buildNpmPackage,
   fetchFromGitHub,
   pnpm_10,
-  pnpm ? pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildNpmPackage (finalAttrs: {
   pname = "zashboard";
-  version = "3.5.1";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yTLkfNhfmhJ/2oopKQ+F6ycYYwUXpbyz4SSE3IIpTgc=";
+    hash = "sha256-lFuM6ovnFJysndARV00A659nXIlG+tMNuXv2Z7DlQZM=";
   };
 
   npmDeps = null;
@@ -25,7 +26,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-DMR9vNgsWdBK0BbSGzxEZUBZpa4szF2NIFO/GePwIUw=";
+    hash = "sha256-UjoY2/cLJ0chdZ2VUq/7KoJXRhLrJAADi8jEYjHKdmw=";
   };
 
   nativeBuildInputs = [ pnpm ];

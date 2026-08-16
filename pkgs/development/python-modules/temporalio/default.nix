@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.26.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     repo = "sdk-python";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-mCx7IP3/KUDTzmzgwBIpzi2UFf9gNFxlSrBpOyPm/xs=";
+    hash = "sha256-CJOvebkyTLxF/S307YC5Can3KVrW+Ywo9lMPGGHq8Y8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-CL2ipOgnxGn0Zw2da85BzLJdjYamBXKftiRPExWCbb0=";
+    hash = "sha256-qRcwZ7G8b0FDh8UjY9OTjN6ZjiPlwgzSmqPVdpn9H9c=";
   };
 
   cargoRoot = "temporalio/bridge";

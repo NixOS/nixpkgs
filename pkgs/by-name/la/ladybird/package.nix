@@ -7,6 +7,7 @@
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
+  chromium-hsts-preload-list,
   cmake,
   ninja,
   pkg-config,
@@ -14,10 +15,13 @@
   libavif,
   angle, # libEGL
   libjxl,
+  libedit,
   libpulseaudio,
   libwebp,
   libxcrypt,
+  mimalloc,
   openssl,
+  perl,
   python3,
   qt6Packages,
   woff2,
@@ -32,6 +36,8 @@
   skia,
   nixosTests,
   unstableGitUpdater,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
   libtommath,
   sdl3,
   icu78,
@@ -40,22 +46,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-04-04";
+  version = "0-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "b11f30b32eff7c5e7baf6e84d0a432975631486d";
-    hash = "sha256-Fv74py0dQG2hQti40eh7vXCkN0rkheeqQ/JM3KIuLDA=";
+    rev = "02b205361dd239e134f434e484b609d1fa5f1938";
+    hash = "sha256-+CVJjrL1kqT2A7r89F+riiHpMa39rcggqG9SByidUY4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    hash = "sha256-5CB5mRdmvsmTmy3PGKhCx3NZm7Et2cIwIg9vF2wA7xE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-n0ACVH8NXwe7SIaGFoJ20WIGGR3XjcuLTwPSKGJpT5s=";
   };
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
+
+    perl -0pi -e \
+      's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
+      Meta/CMake/check_for_dependencies.cmake
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
@@ -79,12 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
+
+    mkdir build/Caches/HSTSPreload
+    cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
   '';
 
   nativeBuildInputs = [
     cargo
     cmake
     ninja
+    perl
     pkg-config
     python3
     rustPlatform.cargoSetupHook
@@ -102,8 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     angle # libEGL
     libjxl
+    libedit
     libwebp
     libxcrypt
+    mimalloc
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
@@ -129,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu78
     simdjson
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
   ];
@@ -161,14 +177,32 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
-  # On linux we end up wraping some non-Qt apps, like headless-browser.
+  # On linux we end up wrapping some non-Qt apps, like headless-browser.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript =
+    let
+      updateSource = unstableGitUpdater {
+        hardcodeZeroVersion = true;
+      };
+
+      updateCargoDeps = {
+        command = [
+          (lib.getExe' common-updater-scripts "update-source-version")
+          "ladybird"
+          "--ignore-same-version"
+          "--source-key=cargoDeps.vendorStaging"
+        ];
+      };
+    in
+    _experimental-update-script-combinators.sequence [
+      updateSource
+      updateCargoDeps
+    ];
 
   meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
@@ -177,14 +211,17 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fgaz
       jk
+      schembriaiden
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
     broken = stdenv.hostPlatform.isDarwin;
+    knownVulnerabilities = [
+      "CVE-2026-58592"
+    ];
   };
 })

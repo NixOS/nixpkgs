@@ -42,13 +42,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd git-absorb \
       --bash <($out/bin/git-absorb --gen-completions bash) \
       --fish <($out/bin/git-absorb --gen-completions fish) \
-      --zsh <($out/bin/git-absorb --gen-completions zsh)
+      --zsh <($out/bin/git-absorb --gen-completions zsh) \
+      --nushell <($out/bin/git-absorb --gen-completions nushell)
   '';
 
   meta = {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

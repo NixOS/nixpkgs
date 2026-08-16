@@ -9,7 +9,7 @@
   installShellFiles,
   makeWrapper,
   esbuild,
-  wasm-bindgen-cli_0_2_118,
+  wasm-bindgen-cli_0_2_126,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.7.7";
+  version = "0.7.10";
 
   src = fetchCrate {
     pname = "dioxus-cli";
     version = finalAttrs.version;
-    hash = "sha256-jMy2i19qyoMuIh/BJ1iJU78WNY+kWQC9xKTovLJvL2A=";
+    hash = "sha256-kPzo5zRSVs46SjiDRKpKxca8kPcWUgqc/LMKQsk0sC8=";
   };
 
-  cargoHash = "sha256-qPxW3VzHUw+GBmHn9r77BcDw50AkCfAOa7JblpgYgls=";
+  cargoHash = "sha256-cvBVIkIqBjXFifYNpL2DqZpQcBaX/59Xw0ZJKUvUcIs=";
   buildFeatures = [
     "no-downloads"
   ]
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --suffix PATH : ${
         lib.makeBinPath [
           esbuild
-          wasm-bindgen-cli_0_2_118
+          wasm-bindgen-cli_0_2_126
         ]
       }
   '';
@@ -95,7 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      cathalmullan
       anish
     ];
     platforms = lib.platforms.all;

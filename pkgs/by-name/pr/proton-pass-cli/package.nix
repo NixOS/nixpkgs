@@ -8,17 +8,24 @@
   jq,
   keyutils,
   libgcc,
+  makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proton-pass-cli";
-  version = "2.0.2";
+  version = "2.3.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -37,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/pass-cli --set PROTON_PASS_NO_UPDATE_CHECK 1
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -46,19 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-aarch64";
-        hash = "sha256-C/2ZxNgnDOLCkTyTqCPGIKiXXjwvHOJNI05BcGy1z0c=";
+        hash = "sha256-NORQQIMCkJVqNEkKIwJPto68cWkcMxaxUX2FIJfJoIw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-aarch64";
-        hash = "sha256-wSxTGtuCPU6uT25pBlxudnsQ7XEyihs/piWkiXrjs4w=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-x86_64";
-        hash = "sha256-qXXKavGRd6LSdLeoIiwlENhOE9JS/ZxQv432flS0KBg=";
+        hash = "sha256-8Er3ZrPLRYP+e5bofQbVFK9i5wEBxPS4NM6IapuhTAU=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-x86_64";
-        hash = "sha256-/WClBB5kKnsRNe9oeMPXzjUjsIMhDqgQDu5cNwEBftk=";
+        hash = "sha256-0WMzZBIZ1sDgpWeZ8ovWbS2McKJbIdUSPz7HqJ8y9Ms=";
       };
     };
     updateScript = writeShellScript "update-proton-pass-cli" ''
@@ -84,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command-line interface for managing your Proton Pass vaults, items, and secrets";
     homepage = "https://github.com/protonpass/pass-cli";
-    license = lib.licenses.unfree;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pass-cli";
     maintainers = with lib.maintainers; [ delafthi ];
     platforms = lib.attrNames finalAttrs.passthru.sources;

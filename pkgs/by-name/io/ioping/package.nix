@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkgsCross,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,12 +16,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9lJEjns8ttjgI52ZXeWgL77GMd7o7IvefBJ5UH9y9ks=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC:=$(CC)"
+  ];
 
   outputs = [
     "out"
     "man"
   ];
+
+  passthru.tests = {
+    aarch64-cross = pkgsCross.aarch64-multiplatform.ioping;
+  };
 
   meta = {
     description = "Disk I/O latency measuring tool";

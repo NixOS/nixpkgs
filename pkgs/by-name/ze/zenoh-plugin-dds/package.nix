@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-dds";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.9.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-dds";
     tag = finalAttrs.version;
-    hash = "sha256-vSFgxSSbLEwpwPznvy+m66Z5grgmxZiIom/I4p0xris=";
+    hash = "sha256-MOZmyZGaMJieWISZnnSTU+3+ER4FcGhg3YCTlmuWmuE=";
   };
 
-  cargoHash = "sha256-oMmO4N1EqqpWcujbm8sPPwEzNC1Gy2UdCCRqcgyQqdI=";
+  cargoHash = "sha256-O7OrgEPPkWMYCtmtdgYIcE8YUa+YpHWttwW0Gu5BLJA=";
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [ kaweees ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "zenoh-bridge-dds";
   };
 })

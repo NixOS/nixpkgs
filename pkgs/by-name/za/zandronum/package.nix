@@ -7,7 +7,7 @@
   makeWrapper,
   callPackage,
   soundfont-fluid,
-  SDL_compat,
+  sdl12-compat,
   libGL,
   libopus,
   glew,
@@ -17,7 +17,6 @@
   fluidsynth,
   fmodex,
   openssl,
-  gtk2,
   python3,
   game-music-emu,
   copyDesktopItems,
@@ -56,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     bzip2
     zlib
-    SDL_compat
+    sdl12-compat
     libjpeg
     sqlite
     game-music-emu
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     fmod
     fluidsynth
     libopus
-    gtk2
   ];
 
   nativeBuildInputs = [
@@ -93,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DFORCE_INTERNAL_GME=OFF"
+    "-DNO_GTK=ON"
   ]
   ++ (if serverOnly then [ "-DSERVERONLY=ON" ] else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 

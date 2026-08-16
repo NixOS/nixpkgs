@@ -1,3 +1,4 @@
+// @ts-nocheck
 async function handleReviewers({
   github,
   context,

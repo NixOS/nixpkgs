@@ -80,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
       babbaj
       js6pak
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

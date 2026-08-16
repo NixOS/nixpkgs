@@ -142,6 +142,14 @@ runBuildTests {
     '';
   };
 
+  jsonNull = shouldPass {
+    format = formats.json { };
+    input = null;
+    expected = ''
+      null
+    '';
+  };
+
   yaml_1_1Atoms = shouldPass {
     format = formats.yaml_1_1 { };
     input = {
@@ -160,6 +168,8 @@ runBuildTests {
       time = "22:30:00";
     };
     expected = ''
+      %YAML 1.1
+      ---
       attrs:
         foo: null
       'false': false
@@ -173,6 +183,16 @@ runBuildTests {
       str: foo
       time: '22:30:00'
       'true': true
+    '';
+  };
+
+  yaml_1_1Null = shouldPass {
+    format = formats.yaml_1_1 { };
+    input = null;
+    expected = ''
+      %YAML 1.1
+      ---
+        null
     '';
   };
 
@@ -210,6 +230,16 @@ runBuildTests {
     '';
   };
 
+  yaml_1_2Null = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = null;
+    # nixfmt insists on removing indentation, so force it with ${"  "}
+    expected = ''
+
+      ${"  "}null
+    '';
+  };
+
   iniAtoms = shouldPass {
     format = formats.ini { };
     input = {
@@ -227,6 +257,110 @@ runBuildTests {
       int=10
       str=string
     '';
+  };
+
+  configobjAtoms = shouldPass {
+    format = formats.configobj { };
+    input = {
+      bool = true;
+      int = 10;
+      float = 3.141;
+      str = "string";
+    };
+    expected = ''
+      bool = True
+      float = 3.141
+      int = 10
+      str = string
+    '';
+  };
+
+  configobjListWithoutListToValue = shouldPass {
+    format = formats.configobj { };
+    input = {
+      items = [
+        1
+        true
+        "x"
+      ];
+    };
+    expected = ''
+      items = 1, True, x
+    '';
+  };
+
+  configobjNestedAttrsets = shouldPass {
+    format = formats.configobj { };
+    input = {
+      server = {
+        host = "127.0.0.1";
+        port = 8080;
+        enabled = true;
+        tags = [
+          "web"
+          "nix"
+          42
+        ];
+      };
+
+      logging = {
+        level = "info";
+        rotate = true;
+      };
+
+      interfaces = {
+        local = {
+          address = "123";
+          coin = {
+            foo = "bar";
+          };
+        };
+        remote = {
+          address = "456";
+        };
+      };
+    };
+    expected = ''
+      [interfaces]
+      [[local]]
+      address = 123
+      [[[coin]]]
+      foo = bar
+      [[remote]]
+      address = 456
+      [logging]
+      level = info
+      rotate = True
+      [server]
+      enabled = True
+      host = 127.0.0.1
+      port = 8080
+      tags = web, nix, 42
+    '';
+  };
+
+  configobjNullableValues = shouldPass {
+    format = formats.configobj { };
+    input = {
+      nullable = null;
+      nested = {
+        keep = "ok";
+        missing = null;
+      };
+    };
+    expected = ''
+      nullable = None
+      [nested]
+      keep = ok
+      missing = None
+    '';
+  };
+
+  configobjInvalidAtom = shouldFail {
+    format = formats.configobj { };
+    input = {
+      function = _: 1;
+    };
   };
 
   iniInvalidAtom = shouldFail {
@@ -695,16 +829,14 @@ runBuildTests {
       float = 3.141
       int = 10
       list = [1, 2]
-      str = 'foo'
+      str = "foo"
       true = true
 
       [attrs]
-      foo = 'foo'
+      foo = "foo"
 
-      [level1]
-      [level1.level2]
       [level1.level2.level3]
-      level4 = 'deep'
+      level4 = "deep"
     '';
   };
 
@@ -725,7 +857,7 @@ runBuildTests {
       ];
     };
     expected = ''
-      language-server = ['bash-language-server', {except-features = ['diagnostics'], name = 'typescript-language-server'}]
+      language-server = ["bash-language-server", { except-features = ["diagnostics"], name = "typescript-language-server" }]
     '';
   };
 
@@ -739,8 +871,13 @@ runBuildTests {
       "stack(x,n)" = "foobar";
     };
     expected = ''
-      'stack(x,n)' = 'foobar'
+      "stack(x,n)" = "foobar"
     '';
+  };
+
+  tomlNull = shouldFail {
+    format = formats.toml { };
+    input = null;
   };
 
   cdnAtoms = shouldPass {
@@ -774,6 +911,14 @@ runBuildTests {
       "path": "${./testfile}"
       "str": "foo"
       "true": true
+    '';
+  };
+
+  cdnNull = shouldPass {
+    format = formats.cdn { };
+    input = null;
+    expected = ''
+      null: null
     '';
   };
 
@@ -887,6 +1032,14 @@ runBuildTests {
     '';
   };
 
+  luaNull = shouldPass {
+    format = formats.lua { };
+    input = null;
+    expected = ''
+      return nil
+    '';
+  };
+
   nixConfAtoms = shouldPass {
     format = formats.nixConf {
       package = pkgs.nix;
@@ -910,6 +1063,15 @@ runBuildTests {
 
       ignore-try = false
     '';
+  };
+
+  nixConfNull = shouldFail {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = "ignore-try = false";
+    };
+    input = null;
   };
 
   phpAtoms = shouldPass rec {
@@ -938,6 +1100,16 @@ runBuildTests {
       declare(strict_types=1);
       $config = ['attrs' => ['foo' => null], 'false' => false, 'float' => 3.141000, 'int' => 10, 'list' => [null, null], 'mixed' => [10, 3.141000, 'attrs' => ['foo' => null], 'str' => 'foo'], 'null' => null, 'raw' => random_function(), 'str' => 'foo', 'str_special' => 'foo
       testhello\'\'\'${"'"}, 'true' => true];
+    '';
+  };
+
+  phpNull = shouldPass {
+    format = formats.php { finalVariable = "config"; };
+    input = null;
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      $config = null;
     '';
   };
 
@@ -976,27 +1148,23 @@ runBuildTests {
         import re
         import a.b.c
 
-        attrs = {
-            "conditional": 1 if True else 2,
-            "foo": None,
-        }
+        attrs = {"conditional": 1 if True else 2, "foo": None}
         bool = True
         float = 3.141
-        func = re.findall(r"\bf[a-z]*", "which foot or hand fell fastest")
+        func = re.findall("\\bf[a-z]*", "which foot or hand fell fastest")
         int = 10
-        list = [
-            None,
-            1,
-            "str",
-            True,
-            1 if True else 2,
-        ]
+        list = [None, 1, "str", True, 1 if True else 2]
         null = None
         str = "foo"
         str_special = "foo\ntesthello''''"
       '';
     }
   );
+
+  pythonVarsNull = shouldFail {
+    format = formats.pythonVars { };
+    input = null;
+  };
 
   phpReturn = shouldPass {
     format = formats.php { };
@@ -1041,6 +1209,11 @@ runBuildTests {
         <nulltest></nulltest>
       </root>
     '';
+  };
+
+  xmlNull = shouldFail {
+    format = formats.xml { };
+    input = null;
   };
 
   PlistGenerate = shouldPass {
@@ -1115,6 +1288,17 @@ runBuildTests {
       ''\t<key>true</key>
       ''\t<true/>
       </dict>
+      </plist>'';
+  };
+
+  PlistNull = shouldPass {
+    format = formats.plist { };
+    input = null;
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+
       </plist>'';
   };
 

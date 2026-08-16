@@ -59,6 +59,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "imagesize"
     "markdown-it-py"
     "mdit-py-plugins"
     "platformdirs"

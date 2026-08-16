@@ -24,16 +24,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "26.3.1";
+  version = "26.7.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-wLmZHE7W1ulBvUBpwVatdR8etFVhdG/zpggUpNIb65s=";
+    hash = "sha256-BH5ucY+xd5K325mKdzw4vHu4f3v/R3iCsqlG/YZboWM=";
   };
 
-  vendorHash = "sha256-uJ7DBJGQ4D1UnZXSUnrO3Fy3xEFz6ZxcMQ12E2jKKSM=";
+  vendorHash = "sha256-vzEBZDe3tpLgl7f0kJniwv56r1MsJSSkPxeYW1zM0pI=";
 
   php = phpPackage;
 
@@ -82,6 +82,7 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
       --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
+      --replace-fail '"default": "/usr/bin/snmptrap",' '"default": "${net-snmp}/bin/snmptrap",' \
       --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
       --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \

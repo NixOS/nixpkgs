@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.7";
+  version = "0.12.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a78KiTsCCARWZvbxz9QKdUKnjkDJGXcPVVJu5rU4m/U=";
+    hash = "sha256-0I5RwA1ORlWtSawOZhgsZMBQSOusyxD0WnIoPgZdxZw=";
   };
 
   build-system = [

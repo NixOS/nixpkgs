@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -27,6 +28,8 @@
   libtiff,
   enableWebP ? true,
   libwebp,
+  enableJpegXL ? true,
+  libjxl,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
   enableJPEG2000 ? true,
@@ -51,14 +54,13 @@
   enableIpp ? false,
   enablePython ? false,
   pythonPackages,
-  enableGtk2 ? false,
-  gtk2,
   enableGtk3 ? false,
   gtk3,
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  # FIXME: unpin once upstream has ffmpeg 9 support
+  ffmpeg_8-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -300,9 +302,21 @@ effectiveStdenv.mkDerivation {
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
     ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
   ]
-  ++ optionals enableCuda [
-    ./cuda_opt_flow.patch
-  ];
+  ++ optionals enableCuda (
+    [
+      ./cuda_opt_flow.patch
+    ]
+    ++ optionals (cudaPackages.cudaAtLeast "13.2") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4097
+      (fetchpatch {
+        name = "fix-cuda-13-2-compat";
+        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
+      })
+    ]
+  );
 
   postPatch =
     # This prevents cmake from using libraries in impure paths (which
@@ -345,9 +359,6 @@ effectiveStdenv.mkDerivation {
   ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
     hdf5
   ]
-  ++ optionals enableGtk2 [
-    gtk2
-  ]
   ++ optionals enableGtk3 [
     gtk3
   ]
@@ -366,6 +377,9 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableWebP [
     libwebp
   ]
+  ++ optionals enableJpegXL [
+    libjxl
+  ]
   ++ optionals enableEXR [
     openexr
   ]
@@ -373,7 +387,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg_8-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
@@ -421,7 +435,7 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ]
@@ -484,6 +498,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_IPP" enableIpp)
     (cmakeBool "WITH_TIFF" enableTIFF)
     (cmakeBool "WITH_WEBP" enableWebP)
+    (cmakeBool "WITH_JPEGXL" enableJpegXL)
     (cmakeBool "WITH_JPEG" enableJPEG)
     (cmakeBool "WITH_PNG" enablePNG)
     (cmakeBool "WITH_OPENEXR" enableEXR)
@@ -630,7 +645,6 @@ effectiveStdenv.mkDerivation {
       opencv4-tests = callPackage ./tests.nix {
         inherit
           enableGStreamer
-          enableGtk2
           enableGtk3
           runAccuracyTests
           runPerformanceTests

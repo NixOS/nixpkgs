@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "incubator-tvm";
+    repo = "tvm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-+YnxYIGaPMgfLDsQEiCpqGuJRBTFEbXWI1L2JdnUyfI=";

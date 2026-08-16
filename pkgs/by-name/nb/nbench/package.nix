@@ -14,11 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   prePatch = ''
-    substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
-    substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
+    substituteInPlace nbench1.h --replace-fail '"NNET.DAT"' "\"$out/NNET.DAT\"" \
+      --replace-fail 'static void adjust_mid_wts();' 'static void adjust_mid_wts(int);'
+    substituteInPlace sysspec.h --replace-fail "malloc.h" "stdlib.h"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace "-static" ""
+    substituteInPlace Makefile --replace-fail "-static" ""
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [

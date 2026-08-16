@@ -23,6 +23,7 @@
   openssl,
   xz,
   zlib,
+  rust-jemalloc-sys,
   bintools,
   which,
   libffi,
@@ -402,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
+    rust-jemalloc-sys
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     zlib
@@ -445,6 +447,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHooks = ./setup-hook.sh;
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  # Make sure our bootstrap packages don't end up in our runtime closure
+  disallowedReferences = [
+    cargo
+    rustc
+  ];
 
   passthru = {
     llvm = llvmShared;

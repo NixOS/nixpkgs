@@ -17,16 +17,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
-  version = "15.1.0";
+  version = "15.2.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    rev = finalAttrs.version;
-    hash = "sha256-0gjwYMUlXYnmIWQS1SVzF1yQw1lpveRLw5qp049lc3I=";
+    tag = finalAttrs.version;
+    hash = "sha256-BsSIbZwB6s8i3dDTRYJ1EdVbJmiO0oxcLu6qiYlPkOI=";
   };
 
-  cargoHash = "sha256-ry3pLuYNwX776Dpj9IE2+uc7eEa5+sQvdNNeG1eJecs=";
+  cargoHash = "sha256-AqizStE9ICd6mNDZWdeXg6dHuTiY+B0TNauQQYWUa84=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,15 +50,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    file="$(mktemp)"
-    echo "abc\nbcd\ncde" > "$file"
-    ${rg} -N 'bcd' "$file"
-    ${rg} -N 'cd' "$file"
-  ''
-  + lib.optionalString withPCRE2 ''
-    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
-  '';
+  installCheckPhase = lib.optionalString canRunRg (
+    ''
+      file="$(mktemp)"
+      echo "abc\nbcd\ncde" > "$file"
+      ${rg} -N 'bcd' "$file"
+      ${rg} -N 'cd' "$file"
+    ''
+    + lib.optionalString withPCRE2 ''
+      echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
+    ''
+  );
 
   meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";

@@ -32,6 +32,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0,<3.1" "Cython>=3.0"
+  '';
+
   doCheck = false;
 
   pythonImportsCheck = [ "clickhouse_cityhash" ];
@@ -39,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";
     homepage = "https://github.com/xzkostyan/python-cityhash";
-    license = lib.licenses.upl;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ breakds ];
   };
 }

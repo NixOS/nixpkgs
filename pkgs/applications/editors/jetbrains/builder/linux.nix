@@ -23,6 +23,26 @@
   libGL,
   libx11,
 
+  # bundled jcef-plugin
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  libgbm,
+  libxcb,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxkbcommon,
+  libxrandr,
+  nspr,
+  nss,
+  pango,
+
   jdk,
   vmopts ? null,
   forceWayland ? null,
@@ -86,6 +106,26 @@ lib.extendMkDerivation {
         fontconfig
         libGL
         libx11
+        # required for the bundled jcef-plugin
+        udev
+        alsa-lib
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cairo
+        cups
+        dbus
+        libgbm
+        libxcb
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxkbcommon
+        libxrandr
+        nspr
+        nss
+        pango
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
@@ -102,6 +142,19 @@ lib.extendMkDerivation {
 
         if [ -d "plugins/remote-dev-server" ]; then
           patch -F3 -p1 < ${../patches/jetbrains-remote-dev.patch}
+        fi
+
+        # The bundled libraries of the remote dev server are not used (see the patch above),
+        # so drop them. This has to happen before autoPatchelfHook runs, otherwise their
+        # directory ends up in the RPATH of unrelated binaries, see below.
+        rm -rf plugins/remote-dev-server/selfcontained
+
+        # libjcef.so has "." in its RPATH. autoPatchelfHook follows the RPATHs of the
+        # libraries it indexes and resolves that "." against the build directory, which
+        # makes it prefer bundled copies of libraries over the ones from nixpkgs and
+        # bake build-time-only paths into the RPATHs it writes.
+        if [ -e plugins/jcef-plugin/jcef/libjcef.so ]; then
+          patchelf --set-rpath '$ORIGIN' plugins/jcef-plugin/jcef/libjcef.so
         fi
 
         vmopts_file=bin/linux/${vmoptsName}
@@ -177,13 +230,16 @@ lib.extendMkDerivation {
         fi
 
         ln -s "$launcher" $out/bin/$pname
-        rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
         echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
         chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
         ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
         ln -s "$item/share/applications" $out/share
 
         runHook postInstall
+      '';
+
+      preFixup = ''
+        addAutoPatchelfSearchPath "${jdk.home}/lib"
       '';
 
       preferLocalBuild = !(finalAttrs.meta.license.free or true);
