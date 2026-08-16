@@ -18,15 +18,18 @@
 }:
 
 let
-  version = "5.16.2-43";
+  latestDebianCodename = "trixie";
+  latestUbuntuCodename = "noble";
+  version = "6.0.2-3";
+  majorVersion = lib.versions.major version;
   srcs = {
     aarch64-linux = fetchurl {
-      url = "https://signalyst.com/bins/trixie/hqplayer5desktop_${version}_arm64.deb";
-      hash = "sha256-dmnDbFf1obuBvKSMIGFiI7fXi/5YRP23625Y+UEj+Wo=";
+      url = "https://signalyst.com/bins/${latestDebianCodename}/hqplayer${majorVersion}desktop_${version}_arm64.deb";
+      hash = "sha256-remml9wtBrJXiSA96rBjf0tbVJquskq2o+kmeAxI84M=";
     };
     x86_64-linux = fetchurl {
-      url = "https://signalyst.com/bins/noble/hqplayer5desktop_${version}_amd64.deb";
-      hash = "sha256-WUqfMUQSVb+MSc0GyhuEMM9H6fJP/NcmpFAX46BCiPI=";
+      url = "https://signalyst.com/bins/${latestUbuntuCodename}/hqplayer${majorVersion}desktop_${version}_amd64.deb";
+      hash = "sha256-Lx0E7lM7lLl44s7+T17JJmjKzdKmXJbD5iXDBJelT24=";
     };
   };
 in
@@ -72,10 +75,19 @@ stdenv.mkDerivation {
     mkdir -p "$out"/bin
     mv ./usr/bin/* "$out"/bin
 
+    # The binary links against libomp.so.5, which is not provided by
+    # `llvmPackages.openmp`; provide it as a symlink so that
+    # `autoPatchelfHook` can resolve it.
+    mkdir -p "$out"/lib
+    ln --symbolic \
+      ${lib.getLib llvmPackages.openmp}/lib/libomp.so \
+      "$out"/lib/libomp.so.5
+    addAutoPatchelfSearchPath "$out"/lib
+
     # documentation
     mkdir -p "$doc/share/doc/hqplayer-desktop" "$doc/share/applications"
-    mv ./usr/share/doc/hqplayer5desktop/* "$doc/share/doc/hqplayer-desktop"
-    mv ./usr/share/applications/hqplayer5desktop-manual.desktop "$doc/share/applications"
+    mv ./usr/share/doc/hqplayer6desktop/* "$doc/share/doc/hqplayer-desktop"
+    mv ./usr/share/applications/hqplayer6desktop-manual.desktop "$doc/share/applications"
 
     # desktop files
     mkdir -p "$out/share/applications"
@@ -83,9 +95,9 @@ stdenv.mkDerivation {
 
     # icons
     mkdir -p $out/share/icons/hicolor/96x96/apps
-    install -D ./usr/share/pixmaps/hqplayer5client.png -t $out/share/icons/hicolor/128x128/apps
-    install -D ./usr/share/pixmaps/hqplayer5desktop.png -t $out/share/icons/hicolor/128x128/apps
-    magick ./usr/share/pixmaps/hqplayer5desktop-manual.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/hqplayer5desktop-manual.png
+    install -D ./usr/share/pixmaps/hqplayer6client.png -t $out/share/icons/hicolor/128x128/apps
+    install -D ./usr/share/pixmaps/hqplayer6desktop.png -t $out/share/icons/hicolor/128x128/apps
+    magick ./usr/share/pixmaps/hqplayer6desktop-manual.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/hqplayer6desktop-manual.png
     runHook postInstall
   '';
 
@@ -96,17 +108,13 @@ stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    for desktopFile in $out/share/applications/hqplayer5{client,desktop}.desktop; do
+    for desktopFile in $out/share/applications/hqplayer6{client,desktop}.desktop; do
       substituteInPlace "$desktopFile" \
         --replace /usr/bin "$out"/bin
     done
-    substituteInPlace "$doc/share/applications/hqplayer5desktop-manual.desktop" \
-        --replace /usr/share/doc/hqplayer5desktop "$doc/share/doc/hqplayer-desktop" \
+    substituteInPlace "$doc/share/applications/hqplayer6desktop-manual.desktop" \
+        --replace /usr/share/doc/hqplayer6desktop "$doc/share/doc/hqplayer-desktop" \
         --replace evince "${evince}/bin/evince"
-  '';
-
-  postFixup = ''
-    patchelf --replace-needed libomp.so.5 libomp.so $out/bin/.hqplayer5*-wrapped
   '';
 
   meta = {
