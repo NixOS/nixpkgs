@@ -788,6 +788,8 @@ let
           inherit (pkgs) gnuplot;
         };
 
+        goblint-cil = callPackage ../development/ocaml-modules/goblint-cil { };
+
         grace = callPackage ../development/ocaml-modules/grace { };
 
         graphics = callPackage ../development/ocaml-modules/graphics { };
