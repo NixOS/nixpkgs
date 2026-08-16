@@ -45,7 +45,10 @@ buildFHSEnv {
   meta = {
     description = "Open source ecosystem for IoT development";
     homepage = "https://platformio.org";
-    maintainers = with lib.maintainers; [ mog ];
+    maintainers = with lib.maintainers; [
+      mog
+      nikp123
+    ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux;
   };
