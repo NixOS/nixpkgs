@@ -94,6 +94,8 @@ let
           inherit (pkgs) augeas;
         };
 
+        autofonce = callPackage ../development/ocaml-modules/autofonce { };
+
         awa = callPackage ../development/ocaml-modules/awa { };
 
         awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
