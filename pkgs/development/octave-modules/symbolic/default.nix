@@ -4,6 +4,10 @@
   fetchFromGitHub,
   # Octave's Python (Python 3)
   python,
+  gnuplot,
+  writableTmpDirAsHomeHook,
+  makeFontsConf,
+  texinfo,
 }:
 
 let
@@ -25,6 +29,16 @@ buildOctavePackage rec {
   };
 
   propagatedBuildInputs = [ pythonEnv ];
+
+  nativeOctavePkgTestInputs = [
+    gnuplot
+    writableTmpDirAsHomeHook
+    texinfo
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/symbolic/";
