@@ -2,8 +2,9 @@
   lib,
   stdenv,
   testers,
-  fetchurl,
+  fetchFromGitLab,
   fetchpatch,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -35,9 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableDocumentation [ "devdoc" ];
 
-  src = fetchurl {
-    url = "https://libnice.freedesktop.org/releases/libnice-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YY/E6N45O3GbFkHB2O7AGCbU050VrekmedIhx/Xk5w0=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "libnice";
+    repo = "libnice";
+    tag = finalAttrs.version;
+    hash = "sha256-UPppE5kBois0jJwsHKefBC8iTfSIkPZXV6XnUBnEFn8=";
   };
 
   patches = [
@@ -107,7 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
   doCheck = false;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     changelog = "https://gitlab.freedesktop.org/libnice/libnice/-/blob/${finalAttrs.version}/NEWS";
