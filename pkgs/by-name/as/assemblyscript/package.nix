@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "assemblyscript";
-  version = "0.28.13";
+  version = "0.28.20";
 
   src = fetchFromGitHub {
     owner = "AssemblyScript";
     repo = "assemblyscript";
     rev = "v${version}";
-    hash = "sha256-AN9W6IYmMFFiD1Au3uW+7jr2xOwVcOGd5e61cqVNnbs=";
+    hash = "sha256-GacSQeJ7ddvQxsUU8qEEnpVvqDguud4HEZ4tpBJSuL0=";
   };
 
-  npmDepsHash = "sha256-5s420YWTc4bZ5oZRBjinw4lAfMTPrnrIWx4IM3Ysuqo=";
+  npmDepsHash = "sha256-TpCcnQegA9/QeyEPB4pdl3dYn5DmGNB3sHP+GPiGLLE=";
 
   meta = {
     homepage = "https://github.com/AssemblyScript/assemblyscript";
