@@ -14,7 +14,8 @@ self: super:
 let
   preferLocal =
     orig:
-    self.lib.extendMkDerivation {
+    (if self.lib.isAttrs orig then orig else { })
+    // self.lib.extendMkDerivation {
       constructDrv = orig;
       extendDrvArgs =
         finalAttrs:
@@ -33,9 +34,7 @@ in
   buildenv = preferLocal super.buildenv;
   fetchfossil = preferLocal super.fetchfossil;
   fetchdocker = preferLocal super.fetchdocker;
-  fetchgit = (preferLocal super.fetchgit) // {
-    inherit (super.fetchgit) getRevWithTag;
-  };
+  fetchgit = (preferLocal super.fetchgit);
   fetchgx = preferLocal super.fetchgx;
   fetchhg = preferLocal super.fetchhg;
   fetchipfs = preferLocal super.fetchipfs;
