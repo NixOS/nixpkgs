@@ -194,8 +194,7 @@ lib.extendMkDerivation rec {
           useFetchGitArgsWDPassing
           // {
             inherit tag rev;
-            url = gitRepoUrl;
-            inherit passthru;
+            url = finalAttrs.gitRepoUrl;
           }
         else
           let
@@ -219,21 +218,19 @@ lib.extendMkDerivation rec {
               else
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
-            passthru = {
-              inherit gitRepoUrl;
-            }
-            // passthru;
           }
       )
       // privateAttrs
       // {
         inherit
           name
+          passthru
           ;
 
         derivationArgs = derivationArgs // {
           inherit
             domain
+            gitRepoUrl
             netrcMachineName
             owner
             private
@@ -260,4 +257,13 @@ lib.extendMkDerivation rec {
       };
   in
   fetcherArgs // { inherit useFetchGit; };
+
+  transformDrv =
+    drv:
+    drv.overrideAttrs (
+      finalAttrs: previousAttrs:
+      {
+        passthru =  removeAttrs previousAttrs.passthru [ "gitRepoUrl" ];
+      }
+    );
 }
