@@ -56,6 +56,8 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     ln -s proton $out/bin/proton-cli
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd proton \
       --bash <($out/bin/proton completion bash) \
       --fish <($out/bin/proton completion fish) \
