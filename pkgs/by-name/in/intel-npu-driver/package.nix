@@ -5,7 +5,6 @@
   openssl,
   boost,
   cmake,
-  git,
   level-zero,
   pkg-config,
   fetchFromGitHub,
