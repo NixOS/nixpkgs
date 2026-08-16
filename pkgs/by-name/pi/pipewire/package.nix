@@ -9,10 +9,16 @@
   meson,
   ninja,
   freebsd,
+  # session/seat tracking to arbitrate access to udev-discovered devices
+  # provided by logind (systemd) or elogind
+  # can be disabled entirely on systems without a logind provider, or when looking to minimize closure
+  # useful for non-systemd, linux based systems, like finix, sixos, micros, etc...
+  logindSupport ? udevSupport,
   elogind,
   libinotify-kqueue,
   epoll-shim,
   systemdLibs,
+  # dbus + socket activation, provides logind and udev dependencies by default
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs, # enableSystemd=false maintained by maintainers.highghlow.
   pkg-config,
   docutils,
@@ -23,6 +29,11 @@
   alsa-lib,
   libjack2,
   libusb1,
+  # dynamic hardware/device detection
+  # interchangeably provided by udev (systemd), eudev, or even libudev-zero/libudev-garden
+  # can be disabled entirely on systems without a compatible device manager, or when looking to minimize closure
+  # useful for non-systemd, linux based systems, like finix, sixos, micros, etc...
+  udevSupport ? stdenv.hostPlatform.isLinux,
   udev,
   libsndfile,
   vulkanSupport ? true,
@@ -155,17 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     bashNonInteractive
   ]
-  ++ (
-    if enableSystemd then
-      [ systemdLibs ]
-    else if stdenv.hostPlatform.isLinux then
-      [
-        elogind
-        udev
-      ]
-    else
-      [ ]
-  )
+  ++ lib.optional enableSystemd systemdLibs
+  ++ lib.optional (!enableSystemd && udevSupport) udev
+  ++ lib.optional (!enableSystemd && logindSupport) elogind
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libinotify-kqueue
     epoll-shim
@@ -222,7 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gstreamer" true)
     (lib.mesonEnable "gstreamer-device-provider" true)
     (lib.mesonOption "logind-provider" (if enableSystemd then "libsystemd" else "libelogind"))
-    (lib.mesonEnable "logind" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "logind" logindSupport)
     (lib.mesonEnable "selinux" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "avb" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "v4l2" stdenv.hostPlatform.isLinux)
@@ -230,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "systemd-user-service" enableSystemd)
-    (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "udev" udevSupport)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)
     (lib.mesonEnable "bluez5" bluezSupport)
