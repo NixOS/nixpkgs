@@ -1,0 +1,12 @@
+diff --git a/hw/i386/pc_piix.c b/hw/i386/pc_piix.c
+index 82457bdb16..0a911ce59e 100644
+--- a/hw/i386/pc_piix.c
++++ b/hw/i386/pc_piix.c
+@@ -658,6 +658,7 @@ static void xenfv_machine_4_2_options(MachineClass *m)
+  {
+  pc_i440fx_machine_4_2_options(m);
+  m->desc = "Xen Fully-virtualized PC";
++m->alias = "xenfv";
+  m->max_cpus = HVM_MAX_VCPUS;
+  m->default_machine_opts = "accel=xen,suppress-vmdesc=on";
+  }

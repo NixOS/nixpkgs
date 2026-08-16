@@ -287,7 +287,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://lists.gnu.org/archive/html/qemu-devel/2026-07/msg08469.html
     ./fix-tls-tests-without-tasn1.patch
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+  ++ lib.optional xenSupport ./xenfv.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
