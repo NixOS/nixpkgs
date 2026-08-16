@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeDesktopItem,
+  nix-update-script,
 
   copyDesktopItems,
   dart-sass,
@@ -171,6 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "redisinsight";
     })
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--custom-dep"
+      "baseOfflineCache"
+      "--custom-dep"
+      "innerOfflineCache"
+      "--custom-dep"
+      "apiOfflineCache"
+    ];
+  };
 
   meta = {
     description = "Developer GUI for Redis";
