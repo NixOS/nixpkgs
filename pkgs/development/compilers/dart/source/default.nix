@@ -30,7 +30,7 @@
 }:
 
 let
-  version = "3.12.2";
+  version = "3.13.0";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -81,7 +81,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-J+qlj0sSWYqqvMiTP6hZYD97ho2VsrqRynCaiSRQV6Q=";
+    outputHash = "sha256-kw6bygtcy+yAPLX61CYzcA9l0GRZaI70hB5oY0xJEjU=";
 
     buildCommand = ''
       mkdir source
@@ -146,21 +146,6 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./zlib-not-found.patch
     ./custom-flags.patch
 
-    # GCC 16 triggers various build warnings (made errors by -Werror) in the
-    # Dart SDK. These have been fixed upstream, either by correcting the
-    # problematic code or silencing the relevant warnings. Until they have
-    # been released, we fetch the patches here.
-    # Remove when upgrading to Dart 3.13:
-    (fetchpatch {
-      name = "dart-fix-gcc-build.patch";
-      url = "https://github.com/dart-lang/sdk/commit/b2911c0bf1dab671ee4008e05b0d71441a522d84.patch";
-      hash = "sha256-RuS4NuOofg0VjhkwN2oFE1iYjMnCdFtoNZnZLzCDJaU=";
-    })
-    (fetchpatch {
-      name = "dart-fix-gcc16-build.patch";
-      url = "https://github.com/dart-lang/sdk/commit/2f2a523818bf64e23657d1bf9da901d7f58c67aa.patch";
-      hash = "sha256-NQd9YcaFKUXDcG2IdBSTnkJAIqs+3/ahN82gWPnOeQo=";
-    })
     # Remove when upgrading to Dart 3.14:
     (fetchpatch {
       name = "dart-ignore-binaryen-warnings.patch";
@@ -169,7 +154,6 @@ dart-bin.overrideAttrs (oldAttrs: {
     })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    ./unbundle.patch
     ./unbundle-icu.patch
   ];
 
@@ -200,7 +184,6 @@ dart-bin.overrideAttrs (oldAttrs: {
     python3 tools/generate_package_config.py
     python3 tools/generate_sdk_version_file.py
     echo "" > tools/bots/dartdoc_footer.html
-    rm third_party/devtools/web/devtools_analytics.js
     JOBS_COUNT=''${NIX_BUILD_CORES:-2}
     rg --no-ignore -l 'google-analytics\.com' . \
       | rg -v "\.map\$" \
@@ -211,6 +194,17 @@ dart-bin.overrideAttrs (oldAttrs: {
         sed --in-place --regexp-extended 's|UA-[0-9]+-[0-9]+|UA-2137-0|g'
   ''
   + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    install -D --mode=0644 ${./unbundle/icu.gn} build/linux/unbundle/icu.gn
+    install -D --mode=0644 ${./unbundle/zlib.gn} build/linux/unbundle/zlib.gn
+    install -D --mode=0755 ${./unbundle/replace_gn_files.py} build/linux/unbundle/replace_gn_files.py
+    install -D --mode=0644 ${./unbundle/shim_headers.gni} build/shim_headers.gni
+    install -D --mode=0644 ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/dart-lang/sdk/d684a576a6aa954ae107a03b2b4e1d61c3bebe93/tools/generate_shim_headers.py";
+        hash = "sha256-jE3RZFnqq0mUR7tIrTGU5sblBaBsi/SwhKg2H37ypGg=";
+      }
+    } tools/generate_shim_headers.py
+
     for _lib in icu zlib; do
         find . -type f -path "*third_party/$_lib/*" \
             \! -path "*third_party/$_lib/chromium/*" \

@@ -159,6 +159,7 @@ mapAliases {
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   chai = throw "'chai' has been removed as it is no longer maintained upstream and the repository was archived"; # Added 2026-06-08
+  changefinder = throw "'changefinder' has been removed because it was unmaintained upstream"; # Added 2026-08-07
   characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
   chart-studio = throw "'chart-studio' has been removed as it is no longer maintained upstream"; # Added 2026-03-12
   cheetah3 = ct3; # added 2026-07-24
@@ -283,6 +284,7 @@ mapAliases {
   gepetto-viewer = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   gepetto-viewer-corba = throw "'gepetto-viewer-corba' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   ghidra-bridge = throw "'ghidra-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
+  gistyc = throw "'gistyc' has been removed because it was deleted upstream and unmaintained in nixpkgs"; # Added 2026-08-15
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   gitterpy = throw "'gitterpy' was removed. The service was migrated to Matrix"; # Added 2026-06-04

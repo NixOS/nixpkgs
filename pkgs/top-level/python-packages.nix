@@ -3032,8 +3032,6 @@ self: super: with self; {
 
   chameleon = callPackage ../development/python-modules/chameleon { };
 
-  changefinder = callPackage ../development/python-modules/changefinder { };
-
   changelog-chug = callPackage ../development/python-modules/changelog-chug { };
 
   channels = callPackage ../development/python-modules/channels { };
@@ -6800,8 +6798,6 @@ self: super: with self; {
   gios = callPackage ../development/python-modules/gios { };
 
   gipc = callPackage ../development/python-modules/gipc { };
-
-  gistyc = callPackage ../development/python-modules/gistyc { };
 
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter { };
 
