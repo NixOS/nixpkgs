@@ -88,6 +88,7 @@ let
     nameValuePair
     optionalDrvAttr
     optionAttrSetToDocList
+    optionAttrSetToDocTree
     overrideExisting
     packagesFromDirectoryRecursive
     pipe
@@ -3361,6 +3362,23 @@ runTests {
         "bar"
       ]
     ];
+  };
+
+  testOptionAttrSetToDocTree = {
+    expr =
+      let
+        module = {
+          options.boot.enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable boot";
+          };
+        };
+        options = (evalModules { modules = [ module ]; }).options;
+        docTree = optionAttrSetToDocTree options;
+      in
+      docTree.boot.enable.name;
+    expected = "boot.enable";
   };
 
   testFreeformOptions = {
