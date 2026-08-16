@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     bdfresize
     otf2bdf
     perl
-    unifont
+    unifont.bin
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
