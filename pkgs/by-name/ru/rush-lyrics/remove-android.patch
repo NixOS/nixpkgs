@@ -12,7 +12,7 @@ index 1535716..ccca9fb 100644
 -
  include(":desktopApp")
 diff --git a/shared/core/build.gradle.kts b/shared/core/build.gradle.kts
-index 8c629be..4601950 100644
+index a4e7587..f2404ee 100644
 --- a/shared/core/build.gradle.kts
 +++ b/shared/core/build.gradle.kts
 @@ -17,7 +17,6 @@
@@ -36,9 +36,9 @@ index 8c629be..4601950 100644
 -
      jvm()
  
-     sourceSets {
+     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
 diff --git a/shared/logic/build.gradle.kts b/shared/logic/build.gradle.kts
-index 3bcd708..5c6a9a8 100644
+index ef5a1dd..db72417 100644
 --- a/shared/logic/build.gradle.kts
 +++ b/shared/logic/build.gradle.kts
 @@ -19,7 +19,6 @@ import java.util.Properties
@@ -49,7 +49,7 @@ index 3bcd708..5c6a9a8 100644
      alias(libs.plugins.compose.multiplatform)
      alias(libs.plugins.compose.compiler)
      alias(libs.plugins.build.config)
-@@ -34,15 +33,6 @@ kotlin {
+@@ -35,15 +34,6 @@ kotlin {
          freeCompilerArgs.add("-Xexpect-actual-classes")
      }
  
@@ -62,27 +62,30 @@ index 3bcd708..5c6a9a8 100644
 -        androidResources { enable = true }
 -    }
 -
-     jvm()
- 
-     sourceSets {
-@@ -68,7 +58,6 @@ kotlin {
-             implementation(libs.bundles.ktor)
-             implementation(libs.ksoup)
+     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+         iosTarget.binaries.framework {
+             baseName = "SharedLogic"
+@@ -81,10 +71,6 @@ kotlin {
+             implementation(libs.ktor.client.darwin)
+             implementation(libs.androidx.sqlite.bundled)
          }
--        androidMain.dependencies { implementation(projects.androidLibs.romanization) }
-         jvmMain.dependencies { implementation(libs.androidx.sqlite.bundled) }
-     }
- }
-@@ -98,7 +87,6 @@ room3 { schemaDirectory("$projectDir/schemas") }
+-        androidMain.dependencies {
+-            implementation(libs.ktor.client.okhttp)
+-            implementation(projects.androidLibs.romanization)
+-        }
+         jvmMain.dependencies {
+             implementation(libs.ktor.client.okhttp)
+             implementation(libs.androidx.sqlite.bundled)
+@@ -117,7 +103,6 @@ room3 { schemaDirectory("$projectDir/schemas") }
  
  dependencies {
      add("kspJvm", libs.androidx.room.compiler)
 -    add("kspAndroid", libs.androidx.room.compiler)
+     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+     add("kspIosArm64", libs.androidx.room.compiler)
  }
- 
- tasks.register("generateChangelog") {
 diff --git a/shared/ui/build.gradle.kts b/shared/ui/build.gradle.kts
-index cf0d519..7d72086 100644
+index cf0d519..9ab57e2 100644
 --- a/shared/ui/build.gradle.kts
 +++ b/shared/ui/build.gradle.kts
 @@ -18,7 +18,6 @@
@@ -107,7 +110,7 @@ index cf0d519..7d72086 100644
      jvm()
  
      sourceSets {
-@@ -79,20 +71,6 @@ kotlin {
+@@ -79,20 +71,9 @@ kotlin {
              implementation(libs.koin.compose.viewmodel.navigation)
              implementation(libs.koin.annotations)
          }
@@ -118,11 +121,11 @@ index cf0d519..7d72086 100644
      }
  }
  
--dependencies {
+ dependencies {
 -    androidRuntimeClasspath(libs.compose.ui.tooling)
 -    androidRuntimeClasspath(libs.compose.ui.tooling.preview)
--}
--
+ }
+ 
 -androidComponents {
 -    onVariants { variant ->
 -        variant.sources.res?.addStaticSourceDirectory("src/commonMain/composeResources")
