@@ -44,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   pname = "niworkflows";
   version = "1.14.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
@@ -55,13 +56,14 @@ buildPythonPackage (finalAttrs: {
   # fails to determine the version automatically
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
-  pythonRelaxDeps = [ "traits" ];
-
   build-system = [
     hatch-vcs
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "traits"
+  ];
   dependencies = [
     acres
     attrs
