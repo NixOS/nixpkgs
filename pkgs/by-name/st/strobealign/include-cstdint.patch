@@ -1,0 +1,12 @@
+diff --git a/ext/robin_hood.h b/ext/robin_hood.h
+index a8f3a78..1c1b1d8 100644
+--- a/ext/robin_hood.h
++++ b/ext/robin_hood.h
+@@ -41,6 +41,7 @@
+
+ #include <algorithm>
+ #include <cstdlib>
++#include <cstdint>
+ #include <cstring>
+ #include <functional>
+ #include <memory> // only to support hash of smart pointers

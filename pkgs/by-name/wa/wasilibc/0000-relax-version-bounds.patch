@@ -1,0 +1,39 @@
+Commit ID: bf0251709e0440ff00036298d94177a72382979d
+Change ID: nukukykqkzqunwukokzxwlxrpxptuwzm
+Author   : Sam Pointon <sampointon@gmail.com> (2026-06-17 09:26:00)
+Committer: Sam Pointon <sampointon@gmail.com> (2026-06-17 09:27:26)
+
+    Relax strict version bounds on tools
+
+    Nixpkgs has more recent versions of these, and they work fine.
+
+diff --git a/cmake/bindings.cmake b/cmake/bindings.cmake
+index a629ecd006..14fdb8aed3 100644
+--- a/cmake/bindings.cmake
++++ b/cmake/bindings.cmake
+@@ -15,10 +15,6 @@
+     OUTPUT_VARIABLE WIT_BINDGEN_VERSION
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+-  if (NOT (WIT_BINDGEN_VERSION MATCHES "0\\.53\\.1"))
+-    message(WARNING "wit-bindgen version 0.53.1 is required, found: ${WIT_BINDGEN_VERSION}")
+-    set(WIT_BINDGEN_EXECUTABLE "")
+-  endif()
+ endif()
+ 
+ if (NOT WIT_BINDGEN_EXECUTABLE)
+diff --git a/cmake/wasi-wits.cmake b/cmake/wasi-wits.cmake
+index e21ab0258d..d72ed9bcc2 100644
+--- a/cmake/wasi-wits.cmake
++++ b/cmake/wasi-wits.cmake
+@@ -12,10 +12,6 @@
+     OUTPUT_VARIABLE WKG_VERSION
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+-  if (NOT (WKG_VERSION MATCHES "0\\.13\\.0"))
+-    message(WARNING "wkg version 0.13.0 is required, found: ${WKG_VERSION}")
+-    set(WKG_EXECUTABLE "")
+-  endif()
+ endif()
+ 
+ if (NOT WKG_EXECUTABLE)

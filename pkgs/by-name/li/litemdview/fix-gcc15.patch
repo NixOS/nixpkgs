@@ -1,0 +1,15 @@
+diff --git a/xxd/xxd.c b/xxd/xxd.c
+index 20f06ab..55e64fe 100644
+--- a/xxd/xxd.c
++++ b/xxd/xxd.c
+@@ -132,8 +132,8 @@ extern void perror __P((char *));
+ # endif
+ #endif
+ 
+-extern long int strtol();
+-extern long int ftell();
++extern long int strtol(const char *restrict, char **restrict, int);
++extern long int ftell(FILE *);
+ 
+ char version[] = "xxd V1.10 27oct98 by Juergen Weigert";
+ #ifdef WIN32

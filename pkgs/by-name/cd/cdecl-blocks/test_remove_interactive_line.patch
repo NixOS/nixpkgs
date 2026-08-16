@@ -1,0 +1,22 @@
+diff --git a/testset_expected_output.txt b/testset_expected_output.txt
+index 10d7eb3..ffe8184 100644
+--- a/testset_expected_output.txt
++++ b/testset_expected_output.txt
+@@ -26,7 +26,6 @@ Valid set options (and command line equivalents) are:
+ 	options
+ 	create (-c), nocreate
+ 	prompt, noprompt (-q)
+-	interactive (-i), nointeractive
+ 	ritchie (-r), preansi (-p), ansi (-a) or cplusplus (-+)
+ 
+ Current set values are:
+--- a/testset_cpp_expected_output.txt
++++ b/testset_cpp_expected_output.txt
+@@ -26,7 +26,6 @@ Valid set options (and command line equivalents) are:
+ 	options
+ 	create (-c), nocreate
+ 	prompt, noprompt (-q)
+-	interactive (-i), nointeractive
+ 	ritchie (-r), preansi (-p), ansi (-a) or cplusplus (-+)
+ 
+ Current set values are:

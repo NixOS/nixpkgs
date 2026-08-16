@@ -1,0 +1,64 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "d4"
+      ],
+      "path": "/nix/store/gc6hspl4p050mrlm3v3gj6pw87rp3awj-source",
+      "ref": "v0.0.3",
+      "rev": "3536104b4070ff617537ef37db7cfbae36909546",
+      "sha256": "12n5snrxha27hz95qq7krgrmip39xvhb400y5b0awnh44gczwn90",
+      "srcDir": "src",
+      "url": "https://github.com/brentp/d4-nim/archive/3536104b4070ff617537ef37db7cfbae36909546.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "docopt"
+      ],
+      "path": "/nix/store/qdmip0p56pd5ivalp3waaqjkc1xvzaxn-source",
+      "ref": "v0.7.1",
+      "rev": "efaa112b6df172a9168c4eb581ab8dda1fbcfe2a",
+      "sha256": "0v85frvfm5difggs016g8llspsq8kd27lq00sv79v65ih9vlr9r4",
+      "srcDir": "src",
+      "url": "https://github.com/docopt/docopt.nim/archive/efaa112b6df172a9168c4eb581ab8dda1fbcfe2a.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "hts"
+      ],
+      "path": "/nix/store/k19hyryn922gy9f9xmdrj6i80p1npgk0-source",
+      "ref": "v0.3.25",
+      "rev": "e70f16a008d1c6526fa8c108c73968175505d9d0",
+      "sha256": "1pcvqp9lnsl575f13hf6rxg2pb0lsq6z1wi4pzva5yjv5cmwq3pk",
+      "srcDir": "src",
+      "url": "https://github.com/brentp/hts-nim/archive/e70f16a008d1c6526fa8c108c73968175505d9d0.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "regex"
+      ],
+      "path": "/nix/store/vfs4ysdw2kvyp18jwpbvb9wfh1ajz0a9-source",
+      "ref": "v0.23.0",
+      "rev": "577c4ec3b235c5fd2653a9c86cbc4a576cfc0869",
+      "sha256": "0401f9m2m2h6bikl3hffyhaw5fc2nbjdf5mj4z9wckmm9lx9hpkl",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-regex/archive/577c4ec3b235c5fd2653a9c86cbc4a576cfc0869.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "unicodedb"
+      ],
+      "path": "/nix/store/wpilzdf8vdwp7w129yrl821p9qvl3ky3-source",
+      "ref": "0.12.0",
+      "rev": "b055310c08db8f879057b4fec15c8301ee93bb2a",
+      "sha256": "0w77h75vrgp6jiq4dd9i2m4za2cf8qhjkz2wlxiz27yn2isjrndy",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/b055310c08db8f879057b4fec15c8301ee93bb2a.tar.gz"
+    }
+  ]
+}

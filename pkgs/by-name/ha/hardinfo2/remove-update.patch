@@ -1,0 +1,58 @@
+diff --git a/includes/uidefs.h b/includes/uidefs.h
+index 552fd3cb..4998f677 100644
+--- a/includes/uidefs.h
++++ b/includes/uidefs.h
+@@ -36,7 +36,6 @@ char *uidefs_str =
+     "	<menu name=\"HelpMenu\" action=\"HelpMenuAction\">"
+     "		<menuitem name=\"WebPage\" action=\"HomePageAction\" always-show-image=\"true\"/>"
+     "		<menuitem name=\"HelpPage\" action=\"HelpPageAction\" always-show-image=\"true\"/>"
+-    "		<menuitem name=\"UpdatesPage\" action=\"UpdatesPageAction\" always-show-image=\"true\"/>"
+     "		<menuitem name=\"ReportBug\" action=\"ReportBugAction\" always-show-image=\"true\"/>"
+     "		<menuitem name=\"About\" action=\"AboutAction\" always-show-image=\"true\"/>"
+     "	</menu>"
+@@ -48,8 +47,6 @@ char *uidefs_str =
+   /*    "			<toolitem name=\"Copy\" action=\"CopyAction\"/>"*/
+     "			<separator/>"
+     "                   <toolitem name=\"SyncManager\" action=\"SyncManagerAction\" always-show-image=\"true\"/>"
+-    "			<separator/>"
+-    "                   <toolitem name=\"Update\" action=\"UpdateAction\" always-show-image=\"true\"/>"
+     "	</toolbar>"
+     "</ui>";
+ 
+diff --git a/shell/menu.c b/shell/menu.c
+index 5ffd4410..04398b1d 100644
+--- a/shell/menu.c
++++ b/shell/menu.c
+@@ -52,11 +52,6 @@ static GtkActionEntry entries[] = {
+      N_("Send benchmark results and receive updated data from the network"),
+      G_CALLBACK(cb_sync_manager)},
+ 
+-    {"UpdateAction", HI_STOCK_UPDATES,
+-     N_("Update Available"), "",
+-     N_("Update Available"),
+-     G_CALLBACK(cb_update)},
+-
+     //does not work correctly and value low
+     /*{"CopyAction", HI_STOCK_CLIPBOARD,
+      N_("_Copy to Clipboard"), "<control>C",
+@@ -78,11 +73,6 @@ static GtkActionEntry entries[] = {
+      NULL,
+      G_CALLBACK(cb_open_help_page)},
+ 
+-    {"UpdatesPageAction", NULL,
+-     N_("_Update HardInfo2"), "",
+-     NULL,
+-     G_CALLBACK(cb_open_updates_page)},
+-
+     {"ReportBugAction", NULL,
+      N_("_Report bug"), NULL,
+      NULL,
+@@ -237,8 +227,6 @@ void menu_init(Shell * shell)
+     gtk_image_menu_item_set_image(t,icon_cache_get_image_at_size("home.svg",size,size));
+     t=GTK_IMAGE_MENU_ITEM(gtk_ui_manager_get_widget(shell->ui_manager, "/MainMenu/HelpMenu/HelpPage"));
+     gtk_image_menu_item_set_image(t,icon_cache_get_image_at_size("help.svg",size,size));
+-    t=GTK_IMAGE_MENU_ITEM(gtk_ui_manager_get_widget(shell->ui_manager, "/MainMenu/HelpMenu/UpdatesPage"));
+-    gtk_image_menu_item_set_image(t,icon_cache_get_image_at_size("updates.svg",size,size));
+     t=GTK_IMAGE_MENU_ITEM(gtk_ui_manager_get_widget(shell->ui_manager, "/MainMenu/HelpMenu/ReportBug"));
+     gtk_image_menu_item_set_image(t,icon_cache_get_image_at_size("report-bug.svg",size,size));
+     t=GTK_IMAGE_MENU_ITEM(gtk_ui_manager_get_widget(shell->ui_manager, "/MainMenu/HelpMenu/About"));

@@ -1,0 +1,41 @@
+From c01e056ee845ae973ec36cc50125492ef8c02c12 Mon Sep 17 00:00:00 2001
+From: Conroy Cheers <conroy@corncheese.org>
+Date: Thu, 12 Jun 2025 17:45:27 +1000
+Subject: [PATCH] [Fix] find nanobind from Python module
+
+---
+ cpp/nanobind/CMakeLists.txt | 4 ++++
+ pyproject.toml              | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/cpp/nanobind/CMakeLists.txt b/cpp/nanobind/CMakeLists.txt
+index 8ea5622..02500ac 100644
+--- a/cpp/nanobind/CMakeLists.txt
++++ b/cpp/nanobind/CMakeLists.txt
+@@ -3,6 +3,10 @@ find_package(
+   COMPONENTS Interpreter Development.Module
+   REQUIRED
+ )
++
++execute_process(
++  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
++  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_DIR)
+ find_package(nanobind CONFIG REQUIRED)
+ 
+ # Compile this source file seperately. Nanobind suggests to optimize bindings code for size, but
+diff --git a/pyproject.toml b/pyproject.toml
+index 11fae7d..d2078b1 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -44,7 +44,7 @@ provider = "scikit_build_core.metadata.regex"
+ input = "python/xgrammar/version.py"
+ 
+ [build-system]
+-requires = ["scikit-build-core>=0.10.0", "nanobind==2.5.0"]
++requires = ["scikit-build-core>=0.10.0", "nanobind>=2.5.0"]
+ build-backend = "scikit_build_core.build"
+ 
+ [tool.scikit-build]
+-- 
+2.49.0
+

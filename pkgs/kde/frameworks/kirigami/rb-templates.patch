@@ -1,0 +1,30 @@
+diff --git a/src/dialogs/CMakeLists.txt b/src/dialogs/CMakeLists.txt
+index 9bf3cde9..c51437f6 100644
+--- a/src/dialogs/CMakeLists.txt
++++ b/src/dialogs/CMakeLists.txt
+@@ -28,6 +28,10 @@ target_include_directories(KirigamiDialogs PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/.
+ 
+ target_link_libraries(KirigamiDialogs PRIVATE Qt6::Quick KirigamiPlatform)
+ 
++add_dependencies(KirigamiDialogs
++  KirigamiPrimitives
++)
++
+ ecm_finalize_qml_module(KirigamiDialogs EXPORT KirigamiTargets)
+ 
+ install(TARGETS KirigamiDialogs EXPORT KirigamiTargets ${KF_INSTALL_DEFAULT_ARGUMENTS})
+diff --git a/src/templates/CMakeLists.txt b/src/templates/CMakeLists.txt
+index 87ae9e72..f202b2fc 100644
+--- a/src/templates/CMakeLists.txt
++++ b/src/templates/CMakeLists.txt
+@@ -40,6 +40,10 @@ set_target_properties(KirigamiTemplates PROPERTIES
+ 
+ target_include_directories(KirigamiTemplates PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+ 
++add_dependencies(KirigamiTemplates
++    KirigamiPrimitives
++    KirigamiLayouts
++)
+ 
+ ecm_finalize_qml_module(KirigamiTemplates EXPORT KirigamiTargets)
+ 

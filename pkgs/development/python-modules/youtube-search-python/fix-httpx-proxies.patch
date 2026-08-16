@@ -1,0 +1,39 @@
+--- a/youtubesearchpython/core/requests.py
++++ b/youtubesearchpython/core/requests.py
+@@ -11,29 +11,28 @@ class RequestCore:
+         self.proxy = {}
+         http_proxy = os.environ.get("HTTP_PROXY")
+         if http_proxy:
+-            self.proxy["http://"] = http_proxy
++            self.proxy["http://"] = httpx.HTTPTransport(proxy=http_proxy)
+         https_proxy = os.environ.get("HTTPS_PROXY")
+         if https_proxy:
+-            self.proxy["https://"] = https_proxy
++            self.proxy["https://"] = httpx.HTTPTransport(proxy=https_proxy)
+
+     def syncPostRequest(self) -> httpx.Response:
+-        return httpx.post(
++        return httpx.Client(mounts=self.proxy).post(
+             self.url,
+             headers={"User-Agent": userAgent},
+             json=self.data,
+-            timeout=self.timeout,
+-            proxies=self.proxy
++            timeout=self.timeout
+         )
+
+     async def asyncPostRequest(self) -> httpx.Response:
+-        async with httpx.AsyncClient(proxies=self.proxy) as client:
++        async with httpx.AsyncClient(mounts=self.proxy) as client:
+             r = await client.post(self.url, headers={"User-Agent": userAgent}, json=self.data, timeout=self.timeout)
+             return r
+
+     def syncGetRequest(self) -> httpx.Response:
+-        return httpx.get(self.url, headers={"User-Agent": userAgent}, timeout=self.timeout, cookies={'CONSENT': 'YES+1'}, proxies=self.proxy)
++        return httpx.Client(mounts=self.proxy).get(self.url, headers={"User-Agent": userAgent}, timeout=self.timeout, cookies={'CONSENT': 'YES+1'})
+
+     async def asyncGetRequest(self) -> httpx.Response:
+-        async with httpx.AsyncClient(proxies=self.proxy) as client:
++        async with httpx.AsyncClient(mounts=self.proxy) as client:
+             r = await client.get(self.url, headers={"User-Agent": userAgent}, timeout=self.timeout, cookies={'CONSENT': 'YES+1'})
+             return r

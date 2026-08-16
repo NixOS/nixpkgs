@@ -1,0 +1,31 @@
+diff --git a/librashader-capi/Cargo.toml b/librashader-capi/Cargo.toml
+index 4a103ab7..38971ddb 100644
+--- a/librashader-capi/Cargo.toml
++++ b/librashader-capi/Cargo.toml
+@@ -17,12 +17,12 @@ crate-type = [ "cdylib", "staticlib" ]
+ [features]
+ default = ["runtime-all" ]
+ runtime-all = ["runtime-opengl", "runtime-d3d9", "runtime-d3d11", "runtime-d3d12", "runtime-vulkan", "runtime-metal"]
+-runtime-opengl = ["glow", "librashader/runtime-gl"]
+-runtime-d3d11 = ["windows", "librashader/runtime-d3d11", "windows/Win32_Graphics_Direct3D11"]
+-runtime-d3d12 = ["windows", "librashader/runtime-d3d12", "windows/Win32_Graphics_Direct3D12"]
+-runtime-d3d9 = ["windows", "librashader/runtime-d3d9", "windows/Win32_Graphics_Direct3D9"]
++runtime-opengl = ["dep:glow", "librashader/runtime-gl"]
++runtime-d3d11 = ["dep:windows", "librashader/runtime-d3d11", "windows/Win32_Graphics_Direct3D11"]
++runtime-d3d12 = ["dep:windows", "librashader/runtime-d3d12", "windows/Win32_Graphics_Direct3D12"]
++runtime-d3d9 = ["dep:windows", "librashader/runtime-d3d9", "windows/Win32_Graphics_Direct3D9"]
+ 
+-runtime-vulkan = ["ash", "librashader/runtime-vk"]
++runtime-vulkan = ["dep:ash", "librashader/runtime-vk"]
+ runtime-metal = ["__cbindgen_internal_objc", "librashader/runtime-metal"]
+ 
+ reflect-unstable = []
+@@ -33,7 +33,7 @@ __cbindgen_internal = ["runtime-all"]
+ 
+ # make runtime-metal depend on this, so its automatically implied.
+ # this will make cbindgen generate __OBJC__ ifdefs for metal functions.
+-__cbindgen_internal_objc = ["objc2-metal", "objc2"]
++__cbindgen_internal_objc = ["dep:objc2-metal", "dep:objc2"]
+ 
+ [dependencies]
+ thiserror = "2"

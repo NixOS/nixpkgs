@@ -1,0 +1,8 @@
+--- a/deps/vera/src/gl/textureStreamAudio.cpp
++++ b/deps/vera/src/gl/textureStreamAudio.cpp
+@@ -59,7 +59,6 @@ TextureStreamAudio::TextureStreamAudio(): TextureStream() {
+     m_dft_buffer = (float*)av_malloc_array(sizeof(float), m_buf_len);
+     m_buffer_wr.resize(m_buf_len, 0);
+     m_buffer_re.resize(m_buf_len, 0);
+-    m_dft_buffer = nullptr;
+ }
