@@ -8940,8 +8940,6 @@ with pkgs;
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
-  mendeley = callPackage ../applications/office/mendeley { };
-
   mercurialFull = mercurial.override { fullBuild = true; };
 
   mopidyPackages = recurseIntoAttrs (
