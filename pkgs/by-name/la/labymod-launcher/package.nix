@@ -6,12 +6,12 @@
 
 let
   pname = "labymod-launcher";
-  version = "3.0.11";
+  version = "3.0.13";
 
   src = fetchurl {
     name = "labymod-launcher";
     url = "https://releases.r2.labymod.net/launcher/linux/x64/LabyMod%20Launcher-${version}.AppImage";
-    hash = "sha256-piGk8nbOj4AUjw05y9Ux59JSPXBIB7VisDbVirriMoI=";
+    hash = "sha256-9faOKYfWUUe7MboGQYwsU1eRNQkMX/1Cy0U3ALtlZjo=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
