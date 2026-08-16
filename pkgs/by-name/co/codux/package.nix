@@ -4,24 +4,18 @@
   fetchurl,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "codux";
   version = "15.42.0";
 
   src = fetchurl {
-    url = "https://github.com/wixplosives/codux-versions/releases/download/${version}/Codux-${version}.x86_64.AppImage";
+    url = "https://github.com/wixplosives/codux-versions/releases/download/${finalAttrs.version}/Codux-${finalAttrs.version}.x86_64.AppImage";
     hash = "sha256-rD0yXZAEUcPtxWlWuZD77gjw6JlcUvBsaDYGj+NgLss=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/codux.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -m 444 -D ${finalAttrs.contents}/codux.desktop -t $out/share/applications
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
     substituteInPlace $out/share/applications/codux.desktop  --replace 'Exec=AppRun' 'Exec=codux'
   '';
 
@@ -35,4 +29,4 @@ appimageTools.wrapType2 {
     ];
     mainProgram = "codux";
   };
-}
+})
