@@ -43,6 +43,8 @@ appimageTools.wrapType2 {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Tiny, powerful, free mathematical program with WYSIWYG editor and complete units of measurements support";
     homepage = "https://smath.com/";
