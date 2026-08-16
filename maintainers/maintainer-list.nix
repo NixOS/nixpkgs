@@ -9623,6 +9623,12 @@
     githubId = 44584365;
     name = "Francesco Vecchia";
   };
+  frajul = {
+    email = "frajul@comumail.de";
+    github = "Frajul";
+    githubId = 37769358;
+    name = "Julian Mutter";
+  };
   franciscod = {
     github = "franciscod";
     githubId = 726447;
