@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
           libheif.lib
+          librsvg
         ];
       }
     }"
