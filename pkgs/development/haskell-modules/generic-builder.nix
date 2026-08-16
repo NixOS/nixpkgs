@@ -23,7 +23,8 @@ let
   crossSupport = rec {
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
-    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs; # JS backend already handles this
+    # Both backends provide their own interpreter.
+    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm;
 
     canProxyTH =
       # Using iserv-proxy with 9.4 yields
