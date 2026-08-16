@@ -15,13 +15,14 @@
   libyuv,
   gst_all_1,
   gtest,
-  graphviz,
-  doxygen,
   python3,
   python3Packages,
   udev,
   libpisp,
   libglvnd,
+  enableDocumentation ? false,
+  graphviz,
+  doxygen,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
   withSoftispGPU ? true, # software ISP GPU acceleration
@@ -116,36 +117,43 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.jinja2
     python3Packages.pyyaml
     python3Packages.ply
+    openssl
+  ]
+  ++ lib.optionals enableDocumentation [
     python3Packages.sphinx
     graphviz
     doxygen
-    openssl
   ]
   ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
-  mesonFlags = [
-    (lib.mesonEnable "v4l2" true)
-    (lib.mesonEnable "tracing" withTracing)
-    (lib.mesonEnable "qcam" withQcam)
-    (lib.mesonEnable "apps-output-dng" withQcam)
-    (lib.mesonEnable "cam-output-sdl2" withQcam)
-    (lib.mesonEnable "cam-jpeg" withQcam)
-    (lib.mesonEnable "softisp-gpu" withSoftispGPU)
-    (lib.mesonEnable "libunwind" false)
-    (lib.mesonEnable "libdw" false)
-    (lib.mesonEnable "lc-compliance" false) # tries unconditionally to download gtest when enabled
-    # Avoid blanket -Werror to evade build failures on less
-    # tested compilers.
-    (lib.mesonBool "werror" false)
-    # Documentation breaks binary compatibility.
-    # Given that upstream also provides public documentation,
-    # we can disable it here.
-    (lib.mesonEnable "documentation" false)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [
-    # we don't have tensorflow-lite to build this
-    (lib.mesonEnable "rpi-awb-nn" false)
-  ];
+  mesonFlags =
+    lib.mapAttrsToList lib.mesonEnable {
+      v4l2 = true;
+      tracing = true;
+      pycamera = true;
+      qcam = true;
+      apps-output-dng = withQcam;
+      cam-output-sdl2 = withQcam;
+      cam-jpeg = withQcam;
+      softisp-gpu = withSoftispGPU;
+      libunwind = false;
+      libdw = false;
+      lc-compliance = false; # tries unconditionally to download gtest when enabled
+
+      # Documentation breaks binary compatibility.
+      # Given that upstream also provides public documentation,
+      # we can disable it here.
+      documentation = enableDocumentation;
+
+      rpi-awb-nn = false;
+    }
+    ++ [
+      (lib.mesonBool "test" finalAttrs.finalPackage.doCheck)
+
+      # Avoid blanket -Werror to evade build failures on less
+      # tested compilers.
+      (lib.mesonBool "werror" false)
+    ];
 
   env = {
     # Fixes error on a deprecated declaration
