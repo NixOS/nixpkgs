@@ -134,6 +134,8 @@ with haskellLib;
     ] super.serialise
   );
 
+  # https://github.com/maoe/ghc-trace-events/pull/17
+  ghc-trace-events = doJailbreak super.ghc-trace-events; # base < 4.22
 
   ghc-exactprint_1_14_1_0 = addBuildDepends [
     # cabal2nix drops conditional block: impl (ghc >= 9.14)
