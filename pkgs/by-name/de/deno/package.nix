@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   outputs = [
     "out"
     "denort"
+    "libdenort"
   ];
 
   src = fetchFromGitHub {
@@ -244,6 +245,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     moveToOutput "bin/denort" "$denort"
+    moveToOutput "lib/libdenort${stdenv.hostPlatform.extensions.sharedLibrary}" "$libdenort"
 
     # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
