@@ -201,47 +201,68 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
+    declare -A processed
+
+    # Canonicalize all of the library directories.
+    if [[ ${#libDirs[@]} -gt 0 ]]; then
+        mapfile -t canonicalDirs < <(realpath -s -- "${libDirs[@]}")
+
+        # If canonicalDirs and libDirs do not match in length,
+        # then one of the paths does not exist.
+        # Degrade to the older (slower) behaviour.
+        if [[ ${#canonicalDirs[@]} -ne ${#libDirs[@]} ]]; then
+            canonicalDirs=()
+            for dir in "${libDirs[@]}"; do
+                if dir2=$(realpath -s "$dir"); then
+                    canonicalDirs+=("$dir2")
+                else
+                    canonicalDirs+=("")
+                fi
+            done
+        fi
+    else
+        canonicalDirs=()
+    fi
+
+    i=0
     for dir in ${libDirs+"${libDirs[@]}"}; do
+        canonicalDir="${canonicalDirs[i++]}"
+        # If the library's directory cannot be resolved, skip.
+        [[ -n "$canonicalDir" ]] || continue
+        dir="$canonicalDir"
+
+        # If the library has already been processed, don't process it a second time.
+        [[ ${processed[$dir]:-} ]] && continue
+        processed["$dir"]=1
+
         # If the path is in the store, do not resolve any symlinks and add it to the rpath.
         # Resolving symlinks in the store breaks bootstrapping, see issue #454199.
         # If it is outside the store, resolve symlinks step by step until it falls
         # into the store or it becomes not a symlink.
         # Always canonicalize the path before checking it is in the store or not.
-        if dir2=$(realpath -s "$dir"); then
-            dir="$dir2"
-        else
-            continue
-        fi
         while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
-            if dir2=$(readlink "$dir"); then
-                dir="dir2"
-            else
-                break
-            fi
-            if dir2=$(realpath -s "$dir"); then
-                dir="dir2"
-            else
-                break
-            fi
+            dir2=$(readlink "$dir") || break
+            dir="$dir2"
+            dir2=$(realpath -s "$dir") || break
+            dir="$dir2"
         done
+
         # If the path turns out to be outside the store, we do not add it to rpath.
         # This typically happens for libraries in /tmp that are later
         # copied to $out/lib. If not, we're screwed.
-        if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
-            continue
-        fi
-        for path in "$dir"/*; do
-            file="${path##*/}"
-            if [ "${libs[$file]:-}" ]; then
-                # This library may have been provided by a previous directory,
-                # but if that library file is inside an output of the current
-                # derivation, it can be deleted after this compilation and
-                # should be found in a later directory, so we add all
-                # directories that contain any of the libraries to rpath.
-                rpaths["$dir"]=1
-                extraAfter+=(-rpath "$dir")
-                break
-            fi
+        [[ -n "${rpaths[$dir]:-}" ]] && continue
+        [[ "$dir" != "${NIX_STORE:-}"/* ]] && continue
+
+        for file in "${!libs[@]}"; do
+            [[ -e "$dir/$file" || -L "$dir/$file" ]] || continue
+            # This library may have been provided by a previous directory,
+            # but if that library file is inside an output of the current
+            # derivation, it can be deleted after this compilation and
+            # should be found in a later directory, so we add all
+            # directories that contain any of the libraries to rpath.
+            rpaths["$dir"]=1
+            extraAfter+=(-rpath "$dir")
+            break
         done
     done
 
