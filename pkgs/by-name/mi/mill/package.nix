@@ -27,15 +27,15 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "mill";
-  version = "1.1.7";
+  version = "1.2.0-RC1-46-16168f";
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/${version}/mill-dist-${suffix}-${version}.exe";
     sha256 =
       {
-        aarch64-darwin = "sha256-tQpV0Goe9Oq16rm14mavS5ELl7z4Bsu7JBVbbFgauPE=";
-        aarch64-linux = "sha256-lq0mR0lFhl7ESY+BM6kVRjyI3bpZOSwj+bSo37dAkaI=";
-        x86_64-linux = "sha256-2GSLEvRTlH9QPzkGM52sYiJh6OqXQzn/V0sPQ+SA39s=";
+        aarch64-darwin = "sha256-Zf6E49RKeLo8AULrm6icwE9XqBq3VhSQ7PO77Uo1b64=";
+        aarch64-linux = "sha256-mPnHZzQqOuVM0a6akg1vvFdQN7gh+yMGeRiAReQuukg=";
+        x86_64-linux = "sha256-kQTgZTdj9GRONjariFrzSUVtkWrZlP/w9V9WqSoqEs4=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
