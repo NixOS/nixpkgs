@@ -4,26 +4,22 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "buttercup-desktop";
   version = "2.28.1";
+
   src = fetchurl {
-    url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
+    url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${finalAttrs.version}/Buttercup-linux-x86_64.AppImage";
     sha256 = "sha256-iCuvs+FisYPvCmPVg1dhYMX+Lw3WmrMSRytdy6TLrxg=";
   };
-  appimageContents = appimageTools.extract { inherit pname src version; };
-
-in
-appimageTools.wrapType2 {
-  inherit pname src version;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
+    install -m 444 -D ${finalAttrs.contents}/buttercup.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/buttercup.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+      --replace 'Exec=AppRun' 'Exec=buttercup-desktop'
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   meta = {
@@ -34,4 +30,4 @@ appimageTools.wrapType2 {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
