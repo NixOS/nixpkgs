@@ -347,6 +347,16 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a contrib $out/share/git/
     mkdir -p $out/share/bash-completion/completions
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
+  ''
+
+  + lib.optionalString perlSupport ''
+
+    substituteInPlace $out/share/git/contrib/git-jump/git-jump \
+      --replace-fail "perl -ne '" "${lib.getExe perlPackages.perl} -ne '" \
+      --replace-fail "perl -pe '" "${lib.getExe perlPackages.perl} -pe '"
+  ''
+
+  + ''
 
     # grep is a runtime dependency, need to patch so that it's found
     substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -404,6 +414,11 @@ stdenv.mkDerivation (finalAttrs: {
         sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
             "$out/share/gitweb/gitweb.cgi"
     done
+  ''
+
+  + lib.optionalString pythonSupport ''
+    substituteInPlace $out/share/git/contrib/fast-import/import-zips.py \
+      --replace-fail "#!/usr/bin/env python" "#!${lib.getExe python3}"
   ''
 
   + (
