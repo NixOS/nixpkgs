@@ -86,6 +86,11 @@ let
     AuthenSASL
     DigestHMAC
   ];
+  gitJumpBinPath = lib.makeBinPath [
+    "$out"
+    perlPackages.perl
+    coreutils
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -197,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv)
     bash
   ]
+  ++ lib.optionals pythonSupport [ python3 ]
   ++ lib.optionals perlSupport [ perlPackages.perl ]
   ++ lib.optionals guiSupport [
     tcl
@@ -383,9 +389,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
     ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
-    ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
   ''
   + lib.optionalString perlSupport ''
+    makeWrapper $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump \
+      --prefix PATH : "${gitJumpBinPath}"
+
     # wrap perl commands
     makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/libexec/git-core/git-credential-netrc \
                 --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -410,6 +418,10 @@ stdenv.mkDerivation (finalAttrs: {
         sed -i -e "/use CGI /i use lib \"$p/${perlPackages.perl.libPrefix}\";" \
             "$out/share/gitweb/gitweb.cgi"
     done
+  ''
+
+  + lib.optionalString pythonSupport ''
+    patchShebangs $out/share/git/contrib/fast-import/import-zips.py
   ''
 
   + (
