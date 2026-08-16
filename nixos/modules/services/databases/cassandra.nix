@@ -69,6 +69,7 @@ let
     cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
     cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
 
+    strictDeps = true;
     __structuredAttrs = true;
     inherit (cfg) extraEnvSh package;
 
