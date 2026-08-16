@@ -1,0 +1,12 @@
+diff --git a/src/MainWindow.h b/src/MainWindow.h
+index 75a1e47..399a4e3 100644
+--- a/src/MainWindow.h
++++ b/src/MainWindow.h
+@@ -6,6 +6,7 @@
+ #include <QItemSelection>
+ #include <QMainWindow>
+ #include <QShowEvent>
++#include <QElapsedTimer>
+ #include <QSystemTrayIcon>
+ #include <climits>
+ #include <dialogs/AboutDialog.h>
