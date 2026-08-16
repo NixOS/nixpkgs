@@ -166,6 +166,15 @@ with haskellLib;
 
   # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
   mono-traversable = dontCheck super.mono-traversable;
+  # doctests broke with GHC 9.14, something to do with error messages
+  # https://github.com/kcsongor/generic-lens/issues/174
+  generic-lens = overrideCabal {
+    testTargets = [
+      "generic-lens-bifunctor"
+      "inspection-tests"
+      "generic-lens-syb-tree"
+    ];
+  } super.generic-lens;
 
   # Too strict bound on containers in test suite
   # https://github.com/jaspervdj/blaze-markup/issues/69
