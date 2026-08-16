@@ -67,13 +67,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ledger-bitcoin
       cbor2
       pyserial
+      trezor
     ]
     ++ lib.optionals enablePythonEcdsa [
       # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
       # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
-      trezor
       bitbox02
     ]
     ++ lib.optionals enableQt [
