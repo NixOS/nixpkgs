@@ -128,6 +128,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "xarray" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/pydata/xarray/blob/${finalAttrs.src.tag}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";

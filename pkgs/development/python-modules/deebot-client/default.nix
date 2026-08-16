@@ -50,6 +50,10 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [ xz ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   dependencies = [
     aiohttp
     aiomqtt
