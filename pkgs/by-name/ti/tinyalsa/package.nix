@@ -2,6 +2,7 @@
   lib,
   stdenv,
   testers,
+  unstableGitUpdater,
   fetchFromGitHub,
   meson,
   ninja,
@@ -33,9 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-    versionCheck = false;
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = false;
+    };
   };
 
   meta = {
