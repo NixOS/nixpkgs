@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mplhep";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "mplhep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EqHAj23PylGS+VTSMK2B80TXXj8CYTyWfkDqmFTMhGo=";
+    hash = "sha256-EiLhxkuHDxslz2HH/WIc20eYCJECXV414qnJdsUSVQY=";
   };
 
   build-system = [
