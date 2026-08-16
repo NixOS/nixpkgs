@@ -238,10 +238,8 @@ stdenv.mkDerivation (finalAttrs: {
         ''} \
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        ${
-          lib.strings.optionalString (!useFHSEnv)
-            "--prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib"
-        } \
+        --prefix LD_LIBRARY_PATH : $out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib \
+        ${lib.strings.optionalString (!useFHSEnv) "--prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}"} \
         --suffix VK_ADD_DRIVER_FILES : "${addDriverRunpath.driverLink}/share/vulkan/icd.d" \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
         --run "${finalAttrs.stageModules} $out/opt/${binaryName}/modules" \
