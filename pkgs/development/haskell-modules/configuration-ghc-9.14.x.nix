@@ -147,6 +147,9 @@ with haskellLib;
     self.HUnit
   ] super.ghc-exactprint_1_14_1_0;
 
+  ormolu = doDistribute self.ormolu_0_8_2_0;
+  fourmolu = doDistribute self.fourmolu_0_20_1_0;
+
   #
   # Test suite issues
   #
