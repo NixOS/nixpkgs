@@ -13,7 +13,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "proton-cli";
-  version = "2.2.3";
+  version = "2.4.1";
 
   __structuredAttrs = true;
 
@@ -21,12 +21,12 @@ buildGoModule (finalAttrs: {
     owner = "roman-16";
     repo = "proton-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mw+hfBStq0Ga/FrKll92//YjFt0XreZ5tjqZGY0enzw=";
+    hash = "sha256-Kb7/KpTXJzbsBkF0SLqeF35dE6N693X9+hyDpSqreaE=";
   };
 
   vendorHash = "sha256-VjLuSaHW7C1Ar84vusMRjBWVikgVCdLBwd+OFT7ufiQ=";
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/proton" ];
 
   tags = [ "embed_hv" ];
 
@@ -55,10 +55,14 @@ buildGoModule (finalAttrs: {
   };
 
   postInstall = ''
+    ln -s proton $out/bin/proton-cli
+    installShellCompletion --cmd proton \
+      --bash <($out/bin/proton completion bash) \
+      --fish <($out/bin/proton completion fish) \
+      --zsh  <($out/bin/proton completion zsh)
     installShellCompletion --cmd proton-cli \
-      --bash <($out/bin/proton-cli completion bash) \
-      --fish <($out/bin/proton-cli completion fish) \
-      --zsh  <($out/bin/proton-cli completion zsh)
+      --bash <($out/bin/proton completion bash) \
+      --fish <(echo 'complete -c proton-cli -w proton')
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -71,7 +75,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/roman-16/proton-cli";
     changelog = "https://github.com/roman-16/proton-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    mainProgram = "proton-cli";
+    mainProgram = "proton";
     maintainers = with lib.maintainers; [ roman-16 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
