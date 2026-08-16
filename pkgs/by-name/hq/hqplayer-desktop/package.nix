@@ -123,6 +123,9 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames srcs;
-    maintainers = with lib.maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      yiyu
+    ];
   };
 }
