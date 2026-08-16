@@ -22,10 +22,10 @@
   json_c,
   libevdev,
   scdoc,
-  scenefx_0_4,
+  scenefx,
   wayland-scanner,
   libxcb-wm,
-  wlroots_0_19,
+  wlroots_0_20,
   testers,
   nixosTests,
   # Used by the NixOS module:
@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.5.3";
+  version = "0.6";
 
   src = fetchFromGitHub {
-    owner = "WillPower3309";
+    owner = "wlrfx";
     repo = "swayfx";
     tag = finalAttrs.version;
-    hash = "sha256-TZNN5pQhH/10DfntCfGHL1kuAceLMYbxwa4RFq7OmrQ=";
+    hash = "sha256-yvVqwgKEZt/JbT4cxyRA95oK1t/KcZ2AvI5/o7gYa0M=";
   };
 
   separateDebugInfo = true;
@@ -96,10 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pango
     pcre2
-    scenefx_0_4
+    scenefx
     wayland
     wayland-protocols
-    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_20.override { inherit (finalAttrs) enableXWayland; })
   ]
   ++ lib.optionals finalAttrs.enableXWayland [ libxcb-wm ];
 
@@ -133,8 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Sway, but with eye candy";
-    homepage = "https://github.com/WillPower3309/swayfx";
-    changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
+    homepage = finalAttrs.src.meta.homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ricarch97
