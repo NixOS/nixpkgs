@@ -19,6 +19,7 @@
   libpulseaudio,
   libzip,
   nlohmann_json,
+  stb,
   SDL2,
   spdlog,
   tinyxml-2,
@@ -80,12 +81,6 @@ let
       #define STB_IMAGE_IMPLEMENTATION
       #include "stb_image.h"
     '';
-  };
-
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
   };
 
   stormlib' = applyPatches {
@@ -213,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     # mirror 2ship's stb
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
