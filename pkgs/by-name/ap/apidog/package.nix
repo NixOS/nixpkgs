@@ -5,34 +5,14 @@
   makeDesktopItem,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "apidog";
   version = "2.8.42";
 
   src = fetchurl {
-    url = "https://file-assets.apidog.com/download/${version}/Apidog-${version}.AppImage";
+    url = "https://file-assets.apidog.com/download/${finalAttrs.version}/Apidog-${finalAttrs.version}.AppImage";
     hash = "sha256-BKhnOcJctfw3z3/q8RPq0OuAJcM1kF0e1LH3O9BI2Tw=";
   };
-
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "apidog";
-    exec = "apidog %U";
-    icon = "apidog";
-    desktopName = "Apidog";
-    comment = "All-in-One API Platform: Design, Debug, Mock, Test, and Document.";
-    categories = [
-      "Development"
-      "Utility"
-    ];
-    mimeTypes = [ "x-scheme-handler/apidog" ];
-  };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [
     pkgs.nss
@@ -50,11 +30,24 @@ appimageTools.wrapType2 {
   ];
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/apidog.png \
+    install -Dm444 ${finalAttrs.contents}/apidog.png \
       $out/share/icons/hicolor/512x512/apps/apidog.png
   '';
 
-  desktopItems = [ desktopItem ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "apidog";
+      exec = "apidog %U";
+      icon = "apidog";
+      desktopName = "Apidog";
+      comment = "All-in-One API Platform: Design, Debug, Mock, Test, and Document.";
+      categories = [
+        "Development"
+        "Utility"
+      ];
+      mimeTypes = [ "x-scheme-handler/apidog" ];
+    })
+  ];
 
   meta = with lib; {
     description = "All-in-one API design, test, mock and documentation platform";
@@ -65,4 +58,4 @@ appimageTools.wrapType2 {
     mainProgram = "apidog";
     maintainers = with maintainers; [ DomagojAlaber ];
   };
-}
+})
