@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fsel";
-  version = "3.1.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Mjoyufull";
     repo = "fsel";
     tag = finalAttrs.version;
-    hash = "sha256-h8CA2ZR/XKQJDq5uopOD1I+ZpWehuVNiJLeuuLaKAQA=";
+    hash = "sha256-yUenkuZ5ryUSpeGjJPO7xgbMObZ5SeBs8/LKU3ROo4g=";
   };
 
-  cargoHash = "sha256-RHDTdwbsKQtz8Pwq3pNgoUvK8y5NO94zVhsKiBVET+I=";
+  cargoHash = "sha256-WmHrMALgP52OJH1acrB7DMgo/8FMgksPyXpeRL9Q7s0=";
 
   nativeBuildInputs = [
     installShellFiles
