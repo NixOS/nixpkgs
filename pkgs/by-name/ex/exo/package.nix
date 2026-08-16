@@ -225,5 +225,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "exo";
+    knownVulnerabilities = [
+      # https://github.com/NixOS/nixpkgs/issues/538886
+      "CVE-2026-14738"
+    ];
   };
 })
