@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     "info"
   ];
 
+  # Don't bloat the font output with tools
+  propagatedBuildOutputs = [ ];
+
   passthru.updateScript = ./update.sh;
 
   meta = {
