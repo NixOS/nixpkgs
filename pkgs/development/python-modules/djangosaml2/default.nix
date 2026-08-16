@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "djangosaml2";
-  version = "1.11.1-1";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "djangosaml2";
     tag = "v${version}";
-    hash = "sha256-f7VgysfGpwt4opmXXaigRsOBS506XB/jZV1zRiYwZig=";
+    hash = "sha256-jsRP4kVpIyfdDLaQNJNou7e2bFhqIUlE/RzWWy7GmEc=";
   };
 
   build-system = [ setuptools ];
