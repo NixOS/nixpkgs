@@ -7314,6 +7314,8 @@ self: super: with self; {
 
   hyprland-config = callPackage ../development/python-modules/hyprland-config { };
 
+  hyprland-monitors = callPackage ../development/python-modules/hyprland-monitors { };
+
   hyprland-schema = callPackage ../development/python-modules/hyprland-schema { };
 
   hyprland-socket = callPackage ../development/python-modules/hyprland-socket { };
