@@ -15,7 +15,7 @@
 let
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
-    version = "4.20";
+    version = "4.21";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -24,7 +24,7 @@ let
       owner = "saalen";
       repo = "highlight";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-fMIyMR9RA60hdy1eniJkvLHK+WJPuVehWMyS9Lt6iQ4=";
+      hash = "sha256-lIfaiVM6M6RN4DeTGTdASNavFljyDRpts3a+N6I2gJY=";
     };
 
     enableParallelBuilding = true;
