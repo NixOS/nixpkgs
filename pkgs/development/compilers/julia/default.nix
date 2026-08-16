@@ -54,8 +54,8 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.11";
-        hash = "sha256-XItQngSzszyIGzSvqdXBV/yLQGDxf5x8SnrQ/DtzUtU=";
+        version = "1.10.12";
+        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
