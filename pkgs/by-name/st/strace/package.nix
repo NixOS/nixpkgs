@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   perl,
+  bashNonInteractive,
   libunwind,
   buildPackages,
   gitUpdater,
@@ -30,14 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # libunwind for -k.
-  # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
-  # The build will silently fall back and -k will not work on RISC-V.
   buildInputs = [
+    bashNonInteractive # for strace-log-merge shebang
+    # libunwind for -k.
+    # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
+    # The build will silently fall back and -k will not work on RISC-V.
     libunwind
   ]
   # -kk
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+
+  strictDeps = true;
 
   configureFlags = [
     "--enable-mpers=check"
