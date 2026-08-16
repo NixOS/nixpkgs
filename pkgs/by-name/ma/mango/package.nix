@@ -24,17 +24,19 @@
   libGL,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  __structuredAttrs = true;
-  strictDeps = true;
+
   pname = "mango";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-ERtlCk10ortjvBcyovnFVUwwPifSw/rORgVtCbmUsFU=";
+    hash = "sha256-0mX95LpyZuMMkEKS1qTiVrpDLeuCzO5hVJdmdpr7SY0=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -76,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "mango";
     description = "Lightweight and feature-rich Wayland compositor based on dwl";
-    homepage = "https://mangowm.github.io";
+    homepage = finalAttrs.src.meta.homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       hustlerone
