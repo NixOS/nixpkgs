@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "marko";
-  version = "2.2.3";
+  version = "2.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "marko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EuLir4Nws39B3onmWnnvEzp5W8934K89/WHOVHxVVKM=";
+    hash = "sha256-Md/cHuCDUW5rbOm6AE4jwRRr+hUqJkQRMn4hwq0c2ZY=";
   };
 
   build-system = [ pdm-backend ];
