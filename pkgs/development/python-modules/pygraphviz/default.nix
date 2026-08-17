@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pygraphviz";
-  version = "2.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
     tag = "pygraphviz-${finalAttrs.version}";
-    hash = "sha256-AxiaKEmVjofAi6LV1ozOPERqZyOhmBWMLV3GYlhSuNo=";
+    hash = "sha256-l0kAGlO8AFJcSQgoCXM0+HyzyseUJVVeJQ7E8sKCnr0=";
   };
 
   patches = [

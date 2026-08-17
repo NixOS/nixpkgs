@@ -20,13 +20,13 @@
   withGpu ? true,
 }:
 let
-  version = "1.19.3";
+  version = "1.19.4";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "libkrun";
     tag = "v${version}";
-    hash = "sha256-mDko5fRcjnb3BI6cINr4gm6DiCghUlkIn1ZiQeHxyaE=";
+    hash = "sha256-X/VGKOfbLN/3rj1Af7HEprfJB99Mh3UwfikXtS1dkXI=";
   };
 
   virglrenderer = stdenv.mkDerivation (finalAttrs: {
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-PE8xO8T5TFuGnL+95Y1BAz9EdJVUrxgVtVssAgStW+8=";
+    hash = "sha256-ZNSpsxCzCUKkjsDt7Sd5HcfqiQ13kaZSo7w/Vy6HXtY=";
   };
 
   nativeBuildInputs = [

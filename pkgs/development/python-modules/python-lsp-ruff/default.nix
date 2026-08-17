@@ -16,14 +16,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-lsp-ruff";
-  version = "2.3.1";
+  version = "2.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-ruff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1dgtuUX1GWKRiZOl5BYB/U8ecg42eTUMZqRYPKzHW/Y=";
+    hash = "sha256-dTQw1j7nkwc2Usy1TzziBgMl5UmLJU/6JWt7P3qAzL8=";
   };
 
   postPatch =

@@ -1368,8 +1368,6 @@ with pkgs;
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
-  gistyc = with python3Packages; toPythonApplication gistyc;
-
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
   go2tv-lite = go2tv.override { withGui = false; };
@@ -5484,8 +5482,6 @@ with pkgs;
       ;
   };
 
-  vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
-
   enchant = enchant_2;
 
   factorPackages-0_99 = callPackage ./factor-packages.nix {
@@ -8763,12 +8759,6 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_19
     wlroots_0_20
-    ;
-
-  inherit (callPackages ../development/libraries/scenefx { })
-    scenefx_0_4
-    scenefx_0_5
-    scenefx
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });

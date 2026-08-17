@@ -7,6 +7,8 @@
   pkg-config,
   autoPatchelfHook,
   alsa-lib,
+  dbus,
+  fontconfig,
   wayland,
   libxcursor,
   libxrandr,
@@ -17,6 +19,7 @@
   udev,
   libxkbcommon,
   openh264,
+  openssl,
   writeShellApplication,
   curl,
   jq,
@@ -27,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.2.0-nightly-2026-04-23";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
-    tag = lib.strings.removePrefix "0.2.0-" finalAttrs.version;
-    hash = "sha256-v8o5HbwL/nMcrKcJSFfO9EHeaIeCakHgmSpQSwEOO3I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/x9blMac62JqA5eWUBqye3g2PWVWYJlOaPysXNSahgA=";
   };
 
   postPatch =
@@ -49,33 +52,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
                        "OpenH264Version(${major}, ${minor}, ${patch})"
     '';
 
-  cargoHash = "sha256-wQ2rM0O9X7xLZsIwdMrIApdDd5nSaDFj+e1TZkSPptU=";
+  cargoHash = "sha256-DSSKisWHbI0Cwiuqyg6EzvHIXB6fdV17nhXDQnqQIdM=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
     let
-      tag = lib.strings.removePrefix "0.2.0-" finalAttrs.version;
-      versionDate = lib.strings.removePrefix "0.2.0-nightly-" finalAttrs.version;
+      commitDate = "2026-07-19";
     in
     {
       VERGEN_IDEMPOTENT = "1";
-      VERGEN_GIT_SHA = tag;
-      VERGEN_GIT_COMMIT_DATE = versionDate;
-      VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
+      VERGEN_GIT_SHA = "v${finalAttrs.version}";
+      VERGEN_GIT_COMMIT_DATE = commitDate;
+      VERGEN_GIT_COMMIT_TIMESTAMP = "${commitDate}T00:00:00Z";
     };
 
   nativeBuildInputs = [
     jre_minimal
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
     autoPatchelfHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    fontconfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     udev
+    openssl
     (lib.getLib stdenv.cc.cc)
   ];
 
@@ -85,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       libxkbcommon
       vulkan-loader
       openh264
+      (lib.getLib dbus)
     ]
     ++ lib.optionals withX11 [
       libxcursor
@@ -121,10 +128,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
       text = ''
         version="$( \
-          curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
-          jq -r ".[0].tag_name" \
+          curl https://api.github.com/repos/ruffle-rs/ruffle/releases/latest | \
+          jq -r ".tag_name" \
         )"
-        exec nix-update --version "0.2.0-$version" ruffle
+        exec nix-update --version "''${version#v}" ruffle
       '';
     });
   };
@@ -147,7 +154,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0.2.0-" finalAttrs.version}";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/v${finalAttrs.version}";
     maintainers = [
       lib.maintainers.jchw
     ];

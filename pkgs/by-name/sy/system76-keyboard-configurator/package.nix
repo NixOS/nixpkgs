@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-keyboard-configurator";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rnKWzct2k/ObjBnf90uwMar7fjZAUvQ2RPPZVZQsWEA=";
+    sha256 = "sha256-Nb/N/tfyRucxRHyvlwET3O+JShyO/zxPg3+OuALFBpM=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  cargoHash = "sha256-0UmEWQz+8fKx8Z1slVuVZeiWN9JKjEKINgXzZ6a4jkE=";
+  cargoHash = "sha256-Ws1LLX3K9/kpPJa6wureScSDswn1bIsu+s3C/VsDiEY=";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 linux/com.system76.keyboardconfigurator.desktop -t $out/share/applications

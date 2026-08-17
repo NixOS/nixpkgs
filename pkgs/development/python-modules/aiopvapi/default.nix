@@ -10,20 +10,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiopvapi";
-  version = "3.4.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pIi6A0YZnkFFg2juThPIO2IymzWZokTnyZl0QNUKstg=";
+    hash = "sha256-JXQTxHWMg/biWEQssk4KCIcTJ1JOG+UIRBI8xw4WfJ8=";
   };
-
-  postPatch = ''
-    substituteInPlace aiopvapi/__version__.py \
-      --replace-fail "3.3.0" "${finalAttrs.version}"
-  '';
 
   build-system = [ setuptools ];
 

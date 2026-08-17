@@ -3032,8 +3032,6 @@ self: super: with self; {
 
   chameleon = callPackage ../development/python-modules/chameleon { };
 
-  changefinder = callPackage ../development/python-modules/changefinder { };
-
   changelog-chug = callPackage ../development/python-modules/changelog-chug { };
 
   channels = callPackage ../development/python-modules/channels { };
@@ -6801,8 +6799,6 @@ self: super: with self; {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
-  gistyc = callPackage ../development/python-modules/gistyc { };
-
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter { };
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
@@ -8859,6 +8855,8 @@ self: super: with self; {
   jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter-book = callPackage ../development/python-modules/jupyter-book { };
+
+  jupyter-builder = callPackage ../development/python-modules/jupyter-builder { };
 
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
@@ -11823,6 +11821,8 @@ self: super: with self; {
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
+
+  nemo-relay = callPackage ../development/python-modules/nemo-relay { };
 
   nemosis = callPackage ../development/python-modules/nemosis { };
 

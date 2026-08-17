@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -24,9 +24,6 @@
   puremagic,
   pybids,
   pydot,
-  pytestCheckHook,
-  pytest-xdist,
-  pytest-cov-stub,
   rdflib,
   scipy,
   simplejson,
@@ -35,33 +32,49 @@
   # optional-dependencies
   datalad,
   duecredit,
-  pandas,
   paramiko,
   psutil,
-  sphinx,
   xvfbwrapper,
 
-  # other dependencies
-  which,
+  # tests
   bash,
   glibcLocales,
+  pandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-doctestplus,
+  pytest-env,
+  pytest-timeout,
+  pytest-xdist,
+  sphinx,
+  which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nipype";
   version = "1.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZwfsTDz44Zg673+O6nlifue3q0qklkmZFVDhKcFlt6c=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipype";
+    tag = finalAttrs.version;
+    hash = "sha256-Xa7hoD+UvxozXsW4ztjQfKPmvHJL42EMuu95rWWlbe8=";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${lib.getExe bash}"
     substituteInPlace nipype/pipeline/engine/tests/test_nodes.py \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
+  ''
+  # `nilearn.input_data` was renamed to `nilearn.maskers` in nilearn 0.9 and dropped in 0.13
+  + ''
+    substituteInPlace nipype/interfaces/nilearn.py \
+      --replace-fail \
+        "import nilearn.input_data as nl" \
+        "import nilearn.maskers as nl"
   '';
 
   build-system = [
@@ -90,7 +103,7 @@ buildPythonPackage rec {
     traits
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     data = [ datalad ];
     duecredit = [ duecredit ];
     profiler = [ psutil ];
@@ -104,6 +117,9 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     pytest-cov-stub
+    pytest-doctestplus
+    pytest-env
+    pytest-timeout
     pytest-xdist
     sphinx
     which
@@ -119,11 +135,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "https://nipy.org/nipype";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
-    changelog = "https://github.com/nipy/nipype/releases/tag/${version}";
+    homepage = "https://nipy.org/nipype";
+    downloadPage = "https://github.com/nipy/nipype";
+    changelog = "https://github.com/nipy/nipype/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "nipypecli";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})
