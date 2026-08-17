@@ -88,7 +88,7 @@ let
     nameValuePair
     optionalDrvAttr
     optionAttrSetToDocList
-    optionAttrSetToDocTree
+    optionToDoc
     overrideExisting
     packagesFromDirectoryRecursive
     pipe
@@ -3364,7 +3364,7 @@ runTests {
     ];
   };
 
-  testOptionAttrSetToDocTree = {
+  testOptionToDoc = {
     expr =
       let
         module = {
@@ -3375,9 +3375,9 @@ runTests {
           };
         };
         options = (evalModules { modules = [ module ]; }).options;
-        docTree = optionAttrSetToDocTree options;
+        optionDoc = optionToDoc options;
       in
-      docTree.boot.enable.name;
+      optionDoc.boot.enable.name;
     expected = "boot.enable";
   };
 

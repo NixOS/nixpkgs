@@ -649,9 +649,9 @@ rec {
 
   # Generate documentation template as a nested attribute set (tree)
   # preserving module option structure.
-  optionAttrSetToDocTree = optionAttrSetToDocTree' [ ];
+  optionToDoc = optionToDoc' [ ];
 
-  optionAttrSetToDocTree' =
+  optionToDoc' =
     _: options:
     foldOptionSet {
       onOption = doc: subDocs: if subDocs != { } then doc // { subOptions = subDocs; } else doc;
