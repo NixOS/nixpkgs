@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.18.2";
   pname = "chafa";
 
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
