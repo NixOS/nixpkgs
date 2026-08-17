@@ -2006,17 +2006,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lrexlib-posix";
-      version = "2.9.3-1";
+      version = "2.9.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lrexlib-posix-2.9.3-1.rockspec";
-          sha256 = "0s8w35x3jvhjn4znram93dj4kck95sv4zrlqcs6mqa4q70d5rl27";
+          url = "mirror://luarocks/lrexlib-posix-2.9.4-1.rockspec";
+          sha256 = "1qfp00hhmf1ra0b0zpmf6bz770fcg41rjpa5hkl99fy9yh5x1b04";
         }).outPath;
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        tag = "rel-2-9-3";
-        hash = "sha256-7lybrMvNk2YhXish01PQlMpRVW+qlFj03RO33zmgGp4=";
+        tag = "rel-2-9-4";
+        hash = "sha256-f2rwr3Am+pzQB3fXOd5FVUzvJsA9e81Jy1Ar/Zqtc3Q=";
       };
 
       disabled = luaOlder "5.1";
