@@ -4130,12 +4130,12 @@ final: prev: {
 
   copilot-lua = buildVimPlugin {
     pname = "copilot.lua";
-    version = "3.0.2";
+    version = "3.0.4";
     src = fetchFromGitHub {
       owner = "zbirenbaum";
       repo = "copilot.lua";
-      tag = "v3.0.2";
-      hash = "sha256-fL3XO5gU9pXuk3UqtkAr+iqczIwfcvVzaQqU/EajQoU=";
+      tag = "v3.0.4";
+      hash = "sha256-nrKBq1K43l34S812udQHKIPWoSamCgQLtfYq/AjBu5I=";
     };
     meta.homepage = "https://github.com/zbirenbaum/copilot.lua/";
     meta.license = getLicenseFromSpdxId "MIT";
