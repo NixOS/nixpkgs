@@ -11,6 +11,9 @@ buildGoModule (finalAttrs: {
   pname = "oras";
   version = "1.3.3";
 
+  # required for tests
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
