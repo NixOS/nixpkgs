@@ -763,6 +763,7 @@ let
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
     mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    mongolite = [ pkgs.pkg-config ];
     monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
     mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -783,6 +784,7 @@ let
     ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
+    openssl = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
       cargo
       rustc
@@ -982,6 +984,7 @@ let
       rustc
     ];
     webp = [ pkgs.pkg-config ];
+    websocket = [ pkgs.pkg-config ];
     xactonomial = with pkgs; [
       cargo
       rustc
@@ -1477,6 +1480,11 @@ let
       zlib
     ];
     mixcat = [ pkgs.gsl ];
+    mongolite = with pkgs; [
+      cyrus_sasl
+      openssl
+      zlib
+    ];
     multibridge = [ pkgs.mpfr ];
     mutscan = [ pkgs.zlib ];
     mvabund = [ pkgs.gsl ];
@@ -1494,6 +1502,7 @@ let
     npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
+    openssl = [ pkgs.openssl ];
     otelsdk = with pkgs; [
       curl
       protobuf
@@ -1770,6 +1779,7 @@ let
     ];
     vdiffr = [ pkgs.libpng ];
     webp = [ pkgs.libwebp ];
+    websocket = [ pkgs.openssl ];
     writexl = with pkgs; [ zlib ];
     xdvir = [ pkgs.freetype ];
     xml2 = [ pkgs.libxml2 ];
@@ -2576,13 +2586,6 @@ let
       };
     });
 
-    mongolite = old.mongolite.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include -I${lib.getDev pkgs.cyrus_sasl}/include -I${lib.getDev pkgs.zlib}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
-      };
-    });
-
     nanonext = old.nanonext.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
@@ -2628,10 +2631,11 @@ let
       });
 
     openssl = old.openssl.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
-      };
+      # RPATH will be incorrect if the configure script replaces -lssl with -l:libssl.so.{n}
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail 'PKG_LIBS="''${PKG_LIBS_VERSIONED}"' ':'
+      '';
     });
 
     pak = old.pak.overrideAttrs (attrs: {
@@ -2925,10 +2929,11 @@ let
     });
 
     websocket = old.websocket.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
-      };
+      # RPATH will be incorrect if the configure script replaces -lssl with -l:libssl.so.{n}
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail 'PKG_LIBS="''${PKG_LIBS_VERSIONED}"' ':'
+      '';
     });
 
     xslt = old.xslt.overrideAttrs (attrs: {
