@@ -25,7 +25,6 @@ let
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
-    inherit (pkgs) gettext gfortran;
   };
 
   # Generates package templates given per-repository settings
@@ -141,7 +140,7 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ pkgs.bar ];
+  #     nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.bar ];
   #   });
   # }
   overrideNativeBuildInputs =
@@ -149,7 +148,7 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -164,7 +163,7 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     buildInputs = attrs.buildInputs ++ [ pkgs.bar ];
+  #     buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.bar ];
   #   });
   # }
   overrideBuildInputs =
@@ -172,7 +171,7 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ value;
+        buildInputs = (attrs.buildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -210,7 +209,6 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
   #     propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ self.bar ];
   #   });
   # }
@@ -219,7 +217,6 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
         propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ value;
       })
     ) overrides;
@@ -2192,15 +2189,15 @@ let
     Rhdf5lib =
       let
         hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
-          cmakeFlags = attrs.cmakeFlags ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
-          buildInputs = attrs.buildInputs ++ [ pkgs.curl ];
-          postInstall = attrs.postInstall or "" + ''
+          cmakeFlags = (attrs.cmakeFlags or [ ]) ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
+          buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.curl ];
+          postInstall = (attrs.postInstall or "") + ''
             cp src/libhdf5.settings $dev/lib
           '';
         });
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
-        propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ [
           hdf5
           pkgs.libaec
         ];
@@ -2371,7 +2368,7 @@ let
       src = pkgs.arrow-cpp.src;
       name = "r-arrow-${pkgs.arrow-cpp.version}";
       prePatch = "cd r";
-      buildInputs = attrs.buildInputs ++ [
+      buildInputs = (attrs.buildInputs or [ ]) ++ [
         pkgs.arrow-cpp
       ];
     });
@@ -2442,7 +2439,7 @@ let
     });
 
     geojsonio = old.geojsonio.overrideAttrs (attrs: {
-      buildInputs = [ cacert ] ++ attrs.buildInputs;
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ cacert ];
     });
 
     geomorph = old.geomorph.overrideAttrs (attrs: {
@@ -2484,8 +2481,8 @@ let
     });
 
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [ new.Rhdf5lib.hdf5 ];
-      buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ new.Rhdf5lib.hdf5 ];
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ new.Rhdf5lib.hdf5 ];
     });
 
     immunotation =
@@ -2617,7 +2614,7 @@ let
         });
       in
       old.opencv.overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ [ opencvGtk ];
+        buildInputs = (attrs.buildInputs or [ ]) ++ [ opencvGtk ];
       });
 
     openssl = old.openssl.overrideAttrs (attrs: {
