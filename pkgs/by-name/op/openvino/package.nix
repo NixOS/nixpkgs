@@ -54,26 +54,10 @@ let
     ]
   );
 
-  npuCompiler = lib.optionalAttrs npuSupport (stdenv.mkDerivation {
-    pname = "openvino-intel-npu-compiler";
-    version = "8.2.0";
-
-    src = fetchurl {
-      url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/npu_compiler/npu_compiler_vcl_ubuntu_24_04-8_2_0-9802763.tar.gz";
-      hash = "sha256-xfK2be5sQkzS2N1Qz5lYbSEABwMSG7/F7ZkRr1YiHkk=";
-    };
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      mkdir -p $out/lib
-
-      cp build_manifest.json $out/
-      cp lib/libopenvino_intel_npu_compiler.so $out/lib/
-      cp lib/libopenvino_intel_npu_compiler_loader.so $out/lib/
-      cp lib/libnpu_interpreter_runtime.so $out/lib/
-    '';
-  });
+  npuCompiler = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/npu_compiler/npu_compiler_vcl_ubuntu_24_04-8_2_0-9802763.tar.gz";
+    hash = "sha256-xfK2be5sQkzS2N1Qz5lYbSEABwMSG7/F7ZkRr1YiHkk=";
+  };
 
   openvino = stdenv.mkDerivation (finalAttrs: {
     pname = "openvino";
@@ -121,10 +105,6 @@ let
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
-
-  preConfigure = lib.optionalString npuSupport ''
-    export NPU_PLUGIN_COMPILER_ROOT="${npuCompiler}"
-  '';
 
   cmakeFlags = [
     "-Wno-dev"
@@ -198,18 +178,19 @@ let
 
   enableParallelBuilding = true;
 
+  appendRunpaths = lib.optionals npuSupport [
+    "${lib.getLib level-zero}/lib"
+  ];
+
   postInstall = ''
     mkdir -p $python/lib
     mv $lib/lib/python* $python/lib/
   ''
   + lib.optionalString npuSupport ''
     mkdir -p $lib/lib/openvino
-    cp ${npuCompiler}/lib/libopenvino_intel_npu_compiler*.so $lib/lib/openvino/
-    cp ${npuCompiler}/lib/libnpu_interpreter_runtime.so \
-      $lib/lib/openvino/libopenvino_intel_npu_vm_runtime.so
-
-    ln -s ${level-zero}/lib/libze_loader.so.1 \
-      $lib/lib/libze_loader.so.1
+    tar -xzf ${npuCompiler} --strip-components=0 -C $TMPDIR
+    cp $TMPDIR/lib/libopenvino_intel_npu_compiler*.so $lib/lib/openvino/
+    cp $TMPDIR/lib/libnpu_interpreter_runtime.so $lib/lib/openvino/libopenvino_intel_npu_vm_runtime.so
   '';
 
   postFixup = ''
