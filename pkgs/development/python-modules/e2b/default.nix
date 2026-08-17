@@ -91,6 +91,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/e2b-dev/E2B/blob/main/packages/python-sdk";
     changelog = "https://github.com/e2b-dev/E2B/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mishushakov
+    ];
   };
 })
