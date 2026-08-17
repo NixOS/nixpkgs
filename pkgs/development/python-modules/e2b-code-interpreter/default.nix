@@ -66,6 +66,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/e2b-dev/code-interpreter/tree/main/python";
     changelog = "https://github.com/e2b-dev/code-interpreter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mishushakov
+    ];
   };
 })
