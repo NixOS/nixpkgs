@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   writeScript,
   testers,
@@ -15,14 +14,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://xorg/individual/lib/xtrans-${finalAttrs.version}.tar.xz";
     hash = "sha256-+q/qFmvyRRoXPZ1ZM1KUDsZAQUXF0dpcITQjzk01npI=";
   };
-
-  patches = [
-    # fix darwin crashes with fortify when using launchctl socket activation
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/commit/79f6b0bfe2170496e8c37626043d009f4cd3f1e1.patch";
-      hash = "sha256-Y8QY1yAiOI/rSNi71/Qhsn6UEql556/pS2av7+vmGQA=";
-    })
-  ];
 
   strictDeps = true;
 
