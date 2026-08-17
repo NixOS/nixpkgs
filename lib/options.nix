@@ -564,7 +564,7 @@ rec {
   */
   getFiles = catAttrs "file";
 
-  # Internal helper to transform a raw option set into a documentation attribute set.
+  # Internal helper to transform a raw option set into a base documentation attribute set.
   optionToDocItem =
     opt:
     let
@@ -572,8 +572,6 @@ rec {
       visible = opt.visible or true;
     in
     {
-      inherit (opt) loc;
-      inherit name;
       description = opt.description or null;
       declarations = filter (x: x != unknownModule) opt.declarations;
       internal = opt.internal or false;
@@ -627,7 +625,7 @@ rec {
             subDocs = if ss != { } then recurse ss else empty;
             subVisible = if isBool visible then visible else visible == "transparent";
           in
-          onOption doc (if subVisible then subDocs else empty)
+          onOption doc (if subVisible then subDocs else empty) tree
         else if isAttrs tree then
           onAttrSet recurse tree
         else
@@ -642,7 +640,18 @@ rec {
   optionAttrSetToDocList' =
     _: options:
     foldOptionSet {
-      onOption = doc: subDocs: [ doc ] ++ subDocs;
+      onOption =
+        doc: subDocs: opt:
+        [
+          (
+            {
+              inherit (opt) loc;
+              name = showOption opt.loc;
+            }
+            // doc
+          )
+        ]
+        ++ subDocs;
       onAttrSet = recurse: set: concatMap recurse (builtins.attrValues set);
       empty = [ ];
     } options;
@@ -652,7 +661,9 @@ rec {
   optionToDoc =
     options:
     foldOptionSet {
-      onOption = doc: subDocs: if subDocs != { } then doc // { "*" = subDocs; } else doc;
+      onOption =
+        doc: subDocs: _:
+        if subDocs != { } then doc // { "*" = subDocs; } else doc;
       onAttrSet = recurse: set: mapAttrs (_: recurse) set;
       empty = { };
     } options;

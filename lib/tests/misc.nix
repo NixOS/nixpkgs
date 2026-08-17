@@ -3391,12 +3391,12 @@ runTests {
         optionDoc = optionToDoc options;
       in
       [
-        optionDoc.boot.enable.name
-        optionDoc.services.nginx.virtualHosts."*".enableSSL.name
+        optionDoc.boot.enable.type
+        optionDoc.services.nginx.virtualHosts."*".enableSSL.type
       ];
     expected = [
-      "boot.enable"
-      "services.nginx.virtualHosts.<name>.enableSSL"
+      "boolean"
+      "boolean"
     ];
   };
 
