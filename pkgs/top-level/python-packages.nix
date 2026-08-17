@@ -19369,6 +19369,8 @@ self: super: with self; {
 
   spdx-license-list = callPackage ../development/python-modules/spdx-license-list { };
 
+  spdx-python-model = callPackage ../development/python-modules/spdx-python-model { };
+
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speak2mary = callPackage ../development/python-modules/speak2mary { };
