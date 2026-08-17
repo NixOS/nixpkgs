@@ -740,7 +740,6 @@ in
   grafana = handleTest ./grafana { };
   grafana-to-ntfy = runTest ./grafana-to-ntfy.nix;
   graphite = runTest ./graphite.nix;
-  grav = runTest ./web-apps/grav.nix;
   graylog = runTest ./graylog.nix;
   greetd-no-shadow = runTest ./greetd-no-shadow.nix;
   grocy = runTest ./grocy.nix;
