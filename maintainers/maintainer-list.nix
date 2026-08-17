@@ -4885,6 +4885,12 @@
     githubId = 543423;
     name = "Alex Wied";
   };
+  Cesatorii = {
+    email = "cesatorii.alt@protonmail.com";
+    name = "Cesatorii";
+    github = "Cesatorii";
+    githubId = 90511595;
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
