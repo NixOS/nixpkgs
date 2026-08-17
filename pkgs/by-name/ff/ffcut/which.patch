@@ -1,0 +1,49 @@
+--- ffcut	2026-04-03 06:01:49.000000000 -0500
++++ ffcut	2026-04-04 12:15:22.841303648 -0500
+@@ -13,6 +13,7 @@
+ sub debug() { 0 }
+ 
+ use File::stat;
++use File::Which;
+ use Date::Format;
+ use IPC::Open3 qw( open3 );
+ use Term::ANSIColor qw(:constants);
+@@ -34,8 +35,8 @@
+ $MPARMS .= ' -osdlevel 3' unless $opt_T;
+ my $DEFLEN = 10;
+ 
+-$has_mp4box = &which('MP4Box') || &which('mp4box');
+-$has_ffmpeg = &which('ffmpeg');
++$has_mp4box = which 'MP4Box' || which 'mp4box';
++$has_ffmpeg = which 'ffmpeg';
+ 
+ if (! -r $start) {
+ 	&ffcut($output, $start, $end);
+@@ -230,8 +231,8 @@
+ 	# Ideally they should be identical, but they frequently aren't.
+ 	return unless $opt_x or $opt_S or $opt_q;
+ 
+-	my $has_mplayer = &which('mplayer');
+-	#my $has_mpv = &which('mpv');
++	my $has_mplayer = which 'mplayer';
++	my $has_mpv = which 'mpv';
+ 	my $prefer_mpv = $has_mpv || $has_mplayer;
+ 	my $prefer_mplayer = $has_mplayer || $has_mpv;
+ 	die "Neither mpv nor mplayer available on this system"
+@@ -274,16 +275,6 @@
+ 	return $tmp < $min ? $tmp * 60 : $tmp;
+ }
+ 
+-# if your system doesn't have "which" we're in trouble
+-# even BSD has which in that place, so it is ok to use full path
+-sub which {
+-	my $cmd = shift;
+-	$_ = `/usr/bin/which $cmd 2>&1`;
+-	print STDERR "which $cmd: $_" if debug & 1;
+-	/^(\S+)\s*$/;
+-	return $1;
+-}
+-
+ __END__
+ 
+ =pod
