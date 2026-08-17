@@ -35,7 +35,7 @@ in
         cat > gcc/build/genchecksum <<\EOF
         #!${stdenv.shell}
         ${nukeReferences}/bin/nuke-refs $@
-        for INPUT in "$@"; do install -Dt $INPUT $checksum/inputs/; done
+        for INPUT in "$@"; do install -Dt $checksum/inputs/ $INPUT; done
         exec build/.genchecksum-wrapped $@
         EOF
         chmod +x gcc/build/genchecksum
