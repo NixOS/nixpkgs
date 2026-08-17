@@ -10,29 +10,16 @@
   zlib,
   intel-compute-runtime,
   python3,
+  spirv-headers,
   spirv-tools,
 }:
 
 let
   llvmVersion = "17.0.6";
-
-  spirv-headers = stdenv.mkDerivation {
-    pname = "spirv-headers";
-    version = "1.4.341.0-unstable-2026-04-29";
-
-    src = fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "SPIRV-Headers";
-      rev = "948a3b0997e2dffea5484b3df7bd5590c5b844cc";
-      hash = "sha256-goQTZ4vR4R+bp3mcco10y4grB97aB7QJauO9ZaHJbU8=";
-    };
-
-    nativeBuildInputs = [ cmake ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.38.2";
+  version = "2.40.13";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -42,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-xLRQzXUSqRVAN0flRlcrsSFZTLFxmQi6ePbm5ks6vhI=";
+      hash = "sha256-koc3ee6ItemDkNpWlBhJX8Dr8Wa4Zpvo08LxiR6BNLE=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -62,15 +49,15 @@ stdenv.mkDerivation rec {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v17.0.7";
-      hash = "sha256-7kQlH1Y4pnNvj/CS2qAVbYUl9FQWBuMew7i8CpORfKE=";
+      tag = "v17.0.9";
+      hash = "sha256-hnwUBOy+NebhPyBf4GtsXHdzKEWAFsq8sj0ssIlGjtw=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v17.0.25";
-      hash = "sha256-WzazByTj9Pnk9ix6cyCtxT8aSh9kg0lK3geiokCqO8I=";
+      tag = "v17.0.26";
+      hash = "sha256-Q3tUr4FjHDjDRCyOqOKyVx29mMz/88POHs2rWnjBGb4=";
     })
   ];
 
@@ -84,6 +71,8 @@ stdenv.mkDerivation rec {
     # warnings within LLVM. This is in accordance with IGC disabling warnings
     # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
     ./gcc15-allow-llvm-free-nonheap-object-warning.patch
+
+    ./fix-create-directories-to-apply-patches.diff
   ];
 
   sourceRoot = ".";
@@ -103,17 +92,14 @@ stdenv.mkDerivation rec {
     chmod +x igc/IGC/Scripts/igc_create_linker_script.sh
     patchShebangs --build igc/IGC/Scripts/igc_create_linker_script.sh
 
-    # The build system only applies patches when the sources are in a
-    # Git repository.
+    # The build system only applies patches when the sources are in a Git repository.
     git -C llvm-project init
-    git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
+    git -C llvm-project add .
+    git -C llvm-project -c user.name=nixbld -c user.email= commit -m stub
+
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
-                     'COMMAND patch -p1 --ignore-whitespace -i '
-
-    # match default LLVM version with our provided version to apply correct patches
-    substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "17.0.6" "${llvmVersion}"
+                     'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0 '
   '';
 
   nativeBuildInputs = [
