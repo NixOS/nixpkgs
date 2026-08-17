@@ -13,13 +13,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "cheating-daddy";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sohzm";
     repo = "cheating-daddy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xH3tBnZAnDr/EbewtJc0WpBirW1Obn6tka7NP0ovAc=";
+    hash = "sha256-EOAvKy9pJo4+x4xVpW10bRyyyuU5xvp0CmWfyLNvqkw=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     ./bump-yauzl.patch
   ];
 
-  npmDepsHash = "sha256-p26yEuIiK7baeAxf06E+cmuzl45NS2WOmWNeFfTplQA=";
+  npmDepsHash = "sha256-8Ah27MVHhhlNxiv5OOamqKzoVvLbW94SeDuPor+GyRA=";
 
   nativeBuildInputs = [
     copyDesktopItems
