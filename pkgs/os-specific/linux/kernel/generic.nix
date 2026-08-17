@@ -172,20 +172,7 @@ lib.makeOverridable (
 
       generateConfig = ./generate-config.pl;
 
-      depsBuildBuild = [ buildPackages.stdenv.cc ];
-      nativeBuildInputs = [
-        perl
-        gmp
-        libmpc
-        mpfr
-        bison
-        flex
-      ]
-      ++ lib.optional (lib.versionAtLeast version "5.2") pahole
-      ++ lib.optionals withRust [
-        rust-bindgen-unwrapped
-        rustc-unwrapped
-      ];
+      inherit (kernel) depsBuildBuild nativeBuildInputs;
 
       env = {
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
