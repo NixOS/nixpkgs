@@ -12,7 +12,7 @@
 }:
 let
   versions = lib.importJSON ./versions.json;
-  inherit (versions.umple) version longVersion;
+  inherit (versions.umple) longVersion;
 
   # Required for bootstrapping
   umpleJar = fetchurl versions.umpleJar;
@@ -28,12 +28,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umple";
-  inherit version;
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "umple";
     repo = "umple";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BPy1L3bzvKoywM0srv36SXVe8psaY/m0bljy30z5dr8=";
   };
 
