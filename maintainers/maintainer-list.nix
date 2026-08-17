@@ -5188,6 +5188,11 @@
     githubId = 1103294;
     name = "Christopher Rosset";
   };
+  christo-auer = {
+    name = "Christopher Auer";
+    github = "christo-auer";
+    githubId = 15138131;
+  };
   christoph-heiss = {
     email = "christoph@c8h4.io";
     github = "christoph-heiss";
@@ -23627,6 +23632,13 @@
     matrix = "@rachalaraj:matrix.org";
     github = "rachalaraj";
     githubId = 124191100;
+  };
+  rachitvrma = {
+    name = "Rachit Kumar Verma";
+    email = "rachitverma1122+nixpkgs@gmail.com";
+    matrix = "@rachitvrma:matrix.org";
+    github = "rachitvrma";
+    githubId = 155641117;
   };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
