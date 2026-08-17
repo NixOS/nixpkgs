@@ -10672,12 +10672,12 @@ final: prev: {
 
   modus-themes-nvim = buildVimPlugin {
     pname = "modus-themes.nvim";
-    version = "1.4.3";
+    version = "1.4.4";
     src = fetchFromGitHub {
       owner = "miikanissi";
       repo = "modus-themes.nvim";
-      tag = "v1.4.3";
-      hash = "sha256-5w1a8ISBM90bwajkAupBFXoucHat+lQsyD5Rr0e2SKY=";
+      tag = "v1.4.4";
+      hash = "sha256-j10BCRHN6cTDx1+zBxgo6drtA9XoZAqaZg+1uTDQH4M=";
     };
     meta.homepage = "https://github.com/miikanissi/modus-themes.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
