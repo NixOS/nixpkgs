@@ -12813,12 +12813,12 @@ final: prev: {
 
   nvim-dap-view = buildVimPlugin {
     pname = "nvim-dap-view";
-    version = "1.2.0";
+    version = "1.2.1";
     src = fetchFromGitHub {
       owner = "igorlfs";
       repo = "nvim-dap-view";
-      tag = "v1.2.0";
-      hash = "sha256-JRFLk+Ok8Fo8yJzwVxstcnfSIztsg+I+yQp+3g3DMcA=";
+      tag = "v1.2.1";
+      hash = "sha256-0xCWVHcoyrUicbW04QgyJIFe1juplnK9tPuzDoQIMrg=";
     };
     meta.homepage = "https://github.com/igorlfs/nvim-dap-view/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
