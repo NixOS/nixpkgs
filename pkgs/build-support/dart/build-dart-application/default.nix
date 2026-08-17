@@ -82,7 +82,7 @@ lib.extendMkDerivation {
     let
       generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
 
-      pubspecLockFile = builtins.toJSON pubspecLock;
+      pubspecLockFile = writeText "pubspec.lock" (builtins.toJSON pubspecLock);
       pubspecLockData = pub2nix.readPubspecLock {
         inherit
           src
@@ -194,14 +194,12 @@ lib.extendMkDerivation {
           builtins.attrValues pubspecLockData.dependencySources;
 
       preConfigure = args.preConfigure or "" + ''
-        ln -sf "$pubspecLockFilePath" pubspec.lock
+        ln -sf "$pubspecLockFile" pubspec.lock
       '';
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.
       dontStrip = args.dontStrip or (dartOutputType == "exe");
-
-      passAsFile = [ "pubspecLockFile" ];
 
       passthru = {
         pubspecLock = pubspecLockData;
