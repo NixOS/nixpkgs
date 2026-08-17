@@ -3,30 +3,23 @@
   fetchFromGitLab,
   rustPlatform,
   rustc,
-  wasm-pack,
-  wasm-bindgen-cli_0_2_95,
   binaryen,
 }:
 
-let
-  version = "0.1.1";
-in
 rustPlatform.buildRustPackage {
   pname = "tpsecore";
-  inherit version;
+  version = "0.1.1-unstable-2026-04-06";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tpsecore";
-    rev = "v${version}";
-    hash = "sha256-+OynnLMBEiYwdFzxGzgkcBN6xrHoH1Q6O5i+OW7RBLo=";
+    rev = "549767cac60df6f887f6012fa5d26ca12d55a2eb";
+    hash = "sha256-nnekiqs9W7oOl0/yjuQI83MsRgRZRrgipnwIbhRdLW8=";
   };
 
-  cargoHash = "sha256-EM/THiR0NV4N3mFGjRYe1cpaF82rCYnOPLxv67BronU=";
+  cargoHash = "sha256-rJDy0gbtIGM5q6w0tfgIE09HW1lQ9pEL9o+LSdX6RyU=";
 
   nativeBuildInputs = [
-    wasm-pack
-    wasm-bindgen-cli_0_2_95
     binaryen
     rustc.llvmPackages.lld
   ];
@@ -34,7 +27,8 @@ rustPlatform.buildRustPackage {
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(mktemp -d) wasm-pack build --target web --release
+    HOME=$(mktemp -d) cargo build --profile release \
+    --target wasm32-unknown-unknown --features wasm_rendering
 
     runHook postBuild
   '';
@@ -42,7 +36,10 @@ rustPlatform.buildRustPackage {
   installPhase = ''
     runHook preInstall
 
-    cp -r pkg/ $out
+    mkdir -p $out
+
+    cp target/wasm32-unknown-unknown/release/tpsecore.wasm $out/
+    cp tpsecore.js $out/
 
     runHook postInstall
   '';
