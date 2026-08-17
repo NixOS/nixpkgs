@@ -7,27 +7,18 @@
   ninja,
   boost,
   nlohmann_json,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpisp";
-  version = "1.2.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "libpisp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YshU7G5Rov67CVwFbf5ENp2j5ptAvkVrlMu85KmnEpk=";
+    hash = "sha256-hzJA8hoOXf2Lswwz9t0StJ9JJP8ICWJlstzSsli4Yqs=";
   };
-
-  patches = [
-    # fix build with glibc 2.42 & -Werror
-    (fetchpatch {
-      url = "https://github.com/raspberrypi/libpisp/commit/f2bbf7e000d3f11cac235b8ea1291722080a016c.patch";
-      hash = "sha256-vrdmVadyjlAnZtmBahOs/hlKPrkh/BF3LvrTPM9D15Q=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
