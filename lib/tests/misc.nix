@@ -3373,12 +3373,31 @@ runTests {
             default = false;
             description = "Enable boot";
           };
+          options.services.nginx.virtualHosts = lib.mkOption {
+            type = lib.types.attrsOf (
+              lib.types.submodule {
+                options.enableSSL = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Enable SSL";
+                };
+              }
+            );
+            default = { };
+            description = "Virtual hosts";
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
       in
-      optionDoc.boot.enable.name;
-    expected = "boot.enable";
+      [
+        optionDoc.boot.enable.name
+        optionDoc.services.nginx.virtualHosts."*".enableSSL.name
+      ];
+    expected = [
+      "boot.enable"
+      "services.nginx.virtualHosts.<name>.enableSSL"
+    ];
   };
 
   testFreeformOptions = {

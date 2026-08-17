@@ -652,7 +652,7 @@ rec {
   optionToDoc =
     options:
     foldOptionSet {
-      onOption = doc: subDocs: if subDocs != { } then doc // { subOptions = subDocs; } else doc;
+      onOption = doc: subDocs: if subDocs != { } then doc // { "*" = subDocs; } else doc;
       onAttrSet = recurse: set: mapAttrs (_: recurse) set;
       empty = { };
     } options;
