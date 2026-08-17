@@ -88,6 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "buffer-overflow-cve-2018-13410.patch";
       hash = "sha256-Hgy0yrBuSX2XWN1PNASQbjiXfyzSScwHQ+o0fv6Sgs4=";
     })
+    # Command injection in zip -T for specially crafted file
+    # names. See: https://seclists.org/oss-sec/2026/q3/494
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "16";
+      patch = "fix-command-injection.patch";
+      hash = "sha256-cfE98l98KkPfDS5KT/DB2bqFNPTbHBKyJ7W2+iKgaGI=";
+    })
   ]
   ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
