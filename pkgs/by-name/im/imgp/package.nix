@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "imgp";
-  version = "2.9";
+  version = "3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "imgp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yQ2BzOBn6Bl9ieZkREKsj1zLnoPcf0hZhZ90Za5kiKA=";
+    hash = "sha256-CmpF4vIu7tXSnMTl/cBq/L4SHinT/ytO2OUjdjrFQRU=";
   };
 
   build-system = [ python3Packages.setuptools ];
