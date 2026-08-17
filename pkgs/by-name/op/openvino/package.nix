@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
-  npuSupport ? false,
+  npuSupport ? true,
 
   # build
   scons,
