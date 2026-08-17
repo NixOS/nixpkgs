@@ -109,6 +109,10 @@ in
       "pata_qdi"
       "pata_winbond"
     ]
+    ++ lib.optionals (lib.versionAtLeast config.boot.kernelPackages.kernel.version "7.2") [
+      # xhci-pci defers AMD 800-series chipset controllers to this driver.
+      "xhci_pci_prom21"
+    ]
     ++ lib.optionals platform.isx86 [ "vmw_balloon" ]
     ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
       "vmw_vmci"
