@@ -41,7 +41,10 @@ let
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://triliumnotes.org/";
-    license = lib.licenses.agpl3Plus;
+    license = with lib.licenses; [
+      agpl3Plus # trilium code
+      unfree # ckeditor5-premium-features dependency, which is part of the prebuilt binary
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       eliandoran
