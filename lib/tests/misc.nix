@@ -3399,20 +3399,44 @@ runTests {
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
-        customFold = optionAttrSetToDocList options;
+        docList = optionAttrSetToDocList options;
       in
-      [
-        optionDoc.boot.enable.type
-        optionDoc.services.nginx.virtualHosts."*".enableSSL.type
-        optionDoc.tagTest."*".tagA.type
-        (builtins.length customFold > 0)
-      ];
-    expected = [
-      "boolean"
-      "boolean"
-      "boolean"
-      true
-    ];
+      {
+        # Standard option schema verification (no loc, no name)
+        bootEnableDescription = optionDoc.boot.enable.description;
+        bootEnableType = optionDoc.boot.enable.type;
+        bootEnableDefaultText = optionDoc.boot.enable.default.text;
+        bootEnableHasNoLoc = !(optionDoc.boot.enable ? loc);
+        bootEnableHasNoName = !(optionDoc.boot.enable ? name);
+
+        # Submodule nesting via '*' key
+        vhostDescription = optionDoc.services.nginx.virtualHosts.description;
+        vhostType = optionDoc.services.nginx.virtualHosts.type;
+        vhostSubOptionType = optionDoc.services.nginx.virtualHosts."*".enableSSL.type;
+
+        # attrTag nesting via '*' key
+        attrTagDescription = optionDoc.tagTest.description;
+        attrTagSubOptionType = optionDoc.tagTest."*".tagA.type;
+
+        # Equivalent traversal via optionAttrSetToDocList
+        docListCount = builtins.length docList;
+      };
+    expected = {
+      bootEnableDescription = "Enable boot";
+      bootEnableType = "boolean";
+      bootEnableDefaultText = "false";
+      bootEnableHasNoLoc = true;
+      bootEnableHasNoName = true;
+
+      vhostDescription = "Virtual hosts";
+      vhostType = "attribute set of (submodule)";
+      vhostSubOptionType = "boolean";
+
+      attrTagDescription = "AttrTag test option";
+      attrTagSubOptionType = "boolean";
+
+      docListCount = 13;
+    };
   };
 
   testFreeformOptions = {
