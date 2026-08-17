@@ -8588,7 +8588,7 @@ with pkgs;
           buildMozillaMach
           ;
       };
-  firefox-esr-unwrapped = firefox-esr-140-unwrapped;
+  firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
@@ -8606,7 +8606,7 @@ with pkgs;
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
-  firefox-esr = firefox-esr-140;
+  firefox-esr = firefox-esr-153;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (firefox-unwrapped.passthru) applicationName;
