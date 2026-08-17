@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "docstrfmt";
-  version = "2.0.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LilSpazJoekp";
     repo = "docstrfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N2uPFOdDvAUL9eV4kn8MYM6OTMWJm24inlyY+k9Eqm8=";
+    hash = "sha256-DMeTrFHSJpUPBsE70dZ96WwQuY6C1POAGOJkSRfa2ho=";
   };
 
   build-system = [
@@ -43,6 +43,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-aiohttp
+  ];
+
+  disabledTests = [
+    # Failure due to different behavior of click, see:
+    # https://github.com/LilSpazJoekp/docstrfmt/issues/232
+    "test_invalid_line_length[tests/test_files/test_file.rst]"
+    "test_invalid_line_length[tests/test_files/py_file.py]"
+    "test_invalid_pyproject_toml"
+    "test_cache_single_file"
   ];
 
   pythonImportsCheck = [
