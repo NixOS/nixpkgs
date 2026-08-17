@@ -23,7 +23,9 @@
           # Add a tmpfs on a path that does not exist
           "/some/random/path"
         ];
-        config = { };
+        config = {
+          nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
+        };
       };
 
       virtualisation.additionalPaths = [ pkgs.stdenv ];
