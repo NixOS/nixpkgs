@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.28.5";
+  version = "1.28.6";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
-    hash = "sha256-d28ZIo+R/SW79U2YUFl+FYUH9ZSHKlK5toFOJCm0Pqo=";
+    hash = "sha256-C6aZx8bGb0umQL54yziiRxWt2Wg/PjoZn1Np3FpPBKw=";
   };
 
   __structuredAttrs = true;
@@ -129,37 +129,48 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
   ];
 
-  mesonFlags = [
-    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
-    "-Dgl_winsys=${
-      lib.concatStringsSep "," (
+  mesonFlags =
+    let
+      # For a list of choices, see
+      # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/d529453528a5dd11c15eab788cce6676141134b7/subprojects/gst-plugins-base/meson.options#L14-1
+      # unsupported platforms: win32, winrt, android
+      # deprecated/ancient platforms: dispmanx, eagl
+      # TODO: should we add egl, surfaceless, viv-fb, gbm?
+      # (on Linux, autodiscovery would automatically add egl and surfaceless)
+      # 'egl', 'surfaceless', 'viv-fb', 'gbm',
+      enabledGlWinSys =
         lib.optional enableX11 "x11"
         ++ lib.optional enableWayland "wayland"
-        ++ lib.optional enableCocoa "cocoa"
-      )
-    }"
-    (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "doc" enableDocumentation)
-    (lib.mesonEnable "libvisual" false)
-    (lib.mesonEnable "tremor" false) # unmaintained in nixpkgs, just use regular libvorbis instead
-    (lib.mesonEnable "vorbis" true)
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dtests=disabled"
-  ]
-  ++ lib.optionals (!enableX11) [
-    "-Dx11=disabled"
-    "-Dxi=disabled"
-    "-Dxshm=disabled"
-    "-Dxvideo=disabled"
-  ]
-  # TODO How to disable Wayland?
-  ++ lib.optional (!enableGl) "-Dgl=disabled"
-  ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
-  ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
+        ++ lib.optional enableCocoa "cocoa";
+    in
+    lib.mapAttrsToList lib.mesonEnable {
+      orc = true;
+      orc-compiler = true;
+      nls = true;
+
+      glib_debug = false; # cast checks should be disabled on stable releases
+      examples = false; # requires many dependencies and probably not useful for our users
+      introspection = withIntrospection;
+      doc = enableDocumentation;
+
+      tests = finalAttrs.finalPackage.doCheck;
+
+      libvisual = false;
+      tremor = false; # unmaintained in nixpkgs, just use regular libvorbis instead
+      vorbis = true;
+
+      x11 = enableX11;
+      xi = enableX11;
+      xshm = enableX11;
+      xvideo = enableX11;
+
+      # TODO How to disable Wayland?
+      gl = enableGl;
+      alsa = enableAlsa;
+      cdparanoia = enableCdparanoia;
+      drm = !stdenv.hostPlatform.isDarwin;
+    }
+    ++ [ (lib.mesonOption "gl_winsys" (lib.concatStringsSep "," enabledGlWinSys)) ];
 
   postPatch = ''
     patchShebangs \
@@ -194,20 +205,39 @@ stdenv.mkDerivation (finalAttrs: {
     waylandEnabled = enableWayland;
 
     updateScript = directoryListingUpdater { odd-unstable = true; };
-  };
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+  };
 
   meta = {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
-    pkgConfigModules = [
-      "gstreamer-audio-1.0"
-      "gstreamer-base-1.0"
-      "gstreamer-net-1.0"
-      "gstreamer-video-1.0"
-    ];
+    pkgConfigModules = lib.map (m: "gstreamer-${m}-1.0") (
+      [
+        "allocators"
+        "app"
+        "audio"
+        "fft"
+        "pbutils"
+        "plugins-base"
+        "riff"
+        "rtp"
+        "rtsp"
+        "sdp"
+        "tag"
+      ]
+      ++ lib.optionals enableGl [
+        "gl"
+        "gl-egl"
+        "gl-prototypes"
+      ]
+      ++ lib.optional (enableGl && enableWayland) "gl-wayland"
+      ++ lib.optional (enableGl && enableX11) "gl-x11"
+    );
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
