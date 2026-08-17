@@ -26082,12 +26082,12 @@ final: prev: {
 
   yazi-nvim = buildVimPlugin {
     pname = "yazi.nvim";
-    version = "13.9.0";
+    version = "14.0.0";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "yazi.nvim";
-      tag = "v13.9.0";
-      hash = "sha256-Ua8FqTFlTSqnHSrz31RuS+A3SkOxjXB/L8Yb8fq+FSQ=";
+      tag = "v14.0.0";
+      hash = "sha256-aCFCtSu7qD0HhNLS9o/W7vsh3EimQy6QcMtdXLPa5Zc=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mikavilpas/yazi.nvim/";
