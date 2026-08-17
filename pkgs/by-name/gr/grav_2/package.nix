@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -32,6 +33,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -R . $out/
     runHook postInstall
   '';
+
+  passthru.tests = {
+    grav = nixosTests.grav;
+  };
 
   meta = {
     description = "Fast, simple, and flexible, file-based web platform";
