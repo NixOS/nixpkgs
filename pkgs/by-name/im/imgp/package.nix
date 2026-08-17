@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  installShellFiles,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -12,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "imgp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CmpF4vIu7tXSnMTl/cBq/L4SHinT/ytO2OUjdjrFQRU=";
   };
 
@@ -20,19 +22,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = [ python3Packages.pillow ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
 
   postInstall = ''
-    install -Dm555 auto-completion/bash/imgp-completion.bash $out/share/bash-completion/completions/imgp.bash
-    install -Dm555 auto-completion/fish/imgp.fish -t $out/share/fish/vendor_completions.d
-    install -Dm555 auto-completion/zsh/_imgp -t $out/share/zsh/site-functions
-  '';
-
-  checkPhase = ''
-    $out/bin/imgp --help
+    installManPage imgp.1
+    installShellCompletion --cmd imgp \
+      --bash auto-completion/bash/imgp-completion.bash \
+      --fish auto-completion/fish/imgp.fish \
+      --zsh auto-completion/zsh/_imgp
   '';
 
   meta = {
