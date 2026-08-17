@@ -28,13 +28,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umple";
-  version = "1.37.0";
+  version = "1.37.1";
 
   src = fetchFromGitHub {
     owner = "umple";
     repo = "umple";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BPy1L3bzvKoywM0srv36SXVe8psaY/m0bljy30z5dr8=";
+    hash = "sha256-xrq3Qmoq0tWR+9vrp292H3WpcWCYjYeIu1LJPBLvhD4=";
   };
 
   patches = [

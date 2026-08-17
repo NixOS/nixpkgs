@@ -242,8 +242,8 @@
   "com/google/guava/guava/maven-metadata": {
    "xml": {
     "groupId": "com.google.guava",
-    "lastUpdated": "20260414193116",
-    "release": "33.6.0-jre"
+    "lastUpdated": "20260817142319",
+    "release": "33.7.0-jre"
    }
   },
   "com/google/inject#guice-parent/3.0": {
