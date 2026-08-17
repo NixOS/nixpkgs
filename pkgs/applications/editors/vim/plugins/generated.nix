@@ -26039,12 +26039,12 @@ final: prev: {
 
   yankcraft-nvim = buildVimPlugin {
     pname = "yankcraft.nvim";
-    version = "0.1.0";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "f4z3r";
       repo = "yankcraft.nvim";
-      tag = "v0.1.0";
-      hash = "sha256-Cs69n6FSczrt6W4eigW6jYZJAQgMN5DxHUUDT2QJQ7A=";
+      tag = "v0.2.0";
+      hash = "sha256-m5XoftGwJB2YB7MuVxryYq4dolzZrHlxwJ1KLvkp9HM=";
     };
     meta.homepage = "https://github.com/f4z3r/yankcraft.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
