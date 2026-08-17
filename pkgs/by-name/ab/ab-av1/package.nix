@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chgrv ];
     mainProgram = "ab-av1";
   };
 })
