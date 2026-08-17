@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
   openssl,
   pkg-config,
   stdenv,
@@ -35,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+
+  passthru.tests = { inherit (nixosTests) krill; };
 
   meta = {
     mainProgram = "krillc";
