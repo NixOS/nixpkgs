@@ -16,56 +16,70 @@
 }:
 
 let
-  commonArgs = {
+  useCrossStdenv = crossSystem != localSystem || crossOverlays != [ ];
+  useCustomStdenv = !useCrossStdenv && (config.replaceStdenv or null) != null;
+
+  # Cross and custom stdenvs extend the local bootstrap stages. Keep
+  # replaceStdenv out of those stages so it is applied only by the appended
+  # custom stage; cross compilation uses replaceCrossStdenv instead.
+  bootArgs = {
+    inherit lib localSystem overlays;
+    config =
+      if useCrossStdenv || useCustomStdenv then removeAttrs config [ "replaceStdenv" ] else config;
+  };
+
+  # The native (i.e., impure) build environment.  This one uses the
+  # tools installed on the system outside of the Nix environment,
+  # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
+  # be used with care, since many Nix packages will not build properly
+  # with it (e.g., because they require GNU Make).
+  stagesNative = import ./native bootArgs;
+
+  # The Nix build environment.
+  stagesNix = import ./nix (bootArgs // { bootStages = stagesNative; });
+
+  stagesFreeBSD = import ./freebsd bootArgs;
+
+  # On Linux systems, the standard build environment consists of Nix-built
+  # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
+  # the GNU C compiler, and so on.
+  stagesLinux = import ./linux bootArgs;
+
+  stagesDarwin = import ./darwin bootArgs;
+
+  bootStages =
+    if localSystem.isLinux then
+      stagesLinux
+    else if localSystem.isDarwin then
+      stagesDarwin
+    else
+      {
+        x86_64-solaris = stagesNix;
+        x86_64-freebsd = stagesFreeBSD;
+      }
+      .${localSystem.system} or stagesNative;
+
+  stagesCross = import ./cross {
     inherit
       lib
       localSystem
       crossSystem
       config
       overlays
+      crossOverlays
+      bootStages
       ;
   };
-  # The native (i.e., impure) build environment.  This one uses the
-  # tools installed on the system outside of the Nix environment,
-  # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
-  # be used with care, since many Nix packages will not build properly
-  # with it (e.g., because they require GNU Make).
-  stagesNative = import ./native commonArgs;
 
-  # The Nix build environment.
-  stagesNix = import ./nix (commonArgs // { bootStages = stagesNative; });
-
-  stagesFreeBSD = import ./freebsd commonArgs;
-
-  # On Linux systems, the standard build environment consists of Nix-built
-  # instances glibc and the `standard' Unix tools, i.e., the Posix utilities,
-  # the GNU C compiler, and so on.
-  stagesLinux = import ./linux commonArgs;
-
-  stagesDarwin = import ./darwin commonArgs;
-
-  stagesCross = import ./cross (commonArgs // { inherit crossOverlays; });
-
-  stagesCustom = import ./custom commonArgs;
+  replaceStdenvStage = vanillaPackages: {
+    inherit config overlays;
+    stdenv = config.replaceStdenv { pkgs = vanillaPackages; };
+  };
 
 in
-# Select the appropriate stages for the platform `system'.
-if crossSystem != localSystem || crossOverlays != [ ] then
+if useCrossStdenv then
   stagesCross
-# The `or null` fallback is needed for contexts that don't use the module system (e.g. tarball builds).
-else if (config.replaceStdenv or null) != null then
-  stagesCustom
-else if localSystem.isLinux then
-  stagesLinux
-else if localSystem.isDarwin then
-  stagesDarwin
-# misc special cases
+else if useCustomStdenv then
+  bootStages ++ [ replaceStdenvStage ]
 else
-  {
-    # switch
-    x86_64-solaris = stagesNix;
-    i686-cygwin = stagesNative;
-    x86_64-cygwin = stagesNative;
-    x86_64-freebsd = stagesFreeBSD;
-  }
-  .${localSystem.system} or stagesNative
+  bootStages
