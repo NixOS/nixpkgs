@@ -21,10 +21,11 @@ let
   isDefaultDir = dataDir == defaultDir;
 
   # Defaults match upstream Config field defaults (config.cc).
-  workers = cfg.settings.workers or 8;
-  maxBackgroundJobs = cfg.settings."rocksdb.max_background_jobs" or 4;
-  maxclients = cfg.settings.maxclients or 10240;
-  maxOpenFiles = cfg.settings."rocksdb.max_open_files" or 8096;
+  # freeformType uses listsAsDuplicateKeys, so set values are singleton lists.
+  workers = lib.head (cfg.settings.workers or [ 8 ]);
+  maxBackgroundJobs = lib.head (cfg.settings."rocksdb.max_background_jobs" or [ 4 ]);
+  maxclients = lib.head (cfg.settings.maxclients or [ 10240 ]);
+  maxOpenFiles = lib.head (cfg.settings."rocksdb.max_open_files" or [ 8096 ]);
 
   # Thread inventory from server.cc ("Kvrocks threads list") + Server::Start:
   #   always-on: main, workers, task-runner (1), server-cron, compact-check,
