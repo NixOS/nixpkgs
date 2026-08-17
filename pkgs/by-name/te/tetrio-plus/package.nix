@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
     # Install tpsecore
-    cp ${tpsecore}/{tpsecore_bg.wasm,tpsecore.js} out/tetrioplus/source/lib/
+    cp ${tpsecore}/{tpsecore.wasm,tpsecore.js} out/tetrioplus/source/lib/
 
     # Disable useless uninstall button in the tetrio-plus popup
     substituteInPlace out/tetrioplus/desktop-manifest.js \
