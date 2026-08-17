@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-kelpSM7pfeIOXYOug/YkAgULYMyeDhm1fJX5v1n+vKE=";
   };
 
+  __structuredAttrs = true;
+
   dependencies = with python3Packages; [
     requests
   ];
