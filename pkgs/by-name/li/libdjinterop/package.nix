@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-    --replace-fail "VERSION 0.27.2" "VERSION 0.27.1"
+      --replace-fail "VERSION 0.27.2" "VERSION ${finalAttrs.version}"
   '';
 
   nativeBuildInputs = [
