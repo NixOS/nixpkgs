@@ -18694,6 +18694,12 @@
     githubId = 54669781;
     keys = [ { fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; } ];
   };
+  mishushakov = {
+    email = "mish@e2b.dev";
+    github = "mishushakov";
+    githubId = 10400064;
+    name = "Mish Ushakov";
+  };
   misilelab = {
     name = "misilelab";
     email = "misileminecord@gmail.com";
