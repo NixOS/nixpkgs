@@ -6658,15 +6658,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "tree-sitter-teal";
-      version = "0.0.35-1";
+      version = "0.0.37-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/tree-sitter-teal-0.0.35-1.rockspec";
-          sha256 = "06g2i3y3gmyz17v9gxwswa9db544nyhd5mx4zq3lihrshbbf6r10";
+          url = "mirror://luarocks/tree-sitter-teal-0.0.37-1.rockspec";
+          sha256 = "16v1r92w8zisgizys99ir2wkvwmf4fcpddznxg3fyxbqr67hyy5c";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/euclidianAce/tree-sitter-teal/archive/05d276e737055e6f77a21335b7573c9d3c091e2f.zip";
-        sha256 = "1g1zk47a8jcwac0j60mlfv56mhlhbf6f77vjkx4vsfbrryprcfi4";
+        url = "https://github.com/euclidianAce/tree-sitter-teal/archive/ac6b42ffb23d5d52b582c02508dd3524ac0ba3df.zip";
+        sha256 = "15dnrvw4xp7gv9b7x825svrnaxjr40bv8crdl5v7xj0np9lrkwzj";
       };
 
       disabled = luaOlder "5.1";
