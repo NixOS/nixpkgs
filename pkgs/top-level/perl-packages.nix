@@ -25993,19 +25993,18 @@ with self;
     };
   };
 
-  NetOAuth = buildPerlModule {
+  NetOAuth = buildPerlPackage {
     pname = "Net-OAuth";
-    version = "0.28";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KG/KGRENNAN/Net-OAuth-0.28.tar.gz";
-      hash = "sha256-e/wxnaCsV44Ali81o1DPUREKOjEwFtH9wwciAooikEw=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Net-OAuth-0.33.tar.gz";
+      hash = "sha256-BqKQwTvBycKs7jOnkImzLzBHlkkl1OqZLrbBzD2N9sE=";
     };
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [
       ClassAccessor
       ClassDataInheritable
-      DigestHMAC
-      DigestSHA1
+      CryptSysRandom
       LWP
     ];
     meta = {
