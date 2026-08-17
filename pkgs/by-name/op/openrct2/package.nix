@@ -199,21 +199,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    runHook preInstall
-    mkdir -p $out/{Applications,bin,share}
-    cp -R OpenRCT2.app $out/Applications/
-    makeBinaryWrapper $out/Applications/OpenRCT2.app/Contents/MacOS/openrct2 $out/bin/openrct2
-    cp openrct2-cli $out/bin/openrct2-cli
-    ln -s $out/Applications/OpenRCT2.app/Contents/Resources $out/share/openrct2
-    runHook postInstall
-  '';
-
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    wrapProgram $out/bin/openrct2 \
-      ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
-      ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/{Applications,bin,share}
+        cp -R OpenRCT2.app $out/Applications/
+        makeBinaryWrapper $out/Applications/OpenRCT2.app/Contents/MacOS/openrct2 $out/bin/openrct2
+        cp openrct2-cli $out/bin/openrct2-cli
+        ln -s $out/Applications/OpenRCT2.app/Contents/Resources $out/share/openrct2
+      ''
+    else
+      ''
+        wrapProgram $out/bin/openrct2 \
+          ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
+          ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
+      '';
 
   meta = {
     description = "Open source re-implementation of RollerCoaster Tycoon 2";
