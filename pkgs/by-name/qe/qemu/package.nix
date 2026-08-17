@@ -70,9 +70,6 @@
   xen,
   cephSupport ? false,
   ceph,
-  glusterfsSupport ? false,
-  glusterfs,
-  libuuid,
   openGLSupport ? sdlSupport,
   libgbm,
   libepoxy,
@@ -236,10 +233,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xenSupport [ xen ]
   ++ lib.optionals cephSupport [ ceph ]
-  ++ lib.optionals glusterfsSupport [
-    glusterfs
-    libuuid
-  ]
   ++ lib.optionals openGLSupport [
     libgbm
     libepoxy
@@ -342,7 +335,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional gtkSupport "--enable-gtk"
   ++ lib.optional xenSupport "--enable-xen"
   ++ lib.optional cephSupport "--enable-rbd"
-  ++ lib.optional glusterfsSupport "--enable-glusterfs"
   ++ lib.optional openGLSupport "--enable-opengl"
   ++ lib.optional virglSupport "--enable-virglrenderer"
   ++ lib.optional tpmSupport "--enable-tpm"
