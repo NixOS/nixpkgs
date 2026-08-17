@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mammoth";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-mammoth";
     tag = version;
-    hash = "sha256-8aqO5JPiyONu5rfR76qrutPHGE4nJn+716uPtYlZ+xA=";
+    hash = "sha256-Hva7XvqiNsRzcZWZ33izSLBeozjCulLaHG/Am63ss5Y=";
   };
 
   postPatch = ''
