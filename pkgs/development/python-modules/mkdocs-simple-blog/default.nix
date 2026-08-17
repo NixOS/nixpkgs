@@ -5,6 +5,7 @@
   mkdocs,
   poetry-core,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
 }:
 buildPythonPackage rec {
@@ -24,6 +25,8 @@ buildPythonPackage rec {
   dependencies = [
     mkdocs
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [
     pytestCheckHook
