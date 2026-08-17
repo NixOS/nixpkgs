@@ -17,7 +17,6 @@ check-phase-thread-limit-hook.section.md
 cmake.section.md
 desktop-file-utils.section.md
 gdk-pixbuf.section.md
-ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
