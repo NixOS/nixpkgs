@@ -1338,6 +1338,7 @@ in
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
   paperless = runTest ./paperless.nix;
+  papra = runTest ./papra.nix;
   paretosecurity = runTest ./paretosecurity.nix;
   parsedmarc = handleTest ./parsedmarc { };
   part-db = runTest ./web-apps/part-db.nix;
