@@ -56,7 +56,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/TriliumNext/Trilium";
-    license = lib.licenses.agpl3Plus;
+    license = with lib.licenses; [
+      agpl3Plus # trilium code
+      unfree # ckeditor5-premium-features dependency, which is part of the prebuilt binary
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
