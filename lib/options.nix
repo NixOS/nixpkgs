@@ -610,9 +610,12 @@ rec {
   # Generic traversal algebra over a module option attribute set hierarchy.
   foldOptionSet =
     {
-      onOption,
-      onAttrSet,
-      empty,
+      onOption ?
+        doc: subDocs: opt:
+        empty,
+      onAttrSet ? recurse: set: empty,
+      empty ? { },
+      ...
     }:
     let
       recurse =

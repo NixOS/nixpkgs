@@ -3386,17 +3386,32 @@ runTests {
             default = { };
             description = "Virtual hosts";
           };
+          options.tagTest = lib.mkOption {
+            type = lib.types.attrTag {
+              tagA = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Tag A";
+              };
+            };
+            description = "AttrTag test option";
+          };
         };
         options = (evalModules { modules = [ module ]; }).options;
         optionDoc = optionToDoc options;
+        customFold = optionAttrSetToDocList options;
       in
       [
         optionDoc.boot.enable.type
         optionDoc.services.nginx.virtualHosts."*".enableSSL.type
+        optionDoc.tagTest."*".tagA.type
+        (builtins.length customFold > 0)
       ];
     expected = [
       "boolean"
       "boolean"
+      "boolean"
+      true
     ];
   };
 
