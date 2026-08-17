@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ttyplot";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = finalAttrs.version;
-    hash = "sha256-JXxJDFwbwnLc19qfKtHwsZDv3Un1ahCOZlAfQbBuCpc=";
+    hash = "sha256-ez8++rn6tfx2M2FDEU5a0Td0HPC2Ra9dCY1gKesDtbQ=";
   };
 
   nativeBuildInputs = [
