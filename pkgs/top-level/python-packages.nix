@@ -3543,6 +3543,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connectrpc = callPackage ../development/python-modules/connectrpc { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   connio = callPackage ../development/python-modules/connio { };
