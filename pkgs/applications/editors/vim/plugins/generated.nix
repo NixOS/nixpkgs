@@ -6206,12 +6206,12 @@ final: prev: {
 
   flutter-tools-nvim = buildVimPlugin {
     pname = "flutter-tools.nvim";
-    version = "3.0.0";
+    version = "3.0.1";
     src = fetchFromGitHub {
       owner = "nvim-flutter";
       repo = "flutter-tools.nvim";
-      tag = "v3.0.0";
-      hash = "sha256-qr8k29l4VNdsr2ApXqFd3jGxCFqf4a4QKNYVAJkaxHQ=";
+      tag = "v3.0.1";
+      hash = "sha256-rdwusVC1/1FTY3dTLkjZ6d1pjubt+fBgRZexih7ClsM=";
     };
     meta.homepage = "https://github.com/nvim-flutter/flutter-tools.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
