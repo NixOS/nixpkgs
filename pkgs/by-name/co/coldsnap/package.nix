@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coldsnap";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "coldsnap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QQWH8cWBskXOmiZygvkNDyBX4WdsgnA0/ec6/UnmwIA=";
+    hash = "sha256-KYP0CQ4t5ytw8vT9kOZsNjl5KY0DzBTiWp2G+oYt1SU=";
   };
 
-  cargoHash = "sha256-U5MinzKQYTHRXM3WndkMEbvoT9tPwIIB3QxEOwWA3zE=";
+  cargoHash = "sha256-clZ1HNABg8dVOcuRI1GmFfyFYZqiB/M1OWBpuiZrg08=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

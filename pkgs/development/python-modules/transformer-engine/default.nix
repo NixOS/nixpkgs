@@ -15,6 +15,7 @@
   # build-system
   cmake,
   ninja,
+  nvidia-cudnn-frontend,
   pybind11,
   setuptools,
   # jax-only
@@ -22,6 +23,9 @@
   jax,
   # pytorch-only:
   torch,
+
+  # buildInputs
+  nlohmann_json,
 
   # dependencies
   importlib-metadata,
@@ -82,7 +86,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.17.1";
+  version = "2.18";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -92,7 +96,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-W9aWSmYCV7wYrLSAlYE2prfPfucXkPjWGA7NAMfBJ9E=";
+    hash = "sha256-NKky2b5grlfVdWsPf6HO4QZAvVuibCKvmfU0DxUIfvs=";
   };
 
   patches = optionals cudaSupport [
@@ -114,7 +118,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     ''
       substituteInPlace pyproject.toml \
         --replace-fail "pybind11[global]" "pybind11" \
-        --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1"' ""
+        --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1",' ""
     ''
     # Hardcode the path to the output store path that transformer_engine will use to import
     # - libtransformer_engine.so
@@ -180,6 +184,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   build-system = [
     cmake
     ninja
+    nvidia-cudnn-frontend
     pybind11
     setuptools
   ]
@@ -217,6 +222,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     cudaPackages.libcusolver # cusolverDn.h
     cudaPackages.libcusparse # cusparse.h
     cudaPackages.nccl # nccl.h
+    nlohmann_json
     pybind11 # pybind11/pybind11.h
   ]
   ++ optionals withMpi [
@@ -298,6 +304,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     changelog = "https://github.com/NVIDIA/TransformerEngine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    teams = [ lib.teams.cuda ];
     broken = !cudaSupport;
   };
 })

@@ -1362,8 +1362,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.29.8";
-          hash = "sha256-dvyIdixtmg5ZTo/REB/E5QlHJu2xZ+Ui5qwJegoHTfk=";
+          version = "2.29.10";
+          hash = "sha256-t1FbUeFw5WMKyb/qwVJBpILB8z4wtWH/BOnMVEDg0pU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1685,6 +1685,22 @@ let
           changelog = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
           license = lib.licenses.gpl3Only;
           maintainers = with lib.maintainers; [ onedragon ];
+        };
+      };
+
+      ExodiusStudios.comment-anchors = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "ExodiusStudios";
+          name = "comment-anchors";
+          version = "1.10.4";
+          hash = "sha256-FvfjPpQsgCsnY1BylhLCM/qDQChf9/iTr3cKkCGfMVI=";
+        };
+        meta = {
+          description = "Place anchor tags within comments for easy file and workspace navigation.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=exodiusstudios.comment-anchors";
+          homepage = "https://github.com/StarlaneStudios/vscode-comment-anchors";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ logn ];
         };
       };
 
