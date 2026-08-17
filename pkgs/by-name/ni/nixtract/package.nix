@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixtract";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nixtract";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-36ciPNSlB1LU+UXP8MLakrBRRqbyiVFN8Jp/JbCe1OY=";
+    hash = "sha256-g3+To12sWJnBd/XHzd5Hj4Bqpy8dxvpP6KUScD7xdc4=";
   };
 
-  cargoHash = "sha256-vG661ZXL87FiMy8yLOI7cagvunhzJhAsBR+VF6RfBxU=";
+  cargoHash = "sha256-u0T9L5F6LQUfqaH49YZwnpPCbsPbRewCjk/mQ17CLdM=";
 
   nativeBuildInputs = [ pkg-config ];
 

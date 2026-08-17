@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "xmpp-dns";
-  version = "0.6.3";
+  version = "0.6.4";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -16,9 +16,9 @@ buildGoModule (finalAttrs: {
     owner = "mdosch";
     repo = "xmpp-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GLTAV8LtOtgYwb261m3gq+AwFQspFUjVl4Si/A5ZmzI=";
+    hash = "sha256-aqj6RpTuZxb5GdRoNTX2eSz9LwjNB+M/po5ZQKJv2A0=";
   };
-  vendorHash = "sha256-KFDnFD6g88zIRt08aL/0Obik70oELCDb7piKZaSXGY4=";
+  vendorHash = "sha256-vKhzDtY5zeZT2AcqdSMP/KdTIiXCFuGGLdb5VvlWXbM=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = "installManPage man/xmpp-dns.1";

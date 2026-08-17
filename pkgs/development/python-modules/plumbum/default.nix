@@ -1,13 +1,23 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  typing-extensions,
+
+  # optional-dependencies
+  paramiko,
+
+  # tests
   mount,
   openssh,
-  paramiko,
   ps,
   psutil,
   pytest-asyncio,
@@ -15,18 +25,19 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
-  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plumbum";
   version = "2.0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i99HpT/QuF9JwX92IwwOqpEVUc/1k39E7N9v9TZ4Qvg=";
   };
 
@@ -38,9 +49,18 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch =
+    # `ps` on Darwin reports negative UIDs (`nobody` is -2), which the parser rejects
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace plumbum/lib.py \
+        --replace-fail \
+          'r"\s*(\d+)\s+(\d+)"' \
+          'r"\s*(\d+)\s+(-?\d+)"'
+    '';
+
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -61,12 +81,9 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export HOME=$TMP
-  '';
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     # broken in nix env
@@ -75,9 +92,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module Shell Combinators";
-    changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
+    changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/tomerfiliba/plumbum";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})
