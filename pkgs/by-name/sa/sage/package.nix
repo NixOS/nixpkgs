@@ -1,6 +1,5 @@
 {
   pkgs,
-  stdenv,
   withDoc ? false,
   requireSageTests ? true,
   extraPythonPackages ? ps: [ ],
