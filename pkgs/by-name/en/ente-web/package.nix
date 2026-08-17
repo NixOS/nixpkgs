@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
     # Replace hardcoded links pointing to the public ente instance so that
     # users of a self-hosted instance are not accidentally redirected there
     + lib.optionalString (enteMainUrl != null) ''
-      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io"; do
+      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io" "https://photos.ente.com"; do
         mapfile -d "" -t files < <(grep -rlFZ -- "$pattern" apps/)
         ${lib.getExe sd} -F -- "$pattern" ${lib.escapeShellArg enteMainUrl} "''${files[@]}"
       done
