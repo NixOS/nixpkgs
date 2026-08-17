@@ -1,8 +1,8 @@
 diff --git a/desktop/packages/mullvad-vpn/tasks/distribution.cjs b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
-index 7b2bc36e08..ec027454a2 100644
+index ae1725c61d..1e51dcbad6 100644
 --- a/desktop/packages/mullvad-vpn/tasks/distribution.cjs
 +++ b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
-@@ -28,6 +28,7 @@ function newConfig() {
+@@ -30,6 +30,7 @@
      publish: null,
      asar: true,
      compression: noCompression ? 'store' : 'normal',
@@ -10,7 +10,7 @@ index 7b2bc36e08..ec027454a2 100644
      extraResources: [
        { from: distAssets('ca.crt'), to: '.' },
        { from: distAssets('relays/relays.json'), to: '.' },
-@@ -180,11 +181,7 @@
+@@ -171,11 +172,7 @@
      linux: {
        target: [
          {
@@ -23,7 +23,7 @@ index 7b2bc36e08..ec027454a2 100644
            arch: getLinuxTargetArch(),
          },
        ],
-@@ -185,9 +181,6 @@ function newConfig() {
+@@ -185,9 +182,6 @@
        icon: distAssets('icon.icns'),
        extraFiles: [{ from: distAssets('linux/mullvad-gui-launcher.sh'), to: '.' }],
        extraResources: [
@@ -33,19 +33,19 @@ index 7b2bc36e08..ec027454a2 100644
        ],
      },
  
-@@ -494,6 +487,7 @@ function getMacArch() {
+@@ -524,6 +518,7 @@
  // than a non-tilde version component
  // https://docs.fedoraproject.org/en-US/packaging-guidelines/Versioning/#_complex_versioning
  function getLinuxVersion() {
 +  return "@version@";
-   const [version, ...prereleaseParts] = productVersion([]).split('-');
+   const [version, ...prereleaseParts] = productVersion().split('-');
    const [major, minor] = version.split('.');
    const prerelease = prereleaseParts.join('-');
-@@ -509,6 +503,7 @@ function getLinuxVersion() {
- // Returns the product version. The `args` argument is optional. Set it to `'semver'`
- // to get the version in semver format.
- function productVersion(extraArgs) {
+@@ -538,6 +533,7 @@
+ 
+ // Returns the product version.
+ function productVersion() {
 +  return "@version@";
-   const args = ['run', '-q', '--bin', 'mullvad-version', ...extraArgs];
+   const args = ['run', '-q', '--bin', 'mullvad-version'];
    return execFileSync('cargo', args, { encoding: 'utf-8' }).trim();
  }
