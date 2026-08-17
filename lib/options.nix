@@ -564,7 +564,21 @@ rec {
   */
   getFiles = catAttrs "file";
 
-  # Internal helper to transform a raw option set into a base documentation attribute set.
+  /**
+    Transform a raw module option set into a base documentation attribute set.
+
+    # Inputs
+
+    `opt`
+
+    : An evaluated module option attribute set (e.g. from `evalModules`).
+
+    # Type
+
+    ```
+    optionToDocItem :: Option -> AttrSet
+    ```
+  */
   optionToDocItem =
     opt:
     let
@@ -607,7 +621,21 @@ rec {
       inherit (opt) relatedPackages;
     };
 
-  # Generic traversal algebra over a module option attribute set hierarchy.
+  /**
+    Generic traversal algebra over a module option attribute set hierarchy.
+
+    # Inputs
+
+    `handlers`
+
+    : An attribute set containing optional callback handlers (`onOption`, `onAttrSet`, `empty`).
+
+    # Type
+
+    ```
+    foldOptionSet :: AttrSet -> (OptionSet | Option) -> Any
+    ```
+  */
   foldOptionSet =
     {
       onOption ?
@@ -659,8 +687,42 @@ rec {
       empty = [ ];
     } options;
 
-  # Generate documentation template as a nested attribute set (tree)
-  # preserving module option structure.
+  /**
+    Generate documentation template as a nested attribute set (tree)
+    preserving module option structure.
+
+    Submodule sub-options are nested directly under the `"*"` wildcard key.
+
+    # Inputs
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc :: (OptionSet | Option) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## Generate a nested option documentation tree
+
+    ```nix
+    optionToDoc (evalModules { modules = [ module ]; }).options
+    => {
+      boot = {
+        enable = {
+          default = { _type = "literalExpression"; text = "false"; };
+          description = "Enable boot";
+          type = "boolean";
+        };
+      };
+    }
+    ```
+    :::
+  */
   optionToDoc =
     options:
     foldOptionSet {
