@@ -16102,6 +16102,10 @@ self: super: with self; {
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
+  pysigma-backend-crowdstrike =
+    callPackage ../development/python-modules/pysigma-backend-crowdstrike
+      { };
+
   pysigma-backend-elasticsearch =
     callPackage ../development/python-modules/pysigma-backend-elasticsearch
       { };
@@ -16121,10 +16125,6 @@ self: super: with self; {
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
   pysigma-backend-sqlite = callPackage ../development/python-modules/pysigma-backend-sqlite { };
-
-  pysigma-pipeline-crowdstrike =
-    callPackage ../development/python-modules/pysigma-pipeline-crowdstrike
-      { };
 
   pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
 

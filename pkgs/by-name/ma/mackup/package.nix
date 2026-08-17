@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mackup";
-  version = "0.10.3";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
     rev = "${finalAttrs.version}";
-    hash = "sha256-xK/01vnJP8eyyqyeEp7lv+fSN8KdCGIscqjlI32D/xA=";
+    hash = "sha256-qr/+Ot2mGRn/uZ2h6mOoNKS0Oeik0mBgpV2Kt3Lc6yg=";
   };
 
   postPatch = ''
