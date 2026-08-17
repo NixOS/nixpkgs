@@ -32,8 +32,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   # Needed because of:
+  # ytmusicapi==1.12.1 not satisfied by version 1.12.2
   # yt-dlp==2026.3.17 not satisfied by version 2026.7.4
   pythonRelaxDeps = [
+    "ytmusicapi"
     "yt-dlp"
   ];
 
