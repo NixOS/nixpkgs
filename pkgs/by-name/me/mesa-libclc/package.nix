@@ -6,17 +6,18 @@
   cmake,
   llvmPackages_22,
   mesa,
-  spirv-llvm-translator,
+  buildPackages,
 }:
 let
-  spirv-llvm-translator' = spirv-llvm-translator.override {
-    inherit (llvmPackages_22) llvm;
+  llvmPackages_22' = buildPackages.llvmPackages_22;
+  spirv-llvm-translator' = buildPackages.spirv-llvm-translator.override {
+    inherit (llvmPackages_22') llvm;
   };
   tools = buildEnv {
     name = "mesa-libclc-tools";
     paths = [
-      llvmPackages_22.clang-unwrapped
-      llvmPackages_22.llvm
+      llvmPackages_22'.clang-unwrapped
+      llvmPackages_22'.llvm
     ];
     pathsToLink = [ "/bin" ];
   };
