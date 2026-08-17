@@ -52,7 +52,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.comfyui.extraArgs = [
+    services.comfyui.extraArgs = lib.mkBefore [
       "--base-directory=/var/lib/comfyui"
       "--database-url=sqlite:////var/lib/comfyui/user/comfyui.db"
       "--listen=${lib.concatStringsSep "," cfg.listen}"
