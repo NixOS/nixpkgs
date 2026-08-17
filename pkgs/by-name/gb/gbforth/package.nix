@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "gbforth";
-  version = "unstable-2025-10-08";
+  version = "0-unstable-2025-10-08";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ams-hackers";
