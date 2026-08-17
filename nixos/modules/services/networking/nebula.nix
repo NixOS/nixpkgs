@@ -36,7 +36,7 @@ let
       };
       tun = {
         disabled = netCfg.tun.disable;
-        dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
+        dev = netCfg.tun.device;
       };
       firewall = {
         inbound = netCfg.firewall.inbound;
@@ -211,7 +211,7 @@ in
 
                 tun.device = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
-                  default = null;
+                  default = "nebula.${name}";
                   description = "Name of the tun device. Defaults to nebula.\${networkName}.";
                 };
 
@@ -289,6 +289,17 @@ in
 
   # Implementation
   config = lib.mkIf (enabledNetworks != { }) {
+    assertions = lib.mapAttrsToList (netName: netCfg: {
+      # IFNAMSIZ caps network device names to 16 chars (including NULL terminator).
+      # Without this check, users might end up with a truncated interface name.
+      assertion = !netCfg.tun.disable && builtins.stringLength netCfg.tun.device <= 15;
+      message = ''
+        Network device names can't be longer than 15 chars.
+        `config.services.nebula.networks.${netName}.tun.device` is set to "${netCfg.tun.device}" which is above the limit.
+        Please assign `tun.device` to something shorter.
+      '';
+    }) enabledNetworks;
+
     systemd.services = lib.mkMerge (
       lib.mapAttrsToList (
         netName: netCfg:
