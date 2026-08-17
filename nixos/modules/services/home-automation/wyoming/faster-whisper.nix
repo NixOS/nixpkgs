@@ -10,6 +10,8 @@ let
   cfg = config.services.wyoming.faster-whisper;
 
   inherit (lib)
+    any
+    hasInfix
     mapAttrsToList
     mkOption
     mkEnableOption
@@ -69,6 +71,7 @@ in
                   "auto"
                   "faster-whisper"
                   "onnx-asr"
+                  "qwen3-asr"
                   "sherpa"
                   "transformers"
                 ];
@@ -311,8 +314,13 @@ in
     in
     mkIf (cfg.servers != { }) {
       assertions = mapAttrsToList (server: options: {
-        assertion = options.sttLibrary != "faster-whisper" -> options.initialPrompt == null;
-        message = "wyoming-faster-whisper/${server}: Initial prompt is only supported when using `faster-whisper` as `sttLibrary`.";
+        assertion =
+          !lib.elem options.sttLibrary [
+            "faster-whisper"
+            "qwen3-asr"
+          ]
+          -> options.initialPrompt == null;
+        message = "wyoming-faster-whisper/${server}: Initial prompt is only supported when `sttLibrary` is `faster-whisper` or `qwen3-asr`.";
       }) cfg.servers;
 
       systemd.services = mapAttrs' (
@@ -321,6 +329,7 @@ in
           finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
             dependencies =
               oldAttrs.dependencies
+              ++ optionals (any (arg: hasInfix "--hass" arg) cfg.extraArgs) oldAttrs.optional-dependencies.hass
               ++ optionals options.zeroconf.enable oldAttrs.optional-dependencies.zeroconf
               ++ optionals (
                 options.sttLibrary == "onnx-asr" || options.sttLibrary == "auto" && options.language == "ru"
