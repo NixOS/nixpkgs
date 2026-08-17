@@ -475,6 +475,8 @@ let
             # This avoids eating them all up if something is misconfigured upon the first try.
             RestartSec = 15 * 60;
 
+            Restart = "on-failure";
+
             # Keep in mind that these directories will be deleted if the user runs
             # systemctl clean --what=state
             # acme/.lego/${cert} is listed for this reason.
