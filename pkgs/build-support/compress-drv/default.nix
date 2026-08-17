@@ -15,6 +15,11 @@
     This can be used to exclude certain files.
     For example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
 
+  `removeIfSmaller` (Boolean; optional)
+
+  : Remove compressed sidecars that are not smaller than their source files.
+    Defaults to `true`.
+
   `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
@@ -28,10 +33,14 @@
     - read symlinks (thus --force is needed to gzip, zstd, xz).
     - keep the original file in place (--keep).
 
+    If `removeIfSmaller` is enabled, a compressed sidecar that ends up not
+    smaller than its source file is deleted, since it has no legitimate use
+    over serving the original.
+
   # Type
 
   ```
-  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; }; removeIfSmaller :: Bool; } -> Derivation
   ```
 
   # Examples
@@ -57,6 +66,7 @@ drv:
   formats,
   compressors,
   extraFindOperands ? "",
+  removeIfSmaller ? true,
 }:
 let
   validProg =
@@ -70,7 +80,16 @@ let
     assert validProg ext prog;
     ''
       find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
-        | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
+        | xargs -0 -P$NIX_BUILD_CORES -I{} sh -c '
+            set -e
+            ${prog}
+            ${lib.optionalString removeIfSmaller ''
+              # if compressed file is larger than the original, it has no purpose; remove.
+              if [ "$(stat -c%s "{}.${ext}")" -ge "$(stat -L -c%s "{}")" ]; then
+                rm -f "{}.${ext}"
+              fi
+            ''}
+          '
     '';
   formatsPipe = lib.concatStringsSep "|" formats;
 in

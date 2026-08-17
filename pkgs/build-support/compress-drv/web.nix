@@ -23,6 +23,10 @@
 
   : See compressDrv for details.
 
+  `removeIfSmaller` (Boolean; optional)
+
+  : See compressDrv for details.
+
   `extraFormats` ([String])
 
   : Extra extensions to compress in addition to `formats`.
@@ -34,7 +38,7 @@
   # Type
 
   ```
-  compressDrvWeb :: Derivation -> { formats :: [String]; extraFormats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrvWeb :: Derivation -> { formats :: [String]; extraFormats :: [String]; compressors :: { ${fileExtension} :: String; }; removeIfSmaller :: Bool; } -> Derivation
   ```
 
   # Examples
@@ -137,9 +141,10 @@ drv:
     zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
   },
   extraFindOperands ? "",
+  removeIfSmaller ? true,
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
   compressors = compressors;
-  inherit extraFindOperands;
+  inherit extraFindOperands removeIfSmaller;
 }
