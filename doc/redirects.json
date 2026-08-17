@@ -2801,9 +2801,6 @@
   "glycin-dont-wrap": [
     "index.html#glycin-dont-wrap"
   ],
-  "ghc": [
-    "index.html#ghc"
-  ],
   "gnome-platform": [
     "index.html#gnome-platform"
   ],
@@ -3651,7 +3648,8 @@
     "index.html#hareHook-cross-compilation"
   ],
   "haskell": [
-    "index.html#haskell"
+    "index.html#haskell",
+    "index.html#ghc"
   ],
   "haskell-available-packages": [
     "index.html#haskell-available-packages"
