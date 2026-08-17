@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-material";
-  version = "9.7.6";
+  version = "9.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = finalAttrs.version;
-    hash = "sha256-qQtVnWNSh7rJhVyufkebEq6n4lpBI3tZxHRT07AIZFA=";
+    hash = "sha256-cos0IwQiiDJyodjhHOOpmE1UemsChfLMigRswpqrIA0=";
   };
 
   build-system = [
