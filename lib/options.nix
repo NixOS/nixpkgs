@@ -657,10 +657,8 @@ rec {
             subVisible = if isBool visible then visible else visible == "transparent";
           in
           onOption doc (if subVisible then subDocs else empty) tree
-        else if isAttrs tree then
-          onAttrSet recurse tree
         else
-          empty;
+          onAttrSet recurse tree;
     in
     recurse;
 
