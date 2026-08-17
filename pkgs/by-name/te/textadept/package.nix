@@ -5,7 +5,7 @@
   fetchurl,
   cmake,
   withQt ? true,
-  libsForQt5,
+  qt6,
   withCurses ? false,
   ncurses,
 }:
@@ -20,9 +20,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vpBmDcnaHdpYZIfcy482G4NGor+64Dh1tzryb8JJ+c8=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withQt [
+    qt6.wrapQtAppsHook
+    qt6.qt5compat
+  ];
 
-  buildInputs = lib.optionals withQt [ libsForQt5.qtbase ] ++ lib.optionals withCurses ncurses;
+  buildInputs = lib.optionals withQt [ 
+    qt6.qtbase 
+  ] ++ lib.optionals withCurses ncurses;
 
   cmakeFlags =
     lib.optional withQt [ "-DQT=ON" ]
@@ -51,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       raskin
       mirrexagon
       arcuru
+      mikecm
     ];
     platforms = lib.platforms.linux;
     mainProgram = "textadept";
