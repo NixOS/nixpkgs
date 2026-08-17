@@ -10,6 +10,7 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
@@ -46,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -79,6 +81,7 @@ buildDotnetModule rec {
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';

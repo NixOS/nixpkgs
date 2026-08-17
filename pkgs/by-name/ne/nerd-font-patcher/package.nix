@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nerd-font-patcher";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${finalAttrs.version}/FontPatcher.zip";
-    sha256 = "sha256-koZj0Tn1HtvvSbQGTc3RbXQdUU4qJwgClOVq1RXW6aM=";
+    sha256 = "sha256-Z3KpaSoJpZx3D07K5EtHBXDl4pyHxnTIg/AuXrzTWWA=";
     stripRoot = false;
   };
 
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mkdir -p $out/bin $out/share $out/lib
     install -Dm755 font-patcher $out/bin/nerd-font-patcher
     cp -ra src/glyphs $out/share/
-    cp -ra bin/scripts/name_parser $out/lib/
+    cp -ra bin/scripts/{braille,name_parser} $out/lib/
   '';
 
   meta = {

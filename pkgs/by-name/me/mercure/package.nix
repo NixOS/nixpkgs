@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "mercure";
-  version = "0.21.8";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M/RzcR0FPkjBCRw0faRHF2ML25vzxcmNbAnnSWo+NFU=";
+    hash = "sha256-pWzj2WTqngVz+ohj7oqXiRmzWjQEZttpmnoHsJ0oO/k=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
 
-  vendorHash = "sha256-KtjKrCqu+MAJpSL/HbLipxKbLOqDvzPOA5QN9ppu2aY=";
+  vendorHash = "sha256-qas5UMEL8FUtWwXTc+4RCNR52bVO20AEl8qp1yEgdJQ=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
@@ -28,6 +28,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X 'github.com/caddyserver/caddy/v2/modules/caddyhttp.ServerHeader=Mercure.rocks Caddy'"
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=Mercure.rocks v${finalAttrs.version} Caddy'"
   ];
 
