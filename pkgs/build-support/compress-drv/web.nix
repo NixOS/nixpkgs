@@ -23,6 +23,10 @@
 
   : See compressDrv for details.
 
+  `removeIfSmaller` (Boolean; optional)
+
+  : See compressDrv for details.
+
   `extraFormats` ([String])
 
   : Extra extensions to compress in addition to `formats`.
@@ -34,7 +38,7 @@
   # Type
 
   ```
-  compressDrvWeb :: Derivation -> { formats :: [String]; extraFormats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrvWeb :: Derivation -> { formats :: [String]; extraFormats :: [String]; compressors :: { ${fileExtension} :: String; }; extraFindOperands :: String; removeIfSmaller :: Bool; } -> Derivation
   ```
 
   # Examples
@@ -68,18 +72,24 @@
   ├── index.2fd01148.js.map -> /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/index.2fd01148.js.map
   ├── index.2fd01148.js.map.br
   ├── index.2fd01148.js.map.gz
+  ├── index.2fd01148.js.map.zst
+  ├── index.2fd01148.js.zst
   ├── index.37aa9a8a.css -> /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/index.37aa9a8a.css
   ├── index.37aa9a8a.css.br
   ├── index.37aa9a8a.css.gz
   ├── index.37aa9a8a.css.map -> /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/index.37aa9a8a.css.map
   ├── index.37aa9a8a.css.map.br
   ├── index.37aa9a8a.css.map.gz
+  ├── index.37aa9a8a.css.map.zst
+  ├── index.37aa9a8a.css.zst
   ├── index.html -> /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/index.html
   ├── index.html.br
   ├── index.html.gz
+  ├── index.html.zst
   ├── manifest.webmanifest -> /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/manifest.webmanifest
   ├── manifest.webmanifest.br
-  └── manifest.webmanifest.gz
+  ├── manifest.webmanifest.gz
+  └── manifest.webmanifest.zst
   ```
 
   When the `-compressed` derivation is passed to a properly configured web server,
@@ -134,12 +144,13 @@ drv:
     # --force is required to not fail on symlinks
     # for details on the compression level see
     # https://github.com/NixOS/nixpkgs/pull/332752#issuecomment-2275110390
-    zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
+    zst = "${lib.getExe zstd} --force --keep --quiet -19 {}";
   },
   extraFindOperands ? "",
+  removeIfSmaller ? false,
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
   compressors = compressors;
-  inherit extraFindOperands;
+  inherit extraFindOperands removeIfSmaller;
 }

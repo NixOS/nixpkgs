@@ -13,15 +13,23 @@
 
   : Extra command line parameters to pass to the find command.
     This can be used to exclude certain files.
-    For example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
+    For example:
+      - exclude l10n directories under apps: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
+      - skip files of 256 bytes or less: `-size +256c`
+
+  `removeIfSmaller` (Boolean; optional)
+
+  : Remove compressed sidecars that are not smaller than their source files.
+    Defaults to `false`.
 
   `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
 
     The compressor program that will be executed to get the `COMPRESSOR` extension.
-    The program should have a single " {}", which will be the replaced with the
-    target filename.
+    The extension must be the one the program appends to its output file.
+    The program should have a single `{}`, which will be replaced with the
+    target filename. Do not quote `{}`.
 
     Compressor must:
 
@@ -31,7 +39,7 @@
   # Type
 
   ```
-  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; }; extraFindOperands :: String; removeIfSmaller :: Bool; } -> Derivation
   ```
 
   # Examples
@@ -57,6 +65,7 @@ drv:
   formats,
   compressors,
   extraFindOperands ? "",
+  removeIfSmaller ? false,
 }:
 let
   validProg =
@@ -70,7 +79,16 @@ let
     assert validProg ext prog;
     ''
       find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
-        | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
+        | xargs -0 -P$NIX_BUILD_CORES ${
+          if !removeIfSmaller then
+            "-I{} ${prog}"
+          else
+            "-n1 sh -c ${lib.escapeShellArg ''
+              set -e
+              ${lib.replaceStrings [ "{}" ] [ ''"$1"'' ] prog}
+              [ "$(stat -L -c%s "$1.${ext}")" -lt "$(stat -L -c%s "$1")" ] || rm "$1.${ext}"
+            ''} _"
+        }
     '';
   formatsPipe = lib.concatStringsSep "|" formats;
 in
