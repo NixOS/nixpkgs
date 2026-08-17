@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  ffmpeg-headless,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,9 +21,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-XOXzWawdeGO5oqNlBOx0ZzMpdVTVidfak6AcfiZLFKY=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    wrapProgram $out/bin/ab-av1 \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          (ffmpeg-headless.override {
+            withSvtav1 = true;
+            withVmaf = true;
+            withOpus = true;
+          })
+        ]
+      }
+
     installShellCompletion --cmd ab-av1 \
       --bash <($out/bin/ab-av1 print-completions bash) \
       --fish <($out/bin/ab-av1 print-completions fish) \
