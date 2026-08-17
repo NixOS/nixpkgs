@@ -53,13 +53,6 @@ let
               inherit (config) containers;
               nodes = config.nodesCompat;
             };
-            # FIXME: remove this and deprecate the old entrypoints
-            #        this is a workaround in order to observe and improve all internal tests
-            #        unfortunately the legacy entrypoints are used both internally
-            #        and out-of-tree, so leaving this in here risks breaking external users
-            #        Instead, we should rely on the identical all-tests.nix definition,
-            #        and use that consistently, so that we don't have to break users.
-            nix.enable = lib.mkDefault false;
           }
           (
             { options, ... }:
