@@ -81,19 +81,24 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
   version = "0.68";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cf3L3Il717ReAcPTPNHZLwldDeCwuPqHYoxeQusBOOg=";
     fetchSubmodules = true;
+    hash = "sha256-cf3L3Il717ReAcPTPNHZLwldDeCwuPqHYoxeQusBOOg=";
   };
 
   postPatch = ''
     patchShebangs tests
     substituteInPlace tests/aiger/generate_mk.py \
       --replace-fail 'SHELL := /usr/bin/env bash' 'SHELL := ${stdenv.shell}'
-    # these plugin tests only work against the installed output, so skip them.
+  ''
+  # these plugin tests only work against the installed output, so skip them.
+  + ''
     rm tests/various/plugin.sh tests/various/ezcmdline_plugin.sh
   '';
 
@@ -155,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       shell
       thoughtpolice
       Luflosi
+      gonsolo
     ];
   };
 })

@@ -206,7 +206,7 @@ Here is how your `default.nix` file would look for a Phoenix project.
   # beam27Packages or beam29Packages is available if you need a particular version
   beamPackages,
 }:
-let
+beamPackages.mixRelease (finalAttrs: {
   pname = "your_project";
   version = "0.0.1";
 
@@ -215,24 +215,6 @@ let
     rev = "replace_with_your_commit";
   };
 
-  # if using mix2nix you can use the mixNixDeps attribute
-  mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
-    # nix will complain and tell you the right value to replace this with
-    hash = lib.fakeHash;
-    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
-    # if you have build time environment variables add them here
-    MY_ENV_VAR = "my_value";
-  };
-in
-beamPackages.mixRelease {
-  inherit
-    src
-    pname
-    version
-    mixFodDeps
-    ;
   # if you have build time environment variables add them here
   MY_ENV_VAR = "my_value";
 
@@ -242,7 +224,18 @@ beamPackages.mixRelease {
     mix do deps.loadpaths --no-deps-check, phx.digest
     mix phx.digest --no-deps-check
   '';
-}
+
+  # if using mix2nix you can use the mixNixDeps attribute
+  mixFodDeps = beamPackages.fetchMixDeps {
+    pname = "mix-deps-${finalAttrs.pname}";
+    inherit (finalAttrs) src version;
+    # nix will complain and tell you the right value to replace this with
+    hash = lib.fakeHash;
+    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
+    # if you have build time environment variables add them here
+    MY_ENV_VAR = "my_value";
+  };
+})
 ```
 
 Setup will require the following steps:

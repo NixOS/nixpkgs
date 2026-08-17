@@ -6,12 +6,29 @@
 }:
 let
   cfg = config.services.comfyui;
+
+  # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
+  isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 in
 {
   options = {
     services.comfyui = {
       enable = lib.mkEnableOption "ComfyUI";
       package = lib.mkPackageOption pkgs "comfyui" { };
+
+      dataDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/comfyui";
+        example = "/srv/comfyui";
+        description = ''
+          Directory holding ComfyUI's state: models, custom nodes, inputs, outputs and the database.
+
+          Defaults to the unit's `StateDirectory`.
+          Any other directory is created with systemd-tmpfiles and bind-mounted into the service.
+
+          Existing state is not migrated, you need to move it yourself.
+        '';
+      };
 
       listen = lib.mkOption {
         type = with lib.types; listOf str;
@@ -46,18 +63,29 @@ in
         ];
         description = ''
           Extra arguments to pass to the server. See `comfyui --help` for available args.
+
+          Flags set by the module are prepended with `lib.mkBefore`, so any user supplied flag wins over that.
         '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.comfyui.extraArgs = [
-      "--base-directory=/var/lib/comfyui"
-      "--database-url=sqlite:////var/lib/comfyui/user/comfyui.db"
+    services.comfyui.extraArgs = lib.mkBefore [
+      "--base-directory=${cfg.dataDir}"
+      "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
       "--listen=${lib.concatStringsSep "," cfg.listen}"
       "--port=${toString cfg.port}"
     ];
+
+    # owner read back from the unit, not spelled out: StateDirectory= infers it, this rule has to be told
+    systemd.tmpfiles.settings = lib.mkIf (!isDefaultDataDir) {
+      "10-comfyui".${cfg.dataDir}.d = {
+        user = config.systemd.services.comfyui.serviceConfig.User;
+        group = config.systemd.services.comfyui.serviceConfig.Group;
+        mode = "0700";
+      };
+    };
 
     systemd.services.comfyui = {
       description = "Powerful and modular diffusion model GUI, api and backend";
@@ -66,8 +94,8 @@ in
 
       preStart = ''
         for d in custom_nodes input output models; do
-          if [[ ! -d /var/lib/comfyui/$d ]]; then
-            cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d /var/lib/comfyui/
+          if [[ ! -d "${cfg.dataDir}/$d" ]]; then
+            cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
       '';
@@ -77,9 +105,12 @@ in
         Group = "comfyui";
         Restart = "always";
         RestartSec = "5sec"; # don't crash loop immediately
-        StateDirectory = "comfyui";
+        StateDirectory = lib.mkIf isDefaultDataDir "comfyui";
         Type = "simple";
         User = "comfyui";
+
+        # This is a bind mount, not ReadWritePaths, so that with ProtectHome it is not shadowed by a tmpfs.
+        BindPaths = lib.mkIf (!isDefaultDataDir) [ cfg.dataDir ];
 
         # required for Torch and GPU acceleration
         BindReadOnlyPaths = [ "/proc/cpuinfo" ];
@@ -123,7 +154,7 @@ in
       groups.comfyui = { };
       users.comfyui = {
         group = "comfyui";
-        home = "/var/lib/comfyui";
+        home = cfg.dataDir;
         isSystemUser = true;
       };
     };
