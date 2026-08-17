@@ -125,6 +125,10 @@ let
       ];
       extraBaseModules = {
         _file = "nixpkgs/nixos/tests/all-tests.nix#localTestOverrides-extraBaseModules";
+        # tag(no-nix-by-default): we exclude nix from the tests *here* to keep a
+        #   small reverse closure for nix package updates among other things.
+        #   Out-of-tree usages get nix by default as usual.
+        #   See https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos
         config.nix.enable = lib.mkDefault false;
       };
     };
