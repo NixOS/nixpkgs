@@ -1079,12 +1079,12 @@ final: prev: {
 
   astrocore = buildVimPlugin {
     pname = "astrocore";
-    version = "3.0.5";
+    version = "3.0.8";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astrocore";
-      tag = "v3.0.5";
-      hash = "sha256-YH9mb8d/mwzvR0w/UQVzI27dad1x5B5uTkZcxFb6uAQ=";
+      tag = "v3.0.8";
+      hash = "sha256-xpO2fcUuzZneBMLfykQpyknWU3pE7mrEZBZtGX+/QTw=";
     };
     meta.homepage = "https://github.com/AstroNvim/astrocore/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
