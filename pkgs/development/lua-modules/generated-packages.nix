@@ -1237,15 +1237,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.76-1";
+      version = "1.6.78-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.76-1.rockspec";
-          sha256 = "0ylhh5zm29473nz5myddaywk5hhkp047lf6sy19xqfdxv0isd58c";
+          url = "mirror://luarocks/grug-far.nvim-1.6.78-1.rockspec";
+          sha256 = "0h7g3z0abbzs4rpqv5qk7skkvk7kvw5zpvag9jj5b0xyjcy0chmc";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/6e05398cf6cad05b3fb46569db96b1ccfcbbd402.zip";
-        sha256 = "0bbn4jsryz4x3s6aci7rhik53pgsq4w7xgsg1kgc1lnj7aiql16p";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/11595bf747edc270bce2069d1020502ad4ae56cf.zip";
+        sha256 = "05r65gxq53m67gmxsfynralwxqr7kaja51526fm677zirrja6ic2";
       };
 
       disabled = luaOlder "5.1";
