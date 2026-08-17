@@ -25927,15 +25927,15 @@ final: prev: {
 
   xeno-nvim = buildVimPlugin {
     pname = "xeno.nvim";
-    version = "0-unstable-2025-10-23";
+    version = "1.1.1";
     src = fetchFromGitHub {
       owner = "kyzabuilds";
       repo = "xeno.nvim";
-      rev = "f70c22447c7d954973f35c10dd9e9942cd7fb2eb";
-      hash = "sha256-zTGclrlxThgqEvj8K3fQ87G98g3VDqvp/dCnZwSm4I8=";
+      tag = "xeno@1.1.1";
+      hash = "sha256-HQ0/zAJK5ZWp9Z4KpxZeLuiWKVdSwh5y0xqz6kVn+aY=";
     };
     meta.homepage = "https://github.com/kyzabuilds/xeno.nvim/";
-    meta.license = unfree;
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
