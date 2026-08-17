@@ -516,6 +516,7 @@ let
       inherit (self.options)
         isOption
         mkEnableOption
+        mkEnabledOption
         mkSinkUndeclaredOptions
         mergeDefaultOption
         mergeOneOption
