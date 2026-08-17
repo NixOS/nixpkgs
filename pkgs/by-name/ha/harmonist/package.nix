@@ -1,26 +1,38 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromCodeberg,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "harmonist";
   version = "1.0.3";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "anaseto";
     repo = "harmonist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9cEKkvQze+hg4CwDe5epTpuQPevylwnSP5xQAVGJ/wQ=";
+    hash =
+      # darwin's case-insensitive filesystem produces a different source hash because of map-d vs map-D
+      # is this a correctness issue?
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-yNPGoCvCdrmFaUjtA1p8pgPIC9ekIizhG6oMiYRFYGA="
+      else
+        "sha256-9cEKkvQze+hg4CwDe5epTpuQPevylwnSP5xQAVGJ/wQ=";
   };
 
   vendorHash = "sha256-wibNLDdykV2psOnJbMKu0EZSrrhKRxrN/OTWXmUz2FM=";
 
   ldflags = [
     "-s"
-    "-w"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Stealth coffee-break roguelike game";
