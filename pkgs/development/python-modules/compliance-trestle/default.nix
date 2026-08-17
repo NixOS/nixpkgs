@@ -24,55 +24,34 @@
   python-frontmatter,
   requests,
   ruamel-yaml,
+  rfc8785,
+  securesystemslib,
 
   # tests
   datamodel-code-generator,
   pytestCheckHook,
   mypy,
 }:
-
-let
-  # nist-content is a git submodule, but using fetchSubmodules in src fails while recursing into
-  # nist-content itself.
-  # Thus we simply inject it after the fact in postPatch.
-  nist-content = fetchFromGitHub {
-    name = "nist-content";
-    owner = "usnistgov";
-    repo = "oscal-content";
-    rev = "941c978d14c57379fbf6f7fb388f675067d5bff7";
-    hash = "sha256-sDvNMheZZhk09YEfY5ocmZmAC3t3KenqD3PaNsi0mMU=";
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "compliance-trestle";
-  version = "3.12.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscal-compass";
     repo = "compliance-trestle";
     tag = "v${finalAttrs.version}";
-    # TODO: Try to fall back to fetchSubmodules at the next release
-    # fetchSubmodules = true;
-    hash = "sha256-4z+hJoykIwDRshtSyE94POy39cRNVqtT4L6KftNWG6w=";
+    fetchSubmodules = true;
+    hash = "sha256-8ObzK0P1syPw7L6m0LfCs507jruazxRNNwob5CzS6Zw=";
   };
 
   postPatch = ''
     substituteInPlace tests/trestle/misc/mypy_test.py \
       --replace-fail "trestle'," "${placeholder "out"}/bin/trestle',"
-  ''
-  # Replace the expected nist-content git submodule with the pre-fetched path.
-  + ''
-    rmdir ./nist-content
-    ln -s ${nist-content} ./nist-content
   '';
 
   build-system = [
     hatchling
-  ];
-
-  pythonRelaxDeps = [
-    "cryptography"
   ];
 
   dependencies = [
@@ -92,7 +71,10 @@ buildPythonPackage (finalAttrs: {
     python-frontmatter
     requests
     ruamel-yaml
+    securesystemslib
+    rfc8785
   ]
+  ++ securesystemslib.optional-dependencies.crypto
   ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [
@@ -106,6 +88,7 @@ buildPythonPackage (finalAttrs: {
     "test_import_from_url"
     "test_import_from_nist"
     "test_remote_profile_relative_cat"
+    "test_ssp_generate_missing_profile_param_value_origin_regression"
 
     # AssertionError
     "test_profile_generate_assemble_rev_5"
