@@ -1,0 +1,54 @@
+--- hedgewars-src-1.0.3/cmake_modules/platform.cmake	2021-06-23 14:58:09.000000000 -0400
++++ hedgewars-patch-work/cmake_modules/platform.cmake	2026-05-17 21:52:13.746344437 -0400
+@@ -45,6 +45,7 @@
+         string(REGEX MATCH "[pP][pP][cC]+" powerpc_build "${CMAKE_OSX_ARCHITECTURES}")
+         string(REGEX MATCH "[iI]386+" i386_build "${CMAKE_OSX_ARCHITECTURES}")
+         string(REGEX MATCH "[xX]86_64+" x86_64_build "${CMAKE_OSX_ARCHITECTURES}")
++        string(REGEX MATCH "[aA][rR][mM]64+" arm64_build "${CMAKE_OSX_ARCHITECTURES}")
+         if(x86_64_build)
+             add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
+         elseif(i386_build)
+@@ -51,6 +52,9 @@
+             add_flag_prepend(CMAKE_Pascal_FLAGS -Pi386)
+         elseif(powerpc_build)
+             add_flag_prepend(CMAKE_Pascal_FLAGS -Ppowerpc)
++        elseif(arm64_build)
++            add_flag_prepend(CMAKE_Pascal_FLAGS -Paarch64)
++            add_flag_prepend(CMAKE_Pascal_FLAGS -WM11.0)
+         else()
+             message(FATAL_ERROR "Unknown architecture present in CMAKE_OSX_ARCHITECTURES (${CMAKE_OSX_ARCHITECTURES})")
+         endif()
+@@ -58,6 +62,9 @@
+         if(num_of_archs GREATER 1)
+             message("*** Only one architecture in CMAKE_OSX_ARCHITECTURES is supported, picking the first one ***")
+         endif()
++    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
++        add_flag_prepend(CMAKE_Pascal_FLAGS -Paarch64)
++        add_flag_prepend(CMAKE_Pascal_FLAGS -WM11.0)
+     elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
+         #if that variable is not set check if we are on x86_64 and if so force it, else use default
+         add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
+--- hedgewars-src-1.0.3/hedgewars/CMakeLists.txt	2025-07-22 13:12:55.000000000 -0400
++++ hedgewars-patch-work/hedgewars/CMakeLists.txt	2026-05-17 21:52:13.747145614 -0400
+@@ -130,7 +130,20 @@
+     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kOpenGL")
+ 
+     #set the correct library or framework style depending on the main SDL
+-    string(FIND "${SDL2_LIBRARIES}" "dylib" sdl_framework)
++    # In nixpkgs SDL2_LIBRARIES is a cmake target name (SDL2::SDL2), not a file path,
++    # so string(FIND "dylib") always fails. Force the dylib path and extract library
++    # directories from cmake imported-target properties for FPC -Fl search paths.
++    set(sdl_framework 1)
++    get_target_property(_sdl2_loc SDL2::SDL2 IMPORTED_LOCATION_RELEASE)
++    if(NOT _sdl2_loc)
++        get_target_property(_sdl2_loc SDL2::SDL2 IMPORTED_LOCATION)
++    endif()
++    get_filename_component(_sdl2_dir ${_sdl2_loc} PATH)
++    get_filename_component(_sdl2_image_dir ${SDL2_IMAGE_LIBRARY} PATH)
++    get_filename_component(_sdl2_mixer_dir ${SDL2_MIXER_LIBRARY} PATH)
++    get_filename_component(_sdl2_ttf_dir ${SDL2_TTF_LIBRARY} PATH)
++    get_filename_component(_sdl2_net_dir ${SDL2_NET_LIBRARY} PATH)
++    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${_sdl2_dir} -Fl${_sdl2_image_dir} -Fl${_sdl2_mixer_dir} -Fl${_sdl2_ttf_dir} -Fl${_sdl2_net_dir}")
+     if(${sdl_framework} GREATER -1)
+         add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdl2 -k-lsdl2_image -k-lsdl2_mixer -k-lsdl2_ttf -k-lsdl2_net")
+     else()
