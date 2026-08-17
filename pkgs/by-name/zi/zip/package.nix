@@ -80,6 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/zip/files/zip-3.0-zipnote-freeze.patch?id=d37d095fc7a2a9e4a8e904a7bf0f597fe99df85a";
       hash = "sha256-EVr7YS3IytnCRjAYUlkg05GA/kaAY9NRFG7uDt0QLAY=";
     })
+    # Fix buffer overflow (CVE-2018-13410).
+    # See: https://seclists.org/fulldisclosure/2018/Jul/24
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "16";
+      patch = "buffer-overflow-cve-2018-13410.patch";
+      hash = "sha256-Hgy0yrBuSX2XWN1PNASQbjiXfyzSScwHQ+o0fv6Sgs4=";
+    })
   ]
   ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
