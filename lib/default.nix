@@ -526,7 +526,6 @@ let
         optionAttrSetToDocList
         optionAttrSetToDocList'
         optionToDoc
-        optionToDoc'
         scrubOptionValue
         literalExpression
         showOption
