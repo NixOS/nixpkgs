@@ -5,6 +5,7 @@
   setuptools-scm,
   aiohttp,
   beautifulsoup4,
+  json5,
   lxml,
   pyjwt,
   freezegun,
@@ -14,17 +15,22 @@
 
 buildPythonPackage rec {
   pname = "volkswagencarnet";
-  version = "5.4.11";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-Ria6+dlxV0VA7zXb1eL0TgblxlUjRTYYgDaj/727eCA=";
+    hash = "sha256-0jjshQOqrqks0M3b6wXcF50iHZG7RmWSWvUt/Vsjtp8=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=84.0.0" setuptools \
+      --replace-fail "setuptools_scm>=10.2.1" setuptools_scm \
+      --replace-fail "wheel>=0.48.0" wheel
+
     substituteInPlace tests/conftest.py \
       --replace-fail 'pytest_plugins = ["pytest_cov"]' 'pytest_plugins = []'
   '';
@@ -34,6 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     beautifulsoup4
+    json5
     lxml
     pyjwt
   ];
