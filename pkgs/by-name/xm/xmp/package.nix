@@ -8,15 +8,18 @@
   libxmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmp";
-  version = "4.3.0";
+  version = "4.3.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "libxmp";
     repo = "xmp-cli";
-    rev = "${pname}-${version}";
-    hash = "sha256-bHepVTkh7Gu8ea/WW5bY7zTiqYWpENlsPqsMV+4WVT4=";
+    tag = "xmp-${finalAttrs.version}";
+    hash = "sha256-vy1e/d70c2sMOBEPfAdaPrUQ77BQDJkUNwE9BCFIXeg=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +31,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Extended module player";
     homepage = "https://xmp.sourceforge.net/";
+    changelog = "https://github.com/libxmp/xmp-cli/blob/${finalAttrs.src.rev}/Changelog";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    maintainers = [ ];
     mainProgram = "xmp";
   };
-}
+})
