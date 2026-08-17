@@ -1,33 +1,89 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  jupyter-packaging,
+  fetchFromGitHub,
+  writeText,
+  nodejs,
+  yarn-berry_3,
   jupyterlab,
+  jupyter-packaging,
   bqscales,
   ipywidgets,
   numpy,
   pandas,
   traitlets,
   traittypes,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "bqplot";
-  version = "0.12.46";
-  pyproject = true;
+let
+  version = "0.13.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lBdL4+skHJ+h1pelQxMomgvT/ogK3ZbGZA0xY73T0io=";
+  src = fetchFromGitHub {
+    owner = "bqplot";
+    repo = "bqplot";
+    tag = version;
+    hash = "sha256-mYeQzmUa7WFDL8o6xsRD2bZ+3E9y4K/KyGE0zr0V4BA=";
   };
 
-  # upstream seems in flux for 0.13 release. they seem to want to migrate from
-  # jupyter_packaging to hatch, so let's patch instead of fixing upstream
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "jupyter_packaging~=" "jupyter_packaging>=" \
-      --replace "jupyterlab~=" "jupyterlab>="
+  frontend = stdenv.mkDerivation {
+    pname = "bqplot-frontend";
+    inherit version src;
+
+    sourceRoot = "${src.name}/js";
+
+    # no hashes are missing
+    missingHashes = writeText "missing-hashes.json" /* json */ ''
+      {}
+    '';
+
+    yarnOfflineCache = yarn-berry_3.fetchYarnBerryDeps {
+      inherit src;
+      yarnLock = "js/yarn.lock";
+      hash = "sha256-g7G+NsVDxWZ9wM0TrJC2ew28rUKQUFL5MMcQVWpe9jo=";
+    };
+
+    postPatch = ''
+      substituteInPlace package.json \
+        --replace-fail "jlpm run" "yarn run"
+
+      substituteInPlace package.json webpack.config.js \
+        --replace-fail "../share/jupyter" "share/jupyter"
+    '';
+
+    nativeBuildInputs = [
+      nodejs
+      yarn-berry_3
+      yarn-berry_3.yarnBerryConfigHook
+      jupyterlab
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      yarn run build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r share $out/share
+
+      runHook postInstall
+    '';
+  };
+in
+buildPythonPackage {
+  inherit version src;
+  pname = "bqplot";
+  pyproject = true;
+
+  preBuild = ''
+    cp -r ${frontend}/share ./share
   '';
 
   build-system = [
@@ -44,8 +100,16 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  # no tests in PyPI dist, and not obvious to me how to build the js files from GitHub
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # clear upstreams `addopts = --nbval --current-env`
+  pytestFlags = [
+    "-o"
+    "addopts="
+  ];
+  enabledTestPaths = [ "tests/" ];
 
   pythonImportsCheck = [
     "bqplot"
