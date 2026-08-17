@@ -7466,12 +7466,12 @@ final: prev: {
 
   herdr-splits-nvim = buildVimPlugin {
     pname = "herdr-splits.nvim";
-    version = "0.5.2";
+    version = "0.5.3";
     src = fetchFromGitHub {
       owner = "lmilojevicc";
       repo = "herdr-splits.nvim";
-      tag = "v0.5.2";
-      hash = "sha256-2h9HGQcIwKIE5uKuRVwtIfKNn0urQttvg5b95kavzgo=";
+      tag = "v0.5.3";
+      hash = "sha256-3ej6CYPnOCXrcWs/jauo7zDtBS29YZQuxJsE6Mvzu7U=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/lmilojevicc/herdr-splits.nvim/";
