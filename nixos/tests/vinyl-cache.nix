@@ -28,6 +28,7 @@ in
         services.nix-serve = {
           enable = true;
         };
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
 
         services.vinyl-cache = {
           inherit package;
@@ -97,6 +98,7 @@ in
           require-sigs = false;
           substituters = lib.mkForce [ "http://vinyl" ];
         };
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
       };
   };
 

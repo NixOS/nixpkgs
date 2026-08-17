@@ -2,6 +2,8 @@
   name = "lix";
 
   nodes.machine = { pkgs, ... }: {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
     nix.package = pkgs.lix;
 
     environment.etc."test.nix".text = ''
