@@ -3625,12 +3625,12 @@ final: prev: {
 
   codecompanion-spinner-nvim = buildVimPlugin {
     pname = "codecompanion-spinner.nvim";
-    version = "0.3.0";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "franco-ruggeri";
       repo = "codecompanion-spinner.nvim";
-      tag = "v0.3.0";
-      hash = "sha256-icFyR0q814mfLj+wT3ArSYwo50EWpn9BgI81qhbQDCQ=";
+      tag = "v0.4.0";
+      hash = "sha256-2YsANtNfp+Ya/fiTniregg5GWI8RqmSO4CmIreeexdE=";
     };
     meta.homepage = "https://github.com/franco-ruggeri/codecompanion-spinner.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
