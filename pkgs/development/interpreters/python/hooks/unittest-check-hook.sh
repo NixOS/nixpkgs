@@ -9,11 +9,11 @@ unittestCheckPhase() {
 
     local -a flagsArray=()
 
-    # Compatibility layer to the obsolete unittestFlagsArray
     if [[ -z "${dontUseUnittestDiscover-}" ]]; then
       flagsArray+=("discover")
     fi
 
+    # Compatibility layer to the obsolete unittestFlagsArray
     eval "flagsArray+=(${unittestFlagsArray[*]-})"
 
     concatTo flagsArray unittestFlags
