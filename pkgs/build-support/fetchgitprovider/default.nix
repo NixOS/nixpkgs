@@ -150,48 +150,6 @@ lib.extendMkDerivation rec {
         else
           builtins.unsafeGetAttrPos "rev" args
       );
-      newMeta =
-        meta
-        // {
-          ${if finalAttrs.browsableUrl != null then "homepage" else null} =
-            meta.homepage or finalAttrs.browsableUrl;
-          identifiers = {
-            purlParts = {
-              type = "generic";
-              # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
-              spec = "${finalAttrs.repo}?vcs_url=${finalAttrs.gitRepoUrl}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
-            };
-          }
-          // meta.identifiers or { };
-        }
-        // lib.optionalAttrs (position != null) {
-          # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-          position = "${position.file}:${toString position.line}";
-        };
-      privateAttrs = {
-        netrcPhase =
-          args.netrcPhase or (
-            # When using private repos:
-            # - Fetching with git works using https://github.com but not with the GitHub API endpoint
-            # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
-            nullIfNot finalAttrs.private ''
-              if [ -z "''$${finalAttrs.varBase}USERNAME" -o -z "''$${finalAttrs.varBase}PASSWORD" ]; then
-                echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
-                exit 1
-              fi
-              cat > netrc <<EOF
-              machine $netrcMachineName
-                      login ''$${finalAttrs.varBase}USERNAME
-                      password ''$${finalAttrs.varBase}PASSWORD
-              EOF
-            ''
-          );
-        netrcImpureEnvVars =
-          args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
-            "${finalAttrs.varBase}USERNAME"
-            "${finalAttrs.varBase}PASSWORD"
-          ]);
-      };
 
       fetcherArgs =
         (
@@ -205,7 +163,6 @@ lib.extendMkDerivation rec {
               extension = "tar.gz";
             }
         )
-        // privateAttrs
         // {
           inherit
             name
@@ -244,7 +201,49 @@ lib.extendMkDerivation rec {
 
           url = if finalAttrs.useFetchGit then finalAttrs.gitRepoUrl else finalAttrs.archiveUrl;
 
-          meta = newMeta;
+          # Private attributes
+          netrcPhase =
+            args.netrcPhase or (
+              # When using private repos:
+              # - Fetching with git works using https://github.com but not with the GitHub API endpoint
+              # - Fetching a tarball from a private repo requires to use the GitHub API endpoint
+              nullIfNot finalAttrs.private ''
+                if [ -z "''$${finalAttrs.varBase}USERNAME" -o -z "''$${finalAttrs.varBase}PASSWORD" ]; then
+                  echo "Error: Private ${functionName} requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+                  exit 1
+                fi
+                cat > netrc <<EOF
+                machine $netrcMachineName
+                        login ''$${finalAttrs.varBase}USERNAME
+                        password ''$${finalAttrs.varBase}PASSWORD
+                EOF
+              ''
+            );
+
+          netrcImpureEnvVars =
+            args.netrcImpureEnvVars or (lib.optionals finalAttrs.private [
+              "${finalAttrs.varBase}USERNAME"
+              "${finalAttrs.varBase}PASSWORD"
+            ]);
+
+          meta =
+            meta
+            // {
+              ${if finalAttrs.browsableUrl != null then "homepage" else null} =
+                meta.homepage or finalAttrs.browsableUrl;
+              identifiers = {
+                purlParts = {
+                  type = "generic";
+                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                  spec = "${finalAttrs.repo}?vcs_url=${finalAttrs.gitRepoUrl}@${(lib.revOrTag finalAttrs.revCustom finalAttrs.tag)}";
+                };
+              }
+              // meta.identifiers or { };
+            }
+            // lib.optionalAttrs (position != null) {
+              # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+              position = "${position.file}:${toString position.line}";
+            };
         };
     in
     fetcherArgs // { inherit useFetchGit; };
