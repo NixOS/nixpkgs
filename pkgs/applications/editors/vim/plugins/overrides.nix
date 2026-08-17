@@ -352,13 +352,6 @@ assertNoAdditions {
     };
   });
 
-  bitbake = super.bitbake.overrideAttrs (old: {
-    sourceRoot = "source/contrib/vim";
-    meta = old.meta // {
-      license = lib.licenses.gpl2Only;
-    };
-  });
-
   blink-calc = super.blink-calc.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
