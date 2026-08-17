@@ -423,6 +423,9 @@ nixos/tests/forgejo.nix               @adamcstephens @bendlas @christoph-heiss @
 /pkgs/test/dotnet                           @corngood
 /doc/languages-frameworks/dotnet.section.md @corngood
 
+# Kubernetes
+/nixos/modules/services/cluster/kubernetes @NixOS/kubernetes
+
 # Node.js
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/prefetch-npm-deps      @winterqt
