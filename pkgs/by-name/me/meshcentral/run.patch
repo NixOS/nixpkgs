@@ -1,0 +1,14 @@
+diff --git c/meshcentral.js w/meshcentral.js
+index ea784b4c..62dfd645 100644
+--- c/meshcentral.js
++++ w/meshcentral.js
+@@ -4461,8 +4461,4 @@ function mainStart() {
+     });
+ }
+ 
+-if (require.main === module) {
+-    mainStart(); // Called directly, launch normally.
+-} else {
+-    module.exports.mainStart = mainStart; // Required as a module, useful for winservice.js
+-}
++mainStart(); // Called directly, launch normally.

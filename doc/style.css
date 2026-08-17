@@ -1,0 +1,587 @@
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.book,
+.appendix {
+  margin: auto;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .book,
+  .appendix {
+    max-width: 46rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .book,
+  .appendix {
+    max-width: 60rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .book,
+  .appendix {
+    max-width: 73rem;
+  }
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+pre {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+a {
+  background-color: transparent;
+}
+
+strong {
+  font-weight: bolder;
+}
+
+code {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+pre {
+  overflow: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  line-height: 1.77777778;
+}
+
+@media screen and (min-width: 4000px) {
+  html {
+    background: #000;
+  }
+
+  html body {
+    margin: auto;
+    max-width: 250rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  html {
+    font-size: calc(16 / 320 * 100vw);
+  }
+}
+
+body {
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: var(--main-text-color);
+  background-color: var(--background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 767.9px) {
+  body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /*
+  See: https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+
+  - :popover-open pseudo-class matches a popover element when it is in the showing state
+  - ::backdrop full-screen element placed directly behind popover
+  */
+  nav.toc-sidebar:popover-open {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(20rem, 85vw);
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--background);
+    border: 0;
+    border-right: 0.0625rem solid #d8d8d8;
+    box-shadow: 0 0 1.5rem rgb(0 0 0 / 0.35);
+  }
+
+  nav.toc-sidebar::backdrop {
+    background: rgb(0 0 0 / 0.5);
+  }
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid;
+  color: var(--link-color);
+}
+
+ul {
+  padding: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+thead th {
+  text-align: left;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-weight: 800;
+  line-height: 110%;
+  font-size: 200%;
+  margin-bottom: 1rem;
+  color: var(--heading-color);
+}
+
+h2 {
+  font-weight: 800;
+  line-height: 110%;
+  font-size: 170%;
+  margin-bottom: 0.625rem;
+  color: var(--heading-color);
+}
+
+h2:not(:first-child) {
+  margin-top: 1rem;
+}
+
+h3 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 150%;
+  color: var(--heading-color);
+}
+
+:is(.note, .tip, .warning, .caution, .important) h3 {
+  font-size: 120%;
+}
+
+h4 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 140%;
+  color: var(--heading-color);
+}
+
+h5 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 130%;
+  color: var(--small-heading-color);
+}
+
+h6 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 120%;
+}
+
+strong {
+  font-weight: bold;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt > *:first-child,
+dd > *:first-child {
+  margin-top: 0;
+}
+
+dt > *:last-child,
+dd > *:last-child {
+  margin-bottom: 0;
+}
+
+pre,
+code {
+  font-family: monospace;
+}
+
+code {
+  color: #ff8657;
+  background: #f4f4f4;
+  display: inline-block;
+  padding: 0 0.5rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 0.5rem;
+  line-height: 1.57777778;
+}
+
+div.book .programlisting,
+div.appendix .programlisting {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow: auto;
+  background: var(--codeblock-background);
+  color: var(--codeblock-text-color);
+}
+
+:is(.note, .tip, .warning, .caution, .important) {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  overflow: auto;
+  background: #f4f4f4;
+}
+
+:is(.note, .tip, .warning, .caution, .important) > .title {
+  font-weight: 800;
+  line-height: 110%;
+  color: inherit;
+  margin-bottom: 0;
+}
+
+:is(.note, .tip, .warning, .caution, .important) > :first-child {
+  margin-top: 0;
+}
+
+:is(.note, .tip, .warning, .caution, .important) > :last-child {
+  margin-bottom: 0;
+}
+
+.note {
+  color: var(--note-text-color);
+  background: var(--note-background);
+}
+
+.tip {
+  color: var(--tip-text-color);
+  background: var(--tip-background);
+}
+
+.important {
+  color: var(--important-text-color);
+  background: var(--important-background);
+}
+
+.warning {
+  color: var(--warning-text-color);
+  background: var(--warning-background);
+}
+
+.caution {
+  color: var(--caution-text-color);
+  background: var(--caution-background);
+}
+
+div.book .section,
+div.appendix .section {
+  margin-top: 2em;
+}
+
+div.book div.example,
+div.appendix div.example {
+  margin-top: 1.5em;
+}
+
+div.book div.example details,
+div.appendix div.example details {
+  padding: 5px;
+}
+
+div.book div.example details[open],
+div.appendix div.example details[open] {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+div.book div.example details > summary,
+div.appendix div.example details > summary {
+  cursor: pointer;
+}
+
+div.book br.example-break,
+div.appendix br.example-break {
+  display: none;
+}
+
+div.book div.footnotes > hr,
+div.appendix div.footnotes > hr {
+  border-color: #d8d8d8;
+}
+
+div.book div.footnotes > br,
+div.appendix div.footnotes > br {
+  display: none;
+}
+
+div.book dt,
+div.appendix dt {
+  margin-top: 1em;
+}
+
+div.book code,
+div.appendix code {
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  color: inherit;
+  font-size: 100%;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
+}
+
+div.book span.command,
+div.appendix span.command {
+  font-family: monospace;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
+}
+
+div.book .informaltable th,
+div.book .informaltable td,
+div.appendix .informaltable th,
+div.appendix .informaltable td {
+  padding: 0.5rem;
+}
+
+div.book .variablelist .term,
+div.appendix .variablelist .term {
+  font-weight: 500;
+}
+
+/*
+  This relies on highlight.js applying certain classes on the prompts.
+  For more details, see https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#stylable-scopes
+*/
+.hljs-meta.prompt_ {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:root {
+  --sidebar-width: 20rem;
+  --background: #fff;
+  --main-text-color: #000;
+  --link-color: #405d99;
+  --heading-color: #6586c8;
+  --small-heading-color: #6a6a6a;
+  /* NOTE */
+  --note-text-color: #0065d2;
+  --note-background: #e4f5ff;
+  /* TIP */
+  --tip-text-color: #188000;
+  --tip-background: #e8fae3;
+  /* IMPORTANT */
+  --important-text-color: #8a3db8;
+  --important-background: #fbedff;
+  /* WARNING */
+  --warning-text-color: #aa4a00;
+  --warning-background: #fff0db;
+  /* CAUTION */
+  --caution-text-color: #be222a;
+  --caution-background: #ffebe8;
+  --codeblock-background: #f2f8fd;
+  --codeblock-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #242424;
+    --main-text-color: #fff;
+    --link-color: #6586c8;
+    --small-heading-color: #fff;
+    /* NOTE */
+    --note-text-color: #66c6ff;
+    --note-background: #1e2f44;
+    /* TIP */
+    --tip-text-color: #80e05f;
+    --tip-background: #22331d;
+    /* IMPORTANT */
+    --important-text-color: #ea9dff;
+    --important-background: #35273f;
+    /* WARNING */
+    --warning-text-color: #ffaa00;
+    --warning-background: #3c2a13;
+    /* CAUTION */
+    --caution-text-color: #ff8c84;
+    --caution-background: #422522;
+    --codeblock-background: #393939;
+    --codeblock-text-color: #fff;
+  }
+
+  :is(.note, .tip, .warning, .caution, .important) {
+    border: 2px solid;
+    font-weight: 400;
+  }
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url(Roboto.ttf);
+}
+
+.chapter {
+  content-visibility: auto;
+}
+
+.navheader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--background);
+}
+
+nav.toc-sidebar {
+  height: 100%;
+  padding: 0 1rem 2rem;
+}
+
+/* menu button, shown on mobile, hidden on desktop */
+.toc-toggle {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.75rem 0 0;
+  padding: 0.4rem 0.8rem;
+  border: 0.0625rem solid #d8d8d8;
+  border-radius: 0.25rem;
+  background: var(--background);
+  color: var(--main-text-color);
+  font: inherit;
+  cursor: pointer;
+  position: fixed;
+  top: 0.5rem;
+  left: 0.8rem;
+  z-index: 2;
+}
+
+nav.toc-sidebar .toc {
+  margin-bottom: 0;
+}
+
+nav.toc-sidebar ol.toc,
+nav.toc-sidebar ol.toc ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+nav.toc-sidebar ol.toc ol {
+  padding-left: 1em;
+}
+
+nav.toc-sidebar li {
+  margin: 0;
+}
+
+nav.toc-sidebar summary {
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    height: 100vh;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  body:has(> nav.toc-sidebar) {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
+
+  .navheader {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  nav.toc-sidebar {
+    /* un-pop the drawer */
+    display: block;
+    position: static;
+    inset: auto;
+    /*  */
+    margin: 0;
+    grid-column: 1;
+    grid-row: 2;
+    max-height: none;
+    overflow-y: auto;
+    border: none;
+    border-right: 0.0625rem solid #d8d8d8;
+  }
+
+  /* Hide the toggle button on desktop */
+  .toc-toggle {
+    display: none;
+  }
+
+  main.content {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 0 1rem;
+  }
+
+  body:has(> nav.toc-sidebar) main.content {
+    grid-column: 2;
+  }
+}

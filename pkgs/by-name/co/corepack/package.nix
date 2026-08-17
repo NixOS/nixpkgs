@@ -1,0 +1,109 @@
+{
+  lib,
+  stdenvNoCC,
+  cacert,
+  yarn-berry,
+  nodejs-slim, # no need for npm
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writeScriptBin,
+}:
+
+let
+  nodejs = nodejs-slim;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "corepack";
+  version = "0.35.0";
+
+  src = fetchFromGitHub {
+    owner = "nodejs";
+    repo = "corepack";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VgiQ4k6HiRxemtizItL0zkTDpgTnL0ScfSOfgjMpokI=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
+  ];
+  buildInputs = [
+    nodejs
+  ];
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit nodejs;
+    inherit (finalAttrs)
+      missingHashes
+      src
+      ;
+    hash = "sha256-Q7vUJrFUr8ZbDdaMZq8fnJFfIgEFYkHQiUoo2xILaKo=";
+  };
+
+  postPatch = ''
+    substituteInPlace tests/_runCli.ts --replace-fail 'require.resolve(`../dist/corepack.js`)' "'$out/bin/corepack'"
+    substituteInPlace tests/main.test.ts --replace-fail 'npath.dirname(__dirname)' "'$out'"
+
+    substituteInPlace mkshims.ts --replace-fail './lib/corepack.cjs' '../lib/corepack.cjs'
+    substituteInPlace \
+      sources/corepackUtils.ts \
+      sources/commands/Enable.ts \
+      --replace-fail 'require.resolve(`corepack/package.json`)' "'$out/package.json'"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 dist/lib/corepack.cjs -t $out/lib
+    node -p 'Object.keys(require("./package.json").publishConfig.bin).join("\0")' | while IFS= read -r -d "" binName; do
+      echo "Installing bin/$binName"
+      install -Dm755 "dist/$binName.js" -T "$out/bin/$binName"
+    done
+    mkdir "$out/dist"
+    find dist -maxdepth 1 -name "*.js" -print0 | while IFS= read -r -d "" jsFile; do
+      echo "Installing $jsFile"
+      if [ -f "$out/bin/''${jsFile:5:-3}" ]; then
+        ln -s "$out/bin/''${jsFile:5:-3}" "$out/$jsFile"
+      else
+        install -m755 "$jsFile" -T $out/$jsFile
+      fi
+    done
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [
+    cacert
+    versionCheckHook
+  ];
+  # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
+  preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''
+    # Exclude test files that require internet access.
+    NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
+  '';
+  doInstallCheck = true;
+  # vitest needs to bind to `localhost` during installCheck; allow that in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/nodejs/corepack/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    description = "Package manager version manager for Node.js projects";
+    homepage = "https://github.com/nodejs/corepack";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aduh95 ];
+    mainProgram = "corepack";
+  };
+})

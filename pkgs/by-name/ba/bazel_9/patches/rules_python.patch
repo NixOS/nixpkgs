@@ -1,0 +1,13 @@
+diff --git a/python/private/runtime_env_toolchain.bzl b/python/private/runtime_env_toolchain.bzl
+index de749007..72d14499 100644
+--- a/python/private/runtime_env_toolchain.bzl
++++ b/python/private/runtime_env_toolchain.bzl
+@@ -48,7 +48,7 @@ def define_runtime_env_toolchain(name):
+         name = "_runtime_env_py3_runtime",
+         interpreter = "//python/private:runtime_env_toolchain_interpreter.sh",
+         python_version = "PY3",
+-        stub_shebang = "#!/usr/bin/env python3",
++        stub_shebang = "#!@usrBinEnv@ python3",
+         visibility = ["//visibility:private"],
+         tags = ["manual"],
+         supports_build_time_venv = supports_build_time_venv,

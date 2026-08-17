@@ -1,0 +1,22 @@
+diff --git a/lib_pypy/_sqlite3_build.py b/lib_pypy/_sqlite3_build.py
+index fb03aee..b3b5f39 100644
+--- a/lib_pypy/_sqlite3_build.py
++++ b/lib_pypy/_sqlite3_build.py
+@@ -234,7 +234,7 @@ def _has_load_extension():
+     typedef ... sqlite3;
+     int sqlite3_enable_load_extension(sqlite3 *db, int onoff);
+     """)
+-    libname = 'sqlite3'
++    libname = '@libsqlite@'
+     if sys.platform == 'win32':
+         import os
+         _libname = os.path.join(os.path.dirname(sys.executable), libname)
+@@ -257,6 +257,8 @@ if sys.platform.startswith('freebsd'):
+ else:
+     extra_args = dict(
+         libraries=libraries,
++        include_dirs=['@dev@/include'],
++        library_dirs=['@out@/lib']
+     )
+ 
+ _ffi.set_source("_sqlite3_cffi", "#include <sqlite3.h>", **extra_args)

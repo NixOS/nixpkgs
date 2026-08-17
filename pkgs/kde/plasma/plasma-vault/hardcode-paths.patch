@@ -1,0 +1,61 @@
+diff --git a/kded/engine/backends/cryfs/cryfsbackend.cpp b/kded/engine/backends/cryfs/cryfsbackend.cpp
+index f425eb3..5b8cd43 100644
+--- a/kded/engine/backends/cryfs/cryfsbackend.cpp
++++ b/kded/engine/backends/cryfs/cryfsbackend.cpp
+@@ -207,7 +207,7 @@ QProcess *CryFsBackend::cryfs(const QStringList &arguments) const
+     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
+     KConfigGroup backendConfig(config, "CryfsBackend");
+ 
+-    return process("cryfs", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
++    return process("@cryfs@", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {{"CRYFS_FRONTEND", "noninteractive"}});
+ }
+ 
+ } // namespace PlasmaVault
+diff --git a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
+index 8636e4e..4f4ba0d 100644
+--- a/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
++++ b/kded/engine/backends/gocryptfs/gocryptfsbackend.cpp
+@@ -204,7 +204,7 @@ QProcess *GocryptfsBackend::gocryptfs(const QStringList &arguments) const
+     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
+     KConfigGroup backendConfig(config, "GocryptfsBackend");
+ 
+-    return process("gocryptfs", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {});
++    return process("@gocryptfs@", arguments + backendConfig.readEntry("extraMountOptions", QStringList{}), {});
+ }
+ 
+ QString GocryptfsBackend::getConfigFilePath(const Device &device) const
+diff --git a/kded/engine/vault.cpp b/kded/engine/vault.cpp
+index f488d00..6b76565 100644
+--- a/kded/engine/vault.cpp
++++ b/kded/engine/vault.cpp
+@@ -480,7 +480,7 @@ FutureResult<> Vault::close()
+             } else {
+                 // We want to check whether there is an application
+                 // that is accessing the vault
+-                AsynQt::Process::getOutput(QStringLiteral("lsof"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this, result] {
++                AsynQt::Process::getOutput(QStringLiteral("@lsof@"), {QStringLiteral("-t"), mountPoint().data()}) | cast<QString>() | onError([this, result] {
+                     // no application seems to be accessing the vault, bubble
+                     // through the original unmount error
+                     d->updateMessage(result.error().message());
+@@ -534,7 +534,7 @@ FutureResult<> Vault::forceClose()
+     using namespace AsynQt::operators;
+ 
+     AsynQt::await(
+-        AsynQt::Process::getOutput(QStringLiteral("lsof"), { QStringLiteral("-t"), mountPoint().data() })
++        AsynQt::Process::getOutput(QStringLiteral("@lsof@"), { QStringLiteral("-t"), mountPoint().data() })
+             | cast<QString>()
+             | onError([this] {
+                 d->updateMessage(i18n("Failed to fetch the list of applications using this vault"));
+diff --git a/kded/ui/cryfscypherchooserwidget.cpp b/kded/ui/cryfscypherchooserwidget.cpp
+index bbe76ef..dbd27ac 100644
+--- a/kded/ui/cryfscypherchooserwidget.cpp
++++ b/kded/ui/cryfscypherchooserwidget.cpp
+@@ -39,7 +39,7 @@ void CryfsCypherChooserWidget::initializeCyphers()
+     // TODO: This needs to be prettier -- for modules to be able
+     // to reach their backends directly
+     auto process = new QProcess();
+-    process->setProgram("cryfs");
++    process->setProgram("@cryfs@");
+     process->setArguments({"--show-ciphers"});
+ 
+     auto env = process->processEnvironment();

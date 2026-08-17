@@ -1,0 +1,55 @@
+Disable strict autoconf version check so we can autoreconf in nixpkgs.
+
+diff --git a/config/override.m4 b/config/override.m4
+index 8b954d3cb..60c4cfd12 100644
+--- a/config/override.m4
++++ b/config/override.m4
+@@ -44,7 +44,6 @@ AC_DEFUN([_GCC_AUTOCONF_VERSION_CHECK],
+   [m4_fatal([Please use exactly Autoconf ]_GCC_AUTOCONF_VERSION[ instead of ]m4_defn([m4_PACKAGE_VERSION])[.])])
+ ])
+ m4_define([AC_INIT], m4_defn([AC_INIT])[
+-_GCC_AUTOCONF_VERSION_CHECK
+ ])
+ 
+ 
+
+This is needed for target linking to find e.g. crt0.o.
+diff --git a/configure.ac b/configure.ac
+index 05ddf6987..f5bbd5c72 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3166,7 +3166,7 @@ case " $target_configdirs " in
+   *" --with-newlib "*)
+    case "$target" in
+     *-cygwin*)
+-      FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -L$$r/$(TARGET_SUBDIR)/winsup/cygwin -isystem $$s/winsup/cygwin/include'
++      FLAGS_FOR_TARGET=$FLAGS_FOR_TARGET' -B$$r/$(TARGET_SUBDIR)/winsup/cygwin -isystem $$s/winsup/cygwin/include'
+       ;;
+    esac
+ 
+
+Autoconf clears EXEEXT= in cross, which breaks installation of utils/cygserver.
+
+AC_CHECK_LIB is disabled in cross after AC_NO_EXECUTABLES.
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index e7ac814b1..14b56e130 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -40,6 +40,8 @@ AM_PROG_AS
+ AC_LANG(C)
+ AC_LANG(C++)
+ 
++EXEEXT=.exe
++
+ AC_ARG_WITH([cross-bootstrap],[AS_HELP_STRING([--with-cross-bootstrap],[do not build programs using the MinGW toolchain or check for MinGW libraries (useful for bootstrapping a cross-compiler)])],[],[with_cross_bootstrap=no])
+ 
+ AC_CYGWIN_INCLUDES
+@@ -135,8 +137,6 @@ AM_CONDITIONAL(BUILD_DUMPER, [test "x$build_dumper" = "xyes"])
+ # libbfd.a doesn't have a pkgconfig file, so we guess what it's dependencies
+ # are, based on what's present in the build environment
+ BFD_LIBS="-lintl -liconv -liberty -lz"
+-AC_CHECK_LIB([sframe], [sframe_decode], [BFD_LIBS="${BFD_LIBS} -lsframe"])
+-AC_CHECK_LIB([zstd], [ZSTD_isError], [BFD_LIBS="${BFD_LIBS} -lzstd"])
+ AC_SUBST([BFD_LIBS])
+ 
+ AC_CONFIG_FILES([

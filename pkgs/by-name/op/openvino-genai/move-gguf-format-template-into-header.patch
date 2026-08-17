@@ -1,0 +1,37 @@
+--- a/src/cpp/src/gguf_utils/gguf.hpp
++++ b/src/cpp/src/gguf_utils/gguf.hpp
+@@ -28,7 +28,12 @@
+                             std::unordered_map<std::string, gguf_tensor_type>>;
+ 
+ template <typename... Args>
+-std::string format(std::string fmt, Args... args);
++std::string format(std::string fmt, Args... args) {
++    char buf[1000];
++    int n = snprintf(buf, sizeof(buf), fmt.c_str(), args...);
++    assert(n >= 0 && n < static_cast<int>(sizeof(buf)));
++    return std::string(buf);
++}
+ 
+ ov::Shape get_shape(const gguf_tensor& tensor);
+ 
+--- a/src/cpp/src/gguf_utils/gguf.cpp
++++ b/src/cpp/src/gguf_utils/gguf.cpp
+@@ -13,18 +13,6 @@
+ // https://github.com/antirez/gguf-tools/blob/af7d88d808a7608a33723fba067036202910acb3/gguflib.h#L102-L108
+ constexpr int gguf_array_header_size = 12;
+ 
+-template <typename... Args>
+-std::string format(std::string fmt, Args... args) {
+-    size_t bufferSize = 1000;
+-    char* buffer = new char[bufferSize];
+-    int n = sprintf(buffer, fmt.c_str(), args...);
+-    assert(n >= 0 && n < (int)bufferSize - 1);
+-
+-    std::string fmtStr(buffer);
+-    delete[] buffer;
+-    return fmtStr;
+-}
+-
+ std::optional<uint32_t> dtype_to_gguf_tensor_type(const ov::element::Type& dtype) {
+     switch (dtype) {
+     case ov::element::f64:

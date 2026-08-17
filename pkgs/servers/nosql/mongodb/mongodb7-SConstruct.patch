@@ -1,0 +1,38 @@
+diff --git a/SConstruct b/SConstruct
+index 4ec07a36a51..0010dcb6d27 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -3535,33 +3535,6 @@ def doConfigure(myenv):
+         myenv.AddMethod(
+             functools.partial(var_func, var=var, func=CheckFlag), f"Check{var}Supported")
+ 
+-    if myenv.ToolchainIs('gcc', 'clang'):
+-        # This tells clang/gcc to use the gold linker if it is available - we prefer the gold linker
+-        # because it is much faster. Don't use it if the user has already configured another linker
+-        # selection manually.
+-        if any(flag.startswith('-fuse-ld=') for flag in env['LINKFLAGS']):
+-            myenv.FatalError(
+-                f"Use the '--linker' option instead of modifying the LINKFLAGS directly.")
+-
+-        linker_ld = get_option('linker')
+-        if linker_ld == 'auto':
+-            if not env.TargetOSIs('darwin', 'macOS'):
+-                if not myenv.AddToLINKFLAGSIfSupported('-fuse-ld=lld'):
+-                    myenv.FatalError(
+-                        f"The recommended linker 'lld' is not supported with the current compiler configuration, you can try the 'gold' linker with '--linker=gold'."
+-                    )
+-        elif link_model.startswith("dynamic") and linker_ld == 'bfd':
+-            # BFD is not supported due to issues with it causing warnings from some of
+-            # the third party libraries that mongodb is linked with:
+-            # https://jira.mongodb.org/browse/SERVER-49465
+-            myenv.FatalError(f"Linker {linker_ld} is not supported with dynamic link model builds.")
+-        else:
+-            if not myenv.AddToLINKFLAGSIfSupported(f'-fuse-ld={linker_ld}'):
+-                myenv.FatalError(f"Linker {linker_ld} could not be configured.")
+-
+-        if has_option('gcov') and myenv.AddToCCFLAGSIfSupported('-fprofile-update=single'):
+-            myenv.AppendUnique(LINKFLAGS=['-fprofile-update=single'])
+-
+     detectCompiler = Configure(
+         myenv,
+         help=False,

@@ -1,0 +1,80 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  ninja,
+  pkg-config,
+  zlib,
+  xz,
+  bzip2,
+  zchunk,
+  zstd,
+  expat,
+  withRpm ? !stdenv.hostPlatform.isDarwin,
+  rpm,
+  db,
+  withConda ? true,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.7.37";
+  pname = "libsolv";
+
+  src = fetchFromGitHub {
+    owner = "openSUSE";
+    repo = "libsolv";
+    rev = finalAttrs.version;
+    hash = "sha256-hiumMnTJ3eP+acH2V0eNTM71Fw//IWQPechCA0+kH1s=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-9149";
+      url = "https://github.com/openSUSE/libsolv/commit/210386037c892a720972ad35a3d8f7073b4d763b.patch";
+      hash = "sha256-ju3xn78UGMR5usq1e1ovFTWnKW1TPDA77sNGx8yc8Z8=";
+    })
+  ];
+
+  cmakeFlags = [
+    "-DENABLE_COMPLEX_DEPS=true"
+    (lib.cmakeBool "ENABLE_CONDA" withConda)
+    "-DENABLE_LZMA_COMPRESSION=true"
+    "-DENABLE_BZIP2_COMPRESSION=true"
+    "-DENABLE_ZSTD_COMPRESSION=true"
+    "-DENABLE_ZCHUNK_COMPRESSION=true"
+    "-DWITH_SYSTEM_ZCHUNK=true"
+  ]
+  ++ lib.optionals withRpm [
+    "-DENABLE_COMPS=true"
+    "-DENABLE_PUBKEY=true"
+    "-DENABLE_RPMDB=true"
+    "-DENABLE_RPMDB_BYRPMHEADER=true"
+    "-DENABLE_RPMMD=true"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    zlib
+    xz
+    bzip2
+    zchunk
+    zstd
+    expat
+    db
+  ]
+  ++ lib.optional withRpm rpm;
+
+  meta = {
+    description = "Free package dependency solver";
+    homepage = "https://github.com/openSUSE/libsolv";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ ];
+  };
+})

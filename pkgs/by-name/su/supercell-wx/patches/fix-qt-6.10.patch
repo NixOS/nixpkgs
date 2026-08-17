@@ -1,0 +1,13 @@
+diff --git a/external/qt6ct.cmake b/external/qt6ct.cmake
+index 665b5368..9e6ed0e9 100644
+--- a/external/qt6ct.cmake
++++ b/external/qt6ct.cmake
+@@ -5,7 +5,7 @@ find_package(QT NAMES Qt6
+              COMPONENTS Gui Widgets
+              REQUIRED)
+ find_package(Qt${QT_VERSION_MAJOR}
+-             COMPONENTS Gui Widgets
++             COMPONENTS Gui Widgets WidgetsPrivate
+              REQUIRED)
+ 
+ #extract version from qt6ct.h

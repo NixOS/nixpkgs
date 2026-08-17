@@ -1,0 +1,12 @@
+diff -Naur source-old/bqn.js source-new/bqn.js
+--- source-old/bqn.js	1969-12-31 21:00:01.000000000 -0300
++++ source-new/bqn.js	2021-10-03 01:28:00.268998916 -0300
+@@ -4,7 +4,7 @@
+ let path = require('path');
+ let fs = require('fs');
+ 
+-let bqn = require("./docs/bqn.js");
++let bqn = require("@libbqn@");
+ module.exports = bqn;
+ let {fmt,fmtErr,sysvals,sysargs,makebqn,makerepl}=bqn;
+ let {has,list,str,unstr,dynsys,req1str,makens}=bqn.util;

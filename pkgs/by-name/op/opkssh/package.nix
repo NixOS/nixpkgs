@@ -1,0 +1,41 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "opkssh";
+  version = "0.15.0";
+
+  src = fetchFromGitHub {
+    owner = "openpubkey";
+    repo = "opkssh";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-COACiBNXHEpzZyGGYmz0uj0ubzYJFRabAEku2qOjLcg=";
+  };
+
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  vendorHash = "sha256-aRWu4yB83hBKtW78MVMg7l8iSzHdLgnYgskgt32tiLw=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    homepage = "https://github.com/openpubkey/opkssh";
+    description = "Enables SSH to be used with OpenID Connect";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      johnrichardrinehart
+      sarcasticadmin
+    ];
+    mainProgram = "opkssh";
+  };
+})

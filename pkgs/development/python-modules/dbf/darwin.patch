@@ -1,0 +1,12 @@
+diff --git a/dbf/test.py b/dbf/test.py
+index 117f611..34a9507 100755
+--- a/dbf/test.py
++++ b/dbf/test.py
+@@ -4814,6 +4814,7 @@ def test_index_search(self):
+         self.assertEqual(sorted.index_search('jul', partial=True), 9)
+         self.assertTrue(sorted.index_search('jul', partial=True))
+ 
++    @unittest.skipIf(sys.platform == 'darwin', 'fails on case-insensitive filesystems')
+     def test_mismatched_extensions(self):
+         old_memo_name = self.dbf_table._meta.memoname
+         new_memo_name = old_memo_name[:-3] + 'Dbt'

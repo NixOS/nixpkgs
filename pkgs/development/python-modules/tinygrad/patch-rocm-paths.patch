@@ -1,0 +1,68 @@
+diff --git a/tinygrad/runtime/autogen/comgr.py b/tinygrad/runtime/autogen/comgr.py
+index 9c642cef2..b42c7c9c8 100644
+--- a/tinygrad/runtime/autogen/comgr.py
++++ b/tinygrad/runtime/autogen/comgr.py
+@@ -2,7 +2,7 @@
+ import ctypes
+ from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+ import os
+-dll = DLL('comgr', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamd_comgr.so', 'amd_comgr'])
++dll = DLL('comgr', '@comgr@/lib/libamd_comgr.so')
+ amd_comgr_status_s = CEnum(ctypes.c_uint32)
+ AMD_COMGR_STATUS_SUCCESS = amd_comgr_status_s.define('AMD_COMGR_STATUS_SUCCESS', 0)
+ AMD_COMGR_STATUS_ERROR = amd_comgr_status_s.define('AMD_COMGR_STATUS_ERROR', 1)
+diff --git a/tinygrad/runtime/autogen/hip.py b/tinygrad/runtime/autogen/hip.py
+index 1cccb1e1f..d57a4d90a 100644
+--- a/tinygrad/runtime/autogen/hip.py
++++ b/tinygrad/runtime/autogen/hip.py
+@@ -2,7 +2,7 @@
+ import ctypes
+ from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+ import os
+-dll = DLL('hip', os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libamdhip64.so')
++dll = DLL('hip', '@clr@/lib/libamdhip64.so')
+ hipError_t = CEnum(ctypes.c_uint32)
+ hipSuccess = hipError_t.define('hipSuccess', 0)
+ hipErrorInvalidValue = hipError_t.define('hipErrorInvalidValue', 1)
+diff --git a/tinygrad/runtime/autogen/hsa.py b/tinygrad/runtime/autogen/hsa.py
+index 16e568e21..9788d3705 100644
+--- a/tinygrad/runtime/autogen/hsa.py
++++ b/tinygrad/runtime/autogen/hsa.py
+@@ -2,7 +2,7 @@
+ import ctypes
+ from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+ import os
+-dll = DLL('hsa', [os.getenv('ROCM_PATH', '/opt/rocm')+'/lib/libhsa-runtime64.so', 'hsa-runtime64'])
++dll = DLL('hsa', '@rocm-runtime@/lib/libhsa-runtime64.so')
+ enum_SQ_RSRC_BUF_TYPE = CEnum(ctypes.c_uint32)
+ SQ_RSRC_BUF = enum_SQ_RSRC_BUF_TYPE.define('SQ_RSRC_BUF', 0)
+ SQ_RSRC_BUF_RSVD_1 = enum_SQ_RSRC_BUF_TYPE.define('SQ_RSRC_BUF_RSVD_1', 1)
+diff --git a/tinygrad/runtime/support/compiler_amd.py b/tinygrad/runtime/support/compiler_amd.py
+index e97aaefcd..ef55838a3 100644
+--- a/tinygrad/runtime/support/compiler_amd.py
++++ b/tinygrad/runtime/support/compiler_amd.py
+@@ -13,9 +13,9 @@ from tinygrad.runtime.support.compiler_cpu import LLVMCompiler
+ from tinygrad.helpers import OSX, to_char_p_p
+ 
+ def _find_llvm_objdump():
+-  if OSX: return '/opt/homebrew/opt/llvm/bin/llvm-objdump'
++  if OSX: return '@llvm-objdump@'
+   # Try ROCm path first, then versioned, then unversioned
+-  for p in ['/opt/rocm/llvm/bin/llvm-objdump', 'llvm-objdump-21', 'llvm-objdump-20', 'llvm-objdump']:
++  for p in ['@rocm-llvm-objdump@', '@llvm-objdump@']:
+     if shutil.which(p): return p
+   raise FileNotFoundError("llvm-objdump not found")
+ 
+@@ -107,9 +107,9 @@ class HIPCCCompiler(Compiler):
+         srcf.write(src.encode())
+         srcf.flush()
+ 
+-        subprocess.run(["hipcc", "-c", "-emit-llvm", "--cuda-device-only", "-O3", "-mcumode",
+-                        f"--offload-arch={self.arch}", "-I/opt/rocm/include/hip", "-o", bcf.name, srcf.name] + self.extra_options, check=True)
+-        subprocess.run(["hipcc", "-target", "amdgcn-amd-amdhsa", f"-mcpu={self.arch}",
++        subprocess.run(["@hipcc@", "-c", "-emit-llvm", "--cuda-device-only", "-O3", "-mcumode",
++                        f"--offload-arch={self.arch}", "-I@clr@/include/hip", "-o", bcf.name, srcf.name] + self.extra_options, check=True)
++        subprocess.run(["@hipcc@", "-target", "amdgcn-amd-amdhsa", f"-mcpu={self.arch}",
+                         "-O3", "-mllvm", "-amdgpu-internalize-symbols", "-c", "-o", libf.name, bcf.name] + self.extra_options, check=True)
+ 
+         return pathlib.Path(libf.name).read_bytes()

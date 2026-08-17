@@ -1,0 +1,22 @@
+{
+  "version": "0.1.112",
+  "tag": "box-cli-v0.1.112-ascii-prod1",
+  "platforms": {
+    "x86_64-linux": {
+      "filename": "box-linux-x64",
+      "hash": "sha256-DWQNenz/pmFVH5QM554lBk6+RwgOCjCBe7p+ZkHADTI="
+    },
+    "aarch64-linux": {
+      "filename": "box-linux-arm64",
+      "hash": "sha256-V2Sk6C1ZTRWlYQ2bVQTvK6PU8BkBPkmJMjUAo2Ul6+Q="
+    },
+    "x86_64-darwin": {
+      "filename": "box-darwin-x64",
+      "hash": "sha256-QI+ecq0O4dkKqdIvkONcYdXsS+EQLFIU35ulKGNSCRE="
+    },
+    "aarch64-darwin": {
+      "filename": "box-darwin-arm64",
+      "hash": "sha256-cyjMUGkWfNOggvtBfVqCijmcAj0P2SuFQORwg9EWbn0="
+    }
+  }
+}

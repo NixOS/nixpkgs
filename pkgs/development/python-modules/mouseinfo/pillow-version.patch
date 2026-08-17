@@ -1,0 +1,20 @@
+diff --git a/setup.py b/setup.py
+index 894fe78..ac580a6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -33,14 +33,7 @@ setup(
+     install_requires=['rubicon-objc;platform_system=="Darwin"',
+                       'python-Xlib;platform_system=="Linux"',
+                       'pyperclip',
+-                      'Pillow >= 6.2.1; python_version == "3.8"',
+-                      'Pillow >= 5.2.0; python_version == "3.7"',
+-                      'Pillow >= 4.0.0; python_version == "3.6"',
+-                      'Pillow >= 3.2.0; python_version == "3.5"',
+-                      'Pillow <= 5.4.1, >= 2.5.0; python_version == "3.4"',
+-                      'Pillow <= 4.3.0, >= 2.0.0; python_version == "3.3"',
+-                      'Pillow <= 3.4.2, >= 2.0.0; python_version == "3.2"',
+-                      'Pillow >= 2.0.0; python_version == "2.7"',
++                      'Pillow',
+                       ],
+     keywords='',
+     classifiers=[

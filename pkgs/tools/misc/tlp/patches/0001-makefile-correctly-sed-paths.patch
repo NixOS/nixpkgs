@@ -1,0 +1,54 @@
+From 6500d02a70572f94e7b7df4d70b391ac27ac8bcb Mon Sep 17 00:00:00 2001
+From: Bernardo Meurer <bernardo@meurer.org>
+Date: Fri, 15 Oct 2021 23:22:50 -0700
+Subject: [PATCH 1/2] makefile: correctly sed paths
+
+The default Makefile for tlp makes a mess with catenating `DESTDIR` to
+everything, but then not actualy using the catenated (_ prefixed)
+variables to sed it's `.in` files.
+
+This patch makes sure that it correctly sets the paths, taking `DESTDIR`
+in account where it makes sense (e.g. /bin where we want $out/bin) but
+not where it doesn't (/etc/tlp.conf should be just that).
+
+The reason DESTDIR is used at all, as opposed to the more appropriate
+PREFIX, is covered in the nix formula, and is (also) due to the Makefile
+being a bit "different."
+---
+ Makefile | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 41eb38d..df3abb7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -57,17 +57,17 @@ _VAR     = $(DESTDIR)$(TLP_VAR)
+ 
+ SED = sed \
+ 	-e "s|@TLPVER@|$(TLPVER)|g" \
+-	-e "s|@TLP_SBIN@|$(TLP_SBIN)|g" \
+-	-e "s|@TLP_TLIB@|$(TLP_TLIB)|g" \
+-	-e "s|@TLP_FLIB@|$(TLP_FLIB)|g" \
+-	-e "s|@TLP_ULIB@|$(TLP_ULIB)|g" \
+-	-e "s|@TLP_BATD@|$(TLP_BATD)|g" \
++	-e "s|@TLP_SBIN@|$(_SBIN)|g" \
++	-e "s|@TLP_TLIB@|$(_TLIB)|g" \
++	-e "s|@TLP_FLIB@|$(_FLIB)|g" \
++	-e "s|@TLP_ULIB@|$(_ULIB)|g" \
++	-e "s|@TLP_BATD@|$(_BATD)|g" \
+ 	-e "s|@TLP_CONFUSR@|$(TLP_CONFUSR)|g" \
+ 	-e "s|@TLP_CONFDIR@|$(TLP_CONFDIR)|g" \
+-	-e "s|@TLP_CONFDEF@|$(TLP_CONFDEF)|g" \
+-	-e "s|@TLP_CONFREN@|$(TLP_CONFREN)|g" \
+-	-e "s|@TLP_CONFDPR@|$(TLP_CONFDPR)|g" \
+-	-e "s|@TLP_CONF@|$(TLP_CONF)|g" \
++	-e "s|@TLP_CONFDEF@|$(_CONFDEF)|g" \
++	-e "s|@TLP_CONFREN@|$(_CONFREN)|g" \
++	-e "s|@TLP_CONFDPR@|$(_CONFDPR)|g" \
++	-e "s|@TLP_CONF@|$(_CONF)|g" \
+ 	-e "s|@TLP_RUN@|$(TLP_RUN)|g"   \
+ 	-e "s|@TLP_VAR@|$(TLP_VAR)|g"
+ 
+-- 
+2.44.1
+
