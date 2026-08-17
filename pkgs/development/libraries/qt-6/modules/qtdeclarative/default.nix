@@ -57,6 +57,15 @@ qtModule {
       url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.diff";
       hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
     })
+
+    # backport fix for a QV4 heap corruption crash on JS objects with
+    # add/delete/re-add property churn (QTBUG-147153); crashes e.g.
+    # quickshell-based shells like noctalia-shell
+    # https://bugreports.qt.io/browse/QTBUG-147153
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/624e90bb5e89837d4b759b43e2120b059d98a41e.diff";
+      hash = "sha256-7duTYpHZusVNDMlkm19dCppEWBejjTbc0sy3QvJG65s=";
+    })
   ];
 
   cmakeFlags = [
