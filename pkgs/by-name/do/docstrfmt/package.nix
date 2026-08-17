@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "docstrfmt";
   version = "2.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   build-system = [
-    python3.pkgs.flit-core
+    python3Packages.flit-core
   ];
 
   pythonRelaxDeps = [
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "types-docutils"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     black
     click
     coverage
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     types-docutils
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-aiohttp
   ];
