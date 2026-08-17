@@ -7,13 +7,13 @@
 
 mkDerivation {
   pname = "fffuu";
-  version = "unstable-2018-05-26";
+  version = "0.1.0.0-unstable-2018-05-26";
 
   src = fetchFromGitHub {
     owner = "diekmann";
     repo = "Iptables_Semantics";
     rev = "e0a2516bd885708fce875023b474ae341cbdee29";
-    sha256 = "1qc7p44dqja6qrjbjdc2xn7n9v41j5v59sgjnxjj5k0mxp58y1ch";
+    hash = "sha256-kAWPyu0VzCJlt/LpVHaRgexkj+2CNblkxkZJ3Ai5h+E=";
   };
 
   postUnpack = ''
