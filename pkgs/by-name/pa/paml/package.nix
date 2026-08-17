@@ -6,19 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paml";
-  version = "4.10.7";
+  version = "4.10.10";
 
   src = fetchFromGitHub {
     owner = "abacus-gene";
     repo = "paml";
-    tag = finalAttrs.version;
-    hash = "sha256-P/oHaLxoQzjFuvmHyRdShHv1ayruy6O/I9w8aTyya2s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e93ldPcYpxtgei9+qPNxmhHkwwjpbywkQJklx+dsONM=";
   };
-
-  patches = [
-    # https://github.com/abacus-gene/paml/pull/78
-    ./fix-ProcessNodeAnnotation-declaration.patch
-  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_POSIX_C_SOURCE";
 
