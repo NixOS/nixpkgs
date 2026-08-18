@@ -35,7 +35,7 @@ let
     enableAutologin:
     "${gettyCfg.loginProgram} ${baseLoginOptions}${lib.optionalString enableAutologin " -f -- ${gettyCfg.autologinUser}"}";
 
-  loginScript = pkgs.writers.writeDash "kmscon-login" (
+  loginScript = pkgs.writers.writeBash "kmscon-login" (
     lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
       kms_tty=
       active_tty_file=/sys/class/tty/tty0/active
