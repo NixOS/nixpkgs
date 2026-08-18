@@ -8,7 +8,8 @@
   vars = {
     prompts.example.description = "Your name";
 
-    generators.example = {
+    generators."different attribute name" = {
+      name = "example"; # This should be used instead!
       prompts = [ "example" ];
       files.example = { };
       script =
