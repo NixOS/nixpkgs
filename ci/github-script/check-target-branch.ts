@@ -40,6 +40,89 @@ type ChangedPaths = {
   rebuildsByPlatform: Record<string, string[]>
 }
 
+type TargetBranchReviewFacts = {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  core: typeof actionsCore
+  dry: boolean
+  base: string
+  maxRebuildCount: number
+}
+
+async function postMassRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  const desiredBranch =
+    base === 'master' ? 'staging' : `staging-${split(base).version}`
+  const body = [
+    `The PR's base branch is set to \`${base}\`, but this PR causes ${maxRebuildCount} rebuilds.`,
+    'It is therefore considered a mass rebuild.',
+    `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${desiredBranch}\`).`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
+async function postNixosRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  let branchText: string
+  if (base === 'master' && maxRebuildCount >= 500) {
+    branchText = '(probably either `staging-nixos` or `staging`)'
+  } else if (base === 'master') {
+    branchText = '(probably `staging-nixos`)'
+  } else if (maxRebuildCount >= 500) {
+    branchText = `(probably either \`staging-nixos-${split(base).version}\` or \`staging-${split(base).version}\`)`
+  } else {
+    branchText = `(probably \`staging-nixos-${split(base).version}\`)`
+  }
+  const body = [
+    `The PR's base branch is set to \`${base}\`, but this PR rebuilds all NixOS tests.`,
+    base === 'master' && maxRebuildCount >= 500
+      ? `Since this PR also causes ${maxRebuildCount} rebuilds, it may also be considered a mass rebuild.`
+      : '',
+    `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) ${branchText}.`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
+async function postPossibleMassRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  const stagingBranch =
+    base === 'master' ? 'staging' : `staging-${split(base).version}`
+  const body = [
+    `The PR's base branch is set to \`${base}\`, and this PR causes ${maxRebuildCount} rebuilds.`,
+    `Please consider whether this PR causes a mass rebuild according to [our conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions).`,
+    `If it does cause a mass rebuild, please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${stagingBranch}\`).`,
+    `If it does not cause a mass rebuild, this message can be ignored.`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
 async function checkTargetBranch({
   github,
   context,
@@ -142,79 +225,29 @@ async function checkTargetBranch({
     ].join('\n'),
   )
 
+  const reviewFacts: TargetBranchReviewFacts = {
+    github,
+    context,
+    core,
+    dry,
+    base,
+    maxRebuildCount,
+  }
+
   if (
     maxRebuildCount >= 1000 &&
     !isExemptHomeAssistantUpdate &&
     !isExemptKernelUpdate
   ) {
-    const desiredBranch =
-      base === 'master' ? 'staging' : `staging-${split(base).version}`
-    const body = [
-      `The PR's base branch is set to \`${base}\`, but this PR causes ${maxRebuildCount} rebuilds.`,
-      'It is therefore considered a mass rebuild.',
-      `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${desiredBranch}\`).`,
-    ].join('\n')
-
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
+    await postMassRebuildReview(reviewFacts)
   } else if (rebuildsAllTests && !isExemptKernelUpdate) {
-    let branchText: string
-    if (base === 'master' && maxRebuildCount >= 500) {
-      branchText = '(probably either `staging-nixos` or `staging`)'
-    } else if (base === 'master') {
-      branchText = '(probably `staging-nixos`)'
-    } else if (maxRebuildCount >= 500) {
-      branchText = `(probably either \`staging-nixos-${split(base).version}\` or \`staging-${split(base).version}\`)`
-    } else {
-      branchText = `(probably \`staging-nixos-${split(base).version}\`)`
-    }
-    const body = [
-      `The PR's base branch is set to \`${base}\`, but this PR rebuilds all NixOS tests.`,
-      base === 'master' && maxRebuildCount >= 500
-        ? `Since this PR also causes ${maxRebuildCount} rebuilds, it may also be considered a mass rebuild.`
-        : '',
-      `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) ${branchText}.`,
-    ].join('\n')
-
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
+    await postNixosRebuildReview(reviewFacts)
   } else if (
     maxRebuildCount >= 500 &&
     !isExemptKernelUpdate &&
     !isExemptHomeAssistantUpdate
   ) {
-    const stagingBranch =
-      base === 'master' ? 'staging' : `staging-${split(base).version}`
-    const body = [
-      `The PR's base branch is set to \`${base}\`, and this PR causes ${maxRebuildCount} rebuilds.`,
-      `Please consider whether this PR causes a mass rebuild according to [our conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions).`,
-      `If it does cause a mass rebuild, please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${stagingBranch}\`).`,
-      `If it does not cause a mass rebuild, this message can be ignored.`,
-    ].join('\n')
-
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
+    await postPossibleMassRebuildReview(reviewFacts)
   } else {
     core.info('checkTargetBranch: this PR is against an appropriate branch.')
 
