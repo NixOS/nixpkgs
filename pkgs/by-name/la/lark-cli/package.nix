@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lark-cli";
-  version = "1.0.58";
+  version = "1.0.88";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "larksuite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MqaxcmzX/79vM2EI8wD4ZAFsUfqWvPAovlpmuDP1IWU=";
+    hash = "sha256-MRaFOq+0+ieNPG23ncYot/kp5hyWER7bX95I+trLHbw=";
   };
 
-  vendorHash = "sha256-M0/Y62Y+M/P1B/YIDjX5bEyB/GKihCWQakTWVd7zvBg=";
+  vendorHash = "sha256-WClES7ilNmQ0018Qf13tNHouE/SIwh99MaewZ7VGQ2E=";
 
   subPackages = [ "." ];
 
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     pname = "meta_data.json";
     inherit (finalAttrs) version;
     url = "https://open.feishu.cn/api/tools/open/api_definition?protocol=meta&client_version=v${finalAttrs.version}";
-    hash = "sha256-ihPrq/VzFIBnlrKxE2762NpQZzBRk7ylM3Mvg0iJfCE=";
+    hash = "sha256-JEt2n3mcTNMuZf81c9VyoruABrgXVz5u6SxHg+lTWDI=";
     postFetch = ''
       ${lib.getExe jq} -S ".data" "$out" > normalized
       mv normalized "$out"
