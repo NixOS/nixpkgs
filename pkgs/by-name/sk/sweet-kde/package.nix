@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation {
     description = "Sweet plasma style theme";
     homepage = "https://github.com/EliverLara/Sweet-kde";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.raducu42 ];
+    maintainers = [ lib.maintainers.raducu427 ];
     platforms = lib.platforms.all;
   };
 }
