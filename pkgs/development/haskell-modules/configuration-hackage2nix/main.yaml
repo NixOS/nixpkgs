@@ -225,9 +225,6 @@ package-maintainers:
     - located-base
   iblech:
     - Agda
-  ivanbrennan:
-    - xmonad
-    - xmonad-contrib
   jb55:
     # - bson-lens
     - cased
