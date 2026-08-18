@@ -128,6 +128,15 @@
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
   ],
+  "module-services-pterodactyl-panel": [
+    "index.html#module-services-pterodactyl-panel"
+  ],
+  "module-services-pterodactyl-panel-basic-usage": [
+    "index.html#module-services-pterodactyl-panel-basic-usage"
+  ],
+  "module-services-pterodactyl-panel-cli": [
+    "index.html#module-services-pterodactyl-panel-cli"
+  ],
   "module-services-rnsd": [
     "index.html#module-services-rnsd"
   ],
