@@ -1513,6 +1513,10 @@ let
 
         ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
+        ocaml-solo5 = callPackage ../development/ocaml-modules/ocaml-solo5 {
+          inherit (pkgs) opam solo5;
+        };
+
         ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
