@@ -9,42 +9,47 @@
   setuptools-scm,
 
   # dependencies
-  msgpack,
+  numpy,
   ruamel-yaml,
 
   # optional-dependencies
-  coverage,
+  invoke,
+  ipython,
+  msgpack,
+  mypy,
+  myst-parser,
+  orjson,
+  pandas,
+  pint,
+  pydantic,
   pymongo,
   pytest,
   pytest-cov,
-  types-requests,
+  requests,
+  roman-numerals,
+  ruff,
   sphinx,
+  sphinx-markdown-builder,
   sphinx-rtd-theme,
-  orjson,
-  pandas,
-  pydantic,
-  pint,
   torch,
   tqdm,
-  invoke,
-  requests,
+  uv,
 
   # tests
-  ipython,
-  numpy,
   pytestCheckHook,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2025.3.3";
+  version = "2026.7.16";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "materialsvirtuallab";
+    owner = "materialyzeai";
     repo = "monty";
     tag = "v${version}";
-    hash = "sha256-3UoACKJtPm2BrkJP8z7BFrh3baRyL/S3VwCG3K8AQn0=";
+    hash = "sha256-x5FNw7E3rtrgCWVhMsBpnO+uwu+mB3ELNFdd33+uFds=";
   };
 
   build-system = [
@@ -53,53 +58,47 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    msgpack
+    numpy
     ruamel-yaml
   ];
 
   optional-dependencies = rec {
     ci = [
-      coverage
-      pymongo
+      mypy
       pytest
       pytest-cov
-      types-requests
+      ruff
+      uv
     ]
     ++ optional;
     dev = [ ipython ];
     docs = [
       sphinx
       sphinx-rtd-theme
+      requests
+      invoke
+      myst-parser
+      sphinx-markdown-builder
+      roman-numerals
     ];
     json = [
       orjson
       pandas
+      pint
       pydantic
       pymongo
-    ]
-    ++ lib.optionals (pythonOlder "3.13") [
-      pint
       torch
     ];
     multiprocessing = [ tqdm ];
     optional = dev ++ json ++ multiprocessing ++ serialization;
     serialization = [ msgpack ];
-    task = [
-      invoke
-      requests
-    ];
   };
 
   nativeCheckInputs = [
-    ipython
-    numpy
-    pandas
-    pydantic
-    pymongo
     pytestCheckHook
-    torch
-    tqdm
-  ];
+    pytest-benchmark
+  ]
+  ++ optional-dependencies.optional;
 
   pythonImportsCheck = [ "monty" ];
 
@@ -110,8 +109,8 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = "https://github.com/materialsvirtuallab/monty";
-    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/${src.tag}";
+    homepage = "https://github.com/materialyzeai/monty";
+    changelog = "https://github.com/materialyzeai/monty/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
