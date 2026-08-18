@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptolyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9RuboCWHEqw4aFfQTjWly/UP9Yed0R+VdMLVXxdBmc=";
+    hash = "sha256-v+himg/DOBlIRiWBIGkxiahT3JGp384Ed4cUCIq6TOw=";
   };
 
   patches = [
