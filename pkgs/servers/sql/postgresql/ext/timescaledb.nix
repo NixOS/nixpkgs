@@ -105,7 +105,7 @@ postgresqlBuildExtension (finalAttrs: {
       lib.versionOlder postgresql.version "16"
       ||
         # Check after next package update.
-        lib.warnIf (finalAttrs.version != "2.29.1") "Is postgresql19Packages.timescaledb still broken?" (
+        lib.warnIf (finalAttrs.version != "2.29.2") "Is postgresql19Packages.timescaledb still broken?" (
           lib.versionAtLeast postgresql.version "19"
         );
   };
