@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       hustlerone
+      samiser
     ];
     platforms = lib.platforms.linux;
   };
