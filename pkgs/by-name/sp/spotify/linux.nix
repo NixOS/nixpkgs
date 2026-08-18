@@ -1,62 +1,53 @@
 {
   fetchurl,
   lib,
+  meta,
+  pname,
   stdenv,
-  squashfs-tools,
-  libxtst,
-  libxscrnsaver,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcursor,
-  libxcomposite,
-  libx11,
-  libsm,
-  libice,
-  libxshmfence,
-  libxcb,
-  alsa-lib,
   makeShellWrapper,
+  squashfs-tools,
   wrapGAppsHook3,
-  openssl,
-  freetype,
-  glib,
-  pango,
-  cairo,
+
+  #Spotify
   atk,
+  ayatana-ido,
+  cairo,
+  ffmpeg_7-headless, # Requires libavcodec < 62
   gdk-pixbuf,
+  glib,
   gtk3,
-  cups,
-  nspr,
-  nss_latest,
-  libpng,
-  libnotify,
-  libgcrypt,
-  systemd,
-  fontconfig,
-  dbus,
-  expat,
-  ffmpeg_7-headless,
-  curlWithGnuTls,
+  harfbuzz,
+  libayatana-appindicator,
+  libayatana-indicator,
+  libdbusmenu,
+  libx11,
+  pango,
+  pulseaudio,
   zlib,
-  zenity,
+
+  # CEF
+  alsa-lib,
   at-spi2-atk,
   at-spi2-core,
-  libpulseaudio,
+  cups,
+  dbus,
+  expat,
   libdrm,
   libgbm,
-  libxkbcommon,
-  pname,
-  meta,
-  harfbuzz,
-  libayatana-indicator,
-  libayatana-appindicator,
-  ayatana-ido,
-  libdbusmenu,
   libGL,
+  libxcb,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxkbcommon,
+  libxrandr,
+  libxshmfence,
+  nspr,
+  nss_latest,
+  systemdLibs,
+  udev,
+
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
   deviceScaleFactor ? null,
@@ -65,56 +56,57 @@
 
 let
   deps = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    curlWithGnuTls
-    dbus
-    expat
-    ffmpeg_7-headless # Requires libavcodec < 62
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    harfbuzz
-    libayatana-indicator
-    libayatana-appindicator
+    # Via lddtree:
     ayatana-ido
+    cairo
+    gdk-pixbuf
+    gtk3
+    libayatana-appindicator
+    libayatana-indicator
     libdbusmenu
-    libdrm
-    libgcrypt
-    libGL
-    libnotify
-    libpng
-    libpulseaudio
-    libxkbcommon
-    libgbm
-    nss_latest
     pango
     stdenv.cc.cc
-    systemd
-    libice
-    libsm
+
+    # Found via dlopen:
+    atk
+    ffmpeg_7-headless # Requires libavcodec < 62
+    glib
+    harfbuzz
     libx11
+    pulseaudio
+    zlib
+
+    # https://github.com/NixOS/nixpkgs/blob/b6c2725f1208c66437095d28c5b84e6a173d9e3c/pkgs/by-name/ce/cef-binary/package.nix#L45
+    # Copied CEF Dependencies with duplicates commented out:
+
+    #glib
+    # https://github.com/NixOS/nixpkgs/commit/699e707e90a89fb06a9880df6b83c22428fd8deb
+    nss_latest
+    nspr
+    #atk
+    at-spi2-atk
+    libdrm
+    expat
+    libxkbcommon
+    libgbm
+    #gtk3
+    #pango
+    #cairo
+    alsa-lib
+    dbus
+    at-spi2-core
+    cups
+    libGL
+    udev
+    systemdLibs
     libxcb
+    #libx11
     libxcomposite
-    libxcursor
     libxdamage
     libxext
     libxfixes
-    libxi
     libxrandr
-    libxrender
-    libxscrnsaver
     libxshmfence
-    libxtst
-    nspr
-    openssl
-    zlib
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -214,7 +206,6 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       } \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath deps}" \
-      --prefix PATH : "${zenity}/bin" \
       --run 'if [[ "''${NIXOS_OZONE_WL:-default}" == "1" ]]; then unset DISPLAY; fi'
 
     runHook postFixup
