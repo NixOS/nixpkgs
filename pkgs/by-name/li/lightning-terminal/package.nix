@@ -23,12 +23,12 @@
 
 buildGoModule rec {
   pname = "lightning-terminal";
-  version = "0.17.0-alpha";
+  version = "0.17.2-alpha";
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lightning-terminal";
     tag = "v${version}";
-    hash = "sha256-TjvQaKT2+n08efm+hRImmyFkvoyl0hfyw3dgtm6S/gk=";
+    hash = "sha256-KS6aIVkeVMUQ3Jmyzix19azmhHc+ymPIfdUBZvoH05A=";
     leaveDotGit = true;
     # Populate values that require us to use git.
     postFetch = ''
@@ -41,7 +41,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-VaXYBl6upod1fI86C7SzWD0Er2T81dZzaaBoFWTEoJc=";
+  vendorHash = "sha256-LKdAICI9Q3DY1jgy3p5eR6U3BNeLv0yZ3d8Jd79hDmM=";
 
   buildInputs = [ lightning-app ];
   postUnpack = ''
@@ -171,15 +171,8 @@ buildGoModule rec {
     version = "0.0.1";
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
-      hash = "sha256-EJwrnsIBwLKDI3mF54EjLvaKu1PYKKLXed9SKKwUZNA=";
+      hash = "sha256-qYfbH0d4/b1ct3N8DkQx3tj7/2gJ8wwz1uNhAOP51ug=";
     };
-
-    # Remove this command from package.json. It requires Git and it is not
-    # really needed.
-    postPatch = ''
-      substituteInPlace package.json \
-        --replace '"postbuild": "git restore build/.gitkeep",' ' '
-    '';
 
     nativeBuildInputs = [
       nodejs
