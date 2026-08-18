@@ -7,17 +7,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rayfish";
-  version = "0.2.0";
+  version = "0.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rayfish";
     repo = "rayfish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y9XQt6HhGWXI7Uwpw4TjqMavqEE/+pa0gEhQ0Gh/SqM=";
+    hash = "sha256-YIkx0Vlc620x9SS1tFdJMF1RRXTebgSMxa9p7PfdrvM=";
   };
 
-  cargoHash = "sha256-mh4lGbI3GUH32vf0FwVqyh737gCM7nEphQJr1rQed48=";
+  cargoHash = "sha256-l5hH/r8bScDCbcB8nIMlcVlfa+0P4Z9v3yXtdZ2Zj+g=";
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
