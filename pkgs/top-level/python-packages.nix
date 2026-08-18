@@ -20699,6 +20699,8 @@ self: super: with self; {
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
 
+  trailbase = callPackage ../development/python-modules/trailbase { inherit (pkgs) trailbase; };
+
   trailrunner = callPackage ../development/python-modules/trailrunner { };
 
   trainer = callPackage ../development/python-modules/trainer { };
