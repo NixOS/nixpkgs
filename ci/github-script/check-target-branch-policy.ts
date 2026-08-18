@@ -5,8 +5,7 @@ type TargetBranchPolicyFacts = {
   head: string
   maxRebuildCount: number
   rebuildsAllTests: boolean
-  isExemptKernelUpdate: boolean
-  isExemptHomeAssistantUpdate: boolean
+  onlyChangedFile: string | null
 }
 
 type TargetBranchReviewDecision =
@@ -15,6 +14,14 @@ type TargetBranchReviewDecision =
   | 'possible-mass-rebuild'
   | 'skip-development-merge'
   | 'dismiss'
+
+type TargetBranchPolicyResult = {
+  decision: TargetBranchReviewDecision
+  details: {
+    isExemptKernelUpdate: boolean
+    isExemptHomeAssistantUpdate: boolean
+  }
+}
 
 function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
   const baseClassification = classify(base)
@@ -35,31 +42,50 @@ function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
   }
 }
 
-function decideTargetBranchReview({
+function evaluateTargetBranchPolicy({
   base,
   head,
   maxRebuildCount,
   rebuildsAllTests,
-  isExemptKernelUpdate,
-  isExemptHomeAssistantUpdate,
-}: TargetBranchPolicyFacts): TargetBranchReviewDecision {
+  onlyChangedFile,
+}: TargetBranchPolicyFacts): TargetBranchPolicyResult {
   const {
     isStagingNixosBase,
     shouldSkipDevelopmentMerge,
     shouldCheckMassRebuild,
     shouldCheckNixosRebuild,
   } = getTargetBranchPolicy({ base, head })
+
+  // https://github.com/NixOS/nixpkgs/pull/521157
+  // These should go to master and release-xx.xx when backported
+  const isExemptKernelUpdate =
+    onlyChangedFile === 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
+
+  // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
+  const isExemptHomeAssistantUpdate =
+    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+
+  const details = {
+    isExemptKernelUpdate,
+    isExemptHomeAssistantUpdate,
+  }
+
+  const result = (decision: TargetBranchReviewDecision) => ({
+    decision,
+    details,
+  })
+
   const isMassRebuild =
     maxRebuildCount >= 1000 &&
     !isExemptKernelUpdate &&
     !isExemptHomeAssistantUpdate
 
   if (shouldCheckMassRebuild && isMassRebuild) {
-    return 'mass-rebuild'
+    return result('mass-rebuild')
   }
 
   if (shouldCheckNixosRebuild && rebuildsAllTests && !isExemptKernelUpdate) {
-    return 'nixos-rebuild'
+    return result('nixos-rebuild')
   }
 
   const isPossibleMassRebuild =
@@ -72,10 +98,12 @@ function decideTargetBranchReview({
     isPossibleMassRebuild &&
     !(rebuildsAllTests && isStagingNixosBase)
   ) {
-    return 'possible-mass-rebuild'
+    return result('possible-mass-rebuild')
   }
 
-  return shouldSkipDevelopmentMerge ? 'skip-development-merge' : 'dismiss'
+  return result(
+    shouldSkipDevelopmentMerge ? 'skip-development-merge' : 'dismiss',
+  )
 }
 
-module.exports = { decideTargetBranchReview, getTargetBranchPolicy }
+module.exports = { evaluateTargetBranchPolicy, getTargetBranchPolicy }

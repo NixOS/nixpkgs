@@ -10,7 +10,7 @@ const { split } = require('../supportedBranches.js')
 const { readFile } = require('node:fs/promises')
 const { postReview, dismissReviews } = require('./reviews.js')
 const {
-  decideTargetBranchReview,
+  evaluateTargetBranchPolicy,
   getTargetBranchPolicy,
 } = require('./check-target-branch-policy.ts')
 
@@ -168,9 +168,7 @@ async function checkTargetBranch({
     changed.attrdiff.changed.includes('nixosTests.simple-container') ||
     changed.attrdiff.changed.includes('nixosTests.simple-vm')
 
-  // https://github.com/NixOS/nixpkgs/pull/521157
-  // These should go to master and release-xx.xx when backported
-  let isExemptKernelUpdate = false
+  let onlyChangedFile: string | null = null
   if (shouldCheckMassRebuild && prInfo.changed_files === 1) {
     const changedFiles = (
       await github.rest.pulls.listFiles({
@@ -178,22 +176,19 @@ async function checkTargetBranch({
         pull_number,
       })
     ).data
-    isExemptKernelUpdate =
-      changedFiles.length === 1 &&
-      changedFiles[0].filename ===
-        'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
+    onlyChangedFile =
+      changedFiles.length === 1 ? changedFiles[0].filename : null
   }
 
-  // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
-  const isExemptHomeAssistantUpdate =
-    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
-  const decision = decideTargetBranchReview({
+  const {
+    decision,
+    details: { isExemptKernelUpdate, isExemptHomeAssistantUpdate },
+  } = evaluateTargetBranchPolicy({
     base,
     head,
     maxRebuildCount,
     rebuildsAllTests,
-    isExemptKernelUpdate,
-    isExemptHomeAssistantUpdate,
+    onlyChangedFile,
   })
 
   core.info(
