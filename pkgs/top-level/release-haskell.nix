@@ -598,12 +598,7 @@ let
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
-      weeder = lib.subtractLists [
-        # Currently (2026-08-13) blocked on
-        # https://github.com/kcsongor/generic-lens/issues/174
-        compilerNames.ghc9141
-        compilerNames.ghc9142
-      ] released;
+      weeder = released;
 
       # MicroHs core packages
       ghc-compat = [
