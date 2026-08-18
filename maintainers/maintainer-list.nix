@@ -13107,6 +13107,11 @@
     githubId = 1476865;
     name = "jigglycrumb";
   };
+  jim-ww = {
+    github = "jim-ww";
+    githubId = 92788107;
+    name = "jim-ww";
+  };
   jinser = {
     name = "Jinser Kafka";
     email = "aimer@purejs.icu";
