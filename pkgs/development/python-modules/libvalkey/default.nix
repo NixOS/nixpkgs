@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libvalkey";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     repo = "libvalkey-py";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tOq4SC9xA1rXfclqIzseedu7lyQ+7ZcVy/4ELTAorJ4=";
+    hash = "sha256-L8qbJxMbYL/0fujzm5aRQAD/gm8UO8USgiwsLeMs6Ag=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/valkey-io/libvalkey-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/valkey-io/libvalkey-py/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper for libvalkey";
     homepage = "https://github.com/valkey-io/libvalkey-py";
     license = lib.licenses.mit;
