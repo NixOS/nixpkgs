@@ -12,6 +12,7 @@
   configuration,
   pkgsHost ? null,
   pkgsTarget ? null,
+  pkgsDefault ? null,
 }:
 let
   pkgsTarget' =
@@ -20,7 +21,7 @@ let
     else if configuration._type or null == "configuration" then
       configuration.pkgs
     else
-      import <nixpkgs> { };
+      pkgsDefault;
 
   pkgsHost' = if pkgsHost != null then pkgsHost else pkgsTarget';
 

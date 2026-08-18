@@ -15,7 +15,7 @@
       in
       pkgsHost.nixos-vars.jsonify {
         inherit pkgsHost;
-        config = inputs.self.nixosConfigurations.example;
+        configuration = inputs.self.nixosConfigurations.example;
       };
   };
 }

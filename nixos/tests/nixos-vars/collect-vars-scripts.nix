@@ -4,11 +4,11 @@
 # This module takes a NixOS configuration, collects every vars-related
 # derivation, and returns their combined closures. Said closure can later be
 # added to `system.extraDependencies`.
-{ pkgs, config }:
+{ pkgs, configuration }:
 let
   inherit (pkgs) lib;
   evaluated = pkgs.nixos-vars.jsonify {
-    inherit config;
+    inherit configuration;
     pkgsHost = pkgs;
     pkgsTarget = pkgs;
   };
