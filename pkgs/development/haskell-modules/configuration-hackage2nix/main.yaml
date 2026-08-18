@@ -187,8 +187,6 @@ package-maintainers:
     - smtlib-backends-process
     - smtlib-backends-tests
     - vector-hashtables
-  arturcygan:
-    - hevm
   athas:
     - futhark
   auscyber:
