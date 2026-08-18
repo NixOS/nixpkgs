@@ -166,30 +166,6 @@ def list_secrets(
         )
 
 
-def fixup_secrets(
-    args: VarsArgs,
-    config: VarsConfig,
-    backend: VarsGeneratorBackend,
-    files: List[tuple[str, str]],
-):
-    inputLines = []
-    for generator, filename in files:
-        inputLines.append(f"{generator} {filename}")
-
-    binary = build_binary(backend.fixup)
-    try:
-        subprocess.run(
-            [binary, "\n".join(inputLines)],
-            capture_output=not args.verbose,
-            text=True,
-            check=True,
-        )
-    except subprocess.CalledProcessError as e:
-        raise VarsError(
-            f"Error running fixup script for backend '{backend.name}':\n{e.stderr}"
-        )
-
-
 def deploy_secrets(
     args: VarsArgs,
     config: VarsConfig,
@@ -295,6 +271,7 @@ def rebuild_order(
 def fixup_all(args: VarsArgs, config: VarsConfig):
     print("Running fixup scripts:")
 
+    errors = []
     for backend in config.generatorBackends.values():
         files = config.files_for_backend(backend)
 
@@ -310,4 +287,22 @@ def fixup_all(args: VarsArgs, config: VarsConfig):
         if args.dry_run:
             continue
 
-        fixup_secrets(args, config, backend, files)
+        inputLines = []
+        for generator, filename in files:
+            inputLines.append(f"{generator} {filename}")
+
+        binary = build_binary(backend.fixup)
+        try:
+            subprocess.run(
+                [binary, "\n".join(inputLines)],
+                capture_output=not args.verbose,
+                text=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            errors.append(
+                f"Error running fixup script for backend '{backend.name}':\n{e.stderr}"
+            )
+
+    if errors:
+        raise VarsError("\n".join(errors))
