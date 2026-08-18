@@ -40,6 +40,7 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       phanirithvij
       willow
+      philocalyst
     ];
     platforms = [
       "x86_64-linux"
