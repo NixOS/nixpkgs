@@ -18161,6 +18161,8 @@ self: super: with self; {
 
   smarthab = callPackage ../development/python-modules/smarthab { };
 
+  smartthings-local = callPackage ../development/python-modules/smartthings-local { };
+
   smartypants = callPackage ../development/python-modules/smartypants { };
 
   smbprotocol = callPackage ../development/python-modules/smbprotocol { };

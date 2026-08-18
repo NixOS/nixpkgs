@@ -66,6 +66,47 @@ let
         buildInputs = [ file ];
         buildFlags = [ "--enable-system-libraries" ];
       };
+
+      gitlab-glaz = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/glaz $out
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-5fGoW6TpkIQ8OIXjt2fLGzG9xhZ2TT+v2zLH1ecItII=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
       gitlab-glfm-markdown = attrs: {
         cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
@@ -135,7 +176,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-BRbBijOg2nQK2Nzrkpk7mwCjr+AaF3D/3HUrS5GwIz4=";
+          hash = "sha256-v0XIAyBqwFpO4n6EUgXaE7/yuyYAva8arv4unVPqqN4=";
         };
 
         postPatch = ''
@@ -196,7 +237,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-7jqaf5RIsc9gq98WBCe3Dd3Fv2X+4echdXU1FSK/xnE=";
+          hash = "sha256-lhD8vlqK9a38ZLBD6YagWnJ/DQ8YqbC1NxEyzYnoLh8=";
         };
 
         nativeBuildInputs = [
@@ -333,6 +374,9 @@ let
       pushd node_modules/vue-demi
       yarn run postinstall
       popd
+
+      # Apply node_modules patches
+      node scripts/frontend/postinstall.js
 
       # Creates a `infection_scanner.json` needed for the assets compiler to succeed.
       node scripts/frontend/infection_scanner/infection_scanner.mjs
