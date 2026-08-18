@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
-  # frontend
+  # nativeBuildInputs
   nodejs,
   yarn-berry_3,
 
@@ -45,23 +44,13 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    yarn-berry_3.yarnBerryConfigHook
     yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
   ];
 
-  preBuild =
-    # `jupyter labextension build` looks up `@jupyterlab/core-meta` in `node_modules` and
-    # downloads it from npm when missing. Seed it with the core package definition shipped
-    # by our `jupyterlab`, which is what the upstream `@jupyter/builder` devDependency
-    # would provide.
-    ''
-      mkdir -p node_modules/@jupyterlab/core-meta
-      cp ${jupyterlab}/${python.sitePackages}/jupyterlab/staging/package.json \
-        node_modules/@jupyterlab/core-meta/core.package.json
-    ''
-    + ''
-      npm run build
-    '';
+  preBuild = ''
+    npm run build
+  '';
 
   build-system = [
     hatch
@@ -81,7 +70,7 @@ buildPythonPackage (finalAttrs: {
 
   env.SKIP_JUPYTER_BUILDER = 1;
 
-  # no tests in PyPI dist
+  # no python tests
   doCheck = false;
 
   pythonImportsCheck = [ "bqscales" ];

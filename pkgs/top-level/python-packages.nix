@@ -7390,6 +7390,8 @@ self: super: with self; {
 
   ha-iotawattpy = callPackage ../development/python-modules/ha-iotawattpy { };
 
+  ha-mcp = callPackage ../development/python-modules/ha-mcp { };
+
   ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs { };
@@ -15441,6 +15443,8 @@ self: super: with self; {
   pymorphy3-dicts-ru = callPackage ../development/python-modules/pymorphy3-dicts-ru { };
 
   pymorphy3-dicts-uk = callPackage ../development/python-modules/pymorphy3-dicts-uk { };
+
+  pymp4 = callPackage ../development/python-modules/pymp4 { };
 
   pympler = callPackage ../development/python-modules/pympler { };
 
