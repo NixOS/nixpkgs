@@ -91,6 +91,9 @@ buildGoModule (finalAttrs: {
     rm services/search/pkg/opensearch/*_test.go
   '';
 
+  # The activitylog tests start a local NATS server.
+  __darwinAllowLocalNetworking = true;
+
   env = {
     # avoids 'make generate' calling `git`, otherwise no-op
     STRING = finalAttrs.version;
