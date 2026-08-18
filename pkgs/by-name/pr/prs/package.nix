@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-U0qaFrRp2KTKejPivd62tWM7qsGiBmGsWrEpTnCroyY=";
   };
 
+  patches = [ ./0001-fix-macos-compilation-error.patch ];
+
   cargoHash = "sha256-xPF3HeDU6AXQ0M4utko3SCuLVBjj/qMjTCeSUT6kGmo=";
 
   nativeBuildInputs = [

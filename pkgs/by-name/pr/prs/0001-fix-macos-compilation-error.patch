@@ -1,0 +1,23 @@
+From dd29c60992714a160e88c32f6ec8848e7ccbee12 Mon Sep 17 00:00:00 2001
+From: Daeho Ro <40587651+daeho-ro@users.noreply.github.com>
+Date: Thu, 22 Jan 2026 21:10:43 +0900
+Subject: [PATCH] Fix macos compilation error
+
+---
+ cli/src/util/clipboard.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cli/src/util/clipboard.rs b/cli/src/util/clipboard.rs
+index e3669c1..9b38359 100644
+--- a/cli/src/util/clipboard.rs
++++ b/cli/src/util/clipboard.rs
+@@ -662,7 +662,7 @@ pub(crate) struct NotifyHandle(
+ impl NotifyHandle {
+     /// Explicitly close the notification
+     fn close(self) {
+-        #[cfg(all(feature = "notify", not(target_env = "musl")))]
++        #[cfg(all(feature = "notify", not(target_env = "musl"), not(target_os = "macos")))]
+         self.0.close();
+     }
+ }
+
