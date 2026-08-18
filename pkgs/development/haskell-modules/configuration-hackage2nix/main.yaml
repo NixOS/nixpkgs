@@ -206,11 +206,6 @@ package-maintainers:
     - termonad
   centromere:
     - nfc
-  dalpd:
-    - dhall-lsp-server
-    - ghc-vis
-    - patat
-    - svgcairo
   danielrolls:
     - aws-spend-summary
     - byte-count-reader
