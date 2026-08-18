@@ -167,7 +167,8 @@ class VarsConfig:
                 continue
 
             for file in generator.files.values():
-                if no_local and file.local:
+                # Checks that no_local implies !file.local
+                if not no_local or no_local and not file.local:
                     files.append((generator.name, file.name))
 
         return files

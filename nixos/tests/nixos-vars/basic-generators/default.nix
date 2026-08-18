@@ -44,6 +44,7 @@
 
     machine.succeed("mkdir /tmp/system")
     machine.succeed("nixos-vars deploy -l /tmp/system -f /etc/nixos/config2.nix")
+    t.assertIn("Hewwo placeholder!!", machine.succeed("cat /tmp/system/tmp/vars-demo/example/example"))
     t.assertIn("< Hewwo placeholder!! >", machine.succeed("cat /tmp/system/tmp/vars-demo/derived/derived2"))
 
     # We haven't yet implemented this!
