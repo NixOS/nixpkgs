@@ -224,7 +224,7 @@ Backends might need to perform maintenance work on the secret files on disk. Thi
 
 ### Deployment
 
-Backends can also provide `deployLocal` and `deploy` scripts. Note that each secret file has a `local` flag that is off by default. Users can choose to disable deployment for any of their secrets by setting said flag to `true`. This might be useful (for example) when handling generators that are meant to be used as inputs to other generators, but must not have their outputs deployed right away. A backend can choose to not provide either of the scripts above.
+Backends can also provide `deploy.local` and `deploy.remote` scripts. Note that each secret file has a `local` flag that is off by default. Users can choose to disable deployment for any of their secrets by setting said flag to `true`. This might be useful (for example) when handling generators that are meant to be used as inputs to other generators, but must not have their outputs deployed right away. A backend can choose to not provide either of the scripts above.
 
 The names of the two scripts might give away their intended purpose. The former is meant for deploying the secrets to a system that has its system root mounted to the current machine's filesystem and will therefore receive a path to the system root as its first argument. The latter is meant for deploying to fully remote systems.
 

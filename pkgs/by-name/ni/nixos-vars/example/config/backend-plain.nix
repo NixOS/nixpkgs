@@ -66,7 +66,7 @@ in
                       print(f"{generator.name} {file.name}")
         '';
 
-      deployLocal = mkScript "deployLocal" ''
+      deploy.local = mkScript "deploy-local" ''
         # NOTE: this script will not parse the input file list (my bash-fu is
         # not strong enough...). It will instead push all the secrets to the
         # target machine :p

@@ -56,12 +56,12 @@ in
 
       fixup = noop;
 
-      deploy = mkBackendScript "deploy" ''
+      deploy.remote = mkBackendScript "deploy-remote" ''
         echo "Not implemented :(" 1>&2
         exit 1
       '';
 
-      deployLocal = mkBackendScript "deployLocal" ''
+      deploy.local = mkBackendScript "deploy-local" ''
         if [[ ! -d "$1" ]]; then
           echo "System root not found" 1>&2
           exit 1

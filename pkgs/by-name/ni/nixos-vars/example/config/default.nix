@@ -58,7 +58,7 @@
       files.derived.local = true;
       script =
         pkgs:
-        pkgs.writeScript "gen-derived" ''
+        pkgs.writeScript "gen-derived-plain" ''
           #!/bin/sh
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           cat $in/derived/derived > $out/derived
