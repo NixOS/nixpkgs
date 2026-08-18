@@ -13,8 +13,8 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.23.1";
-  hash = "sha256-Udc+J+AYJZviWJhPtWvtXDss7Wqm9Gc9T8KsfOkx4EE=";
+  version = "3.23.3";
+  hash = "sha256-Liv09fgwQs6c0mA/35I+fAQV32SrG4gnFTewftfn/h8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";

@@ -16,7 +16,7 @@
   makeShellWrapper,
   minizip,
   nss,
-  squashfsTools,
+  squashfs-tools,
   stdenv,
   writeShellScript,
   xkeyboard_config,
@@ -62,7 +62,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       makeShellWrapper
-      squashfsTools
+      squashfs-tools
     ];
 
     buildInputs = [
