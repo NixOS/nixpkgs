@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.52";
+  version = "1.53";
   pname = "mxt-app";
 
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-CW2iWkYuI0joTQJXt271XLO70Qq/Yg8eX9f56XnJht8=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-WvR4QT03hLCX3qq1dM20zuaYkwfSkqK6PGeC7gJOUU0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command line utility for Atmel maXTouch devices";
     homepage = "https://github.com/atmel-maxtouch/mxt-app";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.lukas-sgx ];
     platforms = lib.platforms.linux;
     mainProgram = "mxt-app";
   };
