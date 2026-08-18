@@ -1,16 +1,17 @@
 {
   lib,
   fetchurl,
-  fetchFromCodeberg,
+  fetchFromGitLab,
 }:
 let
   src = lib.importJSON ./src.json;
 in
 {
   inherit (src) packageVersion;
-  source = fetchFromCodeberg (
+  source = fetchFromGitLab (
     src.source
     // {
+      domain = "librewolf.dev";
       owner = "librewolf";
       repo = "source";
       fetchSubmodules = true;
