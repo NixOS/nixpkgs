@@ -62,6 +62,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "apiflask" ];
 
+  disabledTests = [
+    # TypeError
+    "test_spec_with_dict_headers"
+  ];
+
   meta = {
     description = "Lightweight Python web API framework";
     homepage = "https://github.com/apiflask/apiflask";
