@@ -156,41 +156,7 @@ async function checkTargetBranch({
   ).data
   const base = prInfo.base.ref
   const head = prInfo.head.ref
-  const { shouldSkipDevelopmentMerge, shouldCheckMassRebuild } =
-    getTargetBranchPolicy({ base, head })
-
-  // Don't run on, e.g., staging-nixos to master merges.
-  if (shouldSkipDevelopmentMerge) {
-    core.info(
-      `Skipping checkTargetBranch: PR is from a development branch (${head})`,
-    )
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
-
-    return
-  }
-  // Don't run on PRs against staging branches, wip branches, haskell-updates, etc.
-  if (!shouldCheckMassRebuild) {
-    core.info(
-      `Skipping checkTargetBranch: PR is against a non-primary base branch (${base})`,
-    )
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
-
-    return
-  }
+  const { shouldCheckMassRebuild } = getTargetBranchPolicy({ base, head })
 
   const maxRebuildCount = Math.max(
     ...Object.values(changed.rebuildCountByKernel),
@@ -202,7 +168,7 @@ async function checkTargetBranch({
   // https://github.com/NixOS/nixpkgs/pull/521157
   // These should go to master and release-xx.xx when backported
   let isExemptKernelUpdate = false
-  if (prInfo.changed_files === 1) {
+  if (shouldCheckMassRebuild && prInfo.changed_files === 1) {
     const changedFiles = (
       await github.rest.pulls.listFiles({
         ...context.repo,
@@ -248,21 +214,34 @@ async function checkTargetBranch({
 
   if (decision === 'mass-rebuild') {
     await postMassRebuildReview(reviewFacts)
-  } else if (decision === 'nixos-rebuild') {
+    return
+  }
+
+  if (decision === 'nixos-rebuild') {
     await postNixosRebuildReview(reviewFacts)
-  } else if (decision === 'possible-mass-rebuild') {
+    return
+  }
+
+  if (decision === 'possible-mass-rebuild') {
     await postPossibleMassRebuildReview(reviewFacts)
+    return
+  }
+
+  if (decision === 'skip-development-merge') {
+    core.info(
+      `Skipping checkTargetBranch: PR merges the development branch ${head} into ${base}`,
+    )
   } else {
     core.info('checkTargetBranch: this PR is against an appropriate branch.')
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
   }
+
+  await dismissReviews({
+    github,
+    context,
+    core,
+    dry,
+    reviewKey,
+  })
 }
 
 module.exports = checkTargetBranch
