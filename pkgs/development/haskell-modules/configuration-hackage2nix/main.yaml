@@ -321,21 +321,6 @@ package-maintainers:
     - agda2hs
     - irc-client
     - shake
-  peti:
-    - cabal2spec
-    - funcmp
-    - git-annex
-    - hledger-interest
-    - hopenssl
-    - hsdns
-    - hsemail
-    - hsyslog
-    - logging-facade-syslog
-    - nix-paths
-    - structured-haskell-mode
-    - titlecase
-    - xmonad
-    - xmonad-contrib
   phijor:
     - cornelis
   psibi:
