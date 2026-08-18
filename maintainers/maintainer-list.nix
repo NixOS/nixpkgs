@@ -17753,6 +17753,11 @@
     githubId = 29855073;
     name = "Michael Colicchia";
   };
+  Masrepus = {
+    github = "Masrepus";
+    githubId = 6538121;
+    name = "Samuel Hopstock";
+  };
   masrlinu = {
     github = "masrlinu";
     githubId = 5259918;
