@@ -8308,6 +8308,8 @@ self: super: with self; {
 
   ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
 
+  ini2toml = callPackage ../development/python-modules/ini2toml { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
