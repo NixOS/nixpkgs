@@ -329,7 +329,9 @@ in
           finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
             dependencies =
               oldAttrs.dependencies
-              ++ optionals (any (arg: hasInfix "--hass" arg) cfg.extraArgs) oldAttrs.optional-dependencies.hass
+              ++ optionals (any (
+                arg: hasInfix "--hass" arg
+              ) options.extraArgs) oldAttrs.optional-dependencies.hass
               ++ optionals options.zeroconf.enable oldAttrs.optional-dependencies.zeroconf
               ++ optionals (
                 options.sttLibrary == "onnx-asr" || options.sttLibrary == "auto" && options.language == "ru"
