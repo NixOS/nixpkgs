@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "msr-tools";
-  version = "1.3-unstable-2022-08-05";
+  version = "msr-tools-1.3";
 
   src = fetchFromGitHub {
     owner = "intel";
