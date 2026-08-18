@@ -80,6 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/rsyslog/rsyslog/commit/f7f774228273730ba1075f4cd457ae78303a8f08.patch";
       hash = "sha256-ww8Ade2eKrQygJduLMPFjxd/fmBnpQ4ePLEzHffPy90=";
     })
+
+    # Fix imjournal invalidation reopen busy-loop.
+    # Remove with rsyslog 8.2608.0 or newer.
+    # https://github.com/rsyslog/rsyslog/pull/7384
+    (fetchpatch {
+      name = "imjournal-invalidation-reopen-busy-loop.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/383f80f21f16c3c94e7d7a57b0a5af12cdac9d75.patch";
+      excludes = [ "ChangeLog" ];
+      hash = "sha256-RlhXoK+dAPBN2wu4V7GoFw/d+uWQzO7+nUkW5+z7QJY=";
+    })
   ];
 
   nativeBuildInputs = [
