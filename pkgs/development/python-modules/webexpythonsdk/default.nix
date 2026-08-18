@@ -7,6 +7,7 @@
   requests-toolbelt,
   poetry-core,
   poetry-dynamic-versioning,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -25,6 +26,8 @@ buildPythonPackage (finalAttrs: {
     poetry-core
     poetry-dynamic-versioning
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     pyjwt
