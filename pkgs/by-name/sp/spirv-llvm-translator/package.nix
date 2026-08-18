@@ -3,7 +3,6 @@
   stdenv,
   srcOnly,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   lit,
