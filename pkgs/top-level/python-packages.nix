@@ -10592,6 +10592,8 @@ self: super: with self; {
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc { };
 
+  mintotp = callPackage ../development/python-modules/mintotp { };
+
   mip = callPackage ../development/python-modules/mip { };
 
   mir-eval = callPackage ../development/python-modules/mir-eval { };
