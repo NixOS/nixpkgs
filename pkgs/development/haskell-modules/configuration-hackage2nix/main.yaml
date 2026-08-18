@@ -198,11 +198,6 @@ package-maintainers:
     - arch-web
     - uusi
   cdepillabout:
-    - cloudy
-    - password
-    - password-instances
-    - pretty-simple
-    - stack
     - termonad
   centromere:
     - nfc
