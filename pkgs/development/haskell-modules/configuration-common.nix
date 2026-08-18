@@ -1925,6 +1925,13 @@ with haskellLib;
   # TODO: when (likely in 25.x) Stackage bumps random to 1.3, unpin
   ihaskell-dataframe = doJailbreak super.ihaskell-dataframe;
 
+  # 2026-08-18: too strict bounds on doctest <0.25
+  # https://github.com/hasktorch/hasktorch/pull/801
+  hasktorch = lib.pipe super.hasktorch [
+    (warnAfterVersion "0.2.2.0")
+    doJailbreak
+  ];
+
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
   ihaskell-display = doJailbreak super.ihaskell-display;
