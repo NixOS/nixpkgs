@@ -17200,11 +17200,26 @@ with self;
 
   Imager = buildPerlPackage rec {
     pname = "Imager";
-    version = "1.031";
+    version = "1.034";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-${version}.tar.gz";
-      hash = "sha256-kL59G9/F7bfxfPgreeamYUxbAuv+Mm67b2afzaeRNAE=";
+      hash = "sha256-hrWizXGna4QJJJFSGl1WI4Qo8sN1AYMsmVxaMxJg+AM=";
     };
+    # Remove when updating to the first release containing both fixes.
+    patches = [
+      (fetchpatch2 {
+        name = "fix-32-bit-exif-ifd-offset-checks.patch";
+        url = "https://github.com/tonycoz/imager/commit/48ba8ac0749f89466b6e6681fb88cbdb51086ebd.patch?full_index=1";
+        includes = [ "imexif.c" ];
+        hash = "sha256-rpUeTsgSkCdzJsy3Ny0rU+KNL6xkSosfkDqzFb813Wo=";
+      })
+      (fetchpatch2 {
+        name = "fix-32-bit-exif-limit-checks.patch";
+        url = "https://github.com/tonycoz/imager/commit/6f1fd003a8e48c7e6e58b7019a04cc71bbfec2c3.patch?full_index=1";
+        includes = [ "imexif.c" ];
+        hash = "sha256-Ct7T/JHuxAIAjjuzoUhdAPlp0qPYKRQQqejsrcGXPko=";
+      })
+    ];
     buildInputs = [
       pkgs.freetype
       pkgs.fontconfig
