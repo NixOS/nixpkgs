@@ -81,7 +81,8 @@ in
   fetchAttrs = {
     sha256 =
       {
-        x86_64-linux = "sha256-LsdpCdL/AY5qHDTBDKsN04xcywaD0nMddc56XxAvN78=";
+        # Warning(reproducibility): ofborg's hash, can't reproduce it on makemake.ngi.nixos.org
+        x86_64-linux = "sha256-A/aXveEGL1uhhoWzReqO+dCRIHfv5QDrPeYNBM7tNpQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     inherit (xla.deps)
