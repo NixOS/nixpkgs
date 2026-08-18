@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocs-simple-blog";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lp0+mJYyP7Qz/gJCI7+tKh9fZArWs2u1ZusnVUax7A4=";
+    hash = "sha256-Z2+ou+bjE/glInl4of0gkoNEc9eGD8k/LDcQpKGWsB8=";
   };
 
   build-system = [ poetry-core ];
