@@ -259,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    description = "Core user interface for the GNOME 3 desktop";
+    description = "Core user interface for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;

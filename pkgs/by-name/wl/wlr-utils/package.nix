@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libGL,
-  ffmpeg,
+  ffmpeg_8,
   leptonica,
   libgbm,
   libxkbcommon,
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
     leptonica
     libgbm
     libxkbcommon

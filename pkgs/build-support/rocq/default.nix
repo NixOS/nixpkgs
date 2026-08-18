@@ -213,6 +213,12 @@ stdenv.mkDerivation (
         }
         // (args.env or { });
 
+      preBuild =
+        optionalString (useCoq && useDune && lib.versionAtLeast rocq-core.rocq-version "9.0") ''
+          export COQPATH="$ROCQPATH"
+        ''
+        + (args.preBuild or "");
+
       meta =
         (
           {
