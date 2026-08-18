@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "yersinia";
-  version = "unstable-2022-11-20";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "tomac";
