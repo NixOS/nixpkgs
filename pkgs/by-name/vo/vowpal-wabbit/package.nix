@@ -5,6 +5,7 @@
   cmake,
   boost,
   eigen,
+  fmt_11,
   gtest,
   help2man,
   rapidjson,
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fmt_11
     boost
     eigen
     rapidjson
