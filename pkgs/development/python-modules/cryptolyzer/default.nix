@@ -65,6 +65,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
