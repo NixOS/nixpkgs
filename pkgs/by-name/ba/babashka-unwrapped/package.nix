@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGraalvmNativeImage,
   fetchurl,
   writeScript,
@@ -39,11 +40,22 @@ buildGraalvmNativeImage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd bb --bash ${./completions/bb.bash}
-    installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
-    installShellCompletion --cmd bb --fish ${./completions/bb.fish}
-  '';
+  postInstall =
+    if lib.versionAtLeast finalAttrs.version "1.13.219" then
+      # babashka.cli 0.12.85+ (bundled since bb 1.13.219) generates shell
+      # completions itself, see https://github.com/babashka/cli#completions
+      lib.optionalString (stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+        installShellCompletion --cmd bb \
+          --bash <($out/bin/bb org.babashka.cli/completions snippet --shell bash --prog bb) \
+          --fish <($out/bin/bb org.babashka.cli/completions snippet --shell fish --prog bb) \
+          --zsh <($out/bin/bb org.babashka.cli/completions snippet --shell zsh --prog bb)
+      ''
+    else
+      ''
+        installShellCompletion --cmd bb --bash ${./completions/bb.bash}
+        installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
+        installShellCompletion --cmd bb --fish ${./completions/bb.fish}
+      '';
 
   passthru.updateScript = writeScript "update-babashka" ''
     #!/usr/bin/env nix-shell
