@@ -1,4 +1,4 @@
-const { classify } = require('../supportedBranches.js')
+const { classify, split } = require('../supportedBranches.js')
 
 type TargetBranchPolicyFacts = {
   base: string
@@ -20,12 +20,17 @@ function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
   const baseClassification = classify(base)
   const headClassification = classify(head)
   const isPrimaryBase = baseClassification.type.includes('primary')
+  const isPrimaryHead = headClassification.type.includes('primary')
+  const isStagingNixosBase = split(base).prefix === 'staging-nixos'
+  const isDevelopmentHead = headClassification.type.includes('development')
   const shouldSkipDevelopmentMerge =
-    headClassification.type.includes('development')
+    isDevelopmentHead && (!isStagingNixosBase || isPrimaryHead)
 
   return {
+    isStagingNixosBase,
     shouldSkipDevelopmentMerge,
-    shouldCheckMassRebuild: !shouldSkipDevelopmentMerge && isPrimaryBase,
+    shouldCheckMassRebuild:
+      !shouldSkipDevelopmentMerge && (isPrimaryBase || isStagingNixosBase),
     shouldCheckNixosRebuild: !shouldSkipDevelopmentMerge && isPrimaryBase,
   }
 }
@@ -39,6 +44,7 @@ function decideTargetBranchReview({
   isExemptHomeAssistantUpdate,
 }: TargetBranchPolicyFacts): TargetBranchReviewDecision {
   const {
+    isStagingNixosBase,
     shouldSkipDevelopmentMerge,
     shouldCheckMassRebuild,
     shouldCheckNixosRebuild,
@@ -61,7 +67,11 @@ function decideTargetBranchReview({
     !isMassRebuild &&
     !isExemptKernelUpdate &&
     !isExemptHomeAssistantUpdate
-  if (shouldCheckMassRebuild && isPossibleMassRebuild) {
+  if (
+    shouldCheckMassRebuild &&
+    isPossibleMassRebuild &&
+    !(rebuildsAllTests && isStagingNixosBase)
+  ) {
     return 'possible-mass-rebuild'
   }
 

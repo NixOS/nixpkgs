@@ -53,10 +53,14 @@ type TargetBranchReviewFacts = {
   maxRebuildCount: number
 }
 
+function getStagingBranch(base: string) {
+  const version = split(base).version
+  return version ? `staging-${version}` : 'staging'
+}
+
 async function postMassRebuildReview(facts: TargetBranchReviewFacts) {
   const { github, context, core, dry, base, maxRebuildCount } = facts
-  const desiredBranch =
-    base === 'master' ? 'staging' : `staging-${split(base).version}`
+  const desiredBranch = getStagingBranch(base)
   const body = [
     `The PR's base branch is set to \`${base}\`, but this PR causes ${maxRebuildCount} rebuilds.`,
     'It is therefore considered a mass rebuild.',
@@ -107,8 +111,7 @@ async function postNixosRebuildReview(facts: TargetBranchReviewFacts) {
 
 async function postPossibleMassRebuildReview(facts: TargetBranchReviewFacts) {
   const { github, context, core, dry, base, maxRebuildCount } = facts
-  const stagingBranch =
-    base === 'master' ? 'staging' : `staging-${split(base).version}`
+  const stagingBranch = getStagingBranch(base)
   const body = [
     `The PR's base branch is set to \`${base}\`, and this PR causes ${maxRebuildCount} rebuilds.`,
     `Please consider whether this PR causes a mass rebuild according to [our conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions).`,
