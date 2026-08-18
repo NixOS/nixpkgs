@@ -55,9 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
         singleBinary = false;
       });
 
-      # Avoid messing with libkrb5 and libnghttp2.
+      # Avoid messing with libnghttp2.
       curl_ = curlMinimal.override (prevArgs: {
-        gssSupport = false;
         http2Support = false;
         scpSupport = false;
       });

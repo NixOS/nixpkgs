@@ -16,21 +16,7 @@
   gnutls,
   gsaslSupport ? false,
   gsasl,
-  gssSupport ?
-    with stdenv.hostPlatform;
-    (
-      # krb5 is broken on cygwin
-      !(isWindows || isCygwin)
-      &&
-        # disable gss because of: undefined reference to `k5_bcmp'
-        # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-        !isStatic
-      &&
-        # the "mig" tool does not configure its compiler correctly. This could be
-        # fixed in mig, but losing gss support on cross compilation to darwin is
-        # not worth the effort.
-        !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
-    ),
+  gssSupport ? false,
   libkrb5,
   http2Support ? true,
   nghttp2,
@@ -302,8 +288,23 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
-    # Fails to link against static gss
-    broken = stdenv.hostPlatform.isStatic && gssSupport;
+    broken =
+      with stdenv.hostPlatform;
+      gssSupport
+      && (
+        # krb5 is broken on cygwin
+        isWindows
+        || isCygwin
+        ||
+          # broken gss because of: undefined reference to `k5_bcmp'
+          # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+          isStatic
+        ||
+          # the "mig" tool does not configure its compiler correctly. This could be
+          # fixed in mig, but losing gss support on cross compilation to darwin is
+          # not worth the effort.
+          (isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+      );
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;

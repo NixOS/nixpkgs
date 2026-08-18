@@ -3,6 +3,9 @@
   ...
 }@args:
 
+let
+  inherit (curlMinimal) stdenv;
+in
 curlMinimal.override (
   {
     brotliSupport = true;
@@ -10,6 +13,8 @@ curlMinimal.override (
     idnSupport = true;
     pslSupport = true;
     zstdSupport = true;
+
+    gssSupport = !(curlMinimal.override { gssSupport = true; }).meta.broken;
   }
   // removeAttrs args [ "curlMinimal" ]
 )
