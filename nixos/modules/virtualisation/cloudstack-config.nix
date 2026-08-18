@@ -1,7 +1,5 @@
 { lib, pkgs, ... }:
 
-with lib;
-
 {
   imports = [
     ../profiles/qemu-guest.nix

@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication {
   pname = "isrcsubmit";
   version = "2.1.0-unstable-2023-08-10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JonnyJD";
@@ -25,15 +25,19 @@ python3Packages.buildPythonApplication {
     substituteInPlace isrcsubmit.py --replace-fail "main(argv):" "main(argv=sys.argv):"
   '';
 
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
   dependencies =
     with python3Packages;
     [
       musicbrainzngs
       discid
     ]
-    ++ lib.optional withKeyring [
-      keyring
-    ];
+    ++ lib.optional withKeyring keyring;
+
+  pythonImportsCheck = [ "isrcsubmit" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

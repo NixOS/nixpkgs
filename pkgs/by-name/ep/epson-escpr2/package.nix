@@ -8,14 +8,15 @@
 
 stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.34";
+  version = "1.2.37";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
     # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/17/17/88/53f956e8d0a0dfc9cb7d0c35907183deb028a8b7/epson-inkjet-printer-escpr2-1.2.34-1.tar.gz";
-    hash = "sha256-7EpK/EI9MHTX2z+JtMB2Urt/e893cwNX5DAGSbjDyj4=";
+
+    url = "https://download-center.epson.com/f/module/1316b6b0-77cd-438c-95e1-c71e760a7579/epson-inkjet-printer-escpr2-1.2.37-1.tar.gz";
+    hash = "sha256-jSh2HVb490CYJ/C+Eh1T5TmnBF7hmBmsGHuVbiWTHQ0=";
   };
 
   buildInputs = [ cups ];
@@ -33,9 +34,11 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--with-cupsfilterdir=${builtins.placeholder "out"}/lib/cups/filter"
-    "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
+    "--with-cupsfilterdir=${placeholder "out"}/lib/cups/filter"
+    "--with-cupsppddir=${placeholder "out"}/share/cups/model"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -50,7 +53,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       ma9e
       ma27
-      shawn8901
     ];
     platforms = lib.platforms.linux;
   };

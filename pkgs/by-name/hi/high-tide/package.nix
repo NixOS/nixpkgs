@@ -9,22 +9,25 @@
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
+  glib-networking,
   gst_all_1,
   libsecret,
   libportal,
+  alsa-utils,
+  pipewire,
   nix-update-script,
 }:
 
-python313Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
-  version = "0.1.7";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
-    tag = "v${version}";
-    hash = "sha256-QFa9K/iSPe3cIx90PzPCkJszrygON9ijukv4px3Rob8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uZkXpzRIDzn6wT3GmwNQbtf2/G9ddU13f7iMkj9Qopc=";
   };
 
   nativeBuildInputs = [
@@ -36,25 +39,30 @@ python313Packages.buildPythonApplication rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libportal
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      libsecret
-    ]);
+  buildInputs = [
+    glib-networking
+    libadwaita
+    libportal
+    pipewire # provides a gstreamer plugin for pipewiresink
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    libsecret
+  ]);
 
-  dependencies = with python313Packages; [
+  dependencies = [
+    alsa-utils
+  ]
+  ++ (with python313Packages; [
     pygobject3
     tidalapi
     requests
-    mpd2
+    python-mpd2
     pypresence
-  ];
+  ]);
 
   dontWrapGApps = true;
 
@@ -65,13 +73,14 @@ python313Packages.buildPythonApplication rec {
   meta = {
     description = "Libadwaita TIDAL client for Linux";
     homepage = "https://github.com/Nokse22/high-tide";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "high-tide";
     maintainers = with lib.maintainers; [
+      drafolin
       nilathedragon
       nyabinary
       griffi-gh
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

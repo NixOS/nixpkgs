@@ -20,12 +20,13 @@ let
     with pkgs;
     [
       cosmic-applets
-      cosmic-applibrary
+      cosmic-app-library
       cosmic-bg
       cosmic-comp
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
+      cosmic-initial-setup
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
@@ -43,13 +44,13 @@ let
     ];
 in
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options = {
     services.desktopManager.cosmic = {
-      enable = lib.mkEnableOption "Enable the COSMIC desktop environment";
+      enable = lib.mkEnableOption "COSMIC desktop environment";
 
-      showExcludedPkgsWarning = lib.mkEnableOption "Disable the warning for excluding core packages." // {
+      showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
       };
 
@@ -71,6 +72,8 @@ in
     environment.pathsToLink = [
       "/share/backgrounds"
       "/share/cosmic"
+      "/share/cosmic-layouts"
+      "/share/cosmic-themes"
     ];
     environment.systemPackages = utils.removePackagesByName (
       corePkgs
@@ -81,15 +84,21 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
+          cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          cosmic-sound-theme
+          glib
           hicolor-icon-theme
+          networkmanagerapplet
           playerctl
           pop-icon-theme
           pop-launcher
+          pulseaudio
           xdg-user-dirs
         ]
         ++ lib.optionals config.services.flatpak.enable [
@@ -103,6 +112,8 @@ in
     services.graphical-desktop.enable = true;
 
     xdg = {
+      # Required for cosmic-osd
+      sounds.enable = true;
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
       portal = {
@@ -115,16 +126,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira
@@ -137,7 +139,10 @@ in
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
     programs.dconf.enable = true;
     programs.dconf.packages = [ pkgs.cosmic-session ];
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];

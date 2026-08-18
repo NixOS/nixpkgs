@@ -1,45 +1,46 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gatekeeper";
-  version = "3.19.2";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
-    tag = "v${version}";
-    hash = "sha256-ksspmNq42Wn/4Uzi8omvzCCprP+ELHVGBImgi8GrMSk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3aXyXIiwx6pSvYQ4YY4lnuk+0oRG2S6TxrSJNmLRM9c=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-zhkPJc23cux0NCp81Iv2QSczbdD6banqS0qQt9FBELY=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   ldflags = [
-    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${version}"
+    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/gator" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gator \
       --bash <($out/bin/gator completion bash) \
       --fish <($out/bin/gator completion fish) \
       --zsh <($out/bin/gator completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Policy Controller for Kubernetes";
     mainProgram = "gator";
     homepage = "https://github.com/open-policy-agent/gatekeeper";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

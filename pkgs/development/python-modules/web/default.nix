@@ -2,14 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pytestCheckHook,
   cheroot,
   legacy-cgi,
   dbutils,
   mysqlclient,
   pymysql,
-  mysql-connector,
+  mysql-connector-python,
   psycopg2,
 }:
 
@@ -25,7 +24,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cheroot
-  ] ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
+    legacy-cgi
+  ];
 
   # requires multiple running databases
   doCheck = false;
@@ -37,18 +37,18 @@ buildPythonPackage rec {
     dbutils
     mysqlclient
     pymysql
-    mysql-connector
+    mysql-connector-python
     psycopg2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Makes web apps";
     longDescription = ''
       Think about the ideal way to write a web app.
       Write the code to make it happen.
     '';
     homepage = "https://webpy.org/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ layus ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ layus ];
   };
 }

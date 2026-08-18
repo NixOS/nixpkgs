@@ -4,22 +4,18 @@
 # $ rg -No "(https://.+)\"" -r '$1' pkgs/development/compilers/graalvm/graalvm-oracle/hashes.nix | \
 #   parallel -k 'echo {}; nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
 {
-  "23" = {
+  "25" = {
     "aarch64-linux" = {
-      hash = "sha256-VlB664/l7NWFQrPE3vEJvCXkEzKEJ0ck/HNU5pGGTwU=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_linux-aarch64_bin.tar.gz";
+      hash = "sha256-LG5e9jCExfOcZ8v1wz0jyFLfhI0QzVDXbmZ//5yc8rw=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.3_linux-aarch64_bin.tar.gz";
     };
     "x86_64-linux" = {
-      hash = "sha256-2wmx/hi4PzOK+bMpFEN3SzFw2euhdTjOLuOcXm1gHfw=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_linux-x64_bin.tar.gz";
-    };
-    "x86_64-darwin" = {
-      hash = "sha256-tFmfv9OUMEqE6UNb98ZzBp1P4MVl0tRNcPD29YBM6jU=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_macos-x64_bin.tar.gz";
+      hash = "sha256-G1KWYTw9ElIdWU4cmTAt+I2OHwfXSreYPb9XIAC5LHw=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.3_linux-x64_bin.tar.gz";
     };
     "aarch64-darwin" = {
-      hash = "sha256-DmRLktA9Ob30hC43i4sicT+qpO2ujv/w2pkp0eBN0Ms=";
-      url = "https://download.oracle.com/graalvm/23/archive/graalvm-jdk-23.0.2_macos-aarch64_bin.tar.gz";
+      hash = "sha256-o/Aih4g9drGLK4DeVrC+Vymss8BLgdSwsP38/ZNSKPM=";
+      url = "https://download.oracle.com/graalvm/25/archive/graalvm-jdk-25.0.3_macos-aarch64_bin.tar.gz";
     };
   };
   "17" = {
@@ -30,10 +26,6 @@
     "x86_64-linux" = {
       hash = "sha256-tvPaziTPGWDseQIW9MhvANT0PfZOTotUj2OC8EiUcT8=";
       url = "https://download.oracle.com/graalvm/17/archive/graalvm-jdk-17.0.12_linux-x64_bin.tar.gz";
-    };
-    "x86_64-darwin" = {
-      hash = "sha256-PsrBRx8/qVpWxbdcZdueYKxFUfVu2gnrnaleYEnqd9c=";
-      url = "https://download.oracle.com/graalvm/17/archive/graalvm-jdk-17.0.12_macos-x64_bin.tar.gz";
     };
     "aarch64-darwin" = {
       hash = "sha256-TN/cbJOV9nc+/NGRtmBfG3yOG3irkAq1z/NHIKP+/8U=";

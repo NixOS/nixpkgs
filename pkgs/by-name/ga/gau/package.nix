@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gau";
   version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = "gau";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B2l5joHeFDjYmdb3F1FFDKjIKENZu92O2sMlkf3Sf6Y=";
   };
 
@@ -22,15 +22,15 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to fetch known URLs";
     longDescription = ''
       getallurls (gau) fetches known URLs from various sources for any
       given domain.
     '';
     homepage = "https://github.com/lc/gau";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gau";
   };
-}
+})

@@ -1,40 +1,35 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  buildPackages,
-  pkg-config,
-  apple-sdk,
-  installShellFiles,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  notmuch,
-  gpgme,
-  buildNoDefaultFeatures ? false,
   buildFeatures ? [ ],
-  withNoDefaultFeatures ? buildNoDefaultFeatures,
-  withFeatures ? buildFeatures,
-}@args:
+  buildNoDefaultFeatures ? false,
+  buildPackages,
+  fetchFromGitHub,
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installShellFiles,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+}:
 
 let
-  version = "1.1.0";
-  hash = "sha256-gdrhzyhxRHZkALB3SG/aWOdA5iMYkel3Cjk5VBy3E4M=";
-  cargoHash = "sha256-ulqMjpW3UI509vs3jVHXAEQUhxU/f/hN8XiIo8UBRq8=";
+  version = "2.0.0";
+  hash = "sha256-rOCMjJV0lFSIlvstkSMqGwXKDZsBkWtTYhvXpA73ucA=";
+  cargoHash = "sha256-ppZYlGWNS5lXQZNt7RcwJIvU5jp07cXhEpmFJ9UtxRE=";
 
-  noDefaultFeatures =
-    lib.warnIf (args ? buildNoDefaultFeatures)
-      "buildNoDefaultFeatures is deprecated in favour of withNoDefaultFeatures and will be removed in the next release"
-      withNoDefaultFeatures;
+  withOpenssl = stdenv.hostPlatform.isLinux && builtins.elem "native-tls" buildFeatures;
+  emulator = stdenv.hostPlatform.emulator buildPackages;
+  exe = stdenv.hostPlatform.extensions.executable;
 
-  features =
-    lib.warnIf (args ? buildFeatures)
-      "buildFeatures is deprecated in favour of withFeatures and will be removed in the next release"
-      withFeatures;
 in
-
 rustPlatform.buildRustPackage {
-  inherit version cargoHash;
+  inherit
+    version
+    cargoHash
+    buildFeatures
+    buildNoDefaultFeatures
+    ;
 
   pname = "himalaya";
 
@@ -45,43 +40,35 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
   };
 
-  useFetchCargoVendor = true;
-
-  buildNoDefaultFeatures = noDefaultFeatures;
-  buildFeatures = features;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
+    installShellFiles
+  ];
 
-  buildInputs =
-    [ ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk
-    ++ lib.optional (builtins.elem "notmuch" withFeatures) notmuch
-    ++ lib.optional (builtins.elem "pgp-gpg" withFeatures) gpgme;
-
-  # most of the tests are lib side
-  doCheck = false;
+  buildInputs = lib.optional withOpenssl openssl;
 
   postInstall =
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
+    lib.optionalString (lib.hasInfix "wine" emulator) ''
+      export WINEPREFIX="''${WINEPREFIX:-$(mktemp -d)}"
+      mkdir -p $WINEPREFIX
     ''
-      mkdir -p $out/share/{applications,completions,man}
+    + ''
+      mkdir -p $out/share/{applications,completions,man,schemas}
       cp assets/himalaya.desktop "$out"/share/applications/
-      ${emulator} "$out"/bin/himalaya man "$out"/share/man
-      ${emulator} "$out"/bin/himalaya completion bash > "$out"/share/completions/himalaya.bash
-      ${emulator} "$out"/bin/himalaya completion elvish > "$out"/share/completions/himalaya.elvish
-      ${emulator} "$out"/bin/himalaya completion fish > "$out"/share/completions/himalaya.fish
-      ${emulator} "$out"/bin/himalaya completion powershell > "$out"/share/completions/himalaya.powershell
-      ${emulator} "$out"/bin/himalaya completion zsh > "$out"/share/completions/himalaya.zsh
+      ${emulator} "$out"/bin/himalaya${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
+      ${emulator} "$out"/bin/himalaya${exe} manual "$out"/share/man
+      ${emulator} "$out"/bin/himalaya${exe} json-schema "$out"/share/schemas
     ''
     + lib.optionalString installManPages ''
       installManPage "$out"/share/man/*
     ''
     + lib.optionalString installShellCompletions ''
-      installShellCompletion "$out"/share/completions/himalaya.{bash,fish,zsh}
+      installShellCompletion --cmd himalaya \
+        --bash "$out"/share/completions/himalaya.bash \
+        --fish "$out"/share/completions/himalaya.fish \
+        --zsh "$out"/share/completions/_himalaya
     '';
 
   meta = {
@@ -89,7 +76,10 @@ rustPlatform.buildRustPackage {
     mainProgram = "himalaya";
     homepage = "https://github.com/pimalaya/himalaya";
     changelog = "https://github.com/pimalaya/himalaya/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [
       soywod
       yanganto

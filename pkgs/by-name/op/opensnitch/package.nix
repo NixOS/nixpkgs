@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   protobuf,
   go-protobuf,
   pkg-config,
@@ -35,23 +34,14 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opensnitch";
-  version = "1.7.0.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZkXqocgxyJGo5uQq4Ct1wmUIQljtx5oPzj4JfWWAuSE=";
+    hash = "sha256-Bz5h2DEC61vpkeWZxFlogh6NvTubJcnHuwgTNSzZd68=";
   };
-
-  patches = [
-    # https://github.com/evilsocket/opensnitch/issues/1357
-    # remove next release
-    (fetchpatch {
-      url = "https://github.com/dwongdev/opensnitch/commit/376b06ef97ef79e3afa699878af2e59918aa7ef0.patch?full_index=1";
-      hash = "sha256-QBhc4A2Dign5JY4fcQ2c3F02xFj3m3G2VwY9cFuWV3w=";
-    })
-  ];
 
   postPatch = ''
     # Allow configuring Version at build time
@@ -73,7 +63,7 @@ buildGoModule (finalAttrs: {
     protoc-gen-go-grpc'
   ];
 
-  vendorHash = "sha256-IByoQuJsGORmePlv1HzvF8RSu2XhP5Sry1j3NoY2WP8=";
+  vendorHash = "sha256-6/N/E+uk6RVmSLy6fSWjHj+J5mPFXtHZwWThhFJnfYY=";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
@@ -82,13 +72,11 @@ buildGoModule (finalAttrs: {
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
-    cp system-fw.json $out/etc/opensnitchd/
-    substitute default-config.json $out/etc/opensnitchd/default-config.json \
+    cp -r data/{rules,*.json} $out/etc/opensnitchd/
+    substituteInPlace $out/etc/opensnitchd/default-config.json \
       --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
-    # Do not mkdir rules path
-    sed -i '8d' opensnitchd.service
     # Fixup hardcoded paths
-    substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
+    substitute data/init/opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
       --replace-fail "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 

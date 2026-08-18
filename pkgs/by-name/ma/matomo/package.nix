@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matomo";
-  version = "5.3.2";
+  version = "5.12.0";
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rn5Lr2BSrGitI16MLlP91znSPm2Asd6j0qI8N+1c+Lo=";
+    hash = "sha256-yiQUXb9yGgJ8PFOL1tyXtXEmgCviaqCtN0DwxKcGZV0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -117,7 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
       twey
       boozedog
       niklaskorz
+      leona
+      osnyx
     ];
-    teams = [ lib.teams.flyingcircus ];
   };
 })

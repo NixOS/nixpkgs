@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   # FIXME: This package does not support `distmp3', `eject', etc.
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i "s|^[[:blank:]]*prefix *=.*$|prefix = $out|g ;
             s|^[[:blank:]]*etcdir *=.*$|etcdir = $out/etc|g ;
             s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
@@ -36,7 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
     substituteInPlace "abcde" \
-      --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
+      --replace-fail "/etc/abcde.conf" "$out/etc/abcde.conf"
+
+    runHook postConfigure
   '';
 
   nativeBuildInputs = [ makeWrapper ];

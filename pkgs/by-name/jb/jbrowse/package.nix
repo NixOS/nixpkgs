@@ -6,14 +6,14 @@
 
 let
   pname = "jbrowse";
-  version = "3.5.1";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-1swQIG9rCzk2wP7apYo4UjUE+enMK/ZrMu1q4/ahfjA=";
+    sha256 = "sha256-8d/nF2e92BLYzlw7MfLon+dWZnwnoIFCLy+gTGA1E14=";
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -31,12 +31,12 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun --no-sandbox' 'Exec=jbrowse-desktop'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation genome browser";
     mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benwbooth ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

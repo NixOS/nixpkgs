@@ -1,6 +1,6 @@
 {
   lib,
-  beamPackages,
+  beam_minimal,
   fetchFromGitea,
   cmake,
   file,
@@ -8,25 +8,38 @@
   nix-update-script,
 }:
 
-beamPackages.mixRelease rec {
+let
+  beamPackages = beam_minimal.packages.erlang_27.extend (
+    self: super: {
+      elixir = self.elixir_1_17;
+      rebar3 = self.rebar3WithPlugins {
+        plugins = with self; [ pc ];
+      };
+    }
+  );
+in
+beamPackages.mixRelease (finalAttrs: {
   pname = "akkoma";
-  version = "3.15.2";
+  version = "3.19.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
-    tag = "v${version}";
-    hash = "sha256-GW86OyO/XPIrCS+cPKQ8LG8PdhhfA2rNH1FXFiuL6vM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ASLnsmuWpfQKwpNNLUgI32Gdn/j+jUW5IBLlT8RUmcE=";
+
+    # upstream repository archive fetching is broken
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ file ];
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
-    hash = "sha256-ygRj0s9J2/nBXR5s9CE7eMRBxsRhKlV/IZrkwPpco14=";
+    pname = "mix-deps-akkoma";
+    inherit (finalAttrs) src version;
+    hash = "sha256-O9A7XuQSSczGMcLMc6Fk0eh7PkjQ6sYJKSwdqoEPJJI=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \
@@ -65,7 +78,7 @@ beamPackages.mixRelease rec {
       inherit akkoma akkoma-confined;
     };
 
-    inherit mixFodDeps;
+    inherit (finalAttrs) mixFodDeps;
 
     # Used to make sure the service uses the same version of elixir as
     # the package
@@ -77,9 +90,9 @@ beamPackages.mixRelease rec {
   meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
-    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${version}";
+    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mvs ];
     platforms = lib.platforms.unix;
   };
-}
+})

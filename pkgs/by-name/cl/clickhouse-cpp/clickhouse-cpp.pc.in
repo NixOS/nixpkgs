@@ -1,0 +1,11 @@
+prefix=@out@
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: clickhouse-cpp
+Description: Library to interact with ClickHouse Database from C++ code
+URL: https://github.com/ClickHouse/clickhouse-cpp
+Version: @version@
+Cflags: -pthread -isystem${includedir}
+Libs: -pthread -L${libdir} -Wl,-rpath,${libdir} -lclickhouse-cpp-lib
+Requires: absl_int128

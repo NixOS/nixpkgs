@@ -2,42 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "atproto-goat";
-  version = "0-unstable-2025-02-01";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
-    repo = "indigo";
-    rev = "fd270fbccf0ca858ed2eccdeff246a303c0be045";
-    hash = "sha256-1WK3tMz8WbuIGTHYwD0or+9D0KVezhnv3EDdK11KKp8=";
+    repo = "goat";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mI7GC0ElE+FxT7v29V/a+UZBI1d6os+HpEO5WYWxm6A=";
   };
 
   postPatch = ''
-    substituteInPlace cmd/goat/main.go \
-      --replace-fail "versioninfo.Short()" '"${version}"' \
-      --replace-fail '"github.com/carlmjohnson/versioninfo"' ""
+    substituteInPlace main.go \
+      --replace-fail "versioninfo.Short()" '"${finalAttrs.version}"' \
+      --replace-fail '"github.com/earthboundkid/versioninfo/v2"' ""
   '';
 
-  vendorHash = "sha256-pGc29fgJFq8LP7n/pY1cv6ExZl88PAeFqIbFEhB3xXs=";
+  vendorHash = "sha256-QVnpISwYri8aL4umZWi2LJ0X13CXXK7JygaBh1Sq5PA=";
 
-  subPackages = [ "cmd/goat" ];
-
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go AT protocol CLI tool";
-    homepage = "https://github.com/bluesky-social/indigo/blob/main/cmd/goat/README.md";
+    homepage = "https://github.com/bluesky-social/goat/blob/main/README.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      pyrox0
+      isabelroses
+    ];
     mainProgram = "goat";
   };
-}
+})

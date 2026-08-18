@@ -2,35 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
+  redisTestHook,
+
+  hatchling,
   hypothesis,
   jsonpath-ng,
   lupa,
-  poetry-core,
+  numpy,
   pyprobables,
   pytest-asyncio,
   pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
   redis,
-  redisTestHook,
   sortedcontainers,
+  valkey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.29.0";
+  version = "2.36.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "dsoftwareinc";
+    owner = "cunla";
     repo = "fakeredis-py";
-    tag = "v${version}";
-    hash = "sha256-wBUsoPmTIE3VFvmMnW4B9Unw/V63dIvsBTYCloElamA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vOQBezPsgcjSUigCiW7Q+VueUTtQm3Y7hhB0mTstwKM=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     redis
@@ -43,6 +43,11 @@ buildPythonPackage rec {
     bf = [ pyprobables ];
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
+    valkey = [ valkey ];
+    vectorset = [
+      jsonpath-ng
+      numpy
+    ];
   };
 
   nativeCheckInputs = [
@@ -51,21 +56,27 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
+
+  disabledTests = [
+    # redis.exceptions.ResponseError: unknown command 'evalsha'
+    "test_async_lock"
+  ];
 
   preCheck = ''
     redisTestPort=6390
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fake implementation of Redis API";
-    homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/cunla/fakeredis-py";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

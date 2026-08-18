@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwmenu";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "e-tho";
     repo = "iwmenu";
-    tag = "v${version}";
-    hash = "sha256-F1w2Lp0/iXUHh0PXAZ/wD78C2uVtAcWlEKqBI5I/hnE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2DprhM1gaKWqj3eORLqTuy5Qq0htI+kQhKR3rM0DL/Y=";
   };
 
-  cargoHash = "sha256-NjA8n11pOytXsotEQurYxDHPhwXG5vpdlyscmVUIzfA=";
+  cargoHash = "sha256-PGB/gTDRSnnJMj78KtdFk9w4BWFjz2ehv0ShcRL//KA=";
 
   meta = {
     homepage = "https://github.com/e-tho/iwmenu";
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vuimuich ];
   };
-}
+})

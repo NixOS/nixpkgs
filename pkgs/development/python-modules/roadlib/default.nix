@@ -1,31 +1,32 @@
 {
   lib,
   aiohttp,
+  cbor2,
   cryptography,
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   setuptools,
   requests,
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roadlib";
-  version = "1.3.1";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RI6gUqCaOeLesIwHtsASEkTtdRxLCAP6+C5Yj8mBb2o=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-al1FnLcKAFWRY43weXtsS8DN5pXCO1qFUw1vwLfZvGM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cbor2
     cryptography
     pyjwt
     requests
@@ -41,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROADtools common components library";
     homepage = "https://pypi.org/project/roadlib/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,9 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoconf,
-  automake,
   pkg-config,
   intltool,
   libxml2,
@@ -17,6 +14,11 @@
   bison,
   python3Packages,
   itstool,
+  autoreconfHook,
+  gtk-doc,
+  fetchFromGitLab,
+  gettext,
+  yelp-tools,
 }:
 
 let
@@ -24,18 +26,32 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.59";
+  version = "1.12.61";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnumeric/${lib.versions.majorMinor finalAttrs.version}/gnumeric-${finalAttrs.version}.tar.xz";
-    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnumeric";
+    tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-SrAFYLCYacTobOmb+Jk4f4OWVLcWS8aq8OBFrdwYcbE=";
   };
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
+    gtk-doc
+    yelp-tools
     pkg-config
     intltool
     bison
@@ -48,25 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ToDo: optional libgda, introspection?
   # TODO: fix Perl plugin when cross-compiling
-  buildInputs =
-    [
-      goffice
-      gtk3
-      adwaita-icon-theme
-      python
-      pygobject3
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ]);
+  buildInputs = [
+    goffice
+    gtk3
+    adwaita-icon-theme
+    python
+    pygobject3
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -75,11 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
   };
 })

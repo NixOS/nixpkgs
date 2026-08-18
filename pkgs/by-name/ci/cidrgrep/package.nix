@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "cidrgrep";
-  version = "unstable-2020-11-17";
+  version = "0-unstable-2020-11-17";
 
   src = fetchFromGitHub {
     owner = "tomdoherty";
@@ -23,8 +23,9 @@ buildGoModule {
 
   meta = {
     description = "Like grep but for IPv4 CIDRs";
+    homepage = "https://github.com/tomdoherty/cidrgrep";
     mainProgram = "cidrgrep";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 }

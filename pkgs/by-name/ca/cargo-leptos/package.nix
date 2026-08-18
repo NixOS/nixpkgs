@@ -6,32 +6,30 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
-  version = "0.2.36";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
-    rev = "v${version}";
-    hash = "sha256-ogX8kfCC+1sh9VXT9eYDJSNtX5WH/QF5LtOOkR90Snc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w1kd/eOjNHYAramUvHdgj0ogFqgHDQ1P+ItKTTLL9hU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-USMJeyNdxEOQctsVCvD1ImuEIzbzskVoz6rcU270AFg=";
+  cargoHash = "sha256-p0mku5B9RtU0E7ny1Izhr2diBLgDH8HR2/B92MvBfws=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  env =
-    {
-      OPENSSL_NO_VENDOR = 1;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # Fix for C++ compiler version on darwin for wasm-opt
-      CRATE_CC_NO_DEFAULTS = 1;
-    };
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Fix for C++ compiler version on darwin for wasm-opt
+    CRATE_CC_NO_DEFAULTS = 1;
+  };
 
   # https://github.com/leptos-rs/cargo-leptos#dependencies
   buildFeatures = [ "no_downloads" ]; # cargo-leptos will try to install missing dependencies on its own otherwise
@@ -41,8 +39,8 @@ rustPlatform.buildRustPackage rec {
     description = "Build tool for the Leptos web framework";
     mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
-    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benwis ];
   };
-}
+})

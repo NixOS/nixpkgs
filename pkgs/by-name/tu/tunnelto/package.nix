@@ -18,16 +18,14 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-84jGcR/E1QoqIlbGu67muYUtZU66ZJtj4tdZvmYbII4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QXkKqEEbNEDcypErDIFarJLuIoYWOZj/9jCbslxrOXs=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Expose your local web server to the internet with a public URL";
     homepage = "https://tunnelto.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
   };
 }

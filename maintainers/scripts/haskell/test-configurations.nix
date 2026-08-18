@@ -6,7 +6,7 @@
   and builds all derivations (or at least a reasonable subset) affected by
   these overrides.
 
-  By default, it checks `configuration-{common,nix,ghc-8.10.x}.nix`. You can
+  By default, it checks `configuration-{common,nix,ghc-9.10.x}.nix`. You can
   invoke it like this:
 
     nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
@@ -50,11 +50,13 @@
   files ? [
     "configuration-common.nix"
     "configuration-nix.nix"
-    "configuration-ghc-8.10.x.nix"
+    "configuration-ghc-9.8.x.nix"
   ],
   nixpkgsPath ? ../../..,
   config ? {
     allowBroken = true;
+    # TODO(@sternenseemann): better way to workaround throw-ing aliases?
+    allowAliases = false;
   },
   skipEvalErrors ? true,
   skipBinaryGHCs ? true,
@@ -65,7 +67,7 @@ let
   inherit (pkgs) lib;
 
   # see usage explanation for the input format `files` allows
-  files' = builtins.map builtins.baseNameOf (if !builtins.isList files then [ files ] else files);
+  files' = map baseNameOf (if !builtins.isList files then [ files ] else files);
 
   packageSetsWithVersionedHead =
     pkgs.haskell.packages
@@ -99,7 +101,7 @@ let
       # match the major and minor version of the GHC the config is intended for, if any
       configVersion = lib.concatStrings (builtins.match "ghc-([0-9]+).([0-9]+).x" configName);
       # return all package sets under haskell.packages matching the version components
-      setsForVersion = builtins.map (name: packageSetsWithVersionedHead.${name}) (
+      setsForVersion = map (name: packageSetsWithVersionedHead.${name}) (
         builtins.filter (
           setName:
           lib.hasPrefix "ghc${configVersion}" setName && (skipBinaryGHCs -> !(lib.hasInfix "Binary" setName))
@@ -120,7 +122,7 @@ let
 
   # attribute set that has all the attributes of haskellPackages set to null
   availableHaskellPackages = builtins.listToAttrs (
-    builtins.map (attr: lib.nameValuePair attr null) (builtins.attrNames pkgs.haskellPackages)
+    map (attr: lib.nameValuePair attr null) (builtins.attrNames pkgs.haskellPackages)
   );
 
   # evaluate a configuration and only return the attributes changed by it,
@@ -155,7 +157,7 @@ let
             sets = setsForFile fileName;
             attrs = overriddenAttrs fileName;
           in
-          lib.concatMap (set: builtins.map (attr: set.${attr}) attrs) sets
+          lib.concatMap (set: map (attr: set.${attr}) attrs) sets
         ) files'
       );
 in

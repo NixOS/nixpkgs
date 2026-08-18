@@ -3,37 +3,34 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   types-awscrt,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "botocore-stubs";
-  version = "1.38.46";
+  version = "1.43.67";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "botocore_stubs";
-    inherit version;
-    hash = "sha256-oE5pdmq4uuM4kRwYl0kviNBc1InNdfBubrTxNfnajHs=";
+    inherit (finalAttrs) version;
+    hash = "sha256-hT50AUofVXBVxP+uX7ONfGXHwFIOGqs2bKxB1UKPQZ0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     types-awscrt
     typing-extensions
   ];
 
   pythonImportsCheck = [ "botocore-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations and code completion for botocore";
     homepage = "https://pypi.org/project/botocore-stubs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

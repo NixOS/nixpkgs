@@ -23,14 +23,14 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "ratelimit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API Rate Limit Decorator";
     homepage = "https://github.com/tomasbasham/ratelimit";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

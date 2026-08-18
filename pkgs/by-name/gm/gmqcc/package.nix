@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphitemaster.github.io/gmqcc/";
     description = "Modern QuakeC compiler";
     mainProgram = "gmqcc";
@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ necrophcodr ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

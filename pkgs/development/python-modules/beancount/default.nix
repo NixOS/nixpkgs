@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   bison,
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  fetchpatch2,
   flex,
   gnupg,
   meson,
@@ -14,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.3";
   pname = "beancount";
   pyproject = true;
 
@@ -22,8 +24,15 @@ buildPythonPackage rec {
     owner = "beancount";
     repo = "beancount";
     tag = version;
-    hash = "sha256-ogjBW/NGlMmhYlzcx3EWWoVi+OOEv2Wm49tzwMiNb8A=";
+    hash = "sha256-WM8SM2ZHphafzXHyVi4Fo9tgsClAnmLsZKZUsf2Twmg=";
   };
+
+  postPatch = ''
+    # We don't need the python binary wrappers, since we provide them via nativeBuildInputs
+    substituteInPlace pyproject.toml \
+      --replace-fail "'flex-bin ; sys_platform == \"linux\" or sys_platform == \"darwin\"'," "" \
+      --replace-fail "'bison-bin ; sys_platform == \"linux\" or sys_platform == \"darwin\"'," ""
+  '';
 
   build-system = [
     meson
@@ -50,6 +59,12 @@ buildPythonPackage rec {
     # avoid local paths, relative imports wont resolve correctly
     mv beancount tests
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot run the gpg-agent. If needed, implement as passthru tests.
+    "test_read_encrypted_file"
+    "test_include_encrypted"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 

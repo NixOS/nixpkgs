@@ -7,7 +7,6 @@
   django-phonenumber-field,
   fetchFromGitHub,
   mercadopago,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "3.0.1";
+  version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-payments";
     tag = "v${version}";
-    hash = "sha256-/XsqtExnNtUGqI40XvvcO/nGq56gbC/mPdtHv1QQyGo=";
+    hash = "sha256-vEmmX+IjE6HaIq/i1h2xc5ArkNlenVhD19mBgHvvmbM=";
   };
 
   build-system = [
@@ -39,7 +36,8 @@ buildPythonPackage rec {
     django
     django-phonenumber-field
     requests
-  ] ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
+  ]
+  ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
 
   # require internet connection
   doCheck = false;
@@ -55,11 +53,11 @@ buildPythonPackage rec {
     stripe = [ stripe ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
     changelog = "https://github.com/jazzband/django-payments/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

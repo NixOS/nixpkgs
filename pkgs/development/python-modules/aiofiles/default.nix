@@ -4,26 +4,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  hatch-vcs,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "24.1.0";
+  version = "25.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = "aiofiles";
     tag = "v${version}";
-    hash = "sha256-uDKDMSNbMIlAaifpEBh1+q2bdZNUia8pPb30IOIgOAE=";
+    hash = "sha256-NBmzoUb2una3+eWqR1HraVPibaRb9I51aYwskrjxskQ=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -42,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiofiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
-    changelog = "https://github.com/Tinche/aiofiles/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/Tinche/aiofiles/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

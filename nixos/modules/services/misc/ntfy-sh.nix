@@ -61,6 +61,18 @@ in
         Configuration for ntfy.sh, supported values are [here](https://ntfy.sh/docs/config/#config-options).
       '';
     };
+
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/ntfy";
+      description = ''
+        Path to a file containing extra ntfy environment variables in the systemd `EnvironmentFile`
+        format. Refer to the [documentation](https://docs.ntfy.sh/config/) for config options.
+
+        This can be used to pass secrets such as creating declarative users or token without putting them in the Nix store.
+      '';
+    };
   };
 
   config =
@@ -91,6 +103,7 @@ in
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           User = cfg.user;
           StateDirectory = "ntfy-sh";
+          RuntimeDirectory = "ntfy-sh";
 
           DynamicUser = true;
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
@@ -109,6 +122,7 @@ in
           MemoryDenyWriteExecute = true;
           # Upstream Recommendation
           LimitNOFILE = 20500;
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         };
       };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tomduck";
-    repo = "pandox-xnos";
+    repo = "pandoc-xnos";
     tag = version;
     hash = "sha256-beiGvN0DS6s8wFjcDKozDuwAM2OApX3lTRaUDRUqLeU=";
   };

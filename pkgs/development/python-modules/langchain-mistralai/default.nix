@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -22,21 +22,22 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
-  version = "0.2.10";
+  version = "1.1.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-mistralai==${version}";
-    hash = "sha256-1oH9GRvjYv/YzedKXeWgw5nwNgMQ9mSNkmZ2xwPekXc=";
+    tag = "langchain-mistralai==${finalAttrs.version}";
+    hash = "sha256-FkldUvLhbOS0FwRQaAZHebUv1jUSWMXMuIx780B6R+8=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/mistralai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/mistralai";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -46,28 +47,37 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
-
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Comparison error due to message formatting differences
+    "test__convert_dict_to_message_tool_call"
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    # RuntimeError: Cannot send a request, as the client has been closed.
+    # Tries to download from huggingface hub
+    "test_mistral_init"
+  ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-mistralai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-mistralai==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;
@@ -75,4 +85,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

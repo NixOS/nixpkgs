@@ -18,13 +18,10 @@ melpaBuild {
 
   files = ''(:defaults (:exclude "color-theme-solarized-pkg.el"))'';
 
-  # https://github.com/NixOS/nixpkgs/issues/335408
-  ignoreCompilationError = true;
-
   meta = {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -52,6 +52,7 @@ in
         for possible values.
       '';
       type = types.submodule {
+        freeformType = yaml.type;
         options.repo = {
           scanPath = mkOption {
             type = types.path;
@@ -60,7 +61,12 @@ in
           };
           readme = mkOption {
             type = types.listOf types.str;
-            default = [ ];
+            default = [
+              "readme"
+              "README"
+              "readme.md"
+              "README.md"
+            ];
             description = "Readme files to look for.";
           };
           mainBranch = mkOption {
@@ -80,14 +86,14 @@ in
         options.dirs = {
           templates = mkOption {
             type = types.path;
-            default = "${pkgs.legit-web}/lib/legit/templates";
-            defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/templates"'';
+            default = "${cfg.package}/lib/legit/templates";
+            defaultText = literalExpression ''"''${config.services.legit.package}/lib/legit/templates"'';
             description = "Directories where template files are located.";
           };
           static = mkOption {
             type = types.path;
-            default = "${pkgs.legit-web}/lib/legit/static";
-            defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/static"'';
+            default = "${cfg.package}/lib/legit/static";
+            defaultText = literalExpression ''"''${config.services.legit.package}/lib/legit/static"'';
             description = "Directories where static files are located.";
           };
         };

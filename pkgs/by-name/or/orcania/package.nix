@@ -6,14 +6,14 @@
   check,
   subunit,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orcania";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = "orcania";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
   };
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Potluck with different functions for different purposes that can be shared among C programs";
     mainProgram = "base64url";
     homepage = "https://github.com/babelouest/orcania";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ johnazoidberg ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
   };
-}
+})

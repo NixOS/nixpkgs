@@ -1,12 +1,11 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  system,
+  pkgs,
+  runTest,
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
 let
+  inherit (pkgs) lib;
 
   makeZfsTest =
     {
@@ -15,15 +14,12 @@ let
       zfsPackage,
       extraTest ? "",
     }:
-    makeTest {
+    runTest {
       name = zfsPackage.kernelModuleAttribute;
-      meta = with pkgs.lib.maintainers; {
-        maintainers = [ elvishjerricco ];
-      };
+      meta.maintainers = with lib.maintainers; [ elvishjerricco ];
 
       nodes.machine =
         {
-          config,
           pkgs,
           lib,
           ...
@@ -53,6 +49,8 @@ let
 
           # /dev/disk/by-id doesn't get populated in the NixOS test framework
           boot.zfs.devNodes = "/dev/disk/by-uuid";
+
+          boot.zfs.forceImportRoot = lib.mkDefault false;
 
           specialisation.samba.configuration = {
             services.samba = {
@@ -101,6 +99,7 @@ let
             systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ "forcepool.mount" ];
             systemd.targets.zfs.wantedBy = lib.mkVMOverride [ ];
             boot.zfs.forceImportAll = true;
+            boot.zfs.forceImportRoot = true;
             virtualisation.fileSystems."/forcepool" = {
               device = "forcepool";
               fsType = "zfs";
@@ -123,6 +122,13 @@ let
         };
 
       testScript =
+        { nodes, ... }:
+        let
+          samba = nodes.machine.specialisation.samba.configuration.system.build.toplevel;
+          encryption = nodes.machine.specialisation.encryption.configuration.system.build.toplevel;
+          forcepool = nodes.machine.specialisation.forcepool.configuration.system.build.toplevel;
+        in
+        # python
         ''
           machine.wait_for_unit("multi-user.target")
           machine.succeed(
@@ -139,7 +145,7 @@ let
                   "zfs create -o mountpoint=legacy rpool/root",
                   # shared datasets cannot have legacy mountpoint
                   "zfs create rpool/shared_smb",
-                  "bootctl set-default nixos-generation-1-specialisation-samba.conf",
+                  "${samba}/bin/switch-to-configuration boot",
                   "sync",
               )
               machine.crash()
@@ -160,7 +166,7 @@ let
                   + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
                   "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
                   + "-o keylocation=http://localhost/zfskey manual/httpkey",
-                  "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
+                  "${encryption}/bin/switch-to-configuration boot",
                   "sync",
                   "zpool export automatic",
                   "zpool export manual",
@@ -186,7 +192,7 @@ let
                   "rm /etc/hostid",
                   "zgenhostid deadcafe",
                   "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
-                  "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
+                  "${forcepool}/bin/switch-to-configuration boot",
                   "rm /etc/hostid",
                   "sync",
               )
@@ -204,32 +210,52 @@ let
 
 in
 {
-
-  series_2_2 = makeZfsTest {
-    zfsPackage = pkgs.zfs_2_2;
-    kernelPackages = pkgs.linuxPackages;
-  };
-
   series_2_3 = makeZfsTest {
     zfsPackage = pkgs.zfs_2_3;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstable = makeZfsTest rec {
+  series_2_4 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_4;
+    kernelPackages = pkgs.linuxPackages;
+  };
+
+  unstable = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest rec {
+  unstableWithSystemdStage1 = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
     enableSystemdStage1 = true;
   };
 
-  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
-  installer = (import ./installer.nix { inherit system; }).zfsroot;
+  installerBoot =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).separateBootZfs;
 
-  expand-partitions = makeTest {
+  installer =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).zfsroot;
+
+  installerBootWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).separateBootZfs;
+
+  installerWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).zfsroot;
+
+  expand-partitions = runTest {
     name = "multi-disk-zfs";
     nodes = {
       machine =

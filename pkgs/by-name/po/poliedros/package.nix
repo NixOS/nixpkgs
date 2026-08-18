@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 let
-  version = "1.5.0";
+  version = "1.5.3";
 in
 python3Packages.buildPythonApplication {
   pname = "poliedros";
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     owner = "kriptolix";
     repo = "Poliedros";
     tag = "v${version}";
-    hash = "sha256-1itBovF5xGB8zMedtKKcQ2FJeOd5gT1COrJtwEOgdbk=";
+    hash = "sha256-PZKmxy9Pc0bPCXUmSZL2ETuJbmN3pebMwak3fRuj9AU=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,6 @@ python3Packages.buildPythonApplication {
     changelog = "https://github.com/kriptolix/Poliedros/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "poliedros";
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 }

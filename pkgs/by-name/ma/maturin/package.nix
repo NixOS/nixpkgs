@@ -10,19 +10,18 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maturin";
-  version = "1.8.6";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
-    rev = "v${version}";
-    hash = "sha256-Dfq8kBg6gk1j/Y1flOb2yw9hhY40n5gi4h08znI2Yw8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sqcNRN8oAZ2AK5gHr3ipb035VOiB+zDA10wTtiaeUBM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LDVmNtpu+J8rnSlpTslwm6QcyN6E3ZlVdpmowKc/kZo=";
+  cargoHash = "sha256-pD8/S7GsFFeAjc8U4fQ9ZTu+o3mKyPagMPKKRI40n4w=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     tests = {
       version = testers.testVersion { package = maturin; };
       pyo3 = python3.pkgs.callPackage ./pyo3-test {
-        format = "pyproject";
+        pyproject = true;
         buildAndTestSubdir = "examples/word-count";
         preConfigure = "";
 
@@ -60,12 +59,15 @@ rustPlatform.buildRustPackage rec {
       Python and can upload them to PyPI.
     '';
     homepage = "https://github.com/PyO3/maturin";
-    changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/PyO3/maturin/blob/v${finalAttrs.version}/Changelog.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      miniharinn
+    ];
     mainProgram = "maturin";
   };
-}
+})

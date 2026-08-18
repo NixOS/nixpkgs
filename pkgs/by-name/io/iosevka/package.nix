@@ -4,8 +4,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   cctools,
-  remarshal,
+  go-toml,
   ttfautohint-nox,
+  nodejs_latest,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
@@ -47,35 +48,39 @@
   #   sequence = "+>"
   # '';
   extraParameters ? null,
-  # Custom font set name. Required if any custom settings above.
-  set ? null,
+  # Custom font set name. Required if `extraParameters` is used and/or
+  # if `privateBuildPlan` is a TOML string.
+  set ? privateBuildPlan.family or null,
 }:
 
+assert (builtins.isAttrs privateBuildPlan) -> builtins.hasAttr "family" privateBuildPlan;
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.2.5";
+  version = "34.7.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
-    rev = "v${version}";
-    hash = "sha256-2yIkANG5hnath2EHiRXSKEflFoler9syz4e3AU5jxgU=";
+    tag = "v${version}";
+    hash = "sha256-OwCtp/WufMCzuaPTDCr2siorUC52zgM2e80DyshzsZw=";
   };
 
-  npmDepsHash = "sha256-n6vd2ed4OCUIz3YyOO8Yt/wQJCznrwYCZlg3MRJEX6o=";
+  npmDepsHash = "sha256-tlBxO9K0itXO6Mac4jcygZ6+9kj1gTdmu+rtbL2qdcE=";
+  nodejs = nodejs_latest;
 
-  nativeBuildInputs =
-    [
-      remarshal
-      ttfautohint-nox
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # libtool
-      cctools
-    ];
+  nativeBuildInputs = [
+    go-toml
+    ttfautohint-nox
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # libtool
+    cctools
+  ];
+
+  strictDeps = true;
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -84,21 +89,16 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile =
-    [ "extraParameters" ]
-    ++ lib.optionals (
-      !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-    ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+      printf "%s" "$buildPlan" | jsontoml -use-json-number > private-build-plans.toml
     ''}
     ${lib.optionalString
       (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
       ''
-        cp "$buildPlanPath" private-build-plans.toml
+        printf "%s" "$buildPlan" > private-build-plans.toml
       ''
     }
     ${lib.optionalString
@@ -109,7 +109,7 @@ buildNpmPackage rec {
     }
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
-      cat "$extraParametersPath" >> params/parameters.toml
+      printf "%s" "$extraParameters" >> params/parameters.toml
     ''}
     runHook postConfigure
   '';
@@ -119,7 +119,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     # pipe to cat to disable progress bar
-    npm run build --no-update-notifier --targets ttf::$pname -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
+    npm run build --no-update-notifier --targets ttf::"$pname" -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
 
     runHook postBuild
   '';
@@ -133,8 +133,11 @@ buildNpmPackage rec {
   '';
 
   enableParallelBuilding = true;
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = "Versatile typeface for code, from code";
@@ -143,11 +146,9 @@ buildNpmPackage rec {
       quasi‑proportional typeface family, designed for writing code, using in
       terminals, and preparing technical documents.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      ttuegel
-      rileyinman
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       lunik1
     ];
   };

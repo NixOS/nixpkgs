@@ -1,170 +1,180 @@
 {
   lib,
-  symlinkJoin,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-  ninja,
+  # build-system
+  setuptools,
 
-  # buildInputs
-  ffmpeg_6-full,
-  pybind11,
-  sox,
+  # dependencies
   torch,
-  llvmPackages,
+  torchcodec,
+
+  # tests
+  expecttest,
+  inflect,
+  librosa,
+  parameterized,
+  pytestCheckHook,
+  pytorch-lightning,
+  requests,
+  scipy,
+  sentencepiece,
+  soundfile,
+  unidecode,
+
+  # passthru
+  torchaudio,
 
   cudaSupport ? torch.cudaSupport,
-  cudaPackages,
   rocmSupport ? torch.rocmSupport,
-  rocmPackages,
-
-  gpuTargets ? [ ],
 }:
 
 let
-  # TODO: Reuse one defined in torch?
-  # Some of those dependencies are probably not required,
-  # but it breaks when the store path is different between torch and torchaudio
-  rocmtoolkit_joined = symlinkJoin {
-    name = "rocm-merged";
-
-    paths = with rocmPackages; [
-      rocm-core
-      clr
-      rccl
-      miopen
-      rocrand
-      rocblas
-      rocsparse
-      hipsparse
-      rocthrust
-      rocprim
-      hipcub
-      roctracer
-      rocfft
-      rocsolver
-      hipfft
-      hipsolver
-      hipblas-common
-      hipblas
-      rocminfo
-      rocm-comgr
-      rocm-device-libs
-      rocm-runtime
-      clr.icd
-      hipify
-    ];
-
-    # Fix `setuptools` not being found
-    postBuild = ''
-      rm -rf $out/nix-support
-    '';
-  };
-  # Only used for ROCm
-  gpuTargetString = lib.strings.concatStringsSep ";" (
-    if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
-      gpuTargets
-    else if rocmSupport then
-      rocmPackages.clr.gpuTargets
-    else
-      throw "No GPU targets specified"
-  );
+  inherit (stdenv) hostPlatform;
+  inherit (torch) cudaCapabilities cudaPackages;
 in
-buildPythonPackage rec {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
-  version = "2.7.1";
+  version = "2.11.0";
   pyproject = true;
-
-  stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
-    tag = "v${version}";
-    hash = "sha256-T1V+/Oho6Dblh3ah5PljpxKcndy2e1dAlVxC3ay4AM0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TncROn9wfn5HOaIvupS2/KD9JCgwfHyfnbZRc+SiqJ0=";
   };
-
-  patches = [
-    ./0001-setup.py-propagate-cmakeFlags.patch
-  ];
-
-  postPatch = lib.optionalString rocmSupport ''
-    # There is no .info/version-dev, only .info/version
-    substituteInPlace cmake/LoadHIP.cmake \
-      --replace-fail "/.info/version-dev" "/.info/version"
-  '';
 
   env = {
-    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+    # CTC seems to be missing no matter what. No obvious flag to force its compilation.
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CTC_DECODER = 1;
+
+    # CUDA
+    USE_CUDA = cudaSupport;
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 1;
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 1;
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MULTIGPU_CUDA = 1;
+
+    # ROCM
+    USE_ROCM = rocmSupport;
+    PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport torch.gpuTargetString;
+    ROCM_PATH = lib.optionalString rocmSupport torch.rocmtoolkit_joined;
+
+    # demucs is not packaged in nixpkgs and is archived anyway
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MOD_demucs = true;
+
+    # fairseq is unmaintained and broken in nixpkgs
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MOD_fairseq = true;
+
+    # Fails even on python>3.10 with:
+    #   RuntimeError: Test is known to fail for Python 3.10, disabling for now
+    #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
+
+    # Fails on aarch64-linux and darwin with:
+    #   RuntimeError: `fbgemm` is not available
+    # `fbgemm` is indeed an x86_64-linux-only feature
+    # in some x86_64-linux build environments this is also needed
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION = 1;
   };
 
-  # https://github.com/pytorch/audio/blob/v2.1.0/docs/source/build.linux.rst#optional-build-torchaudio-with-a-custom-built-ffmpeg
-  FFMPEG_ROOT = symlinkJoin {
-    name = "ffmpeg";
-    paths = [
-      ffmpeg_6-full.bin
-      ffmpeg_6-full.dev
-      ffmpeg_6-full.lib
-    ];
-  };
+  build-system = [
+    setuptools
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      ninja
-    ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals rocmSupport (
-      with rocmPackages;
-      [
-        clr
-        rocblas
-        hipblas
-      ]
-    );
+  nativeBuildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs = [
-    ffmpeg_6-full
-    pybind11
-    sox
-    torch.cxxdev
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
-  dependencies = [ torch ];
-
-  BUILD_SOX = 0;
-  BUILD_KALDI = 0;
-  BUILD_RNNT = 0;
-  BUILD_CTC_DECODER = 0;
-
-  preConfigure = lib.optionalString rocmSupport ''
-    export ROCM_PATH=${rocmtoolkit_joined}
-    export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-  '';
-
-  dontUseCmakeConfigure = true;
-
-  doCheck = false; # requires sox backend
+  dependencies = [
+    torch
+    torchcodec
+  ];
 
   pythonImportsCheck = [ "torchaudio" ];
 
+  nativeCheckInputs = [
+    expecttest
+    inflect
+    parameterized
+    pytestCheckHook
+    pytorch-lightning
+    scipy
+    sentencepiece
+    unidecode
+    librosa
+    requests
+    soundfile
+  ];
+
+  disabledTestPaths = [
+    # Require internet access
+    "test/integration_tests"
+  ];
+
+  disabledTests = [
+    # AssertionError: Tensor-likes are not close!
+    # Mismatched elements: 1070 / 32800 (3.3%)
+    "test_amplitude_to_DB"
+    "test_amplitude_to_DB_power"
+    "test_griffinlim_0_99"
+    "test_MelSpectrogram_00"
+    "test_MelSpectrogram_01"
+    "test_MelSpectrogram_04"
+    "test_MelSpectrogram_05"
+    "test_MelSpectrogram_08"
+    "test_MelSpectrogram_09"
+
+    # Very long to run
+    "AutogradCPUTest"
+    "TestAutogradLfilterCPU"
+    "TestWav2Vec2Model"
+
+    # Massive RAM usage
+    "TestConvTasNet"
+  ]
+  ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_batch_inverse_spectrogram"
+    "test_batch_pitch_shift"
+    "test_batch_spectrogram"
+
+    # RuntimeError: illegal immediate parameter (range error)
+    "test_lfilter_shape_4"
+    "test_lfilter_shape_6"
+  ];
+
+  passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
+    pname = "${finalAttrs.pname}-gpuCheck";
+    # This is only a test derivation; its metadata still identifies the package as "torchaudio".
+    dontCheckPythonMetadata = true;
+    requiredSystemFeatures = [ "cuda" ];
+
+    env = (old.env or { }) // {
+      TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 0;
+      TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 0;
+    };
+  });
+
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
+    changelog = "https://github.com/pytorch/audio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     platforms =
-      lib.platforms.linux
-      ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
+      lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       GaetanLepage
+      caniko
       junjihashimoto
     ];
   };
-}
+})

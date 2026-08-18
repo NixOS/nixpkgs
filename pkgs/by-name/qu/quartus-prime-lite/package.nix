@@ -5,8 +5,9 @@
   makeDesktopItem,
   runtimeShell,
   runCommand,
+  writeShellScriptBin,
+  xdg-utils,
   unstick,
-  quartus-prime-lite,
   libfaketime,
   pkgsi686Linux,
   withQuesta ? true,
@@ -31,9 +32,23 @@ let
     genericName = "Quartus Prime";
     categories = [ "Development" ];
   };
+  # Quartus's own launcher (quartus/adm/qenv.sh) prepends quartus/linux64
+  # (which bundles an older libstdc++.so.6) to LD_LIBRARY_PATH for its whole
+  # session. When a user clicks a web link, Quartus execs `xdg-open` (found
+  # via $PATH) to open it, and that process inherits the polluted
+  # LD_LIBRARY_PATH, causing the browser it eventually launches to pick up
+  # Quartus's outdated libstdc++ instead of its own and fail to start. Shadow
+  # `xdg-open` on $PATH with a wrapper that restores the environment's
+  # original LD_LIBRARY_PATH (conveniently saved by qenv.sh as
+  # $QUARTUS_ORIG_LIBPATH) before delegating to nixpkgs' own xdg-utils
+  # xdg-open.
+  xdgOpenWrapper = writeShellScriptBin "xdg-open" ''
+    export LD_LIBRARY_PATH=$QUARTUS_ORIG_LIBPATH
+    exec ${lib.getExe' xdg-utils "xdg-open"} "$@"
+  '';
 in
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-buildFHSEnv rec {
+buildFHSEnv (finalAttrs: {
   pname = "quartus-prime-lite"; # wrapped
   inherit (unwrapped) version;
 
@@ -50,19 +65,19 @@ buildFHSEnv rec {
       ))
       # quartus requirements
       glib
-      xorg.libICE
-      xorg.libSM
-      xorg.libXau
-      xorg.libXdmcp
-      xorg.libXScrnSaver
+      libice
+      libsm
+      libxau
+      libxdmcp
+      libxscrnsaver
       libudev0-shim
       bzip2
       brotli
       expat
       dbus
       # qsys requirements
-      xorg.libXtst
-      xorg.libXi
+      libxtst
+      libxi
       dejavu_fonts
       gnumake
     ];
@@ -75,25 +90,37 @@ buildFHSEnv rec {
     pkgs:
     with pkgs;
     let
-      # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
+      # NOTE: Not using `pkgs.extend` here on purpose: `pkgs` here is
+      # `pkgsi686Linux`, a spliced package set (see the "splicing code does not
+      # handle `pkgsi686Linux` well" comment in buildFHSEnv.nix), and `.extend`
+      # rebuilds the whole fixed point instead of overriding a single
+      # derivation. That drops the splice, so every package pulled from this
+      # set below (not just the ones touching `libpng`) ends up rebuilt from an
+      # independent, non-spliced i686 bootstrap instead of sharing store paths
+      # with the rest of the closure.
       freetype = pkgs.freetype.override { libpng = libpng12; };
       fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
+      libxft = pkgs.libxft.override { inherit freetype fontconfig; };
     in
     [
       # questa requirements
       libxml2
       ncurses5
-      unixODBC
-      libXft
+      unixodbc
+      libxft
       # common requirements
       freetype
       fontconfig
-      xorg.libX11
-      xorg.libXext
-      xorg.libXrender
+      libx11
+      libxext
+      libxrender
       libxcrypt-legacy
     ];
+
+  # See above NOTE regarding libpng
+  disallowedReferences = [
+    pkgsi686Linux.libpng
+  ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/64x64/apps
@@ -102,12 +129,13 @@ buildFHSEnv rec {
 
     progs_to_wrap=(
       "${unwrapped}"/quartus/bin/*
+      "${unwrapped}"/niosv/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
       "${unwrapped}"/questa_fse/bin/*
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${pname}
+    wrapper=$out/bin/quartus-prime-lite
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
@@ -124,6 +152,12 @@ buildFHSEnv rec {
                 # SOURCE_DATE_EPOCH code path.
                 NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=0
                 ;;
+            niosv/*)
+                # Both are needed for a functional niosv-bsp and possibly other
+                # executables.
+                echo "export QUARTUS_ROOTDIR=${unwrapped}/quartus" >> "$wrapped"
+                echo "export SOPC_KIT_NIOS2=${unwrapped}/niosv" >> "$wrapped"
+                ;;
         esac
         # SOURCE_DATE_EPOCH blocklist for programs that are known to hang/break
         # with fixed/static clock.
@@ -133,6 +167,11 @@ buildFHSEnv rec {
                 ;;
         esac
         echo "export NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" >> "$wrapped"
+        # If a Wayland user has QT_QPA_PLATFORM=wayland, Quartus executables
+        # that use Qt won't work, so let's be explicit.
+        echo "export QT_QPA_PLATFORM=xcb" >> "$wrapped"
+        # See above NOTE regarding `xdgOpenWrapper`
+        echo "export PATH=${xdgOpenWrapper}/bin:\$PATH" >> "$wrapped"
         echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
@@ -142,38 +181,37 @@ buildFHSEnv rec {
     ln --symbolic --relative --target-directory ./bin ''${progs_wrapped[@]}
   '';
 
-  profile =
-    ''
-      # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
-      # starting most operations in many containerized environments, including WSL2, Docker, and LXC
-      # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
-      # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
-      #
-      # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
-      # compiling encrypted device libraries in Questa (with error
-      # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
-      # for non-Questa wrappers.
-      if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
-          export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
-      fi
+  profile = ''
+    # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
+    # starting most operations in many containerized environments, including WSL2, Docker, and LXC
+    # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
+    # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
+    #
+    # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
+    # compiling encrypted device libraries in Questa (with error
+    # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
+    # for non-Questa wrappers.
+    if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
+        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
+    fi
 
-      # Implement the SOURCE_DATE_EPOCH specification for reproducible builds
-      # (https://reproducible-builds.org/specs/source-date-epoch).
-      # Require opt-in with NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD=1 for now, in case
-      # the blocklist is incomplete.
-      if [ -n "$SOURCE_DATE_EPOCH" ] && [ "$NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD" = 1 ] && [ "$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" = 1 ]; then
-          export LD_LIBRARY_PATH="${
-            lib.makeLibraryPath [
-              libfaketime
-              pkgsi686Linux.libfaketime
-            ]
-          }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-          export LD_PRELOAD=libfaketime.so.1''${LD_PRELOAD:+:$LD_PRELOAD}
-          export FAKETIME_FMT="%s"
-          export FAKETIME="$SOURCE_DATE_EPOCH"
-      fi
-    ''
-    + extraProfile;
+    # Implement the SOURCE_DATE_EPOCH specification for reproducible builds
+    # (https://reproducible-builds.org/specs/source-date-epoch).
+    # Require opt-in with NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD=1 for now, in case
+    # the blocklist is incomplete.
+    if [ -n "$SOURCE_DATE_EPOCH" ] && [ "$NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD" = 1 ] && [ "$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" = 1 ]; then
+        export LD_LIBRARY_PATH="${
+          lib.makeLibraryPath [
+            libfaketime
+            pkgsi686Linux.libfaketime
+          ]
+        }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        export LD_PRELOAD=libfaketime.so.1''${LD_PRELOAD:+:$LD_PRELOAD}
+        export FAKETIME_FMT="%s"
+        export FAKETIME="$SOURCE_DATE_EPOCH"
+    fi
+  ''
+  + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
@@ -184,7 +222,7 @@ buildFHSEnv rec {
       buildSof =
         runCommand "quartus-prime-lite-test-build-sof"
           {
-            nativeBuildInputs = [ quartus-prime-lite ];
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
             env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
           }
           ''
@@ -221,11 +259,11 @@ buildFHSEnv rec {
             env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
           }
           ''
-            "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+            "${finalAttrs.finalPackage}/bin/vlog" "${finalAttrs.passthru.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
             touch "$out"
           '';
     };
   };
 
   inherit (unwrapped) meta;
-}
+})

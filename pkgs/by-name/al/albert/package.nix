@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.28.2";
+  version = "35.1.0";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FYl/S7+KoQ3kgUQX0hiv8B+AbTbyfmo1GX130G09bZ8=";
+    hash = "sha256-3YJeZZEm7rnKZhBpKB2pRVNds+xXk18dSbSdSM+hl58=";
     fetchSubmodules = true;
   };
 
@@ -31,26 +31,26 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      kdePackages.qtkeychain
-      libqalculate
-      libarchive
-      muparser
-    ]
-    ++ (with qt6; [
-      qt5compat
-      qtbase
-      qtdeclarative
-      qtscxml
-      qtsvg
-      qttools
-      qtwayland
-    ])
-    ++ (with python3Packages; [
-      python
-      pybind11
-    ]);
+  buildInputs = [
+    kdePackages.qcoro
+    kdePackages.qtkeychain
+    libqalculate
+    libarchive
+    muparser
+  ]
+  ++ (with qt6; [
+    qt5compat
+    qtbase
+    qtdeclarative
+    qtscxml
+    qtsvg
+    qttools
+    qtwayland
+  ])
+  ++ (with python3Packages; [
+    python
+    pybind11
+  ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      synthetica
       eljamm
     ];
     mainProgram = "albert";

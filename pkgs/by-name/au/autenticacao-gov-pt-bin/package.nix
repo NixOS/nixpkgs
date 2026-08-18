@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "autenticacao-gov-pt-bin";
-  version = "3.13.3";
+  version = "3.14.0";
 
   src = fetchurl {
     url = "https://github.com/amagovpt/autenticacao.gov/releases/download/v${version}/pteid-mw-${version}.flatpak";
-    hash = "sha256-kUSUcX3/rPENdyd6ABeqADqK4CcSltwsdnmcgWzw8Fc=";
+    hash = "sha256-eOUW3sWG8ujihqNuTvYbwzQh9sP5nS4YxL2kHngQ/V0=";
   };
 
   dontConfigure = true;

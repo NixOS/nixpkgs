@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  uv-dynamic-versioning,
 
   # dependencies
   docstring-parser,
@@ -19,27 +21,27 @@
   # tests
   matplotlib,
   numpy,
-  orion,
   pytest-benchmark,
   pytest-regressions,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simple-parsing";
-  version = "0.1.7";
+  version = "0.1.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lebrice";
     repo = "SimpleParsing";
-    tag = "v${version}";
-    hash = "sha256-wHk3osr5CNmA/g9ipLy1dgvJoMy1zE/BAGD9ZATE+tc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tSQgyxJ0INGQkmqRmzVgKwBd/JXr3OTecdNSfc9Nf94=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [
@@ -60,13 +62,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     numpy
-    orion
     pytest-benchmark
     pytest-regressions
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
+
+  preCheck =
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
 
   disabledTests = [
     # AssertionError
@@ -81,13 +88,22 @@ buildPythonPackage rec {
     "test_running_example_outputs_expected_without_arg"
     "test_subgroup_partial_with_nested_field"
     "test_weird_docstring_with_field_like"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError ("usagepython314mpytesthmixed..." != "usagepython314mpytesthmixed")
+    "test_each_type_is_used_correctly"
+    "test_issue_46"
+    "test_issue_46_solution2"
+
+    # TypeError: dest= is required for options like '---------'
+    "test_pass_invalid_value_to_add_config_path_arg"
   ];
 
   meta = {
     description = "Simple, Elegant, Typed Argument Parsing with argparse";
-    changelog = "https://github.com/lebrice/SimpleParsing/releases/tag/v${version}";
+    changelog = "https://github.com/lebrice/SimpleParsing/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/lebrice/SimpleParsing";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

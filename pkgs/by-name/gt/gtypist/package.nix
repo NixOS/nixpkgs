@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ymGAVOkfHtXvBD/MQ1ALutcByVnDGETUaI/yKEmsJS0=";
   };
 
-  CFLAGS = "-std=gnu99";
+  env.CFLAGS = "-std=gnu99";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -26,11 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     perl
     fortune
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   preFixup = ''
     wrapProgram "$out/bin/typefortune" \
-      --prefix PATH : "${fortune}/bin" \
+      --prefix PATH : "${fortune}/bin"
   '';
 
   meta = {

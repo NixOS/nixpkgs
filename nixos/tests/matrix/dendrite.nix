@@ -8,9 +8,6 @@ let
 in
 {
   name = "dendrite";
-  meta = with pkgs.lib; {
-    maintainers = teams.matrix.members;
-  };
 
   nodes = {
     homeserver =

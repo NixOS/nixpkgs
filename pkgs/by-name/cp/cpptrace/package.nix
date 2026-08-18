@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   libdwarf,
+  libunwind,
   gtest,
   callPackage,
   zstd,
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rqj0yFOOOZyK4BJWVFGyYznMSSwNgb+o1HTykyyOWcA=";
+    hash = "sha256-KmAJEEU1aTKwleGBllSxlrsO4jVSTKnSTQQZyJ50loY=";
   };
 
   patches = [
@@ -32,9 +33,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ (lib.getDev libdwarf) ];
+  buildInputs = [
+    (lib.getDev libdwarf)
+    libunwind
+  ];
 
-  propagatedBuildInputs = [ zstd ] ++ (lib.optionals static [ libdwarf ]);
+  propagatedBuildInputs = [
+    zstd
+  ]
+  ++ (lib.optionals static [
+    libdwarf
+    libunwind
+  ]);
 
   cmakeFlags = [
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
@@ -42,9 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_GTEST" true)
+    (lib.cmakeBool "CPPTRACE_UNWIND_WITH_LIBUNWIND" true)
   ];
 
   checkInputs = [ gtest ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    dsymutil unittest
+  '';
 
   doCheck = true;
 

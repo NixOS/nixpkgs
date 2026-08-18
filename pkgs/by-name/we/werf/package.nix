@@ -1,92 +1,86 @@
 {
-  lib,
-  stdenv,
+  btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
-  btrfs-progs,
-  writableTmpDirAsHomeHook,
   installShellFiles,
+  lib,
+  stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.39.1";
+  version = "2.73.2";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xQ1nh9YL198/ih9rw52rItR3t5Nq901MpDlFVht6kAc=";
+    hash = "sha256-OadbfQ0onCAFtPuDkgxxdNoqAElHbMHoNTqSAXEEAcQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-CLe5UuHwAXLk9c+6baOpfFqrE/pl4889PhlajBRV+UU=";
+  vendorHash = "sha256-twmFBZ+uDk/43N5Fy7hq3OWjG1eKaSswgqj11pLhY5Y=";
 
-  subPackages = [ "cmd/werf" ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
-
+  nativeBuildInputs = [ installShellFiles ];
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
     ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
 
+  subPackages = [ "cmd/werf" ];
+
   env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
-  ldflags =
-    [
-      "-s"
-      "-w"
-      "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
-    ]
-    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-      "-extldflags=-static"
-      "-linkmode external"
-    ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
+  ]
+  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
+    "-extldflags=-static"
+    "-linkmode external"
+  ];
 
-  tags =
-    [
-      "containers_image_openpgp"
-      "dfrunmount"
-      "dfrunnetwork"
-      "dfrunsecurity"
-      "dfssh"
-    ]
-    ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-      "cni"
-      "exclude_graphdriver_devicemapper"
-      "netgo"
-      "no_devmapper"
-      "osusergo"
-      "static_build"
-    ];
+  tags = [
+    "containers_image_openpgp"
+    "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
+    "dfssh"
+  ]
+  ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
+    "cni"
+    "exclude_graphdriver_devicemapper"
+    "netgo"
+    "no_devmapper"
+    "osusergo"
+    "static_build"
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  preCheck = ''
+    # Test all packages.
+    unset subPackages
 
-  preCheck =
-    ''
-      # Test all packages.
-      unset subPackages
-
-      # Remove tests that fail or require external services.
-      rm -rf \
-        integration/suites \
-        pkg/true_git/*_test.go \
-        pkg/werf/exec/*_test.go \
-        test/e2e
-    ''
-    + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-      # A workaround for osusergo.
-      export USER=nixbld
-    '';
+    # Remove tests that fail or require external services.
+    rm -rf \
+      integration/suites \
+      pkg/container_backend/buildah_backend_data_archives_test.go \
+      pkg/true_git/*_test.go \
+      pkg/werf/exec/*_test.go \
+      test/e2e \
+      test/legacy_e2e
+  ''
+  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
+    # A workaround for osusergo.
+    export USER=nixbld
+  '';
 
   doInstallCheck = true;
-
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       installShellCompletion \
         --cmd werf \

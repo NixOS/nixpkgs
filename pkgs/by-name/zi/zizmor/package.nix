@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
   rustPlatform,
@@ -10,20 +11,36 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.11.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zxEF76zpqwLroC5GjSkwIC3+XdXmErvabIEqhVe0zCA=";
+    hash = "sha256-2I4RvLsAzsq8HMCiXeG2IrZ9fRvr/VIGCw9qKQ5NHlA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vxDyao9pX/CfS08vFmq3vXtgDIg5NXlEwpzroGW48dA=";
+  cargoHash = "sha256-B8TMVvNWKdGUqXWBZ4900alkItj8tIikKFEv8cbpEVw=";
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
+  ];
+
+  checkFlags = [
+    # need network
+    "--skip=audit::known_vulnerable_actions::tests::test_first_patched_version_priority"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_symbolic_ref"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_action_with_subpath"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_checkout"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_setup_node"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_multiple_vulnerable_actions"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_third_party_action"
+    # insta snapshot appears to depend on checkout structure
+    "--skip=e2e::issue_1745"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -38,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^v([0-9.]+\.[0-9.]+\.[0-9.])+$" ];
+    extraArgs = [ "--version-regex=^v([0-9.]+\\.[0-9.]+\\.[0-9.])+$" ];
   };
 
   meta = {

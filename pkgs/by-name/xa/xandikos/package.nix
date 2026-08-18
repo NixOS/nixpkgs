@@ -3,20 +3,19 @@
   lib,
   nixosTests,
   python3Packages,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.12";
+  version = "0.4.5";
   pyproject = true;
-
-  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     tag = "v${version}";
-    hash = "sha256-wdEwIVN9dkLVj8oe+2eh5n258pZRfKgLgzVCmwafCis=";
+    hash = "sha256-0OskWcCqAOdyM6BE/hDjv6uuZ0kf6fL1SDznraAYiUI=";
   };
 
   build-system = with python3Packages; [
@@ -26,14 +25,20 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     aiohttp
     aiohttp-openmetrics
+    aiosmtpd
     dulwich
     defusedxml
     icalendar
     jinja2
     multidict
-    pytz
     vobject
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage man/xandikos{,-milter}.8
+  '';
 
   passthru.tests.xandikos = nixosTests.xandikos;
 

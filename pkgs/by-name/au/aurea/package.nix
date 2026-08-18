@@ -14,16 +14,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aurea";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Aurea";
-    tag = version;
-    hash = "sha256-XoLqtuh4ZIeKo8xb1ccaK+9K3uGuQfZt9Fb6NeUDCjE=";
+    tag = finalAttrs.version;
+    hash = "sha256-q+96G+bT3m3fOKHhOXTHFJ3ZlGXvrp89ga9Hg0c7Lcc=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/CleoMenezesJr/Aurea";
     mainProgram = "aurea";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
-}
+})

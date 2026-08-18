@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssdeep";
   version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "ssdeep-project";
     repo = "ssdeep";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "1yx6yjkggshw5yl89m4kvyzarjdg2l3hs0bbjbrfzwp1lkfd8i0c";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

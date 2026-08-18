@@ -1,74 +1,86 @@
 {
   lib,
+  anyio,
   anysqlite,
-  boto3,
   buildPythonPackage,
   fetchFromGitHub,
+  fastapi,
   hatch-fancy-pypi-readme,
   hatchling,
   httpx,
-  moto,
+  inline-snapshot,
+  msgpack,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
   redis,
-  trio,
+  redisTestHook,
+  requests,
+  fakeredis,
+  time-machine,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.1.2";
+  version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-EaVE70lzjvMqMJlXObz450FwunaPZv86kJCKgI174a8=";
+    hash = "sha256-KVfbWhGpbLGzK3fQOuT+KtBi13z5ZZBP8NOsIIfObMc=";
   };
+
+  postPatch = ''
+    sed -i "/addopts/d" pyproject.toml
+  '';
 
   build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    msgpack
+    typing-extensions
+  ];
 
   optional-dependencies = {
+    async = [
+      anyio
+      anysqlite
+    ];
+    requests = [ requests ];
+    httpx = [ httpx ];
+    fastapi = [ fastapi ];
     redis = [ redis ];
-    s3 = [ boto3 ];
-    sqlite = [ anysqlite ];
-    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
-    moto
+    inline-snapshot
     pytest-asyncio
     pytestCheckHook
-    trio
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    redisTestHook
+    fakeredis
+    time-machine
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # network access
+    "test_encoded_content_caching"
+    "test_simple_caching"
+    "test_simple_caching_ignoring_spec"
+  ];
 
   pythonImportsCheck = [ "hishel" ];
 
-  disabledTests = [
-    # Tests require a running Redis instance
-    "test_redis"
-  ];
-
-  disabledTestPaths = [
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/_async/test_storages.py"
-    "tests/_sync/test_storages.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "HTTP Cache implementation for HTTPX and HTTP Core";
     homepage = "https://github.com/karpetrosyan/hishel";
     changelog = "https://github.com/karpetrosyan/hishel/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

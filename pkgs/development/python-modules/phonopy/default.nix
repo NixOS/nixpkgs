@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -9,12 +10,12 @@
   ninja,
   numpy,
   scikit-build-core,
-  setuptools,
   setuptools-scm,
 
   # dependencies
   h5py,
   matplotlib,
+  phonors,
   pyyaml,
   scipy,
   spglib,
@@ -23,17 +24,24 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "2.38.2";
+  version = "4.4.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
-    tag = "v${version}";
-    hash = "sha256-oQcKBwrjQGmjJIHROb9Z/8j7CmfoSxlIzHRABBg+tSs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w31B4/o/lo/0LIfrn7DR2cJ2OY6Pfe4zAMgcQfJ2q1g=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "nanobind<2.10.0" "nanobind"
+  '';
 
   build-system = [
     cmake
@@ -41,7 +49,6 @@ buildPythonPackage rec {
     ninja
     numpy
     scikit-build-core
-    setuptools
     setuptools-scm
   ];
   dontUseCmakeConfigure = true;
@@ -51,12 +58,18 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pyyaml
+    phonors
     scipy
     spglib
     symfc
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    MPLBACKEND = "Agg";
+  };
 
   # prevent pytest from importing local directory
   preCheck = ''
@@ -75,4 +88,4 @@ buildPythonPackage rec {
       chn
     ];
   };
-}
+})

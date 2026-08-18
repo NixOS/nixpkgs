@@ -8,17 +8,17 @@
   nodejs,
   s,
   melpaBuild,
-  copilot-language-server-fhs,
+  copilot-language-server,
 }:
 melpaBuild (finalAttrs: {
   pname = "copilot";
-  version = "0.2.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "copilot-emacs";
     repo = "copilot.el";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hIA+qdWoOJI9/hqBUSHhmh+jjzDnPiZkIzszCPuQxd0=";
+    sha256 = "sha256-x2Lzhz8Yi3/EsahkJZ/pJoaJuVb1xIHgNt50qi0ndeo=";
   };
 
   files = ''(:defaults "dist")'';
@@ -26,7 +26,7 @@ melpaBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace copilot.el \
       --replace-fail "defcustom copilot-server-executable \"copilot-language-server\"" \
-                     "defcustom copilot-server-executable \"${lib.getExe copilot-language-server-fhs}\""
+                     "defcustom copilot-server-executable \"${lib.getExe copilot-language-server}\""
   '';
 
   packageRequires = [
@@ -47,7 +47,6 @@ melpaBuild (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
       "x86_64-windows"
     ];

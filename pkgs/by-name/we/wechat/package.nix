@@ -19,41 +19,43 @@ let
     mainProgram = "wechat";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
   };
 
-  sources =
-    let
-      # https://dldir1.qq.com/weixin/mac/mac-release.xml
-      any-darwin = {
-        version = "4.0.5.27-29258";
+  sources = {
+    # https://dldir1.qq.com/weixin/mac/mac-release.xml
+    aarch64-darwin =
+      let
+        version = "4.1.8.106-37335";
+        version' = lib.replaceString "-" "_" version;
+      in
+      {
+        inherit version;
         src = fetchurl {
-          url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.0.5.27_29258.dmg";
-          hash = "sha256-Gje1F9rdykxTqYIJ4Pfq3zpUH3t3GKIK/QL5kt1qCVc=";
+          url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
+          hash = "sha256-lygjqWbNqh9fCnhbyfEhnRdKdfQ9MOwPv5unqwJJsvE=";
         };
       };
-    in
-    {
-      aarch64-darwin = any-darwin;
-      x86_64-darwin = any-darwin;
-      aarch64-linux = {
-        version = "4.0.1.11";
-        src = fetchurl {
-          url = "https://web.archive.org/web/20250512112413if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-          hash = "sha256-Rg+FWNgOPC02ILUskQqQmlz1qNb9AMdvLcRWv7NQhGk=";
-        };
-      };
-      x86_64-linux = {
-        version = "4.0.1.11";
-        src = fetchurl {
-          url = "https://web.archive.org/web/20250512110825if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-          hash = "sha256-gBWcNQ1o1AZfNsmu1Vi1Kilqv3YbR+wqOod4XYAeVKo=";
-        };
+    # use https://web.archive.org/save to archive the Linux versions
+    # add `if_` at the end of timestamps to avoid toolbar insertion
+    # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine
+    aarch64-linux = {
+      version = "4.1.1.4";
+      src = fetchurl {
+        url = "https://web.archive.org/web/20260311102559if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+        hash = "sha256-YlWJxT62tXDaNwYVpsPMC5elFH8fsbI1HjTQn6ePiPo=";
       };
     };
+    x86_64-linux = {
+      version = "4.1.1.4";
+      src = fetchurl {
+        url = "https://web.archive.org/web/20260311102439if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
+        hash = "sha256-XxAvFnlljqurGPDgRr+DnuCKbdVvgXBPh02DLHY3Oz8=";
+      };
+    };
+  };
 in
 callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
   inherit pname meta;

@@ -2,29 +2,44 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
   nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komodo";
-  version = "1.18.4";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
-    tag = "v${version}";
-    hash = "sha256-allGKoeI3mlMWbF9WsDbX/4eGdBT/eoF71uAk5iK0e4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nEST1Mp/WJJ+GtsC9cX10w3thywe3dHNrQV5iLPXMIQ=";
   };
 
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-krFHWiHgdBL2jIr0YsBrNG4+NaaoaSVf6q65jWiQGsg=";
 
-  cargoHash = "sha256-nlCGrPlH+AZNz7BYDcoU0WBHBft4DnO4WfqGD5wVLmQ=";
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   # disable for check. document generation is fail
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  # xtask is a workspace-internal build helper, not a user-facing program.
+  postInstall = ''
+    rm -f $out/bin/xtask
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) komodo-periphery;
+    };
+  };
 
   meta = {
     description = "Tool to build and deploy software on many servers";
@@ -43,9 +58,12 @@ rustPlatform.buildRustPackage rec {
       Komodo is composed of a single core and any amount of connected servers running the periphery application.
     '';
     homepage = "https://komo.do";
-    changelog = "https://github.com/moghtech/komodo/releases/tag/v${version}";
-    mainProgram = "komodo";
-    maintainers = with lib.maintainers; [ r17x ];
+    changelog = "https://github.com/moghtech/komodo/releases/tag/v${finalAttrs.version}";
+    mainProgram = "km";
+    maintainers = with lib.maintainers; [
+      r17x
+      channinghe
+    ];
     license = lib.licenses.gpl3;
   };
-}
+})

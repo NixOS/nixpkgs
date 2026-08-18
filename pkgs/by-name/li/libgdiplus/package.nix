@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitLab,
   pkg-config,
   glib,
   cairo,
@@ -10,20 +10,21 @@
   giflib,
   libjpeg,
   libpng,
-  libXrender,
+  libxrender,
   libexif,
   autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgdiplus";
-  version = "6.1";
+  version = "6.2";
 
-  # Using source archive to avoid fetching Git submodules.
-  # Git repo: https://github.com/mono/libgdiplus
-  src = fetchzip {
-    url = "https://download.mono-project.com/sources/libgdiplus/libgdiplus-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+lP9ETlw3s0RUliQT1uBWZ2j6o3V9EECBQSppOYFq4Q=";
+  src = fetchFromGitLab {
+    domain = "gitlab.winehq.org";
+    owner = "mono";
+    repo = "libgdiplus";
+    tag = finalAttrs.version;
+    hash = "sha256-otWdHiS/Ws+2tq5wQlcSfBUOc8Mfhpz5PLmMDgtld1Q=";
   };
 
   patches = [
@@ -31,7 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./configure-pkg-config.patch
   ];
 
-  NIX_LDFLAGS = "-lgif";
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace-fail "all: update_submodules" "all:"
+  '';
+
+  env.NIX_LDFLAGS = "-lgif";
 
   outputs = [
     "out"
@@ -57,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXrender
+    libxrender
     libexif
   ];
 
@@ -69,10 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     make check -w
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.winehq.org/mono/libgdiplus/-/releases/${finalAttrs.src.tag}";
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
     homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 })

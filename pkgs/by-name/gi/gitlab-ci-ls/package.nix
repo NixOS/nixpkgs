@@ -6,28 +6,27 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-ci-ls";
-  version = "1.1.1";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
-    rev = "${version}";
-    hash = "sha256-3DR1MV9YSugWFodLh4wBa6oT8yGEkir0rVm0mcHXpxU=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-NOPvNm+bdX+iFeBopRF4RFKFM4xfKi2WabuBhpMm6vQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-V2ZQLHLIaYJpNeQIZyRq2G5u6/cTJvMXV2301VG21xQ=";
+  cargoHash = "sha256-sOrhE1Uqnm45eWEj6+qTbmn7ie3HoPsah5ZzWLCqLnA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alesbrelih/gitlab-ci-ls";
     description = "GitLab CI Language Server (gitlab-ci-ls)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.unix;
     mainProgram = "gitlab-ci-ls";
   };
-}
+})

@@ -13,15 +13,15 @@ let
     sha256 = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "immudb";
-  version = "1.9.7";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
-    rev = "v${version}";
-    sha256 = "sha256-tYQYQyYhHMn0+PQWDEb4zY9EbDt1pVzZIcP0Gnsplrk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-S+X52zxIJj9uJhvSk0aGrEvLKKoa0BciQW5nAgPRtrc=";
   };
 
   postPatch = ''
@@ -36,16 +36,16 @@ buildGoModule rec {
   preBuild = ''
     mkdir -p webconsole/dist
     cp -r ${webconsoleDist}/* ./webconsole/dist
-    go generate -tags webconsole ./webconsole
+    go generate -mod=mod -tags webconsole ./webconsole
   '';
 
-  vendorHash = "sha256-6DHmJrE+xkf8K38a8h1VSD33W6qj594Q5bJJXnfSW0Q=";
+  vendorHash = "sha256-7/TR+YjeeTQk+kY2WjYBeiP94onLJXrjJijYl5N6cPc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   tags = [ "webconsole" ];
 
-  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${version}" ];
+  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${finalAttrs.version}" ];
 
   subPackages = [
     "cmd/immudb"
@@ -63,10 +63,14 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/codenotary/immudb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
     homepage = "https://github.com/codenotary/immudb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = with lib.licenses; [
+      asl20
+      bsl11
+    ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

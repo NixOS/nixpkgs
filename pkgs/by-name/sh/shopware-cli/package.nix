@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,14 +9,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shopware-cli";
-  version = "0.6.16";
+  version = "0.17.0";
   src = fetchFromGitHub {
     repo = "shopware-cli";
-    owner = "FriendsOfShopware";
-    tag = version;
-    hash = "sha256-oEWJ51XeAOE92u6U2Cjj875mn47R8IRbZ2BHy1zLblw=";
+    owner = "shopware";
+    tag = finalAttrs.version;
+    hash = "sha256-VEpQUHEmShrTu+SCZh32X8f2vq7irv+lUOrZ9jZpY8c=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,9 @@ buildGoModule rec {
     dart-sass
   ];
 
-  vendorHash = "sha256-am8tGpevz5KXX+8ckhlNVtoUbG3g739O9KP6rLsF0y8=";
+  vendorHash = "sha256-Nsvoqp+Wvf2ZCwb8C+TavpBsVrMTlGwR19fjks0Y2Gs=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shopware-cli \
       --bash <($out/bin/shopware-cli completion bash) \
       --zsh <($out/bin/shopware-cli completion zsh) \
@@ -44,15 +45,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
+    "-X 'github.com/shopware/shopware-cli/cmd.version=${finalAttrs.version}'"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Command line tool for Shopware 6";
     mainProgram = "shopware-cli";
-    homepage = "https://github.com/FriendsOfShopware/shopware-cli";
-    changelog = "https://github.com/FriendsOfShopware/shopware-cli/releases/tag/${version}";
+    homepage = "https://github.com/shopware/shopware-cli";
+    changelog = "https://github.com/shopware/shopware-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shyim ];
   };
-}
+})

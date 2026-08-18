@@ -10,20 +10,23 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.6.0";
+  version = "1.19.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p03yjLPphS4jp0dK3hlREKzAzCKRPOpvUnmGaGzrwww=";
+    hash = "sha256-AHDCiJOXvJe+2sd1mK6quUDIGuRSecY8CwiA078DNrE=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-ElqyT5dllacm49PEdxAVvEO7aV5W0ga1N0tb3qIy/cA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,21 +47,47 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests =
-        [
-          # Skip tests that require network, not available in the nix sandbox
-          "TestInterQueryCache_ClientError"
-          "TestIntraQueryCache_ClientError"
-          "TestSSOCredentialService"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # Skip tests that require network, not available in the darwin sandbox
-          "TestHTTPSClient"
-          "TestHTTPSNoClientCerts"
-        ]
-        ++ lib.optionals (!enableWasmEval) [
-          "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-        ];
+      skippedTests = [
+        # Skip tests that require network, not available in the nix sandbox
+        "TestInterQueryCache_ClientError"
+        "TestIntraQueryCache_ClientError"
+        "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Skip tests that require network, not available in the darwin sandbox
+        "TestHTTPSClient"
+        "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        # Flaky
+        "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
+
+        # tests observed to have `no space left on device` failures on darwin on hydra
+        # storage_internal_error:
+        #   cannot create memtable error:
+        #     newMemTable error:
+        #       While opening memtable: /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem error:
+        #         while opening file: /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem error:
+        #           truncate /private/tmp/nix-build-open-policy-agent-X.Y.Z.drv-0/opa_test0000000000/data/00001.mem: no space left on device
+        "TestBundleScope"
+        "TestDataV1"
+        "TestDataV1Metrics"
+        "TestDataMetricsEval"
+        "TestQueryV1"
+      ]
+      ++ lib.optionals (!enableWasmEval) [
+        "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+      ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
@@ -71,13 +100,9 @@ buildGoModule (finalAttrs: {
       getGoDirs() {
         go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
       }
-    ''
-    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      rm v1/server/server_test.go
     '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd opa \
       --bash <($out/bin/opa completion bash) \
       --fish <($out/bin/opa completion fish) \

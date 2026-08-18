@@ -11,38 +11,34 @@
   qtsvg,
   qtwayland,
   qtdeclarative,
-  qtx11extras ? null,
   kitemviews,
   kwidgetsaddons,
-  qtquickcontrols2 ? null,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kirigami ? null,
-  kirigami2 ? null,
   isocodes,
-  xkeyboardconfig,
+  xkeyboard-config,
   libxkbfile,
   libplasma ? null,
-  plasma-framework ? null,
   wrapQtAppsHook,
   kcmSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.9";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-x4DhPxiwPR16xQpBFnJ1DiU435BHOOs6pFj+zJQXFUI=";
+    hash = "sha256-+lpJlGaVGTcZpoGvcHAsb5N5M4Y3McV4GSZpSwZxX3Y=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "KDE_INSTALL_USE_QT_SYS_PATHS" true)
     (lib.cmakeBool "ENABLE_KCM" kcmSupport)
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
   ];
 
   nativeBuildInputs = [
@@ -52,45 +48,33 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      fcitx5
-      fcitx5-qt
-      qtbase
-      qtsvg
-      qtwayland
-      kitemviews
-      kwidgetsaddons
-      isocodes
-      xkeyboardconfig
-      libxkbfile
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtx11extras
-    ]
-    ++ lib.optionals kcmSupport (
-      [
-        qtdeclarative
-        kcoreaddons
-        kdeclarative
-      ]
-      ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-        qtquickcontrols2
-        plasma-framework
-        kirigami2
-      ]
-      ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-        libplasma
-        kirigami
-      ]
-    );
+  buildInputs = [
+    fcitx5
+    fcitx5-qt
+    qtbase
+    qtsvg
+    qtwayland
+    kitemviews
+    kwidgetsaddons
+    isocodes
+    xkeyboard-config
+    libxkbfile
+  ]
+  ++ lib.optionals kcmSupport [
+    qtdeclarative
+    kcoreaddons
+    kdeclarative
+    kcmutils
+    libplasma
+    kirigami
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
     mainProgram = "fcitx5-config-qt";
   };
 }

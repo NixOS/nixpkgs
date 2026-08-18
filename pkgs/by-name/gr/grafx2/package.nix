@@ -52,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = false; # Why??
 
-  makeFlags = [ "-C src" ];
+  makeFlags = [ "--directory=src" ];
   installFlags = [
-    "-C src"
+    "--directory=src"
     "PREFIX=$(out)"
   ];
 
@@ -75,9 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
       The program is mostly developed on Haiku, Linux and Windows, but is also
       portable on many other platforms.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "grafx2-sdl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,6 +1,6 @@
-diff --git c/distrobuilder/lxc.generator w/distrobuilder/lxc.generator
-index 5f854d3..927f2df 100644
---- c/distrobuilder/lxc.generator
+diff --git i/distrobuilder/lxc.generator w/distrobuilder/lxc.generator
+index f7692af..f617b89 100644
+--- i/distrobuilder/lxc.generator
 +++ w/distrobuilder/lxc.generator
 @@ -16,16 +16,6 @@ is_lxc_privileged_container() {
  	grep -qw 4294967295$ /proc/self/uid_map
@@ -166,3 +166,12 @@ index 5f854d3..927f2df 100644
  # Allow masking units created by the lxc system-generator.
  for d in /etc/systemd/system /usr/lib/systemd/system /lib/systemd/system; do
  	if ! [ -d "${d}" ]; then
+@@ -247,7 +176,7 @@ if [ "${SYSTEMD}" -ge 258 ]; then
+ 	cat <<-EOF > /run/systemd/system/console-getty.service.d/override.conf
+ 		[Service]
+ 		ExecStart=
+-		ExecStart=-/sbin/agetty -o '-- \\\\u' --noreset --noclear --keep-baud 115200,57600,38400,9600 console
++		ExecStart=-/run/current-system/sw/bin/agetty -o '-- \\\\u' --noreset --noclear --keep-baud 115200,57600,38400,9600 console
+ 		StandardInput=null
+ 		StandardOutput=null
+ 		EOF

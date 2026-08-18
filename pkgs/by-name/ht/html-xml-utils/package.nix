@@ -3,27 +3,32 @@
   stdenv,
   fetchurl,
   curl,
+  gperf,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html-xml-utils";
   version = "8.7";
 
   src = fetchurl {
-    url = "https://www.w3.org/Tools/HTML-XML-utils/${pname}-${version}.tar.gz";
+    url = "https://www.w3.org/Tools/HTML-XML-utils/html-xml-utils-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-iIoxYxp6cDCLsvMz4HfQQW9Lt4MX+Gl/+0qVGH9ncwE=";
   };
+
+  patches = [ ./gcc15.patch ];
+
+  nativeBuildInputs = [ gperf ];
 
   buildInputs = [
     curl
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for manipulating HTML and XML files";
     homepage = "https://www.w3.org/Tools/HTML-XML-utils/";
-    license = licenses.w3c;
-    platforms = platforms.all;
+    license = lib.licenses.w3c;
+    platforms = lib.platforms.all;
   };
-}
+})

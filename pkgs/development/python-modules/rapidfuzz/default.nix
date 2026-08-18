@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  clang-tools,
   cmake,
   cython,
   ninja,
@@ -18,30 +19,38 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.13.0";
+  version = "3.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-vwAqlTq4HIbmCL1HsHcgfVWETImxdqTsnenmX2RGXw8=";
+    hash = "sha256-wF7eeSD6GQfN0EOwDvrgjMqN5u2wxXFlktQS7nIKgkU=";
   };
 
   patches = [
-    # https://github.com/rapidfuzz/RapidFuzz/pull/446
     (fetchpatch {
-      name = "support-taskflow-3.10.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/bba3281cc61ecc4ab4affe5d2d50389a4f6d7556.patch";
-      hash = "sha256-kAS6xsPY7eUTfKO+EAOW8bktY4cApvLEpRMciJEsPgk=";
+      # https://github.com/rapidfuzz/RapidFuzz/pull/486
+      name = "support-taskflow-4.1.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/76fa54bf8c3f2d24879ca1966ea98bbba7b3c9d6.patch";
+      hash = "sha256-hJZtYNLSqK5NgcBAcvrf9NPh3Z0+pSlyy0W+uJ96kBQ=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.1.6, <3.3.0" "Cython >=3.1.6"
+  '';
 
   build-system = [
     cmake
     cython
     ninja
     scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    clang-tools # provides wrapped clang-scan-deps
   ];
 
   dontUseCmakeConfigure = true;
@@ -69,11 +78,6 @@ buildPythonPackage rec {
     hypothesis
     pandas
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # segfaults
-    "test_cdist"
   ];
 
   pythonImportsCheck = [

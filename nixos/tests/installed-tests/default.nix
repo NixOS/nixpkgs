@@ -38,7 +38,7 @@ let
     }@args:
     makeTest (
       recursiveUpdate
-        rec {
+        {
           name = tested.name;
 
           meta = {
@@ -50,7 +50,8 @@ let
             {
               imports = [
                 testConfig
-              ] ++ optional withX11 ../common/x11.nix;
+              ]
+              ++ optional withX11 ../common/x11.nix;
 
               environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
 
@@ -106,7 +107,6 @@ in
   gsconnect = callInstalledTest ./gsconnect.nix { };
   json-glib = callInstalledTest ./json-glib.nix { };
   ibus = callInstalledTest ./ibus.nix { };
-  libgdata = callInstalledTest ./libgdata.nix { };
   glib-testing = callInstalledTest ./glib-testing.nix { };
   libjcat = callInstalledTest ./libjcat.nix { };
   libxmlb = callInstalledTest ./libxmlb.nix { };

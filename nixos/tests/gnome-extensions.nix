@@ -23,10 +23,9 @@
 
       # Configure GDM
       services.xserver.enable = true;
-      services.xserver.displayManager.gdm = {
+      services.displayManager.gdm = {
         enable = true;
         debug = true;
-        wayland = true;
       };
       services.displayManager.autoLogin = {
         enable = true;
@@ -38,7 +37,7 @@
       services.desktopManager.gnome.debug = true;
 
       systemd.user.services = {
-        "org.gnome.Shell@wayland" = {
+        "org.gnome.Shell@" = {
           serviceConfig = {
             ExecStart = [
               # Clear the list before overriding it.
@@ -105,7 +104,8 @@
           # wait for alice to be logged in
           machine.wait_for_unit("default.target", "${user.name}")
           # check that logging in has given the user ownership of devices
-          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
+          # Change back to /dev/snd/timer after systemd-258.1
+          assert "alice" in machine.succeed("getfacl -p /dev/dri/card0")
 
       with subtest("Wait for GNOME Shell"):
           # correct output should be (true, 'false')
@@ -146,7 +146,7 @@
 
               machine.succeed(f"${run "gnome-extensions enable {extension}"}")
               wait_time = 5
-              while getState(extension) == "ACTIVATING" and (wait_time := wait_time - 1) > 0:
+              while "ACTIVATING" in getState(extension) and (wait_time := wait_time - 1) > 0:
                   machine.log(f"Extension {extension} is still activating, waiting {wait_time} more seconds")
                   machine.sleep(1)
               checkState("ACTIVE", extension)

@@ -14,13 +14,13 @@
 
 buildDunePackage rec {
   pname = "wayland";
-  version = "2.1";
+  version = "2.3";
 
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {
     url = "https://github.com/talex5/ocaml-wayland/releases/download/v${version}/wayland-${version}.tbz";
-    hash = "sha256-D/tTlYlU8e1O+HShIsBxqc8953rjQblj63tRPYAo88E=";
+    hash = "sha256-EGJ6lPTO+XFHmRUo/NJG+PJ8y/MCbq/ezplbU+6UaKA=";
   };
 
   propagatedBuildInputs = [

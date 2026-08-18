@@ -1,8 +1,6 @@
 {
-  buildDotnetModule,
   cargo-about,
   cargo-tauri,
-  dotnetCorePackages,
   fetchFromGitHub,
   fetchNpmDeps,
   glib-networking,
@@ -19,95 +17,65 @@
   webkitgtk_4_1,
 }:
 let
+  subdir = "vrc-get-gui";
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alcom";
-  version = "1.0.1";
-
+  version = "1.1.8";
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    tag = "gui-v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-cOx7X3xfTBYpXhv1zIRStaIpyGWSp+d7qzdJLGzXtDY=";
+    tag = "gui-v${finalAttrs.version}";
+    hash = "sha256-86oR2+qKCmgkQMROq/RZDsSYINzdG5U08dmPznzMSzg=";
   };
-
-  subdir = "vrc-get-gui";
-
-  dotnetSdk = dotnetCorePackages.sdk_8_0;
-  dotnetRuntime = dotnetCorePackages.runtime_8_0;
-
-  dotnetBuild = buildDotnetModule {
-    inherit pname version src;
-
-    dotnet-sdk = dotnetSdk;
-    dotnet-runtime = dotnetRuntime;
-
-    projectFile = [
-      "vrc-get-litedb/dotnet/vrc-get-litedb.csproj"
-      "vrc-get-litedb/dotnet/LiteDB/LiteDB/LiteDB.csproj"
-    ];
-    nugetDeps = ./deps.json;
-  };
-in
-rustPlatform.buildRustPackage {
-  inherit pname version src;
-
-  patches = [
-    ./disable-updater-artifacts.patch
-  ];
 
   nativeBuildInputs = [
     cargo-about
     cargo-tauri.hook
-    dotnetSdk
     nodejs
     npmHooks.npmConfigHook
     wrapGAppsHook4
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libsoup_3
-      makeBinaryWrapper
-      webkitgtk_4_1
-    ]
-    ++ dotnetSdk.packages
-    ++ dotnetBuild.nugetDeps;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libsoup_3
+    makeBinaryWrapper
+    webkitgtk_4_1
+  ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ph6QZW21JYQJgrUecN+MklWuY51iKC2glPEdgxw+3r8=";
+  cargoHash = "sha256-z3VLIRTyS127TS+jdGTdlt1xmMHdwFAsMzkkuVc78lU=";
+  buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
 
+  postInstall = ''
+    install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
+    for size in 32x32 64x64 128x128 128x128@2x; do
+      install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
+    done
+  '';
+
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/${subdir}";
-    hash = "sha256-lWQPBILZn8VGoILfEY2bMxGaBL2ALGbvcT5RqanTNyY=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${subdir}";
+    hash = "sha256-flWM2ctaGak/KaTZ5sCj3Z28vIqOeiX8VJMTaIxg2fw=";
   };
   npmRoot = subdir;
-
-  preConfigure = ''
-    dotnet restore "vrc-get-litedb/dotnet/vrc-get-litedb.csproj" \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true
-  '';
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/ALCOM \
-      --set APPIMAGE ALCOM
-  '';
-
-  passthru = {
-    inherit (dotnetBuild) fetch-deps;
-  };
 
   meta = {
     description = "Experimental GUI application to manage VRChat Unity Projects";
     homepage = "https://github.com/vrc-get/vrc-get";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      ImSapphire
+    ];
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "alcom";
+    mainProgram = "ALCOM";
   };
-}
+})

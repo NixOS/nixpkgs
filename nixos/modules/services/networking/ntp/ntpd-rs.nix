@@ -70,6 +70,7 @@ in
 
     services.ntpd-rs.settings = {
       observability = {
+        log-level = lib.mkDefault "warn";
         observation-path = lib.mkDefault "/var/run/ntpd-rs/observe";
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (
@@ -90,6 +91,49 @@ in
           ""
           "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${validateConfig configFile}"
         ];
+
+        CapabilityBoundingSet = [
+          "CAP_SYS_TIME"
+          "CAP_NET_BIND_SERVICE"
+        ];
+        AmbientCapabilities = [
+          "CAP_SYS_TIME"
+          "CAP_NET_BIND_SERVICE"
+        ];
+        LimitCORE = 0;
+        LimitNOFILE = 65535;
+        LockPersonality = true;
+        MemorySwapMax = 0;
+        MemoryZSwapMax = 0;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        Restart = "on-failure";
+        RestartSec = "10s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@resources"
+          "@network-io"
+          "@clock"
+        ];
+        NoNewPrivileges = true;
+        UMask = "0077";
       };
     };
 
@@ -103,6 +147,44 @@ in
           ""
           "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${validateConfig configFile}"
         ];
+
+        CapabilityBoundingSet = [ ];
+        LimitCORE = 0;
+        LimitNOFILE = 65535;
+        LockPersonality = true;
+        MemorySwapMax = 0;
+        MemoryZSwapMax = 0;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        PrivateDevices = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@network-io"
+          "~@privileged"
+          "~@resources"
+          "~@mount"
+        ];
+        NoNewPrivileges = true;
+        UMask = "0077";
       };
     };
   };

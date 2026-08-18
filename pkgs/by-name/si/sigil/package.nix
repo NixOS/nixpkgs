@@ -10,18 +10,21 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sigil";
-  version = "2.5.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
-    tag = version;
-    hash = "sha256-nMPBkAAah4qbatvtfkCJqdo6BVL0NuxFZEHhSiB4uXY=";
+    tag = finalAttrs.version;
+    hash = "sha256-x1/BwWBLb0up7VSTtwJu71+EdHOgEbrZO/W6Pi1lGLo=";
   };
 
-  pythonPath = with python3Packages; [ lxml ];
+  pythonPath = with python3Packages; [
+    lxml
+    dulwich
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,6 +40,7 @@ stdenv.mkDerivation rec {
     qt6.qtwebengine
     qt6.qtsvg
     python3Packages.lxml
+    python3Packages.dulwich
   ];
 
   prePatch = ''
@@ -57,9 +61,27 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontWrapQtApps = true;
+
   preFixup = ''
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
+
+  fixupPhase =
+    let
+      sigil =
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/Sigil.app/Contents/MacOS/Sigil"
+        else
+          "$out/bin/sigil";
+    in
+    ''
+      runHook preFixup
+
+      wrapQtApp "${sigil}"
+
+      runHook postFixup
+    '';
 
   meta = {
     description = "Free, open source, multi-platform ebook (ePub) editor";
@@ -69,4 +91,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sigil";
   };
-}
+})

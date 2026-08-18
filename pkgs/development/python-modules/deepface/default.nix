@@ -12,9 +12,8 @@
   opencv4,
   pandas,
   pillow,
-  pythonOlder,
   requests,
-  retinaface,
+  retina-face,
   setuptools,
   tensorflow,
   tqdm,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.93";
+  version = "0.0.100";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-G/e0tvf4GbXPjqJCTMgWDe59701fxfrtAf+bioEn8io=";
+    hash = "sha256-DfymSylAlw2cordGYZTHPbi3AzMg18y9VPDPeZ81c6A=";
   };
 
   postPatch = ''
@@ -58,7 +55,7 @@ buildPythonPackage rec {
     pandas
     pillow
     requests
-    retinaface
+    retina-face
     tensorflow
     tqdm
   ];

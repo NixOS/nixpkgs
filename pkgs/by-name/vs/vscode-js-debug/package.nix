@@ -11,25 +11,29 @@
   runCommand,
   vscode-js-debug,
   nix-update-script,
+  clang_20,
 }:
-
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.100.1";
+  version = "1.117.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-9V0sF0W0lQdnLgg4QmpBdjhRPAh32T+TCqOSyXZmj30=";
+    hash = "sha256-1Mj7nfX5iVO0hhydCV/VbqN1x77WFEzG6/ahk1kN1fw=";
   };
 
-  npmDepsHash = "sha256-fC8pHq+US78z9X6MoKYSiHo8syiuHzYyJmG+O/jMm0s=";
+  npmDepsHash = "sha256-uTtA5XjHfuI2e9IuNAYfDNKZE8c/wa+CWqAsmd/M3Xk=";
 
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    clang_20
+  ]; # clang_21 breaks it
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 

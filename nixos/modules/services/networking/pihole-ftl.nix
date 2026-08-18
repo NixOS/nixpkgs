@@ -9,6 +9,7 @@ with {
   inherit (lib)
     elemAt
     getExe
+    getExe'
     hasAttrByPath
     mkEnableOption
     mkIf
@@ -53,7 +54,13 @@ in
         query logging.
       '';
       default = 0;
-      example = "3";
+      example = 3;
+    };
+
+    openFirewallDNS = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open ports in the firewall for pihole-FTL's DNS server.";
     };
 
     openFirewallDHCP = mkOption {
@@ -109,6 +116,14 @@ in
       description = ''
         Import options defined in [](#opt-services.dnsmasq.settings) via
         misc.dnsmasq_lines in Pi-hole's config.
+      '';
+    };
+
+    macvendorURL = mkOption {
+      type = types.str;
+      default = "https://ftl.pi-hole.net/macvendor.db";
+      description = ''
+        URL from which to download the macvendor.db file.
       '';
     };
 
@@ -172,7 +187,7 @@ in
     };
 
     queryLogDeleter = {
-      enable = mkEnableOption ("Pi-hole FTL DNS query log deleter");
+      enable = mkEnableOption "Pi-hole FTL DNS query log deleter";
 
       age = mkOption {
         type = types.int;
@@ -192,6 +207,19 @@ in
         '';
       };
     };
+
+    webserverEnabled = mkOption {
+      type = types.bool;
+      default = (
+        (hasAttrByPath [ "webserver" "port" ] cfg.settings)
+        && !builtins.elem cfg.settings.webserver.port [
+          ""
+          null
+        ]
+      );
+      internal = true;
+      description = "Whether the webserver is enabled.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -202,15 +230,7 @@ in
       }
 
       {
-        assertion =
-          builtins.length cfg.lists == 0
-          || (
-            (hasAttrByPath [ "webserver" "port" ] cfg.settings)
-            && !builtins.elem cfg.settings.webserver.port [
-              ""
-              null
-            ]
-          );
+        assertion = builtins.length cfg.lists == 0 || cfg.webserverEnabled;
         message = ''
           The Pi-hole webserver must be enabled for lists set in services.pihole-ftl.lists to be automatically loaded on startup via the web API.
           services.pihole-ftl.settings.port must be defined, e.g. by enabling services.pihole-web.enable and defining services.pihole-web.port.
@@ -234,7 +254,7 @@ in
       (mkDefaults {
         misc.readOnly = true; # Prevent config changes via API or CLI by default
         webserver.port = ""; # Disable the webserver by default
-        misc.privacyLevel = cfg.privacyLevel;
+        misc.privacylevel = cfg.privacyLevel;
       })
 
       # Move state files to cfg.stateDirectory
@@ -249,7 +269,7 @@ in
         files = {
           database = "${cfg.stateDirectory}/pihole-FTL.db";
           gravity = "${cfg.stateDirectory}/gravity.db";
-          macvendor = "${cfg.stateDirectory}/gravity.db";
+          macvendor = "${cfg.stateDirectory}/macvendor.db";
           log.ftl = "${cfg.logDirectory}/FTL.log";
           log.dnsmasq = "${cfg.logDirectory}/pihole.log";
           log.webserver = "${cfg.logDirectory}/webserver.log";
@@ -342,6 +362,8 @@ in
 
       pihole-ftl-setup = {
         description = "Pi-hole FTL setup";
+        enable = builtins.length cfg.lists > 0;
+
         # Wait for network so lists can be downloaded
         after = [ "network-online.target" ];
         requires = [ "network-online.target" ];
@@ -388,6 +410,17 @@ in
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;
+          # Avoid creating an empty database file if it doesn't yet exist
+          ConditionFileNotEmpty = cfg.settings.files.database;
+          ExecStart =
+            let
+              days = toString cfg.queryLogDeleter.age;
+              database = cfg.settings.files.database;
+            in
+            [
+              "${getExe' pkgs.coreutils "echo"} 'Deleting query logs older than ${days} days'"
+              "${getExe cfg.package} sqlite3 '${database}' 'DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1'"
+            ];
           # Hardening
           NoNewPrivileges = true;
           PrivateTmp = true;
@@ -406,17 +439,6 @@ in
           MemoryDenyWriteExecute = true;
           LockPersonality = true;
         };
-        script =
-          let
-            days = toString cfg.queryLogDeleter.age;
-            database = "${cfg.stateDirectory}/pihole-FTL.db";
-          in
-          ''
-            set -euo pipefail
-
-            echo "Deleting query logs older than ${days} days"
-            ${getExe cfg.package} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
-          '';
       };
     };
 
@@ -434,9 +456,13 @@ in
     };
 
     networking.firewall = lib.mkMerge [
-      (mkIf cfg.openFirewallDHCP {
+      (mkIf cfg.openFirewallDNS {
         allowedUDPPorts = [ 53 ];
         allowedTCPPorts = [ 53 ];
+      })
+
+      (mkIf cfg.openFirewallDHCP {
+        allowedUDPPorts = [ 67 ];
       })
 
       (mkIf cfg.openFirewallWebserver {
@@ -461,11 +487,18 @@ in
 
     users.groups.${cfg.group} = { };
 
-    environment.etc."pihole/pihole.toml" = {
-      source = settingsFile;
-      user = cfg.user;
-      group = cfg.group;
-      mode = "400";
+    environment.etc = {
+      "pihole/pihole.toml" = {
+        source = settingsFile;
+        user = cfg.user;
+        group = cfg.group;
+        mode = "400";
+      };
+
+      "pihole/versions".text = ''
+        CORE_VERSION=${cfg.piholePackage.src.src.tag}
+        FTL_VERSION=${cfg.package.src.tag}
+      '';
     };
 
     environment.systemPackages = [ cfg.pihole ];

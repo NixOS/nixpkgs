@@ -88,6 +88,8 @@ stdenv.mkDerivation rec {
     "--with-cflags=-I$PWD"
   ];
 
+  makeFlags = [ "LD=$(CC)" ];
+
   prePatch = "cp -r ${ed25519-donna}/. ed25519-donna/.";
 
   enableParallelBuilding = true;

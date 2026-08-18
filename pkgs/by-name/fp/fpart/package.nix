@@ -6,15 +6,15 @@
   fts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fpart";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
-    rev = "fpart-${version}";
-    sha256 = "sha256-BQGSKDSuK2iB0o2v8I+XOwhYtU/0QtMevt4pgIfRhNQ=";
+    rev = "fpart-${finalAttrs.version}";
+    sha256 = "sha256-S+paRGjqALohSkm3kpbsiYiYZyC4WWL3ccTMX0FGhEg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
         -i "$out/bin/fpsync"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Split file trees into bags (called \"partitions\")";
     longDescription = ''
       Fpart is a tool that helps you sort file trees and pack them into bags
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       Used this way, fpart can be seen as a powerful data migration tool.
     '';
     homepage = "http://contribs.martymac.org/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

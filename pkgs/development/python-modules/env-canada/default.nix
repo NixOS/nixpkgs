@@ -10,26 +10,24 @@
   numpy,
   pandas,
   pillow,
+  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   syrupy,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "env-canada";
-  version = "0.11.2";
+  version = "0.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    tag = "v${version}";
-    hash = "sha256-r0a2bMgWY6dH88aOJoNpmcSyQi207XDI3Ehu37kU9hY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tjZdYUWaNqpJ6cYgFw0ezbV08nUbB95nhHw0MhYyYf4=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     freezegun
     pytestCheckHook
     syrupy
@@ -70,11 +69,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "env_canada" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
-    changelog = "https://github.com/michaeldavie/env_canada/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/michaeldavie/env_canada/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,30 +8,32 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-workflows";
-  version = "1.18.2";
+  version = "1.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_workflows";
-    inherit version;
-    hash = "sha256-S7k2QZv+EQyfZ6RjG+NA/+a9IBQpnMTE+TIbXlIC1N8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-vo4IpdE0GG2834Z8BbFZrYrH3jtkJbIb76q39PJY1Kg=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -45,11 +47,11 @@ buildPythonPackage rec {
     "google.cloud.workflows_v1beta"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Cloud Workflows";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-workflows";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workflows-v${version}/packages/google-cloud-workflows/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workflows-v${finalAttrs.version}/packages/google-cloud-workflows/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

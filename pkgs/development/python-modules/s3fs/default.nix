@@ -15,19 +15,20 @@
   flask,
   flask-cors,
   moto,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2025.2.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "s3fs";
     tag = version;
-    hash = "sha256-nnfvccORDspj54sRxL3d0hn4MpzKYGKE2Kl0v/wLaNw=";
+    hash = "sha256-CWZHu9PXW/YZosCVtnCJ4T6eQCmrdFcP0vkoGr+RAhM=";
   };
 
   build-system = [
@@ -53,12 +54,14 @@ buildPythonPackage rec {
     flask
     flask-cors
     moto
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
     # require network access
     "test_async_close"
+    "test_session_close"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -66,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
-    changelog = "https://github.com/fsspec/s3fs/blob/${version}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/s3fs/blob/${src.tag}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };

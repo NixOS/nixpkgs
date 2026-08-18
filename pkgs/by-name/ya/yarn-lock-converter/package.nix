@@ -1,51 +1,66 @@
 {
   lib,
-  buildNpmPackage,
-  fetchurl,
+  stdenv,
+  fetchFromGitHub,
   nodejs,
   testers,
   yarn-lock-converter,
+  yarn-berry_3,
+  makeBinaryWrapper,
+  nix-update-script,
 }:
-
-let
-  source = lib.importJSON ./source.json;
-in
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-lock-converter";
-  inherit (source) version;
+  version = "0.0.2";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/@vht/yarn-lock-converter/-/yarn-lock-converter-${version}.tgz";
-    hash = "sha256-CP1wI33fgtp4GSjasktbfWuUjGzCuK3XR+p64aPAryQ=";
+  src = fetchFromGitHub {
+    owner = "vht";
+    repo = "yarn-lock-converter";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AFetTjQZwXjlgLFE9YWHt82j3y8Ej25HYLed3tw/IxU=";
   };
 
-  npmDepsHash = source.deps;
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-dpZJYiRJzd6QbrRJccXpEkkNgtbBJ669lY5UQmcy8Yg=";
+  };
 
-  dontBuild = true;
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+    yarn-berry_3
+    makeBinaryWrapper
+  ];
 
-  nativeBuildInputs = [ nodejs ];
+  installPhase = ''
+    runHook preInstall
 
-  postPatch = ''
-    # Use generated package-lock.json as upstream does not provide one
-    ln -s ${./package-lock.json} package-lock.json
+    yarn config set nodeLinker "node-modules"
+    yarn install --mode=skip-build --inline-builds
+    mkdir -p $out/lib/node_modules/yarn-lock-converter
+    chmod +x ./index.js
+    rm yarn.lock README.md package.json
+    mkdir $out/bin
+    mv * $out/lib/node_modules/yarn-lock-converter/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/yarn-lock-converter \
+      --add-flags "$out/lib/node_modules/yarn-lock-converter/index.js"
+
+    runHook postInstall
   '';
 
-  postInstall = ''
-    mv $out/bin/@vht/yarn-lock-converter $out/bin/yarn-lock-converter
-    rmdir $out/bin/@vht
-  '';
   passthru = {
     tests.version = testers.testVersion {
       package = yarn-lock-converter;
     };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Converts modern Yarn v2+ yarn.lock files into a Yarn v1 format";
     homepage = "https://github.com/VHT/yarn-lock-converter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "yarn-lock-converter";
   };
-}
+})

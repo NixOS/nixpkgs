@@ -6,7 +6,7 @@
 
 buildNpmPackage rec {
   pname = "mw";
-  version = "unstable-2023-08-04";
+  version = "0-unstable-2023-08-04";
 
   src = fetchFromGitHub {
     owner = "mark-when";
@@ -32,6 +32,6 @@ buildNpmPackage rec {
       Markwhen is an interactive text-to-timeline tool. Write markdown-ish text and it gets converted into a nice looking cascading timeline.
     '';
     mainProgram = "mw";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

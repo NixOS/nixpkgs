@@ -9,7 +9,7 @@
   gmp,
   cgal,
   mpfr,
-  tbb,
+  onetbb,
   numpy,
   cython,
   pybind11,
@@ -46,7 +46,8 @@ buildPythonPackage rec {
     gmp
     cgal
     mpfr
-  ] ++ lib.optionals enableTBB [ tbb ];
+  ]
+  ++ lib.optionals enableTBB [ onetbb ];
   propagatedBuildInputs = [
     numpy
     scipy

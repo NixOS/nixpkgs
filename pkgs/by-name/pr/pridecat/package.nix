@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "pridecat";
-  version = "unstable-2020-06-19";
+  version = "0-unstable-2020-06-19";
 
   src = fetchFromGitHub {
     owner = "lunasorcery";
@@ -18,11 +18,11 @@ stdenv.mkDerivation {
   # fixes the install path in the Makefile
   patches = [ ./fix_install.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Like cat, but more colorful";
     homepage = "https://github.com/lunasorcery/pridecat";
-    license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ lunarequest ];
+    license = lib.licenses.cc-by-nc-sa-40;
+    maintainers = with lib.maintainers; [ lunarequest ];
     mainProgram = "pridecat";
   };
 }

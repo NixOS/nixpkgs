@@ -7,7 +7,7 @@
 
 {
   meta = {
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 
   imports = [
@@ -28,22 +28,37 @@
   options = { };
 
   config =
-    let
-      initScript = if config.boot.initrd.systemd.enable then "prepare-root" else "init";
-    in
+
     {
       boot.isContainer = true;
-      boot.postBootCommands = ''
-        # After booting, register the contents of the Nix store in the Nix
-        # database.
-        if [ -f /nix-path-registration ]; then
-          ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
+      systemd.services.register-nix-paths = {
+        description = "Register Nix Store Paths";
+        unitConfig = {
+          DefaultDependencies = false;
+          ConditionPathExists = "/nix-path-registration";
+        };
+        wantedBy = [ "sysinit.target" ];
+        before = [
+          "sysinit.target"
+          "shutdown.target"
+          "nix-daemon.socket"
+          "nix-daemon.service"
+        ];
+        after = [ "local-fs.target" ];
+        conflicts = [ "shutdown.target" ];
+        restartIfChanged = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          ${lib.getExe' config.nix.package.out "nix-store"} --load-db < /nix-path-registration
           rm /nix-path-registration
-        fi
 
-        # nixos-rebuild also requires a "system" profile
-        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+          # nixos-rebuild also requires a "system" profile
+          ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/system --set /run/current-system
+        '';
+      };
 
       # supplement 99-ethernet-default-dhcp which excludes veth
       systemd.network = lib.mkIf config.networking.useDHCP {
@@ -79,7 +94,7 @@
 
         contents = [
           {
-            source = config.system.build.toplevel + "/${initScript}";
+            source = config.system.build.toplevel + "/init";
             target = "/sbin/init";
           }
           # Technically this is not required for lxc, but having also make this configuration work with systemd-nspawn.
@@ -104,7 +119,7 @@
 
         pseudoFiles = [
           "/sbin d 0755 0 0"
-          "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/${initScript}"
+          "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/init"
           "/dev d 0755 0 0"
           "/proc d 0555 0 0"
           "/sys d 0555 0 0"
@@ -113,7 +128,7 @@
 
       system.build.installBootLoader = pkgs.writeScript "install-lxc-sbin-init.sh" ''
         #!${pkgs.runtimeShell}
-        ${pkgs.coreutils}/bin/ln -fs "$1/${initScript}" /sbin/init
+        ${pkgs.coreutils}/bin/ln -fs "$1/init" /sbin/init
       '';
 
       # networkd depends on this, but systemd module disables this for containers
@@ -121,8 +136,5 @@
 
       systemd.packages = [ pkgs.distrobuilder.generator ];
 
-      system.activationScripts.installInitScript = lib.mkForce ''
-        ln -fs $systemConfig/${initScript} /sbin/init
-      '';
     };
 }

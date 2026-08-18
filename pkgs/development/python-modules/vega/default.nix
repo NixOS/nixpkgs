@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   altair,
   ipytablewidgets,
   ipywidgets,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "vega";
   version = "4.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -56,7 +53,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vega" ];
 
-  meta = with lib; {
+  meta = {
     description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
@@ -65,7 +62,7 @@ buildPythonPackage rec {
       jupyter nbextension enable --user vega
     '';
     homepage = "https://github.com/vega/ipyvega";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

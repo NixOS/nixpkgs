@@ -1,31 +1,35 @@
 {
   fetchFromGitHub,
   lib,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
   nodejs,
   nix-update-script,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
-  version = "2.0.35";
+  version = "2.0.75";
 
   src = fetchFromGitHub {
     owner = "kvndrsslr";
     repo = "sketchybar-app-font";
-    rev = "v2.0.35";
-    hash = "sha256-qXXxpx/thEJuFnNUWmMXYMoir5CGqCktV1emzVPcTIY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o6Nq1vQWv2YMd0S2jUPtxPK3KrKyS1bF3RBNEM5ZHBg=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NGAgueJ+cuK/csjdf94KNklu+Xf91BHoWKVgEctX6eA=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-zFheFcVSCZWDrThn5PnxhJscRhLG/psSI8Q8g48nXNU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
   ];
 
   buildPhase = ''
@@ -55,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
     '';
     homepage = "https://github.com/kvndrsslr/sketchybar-app-font";
+    changelog = "https://github.com/kvndrsslr/sketchybar-app-font/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.all;

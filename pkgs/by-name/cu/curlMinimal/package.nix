@@ -6,6 +6,8 @@
   perl,
   nixosTests,
   autoreconfHook,
+  buildPackages,
+  runtimeShellPackage,
   brotliSupport ? false,
   brotli,
   c-aresSupport ? false,
@@ -17,7 +19,8 @@
   gssSupport ?
     with stdenv.hostPlatform;
     (
-      !isWindows
+      # krb5 is broken on cygwin
+      !(isWindows || isCygwin)
       &&
         # disable gss because of: undefined reference to `k5_bcmp'
         # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
@@ -34,7 +37,6 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
-  quictls,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -48,8 +50,6 @@
   rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
-  wolfsslSupport ? false,
-  wolfssl,
   rustlsSupport ? false,
   rustls-ffi,
   zlibSupport ? true,
@@ -80,18 +80,16 @@ assert
     (lib.count (x: x) [
       gnutlsSupport
       opensslSupport
-      wolfsslSupport
       rustlsSupport
     ]) > 1
   );
 
 let
-  openssl' = if http3Support then quictls else openssl;
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.14.1";
+  version = "8.21.0";
 
   src = fetchurl {
     urls = [
@@ -100,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
+    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -122,8 +120,13 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+  env = {
+    CXX = "${stdenv.cc.targetPrefix}c++";
+    CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
     # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
     # some of curl’s propagated inputs need libiconv.
     NIX_LDFLAGS = "-liconv";
@@ -132,11 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
   nativeCheckInputs = [
     # See https://github.com/curl/curl/pull/16928
-    openssl'
+    openssl
   ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -155,11 +159,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional idnSupport libidn2
     ++ lib.optional ldapSupport openldap
-    ++ lib.optional opensslSupport openssl'
+    ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
-    ++ lib.optional wolfsslSupport wolfssl
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd;
@@ -170,95 +173,100 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/tool_hugehelp.c
   '';
 
-  configureFlags =
-    [
-      "--enable-versioned-symbols"
-      # Build without manual
-      "--disable-manual"
-      (lib.enableFeature c-aresSupport "ares")
-      (lib.enableFeature ldapSupport "ldap")
-      (lib.enableFeature ldapSupport "ldaps")
-      (lib.enableFeature websocketSupport "websockets")
-      # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
-      (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
-      (lib.withFeature http3Support "nghttp3")
-      (lib.withFeature http3Support "ngtcp2")
-      (lib.withFeature rtmpSupport "librtmp")
-      (lib.withFeature rustlsSupport "rustls")
-      (lib.withFeature zstdSupport "zstd")
-      (lib.withFeature pslSupport "libpsl")
-      (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
-      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
-      (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
-      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl'))
-      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-      (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
-    ]
-    ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
-    # For the 'urandom', maybe it should be a cross-system option
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-random=/dev/urandom"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
-      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
-      "--without-ca-bundle"
-      "--without-ca-path"
-    ]
-    ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
-      "--without-ssl"
-    ]
-    ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
-      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
-    ]
-    ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
-      "--with-ca-path=/etc/ssl/certs"
-    ];
-
-  CXX = "${stdenv.cc.targetPrefix}c++";
-  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+  configureFlags = [
+    "--enable-versioned-symbols"
+    # Build without manual
+    "--disable-manual"
+    (lib.enableFeature c-aresSupport "ares")
+    (lib.enableFeature ldapSupport "ldap")
+    (lib.enableFeature ldapSupport "ldaps")
+    (lib.enableFeature websocketSupport "websockets")
+    # --with-ca-fallback is only supported for openssl https://github.com/curl/curl/blame/curl-8_16_0/acinclude.m4#L1258
+    (lib.withFeature opensslSupport "ca-fallback")
+    (lib.withFeature http3Support "nghttp3")
+    (lib.withFeature http3Support "ngtcp2")
+    (lib.withFeature rtmpSupport "librtmp")
+    (lib.withFeature rustlsSupport "rustls")
+    (lib.withFeature zstdSupport "zstd")
+    (lib.withFeature pslSupport "libpsl")
+    (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
+    (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+    (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
+    (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+    (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
+  ]
+  ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
+  # For the 'urandom', maybe it should be a cross-system option
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-random=/dev/urandom"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+    # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+    "--without-ca-bundle"
+    "--without-ca-path"
+  ]
+  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !rustlsSupport) [
+    "--without-ssl"
+  ]
+  ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
+    "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+  ]
+  ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
+    "--with-ca-path=/etc/ssl/certs"
+  ];
 
   # takes 14 minutes on a 24 core and because many other packages depend on curl
   # they cannot be run concurrently and are a bottleneck
   # tests are available in passthru.tests.withCheck
   doCheck = false;
-  preCheck =
-    ''
-      patchShebangs tests/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # bad interaction with sandbox if enabled?
-      rm tests/data/test1453
-      rm tests/data/test1086
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      # different resolving behaviour?
-      rm tests/data/test1592
-    '';
+  preCheck = ''
+    patchShebangs tests/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # bad interaction with sandbox if enabled?
+    rm tests/data/test1453
+    rm tests/data/test1086
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # different resolving behaviour?
+    rm tests/data/test1592
+  '';
 
   __darwinAllowLocalNetworking = true;
 
-  postInstall =
-    ''
-      moveToOutput bin/curl-config "$dev"
+  postInstall = ''
+    moveToOutput bin/curl-config "$dev"
 
-      # Install completions
-      make -C scripts install
-    ''
-    + lib.optionalString scpSupport ''
-      sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
-    ''
-    + lib.optionalString gnutlsSupport ''
-      ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
-      ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
-      ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
-    '';
+    # Install completions
+    make -C scripts install
+  ''
+  + lib.optionalString scpSupport ''
+    sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
+  ''
+  + lib.optionalString gnutlsSupport ''
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
+  ''
+  # The wcurl shell script found in `''${!outputBin}/bin`, is located in the
+  # source along with all the scripts patched in `postPatch` above.
+  # `patchShebangs` at that stage causes the host intended wcurl script to get
+  # the buildPlatform's runtimeShell shebang, instead of the hostPlatform's. To
+  # make sure this doesn't happen we disallow it, and fix it above in the
+  # postInstall, and also with the conditional hostPlatform's
+  # runtimeShellPackage added in buildInputs.
+  + lib.optionalString isCross ''
+    patchShebangs --update --host "''${!outputBin}/bin"
+  '';
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  buildInputs = lib.optional isCross runtimeShellPackage;
 
   passthru =
     let
       useThisCurl = attr: attr.override { curl = finalAttrs.finalPackage; };
     in
     {
-      inherit opensslSupport;
-      openssl = openssl';
+      inherit opensslSupport openssl;
       tests = {
         withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
           doCheck = true;
@@ -287,15 +295,17 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
-      lovek323
       Scrumplex
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
-    # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    # Fails to link against static gss
+    broken = stdenv.hostPlatform.isStatic && gssSupport;
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;
   };
 })

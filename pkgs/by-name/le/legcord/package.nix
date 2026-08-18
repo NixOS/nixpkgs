@@ -2,30 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
-  electron,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   autoPatchelfHook,
   pipewire,
   libpulseaudio,
+  jq,
   nix-update-script,
 }:
+let
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6egqI1JhnRc8YwzAvyy4Xg9Z9dEfG7wIbMfUgQ+4IBA=";
+    hash = "sha256-Mjub2OFb5RN4yBwdUk8v6uo/dUeYZ5nELmpPzEFmx2c=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     # we use a script wrapper here for environment variable expansion at runtime
     # https://github.com/NixOS/nixpkgs/issues/172583
@@ -34,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # legcord uses venmic, which is a shipped as a prebuilt node module
     # and needs to be patched
     autoPatchelfHook
+    jq
   ];
 
   buildInputs = [
@@ -42,10 +50,26 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-nobOORfhwlGEvNt+MfDKd3rXor6tJHDulz5oD1BGY4I=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-xBW7D/3Nz/h7VqLqTiVL9dTjXLdNOqfdIlj66iYwuhM=";
   };
+
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
+
+    # electron builds must be writable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -57,13 +81,21 @@ stdenv.mkDerivation (finalAttrs: {
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/node-napi-v7.node ./dist/venmic-x64.node
     cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/node-napi-v7.node ./dist/venmic-arm64.node
 
+    # Remove unnecessary koffi prebuilds, otherwise unsupported platforms
+    # (OpenBSD, FreeBSD, Linux musl builds) will cause autoPatchelf to not
+    # be able to find the required libraries and fail.
+    find ./node_modules/koffi/build/koffi -mindepth 1 -maxdepth 1 \
+      ! -name linux_x64 \
+      ! -name linux_arm64 \
+      -type d -exec rm -rf {} +
+
     # Patch venmic before putting it into the ASAR archive
     autoPatchelf ./dist
 
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist="${electron.dist}" \
+      -c.electronDist=electron-dist \
       -c.electronVersion="${electron.version}"
 
     runHook postBuild

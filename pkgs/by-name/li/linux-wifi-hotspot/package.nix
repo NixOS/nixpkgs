@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   which,
   pkg-config,
   glib,
@@ -50,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lakinduakash/linux-wifi-hotspot/commit/a3fce4b3ee9371eeb7b300fa7e9f291d93986db3.patch";
+      hash = "sha256-4xQ3iRUlkNpoxHXABhMIgsoDY9nENN/9FtHD3UMyAhc=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace ./src/scripts/Makefile \
       --replace "etc" "$out/etc"
@@ -94,15 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${placeholder "out"}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface";
     homepage = "https://github.com/lakinduakash/linux-wifi-hotspot";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       johnrtitor
       onny
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
 })

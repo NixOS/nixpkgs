@@ -1,0 +1,13 @@
+diff --git a/pytest_pylint/tests/test_pytest_pylint.py b/pytest_pylint/tests/test_pytest_pylint.py
+index 4c87ac336690defb2f2d472b389945c91fae5d31..f6478c018f5974acb2fdd95f1d461ca71e1302ba 100644
+--- a/pytest_pylint/tests/test_pytest_pylint.py
++++ b/pytest_pylint/tests/test_pytest_pylint.py
+@@ -38,7 +38,7 @@ def test_nodeid_no_dupepath(testdir):
+     testdir.makepyfile(app="import sys")
+     result = testdir.runpytest("--pylint", "--verbose")
+     assert re.search(
+-        r"^FAILED\s+app\.py::PYLINT$", result.stdout.str(), flags=re.MULTILINE
++        r"^FAILED\s+app\.py::PYLINT( |$)", result.stdout.str(), flags=re.MULTILINE
+     )
+
+

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchgit,
   cmake,
   SDL,
   makeDesktopItem,
@@ -10,20 +11,19 @@
 }:
 
 let
-
   icon = fetchurl {
     url = "https://baller.tuxfamily.org/king.png";
-    sha256 = "1xq2h87s648wjpjl72ds3xnnk2jp8ghbkhjzh2g4hpkq2zdz90hy";
+    hash = "sha256-HoL02xd4XkiegF/CueBDV4ppbR+6iUPllRwRow+CAvc=";
   };
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ballerburg";
-  version = "1.2.0";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/baller/ballerburg-${version}.tar.gz";
-    sha256 = "sha256-BiX0shPBGA8sshee8rxs41x+mdsrJzBqhpDDic6sYwA=";
+  src = fetchgit {
+    url = "https://framagit.org/baller/ballerburg.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4rO7ixLE+EV6zd0EryHU6QZeVoa6N4fvxwoJWa0aO70=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ];
 
+  # CMake's default framework search order on Darwin finds Kernel.framework
+  # headers while detecting SDL 1.2, which makes standard includes like
+  # <string.h> resolve to the wrong SDK header and breaks the build.
+  # Keep this package on the old Nixpkgs search order without restoring it
+  # globally: https://github.com/NixOS/nixpkgs/pull/455592
+  # CMake docs: https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_FRAMEWORK.html
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_FIND_FRAMEWORK=LAST"
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "Ballerburg";
       desktopName = "Ballerburg SDL";
       exec = "_NET_WM_ICON=ballerburg ballerburg";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       icon = "ballerburg";
       categories = [ "Game" ];
     })
@@ -55,15 +65,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic cannon combat game";
     mainProgram = "ballerburg";
     longDescription = ''
       Two castles, separated by a mountain, try to defeat each other with their cannonballs,
       either by killing the opponent's king or by weakening the opponent enough so that the king capitulates.'';
     homepage = "https://baller.tuxfamily.org/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.j0hax ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ j0hax ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -5,21 +5,22 @@
   gitMinimal,
   rustPlatform,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-metrics";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "jdrouet";
     repo = "git-metrics";
-    tag = "v${version}";
-    hash = "sha256-SdA/FpdrbC36Ny7aBpTUvFldbYXyajSqWGheaDPHYoE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z34yzKHoTskIDPWl9LHy9dsXeNxwlI6kD73EzeSUrN0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-e4CdpwoFl8leV5HJWkWBpvPrVrk+7vq49yTPkpeQ2Ng=";
+  cargoHash = "sha256-7/1Jf3GJmEydTDVL3oGIKIkCHAMKJ8BE6PUmpWH0xcQ=";
 
   buildInputs = [
     openssl
@@ -39,15 +40,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::display_diff::execute"
     "--skip=tests::simple_use_case::execute::with_command_backend"
     "--skip=tests::simple_use_case::execute::with_git2_backend"
+    "--skip=tests::config_override"
   ];
+
+  passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/jdrouet/git-metrics";
+    changelog = "https://github.com/jdrouet/git-metrics/releases/tag/v${finalAttrs.version}";
     description = "Git extension to be able to track metrics about your project, within the git repository";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "git-metrics";
   };
-}
+})

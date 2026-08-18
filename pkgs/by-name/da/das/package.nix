@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "das";
   version = "1.0.3";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "DivideAndScan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WZmWpcBqxsNH96nVWwoepFhsvdxZpYKmAjNd7ghIJMA=";
   };
 
@@ -49,9 +49,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Divide full port scan results and use it for targeted Nmap runs";
     homepage = "https://github.com/snovvcrash/DivideAndScan";
-    changelog = "https://github.com/snovvcrash/DivideAndScan/releases/tag/v${version}";
+    changelog = "https://github.com/snovvcrash/DivideAndScan/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "das";
   };
-}
+})

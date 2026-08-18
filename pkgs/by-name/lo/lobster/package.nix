@@ -4,39 +4,62 @@
   fetchFromGitHub,
   cmake,
   callPackage,
+  pkg-config,
 
   # Linux deps
   libGL,
-  xorg,
+  libxcursor,
+  libxext,
+  libxi,
+  libx11,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
 
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2025.2";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-F6py2zhNk88PUGxjWim+LHVTOpYHViV7d70LV77QgdU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kqKOf0zrHyqRTs+57owHR5sORZgNIgGghtjUtSaFjZw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # TODO devendor sdl3 and remove these
     libGL
-    xorg.libX11
-    xorg.libXext
+    libxcursor
+    libx11
+    libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
   ];
 
   preConfigure = ''
     cd dev
   '';
 
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # The test suite expects the executable to be in any of a number of locations
+  # that do not include the bin directory.
+  preCheck = ''
+    ln -s ../../bin/lobster lobster
+  '';
+
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
     mainProgram = "lobster";
@@ -45,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       very static typing and memory management with a very lightweight,
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

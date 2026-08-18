@@ -4,11 +4,11 @@
   lib,
   fetchFromGitLab,
   fetchgit,
-  fetchpatch,
+  gitUpdater,
 
   cmake,
+  pkg-config,
   ninja,
-  extra-cmake-modules,
   flex,
   bison,
   wrapGAppsHook3,
@@ -63,33 +63,27 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.6.0";
+  version = "9.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CMyvNOAlIqD6OeqUquQ+/sOiBXmEowZe3/qmaXxh0X0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rrAqHSG7AsyG8DM0zYfyuGyu6jI/ZDmSYco91nhdmhQ=";
   };
 
   patches = [
     ./disable-tests-download.patch
-
-    # Fix build with Qt 6.9
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://invent.kde.org/graphics/digikam/-/commit/325b19fc7f0d04cdc1308f235c207c1ab43e945d.patch";
-      hash = "sha256-bsxaNuLuU9MyDRmenOqO4JuzsbpUvfKQwcSCDfLHoWQ=";
-    })
   ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     flex
     bison
     kdePackages.wrapQtAppsHook
@@ -104,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   # build inputs.
 
   buildInputs = [
-    opencv
+    opencv.cxxdev
     libtiff
     libpng
     # TODO: Figure out how on earth to get it to pick up libjpeg8 for
@@ -175,11 +169,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_KFILEMETADATASUPPORT" true)
     #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
+  ]
+  ++ lib.optionals enableCuda [
+    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
   ];
 
   # Tests segfault for some reason…
@@ -207,13 +204,17 @@ stdenv.mkDerivation (finalAttrs: {
   # over 3h in a normal build slot (2 cores
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     description = "Photo management application";
     homepage = "https://www.digikam.org/";
     changelog = "${finalAttrs.src.meta.homepage}-/blob/master/project/NEWS.${finalAttrs.version}";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ philipdb ];
     platforms = lib.platforms.linux;
     mainProgram = "digikam";
   };

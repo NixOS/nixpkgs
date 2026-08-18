@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "constantdict";
-  version = "2025.1.1";
+  version = "2025.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiasdiener";
     repo = "constantdict";
-    tag = "v${version}";
-    hash = "sha256-M3duCafyJk/W3KIqP43ErXr/EfCj6/Sin6eCaaxyI5g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jX6g9xBteZOc/7Ob5N8eUSCycb6JoE5i38T52zknOTI=";
   };
 
   build-system = [
@@ -38,8 +38,8 @@ buildPythonPackage rec {
     homepage = "https://matthiasdiener.github.io/constantdict";
     downloadPage = "https://github.com/matthiasdiener/constantdict";
     description = "Immutable dictionary class for Python, implemented as a thin layer around Python's builtin dict class";
-    changelog = "https://github.com/matthiasdiener/constantdict/releases/tag/${src.tag}";
+    changelog = "https://github.com/matthiasdiener/constantdict/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

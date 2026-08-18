@@ -7,9 +7,9 @@
   buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doctl";
-  version = "1.131.0";
+  version = "1.166.0";
 
   vendorHash = null;
 
@@ -22,9 +22,9 @@ buildGoModule rec {
       t = "github.com/digitalocean/doctl";
     in
     [
-      "-X ${t}.Major=${lib.versions.major version}"
-      "-X ${t}.Minor=${lib.versions.minor version}"
-      "-X ${t}.Patch=${lib.versions.patch version}"
+      "-X ${t}.Major=${lib.versions.major finalAttrs.version}"
+      "-X ${t}.Minor=${lib.versions.minor finalAttrs.version}"
+      "-X ${t}.Patch=${lib.versions.patch finalAttrs.version}"
       "-X ${t}.Label=release"
     ];
 
@@ -41,8 +41,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "doctl";
-    tag = "v${version}";
-    hash = "sha256-bZpYojpNm9TPJOulxBgXJ0l/JAVxNakA6JifGOhX3BU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m4KJ/WzmnLuL4/6RQV1sPUEc+PdKDNkTL2+HBGgN5x8=";
   };
 
   meta = {
@@ -52,4 +52,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.siddharthist ];
   };
-}
+})

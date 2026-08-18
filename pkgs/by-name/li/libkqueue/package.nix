@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkqueue";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "mheily";
     repo = "libkqueue";
-    rev = "v${version}";
-    sha256 = "sha256-5Zds9sqHkFldJf3ThTPOiaGKohmFcIzY0ARDA0iswVk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-hT7/0Cy4UCKN16Rlwyjj1AAYC4/n1+170xsnYrjiglQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "kqueue(2) compatibility library";
     homepage = "https://github.com/mheily/libkqueue";
-    changelog = "https://github.com/mheily/libkqueue/raw/v${version}/ChangeLog";
+    changelog = "https://github.com/mheily/libkqueue/raw/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

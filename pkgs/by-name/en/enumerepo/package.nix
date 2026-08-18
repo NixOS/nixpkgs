@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "enumerepo";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "trickest";
     repo = "enumerepo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PWWx6b+fttxKxMtuHAYPTeEsta0E6+IQ1DSKO6c7Jdc=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
     description = "Tool to list all public repositories for (valid) GitHub usernames";
     mainProgram = "enumerepo";
     homepage = "https://github.com/trickest/enumerepo";
-    changelog = "https://github.com/trickest/enumerepo/releases/tag/v${version}";
+    changelog = "https://github.com/trickest/enumerepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

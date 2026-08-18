@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "thttp";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sesh";
@@ -24,11 +21,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thttp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight wrapper around urllib";
     homepage = "https://github.com/sesh/thttp";
     changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

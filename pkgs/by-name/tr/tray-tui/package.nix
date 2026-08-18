@@ -1,30 +1,29 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tray-tui";
-  version = "0.2.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "tray-tui";
-    tag = version;
-    hash = "sha256-iZyhcBCOUq2KuQR21sQiwFeEIr7DNBs1fYRu5Nv5+ng=";
+    tag = finalAttrs.version;
+    hash = "sha256-P34tL65vTxqDfc3syOlSw+E/bMaQXNF4gen9rZDWLxg=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-o3FmSNOiCcbLoU6/LtbugalWUm/ME9kG8bzfem3HqWI=";
+  cargoHash = "sha256-oRY2K3F8cvzqfxgBDGhX2WrroGcV+hLKbYKFvrfKUuk=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tray-tui \
       --bash <($out/bin/tray-tui --completions bash) \
       --zsh <($out/bin/tray-tui --completions zsh) \
@@ -41,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Levizor ];
     platforms = lib.platforms.linux;
   };
-}
+})

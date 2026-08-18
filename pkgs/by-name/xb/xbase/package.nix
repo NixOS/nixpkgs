@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbase";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xdb/xbase64-${version}.tar.gz";
+    url = "mirror://sourceforge/xdb/xbase64-${finalAttrs.version}.tar.gz";
     sha256 = "17287kz1nmmm64y7zp9nhhl7slzlba09h6cc83w4mvsqwd9w882r";
   };
 
@@ -30,10 +30,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    sed -i '1i#include <cstdarg>' xbase64/xbstring.cpp
+  '';
+
+  meta = {
     homepage = "https://sourceforge.net/projects/xdb/";
     description = "C++ class library formerly known as XDB";
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    maintainers = with lib.maintainers; [ tbutter ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
-}
+})

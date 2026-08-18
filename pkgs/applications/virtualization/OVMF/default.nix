@@ -40,7 +40,6 @@
   sourceDebug ? false,
   projectDscPath ?
     {
-      i686 = "OvmfPkg/OvmfPkgIa32.dsc";
       x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
       aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
       riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
@@ -50,7 +49,6 @@
       or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
   fwPrefix ?
     {
-      i686 = "OVMF";
       x86_64 = "OVMF";
       aarch64 = "AAVMF";
       riscv64 = "RISCV_VIRT";
@@ -58,16 +56,12 @@
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? edk2.meta.platforms,
+  metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
 }:
 
 let
 
   platformSpecific = {
-    i686.msVarsArgs = {
-      flavor = "OVMF";
-      archDir = "Ia32";
-    };
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
       archDir = "X64";
@@ -95,12 +89,89 @@ let
       "debian/edk2-vars-generator.py"
       "debian/python"
       "debian/PkKek-1-*.pem"
+      "debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch"
     ];
-    rev = "refs/tags/debian/2025.02-8";
-    hash = "sha256-kAwfS8TBdN1PTm5kxTvqFuA9edBfBuMt6XmRWnFnolQ=";
+    tag = "debian/2025.02-8";
+    hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
 
   buildPrefix = "Build/*/*";
+
+  isQemuPlatform = builtins.elem projectDscPath [
+    "OvmfPkg/OvmfPkgX64.dsc"
+    "ArmVirtPkg/ArmVirtQemu.dsc"
+    "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc"
+    "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc"
+  ];
+
+  # QEMU firmware interop descriptors to install, keyed by file name.
+  # Add an attribute to ship an additional descriptor.
+  qemuDescriptors =
+    let
+      description = "${fwPrefix} UEFI firmware for ${cpuName}${lib.optionalString secureBoot " with Secure Boot"}";
+
+      flashMapping = varsFile: {
+        device = "flash";
+        mode = "split";
+        executable = {
+          filename = "${placeholder "fd"}/FV/${fwPrefix}_CODE.fd";
+          format = "raw";
+        };
+        nvram-template = {
+          filename = "${placeholder "fd"}/FV/${varsFile}";
+          format = "raw";
+        };
+      };
+
+      common = {
+        interface-types = [ "uefi" ];
+        targets = [
+          {
+            architecture = cpuName;
+            machines =
+              {
+                x86_64 =
+                  if systemManagementModeRequired then
+                    [ "pc-q35-*" ]
+                  else
+                    [
+                      "pc-i440fx-*"
+                      "pc-q35-*"
+                    ];
+                aarch64 = [ "virt-*" ];
+                riscv64 = [ "virt*" ];
+                loongarch64 = [ "virt*" ];
+              }
+              .${cpuName} or [ ];
+          }
+        ];
+        features =
+          lib.optionals stdenv.hostPlatform.isx86 [
+            "acpi-s3"
+            "amd-sev"
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.isx86 && !systemManagementModeRequired) [ "amd-sev-es" ]
+          ++ lib.optionals secureBoot [ "secure-boot" ]
+          ++ lib.optionals systemManagementModeRequired [ "requires-smm" ]
+          ++ lib.optionals (stdenv.hostPlatform.isx86 && !debug) [ "verbose-dynamic" ];
+        tags = [ ];
+      };
+    in
+    lib.optionalAttrs isQemuPlatform (
+      {
+        "50-edk2-${cpuName}${lib.optionalString secureBoot "-sb"}.json" = common // {
+          inherit description;
+          mapping = flashMapping "${fwPrefix}_VARS.fd";
+        };
+      }
+      // lib.optionalAttrs msVarsTemplate {
+        "40-edk2-${cpuName}${lib.optionalString secureBoot "-sb"}-enrolled.json" = common // {
+          description = "${description}, Microsoft keys enrolled";
+          mapping = flashMapping "${fwPrefix}_VARS.ms.fd";
+          features = common.features ++ [ "enrolled-keys" ];
+        };
+      }
+    );
 
 in
 
@@ -117,24 +188,23 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "fd"
   ];
 
-  nativeBuildInputs =
-    [
-      util-linux
-      nasm
-      acpica-tools
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.bintools
-      llvmPackages.llvm
-    ]
-    ++ lib.optionals msVarsTemplate [
-      python3
-      pexpect
-      xorriso
-      qemu
-      dosfstools
-      mtools
-    ];
+  nativeBuildInputs = [
+    util-linux
+    nasm
+    acpica-tools
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.bintools
+    llvmPackages.llvm
+  ]
+  ++ lib.optionals msVarsTemplate [
+    python3
+    pexpect
+    xorriso
+    qemu
+    dosfstools
+    mtools
+  ];
   strictDeps = true;
 
   hardeningDisable = [
@@ -142,7 +212,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "stackprotector"
     "pic"
     "fortify"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "relro";
 
   buildFlags =
     # IPv6 has no reason to be disabled.
@@ -172,6 +243,10 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postUnpack = lib.optionalDrvAttr msVarsTemplate ''
     ln -s ${debian-edk-src}/debian
   '';
+
+  patches = [
+    (debian-edk-src + "/debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch")
+  ];
 
   postConfigure = lib.optionalDrvAttr msVarsTemplate ''
     tr -d '\n' < ${vendorPkKek} | sed \
@@ -216,35 +291,44 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   # TODO: Usage of -bios OVMF.fd is discouraged: https://lists.katacontainers.io/pipermail/kata-dev/2021-January/001650.html
   # We should remove the isx86-specific block here once we're ready to update nixpkgs to stop using that and update the
   # release notes accordingly.
-  postInstall =
-    ''
-      mkdir -vp $fd/FV
-    ''
-    +
-      lib.optionalString
-        (builtins.elem fwPrefix [
-          "OVMF"
-          "AAVMF"
-          "RISCV_VIRT"
-          "LOONGARCH_VIRT"
-        ])
-        ''
-          mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
-        ''
-    + lib.optionalString stdenv.hostPlatform.isx86 ''
-      mv -v $out/FV/${fwPrefix}.fd $fd/FV
-    ''
-    + lib.optionalString msVarsTemplate ''
-      mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
-      ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
-    ''
-    + lib.optionalString stdenv.hostPlatform.isAarch ''
-      mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
-      # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
-      mkdir -vp $fd/AAVMF
-      ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
-      ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-    '';
+  postInstall = ''
+    mkdir -vp $fd/FV
+  ''
+  +
+    lib.optionalString
+      (builtins.elem fwPrefix [
+        "OVMF"
+        "AAVMF"
+        "RISCV_VIRT"
+        "LOONGARCH_VIRT"
+      ])
+      ''
+        mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+      ''
+  + lib.optionalString stdenv.hostPlatform.isx86 ''
+    mv -v $out/FV/${fwPrefix}.fd $fd/FV
+  ''
+  + lib.optionalString msVarsTemplate ''
+    mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
+    ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch ''
+    mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
+    # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
+    mkdir -vp $fd/AAVMF
+    ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
+    ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
+  ''
+  + lib.optionalString (qemuDescriptors != { }) ''
+    mkdir -vp $fd/share/qemu/firmware
+  ''
+  + lib.concatStrings (
+    lib.mapAttrsToList (name: descriptor: ''
+      python3 -m json.tool > $fd/share/qemu/firmware/${name} <<'EOF'
+      ${builtins.toJSON descriptor}
+      EOF
+    '') qemuDescriptors
+  );
 
   dontPatchELF = true;
 
@@ -272,10 +356,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     platforms = metaPlatforms;
     maintainers = with lib.maintainers; [
       adamcstephens
-      raitobezarius
       mjoerg
       sigmasquadron
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

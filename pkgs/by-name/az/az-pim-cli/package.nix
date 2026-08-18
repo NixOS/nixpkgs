@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
-  version = "1.6.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "netr0m";
     repo = "az-pim-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gf4VscHaUr3JtsJO5PAq1nyPeJxIwGPaiH/QdXKpvQ0=";
+    hash = "sha256-CQS3Grw30nmMpjys/RhGF59rvK8joNUG13f+VEkKTjU=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     ./version-build-info.patch
   ];
 
-  vendorHash = "sha256-PHrpUlAG/PBe3NKUGBQ1U7dCcqkSlErWX2dp9ZPB3+8=";
+  vendorHash = "sha256-+CV4Cbpgcp9zjBo9f8UjrOvp7hrEUS+r+lGVJ/uGdes=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -59,7 +59,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/netr0m/az-pim-cli";
     changelog = "https://github.com/netr0m/az-pim-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "az-pim-cli";
   };
 })

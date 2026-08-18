@@ -13,7 +13,6 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-aarch64";
-      "x86_64-darwin" = "darwin-x86-64";
       "aarch64-darwin" = "darwin-aarch64";
     }
     .${stdenv.system} or null;
@@ -33,6 +32,13 @@ maven.buildMavenPackage rec {
     # make sure mvnHash doesn't change when maven is updated
     ./fix-default-maven-plugin-versions.patch
   ];
+
+  # use non-absolute paths for Exec and Icon fields in the desktop item
+  postPatch = ''
+    substituteInPlace "bin/packaging/debian/Juggling Lab.desktop" \
+      --replace-fail "/opt/juggling-lab/bin/Juggling\ Lab" "jugglinglab" \
+      --replace-fail "/opt/juggling-lab/lib/Juggling_Lab.png" "jugglinglab"
+  '';
 
   mvnHash = "sha256-1Uzo9nRw+YR/sd7CC9MTPe/lttkRX6BtmcsHaagP1Do=";
 
@@ -54,6 +60,14 @@ maven.buildMavenPackage rec {
       install -Dm755 bin/ortools-lib/ortools-${platformName}/* -t $out/lib/ortools-lib
     ''}
 
+    install -Dm644 \
+      "bin/packaging/debian/Juggling Lab.png" \
+      "$out/share/icons/hicolor/256x256/apps/jugglinglab.png"
+
+    install -Dm644 \
+      "bin/packaging/debian/Juggling Lab.desktop" \
+      "$out/share/applications/jugglinglab.desktop"
+
     runHook postInstall
   '';
 
@@ -65,15 +79,15 @@ maven.buildMavenPackage rec {
         --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
   '';
 
-  meta = with lib; {
-    description = "Program to visualize different juggling pattens";
+  meta = {
+    description = "Program to visualize different juggling patterns";
     homepage = "https://jugglinglab.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "jugglinglab";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       wnklmnn
       tomasajt
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

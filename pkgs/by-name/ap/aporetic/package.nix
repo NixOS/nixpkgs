@@ -14,12 +14,12 @@ let
     "serif"
   ];
   pname = "aporetic";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "protesilaos";
     repo = "aporetic";
     tag = version;
-    hash = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
+    hash = "sha256-1BbuC/mWEcXJxzDppvsukhNtdOLz0QosD6QqI/93Khc=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont =
@@ -40,11 +40,11 @@ let
             src = fetchFromGitHub {
               owner = "be5invis";
               repo = "iosevka";
-              tag = "v32.5.0";
-              hash = "sha256-MzsAkq5l4TP19UJNPW/8hvIqsJd94pADrrv8wLG6NMQ=";
+              tag = "v33.2.2";
+              hash = "sha256-dhMTcceHru/uLHRY4eWzFV+73ckCBBnDlizP3iY5w5w=";
             };
 
-            npmDepsHash = "sha256-HeqwpZyHLHdMhd/UfXVBonMu+PhStrLCxAMuP/KuTT8=";
+            npmDepsHash = "sha256-5DcMV9N16pyQxRaK6RCoeghZqAvM5EY1jftceT/bP+o=";
           }
         );
     });
@@ -52,7 +52,7 @@ in
 symlinkJoin {
   inherit pname version;
 
-  paths = (builtins.map makeIosevkaFont sets);
+  paths = (map makeIosevkaFont sets);
 
   meta = {
     inherit (src.meta) homepage;

@@ -2,21 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "petl";
-  version = "1.7.16";
+  version = "1.7.23";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "petl-developers";
     repo = "petl";
-    tag = "v${version}";
-    hash = "sha256-rew/+GXQq2l1LlsR4yqHJZ/iY21HJ2Lf86KS55L8jsQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MTp2QjbJEAyMn5j5O1bcQ8CvA5iGEdbQXnlOIVQfo0c=";
   };
 
   build-system = [
@@ -28,13 +33,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "petl"
-  ];
+  pythonImportsCheck = [ "petl" ];
 
   meta = {
     homepage = "https://github.com/petl-developers/petl";
-    changelog = "https://github.com/petl-developers/petl/releases/tag/${src.tag}";
+    changelog = "https://github.com/petl-developers/petl/releases/tag/${finalAttrs.src.tag}";
     description = "Python package for extracting, transforming and loading tables of data";
     license = lib.licenses.mit;
     mainProgram = "petl";
@@ -42,4 +45,4 @@ buildPythonPackage rec {
       alapshin
     ];
   };
-}
+})

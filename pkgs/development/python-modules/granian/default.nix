@@ -4,6 +4,7 @@
   rustPlatform,
   cacert,
   buildPythonPackage,
+  granian,
   uvloop,
   click,
   setproctitle,
@@ -11,6 +12,7 @@
   versionCheckHook,
   pytestCheckHook,
   pytest-asyncio,
+  python-dotenv,
   websockets,
   httpx,
   sniffio,
@@ -19,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.3.4";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-PoNHpxumBdVllfpbVMYDV8KnDqIDP+XQcrkvs6tdNKg=";
+    hash = "sha256-OCVy8OH+jt4a6fjJhtQG8BODulmVb4XFY4LDxMLgmZY=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -34,12 +36,13 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
-    ./no-alloc.patch
+    ./no-alloc.patch # with --unified=1 context
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-0tEYewojStfXRrcI8LVR1T7c5EETkYXVfClsHCUNPrM=";
+    pname = "granian";
+    inherit version src;
+    hash = "sha256-YnQf9mJ0ujL7hq3LW3jTJfwNIzrwD5Z8tHOsrCRGOuo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -52,6 +55,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     pname = [ setproctitle ];
     reload = [ watchfiles ];
     # rloop = [ rloop ]; # not packaged
@@ -77,11 +81,44 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
+
+  disabledTests = [
+    # SSLCertVerificationError: certificate verify failed: certificate has expired
+    "test_asgi_ws_scope"
+    "test_rsgi_ws_scope"
+  ];
+
+  # This is a measure of last resort. Granian tests fully lock up
+  # on shutdown in >90% of cases, which makes the whole thing
+  # impossible to build without restarting it double digits
+  # numbers of times. The issue has not been fully identified,
+  # and upstream claims it does not exist.
+  # FIXME: root cause and fix this.
+  doCheck = false;
+
+  # Make ofborg run checks.
+  # They're too buggy for hydra, but still a useful smell test
+  passthru.tests = {
+    # overridePythonAttrs is not available in finalAttrs.finalPackage
+    pytest = granian.overridePythonAttrs {
+      pname = "granian-with-check-phase";
+      # skip repeat build
+      buildPhase = ''
+        # runHook preBuild
+        die() { echo >&2 "$@"; exit 1; }
+        [[ ! -d dist ]] || die "ERROR: dist/ found at start of buildPhase"
+        cp -r ${granian.dist} dist
+        chmod -R +w dist/
+        runHook postBuild
+      '';
+      nativeBuildInputs = [ ]; # maturin overwrites buildPhase unconditionally
+      doCheck = true;
+      dontCheckPythonMetadata = true; # changed pname
+    };
+  };
 
   pythonImportsCheck = [ "granian" ];
-
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

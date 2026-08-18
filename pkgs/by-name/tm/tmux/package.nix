@@ -8,29 +8,24 @@
   ncurses,
   pkg-config,
   runCommand,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  withUtf8proc ? true,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
+  # broken on i686-linux https://github.com/tmux/tmux/issues/4597
+  withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   withSixel ? true,
+  versionCheckHook,
+  common-updater-scripts,
+  writeShellScript,
+  curl,
+  jq,
 }:
-
-let
-
-  bashCompletion = fetchFromGitHub {
-    owner = "imomaliev";
-    repo = "tmux-bash-completion";
-    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
-    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
-  };
-
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.5a";
+  version = "3.7b";
 
   outputs = [
     "out"
@@ -40,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = finalAttrs.version;
-    hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
+    tag = finalAttrs.version;
+    hash = "sha256-CTq06XP997M0ODxQihTq34dI9H6jSRLUXLYuTWOwDpc=";
   };
 
   nativeBuildInputs = [
@@ -50,36 +45,33 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  buildInputs =
-    [
-      ncurses
-      libevent
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ lib.optionals withUtf8proc [ utf8proc ]
-    ++ lib.optionals withUtempter [ libutempter ];
+  buildInputs = [
+    ncurses
+    libevent
+  ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
+  ++ lib.optionals withUtf8proc [ utf8proc ]
+  ++ lib.optionals withUtempter [ libutempter ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-    ]
-    ++ lib.optionals withSystemd [ "--enable-systemd" ]
-    ++ lib.optionals withSixel [ "--enable-sixel" ]
-    ++ lib.optionals withUtempter [ "--enable-utempter" ]
-    ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ]
+  ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals withSixel [ "--enable-sixel" ]
+  ++ lib.optionals withUtempter [ "--enable-utempter" ]
+  ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      mkdir -p $out/share/bash-completion/completions
-      cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/nix-support
-      echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/nix-support
+    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   passthru = {
     terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (
@@ -98,10 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
+    updateScript = writeShellScript "update-tmux" ''
+      latest=$(${lib.getExe curl} --silent ''${GITHUB_TOKEN:+--header "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/tmux/tmux/releases/latest | ${lib.getExe jq} -r .tag_name)
+      ${lib.getExe' common-updater-scripts "update-source-version"} tmux "$latest"
+    '';
   };
 
   meta = {
     homepage = "https://tmux.github.io/";
+    downloadPage = "https://github.com/tmux/tmux";
     description = "Terminal multiplexer";
     longDescription = ''
       tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
@@ -120,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
-      thammers
+      ethancedwards8
       fpletz
     ];
   };

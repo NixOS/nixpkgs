@@ -6,6 +6,7 @@
   flit-core,
   psutil,
   pytestCheckHook,
+  pythonAtLeast,
   pyyaml,
   pyzmq,
   tornado,
@@ -47,6 +48,15 @@ buildPythonPackage rec {
     "test_resource_watcher_min_mem_abs"
     # Compares with magic string
     "test_streams"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # argparse output prefix changed in 3.14
+    "test_help_invalid_command"
+    # multiprocessing signal handler test times out under 3.14
+    "test_handler"
+    # tests/venv fixture lacks a python3.14 sitedir
+    "test_venv"
+    "test_venv_site_packages"
   ];
 
   pythonImportsCheck = [ "circus" ];

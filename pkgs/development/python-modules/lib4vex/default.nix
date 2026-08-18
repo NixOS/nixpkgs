@@ -5,23 +5,26 @@
   csaf-tool,
   lib4sbom,
   packageurl-python,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lib4vex";
-  version = "0.2.0";
+  version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4vex";
     tag = "v${version}";
-    hash = "sha256-mR9ZpJDC2O04js3Kd/8qlg4Ds/jy2CmpTywRVYqmnQw=";
+    hash = "sha256-XH3Y2kbsJFR202F8bmcd3IWpgHS36W+ylDObtBFNFFg=";
   };
+
+  # https://github.com/anthonyharrison/lib4vex/pull/7
+  postPatch = ''
+    substituteInPlace lib4vex/version.py \
+      --replace-fail '"0.2.2"' '"0.2.3"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -36,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lib4vex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to ingest and generate VEX documents";
     homepage = "https://github.com/anthonyharrison/lib4vex";
     changelog = "https://github.com/anthonyharrison/lib4vex/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teatwig ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teatwig ];
   };
 }

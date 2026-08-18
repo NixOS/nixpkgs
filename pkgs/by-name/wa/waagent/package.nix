@@ -13,15 +13,16 @@ let
   python = python312;
 
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "waagent";
-  version = "2.14.0.0";
-  format = "setuptools";
+  version = "2.15.0.1";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    tag = "pre-v${version}";
-    hash = "sha256-nJZXyqdsSQgW+nGqyTS9XSW4z5mGRHtCYsDHKDw/eiM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P+jxn0W8LaTxDcvKlWjCK1Z9X1l/jf1s41bO9N34N0Q=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
@@ -47,7 +48,9 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
-  propagatedBuildInputs = [ python.pkgs.distro ];
+  build-system = with python.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [ distro ];
 
   # The udev rules are placed to the wrong place.
   # Move them to their default location.
@@ -87,7 +90,7 @@ python.pkgs.buildPythonApplication rec {
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
     maintainers = with lib.maintainers; [ codgician ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
-}
+})

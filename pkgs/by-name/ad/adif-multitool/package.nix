@@ -3,24 +3,26 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "adif-multitool";
-  version = "0.1.20";
+  version = "0.1.22";
 
-  vendorHash = "sha256-U9BpTDHjUZicMjKeyxyM/eOxJeAY2DMQMHOEMiCeN/U=";
+  vendorHash = "sha256-Fin0DUvpNPqKXpbDVekvWZYghJIpMLY9IRr2wdbZczc=";
+
+  proxyVendor = true;
 
   src = fetchFromGitHub {
     owner = "flwyd";
     repo = "adif-multitool";
-    tag = "v${version}";
-    hash = "sha256-qeAH8UTyEZn8As3wTjluONpjeT/5l9zicN5+8uwnbLo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UYnm4S4DP0c2ZkPkPScUHXdKiAz6JY9Lzdu4mAO49Dc=";
   };
 
-  meta = with lib; {
-    description = "Command-line program for working with ham logfiles.";
+  meta = {
+    description = "Command-line program for working with ham logfiles";
     homepage = "https://github.com/flwyd/adif-multitool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mafo ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mafo ];
     mainProgram = "adifmt";
   };
-}
+})

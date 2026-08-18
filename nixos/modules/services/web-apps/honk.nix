@@ -152,7 +152,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     doc = ./honk.md;
   };
 }

@@ -1,0 +1,24 @@
+diff --git a/src/Vector/BLF/FileStatistics.h b/src/Vector/BLF/FileStatistics.h
+index 2e507c2..6fc25b8 100644
+--- a/src/Vector/BLF/FileStatistics.h
++++ b/src/Vector/BLF/FileStatistics.h
+@@ -6,6 +6,7 @@
+ 
+ #include <Vector/BLF/platform.h>
+ 
++#include <cstdint>
+ #include <array>
+ 
+ #include <Vector/BLF/AbstractFile.h>
+diff --git a/src/Vector/BLF/ObjectHeaderBase.h b/src/Vector/BLF/ObjectHeaderBase.h
+index 4fb9407..b72ed6d 100644
+--- a/src/Vector/BLF/ObjectHeaderBase.h
++++ b/src/Vector/BLF/ObjectHeaderBase.h
+@@ -10,6 +10,7 @@
+ 
+ #include <Vector/BLF/vector_blf_export.h>
+ 
++#include <cstdint>
+ namespace Vector {
+ namespace BLF {
+ 

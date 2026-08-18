@@ -2,19 +2,23 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_36,
+  electron_41,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
 }:
 
 let
-  electron = electron_36;
-  version = "2025.3.1";
+  electron = electron_41;
+  version = "2026.7.1";
 in
 
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
   inherit version;
 
@@ -22,16 +26,18 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-Qpk3IXoegPKLKdSSzY05cT2//45TIhyVLxESd2OeWPE=";
+    hash = "sha256-7pxXlY/aifrg4cuGZSgxONF+RPL8P7JcZ6Gobqv2nz4=";
   };
 
-  npmDepsHash = "sha256-vUqX8yUZCflfkDYssQelFfJLNhDeU3K4UJPPgvvEeaI=";
+  npmDepsHash = "sha256-W9FWIHhtS2d9xBpIEGB8sWmDfcdyphL+0eCk1+8pu2s=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+
+  makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +63,7 @@ buildNpmPackage {
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \
-      $out/share/icons/hicolor/512x512/apps/appium-inspector.png
+      $out/share/icons/hicolor/256x256/apps/appium-inspector.png
 
     runHook postInstall
   '';
@@ -73,7 +79,25 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "${finalAttrs.pname}-electron-updater";
+      runtimeInputs = [
+        nix
+        jq
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = toString ./package.nix;
+      };
+      text = ''
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
+        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+      '';
+    }))
+  ];
 
   meta = {
     description = "GUI inspector for the appium UI automation tool";
@@ -84,4 +108,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ marie ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -12,22 +12,19 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.14.3";
+  version = "1.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
     tag = "v${version}";
-    hash = "sha256-OcSR8iYwX1az5BFVNp6xHpVE//Nyk4Nk97SaxAMJQRI=";
+    hash = "sha256-7d5FJhG5+uMBS7juolNpeYTJkPGbORXsBj7GvZSDWts=";
   };
 
   build-system = [ poetry-core ];
@@ -44,7 +41,8 @@ buildPythonPackage rec {
     portalocker
     pydantic
     urllib3
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   pythonImportsCheck = [ "qdrant_client" ];
 
@@ -60,11 +58,11 @@ buildPythonPackage rec {
     fastembed = [ fastembed ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Qdrant vector search engine";
     homepage = "https://github.com/qdrant/qdrant-client";
     changelog = "https://github.com/qdrant/qdrant-client/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

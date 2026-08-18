@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deark";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "jsummers";
     repo = "deark";
     tag = "v${version}";
-    hash = "sha256-dyX41gWZnZ/07Vyxo1x4Y8neGHS5ev+YyBJ0cUH+gKY=";
+    hash = "sha256-FA0O/yJoFByOPEb1UcRWARr2z7CdjWHKa4s8Q4Sl5Zo=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       #                copyright messages are not removed, and no monies are exchanged"
       #                + waiver of liability)
       unfreeRedistributable
-      # lzhuf.* (no copywrite notice, predates standardized licenses,
+      # lzhuf.* (no copyright notice, predates standardized licenses,
       #          widely distributed & intent appears to be free use)
       # "By necessity, Deark contains knowledge about how to decode various
       # third-party file formats. This knowledge includes data structures,

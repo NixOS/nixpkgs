@@ -21,16 +21,21 @@
   libgbm,
   openssl,
   systemd,
-  xorg,
+  libxcb-cursor,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alfaview";
-  version = "9.21.1";
+  version = "9.24.1";
 
   src = fetchurl {
-    url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-/Wue2Ag+ofv3z33PfpI7SlZWsGUjY33nOEcx5xPh5CA=";
+    url = "https://assets.alfaview.com/stable/linux/deb/alfaview_${finalAttrs.version}.deb";
+    hash = "sha256-vRo5ZD3yYTWhR6fbc/HFtBBbYuq3cGbxPuDlSt5D8XM=";
   };
 
   nativeBuildInputs = [
@@ -59,14 +64,15 @@ stdenv.mkDerivation rec {
     openssl
     stdenv.cc.cc
     systemd
-    xorg.libX11
-    xorg.xcbutilwm
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb-cursor
+    libx11
+    libxcb-wm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
   ];
 
-  libPath = lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath finalAttrs.buildInputs;
 
   dontBuild = true;
   dontConfigure = true;
@@ -78,22 +84,22 @@ stdenv.mkDerivation rec {
     mv opt $out
 
     substituteInPlace $out/share/applications/alfaview.desktop \
-      --replace "/opt/alfaview" "$out/bin" \
-      --replace "/usr/share/pixmaps/alfaview_production.png" alfaview_production
+      --replace-fail "/opt/alfaview" "$out/bin" \
+      --replace-fail "/usr/share/pixmaps/alfaview.png" alfaview
 
     makeWrapper $out/opt/alfaview/alfaview $out/bin/alfaview \
-      --prefix LD_LIBRARY_PATH : ${libPath}
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

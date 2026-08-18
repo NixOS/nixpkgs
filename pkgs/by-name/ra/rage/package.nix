@@ -6,19 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rage";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = "rage";
-    rev = "v${version}";
-    hash = "sha256-aZs1iqfpsiMuhxXNqRatpKD99eDBCsWHk4OPpnnaB70=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZOY0cr0uO5ls3tj80PZqzbdjhcw9jKRJvHC60JaBOm0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GdvqkB/jHAGUbzhOLPkIX664JJH3WrZZtv+/E/PhTR8=";
+  cargoHash = "sha256-0PfePGkMOSbHemc8gWnQR7W4/R5EMuXBKaFntL6dSPI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
-    changelog = "https://github.com/str4d/rage/blob/v${version}/rage/CHANGELOG.md";
+    changelog = "https://github.com/str4d/rage/blob/v${finalAttrs.version}/rage/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -46,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ryantm ];
     mainProgram = "rage";
   };
-}
+})

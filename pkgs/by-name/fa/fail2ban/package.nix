@@ -2,39 +2,50 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   installShellFiles,
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fail2ban";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = version;
-    hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
+    tag = finalAttrs.version;
+    hash = "sha256-6L8lSoFdf/KL1AQfN0lfGthEfeLlxodVsMI3LXCq+XY=";
   };
 
   outputs = [
     "out"
     "man"
-  ];
+  ]
+  # From some reason upstream installs documentation only for Linux, solaris,
+  # sunos and any gnu system.
+  ++ lib.optionals (lib.pipe stdenv.hostPlatform [
+    (lib.attrVals [
+      "isLinux"
+      "isSunOS"
+      "isGnu"
+    ])
+    (builtins.any lib.id)
+  ]) [ "doc" ];
+
+  build-system = [ python3.pkgs.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  pythonPath =
+  dependencies =
     with python3.pkgs;
     lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
+      systemd-python
       pyinotify
-
-      # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
-      setuptools
     ];
 
   preConfigure = ''
@@ -42,25 +53,9 @@ python3.pkgs.buildPythonApplication rec {
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail
     done
-
-    substituteInPlace config/filter.d/dovecot.conf \
-      --replace dovecot.service dovecot2.service
   '';
 
   doCheck = false;
-
-  patches = [
-    # Adjust sshd filter for OpenSSH 9.8 new daemon name - remove next release
-    (fetchpatch {
-      url = "https://github.com/fail2ban/fail2ban/commit/2fed408c05ac5206b490368d94599869bd6a056d.patch";
-      hash = "sha256-uyrCdcBm0QyA97IpHzuGfiQbSSvhGH6YaQluG5jVIiI=";
-    })
-    # filter.d/sshd.conf: ungroup (unneeded for _daemon) - remove next release
-    (fetchpatch {
-      url = "https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a.patch";
-      hash = "sha256-YGsUPfQRRDVqhBl7LogEfY0JqpLNkwPjihWIjfGdtnQ=";
-    })
-  ];
 
   preInstall = ''
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
@@ -74,11 +69,9 @@ python3.pkgs.buildPythonApplication rec {
       sitePackages = "$out/${python3.sitePackages}";
     in
     ''
-      install -m 644 -D -t "$out/lib/systemd/system" build/fail2ban.service
+      install -m 644 -D -t "$out/lib/systemd/system" build/fail2ban.service build/fail2ban.socket
       # Replace binary paths
       sed -i "s#build/bdist.*/wheel/fail2ban.*/scripts/#$out/bin/#g" $out/lib/systemd/system/fail2ban.service
-      # Delete creating the runtime directory, systemd does that
-      sed -i "/ExecStartPre/d" $out/lib/systemd/system/fail2ban.service
 
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/etc"
@@ -89,6 +82,8 @@ python3.pkgs.buildPythonApplication rec {
       rm $out/bin/fail2ban-python
       ln -s ${python3.interpreter} $out/bin/fail2ban-python
 
+      # Irrelevant for NixOS
+      rm -r $out/var
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
@@ -97,10 +92,13 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) fail2ban; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    changelog = "https://github.com/fail2ban/fail2ban/blob/${finalAttrs.src.tag}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      Deric-W
+    ];
   };
-}
+})

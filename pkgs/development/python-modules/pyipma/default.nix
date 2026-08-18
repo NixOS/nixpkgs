@@ -9,22 +9,19 @@
   geopy,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyipma";
-  version = "3.0.9";
+  version = "3.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pyipma";
-    tag = version;
-    hash = "sha256-1EUOkNwNoZQEetJ5v6httas0S0a3bHLv/lDRXQsT/Ds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f1V+8So8TmR9Cu2fjD3B7EqeJd9e1G9cgCNytGul2Eo=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyipma" ];
 
+  disabledTests = [
+    # Test requires network access
+    "test_retrieve_returns_json_response_from_api"
+  ];
+
   disabledTestPaths = [
     # Tests require network access
     "tests/test_auxiliar.py"
@@ -51,11 +53,11 @@ buildPythonPackage rec {
     "tests/test_sea_forecast.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
-    changelog = "https://github.com/dgomes/pyipma/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/dgomes/pyipma/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

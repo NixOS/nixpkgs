@@ -5,7 +5,6 @@
   fetchpatch,
   deprecation,
   hatchling,
-  pythonOlder,
   packaging,
   pytestCheckHook,
   pytest-timeout,
@@ -16,8 +15,7 @@
 buildPythonPackage rec {
   pname = "jupyter-packaging";
   version = "0.12.3";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_packaging";
@@ -33,9 +31,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecation
     packaging
     setuptools
@@ -47,7 +45,11 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    # The 'wheel' package is no longer the canonical location of the 'bdist_wheel' command, and will be removed in a future release. Please update to setuptools v70.1 or later which contains an integrated version of this command.
+    "-Wignore::FutureWarning"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -66,9 +68,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_packaging" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

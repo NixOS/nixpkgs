@@ -3,7 +3,6 @@
   python3,
   fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
   git,
   postgresql,
   postgresqlTestHook,
@@ -35,49 +34,55 @@ let
         };
         doCheck = false;
       });
+
+      # https://github.com/irrdnet/irrd/blob/0fd95020279060f2bc2816c0533c825e40f4c73c/pyproject.toml#L58C1-L59C1
+      limits = prev.limits.overridePythonAttrs (oldAttrs: rec {
+        version = "5.6.0";
+        src = fetchFromGitHub {
+          owner = "alisaifee";
+          repo = "limits";
+          tag = version;
+          hash = "sha256-kghfF2ihEvyMPEGO1m9BquCdeBsYRoPyIljdLL1hToQ=";
+        };
+        doCheck = false;
+      });
+
     };
   };
 in
 
-py.pkgs.buildPythonPackage rec {
+py.pkgs.buildPythonPackage (finalAttrs: {
   pname = "irrd";
-  version = "4.5.0b1";
-  format = "pyproject";
+  version = "4.5.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
-    rev = "v${version}";
-    hash = "sha256-Hr/PbC4N/yrYeQ7bTfqIchDFmaL3c4afxV1XS7FR1F8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XXqG/ygW5EbhKs4T5r9w/6URlv7y37+sjhWagI4n2pg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail py-radix py-radix-sr
-  '';
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeCheckInputs =
-    [
-      git
-      valkey
-      redisTestHook
-      postgresql
-      postgresqlTestHook
-    ]
-    ++ (with py.pkgs; [
-      pytest-asyncio
-      pytest-freezegun
-      pytestCheckHook
-      smtpdfix
-      httpx
-    ]);
+  nativeCheckInputs = [
+    git
+    valkey
+    redisTestHook
+    postgresql
+    postgresqlTestHook
+  ]
+  ++ (with py.pkgs; [
+    pytest-asyncio_0
+    pytest-freezegun
+    pytestCheckHook
+    smtpdfix
+    httpx
+  ]);
 
-  propagatedBuildInputs =
+  dependencies =
     with py.pkgs;
     [
       python-gnupg
@@ -124,6 +129,7 @@ py.pkgs.buildPythonPackage rec {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
@@ -143,17 +149,22 @@ py.pkgs.buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  # skip tests that require internet access
   disabledTests = [
+    # Skip tests that require internet access
     "test_020_dash_o_noop"
     "test_050_non_json_response"
   ];
 
+  disabledTestPaths = [
+    # Doesn't work with later pytest releases
+    "irrd/server/whois/tests/test_query_response.py"
+  ];
+
   meta = {
-    changelog = "https://irrd.readthedocs.io/en/v${version}/releases/";
+    changelog = "https://irrd.readthedocs.io/en/${finalAttrs.src.tag}/releases/";
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
     license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
   };
-}
+})

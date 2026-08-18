@@ -19,12 +19,12 @@ let
 in
 buildNpmPackage rec {
   pname = "antimatter-dimensions";
-  version = "0-unstable-2025-05-08";
+  version = "0-unstable-2026-07-17";
   src = fetchFromGitHub {
     owner = "IvarK";
     repo = "AntimatterDimensionsSourceCode";
-    rev = "7b29fa1c0771b93a8bf8198ca04886167ecffc0b";
-    hash = "sha256-z7dVToxu8qWCPajf0vKprXF4zSBCRDquBgjf55ZPgyE=";
+    rev = "5409e320cecef96a917cca1dfb68f1f183e499ca";
+    hash = "sha256-kWKa2SUXVLxeSFerApyXhZBeRtHmJnHxklFSz6g4Ok8=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -74,7 +74,7 @@ buildNpmPackage rec {
 
   meta = {
     homepage = "https://github.com/IvarK/AntimatterDimensionsSourceCode";
-    description = "Idle incremental game with multiple prestige layers.";
+    description = "Idle incremental game with multiple prestige layers";
     license = lib.licenses.mit;
     mainProgram = "antimatter-dimensions";
     maintainers = with lib.maintainers; [ amozeo ];

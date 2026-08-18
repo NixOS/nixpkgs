@@ -1,22 +1,20 @@
 {
   lib,
   buildNimPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 buildNimPackage (finalAttrs: {
   pname = "snekim";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "snekim";
     rev = "v${finalAttrs.version}";
     hash = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
   };
 
-  strictDeps = true;
   lockFile = ./lock.json;
 
   nimFlags = [ "-d:nimraylib_now_shared" ];

@@ -167,5 +167,5 @@
             machine.screenshot("lss_localised_page_${page.name}")
       ''
     ) settingsPages)
-    + '''';
+    + "";
 }

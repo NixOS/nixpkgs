@@ -5,12 +5,14 @@
   copyDesktopItems,
   imagemagick,
   makeDesktopItem,
-  jre,
+  jdk21,
 }:
 let
+  jre = jdk21;
+
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2025.3-b147";
+  version = "2025.9-b191";
 
   arches = {
     aarch64-linux = "arm64";
@@ -20,8 +22,8 @@ let
   arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-uyoticzh7jeBp0B+tKI6q6N+aoJUS3yfhUxTgCtVwR4=";
-    x64 = "sha256-kiINiOHlvunNRS+Wpr+2tE4vkgZXMiED8itTuP03wzk=";
+    arm64 = "sha256-gBvz+SsiVIjFtqra8BZ3fsmpLPn/vk1PSN57pDm9lA4=";
+    x64 = "sha256-0jgWKQyJkbE2Dd/s6wq2wwIgvGZQmnAKtqXN4ISuofc=";
   };
 
   desktopItem = makeDesktopItem {
@@ -89,14 +91,14 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     homepage = "https://www.yourkit.com";
     changelog = "https://www.yourkit.com/changes/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "yourkit-java-profiler";
-    platforms = attrNames arches;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ herberteuler ];
+    platforms = lib.attrNames arches;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ herberteuler ];
   };
 }

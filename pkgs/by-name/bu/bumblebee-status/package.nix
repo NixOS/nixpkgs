@@ -22,7 +22,7 @@ in
 python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";
@@ -40,10 +40,15 @@ python3.pkgs.buildPythonPackage {
     })
   ];
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   buildInputs = lib.concatMap (p: p.buildInputs or [ ]) selectedPlugins;
+
   propagatedBuildInputs = lib.concatMap (p: p.propagatedBuildInputs or [ ]) selectedPlugins;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     netifaces
     psutil
@@ -74,12 +79,12 @@ python3.pkgs.buildPythonPackage {
     cp -r ./themes $out/${python3.sitePackages}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular, theme-able status line generator for the i3 window manager";
     homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
     mainProgram = "bumblebee-status";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jamerrq ];
   };
 }

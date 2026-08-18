@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emplace";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tversteeg";
     repo = "emplace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
   };
 
@@ -23,14 +23,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nBpM8i4jlxtnaonOx71DWjbLS8tYznJkoR2JI/B25LM=";
 
   meta = {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "emplace";
   };
-}
+})

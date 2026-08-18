@@ -45,14 +45,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "10.15";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     tag = version;
-    hash = "sha256-ADl1l1cgJC3T8EN+cGNq14VfShGLG51ElXFRx+tdnCg=";
+    hash = "sha256-z3AnL5z9QPb0utOKSW/SiJ9tFtFi8REETjfZbrKY+xM=";
   };
 
   build-system = [ hatchling ];
@@ -60,18 +60,11 @@ buildPythonPackage rec {
   dependencies = [
     markdown
     pygments
+    pyyaml
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pyyaml
-  ];
-
-  disabledTests = [
-    # test artifact mismatch
-    "test_toc_tokens"
-    # Tests fails with AssertionError
-    "test_windows_root_conversion"
   ];
 
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
@@ -85,13 +78,14 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/facelessuser/pymdown-extensions/blob/${src.tag}/docs/src/markdown/about/changelog.md";
     description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ];
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

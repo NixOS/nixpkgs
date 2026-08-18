@@ -33,12 +33,11 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/richih/modbus_exporter/releases/tag/v${finalAttrs.version}";
-    homepage = "https://paepcke.de/modbus_exporter";
-    description = "Prometheus exporter for the modbus interface. Basepackage for a large group of iot device exporters.";
+    homepage = "https://github.com/richih/modbus_exporter";
+    description = "Exporter which retrieves stats from a modbus system and exports them via HTTP for Prometheus consumption";
     license = lib.licenses.mit;
     mainProgram = "modbus_exporter";
     maintainers = with lib.maintainers; [ paepcke ];

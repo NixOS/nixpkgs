@@ -4,9 +4,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python,
-  pax-utils,
 
   # build-system
   setuptools,
@@ -17,12 +15,13 @@
   decorator,
   cachetools,
   mpi4py,
-  fenics-ufl,
+  firedrake-ufl,
   firedrake-fiat,
   h5py,
   libsupermesh,
   loopy,
   petsc4py,
+  petsctools,
   numpy,
   packaging,
   pkgconfig,
@@ -36,6 +35,7 @@
   sympy,
   islpy,
   matplotlib,
+  immutabledict,
 
   # tests
   pytest,
@@ -43,9 +43,10 @@
   mpiCheckPhaseHook,
   writableTmpDirAsHomeHook,
 
-  # passthru.tests
+  # passthru
   firedrake,
   mpich,
+  nix-update-script,
 }:
 let
   firedrakePackages = lib.makeScope newScope (self: {
@@ -55,38 +56,26 @@ let
     mpi-pytest = self.callPackage mpi-pytest.override { };
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake";
-  version = "2025.4.1";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
-    tag = version;
-    hash = "sha256-p/yquIKWynGY7UESDNBCf1cM8zpy8beuuRxSrSMvj7c=";
+    tag = finalAttrs.version;
+    hash = "sha256-scsxxs9k280R9+mM5CC7aIkKJ8rR1faexnUuMrDO9+k=";
   };
 
-  postPatch =
-    # relax build-dependency petsc4py
-    ''
-      substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.3" "petsc4py"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["ldd"]' \
-        'program = ["${lib.getExe' pax-utils "lddtree"}"]'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["otool"' \
-        'program = ["${lib.getExe' stdenv.cc.bintools.bintools "otool"}"'
-    '';
+  # relax build-dependency petsc4py
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      "petsc4py==3.25.0" "petsc4py"
+  '';
 
   pythonRelaxDeps = [
     "decorator"
-    "slepc4py"
   ];
 
   build-system = [
@@ -105,34 +94,35 @@ buildPythonPackage rec {
     firedrakePackages.mpi
   ];
 
-  dependencies =
-    [
-      decorator
-      cachetools
-      firedrakePackages.mpi4py
-      fenics-ufl
-      firedrake-fiat
-      firedrakePackages.h5py
-      libsupermesh
-      loopy
-      petsc4py
-      numpy
-      packaging
-      pkgconfig
-      progress
-      pyadjoint-ad
-      pycparser
-      pytools
-      requests
-      rtree
-      scipy
-      sympy
-      # required by script spydump
-      matplotlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      islpy
-    ];
+  dependencies = [
+    decorator
+    cachetools
+    firedrakePackages.mpi4py
+    firedrake-ufl
+    firedrake-fiat
+    firedrakePackages.h5py
+    immutabledict
+    libsupermesh
+    loopy
+    petsc4py
+    petsctools
+    numpy
+    packaging
+    pkgconfig
+    progress
+    pyadjoint-ad
+    pycparser
+    pytools
+    requests
+    rtree
+    scipy
+    sympy
+    # required by script spydump
+    matplotlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    islpy
+  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \
@@ -152,25 +142,26 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  # These scripts are used by official sdist/editable_wheel only
-  postInstall = ''
-    rm $out/bin/firedrake-{check,status,run-split-tests}
-  '';
-
-  preCheck = ''
-    rm -rf firedrake pyop2 tinyasm tsfc
-  '';
-
   # run official smoke tests
   checkPhase = ''
     runHook preCheck
 
-    make check
+    $out/bin/firedrake-check
 
     runHook postCheck
   '';
 
   passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
+
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       mpich = firedrake.override {
         petsc4py = petsc4py.override { mpi = mpich; };
@@ -188,4 +179,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

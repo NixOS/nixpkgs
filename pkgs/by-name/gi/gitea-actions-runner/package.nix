@@ -1,42 +1,53 @@
 {
   lib,
   fetchFromGitea,
-  buildGo123Module,
+  buildGoModule,
   testers,
   gitea-actions-runner,
+  nix-update-script,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "gitea-actions-runner";
-  version = "0.2.11";
+  version = "3.1.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
-    repo = "act_runner";
-    rev = "v${version}";
-    hash = "sha256-PmDa8XIe1uZ4SSrs9zh5HBmFaOuj+uuLm7jJ4O5V1dI=";
+    repo = "runner";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-A9Md5sG1Rswmd8vqwoVqwkNJDVdOo6QGianHnfwGHa0=";
   };
 
-  vendorHash = "sha256-lYJFySGqkhT89vHDp1FcTiiC7DG4ziQ1DaBHLh/kXQc=";
+  vendorHash = "sha256-02PGO8py5vjuqhLe9wncVH5f3fOVExJEMVngc0GUR9Y=";
+
+  # Tests require network access (artifactcache tests try to determine outbound IP)
+  doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=v${version}"
+    "-X gitea.com/gitea/runner/internal/pkg/ver.version=v${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gitea-actions-runner;
-    version = "v${version}";
+  postInstall = ''
+    mv "$out/bin/runner" "$out/bin/gitea-runner"
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = gitea-actions-runner;
+      version = "v${finalAttrs.version}";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    mainProgram = "act_runner";
-    maintainers = with lib.maintainers; [ techknowlogick ];
-    license = lib.licenses.mit;
-    changelog = "https://gitea.com/gitea/act_runner/releases/tag/v${version}";
-    homepage = "https://gitea.com/gitea/act_runner";
+    changelog = "https://gitea.com/gitea/runner/releases/tag/v${finalAttrs.version}";
     description = "Runner for Gitea based on act";
+    homepage = "https://gitea.com/gitea/runner";
+    license = lib.licenses.mit;
+    mainProgram = "gitea-runner";
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

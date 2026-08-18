@@ -1,30 +1,45 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
   defusedxml,
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
+  fetchpatch2,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
+  zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-hypervisor";
-  version = "3.18";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
-    tag = version;
-    hash = "sha256-1M9KDbLNFBmB/iSMqRdNlW3WEZugJxhXJJgcijK61kA=";
+    tag = finalAttrs.version;
+    fetchLFS = true;
+    hash = "sha256-T6dv8TtGTwjOVoGplgBJgRmFRst4Q0EMYgPheGSAEU4=";
   };
+
+  patches = [
+    # Fix vmtar compat with python 3.13.13+ tarfile refactor.
+    (fetchpatch2 {
+      url = "https://github.com/fox-it/dissect.hypervisor/commit/8baa8f6ac1ae9a7cfd99095472d9f8e933d290f5.patch?full_index=1";
+      excludes = [ "tests/util/test_vmtar.py" ];
+      hash = "sha256-Ot0rV1j+yQrXi7v1ARX+Pamnbr+/Q7T1YidY80QdgDo=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/util/test_vmtar.py \
+      --replace-fail '"test/file1",' '"test", "test/file1",'
+  '';
 
   build-system = [
     setuptools
@@ -39,19 +54,28 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     full = [
+      backports-zstd
       pycryptodome
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "dissect.hypervisor" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Read error
+    "test_vmtar"
+  ];
+
+  meta = {
     description = "Dissect module implementing parsers for various hypervisor disk, backup and configuration files";
     homepage = "https://github.com/fox-it/dissect.hypervisor";
-    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

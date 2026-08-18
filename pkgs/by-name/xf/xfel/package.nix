@@ -8,23 +8,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
-  version = "1.3.2";
+  version = "1.3.5";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xboot";
     repo = "xfel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fmf+jqCWC7RaLknr/TyRV6VQz4+fp83ynHNk2ACkyfQ=";
+    hash = "sha256-a9g5dywILcacxnNPlZMgC0ZnG2Qkophsb53ePXIbq+4=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "/usr/local" "$out" \
+      --replace-fail "/etc" "$out/etc" \
+      --replace-fail "/usr/share" "$out/share"
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ];
-
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX=/"
-  ];
 
   doInstallCheck = true;
 

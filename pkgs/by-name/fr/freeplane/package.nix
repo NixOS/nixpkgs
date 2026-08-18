@@ -2,47 +2,46 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_8,
+  gradle_9,
   which,
   copyDesktopItems,
+  fetchpatch,
 }:
 
 let
   pname = "freeplane";
-  version = "1.12.10";
+  version = "1.13.2";
 
   jdk = jdk17;
-  gradle = gradle_8;
+  gradle = gradle_9;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-08Rl3vhXtlylNDc1gh5aZJ9/RoxeyxpDbklmhMVJuq4=";
+    hash = "sha256-NDji6psNXESAY5NWI/Ms63MTgbxZHiIxYAgOSkWHuK0=";
   };
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  patches = [
+    # Gradle 9.5 compatibility. Remove on next version bump.
+    (fetchpatch {
+      url = "https://github.com/freeplane/freeplane/commit/34189b58bbdf0027185a212e2d6bd9e289782ef2.patch";
+      hash = "sha256-gVCKXme+pB7PV0yBoDMPg6ltCaTGYh1lspEKgwVkDgc=";
+    })
+  ];
+
   nativeBuildInputs = [
     makeBinaryWrapper
     jdk
     gradle
     copyDesktopItems
-  ];
-
-  patches = [
-    # freeplane is using the wrong repository for a plugin
-    # remove when https://github.com/freeplane/freeplane/pull/2453 is merged and released
-    (fetchpatch {
-      url = "https://github.com/amadejkastelic/freeplane/commit/973c49b7a73622e434bb86c8caea15383201b58a.patch";
-      hash = "sha256-iztFmISXZu8xKWqpwDYgBSl8ZSpZEtNriwM+EW1+s+Y=";
-    })
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -102,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';
@@ -112,7 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://freeplane.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = [ ];
     mainProgram = "freeplane";
   };
 })

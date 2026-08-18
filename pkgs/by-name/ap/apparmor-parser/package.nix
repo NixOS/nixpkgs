@@ -6,9 +6,12 @@
   bison,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   buildPackages,
+  zstd,
+  fetchpatch,
 
   # apparmor deps
   libapparmor,
+  runtimeShellPackage,
 
   # testing
   perl,
@@ -25,11 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
-    substituteInPlace rc.apparmor.functions \
-      --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" # FIXME
-    substituteInPlace rc.apparmor.functions \
-      --replace-fail "/usr/sbin/aa-status" '$(which aa-status)'
-    sed -i rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
   '';
 
   nativeBuildInputs = [
@@ -38,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [ libapparmor ];
+  buildInputs = [
+    libapparmor
+    zstd
+    runtimeShellPackage
+  ];
 
   makeFlags = [
     "LANGS="
@@ -48,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     "POD2MAN=${lib.getExe' buildPackages.perl "pod2man"}"
     "POD2HTML=${lib.getExe' buildPackages.perl "pod2html"}"
     "MANDIR=share/man"
-  ] ++ lib.optional finalAttrs.doCheck "PROVE=${lib.getExe' perl "prove"}";
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck "PROVE=${lib.getExe' perl "prove"}";
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -61,12 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = "popd";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMusl;
-  checkInputs = [
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  nativeCheckInputs = [
     bashInteractive
     perl
     python3
   ];
+
+  strictDeps = true;
 
   meta = libapparmor.meta // {
     description = "Mandatory access control system - core library";

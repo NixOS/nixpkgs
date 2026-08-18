@@ -1,4 +1,4 @@
-From c12adfdefd8a091e1fa870305a3cc61de6426914 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Thu, 14 Dec 2023 21:16:20 +0100
 Subject: [PATCH] optional immutable configuration dir
@@ -17,12 +17,12 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  3 files changed, 21 insertions(+), 6 deletions(-)
 
 diff --git a/azure/cli/core/__init__.py b/azure/cli/core/__init__.py
-index d112633ec..20b6d045b 100644
+index 33cdd4b8e37230efbce12fbc033370851893bb41..af9f8704c97cf7c5df24d3e08d910ded7aad4864 100644
 --- a/azure/cli/core/__init__.py
 +++ b/azure/cli/core/__init__.py
-@@ -75,12 +75,13 @@ class AzCli(CLI):
+@@ -97,15 +97,16 @@ class AzCli(CLI):
          self.data['query_active'] = False
-
+ 
          azure_folder = self.config.config_dir
 +        azure_immutable_folder = os.environ.get('AZURE_IMMUTABLE_DIR', azure_folder)
          ensure_dir(azure_folder)
@@ -30,20 +30,23 @@ index d112633ec..20b6d045b 100644
          CONFIG.load(os.path.join(azure_folder, 'az.json'))
          SESSION.load(os.path.join(azure_folder, 'az.sess'), max_age=3600)
 -        INDEX.load(os.path.join(azure_folder, 'commandIndex.json'))
--        VERSIONS.load(os.path.join(azure_folder, 'versionCheck.json'))
 +        INDEX.load(os.path.join(azure_immutable_folder, 'commandIndex.json'))
+         EXTENSION_INDEX.load(os.path.join(azure_folder, 'extensionIndex.json'))
+         HELP_INDEX.load(os.path.join(azure_folder, 'helpIndex.json'))
+         EXTENSION_HELP_INDEX.load(os.path.join(azure_folder, 'extensionHelpIndex.json'))
+-        VERSIONS.load(os.path.join(azure_folder, 'versionCheck.json'))
 +        VERSIONS.load(os.path.join(azure_immutable_folder, 'versionCheck.json'))
          handle_version_update()
-
+ 
          self.cloud = get_active_cloud(self)
 diff --git a/azure/cli/core/_session.py b/azure/cli/core/_session.py
-index 471a0344c..acaef6fb8 100644
+index 294cc923f740b46712912d0bd235cfaf3efe8b95..406fdc42e451271b4da5285fe61339218c2d4fec 100644
 --- a/azure/cli/core/_session.py
 +++ b/azure/cli/core/_session.py
 @@ -85,6 +85,19 @@ class Session(MutableMapping):
          return len(self.data)
-
-
+ 
+ 
 +class ImmutableSession(Session):
 +    """
 +    A session that is backed by an immutable JSON file. This session is read-only.
@@ -59,29 +62,31 @@ index 471a0344c..acaef6fb8 100644
 +
  # ACCOUNT contains subscriptions information
  ACCOUNT = Session()
-
-@@ -95,16 +108,16 @@ CONFIG = Session()
+ 
+@@ -95,7 +108,7 @@ CONFIG = Session()
  SESSION = Session()
-
+ 
  # INDEX contains {top-level command: [command_modules and extensions]} mapping index
 -INDEX = Session()
 +INDEX = ImmutableSession()
-
- # VERSIONS provides local versions and pypi versions.
+ 
+ # EXTENSION_INDEX contains top-level command mappings for installed extensions
+ EXTENSION_INDEX = Session()
+@@ -110,10 +123,10 @@ EXTENSION_HELP_INDEX = Session()
  # DO NOT USE it to get the current version of azure-cli,
  # it could be lagged behind and can be used to check whether
  # an upgrade of azure-cli happens
 -VERSIONS = Session()
 +VERSIONS = ImmutableSession()
-
+ 
  # EXT_CMD_TREE provides command to extension name mapping
 -EXT_CMD_TREE = Session()
 +EXT_CMD_TREE = ImmutableSession()
-
+ 
  # CLOUD_ENDPOINTS provides endpoints/suffixes of clouds
  CLOUD_ENDPOINTS = Session()
 diff --git a/azure/cli/core/extension/dynamic_install.py b/azure/cli/core/extension/dynamic_install.py
-index cb03980a0..29279be2b 100644
+index fc35e5d197c47b6d278ea3870f29b06219713d98..adb6fbfc94281bdc142eafdd14c28161975665ca 100644
 --- a/azure/cli/core/extension/dynamic_install.py
 +++ b/azure/cli/core/extension/dynamic_install.py
 @@ -17,7 +17,8 @@ def _get_extension_command_tree(cli_ctx):
@@ -94,5 +99,3 @@ index cb03980a0..29279be2b 100644
      if not EXT_CMD_TREE.data:
          import posixpath
          import requests
---
-2.42.0

@@ -1,4 +1,4 @@
-# This file is used by .github/workflows/labels.yml
+# This file is used by .github/workflows/bot.yml
 # This version uses `sync-labels: true`, meaning that a non-match will remove the label
 
 # keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
@@ -9,6 +9,7 @@
           - '^release-'
           - '^staging-\d'
           - '^staging-next-\d'
+          - '^staging-nixos-\d'
 
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
@@ -28,6 +29,7 @@
               - nixos/modules/services/x11/desktop-managers/cinnamon.nix
               - nixos/tests/cinnamon.nix
               - nixos/tests/cinnamon-wayland.nix
+              - pkgs/by-name/ci/cinnamon/**/*
               - pkgs/by-name/ci/cinnamon-*/**/*
               - pkgs/by-name/cj/cjs/**/*
               - pkgs/by-name/mu/muffin/**/*
@@ -41,14 +43,6 @@
               - .github/**/*
               - ci/**/*.*
 
-"6.topic: coq":
-  - any:
-      - changed-files:
-          - any-glob-to-any-file:
-              - pkgs/applications/science/logic/coq/**/*
-              - pkgs/development/coq-modules/**/*
-              - pkgs/top-level/coq-packages.nix
-
 "6.topic: COSMIC":
   - any:
       - changed-files:
@@ -57,6 +51,8 @@
               - nixos/modules/services/display-managers/cosmic-greeter.nix
               - nixos/tests/cosmic.nix
               - pkgs/by-name/co/cosmic-*/**/*
+              - pkgs/by-name/li/libcosmicAppHook/*
+              - pkgs/by-name/po/pop-launcher/*
               - pkgs/by-name/xd/xdg-desktop-portal-cosmic/*
 
 "6.topic: crystal":
@@ -258,16 +254,23 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - nixos/modules/services/cluster/k3s/**/*
-              - nixos/tests/k3s/**/*
+              - nixos/modules/services/cluster/rancher/default.nix
+              - nixos/modules/services/cluster/rancher/k3s.nix
+              - nixos/tests/rancher/**/*
               - pkgs/applications/networking/cluster/k3s/**/*
 
 "6.topic: kernel":
   - any:
       - changed-files:
           - any-glob-to-any-file:
+              - doc/packages/linux.section.md
+              - lib/kernel.nix
+              - nixos/doc/manual/configuration/linux-kernel.chapter.md
+              - nixos/modules/system/boot/kernel.nix
+              - nixos/tests/kernel-generic/**/*
               - pkgs/build-support/kernel/**/*
               - pkgs/os-specific/linux/kernel/**/*
+              - pkgs/top-level/linux-kernels.nix
 
 "6.topic: lib":
   - any:
@@ -312,6 +315,13 @@
               - nixos/modules/services/x11/desktop-managers/mate.nix
               - nixos/tests/mate.nix
               - pkgs/desktops/mate/**/*
+              - pkgs/by-name/ca/caja/**/*
+              - pkgs/by-name/ca/caja-*/**/*
+              - pkgs/by-name/li/libmatekbd/**/*
+              - pkgs/by-name/li/libmatemixer/**/*
+              - pkgs/by-name/li/libmateweather/**/*
+              - pkgs/by-name/ma/marco/**/*
+              - pkgs/by-name/ma/mate-*/**/*
 
 "6.topic: module system":
   - any:
@@ -328,6 +338,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - pkgs/os-specific/linux/musl/**/*
+              - pkgs/by-name/mu/musl/**/*
 
 "6.topic: nim":
   - any:
@@ -392,7 +403,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - nixos/modules/services/desktops/pantheon/**/*
-              - nixos/modules/services/x11/desktop-managers/pantheon.nix
+              - nixos/modules/services/desktop-managers/pantheon.nix
               - nixos/modules/services/x11/display-managers/lightdm-greeters/pantheon.nix
               - nixos/tests/pantheon.nix
               - pkgs/desktops/pantheon/**/*
@@ -430,12 +441,9 @@
       - changed-files:
           - any-glob-to-any-file:
               - doc/languages-frameworks/qt.section.md
-              - nixos/modules/services/x11/desktop-managers/plasma5.nix
-              - nixos/tests/plasma5.nix
-              - pkgs/applications/kde/**/*
-              - pkgs/desktops/plasma-5/**/*
-              - pkgs/development/libraries/kde-frameworks/**/*
-              - pkgs/development/libraries/qt-5/**/*
+              - nixos/modules/services/desktop-managers/plasma6.nix
+              - nixos/tests/plasma6.nix
+              - pkgs/kde/**/*
 
 "6.topic: R":
   - any:
@@ -449,6 +457,18 @@
       - changed-files:
           - any-glob-to-any-file:
               - pkgs/development/rocm-modules/**/*
+
+"6.topic: rocq":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/science/logic/coq/**/*
+              - pkgs/applications/science/logic/rocq-core/**/*
+              - pkgs/build-support/coq/**/*
+              - pkgs/build-support/rocq/**/*
+              - pkgs/development/rocq-modules/**/*
+              - pkgs/top-level/coq-packages.nix
+              - pkgs/top-level/rocq-packages.nix
 
 "6.topic: ruby":
   - any:
@@ -525,6 +545,18 @@
               - pkgs/test/texlive/**
               - pkgs/tools/typesetting/tex/**/*
 
+"6.topic: tree-sitter":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/packages/python-tree-sitter.section.md
+              - pkgs/applications/editors/emacs/elisp-packages/manual-packages/tree-sitter-langs/**/*
+              - pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/**/*
+              - pkgs/applications/editors/vim/plugins/nvim-treesitter/**/*
+              - pkgs/by-name/*/*tree-sitter*/**/*
+              - pkgs/by-name/ne/neovim-unwrapped/treesitter-parsers.nix
+              - pkgs/development/python-modules/*tree-sitter*/**/*
+
 "6.topic: updaters":
   - any:
       - changed-files:
@@ -574,6 +606,15 @@
               - nixos/modules/services/x11/desktop-managers/xfce.nix
               - nixos/tests/xfce.nix
               - pkgs/desktops/xfce/**/*
+              - pkgs/by-name/ga/garcon/**/*
+              - pkgs/by-name/li/libxfce4*/**/*
+              - pkgs/by-name/th/thunar/**/*
+              - pkgs/by-name/th/thunar-*/**/*
+              - pkgs/by-name/tu/tumbler/**/*
+              - pkgs/by-name/xf/xfce4-*/**/*
+              - pkgs/by-name/xf/xfconf/**/*
+              - pkgs/by-name/xf/xfdesktop/**/*
+              - pkgs/by-name/xf/xfwm4/**/*
 
 "6.topic: zig":
   - any:

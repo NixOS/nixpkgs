@@ -3,32 +3,29 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "node-semver";
-  version = "0.9.0";
+  version = "0.9.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "podhmo";
     repo = "python-node-semver";
     tag = version;
-    hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
+    hash = "sha256-akeFBF0za4DjcYfR4/M06D5M19o+4xqfyuG74FPSDBU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nodesemver" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
     description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

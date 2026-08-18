@@ -11,7 +11,7 @@
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
   version = "1.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -30,28 +30,37 @@ python3Packages.buildPythonApplication {
   ];
 
   # coverage is not needed to build and test this package
+  # The symlinking of third_party in setup.py doesn't work correctly with pyproject = true, so we copy instead
   postPatch = ''
     sed -i '/coverage>=/d' setup.py
+    cp -r third_party gif_for_cli
   '';
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   buildInputs = [
     zlib
     libjpeg
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     ffmpeg
     pillow
     requests
     x256
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Render gifs as ASCII art in your cli";
     longDescription = "Takes in a GIF, short video, or a query to the Tenor GIF API and converts it to animated ASCII art.";
     homepage = "https://github.com/google/gif-for-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      ambossmann
+      Scriptkiddi
+    ];
     mainProgram = "gif-for-cli";
   };
 }

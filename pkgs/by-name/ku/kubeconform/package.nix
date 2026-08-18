@@ -2,26 +2,45 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeconform";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "yannh";
     repo = "kubeconform";
-    rev = "v${version}";
-    sha256 = "sha256-FTUPARckpecz1V/Io4rY6SXhlih3VJr/rTGAiik4ALA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-HcYKmit67ZGABDfpr281FiStMZmM/vkkj9wxXH5H9zc=";
   };
+
+  env.CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${finalAttrs.version}"
+  ];
 
   vendorHash = null;
 
-  meta = with lib; {
-    description = "FAST Kubernetes manifests validator, with support for Custom Resources!";
+  excludedPackages = [ "./openapi2jsonschema-go" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-v";
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "FAST Kubernetes manifests validator, with support for Custom Resources";
     mainProgram = "kubeconform";
     homepage = "https://github.com/yannh/kubeconform/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.j4m3s ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.j4m3s ];
   };
-}
+})

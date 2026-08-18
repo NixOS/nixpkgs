@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -10,8 +9,8 @@
   # dependencies
   aiofiles,
   aiohttp,
-  aioshutil,
-  async-timeout,
+  aiozoneinfo,
+  av,
   convertertools,
   dateparser,
   orjson,
@@ -38,32 +37,36 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "7.14.1";
+  version = "15.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    tag = "v${version}";
-    hash = "sha256-e5VfG20hl+SGssNsLMoQ2ULJAcVS6gahNkC6XqRuXb0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QWgZsgeMmfi1hRqFeWyKyexPJhYeFOOyJHkhChcYqRU=";
   };
 
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
-    "aiofiles"
+    "orjson"
+    "packaging"
+    "platformdirs"
+    "propcache"
     "pydantic"
+    "pyjwt"
+    "rich"
+    "typer"
   ];
 
   dependencies = [
     aiofiles
     aiohttp
-    aioshutil
-    async-timeout
+    aiozoneinfo
+    av
     convertertools
     dateparser
     orjson
@@ -91,26 +94,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
-
-  disabledTests = [
-    # https://127.0.0.1 vs https://127.0.0.1:0
-    "test_base_url"
-    "test_bootstrap"
-  ];
-
-  disabledTestPaths = [
-    # hangs the test suite
-    "tests/test_api_ws.py"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "uiprotect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/uilibs/uiprotect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

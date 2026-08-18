@@ -1,349 +1,443 @@
 {
   lib,
   stdenv,
-  python,
-  buildPythonPackage,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+
+  # javascript
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+
+  # python
+  a2wsgi,
+  aiosqlite,
   alembic,
   argcomplete,
   asgiref,
   attrs,
-  blinker,
-  cached-property,
-  cattrs,
-  clickclick,
+  babel,
+  buildPythonPackage,
+  cachetools,
+  cadwyn,
   colorlog,
-  configupdater,
-  connexion,
   cron-descriptor,
   croniter,
   cryptography,
   deprecated,
   dill,
-  flask,
-  flask-login,
-  flask-appbuilder,
-  flask-caching,
-  flask-session,
-  flask-wtf,
+  fastapi,
+  flit-core,
+  fsspec,
+  gitdb,
   gitpython,
-  google-re2,
-  graphviz,
-  gunicorn,
+  greenback,
+  hatchling,
   httpx,
-  iso8601,
-  importlib-resources,
   importlib-metadata,
-  inflection,
+  isoduration,
   itsdangerous,
   jinja2,
   jsonschema,
   lazy-object-proxy,
+  libcst,
   linkify-it-py,
   lockfile,
-  markdown,
-  markupsafe,
-  marshmallow-oneofschema,
-  mdit-py-plugins,
-  numpy,
-  openapi-spec-validator,
+  methodtools,
+  msgspec,
+  natsort,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
-  pandas,
+  packaging,
   pathspec,
   pendulum,
+  pluggy,
   psutil,
   pydantic,
   pygments,
+  pygtrie,
   pyjwt,
+  python,
   python-daemon,
   python-dateutil,
-  python-nvd3,
   python-slugify,
-  python3-openid,
-  pythonOlder,
   pyyaml,
+  requests,
+  retryhttp,
   rich,
   rich-argparse,
+  rich-click,
   setproctitle,
+  smmap,
   sqlalchemy,
   sqlalchemy-jsonfield,
-  swagger-ui-bundle,
+  sqlalchemy-utils,
+  starlette,
+  structlog,
+  svcs,
   tabulate,
   tenacity,
   termcolor,
+  tomli,
+  trove-classifiers,
+  types-requests,
   typing-extensions,
-  unicodecsv,
-  werkzeug,
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
-  time-machine,
-  mkYarnPackage,
-  fetchYarnDeps,
-  writeScript,
+  universal-pathlib,
+  uuid6,
+  uvicorn,
 
-  # Extra airflow providers to enable
-  enabledProviders ? [ ],
+  enabledProviders,
 }:
-let
-  version = "2.7.3";
+buildPythonPackage (
+  finalAttrs:
+  let
+    inherit (finalAttrs) src version;
 
-  airflow-src = fetchFromGitHub {
-    owner = "apache";
-    repo = "airflow";
-    rev = "refs/tags/${version}";
-    # Download using the git protocol rather than using tarballs, because the
-    # GitHub archive tarballs don't appear to include tests
-    forceFetchGit = true;
-    hash = "sha256-+YbiKFZLigSDbHPaUKIl97kpezW1rIt/j09MMa6lwhQ=";
-  };
+    airflowUi = stdenv.mkDerivation (uiAttrs: {
+      pname = "airflow-ui-assets";
+      inherit src version;
+      sourceRoot = "${src.name}/airflow-core/src/airflow/ui";
 
-  # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
-  # This replicates this shell script, fixing bugs in yarn.lock and package.json
+      # vite build resolves "localhost" during the build, which the darwin
+      # sandbox blocks by default (getaddrinfo ENOTFOUND localhost).
+      __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
 
-  airflow-frontend = mkYarnPackage rec {
-    name = "airflow-frontend";
+      nativeBuildInputs = [
+        nodejs
+        pnpm_10
+        pnpmConfigHook
+      ];
 
-    src = "${airflow-src}/airflow/www";
-    packageJSON = ./package.json;
+      pnpmDeps = fetchPnpmDeps {
+        pname = "airflow-ui";
+        inherit src version;
+        pnpm = pnpm_10;
+        sourceRoot = uiAttrs.sourceRoot;
+        fetcherVersion = 3;
+        hash = "sha256-bKdZ4Y+enrXYuSpJ85eFHl2EM+QfZsMTGqQZ9yLfGEc=";
+      };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-WQKuQgNp35fU6z7owequXOSwoUGJDJYcUgkjPDMOops=";
+      buildPhase = ''
+        pnpm install
+        pnpm build
+      '';
+
+      installPhase = ''
+        mkdir -p $out/share/airflow/ui
+        cp -r dist $out/share/airflow/ui/
+      '';
+    });
+
+    airflowSimpleAuthUi = stdenv.mkDerivation (simpleUiAttrs: {
+      pname = "airflow-simple-ui-assets";
+      inherit src version;
+      sourceRoot = "${src.name}/airflow-core/src/airflow/api_fastapi/auth/managers/simple/ui";
+
+      __darwinAllowLocalNetworking = stdenv.hostPlatform.isDarwin;
+
+      nativeBuildInputs = [
+        nodejs
+        pnpm_10
+        pnpmConfigHook
+      ];
+
+      pnpmDeps = fetchPnpmDeps {
+        pname = "simple-auth-manager-ui";
+        inherit src version;
+        pnpm = pnpm_10;
+        sourceRoot = simpleUiAttrs.sourceRoot;
+        fetcherVersion = 3;
+        hash = "sha256-Ye8jRs9jgsf3YUd3JPldEcTzQFmgS4cvkOVP6tuZw+8=";
+      };
+
+      buildPhase = ''
+        pnpm install
+        pnpm build
+      '';
+
+      installPhase = ''
+        mkdir -p $out/share/airflow/simple-ui
+        cp -r dist $out/share/airflow/simple-ui/
+      '';
+    });
+
+    requiredProviders = [
+      "common_compat"
+      "common_io"
+      "common_sql"
+      "smtp"
+      "standard"
+    ];
+
+    providers = import ./providers.nix;
+
+    buildProvider =
+      provider:
+      buildPythonPackage {
+        pname = "apache-airflow-providers-${provider}";
+        version = providers.${provider}.version;
+        pyproject = true;
+
+        inherit src;
+        sourceRoot = "${src.name}/providers/${lib.replaceStrings [ "_" ] [ "/" ] provider}";
+
+        buildInputs = [ flit-core ];
+
+        dependencies = map (dep: python.pkgs.${dep}) providers.${provider}.deps;
+
+        pythonRemoveDeps = [
+          "apache-airflow"
+        ];
+
+        pythonRelaxDeps = [
+          "flit-core"
+        ];
+      };
+
+    taskSdk = buildPythonPackage {
+      pname = "task-sdk";
+      inherit src version;
+      pyproject = true;
+
+      sourceRoot = "${src.name}/task-sdk";
+
+      postPatch = ''
+        # resolve cyclic dependency
+        sed -i -E 's/"apache-airflow-core[^"]+",//' pyproject.toml
+
+        # relax dependencies
+        sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+        sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+        sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+
+        # task-sdk needs config.yml from core subpackage
+        mkdir -p src/airflow/config_templates
+        cp ../airflow-core/src/airflow/config_templates/* src/airflow/config_templates/
+      '';
+
+      build-system = [
+        hatchling
+      ];
+
+      dependencies = [
+        asgiref
+        attrs
+        babel
+        colorlog
+        fsspec
+        greenback
+        httpx
+        isoduration
+        jinja2
+        jsonschema
+        methodtools
+        msgspec
+        opentelemetry-api
+        pendulum
+        psutil
+        pydantic
+        pygtrie
+        python-dateutil
+        requests
+        retryhttp
+        structlog
+        tenacity
+        types-requests
+      ];
     };
 
-    distPhase = "true";
+    airflowCore = buildPythonPackage {
+      pname = "apache-airflow-core";
+      inherit src version;
+      pyproject = true;
 
-    # The webpack license plugin tries to create /licenses when given the
-    # original relative path
+      sourceRoot = "${src.name}/airflow-core";
+
+      postPatch = ''
+        # remove cyclic dependency
+        sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
+
+        # relax dependencies
+        sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+        sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+        sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
+        sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+        sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
+        sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
+
+        # Copy built UI assets
+        cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
+        cp -r ${airflowSimpleAuthUi}/share/airflow/simple-ui/dist src/airflow/api_fastapi/auth/managers/simple/ui/
+      '';
+
+      build-system = [
+        gitdb
+        gitpython
+        hatchling
+        packaging
+        smmap
+        tomli
+        trove-classifiers
+      ];
+
+      dependencies = [
+        a2wsgi
+        aiosqlite
+        alembic
+        argcomplete
+        asgiref
+        attrs
+        cachetools
+        cadwyn
+        colorlog
+        cron-descriptor
+        croniter
+        cryptography
+        deprecated
+        dill
+        fastapi
+        httpx
+        importlib-metadata
+        itsdangerous
+        jinja2
+        jsonschema
+        lazy-object-proxy
+        libcst
+        linkify-it-py
+        lockfile
+        methodtools
+        msgspec
+        natsort
+        opentelemetry-api
+        opentelemetry-exporter-otlp
+        packaging
+        pathspec
+        pendulum
+        pluggy
+        psutil
+        pydantic
+        pygments
+        pygtrie
+        pyjwt
+        python-daemon
+        python-dateutil
+        python-slugify
+        pyyaml
+        requests
+        rich
+        rich-argparse
+        rich-click
+        setproctitle
+        sqlalchemy
+        sqlalchemy-jsonfield
+        sqlalchemy-utils
+        starlette
+        structlog
+        svcs
+        tabulate
+        taskSdk
+        tenacity
+        termcolor
+        typing-extensions
+        universal-pathlib
+        uuid6
+        uvicorn
+      ]
+      ++ (map buildProvider requiredProviders);
+
+      pythonRelaxDeps = [ "starlette" ];
+    };
+  in
+  {
+    pname = "apache-airflow";
+    version = "3.3.0";
+
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "airflow";
+      tag = finalAttrs.version;
+      hash = "sha256-1DRaJCJ488BKUOEFaFMGnZjS2yxBx4pwHvIP67juu54=";
+    };
+
+    pyproject = true;
+
     postPatch = ''
-      sed -i 's!../../../../licenses/LICENSES-ui.txt!licenses/LICENSES-ui.txt!' webpack.config.js
+      # relax dependencies
+      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+      sed -i -E 's/"pathspec==[^"]+"/"pathspec"/' pyproject.toml
     '';
 
-    configurePhase = ''
-      cp -r $node_modules node_modules
-    '';
+    nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
-    buildPhase = ''
-      yarn --offline build
-      find package.json yarn.lock static/css static/js -type f | sort | xargs md5sum > static/dist/sum.md5
-    '';
-
-    installPhase = ''
-      mkdir -p $out/static/
-      cp -r static/dist $out/static
-    '';
-  };
-
-  # Import generated file with metadata for provider dependencies and imports.
-  # Enable additional providers using enabledProviders above.
-  providers = import ./providers.nix;
-  getProviderDeps = provider: map (dep: python.pkgs.${dep}) providers.${provider}.deps;
-  getProviderImports = provider: providers.${provider}.imports;
-  providerDependencies = lib.concatMap getProviderDeps enabledProviders;
-  providerImports = lib.concatMap getProviderImports enabledProviders;
-in
-buildPythonPackage rec {
-  pname = "apache-airflow";
-  inherit version;
-  format = "setuptools";
-  src = airflow-src;
-
-  disabled = pythonOlder "3.7";
-
-  propagatedBuildInputs =
-    [
-      alembic
-      argcomplete
-      asgiref
-      attrs
-      blinker
-      cached-property
-      cattrs
-      clickclick
-      colorlog
-      configupdater
-      connexion
-      cron-descriptor
-      croniter
-      cryptography
-      deprecated
-      dill
-      flask
-      flask-appbuilder
-      flask-caching
-      flask-session
-      flask-wtf
-      flask-login
+    build-system = [
+      gitdb
       gitpython
-      google-re2
-      graphviz
-      gunicorn
-      httpx
-      iso8601
-      importlib-resources
-      inflection
-      itsdangerous
-      jinja2
-      jsonschema
-      lazy-object-proxy
-      linkify-it-py
-      lockfile
-      markdown
-      markupsafe
-      marshmallow-oneofschema
-      mdit-py-plugins
-      numpy
-      openapi-spec-validator
-      opentelemetry-api
-      opentelemetry-exporter-otlp
-      pandas
+      hatchling
+      packaging
       pathspec
-      pendulum
-      psutil
-      pydantic
-      pygments
-      pyjwt
-      python-daemon
-      python-dateutil
-      python-nvd3
-      python-slugify
-      python3-openid
-      pyyaml
-      rich
-      rich-argparse
-      setproctitle
-      sqlalchemy
-      sqlalchemy-jsonfield
-      swagger-ui-bundle
-      tabulate
-      tenacity
-      termcolor
-      typing-extensions
-      unicodecsv
-      werkzeug
+      pluggy
+      smmap
+      tomli
+      trove-classifiers
+    ];
+
+    dependencies = [
+      airflowCore # subpackage from airflow src
+      taskSdk # subpackage from airflow src
     ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-metadata
-    ]
-    ++ providerDependencies;
+    ++ (map buildProvider enabledProviders);
 
-  buildInputs = [
-    airflow-frontend
-  ];
-
-  nativeCheckInputs = [
-    freezegun
-    pytest-asyncio
-    pytestCheckHook
-    time-machine
-  ];
-
-  # By default, source code of providers is included but unusable due to missing
-  # transitive dependencies. To enable a provider, add it to extraProviders
-  # above
-  INSTALL_PROVIDERS_FROM_SOURCES = "true";
-
-  postPatch =
-    ''
-      # https://github.com/apache/airflow/issues/33854
-      substituteInPlace pyproject.toml \
-        --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix failing test on Hydra
-      substituteInPlace airflow/utils/db.py \
-        --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
+    postInstall = ''
+      # Create a symlink to the airflow-core package
+      mkdir -p $out/bin
+      ln -s ${airflowCore}/bin/airflow $out/bin/airflow
     '';
 
-  pythonRelaxDeps = [
-    "colorlog"
-    "flask-appbuilder"
-    "opentelemetry-api"
-    "pathspec"
-  ];
+    installCheckPhase = ''
+      runHook preInstallCheck
 
-  # allow for gunicorn processes to have access to Python packages
-  makeWrapperArgs = [
-    "--prefix PYTHONPATH : $PYTHONPATH"
-  ];
+      $out/bin/airflow version
+      $out/bin/airflow db reset -y
 
-  postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
-    # Needed for pythonImportsCheck below
-    export HOME=$(mktemp -d)
-  '';
+      runHook postInstallCheck
+    '';
 
-  pythonImportsCheck = [
-    "airflow"
-  ] ++ providerImports;
+    pythonImportsCheck = [
+      "airflow"
+    ]
+    ++ lib.concatMap (provider: providers.${provider}.imports) (requiredProviders ++ enabledProviders);
 
-  preCheck = ''
-    export AIRFLOW_HOME=$HOME
-    export AIRFLOW__CORE__UNIT_TEST_MODE=True
-    export AIRFLOW_DB="$HOME/airflow.db"
-    export PATH=$PATH:$out/bin
+    passthru.updateScript = ./update.sh;
+    passthru.airflowUi = airflowUi;
+    passthru.airflowSimpleAuthUi = airflowSimpleAuthUi;
 
-    airflow version
-    airflow db init
-    airflow db reset -y
-  '';
+    # Note on testing the web UI:
+    # You can (manually) test the web UI as follows:
+    #
+    #   nix shell .#apache-airflow
+    #   airflow version
+    #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
+    #   airflow standalone
+    #
+    # Then navigate to the localhost URL using the credentials printed, try
+    # triggering the 'example_bash_operator' DAG and see if it reports success.
 
-  pytestFlagsArray = [
-    "tests/core/test_core.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    "bash_operator_kill" # psutil.AccessDenied
-  ];
-
-  # Updates yarn.lock and package.json
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl pcre "python3.withPackages (ps: with ps; [ pyyaml ])" yarn2nix
-
-    set -euo pipefail
-
-    # Get new version
-    new_version="$(curl -s https://airflow.apache.org/docs/apache-airflow/stable/release_notes.html |
-      pcregrep -o1 'Airflow ([0-9.]+).' | head -1)"
-    update-source-version ${pname} "$new_version"
-
-    # Update frontend
-    cd ./pkgs/servers/apache-airflow
-    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
-    curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
-    yarn2nix > yarn.nix
-
-    # update provider dependencies
-    ./update-providers.py
-  '';
-
-  # Note on testing the web UI:
-  # You can (manually) test the web UI as follows:
-  #
-  #   nix shell .#apache-airflow
-  #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
-  #   airflow db init
-  #   airflow standalone
-  #
-  # Then navigate to the localhost URL using the credentials printed, try
-  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
-  # see if they report success.
-
-  meta = with lib; {
-    description = "Programmatically author, schedule and monitor data pipelines";
-    homepage = "https://airflow.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      bhipple
-      gbpdt
-      ingenieroariel
-    ];
-    knownVulnerabilities = [
-      "CVE-2023-50943"
-      "CVE-2023-50944"
-    ];
-  };
-}
+    meta = {
+      description = "Platform to programmatically author, schedule and monitor workflows";
+      homepage = "https://airflow.apache.org/";
+      changelog = "https://airflow.apache.org/docs/apache-airflow/${finalAttrs.version}/release_notes.html";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        taranarmo
+      ];
+      mainProgram = "airflow";
+    };
+  }
+)

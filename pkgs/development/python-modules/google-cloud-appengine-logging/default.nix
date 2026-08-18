@@ -9,31 +9,33 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.6.2";
+  version = "1.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_appengine_logging";
     inherit version;
-    hash = "sha256-SJCShGTJjanuzHv04FQuuiVRUSwCZUYsEPOj0qZCS5A=";
+    hash = "sha256-tVY+dgEKNuat8cxIliDCnuT7O5hrAG0jfpoGHrDwq7c=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -46,11 +48,11 @@ buildPythonPackage rec {
     "google.cloud.appengine_logging_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Appengine logging client library";
     homepage = "https://github.com/googleapis/python-appengine-logging";
     changelog = "https://github.com/googleapis/python-appengine-logging/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

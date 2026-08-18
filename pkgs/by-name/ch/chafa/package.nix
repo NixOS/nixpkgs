@@ -19,14 +19,17 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.16.1";
+  version = "1.18.2";
   pname = "chafa";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     tag = finalAttrs.version;
-    hash = "sha256-O57L/VR3M1dTMg+UES6NGh4hU2D7/e9boTMNo6sR/ws=";
+    hash = "sha256-M4TTLpaIV7H3aLj7/C7FHT0GNCxN9SRZ81FtxuWNzjo=";
   };
 
   outputs = [
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./xmlcatalog_patch.patch ];
 
   preConfigure = ''
-    substituteInPlace ./autogen.sh --replace pkg-config '$PKG_CONFIG'
+    substituteInPlace ./autogen.sh --replace-fail pkg-config '$PKG_CONFIG'
     NOCONFIGURE=1 ./autogen.sh
   '';
 
@@ -77,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
+    changelog = "https://github.com/hpjansson/chafa/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

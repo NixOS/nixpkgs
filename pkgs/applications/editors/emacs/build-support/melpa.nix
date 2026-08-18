@@ -20,12 +20,13 @@ let
   };
 
   packageBuild = stdenv.mkDerivation {
-    name = "package-build";
+    pname = "package-build";
+    version = "4.0.0-unstable-2026-03-17";
     src = fetchFromGitHub {
       owner = "melpa";
       repo = "package-build";
-      rev = "d1722503145facf96631ac118ec0213a73082b76";
-      hash = "sha256-utsZLm9IF9UkTwxFWvJmwA3Ox4tlMeNNTo+f/CqYJGA=";
+      rev = "c25ea902ac4fceb1eb998d46ac176a1de077439b";
+      hash = "sha256-JkdKCfMi+D2ls/Aiz9OPdtLSv1+938BRBJqsIYJIfBM=";
     };
 
     prePatch = ''
@@ -110,7 +111,7 @@ lib.extendMkDerivation {
         args.melpaVersion or (
           let
             parsed =
-              lib.flip builtins.match version
+              lib.flip builtins.match finalAttrs.version
                 # match <version>-unstable-YYYY-MM-DD format
                 "^.*-unstable-([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2})$";
             unstableVersionInNixFormat = parsed != null; # heuristics
@@ -120,39 +121,37 @@ lib.extendMkDerivation {
           if unstableVersionInNixFormat then date + "." + time else finalAttrs.version
         );
 
-      preUnpack =
-        ''
-          mkdir -p "$NIX_BUILD_TOP/recipes"
-          recipeFile="$NIX_BUILD_TOP/recipes/$ename"
-          if [ -r "$recipe" ]; then
-            ln -s "$recipe" "$recipeFile"
-            nixInfoLog "link recipe"
-          elif [ -n "$recipe" ]; then
-            printf "%s" "$recipe" > "$recipeFile"
-            nixInfoLog "write recipe"
-          else
-            cat > "$recipeFile" <<'EOF'
-          (${finalAttrs.ename} :fetcher git :url "" ${
-            lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"
-          })
-          EOF
-            nixInfoLog "use default recipe"
-          fi
-          nixInfoLog "recipe content:" "$(< $recipeFile)"
-          unset -v recipeFile
+      preUnpack = ''
+        mkdir -p "$NIX_BUILD_TOP/recipes"
+        recipeFile="$NIX_BUILD_TOP/recipes/$ename"
+        if [ -r "$recipe" ]; then
+          ln -s "$recipe" "$recipeFile"
+          nixInfoLog "link recipe"
+        elif [ -n "$recipe" ]; then
+          printf "%s" "$recipe" > "$recipeFile"
+          nixInfoLog "write recipe"
+        else
+          cat > "$recipeFile" <<'EOF'
+        (${finalAttrs.ename} :fetcher git :url "" ${
+          lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"
+        })
+        EOF
+          nixInfoLog "use default recipe"
+        fi
+        nixInfoLog "recipe content:" "$(< $recipeFile)"
+        unset -v recipeFile
 
-          ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
+        ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
-          mkdir -p "$NIX_BUILD_TOP/packages"
-        ''
-        + preUnpack;
+        mkdir -p "$NIX_BUILD_TOP/packages"
+      ''
+      + preUnpack;
 
-      postUnpack =
-        ''
-          mkdir -p "$NIX_BUILD_TOP/working"
-          ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
-        ''
-        + postUnpack;
+      postUnpack = ''
+        mkdir -p "$NIX_BUILD_TOP/working"
+        ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
+      ''
+      + postUnpack;
 
       buildPhase =
         args.buildPhase or ''
@@ -197,7 +196,8 @@ lib.extendMkDerivation {
 
       meta = {
         homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
-      } // meta;
+      }
+      // meta;
     };
 
 }

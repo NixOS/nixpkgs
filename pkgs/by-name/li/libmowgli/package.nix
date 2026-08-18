@@ -2,23 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmowgli";
-  version = "2.1.3";
+  version = "2.1.3-unstable-2024-04-01";
 
   src = fetchFromGitHub {
     owner = "atheme";
     repo = "libmowgli-2";
-    rev = "v${version}";
-    sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
+    rev = "878f7e931b55d36e2e1b27807f7a620cbb0577d8";
+    hash = "sha256-Ik0GDsC0vEFNW/s10u+kNubqVh95ZqXb2I5W9iyU1z4=";
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Development framework for C providing high performance and highly flexible algorithms";
     homepage = "https://github.com/atheme/libmowgli-2";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
   };
-}
+})

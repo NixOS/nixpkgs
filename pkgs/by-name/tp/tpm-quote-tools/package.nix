@@ -6,12 +6,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpm-quote-tools";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/tpmquotetools/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/tpmquotetools/${finalAttrs.version}/tpm-quote-tools-${finalAttrs.version}.tar.gz";
     sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       $out/bin/tpm_mkaik
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of programs that provide support for TPM based attestation using the TPM quote mechanism";
     longDescription = ''
       The TPM Quote Tools is a collection of programs that provide support
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       page for tpm_quote_tools provides a usage overview.
     '';
     homepage = "http://tpmquotetools.sourceforge.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ak ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ak ];
+    platforms = lib.platforms.linux;
   };
-}
+})

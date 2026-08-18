@@ -3,6 +3,7 @@
   fetchFromGitHub,
   writeShellScript,
   dash,
+  gitMinimal,
   php,
   phpCfg ? null,
   withPostgreSQL ? true, # “strongly recommended” according to docs
@@ -44,13 +45,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.30.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MjP1rLyWJWrUAHrOKAwGN3A0wIq4iPaXlaUbtPs3F6U=";
+    hash = "sha256-2RWTx/mhMAi13v7BUfJmGvkPc4iqKdVR0B5rCbD5YaQ=";
   };
 
   php = php.buildEnv (
@@ -88,20 +89,39 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-7jb4/UgnMcXtLCihwk4rr0HLw99FgiYeYJVATGxM/D4=";
+  # Composer ≥2.8 defaults preferred-install to
+  # dist only (not auto), which prevents fallback
+  # to git clone when dist downloads fail (such as
+  # MS GitHub’s codeload.* in the build sandbox).
+  composerVendor = php.mkComposerVendor {
+    inherit (finalAttrs)
+      pname
+      src
+      version
+      vendorHash
+      php
+      ;
+
+    postPatch = ''
+      composer config preferred-install auto
+    '';
+    nativeBuildInputs = [ gitMinimal ];
+  };
+
+  vendorHash = "sha256-hSXi1jKilsfhe5P7ElGydxu6uxOpYNeRhHlZGzgkUXw=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
     # replacing `$configuration` with actually-used flags.
-    substituteInPlace src/Movim/Daemon/Session.php \
+    substituteInPlace src/Movim/Daemon/SessionsWorker.php \
       --replace-fail \
         "'exec ' . PHP_BINARY . ' ' . \$configuration . '" \
         "'exec ' . PHP_BINARY . ' -dopcache.enable=1 -dopcache.enable_cli=1 ' . '"
 
     # Point to PHP + PHP INI in the Nix store
     substituteInPlace src/Movim/Console/DaemonCommand.php \
-      --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
-        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+      --replace-fail "<info>composer movim:migrate</info>" \
+        "<info>${lib.getBin finalAttrs.php.packages.composer} movim:migrate</info>" \
       --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
         "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
 

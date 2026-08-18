@@ -23,10 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  meta = with lib; {
+  meta = {
     description = "Automatic Differentiation of C/C++";
     homepage = "https://github.com/coin-or/ADOL-C";
-    maintainers = [ maintainers.bzizou ];
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.bzizou ];
+    license = lib.licenses.gpl2Plus;
   };
 })

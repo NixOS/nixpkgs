@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsperf";
   version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eDDVNFMjj+0wEBe1qO6r4Bai554Sp+EmP86reJ/VXGk=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
-    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${version}";
+    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     mainProgram = "dnsperf";
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
       mfrw
     ];
   };
-}
+})

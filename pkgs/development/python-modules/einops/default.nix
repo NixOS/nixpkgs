@@ -2,32 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # tests
   jupyter,
   nbconvert,
   numpy,
   parameterized,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   torch,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "einops";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = "einops";
-    tag = "v${version}";
-    hash = "sha256-J9m5LMOleHf2UziUbOtwf+DFpu/wBDcAyHUor4kqrR8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d5Vbtkw/MChS2j2IC6j97wfVoKWZT9mU4OeXyEjm6ys=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     jupyter
@@ -37,35 +40,26 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     torch
+    writableTmpDirAsHomeHook
   ];
 
   env.EINOPS_TEST_BACKENDS = "numpy";
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "einops" ];
 
-  disabledTests = [
-    # Tests are failing as mxnet is not pulled-in
-    # https://github.com/NixOS/nixpkgs/issues/174872
-    "test_all_notebooks"
-    "test_dl_notebook_with_all_backends"
-    "test_backends_installed"
-    # depends on tensorflow, which is not available on Python 3.13
-    "test_notebook_2_with_all_backends"
+  disabledTestPaths = [
+    # skip folder with notebook samples that depend on large packages
+    # or accelerator access and have been unreliable
+    "scripts/"
   ];
-
-  disabledTestPaths = [ "einops/tests/test_layers.py" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/arogozhnikov/einops/releases/tag/${src.tag}";
+  meta = {
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    changelog = "https://github.com/arogozhnikov/einops/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})

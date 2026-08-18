@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  davix,
   cmake,
   gtest,
   makeWrapper,
@@ -15,6 +14,7 @@
   libuuid,
   libxcrypt,
   libxml2,
+  libzip,
   openssl,
   readline,
   scitokens-cpp,
@@ -30,32 +30,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.8.1";
+  version = "6.0.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
+    hash = "sha256-RSODctDfDkdY1YnxFINGwbpNxEkNCYjW1QEDk9VAYFw=";
   };
 
-  postPatch =
-    ''
-      patchShebangs genversion.sh
-      substituteInPlace cmake/XRootDConfig.cmake.in \
-        --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
-    '';
+  postPatch = ''
+    patchShebangs genversion.sh
+    substituteInPlace cmake/XRootDConfig.cmake.in \
+      --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
+  '';
 
   outputs = [
     "bin"
     "out"
     "dev"
     "man"
-  ] ++ lib.optional (externalEtc != null) "etc";
+  ]
+  ++ lib.optional (externalEtc != null) "etc";
 
   nativeBuildInputs = [
     cmake
@@ -64,58 +67,60 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      davix
-      curl
-      libkrb5
-      libuuid
-      libxcrypt
-      libxml2
-      openssl
-      readline
-      scitokens-cpp
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
-      fuse
-    ]
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-      isa-l # not available on Apple silicon
-      systemd # only available on specific non-static Linux platforms
-      voms # only available on Linux due to gsoap failing to build on Darwin
-    ];
+  buildInputs = [
+    curl
+    libkrb5
+    libuuid
+    libxcrypt
+    libxml2
+    libzip
+    openssl
+    readline
+    scitokens-cpp
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
+    fuse
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    isa-l # not available on Apple silicon
+    systemd # only available on specific non-static Linux platforms
+    voms # only available on Linux due to gsoap failing to build on Darwin
+  ];
 
-  # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
-  postInstall =
-    ''
-      mkdir -p "$out/lib/tmpfiles.d"
-      install -m 644 -T ../packaging/rhel/xrootd.tmpfiles "$out/lib/tmpfiles.d/xrootd.conf"
-      mkdir -p "$out/etc/xrootd"
-      install -m 644 -t "$out/etc/xrootd" ../packaging/common/*.cfg
-      install -m 644 -t "$out/etc/xrootd" ../packaging/common/client.conf
-      mkdir -p "$out/etc/xrootd/client.plugins.d"
-      install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../packaging/common/client-plugin.conf.example
-      mkdir -p "$out/etc/logrotate.d"
-      install -m 644 -T ../packaging/common/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
-    ''
-    # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
-    # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
-    # So far, this xrootd-config script does not seem necessary in $bin
-    + ''
-      moveToOutput "bin/xrootd-config" "$dev"
-      moveToOutput "bin/.xrootd-config-wrapped" "$dev"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p "$out/lib/systemd/system"
-      install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
-    '';
+  # https://github.com/xrootd/xrootd/blob/v6.0.2/config/
+  postInstall = ''
+    mkdir -p "$out/etc/xrootd"
+    install -m 644 -t "$out/etc/xrootd" ../config/*.cfg
+    install -m 644 -t "$out/etc/xrootd" ../config/client.conf
+    mkdir -p "$out/etc/xrootd/client.plugins.d"
+    install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../config/client-plugin.conf.example
+    mkdir -p "$out/etc/logrotate.d"
+    install -m 644 -T ../config/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
+  ''
+  # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
+  # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
+  # So far, this xrootd-config script does not seem necessary in $bin
+  + ''
+    moveToOutput "bin/xrootd-config" "$dev"
+    moveToOutput "bin/.xrootd-config-wrapped" "$dev"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p "$out/lib/systemd/system"
+    install -m 644 -t "$out/lib/systemd/system" ../systemd/*.service ../systemd/*.socket
+  ''
+  # Install missing private headers needed by Python bindings
+  + ''
+    mkdir -p $dev/include/xrootd/private/XrdCks
+    cp ../src/XrdCks/XrdCksXAttr.hh $dev/include/xrootd/private/XrdCks/
+    mkdir -p $dev/include/xrootd/private/XrdOuc
+    cp ../src/XrdOuc/XrdOucXAttr.hh $dev/include/xrootd/private/XrdOuc/
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "XRootD_VERSION_STRING" finalAttrs.version)
     (lib.cmakeBool "FORCE_ENABLED" true)
-    (lib.cmakeBool "ENABLE_DAVIX" true)
     (lib.cmakeBool "ENABLE_FUSE" (!stdenv.hostPlatform.isDarwin)) # XRootD doesn't support MacFUSE
     (lib.cmakeBool "ENABLE_MACAROONS" false)
     (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
@@ -160,5 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+    mainProgram = "xrootd";
   };
 })

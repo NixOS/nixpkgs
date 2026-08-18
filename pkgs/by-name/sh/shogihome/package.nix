@@ -4,8 +4,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_36,
-  vulkan-loader,
+  electron_42,
+  cacert,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -13,25 +13,27 @@
   _experimental-update-script-combinators,
   writeShellApplication,
   nix,
+  curl,
+  common-updater-scripts,
   jq,
   gnugrep,
 }:
 
 let
-  electron = electron_36;
+  electron = electron_42;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.23.2";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZw9iEhZ5ss+mv/WUFaj+xQ6GP4GAHq+PvBOv6F5tgM=";
+    hash = "sha256-vo9ZxiTJNPBVOlylmXbBzVzXCEr++JZRgHyJ0JYYstY=";
   };
 
-  npmDepsHash = "sha256-dx66k82o+TWrrK9xBHPbnudDn0CG8mM7c1xeoSAM4Fs=";
+  npmDepsHash = "sha256-1LQIhHCTx8ZY2r/kwkd+qPM1FNo4dxx2jDDTtBscemY=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -39,16 +41,23 @@ buildNpmPackage (finalAttrs: {
       --replace-fail 'npm run install:electron && ' ""
 
     substituteInPlace .electron-builder.config.mjs \
-      --replace-fail 'AppImage' 'dir'
-
-    # Workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace src/background/window/path.ts \
+      --replace-fail 'AppImage' 'dir' \
+      --replace-fail 'await signMacApp' '// await signMacApp'
+  ''
+  # Workaround for https://github.com/electron/electron/issues/31121
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/background/proc/env.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_build_from_source = "true";
+
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -60,53 +69,49 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-    ''
-    # Electron builder complains about symlink in electron-dist
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      rm electron-dist/libvulkan.so.1
-      cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-    ''
-    + ''
-      npm run electron:pack
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-      ./node_modules/.bin/electron-builder \
-          --dir \
-          --config .electron-builder.config.mjs \
-          -c.electronDist=electron-dist \
-          -c.electronVersion=${electron.version}
+    npm run electron:pack
 
-      runHook postBuild
-    '';
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p "$out/share/lib/shogihome"
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
+    ./node_modules/.bin/electron-builder \
+        --dir \
+        --config .electron-builder.config.mjs \
+        -c.mac.identity=null \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron.version}
 
-      install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
+    runHook postBuild
+  '';
 
-      makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
-        --add-flags "$out/share/lib/shogihome/resources/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArgs commandLineArgs} \
-        --inherit-argv0
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv dist/mac*/ShogiHome.app "$out/Applications"
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p "$out/share/lib/shogihome"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
+
+    install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
+
+    makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
+      --add-flags "$out/share/lib/shogihome/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArgs commandLineArgs} \
+      --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv dist/mac*/ShogiHome.app "$out/Applications"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -127,9 +132,26 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
+      (lib.getExe (writeShellApplication {
+        name = "${finalAttrs.pname}-version-updater";
+
+        runtimeInputs = [
+          curl
+          jq
+          common-updater-scripts
+        ];
+
+        # Use release.json as the primary source rather than git tags or GitHub releases:
+        # https://github.com/sunfish-shogi/shogihome/issues/1704#issuecomment-5105936699
+        text = ''
+          version="$(curl -s 'https://sunfish-shogi.github.io/shogihome/release.json' | jq -r '.latest.version')"
+          update-source-version '${finalAttrs.pname}' "$version"
+        '';
+      }))
+      # Update src.hash and npmDepsHash
       (nix-update-script {
         extraArgs = [
-          "--version-regex=^v([\\d\\.]+)$"
+          "--version=skip"
         ];
       })
       (lib.getExe (writeShellApplication {
@@ -141,7 +163,7 @@ buildNpmPackage (finalAttrs: {
         ];
         runtimeEnv = {
           PNAME = finalAttrs.pname;
-          PKG_FILE = builtins.toString ./package.nix;
+          PKG_FILE = toString ./package.nix;
         };
         text = ''
           new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
@@ -155,10 +177,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Shogi frontend supporting USI engines";
     homepage = "https://sunfish-shogi.github.io/shogihome/";
-    license = with lib.licenses; [
-      mit
-      asl20 # for icons
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        asl20 # for icons
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

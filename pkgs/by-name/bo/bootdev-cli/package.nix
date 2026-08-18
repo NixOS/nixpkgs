@@ -7,20 +7,21 @@
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  coreutils,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bootdev-cli";
-  version = "1.19.2";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "bootdotdev";
     repo = "bootdev";
-    tag = "v${version}";
-    hash = "sha256-jTI91t/gcEdOc3mwP0dFqL5sYeaC6nD96+RpuQfAf4s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0koZYMQxCHPtB44OYhiD9+nYAyHWXbyQd2xhdqnOqEw=";
   };
 
-  vendorHash = "sha256-jhRoPXgfntDauInD+F7koCaJlX4XDj+jQSe/uEEYIMM=";
+  vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
 
   ldflags = [
     "-s"
@@ -32,26 +33,35 @@ buildGoModule rec {
     writableTmpDirAsHomeHook
   ];
 
+  # TestGetLatestVersionHasOverallTimeout writes a fake go helper that runs
+  # /bin/sleep; that path is missing in the Nix sandbox, and the test also
+  # resets PATH so a bare "sleep" would not help. Point at store sleep.
+  postPatch = ''
+    substituteInPlace version/version_test.go \
+      --replace-fail 'exec /bin/sleep 5' 'exec ${lib.getExe' coreutils "sleep"} 5'
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd bootdev \
-      --bash <($out/bin/bootdev completion bash) \
-      --zsh <($out/bin/bootdev completion zsh) \
-      --fish <($out/bin/bootdev completion fish)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd bootdev --"$shell" <($out/bin/bootdev completion "$shell")
+    done
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/bootdev";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  # checks tests use httptest.NewServer (bind localhost)
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI used to complete coding challenges and lessons on Boot.dev";
     homepage = "https://github.com/bootdotdev/bootdev";
-    changelog = "https://github.com/bootdotdev/bootdev/releases/tag/v${version}";
+    changelog = "https://github.com/bootdotdev/bootdev/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "bootdev";
   };
-}
+})

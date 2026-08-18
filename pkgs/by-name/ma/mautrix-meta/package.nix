@@ -15,21 +15,32 @@
 
 buildGoModule rec {
   pname = "mautrix-meta";
-  version = "0.5.0";
+  version = "26.07";
+  tag = "v0.2607.0";
 
-  subPackages = [ "cmd/mautrix-meta" ];
+  subPackages = [
+    "cmd/mautrix-meta"
+    "cmd/mautrix-instagram"
+  ];
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "meta";
-    rev = "v${version}";
-    hash = "sha256-SM57PLfRVEKspqnAZz1XES6ba9Puuzvx8XZwAWKVRmw=";
+    inherit tag;
+    hash = "sha256-/NwO6B3IevmkP6nOgZ+Zjg12PvY/cGmH++7pKsJjaAk=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-+gQPlI9DHuY01JlUnEaYctOs+2XFAkw+X9SkvH0xlbc=";
+  vendorHash = "sha256-ykTk6JQ6cMBH0HYK7n1FWxhAJkD7HVKrg9HChtvuCMk=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   passthru = {
     tests = {
@@ -44,7 +55,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/mautrix/meta";
-    description = "Matrix <-> Facebook and Matrix <-> Instagram hybrid puppeting/relaybot bridge";
+    description = "Matrix-Meta puppeting bridge";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       eyjhb

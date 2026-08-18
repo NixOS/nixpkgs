@@ -10,10 +10,10 @@
 
 let
   pname = "chatzone-desktop";
-  version = "5.3.2";
+  version = "5.7.0";
   src = fetchurl {
-    url = "https://cdn1.ozone.ru/s3/chatzone-clients/ci/5.3.2/787/chatzone-desktop-linux-5.3.2.AppImage";
-    hash = "sha256-+GzrLNFhdzB+mOmSOiZP+W9sCSF2Mfdxu6Xkgmz1Fuo=";
+    url = "https://ir.ozone.ru/s3/chatzone-clients/ci/5.7.0/1258/chatzone-desktop-linux-5.7.0.AppImage";
+    hash = "sha256-t8qAdrvs1M9NuaQYZj+pCaYiSb4TZc7rY1rJVjSYaAE=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in

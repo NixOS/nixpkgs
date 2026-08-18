@@ -6,7 +6,7 @@
   pkg-config,
 
   # Optional dependencies
-  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic,
+  enableApp ? with stdenv.hostPlatform; !(isWindows || isCygwin) && !isStatic,
   c-aresMinimal,
   libev,
   openssl,
@@ -18,12 +18,10 @@
   enableHttp3 ? false,
   ngtcp2,
   nghttp3,
-  quictls,
   enableJemalloc ? false,
   jemalloc,
   enablePython ? false,
   python3,
-  ncurses,
 
   # Unit tests ; we have to set TZDIR, which is a GNUism.
   enableTests ? stdenv.hostPlatform.isGnu,
@@ -46,11 +44,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.65.0";
+  version = "1.69.0";
 
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-C9u3jcIYcEhP1URJBnZXtg47G3Im4RdM9WQBbG0zB/U=";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
+    hash = "sha256-PxhfWxw+d4heuc8/LE2ksan3OiS/WVe4KRg60Tf4Lcg=";
   };
 
   outputs = [
@@ -61,24 +59,23 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals (enableApp) [ installShellFiles ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableApp [ installShellFiles ];
 
   buildInputs =
     lib.optionals enableApp [
       c-aresMinimal
       libev
       zlib
+      openssl
     ]
-    ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
-    ++ lib.optionals (enableGetAssets) [ libxml2 ]
-    ++ lib.optionals (enableHpack) [ jansson ]
-    ++ lib.optionals (enableJemalloc) [ jemalloc ]
-    ++ lib.optionals (enableHttp3) [
+    ++ lib.optionals enableGetAssets [ libxml2 ]
+    ++ lib.optionals enableHpack [ jansson ]
+    ++ lib.optionals enableJemalloc [ jemalloc ]
+    ++ lib.optionals enableHttp3 [
       ngtcp2
       nghttp3
-      quictls
     ]
-    ++ lib.optionals (enablePython) [ python3 ];
+    ++ lib.optionals enablePython [ python3 ];
 
   enableParallelBuilding = true;
 
@@ -90,11 +87,11 @@ stdenv.mkDerivation rec {
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  nativeCheckInputs = lib.optionals (enableTests) [
+  nativeCheckInputs = lib.optionals enableTests [
     cunit
     tzdata
   ];
-  preCheck = lib.optionalString (enableTests) ''
+  preCheck = lib.optionalString enableTests ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
@@ -105,17 +102,14 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    lib.optionalString (enableApp) ''
+    lib.optionalString enableApp ''
       installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
     ''
     + lib.optionalString (!enableApp) ''
       rm -r $out/bin
     ''
-    + lib.optionalString (enablePython) ''
+    + lib.optionalString enablePython ''
       patchShebangs $out/share/nghttp2
-    ''
-    + lib.optionalString (!enablePython) ''
-      rm -r $out/share
     '';
 
   passthru.tests = {
@@ -138,7 +132,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
-  version = "25.04";
+stdenv.mkDerivation (finalAttrs: {
+  version = "26.06";
   pname = "intel-cmt-cat";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-cmt-cat";
-    rev = "v${version}";
-    sha256 = "sha256-Sbxfa9F+TSv2A8nilrB0PD312v1qN++k8Pezd7wd0PA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-4rpmbQzxLD7FrtIzE+iE4G0sU7Dvz4rWs4MSlJqZcok=";
   };
 
   enableParallelBuilding = true;
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     "NOLDCONFIG=y"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "User space software for Intel(R) Resource Director Technology";
     homepage = "https://github.com/intel/intel-cmt-cat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ arkivm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ arkivm ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

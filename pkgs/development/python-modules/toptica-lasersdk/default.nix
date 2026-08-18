@@ -11,15 +11,15 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toptica-lasersdk";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "toptica_lasersdk";
-    inherit version;
-    hash = "sha256-UNazng4Za3CZeG7eDq0b+l7gmESEXIU8WMLWGGysmBg=";
+    inherit (finalAttrs) version;
+    hash = "sha256-VzgQCqfZP9JoFmotG0jPJpHMxLY+unNZqzxQGhtlYC4=";
   };
 
   build-system = [
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

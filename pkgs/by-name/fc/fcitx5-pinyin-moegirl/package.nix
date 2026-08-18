@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-moegirl";
-  version = "20250610";
+  version = "20260812";
 
   src = fetchurl {
     url = "https://github.com/outloudvi/mw2fcitx/releases/download/${finalAttrs.version}/moegirl.dict";
-    hash = "sha256-krtBLVcF6qKQ7xIUuJsxYmbBlFXezzGXczg9Th0NPYo=";
+    hash = "sha256-JN3PJAS2x2Fsvx2iQZ+K0MYOR4esHGHOsTVl+6dZZVE=";
   };
 
   dontUnpack = true;
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Fcitx 5 pinyin dictionary from zh.moegirl.org.cn";
     homepage = "https://github.com/outloudvi/mw2fcitx";
     license = with lib.licenses; [
-      unlicense
+      mit
       cc-by-nc-sa-30
     ];
     maintainers = with lib.maintainers; [ Guanran928 ];

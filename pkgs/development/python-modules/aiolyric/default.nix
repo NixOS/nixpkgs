@@ -4,40 +4,40 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  incremental,
-  pythonOlder,
+  packaging,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiolyric";
-  version = "2.0.1";
+  version = "2.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aiolyric";
-    tag = version;
-    hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
+    tag = finalAttrs.version;
+    hash = "sha256-jIJTQm86PBnLwJlYalEhppU01g02wbu20kpVvP4kXz0=";
   };
 
   postPatch = ''
-    substituteInPlace requirements_setup.txt \
-      --replace-fail "==" ">="
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
   '';
 
   build-system = [
-    incremental
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   dependencies = [
     aiohttp
-    incremental
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -48,11 +48,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolyric" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # _version file is no shipped
+    "tests/test__version.py"
+  ];
+
+  meta = {
     description = "Python module for the Honeywell Lyric Platform";
     homepage = "https://github.com/timmo001/aiolyric";
-    changelog = "https://github.com/timmo001/aiolyric/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/timmo001/aiolyric/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

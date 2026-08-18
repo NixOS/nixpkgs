@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
 
   # build-system
   cmake,
@@ -22,7 +22,7 @@
   confluent-kafka,
 
   # test
-  myst-docutils,
+  myst-parser,
   pytestCheckHook,
   pytest-benchmark,
 }:
@@ -30,9 +30,10 @@
 buildPythonPackage rec {
   pname = "bytewax";
   version = "0.21.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "bytewax";
@@ -79,29 +80,33 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    myst-docutils
+    myst-parser
     pytestCheckHook
     pytest-benchmark
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
+  ];
+
+  enabledTestPaths = [
     "pytests"
   ];
 
   disabledTestPaths = [
-    # dependens on an old myst-docutils version
+    # depends on an old myst-parser version
     "docs"
   ];
 
   pythonImportsCheck = [ "bytewax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Stream Processing";
     homepage = "https://github.com/bytewax/bytewax";
     changelog = "https://github.com/bytewax/bytewax/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mslingsby
       kfollesdal
     ];

@@ -9,8 +9,12 @@
   lib,
   ocaml,
   version ?
-    if lib.versionAtLeast ocaml.version "5.3" then
-      "1.22.0"
+    if lib.versionAtLeast ocaml.version "5.5" then
+      "1.27.0"
+    else if lib.versionAtLeast ocaml.version "5.4" then
+      "1.26.0"
+    else if lib.versionAtLeast ocaml.version "5.3" then
+      "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
       "1.21.0"
     else if lib.versionAtLeast ocaml.version "4.14" then
@@ -26,6 +30,31 @@
 let
   params =
     {
+      "1.27.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-BDrNaSP4pcuq2RVFI1cKsTlzuu72mOK1VTIT3WN5JxU=";
+      };
+      "1.26.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-tMgQ1mZKW/F1pvmUbIDIzCsY5GqYWTTBRQss4IDkaDI=";
+      };
+      "1.25.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-4xXSvvP4lwmtJXCEaSeZblT/ja/OJRGIgWq5fO8h8CA=";
+      };
+      "1.24.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-TVoaIVf2EvbALY+DjZferKX4GyOt08XOpcts7Ot7N1c=";
+      };
+      "1.23.1" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-x0fjlAJmOeogRGfoWd6T6o6ZWNv0T3gNyyoYl8VtdXE=";
+      };
       "1.22.0" = {
         name = "lsp";
         minimalOCamlVersion = "5.2";
@@ -70,7 +99,7 @@ let
     ."${version}";
 in
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "jsonrpc";
   inherit version;
   src = fetchurl {
@@ -91,7 +120,9 @@ buildDunePackage rec {
       ];
 
   propagatedBuildInputs =
-    if lib.versionAtLeast version "1.7.0" then
+    if lib.versionAtLeast version "1.23.1" then
+      [ yojson ]
+    else if lib.versionAtLeast version "1.7.0" then
       [ ]
     else
       [
@@ -99,10 +130,10 @@ buildDunePackage rec {
         result
       ];
 
-  meta = with lib; {
+  meta = {
     description = "Jsonrpc protocol implementation in OCaml";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

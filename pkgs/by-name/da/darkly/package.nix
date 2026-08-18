@@ -5,68 +5,55 @@
   cmake,
   ninja,
   kdePackages,
-  qtPackages ? kdePackages,
+  qt6,
   gitUpdater,
 }:
-let
-  qtMajorVersion = lib.versions.major qtPackages.qtbase.version;
-in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "darkly-qt${qtMajorVersion}";
-  version = "0.5.21";
+  pname = "darkly";
+  version = "0.5.38";
 
   src = fetchFromGitHub {
     owner = "Bali10050";
     repo = "Darkly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1WErpDYTlMW/889Efe3OUM3uwt5w+EttjOGoBolBZvE=";
+    hash = "sha256-u12imjPk4ZhOen/PgnLiNPML+5NmuKO0Ja4wQKU/Y8E=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    qtPackages.wrapQtAppsHook
-    qtPackages.extra-cmake-modules
+    qt6.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ];
 
-  buildInputs =
-    with qtPackages;
-    [
-      qtbase
-      kconfig
-      kcoreaddons
-      kcmutils
-      kguiaddons
-      ki18n
-      kiconthemes
-      kwindowsystem
-    ]
-    ++ lib.optionals (qtMajorVersion == "5") [
-      kirigami2
-    ]
-    ++ lib.optionals (qtMajorVersion == "6") [
-      kcolorscheme
-      kdecoration
-      kirigami
-    ];
+  buildInputs = with kdePackages; [
+    qtbase
+    kconfig
+    kcoreaddons
+    kcmutils
+    kguiaddons
+    ki18n
+    kiconthemes
+    kwindowsystem
+    kcolorscheme
+    kdecoration
+    kirigami
+  ];
 
-  cmakeFlags = map (v: lib.cmakeBool "BUILD_QT${v}" (v == qtMajorVersion)) [
-    "5"
-    "6"
+  cmakeFlags = [
+    "-DBUILD_QT5=OFF"
+    "-DBUILD_QT6=ON"
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta =
-    {
-      description = "Modern style for Qt applications (fork of Lightly)";
-      homepage = "https://github.com/Bali10050/Darkly";
-      changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
-      platforms = lib.platforms.linux;
-      license = with lib.licenses; [ gpl2Plus ];
-      maintainers = with lib.maintainers; [ pluiedev ];
-    }
-    // lib.optionalAttrs (qtMajorVersion == "6") {
-      mainProgram = "darkly-settings6";
-    };
+  meta = {
+    description = "Modern style for Qt applications (fork of Lightly)";
+    homepage = "https://github.com/Bali10050/Darkly";
+    changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pluiedev ];
+    mainProgram = "darkly-settings6";
+  };
 })

@@ -10,18 +10,24 @@
   gtk3,
   openssl,
   pango,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noaa-apt";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
-    rev = "v${version}";
-    sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-EGbUI9CPgP6Tff2kvIU7pfSlIvyF0yRLo/VlttUn3Rc=";
   };
+
+  cargoPatches = [
+    # https://github.com/martinber/noaa-apt/pull/66
+    ./fix-shapefile-build-failure.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -37,8 +43,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-du44N+G9/nN5YuOpkWXvr1VaSQfjCpZYJ8yDc48ATIU=";
+  cargoHash = "sha256-y0XBgc7bWZ0lMMlFe7U0UkeIQ//3StwFJNWInNNaAUQ=";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.
@@ -56,16 +61,17 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/debian/ar.com.mbernardi.noaa-apt.svg
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "NOAA APT image decoder";
     homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      trepetti
       tmarkus
     ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
+    changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${finalAttrs.version}";
     mainProgram = "noaa-apt";
   };
-}
+})

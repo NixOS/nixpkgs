@@ -53,7 +53,7 @@ let
     repo = "nixpkgs";
     rev = "3bb45b041e7147e2fd2daf689e26a1f970a55d65";
     hash = "sha256-8JL5NI9eUcGzzbR/ARkrG81WLwndoxqI650mA/4rUGI=";
-  }) {};
+  }) { };
 in
 {
   services.forgejo.package = nixpkgs-forgejo-10.forgejo;
@@ -114,6 +114,6 @@ Make sure to disable `services.gitea`, when doing this.
     isSystemUser = true;
   };
 
-  users.groups.gitea = {};
+  users.groups.gitea = { };
 }
 ```

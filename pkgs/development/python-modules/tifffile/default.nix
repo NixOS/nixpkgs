@@ -7,21 +7,18 @@
   lxml,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2025.5.10";
+  version = "2026.1.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AYM100KDqj/YwmO65cPCtmHrxFVI/eMVBAFvyue/EQM=";
+    hash = "sha256-pCPFg+HuzZyiVWQtR/Rj76jX8jZaDhEOsBZ1cEk+DIw=";
   };
 
   build-system = [ setuptools ];
@@ -58,11 +55,11 @@ buildPythonPackage rec {
   # flaky, often killed due to OOM or timeout
   env.SKIP_LARGE = "1";
 
-  meta = with lib; {
+  meta = {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
     changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lebastr ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lebastr ];
   };
 }

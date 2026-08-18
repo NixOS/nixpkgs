@@ -18,7 +18,7 @@
   python3,
   docutils,
   x11Support ? !stdenv.hostPlatform.isDarwin,
-  libXft,
+  libxft,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -29,52 +29,51 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.56.3";
+  version = "1.57.1";
 
   outputs = [
     "bin"
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JgYlK8Jc2NJOG39+ksOicrN6zWc0NHtztHpIKDS6JJE=";
+    hash = "sha256-5l1tEXCA3Drut9i0s7UY9zg6oubPziMRfGI81iR2TC8=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      glib # for glib-mkenum
-      pkg-config
-      python3
-      docutils # for rst2man, rst2html5
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    glib # for glib-mkenum
+    pkg-config
+    python3
+    docutils # for rst2man, rst2html5
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+  ];
 
   buildInputs = [
     fribidi
     libthai
   ];
 
-  propagatedBuildInputs =
-    [
-      cairo
-      glib
-      libintl
-      harfbuzz
-    ]
-    ++ lib.optionals x11Support [
-      libXft
-    ];
+  propagatedBuildInputs = [
+    cairo
+    glib
+    libintl
+    harfbuzz
+  ]
+  ++ lib.optionals x11Support [
+    libxft
+  ];
 
   mesonFlags = [
     (lib.mesonBool "documentation" withIntrospection)
@@ -84,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 
@@ -116,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -128,11 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.pango.org/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
 
     pkgConfigModules = [
       "pango"
@@ -140,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       "pangofc"
       "pangoft2"
       "pangoot"
+    ]
+    ++ lib.optionals x11Support [
       "pangoxft"
     ];
   };

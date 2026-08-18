@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pika";
   version = "1.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pika";
@@ -62,12 +62,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pika/pika/releases/tag/${version}";
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
     downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

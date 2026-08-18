@@ -6,15 +6,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ceph-csi";
-  version = "3.14.1";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "ceph";
     repo = "ceph-csi";
-    rev = "v${version}";
-    hash = "sha256-WyWs5zrgU9//b2CeIKvgcE4jQDsfYQjo4UwYjpHyEeY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P3JBfInv7o3ecLHq1D6I+rL0LUaaMsmP2uiRRoBIVMc=";
   };
 
   preConfigure = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Container Storage Interface (CSI) driver for Ceph RBD and CephFS";
     downloadPage = "https://github.com/ceph/ceph-csi";
-    changelog = "https://github.com/ceph/ceph-csi/releases/tag/v${version}";
+    changelog = "https://github.com/ceph/ceph-csi/releases/tag/v${finalAttrs.version}";
     homepage = "https://ceph.com/";
     license = lib.licenses.asl20;
     mainProgram = "cephcsi";
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
   };
 
+  postPatch = ''
+    substituteInPlace biopandas/mmtf/pandas_mmtf.py --replace-fail \
+      'int(np.argwhere(np.array(model_indices) > ch_idx)[0]) + 1' \
+      'int(np.argwhere(np.array(model_indices) > ch_idx)[0][0]) + 1'
+  '';
+
   pythonRelaxDeps = [ "looseversion" ];
 
   build-system = [ setuptools ];

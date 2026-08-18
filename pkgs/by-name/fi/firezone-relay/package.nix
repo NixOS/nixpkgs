@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firezone-relay";
   version = "0-unstable-2025-03-15";
   src = fetchFromGitHub {
@@ -13,11 +13,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qDeXAzOeTenL6OIsun/rEfPMo62mQT7RhJEmqemzMsM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-uqy4GgYaSX2kM4a37093lHmhvOtNUhkEs6/ZS1bjuYo=";
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "relay";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   # Required to remove profiling arguments which conflict with this builder
   postPatch = ''
@@ -35,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "firezone-relay";
     platforms = lib.platforms.linux;
   };
-}
+})

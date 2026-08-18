@@ -7,15 +7,15 @@
   smartdns,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smartdns";
-  version = "46.1";
+  version = "48.4";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = "smartdns";
-    rev = "Release${version}";
-    hash = "sha256-IvaED1V1pP0/Qk2oND3fVr7PMXSnT9jFeuikEkndX0o=";
+    rev = "Release${finalAttrs.version}";
+    hash = "sha256-q9xHDccu2WUwQl9nCbxdtNFLpq5ei7V8XIoRa7w5BpE=";
   };
 
   buildInputs = [ openssl ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
     "RUNSTATEDIR=/run"
     # by default it is the build time... weird... https://github.com/pymumu/smartdns/search?q=ver
-    "VER=${version}"
+    "VER=${finalAttrs.version}"
   ];
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Local DNS server to obtain the fastest website IP for the best Internet experience";
     longDescription = ''
       SmartDNS is a local DNS server. SmartDNS accepts DNS query requests from local clients, obtains DNS query results from multiple upstream DNS servers, and returns the fastest access results to clients.
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
       Unlike dnsmasq's all-servers, smartdns returns the fastest access resolution.
     '';
     homepage = "https://github.com/pymumu/smartdns";
-    maintainers = [ maintainers.lexuge ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.lexuge ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "smartdns";
   };
-}
+})

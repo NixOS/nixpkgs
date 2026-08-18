@@ -38,6 +38,9 @@ stdenv.mkDerivation {
     mainProgram = "auto-patchelf";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      layus
+    ];
   };
 }

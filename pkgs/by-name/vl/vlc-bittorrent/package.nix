@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bittorrent";
-  version = "2.15";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "vlc-bittorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7FHeQYHbMKZJ3yeHqxTTAUwghTje+gEX8gSEJzfG5sQ=";
+    hash = "sha256-e2oMZGE7D93SbwYTb1a4BPN+P8P3rJ2iGtKC4vwdfhI=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/share/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bittorrent plugin for VLC";
     homepage = "https://github.com/johang/vlc-bittorrent";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.kintrix ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.kintrix ];
   };
 })

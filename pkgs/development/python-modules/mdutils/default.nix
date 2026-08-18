@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "mdutils";
-  version = "1.7.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "didix21";
     repo = "mdutils";
     tag = "v${version}";
-    hash = "sha256-3/rqcRdyReQnllgVe0/KzwpcFdgHN0K6afisV4dj+Y8=";
+    hash = "sha256-qUCiiFzbOccS7wy0LqgyZH04KlwG/FzE3a+R3z7tPF8=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +33,8 @@ buildPythonPackage rec {
       this way, mdutils will make things easy for creating Markdown files.
     '';
     homepage = "https://github.com/didix21/mdutils";
-    changelog = "https://github.com/didix21/mdutils/releases/tag/v${version}";
+    changelog = "https://github.com/didix21/mdutils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.azahi ];
+    maintainers = [ ];
   };
 }

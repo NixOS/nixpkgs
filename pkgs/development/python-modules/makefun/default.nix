@@ -4,11 +4,11 @@
   buildPythonPackage,
 
   # build-system
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 
   # tests
-  pytestCheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,18 +27,20 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest8_3CheckHook
+  ];
 
   pythonImportsCheck = [ "makefun" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/smarie/python-makefun";
     description = "Small library to dynamically create python functions";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

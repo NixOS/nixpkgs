@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "0-unstable-2025-06-05";
+  version = "0-unstable-2026-02-02";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "6bc76b872374845ba9d645a2f012b764fecd765f";
-    hash = "sha256-hXh76y/wDl15almBcqvjryB50B0BaiXJKk20f314RoE=";
+    rev = "77c906c0ba56aabdbc72041bf9111b565cdd6171";
+    hash = "sha256-hwsYgDnby50JNVpTRYlF3UR/Rrpt01OrxVuryF40CFY=";
   };
 
   cargoHash = "sha256-9O93YTEz+e2oxenE0gwxsbz55clbKo9+37yVOqz7ErE=";
@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage {
       teutat3s
       jk
     ];
-    teams = [ lib.teams.serokell ];
     mainProgram = "deploy";
   };
 }

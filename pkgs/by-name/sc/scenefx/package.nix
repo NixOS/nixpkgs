@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots_0_18,
+  wlroots_0_20,
   scdoc,
   pkg-config,
   wayland,
@@ -14,24 +14,27 @@
   wayland-protocols,
   libGL,
   libgbm,
+  libxcb,
+  libxcb-wm,
+  lcms2,
   validatePkgConfig,
   testers,
   wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
   pname = "scenefx";
-  version = "0.2.1";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
     tag = finalAttrs.version;
-    hash = "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=";
+    hash = "sha256-vUjLG6eubEhJJVa9LPygIcVmNoHwYbSUTJcWEcbxnU4=";
   };
 
   strictDeps = true;
-
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
@@ -48,21 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
     libgbm
+    libxcb
+    libxcb-wm
     pixman
     wayland
     wayland-protocols
-    wlroots_0_18
+    wlroots_0_20
+    lcms2
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.version}";
     description = "Drop-in replacement for the wlroots scene API that allows wayland compositors to render surfaces with eye-candy effects";
-    homepage = "https://github.com/wlrfx/scenefx";
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
     mainProgram = "scenefx";
-    pkgConfigModules = [ "scenefx" ];
+    maintainers = with lib.maintainers; [
+      swarsel
+      yvnth
+    ];
+    pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
     platforms = lib.platforms.all;
   };
 })

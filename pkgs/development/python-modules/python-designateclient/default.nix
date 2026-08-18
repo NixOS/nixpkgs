@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   debtcollector,
-  fetchFromGitea,
+  fetchFromGitHub,
   jsonschema,
   keystoneauth1,
   openstackdocstheme,
@@ -11,7 +11,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -22,17 +21,14 @@
 
 buildPythonPackage rec {
   pname = "python-designateclient";
-  version = "6.2.0";
+  version = "6.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchFromGitea {
-    domain = "opendev.org";
+  src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-designateclient";
-    rev = version;
-    hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
+    tag = version;
+    hash = "sha256-OBvPdulj2lg2FCyMDOp1iw12MxLre0/jkMdc7syJatc=";
   };
 
   env.PBR_VERSION = version;

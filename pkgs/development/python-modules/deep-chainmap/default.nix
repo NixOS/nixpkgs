@@ -2,32 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  flit-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "deep-chainmap";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "deep_chainmap";
     inherit version;
-    hash = "sha256-R7Pfh+1bYJ7LCU+0SyZi2XGOsgL1zWiMkp1z9HD1I1w=";
+    hash = "sha256-lrCg6GGxjq/Y3t1c1HpJuaP+XVvVrOcB5aVaem5E/I8=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ flit-core ];
 
-  # Tests are not published to pypi
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "deep_chainmap" ];
 
   # See the guide for more information: https://nixos.org/nixpkgs/manual/#chap-meta
-  meta = with lib; {
+  meta = {
     description = "Recursive subclass of ChainMap";
     homepage = "https://github.com/neutrinoceros/deep_chainmap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rehno-lindeque ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rehno-lindeque ];
   };
 }

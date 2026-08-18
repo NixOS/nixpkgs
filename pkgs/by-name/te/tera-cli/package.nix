@@ -4,19 +4,18 @@
   nix-update-script,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tera-cli";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "chevdor";
     repo = "tera-cli";
-    tag = "v${version}";
-    hash = "sha256-TN3zkxZC0Y9lev2wmvzwyLU+t4rNwut/dQILIA7+qbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-//uF959hXiEL+jIGmQ5OnjYT4Z2jyzflxxIoF+hLnlk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+qf/MlifpVXzDpADJoTqxU40wDntcPu+bW7eq6/iubk=";
+  cargoHash = "sha256-6NzX8dODW106AjTneDSsZWRoPYvNrv5tUCGUanod+Bo=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -28,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "tera";
     platforms = lib.platforms.unix;
   };
-}
+})

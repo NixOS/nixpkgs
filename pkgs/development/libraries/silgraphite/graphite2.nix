@@ -2,6 +2,7 @@
   lib,
   stdenv,
   llvmPackages,
+  python3,
   fetchurl,
   pkg-config,
   freetype,
@@ -11,14 +12,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.3.14";
+  version = "1.3.15";
   pname = "graphite2";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
-    sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
+    hash = "sha256-xryLQlJyRmUpf3ytDFWJcoXGc/m45ts1IqzoM1k/4LE=";
   };
 
   outputs = [
@@ -28,15 +29,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    (python3.withPackages (ps: [ ps.fonttools ]))
     cmake
   ];
-  buildInputs =
-    [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-      llvmPackages.compiler-rt.override {
-        doFakeLibgcc = true;
-      }
-    );
+  buildInputs = [
+    freetype
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    }
+  );
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
@@ -72,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced font engine";
     homepage = "https://graphite.sil.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.raskin ];
     pkgConfigModules = [ "graphite2" ];
     mainProgram = "gr2fonttest";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ttkbootstrap";
-  version = "1.12.1";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "israel-dryer";
     repo = "ttkbootstrap";
     tag = "v${version}";
-    hash = "sha256-Pkp45lB1Xeu9ZoLjKS8aSW2By/k3ID1qwMig/jdYHh4=";
+    hash = "sha256-SzPD8Z6J9sy7f2eB/mItf329/Wh+sESmhxDJ7v3CP1c=";
   };
 
   build-system = [
@@ -26,6 +26,8 @@ buildPythonPackage rec {
   dependencies = [
     pillow
   ];
+
+  pythonRelaxDeps = [ "pillow" ];
 
   # As far as I can tell, all tests require a display and are not normal-ish pytests
   # but appear to just be python scripts that run demos of components?

@@ -29,16 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qEy5F11Q1FpBHySB/QZiuDyzLOUXMWuInPtXCBlXk3M=";
   };
 
-  outputs =
-    [
-      "out"
-      "dev"
-      "info"
-      "lib"
-    ]
-    # help2man can't cross compile because it runs `poke --help` to
-    # generate the man page
-    ++ lib.optional (!isCross) "man";
+  outputs = [
+    "out"
+    "dev"
+    "info"
+    "lib"
+  ]
+  # help2man can't cross compile because it runs `poke --help` to
+  # generate the man page
+  ++ lib.optional (!isCross) "man";
 
   postPatch = ''
     patchShebangs .
@@ -46,23 +45,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      texinfo
-    ]
-    ++ lib.optionals (!isCross) [
-      help2man
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+  ]
+  ++ lib.optionals (!isCross) [
+    help2man
+  ];
 
-  buildInputs =
-    [
-      boehmgc
-      readline
-    ]
-    ++ lib.optional nbdSupport libnbd
-    ++ lib.optional textStylingSupport gettext
-    ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;
+  buildInputs = [
+    boehmgc
+    readline
+  ]
+  ++ lib.optional nbdSupport libnbd
+  ++ lib.optional textStylingSupport gettext
+  ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;
 
   configureFlags = [
     # libpoke depends on $datadir/poke, so we specify the datadir in
@@ -83,13 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-poke" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<a href="...">poke 2.0</a>'
       new_version="$(curl -s https://www.jemarch.net/poke |
-          pcregrep -o1 '>poke ([0-9.]+)</a>')"
+          pcre2grep -o1 '>poke ([0-9.]+)</a>')"
       update-source-version poke "$new_version"
     '';
   };

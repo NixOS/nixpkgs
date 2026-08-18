@@ -1,7 +1,7 @@
 {
-  version = "1.2025.063";
+  version = "1.2026.119";
   src = {
-    url = "https://persistent.oaistatic.com/sidekick/public/ChatGPT_Desktop_public_1.2025.063_1741403068.dmg";
-    hash = "sha256-ZqQZtrN+t6C5BRCHh8iqA/e11EA2GCvVTcxAAjK7Vq0=";
+    url = "https://persistent.oaistatic.com/sidekick/public/ChatGPT_Desktop_public_1.2026.119_1780053722.dmg";
+    hash = "sha256-2RNQ7KS/Bf1boJHpC5qWNdFsWf+NoOVlXqZVEUf7Kh0=";
   };
 }

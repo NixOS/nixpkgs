@@ -32,6 +32,29 @@ This configuration should never be used in production. It is not encrypted and
 stores its secrets in a world-readable location.
 :::
 
+## Database backends {#module-services-firefox-syncserver-database}
+
+The sync server supports MySQL/MariaDB (the default) and PostgreSQL as database
+backends. Set `database.type` to choose the backend:
+
+```nix
+{
+  services.firefox-syncserver = {
+    enable = true;
+    database.type = "postgresql";
+    secrets = "/run/secrets/firefox-syncserver";
+    singleNode = {
+      enable = true;
+      hostname = "localhost";
+      url = "http://localhost:5000";
+    };
+  };
+}
+```
+
+When `database.createLocally` is `true` (the default), the module will
+automatically enable and configure the corresponding database service.
+
 ## More detailed setup {#module-services-firefox-syncserver-configuration}
 
 The `firefox-syncserver` service provides a number of options to make setting up

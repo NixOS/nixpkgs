@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "airscan";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "stapelberg";
     repo = "airscan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gk0soDzrsFBh+SrWcfO/quW6JweX6MthOigTHcaq1oE=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
     description = "Package to scan paper documents using the Apple AirScan (eSCL) protocol";
     mainProgram = "airscan1";
     homepage = "https://github.com/stapelberg/airscan";
-    changelog = "https://github.com/stapelberg/airscan/releases/tag/v${version}";
+    changelog = "https://github.com/stapelberg/airscan/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ johannwagner ];
   };
-}
+})

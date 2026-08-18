@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   aenum,
   aioconsole,
   aiohttp,
+  aiohttp-retry,
   inflection,
   pydantic,
   python-dateutil,
@@ -16,25 +16,23 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mozart-api";
-  version = "4.1.1.116.6";
+  version = "6.2.0.44.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "mozart_api";
-    inherit version;
-    hash = "sha256-0TZHH/EXemsSysgfCzg66x5QhAEDUqRyg+qoK/3YuQA=";
+    inherit (finalAttrs) version;
+    hash = "sha256-HJKxw49hGjVedjpCzxfbL8v6b6MXXqE96hlL5U64r5Y=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    aenum
     aioconsole
     aiohttp
+    aiohttp-retry
     inflection
     pydantic
     python-dateutil
@@ -52,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "REST API for the Bang & Olufsen Mozart platform";
     homepage = "https://github.com/bang-olufsen/mozart-open-api";
-    changelog = "https://github.com/bang-olufsen/mozart-open-api/releases/tag/${version}";
+    changelog = "https://github.com/bang-olufsen/mozart-open-api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
-}
+})

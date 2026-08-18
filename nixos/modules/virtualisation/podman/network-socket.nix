@@ -29,7 +29,7 @@ in
         This allows Docker clients to connect with the equivalents of the Docker
         CLI `-H` and `--tls*` family of options.
 
-        For certificate setup, see https://docs.docker.com/engine/security/protect-access/
+        For certificate setup, see <https://docs.docker.com/engine/security/protect-access/>
 
         This option is independent of [](#opt-virtualisation.podman.dockerSocket.enable).
       '';
@@ -95,5 +95,6 @@ in
     networking.firewall.allowedTCPPorts = lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
   };
 
-  meta.maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];
+  meta.teams = [ lib.teams.podman ];
+  meta.maintainers = [ lib.maintainers.roberth ];
 }

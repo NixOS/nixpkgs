@@ -6,6 +6,8 @@
   fetchurl,
   autoPatchelfHook,
   rpmextract,
+  brotli,
+  libnghttp2,
   libxcrypt-legacy,
   zlib,
   lvm2, # LVM image backup and restore functions (optional)
@@ -44,7 +46,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.2.2?topic=solaris-set-api-environment-variables
 
 let
 
@@ -90,19 +92,24 @@ let
     }/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
-    name = "tsm-client-${finalAttrs.version}-unwrapped";
-    version = "8.1.25.0";
+    pname = "tsm-client-unwrapped";
+    version = "8.2.2.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-OPNjSMnWJ/8Ogy9O0wG0H4cEbYiOwyCVzkWhpG00v/Vm0LDxLzPteMnMOyH8L1egIDhy7lmQYSzI/EC4WWUDDA==";
+      hash = "sha512-cK0IL3D5IDJmN9SKIHDXB5wcO6vPtn7XwHVq3dEgg3feZS8FhE62wZopLQoGLYKg11kz34JVOqBtfouthZWbUA==";
     };
     inherit meta passthru;
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       autoPatchelfHook
       rpmextract
     ];
     buildInputs = [
+      brotli
+      libnghttp2
       libxcrypt-legacy
       stdenv.cc.cc
       zlib
@@ -152,7 +159,8 @@ let
 in
 
 buildEnv {
-  name = "tsm-client-${unwrapped.version}";
+  pname = "tsm-client";
+  inherit (unwrapped) version;
   meta =
     meta
     // lib.attrsets.optionalAttrs enableGui {

@@ -6,23 +6,60 @@
 }:
 let
   cfg = config.services.sssd;
-  nscd = config.services.nscd;
+  settingsFormat = pkgs.formats.ini { };
 
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
-  settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubstituted.conf" cfg.config;
+  mkSettingsFileUnsubstituted =
+    settings:
+    let
+      pyBool = x: if x then "True" else "False";
+      finalSettings = lib.mapAttrs (
+        _: lib.mapAttrs (_: v: if lib.isBool v then pyBool v else v)
+      ) settings;
+    in
+    settingsFormat.generate "sssd-unsubstituted.conf" finalSettings;
+  settingsFileUnsubstituted =
+    if cfg.settings == { } then
+      pkgs.writeText "sssd-unsubstituted.conf" cfg.config
+    else
+      mkSettingsFileUnsubstituted cfg.settings;
 in
 {
   options = {
     services.sssd = {
       enable = lib.mkEnableOption "the System Security Services Daemon";
 
+      settings = lib.mkOption {
+        inherit (settingsFormat) type;
+        description = "Contents of {file}`sssd.conf`.";
+        default = { };
+        example = {
+          sssd = {
+            services = "nss, pam";
+            domains = "shadowutils";
+          };
+
+          nss = { };
+
+          pam = { };
+
+          "domain/shadowutils" = {
+            id_provider = "proxy";
+            proxy_lib_name = "files";
+            auth_provider = "proxy";
+            proxy_pam_target = "sssd-shadowutils";
+            proxy_fast_alias = true;
+          };
+        };
+      };
+
       config = lib.mkOption {
         type = lib.types.lines;
         description = "Contents of {file}`sssd.conf`.";
-        default = ''
+        default = "";
+        example = ''
           [sssd]
-          config_file_version = 2
           services = nss, pam
           domains = shadowutils
 
@@ -56,6 +93,15 @@ in
           Kerberos will be configured to cache credentials in SSS.
         '';
       };
+
+      subIDsIntegration = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to use SSS as a source for subuid and subgid.
+        '';
+      };
+
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -82,6 +128,13 @@ in
   };
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = lib.xor (cfg.settings != { }) (cfg.config != "");
+          message = "services.sssd.settings and services.sssd.config are mutually exclusive";
+        }
+      ];
+
       # For `sssctl` to work.
       environment.etc."sssd/sssd.conf".source = settingsFile;
       environment.etc."sssd/conf.d".source = "${dataDir}/conf.d";
@@ -106,17 +159,26 @@ in
           config.environment.etc."nscd.conf".source
           settingsFileUnsubstituted
         ];
-        script = ''
-          export LDB_MODULES_PATH+="''${LDB_MODULES_PATH+:}${pkgs.ldb}/modules/ldb:${pkgs.sssd}/modules/ldb"
-          mkdir -p /var/lib/sss/{pubconf,db,mc,pipes,gpo_cache,secrets} /var/lib/sss/pipes/private /var/lib/sss/pubconf/krb5.include.d
-          ${pkgs.sssd}/bin/sssd -D -c ${settingsFile}
-        '';
+        environment.LDB_MODULES_PATH = "${pkgs.ldb}/modules/ldb:${pkgs.sssd}/modules/ldb";
         serviceConfig = {
-          Type = "forking";
+          # systemd needs to start sssd directly for "NotifyAccess=main" to work
+          ExecStart = "${pkgs.sssd}/bin/sssd -i -c ${settingsFile}";
+          Type = "notify";
+          NotifyAccess = "main";
           PIDFile = "/run/sssd.pid";
+          CapabilityBoundingSet = [
+            "CAP_DAC_READ_SEARCH"
+            "CAP_SETGID"
+            "CAP_SETUID"
+          ];
+          Restart = "on-abnormal";
           StateDirectory = baseNameOf dataDir;
           # We cannot use LoadCredential here because it's not available in ExecStartPre
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        };
+        unitConfig = {
+          StartLimitIntervalSec = "50s";
+          StartLimitBurst = 5;
         };
         preStart = ''
           mkdir -p "${dataDir}/conf.d"
@@ -127,6 +189,7 @@ in
             -o ${settingsFile} \
             -i ${settingsFileUnsubstituted}
           umask $old_umask
+          mkdir -p /var/lib/sss/{pubconf,db,mc,pipes,gpo_cache,secrets} /var/lib/sss/pipes/private /var/lib/sss/pubconf/krb5.include.d
         '';
       };
 
@@ -145,8 +208,15 @@ in
         description = "SSSD Kerberos Cache Manager";
         requires = [ "sssd-kcm.socket" ];
         serviceConfig = {
-          ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
-          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm";
+          CapabilityBoundingSet = [
+            "CAP_IPC_LOCK"
+            "CAP_CHOWN"
+            "CAP_DAC_READ_SEARCH"
+            "CAP_FOWNER"
+            "CAP_SETGID"
+            "CAP_SETUID"
+          ];
         };
         restartTriggers = [
           settingsFileUnsubstituted
@@ -174,6 +244,11 @@ in
       };
       services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
       services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+
+    (lib.mkIf cfg.subIDsIntegration {
+      system.nssDatabases.subuid = [ "sss" ];
+      system.nssDatabases.subgid = [ "sss" ];
     })
   ];
 

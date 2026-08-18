@@ -44,7 +44,7 @@ in
   };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     let
       backupPath = "${nodes.snipeit.services.snipe-it.dataDir}/storage/app/backups";
 

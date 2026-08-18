@@ -10,12 +10,14 @@
 {
   stdenv,
   lib,
+  applyPatches,
   fetchFromGitHub,
+  fetchFromGitLab,
+  fetchpatch2,
   # For tests
   testers,
   runCommand,
   fetchurl,
-  fetchpatch2,
   # Main build tools
   pkg-config,
   autoconf,
@@ -27,7 +29,7 @@
   numactl,
   writeText,
   # Processing, video codecs, containers
-  ffmpeg_7-full,
+  ffmpeg_8-full,
   nv-codec-headers,
   libogg,
   x264,
@@ -73,7 +75,7 @@
   intltool,
   glib,
   gtk4,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   gst_all_1,
   dbus-glib,
@@ -86,14 +88,38 @@
 }:
 
 let
-  version = "1.9.2";
+  version = "1.11.2";
 
-  src = fetchFromGitHub {
-    owner = "HandBrake";
-    repo = "HandBrake";
-    # uses version commit for logic in version.txt
-    rev = "e117cfe7fca37abeec59ea4201e5d93ed7477746";
-    hash = "sha256-cOEgFVvBgV0kYnTc7d1CdzoN7mMjd8rxSmc6i/dbRWI=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "HandBrake";
+      repo = "HandBrake";
+      # uses version commit for logic in version.txt
+      rev = "9eb6c936803e8b071035b1a77662cb0db58441ea";
+      hash = "sha256-f4kBFeW1yVFLlXGAimWsZx+9PKlgR6xrXUZG+CBh28A=";
+    };
+
+    patches = [
+      # Update x265 submodule to v4.2, drop in next release
+      (fetchpatch2 {
+        url = "https://github.com/HandBrake/HandBrake/commit/432514bf839e7280511e4a7afc35fb4868ef4d0b.patch";
+        excludes = [
+          "contrib/x265/module.defs"
+          "contrib/x265_8bit/module.defs"
+          "contrib/x265_10bit/module.defs"
+          "contrib/x265_12bit/module.defs"
+        ];
+        hash = "sha256-xwIY1pO9mKbrQFjQCENuvntIoiZTHeUVg8axrl3zxxo=";
+      })
+      # Update ffmpeg to v8.1.2, drop if backported
+      (fetchpatch2 {
+        url = "https://github.com/HandBrake/HandBrake/commit/02b704c5cf2e73d227fbb5be151501b232b0e5f2.patch?full_index=1";
+        excludes = [
+          "contrib/ffmpeg/module.defs"
+        ];
+        hash = "sha256-fSfLXH+aRwVv9BrDT1oNBHD2VUbAnN3jVu3CJeoaAKg=";
+      })
+    ];
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -101,65 +127,70 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.1";
-  ffmpeg-hb =
-    (ffmpeg_7-full.override {
-      version = ffmpeg-version;
-      hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
-    }).overrideAttrs
-      (old: {
-        patches = (old.patches or [ ]) ++ [
-          "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
-          "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
-          "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
-          "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-          "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
-          "${src}/contrib/ffmpeg/A06-dvdsubdec-fix-processing-of-partial-packets.patch"
-          "${src}/contrib/ffmpeg/A07-dvdsubdec-return-number-of-bytes-used.patch"
-          "${src}/contrib/ffmpeg/A08-dvdsubdec-use-pts-of-initial-packet.patch"
-          "${src}/contrib/ffmpeg/A09-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
-          "${src}/contrib/ffmpeg/A10-ccaption_dec-fix-pts-in-real_time-mode.patch"
-          "${src}/contrib/ffmpeg/A11-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
-          "${src}/contrib/ffmpeg/A12-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
-
-          # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
-          # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
-          # "${src}/contrib/ffmpeg/A13-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
-
-          "${src}/contrib/ffmpeg/A14-hevc_mp4toannexb.c-fix-qsv-decode-of-10bit-hdr.patch"
-          "${src}/contrib/ffmpeg/A15-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
-          "${src}/contrib/ffmpeg/A16-avcodec-amfenc-Add-support-for-on-demand-key-frames.patch"
-          "${src}/contrib/ffmpeg/A17-avcodec-amfenc-properly-set-primaries-transfer-and-m.patch"
-          "${src}/contrib/ffmpeg/A18-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
-          "${src}/contrib/ffmpeg/A19-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
-          "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
-          "${src}/contrib/ffmpeg/A29-Revert-lavc-Check-codec_whitelist-early-in-avcodec_o.patch"
-        ];
-      });
+  ffmpeg-hb = ffmpeg_8-full.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
+      "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
+      "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
+      "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
+      "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
+      "${src}/contrib/ffmpeg/A06-avformat-mov-read-and-write-additional-iTunes-style-.patch"
+      "${src}/contrib/ffmpeg/A07-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
+      "${src}/contrib/ffmpeg/A08-dvdsubdec-fix-processing-of-partial-packets.patch"
+      "${src}/contrib/ffmpeg/A09-dvdsubdec-return-number-of-bytes-used.patch"
+      "${src}/contrib/ffmpeg/A10-dvdsubdec-use-pts-of-initial-packet.patch"
+      "${src}/contrib/ffmpeg/A11-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
+      "${src}/contrib/ffmpeg/A12-ccaption_dec-fix-pts-in-real_time-mode.patch"
+      "${src}/contrib/ffmpeg/A13-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
+      "${src}/contrib/ffmpeg/A14-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
+      "${src}/contrib/ffmpeg/A15-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+      "${src}/contrib/ffmpeg/A16-libavcodec-qsvenc.c-update-has_b_frames-value-after-.patch"
+      "${src}/contrib/ffmpeg/A17-qsv-enable-av1-scc.patch"
+      "${src}/contrib/ffmpeg/A18-fixed-BT2020-BT709-conversion-via-VPP.patch"
+      "${src}/contrib/ffmpeg/A19-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
+      "${src}/contrib/ffmpeg/A20-videotoolbox-speedup-decoding.patch"
+      "${src}/contrib/ffmpeg/A21-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+      "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
+      "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
+      "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
+      "${src}/contrib/ffmpeg/A26-avformat-movenc-fix-mov_create_dvd_sub_decoder_speci.patch"
+    ];
+  });
 
   x265-hb = x265.overrideAttrs (old: {
-    version = "4.1";
-    sourceRoot = "x265_4.1/source";
+    version = "4.2";
+    sourceRoot = "x265_4.2/source";
     src = fetchurl {
-      url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.1.tar.gz";
-      hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
+      url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.2.tar.gz";
+      hash = "sha256-QLHqBFPgMJ8OupNODd9TP49ilZZmeeiJTo8cHI1eEhA=";
     };
     # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
     # are written with respect to the parent directory instead of that source directory.
     # patches which don't cleanly apply are commented out.
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        pushd ..
-        patch -p1 < ${src}/contrib/x265/A01-Do-not-set-thread-priority-on-Windows.patch
-        # patch -p1 < ${src}/contrib/x265/A02-Apple-Silicon-tuning.patch
-        patch -p1 < ${src}/contrib/x265/A03-fix-crash-when-SEI-length-is-variable.patch
-        patch -p1 < ${src}/contrib/x265/A04-implement-ambient-viewing-environment-sei.patch
-        # patch -p1 < ${src}/contrib/x265/A05-Fix-Dolby-Vision-RPU-memory-management.patch
-        # patch -p1 < ${src}/contrib/x265/A06-Simplify-macOS-cross-compilation.patch
-        # patch -p1 < ${src}/contrib/x265/A07-add-new-matrix-coefficients-from-H.273-v3.patch
-        popd
-      '';
+    postPatch = (old.postPatch or "") + ''
+      pushd ..
+        for p in ${src}/contrib/x265/*.patch; do
+          patch -p1 < "$p"
+        done
+      popd
+    '';
+  });
+
+  svt-av1-hb = svt-av1.overrideAttrs (old: rec {
+    version = "4.1.0";
+    src = fetchFromGitLab {
+      owner = "AOMediaCodec";
+      repo = "SVT-AV1";
+      tag = "v${version}";
+      hash = "sha256-NPJG1SsRlG9kGtUwdJa/uP6DAtF09nCctzeorrvjAhQ=";
+    };
+    postPatch = (old.postPatch or "") + ''
+      pushd ..
+        for p in ${src}/contrib/svt-av1/*.patch; do
+          patch -p1 < "$p"
+        done
+      popd
+    '';
   });
 
   versionFile = writeText "version.txt" ''
@@ -184,135 +215,124 @@ let
     pname = "handbrake";
     inherit version src;
 
-    patches = [
-      (fetchpatch2 {
-        # fixes build against ffmpeg 7.1.1+; remove for handbrake > 1.9.2.
-        # https://github.com/HandBrake/HandBrake/pull/6657
-        url = "https://github.com/HandBrake/HandBrake/commit/75f9c84c140c8841cfe1324ef59452025899ad8b.patch?full_index=1";
-        hash = "sha256-glUyCttS2S/G+bSgIAB4nggECe0iEJIsUyr0RkAKEbE=";
-      })
+    postPatch = ''
+      install -Dm444 ${versionFile} ${versionFile.name}
+
+      patchShebangs scripts
+      patchShebangs gtk/data/
+
+      substituteInPlace libhb/hb.c \
+        --replace-fail 'return hb_version;' 'return "${version}";'
+
+      # Force using nixpkgs dependencies
+      sed -i '/MODULES += contrib/d' make/include/main.defs
+      sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+          -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+          -i make/configure.py
+    ''
+    + optionalString stdenv.hostPlatform.isDarwin ''
+      # Prevent the configure script from failing if xcodebuild isn't available,
+      # which it isn't in the Nix context. (The actual build goes fine without
+      # xcodebuild.)
+      sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
+    ''
+    + optionalString useGtk ''
+      substituteInPlace gtk/module.rules \
+        --replace-fail '$(MESON.exe)' 'meson' \
+        --replace-fail '$(NINJA.exe)' 'ninja' \
+      # Force using nixpkgs dependencies
+      substituteInPlace gtk/meson.build \
+        --replace-fail \
+          "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
+          "hb_incdirs = include_directories(hb_dir / 'libhb')"
+      substituteInPlace gtk/ghb.spec \
+        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      substituteInPlace gtk/data/post_install.py \
+        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    '';
+
+    nativeBuildInputs = [
+      autoconf
+      automake
+      libtool
+      m4
+      pkg-config
+      python3
+    ]
+    ++ optionals useGtk [
+      appstream
+      desktop-file-utils
+      intltool
+      meson
+      ninja
+      wrapGAppsHook4
     ];
 
-    postPatch =
-      ''
-        install -Dm444 ${versionFile} ${versionFile.name}
+    buildInputs = [
+      a52dec
+      dav1d
+      ffmpeg-hb
+      fontconfig
+      freetype
+      fribidi
+      harfbuzz
+      jansson
+      lame
+      libass
+      libbluray
+      libdvdcss
+      libdvdnav
+      libdvdread
+      libiconv
+      libjpeg_turbo
+      libogg
+      libopus
+      libsamplerate
+      libtheora
+      libvorbis
+      libvpx
+      libxml2
+      speex
+      svt-av1-hb
+      x264
+      x265-hb
+      xz
+      zimg
+    ]
+    ++ optional (!stdenv.hostPlatform.isDarwin) numactl
+    ++ optionals useGtk [
+      dbus-glib
+      glib
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gstreamer
+      gtk4
+      hicolor-icon-theme
+      libappindicator
+      libgudev
+      libnotify
+      udev
+    ]
+    ++ optional useFdk fdk_aac
+    # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
+    # look at ./make/configure.py search "enable_nvenc"
+    ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
 
-        patchShebangs scripts
-        patchShebangs gtk/data/
-
-        substituteInPlace libhb/hb.c \
-          --replace-fail 'return hb_version;' 'return "${version}";'
-
-        # Force using nixpkgs dependencies
-        sed -i '/MODULES += contrib/d' make/include/main.defs
-        sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
-            -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
-            -i make/configure.py
-      ''
-      + optionalString stdenv.hostPlatform.isDarwin ''
-        # Prevent the configure script from failing if xcodebuild isn't available,
-        # which it isn't in the Nix context. (The actual build goes fine without
-        # xcodebuild.)
-        sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
-      ''
-      + optionalString useGtk ''
-        substituteInPlace gtk/module.rules \
-          --replace-fail '$(MESON.exe)' 'meson' \
-          --replace-fail '$(NINJA.exe)' 'ninja' \
-        # Force using nixpkgs dependencies
-        substituteInPlace gtk/meson.build \
-          --replace-fail \
-            "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
-            "hb_incdirs = include_directories(hb_dir / 'libhb')"
-        substituteInPlace gtk/ghb.spec \
-          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-        substituteInPlace gtk/data/post_install.py \
-          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-      '';
-
-    nativeBuildInputs =
-      [
-        autoconf
-        automake
-        libtool
-        m4
-        pkg-config
-        python3
-      ]
-      ++ optionals useGtk [
-        appstream
-        desktop-file-utils
-        intltool
-        meson
-        ninja
-        wrapGAppsHook4
-      ];
-
-    buildInputs =
-      [
-        a52dec
-        dav1d
-        ffmpeg-hb
-        fontconfig
-        freetype
-        fribidi
-        harfbuzz
-        jansson
-        lame
-        libass
-        libbluray
-        libdvdcss
-        libdvdnav
-        libdvdread
-        libiconv
-        libjpeg_turbo
-        libogg
-        libopus
-        libsamplerate
-        libtheora
-        libvorbis
-        libvpx
-        libxml2
-        speex
-        svt-av1
-        x264
-        x265-hb
-        xz
-        zimg
-      ]
-      ++ optional (!stdenv.hostPlatform.isDarwin) numactl
-      ++ optionals useGtk [
-        dbus-glib
-        glib
-        gst_all_1.gst-libav
-        gst_all_1.gst-plugins-bad
-        gst_all_1.gst-plugins-base
-        gst_all_1.gst-plugins-good
-        gst_all_1.gstreamer
-        gtk4
-        hicolor-icon-theme
-        libappindicator-gtk3
-        libgudev
-        libnotify
-        udev
-      ]
-      ++ optional useFdk fdk_aac
-      # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
-      # look at ./make/configure.py search "enable_nvenc"
-      ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
-
-    configureFlags =
-      [
-        "--disable-df-fetch"
-        "--disable-df-verify"
-      ]
-      ++ optional (!useGtk) "--disable-gtk"
-      ++ optional useFdk "--enable-fdk-aac"
-      ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
-      ++ optional stdenv.hostPlatform.isx86 "--harden";
+    configureFlags = [
+      "--disable-df-fetch"
+      "--disable-df-verify"
+    ]
+    ++ optional (!useGtk) "--disable-gtk"
+    ++ optional useFdk "--enable-fdk-aac"
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
+    ++ optional stdenv.hostPlatform.isx86 "--harden";
 
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
-    NIX_LDFLAGS = [ "-lx265" ];
+    env.NIX_LDFLAGS = toString [
+      "-lx265"
+    ];
 
     # meson/ninja are used only for the subprojects, not the toplevel
     dontUseMesonConfigure = true;

@@ -93,31 +93,30 @@ in
     systemd.services.artalk = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart =
-        ''
-          umask 0077
-          ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/artalk/new"}
-        ''
-        + (
-          if cfg.allowModify then
-            ''
-              [ -e "${cfg.configFile}" ] || ${lib.getExe cfg.package} gen config "${cfg.configFile}"
-              cat "${cfg.configFile}" | ${lib.getExe pkgs.yj} > "/run/artalk/old"
-              ${lib.getExe pkgs.jq} -s '.[0] * .[1]' "/run/artalk/old" "/run/artalk/new" > "/run/artalk/result"
-              cat "/run/artalk/result" | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
-              rm /run/artalk/{old,new,result}
-            ''
-          else
-            ''
-              cat /run/artalk/new | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
-              rm /run/artalk/new
-            ''
-        );
+      preStart = ''
+        umask 0077
+        ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/artalk/new"}
+      ''
+      + (
+        if cfg.allowModify then
+          ''
+            [ -e "${cfg.configFile}" ] || ${lib.getExe cfg.package} gen config "${cfg.configFile}"
+            cat "${cfg.configFile}" | ${lib.getExe pkgs.yj} > "/run/artalk/old"
+            ${lib.getExe pkgs.jq} -s '.[0] * .[1]' "/run/artalk/old" "/run/artalk/new" > "/run/artalk/result"
+            cat "/run/artalk/result" | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
+            rm /run/artalk/{old,new,result}
+          ''
+        else
+          ''
+            cat /run/artalk/new | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
+            rm /run/artalk/new
+          ''
+      );
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${builtins.toString cfg.settings.port}";
+        ExecStart = "${lib.getExe cfg.package} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${toString cfg.settings.port}";
         Restart = "on-failure";
         RestartSec = "5s";
         ConfigurationDirectory = [ "artalk" ];

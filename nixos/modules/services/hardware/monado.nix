@@ -50,8 +50,7 @@ in
     };
 
     highPriority =
-      mkEnableOption "high priority capability for monado-service"
-      // mkOption { default = true; };
+      mkEnableOption "high priority capability for monado-service" // mkOption { default = true; };
   };
 
   config = mkIf cfg.enable {
@@ -82,6 +81,9 @@ in
           IPC_EXIT_ON_DISCONNECT = mkDefault "off";
           # Needed to avoid libbasalt.so: cannot open shared object file: No such file or directory
           VIT_SYSTEM_LIBRARY_PATH = mkDefault "${pkgs.basalt-monado}/lib/libbasalt.so";
+          # Improves performance
+          # https://gitlab.com/gabmus/envision/-/blob/2f731053537044b1f72b259bea795473ea0c205a/src/profiles/lighthouse.rs#L19
+          U_PACING_APP_USE_MIN_FRAME_PERIOD = mkDefault "1";
         };
 
         preStart = mkIf cfg.forceDefaultRuntime ''

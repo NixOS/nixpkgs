@@ -6,15 +6,15 @@
   luaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fnlfmt";
   version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = "fnlfmt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LYHhKC8iA4N8DdCH8GfSOkN/e+W3YjkFhVSDQraKoFk=";
+    tag = finalAttrs.version;
+    hash = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "FENNEL=${luaPackages.fennel}/bin/fennel"
   ];
-  sourceRoot = [ "${src.name}/tags/${version}" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -38,11 +37,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Formatter for Fennel";
-    homepage = src.meta.homepage;
-    changelog = "${src.meta.homepage}/tree/${version}/changelog.md";
+    homepage = finalAttrs.src.meta.homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/tree/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
     platforms = lua.meta.platforms;
     maintainers = with lib.maintainers; [ chiroptical ];
     mainProgram = "fnlfmt";
   };
-}
+})

@@ -7,14 +7,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gridtracker";
   version = "1.24.0922";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6WgP13JVOzYnYtCDH3qCQXT70X9j4yqlUb18FFf1aSY=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Amateur radio companion to WSJT-X or JTDX";
     mainProgram = "gridtracker";
     longDescription = ''
@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
       logging frameworks including Logbook of the World.
     '';
     homepage = "https://gridtracker.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
-}
+})

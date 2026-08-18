@@ -20,7 +20,8 @@ let
 
   environmentFiles = [
     "/var/lib/karakeep/settings.env"
-  ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+  ]
+  ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
 in
 {
   options = {
@@ -33,7 +34,7 @@ in
           Environment variables to pass to Karakaeep. This is how most settings
           can be configured. Changing DATA_DIR is possible but not supported.
 
-          See https://docs.karakeep.app/configuration/
+          See <https://docs.karakeep.app/configuration/environment-variables>
         '';
         type = lib.types.attrsOf lib.types.str;
         default = { };
@@ -102,8 +103,8 @@ in
       group = "karakeep";
     };
 
-    services.meilisearch = lib.mkIf cfg.meilisearch.enable {
-      enable = true;
+    services.meilisearch = {
+      enable = cfg.meilisearch.enable;
     };
 
     systemd.services.karakeep-init = {
@@ -168,11 +169,15 @@ in
         "karakeep-workers.service"
       ];
       partOf = [ "karakeep.service" ];
-      environment = karakeepEnv;
+      environment = {
+        NEXT_CACHE_DIR = "%C/karakeep";
+      }
+      // karakeepEnv;
       serviceConfig = {
         ExecStart = "${cfg.package}/lib/karakeep/start-web";
         User = "karakeep";
         Group = "karakeep";
+        CacheDirectory = "karakeep";
         StateDirectory = "karakeep";
         EnvironmentFile = environmentFiles;
         PrivateTmp = "yes";

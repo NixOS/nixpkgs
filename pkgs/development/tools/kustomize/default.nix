@@ -1,13 +1,16 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  kustomize,
+  testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kustomize";
-  version = "5.7.0";
+  version = "5.8.1";
 
   ldflags =
     let
@@ -15,32 +18,40 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}.version=${version}"
-      "-X ${t}.gitCommit=${src.rev}"
+      "-X ${t}.version=v${finalAttrs.version}" # add 'v' prefix to match official releases
+      "-X ${t}.gitCommit=${finalAttrs.src.rev}"
     ];
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "kustomize/v${version}";
-    hash = "sha256-O8avyJ1secafVP+Edr7PCTKjcmUFFbB1Dx74qoLxD0M=";
+    repo = "kustomize";
+    rev = "kustomize/v${finalAttrs.version}";
+    hash = "sha256-IFof+h6GBlI19ygufNvQ6HgwGbmS0xR5CmrFafknHf0=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-Qo2KmNbj9OYThOrt/dk6U0CnK8awUOAagYQ2iX5szVQ=";
+  vendorHash = "sha256-0nlI8QmZCzSZXlQKs5ZkAwrRMKaQUoFpDuj60gURlf8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kustomize \
       --bash <($out/bin/kustomize completion bash) \
       --fish <($out/bin/kustomize completion fish) \
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.tests = {
+    versionCheck = testers.testVersion {
+      command = "${finalAttrs.meta.mainProgram} version";
+      version = "v${finalAttrs.version}";
+      package = kustomize;
+    };
+  };
+
+  meta = {
     description = "Customization of kubernetes YAML configurations";
     mainProgram = "kustomize";
     longDescription = ''
@@ -49,14 +60,13 @@ buildGoModule rec {
       as is.
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
-      periklis
       zaninime
       Chili-Man
       saschagrunert
     ];
   };
-}
+})

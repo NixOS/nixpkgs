@@ -1,4 +1,4 @@
-plotutils/2.6-9
+plotutils/2.6-15
 01_AC_PROG_CXX.diff
 10_repair_postscript
 11_manpages_sb_macro
@@ -8,3 +8,4 @@ plotutils/2.6-9
 25_libpng15
 30_hershey_glyphs
 35_spline.test.error.diff
+42_plotutils-gcc15.patch

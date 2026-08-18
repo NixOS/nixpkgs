@@ -5,12 +5,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dkimproxy";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dkimproxy/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/dkimproxy/dkimproxy-${finalAttrs.version}.tar.gz";
     sha256 = "1gc5c7lg2qrlck7b0lvjfqr824ch6jkrzkpsn0gjvlzg7hfmld75";
   };
 
@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
     NetServer
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SMTP-proxy that signs and/or verifies emails";
     homepage = "https://dkimproxy.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ekleog ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

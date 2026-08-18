@@ -55,6 +55,8 @@ in
 callPackage' ./hadrian.nix (
   {
     inherit userSettings;
+    # Taking `ghc` as an input may be too confusing
+    bootGhcVersion = bootPkgs.ghc.version;
   }
   // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
     # Starting with GHC 9.9 development, additional in tree packages are required

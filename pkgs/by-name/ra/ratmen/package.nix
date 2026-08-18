@@ -4,31 +4,31 @@
   fetchurl,
   perl,
   xorgproto,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratmen";
   version = "2.2.3";
   src = fetchurl {
-    url = "http://www.update.uu.se/~zrajm/programs/ratmen/ratmen-${version}.tar.gz";
+    url = "http://www.update.uu.se/~zrajm/programs/ratmen/ratmen-${finalAttrs.version}.tar.gz";
     sha256 = "0gnfqhnch9x8jhr87gvdjcp1wsqhchfjilpnqcwx5j0nlqyz6wi6";
   };
   buildInputs = [
     perl
     xorgproto
-    libX11
+    libx11
   ];
   makeFlags = [
     "PREFIX=$(out)"
   ];
-  meta = with lib; {
+  meta = {
     description = "Minimalistic X11 menu creator";
-    license = licenses.free; # 9menu derivative with 9menu license
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.free; # 9menu derivative with 9menu license
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "http://www.update.uu.se/~zrajm/programs/";
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
     mainProgram = "ratmen";
   };
-}
+})

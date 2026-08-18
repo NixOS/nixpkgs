@@ -11,16 +11,16 @@
   setuptools,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-ros-domain-id-coordinator";
-  version = "0.2.1";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-ros-domain-id-coordinator";
-    tag = "0.2.1";
-    hash = "sha256-8DTpixa5ZGuSOpmwoeJgxLQI+17XheLxPWcJymE0GqM=";
+    tag = finalAttrs.version;
+    hash = "sha256-B7BBBng/fODqVtneVgjoPgU6Cyon66PQa2QcGuRLfFU=";
   };
   build-system = [ setuptools ];
 
@@ -46,9 +46,9 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "An extension for colcon-core to coordinate ROS_DOMAIN_ID values across multiple terminals";
+    description = "Extension for colcon-core to coordinate ROS_DOMAIN_ID values across multiple terminals";
     homepage = "https://github.com/colcon/colcon-ros-domain-id-coordinator";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

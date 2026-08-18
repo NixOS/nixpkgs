@@ -4,7 +4,6 @@
   fetchFromGitHub,
   overrides,
   poetry-core,
-  pythonOlder,
   requests,
   pytestCheckHook,
   types-requests,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyarr";
   version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "totaldebug";
@@ -57,11 +54,11 @@ buildPythonPackage rec {
     "test_upd"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Servarr API's (Sonarr, Radarr, Readarr, Lidarr)";
     homepage = "https://github.com/totaldebug/pyarr";
     changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

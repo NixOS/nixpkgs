@@ -1,57 +1,54 @@
 {
   lib,
-  bleak,
+  aiohttp,
   bleak-retry-connector,
-  boto3,
+  bleak,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  poetry-core,
   pyopenssl,
-  pythonOlder,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  requests,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyswitchbot";
-  version = "0.67.0";
+  version = "2.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
-    tag = version;
-    hash = "sha256-e2bzmJAwJ6BbqP3R0FmTG1UR6TsPggXJlSkO3wdPWQY=";
+    tag = finalAttrs.version;
+    hash = "sha256-is/eLRiVzekX+kLy/CHps6Gw7jujCJJ0A9AWMTNUObs=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
+    aiohttp
     bleak
     bleak-retry-connector
-    boto3
     cryptography
     pyopenssl
-    requests
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "switchbot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control Switchbot IoT devices";
     homepage = "https://github.com/Danielhiversen/pySwitchbot";
-    changelog = "https://github.com/Danielhiversen/pySwitchbot/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/Danielhiversen/pySwitchbot/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
-}
+})

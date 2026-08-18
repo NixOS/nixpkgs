@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-organizations";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bennylope";
     repo = "django-organizations";
     tag = version;
-    hash = "sha256-lgri6CCITp1oYCwpH8vrUglphXOmwZ3KX5G/L29akrs=";
+    hash = "sha256-MgXB2gr7tWBXpgVfxLMI0RQWwAbhXlxdzyqk7XdEsWE=";
   };
 
   build-system = [ hatchling ];

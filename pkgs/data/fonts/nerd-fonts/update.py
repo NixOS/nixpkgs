@@ -12,7 +12,7 @@ if not all(
     raise Exception(
         "Please don't run this script manually, only with:\n"
         "nix-shell maintainers/scripts/update.nix --argstr path nerd-fonts "
-        "--argstr commit true"
+        "--arg commit true"
     )
 
 RELEASE_INFO_URL = "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"

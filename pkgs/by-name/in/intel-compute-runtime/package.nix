@@ -10,15 +10,15 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "25.22.33944.8";
+  version = "26.27.39122.11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-Sz9ELQkSq6CQOfoTlzJoUzj/GuHwQMgtUjmC0P2uzro=";
+    tag = finalAttrs.version;
+    hash = "sha256-CbOtBgYlvn5r15gB7skmmZ+ZvRwq7FFtouICakku0ls=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "SKIP_UNIT_TESTS" true)
-    (lib.cmakeFeature "IGC_DIR" (builtins.toString intel-graphics-compiler))
+    (lib.cmakeFeature "IGC_DIR" (toString intel-graphics-compiler))
     (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     # disable spectre mitigations (already mitigated in the kernel)
     # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
     (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   outputs = [
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
@@ -84,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

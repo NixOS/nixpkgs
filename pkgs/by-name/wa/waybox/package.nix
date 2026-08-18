@@ -17,19 +17,23 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots,
+  wlroots_0_19,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybox";
-  version = "0.2.2";
+  version = "0.2.2-unstable-2026-01-03"; # To remove dependency on wlroots_0_17, switch to stable in next release
 
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = "waybox";
-    rev = finalAttrs.version;
-    hash = "sha256-hAXS9laDfigWR2pfNmdPiOeez3NpTIuKHnpeQyYa9IQ=";
+    rev = "044ce8f7c05720a319984eb569ee713923637940";
+    hash = "sha256-xrjOZzexQSPTKsQstMa0/UYX5A70N5zkO3NIBDnEy68=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
   ];
 
   strictDeps = true;
@@ -64,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -4,7 +4,9 @@
   callPackage,
   lib,
   fetchFromGitHub,
-  python3,
+  # OctoPrint requires Python >=3.7, <3.14, so it cannot use the default python3
+  # while that points at 3.14.
+  python313,
   replaceVars,
   nix-update-script,
   nixosTests,
@@ -13,21 +15,21 @@
 }:
 let
 
-  py = python3.override {
+  py = python313.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) [
       # Built-in dependency
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FileCheck";
-          version = "2024.11.12";
+          version = "2025.7.23";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
             rev = version;
-            sha256 = "sha256-Y7yvImnYahmrf5GC4c8Ki8IsOZ8r9I4uk8mYBhEQZ28=";
+            hash = "sha256-Y3JVfbe+bZz2t65OqdjvVVqTSa0VUPoCaxvE+zQ+Qts=";
           };
           doCheck = false;
         };
@@ -37,14 +39,14 @@ let
       (self: super: {
         octoprint-firmwarecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FirmwareCheck";
-          version = "2021.10.11";
+          version = "2025.7.23";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FirmwareCheck";
             rev = version;
-            hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
+            hash = "sha256-QPchpyeotB5IKbfES74CJlhw3sz8Q1df/+n5dpbrHSs=";
           };
           doCheck = false;
         };
@@ -53,14 +55,14 @@ let
       (self: super: {
         octoprint-pisupport = self.buildPythonPackage rec {
           pname = "OctoPrint-PiSupport";
-          version = "2023.10.10";
+          version = "2025.7.23";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
             rev = version;
-            hash = "sha256-VSzDoFq4Yn6KOn+RNi1uVJHzH44973kd/VoMjqzyBRA=";
+            hash = "sha256-bXjRGxIwi+UnVts2HO9viOJqa2AmZ/CL7wuoyzRbAEw=";
           };
 
           # requires octoprint itself during tests
@@ -75,20 +77,21 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.2";
+          version = "1.11.8";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
+            hash = "sha256-yTHzBqwVxAP6EokiWqD/SR6P2X4gIGyiyzNH0UzzDB4=";
           };
 
           propagatedBuildInputs =
             with self;
             [
               argon2-cffi
+              babel
               blinker
               cachelib
               click
@@ -103,21 +106,23 @@ let
               flask-limiter
               frozendict
               itsdangerous
-              immutabledict
               jinja2
+              libpass
+              limits
               markdown
               markupsafe
               netaddr
               netifaces
               octoprint-filecheck
               octoprint-firmwarecheck
-              passlib
+              packaging
               pathvalidate
-              pkginfo
               pip
+              pkginfo
               psutil
               pylru
               pyserial
+              pytz
               pyyaml
               regex
               requests
@@ -131,6 +136,7 @@ let
               watchdog
               websocket-client
               werkzeug
+              wheel
               wrapt
               zeroconf
               zipstream-ng
@@ -143,6 +149,7 @@ let
           nativeCheckInputs = with self; [
             ddt
             mock
+            time-machine
             pytestCheckHook
           ];
 
@@ -154,21 +161,28 @@ let
 
             # hardcore path to ffmpeg and hide related settings
             (replaceVars ./ffmpeg-path.patch {
-              ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+              ffmpeg = "${pkgs.ffmpeg-headless}/bin/ffmpeg";
             })
           ];
 
           postPatch =
             let
               ignoreVersionConstraints = [
+                "Babel"
                 "cachelib"
+                "Click"
                 "colorlog"
                 "emoji"
-                "immutabledict"
+                "limits"
+                "markdown"
+                "netaddr"
+                "psutil"
                 "PyYAML"
+                "requests"
                 "sarge"
                 "sentry-sdk"
                 "watchdog"
+                "websocket-client"
                 "wrapt"
                 "zeroconf"
                 "Flask-Login"
@@ -181,7 +195,7 @@ let
             ''
               sed -r -i \
                 ${lib.concatStringsSep "\n" (
-                  map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints
+                  map (e: ''-e 's@${e}[<>=!]+.*@${e}",@g' \'') ignoreVersionConstraints
                 )}
                 setup.py
             '';
@@ -193,8 +207,10 @@ let
 
           disabledTests = [
             "test_check_setup" # Why should it be able to call pip?
-          ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
           disabledTestPaths = [
+            "tests/http_api" # requires a live OctoPrint server; excluded by upstream pytest.ini
             "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
           ];
 
@@ -207,13 +223,12 @@ let
             };
           };
 
-          meta = with lib; {
+          meta = {
             homepage = "https://octoprint.org/";
             description = "Snappy web interface for your 3D printer";
             mainProgram = "octoprint";
-            license = licenses.agpl3Only;
-            maintainers = with maintainers; [
-              abbradar
+            license = lib.licenses.agpl3Only;
+            maintainers = with lib.maintainers; [
               WhittlesJr
               gador
             ];
@@ -222,7 +237,7 @@ let
       })
       (callPackage ./plugins.nix { })
       packageOverrides
-    ]);
+    ];
   };
 in
 with py.pkgs;

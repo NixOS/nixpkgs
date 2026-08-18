@@ -7,12 +7,12 @@
   stdune,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "fiber";
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-dune/fiber/releases/download/${version}/fiber-lwt-${version}.tbz";
+    url = "https://github.com/ocaml-dune/fiber/releases/download/${finalAttrs.version}/fiber-lwt-${finalAttrs.version}.tbz";
     hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
   };
 
@@ -27,10 +27,10 @@ buildDunePackage rec {
   # https://github.com/ocaml-dune/fiber/issues/27
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Structured concurrency library";
     homepage = "https://github.com/ocaml-dune/fiber";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

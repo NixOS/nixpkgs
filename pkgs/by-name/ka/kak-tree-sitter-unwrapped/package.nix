@@ -7,19 +7,18 @@
   kak-tree-sitter-unwrapped,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kak-tree-sitter-unwrapped";
-  version = "2.0.0";
+  version = "3.2.2";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "kak-tree-sitter";
-    rev = "kak-tree-sitter-v${version}";
-    hash = "sha256-vFhNxixXsezK3Qm9d5hEiIttSjcuqHfgCHYrEOeKWvs=";
+    rev = "kak-tree-sitter-v${finalAttrs.version}";
+    hash = "sha256-RzPfQstjHdfLH6cF6KuMXB/J7UeR9DeJRypnGdb89TQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tO6i19UuistT4yUc0YzZOh+8M5kXq5l1NUTBUOA3YT8=";
+  cargoHash = "sha256-5hCBFQsZpUyPlgO/iUmBXmdcC5ceG1w4IiB27oBxRxQ=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~hadronized/kak-tree-sitter";
     description = "Server that interfaces tree-sitter with kakoune";
     mainProgram = "kak-tree-sitter";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lelgenio ];
   };
-}
+})

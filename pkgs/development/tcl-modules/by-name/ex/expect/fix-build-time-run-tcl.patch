@@ -1,6 +1,8 @@
---- a/Makefile.in	2022-09-07 21:46:37.090519258 +0200
-+++ b/Makefile.in	2022-09-07 21:46:21.462592279 +0200
-@@ -380,7 +380,7 @@
+diff --git a/Makefile.in b/Makefile.in
+index 36feb62..ac77b25 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -380,7 +380,7 @@ dist: dist-clean doc
  	cp $(DIST_ROOT)/$(PKG_DIR).tar.gz $(top_builddir)
  
  $(SCRIPTS):

@@ -4,32 +4,29 @@
   fetchFromGitHub,
   libunwind,
   cmake,
-  pcre,
+  pcre2,
   gdb,
 }:
 
-stdenv.mkDerivation rec {
-  version = "5.9.18";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.0.0";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
-    rev = "v${version}";
-    sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RIDnilCoYlq0D9CBJKMX1zg1DBQ4RPcOlfGcZ2xosUo=";
   };
-
-  postPatch = ''
-    substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
-  '';
 
   buildInputs = [
     libunwind
     gdb
-    pcre
+    pcre2
   ];
   nativeBuildInputs = [ cmake ];
-  CXXFLAGS = [
+
+  env.CXXFLAGS = toString [
     "-fPIC"
     "-O2"
     "-w"
@@ -37,7 +34,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Ignominous Profiler";
 
     longDescription = ''
@@ -58,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ktf ];
   };
-}
+})

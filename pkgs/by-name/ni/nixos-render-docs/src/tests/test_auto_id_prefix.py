@@ -3,7 +3,6 @@ from pathlib import Path
 from markdown_it.token import Token
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
 from nixos_render_docs.md import Converter
-from nixos_render_docs.redirects import Redirects
 
 auto_id_prefix="TEST_PREFIX"
 def set_prefix(token: Token, ident: str) -> None:
@@ -11,7 +10,7 @@ def set_prefix(token: Token, ident: str) -> None:
 
 
 def test_auto_id_prefix_simple() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, Path("")), {})
 
     src = f"""
 # title
@@ -19,7 +18,7 @@ def test_auto_id_prefix_simple() -> None:
 ## subtitle
     """
     tokens = Converter()._parse(src)
-    md._handle_headings(tokens, on_heading=set_prefix)
+    md._handle_headings(tokens, src=src, on_heading=set_prefix)
 
     assert [
         {**token.attrs, "tag": token.tag}
@@ -32,7 +31,7 @@ def test_auto_id_prefix_simple() -> None:
 
 
 def test_auto_id_prefix_repeated() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, Path("")), {})
 
     src = f"""
 # title
@@ -44,7 +43,7 @@ def test_auto_id_prefix_repeated() -> None:
 ## subtitle2
     """
     tokens = Converter()._parse(src)
-    md._handle_headings(tokens, on_heading=set_prefix)
+    md._handle_headings(tokens, src=src, on_heading=set_prefix)
 
     assert [
         {**token.attrs, "tag": token.tag}
@@ -58,7 +57,7 @@ def test_auto_id_prefix_repeated() -> None:
     ]
 
 def test_auto_id_prefix_maximum_nested() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, Path("")), {})
 
     src = f"""
 # h1
@@ -76,7 +75,7 @@ def test_auto_id_prefix_maximum_nested() -> None:
 ## h2.2
     """
     tokens = Converter()._parse(src)
-    md._handle_headings(tokens, on_heading=set_prefix)
+    md._handle_headings(tokens, src=src, on_heading=set_prefix)
 
     assert [
         {**token.attrs, "tag": token.tag}

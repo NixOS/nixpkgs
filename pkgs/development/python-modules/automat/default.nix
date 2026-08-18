@@ -2,29 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  attrs,
+  hatch-vcs,
   pytest-benchmark,
   pytestCheckHook,
-  setuptools-scm,
-  six,
+  setuptools,
 }:
 
 let
   automat = buildPythonPackage rec {
-    version = "24.8.1";
-    format = "pyproject";
+    version = "25.4.16";
+    pyproject = true;
     pname = "automat";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-s0Inz2P2MluK0jme3ngGdQg+Q5sgwyPTdjc9juYwbYg=";
+      hash = "sha256-ABdZGlR3Bm6Q0msOaW3cFDuq/Ye1iM+sgQC8a+ljTeA=";
     };
 
-    nativeBuildInputs = [ setuptools-scm ];
-
-    propagatedBuildInputs = [
-      six
-      attrs
+    build-system = [
+      setuptools
+      hatch-vcs
     ];
 
     nativeCheckInputs = [
@@ -32,7 +29,7 @@ let
       pytestCheckHook
     ];
 
-    pytestFlagsArray = [ "--benchmark-disable" ];
+    pytestFlags = [ "--benchmark-disable" ];
 
     # escape infinite recursion with twisted
     doCheck = false;
@@ -43,11 +40,11 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/glyph/Automat";
       description = "Self-service finite-state machines for the programmer on the go";
       mainProgram = "automat-visualize";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

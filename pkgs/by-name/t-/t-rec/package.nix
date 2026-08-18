@@ -12,23 +12,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "t-rec";
-  version = "0.7.9";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "sassman";
     repo = "t-rec-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aQX+JJ2MwzzxJkA1vsE8JqvYpWtqyycvycPc2pyFU7g=";
+    sha256 = "sha256-61wK2rtW6+C0SwrM8UJuMPe7WAkPGd6PrKt0KB52v7I=";
   };
 
-  cargoHash = "sha256-AgSYM2a9XGH2X4dcp5CSMnt0Bq/5XT8C3g1R2UX4mLY=";
+  cargoHash = "sha256-RcEWQLH170ycqwQVdbkzX/RrVTTMtc3mCg3/6cy8IH0=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [ imagemagick ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Blazingly fast terminal recorder that generates animated gif images for the web written in rust";
     homepage = "https://github.com/sassman/t-rec-rs";
     changelog = "https://github.com/sassman/t-rec-rs/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       hoverbear
       matthiasbeyer

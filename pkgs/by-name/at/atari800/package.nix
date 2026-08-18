@@ -6,7 +6,7 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   readline,
   zlib,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     libGL
     libGLU
-    libX11
+    libx11
     readline
     zlib
   ];
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       WinCE, Sega Dreamcast, Android and other systems supported by the SDL
       library.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

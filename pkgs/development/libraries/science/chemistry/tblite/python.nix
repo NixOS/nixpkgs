@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   meson,
   ninja,
@@ -24,6 +23,7 @@ buildPythonPackage {
     pname
     version
     src
+    postPatch
     meta
     ;
 
@@ -61,7 +61,7 @@ buildPythonPackage {
     ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
   ];
 
-  format = "other";
+  pyproject = false;
   pythonImportsCheck = [
     "tblite"
     "tblite.interface"

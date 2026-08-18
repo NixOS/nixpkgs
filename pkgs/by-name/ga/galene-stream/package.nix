@@ -11,7 +11,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "galene-stream";
   version = "0.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "erdnaxe";
     repo = "galene-stream";
-    tag = "${version}";
+    tag = finalAttrs.version;
     hash = "sha256-3TdU3vBVuFle+jon2oJLa/rTLIiwYkvzscTDbMEXD1Q=";
   };
 
@@ -43,16 +43,15 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  buildInputs =
-    [
-      libnice # libgstnice.so
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly # libgstx264.so
-    ]);
+  buildInputs = [
+    libnice # libgstnice.so
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly # libgstx264.so
+  ]);
 
   dependencies = with python3Packages; [
     pygobject3
@@ -73,9 +72,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Gateway to send UDP, RTMP, SRT or RIST streams to Galène videoconference server";
     homepage = "https://github.com/erdnaxe/galene-stream";
-    changelog = "https://github.com/erdnaxe/galene-stream/releases/tag/${src.tag}";
+    changelog = "https://github.com/erdnaxe/galene-stream/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     inherit (galene.meta) maintainers;
   };
-}
+})

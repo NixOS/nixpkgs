@@ -1,27 +1,28 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qc";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
-    rev = "v${version}";
-    hash = "sha256-D45uJk1Hb7k2qOLIbRdo0gQlPovUwcQ3rnYqhouhow0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Z96wEb9jTf3zeIxgHJMBl7OQHeEIrP/uIcJncXggA/g=";
   };
 
-  vendorHash = "sha256-Cg1Op/4okIi2UTtqWnR0N3iMWzrYEaYxmXzvWIibftg=";
+  vendorHash = "sha256-/nRPv6SlvWV8mHlQstV19BLou9iwGt/VvJbrpVwiTCU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/qownnotes/qc/cmd.version=${version}"
+    "-X=github.com/qownnotes/qc/cmd.version=${finalAttrs.version}"
   ];
 
   # There are no automated tests
@@ -33,7 +34,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME=$(mktemp -d)
     installShellCompletion --cmd qc \
       --bash <($out/bin/qc completion bash) \
@@ -41,14 +42,14 @@ buildGoModule rec {
       --zsh <($out/bin/qc completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "QOwnNotes command-line snippet manager";
     mainProgram = "qc";
     homepage = "https://github.com/qownnotes/qc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pbek
       totoroot
     ];
   };
-}
+})

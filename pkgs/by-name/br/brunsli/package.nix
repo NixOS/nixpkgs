@@ -7,7 +7,7 @@
   brotli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brunsli";
   version = "0.1";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "brunsli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZcrRz2xSoRepgG8KZYY/JzgONerItW0e6mH1PYsko98=";
   };
 
@@ -37,13 +37,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch =
-    ''
-      rm -r third_party
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      rm -r build
-    '';
+  postPatch = ''
+    rm -r third_party
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm -r build
+  ''
+  # fix build with cmake v4, should be removed in next release
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -59,4 +63,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

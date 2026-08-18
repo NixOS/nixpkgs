@@ -14,28 +14,27 @@ python3.pkgs.buildPythonApplication {
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "0-unstable-2023-12-16";
-  format = "setuptools";
+  version = "0-unstable-2026-07-15";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdellweg";
     repo = "pass_secret_service";
-    rev = "6335c85d9a790a6472e3de6eff87a15208caa5dc";
-    hash = "sha256-SSmI3HJCUWuwFXCu3Zg66X18POlzp3ADRj7HeE8GRio=";
+    rev = "4ba0f4b6c0667192263c385c13b5ec42a87af9ff";
+    hash = "sha256-BaAULmeTxsj6uk3Aqe7ft/uN14M/b1U3ga7S71+lE68=";
   };
 
   # Need to specify session.conf file for tests because it won't be found under
   # /etc/ in check phase.
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
-      --replace '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)' \
-      --replace 'pytest-3' 'pytest'
+      --replace-fail "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
+      --replace-fail '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)'
 
     substituteInPlace systemd/org.freedesktop.secrets.service \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
     substituteInPlace systemd/dbus-org.freedesktop.secrets.service \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''
@@ -44,7 +43,11 @@ python3.pkgs.buildPythonApplication {
     cp systemd/dbus-org.freedesktop.secrets.service "$out/lib/systemd/user/"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     cryptography
     dbus-next
@@ -66,6 +69,8 @@ python3.pkgs.buildPythonApplication {
     ];
 
   checkTarget = "test";
+
+  pythonImportsCheck = [ "pass_secret_service" ];
 
   passthru = {
     updateScript = nix-update-script {

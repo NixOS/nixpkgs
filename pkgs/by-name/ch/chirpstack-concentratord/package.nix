@@ -8,19 +8,18 @@
   libloragw-sx1301,
   libloragw-sx1302,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-concentratord";
-  version = "4.5.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-concentratord";
-    rev = "v${version}";
-    hash = "sha256-UlliScDD1OEH4hLzKVr0z74iI48TTQTDfSsTwHzk8kw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-icvbZjqsDf/RLiDUyx0lQKRVHFh6FNxkLVkv9kckDBc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-NkP3sMSw/iEkzqdX7rR6qMRq7MyZNyF9HcjrVuVRBEk=";
+  cargoHash = "sha256-iJhNaXv5a8+9TZJGLdKZdq1VFE09w0L/05V1y6kabN0=";
 
   buildInputs = [
     libloragw-2g4
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Concentrator HAL daemon for LoRa gateways";
@@ -43,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "chirpstack-concentratord";
   };
-}
+})

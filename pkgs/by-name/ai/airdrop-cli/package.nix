@@ -9,13 +9,13 @@
 # Doesn't build without using the same stdenv (and Clang) to build swift
 swiftPackages.stdenv.mkDerivation {
   pname = "airdrop-cli";
-  version = "0-unstable-2024-04-13";
+  version = "0-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "vldmrkl";
     repo = "airdrop-cli";
-    rev = "dcdd570c3af3aae509ba7ad9fb26782b427f3a1a";
-    hash = "sha256-7gKKeedRayf27XrOhntu41AMXgxc7fqJRE8Jhbihh3o=";
+    rev = "8bb7d64c9f9ce1166405aa5b9a11f00dcc466ea0";
+    hash = "sha256-aaczNVDJhkzeaSBXP+HmgHGZWVztggwv3OtTBAFCFvk=";
   };
 
   nativeBuildInputs = [

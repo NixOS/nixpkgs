@@ -29,6 +29,15 @@ derivationWithMeta {
   PATH = lib.makeBinPath [ mescc-tools-extra ];
 
   passthru.runCommand =
+    let
+      defaultBuildInputs = [
+        kaem
+        mescc-tools
+        mescc-tools-extra
+      ];
+      defaultBinPath = lib.makeBinPath defaultBuildInputs;
+      removedAttributeNames = [ "nativeBuildInputs" ];
+    in
     name: env: buildCommand:
     derivationWithMeta (
       {
@@ -42,23 +51,20 @@ derivationWithMeta {
           (writeText "${name}-builder" buildCommand)
         ];
 
-        PATH = lib.makeBinPath (
-          (env.nativeBuildInputs or [ ])
-          ++ [
-            kaem
-            mescc-tools
-            mescc-tools-extra
-          ]
-        );
+        PATH =
+          if !env ? nativeBuildInputs then
+            defaultBinPath
+          else
+            lib.makeBinPath (env.nativeBuildInputs ++ defaultBuildInputs);
       }
-      // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+      // (removeAttrs env removedAttributeNames)
     );
 
-  meta = with lib; {
+  meta = {
     description = "Minimal build tool for running scripts on systems that lack any shell";
     homepage = "https://github.com/oriansj/mescc-tools";
-    license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit platforms;
   };
 }

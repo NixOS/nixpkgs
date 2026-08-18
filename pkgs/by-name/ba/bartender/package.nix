@@ -1,8 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  _7zz,
+  fetchzip,
   curl,
   cacert,
   xmlstarlet,
@@ -12,14 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "5.2.7";
+  version = "6.5.2";
 
-  src = fetchurl {
-    name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
-    url = "https://www.macbartender.com/B2/updates/${
+  src = fetchzip {
+    url = "https://downloads.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
-    }/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
-    hash = "sha256-TY6ioG80W8q6LC0FCMRQMJh4DiEKiM6htVf+irvmpnI=";
+    }/Bartender%20${lib.versions.major finalAttrs.version}.zip";
+    hash = "sha256-b2FOhbsVCk8Ae5g/Si9RJLmgN+v5ETnxaRas3GOTb08=";
   };
 
   dontPatch = true;
@@ -27,15 +25,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ _7zz ];
-
-  sourceRoot = "Bartender ${lib.versions.major finalAttrs.version}.app";
+  appName = "Bartender ${lib.versions.major finalAttrs.version}.app";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/${finalAttrs.sourceRoot}"
-    cp -R . "$out/Applications/${finalAttrs.sourceRoot}"
+    mkdir -p "$out/Applications/${finalAttrs.appName}"
+    cp -R . "$out/Applications/${finalAttrs.appName}"
 
     runHook postInstall
   '';
@@ -50,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     text = ''
       version_major="${lib.versions.major finalAttrs.version}"
-      url="https://www.macbartender.com/B2/updates/AppcastB$version_major.xml"
+      url="https://downloads.macbartender.com/B2/updates/AppcastB$version_major.xml"
       version=$(curl -s "$url" | xmlstarlet sel -t -v '(//item)[last()]/sparkle:shortVersionString' -n)
       update-source-version bartender "$version"
     '';
@@ -63,10 +59,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Bartender improves your workflow with quick reveal, search, custom hotkeys and triggers, and lots more.
     '';
     homepage = "https://www.macbartender.com";
-    changelog = "https://macbartender.com/B2/updates/${
+    changelog = "https://downloads.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/rnotes.html";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       stepbrobd

@@ -8,17 +8,18 @@
   gitMinimal,
   nixosTests,
   buildPackages,
+  tzdata,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Euhbuu1uiJ5HJNlPs9sUoGcc5QWqXqNmEH0jpfGLlc=";
+    hash = "sha256-pStNE8SMMVavL3ld6RO+5QQRJPXpqlU3asccS2tUoMQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -27,34 +28,41 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      presetdir=$out/share/starship/presets/
-      mkdir -p $presetdir
-      cp docs/public/presets/toml/*.toml $presetdir
-    ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        installShellCompletion --cmd starship \
-          --bash <(${emulator} $out/bin/starship completions bash) \
-          --fish <(${emulator} $out/bin/starship completions fish) \
-          --zsh <(${emulator} $out/bin/starship completions zsh)
-      ''
-    );
+  env.TZDIR = "${tzdata}/share/zoneinfo";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cxDWaPlNK7POJ3GhA21NlJ6q62bqHdA/4sru5pLkvOA=";
+  postInstall = ''
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/public/presets/toml/*.toml $presetdir
+    install -Dm644 .github/config-schema.json $out/share/starship/config-schema.json
+  ''
+  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd starship \
+        --bash <(${emulator} $out/bin/starship completions bash) \
+        --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
+        --zsh <(${emulator} $out/bin/starship completions zsh)
+    ''
+  );
+
+  cargoHash = "sha256-IO/H75FKU3/2oAJ8AKerGujMDfun8w4fV7gETMxWOt0=";
 
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) starship;
+  passthru = {
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
+    };
+    tests = {
+      inherit (nixosTests) starship;
+    };
   };
 
   meta = {
@@ -64,10 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      danth
-      Br1ght0ne
       Frostman
-      awwpotato
+      da157
       sigmasquadron
     ];
     mainProgram = "starship";

@@ -4,22 +4,24 @@
   bash,
   buildGoModule,
   fetchFromGitLab,
+  gitMinimal,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.1.0";
+  version = "19.1.1";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bm3WP8d4Fpcjj/2Ljl9AuhULTMHvWjOKjhN3tx6lEQQ=";
+    hash = "sha256-QKiHd4UFTuAZElQ/793Tyid983RnfU9TeNpe1gFwChA=";
   };
 
-  vendorHash = "sha256-7efuq0D1X+HJF4RT5bSri2B0Ad/AzbsKWFYGdtQxA+Q=";
+  vendorHash = "sha256-Ed2PrEkkqZEWhFLtT1BJavWiacLuv4U7kIAcscMDQgM=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -29,43 +31,50 @@ buildGoModule (finalAttrs: {
     ./remove-bash-test.patch
   ];
 
-  prePatch =
-    ''
-      # Remove some tests that can't work during a nix build
+  prePatch = ''
+    # Remove some tests that can't work during a nix build
 
-      # Needs the build directory to be a git repo
-      substituteInPlace commands/helpers/file_archiver_test.go \
-        --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
-        --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
-      rm shells/abstract_test.go
+    # Needs the build directory to be a git repo
+    substituteInPlace commands/helpers/file_archiver_test.go \
+      --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
+      --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
 
-      # No writable developer environment
-      rm common/build_settings_test.go
-      rm common/build_test.go
-      rm executors/custom/custom_test.go
+    # Needs `make development_setup` (git repo at tmp/gitlab-test/)
+    rm common/build_settings_test.go
+    rm common/build_test.go
+    rm executors/custom/custom_test.go
 
-      # No Docker during build
-      rm executors/docker/docker_test.go
-      rm executors/docker/services_test.go
-      rm executors/docker/terminal_test.go
-      rm helpers/docker/auth/auth_test.go
+    # Timing-dependent test causes spurious failures on Hydra.
+    # Might be fixed upstream in this MR: https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/6623
+    # Try dropping it on next major version bump
+    rm executors/kubernetes/internal/watchers/pod_test.go
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.isx86_64) ''
+    # Kubernetes tests actually work fine inside the network sandbox (they don't
+    # expect real Kubernetes), but they fail on aarch64-linux because their
+    # mocks expect x86_64
+    rm executors/kubernetes/kubernetes_test.go
+    rm executors/kubernetes/overwrites_test.go
+  ''
+  + lib.optionalString stdenv.buildPlatform.isDarwin ''
+    # Darwin's sandbox blocks sendfile(2) during local HTTP PUT uploads
+    substituteInPlace commands/helpers/cache_archiver_test.go \
+      --replace-fail "func TestUploadExistingArchiveIfNeeded" "func OFF_TestUploadExistingArchiveIfNeeded"
 
-      # No Kubernetes during build
-      rm executors/kubernetes/feature_test.go
-      rm executors/kubernetes/kubernetes_test.go
-      rm executors/kubernetes/overwrites_test.go
-    ''
-    + lib.optionalString stdenv.buildPlatform.isDarwin ''
-      # Invalid bind arguments break Unix socket tests
-      substituteInPlace commands/wrapper_test.go \
-        --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
+    # Invalid bind arguments break Unix socket tests.
+    substituteInPlace commands/wrapper_test.go \
+      --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
 
-      # No keychain access during build breaks X.509 certificate tests
-      substituteInPlace helpers/certificate/x509_test.go \
-        --replace-fail "func TestCertificate" "func OFF_TestCertificate"
-      substituteInPlace network/client_test.go \
-        --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
-    '';
+    # No keychain access during build breaks X.509 certificate tests
+    substituteInPlace helpers/certificate/x509_test.go \
+      --replace-fail "func TestCertificate" "func OFF_TestCertificate"
+    substituteInPlace network/client_test.go \
+      --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
+  '';
+
+  postPatch = ''
+    patchShebangs --build helpers/docker/auth/testdata/docker-credential-bin.sh
+  '';
 
   excludedPackages = [
     # Nested dependency Go module, used with go.mod replace directive
@@ -86,6 +95,11 @@ buildGoModule (finalAttrs: {
       "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
     ];
 
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
+
   preCheck = ''
     # Make the tests pass outside of GitLab CI
     export CI=0
@@ -102,8 +116,6 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -111,6 +123,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
     homepage = "https://docs.gitlab.com/runner";
+    changelog = "https://gitlab.com/gitlab-org/gitlab-runner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
     maintainers = with lib.maintainers; [ zimbatm ];

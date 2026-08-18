@@ -1,40 +1,60 @@
 {
   lib,
-  aiohttp,
-  asgiref,
-  azure-core,
-  azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  uv-build,
+
+  # dependencies
+  azure-core,
+  azure-identity,
   ijson,
   msal,
-  pandas,
-  pytest-asyncio,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
-  setuptools,
+
+  # optional-dependencies
+
+  # tests
+  # aio:
+  aiohttp,
+  asgiref,
+  # pandas:
+  pandas,
+
+  # tests
+  aioresponses,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-kusto-data";
-  version = "4.6.3";
+  version = "6.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-kusto-python";
-    tag = "v${version}";
-    hash = "sha256-VndOEvSi4OMf/yAjNl34X9IFF0T+wNfjlPW8NfdrwUo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iggsVxLmDbP6+oSPaIiujPLsZAWwm5VLZSl+HYm0DIQ=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/azure-kusto-data";
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" uv_build
+  '';
 
+  build-system = [ uv-build ];
+
+  pythonRelaxDeps = [
+    "ijson"
+  ];
   dependencies = [
     azure-core
     azure-identity
@@ -53,24 +73,35 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "azure.kusto.data" ];
+
+  disabledTests = [
+    # AssertionError: Attributes of DataFrame.iloc[:, 1] (column name="rowguid") are different
+    "test_sanity_data_frame"
+  ];
 
   disabledTestPaths = [
     # Tests require network access
     "tests/aio/test_async_token_providers.py"
     "tests/test_token_providers.py"
     "tests/test_e2e_data.py"
+
+    # AssertionError: assert <class 'pandas.Timestamp'> is <class 'pandas.api.typing.NaTType'>
+    "tests/test_helpers.py"
   ];
 
   meta = {
     description = "Kusto Data Client";
-    homepage = "https://pypi.org/project/azure-kusto-data/";
-    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
+    homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-data";
+    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
-}
+})

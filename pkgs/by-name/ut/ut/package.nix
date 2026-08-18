@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  meta = with lib; {
-    description = "UT: C++20 μ(micro)/Unit Testing Framework";
+  meta = {
+    description = "C++20 μ(micro)/Unit Testing Framework";
     homepage = "https://github.com/boost-ext/ut";
-    license = licenses.boost;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    platforms = lib.platforms.all;
   };
 })

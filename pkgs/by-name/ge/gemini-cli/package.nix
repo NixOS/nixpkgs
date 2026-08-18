@@ -1,65 +1,133 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
-  writeShellApplication,
-  cacert,
-  curl,
-  gnused,
   jq,
-  nix-prefetch-github,
-  prefetch-npm-deps,
-  gitUpdater,
+  pkg-config,
+  makeWrapper,
+  clang_20,
+  libsecret,
+  ripgrep,
+  nodejs_22,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.7";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAenod/w9BydYdYsOnuLj7kCQRcTnZ81tf4MhLUug6c=";
+    hash = "sha256-pabav4ehssc3oQFuF4MgnSG7Ql1r5Y6n+ZzYbgh5tz8=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-otogkSsKJ5j1BY00y4SRhL9pm7CK9nmzVisvGCDIMlU=";
-  };
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-Df1EVzKYWo5o2cvP3kFGcNKEuDu3fZno4OTKBe37IK8=";
+
+  dontPatchElf = stdenv.hostPlatform.isDarwin;
+
+  nativeBuildInputs = [
+    jq
+    pkg-config
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
+
+  buildInputs = [
+    ripgrep
+    libsecret
+  ];
 
   preConfigure = ''
     mkdir -p packages/generated
     echo "export const GIT_COMMIT_INFO = { commitHash: '${finalAttrs.src.rev}' };" > packages/generated/git-commit.ts
   '';
 
+  postPatch = ''
+    # Remove node-pty dependency from package.json
+    ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' package.json > package.json.tmp && mv package.json.tmp package.json
+
+    # Remove node-pty dependency from packages/core/package.json
+    ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+
+    # Prefer the Nix ripgrep binary by prepending it to candidate paths
+    substituteInPlace packages/core/src/tools/ripGrep.ts \
+      --replace-fail "const candidatePaths = [" "const candidatePaths = [\"${lib.getExe ripgrep}\", "
+
+    # Trust the Nix store path by adding it to standard system prefixes
+    substituteInPlace packages/core/src/utils/paths.ts \
+      --replace-fail "const trustedPrefixes = [" "const trustedPrefixes = [\"/nix/store\", "
+
+    # Disable auto-update by changing default values in settings schema
+    sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
+    sed -i '/enableAutoUpdateNotification:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
+
+    # Also make sure the values are disabled in runtime code by changing condition checks to false
+    substituteInPlace packages/cli/src/utils/handleAutoUpdate.ts \
+      --replace-fail "if (!settings.merged.general.enableAutoUpdateNotification) {" "if (false) {" \
+      --replace-fail "settings.merged.general.enableAutoUpdate," "false," \
+      --replace-fail "!settings.merged.general.enableAutoUpdate" "!false"
+  '';
+
+  # Prevent npmDeps and python from getting into the closure
+  disallowedReferences = [
+    finalAttrs.npmDeps
+    finalAttrs.nodejs.python
+  ];
+
+  npmBuildScript = "bundle";
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,share/gemini-cli}
+
+    mkdir -p $out/{bin,share}
+    cp -r bundle $out/share/gemini-cli
+
+    # We only want to keep optionalDependencies (like @lydell/node-pty) to keep the closure size small,
+    # as regular dependencies are already bundled via esbuild into gemini.js.
+    jq '.dependencies = {} | del(.devDependencies) | del(.workspaces)' package.json > package.json.tmp && mv package.json.tmp package.json
+    npm prune --omit=dev
+    rm -rf node_modules/.bin
+
+    # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
+    # creating a python3 reference in the closure
+    find node_modules -path "*/build/*" -type f -not -name "*.node" -delete
+    find node_modules -type d -empty -delete
 
     cp -r node_modules $out/share/gemini-cli/
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
-    cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
+    rm -f $out/share/gemini-cli/docs/CONTRIBUTING.md
 
-    ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
+    makeWrapper "${lib.getExe finalAttrs.nodejs}" "$out/bin/gemini" \
+      --add-flags "--no-warnings=DEP0040" \
+      --add-flags "$out/share/gemini-cli/gemini.js"
+
     runHook postInstall
   '';
 
-  postInstall = ''
-    chmod +x "$out/bin/gemini"
-  '';
-
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    problems.removal = {
+      message = "Unpaid tier and Google AI Pro/Ultra users: Gemini CLI was replaced by Antigravity CLI.";
+      urls = [
+        "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+      ];
+    };
+    maintainers = with lib.maintainers; [
+      brantes
+      xiaoxiangmoe
+      _4evy
+      caverav
+    ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
   };

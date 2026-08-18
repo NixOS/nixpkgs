@@ -18,7 +18,7 @@
   ffmpeg,
   sqlite,
   zlib,
-  libX11,
+  libx11,
   libGLU,
   libGL,
 }:
@@ -36,53 +36,80 @@ let
     sqlite
     lua
     zlib
-    libX11
+    ffmpeg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
     libGLU
     libGL
-    ffmpeg
   ];
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2025.6.0";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v${version}";
-    hash = "sha256-0M5z40DLZsw/MPjhxsXGwkJnd1dnV59UjR15UXQCChM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dtZrVsXXpy70aJvMqs/IUPsvRd52FKpm9I5XuZSLwCY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
   buildInputs = [
     fpc
     libpng
-  ] ++ sharedLibs;
+  ]
+  ++ sharedLibs;
 
-  preBuild =
-    let
-      items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
-    in
-    ''
-      export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
-    '';
+  env = {
+    NIX_LDFLAGS = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    MACOSX_DEPLOYMENT_TARGET = "10.13";
+  };
 
-  # dlopened libgcc requires the rpath not to be shrinked
+  # fpc's fpc.cfg hardcodes -FD/Applications/Xcode.app/.../usr/bin to find `as`/`ld`,
+  # which is unreachable in the build sandbox and has no sysroot.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PFLAGS_EXTRA="-FD${lib.getBin stdenv.cc.bintools}/bin -XR$SDKROOT $PFLAGS_EXTRA"
+  '';
+
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    make macos-app
+    mkdir -p "$out/Applications" "$out/bin"
+    cp -R UltraStarDeluxe.app "$out/Applications/"
+    ln -s "$out/Applications/UltraStarDeluxe.app/Contents/MacOS/ultrastardx" \
+          "$out/bin/ultrastardx"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    make install
+    install -Dm644 dists/ultrastardx.desktop \
+      "$out/share/applications/ultrastardx.desktop"
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  # dlopened libgcc requires the rpath not to be shrunk
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       diogotcorreia
-      Profpatsch
+      philocalyst
     ];
-    platforms = platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
-}
+})

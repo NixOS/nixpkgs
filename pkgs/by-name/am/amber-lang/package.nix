@@ -4,38 +4,30 @@
   rustPlatform,
   bc,
   util-linux,
-  gnused,
   makeWrapper,
   installShellFiles,
+  versionCheckHook,
   stdenv,
   runCommand,
   amber-lang,
   nix-update-script,
+  bash,
+  ksh,
+  zsh,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.4.0-alpha";
+  version = "0.6.0-alpha";
 
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
-    rev = version;
-    hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
+    tag = version;
+    hash = "sha256-pyMsxb9XPtseroH2MORhMOg9+iaLyoxmgpUTCej+i+Y=";
   };
 
-  patches = [
-    # https://github.com/amber-lang/amber/pull/686
-    ./fix_gnused_detection.patch
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
-
-  preConfigure = ''
-    substituteInPlace src/compiler.rs \
-      --replace-fail 'Command::new("/usr/bin/env")' 'Command::new("env")'
-  '';
+  cargoHash = "sha256-7TZIRg4NK2uOivUUg09T5mbxrNlRmmVyec2xhmzSNvY=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -43,44 +35,73 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeCheckInputs = [
+    bash
     bc
     # 'rev' in generated bash script of test
     # tests::validity::variable_ref_function_invocation
     util-linux
   ];
 
+  preCheck = ''
+    substituteInPlace src/tests/cli.rs \
+      --replace-fail 'Command::new(amber_bin())' "Command::new(\"target/${stdenv.targetPlatform.rust.cargoShortTarget}/$cargoBuildType/amber\")"
+    substituteInPlace src/tests/cli.rs \
+      --replace-fail 'cmd.env("AMBER_SHELL", "/bin/bash")' 'cmd.env("AMBER_SHELL", "bash")'
+  '';
+
   checkFlags = [
     "--skip=tests::extra::download"
-    "--skip=tests::formatter::all_exist"
+    "--skip=tests::stdlib::test_stdlib_src_tests_stdlib_http_fetch_ab"
   ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd amber \
-        --bash <($out/bin/amber completion)
-    '';
+  postInstall = ''
+    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd amber \
+      --bash <($out/bin/amber completion)
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
-      diff -U3 --color=auto <(amber eval 'echo "Hello, World"') <(echo 'Hello, World')
-      touch $out
-    '';
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    tests =
+      let
+        testHelloWorld =
+          type: pkg:
+          runCommand "amber-lang-test-eval-hello-world-${type}"
+            {
+              nativeBuildInputs = [
+                amber-lang
+                pkg
+              ];
+            }
+            ''
+              diff -U3 --color=auto <(amber eval --target ${type} 'echo("Hello, World")') <(echo 'Hello, World')
+              touch $out
+            '';
+      in
+      {
+        eval-hello-world-bash = testHelloWorld "bash" bash;
+        eval-hello-world-bash-3_2 = testHelloWorld "bash-3.2" bash;
+        eval-hello-world-ksh = testHelloWorld "ksh" ksh;
+        eval-hello-world-zsh = testHelloWorld "zsh" zsh;
+      };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language compiled to bash";
     homepage = "https://amber-lang.com";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.lgpl3Only;
     mainProgram = "amber";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
-      uncenter
       aleksana
+      ilai-deutel
     ];
-    platforms = platforms.unix;
   };
 }

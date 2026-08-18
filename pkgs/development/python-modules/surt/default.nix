@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   six,
   tldextract,
 }:
@@ -13,12 +12,11 @@ buildPythonPackage {
   version = "0.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "internetarchive";
     repo = "surt";
     # Has no git tag, https://github.com/internetarchive/surt/issues/26
+    # nixpkgs-update: no auto update
     rev = "6934c321b3e2f66af9c001d882475949f00570c5";
     hash = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
   };
@@ -38,10 +36,10 @@ buildPythonPackage {
     "test_getPublicSuffix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
     homepage = "https://github.com/internetarchive/surt";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

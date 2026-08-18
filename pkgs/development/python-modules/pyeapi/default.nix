@@ -6,15 +6,12 @@
   mock,
   netaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyeapi";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arista-eosplus";
@@ -32,15 +29,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/unit" ];
+  enabledTestPaths = [ "test/unit" ];
 
   pythonImportsCheck = [ "pyeapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Arista eAPI";
     homepage = "https://github.com/arista-eosplus/pyeapi";
     changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

@@ -26,17 +26,17 @@
   gtk3,
   krb5,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libgbm,
   libgnome-keyring,
@@ -56,24 +56,19 @@
 
 let
   pname = "gitkraken";
-  version = "11.2.0";
+  version = "12.4.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-yCAxNYwjnmK0lSkH9x8Q4KoQgAWwWmCS8O81tcsqWhs=";
-    };
-
-    x86_64-darwin = fetchzip {
-      url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-q3sy2VxgccA/9UaX08NcNusibXYNPFzZcaNlVi2eN9E=";
+      hash = "sha256-G7ZKY3ViTGgQy9iiprMgr5p442sauI4eeV2RnCmTLDQ=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-6SxuOgfWMpaYYES+9QBwYJ4t+Go43Af0cwzs/tPVOts=";
+      hash = "sha256-AbT9kx/NOBCSd5HWodqYDH3MzfFoGwOVC/Uqel2BeRM=";
     };
   };
 
@@ -88,6 +83,7 @@ let
     maintainers = with lib.maintainers; [
       nicolas-goudry
       Rishik-Y
+      TurnrDev
     ];
     mainProgram = "gitkraken";
   };
@@ -110,15 +106,15 @@ let
       stdenv.cc.cc
       curlWithGnuTls
       udev
-      libX11
-      libXext
-      libXcursor
-      libXi
+      libx11
+      libxext
+      libxcursor
+      libxi
       libxcb
       glib
-      libXScrnSaver
+      libxscrnsaver
       libxkbfile
-      libXtst
+      libxtst
       nss
       nspr
       cups
@@ -126,16 +122,16 @@ let
       expat
       gdk-pixbuf
       dbus
-      libXdamage
-      libXrandr
+      libxdamage
+      libxrandr
       atk
       pango
       cairo
       freetype
       fontconfig
-      libXcomposite
-      libXfixes
-      libXrender
+      libxcomposite
+      libxfixes
+      libxrender
       gtk3
       libgnome-keyring
       openssl
@@ -154,11 +150,12 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "GitKraken Desktop";
+        name = "gitkraken";
         exec = "gitkraken";
         icon = "gitkraken";
         desktopName = "GitKraken Desktop";
         genericName = "Git Client";
+        startupWMClass = "GitKraken";
         categories = [ "Development" ];
         comment = "Unleash your repo";
       })
@@ -184,8 +181,7 @@ let
       mkdir -p $out/share/${pname}/
       cp -R $src/* $out/share/${pname}
 
-      mkdir -p $out/share/pixmaps
-      cp gitkraken.png $out/share/pixmaps/
+      install -Dm444 gitkraken.png $out/share/icons/hicolor/512x512/apps/gitkraken.png
 
       runHook postInstall
     '';
@@ -207,9 +203,9 @@ let
 
       # SSL and permissions fix for bundled nodegit
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
-      mv nodegit-ubuntu-18.node nodegit-ubuntu-18-ssl-1.1.1.node
-      mv nodegit-ubuntu-18-ssl-static.node nodegit-ubuntu-18.node
-      chmod 755 nodegit-ubuntu-18.node
+      mv nodegit-x64-ubuntu-20.node nodegit-x64-ubuntu-20-ssl-1.1.1.node
+      mv nodegit-x64-ubuntu-20-ssl-static.node nodegit-x64-ubuntu-20.node
+      chmod 755 nodegit-x64-ubuntu-20.node
       popd
 
       # Devendor bundled git

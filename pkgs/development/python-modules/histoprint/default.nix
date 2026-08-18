@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "histoprint";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "histoprint";
-    tag = "v${version}";
-    hash = "sha256-qMg0Ct39BjdcyWB3KxG74rVqVW4I0DGZ5GS7D3uYq3w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RIW3azlQH1+F7MIygHIUiBj4Yr1iVEeamUPNGHC605c=";
   };
 
   build-system = [
@@ -35,11 +35,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty print histograms to the console";
     mainProgram = "histoprint";
     homepage = "https://github.com/scikit-hep/histoprint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/histoprint/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

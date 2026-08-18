@@ -1,55 +1,70 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitea,
-  linux-pam,
-  libxcb,
-  makeBinaryWrapper,
-  zig_0_14,
   callPackage,
+  fetchFromCodeberg,
+  lib,
+  libxcb,
+  linux-pam,
+  makeBinaryWrapper,
   nixosTests,
+  stdenv,
+  versionCheckHook,
   x11Support ? true,
+  zig_0_16,
 }:
 
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.1.0";
+  version = "1.4.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "AnErrupTion";
+  src = fetchFromCodeberg {
+    owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+rRvrlzV5MDwb/7pr/oZjxxDmE1kbnchyUi70xwp0Cw=";
+    hash = "sha256-FiHSUqAxJurlQuXEkpglWrd2tCqKZuucB4mipFGI4II=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_14.hook
+    zig
   ];
+
   buildInputs = [
     linux-pam
-  ] ++ (lib.optionals x11Support [ libxcb ]);
+  ]
+  ++ lib.optionals x11Support [ libxcb ];
 
-  postPatch = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        zig = zig_0_14;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
   zigBuildFlags = [
+    "--system"
+    "${callPackage ./deps.nix { }}"
     "-Denable_x11_support=${lib.boolToString x11Support}"
   ];
+
+  postInstall = ''
+    install -Dm0644 res/config.ini "$out/etc/config.ini"
+    install -Dm0755 res/setup.sh "$out/etc/setup.sh"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.tests = { inherit (nixosTests) ly; };
 
   meta = {
     description = "TUI display manager";
+    longDescription = ''
+      Ly is a lightweight TUI (ncurses-like) display manager for Linux
+      and BSD, designed with portability in mind (e.g. it does not
+      require systemd to run).
+    '';
+    homepage = "https://codeberg.org/fairyglade/ly";
     license = lib.licenses.wtfpl;
-    homepage = "https://codeberg.org/AnErrupTion/ly";
-    maintainers = [ lib.maintainers.vidister ];
-    platforms = lib.platforms.linux;
     mainProgram = "ly";
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
+    platforms = lib.platforms.unix;
   };
 })

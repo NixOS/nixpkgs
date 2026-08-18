@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnsl";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "libnsl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bCToqXVE4RZcoZ2eTNZcVHyzKlWyIpSAssQCOZcfmEA=";
   };
 
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libtirpc ];
 
-  meta = with lib; {
+  meta = {
     description = "Client interface library for NIS(YP) and NIS+";
     homepage = "https://github.com/thkukuk/libnsl";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

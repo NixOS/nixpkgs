@@ -1,5 +1,5 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   lcrq,
   lib,
   librecast,
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lcsync";
   version = "0.3.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "librecast";
     repo = "lcsync";
     rev = "v${finalAttrs.version}";

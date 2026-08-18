@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchsvn,
+  fetchurl,
   autoreconfHook,
   gettext,
   gnutls,
@@ -11,14 +11,15 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfilezilla";
-  version = "0.49.0";
+  version = "0.56.1";
 
-  src = fetchsvn {
-    url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11192";
-    hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
+  src = fetchurl {
+    # Upstream download link was made unstable on purpose
+    # See https://trac.filezilla-project.org/ticket/13186
+    url = "https://sources.archlinux.org/other/libfilezilla/libfilezilla-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rL8r36LFpLHy/zaCs9UsuaZUIv1fPh+WR9iEahB7cck=";
   };
 
   nativeBuildInputs = [
@@ -26,25 +27,27 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gettext
-      gnutls
-      nettle
-      libxcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    gettext
+    gnutls
+    nettle
+    libxcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

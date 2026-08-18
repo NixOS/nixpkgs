@@ -8,14 +8,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rgbds";
-  version = "0.9.2";
+  version = "1.0.3";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
-    rev = "v${version}";
-    hash = "sha256-Ho9aSpENukNutb5VscopY2p6RGXbRgvtIcRgxTtZews=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m9iqBXM9qcvBKiTpVhKmRyOD4nd5fBwbGcWIOZJvjSI=";
   };
   nativeBuildInputs = [
     bison
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   '';
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rgbds.gbdev.io/";
     description = "Free assembler/linker package for the Game Boy and Game Boy Color";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       RGBDS (Rednex Game Boy Development System) is a free assembler/linker package for the Game Boy and Game Boy Color. It consists of:
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
       This is a fork of the original RGBDS which aims to make the programs more like other UNIX tools.
     '';
-    maintainers = with maintainers; [
-      matthewbauer
+    maintainers = with lib.maintainers; [
       NieDzejkob
+      mattcurrie
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

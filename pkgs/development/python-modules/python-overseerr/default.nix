@@ -7,27 +7,29 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-overseerr";
-  version = "0.7.1";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-overseerr";
     tag = "v${version}";
-    hash = "sha256-J0n3uMZaSWcnf3c1d4wdg+OgB9wPE2i/835M6Z3fMPw=";
+    hash = "sha256-9sJWglF1EqwXG0Cj1hOtNE2dYTmxIZoVWHYT5I4RQu0=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 
@@ -51,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client for Overseerr";
     homepage = "https://github.com/joostlek/python-overseerr";
-    changelog = "https://github.com/joostlek/python-overseerr/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-overseerr/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

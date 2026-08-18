@@ -1,14 +1,11 @@
-{ lib, ... }:
 {
   name = "chrony";
-
-  meta.maintainers = with lib.maintainers; [ fpletz ];
 
   nodes.machine = {
     services.chrony.enable = true;
 
     specialisation.hardened.configuration = {
-      services.chrony.enableMemoryLocking = true;
+      environment.memoryAllocator.provider = "graphene-hardened";
     };
   };
 

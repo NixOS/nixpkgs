@@ -4,29 +4,27 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comrak";
-  version = "0.39.1";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "kivikakk";
     repo = "comrak";
-    rev = "v${version}";
-    sha256 = "sha256-czdX4Xfh5vD0d30QhxtTnzmwHkrX86fw8dVIx5b5J2c=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-nLyGIN5AsWJsi+RPsQqPb2DLeSVF30ZrJAcDTsBV1V8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QeMFaYpi8d88gpEbev485hGSCVTbEd7jbgkGSyGeM3g=";
+  cargoHash = "sha256-CXdjr6ScUN1JehyFDlk1Fji93X5tCF5/fs4obRTBzOU=";
 
   meta = {
     description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";
     mainProgram = "comrak";
     homepage = "https://github.com/kivikakk/comrak";
-    changelog = "https://github.com/kivikakk/comrak/blob/v${version}/changelog.txt";
+    changelog = "https://github.com/kivikakk/comrak/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      figsoda
       kivikakk
     ];
   };
-}
+})

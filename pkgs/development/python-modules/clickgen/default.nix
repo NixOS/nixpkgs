@@ -2,8 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  setuptools,
   attrs,
   pillow,
   toml,
@@ -13,21 +13,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clickgen";
   version = "2.2.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yFEkE1VyeHBuebpsumc6CTvv2kpAw7XAWlyUlXibqz0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     numpy
     pillow
@@ -44,17 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickgen" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ful1e5/clickgen";
     description = "Hassle-free cursor building toolbox";
     longDescription = ''
       clickgen is API for building X11 and Windows Cursors from
       .png files. clickgen is using anicursorgen and xcursorgen under the hood.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AdsonCicilioti ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     # fails with:
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

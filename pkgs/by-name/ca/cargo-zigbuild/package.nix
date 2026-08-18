@@ -4,21 +4,22 @@
   fetchFromGitHub,
   makeWrapper,
   zig,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-zigbuild";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
-    owner = "messense";
+    owner = "rust-cross";
     repo = "cargo-zigbuild";
-    rev = "v${version}";
-    hash = "sha256-sUoEKLaUBxKKtCwgw/CcLrVRA4OMhto7d0PR+TMU5xk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y73aPGsrSAZVxNJ1r1lS9uXmfpAwthq6NW4urKS8ab0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jvSOYWydnCFgJx1LTzQ1kHEVpzsdPLo19NVMBaLJEeQ=";
+  cargoHash = "sha256-dt2s18B9RVwEBlun5cegoqfW1KYXFqjdScdc/Q2aDlI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -27,12 +28,18 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${zig}/bin
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool to compile Cargo projects with zig as the linker";
     mainProgram = "cargo-zigbuild";
-    homepage = "https://github.com/messense/cargo-zigbuild";
-    changelog = "https://github.com/messense/cargo-zigbuild/releases/tag/v${version}";
+    homepage = "https://github.com/rust-cross/cargo-zigbuild";
+    changelog = "https://github.com/rust-cross/cargo-zigbuild/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

@@ -7,25 +7,22 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   setuptools,
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "homematicip";
-  version = "2.0.6";
+  version = "2.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    tag = version;
-    hash = "sha256-HV+4ZmYr6LsSBbQnr4PUD2u0y6uWxuCMUgNh7gG9IH8=";
+    tag = finalAttrs.version;
+    hash = "sha256-piH6mFVlCFXcPdFjOobOhT0ET0AvC0sKTg1jQ032rJM=";
   };
 
   build-system = [
@@ -46,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Assert issues with datetime
@@ -76,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homematicip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
-    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

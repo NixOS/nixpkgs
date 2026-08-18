@@ -39,18 +39,17 @@ stdenv.mkDerivation {
   name = "sane-config";
   dontUnpack = true;
 
-  installPhase =
-    ''
-      function symlink () {
-        local target=$1 linkname=$2
-        if [ -e "$linkname" ]; then
-          echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
-        fi
-        ln -sfn "$target" "$linkname"
-      }
+  installPhase = ''
+    function symlink () {
+      local target=$1 linkname=$2
+      if [ -e "$linkname" ]; then
+        echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
+      fi
+      ln -sfn "$target" "$linkname"
+    }
 
-      mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
-    ''
-    + (lib.concatMapStrings installSanePath paths)
-    + (lib.concatMapStrings disableBackend disabledDefaultBackends);
+    mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
+  ''
+  + (lib.concatMapStrings installSanePath paths)
+  + (lib.concatMapStrings disableBackend disabledDefaultBackends);
 }

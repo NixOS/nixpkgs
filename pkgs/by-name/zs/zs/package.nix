@@ -1,34 +1,35 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   buildGoModule,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zs";
-  version = "0.4.1";
+  version = "0.4.5";
 
   src = fetchFromGitea {
     domain = "git.mills.io";
     owner = "prologic";
     repo = "zs";
-    rev = version;
-    hash = "sha256-V8+p19kvVh64yCreNVp4RVdkJkjrq8Q5VbjaJWekZHY=";
+    rev = finalAttrs.version;
+    hash = "sha256-NYnr0s730u4ICppPVZAAHB753XVooZtSSKIAp+z98Gw=";
   };
 
-  vendorHash = "sha256-KXcYTYO4wnWOup5uJ6T+XwthX5l2FL02JyOt1Nv51Sg=";
+  vendorHash = "sha256-21UukhXVVj1AO+HlTlEpHkf5zLHA6dapjrOriVQd1jM=";
 
   ldflags = [
     "-w"
-    "-X=main.Version=${version}"
-    "-X=main.Commit=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Commit=${finalAttrs.src.rev}"
     "-X=main.Build=1970-01-01T00:00:00+00:00"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zs \
       --bash <($out/bin/zs completion bash) \
       --fish <($out/bin/zs completion fish) \
@@ -38,9 +39,9 @@ buildGoModule rec {
   meta = {
     description = "Extremely minimal static site generator written in Go";
     homepage = "https://git.mills.io/prologic/zs";
-    changelog = "https://git.mills.io/prologic/zs/releases/tag/${version}";
+    changelog = "https://git.mills.io/prologic/zs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adtya ];
+    maintainers = with lib.maintainers; [ wariuccio ];
     mainProgram = "zs";
   };
-}
+})

@@ -5,23 +5,22 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nototools";
-  version = "0.2.20";
-  format = "setuptools";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "googlefonts";
+    owner = "notofonts";
     repo = "nototools";
-    tag = "v${version}";
-    sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-QQVAaBUO5rGTctDssKx77X6xuw8Jvkstr3sYnvIsXgM=";
   };
 
-  postPatch = ''
-    sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
-  '';
-
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRemoveDeps = [
     # https://github.com/notofonts/nototools/pull/901
@@ -72,10 +71,12 @@ python3Packages.buildPythonApplication rec {
     cp -r third_party $out
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nototools" ];
+
+  meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
-    homepage = "https://github.com/googlefonts/nototools";
-    license = licenses.asl20;
+    homepage = "https://github.com/notofonts/nototools";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

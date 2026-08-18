@@ -1,98 +1,138 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  kingfisher,
+  python3Packages,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
-        dependencies = [
-          python3.pkgs.pydantic_1
-          python3.pkgs.cryptography
-          python3.pkgs.email-validator
-        ];
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.7.5";
+  version = "5.39.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    tag = version;
-    hash = "sha256-KcHHZPklJZ7o5cs30rL+vGaeST8LUdGfdhG7daZZzX0=";
+    tag = finalAttrs.version;
+    hash = "sha256-luLTaOHRjqc5FhHCwpCjUXJqqYeqWjQt21MrMKqJgyE=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with py.pkgs; [ poetry-core ];
+  pythonRemoveDeps = [ "kingfisher-bin" ];
 
-  dependencies = with py.pkgs; [
+  build-system = with python3Packages; [ hatchling ];
+
+  dependencies = with python3Packages; [
+    alibabacloud-actiontrail20200706
+    alibabacloud-credentials
+    alibabacloud-cs20151215
+    alibabacloud-ecs20140526
+    alibabacloud-oss20190517
+    alibabacloud-ram20150501
+    alibabacloud-sas20181203
+    alibabacloud-sts20150401
+    alibabacloud-tea-openapi
+    alibabacloud-vpc20160428
+    alibabacloud-gateway-oss-util
+    alibabacloud-rds20140815
+    alibabacloud-sls20201230
     alive-progress
-    awsipranges
     azure-identity
     azure-keyvault-keys
+    azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
     azure-mgmt-compute
     azure-mgmt-containerregistry
     azure-mgmt-containerservice
     azure-mgmt-cosmosdb
+    azure-mgmt-databricks
     azure-mgmt-keyvault
+    azure-mgmt-loganalytics
     azure-mgmt-monitor
     azure-mgmt-network
+    azure-mgmt-postgresqlflexibleservers
     azure-mgmt-rdbms
+    azure-mgmt-recoveryservices
+    azure-mgmt-recoveryservicesbackup
     azure-mgmt-resource
-    azure-mgmt-security
     azure-mgmt-search
+    azure-mgmt-security
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
     azure-mgmt-web
+    azure-monitor-query
     azure-storage-blob
     boto3
     botocore
+    cloudflare
     colorama
     cryptography
     dash
     dash-bootstrap-components
+    defusedxml
     detect-secrets
+    dulwich
     google-api-python-client
     google-auth-httplib2
+    h2
+    huaweicloudsdkcore
+    huaweicloudsdkcts
+    huaweicloudsdkecs
+    huaweicloudsdkelb
+    huaweicloudsdkevs
+    huaweicloudsdkiam
+    huaweicloudsdkkms
+    huaweicloudsdkobs
+    huaweicloudsdkrds
+    huaweicloudsdkvpc
+    huaweicloudsdkwaf
     jsonschema
     kubernetes
+    linode-api4
+    markdown
     microsoft-kiota-abstractions
     msgraph-sdk
     numpy
+    oci
+    okta
+    openstacksdk
     pandas
+    py-iam-expand
     py-ocsf-models
-    pydantic_1
+    pydantic
     pygithub
     python-dateutil
     pytz
+    scaleway
     schema
     shodan
     slack-sdk
+    stackit-core
+    stackit-iaas
+    stackit-objectstorage
+    stackit-resourcemanager
     tabulate
     tzlocal
+    uuid6
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/prowler --prefix PATH : "${lib.makeBinPath [ kingfisher ]}"
+  '';
 
   pythonImportsCheck = [ "prowler" ];
 
-  meta = with lib; {
-    description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
+  meta = {
+    description = "Security tool to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "prowler";
   };
-}
+})

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-thirdparty";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-thirdparty";
     rev = "v${version}";
-    sha256 = "sha256-MaUXhlMxNmaTDMRw5LPcQIU/0Sht05MOhJM+GqFD8Pc=";
+    sha256 = "sha256-vPr6rh/X5G///rqmgIdCYKDLeZMQVNK7FoINONO7Cw8=";
   };
 
   installPhase = ''
@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Icinga/icinga-php-thirdparty";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
 }

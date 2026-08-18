@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-directory-server";
   version = "2.0.0.AM26";
 
   src = fetchzip {
-    url = "mirror://apache/directory/apacheds/dist/${version}/apacheds-${version}.zip";
+    url = "mirror://apache/directory/apacheds/dist/${finalAttrs.version}/apacheds-${finalAttrs.version}.zip";
     sha256 = "sha256-36kDvfSy5rt/3+nivEFTepnIKf6sX0NTgPRm28M+1v4=";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
       --add-flags "-classpath $classpath org.apache.directory.server.UberjarMain"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible and embeddable directory server";
     mainProgram = "apache-directory-server";
     homepage = "https://directory.apache.org/apacheds/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ners ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ners ];
   };
-}
+})

@@ -4,15 +4,12 @@
   fetchPypi,
   gmp,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastecdsa";
   version = "3.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastecdsa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast elliptic curve digital signatures";
     homepage = "https://github.com/AntonKueltz/fastecdsa";
     changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

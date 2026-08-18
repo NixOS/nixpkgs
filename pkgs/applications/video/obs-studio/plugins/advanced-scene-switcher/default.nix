@@ -17,14 +17,14 @@
   qtbase,
   stdenv,
   websocketpp,
-  libXScrnSaver,
+  libxscrnsaver,
   libusb1,
   pkg-config,
-# #FIXME: Could not get cmake to pick up on these dependencies
-# Ommiting them prevents cmake from building the OCR video capabilities
-# Everything else should work it's just missing this one plugin
-# tesseract,
-# leptonica,
+  # #FIXME: Could not get cmake to pick up on these dependencies
+  # Omitting them prevents cmake from building the OCR video capabilities
+  # Everything else should work it's just missing this one plugin
+  # tesseract,
+  # leptonica,
 }:
 let
   httplib-src = fetchFromGitHub {
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.30.2";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-Qn6tezrqLAvNeHlyW0VYPr8DWw25GUOARY9n6m3KsA8=";
+    hash = "sha256-padrHEGUtgXV0ee5mgIHSLHjh+6npL/vZAEJ8nARML0=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     procps
     qtbase
     websocketpp
-    libXScrnSaver
+    libxscrnsaver
     libusb1
   ];
 
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow -Wno-error=deprecated-declarations";
 
   passthru.updateScript = nix-update-script { };
-  meta = with lib; {
+  meta = {
     description = "Automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ patrickdag ];
   };
 }

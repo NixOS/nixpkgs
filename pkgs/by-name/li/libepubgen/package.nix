@@ -10,13 +10,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libepubgen";
   version = "0.1.1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/libepubgen/code";
-    rev = "libepubgen-${version}";
+    rev = "libepubgen-${finalAttrs.version}";
     hash = "sha256-wPpU8Sfhx9GIgDmT/otT5yV4iQKm9QPZqgSBTfFcbbg=";
   };
 
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "EPUB generator for librevenge";
     homepage = "https://sourceforge.net/projects/libepubgen/";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

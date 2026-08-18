@@ -2,60 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-  cmake,
-  ninja,
-  matchpy,
-  numpy,
-  astunparse,
-  typing-extensions,
+  meson-python,
+  versioningit,
+  pkg-config,
   nix-update-script,
   pytestCheckHook,
-  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.9.2";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "uarray";
     tag = version;
-    hash = "sha256-eCrmmP+9TI+T8Km8MOz0EqseneFwPizlnZloK5yNLcM=";
+    hash = "sha256-Jut/V0/na+dcVpD7buW0DIS+KpA+dGRRb6QpPDt2/hY=";
   };
 
+  preBuild = ''
+    echo "__version__ = '$version'" > src/uarray/_version.py
+  '';
+
   build-system = [
-    scikit-build-core
-    setuptools
-    setuptools-scm
-    cmake
-    ninja
+    meson-python
+    versioningit
   ];
 
-  dontUseCmakeConfigure = true;
-
-  dependencies = [
-    astunparse
-    matchpy
-    numpy
-    typing-extensions
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov-stub
   ];
 
-  # Tests must be run from outside the source directory
-  preCheck = ''
-    cd $TMP
-  '';
-
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "uarray"
   ];
@@ -64,10 +47,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
-    license = licenses.bsd0;
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
+    license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

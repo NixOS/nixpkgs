@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,14 +14,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-itNHIMoRjiaqYAJoDNetkCquv47VAfel8MAzwsd//Ww=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -D -m444 -t $out/share/fonts/truetype $src/static/TTF/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/static/OTF/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Raleway is an elegant sans-serif typeface family";

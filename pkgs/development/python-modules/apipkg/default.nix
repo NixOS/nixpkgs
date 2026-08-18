@@ -19,6 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-ANLD7fUMKN3RmAVjVkcpwUH6U9ASalXdwKtPpoC8Urs=";
   };
 
+  # support pytest 9: https://github.com/pytest-dev/apipkg/pull/58
+  postPatch = ''
+    substituteInPlace conftest.py \
+      --replace-fail 'def pytest_report_header(startdir):' 'def pytest_report_header():'
+  '';
+
   build-system = [
     hatch-vcs
     hatchling
@@ -26,15 +32,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_apipkg.py" ];
+  enabledTestPaths = [ "test_apipkg.py" ];
 
   pythonImportsCheck = [ "apipkg" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

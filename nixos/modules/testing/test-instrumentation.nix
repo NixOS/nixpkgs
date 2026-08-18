@@ -1,5 +1,5 @@
 # This module allows the test driver to connect to the virtual machine
-# via a root shell attached to port 514.
+# via a root shell attached to a virtio console.
 
 {
   options,
@@ -14,7 +14,7 @@ with lib;
 let
   cfg = config.testing;
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   backdoorService = {
     requires = [
@@ -67,9 +67,19 @@ let
       # we can also run non-NixOS guests during tests. This, however, is
       # mostly futureproofing as the test instrumentation is still very
       # tightly coupled to NixOS.
-      PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+      PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/hvc0
     '';
     serviceConfig.KillSignal = "SIGHUP";
+  };
+
+  managerSettings = {
+    # Don't clobber the console with duplicate systemd messages.
+    ShowStatus = false;
+    # Allow very slow start
+    DefaultTimeoutStartSec = 300;
+    DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in
@@ -77,6 +87,10 @@ in
 {
 
   options.testing = {
+    backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
+      # See assertion below for why the backdoor doesn't work with containers.
+      default = !config.boot.isContainer;
+    };
 
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
@@ -94,17 +108,32 @@ in
       {
         assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
         message = ''
-          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+          `testing.initrdBackdoor` requires `boot.initrd.systemd.enable` to be enabled.
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.backdoor;
+        message = ''
+          `testing.backdoor` uses virtio console, which does not work with
+          containers (we use `nsenter` instead).
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.initrdBackdoor;
+        message = ''
+          `testing.initrdBackdoor` does not work with containers as there is no initrd.
         '';
       }
     ];
 
-    systemd.services.backdoor = lib.mkMerge [
-      backdoorService
-      {
-        wantedBy = [ "multi-user.target" ];
-      }
-    ];
+    systemd.services.backdoor = lib.mkIf cfg.backdoor (
+      lib.mkMerge [
+        backdoorService
+        {
+          wantedBy = [ "multi-user.target" ];
+        }
+      ]
+    );
 
     boot.initrd.systemd = lib.mkMerge [
       {
@@ -115,7 +144,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        extraConfig = config.systemd.extraConfig;
+        settings.Manager = managerSettings;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -167,7 +196,7 @@ in
     # that do not specify any nodes, or an empty attr set as nodes) will not
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.package) {
       qemu = {
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
@@ -201,7 +230,7 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xorg.xwininfo ];
+    environment.systemPackages = [ pkgs.xwininfo ];
 
     # Log everything to the serial console.
     services.journald.extraConfig = ''
@@ -210,18 +239,12 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.extraConfig = ''
-      # Don't clobber the console with duplicate systemd messages.
-      ShowStatus=no
+    systemd.settings.Manager = managerSettings;
+    systemd.user.settings.Manager = {
       # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
-    systemd.user.extraConfig = ''
-      # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+      DefaultTimeoutStartSec = 300;
+      DefaultDeviceTimeoutSec = 300;
+    };
 
     boot.consoleLogLevel = 7;
 

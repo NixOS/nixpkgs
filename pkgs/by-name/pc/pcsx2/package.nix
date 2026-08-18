@@ -5,17 +5,16 @@
   cmake,
   cubeb,
   curl,
-  extra-cmake-modules,
-  ffmpeg,
+  kdePackages,
+  ffmpeg_8,
   gtk3,
-  libXrandr,
+  libxrandr,
   libaio,
   libbacktrace,
   libpcap,
   libwebp,
   llvmPackages,
   lz4,
-  makeWrapper,
   pkg-config,
   qt6,
   shaderc,
@@ -36,8 +35,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "6448ff90bbf2fddb4498dcfdae0e6d3ec8c23479";
-    hash = "sha256-ZXAZekllZHYjfU1q1QrbEdRlRAUAB6VOXLeAfn1GqW0=";
+    rev = "39c64ed2151155a9e7b9cc41129618c1ba0ad04f";
+    hash = "sha256-C5diPrIXvzOvskKQFjYWOfjQUkb/Omw2IN3K4b3nsK4=";
   };
 
   inherit (qt6)
@@ -50,32 +49,33 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.3.424";
+  version = "2.6.3";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EdFkSsat6O/1tXtJVHOPviseSaixd5LB1TNtfqhqR1E=";
+    hash = "sha256-85PZ7ZDoannmwoFeKM7hm7fQS1X2MPxAwm6k+Sa+bGc=";
   };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
-
     ./remove-cubeb-vendor.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapGAppsHook3
@@ -84,14 +84,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     curl
-    ffmpeg
+    ffmpeg_8
     gtk3
     libaio
     libbacktrace
     libpcap
     libwebp
-    libXrandr
+    libxrandr
     lz4
     qtbase
     qtsvg
@@ -112,7 +113,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postInstall = ''
-    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
     zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
@@ -121,10 +122,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath ([
+      libs = lib.makeLibraryPath [
         vulkan-loader
         shaderc
-      ]);
+      ];
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
@@ -132,14 +133,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  # https://github.com/PCSX2/pcsx2/pull/10200
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/pcsx2-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
   passthru = {
@@ -166,7 +159,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
       _0david0mp
-      hrdinka
       govanify
       matteopacini
     ];

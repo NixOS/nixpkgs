@@ -6,8 +6,8 @@
   ...
 }:
 {
-  meta = with lib; {
-    maintainers = with lib.maintainers; [ ];
+  meta = {
+    maintainers = [ ];
   };
 
   ###### interface

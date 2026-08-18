@@ -1,10 +1,12 @@
 {
   taglib-ruby = {
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0r8g7zdncc6243d000jn0grc1n70rn9mx16vggy3q7c4wgsa37xi";
+      sha256 = "1bmirkz9lfhbykj3x48z1gv0jl1bfz60yscpl0hmjxrdmcihzfai";
       type = "gem";
     };
-    version = "0.7.1";
+    version = "2.0.0";
   };
 }

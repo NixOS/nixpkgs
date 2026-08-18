@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   fetchPypi,
   requests,
@@ -25,10 +25,10 @@ buildPythonPackage rec {
     ${python.interpreter} test/test_facebook.py
   '';
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
     homepage = "https://github.com/pythonforfacebook/facebook-sdk";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

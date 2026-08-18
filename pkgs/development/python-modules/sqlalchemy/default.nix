@@ -1,9 +1,9 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -22,7 +22,7 @@
   cx-oracle,
   mariadb,
   mypy,
-  mysql-connector,
+  mysql-connector-python,
   mysqlclient,
   oracledb,
   pg8000,
@@ -41,18 +41,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.41";
+  version = "2.0.51";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-DixgBUI+HJLTCsunN5Y+ogcAHnRnQ3CKSFc6HrxzsPM=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-2t3NhfLiu/rLI2yvFPK9uQXGyzqNUj7ImDRx0EasdsI=";
   };
 
   postPatch = ''
@@ -76,7 +74,7 @@ buildPythonPackage rec {
     mssql_pymysql = [ pymssql ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
-    mysql_connector = [ mysql-connector ];
+    mysql_connector = [ mysql-connector-python ];
     mariadb_connector = [ mariadb ];
     oracle = [ cx-oracle ];
     oracle_oracledb = [ oracledb ];
@@ -109,12 +107,17 @@ buildPythonPackage rec {
     "test/aaa_profiling"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
+  };
+
+  meta = {
+    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag}";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

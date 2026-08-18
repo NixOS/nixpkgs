@@ -7,20 +7,18 @@ in
     name = lib.mkOption {
       type = types.str;
     };
+    github = lib.mkOption {
+      type = types.str;
+    };
+    githubId = lib.mkOption {
+      type = types.ints.unsigned;
+    };
     email = lib.mkOption {
       type = types.nullOr types.str;
       default = null;
     };
     matrix = lib.mkOption {
       type = types.nullOr types.str;
-      default = null;
-    };
-    github = lib.mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
-    githubId = lib.mkOption {
-      type = types.nullOr types.ints.unsigned;
       default = null;
     };
     keys = lib.mkOption {

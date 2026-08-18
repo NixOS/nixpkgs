@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
   version = "0.4.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
@@ -42,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
-    description = "libjaylink is a shared library written in C to access SEGGER J-Link and compatible devices";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ felixsinger ];
-    platforms = platforms.unix;
+    description = "Shared library written in C to access SEGGER J-Link and compatible devices";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ felixsinger ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.15.2";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "main";
     repo = "pyicu";
     tag = "v${version}";
-    hash = "sha256-Div3c4Lk9VTV1HrmvYKDn1a7moDNjG4OHA9Kv3+niKs=";
+    hash = "sha256-JCevXAL6+G+EXx4ikOANgFiI9YPhjY5fDFLFBmEs8Ro=";
   };
 
   postPatch = ''
@@ -38,19 +38,19 @@ buildPythonPackage rec {
     six
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # AssertionError: '$' != 'US Dollar'
-    "--deselect=test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
+    "test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
     # AssertionError: Lists differ: ['a', 'b', 'c', 'd'] != ['a', 'b', 'c', 'd', ...
-    "--deselect=test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
+    "test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
   ];
 
   pythonImportsCheck = [ "icu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.pyicu.org/main/pyicu";
     description = "Python extension wrapping the ICU C++ API";
     changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

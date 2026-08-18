@@ -1,11 +1,11 @@
 {
-  "version": "8.17",
+  "version": "9.2",
   "full": {
-    "filename": "racket-8.17-src.tgz",
-    "sha256": "44431395138f7b8c5e67d416ff063b8fb6ce056f4c4f0fda27b7b1ec58bfa33b"
+    "filename": "racket-9.2-src.tgz",
+    "sha256": "ccf98fd81444dfb3e3d0fde86e8db0753a7e8568725d45c0189ce5c8b7c4bb19"
   },
   "minimal": {
-    "filename": "racket-minimal-8.17-src.tgz",
-    "sha256": "4acb365869290881fa07c69588cfa8b2dc1000bdc69955d70964b0b1e76b71ba"
+    "filename": "racket-minimal-9.2-src.tgz",
+    "sha256": "6292636ee48f8473adc99113fca23419164aa02b30fb482001ab99224cf73074"
   }
 }

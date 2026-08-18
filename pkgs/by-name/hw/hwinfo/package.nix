@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
-  version = "23.5";
+  version = "25.5";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = finalAttrs.version;
-    hash = "sha256-OweEFxNxQpD7blHywhmHTA66vsYG+Qvsufm3huyUhi0=";
+    hash = "sha256-8IzggH+ANAJWP+fxKuE2pI4jc6H23t18W67aeqfzu7M=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Replace /usr paths with Nix store paths
     substituteInPlace Makefile \
-      --replace-fail "/sbin" "/bin" \
-      --replace-fail "/usr/" "/"
+      --replace-fail "/sbin" "/bin"
     substituteInPlace src/isdn/cdb/Makefile \
       --replace-fail "lex isdn_cdb.lex" "flex isdn_cdb.lex"
     substituteInPlace hwinfo.pc.in \
@@ -99,13 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
     "ARCH=${stdenv.hostPlatform.uname.processor}"
   ];
-  installFlags = [ "DESTDIR=$(out)" ];
+  installFlags = [
+    "INSTALL_PREFIX="
+    "DESTDIR=$(out)"
+  ];
 
   enableParallelBuilding = false; # broken parallel dependencies
 
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput lib "$lib"
+    moveToOutput share/bash-completion "$bin"
   '';
 
   passthru = {
@@ -127,12 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hardware detection tool from openSUSE";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/openSUSE/hwinfo";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
     mainProgram = "hwinfo";
     pkgConfigModules = [ "hwinfo" ];
   };

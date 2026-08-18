@@ -7,6 +7,9 @@ let
   inherit (lib.lists)
     filter
     ;
+  inherit (lib.attrsets)
+    catAttrs
+    ;
   inherit (lib.trivial)
     showWarnings
     ;
@@ -14,7 +17,7 @@ in
 rec {
 
   /**
-    Throw if pred is false, else return pred.
+    Throw if `pred` is false, else return `pred`.
     Intended to be used to augment asserts with helpful error messages.
 
     # Inputs
@@ -47,7 +50,7 @@ rec {
     :::
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg = pred: msg: pred || builtins.throw msg;
+  assertMsg = pred: msg: pred || throw msg;
 
   /**
     Specialized `assertMsg` for checking if `val` is one of the elements
@@ -70,7 +73,7 @@ rec {
     # Type
 
     ```
-    assertOneOf :: String -> ComparableVal -> List ComparableVal -> Bool
+    assertOneOf :: String -> ComparableVal -> [ComparableVal] -> Bool
     ```
 
     # Examples
@@ -115,7 +118,7 @@ rec {
     # Type
 
     ```
-    assertEachOneOf :: String -> List ComparableVal -> List ComparableVal -> Bool
+    assertEachOneOf :: String -> [ComparableVal] -> [ComparableVal] -> Bool
     ```
 
     # Examples
@@ -164,7 +167,7 @@ rec {
     # Type
 
     ```
-    checkAssertWarn :: [ { assertion :: Bool; message :: String } ] -> [ String ] -> Any -> Any
+    checkAssertWarn :: [{ assertion :: Bool; message :: String; }] -> [String] -> a -> a
     ```
 
     # Examples
@@ -192,7 +195,7 @@ rec {
   checkAssertWarn =
     assertions: warnings: val:
     let
-      failedAssertions = map (x: x.message) (filter (x: !x.assertion) assertions);
+      failedAssertions = catAttrs "message" (filter (x: !x.assertion) assertions);
     in
     if failedAssertions != [ ] then
       throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"

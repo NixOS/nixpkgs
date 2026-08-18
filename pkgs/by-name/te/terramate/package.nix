@@ -5,18 +5,18 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terramate";
-  version = "0.14.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
-    rev = "v${version}";
-    hash = "sha256-op8mwCofnktV+kkvh4mO5tfLrynlxGbQzOxq6JR7HbE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NoQLxvby0sUA/tcyfJUMuNQukfQINS+v1oJDS0+ehJ0=";
   };
 
-  vendorHash = "sha256-u9eXi7FjMsXm0H0y7Gs/Wu2I8tp4rRLxtjUxrrHJkEU=";
+  vendorHash = "sha256-vmweLyq9lr2V4ou2mzVnIaI8p63D9c0IVLKo8vYLm54=";
 
   # required for version info
   nativeBuildInputs = [ git ];
@@ -38,11 +38,10 @@ buildGoModule rec {
   meta = {
     description = "Adds code generation, stacks, orchestration, change detection, data sharing and more to Terraform";
     homepage = "https://github.com/terramate-io/terramate";
-    changelog = "https://github.com/terramate-io/terramate/releases/tag/v${version}";
+    changelog = "https://github.com/terramate-io/terramate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       asininemonkey
     ];
   };
-}
+})

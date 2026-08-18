@@ -8,19 +8,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sqv";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sqv";
-    rev = "v${version}";
-    hash = "sha256-xkvCEHVyRf1tQ/oo6Hg4Nri2WxdmH0fZFX24CPwJpZQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z8ZZf5+I8YXR6ugP3EF3zynBicQYKoDfCwWmFfrC8FA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZynvC4t9NBri5gc9lt2tHd/45V6QsKHbZb7HjHUQQUI=";
+  cargoHash = "sha256-fsD5LcJ5JTtZbajjU1yaxUGQ+tJk6tyChSmDtJ6k9Bk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqv";
   };
-}
+})

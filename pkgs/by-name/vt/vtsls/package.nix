@@ -2,52 +2,65 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs-slim_22,
   gitMinimal,
   gitSetupHook,
-  pnpm_8,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
+  vtsls,
+  runCommand,
 }:
-
+let
+  pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
     tag = "server-v${finalAttrs.version}";
-    hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
+    hash = "sha256-RuxaT3u9OOUMbDN6A2biIeUC+Z4leELF3OhKXxmCqbM=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs-slim_22
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm'
   ];
 
-  buildInputs = [ nodejs_22 ];
+  buildInputs = [ nodejs-slim_22 ];
 
-  pnpmWorkspaces = [ "@vtsls/language-server" ];
+  pnpmWorkspaces = [
+    "@vtsls/language-server"
+    "@vtsls/language-service"
+    "@vtsls/vscode-fuzzy"
+  ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pnpmWorkspaces
       pname
       src
       version
       ;
-    hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
+    pnpm = pnpm';
+    fetcherVersion = 4;
+    hash = "sha256-jYh79MtcfW/p6twuDM1JDwukSnn2/TJQYvHBlut0QnE=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
   patches = [ ./vtsls-build-patch.patch ];
 
   # Skips manual confirmations during build
-  CI = true;
+  env.CI = true;
 
   buildPhase = ''
     runHook preBuild
@@ -83,10 +96,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.smoke =
+      runCommand "vtsls-smoke-test"
+        {
+        }
+        ''
+          INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+          CONTENT_LENGTH=''${#INIT_REQUEST}
+
+          RESPONSE=$(
+            {
+              printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+              sleep 1
+            } | timeout 3  ${lib.getExe vtsls} --stdio 2>&1 | head -c 1000
+          ) || true
+
+          echo "$RESPONSE" | grep -q '"capabilities"'
+          touch $out
+        '';
   };
 
   meta = {
-    description = "LSP wrapper for typescript extension of vscode.";
+    description = "LSP wrapper for typescript extension of vscode";
     homepage = "https://github.com/yioneko/vtsls";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kuglimon ];

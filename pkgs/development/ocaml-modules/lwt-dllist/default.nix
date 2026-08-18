@@ -3,31 +3,26 @@
   buildDunePackage,
   fetchurl,
   lwt,
-  ocaml,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwt-dllist";
   version = "1.0.1";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.02";
-
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "e86ce75e40f00d51514cf8b2e71e5184c4cb5dae96136be24613406cfc0dba6e";
+    url = "https://github.com/mirage/lwt-dllist/releases/download/v${finalAttrs.version}/lwt-dllist-v${finalAttrs.version}.tbz";
+    hash = "sha256-6GznXkDwDVFRTPiy5x5RhMTLXa6WE2viRhNAbPwNum4=";
   };
 
   checkInputs = [
     lwt
   ];
-  doCheck = lib.versionAtLeast ocaml.version "4.03";
+  doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Mutable doubly-linked list with Lwt iterators";
     homepage = "https://github.com/mirage/lwt-dllist";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

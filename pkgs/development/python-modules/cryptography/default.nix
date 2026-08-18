@@ -16,27 +16,24 @@
   pretend,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "45.0.2"; # Also update the hash in vectors.nix
+  version = "50.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-SjlzEyX30b3LbEH5NOhCJvds9KuguTTdF2A0kbIysA4=";
+    hash = "sha256-KHxEVSYr8yrODSVsGNgZowI/YnhG3qnFgae9877H+VE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-dKwNnWBzBM9QEcRbbvkNhFJnFxFakqZ/MS7rqE8/tNQ=";
+    hash = "sha256-heJGLh0MgDPpksWyPLaIkZ5gVEWx8UnaJKv4GvclpmI=";
   };
 
   postPatch = ''
@@ -49,13 +46,15 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     pkg-config
     setuptools
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
@@ -67,9 +66,10 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ] ++ optional-dependencies.ssh;
+  ]
+  ++ optional-dependencies.ssh;
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     vectors = cryptography-vectors;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
@@ -88,13 +88,12 @@ buildPythonPackage rec {
       digests, and key derivation functions.
     '';
     homepage = "https://github.com/pyca/cryptography";
-    changelog =
-      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
-    license = with licenses; [
+    changelog = "https://cryptography.io/en/latest/changelog/#v" + lib.replaceString "." "-" version;
+    license = with lib.licenses; [
       asl20
       bsd3
       psfl
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

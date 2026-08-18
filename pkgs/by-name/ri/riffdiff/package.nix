@@ -7,19 +7,18 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "riffdiff";
-  version = "3.3.10";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "riff";
-    tag = version;
-    hash = "sha256-5HxQF8PVDonWpmxHEFT4zWZTWzzn50UzBU1z0ahuaGM=";
+    tag = finalAttrs.version;
+    hash = "sha256-2C1aD9sXh/+spNxbLbw13WAJ6ijdYqkWgPbKrw3zTm0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8O4ZLKaQajrvNp7tH8iuVRPriuIIdesBmuv5MXyTafA=";
+  cargoHash = "sha256-Jg9c7tSjluhHSl2GoZkZlkBs+ojCGjjQ3dheROUC60g=";
 
   passthru = {
     tests.version = testers.testVersion { package = riffdiff; };
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Diff filter highlighting which line parts have changed";
     homepage = "https://github.com/walles/riff";
-    changelog = "https://github.com/walles/riff/releases/tag/${version}";
+    changelog = "https://github.com/walles/riff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       johnpyp
@@ -37,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "riff";
   };
-}
+})

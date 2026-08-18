@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyosf";
   version = "1.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "psychopy";
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyosf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library for simple sync with Open Science Framework";
     homepage = "https://github.com/psychopy/pyosf";
     changelog = "https://github.com/psychopy/pyosf/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

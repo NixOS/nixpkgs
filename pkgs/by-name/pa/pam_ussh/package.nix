@@ -8,7 +8,7 @@
 
 buildGoModule {
   pname = "pam_ussh";
-  version = "unstable-20210615";
+  version = "0-unstable-2021-06-15";
 
   src = fetchFromGitHub {
     owner = "uber";
@@ -56,11 +56,11 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) pam-ussh; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/uber/pam-ussh";
     description = "PAM module to authenticate using SSH certificates";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lukegb ];
   };
 }

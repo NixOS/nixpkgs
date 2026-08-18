@@ -1,21 +1,21 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
   neovim,
   fetchpatch,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "neovim-remote";
   version = "2.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 
@@ -25,17 +25,22 @@ buildPythonApplication rec {
       url = "https://github.com/mhinz/neovim-remote/commit/56d2a4097f4b639a16902390d9bdd8d1350f948c.patch";
       hash = "sha256-/PjE+9yfHtOUEp3xBaobzRM8Eo2wqOhnF1Es7SIdxvM=";
     })
+    # Fix nvr --version: replace deprecated pkg_resources with importlib.metadata
+    # (stdlib since Python 3.8). setuptools was correctly kept in build-system
+    # only; this avoids adding it as a spurious runtime dependency.
+    ./use-importlib-metadata.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     pynvim
     psutil
-    setuptools
   ];
 
   nativeCheckInputs = [
     neovim
-    pytestCheckHook
+    python3.pkgs.pytestCheckHook
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -44,12 +49,14 @@ buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nvr" ];
+
+  meta = {
     description = "Tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ edanaher ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ edanaher ];
+    platforms = lib.platforms.unix;
     mainProgram = "nvr";
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -6,27 +7,35 @@
   nix-update-script,
   testers,
   vcluster,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vcluster";
-  version = "0.25.1";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "vcluster";
-    tag = "v${version}";
-    hash = "sha256-kK9cLRgJH/JLmjlpEY6aRaQA/jCjIpKsCS1xQ8Bru6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-31PGY6x+D0QJCS8VyTPS2AVEB/aw1hV/miijsqwpALI=";
   };
 
   vendorHash = null;
+
+  nativeBuildInputs = [
+    installShellFiles
+    # vcluster crashes, even on generating the completion script, if home is not writeable
+    writableTmpDirAsHomeHook
+  ];
 
   subPackages = [ "cmd/vclusterctl" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.goVersion=${lib.getVersion go}"
   ];
 
@@ -41,6 +50,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd vcluster \
+      --bash <($out/bin/vcluster completion bash) \
+      --fish <($out/bin/vcluster completion fish) \
+      --zsh <($out/bin/vcluster completion zsh)
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = vcluster;
     command = "HOME=$(mktemp -d) vcluster --version";
@@ -49,16 +65,15 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${version}";
+    changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${finalAttrs.version}";
     description = "Create fully functional virtual Kubernetes clusters";
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
     maintainers = with lib.maintainers; [
-      berryp
-      peterromfeldhk
       qjoly
+      roehrijn
     ];
   };
-}
+})

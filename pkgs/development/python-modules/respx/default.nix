@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   starlette,
   trio,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = "respx";
     tag = version;
-    hash = "sha256-T3DLNXJykSF/HXjlmQdJ2CG4d+U1eTa+XWcgtT3dhl4=";
+    hash = "sha256-Fz3CS9rIm+H6axVIRErlFTTDgtAcTmGj4/wabLxDV2I=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "respx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
     changelog = "https://github.com/lundberg/respx/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

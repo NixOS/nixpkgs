@@ -5,21 +5,23 @@
   autoreconfHook,
   gettext,
   libev,
-  pcre,
+  pcre2,
   pkg-config,
   udns,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sniproxy";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dlundquist";
     repo = "sniproxy";
-    rev = version;
-    sha256 = "sha256-htM9CrzaGnn1dnsWQ+0V6N65Og7rsFob3BlSc4UGfFU=";
+    tag = finalAttrs.version;
+    hash = "sha256-TUXwixnBFdegYRzeXlLVno2M3gVXyCw5Jdfb9ulOROs=";
   };
+
+  patches = [ ./gettext-0.25.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -28,20 +30,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gettext
     libev
-    pcre
+    pcre2
     udns
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dlundquist/sniproxy";
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       womfoo
       raitobezarius
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "sniproxy";
   };
-
-}
+})

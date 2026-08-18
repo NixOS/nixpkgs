@@ -5,18 +5,15 @@
   stdlib-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "3.0.0";
   pname = "earley";
   src = fetchFromGitHub {
     owner = "rlepigre";
     repo = "ocaml-earley";
-    rev = version;
-    sha256 = "1vi58zdxchpw6ai0bz9h2ggcmg8kv57yk6qbx82lh47s5wb3mz5y";
+    tag = finalAttrs.version;
+    hash = "sha256-vvw6Fi/6EEgF6gub6U/ZE73K3hMw/QWiMvxC1ttHJe4=";
   };
-
-  minimalOCamlVersion = "4.07";
-  useDune2 = true;
 
   buildInputs = [ stdlib-shims ];
 
@@ -29,4 +26,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "pa_ocaml";
   };
-}
+})

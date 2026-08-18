@@ -12,12 +12,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klavaro";
   version = "3.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/klavaro/klavaro-${finalAttrs.version}.tar.bz2";
     hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 
@@ -56,16 +56,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free touch typing tutor program";
     mainProgram = "klavaro";
     homepage = "http://klavaro.sourceforge.net/";
     changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mimame
       davidak
     ];
   };
-}
+})

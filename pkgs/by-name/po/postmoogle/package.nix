@@ -3,15 +3,15 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "postmoogle";
-  version = "0.9.26";
+  version = "0.9.31";
 
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "postmoogle";
-    tag = "v${version}";
-    hash = "sha256-nbkPwHMQTadflHE8q525cB4cgVNxldOMBi4Kwrp52rE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WuWCmmxRKT78JGHsdeECzaq6A7F5JaGJPYULMnwRWPE=";
   };
 
   tags = [
@@ -22,11 +22,11 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = {
-    description = "Postmoogle is Matrix <-> Email bridge in a form of an SMTP server";
+    description = "Matrix <-> Email bridge in the form of an SMTP server";
     homepage = "https://github.com/etkecc/postmoogle";
-    changelog = "https://github.com/etkecc/postmoogle/releases/tag/v${version}";
+    changelog = "https://github.com/etkecc/postmoogle/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ amuckstot30 ];
     mainProgram = "postmoogle";
   };
-}
+})

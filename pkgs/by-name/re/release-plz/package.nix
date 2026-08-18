@@ -9,19 +9,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.137";
+  version = "0.3.160";
 
   src = fetchFromGitHub {
-    owner = "MarcoIeni";
+    owner = "release-plz";
     repo = "release-plz";
-    rev = "release-plz-v${version}";
-    hash = "sha256-7sCwnUhCLfA/MACseZUT6IWR5+JjxKUyBfLSGwno/qQ=";
+    rev = "release-plz-v${finalAttrs.version}";
+    hash = "sha256-rPYRYAp5grTgASFHKGBdOcO0TvbP7iD+GgL0ZLmHhos=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IoFJPRW4SXAWxfBKNBrgtxBAYfbRwxuN9Aig3P9QkOk=";
+  cargoHash = "sha256-m6gX/Tu3WCMzkXhWZ19bM9PL7lQ6Xg1R90/ptuswI1s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,22 +36,25 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
-      --fish <($out/bin/${meta.mainProgram} generate-completions fish) \
-      --zsh <($out/bin/${meta.mainProgram} generate-completions zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} generate-completions bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} generate-completions fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} generate-completions zsh)
   '';
 
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/release-plz/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with lib.maintainers; [
+      dannixon
+      chrjabs
+    ];
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bsky-cli";
-  version = "0.0.73";
+  version = "0.0.81";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "bsky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GTuF/ZbZ84tTcbjp8eXKdpUGCsOkg2rxEcslKTsgpu4=";
+    hash = "sha256-Su2AhHaIozuqTzK1vyAjZR/a01j0dnlayV14Q7hTcCU=";
   };
 
-  vendorHash = "sha256-dLhrPHjhEHEJOokkjll1Z+zhDlBXuhlJJBtCFXfhyws=";
+  vendorHash = "sha256-jGeKaAR0rAqrhoUx/FqdDwdOxA/WioppFjGyi/PsIQs=";
 
   buildInputs = [
     libpcap
@@ -30,7 +30,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/bsky";
-  versionCheckProgramArg = "--version";
   nativeBuildInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };

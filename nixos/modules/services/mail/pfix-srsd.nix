@@ -4,6 +4,10 @@
   pkgs,
   ...
 }:
+
+let
+  cfg = config.services.pfix-srsd;
+in
 {
 
   ###### interface
@@ -32,27 +36,46 @@
         type = lib.types.path;
         default = "/var/lib/pfix-srsd/secrets";
       };
+
+      configurePostfix = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to configure the required settings to use pfix-srsd in the local Postfix instance.
+        '';
+      };
     };
   };
 
   ###### implementation
 
-  config = lib.mkIf config.services.pfix-srsd.enable {
-    environment = {
-      systemPackages = [ pkgs.pfixtools ];
-    };
-
-    systemd.services.pfix-srsd = {
-      description = "Postfix sender rewriting scheme daemon";
-      before = [ "postfix.service" ];
-      #note that we use requires rather than wants because postfix
-      #is unable to process (almost) all mail without srsd
-      requiredBy = [ "postfix.service" ];
-      serviceConfig = {
-        Type = "forking";
-        PIDFile = "/run/pfix-srsd.pid";
-        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.enable && cfg.configurePostfix && config.services.postfix.enable) {
+      services.postfix.settings.main = {
+        sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
+        sender_canonical_classes = [ "envelope_sender" ];
+        recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
+        recipient_canonical_classes = [ "envelope_recipient" ];
       };
-    };
-  };
+    })
+
+    (lib.mkIf cfg.enable {
+      environment = {
+        systemPackages = [ pkgs.pfixtools ];
+      };
+
+      systemd.services.pfix-srsd = {
+        description = "Postfix sender rewriting scheme daemon";
+        before = [ "postfix.service" ];
+        #note that we use requires rather than wants because postfix
+        #is unable to process (almost) all mail without srsd
+        requiredBy = [ "postfix.service" ];
+        serviceConfig = {
+          Type = "forking";
+          PIDFile = "/run/pfix-srsd.pid";
+          ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
+        };
+      };
+    })
+  ];
 }

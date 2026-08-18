@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -18,35 +17,43 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontparts";
-  version = "0.13.1";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+oifxmY7MUkQj3Sy75wjRmoVEPkgZaO3+8/sauMMxYA=";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "robotools";
+    repo = "fontParts";
+    tag = finalAttrs.version;
+    hash = "sha256-dBR9Lf8ECLAOAkEkEy4JCgOKmyXzwXaOXdW4cErWQcs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "vcs-versioning"' "" \
+      --replace-fail "setuptools_scm[toml]>=3.4,<10" "setuptools_scm[toml]"
+    substituteInPlace setup.cfg \
+      --replace-fail "setuptools_scm==9.2.2" "setuptools_scm"
+  '';
 
   build-system = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      booleanoperations
-      defcon
-      fontmath
-      fonttools
-    ]
-    ++ defcon.optional-dependencies.pens
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.unicode;
+  dependencies = [
+    booleanoperations
+    defcon
+    fontmath
+    fonttools
+  ]
+  ++ defcon.optional-dependencies.pens
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode;
+
+  pythonImportsCheck = [ "fontParts" ];
 
   checkPhase = ''
     runHook preCheck
@@ -54,11 +61,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "API for interacting with the parts of fonts during the font development process";
     homepage = "https://github.com/robotools/fontParts";
-    changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    changelog = "https://github.com/robotools/fontParts/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

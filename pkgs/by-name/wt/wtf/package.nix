@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/0vercl0k/wtf";
     changelog = "https://github.com/0vercl0k/wtf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = with lib.platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "wtf";
   };

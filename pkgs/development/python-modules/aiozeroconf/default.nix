@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   netifaces,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aiozeroconf";
   version = "0.1.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiozeroconf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ obadz ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ obadz ];
     mainProgram = "aiozeroconf";
   };
 }

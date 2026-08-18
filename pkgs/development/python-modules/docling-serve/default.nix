@@ -2,87 +2,127 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  setuptools-scm,
-  # python dependencies
-  docling,
+
+  # dependencies
+  docling-core,
+  docling-jobkit,
+  docling-mcp,
+  docling-slim,
   fastapi,
   httpx,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-exporter-prometheus,
+  opentelemetry-instrumentation-fastapi,
+  opentelemetry-sdk,
+  prometheus-client,
+  pydantic,
   pydantic-settings,
   python-multipart,
+  scalar-fastapi,
+  typer,
   uvicorn,
   websockets,
-  tesserocr,
-  rapidocr-onnxruntime,
-  onnxruntime,
-  torch,
-  torchvision,
+
+  # optional-dependencies
+  # ui:
   gradio,
-  nodejs,
-  which,
+  # tesserocr:
+  tesserocr,
+  # easyocr:
+  easyocr,
+  # rapidocr:
+  rapidocr,
+  onnxruntime,
+  # flash-attn:
+  flash-attn,
+
+  # tests
+  versionCheckHook,
+
   withUI ? false,
   withTesserocr ? false,
   withRapidocr ? false,
   withCPU ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-serve";
-  version = "0.11.0";
+  version = "1.29.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
-    tag = "v${version}";
-    hash = "sha256-dPCD7Ovc6Xiga+gYOwg0mJIIhHywVOyxKIAFF5XUsYw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sYpi7vgeUH2xw2Jq8Rgou8SsS8aq+TWgq29gqv/xNnU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"kfp[kubernetes]>=2.10.0",' ""
-  '';
 
   build-system = [
     hatchling
-    setuptools-scm
   ];
 
   pythonRelaxDeps = [
-    "websockets"
+    "fastapi"
+    "opentelemetry-instrumentation-fastapi"
   ];
-
-  dependencies =
-    [
-      docling
-      fastapi
-      httpx
-      pydantic-settings
-      python-multipart
-      uvicorn
-      websockets
-    ]
-    ++ lib.optionals withUI optional-dependencies.ui
-    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-    ++ lib.optionals withCPU optional-dependencies.cpu;
+  dependencies = [
+    docling-core
+    docling-jobkit
+    docling-mcp
+    docling-slim
+    fastapi
+    httpx
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-exporter-prometheus
+    opentelemetry-instrumentation-fastapi
+    opentelemetry-sdk
+    prometheus-client
+    pydantic
+    pydantic-settings
+    python-multipart
+    scalar-fastapi
+    typer
+    uvicorn
+    websockets
+  ]
+  ++ docling-slim.optional-dependencies.standard
+  ++ docling-slim.optional-dependencies.service-client
+  ++ docling-slim.optional-dependencies.models-remote
+  ++ docling-slim.optional-dependencies.format-opendocument
+  ++ docling-jobkit.optional-dependencies.rq
+  ++ docling-jobkit.optional-dependencies.ray
+  ++ docling-jobkit.optional-dependencies.azure
+  ++ docling-jobkit.optional-dependencies.gcloudstorage
+  ++ docling-jobkit.optional-dependencies.gdrive
+  ++ fastapi.optional-dependencies.standard
+  ++ uvicorn.optional-dependencies.standard
+  ++ lib.optionals withUI finalAttrs.passthru.optional-dependencies.ui
+  ++ lib.optionals withTesserocr finalAttrs.passthru.optional-dependencies.tesserocr
+  ++ lib.optionals withRapidocr finalAttrs.passthru.optional-dependencies.rapidocr
+  ++ lib.optionals withCPU finalAttrs.passthru.optional-dependencies.cpu;
 
   optional-dependencies = {
     ui = [
       gradio
-      nodejs
-      which
     ];
     tesserocr = [
       tesserocr
     ];
+    easyocr = [
+      easyocr
+    ];
     rapidocr = [
-      rapidocr-onnxruntime
+      rapidocr
       onnxruntime
     ];
-    cpu = [
-      torch
-      torchvision
+    flash-attn = [
+      flash-attn
     ];
   };
 
@@ -90,15 +130,17 @@ buildPythonPackage rec {
     "docling_serve"
   ];
 
-  # Require network
-  doCheck = false;
+  # Python tests require network
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
-    changelog = "https://github.com/docling-project/docling-serve/blob/${src.tag}/CHANGELOG.md";
     description = "Running Docling as an API service";
     homepage = "https://github.com/docling-project/docling-serve";
+    changelog = "https://github.com/docling-project/docling-serve/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
-}
+})

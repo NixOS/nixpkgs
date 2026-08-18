@@ -2,41 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatcc";
-  version = "0.6.1";
+  version = "0.6.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dvidelabs";
     repo = "flatcc";
-    rev = "v${version}";
-    sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kDZ05r/k15peBLGG2jzyeKwrdTn3+1PWrrDUmC3SV50=";
   };
-
-  patches = [
-    # Fix builds on clang15. Remove post-0.6.1.
-    (fetchpatch {
-      name = "clang15fixes.patch";
-      url = "https://github.com/dvidelabs/flatcc/commit/5885e50f88248bc7ed398880c887ab23db89f05a.patch";
-      hash = "sha256-z2HSxNXerDFKtMGu6/vnzGRlqfz476bFMjg4DVfbObQ";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DFLATCC_INSTALL=on"
+    (lib.cmakeBool "FLATCC_INSTALL" true)
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "FlatBuffers Compiler and Library in C for C";
     mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
-    license = [ licenses.asl20 ];
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/dvidelabs/flatcc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

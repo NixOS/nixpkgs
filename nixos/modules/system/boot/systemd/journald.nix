@@ -10,10 +10,6 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule
-      [ "services" "journald" "enableHttpGateway" ]
-      [ "services" "journald" "gateway" "enable" ]
-    )
   ];
 
   options = {
@@ -79,8 +75,11 @@ in
     };
 
     services.journald.audit = lib.mkOption {
-      default = null;
-      type = lib.types.nullOr lib.types.bool;
+      default = "keep";
+      type = lib.types.oneOf [
+        lib.types.bool
+        (lib.types.enum [ "keep" ])
+      ];
       description = ''
         If enabled systemd-journald will turn on auditing on start-up.
         If disabled it will turn it off. If unset it will neither enable nor disable it, leaving the previous state unchanged.
@@ -127,6 +126,8 @@ in
       "systemd-journald-sync@.service"
       "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
+      "systemd-journalctl.socket"
+      "systemd-journalctl@.service"
       "syslog.socket"
     ];
 

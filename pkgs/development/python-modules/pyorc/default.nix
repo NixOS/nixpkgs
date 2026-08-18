@@ -22,6 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-2w3Qh6g+Yg+D10kTow9YR6B6FhQ+z2DvgDy5GtYxH4g=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"pybind11>2.6.0,<3.0"' \
+        '"pybind11>2.6.0"'
+  '';
+
   build-system = [
     pybind11
     setuptools
@@ -64,10 +71,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/noirello/pyorc/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/noirello/pyorc/blob/v${version}/CHANGELOG.rst";
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

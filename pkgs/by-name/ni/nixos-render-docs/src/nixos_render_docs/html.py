@@ -1,11 +1,12 @@
 from collections.abc import Mapping, Sequence
-from typing import cast, Optional, NamedTuple
-
 from html import escape
+from typing import NamedTuple, Optional, cast
+
 from markdown_it.token import Token
 
 from .manual_structure import XrefTarget
 from .md import Renderer
+
 
 class UnresolvedXrefError(Exception):
     pass
@@ -17,9 +18,6 @@ class Heading(NamedTuple):
     # special handling for part content: whether partinfo div was already closed from
     # elsewhere or still needs closing.
     partintro_closed: bool
-    # tocs are generated when the heading opens, but have to be emitted into the file
-    # after the heading titlepage (and maybe partinfo) has been closed.
-    toc_fragment: str
 
 _bullet_list_styles = [ 'disc', 'circle', 'square' ]
 _ordered_list_styles = [ '1', 'a', 'i', 'A', 'I' ]
@@ -29,7 +27,6 @@ class HTMLRenderer(Renderer):
 
     _headings: list[Heading]
     _attrspans: list[str]
-    _hlevel_offset: int = 0
     _bullet_list_nesting: int = 0
     _ordered_list_nesting: int = 0
 
@@ -185,8 +182,7 @@ class HTMLRenderer(Renderer):
             anchor = f'id="{escape(anchor, True)}"'
         result = self._close_headings(hlevel)
         tag = self._heading_tag(token, tokens, i)
-        toc_fragment = self._build_toc(tokens, i)
-        self._headings.append(Heading(tag, hlevel, htag, tag != 'part', toc_fragment))
+        self._headings.append(Heading(tag, hlevel, htag, tag != 'part'))
         return (
             f'{result}'
             f'<div class="{tag}">'
@@ -205,8 +201,6 @@ class HTMLRenderer(Renderer):
         )
         if heading.container_tag == 'part':
             result += '<div class="partintro">'
-        else:
-            result += heading.toc_fragment
         return result
     def ordered_list_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         extra = 'compact' if token.meta.get('compact', False) else ''
@@ -329,14 +323,14 @@ class HTMLRenderer(Renderer):
         )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
-        return f"h{min(6, max(1, level + self._hlevel_offset))}", ""
+        return f"h{min(6, max(1, level))}", ""
 
     def _maybe_close_partintro(self) -> str:
         if self._headings:
             heading = self._headings[-1]
             if heading.container_tag == 'part' and not heading.partintro_closed:
                 self._headings[-1] = heading._replace(partintro_closed=True)
-                return heading.toc_fragment + "</div>"
+                return "</div>"
         return ""
 
     def _close_headings(self, level: Optional[int]) -> str:
@@ -349,5 +343,3 @@ class HTMLRenderer(Renderer):
 
     def _heading_tag(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "section"
-    def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
-        return ""

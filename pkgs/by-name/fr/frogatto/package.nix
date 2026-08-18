@@ -26,7 +26,8 @@ let
   inherit (data) version;
 in
 buildEnv {
-  name = "frogatto-${version}";
+  pname = "frogatto";
+  inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
   paths = [
@@ -47,14 +48,14 @@ buildEnv {
       --chdir "$out/share/frogatto"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frogatto.com";
     description = description;
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-30
       unfree
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

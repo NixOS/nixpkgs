@@ -9,7 +9,7 @@
   dbus,
   dbus-test-runner,
   evolution-data-server,
-  extra-cmake-modules,
+  kdePackages,
   glib,
   gst_all_1,
   gtest,
@@ -37,84 +37,81 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${if enableLomiriFeatures then "lomiri" else "ayatana"}-indicator-datetime";
-  version = "25.4.0";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
     tag = finalAttrs.version;
-    hash = "sha256-8E9ucy8I0w9DDzsLtzJgICz/e0TNqOHgls9LrgA5nk4=";
+    hash = "sha256-zjAQjd5kFho8YfcoWRGbQbzzAJT0id5nh7zQoZXB1Uk=";
   };
 
-  postPatch =
-    ''
-      # Override systemd prefix
-      substituteInPlace data/CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
-        --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
-    ''
-    + lib.optionalString enableLomiriFeatures ''
-      # Looking for Lomiri schemas for code generation
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail '/usr/share/accountsservice' '${lomiri.lomiri-schemas}/share/accountsservice'
-    '';
+  postPatch = ''
+    # Override systemd prefix
+    substituteInPlace data/CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+      --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
+  ''
+  + lib.optionalString enableLomiriFeatures ''
+    # Looking for Lomiri schemas for code generation
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail '/usr/share/accountsservice' '${lomiri.lomiri-schemas}/share/accountsservice'
+  '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      glib # for schema hook
-      intltool
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals enableLomiriFeatures [
-      libsForQt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    glib # for schema hook
+    intltool
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals enableLomiriFeatures [
+    libsForQt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      ayatana-indicator-messages
-      glib
-      libaccounts-glib
-      libayatana-common
-      libnotify
-      libuuid
-      properties-cpp
-      systemd
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ])
-    ++ (with lomiri; [
-      cmake-extras
-    ])
-    ++ (
-      if enableLomiriFeatures then
-        (
-          [
-            extra-cmake-modules
-            mkcal
-          ]
-          ++ (with libsForQt5; [
-            kcalendarcore
-            qtbase
-          ])
-          ++ (with lomiri; [
-            lomiri-schemas
-            lomiri-sounds
-            lomiri-url-dispatcher
-          ])
-        )
-      else
+  buildInputs = [
+    ayatana-indicator-messages
+    glib
+    libaccounts-glib
+    libayatana-common
+    libnotify
+    libuuid
+    properties-cpp
+    systemd
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ])
+  ++ (with lomiri; [
+    cmake-extras
+  ])
+  ++ (
+    if enableLomiriFeatures then
+      (
         [
-          evolution-data-server
-          libical
+          kdePackages.extra-cmake-modules
+          mkcal
         ]
-    );
+        ++ (with libsForQt5; [
+          __internalKF5.kcalendarcore
+          qtbase
+        ])
+        ++ (with lomiri; [
+          lomiri-schemas
+          lomiri-sounds
+          lomiri-url-dispatcher
+        ])
+      )
+    else
+      [
+        evolution-data-server
+        libical
+      ]
+  );
 
   nativeCheckInputs = [
     dbus
@@ -130,29 +127,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-      (lib.cmakeBool "GSETTINGS_COMPILE" true)
-      (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" enableLomiriFeatures)
-      (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    ]
-    ++ lib.optionals enableLomiriFeatures [
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-        lib.concatStringsSep ";" [
-          # Exclude tests
-          "-E"
-          (lib.strings.escapeShellArg "(${
-            lib.concatStringsSep "|" [
-              # Don't know why these fail yet
-              "^test-eds-ics-repeating-events"
-              "^test-eds-ics-nonrepeating-events"
-              "^test-eds-ics-missing-trigger"
-            ]
-          })")
-        ]
-      ))
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" enableLomiriFeatures)
+    (lib.cmakeBool "ENABLE_MKCAL" enableLomiriFeatures)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals enableLomiriFeatures [
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Don't know why these fail yet
+            "^test-eds-ics-repeating-events"
+            "^test-eds-ics-nonrepeating-events"
+            "^test-eds-ics-missing-trigger"
+          ]
+        })")
+      ]
+    ))
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -173,24 +170,23 @@ stdenv.mkDerivation (finalAttrs: {
     }
   '';
 
-  preFixup =
-    ''
-      gappsWrapperArgs+=(
-    ''
-    + (
-      if enableLomiriFeatures then
-        ''
-          "''${qtWrapperArgs[@]}"
-        ''
-      else
-        # schema is already added automatically by wrapper, EDS needs to be added explicitly
-        ''
-          --prefix XDG_DATA_DIRS : "${edsDataDir}"
-        ''
+  preFixup = ''
+    gappsWrapperArgs+=(
+  ''
+  + (
+    if enableLomiriFeatures then
+      ''
+        "''${qtWrapperArgs[@]}"
+      ''
+    else
+      # schema is already added automatically by wrapper, EDS needs to be added explicitly
+      ''
+        --prefix XDG_DATA_DIRS : "${edsDataDir}"
+      ''
+  )
+  + ''
     )
-    + ''
-      )
-    '';
+  '';
 
   passthru = {
     ayatana-indicators = {
@@ -198,13 +194,12 @@ stdenv.mkDerivation (finalAttrs: {
         (if enableLomiriFeatures then "lomiri" else "ayatana")
       ];
     };
-    tests =
-      {
-        startup = nixosTests.ayatana-indicators;
-      }
-      // lib.optionalAttrs enableLomiriFeatures {
-        lomiri = nixosTests.lomiri.desktop-ayatana-indicator-datetime;
-      };
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+    }
+    // lib.optionalAttrs enableLomiriFeatures {
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-datetime;
+    };
     updateScript = gitUpdater { };
   };
 

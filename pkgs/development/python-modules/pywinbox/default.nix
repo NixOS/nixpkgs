@@ -1,15 +1,18 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
 
   ewmhlib,
-  xlib,
+  python-xlib,
   typing-extensions,
+  pyobjc-core,
+  pyobjc-framework-Cocoa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywinbox";
   version = "0.7";
   pyproject = true;
@@ -17,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyWinBox";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z/gedrIFNpQvzRWqGxMEl5MoEIo9znZz/FZLMVl0Eb4=";
   };
 
@@ -25,9 +28,19 @@ buildPythonPackage rec {
 
   dependencies = [
     ewmhlib
-    xlib
+    python-xlib
     typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-Cocoa
   ];
+
+  # It's called pyobjc-core instead of pyobjc in nixpkgs.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail 'pyobjc' 'pyobjc-core'
+  '';
 
   # requires x session (use ewmhlib)
   pythonImportsCheck = [ ];
@@ -39,4 +52,4 @@ buildPythonPackage rec {
     description = "Cross-Platform and multi-monitor toolkit to handle rectangular areas and windows box";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

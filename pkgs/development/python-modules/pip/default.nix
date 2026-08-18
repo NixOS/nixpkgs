@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
+  flit-core,
   installShellFiles,
-  wheel,
-  setuptools,
 
   # docs
   sphinx,
@@ -29,16 +29,19 @@
 }:
 
 let
+
+  sphinxSupported = !sphinx.disabled;
+
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.0.1";
-    format = "pyproject";
+    version = "26.1.2";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
       tag = version;
-      hash = "sha256-V069rAL6U5KBnSc09LRCu0M7qQCH5NbMghVttlmIoRY=";
+      hash = "sha256-E53TU7LzGz+gpW1TCQUkSRMUif8mq702EgXdAVxtrGw=";
     };
 
     postPatch = ''
@@ -48,10 +51,10 @@ let
     '';
 
     nativeBuildInputs = [
+      flit-core
       installShellFiles
-      setuptools
-      wheel
-
+    ]
+    ++ lib.optionals sphinxSupported [
       # docs
       sphinx
       sphinx-issues
@@ -59,12 +62,14 @@ let
 
     outputs = [
       "out"
+    ]
+    ++ lib.optionals sphinxSupported [
       "man"
     ];
 
     # pip uses a custom sphinx extension and unusual conf.py location, mimic the internal build rather than attempting
     # to fit sphinxHook see https://github.com/pypa/pip/blob/0778c1c153da7da457b56df55fb77cbba08dfb0c/noxfile.py#L129-L148
-    postBuild = ''
+    postBuild = lib.optionalString sphinxSupported ''
       cd docs
 
       # remove references to sphinx extentions only required for html doc generation
@@ -114,8 +119,9 @@ let
     };
 
     meta = {
+      mainProgram = "pip";
       description = "PyPA recommended tool for installing Python packages";
-      license = with lib.licenses; [ mit ];
+      license = lib.licenses.mit;
       homepage = "https://pip.pypa.io/";
       changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     };

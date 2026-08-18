@@ -1,10 +1,11 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "inconsolata";
   version = "3.001";
 
@@ -12,22 +13,23 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "fonts";
     rev = "0f203e3740b5eb77e0b179dff1e5869482676782";
-    sha256 = "sha256-Q8eUJ0mkoB245Ifz5ulxx61x4+AqKhG0uqhWF2nSLpw=";
+    hash = "sha256-4+aIjVO9/L4mCWGYqL1drFehHZTjRL25vTwh3c7GoFk=";
+    rootDir = "ofl/inconsolata";
   };
 
-  installPhase = ''
-    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/static/*.ttf $src/ofl/inconsolata/*.ttf
-  '';
+  nativeBuildInputs = [
+    installFonts
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.levien.com/type/myfonts/inconsolata.html";
     description = "Monospace font for both screen and print";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       appsforartists
       mikoim
       raskin
     ];
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

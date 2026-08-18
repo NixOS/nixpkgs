@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "schedule";
   version = "1.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schedule" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python job scheduling for humans";
     homepage = "https://github.com/dbader/schedule";
     changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

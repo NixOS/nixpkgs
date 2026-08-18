@@ -3,24 +3,26 @@
   buildGoModule,
   pulumi,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi-go";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/go/pulumi-language-go";
+  sourceRoot = "${finalAttrs.src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-3I9Kh3Zqpu0gT0pQNzg2mMwxQUdhEpjITZOrO7Yt50A=";
+  vendorHash = "sha256-rDrxbojnaywJ9JDjQi2GrHw33wYHnP2vWXNfJIay5rs=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
+        "TestLanguagePublished"
+        "TestLanguageLocal"
+        "TestLanguageExtraTypes"
         "TestPluginsAndDependencies_vendored"
         "TestPluginsAndDependencies_subdir"
         "TestPluginsAndDependencies_moduleMode"
@@ -35,6 +37,7 @@ buildGoModule rec {
     mainProgram = "pulumi-language-go";
     maintainers = with lib.maintainers; [
       tie
+      untio11
     ];
   };
-}
+})

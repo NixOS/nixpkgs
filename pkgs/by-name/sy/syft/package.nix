@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "syft";
-  version = "1.27.0";
+  version = "1.51.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
-    tag = "v${version}";
-    hash = "sha256-q9Dmb8R9CixAQkERoKg778K9UiZMC6ql1ZHVsNfk/0s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+g8mSkx21B706LBHlPcnn3j6kaqZ5zbrZJVIOi42M/Y=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +29,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-K6d4IloHF/WURfJ0JIi2LdP8ft/3Pc426HzB2x8Qwj0=";
+  vendorHash = "sha256-zHPzr9cXQeHJYSJ062gZHvWpS/HIVj7wK13aKyITURs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,8 +38,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.gitDescription=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -56,7 +57,7 @@ buildGoModule rec {
   # tests require a running docker instance
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd syft \
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
@@ -68,7 +69,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/syft --help
-    $out/bin/syft version | grep "${version}"
+    $out/bin/syft version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -76,13 +77,13 @@ buildGoModule rec {
   meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
-    changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
+    changelog = "https://github.com/anchore/syft/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       A CLI tool and Go library for generating a Software Bill of Materials
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       developer-guy
       jk
@@ -90,4 +91,4 @@ buildGoModule rec {
     ];
     mainProgram = "syft";
   };
-}
+})

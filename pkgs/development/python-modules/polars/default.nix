@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  build,
   buildPythonPackage,
   cargo,
   cmake,
@@ -15,7 +16,7 @@
   rustc,
   rustPlatform,
   runCommand,
-
+  setuptools,
   mimalloc,
   jemalloc,
   rust-jemalloc-sys,
@@ -35,45 +36,39 @@
     assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
     jemalloc',
 
-  polars,
   python,
 }:
 
 let
-  version = "1.27.1";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polars";
-  inherit version;
-  format = "setuptools";
+  version = "1.42.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
-    tag = "py-${version}";
-    hash = "sha256-/VigBBjZglPleXB9jhWHtA+y7WixjboVbzslprZ/A98=";
+    tag = "py-${finalAttrs.version}";
+    hash = "sha256-xHO+3mgwKvRRQZiAnThwkKFDvfe3ehkifBPINi101Ws=";
   };
 
-  # Do not type-check assertions because some of them use unstable features (`is_none_or`)
-  postPatch = ''
-    while IFS= read -r -d "" path ; do
-      sed -i 's \(\s*\)debug_assert! \1#[cfg(debug_assertions)]\n\1debug_assert! ' "$path"
-    done < <( find -iname '*.rs' -print0 )
-  '';
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-dbPhEMhfe8DZO1D8U+3W1goNK1TAVyLzXHwXzzRvASw=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-EHtQ5BzG6EFJD7e8NMajqNEXlAU/QyyIFLil1irfaqo=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  build-system = [ rustPlatform.maturinBuildHook ];
+  build-system = [
+    setuptools
+    build
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -82,6 +77,7 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
     rustPlatform.cargoInstallHook
+    rustPlatform.maturinBuildHook
     rustc
   ];
 
@@ -97,13 +93,9 @@ buildPythonPackage rec {
     # https://discourse.nixos.org/t/nixpkgs-rustplatform-and-nightly/22870
     RUSTC_BOOTSTRAP = true;
 
-    # Several `debug_assert!` statements use the unstable `Option::is_none_or` method
     RUSTFLAGS = lib.concatStringsSep " " (
-      [
-        "-Cdebug_assertions=n"
-      ]
-      ++ lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
-        "--cfg use_mimalloc"
+      lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
+        "--cfg allocator=\"mimalloc\""
       ]
     );
     RUST_BACKTRACE = true;
@@ -113,23 +105,16 @@ buildPythonPackage rec {
 
   maturinBuildFlags = [
     "-m"
-    "py-polars/Cargo.toml"
+    "py-polars/runtime/polars-runtime-32/Cargo.toml"
   ];
 
-  postInstall = ''
-    # Move polars.abi3.so -> polars.so
-    local polarsSo=""
-    local soName=""
-    while IFS= read -r -d "" p ; do
-      polarsSo=$p
-      soName="$(basename "$polarsSo")"
-      [[ "$soName" == polars.so ]] && break
-    done < <( find "$out" -iname "polars*.so" -print0 )
-    [[ -z "''${polarsSo:-}" ]] && echo "polars.so not found" >&2 && exit 1
-    if [[ "$soName" != polars.so ]] ; then
-      mv "$polarsSo" "$(dirname "$polarsSo")/polars.so"
-    fi
+  # maturin builds `_polars_runtime_32`, and we also need the pure-python `polars` wheel itself
+  preBuild = ''
+    pyproject-build --no-isolation --outdir dist/ --wheel py-polars
   '';
+
+  # Fails on polars -> polars-runtime-32 dependency between the two wheels
+  dontCheckRuntimeDeps = true;
 
   pythonImportsCheck = [
     "polars"
@@ -141,7 +126,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
       }
@@ -158,7 +143,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
         failureHook = ''
@@ -172,13 +157,13 @@ buildPythonPackage rec {
         EOF
       '';
   passthru.tests.pytest = stdenv.mkDerivation {
-    pname = "${polars.pname}-pytest";
+    pname = "${finalAttrs.pname}-pytest";
 
-    inherit (polars) version src;
+    inherit (finalAttrs) version src;
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "${src.name}/py-polars";
+    sourceRoot = "${finalAttrs.src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
@@ -196,7 +181,7 @@ buildPythonPackage rec {
     checkPhase = "pytestCheckPhase";
     nativeBuildInputs = [
       (python.withPackages (ps: [
-        polars
+        finalAttrs.finalPackage
         ps.aiosqlite
         ps.altair
         ps.boto3
@@ -215,6 +200,7 @@ buildPythonPackage rec {
         ps.nest-asyncio
         ps.numpy
         ps.openpyxl
+        ps.orjson
         ps.pandas
         ps.pyarrow
         ps.pydantic
@@ -229,17 +215,15 @@ buildPythonPackage rec {
     ];
     nativeCheckInputs = [
       pytestCheckHook
-      pytest-codspeed
       pytest-cov-stub
       pytest-xdist
       pytest-benchmark
     ];
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "--benchmark-disable"
-      "-n auto"
-      "--dist loadgroup"
-      ''-m "slow or not slow"''
+      "-nauto"
+      "--dist=loadgroup"
     ];
     disabledTests = [
       "test_read_kuzu_graph_database" # kuzu
@@ -274,14 +258,16 @@ buildPythonPackage rec {
       "test_scan_credential_provider"
       "test_scan_credential_provider_serialization"
 
+      # Only connecting to localhost, but http URL scheme is disallowed
+      "test_scan_delta_loads_aws_profile_endpoint_url"
+
       # ModuleNotFoundError: ADBC 'adbc_driver_sqlite.dbapi' driver not detected.
       "test_read_database"
       "test_read_database_parameterised_uri"
 
       # Untriaged
-      "test_pickle_lazyframe_nested_function_udf"
-      "test_serde_udf"
-      "test_hash_struct"
+      "test_async_index_error_25209"
+      "test_parquet_schema_correctness"
     ];
     disabledTestPaths = [
       "tests/benchmark"
@@ -290,15 +276,11 @@ buildPythonPackage rec {
       # Internet access
       "tests/unit/io/cloud/test_credential_provider.py"
 
-      # Wrong altair version
-      "tests/unit/operations/namespaces/test_plot.py"
-
       # adbc
       "tests/unit/io/database/test_read.py"
 
-      # Untriaged
-      "tests/unit/cloud/test_prepare_cloud_plan.py"
-      "tests/unit/io/cloud/test_cloud.py"
+      # Requires pydantic 2.12
+      "tests/unit/io/test_iceberg.py"
     ];
 
     installPhase = "touch $out";
@@ -307,7 +289,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dataframes powered by a multithreaded, vectorized query engine, written in Rust";
     homepage = "https://github.com/pola-rs/polars";
-    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
+    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -316,4 +298,4 @@ buildPythonPackage rec {
     mainProgram = "polars";
     platforms = lib.platforms.all;
   };
-}
+})

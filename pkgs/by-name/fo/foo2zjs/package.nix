@@ -11,12 +11,12 @@
   time,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foo2zjs";
   version = "20210116";
 
   src = fetchurl {
-    url = "http://www.loegria.net/mirrors/foo2zjs/foo2zjs-${version}.tar.gz";
+    url = "http://www.loegria.net/mirrors/foo2zjs/foo2zjs-${finalAttrs.version}.tar.gz";
     sha256 = "14x3wizvncdy0xgvmcx541qanwb7bg76abygqy17bxycn1zh5r1x";
   };
 
@@ -86,12 +86,12 @@ stdenv.mkDerivation rec {
     cp -v getweb arm2hpdl "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ZjStream printer drivers";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

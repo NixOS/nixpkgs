@@ -19,8 +19,8 @@ in
       [ "hardware" "logitech" "wireless" "enable" ]
     )
     (lib.mkRenamedOptionModule
-      [ "hardware" "logitech" "enableGraphical" ]
       [ "hardware" "logitech" "wireless" "enableGraphical" ]
+      [ "programs" "solaar" "enable" ]
     )
   ];
 
@@ -56,20 +56,11 @@ in
 
     wireless = {
       enable = lib.mkEnableOption "support for Logitech Wireless Devices";
-
-      enableGraphical = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable graphical support applications.";
-      };
     };
   };
 
   config = lib.mkIf (cfg.wireless.enable || cfg.lcd.enable) {
-    environment.systemPackages =
-      [ ]
-      ++ lib.optional cfg.wireless.enable pkgs.ltunify
-      ++ lib.optional cfg.wireless.enableGraphical pkgs.solaar;
+    environment.systemPackages = lib.optional cfg.wireless.enable pkgs.ltunify;
 
     services.udev = {
       # ltunifi and solaar both provide udev rules but the most up-to-date have been split
@@ -80,14 +71,13 @@ in
         ++ lib.optional cfg.wireless.enable pkgs.logitech-udev-rules
         ++ lib.optional cfg.lcd.enable pkgs.g15daemon;
 
-      extraRules =
-        ''
-          # nixos: hardware.logitech.lcd
-        ''
-        + lib.concatMapStringsSep "\n" (
-          dev:
-          ''ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${vendor}", ATTRS{idProduct}=="${dev}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="${daemon}.service"''
-        ) cfg.lcd.devices;
+      extraRules = ''
+        # nixos: hardware.logitech.lcd
+      ''
+      + lib.concatMapStringsSep "\n" (
+        dev:
+        ''ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="${vendor}", ATTRS{idProduct}=="${dev}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="${daemon}.service"''
+      ) cfg.lcd.devices;
     };
 
     systemd.services."${daemon}" = lib.mkIf cfg.lcd.enable {

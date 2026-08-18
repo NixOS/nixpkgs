@@ -2,25 +2,31 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diswall";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "dis-works";
     repo = "diswall-rs";
-    rev = "v${version}";
-    sha256 = "sha256-t2ZBi3ab6OUWzc0L0Hq/ay+s3KNDMeu6mkYxti48BuE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5kKVEdzN38gyovGAg3/FE5sbSwCBEiQH1GPsDeQ+rCg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-I4jfeOtK+ho2jksGHgQqHE+L6UzS240t+7v3/Eb/xAs=";
+  cargoHash = "sha256-WXaNLlTbZc2On19azFUbcsx0fA2LpsNNWxO6BzJ469M=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
+
+  env.OPENSSL_NO_VENDOR = 1;
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed firewall";
     longDescription = ''
       Diswall (distributed firewall) - a client of distributed firewall
@@ -32,8 +38,8 @@ rustPlatform.buildRustPackage rec {
       intruder to get any system information.
     '';
     homepage = "https://www.diswall.stream";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "diswall";
   };
-}
+})

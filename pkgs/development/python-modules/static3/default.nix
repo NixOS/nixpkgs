@@ -8,6 +8,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   webtest,
 }:
 
@@ -23,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-uFgv+57/UZs4KoOdkFxbvTEDQrJbb0iYJ5JoWWN4yFY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-cov'" ""
-  '';
-
   optional-dependencies = {
     KidMagic = [
       # TODO: kid
@@ -39,15 +35,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     webtest
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rmohr/static3/releases/tag/v${version}";
     description = "Really simple WSGI way to serve static (or mixed) content";
     mainProgram = "static";
     homepage = "https://github.com/rmohr/static3";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

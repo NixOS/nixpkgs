@@ -18,19 +18,19 @@
   bintools,
   libnotify,
   dwarfs,
-  squashfsTools,
+  squashfs-tools,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gearlever";
-  version = "3.3.3";
+  version = "3.4.7";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    tag = version;
-    hash = "sha256-IAvUKxXXdHntsksShiWyGuLbKOX+dHsKYQE1UBypV4A=";
+    tag = finalAttrs.version;
+    hash = "sha256-GW1jCZIr9oMAny7QKPkuYJxhGKDWxvoRviqr8q7GtdM=";
   };
 
   postPatch =
@@ -86,7 +86,7 @@ python3Packages.buildPythonApplication rec {
         bintools # readelf
         libnotify # notify-send
         dwarfs # dwarfsextract, dwarfsck
-        squashfsTools # unsquashfs
+        squashfs-tools # unsquashfs
       ]
     }"
   ];
@@ -114,4 +114,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

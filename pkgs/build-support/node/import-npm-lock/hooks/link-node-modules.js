@@ -2,6 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const node_modules = process.env.NODE_PATH || "node_modules"
+
 async function asyncFilter(arr, pred) {
   const filtered = [];
   for (const elem of arr) {
@@ -16,7 +18,7 @@ async function asyncFilter(arr, pred) {
 // This means every file in node_modules that is _not_ a symlink to the Nix store.
 async function getUnmanagedFiles(storePrefix, files) {
   return await asyncFilter(files, async (file) => {
-    const filePath = path.join("node_modules", file);
+    const filePath = path.join(node_modules, file);
 
     // Is file a symlink
     const stat = await fs.promises.lstat(filePath);
@@ -37,14 +39,14 @@ async function main() {
 
   // Ensure node_modules exists
   try {
-    await fs.promises.mkdir("node_modules");
+    await fs.promises.mkdir(node_modules);
   } catch (err) {
     if (err.code !== "EEXIST") {
       throw err;
     }
   }
 
-  const files = await fs.promises.readdir("node_modules");
+  const files = await fs.promises.readdir(node_modules);
 
   // Get deny list of files that we don't manage.
   // We do manage nix store symlinks, but not other files.
@@ -58,7 +60,7 @@ async function main() {
   await Promise.all(
     sourceFiles.map(async (file) => {
       const sourcePath = path.join(sourceModules, file);
-      const targetPath = path.join("node_modules", file);
+      const targetPath = path.join(node_modules, file);
 
       // Skip file if it's not a symlink to a store path
       if (unmanaged.includes(file)) {
@@ -69,26 +71,29 @@ async function main() {
       // Don't unlink this file, we just wrote it.
       managed.delete(file);
 
-      // Link to a temporary dummy path and rename.
-      // This is to get some degree of atomicity.
+      // No need to replace the symlink if it already points to the right target
       try {
-        await fs.promises.symlink(sourcePath, targetPath + "-nix-hook-temp");
+        if (await fs.promises.readlink(targetPath) === sourcePath) {
+          return
+        }
       } catch (err) {
-        if (err.code !== "EEXIST") {
+        // If the symlink doesn't already exist, keep going. If we get a
+        // different error trying to stat it, fail.
+        if (err.code !== "ENOENT") {
           throw err;
         }
-
-        await fs.promises.unlink(targetPath + "-nix-hook-temp");
-        await fs.promises.symlink(sourcePath, targetPath + "-nix-hook-temp");
       }
-      await fs.promises.rename(targetPath + "-nix-hook-temp", targetPath);
+      // Replace the link, if it exists, atomically.
+      const tmpPath = `${targetPath}.tmp.${process.pid}`
+      await fs.promises.symlink(sourcePath, tmpPath);
+      await fs.promises.rename(tmpPath, targetPath);
     })
   );
 
   // Clean up store symlinks not included in this generation of node_modules
   await Promise.all(
     Array.from(managed).map((file) =>
-      fs.promises.unlink(path.join("node_modules", file)),
+      fs.promises.unlink(path.join(node_modules, file)),
     )
   );
 }

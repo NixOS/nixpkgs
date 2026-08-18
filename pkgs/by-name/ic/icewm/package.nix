@@ -14,25 +14,26 @@
   giflib,
   glib,
   imlib2,
-  libICE,
-  libSM,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
   libjpeg,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsndfile,
   libtiff,
   libxcb,
+  libxcursor,
   mkfontdir,
   pcre2,
   perl,
@@ -41,13 +42,13 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.8.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     tag = finalAttrs.version;
-    hash = "sha256-PHbBjwGxFxHnecuXXX2nT8SwmgJD0DzThiFEwKKDASU=";
+    hash = "sha256-RIT425SmLcNb9+va/DrMiU21Gq/gb/obCsd3mEEiXjU=";
   };
 
   strictDeps = true;
@@ -71,25 +72,26 @@ gccStdenv.mkDerivation (finalAttrs: {
     giflib
     glib
     imlib2
-    libICE
-    libSM
-    libX11
-    libXcomposite
-    libXdamage
-    libXdmcp
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
     libjpeg
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsndfile
     libtiff
     libxcb
+    libxcursor
     mkfontdir
     pcre2
   ];
@@ -109,6 +111,7 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://ice-wm.org/";
+    changelog = "https://github.com/ice-wm/icewm/releases/tag/${finalAttrs.src.tag}";
     description = "Simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is

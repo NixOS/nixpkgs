@@ -5,20 +5,17 @@
   fetchPypi,
   poetry-core,
   pyscard,
-  pythonOlder,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fido2";
-  version = "1.2.0";
+  version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-hXh0KKlMP46vcvD/MK+6mDtVmhsbeVyTMYyBtK1AYsQ=";
   };
 
   build-system = [ poetry-core ];
@@ -31,17 +28,23 @@ buildPythonPackage rec {
     pcsc = [ pyscard ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  unittestFlagsArray = [ "-v" ];
+  pytestFlags = [
+    "-v"
+    "--no-device"
+  ];
 
   pythonImportsCheck = [ "fido2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides library functionality for FIDO 2.0, including communication with a device over USB";
     homepage = "https://github.com/Yubico/python-fido2";
-    changelog = "https://github.com/Yubico/python-fido2/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/Yubico/python-fido2/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

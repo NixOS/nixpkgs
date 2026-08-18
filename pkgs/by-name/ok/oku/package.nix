@@ -4,14 +4,16 @@
   fetchFromGitHub,
   wrapGAppsHook4,
   pkg-config,
-  fuse,
+  fuse3,
   glib,
   gtk4,
   hicolor-icon-theme,
   libadwaita,
+  oniguruma,
   pango,
   webkitgtk_6_0,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-utbey8DFXUWU6u2H2unNjCHE3/bwhPdrxAOApC+unGA=";
   };
 
+  # Avoiding optimizations for reproducibility
+  prePatch = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail '"-C", "target-cpu=native", ' ""
+  '';
+
   cargoHash = "sha256-rwf9jdr+RDpUcTEG7Xhpph0zuyz6tdFx6hWEZRuxkTY=";
 
   nativeBuildInputs = [
@@ -33,14 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     glib
     gtk4
     hicolor-icon-theme
     libadwaita
+    oniguruma
     pango
     webkitgtk_6_0
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   # the program expects icons to be installed but the
   # program does not install them itself
@@ -49,7 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${finalAttrs.src}/data/hicolor $out/share/icons
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) oku; };
+  };
 
   meta = {
     description = "Browser for the Oku Network and Peer-to-peer sites";

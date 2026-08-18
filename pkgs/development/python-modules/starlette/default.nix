@@ -8,7 +8,6 @@
 
   # dependencies
   anyio,
-  typing-extensions,
 
   # optional dependencies
   itsdangerous,
@@ -16,10 +15,10 @@
   python-multipart,
   pyyaml,
   httpx,
+  httpx2,
 
   # tests
   pytestCheckHook,
-  pythonOlder,
   trio,
 
   # reverse dependencies
@@ -28,21 +27,19 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.46.2";
+  version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-K/0Y6plw+zbRKpzSLbEG6xb30e/Ou//4jddpUYdfs/k=";
+    hash = "sha256-0eby4cDIU2bPUv+1qSTnZtfo4kkgMDIDYnZ9wp2wtoI=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ];
 
   optional-dependencies.full = [
     itsdangerous
@@ -50,22 +47,14 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     httpx
+    httpx2
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     trio
-    typing-extensions
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
-    "-W"
-    "ignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "starlette" ];
 
@@ -73,12 +62,12 @@ buildPythonPackage rec {
     inherit fastapi;
   };
 
-  meta = with lib; {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
+  meta = {
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
     homepage = "https://www.starlette.io/";
     description = "Little ASGI framework that shines";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

@@ -10,16 +10,21 @@
 buildHomeAssistantComponent rec {
   owner = "frenck";
   domain = "spook";
-  version = "3.1.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-IV3n++uFSOvQANPfbCeBj3GP0CCL+w9icKp/k5VO3Qg=";
+    hash = "sha256-tIVEI5oZcvI0uyCQfajb1WVldkx7aQF8gV0UBWYPUnI=";
   };
 
   patches = [ ./remove-sub-integration-symlink-hack.patch ];
+
+  postPatch = ''
+    substituteInPlace custom_components/spook/manifest.json \
+      --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+  '';
 
   dependencies = [
     pillow

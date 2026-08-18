@@ -1,37 +1,35 @@
 {
   stdenv,
   lib,
-  apple-sdk_13,
-  darwinMinVersionHook,
+  gnused,
   rustPlatform,
+  karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
+  nix-update,
+  yq,
+  curl,
+  jq,
+  writeShellApplication,
   writeShellScriptBin,
   withCmd ? false,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
-  version = "1.9.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
-    rev = "v${version}";
-    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WjdmjgEMoo3QNqT4yWxaKOkfuRLdNg4Im+V1Hy5vWgY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
-  ];
+  cargoHash = "sha256-4UBN4I35ZPPPL68LxxPna9Fs9sATCiwoTbWgHYwqOjs=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     (writeShellScriptBin "sw_vers" ''
-      echo 'ProductVersion: 13.0'
+      echo 'ProductVersion: ${stdenv.hostPlatform.darwinMinVersion}'
     '')
   ];
 
@@ -41,24 +39,48 @@ rustPlatform.buildRustPackage rec {
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
 
+  checkFlags = [
+    # these try to access /dev/uinput and won't work in the build sandbox
+    "--skip=kanata::tcp_layer_change_tests"
+  ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    darwinDriverVersion = "6.2.0"; # needs to be updated if karabiner-driverkit changes
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-script-kanata";
+      runtimeInputs = [
+        curl
+        gnused
+        yq
+        jq
+        nix-update
+      ];
+      text = builtins.readFile ./update.sh;
+    });
+
+    darwinDriver =
+      if stdenv.hostPlatform.isDarwin then
+        (karabiner-dk.override {
+          driver-version = finalAttrs.passthru.darwinDriverVersion;
+        })
+      else
+        null;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      bmanuel
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       linj
+      auscyber
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "kanata";
   };
-}
+})

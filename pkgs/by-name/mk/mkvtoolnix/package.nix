@@ -1,15 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   rake,
   boost,
   cmark,
   docbook_xsl,
-  expat,
-  file,
   flac,
   fmt,
   gettext,
@@ -26,7 +24,6 @@
   pugixml,
   qt6,
   utf8cpp,
-  xdg-utils,
   zlib,
   nix-update-script,
   withGUI ? true,
@@ -52,14 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "93.0";
+  version = "100.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-xCO5wKZO2fcO6+KhPO5+OpOvAFuqOuQ2A3V+LzFYLNY=";
+    hash = "sha256-85mL3/x7SoTgOxU/YCFh58vcGzHLG3qPbbG4MD5dB9o=";
   };
 
   passthru = {
@@ -67,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [ "--version-regex=release-(.*)" ];
     };
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -76,37 +74,37 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     rake
-  ] ++ optionals withGUI [ qt6.wrapQtAppsHook ];
+  ]
+  ++ optionals withGUI [ qt6.wrapQtAppsHook ];
 
   # qtbase and qtmultimedia are needed without the GUI
-  buildInputs =
-    [
-      boost
-      expat
-      file
-      flac
-      fmt
-      gmp
-      libdvdread
-      libebml
-      libmatroska
-      libogg
-      libvorbis
-      nlohmann_json
-      pugixml
-      qt6.qtbase
-      qt6.qtmultimedia
-      utf8cpp
-      xdg-utils
-      zlib
-    ]
-    ++ optionals withGUI [ cmark ]
-    ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+  buildInputs = [
+    boost
+    flac
+    fmt
+    gmp
+    libdvdread
+    libebml
+    libmatroska
+    libogg
+    libvorbis
+    nlohmann_json
+    pugixml
+    qt6.qtbase
+    qt6.qtmultimedia
+    utf8cpp
+    zlib
+  ]
+  ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
+    # autoupdate is not needed but it silences a ton of pointless warnings
     patchShebangs . > /dev/null
     autoupdate configure.ac ac/*.m4
+
+    # fix unit tests with GUI disabled
+    sed -i '5i$gtest_apps.delete("gui") if !$build_mkvtoolnix_gui' rake.d/gtest.rb
   '';
 
   configureFlags = [
@@ -143,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with lib.maintainers; [
-      codyopel
       rnhmjoj
     ];
     platforms = lib.platforms.unix;

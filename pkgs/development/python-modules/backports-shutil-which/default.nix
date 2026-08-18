@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "backports-shutil-which";
   version = "3.5.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minrk";
     repo = "backports.shutil_which";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-smvBySS8Ek24y8X9DUGxF4AfJL2ZQ12xeDhEBsZRiP0=";
   };
 
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Backport of shutil.which from Python 3.3";
     homepage = "https://github.com/minrk/backports.shutil_which";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

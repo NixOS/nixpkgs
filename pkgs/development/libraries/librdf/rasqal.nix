@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.9.33";
 
   src = fetchurl {
-    url = "http://download.librdf.org/source/rasqal-${finalAttrs.version}.tar.gz";
+    url = "https://download.librdf.org/source/rasqal-${finalAttrs.version}.tar.gz";
     sha256 = "0z6rrwn4jsagvarg8d5zf0j352kjgi33py39jqd29gbhcnncj939";
   };
 
@@ -27,11 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [ librdf_raptor2 ];
-
-  confiugureFlags = [
-    # uses 'regex.h' as a fallback, which is preferrable
-    "--disable-pcre"
-  ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
 
@@ -52,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
       asl20
     ];
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "rasqal" ];
   };

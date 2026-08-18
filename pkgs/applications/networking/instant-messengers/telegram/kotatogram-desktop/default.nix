@@ -1,64 +1,27 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
-  yasm,
+  telegram-desktop,
   withWebkit ? true,
 }:
 
 let
-  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
   version = "1.4.9";
-  tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
-    version = "0-unstable-2024-06-15";
-
-    src = fetchFromGitHub {
-      owner = "desktop-app";
-      repo = "tg_owt";
-      rev = "c9cc4390ab951f2cbc103ff783a11f398b27660b";
-      hash = "sha256-FfWmSYaeryTDbsGJT3R7YK1oiyJcrR7YKKBOF+9PmpY=";
-      fetchSubmodules = true;
-    };
-
-    patches = [
-      (fetchpatch {
-        url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
-        decode = "base64 -d";
-        stripLen = 1;
-        extraPrefix = "src/";
-        hash = "sha256-goxnuRRbwcdfIk1jFaKGiKCTCYn2saEj7En1Iyglzko=";
-      })
-    ];
-
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
-  });
 in
 telegram-desktop.override {
   pname = "kotatogram-desktop";
   inherit withWebkit;
-  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+  unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: {
     pname = "kotatogram-desktop-unwrapped";
-    version = "${version}-unstable-2024-09-27";
+    version = "${version}-unstable-2026-07-03";
 
     src = fetchFromGitHub {
       owner = "kotatogram";
       repo = "kotatogram-desktop";
-      rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
-      hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
+      rev = "7263a1b53c9e6b45a416532644fff7a4c7f90d54";
+      hash = "sha256-xOfHZ7oUJKk65j7o/AgxtFfc5NqsAoA9E+8U6rHlSmc=";
       fetchSubmodules = true;
     };
-
-    patches = [
-      ./macos-qt5.patch
-      (fetchpatch {
-        url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
-        stripLen = 1;
-        extraPrefix = "cmake/external/glib/cppgir/";
-        hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
-      })
-    ];
 
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
@@ -72,7 +35,7 @@ telegram-desktop.override {
       homepage = "https://kotatogram.github.io";
       changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
       maintainers = with lib.maintainers; [ ilya-fedin ];
-      mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+      mainProgram = "Kotatogram";
     };
-  };
+  });
 }

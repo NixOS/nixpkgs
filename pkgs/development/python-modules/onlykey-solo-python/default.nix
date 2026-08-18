@@ -49,11 +49,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "solo" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trustcrypto/onlykey-solo-python";
     description = "Python library for OnlyKey with Solo FIDO2";
     mainProgram = "solo";
-    maintainers = with maintainers; [ kalbasit ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    license = lib.licenses.asl20;
   };
 }

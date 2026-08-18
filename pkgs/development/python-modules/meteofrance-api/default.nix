@@ -4,24 +4,21 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteofrance-api";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "meteofrance-api";
-    tag = "v${version}";
-    hash = "sha256-5zqmzPbzC9IUZ+y1FRh+u1gds/ZdGeRm5/ajQf8UKTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zvfFMxXbCul14OXaoRdjMWKW3FYyTUcYGklHgb04nvA=";
   };
 
   build-system = [ poetry-core ];
@@ -54,12 +51,12 @@ buildPythonPackage rec {
     "test_workflow"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access information from the Meteo-France API";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
-    changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "meteofrance-api";
   };
-}
+})

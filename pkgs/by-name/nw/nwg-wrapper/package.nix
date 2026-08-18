@@ -12,7 +12,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
   version = "0.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
@@ -31,7 +31,9 @@ python3Packages.buildPythonPackage rec {
     gtk-layer-shell
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     i3ipc
     pygobject3
   ];
@@ -48,11 +50,11 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "nwg_wrapper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to display a script output or a text file content on the desktop in sway or other wlroots-based compositors";
     mainProgram = "nwg-wrapper";
     homepage = "https://github.com/nwg-piotr/nwg-wrapper/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

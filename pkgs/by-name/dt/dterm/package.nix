@@ -5,12 +5,12 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dterm";
   version = "0.5";
 
   src = fetchurl {
-    url = "http://www.knossos.net.nz/downloads/dterm-${version}.tgz";
+    url = "http://www.knossos.net.nz/downloads/dterm-${finalAttrs.version}.tgz";
     hash = "sha256-lFM7558e7JZeWYhtXwCjXLZ1xdsdiUGfJTu3LxQKvds=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "BIN=$(out)/bin/" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.knossos.net.nz/resources/free-software/dterm/";
     description = "Simple terminal program";
     longDescription = ''
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
       are forwarded to the serial line, and data forwarded from the serial line
       appears on the terminal.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ auchter ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ auchter ];
+    platforms = lib.platforms.unix;
     mainProgram = "dterm";
   };
-}
+})

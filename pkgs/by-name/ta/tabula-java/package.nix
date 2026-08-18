@@ -17,7 +17,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-lg8/diyGhfkUU0w7PEOlxb1WNpJZVDDllxMMsTIU/Cw=";
   };
 
-  mvnHash = "sha256-CXJm9YlYsYViChFcH9e2P9pxK0q/tLWODOzZPXZ8hK0=";
+  mvnHash = "sha256-XMrAwOqQCt0vDUqFXodLhmujnrz2/FRSBYkAxDz9Z8c=";
   mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for extracting tables from PDF files";
     longDescription = ''
       tabula-java is the table extraction engine that powers
@@ -43,9 +43,9 @@ maven.buildMavenPackage rec {
       programmatically extract tables from PDFs.
     '';
     homepage = "https://tabula.technology/";
-    license = licenses.mit;
-    maintainers = [ maintainers.jakewaksbaum ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jakewaksbaum ];
+    platforms = lib.platforms.all;
     mainProgram = "tabula-java";
   };
 }

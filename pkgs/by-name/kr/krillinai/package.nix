@@ -4,33 +4,38 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGL,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "krillinai";
-  version = "1.2.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "krillinai";
     repo = "KrillinAI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RHlQeTFeG23LjLwczSGIghH3XPFTR6ZVDFk2KlRQGoA=";
+    hash = "sha256-k1p9v3MQklycW2FsDCyEWNwjLFSymxx1qVg5qhC8xgI=";
   };
 
-  vendorHash = "sha256-PN0ntMoPG24j3DrwuIiYHo71QmSU7u/A9iZ5OruIV/w=";
+  vendorHash = "sha256-OdmOalac4oked7vLGMWFCjjNU5TBq1P+HudE5a+bgq4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libXinerama
-    xorg.libXxf86vm
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libXi
+    libxinerama
+    libxxf86vm
+    libxcursor
+    libxrandr
+    libx11
+    libxi
     libGL
   ];
 
@@ -50,6 +55,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/krillinai/KrillinAI/releases/tag/v${finalAttrs.version}";
     mainProgram = "krillinai-desktop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 })

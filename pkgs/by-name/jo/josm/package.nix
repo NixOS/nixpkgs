@@ -2,30 +2,29 @@
   lib,
   stdenv,
   fetchurl,
-  fetchFromGitHub,
+  fetchsvn,
   makeWrapper,
   unzip,
   jre,
-  libXxf86vm,
+  libxxf86vm,
   extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true",
 }:
 let
   pname = "josm";
-  version = "19412";
+  version = "19613";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-lT7DoB4VJm9yBuQL+qYc4om/SFaJm8mH29R3P3mULjY=";
+      hash = "sha256-e7qbXV61fbOQZy3c5XGmfenVzwsOj+YQxNveFfvlkHc=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-INChmimPk8K0UuDHDIh5prjj/gx26Pv1g1MJhhHVd+8=";
+      hash = "sha256-9qSb8gGNuWhIIV/ZOtLTVnUAGME1HfGuA9zeatWLKmY=";
     };
-    pkg = fetchFromGitHub {
-      owner = "JOSM";
-      repo = "josm";
-      tag = "${version}-tested";
-      hash = "sha256-5XOVDQzjZ6g5iGWTqhhO/yAxgBy4jSthDeHu4QpJxaY=";
+    pkg = fetchsvn {
+      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
+      rev = version;
+      hash = "sha256-sAG9GI0SQpmdDqIXbSH/FN1io/QcsAJFv6/YT483aMA=";
     };
   };
 
@@ -53,15 +52,20 @@ stdenv.mkDerivation {
     else
       ''
         install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-        cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
+        cp -R ${srcs.pkg}/usr/share $out
 
         # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
         makeWrapper ${jre}/bin/java $out/bin/josm \
           --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-          --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib' \
+          --prefix LD_LIBRARY_PATH ":" '${libxxf86vm}/lib' \
           --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-          --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+          --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
       '';
+
+  passthru = {
+    inherit srcs;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Extensible editor for OpenStreetMap";
@@ -72,6 +76,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       rycee
       sikmir
+      starsep
     ];
     platforms = lib.platforms.all;
     mainProgram = "josm";

@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   glib,
+  blueprint-compiler,
   gobject-introspection,
   gtk4,
   desktop-file-utils,
@@ -19,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "embellish";
-  version = "0.4.7";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "getnf";
     repo = "embellish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+tTuQNok2rqTcQR4CRMc4qRqw0Ah2rovIut618z9GhU=";
+    hash = "sha256-5aAeEFB2KCyHtOqBj2q1O7A8PXSQYcP92CCqVtUNIqU=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     glib
+    blueprint-compiler
     gobject-introspection
     gtk4
     gettext
@@ -66,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/getnf/embellish";
     changelog = "https://github.com/getnf/embellish/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     mainProgram = "io.github.getnf.embellish";
     platforms = lib.platforms.linux;
   };

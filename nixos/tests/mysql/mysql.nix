@@ -25,9 +25,11 @@ let
     }:
     makeTest {
       inherit name;
-      meta = {
-        maintainers = lib.teams.helsinki-systems.members;
-      };
+      meta.maintainers = with lib.maintainers; [
+        conni2461
+        das_j
+        helsinki-Jo
+      ];
 
       nodes = {
         ${name} =
@@ -95,8 +97,7 @@ let
               settings = {
                 mysqld = {
                   plugin-load-add =
-                    lib.optional hasMroonga "ha_mroonga.so"
-                    ++ lib.optional hasRocksDB "ha_rocksdb.so";
+                    lib.optional hasMroonga "ha_mroonga.so" ++ lib.optional hasRocksDB "ha_rocksdb.so";
                 };
               };
             };

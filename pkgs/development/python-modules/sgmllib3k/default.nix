@@ -2,35 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
+  setuptools,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sgmllib3k";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = isPy27;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eGj7HIv6dkwaxWPTzzacOB0TJdNhJJM6cm8p/NqoEuk=";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [ "test_declaration_junk_chars" ];
+  disabledTests = [ "test_declaration_junk_chars" ];
 
   doCheck = false;
 
   pythonImportsCheck = [ "sgmllib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/sgmllib3k/";
     description = "Python 3 port of sgmllib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

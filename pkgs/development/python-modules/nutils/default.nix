@@ -12,22 +12,19 @@
   stringly,
   treelog,
   pytestCheckHook,
-  pythonOlder,
   pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "9.0";
+  version = "9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
     tag = "v${version}";
-    hash = "sha256-Ef830yTY+g6ZPZ9h0lSktkewIerHbWVfXwrdQ6rzz6I=";
+    hash = "sha256-Q55nSs7SmB76vG8xJNaSu11vtSuWCXrNn0PRCkTWji4=";
   };
 
   build-system = [ flit-core ];
@@ -52,7 +49,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pkgs.graphviz
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Error: invalid value 'x' for farg: loading 'x' as float
@@ -66,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Numerical Utilities for Finite Element Analysis";
-    changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

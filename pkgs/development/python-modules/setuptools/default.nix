@@ -7,25 +7,29 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools";
-  version = "80.7.1";
+  version = "83.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
-    tag = "v${version}";
-    hash = "sha256-lOGvJoVwFxASI7e5fJkeS7iGOIPklGRYmmMfclqn0H4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gn2gH2LnsgeX1MvDRBbnFnI6WjkjBFItU4SelowkjBc=";
   };
 
   patches = [
-    ./tag-date.patch
+    ./reproducible-wheel.patch
   ];
 
   # Drop dependency on coherent.license, which in turn requires coherent.build
   postPatch = ''
     sed -i "/coherent.licensed/d" pyproject.toml
+
+    # Substitute version for reproducible builds
+    substituteInPlace setuptools/version.py \
+      --replace-fail '@version@' '${finalAttrs.version}'
   '';
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -39,14 +43,14 @@ buildPythonPackage rec {
     inherit distutils;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://github.com/pypa/setuptools";
     changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
-      replaceStrings [ "." ] [ "-" ] version
+      lib.replaceString "." "-" finalAttrs.version
     }";
-    license = with licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = python.meta.platforms;
-    teams = [ teams.python ];
+    teams = [ lib.teams.python ];
   };
-}
+})

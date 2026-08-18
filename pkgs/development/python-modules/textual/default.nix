@@ -11,10 +11,20 @@
   platformdirs,
   rich,
   typing-extensions,
+  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-languages,
+  tree-sitter-c-sharp,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-make,
+  tree-sitter-markdown,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-sql,
+  tree-sitter-yaml,
+  tree-sitter-zeek,
 
   # tests
   jinja2,
@@ -23,38 +33,50 @@
   pytestCheckHook,
   syrupy,
   time-machine,
-  tree-sitter-markdown,
-  tree-sitter-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual";
-  version = "3.5.0";
+  version = "8.2.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
-    tag = "v${version}";
-    hash = "sha256-mr/pzW6EhB+STtVHW1a/+CivzPINHEvvYWnCizycjeo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4T+/eD0adPugDP7TCDoDaOe0OrEFskCUadLVEixmTwo=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      markdown-it-py
-      platformdirs
-      rich
-      typing-extensions
-    ]
-    ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  pythonRelaxDeps = [
+    "rich"
+  ];
+  dependencies = [
+    markdown-it-py
+    mdit-py-plugins
+    platformdirs
+    rich
+    typing-extensions
+  ]
+  ++ markdown-it-py.optional-dependencies.plugins
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+      tree-sitter-c-sharp
+      tree-sitter-html
+      tree-sitter-javascript
+      tree-sitter-make
+      tree-sitter-markdown
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-yaml
+      tree-sitter-zeek
+    ];
   };
 
   nativeCheckInputs = [
@@ -78,14 +100,11 @@ buildPythonPackage rec {
     # Assertion issues
     "test_textual_env_var"
 
-    # Fail since tree-sitter-markdown was updated to 0.5.0
-    # ValueError: Incompatible Language version 15. Must be between 13 and 14
-    # https://github.com/Textualize/textual/issues/5868
-    "test_setting_builtin_language_via_attribute"
-    "test_setting_builtin_language_via_constructor"
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Some tests in groups require state from previous tests
     # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
     "--dist=loadgroup"
@@ -98,8 +117,8 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Textualize/textual/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };
-}
+})

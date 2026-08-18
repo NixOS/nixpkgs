@@ -14,52 +14,50 @@
   withNetSnmp ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keepalived";
-  version = "2.3.4";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
-    rev = "v${version}";
-    sha256 = "sha256-Xv/UGIeZhRHQO5lxkaWgHDUW+3qBi3wFU4+Us1A2uE0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-I+SbxCY3D568L7U0cvlayZ8v4VEbufMCDX1hkRxyQVE=";
   };
 
-  buildInputs =
-    [
-      file
-      libmnl
-      libnftnl
-      libnl
-      openssl
-    ]
-    ++ lib.optionals withNetSnmp [
-      net-snmp
-    ];
+  buildInputs = [
+    file
+    libmnl
+    libnftnl
+    libnl
+    openssl
+  ]
+  ++ lib.optionals withNetSnmp [
+    net-snmp
+  ];
 
   enableParallelBuilding = true;
 
-  passthru.tests.keepalived = nixosTests.keepalived;
+  passthru.tests = nixosTests.keepalived;
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
 
-  configureFlags =
-    [
-      "--enable-sha1"
-    ]
-    ++ lib.optionals withNetSnmp [
-      "--enable-snmp"
-    ];
+  configureFlags = [
+    "--enable-sha1"
+  ]
+  ++ lib.optionals withNetSnmp [
+    "--enable-snmp"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.raitobezarius ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raitobezarius ];
     mainProgram = "keepalived";
   };
-}
+})

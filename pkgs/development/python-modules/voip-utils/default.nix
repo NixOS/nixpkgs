@@ -3,20 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  opuslib,
+  opuslib-next,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "voip-utils";
-  version = "0.3.3";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
     tag = "v${version}";
-    hash = "sha256-LGmvf6HejxH17VaKL2extonoAmk0zqU7UpHmuPc8/u0=";
+    hash = "sha256-kvuNqiBjcDQ53X6LbnOp2WNh8QOu+ExjhfgKWBoSsH0=";
   };
 
   postPatch = ''
@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "opuslib" ];
+  pythonRelaxDeps = [ "opuslib-next" ];
 
-  dependencies = [ opuslib ];
+  dependencies = [ opuslib-next ];
 
   pythonImportsCheck = [ "voip_utils" ];
 

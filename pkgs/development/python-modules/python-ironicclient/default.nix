@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.10.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-ironicclient";
     tag = version;
-    hash = "sha256-HqsOMvJ8SK8IEZgeClLd0TnQLBweBEru0Bw4WRSDG7s=";
+    hash = "sha256-AbxzRpyfplR4Mk9CcaRXi+CNo08tlRIxAFxsJjrkxvY=";
   };
 
   build-system = [
@@ -69,26 +69,17 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run -e <(echo "
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_no_options
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_description
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_extra
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_uuid
-      ironicclient.tests.unit.osc.v1.test_baremetal_conductor.TestBaremetalConductorShow.test_conductor_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalCreate
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalShow.test_baremetal_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestNodeHistoryEventGet.test_baremetal_node_history_list
-    ")
+    stestr run
     runHook postCheck
   '';
 
   pythonImportsCheck = [ "ironicclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for OpenStack bare metal provisioning API, includes a Python module (ironicclient) and CLI (baremetal)";
     mainProgram = "baremetal";
     homepage = "https://github.com/openstack/python-ironicclient";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

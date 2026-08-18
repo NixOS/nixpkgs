@@ -55,18 +55,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Print out system statistics with pride flags";
     longDescription = ''
       Pridefetch prints your system statistics (similarly to neofetch, screenfetch or pfetch) along with a pride flag.
       The flag which is printed is configurable, as well as the width of the output.
     '';
     homepage = "https://github.com/SpyHoodle/pridefetch";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.minion3665
+      lib.maintainers.minion3665
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "pridefetch";
   };
 }

@@ -32,20 +32,39 @@ let
     name = "rocm";
     paths = rocmList;
   };
-
-  # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
-  stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  # TODO(@connorbaker):
+  # When strictDeps is enabled, `cuda_nvcc` is required as the argument to `--with-cuda` in `configureFlags` or else
+  # configurePhase fails with `checking for cuda_runtime.h... no`.
+  # This is odd, especially given `cuda_runtime.h` is provided by `cuda_cudart.dev`, which is already in `buildInputs`.
+  strictDeps = true;
+
   pname = "ucx";
-  version = "1.18.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${version}";
-    sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
+    tag = "v${finalAttrs.version}";
+    # Otherwise compilation fails with:
+    #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
+    fetchSubmodules = true;
+    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
   };
+
+  # UCX uses the `#pragma omp master` declaration which is deprecated since
+  # OpenMP 5.1. Since UCX builds with -Werror by default, this causes build
+  # failures in GCC 16 which introduced the `deprecated-openmp` warning.
+  # Accordingly, we replace it with the new `#pragma omp masked` version in
+  # compilers which support OpenMP 5.1.
+  # https://github.com/openucx/ucx/pull/11697
+  patches = [ ./deprecated-openmp-pragma.patch ];
+
+  postPatch = ''
+    patchShebangs config/nvcc_wrap.sh
+  '';
 
   outputs = [
     "out"
@@ -53,48 +72,53 @@ stdenv'.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      doxygen
-      pkg-config
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
-
-  buildInputs =
-    [
-      libbfd
-      libiberty
-      numactl
-      perl
-      rdma-core
-      zlib
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_nvml_dev
-
-    ]
-    ++ lib.optionals enableRocm rocmList;
-
-  LDFLAGS = lib.optionals enableCuda [
-    # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
   ];
 
-  configureFlags =
-    [
-      "--with-rdmacm=${lib.getDev rdma-core}"
-      "--with-dc"
-      "--with-rc"
-      "--with-dm"
-      "--with-verbs=${lib.getDev rdma-core}"
+  buildInputs = [
+    libbfd
+    libiberty
+    numactl
+    perl
+    rdma-core
+    zlib
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_nvml_dev
+
+  ]
+  ++ lib.optionals enableRocm rocmList;
+
+  # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
+  # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
+  # referring to an array!
+  env.LDFLAGS = toString (
+    lib.optionals enableCuda [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      # Fake libnvidia-ml.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs"
     ]
-    ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
-    ++ lib.optional enableRocm "--with-rocm=${rocm}";
+  );
+
+  configureFlags = [
+    "--with-rdmacm=${lib.getDev rdma-core}"
+    "--with-dc"
+    "--with-rc"
+    "--with-dm"
+    "--with-verbs=${lib.getDev rdma-core}"
+  ]
+  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
+  ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
@@ -106,11 +130,16 @@ stdenv'.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
+    downloadPage = "https://github.com/openucx/ucx";
+    changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    # LoongArch64 is not supported.
+    # See: https://github.com/openucx/ucx/issues/9873
+    badPlatforms = lib.platforms.loongarch64;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

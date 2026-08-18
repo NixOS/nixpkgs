@@ -74,22 +74,21 @@ stdenv.mkDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and simple image viewer";
     longDescription = ''
-      Viewnior is insipred by big projects like Eye of Gnome, because of it's
+      Viewnior is inspired by big projects like Eye of Gnome, because of it's
       usability and richness,and by GPicView, because of it's lightweight design and
       minimal interface. So here comes Viewnior - small and light, with no compromise
       with the quality of it's functions. The program is made with better integration
       in mind (follows Gnome HIG2).
     '';
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://siyanpanayotov.com/project/viewnior/";
-    maintainers = with maintainers; [
-      smironov
+    maintainers = with lib.maintainers; [
       artturin
     ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "viewnior";
   };
 }

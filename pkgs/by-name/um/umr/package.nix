@@ -19,7 +19,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umr";
   version = "1.0.10";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "tomstdenis";
     repo = "umr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-i0pTcg1Y+G/nGZSbMtlg37z12gF4heitEl5L4gfVO9c=";
   };
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace debugging and diagnostic tool for AMD GPUs";
     homepage = "https://gitlab.freedesktop.org/tomstdenis/umr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
-}
+})

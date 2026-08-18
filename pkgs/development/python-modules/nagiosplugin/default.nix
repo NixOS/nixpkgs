@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   twine,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "nagiosplugin";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nagiosplugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python class library which helps with writing Nagios (Icinga) compatible plugins";
     homepage = "https://github.com/mpounsett/nagiosplugin";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ symphorien ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
 }

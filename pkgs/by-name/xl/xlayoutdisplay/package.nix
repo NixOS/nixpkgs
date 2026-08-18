@@ -3,27 +3,29 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxcursor,
+  libx11,
   boost,
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlayoutdisplay";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "xlayoutdisplay";
-    rev = "v${version}";
-    hash = "sha256-A37jFhVTW/3QNEf776Oi3ViRK+ebOPRTsEQqdmNhA7E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gJucWffchhTFdYEQqjbj1OdPTBSmGDDcKbOyIWdWQig=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with xorg; [
-    libX11
-    libXrandr
-    libXcursor
+  buildInputs = [
+    libx11
+    libxrandr
+    libxcursor
     boost
   ];
   nativeCheckInputs = [ gtest ];
@@ -34,12 +36,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement";
     homepage = "https://github.com/alex-courtis/xlayoutdisplay";
-    maintainers = with maintainers; [ dtzWill ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ stephen-huan ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "xlayoutdisplay";
   };
-}
+})

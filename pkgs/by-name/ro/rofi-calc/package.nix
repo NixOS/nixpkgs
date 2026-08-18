@@ -13,15 +13,15 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-calc";
-  version = "2.3.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "rofi-calc";
-    rev = "v${version}";
-    sha256 = "sha256-ASZtIcUxaOYYAlINa77R9WgqonHtAR7Fdm9wDrbyRy0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-adDHONoLQeZP4Oi7yx/tSAaMHAaipj2UrG+xZz7EiQ4=";
   };
 
   nativeBuildInputs = [
@@ -44,18 +44,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/calc.c --replace-fail \
       "qalc_binary = \"qalc\"" \
-      "qalc_binary = \"${libqalculate}/bin/qalc\""
+      "qalc_binary = \"${lib.getExe libqalculate}\""
 
     substituteInPlace src/meson.build --replace-fail \
       "rofi.get_variable('pluginsdir')" \
       "'$out/lib/rofi'"
   '';
 
-  meta = with lib; {
-    description = "Do live calculations in rofi!";
+  meta = {
+    description = "Do live calculations in rofi";
     homepage = "https://github.com/svenstaro/rofi-calc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
+    platforms = with lib.platforms; linux;
   };
-}
+})

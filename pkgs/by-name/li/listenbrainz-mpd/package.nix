@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   stdenv,
   openssl,
@@ -9,22 +9,21 @@
   sqlite,
   installShellFiles,
   asciidoctor,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "listenbrainz-mpd";
-  version = "2.3.8";
+  version = "2.5.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
-    rev = "v${version}";
-    hash = "sha256-QBc0avci232UIxzTKlS0pjL7cCuvwAFgw6dSwdtYAtU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-087+l3calge6hKu3h84C98mIpW6qFAZwRMe4lkQCU4o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-NQXXR6b1XZDihVoRNFJLXtMNjlzOIzkc4rthwx0A7AE=";
+  cargoHash = "sha256-SxXEathWAGqdgeJmIn5h9Zvv7Z3DGXa4htkODf/ANRQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,26 +31,26 @@ rustPlatform.buildRustPackage rec {
     asciidoctor
   ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          libiconv
-        ]
-      else
-        [
-          openssl
-        ]
-    );
+  buildInputs = [
+    sqlite
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        libiconv
+      ]
+    else
+      [
+        openssl
+      ]
+  );
 
-  buildFeatures =
-    [
-      "shell_completion"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "systemd"
-    ];
+  buildFeatures = [
+    "shell_completion"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "systemd"
+  ];
 
   postInstall = ''
     installShellCompletion \
@@ -63,12 +62,17 @@ rustPlatform.buildRustPackage rec {
     installManPage listenbrainz-mpd.1
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";
-    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${version}/CHANGELOG.md";
+    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "ListenBrainz submission client for MPD";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ DeeUnderscore ];
+    maintainers = with lib.maintainers; [
+      DeeUnderscore
+      Kladki
+    ];
     mainProgram = "listenbrainz-mpd";
   };
-}
+})

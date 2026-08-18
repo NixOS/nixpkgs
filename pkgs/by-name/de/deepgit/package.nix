@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem rec {
-      name = pname;
+      name = "deepgit";
       desktopName = "DeepGit";
       keywords = [ "git" ];
       comment = "Git-Client";
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
       terminal = false;
       startupNotify = true;
       startupWMClass = desktopName;
-      exec = pname;
+      exec = "deepgit";
       mimeTypes = [
-        "x-scheme-handler/${pname}"
+        "x-scheme-handler/deepgit"
         "x-scheme-handler/sourcetree"
       ];
-      icon = pname;
+      icon = "deepgit";
     })
   ];
 
@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to investigate the history of source code";
     homepage = "https://www.syntevo.com/deepgit";
     changelog = "https://www.syntevo.com/deepgit/changelog.txt";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ urandom ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "deepgit";
   };
 }

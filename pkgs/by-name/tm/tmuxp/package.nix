@@ -5,14 +5,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tmuxp";
-  version = "1.55.0";
+  version = "1.74.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-reC609nY1kdmQInAphAfmSTZQQqitTD88EBv/4mU3h0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ngSA6gEpmWAmNYh+BGHTlcLYqm42qFtabR1l3NbHgJw=";
   };
 
   build-system = with python3Packages; [
@@ -34,15 +34,16 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd tmuxp \
       --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --fish <(shtab --shell=fish -u tmuxp.cli.create_parser) \
       --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
   meta = {
     description = "tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
-    changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
+    changelog = "https://github.com/tmux-python/tmuxp/raw/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "tmuxp";
   };
-}
+})

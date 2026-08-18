@@ -7,14 +7,14 @@
 # this package is working only as root
 # in order to work as a non privileged user you would need to suid the bin
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "beep";
   version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "spkr-beep";
     repo = "beep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gDgGI9F+wW2cN89IwP93PkMv6vixJA2JckF78nxZ+TU=";
   };
 
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "beep";
   };
-}
+})

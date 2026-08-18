@@ -1,51 +1,58 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fromager";
-  version = "0.47.0";
+  version = "0.94.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
-    tag = version;
-    hash = "sha256-Jw5fOhY4WOwYG5QPCcsT6+BicGtqz9UrHcpPsPQlOWc=";
+    tag = finalAttrs.version;
+    hash = "sha256-h+WQlz1JIwlAF2wXVaUWScEE87P/r5bBFcDVMLalsEM=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-    setuptools-scm
+  build-system = with python3Packages; [
+    hatchling
+    hatch-vcs
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     elfdeps
-    html5lib
+    license-expression
     packaging
-    pkginfo
+    packageurl-python
     psutil
     pydantic
+    pypi-simple
     pyproject-hooks
     pyyaml
     requests
     resolvelib
     rich
-    setuptools
+    starlette
     stevedore
     tomlkit
     tqdm
-    virtualenv
+    uv
+    uvicorn
     wheel
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-xdist
     requests-mock
+    spdx-tools
     twine
+    uv
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
@@ -59,4 +66,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "fromager";
   };
-}
+})

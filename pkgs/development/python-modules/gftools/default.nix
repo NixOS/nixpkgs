@@ -8,20 +8,18 @@
   absl-py,
   afdko,
   axisregistry,
-  babelfont,
   beautifulsoup4,
   black,
   brotli,
-  bumpfontversion,
   coreutils,
   diffenator2,
   ffmpeg-python,
-  font-v,
   fontbakery,
   fontfeatures,
   fontmake,
   fonttools,
   gflanguages,
+  gfmetadata,
   gfsubsets,
   glyphsets,
   glyphslib,
@@ -44,8 +42,6 @@
   requests,
   rich,
   ruamel-yaml,
-  skia-pathops,
-  statmake,
   strictyaml,
   tabulate,
   ttfautohint-py,
@@ -62,14 +58,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.86";
+  version = "0.9.999";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-4N27R+rbPSnxg701OGtrD7/iwTaUBdhp528+9n4ZIt8=";
+    hash = "sha256-jKd/i0qXzPJNOxzO2Ds3BxP2RDoelNhKutqeaz/yQww=";
   };
 
   postPatch = ''
@@ -127,51 +123,45 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      absl-py
-      afdko
-      axisregistry
-      babelfont
-      beautifulsoup4
-      brotli
-      bumpfontversion
-      ffmpeg-python
-      font-v
-      fontfeatures
-      fontmake
-      fonttools
-      gflanguages
-      gfsubsets
-      glyphsets
-      glyphslib
-      jinja2
-      nanoemoji
-      networkx
-      ninja
-      ots-python
-      packaging
-      pillow
-      protobuf
-      pygit2
-      pygithub
-      pyyaml
-      requests
-      rich
-      ruamel-yaml
-      setuptools
-      skia-pathops
-      statmake
-      strictyaml
-      tabulate
-      ttfautohint-py
-      ufomerge
-      unidecode
-      vharfbuzz
-      vttlib
-    ]
-    ++ fonttools.optional-dependencies.ufo
-    ++ fontmake.optional-dependencies.json;
+  dependencies = [
+    absl-py
+    afdko
+    axisregistry
+    beautifulsoup4
+    brotli
+    ffmpeg-python
+    fontfeatures
+    fontmake
+    fonttools
+    gflanguages
+    gfmetadata
+    gfsubsets
+    glyphsets
+    glyphslib
+    jinja2
+    nanoemoji
+    networkx
+    ninja
+    ots-python
+    packaging
+    pillow
+    protobuf
+    pygit2
+    pygithub
+    pyyaml
+    requests
+    rich
+    ruamel-yaml
+    strictyaml
+    tabulate
+    ttfautohint-py
+    ufomerge
+    unidecode
+    vharfbuzz
+    vttlib
+  ]
+  ++ fonttools.optional-dependencies.ufo
+  ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [
@@ -203,12 +193,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gftools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Misc tools for working with the Google Fonts library";
     homepage = "https://github.com/googlefonts/gftools";
     changelog = "https://github.com/googlefonts/gftools/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gftools";
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

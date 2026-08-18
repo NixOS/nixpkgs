@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.10";
+  version = "1.3.0";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,19 +38,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-dUWwX+0rDQce/AklrBU4ALRSmHbBnbQQGlUtfK+Foeg=";
+        hash = "sha256-jL0hLRaWVO3ZPTUIOrI/p9baJHtZ/hbbLXj/x3IGd0c=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-a/0H64NSJZG2ixJCeCAp1SD/2l6HGCT1oECTSsgfu2E=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-B5K7CvBVdSpgRfPXxYraPIZwkwW/kxlkPmaDEy1cOuE=";
+        hash = "sha256-RNHqi7dKAJvRO5vhi3rsZofRfI3hE4OQS3ZnRc5t77I=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-xstTc8y03uWmN33Oi8h7zmoMm4XtY8kl3taLlaJCYmk=";
+        hash = "sha256-8wQr0uNKnoBNOhNSzhW+z40dS68um0I9Gs3+b8HyAHI=";
       };
     };
 
@@ -78,13 +74,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-cli";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tideways Profiler CLI";
     homepage = "https://tideways.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "tideways";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

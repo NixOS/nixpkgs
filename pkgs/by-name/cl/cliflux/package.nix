@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
   nix-update-script,
@@ -9,18 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cliflux";
-  version = "1.8.0";
+  version = "1.10.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "spencerwi";
     repo = "cliflux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AGkinlN5Ng0LXau6U9Ft+yMIFMpbrbup3R3c3UlglEM=";
+    hash = "sha256-fzuqgzBVnVIOcRplDKLBskhX9PlMA9LM0f3MnLqzyhk=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-3nNvPQMnYRZlhUab0MSf39vMNidpMLJh56JSjlsrYAg=";
+  cargoHash = "sha256-gAfN3kO5wrZ8usKv4C97LT+BAEu9ZD8ZP/GOCrWC7Nk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,10 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Terminal client for Miniflux RSS reader";
-    homepage = "https://github.com/spencerwi/cliflux";
-    changelog = "https://github.com/spencerwi/cliflux/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://codeberg.org/spencerwi/cliflux";
+    changelog = "https://codeberg.org/spencerwi/cliflux/raw/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     mainProgram = "cliflux";
   };
 })

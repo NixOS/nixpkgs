@@ -14,29 +14,47 @@
   callPackage,
   nixosTests,
   librsvg,
+  nix-update-script,
 }:
 
 let
-  version = "250321-57590c48b";
+  version = "260728-bbde8f452";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
+    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
   };
 
-  libtensorflow = callPackage ./libtensorflow.nix { };
-  backend = callPackage ./backend.nix { inherit libtensorflow src version; };
+  backend = callPackage ./backend.nix { inherit src version; };
   frontend = callPackage ./frontend.nix { inherit src version; };
 
   fetchModel =
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.org/tensorflow/${name}.zip";
+      extension = "zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
       stripRoot = false;
+    };
+
+  # NB: needs to be a derivation with a src attribute so the update script
+  # can ensure that these hashes remain up to date
+  wrapModelForUpdate =
+    src:
+    stdenv.mkDerivation {
+      inherit pname version src;
+
+      dontUnpack = true;
+      dontBuild = true;
+
+      installPhase = ''
+        mkdir $out
+      '';
+
+      passthru.updateScript = nix-update-script { };
     };
 
   facenet = fetchModel {
@@ -57,7 +75,7 @@ let
   assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname version src;
 
   nativeBuildInputs = [
     makeWrapper
@@ -85,23 +103,53 @@ stdenv.mkDerivation (finalAttrs: {
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
+    rm ${assets_path}/models
+    mkdir -p ${assets_path}/models
+    ln -s ${frontend}/assets/models/* ${assets_path}/models/
+
     # install tensorflow models
-    ln -s ${nasnet}/nasnet ${assets_path}
-    ln -s ${nsfw}/nsfw ${assets_path}
-    ln -s ${facenet}/facenet ${assets_path}
+    ln -s ${nasnet}/nasnet ${assets_path}/models/
+    ln -s ${nsfw}/nsfw ${assets_path}/models/
+    ln -s ${facenet}/facenet ${assets_path}/models/
 
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-  passthru.tests.photoprism = nixosTests.photoprism;
+  passthru = {
+    inherit backend frontend;
 
-  meta = with lib; {
+    facenet = wrapModelForUpdate facenet;
+    nasnet = wrapModelForUpdate nasnet;
+    nsfw = wrapModelForUpdate nsfw;
+
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      photoprism = nixosTests.photoprism;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "backend"
+        "--subpackage"
+        "frontend"
+        "--subpackage"
+        "facenet"
+        "--subpackage"
+        "nasnet"
+        "--subpackage"
+        "nsfw"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
-    inherit (libtensorflow.meta) platforms;
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      ipetkov
+    ];
     mainProgram = "photoprism";
   };
 })

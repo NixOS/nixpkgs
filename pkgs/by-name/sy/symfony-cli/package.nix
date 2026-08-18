@@ -7,18 +7,19 @@
   symfony-cli,
   nssTools,
   makeBinaryWrapper,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "symfony-cli";
-  version = "5.12.0";
-  vendorHash = "sha256-b0BdqqO6257KZ6O+AJ+XQVo+q1X9Msta4dmIfWKasyI=";
+  version = "5.19.0";
+  vendorHash = "sha256-/geZVen7WP60LV7+CVv0W8vhiHOoQJmC2WPAXHAc0qY=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xl8pKfAgaeEjtITMpp6urwPndIBXxSyYEcX0PpVK8nc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8AMH4w8V232vbCHzVWbbSNljMA808+Vvu5u0YkiZPIA=";
     leaveDotGit = true;
     postFetch = ''
       git --git-dir $out/.git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > $out/SOURCE_DATE
@@ -39,15 +40,22 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [ makeBinaryWrapper ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
     mkdir $out/libexec
     mv $out/bin/symfony-cli $out/libexec/symfony
 
     makeBinaryWrapper $out/libexec/symfony $out/bin/symfony \
       --prefix PATH : ${lib.makeBinPath [ nssTools ]}
+
+    installShellCompletion --cmd symfony \
+      --bash <($out/bin/symfony completion bash) \
+      --fish <($out/bin/symfony completion fish) \
+      --zsh <($out/bin/symfony completion zsh)
   '';
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   passthru = {
@@ -65,6 +73,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = lib.licenses.agpl3Plus;
     mainProgram = "symfony";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ patka ];
   };
 })

@@ -60,7 +60,14 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
+        evaluated = gclient_eval.Parse(
+            deps_file,
+            filename="DEPS",
+            vars_override=repo_vars,
+            # KeyError: "host_cpu was used as a variable, but was not declared in the vars dict (file 'DEPS', line 114)"
+            # https://chromium.googlesource.com/webpagereplay.git/+/b2b856131e36c99e9de9c419fe8ca02f857082ba/DEPS#114
+            builtin_vars= {"host_cpu": "*host_cpu_placeholder*"} if path == "src/third_party/webpagereplay" else None,
+        )
 
         repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 
@@ -87,11 +94,11 @@ class Repo:
             {
                 **{
                 f"checkout_{platform}": platform == "linux"
-                for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
+                for platform in ["ios", "chromeos", "android", "mac", "win", "linux", "fuchsia"]
                 },
                 **{
                 f"checkout_{arch}": True
-                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc"]
+                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
                 },
             },
             "",
@@ -166,7 +173,7 @@ class GitilesRepo(Repo):
         # (making it count the compressed instead of uncompressed size)
         # rather than complying with it.
         if url == "https://chromium.googlesource.com/chromium/src.git":
-            self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
+            self.args["postFetch"] = "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
             self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "

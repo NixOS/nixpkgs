@@ -17,7 +17,10 @@ let
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_15;
 
   postgresqlPackage =
-    if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
+    if config.services.postgresql.enable then
+      config.services.postgresql.finalPackage
+    else
+      pkgs.postgresql;
 
   postgresqlVersion = lib.getVersion postgresqlPackage;
 
@@ -540,7 +543,7 @@ in
     assertions = [
       {
         assertion = (cfg.database.host != null) -> (cfg.database.passwordFile != null);
-        message = "When services.gitlab.database.host is customized, services.discourse.database.passwordFile must be set!";
+        message = "When services.discourse.database.host is customized, services.discourse.database.passwordFile must be set!";
       }
       {
         assertion = cfg.hostname != "";
@@ -638,6 +641,8 @@ in
       s3_http_continue_timeout = null;
       s3_install_cors_rule = null;
       s3_asset_cdn_url = null;
+      s3_role_arn = null;
+      s3_role_session_name = null;
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
@@ -664,7 +669,6 @@ in
       compress_anon_cache = false;
       anon_cache_store_threshold = 2;
       allowed_theme_repos = null;
-      enable_email_sync_demon = false;
       max_digests_enqueued_per_30_mins_per_site = 10000;
       cluster_name = null;
       multisite_config_path = "config/multisite.yml";
@@ -678,6 +682,10 @@ in
       allow_impersonation = true;
       log_line_max_chars = 160000;
       yjit_enabled = false;
+      # this option is set to `true` in discourse's defaults.
+      # however, having this option enabled appears to cause a segfault in mini_racer
+      # see https://github.com/rubyjs/mini_racer/issues/422
+      mini_racer_single_threaded = false;
     };
 
     services.redis.servers.discourse =
@@ -694,6 +702,9 @@ in
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
+      extensions = ps: [
+        ps.pgvector
+      ];
       ensureUsers = [ { name = "discourse"; } ];
     };
 
@@ -719,6 +730,7 @@ in
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'discourse'" | grep -q 1 || psql -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
           psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
+          psql '${cfg.database.name}' -tAc "CREATE EXTENSION IF NOT EXISTS vector"
         '';
 
         serviceConfig = {
@@ -733,24 +745,23 @@ in
       after = [
         "redis-discourse.service"
         "postgresql.target"
-        "discourse-postgresql.target"
+        "discourse-postgresql.service"
       ];
-      bindsTo =
-        [
-          "redis-discourse.service"
-        ]
-        ++ lib.optionals (cfg.database.host == null) [
-          "postgresql.target"
-          "discourse-postgresql.target"
-        ];
+      bindsTo = [
+        "redis-discourse.service"
+      ]
+      ++ lib.optionals (cfg.database.host == null) [
+        "postgresql.target"
+        "discourse-postgresql.service"
+      ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage
         pkgs.replace-secret
         cfg.package.rake
       ];
       environment = cfg.package.runtimeEnv // {
-        UNICORN_TIMEOUT = builtins.toString cfg.unicornTimeout;
-        UNICORN_SIDEKIQS = builtins.toString cfg.sidekiqProcesses;
+        UNICORN_TIMEOUT = toString cfg.unicornTimeout;
+        UNICORN_SIDEKIQS = toString cfg.sidekiqProcesses;
         MALLOC_ARENA_MAX = "2";
       };
 
@@ -806,8 +817,11 @@ in
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
+          cp -r ${cfg.package.assets.generated}/* /run/discourse/assets-generated/
           ln -sf /var/lib/discourse/uploads /run/discourse/public/uploads
           ln -sf /var/lib/discourse/backups /run/discourse/public/backups
+          # discourse creates images in this folder, and by default it only has u=rx
+          chmod 750 /run/discourse/public/images
 
           (
               umask u=rwx,g=,o=
@@ -837,9 +851,9 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "assets/javascripts/plugins"
           "public"
           "sockets"
+          "assets-generated"
         ];
         RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [
@@ -899,14 +913,12 @@ in
               }:
               {
                 proxyPass = "http://discourse";
-                extraConfig =
-                  extraConfig
-                  + ''
-                    proxy_set_header X-Request-Start "t=''${msec}";
-                    proxy_set_header X-Sendfile-Type "";
-                    proxy_set_header X-Accel-Mapping "";
-                    proxy_set_header Client-Ip "";
-                  '';
+                extraConfig = extraConfig + ''
+                  proxy_set_header X-Request-Start "t=''${msec}";
+                  proxy_set_header X-Sendfile-Type "";
+                  proxy_set_header X-Accel-Mapping "";
+                  proxy_set_header Client-Ip "";
+                '';
               };
             cache = time: ''
               expires ${time};
@@ -930,11 +942,9 @@ in
             };
             "~ ^/uploads/short-url/" = proxy { };
             "~ ^/secure-media-uploads/" = proxy { };
-            "~* (fonts|assets|plugins|uploads)/.*\\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig =
-              cache_1y
-              + ''
-                add_header Access-Control-Allow-Origin *;
-              '';
+            "~* (fonts|assets|plugins|uploads)/.*\\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig = cache_1y + ''
+              add_header Access-Control-Allow-Origin *;
+            '';
             "/srv/status" = proxy {
               extraConfig = ''
                 access_log off;
@@ -942,38 +952,42 @@ in
               '';
             };
             "~ ^/javascripts/".extraConfig = cache_1d;
-            "~ ^/assets/(?<asset_path>.+)$".extraConfig =
-              cache_1y
-              + ''
-                # asset pipeline enables this
-                brotli_static on;
-                gzip_static on;
-              '';
+            "~ ^/assets/(?<asset_path>.+)$".extraConfig = cache_1y + ''
+              # asset pipeline enables this
+              brotli_static on;
+              gzip_static on;
+              add_header Access-Control-Allow-Origin *;
+            '';
             "~ ^/plugins/".extraConfig = cache_1y;
             "~ /images/emoji/".extraConfig = cache_1y;
             "~ ^/uploads/" = proxy {
-              extraConfig =
-                cache_1y
-                + ''
-                  proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
+              extraConfig = ''
+                proxy_set_header X-Sendfile-Type X-Accel-Redirect;
+                proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
-                  # custom CSS
-                  location ~ /stylesheet-cache/ {
-                      try_files $uri =404;
-                  }
-                  # this allows us to bypass rails
-                  location ~* \.(gif|png|jpg|jpeg|bmp|tif|tiff|ico|webp)$ {
-                      try_files $uri =404;
-                  }
-                  # SVG needs an extra header attached
-                  location ~* \.(svg)$ {
-                  }
-                  # thumbnails & optimized images
-                  location ~ /_?optimized/ {
-                      try_files $uri =404;
-                  }
-                '';
+                # custom CSS
+                location ~ /stylesheet-cache/ {
+                    ${cache_1y}
+                    try_files $uri =404;
+                }
+                # this allows us to bypass rails
+                location ~* \.(gif|png|jpg|jpeg|bmp|tif|tiff|ico|webp)$ {
+                    ${cache_1y}
+                    try_files $uri =404;
+                }
+                # force attachment so SVGs can't render as a document on direct navigation
+                location ~* \.(svg)$ {
+                    ${cache_1y}
+                    add_header Access-Control-Allow-Origin *;
+                    add_header Content-Disposition attachment;
+                    try_files $uri =404;
+                }
+                # thumbnails & optimized images
+                location ~ /_?optimized/ {
+                    ${cache_1y}
+                    try_files $uri =404;
+                }
+              '';
             };
             "~ ^/admin/backups/" = proxy {
               extraConfig = ''
@@ -1085,24 +1099,28 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
-      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
-      origin = cfg.hostname;
-      relayDomains = [ cfg.hostname ];
-      config = {
+      settings.main = {
         smtpd_recipient_restrictions = "check_policy_service unix:private/discourse-policy";
         append_dot_mydomain = lib.mkDefault false;
         compatibility_level = "2";
         smtputf8_enable = false;
         smtpd_banner = lib.mkDefault "ESMTP server";
+        smtpd_tls_chain_files =
+          lib.optionals (cfg.sslCertificate != null && cfg.sslCertificateKey != null)
+            [
+              cfg.sslCertificateKey
+              cfg.sslCertificate
+            ];
         myhostname = lib.mkDefault cfg.hostname;
         mydestination = lib.mkDefault "localhost";
+        myorigin = cfg.hostname;
+        relay_domains = [ cfg.hostname ];
       };
       transport = ''
         ${cfg.hostname} discourse-mail-receiver:
       '';
-      masterConfig = {
+      settings.master = {
         "discourse-mail-receiver" = {
           type = "unix";
           privileged = true;
@@ -1127,16 +1145,15 @@ in
       };
     };
 
-    users.users =
-      {
-        discourse = {
-          group = "discourse";
-          isSystemUser = true;
-        };
-      }
-      // (lib.optionalAttrs cfg.nginx.enable {
-        ${config.services.nginx.user}.extraGroups = [ "discourse" ];
-      });
+    users.users = {
+      discourse = {
+        group = "discourse";
+        isSystemUser = true;
+      };
+    }
+    // (lib.optionalAttrs cfg.nginx.enable {
+      ${config.services.nginx.user}.extraGroups = [ "discourse" ];
+    });
 
     users.groups = {
       discourse = { };

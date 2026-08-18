@@ -35,6 +35,18 @@
       "sha256": "06b9ylqbjcxgm9mjfzljbi8gr9sbajykcqpcxgyqymynqyhxmqjn",
       "srcDir": "src",
       "url": "https://github.com/shoyu777/wcwidth-nim/archive/86f8db1a883f6a64e590a56aed81e788389b7196.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "tinyre"
+      ],
+      "path": "/nix/store/w556rbsnv2fxb229av2iq180ri9x0d9j-source",
+      "ref": "1.6.0",
+      "rev": "77469f58916369bc3863194cabb05238577fb257",
+      "sha256": "18wjz5yqzr1dz6286p2w02fk2xjr54l477g90bz4pskjcqrqnjbv",
+      "srcDir": "",
+      "url": "https://github.com/khchen/tinyre/archive/77469f58916369bc3863194cabb05238577fb257.tar.gz"
     }
   ]
 }

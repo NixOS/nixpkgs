@@ -4,23 +4,20 @@
   colorama,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.17.1";
+  version = "1.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jasonacox";
     repo = "tinytuya";
     tag = "v${version}";
-    hash = "sha256-ivtd61r68kUP/OOIkdTjVI5FiD7QsYe6eSr2WiVF7OI=";
+    hash = "sha256-kyLRTfhTB8olZ48rUm+WtnuGZmCojnlUY4CeF+FADWg=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinytuya" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Tuya WiFi smart devices using a direct local area network (LAN) connection or the cloud (TuyaCloud API)";
     homepage = "https://github.com/jasonacox/tinytuya";
     changelog = "https://github.com/jasonacox/tinytuya/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pathob ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pathob ];
   };
 }

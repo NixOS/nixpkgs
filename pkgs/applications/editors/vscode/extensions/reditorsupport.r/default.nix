@@ -14,8 +14,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "r";
     publisher = "reditorsupport";
-    version = "2.8.6";
-    hash = "sha256-T/Qh0WfTfXMzPonbg9NMII5qFptfNoApFFiZCT5rR3Y=";
+    version = "2.8.8";
+    hash = "sha256-mt2bes7aHcAHLMngSLW/zI3kSIzNKALqX+g0UXo84uI=";
   };
   nativeBuildInputs = [
     jq
@@ -35,6 +35,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=REditorSupport.r";
     homepage = "https://github.com/REditorSupport/vscode-R";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.pandapip1 ];
+    maintainers = [
+      lib.maintainers.pandapip1
+      lib.maintainers.ivyfanchiang
+    ];
   };
 }

@@ -8,14 +8,14 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eepers";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "tsoding";
     repo = "eepers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KG7ci327qlTtlN4yV54P8Q34ExFLJfTGMTZxN3RtZbc=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       -Wall \
       -Wextra \
       -gnat2012 \
-      -o eepers-linux eepers.adb \
+      -o eepers eepers.adb \
       -bargs \
       -largs -lraylib -lm \
       -pthread
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/eepers \
       --add-needed libwayland-client.so \
       --add-needed libwayland-cursor.so \
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ./eepers-linux $out/bin/eepers
+    cp ./eepers $out/bin/eepers
 
     cp -r ./assets $out/
 
@@ -72,10 +72,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple Turn-based Game";
     homepage = "https://github.com/tsoding/eepers";
-    changelog = "https://github.com/tsoding/eepers/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/tsoding/eepers/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      zinzilulo
+    ];
     mainProgram = "eepers";
     platforms = lib.platforms.all;
   };
-}
+})

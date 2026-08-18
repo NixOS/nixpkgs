@@ -6,26 +6,24 @@
   libsamplerate,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "samplerate";
   version = "0.1.6";
-
-  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-samplerate";
-    rev = "v${version}";
-    sha256 = "0h0i9v9p9n2givv3wys8qrfi1i7vp8kq7lnkf14s7d3m4r8x4wrp";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N3PSUSZ1tKNJcNPSgye6+8QQXcZIez72jk/YdNNOEUA=";
   };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libsamplerate ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-samplerate";
     description = "Interface for libsamplerate";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

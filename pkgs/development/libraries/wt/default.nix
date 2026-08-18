@@ -16,9 +16,10 @@
   graphicsmagick,
   glew,
   openssl,
-  pcre,
   harfbuzz,
   icu,
+  libice,
+  libsm,
 }:
 
 let
@@ -52,35 +53,41 @@ let
         graphicsmagick
         glew
         openssl
-        pcre
         harfbuzz
         icu
+        libice
+        libsm
       ];
 
       dontWrapQtApps = true;
-      cmakeFlags =
-        [
-          "-DWT_CPP_11_MODE=-std=c++11"
-          "--no-warn-unused-cli"
-        ]
-        ++ lib.optionals (graphicsmagick != null) [
-          "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
-          "-DGM_PREFIX=${graphicsmagick}"
-        ]
-        ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
+      cmakeFlags = [
+        "-DCMAKE_INSTALL_RPATH=${
+          lib.makeLibraryPath [
+            libice
+            libsm
+          ]
+        }"
+        "-DWT_CPP_11_MODE=-std=c++11"
+        "--no-warn-unused-cli"
+      ]
+      ++ lib.optionals (graphicsmagick != null) [
+        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+        "-DGM_PREFIX=${graphicsmagick}"
+      ]
+      ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
-        platforms = platforms.linux;
-        license = licenses.gpl2;
-        maintainers = with maintainers; [ juliendehos ];
+        platforms = lib.platforms.linux;
+        license = lib.licenses.gpl2;
+        maintainers = with lib.maintainers; [ juliendehos ];
       };
     };
 in
 {
   wt4 = generic {
-    version = "4.11.4";
-    sha256 = "sha256-ynmOUONHo8VTq8nmD+/SpDPR7bHILw8mArvY2DZJ5Hk=";
+    version = "4.13.2";
+    sha256 = "sha256-UK0r99f8ub7YPETiz3Ka/jCkJmF4qc7R8ZLkb/RWQCI=";
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildDunePackage,
+  dune-configurator,
   eio,
   eio_posix,
   eio_linux,
@@ -20,11 +21,12 @@ buildDunePackage {
 
   dontStrip = true;
 
-  propagatedBuildInputs =
-    [
-      eio_posix
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      eio_linux
-    ];
+  buildInputs = lib.optional (lib.versionAtLeast eio.version "1.4") dune-configurator;
+
+  propagatedBuildInputs = [
+    eio_posix
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    eio_linux
+  ];
 }

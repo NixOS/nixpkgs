@@ -1,11 +1,17 @@
 {
   stdenv,
+  stdenvNoLibc,
   lib,
   fetchurl,
   linuxHeaders ? null,
   useBSDCompatHeaders ? true,
 }:
 let
+  stdenv' = if stdenv.hostPlatform != stdenv.buildPlatform then stdenvNoLibc else stdenv;
+in
+let
+  stdenv = stdenv';
+
   cdefs_h = fetchurl {
     name = "sys-cdefs.h";
     url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
@@ -49,13 +55,13 @@ let
       null;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musl";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
-    url = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
+    url = "https://musl.libc.org/releases/musl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1YX9O2E8ZhUfwySejtRPdwIMtebB5jWmFtP5+CRgUSo=";
   };
 
   enableParallelBuilding = true;
@@ -79,19 +85,29 @@ stdenv.mkDerivation rec {
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
     (fetchurl {
-      name = "CVE-2025-26519_0.patch";
-      url = "https://www.openwall.com/lists/musl/2025/02/13/1/1";
-      hash = "sha256-CJb821El2dByP04WXxPCCYMOcEWnXLpOhYBgg3y3KS4=";
+      name = "CVE-2026-6042";
+      url = "https://www.openwall.com/lists/musl/2026/04/03/2/1";
+      hash = "sha256-RE+nDlLKFY+31LrVYGN3kLv49y6AuC//hA3Wb6gwkeM=";
     })
     (fetchurl {
-      name = "CVE-2025-26519_1.patch";
-      url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
-      hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
+      name = "CVE-2026-40200.patch";
+      url = "https://www.openwall.com/lists/musl/2026/04/10/3/1";
+      hash = "sha256-HuKfZPnKjorXw0l3nWYf9rUhJqJ1ddNYaYE1elLEBvs=";
     })
   ];
-  CFLAGS = [
-    "-fstack-protector-strong"
-  ] ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
+
+  env = {
+    CFLAGS = toString (
+      [
+        "-fstack-protector-strong"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-mlong-double-64"
+      ]
+    );
+
+    NIX_DONT_SET_RPATH = true;
+  };
 
   configureFlags = [
     "--enable-shared"
@@ -111,8 +127,6 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   separateDebugInfo = true;
 
-  NIX_DONT_SET_RPATH = true;
-
   preBuild = ''
     ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
       "# the -x c flag is required since the file extension confuses gcc
@@ -122,51 +136,57 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  postInstall =
-    ''
-      # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
-      # Apparently glibc provides scsi itself?
-      (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+  postInstall = ''
+    # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
+    # Apparently glibc provides scsi itself?
+    (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-      ${lib.optionalString (
-        stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32
-      ) "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"}
+    ${lib.optionalString (
+      stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32
+    ) "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"}
 
-      # Create 'ldd' symlink, builtin
-      ln -s $out/lib/libc.so $bin/bin/ldd
+    # Create 'ldd' symlink, builtin
+    ln -s $out/lib/libc.so $bin/bin/ldd
 
-      # (impure) cc wrapper around musl for interactive usuage
-      for i in musl-gcc musl-clang ld.musl-clang; do
-        moveToOutput bin/$i $dev
-      done
-      moveToOutput lib/musl-gcc.specs $dev
-      substituteInPlace $dev/bin/musl-gcc \
-        --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+    # (impure) cc wrapper around musl for interactive usuage
+    for i in musl-gcc musl-clang ld.musl-clang; do
+      moveToOutput bin/$i $dev
+    done
+    moveToOutput lib/musl-gcc.specs $dev
+    substituteInPlace $dev/bin/musl-gcc \
+      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
-      # provide 'iconv' utility, using just-built headers, libc/ldso
-      $CC ${iconv_c} -o $bin/bin/iconv \
-        -I$dev/include \
-        -L$out/lib -Wl,-rpath=$out/lib \
-        -lc \
-        -B $out/lib \
-        -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
-    ''
-    + lib.optionalString (arch != null) ''
-      # Create 'libc.musl-$arch' symlink
-      ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
-    ''
-    + lib.optionalString useBSDCompatHeaders ''
-      install -D ${queue_h} $dev/include/sys/queue.h
-      install -D ${cdefs_h} $dev/include/sys/cdefs.h
-      install -D ${tree_h} $dev/include/sys/tree.h
-    '';
+    # provide 'iconv' utility, using just-built headers, libc/ldso
+    $CC ${iconv_c} -o $bin/bin/iconv \
+      -I$dev/include \
+      -L$out/lib -Wl,-rpath=$out/lib \
+      -lc \
+      -B $out/lib \
+      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  ''
+  + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
+  ''
+  + lib.optionalString useBSDCompatHeaders ''
+    install -D ${queue_h} $dev/include/sys/queue.h
+    install -D ${cdefs_h} $dev/include/sys/cdefs.h
+    install -D ${tree_h} $dev/include/sys/tree.h
+  '';
 
-  passthru.linuxHeaders = linuxHeaders;
+  passthru = {
+    linuxHeaders = linuxHeaders;
+
+    # musl's threads are POSIX threads. `libgcc` and `libstdc++` have to be
+    # configured for the same threading model as each other, so rather than
+    # have each guess, they take it from the libc they are built against.
+    threadModel = "posix";
+  };
 
   meta = {
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org/";
-    changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
+    changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
@@ -183,6 +203,7 @@ stdenv.mkDerivation rec {
       "mips64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv32-linux"
@@ -196,7 +217,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       thoughtpolice
-      dtzWill
     ];
   };
-}
+})

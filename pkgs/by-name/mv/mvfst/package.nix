@@ -6,13 +6,15 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   folly,
   gflags,
   glog,
+  openssl,
 
   fizz,
+
+  ctestCheckHook,
 
   gtest,
 
@@ -21,10 +23,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.04.21.00";
+  version = "2026.07.27.00";
 
   outputs = [
-    "bin"
     "out"
     "dev"
   ];
@@ -33,27 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/84smnZ2L1zDmkO1w9VQzVhXKt/S5azQr7Xpr8/dOA4=";
+    hash = "sha256-H5T039YtYWP01UFtg7Y/7uGt9jhYEa7Q7j/9JhhSDfw=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
     folly
     gflags
     glog
+    openssl
   ];
 
   propagatedBuildInputs = [
     fizz
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   checkInputs = [
@@ -67,76 +68,48 @@ stdenv.mkDerivation (finalAttrs: {
     "trivialautovarinit"
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-      (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
 
-      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
 
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Homebrew sets this, and the shared library build fails without
-      # it. I don‘t know, either. It scares me.
-      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
-    ];
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Homebrew sets this, and the shared library build fails without
+    # it. I don‘t know, either. It scares me.
+    (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 
+  dontUseNinjaCheck = true;
+
   postPatch = ''
     # Make sure the libraries the `tperf` binary uses are installed.
     printf 'install(TARGETS mvfst_test_utils)\n' >> quic/common/test/CMakeLists.txt
-    printf 'install(TARGETS mvfst_dsr_backend)\n' >> quic/dsr/CMakeLists.txt
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
-            "*/QuicClientTransportIntegrationTest.NetworkTest/*"
-            "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
-            "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
-            "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
-            "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
-            "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
-            "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
-            "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
-            "*/QuicClientTransportIntegrationTest.ResetClient/*"
-            "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
-          ])
-        ]
-      )
-    }
-
-    runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-
-    # TODO: Do this in `gtest` rather than downstream.
-    remove-references-to -t ${gtest.dev} $out/lib/*
-  '';
+  disabledTests = [
+    "*/QuicClientTransportIntegrationTest.NetworkTest/*"
+    "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
+    "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
+    "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
+    "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
+    "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
+    "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
+    "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
+    "*/QuicClientTransportIntegrationTest.ResetClient/*"
+    "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -149,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       ris
       emily
       techknowlogick
+      lf-
     ];
   };
 })

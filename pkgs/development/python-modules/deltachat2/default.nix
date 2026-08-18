@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  dacite,
   deltachat-rpc-server,
   setuptools-scm,
   replaceVars,
@@ -9,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "deltachat2";
-  version = "0.7.0";
+  version = "2.58.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat2";
     tag = version;
-    hash = "sha256-n40LyF73FxXXIJnNwVG9B6ibUYaHbx6t9MRPdMjSInw=";
+    hash = "sha256-BpTrReKoPsfKzPtVXygapCwmAf+ou5XBz2yVqgs/Lq4=";
   };
 
   patches = [
@@ -27,6 +28,10 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools-scm
+  ];
+
+  dependencies = [
+    dacite
   ];
 
   pythonImportsCheck = [ "deltachat2" ];

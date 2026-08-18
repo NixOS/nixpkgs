@@ -10,20 +10,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "mirrorbits";
-  version = "0.6";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = "etix";
+    owner = "videolabs";
     repo = "mirrorbits";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-99eOfVSlGIEzNm+0gI/y0+UPd+dnZiGzaHlkqUNtO1U=";
+    hash = "sha256-oMUBLWwyNtGRMVd8nQrkQsuLdx57jiGdH0L7HrHcr9U=";
   };
 
   postPatch = ''
     rm -rf vendor
   '';
 
-  vendorHash = "sha256-cdD9RvOtgN/SHtgrtrucnUI+nnO/FabUyPRdvgoL44o=";
+  vendorHash = "sha256-AxBGSFbg8KpO3Yq5y3PXY2Yh2Xn+YeyYnp4mXw1iZe8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Geographical download redirector for distributing files efficiently across a set of mirrors";
-    homepage = "https://github.com/etix/mirrorbits";
+    homepage = "https://github.com/videolabs/mirrorbits";
     longDescription = ''
       Mirrorbits is a geographical download redirector written in Go for
       distributing files efficiently across a set of mirrors. It offers

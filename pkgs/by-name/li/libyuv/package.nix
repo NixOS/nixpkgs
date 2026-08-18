@@ -17,6 +17,11 @@ stdenv.mkDerivation {
     hash = "sha256-4Irs+hlAvr6v5UKXmKHhg4IK3cTWdsFWxt1QTS0rizU=";
   };
 
+  patches = [
+    # Fixes wrong byte order in ARGBToRGB565DitherRow_C on big-endian
+    ./dither-honour-byte-order.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
@@ -39,7 +44,10 @@ stdenv.mkDerivation {
       --replace "@VERSION@" "$version"
   '';
 
-  doCheck = true;
+  # [==========] 3454 tests from 8 test suites ran.
+  # [  PASSED  ] 3376 tests.
+  # [  FAILED  ] 78 tests
+  doCheck = !stdenv.hostPlatform.isLoongArch64;
 
   checkPhase = ''
     runHook preCheck
@@ -49,12 +57,12 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
     mainProgram = "yuvconvert";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ leixb ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ leixb ];
+    license = lib.licenses.bsd3;
   };
 }

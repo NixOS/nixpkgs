@@ -77,6 +77,8 @@ let
 
       virtualisation.virtualbox.guest.enable = true;
 
+      boot.initrd.systemd.enable = false;
+
       boot.initrd.kernelModules = [
         "af_packet"
         "vboxsf"
@@ -162,7 +164,7 @@ let
           cp "${cfg.system.build.kernel}/bzImage" /mnt/linux
           cp "${cfg.system.build.initialRamdisk}/initrd" /mnt/initrd
 
-          ${pkgs.grub2}/bin/grub-install --boot-directory=/mnt /dev/vda
+          ${pkgs.grub2}/bin/grub-install --target=i386-pc --boot-directory=/mnt /dev/vda
 
           cat > /mnt/grub/grub.cfg <<GRUB
           set root=hd0,1
@@ -307,7 +309,11 @@ let
                     "echo 'Could not get IPv4 address for ${name}!' >&2; "
                     "exit 1"
                 )
-            ).strip()
+            )
+
+            ip = ip + '\n'
+            ip = ip[:ip.find('\n')]
+
             return ip
 
 
@@ -424,9 +430,8 @@ let
 
           virtualisation.virtualbox.host = {
             enable = true;
-          } // vboxHostConfig;
-
-          nixpkgs.config.allowUnfree = config.virtualisation.virtualbox.host.enableExtensionPack;
+          }
+          // vboxHostConfig;
         };
 
       testScript = ''
@@ -504,12 +509,12 @@ mapAttrs (mkVBoxTest { } vboxVMs) {
   simple-gui = ''
     # Home to select Tools, down to move to the VM, enter to start it.
     def send_vm_startup():
-        machine.send_key("home")
-        machine.send_key("down")
+        machine.send_key("ctrl-m")
         machine.send_key("ret")
 
 
     create_vm_simple()
+    machine.succeed(ru("VBoxManage setextradata global \"GUI/Input/SelectorShortcuts\" \"ToolsGlobalMachineManager=Ctrl+M\""))
     machine.succeed(ru("VirtualBox >&2 &"))
     machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
     machine.sleep(5)

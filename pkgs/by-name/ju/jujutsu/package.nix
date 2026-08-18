@@ -14,18 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.31.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4zDHSpi7Kk7rramrWFOlBelZnOxt0zgXIrHucYQUOz0=";
+    hash = "sha256-ojhsg083nb/GWzNIaLzCg0/9hdCHkb3xdrvGqxhNDmY=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-QmMc7pG2FMJBI9AIGPRRh2juFoz7gRFw5CQIcNK6QZI=";
+  cargoHash = "sha256-RrIZS8BjG4a4sKgXdYF/kgq2saRMXjr8Ao6lOCJMmtU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,13 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jj-lib"
     "-p"
     "jj-cli"
+    # Flaky test that asserts an ordering that ties on random operation ids.
+    "-E"
+    "!test(test_build_truncated_evolution_graph)"
   ];
-
-  # taplo-cli (used in tests) always creates a reqwest client, which
-  # requires configd access on macOS.
-  sandboxProfile = ''
-    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
-  '';
 
   env = {
     # Disable vendored libraries.
@@ -77,13 +72,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
         --fish <(COMPLETE=fish ${jj}) \
+        --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
     '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/jj";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -91,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/jj-vcs/jj";
+    homepage = "https://jj-vcs.dev/";
     changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

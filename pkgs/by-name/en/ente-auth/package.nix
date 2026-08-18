@@ -1,9 +1,7 @@
 {
   lib,
-  flutter324,
+  flutter332,
   fetchFromGitHub,
-  webkitgtk_4_1,
-  sqlite,
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
@@ -15,28 +13,58 @@ let
   # which would also clone a whole copy of flutter
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
+  flutter = flutter332;
 in
-flutter324.buildFlutterApplication rec {
+flutter.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.0";
+  version = "4.4.17";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
-    sparseCheckout = [ "auth" ];
+    sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-bwLEOmdDiD7X2o9PshDBf+Y1s6KYT7xGhqCu4nNAchI=";
+    hash = "sha256-qnjOrct70TaaO91QBHcbRIkzLZGH6mbpuLAAKE9k/es=";
   };
 
-  sourceRoot = "${src.name}/auth";
+  sourceRoot = "${src.name}/mobile/apps/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  patches = [
-    # Disable update notifications and auto-update functionality
-    ./0001-disable-updates.patch
-  ];
+  customSourceBuilders.ente_strings =
+    { version, src, ... }:
+    # There currently is no convenient way to setup the flutter SDK outside of apps
+    # and we can't move this to the app's own build phase as it would still reference
+    # the immutable source variant without the generated l10n files.
+    flutter.buildFlutterApplication {
+      inherit version src;
+      inherit (src) passthru;
+      pname = "ente_strings";
+      sourceRoot = "${src.name}/mobile/packages/strings";
+      pubspecLock = lib.importJSON ./strings.pubspec.lock.json;
+
+      buildPhase = ''
+        runHook preBuild
+
+        flutter gen-l10n
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        # The $debug output can't be disabled for buildFlutterApplication.
+        # The $out structure must match that of ente-auth to correctly resolve
+        # the package as pubspec uses relative paths for workspace packages.
+        mkdir -p $debug $out/mobile/{apps/auth,packages}
+        rm pubspec.lock
+        cp -r . $out/mobile/packages/strings
+
+        runHook postInstall
+      '';
+    };
 
   postPatch = ''
     rmdir assets/simple-icons
@@ -49,8 +77,6 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_1
-    sqlite
     libayatana-appindicator
     # The networking client used by ente-auth (native_dio_adapter)
     # introduces a transitive dependency on Java, which technically
@@ -60,8 +86,16 @@ flutter324.buildFlutterApplication rec {
     jdk17_headless # JDK version used by upstream CI
   ];
 
-  # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
-  # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+
+  flutterBuildFlags = [
+    # Disable update notifications and auto-update functionality
+    "--dart-define=app.flavor=independent"
+  ];
+
+  # Based on https://github.com/ente/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
+  # and https://github.com/ente/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [
     (makeDesktopItem {
       name = desktopId;
@@ -104,7 +138,7 @@ flutter324.buildFlutterApplication rec {
       Ente's 2FA app. An end-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups. Works offline. You can even use it without signing up for an account if you don't want the cloud backups or multi-device sync.
     '';
     homepage = "https://ente.io/auth/";
-    changelog = "https://github.com/ente-io/ente/releases/tag/auth-v${version}";
+    changelog = "https://github.com/ente/ente/releases/tag/auth-v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz

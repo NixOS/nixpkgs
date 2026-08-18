@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/uilibs/uvcclient/blob/${src.rev}/CHANGELOG.md";
     description = "Client for Ubiquiti's Unifi Camera NVR";
     mainProgram = "uvc";
     homepage = "https://github.com/kk7ds/uvcclient";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

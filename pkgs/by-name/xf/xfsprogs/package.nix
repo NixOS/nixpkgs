@@ -12,22 +12,29 @@
   inih,
   liburcu,
   nixosTests,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfsprogs";
-  version = "6.15.0";
+  version = "7.1.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-E7kfdL7vitERN/fZ1xBVVz2R6WG8VbsCRZVvabhM1wQ=";
+    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/xfsprogs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Bj7cMbqOhclcf6+b5GWgSJi7p8bmIv3ZsUbu1MpUFeg=";
   };
+
+  postPatch = ''
+    substituteInPlace {./scrub/xfs_scrub_all.py.in,./mkfs/xfs_protofile.py.in}\
+      --replace-fail '#!/usr/bin/python3' '#!/usr/bin/env python3'
+  '';
 
   outputs = [
     "bin"
     "dev"
     "out"
     "doc"
+    "man"
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -43,6 +50,7 @@ stdenv.mkDerivation rec {
     icu
     inih
     liburcu
+    (python3.withPackages (ps: [ ps.dbus-python ]))
   ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
@@ -58,7 +66,8 @@ stdenv.mkDerivation rec {
     for file in scrub/*.in; do
       substituteInPlace "$file" \
         --replace-quiet '@sbindir@' '/run/current-system/sw/bin' \
-        --replace-quiet '@pkg_state_dir@' '/var'
+        --replace-quiet '@stampfile@' '@pkg_state_dir@/xfs_scrub_all_media.stamp' \
+        --replace-quiet '@pkg_state_dir@' '/var/lib/xfsprogs'
     done
     patchShebangs ./install-sh
   '';
@@ -85,18 +94,17 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer) lvm;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       gpl3Plus
     ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      dezgeg
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ajs124
     ];
   };
-}
+})

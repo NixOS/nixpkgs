@@ -26,6 +26,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-1dbx4yC8gL41OEAE/LNDyoDb4xhAwV5h8oRmdlPULUo=";
   };
 
+  # ttfautohint: unrecognized option '--epoch'
+  postPatch = ''
+    substituteInPlace fonttools_script.py \
+      --replace-fail 'print("exec hinting", options_)' 'options_.pop("epoch", None)'
+  '';
+
   nativeBuildInputs = [
     fontforge
     python3'

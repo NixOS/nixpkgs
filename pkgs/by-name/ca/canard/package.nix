@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "canard";
   version = "0.0.2-unstable-2024-04-22";
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mrusme/canard/main.VERSION=${version}"
+    "-X github.com/mrusme/canard/main.VERSION=${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "canard";
   };
-}
+})

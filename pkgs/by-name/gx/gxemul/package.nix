@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gxemul";
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://gavare.se/gxemul/src/${pname}-${version}.tar.gz";
+    url = "https://gavare.se/gxemul/src/gxemul-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ecRDfG+MqQT0bTOsNgYqZf3PSpKiSEeOQIqxEpXPjoM=";
   };
 
   buildInputs = [
-    libX11
+    libx11
   ];
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     export PREFIX=${placeholder "out"}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gavare.se/gxemul/";
     description = "Gavare's experimental emulator";
     longDescription = ''
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
       controllers. The emulation is working well enough to allow several
       unmodified "guest" operating systems to run.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "gxemul";
   };
-}
+})

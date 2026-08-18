@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   beautifulsoup4,
@@ -12,19 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycaption";
-  version = "2.2.16";
-
-  disabled = pythonOlder "3.8";
-
+  version = "2.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pbs";
     repo = "pycaption";
-    tag = version;
-    hash = "sha256-w617mOxvL1alj7jauH4TVsYO0wxMHIFjevdhb4+542s=";
+    tag = finalAttrs.version;
+    hash = "sha256-yokCL6CTUlsANJp7H31ilaT1GN2jp5JfLTNWJ4FMW1s=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/pbs/pycaption/blob/${version}/docs/changelog.rst";
+  meta = {
+    changelog = "https://github.com/pbs/pycaption/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Closed caption converter";
     homepage = "https://github.com/pbs/pycaption";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

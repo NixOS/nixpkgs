@@ -2,26 +2,28 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoreconfHook,
   pkg-config,
   libvlc,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvlcpp";
-  version = "0.1.0-unstable-2024-02-04";
+  version = "0.1.0-unstable-2026-04-16";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libvlcpp";
-    rev = "44c1f48e56a66c3f418175af1e1ef3fd1ab1b118";
-    hash = "sha256-nnS4DMz/2VciCrhOBGRb1+kDbxj+ZOnEtQmzs/TJ870=";
+    rev = "33214afee13df36dc46309ef5416d681b56db5b9";
+    hash = "sha256-PjJzFrvkmrTsBjzmEG6hNU8VzDlofQrdfTGFhxkVPWU=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    autoreconfHook
   ];
 
   propagatedBuildInputs = [

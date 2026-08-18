@@ -1,37 +1,61 @@
 {
   lib,
+  bash,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  gawk,
+  wl-clipboard,
+  fuzzel,
+  fzf,
+  chafa,
+  wofi,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cliphist";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "cliphist";
-    tag = "v${version}";
-    hash = "sha256-tImRbWjYCdIY8wVMibc5g5/qYZGwgT9pl4pWvY7BDlI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y4FSl/Bj80XqCR0ZwjGEkqYUIF6zJHrYyy01XPFlzjU=";
   };
 
-  vendorHash = "sha256-gG8v3JFncadfCEUa7iR6Sw8nifFNTciDaeBszOlGntU=";
+  vendorHash = "sha256-4XyDLOJHdre/1BpjgFt/W6gOlPOvKztE+MsbwE3JAaQ=";
+
+  postPatch = ''
+    substituteInPlace contrib/cliphist-{fuzzel,rofi,wofi}-img \
+      --replace-fail "gawk" "${lib.getExe gawk}"
+    substituteInPlace contrib/cliphist-{fuzzel-img,fzf,fzf-sixel,rofi,rofi-img,wofi-img} \
+      --replace-fail "wl-copy" "${lib.getExe' wl-clipboard "wl-copy"}"
+    substituteInPlace contrib/cliphist-fuzzel-img \
+      --replace-fail "fuzzel " "${lib.getExe fuzzel} "
+    substituteInPlace contrib/cliphist-fzf{,-sixel} \
+      --replace-fail "fzf " "${lib.getExe fzf} "
+    substituteInPlace contrib/cliphist-fzf-sixel \
+      --replace-fail "chafa " "${lib.getExe chafa} "
+    substituteInPlace contrib/cliphist-wofi-img \
+      --replace-fail "| wofi" "| ${lib.getExe wofi}"
+  '';
 
   postInstall = ''
-    cp ${src}/contrib/* $out/bin/
+    cp ./contrib/cliphist-{fuzzel-img,fzf,fzf-sixel,rofi,rofi-img,wofi-img} $out/bin/
   '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  buildInputs = [ bash ];
+
+  meta = {
     description = "Wayland clipboard manager";
     homepage = "https://github.com/sentriz/cliphist";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ klea ];
     mainProgram = "cliphist";
   };
-}
+})

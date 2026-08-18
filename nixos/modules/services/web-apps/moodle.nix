@@ -17,9 +17,7 @@ let
     types
     ;
   inherit (lib)
-    concatStringsSep
     literalExpression
-    mapAttrsToList
     optional
     optionalString
     ;
@@ -317,7 +315,8 @@ in
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -393,8 +392,7 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.target";
+      optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
     users.users.${user} = {
       group = group;

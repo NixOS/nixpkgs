@@ -1,11 +1,15 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/un.h>
+#include <sys/xattr.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <string.h>
@@ -107,6 +111,48 @@ static int open_needs_mode(int flags)
    it contains only what we needed for programs in Nixpkgs. Just add
    more functions as needed. */
 
+WRAPPER(int, bind)(int socket, const struct sockaddr *addr, socklen_t addr_len)
+{
+    int (*bind_real) (int, const struct sockaddr *, socklen_t) = LOOKUP_REAL(bind);
+    char buf[PATH_MAX];
+    const struct sockaddr *real_addr = addr;
+    if (addr->sa_family == AF_UNIX) {
+        struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
+        const char *sun_path = rewrite(real_addr_un.sun_path, buf);
+        if (sun_path != real_addr_un.sun_path) {
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
+            real_addr = (struct sockaddr *)&real_addr_un;
+            addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
+        }
+    }
+    return bind_real(socket, real_addr, addr_len);
+}
+WRAPPER_DEF(bind)
+
+WRAPPER(int, connect)(int socket, const struct sockaddr *addr, socklen_t addr_len)
+{
+    int (*connect_real) (int, const struct sockaddr *, socklen_t) = LOOKUP_REAL(connect);
+    char buf[PATH_MAX];
+    const struct sockaddr *real_addr = addr;
+    if (addr->sa_family == AF_UNIX) {
+        struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
+        const char *sun_path = rewrite(real_addr_un.sun_path, buf);
+        if (sun_path != real_addr_un.sun_path) {
+            int n = snprintf(real_addr_un.sun_path, sizeof(real_addr_un.sun_path), "%s", buf);
+            if (n < 0 || n >= sizeof(real_addr_un.sun_path)) {
+                abort();
+            }
+            real_addr = (struct sockaddr *)&real_addr_un;
+            addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
+        }
+    }
+    return connect_real(socket, real_addr, addr_len);
+}
+WRAPPER_DEF(connect)
+
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
     int (*open_real) (const char *, int, ...) = LOOKUP_REAL(open);
@@ -154,6 +200,24 @@ WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
     return openat_real(dirfd, rewrite(path, buf), flags, mode);
 }
 WRAPPER_DEF(openat)
+
+// In musl libc, openat64 is simply a macro for openat
+#if !defined(__APPLE__) && !defined(openat64)
+WRAPPER(int, openat64)(int dirfd, const char * path, int flags, ...)
+{
+    int (*openat64_real) (int, const char *, int, ...) = LOOKUP_REAL(openat64);
+    mode_t mode = 0;
+    if (open_needs_mode(flags)) {
+        va_list ap;
+        va_start(ap, flags);
+        mode = va_arg(ap, mode_t);
+        va_end(ap);
+    }
+    char buf[PATH_MAX];
+    return openat64_real(dirfd, rewrite(path, buf), flags, mode);
+}
+WRAPPER_DEF(openat64)
+#endif
 
 WRAPPER(FILE *, fopen)(const char * path, const char * mode)
 {
@@ -300,28 +364,108 @@ WRAPPER_DEF(execv)
 
 WRAPPER(int, execvp)(const char * path, char * const argv[])
 {
-    int (*_execvp) (const char *, char * const argv[]) = LOOKUP_REAL(execvp);
+    int (*execvp_real) (const char *, char * const argv[]) = LOOKUP_REAL(execvp);
     char buf[PATH_MAX];
-    return _execvp(rewrite(path, buf), argv);
+    return execvp_real(rewrite(path, buf), argv);
 }
 WRAPPER_DEF(execvp)
 
 WRAPPER(int, execve)(const char * path, char * const argv[], char * const envp[])
 {
-    int (*_execve) (const char *, char * const argv[], char * const envp[]) = LOOKUP_REAL(execve);
+    int (*execve_real) (const char *, char * const argv[], char * const envp[]) = LOOKUP_REAL(execve);
     char buf[PATH_MAX];
-    return _execve(rewrite(path, buf), argv, envp);
+    return execve_real(rewrite(path, buf), argv, envp);
 }
 WRAPPER_DEF(execve)
 
 WRAPPER(DIR *, opendir)(const char * path)
 {
     char buf[PATH_MAX];
-    DIR * (*_opendir) (const char*) = LOOKUP_REAL(opendir);
+    DIR * (*opendir_real) (const char*) = LOOKUP_REAL(opendir);
 
-    return _opendir(rewrite(path, buf));
+    return opendir_real(rewrite(path, buf));
 }
 WRAPPER_DEF(opendir)
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, getxattr)(const char * path, const char * name, void * value, size_t size)
+{
+    ssize_t (*getxattr_real) (const char *, const char *, void *, size_t) = LOOKUP_REAL(getxattr);
+    char buf[PATH_MAX];
+    return getxattr_real(rewrite(path, buf), name, value, size);
+}
+WRAPPER_DEF(getxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, lgetxattr)(const char * path, const char * name, void * value, size_t size)
+{
+    ssize_t (*lgetxattr_real) (const char *, const char *, void *, size_t) = LOOKUP_REAL(lgetxattr);
+    char buf[PATH_MAX];
+    return lgetxattr_real(rewrite(path, buf), name, value, size);
+}
+WRAPPER_DEF(lgetxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, listxattr)(const char * path, char * list, size_t size)
+{
+    ssize_t (*listxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(listxattr);
+    char buf[PATH_MAX];
+    return listxattr_real(rewrite(path, buf), list, size);
+}
+WRAPPER_DEF(listxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, llistxattr)(const char * path, char * list, size_t size)
+{
+    ssize_t (*llistxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(llistxattr);
+    char buf[PATH_MAX];
+    return llistxattr_real(rewrite(path, buf), list, size);
+}
+WRAPPER_DEF(llistxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, setxattr)(const char * path, const char * name, const void * value, size_t size, int flags)
+{
+    int (*setxattr_real) (const char *, const char *, const void *, size_t, int) = LOOKUP_REAL(setxattr);
+    char buf[PATH_MAX];
+    return setxattr_real(rewrite(path, buf), name, value, size, flags);
+}
+WRAPPER_DEF(setxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, lsetxattr)(const char * path, const char * name, const void * value, size_t size, int flags)
+{
+    int (*lsetxattr_real) (const char *, const char *, const void *, size_t, int) = LOOKUP_REAL(lsetxattr);
+    char buf[PATH_MAX];
+    return lsetxattr_real(rewrite(path, buf), name, value, size, flags);
+}
+WRAPPER_DEF(setxattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, removexattr)(const char * path, const char * name)
+{
+    int (*removexattr_real) (const char *, const char *) = LOOKUP_REAL(removexattr);
+    char buf[PATH_MAX];
+    return removexattr_real(rewrite(path, buf), name);
+}
+WRAPPER_DEF(removexattr);
+#endif
+
+#if !defined(__APPLE__)
+WRAPPER(int, lremovexattr)(const char * path, const char * name)
+{
+    int (*lremovexattr_real) (const char *, const char *) = LOOKUP_REAL(lremovexattr);
+    char buf[PATH_MAX];
+    return lremovexattr_real(rewrite(path, buf), name);
+}
+WRAPPER_DEF(lremovexattr);
+#endif
 
 #define SYSTEM_CMD_MAX 512
 
@@ -383,11 +527,11 @@ static void rewriteSystemCall(const char * command, char * buf) {
 
 WRAPPER(int, system)(const char *command)
 {
-    int (*_system) (const char*) = LOOKUP_REAL(system);
+    int (*system_real) (const char*) = LOOKUP_REAL(system);
 
     char newCommand[SYSTEM_CMD_MAX];
     rewriteSystemCall(command, newCommand);
-    return _system(newCommand);
+    return system_real(newCommand);
 }
 WRAPPER_DEF(system)
 
@@ -398,6 +542,14 @@ WRAPPER(int, chdir)(const char *path)
     return chdir_real(rewrite(path, buf));
 }
 WRAPPER_DEF(chdir);
+
+WRAPPER(int, chmod)(const char * path, mode_t mode)
+{
+    int (*chmod_real) (const char *, mode_t) = LOOKUP_REAL(chmod);
+    char buf[PATH_MAX];
+    return chmod_real(rewrite(path, buf), mode);
+}
+WRAPPER_DEF(chmod)
 
 WRAPPER(int, mkdir)(const char *path, mode_t mode)
 {
@@ -430,6 +582,14 @@ WRAPPER(int, unlinkat)(int dirfd, const char *path, int flags)
     return unlinkat_real(dirfd, rewrite(path, buf), flags);
 }
 WRAPPER_DEF(unlinkat)
+
+WRAPPER(int, remove)(const char *path)
+{
+    int (*remove_real) (const char *path) = LOOKUP_REAL(remove);
+    char buf[PATH_MAX];
+    return remove_real(rewrite(path, buf));
+}
+WRAPPER_DEF(remove)
 
 WRAPPER(int, rmdir)(const char *path)
 {

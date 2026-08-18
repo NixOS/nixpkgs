@@ -1,14 +1,17 @@
 {
   lib,
   copyDesktopItems,
-  electron_34,
+  electron_42,
   fetchFromGitHub,
   deltachat-rpc-server,
+  deltachat-tauri,
   makeDesktopItem,
   makeWrapper,
   nodejs,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   rustPlatform,
   stdenv,
@@ -19,53 +22,58 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.159.4";
+    version = "2.59.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-OLE3BoQNgpOHYuMUFBmk+raXimJGOsXySkfP+UTDk/8=";
+      hash = "sha256-I0CZxuHVBQCbvMfaPUL+W1HU8plL7kKo53bSbUZskNE=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "deltachat-core-rust";
+      pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-+h93tSiKxnnNXPGk7elMQrcIuw3G/j2/gugqSbqOrDw=";
+      hash = "sha256-oI/btypttMFLxAe2shYoLbHqwXMhlqzschORHoAQ/Wc=";
     };
   };
-  electron = electron_34;
-  pnpm = pnpm_9;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.58.2";
+  version = "2.59.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JYuYuv+OmAQzdw2AM0Qn0Z0+qq8G1JrW5jl2MI21x6M=";
+    hash = "sha256-Qr9QCH62Hd41rihaxB4nYwa68qiB4HDxx2333DkRkvA=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-pW8SKplbXLQ5OWLOrG36aAnP/j0y9QaYGIg+Q2/Ulfk=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-RApYXI5k/CQGe/6K9vGWqP+C125xqNMEqjiE4W42TMc=";
   };
 
-  nativeBuildInputs =
-    [
-      yq
-      makeWrapper
-      nodejs
-      pkg-config
-      pnpm.configHook
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    yq
+    makeWrapper
+    nodejs
+    pkg-config
+    pnpmConfigHook
+    pnpm_10
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    SKIP_FUSES = true; # EACCES: permission denied
     VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 
@@ -82,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       = ${lib.versions.major electron.version} \
       || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
 
-    pnpm -w build:electron
+    pnpm --filter=@deltachat-desktop/target-electron build4production
 
     pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
     pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
@@ -130,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
+      "application/x-webxdc"
       "x-scheme-handler/openpgp4fpr"
       "x-scheme-handler/dcaccount"
       "x-scheme-handler/dclogin"
@@ -141,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       package = deltachat-desktop;
     };
+    inherit deltachat-tauri;
   };
 
   meta = {

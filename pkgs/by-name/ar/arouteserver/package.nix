@@ -48,7 +48,7 @@ python3Packages.buildPythonPackage rec {
     "pierky.arouteserver"
   ];
 
-  pytestFlagsArray = [ "tests/static" ];
+  enabledTestPaths = [ "tests/static" ];
 
   disabledTests = [
     # disable copyright year check of files
@@ -60,8 +60,10 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "arouteserver";
     homepage = "https://github.com/pierky/arouteserver";
     changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ marcel ];
-    teams = [ lib.teams.wdz ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      marcel
+      johannwagner
+    ];
   };
 }

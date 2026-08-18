@@ -80,79 +80,78 @@ in
     cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };
 
-  testScript =
-    ''
-      # Check configuration
-      with subtest("Timers exist"):
-          cass0.succeed("systemctl list-timers | grep cassandra-full-repair.timer")
-          cass0.succeed("systemctl list-timers | grep cassandra-incremental-repair.timer")
+  testScript = ''
+    # Check configuration
+    with subtest("Timers exist"):
+        cass0.succeed("systemctl list-timers | grep cassandra-full-repair.timer")
+        cass0.succeed("systemctl list-timers | grep cassandra-incremental-repair.timer")
 
-      with subtest("Can connect via cqlsh"):
-          cass0.wait_for_unit("cassandra.service")
-          cass0.wait_until_succeeds("nc -z cass0 9042")
-          cass0.succeed("echo 'show version;' | cqlsh cass0")
+    with subtest("Can connect via cqlsh"):
+        cass0.wait_for_unit("cassandra.service")
+        cass0.wait_until_succeeds("nc -z cass0 9042")
+        cass0.succeed("echo 'show version;' | cqlsh cass0")
 
-      with subtest("Nodetool is operational"):
-          cass0.wait_for_unit("cassandra.service")
-          cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
-          cass0.succeed("nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass0'")
+    with subtest("Nodetool is operational"):
+        cass0.wait_for_unit("cassandra.service")
+        cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
+        cass0.succeed("nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass0'")
 
-      with subtest("Cluster name was set"):
-          cass0.wait_for_unit("cassandra.service")
-          cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
-          cass0.wait_until_succeeds(
-              "nodetool describecluster -p ${jmxPortStr} | grep 'Name: ${clusterName}'"
-          )
+    with subtest("Cluster name was set"):
+        cass0.wait_for_unit("cassandra.service")
+        cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
+        cass0.wait_until_succeeds(
+            "nodetool describecluster -p ${jmxPortStr} | grep 'Name: ${clusterName}'"
+        )
 
-      with subtest("Heap limit set correctly"):
-          # Nodetool takes a while until it can display info
-          cass0.wait_until_succeeds("nodetool info -p ${jmxPortStr}")
-          cass0.succeed("${checkHeapLimitCommand}")
+    with subtest("Heap limit set correctly"):
+        # Nodetool takes a while until it can display info
+        cass0.wait_until_succeeds("nodetool info -p ${jmxPortStr}")
+        cass0.succeed("${checkHeapLimitCommand}")
 
-      # Check cluster interaction
-      with subtest("Bring up cluster"):
-          cass1.wait_for_unit("cassandra.service")
-          cass1.wait_until_succeeds(
-              "nodetool -p ${jmxPortStr} ${jmxAuthArgs} status | egrep -c '^UN' | grep 2"
-          )
-          cass0.succeed("nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass1'")
-    ''
-    + lib.optionalString testRemoteAuth ''
-      with subtest("Remote authenticated jmx"):
-          # Doesn't work if not enabled
-          cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
-          cass1.fail("nc -z 192.168.1.1 ${jmxPortStr}")
-          cass1.fail("nodetool -p ${jmxPortStr} -h 192.168.1.1 status")
+    # Check cluster interaction
+    with subtest("Bring up cluster"):
+        cass1.wait_for_unit("cassandra.service")
+        cass1.wait_until_succeeds(
+            "nodetool -p ${jmxPortStr} ${jmxAuthArgs} status | egrep -c '^UN' | grep 2"
+        )
+        cass0.succeed("nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass1'")
+  ''
+  + lib.optionalString testRemoteAuth ''
+    with subtest("Remote authenticated jmx"):
+        # Doesn't work if not enabled
+        cass0.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
+        cass1.fail("nc -z 192.168.1.1 ${jmxPortStr}")
+        cass1.fail("nodetool -p ${jmxPortStr} -h 192.168.1.1 status")
 
-          # Works if enabled
-          cass1.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
-          cass0.succeed("nodetool -p ${jmxPortStr} -h 192.168.1.2 ${jmxAuthArgs} status")
-    ''
-    + ''
-      with subtest("Break and fix node"):
-          cass1.block()
-          cass0.wait_until_succeeds(
-              "nodetool status -p ${jmxPortStr} --resolve-ip | egrep -c '^DN[[:space:]]+cass1'"
-          )
-          cass0.succeed("nodetool status -p ${jmxPortStr} | egrep -c '^UN'  | grep 1")
-          cass1.unblock()
-          cass1.wait_until_succeeds(
-              "nodetool -p ${jmxPortStr} ${jmxAuthArgs} status | egrep -c '^UN'  | grep 2"
-          )
-          cass0.succeed("nodetool status -p ${jmxPortStr} | egrep -c '^UN'  | grep 2")
+        # Works if enabled
+        cass1.wait_until_succeeds("nc -z localhost ${jmxPortStr}")
+        cass0.succeed("nodetool -p ${jmxPortStr} -h 192.168.1.2 ${jmxAuthArgs} status")
+  ''
+  + ''
+    with subtest("Break and fix node"):
+        cass1.block()
+        cass0.wait_until_succeeds(
+            "nodetool status -p ${jmxPortStr} --resolve-ip | egrep -c '^DN[[:space:]]+cass1'"
+        )
+        cass0.succeed("nodetool status -p ${jmxPortStr} | egrep -c '^UN'  | grep 1")
+        cass1.unblock()
+        cass1.wait_until_succeeds(
+            "nodetool -p ${jmxPortStr} ${jmxAuthArgs} status | egrep -c '^UN'  | grep 2"
+        )
+        cass0.succeed("nodetool status -p ${jmxPortStr} | egrep -c '^UN'  | grep 2")
 
-      with subtest("Replace crashed node"):
-          cass1.block()  # .crash() waits until it's fully shutdown
-          cass2.start()
-          cass0.wait_until_fails(
-              "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass1'"
-          )
+    with subtest("Replace crashed node"):
+        cass1.block()  # .crash() waits until it's fully shutdown
+        cass2.start()
+        cass0.wait_until_fails(
+            "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass1'"
+        )
 
-          cass2.wait_for_unit("cassandra.service")
-          cass0.wait_until_succeeds(
-              "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass2'"
-          )
-    '';
+        cass2.wait_for_unit("cassandra.service")
+        cass0.wait_until_succeeds(
+            "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass2'"
+        )
+  '';
 
   passthru = {
     inherit testPackage;

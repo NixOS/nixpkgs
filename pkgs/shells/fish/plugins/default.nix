@@ -8,9 +8,13 @@ lib.makeScope newScope (
   self:
   with self;
   {
+    ai = callPackage ./ai.nix { };
+
     async-prompt = callPackage ./async-prompt.nix { };
 
     autopair = callPackage ./autopair.nix { };
+
+    aws = callPackage ./aws.nix { };
 
     bang-bang = callPackage ./bang-bang.nix { };
 

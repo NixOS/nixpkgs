@@ -1,44 +1,52 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  cmake,
   m4,
   makeWrapper,
   libbsd,
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csmith";
-  version = "2.3.0";
+  version = "2.3.0-unstable-2026-03-01";
 
-  src = fetchurl {
-    url = "https://embed.cs.utah.edu/csmith/${pname}-${version}.tar.gz";
-    sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
+  src = fetchFromGitHub {
+    owner = "csmith-project";
+    repo = "csmith";
+    rev = "0cdc710315cfee9035e22ef4363ca479270d1934";
+    hash = "sha256-m0xdGtccxGFMHFYRCultkEfMEs9ju8ccx7kZbxNTapE=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    cmake
     m4
     makeWrapper
   ];
-  buildInputs =
-    [ libbsd ]
-    ++ (with perlPackages; [
-      perl
-      SysCPU
-    ]);
+  buildInputs = [
+    libbsd
+  ]
+  ++ (with perlPackages; [
+    perl
+    SysCPU
+  ]);
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
-      --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
-      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
-      --replace '$CSMITH_HOME/src/csmith' $out/bin/csmith
+      --replace-fail '$CSMITH_HOME/runtime' $out/include/csmith-${finalAttrs.version} \
+      --replace-fail ' ''${CSMITH_HOME}/runtime' " $out/include/csmith-${finalAttrs.version}" \
+      --replace-fail '$CSMITH_HOME/src/csmith' $out/bin/csmith
 
     substituteInPlace $out/bin/launchn.pl \
-      --replace '../compiler_test.pl' $out/bin/compiler_test.pl \
-      --replace '../$CONFIG_FILE' '$CONFIG_FILE'
+      --replace-fail '../compiler_test.pl' $out/bin/compiler_test.pl \
+      --replace-fail '../$CONFIG_FILE' '$CONFIG_FILE'
 
     wrapProgram $out/bin/launchn.pl \
       --prefix PERL5LIB : "$PERL5LIB"
@@ -49,11 +57,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Random generator of C programs";
     homepage = "https://embed.cs.utah.edu/csmith";
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     longDescription = ''
       Csmith is a tool that can generate random C programs that statically and
       dynamically conform to the C99 standard. It is useful for stress-testing
@@ -62,6 +70,6 @@ stdenv.mkDerivation rec {
       to find and report more than 400 previously unknown compiler bugs.
     '';
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

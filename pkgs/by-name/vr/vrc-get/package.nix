@@ -8,13 +8,13 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vrc-get";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-gZtaeq/PDVFZPIMH/cB/ZJNP+SbksPPbz8L8Hc7FDM8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-7Remfn9U+yDvKuxLaeKAW+1Xqjz6dmm/nuxEIZwkZAg=";
   };
 
   nativeBuildInputs = [
@@ -22,8 +22,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cG6fcSIQ0E1htEM4H914SSKDNRGM5fj52SUoLqRYzoc=";
+  cargoHash = "sha256-bU+TVVnbrhmkQ8L/u42Kkx0PCBufsjf2rN+GWnYg2h4=";
 
   # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
   # If no emulator is available, then give up on generating shell completions
@@ -38,11 +37,11 @@ rustPlatform.buildRustPackage rec {
         --zsh <(${vrc-get} completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";
     homepage = "https://github.com/vrc-get/vrc-get";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bddvlpr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bddvlpr ];
     mainProgram = "vrc-get";
   };
-}
+})

@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
+  fetchFromGitHub,
   h5py,
   numpy,
   dill,
@@ -17,24 +15,15 @@
 
 buildPythonPackage rec {
   pname = "hickle";
-  version = "5.0.3";
+  version = "5.0.3-unstable-2026-07-25";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
+  src = fetchFromGitHub {
+    owner = "telegraphic";
+    repo = "hickle";
+    rev = "cd92308f564223be999230aeb708988cfb14c2e7";
+    hash = "sha256-+W2svifU1yY4RfxX8zC+8g0h7pjP2hIP6DW4AJSfrVg=";
   };
-
-  patches = [
-    # fixes support for numpy 2.x, the PR is not yet merged https://github.com/telegraphic/hickle/pull/186
-    # FIXME: Remove this patch when the numpy 2.x support arrives
-    (fetchpatch {
-      url = "https://github.com/cjwatson/hickle/commit/246d8e82c805e2e49ea0abd39abc9b2d800bde59.patch";
-      hash = "sha256-IEVw2K7S1nCkzgn9q0xghm4brfXcallNjzXpt2cRq1M=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -54,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hickle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

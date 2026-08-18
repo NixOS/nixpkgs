@@ -18,7 +18,7 @@
   pytest-astropy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyregion";
   version = "2.3.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "pyregion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mEO2PbUSTVy7Qmm723/lGL6PYQzbRazIPZH51SWebvs=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/astropy/pyregion/blob/${src.tag}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/astropy/pyregion/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Python parser for ds9 region files";
     homepage = "https://github.com/astropy/pyregion";
-    license = licenses.mit;
-    maintainers = [ maintainers.smaret ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.smaret ];
   };
-}
+})

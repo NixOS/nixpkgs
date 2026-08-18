@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ignition";
-  version = "2.1.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "flattool";
     repo = "ignition";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-T0bVMJnJPpKdS5T6rPxVAEvIXFNSj5BtypaexSJhl2I=";
+    hash = "sha256-egbpFpwYXhezeQbKSj75InFV3blj1GVzRgcku3ZF6Ag=";
   };
 
   patches = [
@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
   ];
+
+  # Needed since Jasmine is not in nixpkgs
+  mesonFlags = [ "-Dtests=false" ];
 
   meta = {
     description = "Manage startup apps and scripts";

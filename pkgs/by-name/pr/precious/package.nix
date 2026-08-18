@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "precious";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "houseabsolute";
     repo = "precious";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-moJk8bwMlYtfo+Iq/OcjJkQJQiirZ6oKSoATpW3KcQI=";
+    hash = "sha256-3pZ1OA1VxM1aMP1kyMzN7vlqvEQmo6kw0JBusmt8vwE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nvHP5/njvkXcI3QtFU4CijXaX5l4DabMMVzvktvFNvA=";
+  cargoHash = "sha256-tOkd++KxroZyFMSf9abYKiz/OTlAEyB3Wn1BzQPrX2k=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

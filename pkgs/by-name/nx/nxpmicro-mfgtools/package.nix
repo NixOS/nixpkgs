@@ -9,18 +9,19 @@
   libusb1,
   libzip,
   openssl,
+  tinyxml-2,
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nxpmicro-mfgtools";
-  version = "1.5.139";
+  version = "1.5.243";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
-    rev = "uuu_${version}";
-    sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
+    rev = "uuu_${finalAttrs.version}";
+    sha256 = "sha256-+m3r/QxOnTjemqIaZ/2cxDHtHlw7qxu9PbTsQYyMaEY=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +35,13 @@ stdenv.mkDerivation rec {
     libusb1
     libzip
     openssl
+    tinyxml-2
     zstd
   ];
 
   doInstallCheck = true;
 
-  preConfigure = "echo ${version} > .tarball-version";
+  preConfigure = "echo ${finalAttrs.version} > .tarball-version";
 
   postInstall = ''
     # rules printed by the following invocation are static,
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
       --bash ../snap/local/bash-completion/universal-update-utility
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freescale/NXP I.MX chip image deploy tools";
     longDescription = ''
       UUU (Universal Update Utility) is a command line tool, evolved out of
@@ -65,12 +67,12 @@ stdenv.mkDerivation rec {
       script works on both OS.
     '';
     homepage = "https://github.com/NXPmicro/mfgtools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       bmilanov
       jraygauthier
     ];
     mainProgram = "uuu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

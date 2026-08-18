@@ -35,41 +35,43 @@
   enableSystemd ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  system = "/run/current-system/sw";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "elogind";
   version = "255.5";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = "elogind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      m4
-      pkg-config
-      gperf
-      getent
-      libcap
-      gettext
-      libxslt.bin # xsltproc
-      docbook5
-      docbook_xsl
-      docbook_xsl_ns
-      docbook_xml_dtd_42
-      docbook_xml_dtd_45 # needed for docbook without Internet
+  nativeBuildInputs = [
+    meson
+    ninja
+    m4
+    pkg-config
+    gperf
+    getent
+    libcap
+    gettext
+    libxslt.bin # xsltproc
+    docbook5
+    docbook_xsl
+    docbook_xsl_ns
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45 # needed for docbook without Internet
 
-      python3Packages.python
-      python3Packages.jinja2
-    ]
-    ++ lib.optionals enableSystemd [
-      # udevCheckHook introduces a dependency on systemdMinimal
-      udevCheckHook
-    ];
+    python3Packages.python
+    python3Packages.jinja2
+  ]
+  ++ lib.optionals enableSystemd [
+    # udevCheckHook introduces a dependency on systemdMinimal
+    udevCheckHook
+  ];
 
   buildInputs = [
     acl
@@ -79,10 +81,14 @@ stdenv.mkDerivation rec {
     libselinux
     pam
     util-linux
-  ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
+  ]
+  ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
+  ''
+  + lib.optionalString (!enableSystemd) ''
+    substituteInPlace ./rules.d/71-seat.rules.in --replace-fail "{{BINDIR}}/udevadm" "${eudev}/bin/udevadm"
   '';
 
   patches = [
@@ -130,6 +136,7 @@ stdenv.mkDerivation rec {
     })
     ./Add-missing-musl_missing.h-includes-for-basename.patch
     ./Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
+    ./errno-list-filter-out-EFSBADCRC-and-EFSCORRUPTED.patch
   ];
 
   # Inspired by the systemd `preConfigure`.
@@ -148,15 +155,18 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc")
+    (lib.mesonOption "halt-path" "${system}/bin/halt")
+    (lib.mesonOption "poweroff-path" "${system}/bin/poweroff")
+    (lib.mesonOption "reboot-path" "${system}/bin/reboot")
     (lib.mesonBool "utmp" (!stdenv.hostPlatform.isMusl))
     (lib.mesonEnable "xenctrl" false)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elogind/elogind";
-    description = ''The systemd project's "logind", extracted to a standalone package'';
-    platforms = platforms.linux; # probably more
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ nh2 ];
+    description = "systemd project's 'logind', extracted to a standalone package";
+    platforms = lib.platforms.linux; # probably more
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
-}
+})

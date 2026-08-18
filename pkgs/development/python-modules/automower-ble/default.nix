@@ -1,30 +1,31 @@
 {
   lib,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "automower-ble";
-  version = "0.2.1";
+  version = "0.2.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alistair23";
     repo = "AutoMower-BLE";
-    tag = version;
-    hash = "sha256-k0cVjpuhPFpPoPVFj0uoKVoFEQn4TNIuFLedJfawlaA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3Hiplg4PTu84H890JwTja7wopB7bSYteGXR7RQ/J++0=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ bleak ];
+  dependencies = [
+    bleak
+    bleak-retry-connector
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -33,7 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to connect to Husqvarna Automower Connect";
     homepage = "https://github.com/alistair23/AutoMower-BLE";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/alistair23/AutoMower-BLE/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

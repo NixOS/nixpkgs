@@ -4,6 +4,7 @@
   attr,
   autoconf,
   automake,
+  pkg-config,
   bash,
   bc,
   coreutils,
@@ -28,23 +29,27 @@
   util-linux,
   which,
   writeScript,
+  writeShellScript,
   xfsprogs,
+  gitMinimal,
+  nix-update,
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfstests";
-  version = "2023.05.14";
+  version = "2026.07.21";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${version}.tar.gz";
-    hash = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-b2bL8t1I+kOryAvq3pYTVhx+LwIDf26xdHl7Wdq+Mw8=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    pkg-config
   ];
   buildInputs = [
     acl
@@ -62,7 +67,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+      --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
@@ -154,13 +159,31 @@ stdenv.mkDerivation rec {
     }:$PATH
     exec ./check "$@"
   '';
+  passthru.updateScript = writeShellScript "update-xfstests" ''
+    set -euo pipefail
+    export PATH=${
+      lib.makeBinPath [
+        coreutils
+        gitMinimal
+        gawk
+        nix-update
+      ]
+    }:$PATH
+    VERSION="$(git ls-remote --tags --refs https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git \
+      | awk '{ print $2 }' \
+      | grep '^refs/tags/v' \
+      | sed 's|^refs/tags/v||' \
+      | sort -V \
+      | tail -n1)"
+    exec nix-update --version "$VERSION" xfstests "$@"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Torture test suite for filesystems";
     homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "xfstests-check";
   };
-}
+})

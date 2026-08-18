@@ -4,20 +4,39 @@
   callPackage,
   lib,
   dbus,
-  xorg,
+  kmod,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualboxVersion = "7.1.10";
+  virtualboxVersion = "7.2.14";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "7d60010a4c9102613554b46f61d17b825c30ee59d8be071e52d8aac664ca9869";
+  virtualboxSha256 = "384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500";
+
+  platform =
+    if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else if stdenv.hostPlatform.is32bit then
+      "x86"
+    else
+      "amd64";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
-    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+    inherit
+      virtualboxVersion
+      virtualboxSubVersion
+      virtualboxSha256
+      platform
+      ;
   };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
@@ -30,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -42,11 +61,11 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
@@ -54,23 +73,28 @@ stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
   version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
-    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-  }.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
-
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=implicit-function-declaration"
+    ];
+
+    KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  };
 
   nativeBuildInputs = [
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+    kmod
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
@@ -89,12 +113,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done
@@ -128,6 +152,11 @@ stdenv.mkDerivation {
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
 
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
+
     runHook postInstall
   '';
 
@@ -152,12 +181,12 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

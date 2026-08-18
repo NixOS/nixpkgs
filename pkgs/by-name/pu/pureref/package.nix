@@ -1,6 +1,7 @@
 {
   lib,
   appimageTools,
+  makeWrapper,
   runCommand,
   curl,
   gnugrep,
@@ -8,7 +9,7 @@
   dpkg,
 }:
 let
-  version = "2.0.3";
+  version = "2.1.3";
   deb =
     runCommand "PureRef-${version}_x64"
       {
@@ -18,7 +19,7 @@ let
           cacert
           dpkg
         ];
-        outputHash = "sha256-VdKu1YQa+//FbNWqgTPoUhY4pSekgVohI53D4i5hVkQ=";
+        outputHash = "sha256-7S0nnEwtGKKKNPZL2pb5Z8bKKB5eWvymSS2pQo9cJa0=";
         outputHashMode = "recursive";
       }
       ''
@@ -28,22 +29,25 @@ let
         chmod 755 $out
       '';
 in
-appimageTools.wrapType1 {
+appimageTools.wrapType2 {
   pname = "pureref";
   inherit version;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   src = "${deb}/usr/bin/PureRef";
 
   extraInstallCommands = ''
     mv $out/bin/pureref $out/bin/PureRef
     cp -r ${deb}/usr/share $out
+    wrapProgram $out/bin/PureRef --set QT_QPA_PLATFORM xcb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reference Image Viewer";
     homepage = "https://www.pureref.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       elnudev
       husjon
     ];

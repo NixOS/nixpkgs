@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://messymatters.com/tagtime/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
     mainProgram = "tagtimed";
   };
 }

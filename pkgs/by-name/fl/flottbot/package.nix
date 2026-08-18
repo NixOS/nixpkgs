@@ -5,26 +5,26 @@
   nix-update-script,
   replaceVars,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flottbot";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "target";
     repo = "flottbot";
-    rev = version;
-    hash = "sha256-Z17CkJhxIwoF3Fa0doDfE6N2eUtiBeEEhDwDUoWCCQ8=";
+    rev = finalAttrs.version;
+    hash = "sha256-gOy03qrAzkZk99hVNe/tG1YLoUD5CMCE9AeONAJyeE4=";
   };
 
   patches = [
     # patch out debug.ReadBuildInfo since version information is not available with buildGoModule
     (replaceVars ./version.patch {
-      version = version;
-      vcsHash = version; # Maybe there is a way to get the git ref from src? idk.
+      version = finalAttrs.version;
+      vcsHash = finalAttrs.version; # Maybe there is a way to get the git ref from src? idk.
     })
   ];
 
-  vendorHash = "sha256-q4oMlrCN6mjfTTnDc5Q4ncLjKstNttzlEzcXPVw5cLc=";
+  vendorHash = "sha256-vXezNFEM/m5doVgt6T2+Q0PwP3lYALkhHD0cP4ul+JE=";
 
   subPackages = [ "cmd/flottbot" ];
 
@@ -32,13 +32,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Chatbot framework written in Go";
     homepage = "https://github.com/target/flottbot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanhonof ];
-    sourceProvenance = [ sourceTypes.fromSource ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bryanhonof ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "flottbot";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

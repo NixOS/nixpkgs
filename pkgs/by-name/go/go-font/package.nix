@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,23 +15,19 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-rdzt51wY4b7HEr7W/0Ar/FB0zMyf+nKLsOT+CRSEP3o=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
+  postInstall = ''
     mkdir -p $out/share/doc/go-font
-    mv *.ttf $out/share/fonts/truetype
-    mv README $out/share/doc/go-font/LICENSE
-
-    runHook postInstall
+    cp $src/README $out/share/doc/go-font/LICENSE
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://blog.golang.org/go-fonts";
     description = "Go font family";
     changelog = "https://go.googlesource.com/image/+log/refs/heads/master/font/gofont";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sternenseemann ];
     platforms = lib.platforms.all;
   };
 }

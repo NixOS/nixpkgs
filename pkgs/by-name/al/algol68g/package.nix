@@ -15,17 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.5.14";
+  version = "3.12.3";
 
   src = fetchurl {
-    url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-uIy8rIhUjohiQJ/K5EprsIISXMAx1w27I3cGo/9H9Wk=";
+    url = "https://algol68genie.nl/algol68g-${finalAttrs.version}.tar.gz";
+    hash = "sha256-TS5m+Byi+5j4jiOuQbR159QERfNJsQiGNngtoyC9IrE=";
   };
 
   outputs = [
     "out"
     "man"
-  ] ++ lib.optionals withPDFDoc [ "doc" ];
+  ]
+  ++ lib.optionals withPDFDoc [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -46,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       pdfdoc = fetchurl {
-        url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
-        hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
+        url = "https://algol68genie.nl/learning-algol-68-genie.pdf";
+        hash = "sha256-BrVjYXd5sknV0+UCRgQMf0H3QMzMQcLhytEEuiTGkLE=";
       };
     in
     lib.optionalString withPDFDoc ''
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    homepage = "https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html";
+    homepage = "https://algol68genie.nl/en/algol-68-genie/";
     description = "Algol 68 Genie compiler-interpreter";
     longDescription = ''
       Algol 68 Genie (a68g) is a recent checkout hybrid compiler-interpreter,
@@ -68,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.unix;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -10,7 +9,6 @@
   # dependencies
   blinker,
   click,
-  importlib-metadata,
   itsdangerous,
   jinja2,
   werkzeug,
@@ -20,7 +18,6 @@
   python-dotenv,
 
   # tests
-  greenlet,
   pytestCheckHook,
 
   # reverse dependencies
@@ -32,13 +29,18 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.1";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KEx7jy9Yy3N/DPHDD9fq8Mz83hlgmdJOzt4/wgBapZ4=";
+    hash = "sha256-DvDlK4qc2TKFU3kZfdj5QEezWcoKeGlRRDBMtF+Hyes=";
   };
+
+  patches = [
+    # https://github.com/pallets/flask/issues/6071
+    ./pytest-9.1-compat.patch
+  ];
 
   build-system = [ flit-core ];
 
@@ -48,14 +50,19 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     async = [ asgiref ];
     dotenv = [ python-dotenv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # https://github.com/pallets/flask/issues/6092#issuecomment-4952497033
+    "test_bad_environ_raises_bad_request"
+  ];
 
   passthru.tests = {
     inherit
@@ -66,9 +73,9 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
-    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
-      replaceStrings [ "." ] [ "-" ] version
+  meta = {
+    changelog = "https://flask.palletsprojects.com/en/stable/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
     description = "Python micro framework for building web applications";
@@ -80,7 +87,7 @@ buildPythonPackage rec {
       around Werkzeug and Jinja and has become one of the most popular
       Python web application frameworks.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

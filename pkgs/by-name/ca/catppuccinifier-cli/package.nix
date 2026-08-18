@@ -2,23 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "catppuccinifier-cli";
-  version = "8.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "lighttigerXIV";
     repo = "catppuccinifier";
-    rev = version;
-    hash = "sha256-CEjdCr7QgyQw+1VmeEyt95R0HKE0lAKZHrwahaxgJoU=";
+    tag = finalAttrs.version;
+    hash = "sha256-e8sLYp+0YhC/vAn4vag9UUaw3VYDRERGnLD1RuW1TXE=";
   };
 
-  sourceRoot = "${src.name}/src/catppuccinifier-cli";
+  sourceRoot = "${finalAttrs.src.name}/src/catppuccinifier-cli";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oFY07E31ZFy4AphqDCqL6BAhUNQtakHmLwER1RsAE7o=";
+  cargoHash = "sha256-mIzRK4rqD8ON8LqkG3QhOseZLM5+Rr1Rhj1uuu+KRMI=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Apply catppuccin flavors to your wallpapers";
@@ -31,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux ++ windows;
   };
-}
+})

@@ -34,22 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      glib-networking # TLS support
-      gtk3
-      luafilesystem
-      sqlite
-      webkitgtk_4_1
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    glib-networking # TLS support
+    gtk3
+    luafilesystem
+    sqlite
+    webkitgtk_4_1
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   strictDeps = true;
 

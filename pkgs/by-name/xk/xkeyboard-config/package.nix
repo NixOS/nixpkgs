@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkeyboard-config";
-  version = "2.44";
+  version = "2.48";
 
   src = fetchurl {
     url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VNLDPu67Ax1I+lkMVD5Uyby9DwA4brxkibL0eg2kNCo=";
+    hash = "sha256-t3BBMk8BCfdxYe5DdD/gS6pIWGavhGDTHkdq0/dkj9U=";
   };
 
   strictDeps = true;
@@ -70,9 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       hpnd
       cronyx
-      # there is another unknown license at the end but it seems free
-      # also see this issue https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/issues/527
-      free
+      hyphenBulgarian
     ];
     maintainers = [ ];
     platforms = lib.platforms.unix;

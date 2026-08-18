@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TheKevJames";
     repo = "coveralls-python";
     tag = version;
-    hash = "sha256-1MjP99NykWNDyzWwZopLAzZ93vGX1mXEU+m+zvOBIZA=";
+    hash = "sha256-c7YV1SAbxmqfVI/wGtfdr+S4T7G2q7tf0FhuyCJaPDg=";
   };
 
   build-system = [ poetry-core ];

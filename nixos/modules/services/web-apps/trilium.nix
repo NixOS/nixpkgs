@@ -41,6 +41,16 @@ in
       '';
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/secrets/trilium.env";
+      description = ''
+        File to load as the environment file. This allows you to pass secrets in without writing
+        to the nix store.
+      '';
+    };
+
     instanceName = mkOption {
       type = types.str;
       default = "Trilium";
@@ -126,6 +136,7 @@ in
           environment.TRILIUM_DATA_DIR = cfg.dataDir;
           serviceConfig = {
             ExecStart = lib.getExe cfg.package;
+            EnvironmentFile = cfg.environmentFile;
             User = "trilium";
             Group = "trilium";
             PrivateTmp = "true";

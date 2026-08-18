@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "shellcheck";
     publisher = "timonwong";
-    version = "0.37.7";
-    sha256 = "sha256-i8cVY8EcKSxnmWmRWDiARF79pOEcYMc+y+7i4d8EDTo=";
+    version = "0.39.5";
+    sha256 = "sha256-8f9LGmNE8ilPYZmbJpmmAx9DkKJXbQzAia11rM3wTec=";
   };
   nativeBuildInputs = [
     jq
@@ -26,6 +26,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck";
     homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = [ ];
   };
 }

@@ -10,18 +10,16 @@ let
 
   configFile = ''
     ${cfg.chain.type}_chain
-    ${lib.optionalString (
-      cfg.chain.type == "random"
-    ) "chain_len = ${builtins.toString cfg.chain.length}"}
+    ${lib.optionalString (cfg.chain.type == "random") "chain_len = ${toString cfg.chain.length}"}
     ${lib.optionalString cfg.proxyDNS "proxy_dns"}
     ${lib.optionalString cfg.quietMode "quiet_mode"}
-    remote_dns_subnet ${builtins.toString cfg.remoteDNSSubnet}
-    tcp_read_time_out ${builtins.toString cfg.tcpReadTimeOut}
-    tcp_connect_time_out ${builtins.toString cfg.tcpConnectTimeOut}
+    remote_dns_subnet ${toString cfg.remoteDNSSubnet}
+    tcp_read_time_out ${toString cfg.tcpReadTimeOut}
+    tcp_connect_time_out ${toString cfg.tcpConnectTimeOut}
     localnet ${cfg.localnet}
     [ProxyList]
     ${builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (k: v: "${v.type} ${v.host} ${builtins.toString v.port}") (
+      lib.mapAttrsToList (k: v: "${v.type} ${v.host} ${toString v.port}") (
         lib.filterAttrs (k: v: v.enable) cfg.proxies
       )
     )}

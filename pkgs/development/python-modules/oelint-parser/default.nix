@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -12,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oelint-parser";
-  version = "8.1.1";
+  version = "8.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-parser";
-    tag = version;
-    hash = "sha256-XjKtZky/i6KxS81tMbEsSe/caQ/GsEXEGO3pt6uEBq8=";
+    tag = finalAttrs.version;
+    hash = "sha256-UY8KqItX8kj3eS3peP8okBR8i81MisMSffbhSPaqBM0=";
   };
 
   pythonRelaxDeps = [ "regex" ];
@@ -42,13 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oelint_parser" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Alternative parser for bitbake recipes";
     homepage = "https://github.com/priv-kweihmann/oelint-parser";
-    changelog = "https://github.com/priv-kweihmann/oelint-parser/releases/tag/${src.tag}";
+    changelog = "https://github.com/priv-kweihmann/oelint-parser/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

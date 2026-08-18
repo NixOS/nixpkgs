@@ -22,24 +22,23 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # These patches are required when using DXVK with Wine on Darwin.
-  patches =
-    [
-      # Fixes errors building with GCC 13.
-      (fetchpatch {
-        url = "https://github.com/doitsujin/dxvk/commit/1a5afc77b1859e6c7e31b55e11ece899e3b5295a.patch";
-        hash = "sha256-tTAsQOMAazgH/6laLNTuG2lki257VUR9EBivnD4vCuY=";
-      })
-      # Fixes errors building with GCC 14.
-      ./gcc14-compat.patch
-    ]
-    ++ lib.optionals enableMoltenVKCompat [
-      # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
-      # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
-      ./darwin-dxvk-compat.patch
-      # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
-      # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
-      ./darwin-thread-primitives.patch
-    ];
+  patches = [
+    # Fixes errors building with GCC 13.
+    (fetchpatch {
+      url = "https://github.com/doitsujin/dxvk/commit/1a5afc77b1859e6c7e31b55e11ece899e3b5295a.patch";
+      hash = "sha256-tTAsQOMAazgH/6laLNTuG2lki257VUR9EBivnD4vCuY=";
+    })
+    # Fixes errors building with GCC 14.
+    ./gcc14-compat.patch
+  ]
+  ++ lib.optionals enableMoltenVKCompat [
+    # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
+    # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
+    ./darwin-dxvk-compat.patch
+    # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
+    # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
+    ./darwin-thread-primitives.patch
+  ];
 
   strictDeps = true;
 

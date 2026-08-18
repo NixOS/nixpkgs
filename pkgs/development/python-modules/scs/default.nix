@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -19,17 +20,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scs";
-  version = "3.2.7.post2";
+  inherit (pkgs.scs) version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    tag = version;
-    hash = "sha256-A626gK30J4e/TrJMXYc+jMgYw7fNcnWfnTeXlyYQNMM=";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-ZB1A6613ZgwGsZ97MpK9c1vUfNe+0RkUULtzQxGKd88=";
   };
 
   postPatch = ''
@@ -63,9 +64,10 @@ buildPythonPackage rec {
       Can solve: linear programs (LPs), second-order cone programs (SOCPs), semidefinite programs (SDPs),
       exponential cone programs (ECPs), and power cone programs (PCPs), or problems with any combination of those cones.
     '';
-    homepage = "https://github.com/cvxgrp/scs"; # upstream C package
+    inherit (pkgs.scs.meta) homepage;
     downloadPage = "https://github.com/bodono/scs-python";
+    changelog = "https://github.com/bodono/scs-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
-}
+})

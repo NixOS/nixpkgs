@@ -10,7 +10,6 @@
   cryptography,
   docker,
   fetchFromGitHub,
-  fetchpatch,
   flask-cors,
   flask,
   freezegun,
@@ -22,12 +21,12 @@
   multipart,
   openapi-spec-validator,
   py-partiql-parser,
+  pyotp,
   pyparsing,
   pytest-order,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -38,26 +37,15 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.4";
+  version = "5.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
+    hash = "sha256-edMV/EDSVxbQfTjl81y4aM490qtt5NnHSFOvO5o015I=";
   };
-
-  # Fix tests with botocore 1.38.32
-  # FIXME: remove in next update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/getmoto/moto/commit/8dcaaca0eefdf9ac957650c1562317b6d07fadf9.diff";
-      hash = "sha256-5zaerJR1rsMZQLn8cXjS8RYiKlSQ6azp7dk7JzLp+7I=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -306,23 +294,35 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    antlr4-python3-runtime
+    aws-xray-sdk
+    docker
+    flask
+    flask-cors
     freezegun
+    graphql-core
+    joserfc
+    openapi-spec-validator
+    py-partiql-parser
+    pyotp
+    pyparsing
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.server;
+  ];
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
-  pytestFlagsArray = [
-    "-m"
-    "'not network and not requires_docker'"
-
+  pytestFlags = [
     # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist"
-    "loadscope"
+    "--dist=loadscope"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "requires_docker"
   ];
 
   disabledTests = [
@@ -362,9 +362,6 @@ buildPythonPackage rec {
     # Parameter validation fails
     "test_conditional_write"
 
-    # Requires newer botocore version
-    "test_dynamodb_with_account_id_routing"
-
     # Assumes too much about threading.Timer() behavior (that it honors the
     # timeout precisely and that the thread handler will complete in just 0.1s
     # from the requested timeout)
@@ -393,12 +390,25 @@ buildPythonPackage rec {
 
     # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
     "tests/test_workspaces/test_workspaces.py"
+
+    # Requires sagemaker which is broken on Python 3.14
+    "other_langs/tests_sagemaker_client/test_model_training.py"
+    "other_langs/tests_sagemaker_client/test_pipeline_session.py"
+
+    # Requires cfn-lint which is broken on Python 3.14
+    "tests/test_cloudformation/test_validate.py"
+
+    #  Unknown parameter in input: "BucketNamespace", must be one of: ACL, Bucket, CreateBucketConfiguration, GrantFullControl, GrantRead, GrantReadACP, GrantWrite, GrantWriteACP, ObjectLockEnabledForBucket, ObjectOwnership
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace"
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace_other_region"
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace_invalid_name"
+    "tests/test_ec2/test_instance_types.py::test_describe_instance_types_gpu_instance_types"
   ];
 
   meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
-    changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getmoto/moto/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

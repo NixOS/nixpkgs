@@ -9,17 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau-lsp";
-  version = "1.49.1";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "JohnnyMorganz";
     repo = "luau-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-CRfDJXAgofDV9yeF0C91rTLVVa+cqBvqbzlR90AYfVU=";
+    hash = "sha256-fVmc/Ky1fbS4hnh2pOw1idaZFCq0KFHE2hTVQQmYmfM=";
     fetchSubmodules = true;
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -55,16 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/JohnnyMorganz/luau-lsp/releases/tag/${finalAttrs.version}";
     changelog = "https://github.com/JohnnyMorganz/luau-lsp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      anninzy
-      HeitorAugustoLN
-    ];
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "luau-lsp";
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # Could not find a package configuration file provided by "Protobuf"
-      # It is unclear why this is only happening on x86_64-darwin
-      "x86_64-darwin"
-    ];
   };
 })

@@ -8,12 +8,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwps";
   version = "0.4.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwps/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libwps/libwps-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-xVEdlAngO446F50EZcHMKW7aBvyDcTVu9Egs2oaIadE=";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libwps.sourceforge.net/";
     description = "Microsoft Works document format import filter library";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
   };
-}
+})

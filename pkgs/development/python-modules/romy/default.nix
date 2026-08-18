@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   aiohttp,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "romy";
   version = "0.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "xeniter";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "romy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control Wi-Fi enabled ROMY vacuum cleaners";
     homepage = "https://github.com/xeniter/romy";
     changelog = "https://github.com/xeniter/romy/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

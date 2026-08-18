@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-hNJXoUIyrCB9PCWLCmN81F6pBRwZApDR6JWA0adyklw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "tag_build = .dev" ""
+  '';
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "kgb" ];
@@ -28,6 +33,6 @@ buildPythonPackage rec {
     description = "Python function spy support for unit tests";
     homepage = "https://github.com/beanbaginc/kgb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

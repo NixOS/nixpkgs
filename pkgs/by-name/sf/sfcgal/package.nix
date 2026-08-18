@@ -11,14 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfcgal";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "SFCGAL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m8oyfL3rF4qLugoEFa8iiqS5D1Oljg+x1qMp9KfiQ5c=";
+    hash = "sha256-9caucSIEAjzc4cWShuwbBC+BLs5a3e3y58aT4aLzN5E=";
   };
+
+  # boost 1.89 removed the boost_system stub library
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'set( SFCGAL_Boost_COMPONENTS thread system serialization )' \
+      'set( SFCGAL_Boost_COMPONENTS thread serialization )'
+  '';
 
   buildInputs = [
     cgal

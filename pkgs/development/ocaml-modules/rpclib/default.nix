@@ -10,16 +10,15 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "rpclib";
-  version = "9.0.0";
+  version = "10.2.0";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.14";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-rpc/releases/download/${version}/rpclib-${version}.tbz";
-    hash = "sha256-ziPrdWwCjZN0vRmCMpa923wjfT8FVFLTDRz30VIW6WM=";
+    url = "https://github.com/mirage/ocaml-rpc/releases/download/${finalAttrs.version}/rpclib-${finalAttrs.version}.tbz";
+    hash = "sha256-N+xKTdU/yy042EZBXTpFl21aeMFTHm2HbbJDbpRxcvM=";
   };
 
   buildInputs = [
@@ -35,10 +34,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Light library to deal with RPCs in OCaml";
-    license = licenses.isc;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})

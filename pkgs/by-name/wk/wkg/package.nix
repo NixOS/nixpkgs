@@ -8,22 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wkg";
-  version = "0.11.0";
+  version = "0.15.1";
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-pkg-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l8ArzujFirquSKMDkcoP8KukLFCRB7U8BejzMGUD59Y=";
+    hash = "sha256-xWwhRqo/rRa+VPe2RqoZf77pf3YjqCdbOG8axme9oW4=";
   };
 
-  cargoHash = "sha256-ngVnF2eLZfa4ziliAaJOmu5YbnetEovH66kWXp2w1gY=";
+  cargoHash = "sha256-L0KYEnmvTUI6GreuEDf6QzNkTHzsLo/U27RrSwF5sA4=";
 
   # A large number of tests require Internet access in order to function.
   doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

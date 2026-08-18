@@ -12,13 +12,15 @@
   libgudev,
   python3,
   valgrind,
+  libwacom-surface,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.16.1";
+  version = "2.19.1";
 
   outputs = [
+    "bin"
     "out"
     "dev"
   ];
@@ -27,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-YP6z+2HyIRmIAJIdJMbVTQA0rf3EXBZvlCdM4jrmHXM=";
+    hash = "sha256-BYfMltOBhb9iS2sTazibcdIaAq5WHecHJIHIfu/cUAQ=";
   };
 
   postPatch = ''
@@ -47,12 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libevdev
     libgudev
-    (python3.withPackages (
-      pp: with pp; [
-        pp.libevdev
-        pp.pyudev
-      ]
-    ))
+    (python3.withPackages (pp: [
+      pp.libevdev
+      pp.pyudev
+    ]))
   ];
 
   mesonFlags = [
@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  passthru = {
+  passthru.tests = {
+    inherit libwacom-surface;
     tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
@@ -85,5 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

@@ -8,25 +8,23 @@
   ripgrep,
   versionCheckHook,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serpl";
-  version = "0.3.4";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.3.6";
+
   src = fetchFromGitHub {
     owner = "yassinebridi";
     repo = "serpl";
-    rev = version;
-    hash = "sha256-lEvUS1RlZ4CvervzyfODsFqRJAiA6PyLNUVWhSoPMDY=";
+    rev = finalAttrs.version;
+    hash = "sha256-ooxAmpsBA3KD+n8kN1GuMpy2TZGjpZwpmFM90t7nxMw=";
   };
 
   buildFeatures = [ "ast_grep" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-reeJsSNifPeDzqMKVpS1Pmyn9x1F+Vin/xy81d5rKVs=";
+  cargoHash = "sha256-Y95Y2xo6lOsDj9Xqk1BTw3Ab2EGNUuhpKZ7BENKYyX8=";
 
   postFixup = ''
     # Serpl needs ripgrep to function properly.
@@ -44,7 +42,6 @@ rustPlatform.buildRustPackage {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/serpl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -55,4 +52,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "serpl";
   };
-}
+})

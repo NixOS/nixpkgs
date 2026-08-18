@@ -4,9 +4,8 @@
   stdenv,
 
   # Build-time dependencies:
-  addDriverRunpath,
   autoAddDriverRunpath,
-  bazel_6,
+  bazel_7,
   binutils,
   buildBazelPackage,
   buildPythonPackage,
@@ -65,18 +64,21 @@ let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
-  meta = with lib; {
+  meta = {
     description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
-    homepage = "https://github.com/google/jax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    homepage = "https://github.com/jax-ml/jax";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
 
     # Make this platforms.unix once Darwin is supported.
     # The top-level jaxlib now falls back to jaxlib-bin on unsupported platforms.
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+
+    # Needs update for Bazel 7.
+    broken = true;
   };
 
   # Bazel wants a merged cudnn at configuration time
@@ -114,7 +116,7 @@ let
       (lib.getOutput "static" cuda_cudart) # libcudart_static.a
 
       # Headers
-      (lib.getDev cuda_cccl) # block_load.cuh
+      (lib.getDev cccl) # block_load.cuh
       (lib.getDev cuda_cudart) # cuda.h
       (lib.getDev cuda_cupti) # cupti.h
       (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811
@@ -221,13 +223,14 @@ let
     name = "bazel-build-${pname}-${version}";
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
-    bazel = bazel_6;
+    #bazel = bazel_6;
+    bazel = bazel_7;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
-      rev = "refs/tags/${pname}-v${version}";
+      tag = "${pname}-v${version}";
       hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
     };
 
@@ -239,7 +242,8 @@ let
       wheel
       build
       which
-    ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
+    ]
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs = [
       curl
@@ -256,7 +260,8 @@ let
       six
       snappy-cpp
       zlib
-    ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
+    ]
+    ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -339,22 +344,21 @@ let
 
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
-    bazelFlags =
-      [
-        "-c opt"
-        # See https://bazel.build/external/advanced#overriding-repositories for
-        # information on --override_repository flag.
-        "--override_repository=xla=${xla}"
-      ]
-      ++ lib.optionals effectiveStdenv.cc.isClang [
-        # bazel depends on the compiler frontend automatically selecting these flags based on file
-        # extension but our clang doesn't.
-        # https://github.com/NixOS/nixpkgs/issues/150655
-        "--cxxopt=-x"
-        "--cxxopt=c++"
-        "--host_cxxopt=-x"
-        "--host_cxxopt=c++"
-      ];
+    bazelFlags = [
+      "-c opt"
+      # See https://bazel.build/external/advanced#overriding-repositories for
+      # information on --override_repository flag.
+      "--override_repository=xla=${xla}"
+    ]
+    ++ lib.optionals effectiveStdenv.cc.isClang [
+      # bazel depends on the compiler frontend automatically selecting these flags based on file
+      # extension but our clang doesn't.
+      # https://github.com/NixOS/nixpkgs/issues/150655
+      "--cxxopt=-x"
+      "--cxxopt=c++"
+      "--host_cxxopt=-x"
+      "--host_cxxopt=c++"
+    ];
 
     # We intentionally overfetch so we can share the fetch derivation across all the different configurations
     fetchAttrs = {

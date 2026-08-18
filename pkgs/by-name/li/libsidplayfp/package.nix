@@ -3,72 +3,69 @@
   lib,
   fetchFromGitHub,
   makeFontsConf,
-  nix-update-script,
+  gitUpdater,
   testers,
   autoreconfHook,
   docSupport ? true,
   doxygen,
   graphviz,
   libexsid,
-  libgcrypt,
+  libresidfp,
+  libusb1,
   perl,
   pkg-config,
-  unittest-cpp,
   xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.14.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-q1cUv4gpzL3wfssP7pWtDfDzFO47+kzpGy4GYLzEM50=";
+    hash = "sha256-DCRzkMQ9QiGj6eDEqIzl5HeXaHwRxGISjVdqMiCdYXg=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals docSupport [ "doc" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     patchShebangs .
   '';
 
-  strictDeps = true;
-
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      perl
-      pkg-config
-      xa
-    ]
-    ++ lib.optionals docSupport [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    xa
+  ]
+  ++ lib.optionals docSupport [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libexsid
-    libgcrypt
+    libresidfp
+    libusb1
   ];
 
-  checkInputs = [ unittest-cpp ];
-
-  enableParallelBuilding = true;
-
   configureFlags = [
-    (lib.strings.enableFeature true "hardsid")
-    (lib.strings.withFeature true "gcrypt")
     (lib.strings.withFeature true "exsid")
+    (lib.strings.withFeature true "usbsid")
     (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
   ];
 
-  # Make Doxygen happy with the setup, reduce log noise
-  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
-    fontDirectories = [ ];
-  });
+  enableParallelBuilding = true;
 
   preBuild = ''
     # Reduce noise from fontconfig during doc building
@@ -84,9 +81,17 @@ stdenv.mkDerivation (finalAttrs: {
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
 
+  # Make Doxygen happy with the setup, reduce log noise
+  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
+    fontDirectories = [ ];
+  });
+
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "[a-zA-Z]";
+    };
   };
 
   meta = {
@@ -99,9 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
     changelog = "https://github.com/libsidplayfp/libsidplayfp/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ramkromberg
       OPNA2608
     ];
     platforms = lib.platforms.all;

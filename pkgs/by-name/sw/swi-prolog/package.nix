@@ -10,9 +10,9 @@
   openssl,
   gmp,
   gperftools,
-  readline,
   libedit,
   libarchive,
+  libicns,
 
   # optional dependencies
   withDb ? true,
@@ -22,7 +22,7 @@
   jdk,
 
   withOdbc ? true,
-  unixODBC,
+  unixodbc,
 
   withPcre ? true,
   pcre2,
@@ -34,13 +34,13 @@
   libyaml,
 
   withGui ? false,
-  libXpm,
-  libXext,
-  libXft,
-  libXinerama,
+  libxpm,
+  libxext,
+  libxft,
+  libxinerama,
   libjpeg,
-  libXt,
-  libSM,
+  libxt,
+  libsm,
   freetype,
   fontconfig,
 
@@ -64,7 +64,7 @@
   #     url = "https://github.com/mndrix/list_util/archive/v0.13.0.zip";
   #     sha256 = "0lx7vffflak0y8l8vg8k0g8qddwwn23ksbz02hi3f8rbarh1n89q";
   #   };
-  #   typedef = builtins.fetchTarball {
+  #   typedef = fetchTarball {
   #     name = "swipl-pack-typedef";
   #     url = "https://raw.githubusercontent.com/samer--/prolog/master/typedef/release/typedef-0.1.9.tgz";
   #     sha256 = "056nqjn01g18fb1b2qivv9s7hb4azk24nx2d4kvkbmm1k91f44p3";
@@ -78,7 +78,7 @@
 
 let
   # minorVersion is even for stable, odd for unstable
-  version = "9.2.9";
+  version = "10.0.2";
 
   # This package provides several with* options, which replaces the old extraLibraries option.
   # This error should help users that still use this option find their way to these flags.
@@ -97,18 +97,18 @@ let
     [ ]
     ++ (lib.optional withDb db)
     ++ (lib.optional withJava jdk)
-    ++ (lib.optional withOdbc unixODBC)
+    ++ (lib.optional withOdbc unixodbc)
     ++ (lib.optional withPcre pcre2)
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)
     ++ (lib.optionals withGui' [
-      libXt
-      libXext
-      libXpm
-      libXft
-      libXinerama
+      libxt
+      libxext
+      libxpm
+      libxft
+      libxinerama
       libjpeg
-      libSM
+      libsm
       freetype
       fontconfig
     ])
@@ -125,18 +125,25 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl";
     tag = "V${version}";
-    hash = "sha256-M0stUwiD3Auz5OsmgVJFWg2RAswu42UUp8bafqZOC7A=";
+    hash = "sha256-w9BzcnXS2sqHsLXYEcfhZ1niKpifffiDtm8EcJ6cG9g=";
     fetchSubmodules = true;
   };
 
-  # Add the packInstall path to the swipl pack search path
   postPatch = ''
+    # Add the packInstall path to the swipl pack search path
     echo "user:file_search_path(pack, '$out/lib/swipl/extra-pack')." >> boot/init.pl
+
+    # iconutil is unavailable, replace with png2icns from libicns
+    substituteInPlace desktop/make_icns.sh \
+      --replace-fail 'iconutil -c icns "$ICONSET_DIR" -o "$OUTPUT"' 'png2icns "$OUTPUT" "$INPUT"'
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   buildInputs = [
@@ -146,25 +153,26 @@ stdenv.mkDerivation {
     openssl
     gperftools
     gmp
-    readline
     libedit
-  ] ++ optionalDependencies;
+  ]
+  ++ optionalDependencies;
 
   hardeningDisable = [ "format" ];
 
-  cmakeFlags =
-    [ "-DSWIPL_INSTALL_IN_LIB=ON" ]
-    ++ lib.optionals (!withNativeCompiler) [
-      # without these options, the build will embed full compiler paths
-      "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
-      "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
-    ];
+  cmakeFlags = [
+    "-DSWIPL_INSTALL_IN_LIB=ON"
+  ]
+  ++ lib.optionals (!withNativeCompiler) [
+    # without these options, the build will embed full compiler paths
+    "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
+    "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
+  ];
 
   preInstall = ''
     mkdir -p $out/lib/swipl/extra-pack
   '';
 
-  postInstall = builtins.concatStringsSep "\n" (builtins.map (packInstall "$out") extraPacks);
+  postInstall = builtins.concatStringsSep "\n" (map (packInstall "$out") extraPacks);
 
   meta = {
     homepage = "https://www.swi-prolog.org";

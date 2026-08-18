@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "3.0.2";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pynetdicom";
     tag = "v${version}";
-    hash = "sha256-0ylx0EMPfvXxT7kQJYK+gsAFb/bkfRPDiC7Z7s/PvTk=";
+    hash = "sha256-4LISckHH+fVBmPcBr8rM62E6r3IkKAgdUneVHyc5Vm8=";
   };
 
   build-system = [ flit-core ];
@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynetdicom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
     changelog = "https://github.com/pydicom/pynetdicom/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

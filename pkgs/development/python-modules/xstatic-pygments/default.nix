@@ -2,26 +2,31 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xstatic-pygments";
   version = "2.9.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "XStatic-Pygments";
-    inherit version;
-    sha256 = "082c1e9fe606fbbef474f78b6fdb19e9a2efcc7a9b7d94163cf66f7bfae75762";
+    inherit (finalAttrs) version;
+    hash = "sha256-CCwen+YG+770dPeLb9sZ6aLvzHqbfZQWPPZve/rnV2I=";
   };
+
+  build-system = [ setuptools_80 ];
 
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pygments.org";
-    description = "pygments packaged static files for python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    description = "Pygments packaged static files for python";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

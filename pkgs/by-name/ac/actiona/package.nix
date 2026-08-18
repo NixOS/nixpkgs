@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "actiona";
-  version = "3.11.1";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sJlzrrpmo2CbzChCtiyxqDtjoN58BN4Ptjm4sH83zAw=";
+    hash = "sha256-PQNbbIErw/fnEyIy80+300g3YC4pEqUB/m9l1dXvORU=";
     fetchSubmodules = true;
   };
 
@@ -44,12 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bluez
     libnotify
-    opencv
+    # NOTE: Specifically not using lib.getOutput here because it would select the out output of opencv, which changes
+    # semantics since make-derivation uses lib.getDev on the dependency arrays, which won't touch derivations with
+    # specified outputs.
+    (opencv.cxxdev or opencv)
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qttools
     qt6.qt5compat
-  ] ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
+  ]
+  ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
 
   meta = {
     description = "Cross-platform automation tool";

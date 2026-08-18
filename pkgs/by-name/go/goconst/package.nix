@@ -4,17 +4,17 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goconst";
-  version = "1.8.2";
+  version = "1.11.0";
 
   excludedPackages = [ "tests" ];
 
   src = fetchFromGitHub {
     owner = "jgautheron";
     repo = "goconst";
-    rev = "v${version}";
-    sha256 = "sha256-srBUqWfiuMqpKH/O66gJEEKFOC/ifsu2xscEnp54cRY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-rtf5xC83nOO9oRtBFxDqWD/qKtYfTYHDS4YGW7omVYs=";
   };
 
   vendorHash = null;
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Find in Go repeated strings that could be replaced by a constant";
     mainProgram = "goconst";
     homepage = "https://github.com/jgautheron/goconst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

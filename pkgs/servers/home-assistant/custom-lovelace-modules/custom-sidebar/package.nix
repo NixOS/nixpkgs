@@ -2,28 +2,35 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "custom-sidebar";
-  version = "10.3.0";
+  version = "17.0.0";
 
   src = fetchFromGitHub {
     owner = "elchininet";
     repo = "custom-sidebar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uono4z8jd+OwxNnBl4Ge9g3YbLAprNrmFJPh7rKsvSM=";
+    hash = "sha256-ggUF1C9Evq87boXpxJzeDAkKRAXf/8qZLDHJO0ZHswI=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ZWh2R6wr7FH2RfoFAE81Kl+wHnUeNjUbFG3KIk8ZN3g=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-xHGWqtv6rAp1+1DT18IegUdfBsJDR/WBNeNffjcIt00=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     nodejs
   ];
 
@@ -46,12 +53,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.entrypoint = "custom-sidebar-yaml.js";
 
-  meta = with lib; {
+  meta = {
     description = "Custom plugin that allows you to personalise the Home Assistant's sidebar per user or device basis";
     homepage = "https://elchininet.github.io/custom-sidebar";
     downloadPage = "https://github.com/elchininet/custom-sidebar";
-    changelog = "https://github.com/elchininet/custom-sidebar/releases/tag/v${version}";
+    changelog = "https://github.com/elchininet/custom-sidebar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 })

@@ -16,15 +16,15 @@
   libgbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.19.02";
+  version = "0.21.04";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
-    rev = "V${version}";
-    hash = "sha256-QEj+JC3l6O8UqK08+X2CIs/GNHdV7hn2bem3xx1jgjQ=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-v+IGPJZL54E0rSQLfj3tOHPdGTruK+v+IT+a2I2uriA=";
   };
 
   postPatch = ''
@@ -32,23 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs =
-    [
-      judy
-      libbsd
-      libgcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr
-      keyutils
-      libaio
-      libapparmor
-      libcap
-      lksctp-tools
-      libglvnd
-      libgbm
-    ];
+  buildInputs = [
+    judy
+    libbsd
+    libgcrypt
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+    libglvnd
+    libgbm
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -93,10 +92,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
-    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
+    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = with lib.maintainers; [
+      dbeley
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
-}
+})

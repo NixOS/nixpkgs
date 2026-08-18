@@ -5,17 +5,15 @@
   cmake,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
   gtest,
   libei,
   libportal,
-  libX11,
+  libx11,
   libxkbfile,
-  libXtst,
-  libXinerama,
-  libXi,
-  libXrandr,
+  libxtst,
+  libxinerama,
+  libxi,
+  libxrandr,
   libxkbcommon,
   pugixml,
   python3,
@@ -34,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.22.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tNHQHReeOUc5lCs4dI3a5UzeJao+RPWXH4KdWhPwESI=";
+    hash = "sha256-XcSG47Ysjn+wrJH5DC/XXGXcneXcW7xIhAn6sguuv+s=";
   };
 
   postPatch = ''
@@ -60,22 +58,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
+    "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
 
   strictDeps = true;
 
   buildInputs = [
-    tomlplusplus
-    cli11
     gtest
     libei
     libportal
-    libX11
+    libx11
     libxkbfile
-    libXinerama
-    libXi
-    libXrandr
-    libXtst
+    libxinerama
+    libxi
+    libxrandr
+    libxtst
     libxkbcommon
     pugixml
     gdk-pixbuf
@@ -84,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+    qt6.qtdeclarative
+    qt6.qttools
     wayland
     libsysprof-capture
     lerc
@@ -101,13 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
+    ctest --test-dir  "src/unittests" --output-on-failure
     ./bin/legacytests
 
     runHook postCheck
   '';
 
   postInstall = ''
-    install -Dm644 ../README.md ../doc/configuration.md -t $out/share/doc/deskflow
+    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
   '';
 
   passthru.updateScript = nix-update-script {
@@ -122,10 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ flacks ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
-      licenses.mit # share/applications/org.deskflow.deskflow.desktop
+    license = with lib.licenses; [
+      gpl2Plus
+      openssl
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };

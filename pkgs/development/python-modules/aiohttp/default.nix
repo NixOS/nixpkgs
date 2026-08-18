@@ -3,12 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
-  isPy310,
   isPyPy,
+  pythonOlder,
 
   # build-system
-  cython_3_1,
+  cython,
   pkgconfig,
   setuptools,
 
@@ -18,8 +17,8 @@
   # dependencies
   aiohappyeyeballs,
   aiosignal,
-  async-timeout,
   attrs,
+  backports-zstd,
   frozenlist,
   multidict,
   propcache,
@@ -34,35 +33,30 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isa-l,
   isal,
   proxy-py,
   pytest-codspeed,
   pytest-cov-stub,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  python-on-whales,
   re-assert,
   trustme,
   zlib-ng,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
-  version = "3.12.10";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
-    tag = "v${version}";
-    hash = "sha256-ciZGOOfVXYoLzYNIkota3MXMRMxlztf+mFFo0y9r+Lk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n8LH34N9V2Smqc23q/49gqRbP0U1glJAYiyPEGFtEmM=";
   };
-
-  patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
-    ./remove-isal.patch
-  ];
 
   postPatch = ''
     rm -r vendor
@@ -72,10 +66,14 @@ buildPythonPackage rec {
     # don't install Cython using pip
     substituteInPlace Makefile \
       --replace-fail "cythonize: .install-cython" "cythonize:"
+
+    # don't depend on coverage for tests
+    substituteInPlace setup.cfg \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   '';
 
   build-system = [
-    cython_3_1
+    cython
     pkgconfig
     setuptools
   ];
@@ -93,81 +91,84 @@ buildPythonPackage rec {
   dependencies = [
     aiohappyeyeballs
     aiosignal
-    async-timeout
     attrs
     frozenlist
     multidict
     propcache
     yarl
-  ] ++ optional-dependencies.speedups;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [
     blockbuster
     freezegun
     gunicorn
-    # broken on aarch64-darwin
-    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
+    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
-    python-on-whales
     re-assert
     trustme
     zlib-ng
   ];
 
-  disabledTests =
-    [
-      # Disable tests that require network access
-      "test_client_session_timeout_zero"
-      "test_mark_formdata_as_processed"
-      "test_requote_redirect_url_default"
-      # don't run benchmarks
-      "test_import_time"
-      # racy
-      "test_uvloop_secure_https_proxy"
-      # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
-      "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
-    ]
-    # these tests fail with python310 but succeeds with 11+
-    ++ lib.optionals isPy310 [
-      "test_https_proxy_unsupported_tls_in_tls"
-      "test_tcp_connector_raise_connector_ssl_error"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
-      "test_close"
-    ];
+  disabledTests = [
+    # Disable tests that require network access
+    "test_client_session_timeout_zero"
+    "test_mark_formdata_as_processed"
+    "test_requote_redirect_url_default"
+    "test_tcp_connector_ssl_shutdown_timeout_nonzero_passed"
+    "test_tcp_connector_ssl_shutdown_timeout_zero_not_passed"
+    "test_invalid_idna"
+    # don't run benchmarks
+    "test_import_time"
+    "test_cookie_pattern_performance"
+    "test_forwarded_re_performance"
+    "test_regex_performance"
+    # racy
+    "test_uvloop_secure_https_proxy"
+    # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
+    "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
+    # Fails with http.cookies.CookieError: Control characters are not allowed in cookies
+    "test_parse_set_cookie_headers_uses_unquote_with_octal"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_close"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck =
-    ''
-      # aiohttp in current folder shadows installed version
-      rm -r aiohttp
-      touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+  preCheck = ''
+    # aiohttp in current folder shadows installed version
+    rm -r aiohttp
+    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
 
-      export HOME=$(mktemp -d)
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Work around "OSError: AF_UNIX path too long"
-      export TMPDIR="/tmp"
-    '';
+    export HOME=$(mktemp -d)
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
 
-  meta = with lib; {
-    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
+  meta = {
+    changelog = "https://docs.aiohttp.org/en/${finalAttrs.src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

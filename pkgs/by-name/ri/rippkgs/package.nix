@@ -6,18 +6,17 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rippkgs";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "replit";
     repo = "rippkgs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nRaGbJg1zCHTL8y/Tk5dM1dSu2v06ECsZYyMPIQTlvg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bSgQ/dmOffWOYpgeNn0vTdzrM/aFkD3znN9c1u/sjQ0=";
 
   nativeBuildInputs = [
@@ -35,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cdmistman ];
     mainProgram = "rippkgs";
   };
-}
+})

@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.3";
+  version = "45.5";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UU8pw7bqEwg2Vh7S6GTx8swI/2IhlwjQgkGNZCzoMwc=";
+    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
   };
 
   patches = [
@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
-    "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
+    (lib.mesonOption "control-center-keybindings-dir" "${placeholder "out"}/share/gnome-control-center/keybindings")
+    (lib.mesonOption "dbus-services-dir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "systemd-user-unit-dir" "${placeholder "out"}/etc/systemd/user")
   ];
 
   postInstall = ''
@@ -78,13 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Keruspe/GPaste";
     changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
     description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
+    maintainers = with lib.maintainers; [ fabiob ];
   };
 })

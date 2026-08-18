@@ -1,12 +1,13 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   makeWrapper,
   pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  grim,
   hyprland,
   hyprland-protocols,
   hyprlang,
@@ -20,21 +21,20 @@
   qtwayland,
   sdbus-cpp_2,
   slurp,
-  systemd,
   wayland,
   wayland-protocols,
   wayland-scanner,
   debug ? false,
 }:
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.9";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sAObJHBZjJHzYR62g+BLNBNq19cqb5LTw73H8m57K0w=";
+    hash = "sha256-sRAGZVUPgwxpx19uZwaSERa86g1AbsBUQ3SxhaRPgeg=";
   };
 
   depsBuildBuild = [
@@ -60,7 +60,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     qttools
     qtwayland
     sdbus-cpp_2
-    systemd
     wayland
     wayland-protocols
     wayland-scanner
@@ -69,6 +68,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
+  separateDebugInfo = !debug;
 
   dontWrapQtApps = true;
 
@@ -83,7 +83,12 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          (placeholder "out")
+          grim
+        ]
+      }
   '';
 
   passthru = {

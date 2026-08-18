@@ -14,13 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocenaudio";
-  version = "3.15";
+  version = "3.20.1";
 
   src = fetchurl {
     name = "ocenaudio.deb";
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian12.deb?version=v${finalAttrs.version}";
-    hash = "sha256-MZjgdCBE+3dG6Ov+wwDKa/0Y8XIihwM50Gc/cgEf2FQ=";
+    hash = "sha256-flO5jlWZllUPl31okwmNjHI/9ctR0pziUx4/i+YRWQY=";
   };
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libqtocenai.so.3.15"
+    "libqtocencore.so.3.15"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook

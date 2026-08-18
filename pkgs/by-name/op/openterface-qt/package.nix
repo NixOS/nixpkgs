@@ -20,14 +20,14 @@ let
     KERNEL=="hidraw*", ATTRS{idVendor}=="534d", ATTRS{idProduct}=="2109", TAG+="uaccess"
   '';
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openterface-qt";
-  version = "0.3.17";
+  version = "0.3.18";
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
-    rev = "${final.version}";
-    hash = "sha256-kXDiQINbP7D2qUqKUAZXEW2iJqKEH/AqMSE2zU+jRHg=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-yD71UOi6iRd9N3NeASUzqoeHMcTYIqkysAfxRm7GkOA=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -62,8 +62,8 @@ stdenv.mkDerivation (final: {
     (makeDesktopItem {
       name = "openterfaceQT";
       exec = "openterfaceQT";
-      icon = final.pname;
-      comment = final.meta.description;
+      icon = finalAttrs.pname;
+      comment = finalAttrs.meta.description;
       desktopName = "Openterface QT";
       categories = [ "Utility" ];
     })

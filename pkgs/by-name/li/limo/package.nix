@@ -43,34 +43,32 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      libarchive
-      libcpr
-      libloot
-      lz4
-      pugixml
+  buildInputs = [
+    jsoncpp
+    libarchive
+    libcpr
+    libloot
+    lz4
+    pugixml
 
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      libsForQt5.qtwayland
-    ]
-    ++ lib.optionals withUnrar [
-      unrar
-    ];
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qtwayland
+  ]
+  ++ lib.optionals withUnrar [
+    unrar
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "LIMO_INSTALL_PREFIX" (placeholder "out"))
-    ]
-    ++ lib.optionals (withUnrar) [
-      (lib.cmakeBool "USE_SYSTEM_LIBUNRAR" true)
-    ]
-    ++ lib.optionals (!withUnrar) [
-      (lib.cmakeFeature "LIBUNRAR_PATH" "")
-      (lib.cmakeFeature "LIBUNRAR_INCLUDE_DIR" "")
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "LIMO_INSTALL_PREFIX" (placeholder "out"))
+  ]
+  ++ lib.optionals withUnrar [
+    (lib.cmakeBool "USE_SYSTEM_LIBUNRAR" true)
+  ]
+  ++ lib.optionals (!withUnrar) [
+    (lib.cmakeFeature "LIBUNRAR_PATH" "")
+    (lib.cmakeFeature "LIBUNRAR_INCLUDE_DIR" "")
+  ];
 
   meta = {
     description = "General purpose mod manager with support for the NexusMods API and LOOT";

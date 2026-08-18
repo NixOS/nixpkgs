@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "ats-acc";
-  version = "unstable-2018-10-21";
+  version = "0-unstable-2018-10-21";
 
   src = fetchFromGitHub {
     owner = "sparverius";
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ ats2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty-print error messages of the ATS Compiler";
     homepage = "https://github.com/sparverius/ats-acc";
-    maintainers = with maintainers; [ moni ];
-    license = licenses.unfree; # Upstream has no license
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.unfree; # Upstream has no license
   };
 }

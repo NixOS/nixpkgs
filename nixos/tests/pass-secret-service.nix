@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   name = "pass-secret-service";
-  meta.maintainers = [ lib.maintainers.aidalgol ];
+  meta.maintainers = [ lib.maintainers.jluttine ];
 
   nodes.machine =
     { nodes, pkgs, ... }:
@@ -39,7 +39,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       gpg-uid = "alice@example.net";
       gpg-pw = "foobar9000";
       ready-file = "/tmp/secrets-dbus-init.done";

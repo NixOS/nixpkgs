@@ -1,159 +1,121 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
-  pdm-backend,
-
-  # local dependencies
-  black,
-  mypy,
+  hatchling,
+  hatch-fancy-pypi-readme,
 
   # dependencies
-  grpcio,
-  grpclib,
-  httpx-sse,
-  httpx-ws,
   httpx,
-  mmh3,
-  openai,
-  pillow,
-  protobuf,
   pydantic,
-  python-dateutil,
-  rich,
   typing-extensions,
+  anyio,
+  distro,
+  sniffio,
+  aiohttp,
+  httpx-aiohttp,
 
   # optional dependencies
-  fastapi,
-  gitignore-parser,
-  openapi-spec-validator,
-  prance,
-  safetensors,
-  tabulate,
+  datasets,
+  numpy,
+  requests,
+  tiktoken,
+  # tinker -- not packaged yet
   torch,
-  tqdm,
+  transformers,
+  wandb,
+
+  # tests
+  dirty-equals,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
+  time-machine,
 }:
 
-let
-  asyncstdlib-fw = buildPythonPackage rec {
-    pname = "asyncstdlib_fw";
-    version = "3.13.2";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-Ua0JTCBMWTbDBA84wy/W1UmzkcmA8h8foJW2X7aAah8=";
-    };
-
-    build-system = [
-      pdm-backend
-    ];
-
-    dependencies = [
-      black
-      mypy
-    ];
-
-    pythonImportsCheck = [
-      "asyncstdlib"
-    ];
-  };
-
-  betterproto-fw = buildPythonPackage rec {
-    pname = "betterproto_fw";
-    version = "2.0.3";
-    pyproject = true;
-
-    src = fetchPypi {
-      inherit version pname;
-      hash = "sha256-ut5GchUiTygHhC2hj+gSWKCoVnZrrV8KIKFHTFzba5M=";
-    };
-
-    build-system = [
-      pdm-backend
-    ];
-
-    dependencies = [
-      grpclib
-      python-dateutil
-      typing-extensions
-    ];
-
-    pythonImportsCheck = [
-      "betterproto"
-    ];
-
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fireworks-ai";
-  version = "0.17.16";
+  version = "1.2.9";
   pyproject = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  # no source available
-  src = fetchPypi {
-    pname = "fireworks_ai";
-    inherit version;
-    hash = "sha256-WblcAaYjnzwPS4n5rixNHbHLNGTE3bTPXvQ9lYZ1f9A=";
+  src = fetchFromGitHub {
+    owner = "fw-ai-external";
+    repo = "python-sdk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yq5cEg7Iu96S+09PqvYKDFG6PlhzZo3Uq+1XLECIw4I=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.26.3" "hatchling>=1.26.3"
+  '';
 
   build-system = [
-    pdm-backend
+    hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
   dependencies = [
-    asyncstdlib-fw
-    betterproto-fw
-    grpcio
-    grpclib
+    aiohttp
+    anyio
+    distro
     httpx
-    httpx
-    httpx-sse
-    httpx-sse
-    httpx-ws
-    httpx-ws
-    mmh3
-    openai
-    pillow
-    pillow
-    protobuf
+    httpx-aiohttp
     pydantic
-    pydantic
-    python-dateutil
-    rich
+    sniffio
     typing-extensions
   ];
 
   optional-dependencies = {
-    flumina = [
-      fastapi
-      gitignore-parser
-      openapi-spec-validator
-      prance
-      safetensors
-      tabulate
-      torch
-      tqdm
+    training-sdk = [
+      # tinker is not available in nixpkgs
+      requests
     ];
+    training = [
+      datasets
+      numpy
+      tiktoken
+      torch
+      transformers
+      wandb
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.training-sdk;
   };
 
-  # no tests available
-  doCheck = false;
+  nativeCheckInputs = [
+    dirty-equals
+    pytest-asyncio
+    pytestCheckHook
+    respx
+    time-machine
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pytestFlags = [
+    # ResourceWarning: Unclosed client session <aiohttp.client.ClientSession object at 0x7ffff1d48ec0>
+    "-Wignore::ResourceWarning"
+  ];
+
+  disabledTests = [
+    # httpx.TimeoutException: Test timeout error
+    "test_retrying_timeout_errors_doesnt_leak"
+  ];
 
   pythonImportsCheck = [
     "fireworks"
   ];
 
   meta = {
-    description = "Client library for the Fireworks.ai platform";
-    homepage = "https://pypi.org/project/fireworks-ai/";
+    description = "Client library for Fireworks.ai";
+    homepage = "https://github.com/fw-ai-external/python-sdk";
+    changelog = "https://github.com/fw-ai-external/python-sdk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

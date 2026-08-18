@@ -1,20 +1,22 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   libconfuse,
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genimage";
-  version = "18";
+  version = "20";
 
-  src = fetchurl {
-    url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
-    sha256 = "sha256-68P4hsTYAGTdbG1ePC6Y5aZwB4JkEIzi+Jraii4T/t0=";
+  src = fetchFromGitHub {
+    owner = "pengutronix";
+    repo = "genimage";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6pKqvpoEQWebubl6K5FzEAv2aUsBXgOBEAdcCwARkrU=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +36,13 @@ stdenv.mkDerivation rec {
     cp -v README.rst "$docdir"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://git.pengutronix.de/cgit/genimage";
     description = "Generate filesystem images from directory trees";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "genimage";
   };
-}
+})

@@ -13,22 +13,22 @@
   six,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atlassian-python-api";
-  version = "4.0.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = "atlassian-python-api";
-    tag = version;
-    hash = "sha256-iF4gjF/5QbdjJKCWMdElc+gdIy2+D7TV6gpoPZsTv14=";
+    tag = finalAttrs.version;
+    hash = "sha256-8zfM/3apGMo6sTPA5ESu2SkgVOJUA09Wz/pGR12fA7c=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     beautifulsoup4
@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atlassian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
-    changelog = "https://github.com/atlassian-api/atlassian-python-api/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    changelog = "https://github.com/atlassian-api/atlassian-python-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

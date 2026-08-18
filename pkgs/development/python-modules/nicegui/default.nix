@@ -1,67 +1,73 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
   aiofiles,
   aiohttp,
+  buildPythonPackage,
   certifi,
   docutils,
   fastapi,
+  fetchFromGitHub,
   httpx,
   ifaddr,
   itsdangerous,
   jinja2,
+  libsass,
+  lxml-html-clean,
+  lxml,
   markdown2,
+  matplotlib,
   orjson,
+  pandas,
+  pkgs,
+  plotly,
+  poetry-core,
+  poetry-dynamic-versioning,
+  polars,
+  pyecharts,
   pygments,
+  pytest-asyncio,
+  pytest-selenium,
+  pytestCheckHook,
+  python-dotenv,
   python-multipart,
   python-socketio,
+  pywebview,
+  redis,
   requests,
+  setuptools,
+  tinycss2,
   typing-extensions,
   urllib3,
   uvicorn,
   vbuild,
   watchfiles,
-
-  # optional-dependencies
-  matplotlib,
-  pywebview,
-  plotly,
-  libsass,
-  redis,
-
-  # tests
-  pandas,
-  pkgs,
-  polars,
-  pyecharts,
-  pytest-asyncio,
-  pytest-selenium,
-  pytestCheckHook,
   webdriver-manager,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "2.15.0";
+  version = "3.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    tag = "v${version}";
-    hash = "sha256-pwR+9QBCIMZXFK9n8GRESl9UFsh7zcgOxTngdgdyMuc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YSx4+0rpC5BUueKvgHTkeak95BTM7V3EIbTASTokJcs=";
   };
+
+  pythonRelaxDeps = [
+    "idna"
+    "lxml"
+    "orjson"
+    "python-multipart"
+    "requests"
+  ];
 
   build-system = [
     poetry-core
+    poetry-dynamic-versioning
     setuptools
   ];
 
@@ -75,12 +81,16 @@ buildPythonPackage rec {
     ifaddr
     itsdangerous
     jinja2
+    lxml
+    lxml-html-clean
     markdown2
     orjson
     pygments
+    python-dotenv
     python-multipart
     python-socketio
     requests
+    tinycss2
     typing-extensions
     urllib3
     uvicorn
@@ -108,7 +118,8 @@ buildPythonPackage rec {
     pytestCheckHook
     webdriver-manager
     writableTmpDirAsHomeHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -118,8 +129,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

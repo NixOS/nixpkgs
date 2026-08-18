@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ionoscloud";
-  version = "6.1.11";
+  version = "6.1.13";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OQNdif263rY7c3tytKPMjXESmYsCBVtk0M25M3XDSJM=";
+    hash = "sha256-8QgweGXPWcvGQcp22yo4KovkVXrDI2eSWNMUnGhDWEI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ionoscloud" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ionos-cloud/sdk-python";
     description = "Python API client for ionoscloud";
     changelog = "https://github.com/ionos-cloud/sdk-python/blob/v${version}/docs/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

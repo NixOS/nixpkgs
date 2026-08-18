@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   eudev,
   pkg-config,
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.07";
+  version = "2.0.12";
   pname = "flrig";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Rls6w9DWaepmJrppH2j+gVF2C3bSirnlBHcFMrGA9e8=";
+    url = "mirror://sourceforge/fldigi/flrig-${version}.tar.gz";
+    hash = "sha256-wW3AB7aOe+Xas2M4EIXQvFyIQpBhFuzZ4W7nXJ1azL8=";
   };
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
     eudev
   ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  env.FLTK_CONFIG = lib.getExe' (lib.getDev fltk13) "fltk-config";
+  env.FLTK_CONFIG = lib.getExe' (lib.getDev fltk_1_3) "fltk-config";
 
   meta = {
     description = "Digital modem rig control program";

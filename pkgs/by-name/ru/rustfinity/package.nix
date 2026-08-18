@@ -1,42 +1,46 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchCrate,
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfinity";
-  version = "0.2.13";
+  version = "0.4.9";
+  __structuredAttrs = true;
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-yBWhY4Uta/K/Ka5DzhpZUiv0Y3Yfn4dI4ZARpJqTqY8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-0xEVYHvVOugfE4mQxYt+U7AsejOxm/SnDV8HsmcZxBs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ifVhVFiTO1CVpWo6B9OZXJwuc40IRkSc4ncMXG+5DnE=";
+  cargoHash = "sha256-Zc3m+hTotgCqBguUB/KM4BtGsdD4W5MR/ZBg2X/0nNk=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  OPENSSL_NO_VENDOR = 1;
+  buildInputs = [
+    openssl
+  ];
 
-  # Requires network and fs access
-  checkFlags = [
-    "--skip=challenge::tests::test_challenge_exists"
-    "--skip=crates_io::tests::test_get_latest_version"
-    "--skip=dir::tests::test_get_current_dir"
-    "--skip=download::tests::download_file::test_downloads_file"
-    "--skip=download::tests::download_file::test_renames_starter"
+  env.OPENSSL_NO_VENDOR = 1;
+
+  # Fail to run in sandbox environment
+  checkFlags = map (t: "--skip=${t}") [
+    "challenge::tests::test_challenge_exists"
+    "crates_io::tests::test_get_latest_version"
+    "dir::tests::test_get_current_dir"
+    "download::tests::download_file::test_downloads_file"
+    "download::tests::download_file::test_renames_starter"
   ];
 
   meta = {
     description = "CLI for Rustfinity challenges solving";
-    homepage = "https://github.com/dcodesdev/rustfinity.com/tree/main/crates/cli";
+    homepage = "https://github.com/rustfinity/rustfinity/tree/main/crates/cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "rustfinity";
   };
-}
+})

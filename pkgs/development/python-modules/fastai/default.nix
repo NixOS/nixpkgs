@@ -1,56 +1,80 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fastprogress,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cloudpickle,
   fastcore,
   fastdownload,
-  torchvision,
+  fastprogress,
+  fasttransform,
   matplotlib,
+  packaging,
+  pandas,
   pillow,
+  plum-dispatch,
+  pyyaml,
+  requests,
   scikit-learn,
   scipy,
   spacy,
-  pandas,
-  requests,
-  pythonOlder,
+  torch,
+  torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastai";
-  version = "2.8.2";
-  format = "setuptools";
+  version = "2.8.7";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ix3Sp/IKj7BLmuuGd/763LB0llSUYAbMWJD8fvWe/u8=";
+  src = fetchFromGitHub {
+    owner = "fastai";
+    repo = "fastai";
+    tag = finalAttrs.version;
+    hash = "sha256-qjBVqSVQV+v1Uc95Tz8NyLkKwCLdG+R7MkH+CugzY1Q=";
   };
 
-  propagatedBuildInputs = [
-    fastprogress
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    cloudpickle
     fastcore
     fastdownload
-    torchvision
+    fastprogress
+    fasttransform
     matplotlib
+    packaging
+    pandas
     pillow
+    plum-dispatch
+    pyyaml
+    requests
     scikit-learn
     scipy
     spacy
-    pandas
-    requests
+    torch
+    torchvision
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "fastai" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/fastai/fastai";
+  # Tests fail at collection with:
+  #   fixture 'f' not found
+  doCheck = false;
+
+  meta = {
     description = "Fastai deep learning library";
+    homepage = "https://github.com/fastai/fastai";
     mainProgram = "configure_accelerate";
-    changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    changelog = "https://github.com/fastai/fastai/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

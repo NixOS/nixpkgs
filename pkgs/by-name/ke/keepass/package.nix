@@ -5,48 +5,19 @@
   unzip,
   mono,
   makeWrapper,
+  writeText,
   icoutils,
   replaceVars,
   xsel,
-  xorg,
+  xprop,
   xdotool,
   coreutils,
   unixtools,
   glib,
-  gtk2,
   makeDesktopItem,
   plugins ? [ ],
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "keepass";
-  version = "2.57.1";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-97ZX1EzhMv4B3YZ3HoUqlGTEMsQn3cmNGr+uvS6AKYY=";
-  };
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [
-    unzip
-    mono
-    makeWrapper
-  ];
-  buildInputs = [ icoutils ];
-
-  patches = [
-    (replaceVars ./fix-paths.patch {
-      xsel = "${xsel}/bin/xsel";
-      xprop = "${xorg.xprop}/bin/xprop";
-      xdotool = "${xdotool}/bin/xdotool";
-      uname = "${coreutils}/bin/uname";
-      whereis = "${unixtools.whereis}/bin/whereis";
-      gsettings = "${glib}/bin/gsettings";
-    })
-  ];
-
+let
   # KeePass looks for plugins in under directory in which KeePass.exe is
   # located. It follows symlinks where looking for that directory, so
   # buildEnv is not enough to bring KeePass and plugins together.
@@ -74,12 +45,44 @@ stdenv.mkDerivation (finalAttrs: {
         ) plugins
       );
     in
-    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
+    writeText "load-paths.patch" (
+      replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate
+    );
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "keepass";
+  version = "2.61.1";
 
-  passAsFile = [ "pluginLoadPathsPatch" ];
+  src = fetchurl {
+    url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
+    hash = "sha256-cRvZ7HB2ZhZ4Rp5Ruuh23rrAegjDLxscazuP5edhwTo=";
+  };
+
+  sourceRoot = ".";
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    unzip
+    mono
+    makeWrapper
+  ];
+  buildInputs = [ icoutils ];
+
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      xsel = "${xsel}/bin/xsel";
+      xprop = "${xprop}/bin/xprop";
+      xdotool = "${xdotool}/bin/xdotool";
+      uname = "${coreutils}/bin/uname";
+      whereis = "${unixtools.whereis}/bin/whereis";
+      gsettings = "${glib}/bin/gsettings";
+    })
+  ];
+
   postPatch = ''
     sed -i 's/\r*$//' KeePass/Forms/MainForm.cs
-    patch -p1 <$pluginLoadPathsPatchPath
+    patch -p1 <${pluginLoadPathsPatch}
   '';
 
   configurePhase = ''
@@ -101,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    xbuild /p:Configuration=Release
+    xbuild KeePass.sln /p:Configuration=Release
 
     runHook postBuild
   '';
@@ -117,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
   binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
-
-  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   installPhase = ''
     runHook preInstall
@@ -165,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
     maintainers = with lib.maintainers; [
-      amorsillo
       obadz
     ];
     platforms = with lib.platforms; all;

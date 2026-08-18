@@ -14,7 +14,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bic";
   version = "1.0.0-unstable-2022-02-16";
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       bic This a project that allows developers to explore and test C-APIs using a
       read eval print loop, also known as a REPL.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/hexagonal-sun/bic";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ hexagonal-sun ];

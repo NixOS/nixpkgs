@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nixos-bgrt-plymouth";
+  pname = "nixos-bgrt-plymouth";
   version = "0-unstable-2024-10-25";
 
   src = fetchFromGitHub {
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "BGRT theme with a spinning NixOS logo";
     homepage = "https://github.com/helsinki-systems/plymouth-theme-nixos-bgrt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

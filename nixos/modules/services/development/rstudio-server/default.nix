@@ -22,7 +22,6 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     jbedo
-    cfhammill
   ];
 
   options.services.rstudio-server = {

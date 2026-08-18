@@ -12,12 +12,12 @@
   rustc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenraw";
   version = "0.3.7";
 
   src = fetchurl {
-    url = "https://libopenraw.freedesktop.org/download/libopenraw-${version}.tar.bz2";
+    url = "https://libopenraw.freedesktop.org/download/libopenraw-${finalAttrs.version}.tar.bz2";
     hash = "sha256-VRWyYQNh7zRYC2uXZjURn23ttPCnnVRmL6X+YYakXtU=";
   };
 
@@ -40,14 +40,15 @@ stdenv.mkDerivation rec {
       -e "s,GDK_PIXBUF_DIR=.*,GDK_PIXBUF_DIR=$out/lib/gdk-pixbuf-2.0/2.10.0/loaders,"
   '';
 
-  meta = with lib; {
+  configureFlags = [
+    "--with-boost=${lib.getDev boost}"
+  ];
+
+  meta = {
     description = "RAW camerafile decoding library";
     homepage = "https://libopenraw.freedesktop.org";
-    license = licenses.lgpl3Plus;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-    maintainers = [ maintainers.struan ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.struan ];
   };
-}
+})

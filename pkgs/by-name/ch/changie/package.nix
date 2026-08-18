@@ -1,22 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "changie";
-  version = "1.22.0";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
-    rev = "v${version}";
-    hash = "sha256-tq29L9YlzhjbHkUfE0ZZhSrH+rcAwgYjcEAUjP/lHm8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fWPN3oEhJEosb47QUPpi9KtXzTORFVWq/W241L+tnyQ=";
   };
 
-  vendorHash = "sha256-nAwBVa+UssbfFbcOWFcsWUllBTeW89xPcgS+ofXDPf0=";
+  vendorHash = "sha256-+N/h5kNEiSFe1fnzuk/oqf8g0eND4SgHCN/HM9oOgoE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -25,10 +26,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd changie \
       --bash <($out/bin/changie completion bash) \
       --fish <($out/bin/changie completion fish) \
@@ -39,11 +40,10 @@ buildGoModule rec {
     description = "Automated changelog tool for preparing releases with lots of customization options";
     mainProgram = "changie";
     homepage = "https://changie.dev";
-    changelog = "https://github.com/miniscruff/changie/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/miniscruff/changie/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };
-}
+})

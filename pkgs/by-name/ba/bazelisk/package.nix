@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bazelisk";
-  version = "1.25.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazelisk";
-    rev = "v${version}";
-    sha256 = "sha256-1/J/Y2NlIghxQS/5CnGX+2z+glOeOZVEgSE4KWft9Zw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NijRYjJyWOqSkfDKOdki3nrc1OIhfooKLhusuiMY/Js=";
   };
 
-  vendorHash = "sha256-kXv7q32cFD9mwWsFaod7QPn3el72P4ugVc4DGwez8v0=";
+  vendorHash = "sha256-oycCqzUAn/lNFjeLjM+PQfYNscaTi5E9D7Pnv8jrO8M=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.BazeliskVersion=${version}"
+    "-X github.com/bazelbuild/bazelisk/core.BazeliskVersion=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,8 +30,10 @@ buildGoModule rec {
       BEWARE: This package does not work on NixOS.
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
-    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${version}";
+    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ elasticdog ];
+    maintainers = with lib.maintainers; [
+      hythera
+    ];
   };
-}
+})

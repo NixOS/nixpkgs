@@ -1,16 +1,18 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromCodeberg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.113";
   pname = "libaio";
 
-  src = fetchurl {
-    url = "https://pagure.io/libaio/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.gz";
-    sha256 = "sha256-cWxwWXAyRzROsGa1TsvDyiE08BAzBxkubCt9q1+VKKs=";
+  src = fetchFromCodeberg {
+    owner = "jmoyer";
+    repo = "libaio";
+    tag = "libaio-${finalAttrs.version}";
+    hash = "sha256-8TofYbwsnenv5GuC6FjkUt9rBTULEb5nhknuxr2ckQg=";
   };
 
   postPatch = ''
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
 
   hardeningDisable = lib.optional (stdenv.hostPlatform.isi686) "stackprotector";
 
@@ -32,8 +35,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for asynchronous I/O in Linux";
     homepage = "https://lse.sourceforge.net/io/aio.html";
+    downloadPage = "https://codeberg.org/jmoyer/libaio";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

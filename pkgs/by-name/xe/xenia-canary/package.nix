@@ -9,24 +9,38 @@
   ninja,
   cmake,
   libuuid,
+  alsa-lib,
   wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
-  llvmPackages_19,
+  glslang,
+  spirv-tools,
+  symlinkJoin,
+  llvmPackages_20,
   autoPatchelfHook,
   unstableGitUpdater,
   fetchFromGitHub,
 }:
-llvmPackages_19.stdenv.mkDerivation {
+
+let
+  vulkan-sdk = symlinkJoin {
+    name = "vulkan-sdk";
+    paths = [
+      glslang
+      spirv-tools
+    ];
+  };
+in
+llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-06-21";
+  version = "0-unstable-2026-08-13";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "fd1abfe6aa66b2348d9f93f8e5065def06b1a11d";
-    hash = "sha256-cxwawoCLE0E/HaELfI3FG4yhk4GRtjB9pCs9gkeM+uc=";
+    rev = "907d92bf8cfad334cb1b83755f48b6bfea391806";
+    hash = "sha256-5ATxs7iD5QS7VKAevRNOfCAAjMRDLuk5djAQrhBMnfQ=";
   };
 
   dontConfigure = true;
@@ -38,11 +52,15 @@ llvmPackages_19.stdenv.mkDerivation {
     cmake
     wrapGAppsHook3
     copyDesktopItems
+    glslang
+    spirv-tools
+    llvmPackages_20.lld
     autoPatchelfHook
+    alsa-lib
     libuuid
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=unused-result"
   ];
 
@@ -54,8 +72,9 @@ llvmPackages_19.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    python3 xenia-build setup
-    python3 xenia-build build --config=release -j $NIX_BUILD_CORES
+    export VULKAN_SDK="${vulkan-sdk}"
+    python3 xenia-build.py setup
+    python3 xenia-build.py build --config=release
     runHook postBuild
   '';
 
@@ -89,7 +108,7 @@ llvmPackages_19.stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Xbox 360 Emulator Research Project";

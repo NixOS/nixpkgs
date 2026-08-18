@@ -3,20 +3,21 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "github-mcp-server";
-  version = "0.6.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "github-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jW/X8vwV47J20aa3E+WqjRL5n9H+Pb2EQwIVIg1pfug=";
+    hash = "sha256-zG6WwhY7j08Qqvj+BCpBIU6UaS4Di5aksjlnCgZ0Z2c=";
   };
 
-  vendorHash = "sha256-GYfK5QQH0DhoJqc4ynZBWuhhrG5t6KoGpUkZPSfWfEQ=";
+  vendorHash = "sha256-QztH+35KQReYsft50WBZMB0EEBWmQZiSA/mFzsvLSQU=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,8 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/github/github-mcp-server/releases/tag/v${finalAttrs.version}";
@@ -38,6 +40,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/github/github-mcp-server";
     license = lib.licenses.mit;
     mainProgram = "github-mcp-server";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ logger ];
   };
 })

@@ -48,29 +48,27 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs =
-    [
-      fsspec
-      hypothesis
-      pandas
-      pyarrow
-      pytest-remotedata
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [
-      # requires wasmer which is broken for python 3.12
-      # https://github.com/wasmerio/wasmer-python/issues/778
-      snapshottest
-    ];
-
-  pytestFlagsArray = [
-    "-m"
-    "'not remote_data'"
+  checkInputs = [
+    fsspec
+    hypothesis
+    pandas
+    pyarrow
+    pytest-remotedata
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # requires snapshottest
     "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTestMarks = [
+    "remote_data"
   ];
 
   disabledTests = [
@@ -83,6 +81,14 @@ buildPythonPackage rec {
     "test_get_foreign_keys"
     "test_get_check_constraints"
     "test_get_unique_constraints"
+    # https://github.com/Mause/duckdb_engine/issues/1379
+    "test_reflect"
+    "test_get_multi_columns"
+    "test_table_reflect"
+    "test_comment_support"
+    "test_361"
+    "test_reflection"
+    "test_fetch_arrow"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];

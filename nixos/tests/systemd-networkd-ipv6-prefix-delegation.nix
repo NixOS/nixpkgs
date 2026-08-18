@@ -17,7 +17,7 @@ import ./make-test-python.nix (
         hexa
       ];
     };
-    nodes = {
+    containers = {
 
       # The ISP's routers job is to delegate IPv6 prefixes via DHCPv6. Like with
       # regular IPv6 auto-configuration it will also emit IPv6 router
@@ -38,6 +38,7 @@ import ./make-test-python.nix (
             interfaces.eth1 = lib.mkForce { }; # Don't use scripted networking
           };
 
+          services.resolved.enable = false;
           systemd.network = {
             enable = true;
 
@@ -204,6 +205,7 @@ import ./make-test-python.nix (
           interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
         };
 
+        services.resolved.enable = false;
         systemd.network = {
           networks = {
             # systemd-networkd will load the first network unit file
@@ -300,6 +302,7 @@ import ./make-test-python.nix (
       client = {
         virtualisation.vlans = [ 2 ];
         systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+        services.resolved.enable = false;
         networking = {
           useNetworkd = true;
           useDHCP = false;

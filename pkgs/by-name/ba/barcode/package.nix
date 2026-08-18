@@ -5,19 +5,19 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.99";
   pname = "barcode";
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1indapql5fjz0bysyc88cmc54y8phqrbi7c76p71fgjp45jcyzp8";
+    url = "mirror://gnu/barcode/barcode-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6H7PZCFXPhfONYeduDKGF3lSWGUIMa/9Al+6QvFVzcY=";
   };
   patches = [
     # Pull upstream patch for -fno-common toolchains.
     (fetchpatch {
       name = "fno-common.patch";
       url = "http://git.savannah.gnu.org/cgit/barcode.git/patch/?id=4654f68706a459c9602d9932b56a56e8930f7d53";
-      sha256 = "15kclzcwlh0ymr7m48vc0m8z98q0wf4xbfcky4g1y8yvvpvvrfgc";
+      hash = "sha256-7Lm8993bIx8e8ZO51YnjAKP0UQVsI1JPrh5AytmnbJY=";
     })
   ];
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "GNU barcode generator";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     homepage = "https://www.gnu.org/software/barcode/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
-}
+})

@@ -5,9 +5,7 @@
   sha256 = "0gcjpw2q263hh8w2sjvq3f3k2d28qpkkv0jnl8hw1l7v604i8zxg";
 }).overrideAttrs
   (old: {
-    postPatch =
-      old.postPatch or ""
-      + ''
-        echo 'echo ${runtimeShell}' > scripts/find_shell
-      '';
+    postPatch = old.postPatch or "" + ''
+      echo 'echo ${runtimeShell}' > scripts/find_shell
+    '';
   })

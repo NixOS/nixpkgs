@@ -1,135 +1,157 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  fetchPypi,
-  python311,
-  makeWrapper,
-  libtorrent-rasterbar-1_2_x,
-  qt5,
+  buildNpmPackage,
+  fetchFromGitHub,
+  libappindicator,
   nix-update-script,
-  boost186,
+  nodejs_24,
+  python3,
+  wrapGAppsHook3,
 }:
-
 let
-  # libtorrent-rasterbar-1_2_x requires python311 and boost 1.86
-  python3 = python311.override {
-    packageOverrides = final: prev: {
-      boost = boost186;
-    };
+  version = "8.4.3";
+  nodejs = nodejs_24;
+
+  src = fetchFromGitHub {
+    owner = "tribler";
+    repo = "Tribler";
+    tag = "v${version}";
+    hash = "sha256-5ykIQBvYKzGn9toXb2248ulvh22fJlE0mNQkilkWRYo=";
   };
-  libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
+
+  tribler-webui = buildNpmPackage {
+    inherit nodejs version;
+    pname = "tribler-webui";
+    src = "${src}/src/tribler/ui";
+    npmDepsHash = "sha256-3VS2E7YFI2UHWv8zbExR+i+SuLvq70mDaObDqYMIgP0=";
+
+    # The prepack script runs the build script, which we'd rather do in the build phase.
+    npmPackFlags = [ "--ignore-scripts" ];
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
+
+    dontNpmBuild = true;
+    dontNpmInstall = true;
+
+    installPhase = ''
+      mkdir -pv $out
+      cp -prvd ./* $out/
+      cd $out
+      npm install
+      npm run build
+    '';
+  };
+
 in
-stdenv.mkDerivation (finalAttrs: {
+
+python3.pkgs.buildPythonApplication {
+  inherit version src;
   pname = "tribler";
-  version = "7.14.0";
+  pyproject = true;
 
-  src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${finalAttrs.version}/Tribler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
-  };
+  build-system = with python3.pkgs; [ setuptools ];
 
-  patches = [
-    ./startupwmclass.patch
+  dependencies = with python3.pkgs; [
+    # requirements.txt
+    configobj
+    ipv8-rust-tunnels
+    libtorrent-rasterbar
+    lz4
+    pillow
+    pony
+    pyipv8
+    pystray
+
+    # build/requirements.txt
+    cx-freeze
+    requests
   ];
 
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-    makeWrapper
-    # we had a "copy" of this in tribler's makeWrapper
-    # but it went out of date and broke, so please just use it directly
-    qt5.wrapQtAppsHook
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
+  buildInputs = with python3.pkgs; [
+    # setup.py requirements
+    pygobject3
+    # sphinx requirements
+    sphinxHook
+    sphinx
+    sphinx-autoapi
+    sphinx-rtd-theme
+    astroid
+    # tray icon deps
+    libappindicator
   ];
 
-  buildInputs = [ python3.pkgs.python ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonPath =
-    [ libtorrent ]
-    ++ (with python3.pkgs; [
-      # requirements-core.txt
-      aiohttp
-      aiohttp-apispec
-      anyio
-      chardet
-      configobj
-      cryptography
-      decorator
-      faker
-      libnacl
-      lz4
-      marshmallow
-      netifaces
-      networkx
-      pony
-      psutil
-      pyasn1
-      pydantic_1
-      pyopenssl
-      pyyaml
-      sentry-sdk
-      service-identity
-      yappi
-      yarl
-      bitarray
-      filelock
-      (pyipv8.overrideAttrs (p: rec {
-        version = "2.10.0";
-        src = fetchPypi {
-          inherit (p) pname;
-          inherit version;
-          hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
-        };
-      }))
-      file-read-backwards
-      brotli
-      human-readable
-      # requirements.txt
-      pillow
-      pyqt5
-      pyqt5-sip
-      pyqtgraph
-      pyqtwebengine
-    ]);
+  outputs = [
+    "out"
+  ];
 
-  installPhase = ''
-    mkdir -pv $out
-    # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
-    wrapPythonPrograms
-    cp -prvd ./* $out/
-    makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
-        --set _TRIBLERPATH "$out/src" \
-        --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
-        --set NO_AT_BRIDGE 1 \
-        --chdir "$out/src" \
-        --add-flags "-O $out/src/run_tribler.py"
+  postPatch = ''
+    # fix the entrypoint
+    substituteInPlace build/setup.py --replace-fail '"tribler=tribler.run:main"' '"tribler=tribler.run:main_sync"'
+    substituteInPlace src/run_tribler.py --replace-fail 'if __name__ == "__main__":' 'def main_sync():'
 
-    mkdir -p $out/share/applications $out/share/icons
-    cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
-    cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
-    mkdir -p $out/share/copyright/tribler
-    mv $out/LICENSE $out/share/copyright/tribler
+    # ValueError: ZIP does not support timestamps before 1980
+    substituteInPlace build/win/build.py --replace-fail "if {'setup.py', 'bdist_wheel'}.issubset(sys.argv):" "if True:"
+
+    # copy the built webui
+    rm -r src/tribler/ui
+    ln -s ${tribler-webui} src/tribler/ui
   '';
 
-  shellHook = ''
-    wrapPythonPrograms || true
-    export QT_QPA_PLATFORM_PLUGIN_PATH=$(echo ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms)
-    export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
-    export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
+  buildPhase = ''
+    runHook preBuild
+
+    export GITHUB_TAG=v${version}
+    python3 build/debian/update_metainfo.py
+    python3 build/setup.py bdist_wheel
+
+    runHook postBuild
   '';
+
+  postInstall = ''
+    ln -s ${tribler-webui} $out/${python3.sitePackages}/tribler/ui
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ libappindicator ]}"
+    )
+  '';
+
+  disabledTestPaths = [
+    # Tests are outdated
+    "src/tribler/test_unit/core/content_discovery/restapi/"
+    "src/tribler/test_unit/core/database/restapi/"
+    "src/tribler/test_unit/core/libtorrent/restapi/"
+    "src/tribler/test_unit/core/restapi/"
+    "src/tribler/test_unit/core/versioning/restapi/"
+  ];
+
+  disabledTests = [
+    "test_request_for_version"
+    "test_establish_connection"
+    "test_tracker_test_error_resolve"
+    "test_get_default_fallback"
+    "test_get_default_fallback_half_tree"
+    "test_get_set_explicit"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
-    mainProgram = "tribler";
+    description = "Decentralized P2P filesharing client based on the Bittorrent protocol";
     homepage = "https://www.tribler.org/";
-    changelog = "https://github.com/Tribler/tribler/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.lgpl21Plus;
+    changelog = "https://github.com/Tribler/tribler/releases/tag/v${version}";
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      xvapx
-
       mkg20001
+      mlaradji
+      xvapx
     ];
+    mainProgram = "tribler";
     platforms = lib.platforms.linux;
   };
-})
+}

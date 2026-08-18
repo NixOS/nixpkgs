@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     libpng
     readline
     zlib
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 
@@ -66,18 +67,18 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-slang" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of 'Version 2.3.3</td>'
       new_version="$(curl -s https://www.jedsoft.org/slang/ |
-          pcregrep -o1 'Version ([0-9.]+)</td>')"
+          pcre2grep -o1 'Version ([0-9.]+)</td>')"
       update-source-version ${pname} "$new_version"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small, embeddable multi-platform programming library";
     longDescription = ''
       S-Lang is an interpreted language that was designed from the start to be
@@ -100,9 +101,9 @@ stdenv.mkDerivation rec {
       Guide.
     '';
     homepage = "http://www.jedsoft.org/slang/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
     mainProgram = "slsh";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -5,7 +5,8 @@
   makeWrapper,
 }:
 buildEnv {
-  name = "snis-${snis-unwrapped.version}";
+  pname = "snis";
+  inherit (snis-unwrapped) version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -13,6 +14,9 @@ buildEnv {
     snis-unwrapped
     snis-assets
   ];
+
+  # Basic assets are also distributed in the main repo
+  ignoreCollisions = true;
 
   pathsToLink = [
     "/"

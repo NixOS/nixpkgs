@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "unstable-2015-10-15";
 
   src = fetchFromGitHub {
-    owner = "dennishafemann";
+    owner = "zinic";
     repo = "tmux-cssh";
     rev = "21750733c5b6fa2fe23b9e50ce69d8564f2f742a";
     hash = "sha256-Rz4n87aYZLkF0TQNl5F80gJwXHYWEes67EwkUh9ptSw=";

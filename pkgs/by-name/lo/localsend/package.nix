@@ -3,20 +3,21 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter324,
+  flutter329,
   makeDesktopItem,
   copyDesktopItems,
   nixosTests,
   libayatana-appindicator,
   undmg,
   makeBinaryWrapper,
+  fetchpatch,
 }:
 
 let
   pname = "localsend";
   version = "1.17.0";
 
-  linux = flutter324.buildFlutterApplication rec {
+  linux = flutter329.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -34,6 +35,18 @@ let
       permission_handler_windows = "sha256-+TP3neqlQRZnW6BxHaXr2EbmdITIx1Yo7AEn5iwAhwM=";
       pasteboard = "sha256-lJA5OWoAHfxORqWMglKzhsL1IFr9YcdAQP/NVOLYB4o=";
     };
+
+    patches = [
+      # Fix for https://github.com/localsend/localsend/security/advisories/GHSA-34v6-52hh-x4r4
+      # See: https://github.com/NixOS/nixpkgs/issues/488755
+      # Can be removed with new release > 1.17.0
+      (fetchpatch {
+        url = "https://github.com/localsend/localsend/commit/8f3cec85aa29b2b13fed9b2f8e499e1ac9b0504c.patch";
+        hash = "sha256-Fswir+TebCDPxHVBg8YM3ROx2uoLG92E3E15wnzHz+U=";
+      })
+    ];
+
+    patchFlags = [ "-p2" ];
 
     postPatch = ''
       substituteInPlace lib/util/native/autostart_helper.dart \
@@ -119,7 +132,6 @@ let
       mainProgram = "localsend";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };
@@ -128,6 +140,7 @@ let
   metaCommon = {
     description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
+    donationPage = "https://localsend.org/donate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sikmir

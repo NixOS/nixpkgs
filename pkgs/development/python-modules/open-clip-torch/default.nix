@@ -18,25 +18,24 @@
   torchvision,
   tqdm,
 
-  # checks
-  pytestCheckHook,
+  # tests
   braceexpand,
   pandas,
+  pytestCheckHook,
+  requests,
   transformers,
   webdataset,
-
-  stdenv,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "open-clip-torch";
-  version = "2.32.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
-    tag = "v${version}";
-    hash = "sha256-HXzorEAVPieCHfW3xzXqNTTIzJSbIuaZhcfcp0htdCk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rJT0LCIS0uChBUdZ6WTQv0npZ0Ae8veIXMgr6JTgUj4=";
   };
 
   build-system = [ pdm-backend ];
@@ -55,45 +54,45 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     braceexpand
     pandas
+    pytestCheckHook
+    requests
     transformers
     webdataset
   ];
 
   pythonImportsCheck = [ "open_clip" ];
 
-  # -> On Darwin:
-  # AttributeError: Can't pickle local object 'build_params.<locals>.<lambda>'
-  # -> On Linux:
-  # KeyError: Caught KeyError in DataLoader worker process 0
-  disabledTestPaths = [ "tests/test_wds.py" ];
+  disabledTestPaths = [
+    # -> On Darwin:
+    # AttributeError: Can't pickle local object 'build_params.<locals>.<lambda>'
+    # -> On Linux:
+    # KeyError: Caught KeyError in DataLoader worker process 0
+    "tests/test_wds.py"
+  ];
 
-  disabledTests =
-    [
-      # requires network
-      "test_download_pretrained_from_hfh"
-      "test_inference_simple"
-      "test_inference_with_data"
-      "test_pretrained_text_encoder"
-      "test_training_mt5"
-      # fails due to type errors
-      "test_num_shards"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      "test_training"
-      "test_training_coca"
-      "test_training_unfreezing_vit"
-      "test_training_clip_with_jit"
-    ];
+  disabledTests = [
+    # requires network
+    "test_download_pretrained_from_hfh"
+    "test_inference_simple"
+    "test_inference_with_data"
+    "test_pretrained_text_encoder"
+    "test_training_mt5"
+
+    # fails due to type errors
+    "test_num_shards"
+
+    # hangs forever
+    "test_training"
+  ];
 
   meta = {
     description = "Open source implementation of CLIP";
     homepage = "https://github.com/mlfoundations/open_clip";
-    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "open-clip";
   };
-}
+})

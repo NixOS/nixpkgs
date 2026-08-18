@@ -3,44 +3,41 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  patch-ng,
   pytestCheckHook,
   cffi,
   lmdb,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lmdb";
-  version = "1.6.2";
+  version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0o4/pZk1/2iIWHYOxS8gLsuMEImj9o0fFi6jB40VHnM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Jg9ENkDuLaPP0FmoQlhlkxn/OcqRLBa/l0jDJAdrnQk=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [ lmdb ];
 
+  nativeBuildInputs = [ cffi ];
+
+  env.LMDB_FORCE_SYSTEM = 1;
+
+  dependencies = [ patch-ng ];
+
   pythonImportsCheck = [ "lmdb" ];
 
-  nativeCheckInputs = [
-    cffi
-    pytestCheckHook
-  ];
-
-  LMDB_FORCE_SYSTEM = 1;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
-    changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${version}/ChangeLog";
+    changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${finalAttrs.version}/ChangeLog";
     license = lib.licenses.openldap;
-    maintainers = with lib.maintainers; [
-      ivan
-    ];
+    maintainers = [ ];
   };
-}
+})

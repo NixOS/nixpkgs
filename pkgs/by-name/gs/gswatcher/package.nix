@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gswatcher";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "lxndr";
     repo = "gswatcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qohd18bXr7gDSW51tCyslFX54Caux+YrsuJtoLs9Ofk=";
+    hash = "sha256-no+4JMs6d4HvUJwjGQAvSlkySDIzA6psfwCe5JqCa/8=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple game server monitor and administrative tool";
     homepage = "https://github.com/lxndr/gswatcher";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
   };

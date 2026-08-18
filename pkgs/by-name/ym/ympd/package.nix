@@ -8,16 +8,21 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ympd";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "notandy";
     repo = "ympd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1nvb19jd556v2h2bi7w4dcl507p3p8xvjkqfzrcsy7ccy3502brq";
   };
+
+  patches = [
+    # https://github.com/notandy/ympd/pull/199.patch
+    ./bump-cmake-version.patch
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -35,12 +40,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/notandy/ympd";
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
-    maintainers = [ maintainers.siddharthist ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.siddharthist ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ympd";
   };
-}
+})

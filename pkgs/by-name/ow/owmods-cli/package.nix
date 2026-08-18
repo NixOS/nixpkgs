@@ -14,33 +14,32 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-cli";
-  version = "0.15.1";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
-    rev = "cli_v${version}";
-    hash = "sha256-NIg8heytWUshpoUbaH+RFIvwPBQGXL6yaGKvUuGnxg8=";
+    rev = "cli_v${finalAttrs.version}";
+    hash = "sha256-ohCP0VKf2jEtjZsDN5ISZ5c/EGYANvjuCPyKQcNCwyc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kLuiNfrxc3Z8UeDQ2Mb6N78TST6c2f4N7mt4X0zv1Zk=";
+  cargoHash = "sha256-oYTz7Dzdv9prHzDSSjX9PozzKToMXRW6qs8Y2dfYQ8A=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optional wrapWithMono makeWrapper;
+  ]
+  ++ lib.optional wrapWithMono makeWrapper;
 
-  buildInputs =
-    [
-      zstd
-      libsoup_3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ];
+  buildInputs = [
+    zstd
+    libsoup_3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -48,24 +47,23 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "owmods_cli";
 
-  postInstall =
-    ''
-      cargo xtask dist_cli
-      installManPage dist/cli/man/*
-      installShellCompletion --cmd owmods \
-      dist/cli/completions/owmods.{bash,fish,zsh}
-    ''
-    + lib.optionalString wrapWithMono ''
-      wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
-    '';
+  postInstall = ''
+    cargo xtask dist_cli
+    installManPage dist/cli/man/*
+    installShellCompletion --cmd owmods \
+    dist/cli/completions/owmods.{bash,fish,zsh}
+  ''
+  + lib.optionalString wrapWithMono ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} --prefix PATH : '${mono}/bin'
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";
     homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_cli";
-    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
-    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
+    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
+    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
     mainProgram = "owmods";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -74,4 +72,4 @@ rustPlatform.buildRustPackage rec {
       locochoco
     ];
   };
-}
+})

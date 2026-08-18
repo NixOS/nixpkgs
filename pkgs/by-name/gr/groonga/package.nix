@@ -9,7 +9,7 @@
   pkg-config,
   rapidjson,
   testers,
-  xxHash,
+  xxhash,
   zstd,
   postgresqlPackages,
   suggestSupport ? false,
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.1.1";
+  version = "16.0.9";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KxUTKUjqfNfpyOcm0uLTkPmSfvvBRTbgvqmS4F248HA=";
+    hash = "sha256-SqDLwAYcxoX8yTNVxCqCUucYjY8G/6VZwST4j1LrxUY=";
   };
 
   patches = [
@@ -40,25 +40,24 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      rapidjson
-      xxHash
-      zstd
-      mecab
-      kytea
-      msgpack-c
-    ]
-    ++ lib.optionals lz4Support [
-      lz4
-    ]
-    ++ lib.optional zlibSupport [
-      zlib
-    ]
-    ++ lib.optionals suggestSupport [
-      zeromq
-      libevent
-    ];
+  buildInputs = [
+    rapidjson
+    xxhash
+    zstd
+    mecab
+    kytea
+    msgpack-c
+  ]
+  ++ lib.optionals lz4Support [
+    lz4
+  ]
+  ++ lib.optionals zlibSupport [
+    zlib
+  ]
+  ++ lib.optionals suggestSupport [
+    zeromq
+    libevent
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 

@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   fetchFromGitHub,
   bleach,
+  lxml,
   mt-940,
   requests,
   sepaxml,
@@ -13,18 +13,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.3";
+  version = "5.0.0";
   pname = "fints";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
     tag = "v${version}";
-    hash = "sha256-QR5/mAll6vuP+hJo/oguynLLsGawhTQNaU6TCgww9yM=";
+    hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
   };
+
+  pythonRelaxDeps = [ "lxml" ];
 
   pythonRemoveDeps = [ "enum-tools" ];
 
@@ -32,10 +32,13 @@ buildPythonPackage rec {
 
   dependencies = [
     bleach
+    lxml
     mt-940
     requests
     sepaxml
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "fints" ];
 
@@ -44,11 +47,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
   };

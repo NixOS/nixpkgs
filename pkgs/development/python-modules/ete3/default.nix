@@ -30,14 +30,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ete3" ];
 
-  dependencies =
-    [
-      six
-      numpy
-      legacy-cgi
-    ]
-    ++ lib.optional withTreeVisualization pyqt5
-    ++ lib.optional withXmlSupport lxml;
+  dependencies = [
+    six
+    numpy
+    legacy-cgi
+  ]
+  ++ lib.optional withTreeVisualization pyqt5
+  ++ lib.optional withXmlSupport lxml;
 
   meta = {
     description = "Python framework for the analysis and visualization of trees";

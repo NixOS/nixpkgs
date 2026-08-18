@@ -3,25 +3,24 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parallel-disk-usage";
-  version = "0.12.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
     repo = "parallel-disk-usage";
-    rev = version;
-    hash = "sha256-Wj19lWepCrZe36njX+NMdpwXeRRh3ml9jKbbi7irrpg=";
+    rev = finalAttrs.version;
+    hash = "sha256-EYveK1p/OWvtY5Q0dDlZwFkVt7u/A0qY0BG/oLgwmfE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UK+jonM/ZBGoCKFcQlCo5OqYtKeU0VIWtx83oBh3lJQ=";
+  cargoHash = "sha256-r9lNOElOr4GjzaI1ZZFdc+1i2kC4YVl7n/XR05mdEJA=";
 
-  meta = with lib; {
+  meta = {
     description = "Highly parallelized, blazing fast directory tree analyzer";
     homepage = "https://github.com/KSXGitHub/parallel-disk-usage";
-    license = licenses.asl20;
-    maintainers = [ maintainers.peret ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.peret ];
     mainProgram = "pdu";
   };
-}
+})

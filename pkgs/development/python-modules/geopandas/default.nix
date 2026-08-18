@@ -1,18 +1,16 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
   setuptools,
 
+  # dependencies
   packaging,
   pandas,
   pyogrio,
   pyproj,
-  rtree,
   shapely,
 
   # optional-dependencies
@@ -25,30 +23,25 @@
   pyarrow,
   sqlalchemy,
   xyzservices,
+
+  # tests
+  pytestCheckHook,
+  rtree,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopandas";
-  version = "1.0.1";
+  version = "1.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    tag = "v${version}";
-    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7XWPPLuJjc6x+Vb16z0bEjYe1lX710vz5Rwjg/WFHH0=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Remove geom_almost_equals, because it broke with shapely 2.1.0 and is not being updated
-      url = "https://github.com/geopandas/geopandas/commit/0e1f871a02e9612206dcadd6817284131026f61c.patch";
-      excludes = [ "CHANGELOG.md" ];
-      hash = "sha256-n9AmmbjjNwV66lxDQV2hfkVVfxRgMfEGfHZT6bql684=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -83,28 +76,24 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Requires network access
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    changelog = "https://github.com/geopandas/geopandas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   # build deps
   cargo-deny,
@@ -21,10 +22,8 @@
   uv,
   which,
   yasm,
-  zlib,
 
   # runtime deps
-  apple-sdk_14,
   fontconfig,
   freetype,
   gst_all_1,
@@ -35,7 +34,12 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
+  zlib,
 
   # tests
   nixosTests,
@@ -45,14 +49,16 @@ let
   # match .python-version
   customPython = python311.withPackages (
     ps: with ps; [
+      markupsafe
       packaging
+      pygments
     ]
   );
   runtimePaths = lib.makeLibraryPath (
     lib.optionals (stdenv.hostPlatform.isLinux) [
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
+      libxcursor
+      libxrandr
+      libxi
       libxkbcommon
       vulkan-loader
       wayland
@@ -61,15 +67,15 @@ let
   );
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0-unstable-2025-06-26";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "cbb0407ae641c049dd6796275b4ba8572c06b798";
-    hash = "sha256-d0Z+dvnNm3NxvGe/W/zJsAsyeMvxF9HoA+wSclWeLgk=";
+    tag = finalAttrs.version;
+    hash = "sha256-oA6fFvSajUHFxyu5kgT3BZ8oxWNMdkdaov6tVkxgNrE=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -79,8 +85,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-j6cQalYbeHunI1t4VRQkbqGNylwWg0NBoItwloYTfAE=";
+  cargoHash = "sha256-kFuW2RoE37ClYAEcEcRudQoUsRsjbUeEBbz/6d96FPU=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -107,41 +112,46 @@ rustPlatform.buildRustPackage {
     uv
     which
     yasm
-    zlib
   ];
 
   env.UV_PYTHON = customPython.interpreter;
 
-  buildInputs =
-    [
-      fontconfig
-      freetype
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      harfbuzz
-      libunwind
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libxcb
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  buildInputs = [
+    fontconfig
+    freetype
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    harfbuzz
+    libunwind
+    libGL
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libx11
+    libxcb
+    udev
+    vulkan-loader
+  ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "servo_allocator/use-system-allocator"
+    "servo-allocator/use-system-allocator"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # mozjs-sys fails with:
+      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+      "-Wno-error=format-security"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ]
+  );
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
@@ -149,24 +159,27 @@ rustPlatform.buildRustPackage {
     mkdir -p $out/resources
     cp -r ./resources $out/
 
-    wrapProgram $out/bin/servo \
+    wrapProgram $out/bin/servoshell \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) servo; };
   };
 
   meta = {
+    # undefined libmozjs_sys symbols during linking
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/servo/servo/releases/tag/${finalAttrs.src.tag}";
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       hexa
-      supinie
     ];
-    mainProgram = "servo";
+    teams = with lib.teams; [ ngi ];
+    mainProgram = "servoshell";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

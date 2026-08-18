@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cuetsy";
   version = "0.1.11";
 
   src = fetchFromGitHub {
-    owner = "grafana";
+    owner = "grafana-cold-storage";
     repo = "cuetsy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dirzVR4j5K1+EHbeRi4rHwRxkyveySoM7qJzvOlGp+0=";
   };
 
@@ -19,9 +19,9 @@ buildGoModule rec {
 
   meta = {
     description = "Experimental CUE->TypeScript exporter";
-    homepage = "https://github.com/grafana/cuetsy";
+    homepage = "https://github.com/grafana-cold-storage/cuetsy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bryanhonof ];
     mainProgram = "cuetsy";
   };
-}
+})

@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdlfmt";
-  version = "0.1.2";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xDv93cxCEaBybexleyTtcCCKHy2OL3z/BG2gJ7uqIrU=";
+    hash = "sha256-Ftzf4gI7E5tPo8U5ZxUMqlY5+AK5IEUUAll+GsEKYpg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TwZ/0G3lTCoj01e/qGFRxJCfe4spOpG/55GKhoI0img=";
+  cargoHash = "sha256-B/ir+Sf4uxQ9Fqmy6yEa3DMt0qdpfPrwD8lhUMOEUbo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

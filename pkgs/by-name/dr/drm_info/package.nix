@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   libdrm,
+  libdisplay-info,
   json_c,
   pciutils,
   meson,
@@ -14,17 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drm_info";
-  version = "2.7.0";
+  version = "2.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "drm_info";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pgYhZtmyhuhxBiiTRdrEp/YsuwrD6KK/ahfO2L3mfM8=";
+    hash = "sha256-QKF0frDPelwHOzf3r0tzSo7i1WfGhcFGJfxf2bj1+OE=";
   };
 
   strictDeps = true;
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "'<2.4.134'" "'<2.4.133'"
+  '';
 
   depsBuildBuild = [
     pkg-config
@@ -39,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libdrm
+    libdisplay-info
     json_c
     pciutils
   ];
@@ -47,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to dump info about DRM devices";
     mainProgram = "drm_info";
     homepage = "https://gitlab.freedesktop.org/emersion/drm_info";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kiskae ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

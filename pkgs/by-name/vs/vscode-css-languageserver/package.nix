@@ -9,18 +9,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vscode-css-languageserver";
-  version = "1.101.2";
+  version = "1.105.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode";
     tag = finalAttrs.version;
-    hash = "sha256-wdI6VlJ4WoSNnwgkb6dkVYcq/P/yzflv5mE9PuYBVx4=";
+    hash = "sha256-t3S8PHxuwz1DxJ+FPJkRCyaPm4tPW/fHKj3aiIaTuls=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/extensions/css-language-features/server";
 
-  npmDepsHash = "sha256-wGW2n+16NYHuFpYMq8nuvGgir8QwGc9Ud2yauR4ltIQ=";
+  npmDepsHash = "sha256-duYwm1Hf9oLyu0gapdEGbXqdwFV4svkX2tGhvyoZ5Lo=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

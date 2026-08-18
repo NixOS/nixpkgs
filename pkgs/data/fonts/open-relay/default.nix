@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 let
@@ -10,23 +11,20 @@ let
     { directory, meta }:
     stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "open-relay-${name}";
-      version = "2025-03-20";
+      version = "2026-04-12";
 
       src = fetchFromGitHub {
         owner = "kreativekorp";
         repo = "open-relay";
         tag = finalAttrs.version;
-        hash = "sha256-OQpZHPbNL3rxXH89lwtHvm7eENl8fS0M0i8IBn4m2hI=";
+        hash = "sha256-UI3JP/5Os7xWB07dwlEpWuDMG1awpsOr0itmZpxGtyg=";
       };
 
-      installPhase = ''
-        runHook preInstall
+      sourceRoot = "${finalAttrs.src.name}/${directory}";
+      nativeBuildInputs = [ installFonts ];
 
-
-        install -D -m444 -t "$out/share/fonts/truetype" "${directory}/"*.ttf
-        install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" "${directory}/OFL.txt"
-
-        runHook postInstall
+      postInstall = ''
+        install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" OFL.txt
       '';
 
       meta = {
@@ -38,7 +36,8 @@ let
           linus
           toastal
         ];
-      } // meta;
+      }
+      // meta;
     });
 in
 lib.mapAttrs mkOpenRelayTypeface {
@@ -46,7 +45,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "Constructium";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/constructium/";
-      description = "fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
+      description = "Fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
       longDescription = ''
         Constructium is a fork of SIL Gentium designed specifically to support
         constructed scripts as encoded in the Under-ConScript Unicode Registry.
@@ -66,7 +65,7 @@ lib.mapAttrs mkOpenRelayTypeface {
         supports many scripts and a large number of Unicode blocks as well as
         constructed scripts as encoded in the Under-ConScript Unicode Registry,
         pseudographics and semigraphics, and tons of private use characters. It
-        has been superceded by Fairfax HD but is still maintained.
+        has been superseded by Fairfax HD but is still maintained.
       '';
     };
   };
@@ -75,7 +74,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "FairfaxHD";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/fairfaxhd/";
-      description = "halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
+      description = "Halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
       longDescription = ''
         Fairfax HD is a halfwidth scalable monospace font for terminals, text
         editors, IDEs, etc. It supports many scripts and a large number of

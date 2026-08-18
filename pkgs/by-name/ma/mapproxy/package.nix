@@ -5,33 +5,39 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapproxy";
-  version = "5.0.0";
-  format = "setuptools";
-  disabled = python3Packages.pythonOlder "3.8";
+  version = "6.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
-    tag = version;
-    hash = "sha256-+L9ZTgWh4E5cUGeP0rTclDbnqIzc/DlHvIXR+kDcjm8=";
+    tag = finalAttrs.version;
+    hash = "sha256-uEnmYL6dzjR5p6MVXW23IJY1tJqfMhCjbHBDnlvaYrE=";
   };
 
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace-warn "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonRemoveDeps = [ "future" ];
+
   dependencies = with python3Packages; [
+    babel
     boto3 # needed for caches service
+    jinja2
     jsonschema
     pillow
+    python-dateutil
     pyyaml
     pyproj
+    requests
     shapely
     gdal
     lxml
-    setuptools
     werkzeug
   ];
 
@@ -40,6 +46,8 @@ python3Packages.buildPythonApplication rec {
   #    https://github.com/mapproxy/mapproxy/blob/master/requirements-tests.txt
   doCheck = false;
 
+  pythonImportsCheck = [ "mapproxy" ];
+
   meta = {
     description = "Open source proxy for geospatial data";
     homepage = "https://mapproxy.org/";
@@ -47,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ rakesh4g ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

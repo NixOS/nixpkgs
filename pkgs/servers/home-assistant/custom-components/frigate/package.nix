@@ -5,6 +5,7 @@
 
   # dependencies
   hass-web-proxy-lib,
+  titlecase,
 
   # tests
   homeassistant,
@@ -18,28 +19,41 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.9.3";
+  version = "5.15.4";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-kbhDZbyNVct0GDhIr7mKyeVIkyV+Gc/gzbKnnv1FcQg=";
+    hash = "sha256-xckHpwKujlWJ0M/fDlCU96WocMIlMk37+TwmY8iEnNo=";
   };
 
-  dependencies = [ hass-web-proxy-lib ];
+  patches = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1070
+    ./service-to-action.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1085
+    ./llmcontext-user-prompt.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1096
+    ./async-publish-compat.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1095
+    ./remove-advanced-options-gate.patch
+  ];
 
-  nativeCheckInputs =
-    [
-      homeassistant
-      pytest-aiohttp
-      pytest-cov-stub
-      pytest-homeassistant-custom-component
-      pytest-timeout
-      pytestCheckHook
-    ]
-    ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
-    ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+  dependencies = [
+    hass-web-proxy-lib
+    titlecase
+  ];
+
+  nativeCheckInputs = [
+    homeassistant
+    pytest-aiohttp
+    pytest-cov-stub
+    pytest-homeassistant-custom-component
+    pytest-timeout
+    pytestCheckHook
+  ]
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python3Packages)
+  ++ (homeassistant.getPackages "stream" homeassistant.python3Packages);
 
   disabledTests = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/922
@@ -54,11 +68,11 @@ buildHomeAssistantComponent rec {
     "tests/test_media_source.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
     changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
-    maintainers = with maintainers; [ presto8 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
+    license = lib.licenses.mit;
   };
 }

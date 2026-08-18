@@ -27,7 +27,11 @@ The following snippet can be used to configure IBus:
   i18n.inputMethod = {
     enable = true;
     type = "ibus";
-    ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
+    ibus.engines = with pkgs.ibus-engines; [
+      anthy
+      hangul
+      mozc
+    ];
   };
 }
 ```
@@ -54,7 +58,10 @@ Available extra IBus engines are:
 
     ```nix
     {
-      ibus.engines = with pkgs.ibus-engines; [ table table-others ];
+      ibus.engines = with pkgs.ibus-engines; [
+        table
+        table-others
+      ];
     }
     ```
 
@@ -85,7 +92,11 @@ The following snippet can be used to configure Fcitx:
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
+    fcitx5.addons = with pkgs; [
+      fcitx5-mozc
+      fcitx5-hangul
+      fcitx5-m17n
+    ];
   };
 }
 ```
@@ -97,6 +108,8 @@ Available extra Fcitx5 addons are:
 
   - Anthy (`fcitx5-anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
+  - Array (`fcitx5-array`): Array is a Chinese shape-based input method that
+    uses a grid of 30 keys.
   - Chewing (`fcitx5-chewing`): Chewing is an
     intelligent Zhuyin input method. It is one of the most popular input
     methods among Traditional Chinese Unix users.

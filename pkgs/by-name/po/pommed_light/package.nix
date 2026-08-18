@@ -12,14 +12,14 @@
   eject,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pommed-light";
   version = "1.51lw";
 
   src = fetchFromGitHub {
     owner = "bytbox";
     repo = "pommed-light";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.gpl2Only;
   };
-}
+})

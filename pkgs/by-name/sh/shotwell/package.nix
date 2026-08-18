@@ -23,8 +23,7 @@
   json-glib,
   gcr,
   libgee,
-  gexiv2,
-  librest,
+  gexiv2_0_16,
   gettext,
   desktop-file-utils,
   gdk-pixbuf,
@@ -40,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.13";
+  version = "0.32.17";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-vdPoT2AuL8frQoQ8kKJes6pJ+y/7de21HbAb0pBdvR4=";
+    sha256 = "sha256-ClZoTpiBfDED9Upkj+lABCfHaiWnsRFFf8HYYMMWdnI=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libgee
     libgudev
-    gexiv2
+    gexiv2_0_16
     gsettings-desktop-schemas
     libraw
     json-glib
@@ -81,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gdk-pixbuf
     librsvg
-    librest
     gcr
     adwaita-icon-theme
     libsecret
@@ -94,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
-          libheif.out
+          libheif.lib
+          librsvg
         ];
       }
     }"
@@ -107,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Popular photo organizer for the GNOME desktop";
     mainProgram = "shotwell";
     homepage = "https://gitlab.gnome.org/GNOME/shotwell";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.linux;
   };
 })

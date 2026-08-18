@@ -9,7 +9,7 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gts";
   version = "0.7.6";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/gts/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gts/gts-${finalAttrs.version}.tar.gz";
     sha256 = "07mqx09jxh8cv9753y2d2jsv7wp8vjmrd7zcfpbrddz3wc9kx705";
   };
 
@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];
+
+  env = {
+    # Doesn't build on Darwin with -std=gnu23. Apply uniformly as C standard target is something unlikely to vary across platforms.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   doCheck = false; # fails with "permission denied"
 
@@ -57,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

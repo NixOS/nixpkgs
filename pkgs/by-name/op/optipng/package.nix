@@ -30,14 +30,13 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [ ];
 
-  configureFlags =
-    [
-      "--with-system-zlib"
-      "--with-system-libpng"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      #"-prefix=$out"
-    ];
+  configureFlags = [
+    "--with-system-zlib"
+    "--with-system-libpng"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    #"-prefix=$out"
+  ];
 
   postInstall =
     if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then
@@ -47,11 +46,11 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://optipng.sourceforge.net/";
     description = "PNG optimizer";
-    license = licenses.zlib;
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
     mainProgram = "optipng";
   };
 }

@@ -6,9 +6,8 @@
   ninja,
   pkg-config,
   perl,
-  go,
   python3,
-  protobuf_29, # does not build with 30+
+  protobuf,
   zlib,
   gtest,
   brotli,
@@ -16,6 +15,7 @@
   zstd,
   libusb1,
   pcre2,
+  fmt,
 }:
 
 let
@@ -24,11 +24,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "35.0.1";
+  version = "37.0.0";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
+    hash = "sha256-JyXQn4kqOjjlNEKfR6Mh9Y7PajFpyqQskV+yy31Gvg4=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     perl
-    go
   ];
   buildInputs = [
-    protobuf_29
+    protobuf
     zlib
     gtest
     brotli
@@ -47,14 +46,11 @@ stdenv.mkDerivation rec {
     zstd
     libusb1
     pcre2
+    fmt
   ];
   propagatedBuildInputs = [ pythonEnv ];
 
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Android SDK platform tools";
     longDescription = ''
       Android SDK Platform-Tools is a component for the Android SDK. It
@@ -74,12 +70,12 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       unicode-dfs-2015
+      mit
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
-    teams = [ teams.android ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.android ];
   };
 }

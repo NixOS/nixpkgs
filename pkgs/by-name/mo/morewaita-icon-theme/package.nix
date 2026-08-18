@@ -2,19 +2,20 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  adwaita-icon-theme,
   gtk3,
   xdg-utils,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "48.3";
+  version = "49";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ywZSRNXVxjs5l5UO4yvNZ7q7PRlaLNi/2+HSNhe8e5w=";
+    hash = "sha256-DxZ7XnIIF3EKGMPXahD+aHp6lCLRmrnywn7+qWCVflo=";
   };
 
   postPatch = ''
@@ -24,6 +25,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gtk3
     xdg-utils
+  ];
+
+  propagatedBuildInputs = [
+    adwaita-icon-theme
   ];
 
   installPhase = ''
@@ -41,11 +46,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Adwaita style extra icons theme for Gnome Shell";
     homepage = "https://github.com/somepaulo/MoreWaita";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pkosel
-      kachick
     ];
   };
 })

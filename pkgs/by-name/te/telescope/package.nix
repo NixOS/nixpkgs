@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11";
 
   src = fetchFromGitHub {
-    owner = "omar-polo";
+    owner = "telescope-browser";
     repo = "telescope";
     tag = finalAttrs.version;
     hash = "sha256-GKeUXa4RKYkoywrCrpenfLt10Rdj9L0xYI3tf2hFAbk=";
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Telescope is a w3m-like browser for Gemini";
+    description = "w3m-like browser for Gemini";
     homepage = "https://telescope-browser.org/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ heph2 ];

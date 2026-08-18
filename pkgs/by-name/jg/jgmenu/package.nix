@@ -6,25 +6,27 @@
   python3Packages,
   pango,
   librsvg,
+  libxfce4util,
   libxml2,
   menu-cache,
-  xorg,
+  libxrandr,
+  libxinerama,
   makeWrapper,
   enableXfcePanelApplet ? false,
-  xfce,
+  xfce4-panel,
   gtk3,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jgmenu";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
-    owner = "johanmalm";
+    owner = "jgmenu";
     repo = "jgmenu";
-    rev = "v${version}";
-    sha256 = "sha256-vuSpiZZYe0l5va9dHM54gaoI9x8qXH1gJORUS5489jQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1Vwzm7DVMwtSZW7GDWEMVPHi09orXlFiKR6XMJ337Dg=";
   };
 
   nativeBuildInputs = [
@@ -33,28 +35,26 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
   ];
 
-  buildInputs =
-    [
-      pango
-      librsvg
-      libxml2
-      menu-cache
-      xorg.libXinerama
-      xorg.libXrandr
-      python3Packages.python
-    ]
-    ++ lib.optionals enableXfcePanelApplet [
-      gtk3
-      xfce.libxfce4util
-      xfce.xfce4-panel
-    ];
+  buildInputs = [
+    pango
+    librsvg
+    libxml2
+    menu-cache
+    libxinerama
+    libxrandr
+    python3Packages.python
+  ]
+  ++ lib.optionals enableXfcePanelApplet [
+    gtk3
+    libxfce4util
+    xfce4-panel
+  ];
 
-  configureFlags =
-    [
-    ]
-    ++ lib.optionals enableXfcePanelApplet [
-      "--with-xfce4-panel-applet"
-    ];
+  configureFlags = [
+  ]
+  ++ lib.optionals enableXfcePanelApplet [
+    "--with-xfce4-panel-applet"
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/jgmenu"
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
-    homepage = "https://github.com/johanmalm/jgmenu";
+  meta = {
+    homepage = "https://github.com/jgmenu/jgmenu";
     description = "Small X11 menu intended to be used with openbox and tint2";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

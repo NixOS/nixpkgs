@@ -29,15 +29,20 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libavif";
-  version = "1.3.0";
+  version = "1.4.2";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
-    rev = "v${version}";
-    hash = "sha256-0J56wpXa2AVh9JUp5UY2kzWijNE3i253RKhpG5oDFJE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AMQ1TRPGpuBBW7tJ8xuLEVTAeOsLWTHuE0dFJjI7+W4=";
   };
 
   postPatch = ''
@@ -88,19 +93,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall =
-    ''
-      GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
-      GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
-      gdk-pixbuf-query-loaders --update-cache
+  postInstall = ''
+    GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
+    GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
+    gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
+      --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
+  '';
 
-    ''
-    # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p "$out/bin"
-      makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
-        --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
-    '';
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/libavif/libavif-config.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  '';
 
   meta = {
     description = "C implementation of the AV1 Image File Format";
@@ -112,9 +120,9 @@ stdenv.mkDerivation rec {
       (avifenc/avifdec).
     '';
     homepage = "https://github.com/AOMediaCodec/libavif";
-    changelog = "https://github.com/AOMediaCodec/libavif/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/AOMediaCodec/libavif/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
   };
-}
+})

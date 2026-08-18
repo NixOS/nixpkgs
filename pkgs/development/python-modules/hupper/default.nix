@@ -21,7 +21,8 @@ buildPythonPackage rec {
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   disabledTestPaths = [
     # Doesn't work with an exported home, RuntimeError: timeout waiting for change to file=/build/tmpgfn145cx
@@ -30,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hupper" ];
 
-  meta = with lib; {
+  meta = {
     description = "In-process file monitor/reloader for reloading your code automatically during development";
     mainProgram = "hupper";
     homepage = "https://github.com/Pylons/hupper";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

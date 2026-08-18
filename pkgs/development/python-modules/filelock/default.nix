@@ -1,25 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatch-vcs,
   hatchling,
   pytest-asyncio,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.18.0";
+  version = "3.29.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rbyI6ruZ0v7IycGyKbFx8Yr6ZVQAFz3cZT1dAVAfufI=";
+  src = fetchFromGitHub {
+    owner = "tox-dev";
+    repo = "filelock";
+    tag = finalAttrs.version;
+    hash = "sha256-sRJQa7vmMf9aWXT5QdYAZQHM0oIFFZM9P2tQ2x5T79Y=";
   };
 
   build-system = [
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-timeout
     pytestCheckHook
   ];
 
@@ -38,13 +39,16 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Circular dependency with virtualenv
     "tests/test_virtualenv.py"
+    # Very prone to timeouts on busy machines
+    "tests/test_filelock.py"
+    "tests/test_read_write.py"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/tox-dev/filelock/releases/tag/${finalAttrs.version}";
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "yzx9";
     repo = "sdflit";
     tag = "v${version}";
-    hash = "sha256-Ze3J5Dp+TskhIiGP6kMK3AIHLnhVBuEaKJokccIr+SM=";
+    hash = "sha256-9x/EnFCWhGu1zlLLz6D084PduS9ReQqdeRMblmw0g/s=";
   };
 in
 buildPythonPackage {
@@ -24,7 +24,7 @@ buildPythonPackage {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-CrMe5DuO9sQZZ50Hy+av4nF4gbOe296zSWJfJ8th7zs=";
+    hash = "sha256-Bz4HfpC+qNWWV3KgLW8L+4d5odmbYNRvdMjdMBy6qIQ=";
   };
 
   build-system = [

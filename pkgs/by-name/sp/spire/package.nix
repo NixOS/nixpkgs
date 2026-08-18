@@ -2,26 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
+  openssl,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.12.3";
+  version = "1.15.2";
 
   outputs = [
     "out"
     "agent"
     "server"
+    "oidc"
   ];
 
   src = fetchFromGitHub {
     owner = "spiffe";
     repo = "spire";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ZtSJ5/Qg4r2dkFGM/WiDWwQc2OtkX45kGXTdXU35Cng=";
+    sha256 = "sha256-Mmjx4moERdYXbGqaGdtHs/uH3Gsm3E6dA50UST5HfRE=";
   };
 
-  vendorHash = "sha256-1ngjcqGwUNMyR/wBCo0MYguD1gGH8rbI2j9BB+tGL9k=";
+  # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
+  proxyVendor = true;
+  vendorHash = "sha256-I2k5XiTkFo/Xn7XdzshjgjiBCQ8llhXnTbPWj4e8fzA=";
+
+  buildInputs = [ openssl ];
 
   ldflags = [
     "-s"
@@ -32,12 +39,7 @@ buildGoModule (finalAttrs: {
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
-  ];
-
-  excludedPackages = [
-    # ensure these files aren't evaluated, see preCheck
-    "test/tmpsimulator"
-    "pkg/agent/plugin/nodeattestor/tpmdevid"
+    "support/oidc-discovery-provider"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -53,42 +55,40 @@ buildGoModule (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
-    # remove test files which reference github.com/google/go-tpm-tools/simulator
-    # since it requires cgo and some missing header files
-    rm -rf test/tpmsimulator pkg/server/plugin/nodeattestor/tpmdevid/devid_test.go
-
     # unset to run all tests
     unset subPackages
   '';
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
-    mkdir -vp $agent/bin $server/bin
+    mkdir -vp $agent/bin $server/bin $oidc/bin
     mv -v $out/bin/spire-agent $agent/bin/
     mv -v $out/bin/spire-server $server/bin/
+    mv -v $out/bin/oidc-discovery-provider $oidc/bin/
 
     ln -vs $agent/bin/spire-agent $out/bin/spire-agent
     ln -vs $server/bin/spire-server $out/bin/spire-server
+    ln -vs $oidc/bin/oidc-discovery-provider $out/bin/oidc-discovery-provider
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/spire-agent -h
-    if [ "$($out/bin/spire-agent --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-agent version does not match"
-      exit 1
-    fi
-
-    $out/bin/spire-server -h
-    if [ "$($out/bin/spire-server --version 2>&1)" != "${finalAttrs.version}" ]; then
-      echo "spire-server version does not match"
-      exit 1
-    fi
+    for bin in $out/bin/*; do
+      $bin -h
+      if [ "$($bin --version 2>&1)" != "${finalAttrs.version}" ]; then
+        echo "$bin version does not match"
+        exit 1
+      fi
+    done
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) spire;
+  };
 
   meta = {
     description = "SPIFFE Runtime Environment";
@@ -99,6 +99,8 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       fkautz
       jk
+      mjm
+      arianvp
     ];
   };
 })

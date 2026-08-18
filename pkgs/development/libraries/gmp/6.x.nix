@@ -45,27 +45,31 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ m4 ];
 
-    configureFlags =
-      [
-        "--with-pic"
-        (lib.enableFeature cxx "cxx")
-        # Build a "fat binary", with routines for several sub-architectures
-        # (x86), except on Solaris where some tests crash with "Memory fault".
-        # See <https://hydra.nixos.org/build/2760931>, for instance.
-        #
-        # no darwin because gmp uses ASM that clang doesn't like
-        (lib.enableFeature (!stdenv.hostPlatform.isSunOS && stdenv.hostPlatform.isx86) "fat")
-        # The config.guess in GMP tries to runtime-detect various
-        # ARM optimization flags via /proc/cpuinfo (and is also
-        # broken on multicore CPUs). Avoid this impurity.
-        "--build=${stdenv.buildPlatform.config}"
-      ]
-      ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
-      ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
-      # to build a .dll on windows, we need --disable-static + --enable-shared
-      # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-      ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
-      ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
+    configureFlags = [
+      "--with-pic"
+      # gcc-15 have c23 standard by default, where "void foo()" now means "void foo(void)".
+      #
+      # The "configure" script relies on c17 and below semantics for "long long
+      # reliability test 1" (defined in aclocal.m4)
+      "CFLAGS=-std=c99"
+
+      (lib.enableFeature cxx "cxx")
+      # Build a "fat binary", with routines for several sub-architectures
+      # (x86), except on Solaris where some tests crash with "Memory fault".
+      # See <https://hydra.nixos.org/build/2760931>, for instance.
+      #
+      # no darwin because gmp uses ASM that clang doesn't like
+      (lib.enableFeature (!stdenv.hostPlatform.isSunOS && stdenv.hostPlatform.isx86) "fat")
+      # The config.guess in GMP tries to runtime-detect various
+      # ARM optimization flags via /proc/cpuinfo (and is also
+      # broken on multicore CPUs). Avoid this impurity.
+      "--build=${stdenv.buildPlatform.config}"
+    ]
+    ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
+    # to build a .dll on windows, we need --disable-static + --enable-shared
+    # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
+    ++ optional (!withStatic && stdenv.hostPlatform.isPE) "--disable-static --enable-shared";
 
     doCheck = true; # not cross;
 
@@ -73,13 +77,15 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://gmplib.org/";
       description = "GNU multiple precision arithmetic library";
-      license = with licenses; [
-        lgpl3Only
-        gpl2Only
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          lgpl3Plus
+          gpl2Plus
+        ];
 
       longDescription = ''
         GMP is a free library for arbitrary precision arithmetic, operating
@@ -103,8 +109,8 @@ let
         asymptotically faster algorithms.
       '';
 
-      platforms = platforms.all;
-      maintainers = [ ];
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ coolcuber ];
     };
   };
 in

@@ -1,27 +1,26 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
   curl,
-  pkg-config,
+  fetchFromGitHub,
+  lib,
   libgit2,
   openssl,
+  pkg-config,
+  rustPlatform,
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-codspeed";
-  version = "3.0.1";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
-    rev = "v${version}";
-    hash = "sha256-RlI4kfq9FS6f3o4mp6FF27S7ScK5oa61B+4+1f6XH1U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Zu5PltGimy+8JYTEh8fTflW/L4zTW94IKgldT5kzPjA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Fu3A9v8Q6wSG8zmhIjQdWhbL1ygeFjOPY9lbQGnXFI8=";
+  cargoHash = "sha256-hihwHbyNAJcl/mUy9obh2UDZfUA9Lq64c1TRZbUr+L0=";
 
   nativeBuildInputs = [
     curl
@@ -36,25 +35,32 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
   checkFlags = [
     # requires an extra dependency, blit
     "--skip=test_package_in_deps_build"
+
+    # requires criterion, which requires additional dependencies
+    "--skip=test_cargo_config_rustflags"
+
+    # requires additional dependencies
+    "--skip=test_criterion_build_and_run_filtered_by_name"
+    "--skip=test_criterion_build_and_run_filtered_by_name_single"
   ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/v${finalAttrs.version}";
     description = "Cargo extension to build & run your codspeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
-    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
     mainProgram = "cargo-codspeed";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

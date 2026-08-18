@@ -18,7 +18,6 @@ let
   plat = lib.elemAt info 1;
   hashes = {
     x86_64-linux = "sha512-xlbdx/fFQxilECdDiN80U+s+huBowo9Qf5tDIYwZ1z9gUCriNL0rMNDkvzUDL73BEI3WMFMqHdbi3cn7b5l9gA==";
-    x86_64-darwin = "sha512-hiTSp7lO/x6tBYiUgKglce39k/oxT4hUlTAoC50pYFiqANALAN+2E0HtZdvsMmrOn4aGLxh+SKVglMHfrGxr+g==";
     aarch64-linux = "sha512-MPrDfBMcwNCgWW8dpOeAtlz9Odfk/0z8i+Rn08hTp35kU849KdPQLTmexlvnf/jVwqfwzN2xWJtNF0sQO26pUA==";
     aarch64-darwin = "sha512-uq5VVwvbOX4Rv32iLFw+RalFPBxQqA+1hBjFw3svzOaD1caOOrGHD4lJVHFxsFw0xl//AZuSG7S3r7Eh9AmWvQ==";
   };
@@ -46,7 +45,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
   buildInputs = [
     jre_headless
@@ -82,17 +82,25 @@ stdenv.mkDerivation rec {
     enableUnfree = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.elastic20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      apeschar
+    license = lib.licenses.elastic20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       basvandijk
+    ];
+    knownVulnerabilities = [
+      "Elasticsearch 7 is EOL since January 15 2026"
+      "CVE-2026-63144"
+      "CVE-2026-56145"
+      "CVE-2026-63263"
+      "CVE-2026-56144"
+      "CVE-2026-63140"
+      "CVE-2026-63136"
     ];
   };
 }

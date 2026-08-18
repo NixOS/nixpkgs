@@ -6,14 +6,14 @@
   csvq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "csvq";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "mithrandie";
     repo = "csvq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1UK+LSMKryoUf2UWbGt8MU3zs5hH2WdpA2v/jBaIHYE=";
   };
 
@@ -21,15 +21,15 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = csvq;
-    version = "csvq version ${version}";
+    version = "csvq version ${finalAttrs.version}";
   };
 
   meta = {
     description = "SQL-like query language for CSV";
     mainProgram = "csvq";
     homepage = "https://mithrandie.github.io/csvq/";
-    changelog = "https://github.com/mithrandie/csvq/releases/tag/v${version}";
+    changelog = "https://github.com/mithrandie/csvq/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomodachi94 ];
   };
-}
+})

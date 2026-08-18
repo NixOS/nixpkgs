@@ -5,30 +5,36 @@
   installShellFiles,
   lib,
   stdenv,
+  nix-update-script,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "boring";
-  version = "0.11.5";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "alebeck";
     repo = "boring";
-    tag = finalAttrs.version;
-    hash = "sha256-s/mkC/6FvzytKJ9wpAIU36HhClGqEO0XFaAyErhD3Mo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Llc/zxra07DD3pxsUZGAKN2ltegCeTMTI/jSg76gn3U=";
   };
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorHash = "sha256-j8A0F+o3EnzJdge+T/gHAwRGwzC86oD6ddZejUs/C7o=";
+  subPackages = [ "cmd/boring" ];
+
+  vendorHash = "sha256-yjqJ7G9n3c1ABLWynswzLP7B6bSwH1dIYKfVZqJX30g=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X github.com/alebeck/boring/internal/buildinfo.Version=${finalAttrs.version}"
+    "-X github.com/alebeck/boring/internal/buildinfo.Commit=${
+      builtins.substring 0 5 finalAttrs.src.rev
+    }"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -38,10 +44,14 @@ buildGoModule (finalAttrs: {
       --zsh  <($out/bin/boring --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = boring;
-    command = "boring version";
-    version = "boring ${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = boring;
+      command = "boring version";
+      version = "boring ${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

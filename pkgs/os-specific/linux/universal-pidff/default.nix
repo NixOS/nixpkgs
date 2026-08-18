@@ -3,17 +3,18 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.1.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
     tag = version;
-    hash = "sha256-AlJIbu8xrlDXfEqzoMGyHsLLfHnBsyYcECdoU3XyE00=";
+    hash = "sha256-8kAoy2wcQbP6DOzSwp0Mg1aJ8R1ZQpc+OZfDUTEPHBo=";
   };
 
   postPatch = ''
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"

@@ -1,85 +1,136 @@
 {
-  argcomplete,
-  black,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  argcomplete,
+  black,
   genson,
-  graphql-core,
-  httpx,
   inflect,
   isort,
   jinja2,
-  lib,
-  openapi-spec-validator,
   packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
-  prance,
-  pytest-mock,
-  pytestCheckHook,
   pydantic,
   pyyaml,
-  toml,
+
+  # optional-dependencies
+  # debug:
+  pysnooper,
+  # graphql:
+  graphql-core,
+  # http:
+  httpx,
+  # protobuf:
+  grpcio-tools,
+  # ruff:
+  ruff,
+  # validation:
+  openapi-spec-validator,
+  prance,
+  # watch:
+  watchfiles,
+
+  # tests
+  email-validator,
+  hypothesis,
+  hypothesis-jsonschema,
+  inline-snapshot,
+  jsonschema,
+  msgspec,
+  pytest-mock,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datamodel-code-generator";
-  version = "0.26.5";
+  version = "0.71.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
-    tag = version;
-    hash = "sha256-CYNEpQFIWR7i7I7YJ5q/34KNhtQ7cjya97Z0fyeO5g8=";
+    tag = finalAttrs.version;
+    hash = "sha256-0vh/iynZzmMzvdUXNScb+JWANdSrzPLT1qt+jyKleg4=";
   };
 
-  pythonRelaxDeps = [
-    "inflect"
-    "isort"
-  ];
-
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     argcomplete
     black
     genson
-    graphql-core
-    httpx
     inflect
     isort
     jinja2
-    openapi-spec-validator
     packaging
     pydantic
     pyyaml
-    toml
   ];
+
+  optional-dependencies = lib.fix (self: {
+    debug = [ pysnooper ];
+    graphql = [ graphql-core ];
+    http = [ httpx ];
+    protobuf = [ grpcio-tools ];
+    ruff = [ ruff ];
+    validation = [
+      openapi-spec-validator
+      prance
+    ];
+    watch = [
+      watchfiles
+    ];
+  });
 
   nativeCheckInputs = [
-    freezegun
-    prance
+    email-validator
+    hypothesis
+    hypothesis-jsonschema
+    inline-snapshot
+    jsonschema
+    msgspec
     pytest-mock
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
-  ];
-
-  pythonImportsCheck = [ "datamodel_code_generator" ];
+    time-machine
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # remote testing, name resolution failure.
     "test_openapi_parser_parse_remote_ref"
+
+    # ruff formatting changed, causing errors such as
+    #   Failed: Output mismatch
+    #   AssertionError: Content mismatch for ...
+    "test_no_use_type_checking_imports"
+    "test_ruff_batch_formatting_directory"
+    "test_ruff_check_and_format_combined"
+    "test_ruff_check_only"
+    "test_type_checking_imports_default_to_runtime_imports_for_modular_pydantic_ruff"
   ];
+
+  pythonImportsCheck = [ "datamodel_code_generator" ];
 
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/koxudaxi/datamodel-code-generator";
+    changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "datamodel-code-generator";
   };
-}
+})

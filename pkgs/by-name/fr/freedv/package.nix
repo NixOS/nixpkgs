@@ -1,9 +1,13 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
+  autoconf,
+  automake,
+  libtool,
   cmake,
+  pkg-config,
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -15,24 +19,89 @@
   portaudio,
   speexdsp,
   hamlib_4,
-  wxGTK32,
-  sioclient,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  wxwidgets_3_2,
+  dbus,
+  apple-sdk_15,
   nix-update-script,
+  wget,
 }:
 
+let
+  codec2' = codec2.override { freedvSupport = true; };
+  ebur128Src = fetchFromGitHub {
+    owner = "jiixyj";
+    repo = "libebur128";
+    rev = "v1.2.6";
+    hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
+  };
+  opusSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "opus";
+    rev = "940d4e5af64351ca8ba8390df3f555484c567fbb";
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"
+      substituteInPlace autogen.sh \
+        --replace-fail 'dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"' ""
+    '';
+    hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
+  };
+  radaeSrc = fetchFromGitHub {
+    owner = "peterbmarks";
+    repo = "radae_nopy";
+    rev = "d72ec84e795493249db44d5939eb9b05438f956a";
+    hash = "sha256-ziEhYZarzQtQ1akAxF54kcX6o38gJeUJ08jipSWXnxQ=";
+  };
+  rnnoiseSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "rnnoise";
+    rev = "70f1d256acd4b34a572f999a05c87bf00b67730d";
+    nativeBuildInputs = [ wget ];
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      ./download_model.sh
+      substituteInPlace autogen.sh \
+        --replace-fail "./download_model.sh" ""
+    '';
+    hash = "sha256-t/AwOCuHb5Oahy1fDI3Sc9M08Xz3dSAavhYatRC1OIk=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "1.9.9.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
+    hash = "sha256-TjE/iYg+VFvbZH7/1q1V4t0SgcS44pLVet4Pgt6L5HA=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    cp -R ${ebur128Src} ebur128
+    cp -R ${radaeSrc} radae
+    cp -R ${rnnoiseSrc} rnnoise
+    chmod -R u+w ebur128 radae rnnoise
+    substituteInPlace cmake/BuildEbur128.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
+      --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
+      --replace-fail "git apply" "patch -p1 <"
+    substituteInPlace cmake/BuildRADE.cmake \
+      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
+      --replace-fail "GIT_REPOSITORY https://github.com/peterbmarks/radae_nopy/" "URL $(realpath radae)" \
+      --replace-fail "GIT_TAG main" ""
+    substituteInPlace cmake/BuildRNNoise.cmake \
+      --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath rnnoise)" \
+      --replace-fail "GIT_TAG main" ""
+    patchShebangs test/test_*.sh
+    substituteInPlace cmake/CheckGit.cmake \
+      --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
@@ -40,37 +109,66 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      macdylibbundler
-      makeWrapper
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (macdylibbundler.overrideAttrs {
+      # incompatible with darwin.sigtool in Nixpkgs
+      postPatch = ''
+        substituteInPlace src/Utils.cpp \
+          --replace-fail "--deep --preserve-metadata=entitlements,requirements,flags,runtime" ""
+      '';
+    })
+    makeWrapper
+    darwin.autoSignDarwinBinariesHook
+    darwin.sigtool
+  ];
 
   buildInputs = [
-    codec2
+    codec2'
     libsamplerate
     libsndfile
     lpcnet
     speexdsp
     hamlib_4
-    wxGTK32
-    sioclient
-  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
+    wxwidgets_3_2
+  ]
+  ++ (
+    if stdenv.hostPlatform.isLinux then
+      [
+        libpulseaudio
+        dbus
+      ]
+    else if stdenv.hostPlatform.isDarwin then
+      [
+        apple-sdk_15
+      ]
+    else
+      [
+        portaudio
+      ]
+  );
 
   cmakeFlags = [
     (lib.cmakeBool "USE_INTERNAL_CODEC2" false)
     (lib.cmakeBool "USE_STATIC_DEPS" false)
     (lib.cmakeBool "UNITTEST" true)
-    (lib.cmakeBool "USE_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "USE_NATIVE_AUDIO" (with stdenv.hostPlatform; isLinux || isDarwin))
   ];
 
-  doCheck = true;
+  env.NIX_CFLAGS_COMPILE = "-I${codec2'.src}/src";
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  doCheck = false;
+
+  postInstall = ''
+    install -Dm755 rade_build/src/librade.* -t $out/lib
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/FreeDV.app $out/Applications
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv

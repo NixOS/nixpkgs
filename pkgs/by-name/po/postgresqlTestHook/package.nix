@@ -1,7 +1,7 @@
 {
   callPackage,
   makeSetupHook,
-  stdenv,
+  lib,
 }:
 
 makeSetupHook {
@@ -9,6 +9,9 @@ makeSetupHook {
   passthru.tests = {
     simple = callPackage ./test.nix { };
   };
-  # See comment in postgresql's generic.nix doInstallCheck section.
-  meta.broken = stdenv.hostPlatform.isDarwin;
+  meta = {
+    # See comment in postgresql's generic.nix doInstallCheck section.
+    badPlatforms = lib.platforms.darwin;
+    license = lib.licenses.mit;
+  };
 } ./postgresql-test-hook.sh

@@ -4,20 +4,20 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-doc";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "pseudomuto";
     repo = "protoc-gen-doc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-19CN62AwqQGq5Gb5kQqVYhs+LKsJ9K2L0VAakwzPD5Y=";
   };
 
   vendorHash = "sha256-K0rZBERSKob5ubZW28QpbcPhgFKOOASkd9UyC9f8gyQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Documentation generator plugin for Google Protocol Buffers";
     mainProgram = "protoc-gen-doc";
     longDescription = ''
@@ -29,7 +29,7 @@ buildGoModule rec {
       context.
     '';
     homepage = "https://github.com/pseudomuto/protoc-gen-doc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

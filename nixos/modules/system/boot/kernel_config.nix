@@ -6,7 +6,7 @@ let
     locs: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    else if any (x: x == false) (getValues defs) then
+    else if elem false (getValues defs) then
       false
     else
       true;
@@ -29,9 +29,7 @@ let
       };
 
       freeform = mkOption {
-        type = types.nullOr types.str // {
-          merge = mergeEqualOption;
-        };
+        type = types.nullOr types.str;
         default = null;
         example = ''MMC_BLOCK_MINORS.freeform = "32";'';
         description = ''

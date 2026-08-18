@@ -7,17 +7,15 @@
   writeText,
 }:
 
-# resholve does not yet support `finalAttrs` call pattern hence `rec`
-# https://github.com/abathur/resholve/issues/107
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "nix-direnv";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = version;
-    hash = "sha256-HdnQRcysoKNPbVa/D3KDcLgqf5+u9JDPmcl29cGj4AI=";
+    tag = finalAttrs.version;
+    hash = "sha256-dNJeSRuuqA2avtLpTse7mTTmnYdVnC5BxRsofuLXiqE=";
   };
 
   installPhase = ''
@@ -70,6 +68,7 @@ resholve.mkDerivation rec {
   meta = {
     description = "Fast, persistent use_nix implementation for direnv";
     homepage = "https://github.com/nix-community/nix-direnv";
+    changelog = "https://github.com/nix-community/nix-direnv/releases/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -77,4 +76,4 @@ resholve.mkDerivation rec {
       bbenne10
     ];
   };
-}
+})

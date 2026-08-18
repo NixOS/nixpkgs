@@ -3,6 +3,7 @@
   lib,
   undmg,
   fetchurl,
+  makeWrapper,
 }:
 stdenv.mkDerivation rec {
   pname = "Skim";
@@ -14,24 +15,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-0IfdLeH6RPxf4OZWnNltN7tvvZWbWDQaMCmazd4UUi4=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [
+    undmg
+    makeWrapper
+  ];
 
   sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -R Skim.app $out/Applications
+    for app in displayline skimnotes skimpdf; do
+      makeWrapper $out/Applications/Skim.app/Contents/SharedSupport/$app $out/bin/$app
+    done
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Skim is a PDF reader and note-taker for OS X";
+  meta = {
+    description = "PDF reader and note-taker for macOS";
     homepage = "https://skim-app.sourceforge.io/";
-    license = licenses.bsd0;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd0;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "Skim.app";
-    maintainers = with maintainers; [ YvesStraten ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ YvesStraten ];
+    platforms = lib.platforms.darwin;
   };
 }

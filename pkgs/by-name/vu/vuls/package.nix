@@ -1,28 +1,28 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "vuls";
-  version = "0.33.1";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
-    tag = "v${version}";
-    hash = "sha256-djs4bhdicZFDETw3tLoks7KKjLh/o6Z6Ivzw0I/VxH8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IWCdSejQvVu3vkekanuGByKNGmtnhuG8DKBwbGciHi0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-1W6xI6rRyaSfryNZSGhgHULotZ42lPsDt27KVzFEhog=";
+  vendorHash = "sha256-Whxh5xtM+WCd/ynqqm3hutx69sLKnZqaTZJwtlFt7Tk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/future-architect/vuls/config.Version=${version}"
-    "-X=github.com/future-architect/vuls/config.Revision=${src.rev}-1970-01-01T00:00:00Z"
+    "-X=github.com/future-architect/vuls/config.Version=${finalAttrs.version}"
+    "-X=github.com/future-architect/vuls/config.Revision=${finalAttrs.src.rev}-1970-01-01T00:00:00Z"
   ];
 
   postFixup = ''
@@ -32,9 +32,9 @@ buildGo124Module rec {
   meta = {
     description = "Agent-less vulnerability scanner";
     homepage = "https://github.com/future-architect/vuls";
-    changelog = "https://github.com/future-architect/vuls/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/future-architect/vuls/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vuls";
   };
-}
+})

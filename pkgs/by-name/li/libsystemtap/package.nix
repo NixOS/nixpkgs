@@ -7,14 +7,14 @@
   elfutils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsystemtap";
-  version = "5.2";
+  version = "5.5";
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
-    rev = "release-5.2";
-    hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-olN98hjIYZmQvI7Fn1v5ZwRl7yaCAPRGr2g33oMq7VQ=";
   };
 
   dontBuild = true;
@@ -35,12 +35,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Statically defined probes development files";
     homepage = "https://sourceware.org/systemtap/";
-    license = licenses.bsd3;
-    platforms = elfutils.meta.platforms or platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = elfutils.meta.platforms or lib.platforms.unix;
     badPlatforms = elfutils.meta.badPlatforms or [ ];
     maintainers = [ lib.maintainers.workflow ];
   };
-}
+})

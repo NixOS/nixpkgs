@@ -9,39 +9,40 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.4.1";
+  version = "8.7.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eutlnIHOcRnucgFDwJIheTPXA7avqvp4H0xUX2Cv2z8=";
+    hash = "sha256-BPU+Kzx7AJRy1aL4QjcUQeLxGpy2lzUF7YoZY/FQEA4=";
   };
 
-  projectFile = "Recyclarr.sln";
+  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
   nugetDeps = ./deps.json;
 
-  prePatch = ''
-    substituteInPlace src/Recyclarr.Cli/Console/CliSetup.cs \
-      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
-
-    substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
-      --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
-
-    substituteInPlace Recyclarr.sln \
-      --replace-fail ".config\dotnet-tools.json = .config\dotnet-tools.json" ""
+  postPatch = ''
+    cat > src/Recyclarr.Core/GitVersionInformation.g.cs <<'EOF'
+    public static class GitVersionInformation
+    {
+        public static string SemVer => "${finalAttrs.version}";
+        public static string FullBuildMetaData => "nixpkgs";
+        public static string InformationalVersion => "${finalAttrs.version}+nixpkgs";
+        public static int Major => ${lib.versions.major finalAttrs.version};
+    }
+    EOF
 
     rm .config/dotnet-tools.json
   '';
-  patches = [ ./001-Git-Version.patch ];
-
-  enableParallelBuilding = false;
 
   doCheck = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
-  dotnet-test-sdk = dotnetCorePackages.sdk_9_0;
+  dotnetBuildFlags = [
+    "-p:DisableGitVersionTask=true"
+  ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
@@ -55,7 +56,11 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''RECYCLARR_CONFIG_DIR="$TMPDIR/recyclarr" recyclarr --version'';
+      version = "v${finalAttrs.version}";
+    };
   };
 
   meta = {

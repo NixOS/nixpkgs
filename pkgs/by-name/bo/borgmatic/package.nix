@@ -13,14 +13,17 @@
   testers,
   nixosTests,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "borgmatic";
-  version = "2.0.6";
-  format = "pyproject";
+  version = "2.1.6";
+  pyproject = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yxAtD7sKOo0voE8BvfL0HGsnP0L2sc1f0UgXBNt/aQU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Mgx8PnGfTa5j6+53RVntPHa5EDJAY2NQC3fvmyRj24Y=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -30,36 +33,52 @@ python3Packages.buildPythonApplication rec {
     [
       flexmock
       pytestCheckHook
+      pytest-asyncio
       pytest-cov-stub
+      pytest-timeout
     ]
-    ++ optional-dependencies.apprise;
+    ++ finalAttrs.passthru.optional-dependencies.apprise
+    ++ finalAttrs.passthru.optional-dependencies.browse;
 
   # - test_borgmatic_version_matches_news_version
-  # The file NEWS not available on the pypi source, and this test is useless
+  #   NEWS file is available on the pypi source, but the test requires a
+  #   borgmatic executable. Which it can't find in difference to all the
+  #   other tests.
+  # - test_log_outputs_includes_error_output_in_exception
+  #   TOCTOU race in log_outputs(): process.poll() returns None in
+  #   raise_for_process_errors but non-None in the while-loop exit check,
+  #   so the error is never raised. Timing-dependent; fails on x86_64-darwin.
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
+    "test_log_outputs_includes_error_output_in_exception"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     borgbackup
     colorama
     jsonschema
     packaging
     requests
     ruamel-yaml
-    setuptools
   ];
 
   optional-dependencies = {
     apprise = [ python3Packages.apprise ];
+    browse = with python3Packages; [
+      binaryornot
+      textual
+    ];
   };
 
   postInstall =
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
-        --bash <($out/bin/borgmatic --bash-completion)
+        --bash <($out/bin/borgmatic --bash-completion) \
+        --fish <($out/bin/borgmatic --fish-completion)
     ''
     + lib.optionalString enableSystemd ''
       mkdir -p $out/lib/systemd/system
@@ -67,10 +86,10 @@ python3Packages.buildPythonApplication rec {
       # there is another "sleep", so choose the one with the space after it
       # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
       substitute sample/systemd/borgmatic.service \
-                 $out/lib/systemd/system/borgmatic.service \
-                 --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-                 --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-                 --replace "sleep " "${coreutils}/bin/sleep "
+        $out/lib/systemd/system/borgmatic.service \
+        --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+        --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+        --replace-fail "sleep " "${coreutils}/bin/sleep "
     '';
 
   passthru.tests = {
@@ -83,6 +102,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
+    changelog = "https://projects.torsion.org/borgmatic-collective/borgmatic/src/tag/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     mainProgram = "borgmatic";
@@ -91,4 +111,4 @@ python3Packages.buildPythonApplication rec {
       x123
     ];
   };
-}
+})

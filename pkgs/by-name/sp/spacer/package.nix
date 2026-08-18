@@ -4,26 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacer";
-  version = "0.3.9";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "samwho";
     repo = "spacer";
-    rev = "v${version}";
-    hash = "sha256-8c8l8SJlh3z8spembPavO4fhzPcpCfaZVvU8dl3PUTc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OryVQmecb8BgnEKeSvAQha+uiv+aZd2Q41T9tZTcWaI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WNqzOZ38ogeeEYB6B58+C2VptJ/HNj5+DpWvvHBhTAQ=";
+  cargoHash = "sha256-sFsERAvR99BZm7SmaL/5cmCrwVZIKGRiFYcBtSryFaw=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to insert spacers when command output stops";
     homepage = "https://github.com/samwho/spacer";
-    changelog = "https://github.com/samwho/spacer/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/samwho/spacer/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "spacer";
   };
-}
+})

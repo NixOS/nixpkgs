@@ -1,60 +1,235 @@
 {
   lib,
+  stdenv,
+  bun,
+  darwin,
   fetchFromGitHub,
-  buildGoModule,
-  versionCheckHook,
+  makeBinaryWrapper,
+  models-dev,
+  nodejs,
   nix-update-script,
+  ripgrep,
+  sysctl,
+  installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
+let
+  node_modules =
+    finalAttrs:
+    stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
 
-buildGoModule (finalAttrs: {
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
+
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
+
+      dontConfigure = true;
+
+      buildPhase = ''
+        runHook preBuild
+
+        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        bun install \
+          --cpu="*" \
+          --frozen-lockfile \
+          --filter ./ \
+          --filter ./packages/app \
+          --filter ./packages/desktop \
+          --filter ./packages/opencode \
+          --filter ./packages/shared \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
+
+        bun --bun ./nix/scripts/canonicalize-node-modules.ts
+        bun --bun ./nix/scripts/normalize-bun-binaries.ts
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+        # opencode targets only Linux and Darwin (see meta.platforms), so the
+        # Windows executables that "bun install --os=*" fetches are never
+        # executed. Dropping them keeps the output reproducible on hosts whose
+        # security endpoint agents scan the store, and removes the vulnerable
+        # bundled 7za.exe that will be quarantined.
+        find $out -type f -name '*.exe' -delete
+
+        runHook postInstall
+      '';
+
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
+
+      outputHash = "sha256-oU7qWOsY2TtVE+Gp2DhSXffm9OghTHcNhzDwwAovwZI=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.0.52";
+  version = "1.18.18";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wniGu8EXOI2/sCI7gv2luQgODRdes7tt1CoJ6Gs09ig=";
+    hash = "sha256-rDVcv8j9KghTDwooPYriTloOMgTyVutud7xKLG2mTmk=";
   };
 
-  vendorHash = "sha256-pnev0o2/jirTqG67amCeI49XUdMCCulpGq/jYqGqzRY=";
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail \
+        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    # Skip smoke test
+    + ''
+      substituteInPlace packages/opencode/script/build.ts \
+        --replace-fail \
+        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
+        'if (false)'
+    '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/sst/opencode/internal/version.Version=${finalAttrs.version}"
+  nativeBuildInputs = [
+    bun
+    nodejs
+    installShellFiles
+    makeBinaryWrapper
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
-  checkFlags =
-    let
-      skippedTests = [
-        # permission denied
-        "TestBashTool_Run"
-        "TestSourcegraphTool_Run"
-        "TestLsTool_Run"
+  configurePhase = ''
+    runHook preConfigure
 
-        # Difference with snapshot
-        "TestGetContextFromPaths"
-      ];
-    in
-    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+    cp -R ${finalAttrs.passthru.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
 
-  nativeCheckInputs = [
+    runHook postConfigure
+  '';
+
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_DISABLE_MODELS_FETCH = true;
+  env.OPENCODE_VERSION = finalAttrs.version;
+  env.OPENCODE_CHANNEL = "stable";
+
+  buildPhase = ''
+    runHook preBuild
+
+    cd ./packages/opencode
+    bun --bun ./script/build.ts --single --skip-install
+    bun --bun ./script/schema.ts config.json tui.json
+    substituteInPlace config.json \
+      --replace-fail "https://models.dev/model-schema.json" \
+                     "file://$out/share/model-schema.json"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    wrapProgram $out/bin/opencode \
+     --prefix PATH : ${
+       lib.makeBinPath (
+         [
+           ripgrep
+         ]
+         ++ lib.optionals stdenv.hostPlatform.isDarwin [
+           sysctl
+         ]
+       )
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
+
+    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 tui.json $out/share/tui.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
+
+    runHook postInstall
+  '';
+
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      codesign --force --sign - $out/bin/.opencode-wrapped
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd opencode \
+        --bash <($out/bin/opencode completion) \
+        --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+    '';
+
+  dontStrip = true;
+
+  nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "OPENCODE_DISABLE_MODELS_FETCH"
   ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
+      tui = "${finalAttrs.finalPackage}/share/tui.json";
+    };
+    node_modules = node_modules finalAttrs;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+  };
 
   meta = {
-    description = "Powerful terminal-based AI assistant providing intelligent coding assistance";
-    homepage = "https://github.com/sst/opencode";
-    changelog = "https://github.com/sst/opencode/releases/tag/v${finalAttrs.version}";
-    mainProgram = "opencode";
+    description = "AI coding agent built for the terminal";
+    homepage = "https://github.com/anomalyco/opencode";
+    changelog = "https://github.com/anomalyco/opencode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      zestsystem
+      delafthi
+      DuskyElf
+      graham33
     ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
+    mainProgram = "opencode";
   };
 })

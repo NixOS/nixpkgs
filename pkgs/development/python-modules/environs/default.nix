@@ -9,26 +9,23 @@
   marshmallow,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "environs";
-  version = "14.2.0";
+  version = "15.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";
-    tag = version;
-    hash = "sha256-2JmoLhKqvX927e64qMIv+YAK7WJR+O/8nKvgaT9AQm8=";
+    tag = finalAttrs.version;
+    hash = "sha256-t3T31kI2Bh5biJrIzHJXJpEXWps9cLQRnlTZYKwtAtA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     marshmallow
     python-dotenv
   ];
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environs" ];
 
-  meta = with lib; {
-    description = "Python modle for environment variable parsing";
+  meta = {
+    description = "Python module for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
-    changelog = "https://github.com/sloria/environs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sloria/environs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

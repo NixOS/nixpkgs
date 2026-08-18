@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "particle-cli";
-  version = "3.37.0";
+  version = "3.45.0";
 
   src = fetchFromGitHub {
     owner = "particle-iot";
     repo = "particle-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TMyXCTyihUBP2emY0UzedHAsO945eWJ7w7relP7wBaU=";
+    hash = "sha256-Hq2flUBStEouVEhYI25fNFK9ohvHfk792vlPa7b3DRA=";
   };
 
-  npmDepsHash = "sha256-4PeHMhzcCcXFNV0cS0JVAvpkMyo2w6RDmlIO2/MRy8k=";
+  npmDepsHash = "sha256-rHT8ZLBe3uO1NxrbVBdrh0fn9gvBVq4XE8Gfhcshq/E=";
 
   buildInputs = [
     udev
@@ -25,10 +25,6 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
   dontNpmPrune = true;
-
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
 
   postInstall = ''
     install -D -t $out/etc/udev/rules.d \

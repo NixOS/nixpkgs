@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   lib = pkgs.lib;
-  qemu-common = import ../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   mkStartCommand =
     {
@@ -23,41 +23,40 @@ let
     let
       qemu = qemu-common.qemuBinary pkgs.qemu_test;
 
-      flags =
-        [
-          "-m"
-          (toString memory)
-          "-netdev"
-          ("user,id=net0" + (lib.optionalString (pxe != null) ",tftp=${pxe},bootfile=netboot.ipxe"))
-          "-device"
-          (
-            "virtio-net-pci,netdev=net0"
-            + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
-          )
-        ]
-        ++ lib.optionals (cdrom != null) [
-          "-cdrom"
-          cdrom
-        ]
-        ++ lib.optionals (usb != null) [
-          "-device"
-          "usb-ehci"
-          "-drive"
-          "id=usbdisk,file=${usb},if=none,readonly"
-          "-device"
-          "usb-storage,drive=usbdisk"
-        ]
-        ++ lib.optionals (pxe != null) [
-          "-boot"
-          "order=n"
-        ]
-        ++ lib.optionals uefi [
-          "-drive"
-          "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
-          "-drive"
-          "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
-        ]
-        ++ extraFlags;
+      flags = [
+        "-m"
+        (toString memory)
+        "-netdev"
+        ("user,id=net0" + (lib.optionalString (pxe != null) ",tftp=${pxe},bootfile=netboot.ipxe"))
+        "-device"
+        (
+          "virtio-net-pci,netdev=net0"
+          + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
+        )
+      ]
+      ++ lib.optionals (cdrom != null) [
+        "-cdrom"
+        cdrom
+      ]
+      ++ lib.optionals (usb != null) [
+        "-device"
+        "usb-ehci"
+        "-drive"
+        "id=usbdisk,file=${usb},if=none,readonly"
+        "-device"
+        "usb-storage,drive=usbdisk"
+      ]
+      ++ lib.optionals (pxe != null) [
+        "-boot"
+        "order=n"
+      ]
+      ++ lib.optionals uefi [
+        "-drive"
+        "if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware}"
+        "-drive"
+        "if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
+      ]
+      ++ extraFlags;
 
       flagsStr = lib.concatStringsSep " " flags;
     in
@@ -204,11 +203,26 @@ in
     makeTest {
       name = "boot-uboot-extlinux";
       nodes = { };
-      testScript = ''
-        import os
+      testScript = /* py */ ''
+        import subprocess
 
         # Create a mutable linked image backed by the read-only SD image
-        if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
+        if (
+            subprocess.run(
+                [
+                    "${pkgs.qemu}/bin/qemu-img",
+                    "create",
+                    "-f",
+                    "qcow2",
+                    "-F",
+                    "raw",
+                    "-b",
+                    "${sdImage}",
+                    "${mutableImage}",
+                ]
+            ).returncode
+            != 0
+        ):
             raise RuntimeError("Could not create mutable linked image")
 
         machine = create_machine("${startCommand}")

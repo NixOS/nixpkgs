@@ -14,6 +14,7 @@
 
 let
   inherit (lib)
+    catAttrs
     concatMapStringsSep
     concatStrings
     escape
@@ -128,7 +129,7 @@ rec {
     # Type
 
     ```
-    mkValue :: Any -> gvariant
+    mkValue :: Any -> GVariant
     ```
   */
   mkValue =
@@ -150,7 +151,7 @@ rec {
         ) intConstructors;
       in
       throw ''
-        The GVariant type for number “${builtins.toString v}” is unclear.
+        The GVariant type for number “${toString v}” is unclear.
         Please wrap the value with one of the following, depending on the value type in GSettings schema:
 
         ${lib.concatMapStringsSep "\n" (
@@ -174,7 +175,7 @@ rec {
     # Type
 
     ```
-    mkArray :: [Any] -> gvariant
+    mkArray :: [Any] -> GVariant
     ```
 
     # Examples
@@ -191,10 +192,15 @@ rec {
   mkArray =
     elems:
     let
-      vs = map mkValue (lib.throwIf (elems == [ ]) "Please create empty array with mkEmptyArray." elems);
-      elemType = lib.throwIfNot (lib.all (t: (head vs).type == t) (
-        map (v: v.type) vs
-      )) "Elements in a list should have same type." (head vs).type;
+      vs = map mkValue (
+        if elems == [ ] then throw "Please create empty array with mkEmptyArray." else elems
+      );
+      firstType = (head vs).type;
+      elemType =
+        if lib.any (v: v.type != firstType) vs then
+          throw "Elements in a list should have same type."
+        else
+          firstType;
     in
     mkPrimitive (type.arrayOf elemType) vs
     // {
@@ -213,7 +219,7 @@ rec {
     # Type
 
     ```
-    mkEmptyArray :: gvariant.type -> gvariant
+    mkEmptyArray :: GVariantType -> GVariant
     ```
 
     # Examples
@@ -247,7 +253,7 @@ rec {
     # Type
 
     ```
-    mkVariant :: Any -> gvariant
+    mkVariant :: Any -> GVariant
     ```
 
     # Examples
@@ -289,7 +295,7 @@ rec {
     # Type
 
     ```
-    mkDictionaryEntry :: String -> Any -> gvariant
+    mkDictionaryEntry :: String -> Any -> GVariant
     ```
 
     # Examples
@@ -335,7 +341,7 @@ rec {
     # Type
 
     ```
-    mkMaybe :: gvariant.type -> Any -> gvariant
+    mkMaybe :: GVariantType -> Any -> GVariant
     ```
   */
   mkMaybe =
@@ -358,7 +364,7 @@ rec {
     # Type
 
     ```
-    mkNothing :: gvariant.type -> gvariant
+    mkNothing :: GVariantType -> GVariant
     ```
   */
   mkNothing = elemType: mkMaybe elemType null;
@@ -375,7 +381,7 @@ rec {
     # Type
 
     ```
-    mkJust :: Any -> gvariant
+    mkJust :: Any -> GVariant
     ```
   */
   mkJust =
@@ -397,14 +403,14 @@ rec {
     # Type
 
     ```
-    mkTuple :: [Any] -> gvariant
+    mkTuple :: [Any] -> GVariant
     ```
   */
   mkTuple =
     elems:
     let
       gvarElems = map mkValue elems;
-      tupleType = type.tupleOf (map (e: e.type) gvarElems);
+      tupleType = type.tupleOf (catAttrs "type" gvarElems);
     in
     mkPrimitive tupleType gvarElems
     // {
@@ -423,7 +429,7 @@ rec {
     # Type
 
     ```
-    mkBoolean :: Bool -> gvariant
+    mkBoolean :: Bool -> GVariant
     ```
   */
   mkBoolean =
@@ -445,7 +451,7 @@ rec {
     # Type
 
     ```
-    mkString :: String -> gvariant
+    mkString :: String -> GVariant
     ```
   */
   mkString =
@@ -470,7 +476,7 @@ rec {
     # Type
 
     ```
-    mkObjectpath :: String -> gvariant
+    mkObjectpath :: String -> GVariant
     ```
   */
   mkObjectpath =
@@ -486,7 +492,7 @@ rec {
     # Type
 
     ```
-    mkUchar :: Int -> gvariant
+    mkUchar :: Int -> GVariant
     ```
   */
   mkUchar = mkPrimitive type.uchar;
@@ -497,7 +503,7 @@ rec {
     # Type
 
     ```
-    mkInt16 :: Int -> gvariant
+    mkInt16 :: Int -> GVariant
     ```
   */
   mkInt16 = mkPrimitive type.int16;
@@ -508,7 +514,7 @@ rec {
     # Type
 
     ```
-    mkUint16 :: Int -> gvariant
+    mkUint16 :: Int -> GVariant
     ```
   */
   mkUint16 = mkPrimitive type.uint16;
@@ -525,7 +531,7 @@ rec {
     # Type
 
     ```
-    mkInt32 :: Int -> gvariant
+    mkInt32 :: Int -> GVariant
     ```
   */
   mkInt32 =
@@ -541,7 +547,7 @@ rec {
     # Type
 
     ```
-    mkUint32 :: Int -> gvariant
+    mkUint32 :: Int -> GVariant
     ```
   */
   mkUint32 = mkPrimitive type.uint32;
@@ -552,7 +558,7 @@ rec {
     # Type
 
     ```
-    mkInt64 :: Int -> gvariant
+    mkInt64 :: Int -> GVariant
     ```
   */
   mkInt64 = mkPrimitive type.int64;
@@ -563,7 +569,7 @@ rec {
     # Type
 
     ```
-    mkUint64 :: Int -> gvariant
+    mkUint64 :: Int -> GVariant
     ```
   */
   mkUint64 = mkPrimitive type.uint64;
@@ -580,7 +586,7 @@ rec {
     # Type
 
     ```
-    mkDouble :: Float -> gvariant
+    mkDouble :: Float -> GVariant
     ```
   */
   mkDouble =

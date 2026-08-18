@@ -1,47 +1,62 @@
 {
   lib,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
+  copyDesktopItems,
   pkg-config,
-  wayland,
-  openssl,
   glib,
   gtk3,
+  openssl,
+  wayland,
   xdotool,
-  libayatana-appindicator,
   makeDesktopItem,
-  copyDesktopItems,
+  libayatana-appindicator,
+  imagemagick,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "windsend-rs";
-  version = "1.5.4";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
-    tag = "v${version}";
-    hash = "sha256-A0cmjllyhKkYsMyjeuuMCax0uVnaDp9OwJPY7peDjPM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B66JvMRAJcudS/yqYwS9KJBMqOOgKcPVolqKQHVurqg=";
   };
 
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-p2KwwYcXsF0xRHABW0sYCC0fagEGLYzef/f37w3hpcY=";
 
-  cargoHash = "sha256-9zuD3korJGIcarBV0bSSV/g/Q0niWAMqgRfwpPXCuBU=";
-
-  sourceRoot = "${src.name}/windSend-rs";
+  sourceRoot = "${finalAttrs.src.name}/windSend-rs";
 
   nativeBuildInputs = [
-    pkg-config
     copyDesktopItems
+    pkg-config
+    imagemagick
   ];
 
   buildInputs = [
-    wayland
-    openssl
     glib
     gtk3
+    openssl
+    wayland
     xdotool
+  ];
+
+  checkFlags = [
+    # need x11 server
+    "--skip=route::sync_session::tests::idle_transport_sends_single_heartbeat_probe"
+    "--skip=route::sync_session::tests::out_of_order_event_is_rejected_with_protocol_close"
+    "--skip=route::sync_session::tests::peer_close_releases_session_instead_of_detaching"
+    "--skip=route::sync_session::tests::resume_after_disconnect_replays_detached_queue"
+    "--skip=route::sync_session::tests::slow_partial_inbound_frame_does_not_trip_peer_silence_timeout"
+    "--skip=sync::clipboard_event_hub::tests::remote_applies_update_baseline_without_fan_out"
+    "--skip=sync::clipboard_event_hub::tests::semantic_duplicates_are_not_fanned_out_twice"
+    "--skip=sync::session_registry::tests::detached_session_keeps_fan_out_queue_until_ttl_expires"
+    "--skip=sync::session_registry::tests::resume_attach_rejects_expired_sessions"
+    "--skip=sync::session_registry::tests::resume_attach_rotates_token_bumps_generation_and_applies_resume_ack"
+    "--skip=sync::session_registry::tests::start_attach_rejects_duplicate_session_ids"
   ];
 
   desktopItems = [
@@ -54,7 +69,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm644 icon-192.png $out/share/pixmaps/windsend-rs.png
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    magick icon-192.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/windsend-rs.png
   '';
 
   postFixup = ''
@@ -67,8 +83,8 @@ rustPlatform.buildRustPackage rec {
     description = "Quickly and securely sync clipboard, transfer files and directories between devices";
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "wind_send";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

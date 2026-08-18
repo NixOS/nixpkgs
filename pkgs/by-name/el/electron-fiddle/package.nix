@@ -1,60 +1,69 @@
 {
   buildFHSEnv,
-  electron_33,
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
+  electron,
   git,
   lib,
   makeDesktopItem,
-  nodejs_20,
+  nodejs,
   stdenvNoCC,
   util-linux,
-  yarnBuildHook,
-  yarnConfigHook,
+  yarn-berry_4,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.36.5";
-  electron = electron_33;
-  nodejs = nodejs_20;
+  version = "0.40.1";
+  yarn-berry = yarn-berry_4;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     tag = "v${version}";
-    hash = "sha256-Fo7rXnufJ26WijnplWswdeCGJitkvTDboOggUfrz1Hw=";
+    hash = "sha256-nmmj1PvW9LOoEdwwWRRXe9q9J8z6Fp45Tt038BjWD+k=";
   };
 
-  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
-  # from the network and has no stable hash.  Grab an old version from
-  # the repository.
-  releasesJson = fetchurl {
-    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
-    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
-  };
+  patches = [
+    ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+
+    # https://github.com/nixos/nixpkgs/issues/542343
+    ./yarn-metadata-version.patch
+  ];
+
+  missingHashes = ./missing-hashes.json;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src;
+    inherit
+      version
+      src
+      patches
+      missingHashes
+      ;
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-eZ/g2cP6M0zWhF14go0sIC+UuzTo9Gl4KsPBGzJU3FQ=";
+    offlineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src patches missingHashes;
+      hash = "sha256-xxguRiyZDGdVt3eYh+KUI/odLZZ/LeScRBfexMxAOVI=";
     };
 
     nativeBuildInputs = [
       git
       nodejs
       util-linux
-      yarnBuildHook
-      yarnConfigHook
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
       zip
     ];
 
-    preBuild = ''
+    buildPhase = ''
+      runHook preBuild
+
       # electron files need to be writable on Darwin
       cp -r ${electron.dist} electron-dist
       chmod -R u+w electron-dist
@@ -67,12 +76,15 @@ let
 
       # force @electron/packager to use our electron instead of downloading it, even if it is a different version
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
-          --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+        --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
 
-      ln -s ${releasesJson} static/releases.json
+      node --run package
+
+      runHook postBuild
     '';
 
-    yarnBuildScript = "package";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
 
     installPhase = ''
       runHook preInstall
@@ -105,7 +117,9 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
+  passthru = { inherit unwrapped; };
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -138,28 +152,28 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libxcursor
+      libxi
+      libxrender
+      libxtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid
@@ -167,19 +181,16 @@ buildFHSEnv {
       # for running Electron before 4.0.0 inside
       fontconfig
 
-      # for running Electron before 3.0.0 inside
-      gnome2.GConf
-
-      # Electron 2.0.8 is the earliest working version, due to
-      # https://github.com/electron/electron/issues/13972
+      # Electron 3.0.0 is the earliest working version, since GConf was removed
+      # from Nixpkgs
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron-fiddle";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       andersk
       tomasajt
     ];

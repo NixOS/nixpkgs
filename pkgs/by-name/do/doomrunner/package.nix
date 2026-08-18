@@ -1,47 +1,61 @@
 {
   lib,
   stdenv,
-  kdePackages,
+  qt6,
+  minizip,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomrunner";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "Youda008";
     repo = "DoomRunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5kj2Z3QW29kOw2khET6Z4E9nFBBjNTgKw2xbCQrWKY=";
+    hash = "sha256-jEXY0RoSKLE3fpdAygyUahaLRlz4X8Xnq+talZwrSRM=";
   };
 
-  buildInputs = [ kdePackages.qtbase ];
+  buildInputs = [
+    minizip
+    qt6.qtbase
+  ];
 
   nativeBuildInputs = [
-    kdePackages.qmake
-    kdePackages.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
 
   makeFlags = [
     "INSTALL_ROOT=${placeholder "out"}"
   ];
 
-  postInstall = ''
-    mkdir -p $out/{bin,share/applications,share/icons/hicolor/128x128/apps}
-    install -Dm444 $src/Install/XDG/DoomRunner.128x128.png $out/share/icons/hicolor/128x128/apps/DoomRunner.png
-    install -Dm444 $src/Install/XDG/DoomRunner.desktop $out/share/applications/DoomRunner.desktop
-    install -Dm755 $out/usr/bin/DoomRunner $out/bin/DoomRunner
-    rm -rf $out/usr
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/usr/bin/DoomRunner.app $out/Applications/
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir -p $out/{bin,share/applications,share/icons/hicolor/128x128/apps}
+      install -Dm444 $src/Install/XDG/DoomRunner.128x128.png $out/share/icons/hicolor/128x128/apps/DoomRunner.png
+      install -Dm444 $src/Install/XDG/DoomRunner.desktop $out/share/applications/DoomRunner.desktop
+      install -Dm755 $out/usr/bin/DoomRunner $out/bin/DoomRunner
+    ''
+    + ''
+      rm -rf $out/usr
+    '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Preset-oriented graphical launcher of various ported Doom engines";
-    mainProgram = "DoomRunner";
-    homepage = "https://github.com/Youda008/DoomRunner";
     changelog = "https://github.com/Youda008/DoomRunner/blob/${finalAttrs.src.rev}/changelog.txt";
+    description = "Preset-oriented graphical launcher of various ported Doom engines";
+    homepage = "https://github.com/Youda008/DoomRunner";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.all;
+    mainProgram = "DoomRunner";
     maintainers = with lib.maintainers; [ keenanweaver ];
+    platforms = lib.platforms.all;
   };
 })

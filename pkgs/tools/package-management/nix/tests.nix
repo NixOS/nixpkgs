@@ -36,9 +36,12 @@
               fi
             ''
           else
-            # exact match
+            # Match base version, ignoring +suffix (which comes from patches)
             ''
-              if [ "$version" != "$srcVersion" ]; then
+              stripSuffix() {
+                echo "$1" | sed 's/+.*//'
+              }
+              if [ "$(stripSuffix "$version")" != "$(stripSuffix "$srcVersion")" ]; then
                 echo "Version mismatch!"
                 exit 1
               fi
@@ -56,7 +59,8 @@
   };
 }
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-  nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
+  # unfortunally nixpkgs pkgsStatic is too often broken including the dependency closure of nix
+  # nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
 
   # Basic smoke tests that needs to pass when upgrading nix.
   # Note that this test does only test the nixVersions.stable attribute.

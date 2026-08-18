@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchzip,
   gitUpdater,
   tk,
   tclPackages,
@@ -16,14 +16,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "05.04.01";
+  version = "06.02.10";
 
-  src = fetchFromGitea {
-    domain = "git.skoll.ca";
-    owner = "Skollsoft-Public";
-    repo = "Remind";
-    rev = version;
-    hash = "sha256-PTaEGRYZS+yBINwP7EJE4NfgGpB1RTOsDNtzxljZYZA=";
+  src = fetchzip {
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
+    hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [
@@ -38,10 +35,7 @@ tcl.mkTclDerivation rec {
     substituteInPlace scripts/tkremind.in \
       --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
       --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
-      --replace-fail 'set Rem2PS "rem2ps"' "set Rem2PS \"$out/bin/rem2ps\"" \
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
-    substituteInPlace configure \
-      --replace-fail 'f=-ffat-lto-objects' ""
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
@@ -54,16 +48,16 @@ tcl.mkTclDerivation rec {
     ignoredVersions = "-BETA";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       afh
       raskin
       kovirobi
     ];
     mainProgram = "remind";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

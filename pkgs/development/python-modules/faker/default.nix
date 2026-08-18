@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "37.3.0";
+  version = "40.28.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d7eeeiIo1XF1Ezrwu83SbcYj34HbOQ7lL1EE1GwBDy8=";
+    hash = "sha256-KmP7Uaurh5BjbUAwoJTPlCQEy8zJwojRytcOLj6ezVg=";
   };
 
   build-system = [ setuptools ];
@@ -40,14 +40,14 @@ buildPythonPackage rec {
   ];
 
   # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
+  disabledTestPaths = [ "tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for generating fake user data";
     mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

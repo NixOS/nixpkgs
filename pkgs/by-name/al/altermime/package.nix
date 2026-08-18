@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "altermime";
   version = "0.3.11";
 
   src = fetchurl {
-    url = "https://pldaniels.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
+    url = "https://pldaniels.com/altermime/altermime-${finalAttrs.version}.tar.gz";
+    hash = "sha256-R17ScQWH0k8R0A2vpcP234rHnhO4xdVNLqNVdrV5/Zc=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -23,15 +23,17 @@ gccStdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+    substituteInPlace Makefile \
+      --replace-fail "/usr/local" "$out" \
+      --replace-fail "strip " "${gccStdenv.cc.targetPrefix}strip "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIME alteration tool";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
-    license.fullName = "alterMIME LICENSE";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.sendmail;
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };
-}
+})

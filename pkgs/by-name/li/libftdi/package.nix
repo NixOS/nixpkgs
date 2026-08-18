@@ -5,12 +5,12 @@
   libusb-compat-0_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libftdi";
   version = "0.20";
 
   src = fetchurl {
-    url = "https://www.intra2net.com/en/developer/libftdi/download/${pname}-${version}.tar.gz";
+    url = "https://www.intra2net.com/en/developer/libftdi/download/libftdi-${finalAttrs.version}.tar.gz";
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "ac_cv_prog_HAVELIBUSB=${lib.getExe' (lib.getDev libusb-compat-0_1) "libusb-config"}"
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "--with-async-mode";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff
@@ -44,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
   };
-}
+})

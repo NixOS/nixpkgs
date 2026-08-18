@@ -9,6 +9,7 @@
   haskellPackages,
   writeText,
   runCommand,
+  nixosTests,
 }:
 
 # This argument is a function which selects a list of Haskell packages from any
@@ -23,18 +24,9 @@ let
   packages = selectPackages haskellPackages;
 
   wrapper = ./hoogle-local-wrapper.sh;
-  isGhcjs = ghc.isGhcjs or false;
-  opts = lib.optionalString;
-  haddockExe = if !isGhcjs then "haddock" else "haddock-ghcjs";
-  ghcDocLibDir = if !isGhcjs then ghc.doc + "/share/doc/ghc*/html/libraries" else ghc + "/doc/lib";
-  # On GHCJS, use a stripped down version of GHC's prologue.txt
-  prologue =
-    if !isGhcjs then
-      "${ghcDocLibDir}/prologue.txt"
-    else
-      writeText "ghcjs-prologue.txt" ''
-        This index includes documentation for many Haskell modules.
-      '';
+  haddockExe = "haddock";
+  ghcDocLibDir = ghc.doc + "/share/doc/ghc*/html/libraries";
+  prologue = "${ghcDocLibDir}/prologue.txt";
 
   docPackages =
     lib.closePropagation
@@ -62,8 +54,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
   # thus probably intend to substitute it.
   allowSubstitutes = true;
 
-  inherit docPackages;
-
   passAsFile = [ "buildCommand" ];
 
   buildCommand = ''
@@ -84,7 +74,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     echo importing builtin packages
     for docdir in ${ghcDocLibDir}"/"*; do
       name="$(basename $docdir)"
-      ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
         ln -sfn $docdir $out/share/doc/hoogle/$name
       fi
@@ -97,7 +86,7 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
       '')
       (
         lib.filter (el: el.haddockDir != null) (
-          builtins.map (p: {
+          map (p: {
             haddockDir = if p ? haddockDir then p.haddockDir p else null;
             name = p.pname;
           }) docPackages
@@ -137,6 +126,8 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
   passthru = {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
 
+    inherit docPackages;
+
     # The path to the Hoogle database.
     database = "${finalAttrs.finalPackage}/${databasePath}";
 
@@ -147,10 +138,12 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  passthru.tests.nixos = nixosTests.hoogle;
+
   meta = {
     description = "Local Hoogle database";
     platforms = ghc.meta.platforms;
     hydraPlatforms = with lib.platforms; none;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 })

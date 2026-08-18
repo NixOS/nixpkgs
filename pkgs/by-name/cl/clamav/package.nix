@@ -24,13 +24,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clamav";
-  version = "1.4.3";
+  version = "1.5.4";
 
   src = fetchurl {
-    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-2HTKvz1HZbNbUY71NWWKHm7HSAIAah1hP58SSqE0MhA=";
+    url = "https://www.clamav.net/downloads/production/clamav-${finalAttrs.version}.tar.gz";
+    hash = "sha256-GvEReiKPG1vH+pGg2rw3hIqZ59JRiOm+gEMzLOch39M=";
   };
 
   patches = [
@@ -61,30 +61,30 @@ stdenv.mkDerivation rec {
     libmspack
     json_c
     check
-  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
+    "-DCVD_CERTS_DIRECTORY=${placeholder "out"}/share/clamav/certs"
   ];
 
-  # Seems to only fail on x86_64-darwin with sandboxing
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-  __darwinAllowLocalNetworking = true;
+  # Fails on darwin with sandboxing
+  doCheck = !(stdenv.hostPlatform.isDarwin);
 
   checkInputs = [
     python3.pkgs.pytest
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       robberer
       qknight
-      globin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

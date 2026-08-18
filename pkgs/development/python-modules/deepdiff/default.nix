@@ -18,23 +18,26 @@
   # tests
   jsonpickle,
   numpy,
+  pandas,
+  polars,
+  pydantic,
   pytestCheckHook,
   python-dateutil,
+  pytz,
   tomli-w,
-  polars,
-  pandas,
+  uuid6,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "8.5.0";
+  version = "8.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "seperman";
+    owner = "qlustered";
     repo = "deepdiff";
     tag = version;
-    hash = "sha256-JIxlWy2uVpI98BmpH2+EyOxfYBoO2G2S0D9krduVo08=";
+    hash = "sha256-/XRPP8O2ykoXwOZ2ou/7Yoa1x7t45dCx6G3aq30o3Wc=";
   };
 
   build-system = [
@@ -58,34 +61,36 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jsonpickle
     numpy
+    pandas
+    polars
+    pydantic
     pytestCheckHook
     python-dateutil
+    pytz
     tomli-w
-    polars
-    pandas
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    uuid6
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests =
-    [
-      # not compatible with pydantic 2.x
-      "test_pydantic1"
-      "test_pydantic2"
-      # Require pytest-benchmark
-      "test_cache_deeply_nested_a1"
-      "test_lfu"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Times out on darwin in Hydra
-      "test_repeated_timer"
-    ];
+  disabledTests = [
+    # Require pytest-benchmark
+    "test_cache_deeply_nested_a1"
+    "test_lfu"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Times out on darwin in Hydra
+    "test_repeated_timer"
+    # Requires too much RAM and fails only on Darwin from some reason.
+    "test_restricted_unpickler_memory_exhaustion_cve"
+  ];
 
   pythonImportsCheck = [ "deepdiff" ];
 
   meta = {
     description = "Deep Difference and Search of any Python object/data";
     mainProgram = "deep";
-    homepage = "https://github.com/seperman/deepdiff";
-    changelog = "https://github.com/seperman/deepdiff/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/qlustered/deepdiff";
+    changelog = "https://github.com/qlustered/deepdiff/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mic92

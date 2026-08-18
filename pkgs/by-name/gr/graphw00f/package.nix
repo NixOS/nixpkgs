@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "graphw00f";
   version = "1.2.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dolevf";
@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL Server Engine Fingerprinting utility";
     homepage = "https://github.com/dolevf/graphw00f";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "graphw00f";
   };
 }

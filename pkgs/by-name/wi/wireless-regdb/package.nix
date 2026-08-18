@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";
-  version = "2025.02.20";
+  version = "2026.05.30";
 
   src = fetchurl {
-    url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-V/jnchz1qIDBOuDCAu27IQkqBg1F+enFm80qgnK/pFY=";
+    url = "https://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-${version}.tar.xz";
+    hash = "sha256-iie/wIG6/tjCTdcPqw2W8JjloL/NCNPaZyWV8iWriZM=";
   };
 
   dontBuild = true;
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Wireless regulatory database for CRDA";
-    homepage = "http://wireless.kernel.org/en/developers/Regulatory/";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    homepage = "https://wireless.docs.kernel.org/en/latest/en/developers/regulatory/wireless-regdb.html";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

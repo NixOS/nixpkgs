@@ -11,13 +11,13 @@
 }:
 (buildPythonPackage rec {
   pname = "gfal2-util";
-  version = "1.8.1";
+  version = "1.9.1";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-util";
     rev = "v${version}";
-    hash = "sha256-3JbJgKD17aYkrB/aaww7IQU8fLFrTCh868KWlLPxmlk=";
+    hash = "sha256-KKtbxr64FsMUIGXPk3yz66dbQVNCWoGbq3/+q47tS6Q=";
   };
 
   # Replace the ad-hoc python executable finding
@@ -33,11 +33,11 @@
 
   pythonImportsCheck = [ "gfal2_util" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for gfal2";
     homepage = "https://github.com/cern-fts/gfal2-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 }).overrideAttrs
   (
@@ -53,7 +53,7 @@
         # With these functionality tests, it should be safe to merge version bumps once all the tests are passed.
         tests =
           let
-            # Use the the bin output hash of gfal2-util as version to ensure that
+            # Use the bin output hash of gfal2-util as version to ensure that
             # the test gets rebuild everytime gfal2-util gets rebuild
             versionFODTests =
               finalAttrs.version + "-" + lib.substring (lib.stringLength builtins.storeDir + 1) 32 "${self}";

@@ -5,15 +5,15 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "typtea";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ashish0kumar";
     repo = "typtea";
-    tag = "v${version}";
-    hash = "sha256-JIb7MkqHHlKLTI+SY007RQS4DpmQS1y8SNUsYVevEEk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3mqUHX/EiRGYVCutnzrXYx7C67CVpawNjokVzvMJBYU=";
   };
 
   vendorHash = "sha256-LWY1Tnh4iyNAV7dNjlKdT9IwPJRN25HkEAGSkQIRe9I=";
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ashish0kumar/typtea/cmd.version=${version}"
+    "-X github.com/ashish0kumar/typtea/cmd.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -30,7 +30,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ashish0kumar/typtea/releases/tag/v${version}";
+    changelog = "https://github.com/ashish0kumar/typtea/releases/tag/v${finalAttrs.version}";
     description = "Terminal-based typing speed test with multi-language support";
     homepage = "https://github.com/ashish0kumar/typtea";
     license = lib.licenses.mit;
@@ -38,4 +38,4 @@ buildGoModule rec {
     mainProgram = "typtea";
     platforms = lib.platforms.unix;
   };
-}
+})

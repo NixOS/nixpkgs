@@ -11,13 +11,13 @@
   atWrapperPath ? "/run/wrappers/bin/at",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "at";
   version = "3.2.5";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/a/at/at_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-uwZrOJ18m7nYSjVzgDK4XDDLp9lJ91gZKtxyyUd/07g=";
   };
 
@@ -32,17 +32,16 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Remove chown commands and setuid bit
     substituteInPlace Makefile.in \
-      --replace ' -o root ' ' ' \
-      --replace ' -g root ' ' ' \
-      --replace ' -o $(DAEMON_USERNAME) ' ' ' \
-      --replace ' -o $(DAEMON_GROUPNAME) ' ' ' \
-      --replace ' -g $(DAEMON_GROUPNAME) ' ' ' \
-      --replace '$(DESTDIR)$(etcdir)' "$out/etc" \
-      --replace '$(DESTDIR)$(ATJOB_DIR)' "$out/var/spool/atjobs" \
-      --replace '$(DESTDIR)$(ATSPOOL_DIR)' "$out/var/spool/atspool" \
-      --replace '$(DESTDIR)$(LFILE)' "$out/var/spool/atjobs/.SEQ" \
-      --replace 'chown' '# skip chown' \
-      --replace '6755' '0755'
+      --replace-fail ' -o root ' ' ' \
+      --replace-fail ' -g root ' ' ' \
+      --replace-fail ' -o $(DAEMON_USERNAME) ' ' ' \
+      --replace-fail ' -g $(DAEMON_GROUPNAME) ' ' ' \
+      --replace-fail '$(DESTDIR)$(etcdir)' "$out/etc" \
+      --replace-fail '$(DESTDIR)$(ATJOB_DIR)' "$out/var/spool/atjobs" \
+      --replace-fail '$(DESTDIR)$(ATSPOOL_DIR)' "$out/var/spool/atspool" \
+      --replace-fail '$(DESTDIR)$(LFILE)' "$out/var/spool/atjobs/.SEQ" \
+      --replace-fail 'chown' '# skip chown' \
+      --replace-fail '6755' '0755'
   '';
 
   nativeBuildInputs = [
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     export SENDMAIL=${sendmailPath}
     # Purity: force atd.pid to be placed in /var/run regardless of
     # whether it exists now.
-    substituteInPlace ./configure --replace "test -d /var/run" "true"
+    substituteInPlace ./configure --replace-fail "test -d /var/run" "true"
   '';
 
   configureFlags = [
@@ -77,12 +76,12 @@ stdenv.mkDerivation rec {
     sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classical Unix `at' job scheduling command";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://tracker.debian.org/pkg/at";
     changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "at";
   };
-}
+})

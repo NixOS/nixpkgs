@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-servicefees";
-  version = "1.14.1";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-servicefees";
     tag = "v${version}";
-    hash = "sha256-iceFpmuWlq4LnZpG57d4Fwx9bXJDGwx+ox58s8oxupU=";
+    hash = "sha256-gSxzZGokk498e9R8sPP3pVRkVvgjjHcvC8pxZFZHuU8=";
   };
 
   build-system = [
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretix_servicefees" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to charge a flat fee on all orders";
     homepage = "https://github.com/pretix/pretix-servicefees";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

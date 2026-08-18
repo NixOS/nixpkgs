@@ -5,23 +5,25 @@
   libarchive,
   xar,
   installShellFiles,
+  makeWrapper,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "0.1.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-${finalAttrs.version}-installer-signed.pkg";
-    hash = "sha256-no+3kTlKb1NbN7YUdBMrU+vgpKNRwqjzo313RYBpfqE=";
+    hash = "sha256-DKHEKiJpwlV++x2CsbOKxVPmo6PaGxF5xDm87h59ZxQ=";
   };
 
   nativeBuildInputs = [
     libarchive
     xar
     installShellFiles
+    makeWrapper
   ];
 
   dontUnpack = true;
@@ -43,10 +45,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --zsh <($out/bin/${finalAttrs.meta.mainProgram} --generate-completion-script zsh)
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/container \
+      --set-default CONTAINER_INSTALL_ROOT "$out"
+    wrapProgram $out/bin/container-apiserver \
+      --set-default CONTAINER_INSTALL_ROOT "$out"
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -54,13 +62,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Creating and running Linux containers using lightweight virtual machines on a Mac";
+    description = "Create and run Linux containers using lightweight virtual machines on a Mac";
     homepage = "https://github.com/apple/container";
     changelog = "https://github.com/apple/container/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "container";
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
+      Br1ght0ne
     ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -11,7 +11,6 @@ let
     {
       x86_64-linux = "linux_x86_64";
       aarch64-linux = "linux_x86_64";
-      x86_64-darwin = "mac_x86_64";
       aarch64-darwin = "mac_arm_64";
     }
     .${stdenv.hostPlatform.system}
@@ -24,15 +23,15 @@ let
     }
   );
 
-  self = buildGhidraExtension rec {
+  self = buildGhidraExtension (finalAttrs: {
     pname = "kaiju";
-    version = "250610";
+    version = "260608";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
-      rev = version;
-      hash = "sha256-qqUnWakQDOBw3sI/6iWD9140iRAsM5PUEQJSV/3/8FQ=";
+      rev = finalAttrs.version;
+      hash = "sha256-T8Ta8lQob7w0iPsVbZix795AjVwdo2U8yuvgCUBi5fw=";
     };
 
     buildInputs = [
@@ -56,18 +55,17 @@ let
     };
 
     meta = {
-      description = "A Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
+      description = "Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
       homepage = "https://github.com/CERTCC/kaiju";
-      downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${version}";
+      downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${finalAttrs.version}";
       license = lib.licenses.bsd3;
       maintainers = [ lib.maintainers.ivyfanchiang ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };
-  };
+  });
 in
 self

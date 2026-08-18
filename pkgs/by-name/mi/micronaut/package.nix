@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchzip,
-  jdk,
+  jdk25,
   makeWrapper,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "micronaut";
-  version = "4.8.3";
+  version = "5.1.0";
 
   src = fetchzip {
-    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-u24Lwvcfv5sHQu/5N7+jOK3EpJ8zJgSs5wZBee2hNrg=";
+    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${finalAttrs.version}/micronaut-cli-${finalAttrs.version}.zip";
+    hash = "sha256-eJ3iCQKIpUUgsgqbD6HzH3xs/crYnaaUbzWDWFhSPbA=";
   };
 
   nativeBuildInputs = [
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     rm bin/mn.bat
     cp -r . $out
     wrapProgram $out/bin/mn \
-      --prefix JAVA_HOME : ${jdk}
+      --prefix JAVA_HOME : ${jdk25}
     installShellCompletion --bash --name mn.bash bin/mn_completion
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, JVM-based, full-stack framework for building microservice applications";
     longDescription = ''
       Micronaut is a modern, JVM-based, full stack microservices framework
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       not bound to the size of your codebase.
     '';
     homepage = "https://micronaut.io/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moaxcp ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "mn";
   };
-}
+})

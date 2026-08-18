@@ -4,18 +4,18 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-to-age";
-  version = "1.1.11";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-age";
-    rev = version;
-    sha256 = "sha256-Y+GC8Zkznjr0pTvYED+uE1v6zIg+tq44F++ZrBytS1E=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-j+X+kZCOmMdNw8LBDoixl8ToRmDjbmRVe7+IGS/2sMg=";
   };
 
-  vendorHash = "sha256-bAawCPfMR4B+mXBHzaTlKs0UYh07F30/epy4qkf2QhM=";
+  vendorHash = "sha256-FveYuYa6C3R50+jdAlU1jorRw/mg482eZ4ZJ8Pu+R0s=";
 
   checkPhase = ''
     runHook preCheck
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Convert ssh private keys in ed25519 format to age keys";
     homepage = "https://github.com/Mic92/ssh-to-age";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "ssh-to-age";
   };
-}
+})

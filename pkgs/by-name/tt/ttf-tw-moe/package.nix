@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ttf-tw-moe";
-  version = "2020-11-14";
+  version = "2026-05-11";
 
   src = fetchzip {
     url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
-    hash = "sha256-9gy8xO93ViIPmpg1du0DbXVCR2FowourLH8nP9d6HK0=";
+    hash = "sha256-IlAYR0/wxL+tOI7X4t5eypTMqxMCLpTp9jCM7512SNk=";
   };
 
   installPhase = ''
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.moe.gov.tw/";
     description = "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
     version = version;
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
       Both are provided by the Ministry of Education of Taiwan; each character's shape
       closely follows the official recommendation, and can be used as for teaching purposes.
     '';
-    license = licenses.cc-by-nd-30;
-    maintainers = [ maintainers.jiehong ];
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-nd-30;
+    maintainers = [ lib.maintainers.jiehong ];
+    platforms = lib.platforms.all;
   };
 }

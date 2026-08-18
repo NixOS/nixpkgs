@@ -10,15 +10,15 @@
   libnotify,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bleachbit";
-  version = "4.6.0";
+  version = "6.0.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UwUphuUeXFy71I+tmKnRH858dPrA2+xDxnG9h26a+kE=";
+    url = "mirror://sourceforge/bleachbit/bleachbit-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-H7fwg5QdaBduHg5r9z07TIC81Xrf07Uf9gYXbcGQdy4=";
   };
 
   nativeBuildInputs = [
@@ -60,15 +60,15 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bleachbit.sourceforge.net";
     description = "Program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       leonardoce
       mbprtpmnr
     ];
     mainProgram = "bleachbit";
   };
-}
+})

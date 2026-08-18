@@ -12,7 +12,7 @@
   sqlite,
   libjpeg,
   speex,
-  pcre,
+  pcre2,
   libuuid,
   ldns,
   libedit,
@@ -100,21 +100,21 @@ let
 
   modulesConf =
     let
-      lst = builtins.map (mod: mod.path) enabledModules;
+      lst = map (mod: mod.path) enabledModules;
       str = lib.strings.concatStringsSep "\n" lst;
     in
     builtins.toFile "modules.conf" str;
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeswitch";
-  version = "1.10.12";
+  version = "1.11.1";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "freeswitch";
-    rev = "v${version}";
-    hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uXn5MLEsGPfRzTQJ/v3Tq1yXVIWZQwNQIyvZulMxSqU=";
   };
 
   postPatch = ''
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     readline
     libjpeg
     sqlite
-    pcre
+    pcre2
     speex
     ldns
     libedit
@@ -154,21 +154,24 @@ stdenv.mkDerivation rec {
     libtiff
     libuuid
     libxcrypt
-  ] ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
+  ]
+  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error"
-    # https://github.com/signalwire/freeswitch/issues/2495
-    "-Wno-incompatible-pointer-types"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error"
+      # https://github.com/signalwire/freeswitch/issues/2495
+      "-Wno-incompatible-pointer-types"
+    ];
 
-  # Using c++14 because of build error
-  # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
-  CXXFLAGS = "-std=c++14";
+    # Using c++14 because of build error
+    # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
+    CXXFLAGS = "-std=c++14";
 
-  CFLAGS = "-D_ANSI_SOURCE";
+    CFLAGS = "-D_ANSI_SOURCE";
+  };
 
   hardeningDisable = [ "format" ];
 
@@ -194,4 +197,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

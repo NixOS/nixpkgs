@@ -122,19 +122,18 @@ in
           config.environment.etc."hqplayer/hqplayerd.xml".source
         ];
 
-        preStart =
-          ''
-            cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
-            chmod -R u+wX "${stateDir}/web"
+        preStart = ''
+          cp -r "${pkg}/var/lib/hqplayer/web" "${stateDir}"
+          chmod -R u+wX "${stateDir}/web"
 
-            if [ ! -f "${configDir}/hqplayerd.xml" ]; then
-              echo "creating initial config file"
-              install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
-            fi
-          ''
-          + lib.optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
-            ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
-          '';
+          if [ ! -f "${configDir}/hqplayerd.xml" ]; then
+            echo "creating initial config file"
+            install -m 0644 "${pkg}/etc/hqplayer/hqplayerd.xml" "${configDir}/hqplayerd.xml"
+          fi
+        ''
+        + lib.optionalString (cfg.auth.username != null && cfg.auth.password != null) ''
+          ${pkg}/bin/hqplayerd -s ${cfg.auth.username} ${cfg.auth.password}
+        '';
       };
     };
 

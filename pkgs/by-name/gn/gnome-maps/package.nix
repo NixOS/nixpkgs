@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  blueprint-compiler,
   meson,
   ninja,
   gettext,
@@ -11,7 +12,7 @@
   gtk4,
   gobject-introspection,
   gdk-pixbuf,
-  librest_1_0,
+  librest,
   libgweather,
   geoclue2,
   wrapGAppsHook4,
@@ -30,16 +31,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "48.4";
+  version = "50.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rocWuLCz/r0+0iwX6QYuuA9tbSXFBQHATUIwuXzuRco=";
+    hash = "sha256-CJyo4Vq9cqyD2zhs7xnOveBe74t26qyBkGpLBTVUTiw=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
+    blueprint-compiler
     gettext
     meson
     ninja
@@ -64,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libshumate
     libgweather
     libadwaita
-    librest_1_0
+    librest
     libsecret
     libsoup_3
   ];
@@ -114,12 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-maps"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Maps/";
     description = "Map application for GNOME 3";
     mainProgram = "gnome-maps";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 })

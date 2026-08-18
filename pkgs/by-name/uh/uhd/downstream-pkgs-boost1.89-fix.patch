@@ -1,0 +1,46 @@
+commit 57706d6f6c9117fbd919228a06365aa6a1999f8a
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Thu Jul 30 13:15:25 2026 +0300
+
+    cmake: Remove `Boost::system` from `UHDConfig.cmake` component list
+    
+    Boost.System has been header-only since Boost 1.69, and as of Boost 1.89
+    its CMake package config was removed entirely.[1]
+    
+    This makes the `find_dependency(Boost ... COMPONENTS ... system ...)`
+    call in the installed `UHDConfig.cmake` fail on any downstream project
+    that does `find_package(UHD)` while linked against `Boost >= 1.89`.
+    
+    Timeline of how this happened, for reference:
+    
+    - Up to and including v4.9.0.1, UHDConfig.cmake.in had no Boost
+      dependency check at all.
+    - ab724a30ec59219b6556a95a76247277aa90854f introduced the
+      `find_dependency(Boost ... COMPONENTS ... system ...)` call here, to
+      correctly declare Boost as a transitive dependency of the newly added
+      `UHD::uhd` imported target.
+    - c45c296d8fd8d23e1f8cf0b154c23556d90973b0 fixed UHD's own build to stop
+      requiring `Boost::system`, in response to it being dropped as of Boost
+      1.89. That commit did not touch `UHDConfig.cmake.in`, which had only
+      just gained its own separate `Boost::system` reference ten days
+      earlier via ab724a30ec59219b6556a95a76247277aa90854f, and so was
+      missed.
+    - `v4.10.0.0` ships with both commits, making it the first release where
+      `UHDConfig.cmake.in`'s Boost dependency check exists but still lists
+      `system`, breaking `find_package(UHD)` for any consumer linked against
+      Boost >= 1.89.
+    
+    [1]: https://github.com/boostorg/system/commit/7a495bb46d7ccd808e4be2a6589260839b0fd3a3
+
+diff --git a/host/cmake/Modules/UHDConfig.cmake.in b/host/cmake/Modules/UHDConfig.cmake.in
+index 85fc3e158..ac7417684 100644
+--- a/host/cmake/Modules/UHDConfig.cmake.in
++++ b/host/cmake/Modules/UHDConfig.cmake.in
+@@ -30,7 +30,6 @@ find_dependency(Boost ${UHD_BOOST_MIN_VERSION}
+   date_time
+   filesystem
+   program_options
+-  system
+   serialization
+   thread
+   unit_test_framework

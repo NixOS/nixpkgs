@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "traccar";
-  version = "6.7.3";
+  version = "6.13.3";
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   src = fetchzip {
     stripRoot = false;
     url = "https://github.com/traccar/traccar/releases/download/v${version}/traccar-other-${version}.zip";
-    hash = "sha256-XUlGxOT9udJUy9tcdKeqvY2EbGokDcp+Wv3ShfHPoGA=";
+    hash = "sha256-QQJ3+QByXkdfGBPA38F8+sQ72NnRbet6zcD3K82JLbI=";
   };
 
   installPhase = ''
@@ -32,12 +32,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source GPS tracking system";
     homepage = "https://www.traccar.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     mainProgram = "traccar";
-    maintainers = with maintainers; [ frederictobiasc ];
+    maintainers = with lib.maintainers; [ frederictobiasc ];
   };
 }

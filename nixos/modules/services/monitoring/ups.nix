@@ -679,8 +679,7 @@ in
       environment = envVars;
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/upsdrvctl shutdown";
-        Slice = "system-ups.slice";
+        ExecStart = "${cfg.package}/bin/upsdrvctl -u root shutdown";
       };
     };
 

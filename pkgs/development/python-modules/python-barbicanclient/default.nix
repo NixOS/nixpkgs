@@ -2,14 +2,13 @@
   lib,
   buildPythonPackage,
   cliff,
-  fetchFromGitea,
+  fetchFromGitHub,
   keystoneauth1,
   openstackdocstheme,
   oslo-i18n,
   oslo-serialization,
   oslo-utils,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -20,17 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-barbicanclient";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchFromGitea {
-    domain = "opendev.org";
+  src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-barbicanclient";
-    rev = version;
-    hash = "sha256-VEK3MDuvciF4hpyNKTKWX2v3pSCcVi+YGgSKCLaWAuI=";
+    tag = version;
+    hash = "sha256-SFAldyA/M0rkKb2o6ePp+9ITWrUszyTz5jvCnUadufo=";
   };
 
   env.PBR_VERSION = version;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dyn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dynect dns lib";
     homepage = "https://dyn.readthedocs.org";
     changelog = "https://github.com/dyninc/dyn-python/blob/${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

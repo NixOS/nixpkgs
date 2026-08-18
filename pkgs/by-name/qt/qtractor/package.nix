@@ -7,7 +7,7 @@
   fetchurl,
   flac,
   libjack2,
-  ladspaH,
+  ladspa-header,
   ladspaPlugins,
   liblo,
   libmad,
@@ -28,13 +28,13 @@
   suil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtractor";
-  version = "1.5.6";
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
-    hash = "sha256-9JC+kLMnG7Fzti0RAlo/lGtuu6WF4vN4nzcZBN+kuZI=";
+    url = "mirror://sourceforge/qtractor/qtractor-${finalAttrs.version}.tar.gz";
+    hash = "sha256-WjXY1XboGlz16uqVUKJehIWXZBJMPVuAZ8jSea+EuUQ=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     dssi
     flac
     libjack2
-    ladspaH
+    ladspa-header
     ladspaPlugins
     liblo
     libmad
@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
-    changelog = "https://github.com/rncbc/qtractor/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/rncbc/qtractor/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "qtractor";
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

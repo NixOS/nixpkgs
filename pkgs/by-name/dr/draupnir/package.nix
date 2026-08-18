@@ -1,107 +1,98 @@
 {
   lib,
   fetchFromGitHub,
-  makeWrapper,
-  nodejs,
+  makeBinaryWrapper,
+  nodejs_24,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
   srcOnly,
   removeReferencesTo,
-  mkYarnPackage,
-  fetchYarnDeps,
+  buildNpmPackage,
   stdenv,
   cctools,
   nixosTests,
+  nix-update-script,
+  fetchpatch2,
 }:
-
-# docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_24;
 in
-mkYarnPackage rec {
+
+buildNpmPackage (finalAttrs: {
   pname = "draupnir";
-  version = "2.4.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
-    tag = "v${version}";
-    hash = "sha256-mH5SzguZq1H+njHxWLfjXF3y3/v34KUg45ELL+femNw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e6d9z5dkJg4ZpkN+yJFr8J8RWl9tcAhEYTOM+9413Ok=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     sqlite
+    python3
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/the-draupnir-project/Draupnir/commit/4e63164046153c656050c6d0a325c79f1492153a.patch?full_index=1";
+      hash = "sha256-dVG0BAE8pATfGdcHvTV8jTC+OQP0gMB7v396MtJlG4o=";
+    })
   ];
 
-  offlineCache = fetchYarnDeps {
-    name = "${pname}-yarn-offline-cache";
-    yarnLock = src + "/yarn.lock";
-    hash = hashesFile.yarn_offline_cache_hash;
-  };
-
-  packageJSON = ./package.json;
-
-  pkgConfig = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = {
-      postInstall = ''
-        # replace with the existing package in nixpkgs
-        cd ..
-        rm -r matrix-sdk-crypto-nodejs
-        ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/* ./
-      '';
-    };
-
-    better-sqlite3 = {
-      nativeBuildInputs = [ python3 ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
-      postInstall = ''
-        # build native sqlite bindings
-        npm run build-release --offline --nodedir="${nodeSources}"
-        find build -type f -exec \
-          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
-      '';
-    };
-  };
+  npmDepsHash = "sha256-7WAfSFfPQJ9d/U9hk5wypasSoU2JwkoCq/nKAnzFf1o=";
 
   preBuild = ''
-    # install proper version info
-    mkdir --parents deps/draupnir/
-    echo "${version}-nix" > deps/draupnir/version.txt
+    # install proper version and branch info
+    echo "${finalAttrs.version}-nix" > apps/draupnir/version.txt
+    echo "main" > apps/draupnir/branch.txt
 
-    # makes network requests
-    sed -i 's/corepack //g' deps/draupnir/package.json
+    # we already set the version and branch above
+    sed -i "/build:assets/d" apps/draupnir/package.json
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  postInstall = ''
+    # Replace matrix-sdk-crypto-nodejs with nixpkgs version
+    nodeCryptoPath="node_modules/@matrix-org/matrix-sdk-crypto-nodejs"
+    rm -rf "$nodeCryptoPath"
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      "$nodeCryptoPath"
+    chmod -R a+rwx "$nodeCryptoPath"
 
-    yarn --offline --verbose build
+    # build better-sqlite3
+    betterSqlitePath="node_modules/better-sqlite3"
+    pushd "$betterSqlitePath"
+    npm run build-release --offline --nodedir="${nodeSources}"
+    rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
+    find build -type f -exec \
+          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
+    popd
 
-    runHook postBuild
+
+    mkdir -p $out/lib/node_modules/draupnir
+    mkdir $out/bin
+    # Install outputs
+    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
+    # Fix dangling symlink pointing to relative path ../apps/draupnir
+    rm $out/lib/node_modules/draupnir/node_modules/draupnir
+
+    # Create wrapper executable
+    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
+      --add-flags "--enable-source-maps" \
+      --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
+
   '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir --parents $out/share
-    cp --archive . $out/share/draupnir
-
-    makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
-      --add-flags $out/share/draupnir/deps/draupnir/lib/index.js
-
-    runHook postInstall
-  '';
-
-  distPhase = "true";
 
   passthru = {
     tests = { inherit (nixosTests) draupnir; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Moderation tool for Matrix";
     homepage = "https://github.com/the-draupnir-project/Draupnir";
     longDescription = ''
@@ -118,8 +109,8 @@ mkYarnPackage rec {
       A Synapse module is also available to apply the same rulesets the bot
       uses across an entire homeserver.
     '';
-    license = licenses.afl3;
-    maintainers = with maintainers; [ RorySys ];
+    license = lib.licenses.afl3;
+    maintainers = with lib.maintainers; [ RorySys ];
     mainProgram = "draupnir";
   };
-}
+})

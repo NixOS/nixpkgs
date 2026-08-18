@@ -1,79 +1,144 @@
 {
-  buildNpmPackage,
+  stdenv,
+  bun,
+  nodejs-slim,
   fetchFromGitHub,
   lib,
   nix-update-script,
-  gitlab-ci-local,
-  testers,
-  makeBinaryWrapper,
+  makeWrapper,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   rsync,
   gitMinimal,
 }:
 
-buildNpmPackage rec {
+let
   pname = "gitlab-ci-local";
-  version = "4.60.1";
+  version = "4.74.0";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-6v5iyQCP+3bJdG9uvPAsMaJ7mW2xj1kMhn8h2eLsl28=";
+    hash = "sha256-G1rtcMQ8My6whu3VLLwRc7TE42RzpBqzn3I1lK/Ts4M=";
   };
 
-  npmDepsHash = "sha256-P09uxOtlY9AAJyKLTdnFOfw0H6V4trr2hznEonOO58E=";
+  node_modules = stdenv.mkDerivation {
+    pname = "${pname}-node_modules";
+    inherit version src;
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    dontConfigure = true;
+    dontFixup = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install --frozen-lockfile --ignore-scripts --no-progress --cpu="*" --os="*"
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+
+    outputHash = "sha256-OS+HgVvaqy6NQ5pC4BbZwSAcYpGU2ka5VFLtEIQ9NyM=";
+
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    bun
+    makeWrapper
+    installShellFiles
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postPatch = ''
-    # remove cleanup which runs git commands
+    # set version during build
     substituteInPlace package.json \
-      --replace-fail "npm run cleanup" "true"
+      --replace-fail "0.0.0" "${version}"
+
+    # set a script name to avoid yargs using the script path as $0
+    substituteInPlace src/index.ts \
+      --replace-fail 'yargs(process.argv.slice(2))' 'yargs(process.argv.slice(2)).scriptName("gitlab-ci-local")'
   '';
 
-  postInstall = ''
-    NODE_MODULES=$out/lib/node_modules/gitlab-ci-local/node_modules
+  configurePhase = ''
+    runHook preConfigure
 
-    # Remove intermediate build files for re2 to reduce dependencies.
-    #
-    # This does not affect the behavior. On npm `re2` does not ship
-    # the build directory and downloads a prebuilt version of the
-    # `re2.node` binary. This method produces the same result.
-    find $NODE_MODULES/re2/build -type f ! -path "*/Release/re2.node" -delete
-    strip -x $NODE_MODULES/re2/build/Release/re2.node
+    cp -R ${node_modules}/node_modules .
+    patchShebangs node_modules
 
-    # Remove files that depend on python3
-    #
-    # The node-gyp package is only used for building re2, so it is
-    # not needed at runtime. I did not remove the whole directory
-    # because of some dangling links to the node-gyp directory which
-    # is not required. It is possible to remove the directory and all
-    # the files that link to it, but I figured it was not worth
-    # tracking down the files.
-    #
-    # The re2/vendor directory is used for building the re2.node
-    # binary, so it is not needed at runtime.
-    rm -rf $NODE_MODULES/{node-gyp/gyp,re2/vendor}
+    runHook postConfigure
+  '';
 
-    wrapProgram $out/bin/gitlab-ci-local \
+  buildPhase = ''
+    runHook preBuild
+
+    bun run build:node
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D dist/index.js $out/lib/gitlab-ci-local/index.js
+
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/gitlab-ci-local \
+      --add-flags "$out/lib/gitlab-ci-local/index.js" \
       --prefix PATH : "${
         lib.makeBinPath [
           rsync
           gitMinimal
         ]
       }"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gitlab-ci-local \
+      --bash <(SHELL=bash $out/bin/gitlab-ci-local --completion) \
+      --zsh <(SHELL=zsh $out/bin/gitlab-ci-local --completion)
+  ''
+  + ''
+    runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = gitlab-ci-local;
+    inherit node_modules;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "node_modules"
+      ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run gitlab pipelines locally as shell executor or docker executor";
     mainProgram = "gitlab-ci-local";
     longDescription = ''
@@ -82,8 +147,8 @@ buildNpmPackage rec {
       Get rid of all those dev specific shell scripts and make files.
     '';
     homepage = "https://github.com/firecow/gitlab-ci-local";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pineapplehunter ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pineapplehunter ];
+    platforms = lib.platforms.all;
   };
 }

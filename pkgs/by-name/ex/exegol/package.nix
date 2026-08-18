@@ -1,42 +1,57 @@
 {
-  fetchPypi,
   lib,
+  fetchFromGitHub,
   python3Packages,
-  xorg,
+  xhost,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
-  version = "4.3.11";
+  version = "5.1.11";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+LnZSFRW7EvG+cPwMStgO6qD4AjOGkLzCarXBrW3Aak=";
+  src = fetchFromGitHub {
+    owner = "ThePorgs";
+    repo = "Exegol";
+    tag = finalAttrs.version;
+    hash = "sha256-FI6lBJkJqmDexfxOWOa4tFe06tOFmUezy7OoDqXQN24=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
 
   pythonRelaxDeps = [
-    "rich"
     "argcomplete"
+    "cryptography"
+    "docker"
+    "pydantic"
+    "requests"
+    "rich"
+    "supabase"
   ];
 
   dependencies =
     with python3Packages;
     [
-      pyyaml
-      gitpython
+      argcomplete
+      cryptography
       docker
+      gitpython
+      ifaddr
+      pydantic
+      pyjwt
+      pyyaml
       requests
       rich
-      argcomplete
+      supabase
       tzlocal
+      xhost
     ]
-    ++ [ xorg.xhost ];
-
-  doCheck = true;
+    ++ pyjwt.optional-dependencies.crypto;
 
   pythonImportsCheck = [ "exegol" ];
+
+  # No relevant python tests nor --version flag
+  doCheck = false;
 
   meta = {
     description = "Fully featured and community-driven hacking environment";
@@ -49,12 +64,22 @@ python3Packages.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
+      gpl3Only
+      {
+        fullName = "Exegol Software License (ESL) - Version 1.0";
+        url = "https://docs.exegol.com/legal/software-license";
+        # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
+        free = false;
+        redistributable = false;
+      }
+    ];
     mainProgram = "exegol";
     maintainers = with lib.maintainers; [
       _0b11stan
       charB66
+      macbucheron
     ];
   };
-}
+})

@@ -3,51 +3,79 @@
   stdenv,
   fetchFromGitHub,
   testers,
+
+  cmake,
+  ninja,
+
+  alsa-lib,
+  libjack2,
+  libpulseaudio,
+  libvorbis,
+  opusfile,
+  sndio,
+
+  alsaSupport ? true,
+  pulseSupport ? true,
+  jackSupport ? true,
+  sndioSupport ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudio";
-  version = "0.11.22";
+  version = "0.11.25";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    rev = finalAttrs.version;
-    hash = "sha256-o/7sfBcrhyXEakccOAogQqm8dO4Szj1QSpaIHg6OSt4=";
+    tag = finalAttrs.version;
+    hash = "sha256-2k346Z/ueINPbaY20P2cbBvRfFXXH0ugdv4d7WaYt2w=";
   };
 
-  postInstall = ''
-    mkdir -p $out/include
-    mkdir -p $out/lib/pkgconfig
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-    cp $src/miniaudio.h $out/include
-    ln -s $out/include/miniaudio.h $out
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-    cp -r $src/extras $out/
+  buildInputs = [
+    libvorbis
+    opusfile
+  ]
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional sndioSupport sndio;
 
-    cat <<EOF >$out/lib/pkgconfig/miniaudio.pc
-    prefix=$out
-    includedir=$out/include
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "MINIAUDIO_NO_RUNTIME_LINKING" true)
+    (lib.cmakeBool "MINIAUDIO_BUILD_TESTS" true)
+    (lib.cmakeBool "MINIAUDIO_BUILD_EXAMPLES" true)
 
-    Name: miniaudio
-    Description: An audio playback and capture library in a single source file.
-    Version: $version
-    Cflags: -I$out/include
-    Libs: -lm -lpthread -latomic
-    EOF
-  '';
+    (lib.cmakeBool "MINIAUDIO_ENABLE_ONLY_SPECIFIC_BACKENDS" true)
+    (lib.cmakeBool "MINIAUDIO_ENABLE_PULSEAUDIO" pulseSupport)
+    (lib.cmakeBool "MINIAUDIO_ENABLE_JACK" jackSupport)
+    (lib.cmakeBool "MINIAUDIO_ENABLE_SNDIO" alsaSupport)
+    (lib.cmakeBool "MINIAUDIO_ENABLE_ALSA" sndioSupport)
+  ];
+
+  doCheck = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
     changelog = "https://github.com/mackron/miniaudio/blob/${finalAttrs.version}/CHANGES.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit0
     ];
-    maintainers = [ maintainers.jansol ];
+    maintainers = [ lib.maintainers.jansol ];
     pkgConfigModules = [ "miniaudio" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

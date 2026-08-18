@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tlsx";
-  version = "1.1.9";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "tlsx";
-    tag = "v${version}";
-    hash = "sha256-u83hPmmiXH7SGCyINkHFrjNDLanwJLf0o9ZyceQeSg0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3klBmWQfp8PLF4/8bZjHCk+4hiUXX3E+izIfDG2FMfU=";
   };
 
-  vendorHash = "sha256-NF05vVLBRlWQpmTfrNEjnvH7kZMhgY73xmSgTZ8FGmo=";
+  vendorHash = "sha256-5zqiA4Aoc5qjxXf8q+IzJqycSv49hJfynAVQ5Yomrro=";
 
   ldflags = [
     "-s"
@@ -32,8 +32,8 @@ buildGoModule rec {
       collection and analysis.
     '';
     homepage = "https://github.com/projectdiscovery/tlsx";
-    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

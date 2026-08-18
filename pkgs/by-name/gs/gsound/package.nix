@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gsound/${lib.versions.majorMinor version}/gsound-${version}.tar.xz";
     sha256 = "06l80xgykj7x1kqkjvcq06pwj2rmca458zvs053qc55x3sg06bfa";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gsound";
     description = "Small library for playing system sounds";
     mainProgram = "gsound-play";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -7,18 +7,19 @@
   uutf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "otoml";
   version = "1.0.5";
 
-  minimalOCamlVersion = "4.08";
-
   src = fetchFromGitHub {
     owner = "dmbaturin";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
+    repo = "otoml";
+    tag = finalAttrs.version;
+    hash = "sha256-e9Bqd6KHorglLMzvsjakyYt/CLZR3yI/yZPl/rnbkDE=";
   };
+
+  # Compatibility with menhir ≥ 20260122
+  patches = [ ./menhir.patch ];
 
   nativeBuildInputs = [ menhir ];
 
@@ -29,9 +30,9 @@ buildDunePackage rec {
 
   meta = {
     description = "TOML parsing and manipulation library for OCaml";
-    changelog = "https://github.com/dmbaturin/otoml/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dmbaturin/otoml/raw/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/dmbaturin/otoml/";
   };
-}
+})

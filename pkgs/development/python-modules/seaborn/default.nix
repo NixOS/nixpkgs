@@ -7,25 +7,24 @@
   flit-core,
   matplotlib,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   statsmodels,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "seaborn";
   version = "0.13.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";
     repo = "seaborn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
@@ -42,11 +41,16 @@ buildPythonPackage rec {
       url = "https://github.com/mwaskom/seaborn/commit/385e54676ca16d0132434bc9df6bc41ea8b2a0d4.patch";
       hash = "sha256-nwGwTkP7W9QzgbbAVdb2rASgsMxqFnylMk8GnTE445w=";
     })
+    (fetchpatch2 {
+      name = "numpy-2.4-compat.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/5023f2ee885a45200f5b63156a158ddf7272c29e.patch";
+      hash = "sha256-T3OfjEEsPRRv1J6gdq9XmwcWEpPMDzul+LmK8UtV7nk=";
+    })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
@@ -61,18 +65,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # requires internet connection
-      "test_load_dataset_string_error"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-      # overly strict float tolerances
-      "TestDendrogram"
-    ];
+  disabledTests = [
+    # requires internet connection
+    "test_load_dataset_string_error"
+    # matplotlib error string matching
+    "test_theme_validation"
+    # log scale transformation match too strict
+    "test_log_scale"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # overly strict float tolerances
+    "TestDendrogram"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # overly strict float tolerances
+    "test_ticklabels_overlap"
+  ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
@@ -80,10 +92,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seaborn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/mwaskom/seaborn/blob/${finalAttrs.src.tag}/doc/whatsnew/${finalAttrs.src.tag}.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

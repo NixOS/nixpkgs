@@ -1,43 +1,47 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   replaceVars,
   pkg-config,
   glib,
   shadow,
   gobject-introspection,
   polkit,
-  systemd,
-  coreutils,
+  systemdLibs,
   meson,
   mesonEmulatorHook,
   dbus,
+  json_c,
   ninja,
   python3,
   vala,
   gettext,
   libxcrypt,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "accountsservice";
-  version = "23.13.9";
+  version = "26.27.3";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "accountsservice";
+    repo = "accountsservice";
+    tag = finalAttrs.version;
+    hash = "sha256-/n0YCPZaf1SsTScidFUZcxfJkpv/+Bnb6Z7oKL+clgE=";
   };
 
   patches = [
     # Hardcode dependency paths.
     (replaceVars ./fix-paths.patch {
-      inherit shadow coreutils;
+      inherit shadow;
     })
 
     # Do not try to create directories in /var, that will not work in Nix sandbox.
@@ -55,27 +59,27 @@ stdenv.mkDerivation rec {
     ./get-dm-type-from-config.patch
   ];
 
-  nativeBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      meson
-      ninja
-      pkg-config
-      python3
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     dbus
     gettext
     glib
+    json_c
     polkit
-    systemd
+    systemdLibs
     libxcrypt
   ];
 
@@ -98,9 +102,15 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+
+    substituteInPlace meson.build \
+      --replace-fail "run_command(['./generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
   '';
 
+  passthru.tests = { inherit (nixosTests) accountsservice; };
+
   meta = {
+    changelog = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/releases/${finalAttrs.src.tag}";
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = lib.licenses.gpl3Plus;
@@ -108,4 +118,4 @@ stdenv.mkDerivation rec {
     teams = with lib.teams; [ freedesktop ];
     platforms = lib.platforms.linux;
   };
-}
+})

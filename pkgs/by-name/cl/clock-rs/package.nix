@@ -4,19 +4,20 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clock-rs";
-  version = "0.1.215";
+  version = "0.2.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Oughie";
     repo = "clock-rs";
-    tag = "v${version}";
-    sha256 = "sha256-uDEvJqaaBNRxohYqHE6qfqUF07ynRvGwJKWbYfgPEvg=";
+    tag = finalAttrs.version;
+    hash = "sha256-mC7jZ0ZCSfjpF+p2TtNjt7oRowYkOujSkbuFzChYJ3U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Zry6mkOUdEgC95Y3U3RCXPJUsmaSoRPlHvUThI92GQU=";
+  cargoHash = "sha256-K5AdTjRz1GEWmbqW/D/7faYABUo71tpiyyOrCjHd1GM=";
 
   meta = {
     description = "Modern, digital clock that effortlessly runs in your terminal";
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       clock-rs is a terminal-based clock written in Rust, designed to be a new alternative to tty-clock.
       It supports all major platforms and offers several improvements, which include:
 
-      - The use of a single configuration file to manage its settings, with the ability to overwrite them through the command line,
+      - The use of a single configuration file to manage its settings, with the ability to override them through the command line,
       - Many additional features such as a timer and a stopwatch,
       - And greater flexibility as well as better user experience!
     '';
@@ -34,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.oughie ];
     platforms = lib.platforms.all;
   };
-}
+})

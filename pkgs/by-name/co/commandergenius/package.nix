@@ -15,17 +15,17 @@
   SDL2_mixer,
   SDL2_ttf,
   python3,
-  xorg,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "commandergenius";
   version = "3.5.2";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4WfHdgn8frcDVa3Va6vo/jZihf09vIs+bNdAxScgovE=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     zlib
     curl
     python3
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     sed -i 's,APPDIR games,APPDIR bin,' src/install.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern Interpreter for the Commander Keen Games";
     longDescription = ''
       Commander Genius is an open-source clone of
@@ -82,8 +82,8 @@ stdenv.mkDerivation rec {
       are required to do so
     '';
     homepage = "https://github.com/gerstrong/Commander-Genius";
-    maintainers = with maintainers; [ hce ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ hce ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

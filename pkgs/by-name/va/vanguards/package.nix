@@ -5,8 +5,10 @@
 }:
 python312Packages.buildPythonApplication {
   pname = "vanguards";
-  version = "0.3.1-unstable-2023-10-31";
-  format = "setuptools";
+  version = "0.3.1";
+  pyproject = true;
+
+  build-system = [ python312Packages.setuptools ];
 
   dependencies = [ python312Packages.stem ];
   #tries to access the network during the tests, which fails
@@ -24,6 +26,8 @@ python312Packages.buildPythonApplication {
     substituteInPlace src/vanguards/main.py --replace-fail \
       'import stem.response.events' 'import stem.socket; import stem.control; import stem.response.events'
   '';
+
+  pythonImportsCheck = [ "vanguards" ];
 
   meta = {
     maintainers = with lib.maintainers; [ ForgottenBeast ];

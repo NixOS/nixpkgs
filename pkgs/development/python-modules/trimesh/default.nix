@@ -4,10 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
-  trimesh,
 
   # optional deps
   colorlog,
@@ -27,18 +25,16 @@
   embreex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trimesh";
-  version = "4.6.12";
+  version = "5.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
-    tag = version;
-    hash = "sha256-GjwAtbijzIp2Lec+oCYah3+e2bgscHpZrXJXjqC5x9Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-jKEfsIr/aiXi4PCSLVnQKhGCjlASNc2E3C6H1oevKjQ=";
   };
 
   build-system = [ setuptools ];
@@ -46,41 +42,54 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   optional-dependencies = {
-    easy =
-      [
-        colorlog
-        manifold3d
-        charset-normalizer
-        lxml
-        jsonschema
-        networkx
-        svg-path
-        pycollada
-        shapely
-        xxhash
-        rtree
-        httpx
-        scipy
-        pillow
-        # vhacdx # not packaged
-        mapbox-earcut
-      ]
-      ++ lib.optionals embreex.meta.available [
-        embreex
-      ];
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+    ]
+    ++ lib.optionals embreex.meta.available [
+      embreex
+    ];
   };
 
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+  ]
+  # embreex is maintained by trimesh devs
+  ++ lib.optionals embreex.meta.available [
+    embreex
+    rtree
   ];
 
   disabledTests = [
     # requires loading models which aren't part of the Pypi tarball
     "test_load"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    # requires manifold3d
+    "test_contains_cavity"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [
+    "tests/test_minimal.py"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    "tests/test_ray.py"
+  ];
 
   pythonImportsCheck = [
     "trimesh"
@@ -99,11 +108,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimesh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "trimesh";
     maintainers = with lib.maintainers; [
       pbsds
     ];
   };
-}
+})

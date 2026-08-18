@@ -1,52 +1,59 @@
 {
-  lib,
   fetchFromGitHub,
-  glibcLocales,
   glib-networking,
+  glibcLocales,
   gobject-introspection,
   gtk3,
+  innoextract,
+  lib,
   libnotify,
+  nix-update-script,
   python3Packages,
-  steam-run,
   replaceVars,
+  umu-launcher,
   unzip,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  xdg-utils,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
     tag = version;
-    hash = "sha256-nxWJm+CkxZqRMUYQA0ZJKOb2fD1tPYXnYhy+DOnDbkQ=";
+    hash = "sha256-qq5XLWmQ0x6/hK8beKxJDxHmbu//EuukuyOG+CpF9ug=";
   };
 
   patches = [
-    (replaceVars ./inject-launcher-steam-run.diff {
-      steamrun = lib.getExe steam-run;
+    (replaceVars ./inject-launcher-umu-run.diff {
+      umurun = lib.getExe umu-launcher;
     })
   ];
 
-  postPatch = ''
-    substituteInPlace minigalaxy/installer.py \
-      --replace-fail '"unzip"' "\"${lib.getExe unzip}\"" \
-      --replace-fail "'unzip'" "\"${lib.getExe unzip}\""
-  '';
-
   nativeBuildInputs = [
-    wrapGAppsHook3
     gobject-introspection
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib-networking
     gtk3
     libnotify
+    webkitgtk_4_1
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    pygobject3
+    requests
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -59,17 +66,22 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonPath = [
-    python3Packages.pygobject3
-    python3Packages.requests
-    webkitgtk_4_1
-  ];
-
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --suffix PATH : "${
+        lib.makeBinPath [
+          innoextract
+          unzip
+          xdg-utils
+        ]
+      }"
+    )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://sharkwouter.github.io/minigalaxy/";
@@ -77,7 +89,7 @@ python3Packages.buildPythonApplication rec {
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "Simple GOG client for Linux";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ RoGreat ];
     platforms = lib.platforms.linux;
   };
 }

@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "7.1.1-6";
+  version = "7.1.4-3";
 in
 
 (ffmpeg_7-full.override {
@@ -13,8 +13,8 @@ in
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
-    rev = "v${version}";
-    hash = "sha256-mXPiNSI/c1CEblUxOC69gRRcPgDlopmHGHFE2r7RaHk=";
+    tag = "v${version}";
+    hash = "sha256-3aPiR4BJrR/5UFKRbrK8IbyW6HN9wC6oTSYKH4Ak4EU=";
   };
 }).overrideAttrs
   (old: {
@@ -24,9 +24,6 @@ in
       "--extra-version=Jellyfin"
       "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
     ];
-
-    # Clobber upstream patches as they don't apply to the Jellyfin fork
-    patches = [ ];
 
     postPatch = ''
       for file in $(cat debian/patches/series); do
@@ -41,7 +38,10 @@ in
       changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
       description = "${old.meta.description} (Jellyfin fork)";
       homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-      maintainers = with lib.maintainers; [ justinas ];
+      maintainers = with lib.maintainers; [
+        dotlambda
+        justinas
+      ];
       pkgConfigModules = [ "libavutil" ];
     };
   })

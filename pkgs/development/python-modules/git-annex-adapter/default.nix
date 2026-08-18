@@ -8,7 +8,6 @@
   gitMinimal,
   pygit2,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
   util-linux,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alpernebbi";
@@ -71,10 +68,10 @@ buildPythonPackage rec {
     "test_process_annex_metadata_batch"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";
     description = "Call git-annex commands from Python";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

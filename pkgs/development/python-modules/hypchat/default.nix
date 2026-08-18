@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   pythonAtLeast,
   fetchPypi,
@@ -24,4 +25,8 @@ buildPythonPackage rec {
     six
     python-dateutil
   ];
+
+  meta = {
+    license = lib.licenses.mit;
+  };
 }

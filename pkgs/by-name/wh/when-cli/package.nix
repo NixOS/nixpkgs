@@ -3,16 +3,15 @@
   fetchCrate,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "when-cli";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LWssrLl2HKul24N3bJdf2ePqeR4PCROrTiVY5sqzB2M=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ArrKKcTPfp71ltLh1eeEmanFa7B3nLj+jgj4CzINBY0=";
 
   meta = {
@@ -22,4 +21,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

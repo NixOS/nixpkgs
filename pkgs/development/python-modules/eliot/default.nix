@@ -6,6 +6,8 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
+  versioneer,
 
   # dependencies
   boltons,
@@ -25,19 +27,24 @@
   daemontools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eliot";
-  version = "1.17.5";
+  version = "1.18.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "eliot";
-    tag = version;
-    hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-YUvHdnpWtsy2NlrVLaaewcUPKGLfdfX/zvowV0jcXuw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+    versioneer
+  ];
 
   dependencies = [
     boltons
@@ -55,7 +62,8 @@ buildPythonPackage rec {
     pytestCheckHook
     testtools
     twisted
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -64,9 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Logging library that tells you why it happened";
     homepage = "https://eliot.readthedocs.io";
-    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    changelog = "https://github.com/itamarst/eliot/blob/${finalAttrs.version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dpausp ];
   };
-}
+})

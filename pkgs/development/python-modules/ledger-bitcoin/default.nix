@@ -8,17 +8,18 @@
   bip32,
   coincurve,
   typing-extensions,
+  hidapi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ledger-bitcoin";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ledger_bitcoin";
-    hash = "sha256-IkJFLnjPS1fIuNNQnoMYYP1IUbChv6uV8vXj9H1NFQA=";
+    hash = "sha256-PLQpftflV++YNJzcvWZ+9zaMBH1oGMfNy8p6+YuABrY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,13 +30,14 @@ buildPythonPackage rec {
     bip32
     coincurve
     typing-extensions
+    hidapi
   ];
 
   pythonImportsCheck = [ "ledger_bitcoin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for Ledger Bitcoin application";
     homepage = "https://github.com/LedgerHQ/app-bitcoin-new/tree/develop/bitcoin_client/ledger_bitcoin";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

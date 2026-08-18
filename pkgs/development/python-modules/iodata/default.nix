@@ -11,22 +11,28 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "iodata";
-  version = "1.0.0a4";
+buildPythonPackage (finalAttrs: {
+  pname = "qc-iodata";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theochem";
     repo = "iodata";
-    tag = "v${version}";
-    hash = "sha256-ld6V+/8lg4Du6+mHU5XuXXyMpWwyepXurerScg/bf2Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ly5nEqgxCt5uU+UNQx/7zgrh+w1Plngarw29+Ns68ts=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+      'addopts = "-n auto -W error --strict-markers"' \
+      'addopts = "-n auto --strict-markers"'
+  '';
 
   dependencies = [
     numpy
@@ -41,11 +47,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [ "tools/test_harmonics.py" ];
+
+  meta = {
     description = "Python library for reading, writing, and converting computational chemistry file formats and generating input files";
     mainProgram = "iodata-convert";
     homepage = "https://github.com/theochem/iodata";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

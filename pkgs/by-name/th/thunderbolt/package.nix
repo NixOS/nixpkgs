@@ -9,13 +9,13 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thunderbolt";
   version = "0.9.3";
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "intel";
     repo = "thunderbolt-software-user-space";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   meta = {
-    description = "Thunderbolt(TM) user-space components";
+    description = "Thunderbolt user-space components";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ryantrinkle ];
     homepage = "https://01.org/thunderbolt-sw";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,7 +2,7 @@
   buildGoModule,
   fetchFromSourcehut,
   lib,
-  xorg,
+  libx11,
 }:
 
 buildGoModule {
@@ -16,18 +16,18 @@ buildGoModule {
     sha256 = "sha256-2RSGLWfthcChd5YhDSBfLSch6wuTUv1Sh1f7flgzQwc=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   proxyVendor = true;
 
   vendorHash = "sha256-n9XNqXIoqn+f0xKCenJWXUYXtQhtbNBar68onWH/WV4=";
 
-  meta = with lib; {
+  meta = {
     description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";
     mainProgram = "photon";
     homepage = "https://sr.ht/~ghost08/photon";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kmein ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kmein ];
+    platforms = lib.platforms.linux;
   };
 }

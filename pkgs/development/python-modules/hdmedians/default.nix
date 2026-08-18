@@ -47,10 +47,10 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

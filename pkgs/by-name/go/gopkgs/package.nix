@@ -4,12 +4,12 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopkgs";
   version = "2.1.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "uudashr";
     repo = "gopkgs";
     hash = "sha256-ll5fhwzzCNL0UtMLNSGOY6Yyy0EqI8OZ1iqWad4KU8k=";
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.mit;
   };
-}
+})

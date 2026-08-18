@@ -1,30 +1,27 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   clang-tools,
-  cmake,
   colordiff,
   flex,
   libclang,
   llvm,
   unifdef,
-  chardet,
-  pebble,
-  psutil,
-  pytestCheckHook,
+  testers,
+  cvise,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cvise";
-  version = "2.11.0";
-  format = "other";
+  version = "2.12.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     tag = "v${version}";
-    hash = "sha256-xaX3QMnTKXTXPuLzui0e0WgaQNvbz8u1JNRBkfe4QWg=";
+    hash = "sha256-ObnhFe7hAKUoUxNJ+9jo0Q4AE6jQqDgI1Ta/jsumqpI=";
   };
 
   patches = [
@@ -44,7 +41,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    cmake
+    python3Packages.cmake # TODO: swap this out for the non-python cmake
     flex
     llvm.dev
   ];
@@ -56,14 +53,14 @@ buildPythonApplication rec {
     unifdef
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     chardet
     pebble
     psutil
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    python3Packages.pytestCheckHook
     unifdef
   ];
 
@@ -78,11 +75,21 @@ buildPythonApplication rec {
     "test_simple_reduction"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      # basic syntax check
+      help-output = testers.testVersion {
+        package = cvise;
+        command = "cvise --version";
+      };
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/marxin/cvise";
     description = "Super-parallel Python port of C-Reduce";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.ncsa;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

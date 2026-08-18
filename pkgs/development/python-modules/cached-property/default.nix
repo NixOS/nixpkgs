@@ -4,7 +4,6 @@
   fetchFromGitHub,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,14 +12,19 @@ buildPythonPackage rec {
   version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pydanny";
     repo = "cached-property";
     tag = version;
     hash = "sha256-sOThFJs18DR9aBgIpqkORU4iRmhCVKehyM3DLYUt/Wc=";
   };
+
+  patches = [
+    # fix Python 3.14, replace deprecated asyncio.iscoroutinefunction
+    # https://github.com/pydanny/cached-property/pull/359
+    # vendoring because the PR is not yet merged
+    ./python-3.14-compat.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cached_property" ];
 
-  meta = with lib; {
+  meta = {
     description = "Decorator for caching properties in classes";
     homepage = "https://github.com/pydanny/cached-property";
     changelog = "https://github.com/pydanny/cached-property/releases/tag/${version}";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

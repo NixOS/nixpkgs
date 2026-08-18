@@ -13,8 +13,7 @@
   version,
 }:
 
-symlinkJoin rec {
-  name = "${pname}-${version}";
+symlinkJoin {
   pname = "libc-netbsd";
   inherit version;
 
@@ -47,6 +46,12 @@ symlinkJoin rec {
     rm -r "$out/nix-support"
     fixupPhase
   '';
+
+  # NetBSD's threads are POSIX threads — `libpthread` is joined in above.
+  # `libgcc` and `libstdc++` have to be configured for the same threading model
+  # as each other, so rather than have each guess, they take it from the libc
+  # they are built against.
+  passthru.threadModel = "posix";
 
   meta.platforms = lib.platforms.netbsd;
 }

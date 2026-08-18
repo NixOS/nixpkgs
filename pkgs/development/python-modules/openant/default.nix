@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pyusb,
   influxdb-client,
@@ -12,11 +11,9 @@
 }:
 
 buildPythonPackage rec {
-  pname = "openant-unstable";
+  pname = "openant";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tigge";
@@ -46,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openant" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     mainProgram = "openant";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

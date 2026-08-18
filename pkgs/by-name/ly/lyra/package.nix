@@ -6,15 +6,15 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lyra";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
-    rev = version;
-    sha256 = "sha256-tS2SPLiKaL8C35AmOXyJPstFUfynkE/A53rurqiySbI=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-h2IO5cUYY5Xn3nmy2pXmRYqRRWHyOwPCrZgKnJf9gU8=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     cp -R $src/include/* $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bfgroup/Lyra";
     description = "Simple to use, composable, command line parser for C++ 11 and beyond";
-    platforms = platforms.unix;
-    license = licenses.boost;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.boost;
     maintainers = [ ];
   };
-}
+})

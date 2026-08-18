@@ -5,31 +5,18 @@
   ninja,
   gtest,
   fetchFromGitHub,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.7";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
+    hash = "sha256-YUYZO9KLffczjwIz3mBBceD6oM1giLCFLDHgDCevdRA=";
   };
-
-  patches =
-    lib.optional stdenv.hostPlatform.isRiscV
-      # Adds CMake option HWY_CMAKE_RVV
-      # https://github.com/google/highway/pull/1743
-      (
-        fetchpatch {
-          name = "libhwy-add-rvv-optout.patch";
-          url = "https://github.com/google/highway/commit/5d58d233fbcec0c6a39df8186a877329147324b3.patch";
-          hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
-        }
-      );
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
     # aarch64-specific code gets:
@@ -82,14 +69,14 @@ stdenv.mkDerivation rec {
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
     homepage = "https://github.com/google/highway";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ zhaofengli ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

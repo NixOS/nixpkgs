@@ -21,7 +21,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "version"
         "hash"
         "vendorHash"
@@ -38,6 +38,12 @@ let
           rev = "v${version}";
           inherit hash;
         };
+
+        # Set CGO_ENABLED based on platform:
+        # - Linux: CGO_ENABLED=0 for static linking (avoids LTO plugin issues)
+        # - Darwin: CGO_ENABLED=1 to avoid DNS resolution issues
+        # See: https://github.com/hashicorp/terraform/blob/main/BUILDING.md
+        env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
 
         ldflags = [
           "-s"
@@ -194,9 +200,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.12.2";
-    hash = "sha256-ilQ1rscGD66OT6lHsBgWELayC24B2D7l6iH6vtvqzFI=";
-    vendorHash = "sha256-zWNLIurNP5e/AWr84kQCb2+gZIn6EAsuvr0ZnfSq7Zw=";
+    version = "1.15.8";
+    hash = "sha256-FeXebcNl/npEkEyMvwzeMYTEsl9t8Iz+4lBHd/HzQHQ=";
+    vendorHash = "sha256-l5n5PS2buGPvmx/U8vQeKk6BlZdJQQEujJxlPMTdg0k=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;
@@ -213,7 +219,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox

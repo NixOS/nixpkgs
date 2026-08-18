@@ -5,28 +5,29 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunibreak";
-  version = "6.1";
+  version = "7.0";
 
   src =
     let
-      rev_version = lib.replaceStrings [ "." ] [ "_" ] version;
+      rev_version = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchFromGitHub {
       owner = "adah1972";
       repo = "libunibreak";
-      rev = "libunibreak_${rev_version}";
-      sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
+      tag = "libunibreak_${rev_version}";
+      hash = "sha256-J+/L5pFudppf0l0Gk/6/Rwz5I59p9Aw11cUEPRPGP/8=";
     };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/adah1972/libunibreak";
+    changelog = "https://github.com/adah1972/libunibreak/blob/${finalAttrs.src.tag}/NEWS";
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.coroa ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -10,7 +9,6 @@
   # dependencies
   markdown-it-py,
   pygments,
-  typing-extensions,
 
   # optional-dependencies
   ipywidgets,
@@ -27,18 +25,16 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich";
-  version = "14.0.0";
+  version = "15.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
-    tag = "v${version}";
-    hash = "sha256-gnKzb4lw4zgepTfJahHnpw2/vcg8o1kv8KfeVDSHcQI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Uk3r6aYhrjYJ8GrMKfdlv3/muK/uUynd4pd1yWCwSOM=";
   };
 
   build-system = [ poetry-core ];
@@ -46,7 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies = {
     jupyter = [ ipywidgets ];
@@ -56,14 +52,6 @@ buildPythonPackage rec {
     attrs
     pytestCheckHook
     which
-  ];
-
-  disabledTests = [
-    # pygments 2.19 regressions
-    # https://github.com/Textualize/rich/issues/3612
-    "test_inline_code"
-    "test_blank_lines"
-    "test_python_render_simple_indent_guides"
   ];
 
   pythonImportsCheck = [ "rich" ];
@@ -77,11 +65,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
-    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    changelog = "https://github.com/Textualize/rich/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

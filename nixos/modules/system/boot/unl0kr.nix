@@ -12,13 +12,13 @@ in
 {
   options.boot.initrd.unl0kr = {
     enable = lib.mkEnableOption "unl0kr in initrd" // {
-      description = ''Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.'';
+      description = "Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.";
     };
 
     package = lib.mkPackageOption pkgs "buffybox" { };
 
     allowVendorDrivers = lib.mkEnableOption "load optional drivers" // {
-      description = ''Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)'';
+      description = "Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)";
     };
 
     settings = lib.mkOption {
@@ -56,10 +56,10 @@ in
 
     warnings = lib.mkMerge [
       (lib.mkIf (config.hardware.amdgpu.initrd.enable) [
-        ''Use early video loading at your risk. It's not guaranteed to work with unl0kr.''
+        "Use early video loading at your risk. It's not guaranteed to work with unl0kr."
       ])
       (lib.mkIf (config.boot.plymouth.enable) [
-        ''Upstream clearly intends unl0kr to not run with Plymouth. Good luck''
+        "Upstream clearly intends unl0kr to not run with Plymouth. Good luck"
       ])
     ];
 
@@ -87,6 +87,7 @@ in
       contents."/etc/unl0kr.conf".source = settingsFormat.generate "unl0kr.conf" cfg.settings;
       storePaths = with pkgs; [
         libinput
+        libinput.out
         xkeyboard_config
         (lib.getExe' cfg.package "unl0kr")
         "${cfg.package}/libexec/unl0kr-agent"

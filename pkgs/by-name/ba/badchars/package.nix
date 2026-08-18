@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "badchars";
   version = "0.5.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cytopia";
     repo = "badchars";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VWe3k34snEviBK7VBCDTWAu3YjZfh1gXHXjlnFlefJw=";
   };
 
@@ -31,9 +31,9 @@ python3.pkgs.buildPythonApplication rec {
       transform those to other chars.
     '';
     homepage = "https://github.com/cytopia/badchars";
-    changelog = "https://github.com/cytopia/badchars/releases/tag/${version}";
+    changelog = "https://github.com/cytopia/badchars/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "badchars";
   };
-}
+})

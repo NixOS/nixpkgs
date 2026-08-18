@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fleeting-plugin-aws";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org/fleeting/plugins";
     repo = "aws";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3m7t2uGO7Rlfckb8mdYVutW0/ng0OiUAH5XTBoB//ZU=";
+    hash = "sha256-LgE31SrwPCWBjeKZhqIqDoNzvtnVMCP4u8Jb4emiIBg=";
   };
 
-  vendorHash = "sha256-hfuszGVWfMreGz22+dkx0/cxznjq2XZf7pAn4TWOQ5M=";
+  vendorHash = "sha256-ZEmJR38S2LKeBFogQ4nupupbYBPlWUhdACbLu36R4lY=";
 
   # Needed for "fleeting-plugin-aws -version" to not show "dev".
   #

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "afetch";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "13-CF";
     repo = "afetch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-bHP3DJpgh89AaCX4c1tQGaZ/PiWjArED1rMdszFUq+U=";
   };
 
@@ -24,10 +24,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/13-CF/afetch";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dan4ik605743
       jk
     ];
     platforms = lib.platforms.linux;
     mainProgram = "afetch";
   };
-}
+})

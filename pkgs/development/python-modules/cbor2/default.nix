@@ -1,39 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  withCExtensions ? true,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
+  cargo,
+  fetchFromGitHub,
   hypothesis,
   pytest-cov-stub,
   pytestCheckHook,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-rust,
+  setuptools-scm,
+  withCExtensions ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cbor2";
-  version = "5.6.5";
+  version = "6.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-toKCBnfuHbukX32hGJjScg+S4Gvjas7CkIZ9Xr89fgk=";
+  src = fetchFromGitHub {
+    owner = "agronholm";
+    repo = "cbor2";
+    tag = finalAttrs.version;
+    hash = "sha256-DAhMoWZ820bfa7u+Mu+uqQ+ci+ibxQGwP70t4eOCHg8=";
   };
+
+  cargoRoot = "rust";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-L9aYpPNGWf8h/NCjDwj5qper9sMSTCxPL91eIbb4hw0=";
+  };
+
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   build-system = [
     setuptools
     setuptools-scm
+    setuptools-rust
   ];
-
-  pythonImportsCheck = [ "cbor2" ];
 
   nativeCheckInputs = [
     hypothesis
@@ -49,12 +63,15 @@ buildPythonPackage rec {
     inherit withCExtensions;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
+  pythonImportsCheck = [ "cbor2" ];
+
+  meta = {
     description = "Python CBOR (de)serializer with extensive tag support";
-    mainProgram = "cbor2";
+    changelog = "https://github.com/agronholm/cbor2/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/agronholm/cbor2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
+    mainProgram = "cbor2";
+
   };
-}
+})

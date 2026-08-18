@@ -25,7 +25,7 @@ let
     groupName:
     # users.users attrset
     user:
-    lib.any (x: x == user.name) config.users.groups.${groupName}.members;
+    lib.elem user.name config.users.groups.${groupName}.members;
 
   # Generates a valid SFTPGo user configuration for a given user
   # Will be converted to JSON and loaded on application startup.
@@ -362,7 +362,7 @@ in
           client.wait_until_succeeds("curl -sSf http://server:${toString httpPort}/web/client/login")
 
           # Ensure sftpgo found the static folder
-          client.wait_until_succeeds("curl -o /dev/null -sSf http://server:${toString httpPort}/static/favicon.ico")
+          client.wait_until_succeeds("curl -o /dev/null -sSf http://server:${toString httpPort}/static/favicon.png")
 
       with subtest("Setup SSH keys"):
           client.succeed("mkdir -m 700 /root/.ssh")

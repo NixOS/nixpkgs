@@ -14,8 +14,8 @@
   jack2,
   alsa-lib,
   libpulseaudio,
-  libXpm,
-  libXrandr,
+  libxpm,
+  libxrandr,
   flac,
   libogg,
   libvorbis,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
     tag = finalAttrs.version;
-    hash = "sha256-EKDqdv4/xsdT0X42n4HdH1fUYpJ79MfHaNpoO2c5VG8=";
+    hash = "sha256-AceH2FO75WF/Cmk3wd6u495M277iuZp/21nBl3K4jHU=";
     fetchSubmodules = true;
   };
 
@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-w"
     "-Wno-error"
   ];
+
+  # fmt 12.2.0 made <fmt/core.h> a shim for <fmt/base.h>, which no longer
+  # declares fmt::format.
+  patches = [ ./fmt-12-format-header.patch ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -54,33 +58,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      curl
-      expat
-      flac
-      fltk
-      fmt
-      gtk3
-      jack2
-      libGL
-      libXpm
-      libXrandr
-      libogg
-      libopus
-      libpulseaudio
-      libsamplerate
-      libsndfile
-      libvorbis
-      libmpg123
-      nlohmann_json
-      rtmidi
-      webkitgtk_4_1
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
-      fontconfig
-    ];
+  buildInputs = [
+    alsa-lib
+    curl
+    expat
+    flac
+    fltk
+    fmt
+    gtk3
+    jack2
+    libGL
+    libxpm
+    libxrandr
+    libogg
+    libopus
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    libvorbis
+    libmpg123
+    nlohmann_json
+    rtmidi
+    webkitgtk_4_1
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
+    fontconfig
+  ];
 
   meta = {
     description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";

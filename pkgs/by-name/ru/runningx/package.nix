@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   dontUnpack = true;
 

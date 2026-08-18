@@ -369,6 +369,13 @@ in
         description = "Path to a file containing the SMTP password.";
       };
 
+      incomingMailPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/incomingmailpw";
+        description = "Path to a file containing the IMAP password.";
+      };
+
       metricsTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -698,6 +705,10 @@ in
           PASSWD = "#mailerpass#";
         };
 
+        "email.incoming" = mkIf (cfg.incomingMailPasswordFile != null) {
+          PASSWORD = "#incomingmailpass#";
+        };
+
         metrics = mkIf (cfg.metricsTokenFile != null) {
           TOKEN = "#metricstoken#";
         };
@@ -749,42 +760,42 @@ in
       ];
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
 
-        # If we have a folder or symlink with gitea locales, remove it
-        # And symlink the current gitea locales in place
-        "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+      # If we have a folder or symlink with gitea locales, remove it
+      # And symlink the current gitea locales in place
+      "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
 
-      ]
-      ++ lib.optionals cfg.lfs.enable [
-        "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      ];
+    ]
+    ++ lib.optionals cfg.lfs.enable [
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.gitea = {
       description = "gitea";
-      after =
-        [ "network.target" ]
-        ++ optional usePostgresql "postgresql.target"
-        ++ optional useMysql "mysql.service";
+      after = [
+        "network.target"
+      ]
+      ++ optional usePostgresql "postgresql.target"
+      ++ optional useMysql "mysql.service";
       requires =
         optional (cfg.database.createDatabase && usePostgresql) "postgresql.target"
         ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
@@ -858,6 +869,10 @@ in
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
 
+            ${lib.optionalString (cfg.incomingMailPasswordFile != null) ''
+              ${replaceSecretBin} '#incomingmailpass#' '${cfg.incomingMailPasswordFile}' '${runConfig}'
+            ''}
+
             ${lib.optionalString (cfg.metricsTokenFile != null) ''
               ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
             ''}
@@ -890,12 +905,13 @@ in
         '';
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${exe} web --pid /run/gitea/gitea.pid";
         Restart = "always";
+        WatchdogSec = 30;
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
@@ -909,13 +925,15 @@ in
           cfg.repositoryRoot
           cfg.stateDir
           cfg.lfs.contentDir
-        ] ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
+        ]
+        ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = !useSendmail;
+        # one mid size deployments, Gitea already gets killed when doing DB migrations
+        TimeoutStartSec = "3m";
+
         # Sandboxing
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = !useSendmail;
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
@@ -931,7 +949,8 @@ in
           "AF_UNIX"
           "AF_INET"
           "AF_INET6"
-        ] ++ lib.optional (useSendmail && config.services.postfix.enable) "AF_NETLINK";
+        ]
+        ++ lib.optional (useSendmail && config.services.postfix.enable) "AF_NETLINK";
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -941,14 +960,13 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter =
-          [
-            "~@cpu-emulation @debug @keyring @mount @obsolete @setuid"
-            "setrlimit"
-          ]
-          ++ lib.optionals (!useSendmail) [
-            "~@privileged"
-          ];
+        SystemCallFilter = [
+          "~@cpu-emulation @debug @keyring @mount @obsolete @setuid"
+          "setrlimit"
+        ]
+        ++ lib.optionals (!useSendmail) [
+          "~@privileged"
+        ];
       };
 
       environment = {

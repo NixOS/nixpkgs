@@ -55,7 +55,7 @@ buildPythonPackage rec {
     tor = [ stem ];
   };
 
-  nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "scholarly" ];
 

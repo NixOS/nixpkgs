@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvme-rs";
-  version = "0.1.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "nvme-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lkuOPe5gYhboK9zylTCVN1DFWCFRHhfJa7tNEHH/GQM=";
+    hash = "sha256-leD7Y3QdpppaY98QbTw98QDJBAlL3rDnuuqNR8OIXqQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-MNEG6GGfMg1FXodD8yEMqvm8lYkQgYXMc/vR4lV166I=";
+  cargoHash = "sha256-D1pgXq+eCiKE9CamdocmNmXIqkzpFkXGifABzCv7bv8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

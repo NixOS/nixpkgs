@@ -1,23 +1,40 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
+  withRuntimeRules ? true,
+  withRequestAi ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.7.8";
+  version = "0.8.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-73uGxcJCWUVwr1ddNjZTRJwx8OfnAPwtp80v1xpUEhA=";
+    hash = "sha256-z7GQst70KGNTWAd3sb5eoDnMR2RAmw9RNw3qPeoLWSQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VSv0BpIICkYyCIfGDfK7wfKQssWF13hCh6IW375CI/c=";
+  cargoHash = "sha256-d3RCjCxJXb5YLai1ZqWKifbb2nLG5j1psuvAorNgFGg=";
+
+  env = {
+    _DEF_PR_AI_API_KEY = "";
+    _DEF_PR_AI_URL = "";
+    _DEF_PR_AI_MODEL = "";
+  };
+
+  cargoBuildFlags = [
+    "-p pay-respects"
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+  cargoTestFlags = [
+    "-p pay-respects"
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -29,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
-      bloxx12
+      faukah
       ALameLlama
     ];
     mainProgram = "pay-respects";

@@ -10,7 +10,6 @@
   oslo-serialization,
   oslo-utils,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "python-watcherclient";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
     tag = version;
-    hash = "sha256-ZwMsLXqfRw/qJ71B/WcLkK9TGX77GLiy/nLE7kRD1Xg=";
+    hash = "sha256-TYMV55uvTCvHKj5w5QA2zRqVr6pXCXh2Oc07Yo7epjs=";
   };
 
   env.PBR_VERSION = version;

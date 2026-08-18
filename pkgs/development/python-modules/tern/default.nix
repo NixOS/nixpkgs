@@ -5,38 +5,42 @@
   docker,
   dockerfile-parse,
   fetchPypi,
+  setuptools,
   gitpython,
   idna,
   license-expression,
   packageurl-python,
   pbr,
   prettytable,
-  pythonOlder,
   pyyaml,
   regex,
   requests,
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tern";
   version = "2.12.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "tern";
+    inherit (finalAttrs) version;
     hash = "sha256-yMIvFiliEHrbZMqvX3ZAROWcqii5VmB54QEYHGRJocA=";
   };
+
+  build-system = [
+    setuptools
+    pbr
+  ];
 
   preBuild = ''
     cp requirements.{in,txt}
   '';
 
-  nativeBuildInputs = [ pbr ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     docker
     dockerfile-parse
@@ -56,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tern" ];
 
-  meta = with lib; {
+  meta = {
     description = "Software composition analysis tool and Python library that generates a Software Bill of Materials for container images and Dockerfiles";
     mainProgram = "tern";
     homepage = "https://github.com/tern-tools/tern";
-    changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
-    license = licenses.bsd2;
+    changelog = "https://github.com/tern-tools/tern/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

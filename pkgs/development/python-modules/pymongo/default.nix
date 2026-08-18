@@ -5,7 +5,6 @@
   hatchling,
   hatch-requirements-txt,
   setuptools,
-  pythonOlder,
   dnspython,
 
   # for passthru.tests
@@ -19,15 +18,13 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.13.0";
+  version = "4.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "pymongo";
-    hash = "sha256-kqBuNwnjx+UIINNS09TmABVAa8ummAiTfawqbSIib94=";
+    hash = "sha256-cP+gi6ZBRozAaM9GwGs08BqM40ifZBEwn8tc6r5rL8A=";
   };
 
   build-system = [

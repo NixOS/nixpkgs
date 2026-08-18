@@ -57,7 +57,6 @@ in
   name = "xmonad";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      nequissimus
       ivanbrennan
     ];
   };

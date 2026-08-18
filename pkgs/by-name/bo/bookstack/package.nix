@@ -8,16 +8,16 @@
 
 php83.buildComposerProject2 (finalAttrs: {
   pname = "bookstack";
-  version = "25.05.1";
+  version = "26.05.3";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = "bookstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wQ5i9A+uCD9srSuEnTWWgALzlbciPVwfYhy8ZKVsX7E=";
+    hash = "sha256-IRJGgK1MEptQJlnvHVXINSnhr8TVp6S8fZRBi+4VGig=";
   };
 
-  vendorHash = "sha256-ApLBU21CrmYVW1lOX1wFTo5UMWUEErWumn8x742iMT0=";
+  vendorHash = "sha256-1x0czjCCD9Jf9TMhmkSpUt33q5+E1bw2l0SNP9VPRCE=";
 
   passthru = {
     phpPackage = php83;
@@ -27,10 +27,11 @@ php83.buildComposerProject2 (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     mv $out/share/php/bookstack/* $out
-    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads
+    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads $out/themes
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
     ln -s ${dataDir}/public/uploads $out/public/uploads
+    ln -s ${dataDir}/themes $out/themes
   '';
 
   meta = {
@@ -42,7 +43,6 @@ php83.buildComposerProject2 (finalAttrs: {
     homepage = "https://www.bookstackapp.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      ymarkus
       savyajha
     ];
     platforms = lib.platforms.linux;

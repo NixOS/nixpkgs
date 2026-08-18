@@ -6,7 +6,7 @@
   pkg-config,
   libiconv,
   openssl,
-  pcre,
+  pcre2,
   zlib,
 }:
 
@@ -36,7 +36,7 @@ import ./versions.nix (
     buildInputs = [
       libiconv
       openssl
-      pcre
+      pcre2
       zlib
     ];
 
@@ -56,7 +56,7 @@ import ./versions.nix (
         --enable-agent2 \
         --enable-ipv6 \
         --with-iconv \
-        --with-libpcre \
+        --with-libpcre2 \
         --with-openssl=${openssl.dev}
     '';
 

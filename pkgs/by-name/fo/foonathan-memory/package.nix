@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   doctest,
 }:
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     # do not download doctest, use the system doctest instead
     # originally from: https://sources.debian.org/data/main/f/foonathan-memory/0.7.3-2/debian/patches/0001-Use-system-doctest.patch
     ./0001-Use-system-doctest.patch.patch
+
+    (fetchpatch2 {
+      # Fix build under clang on Darwin
+      # https://github.com/foonathan/memory/pull/192
+      name = "size-suffixes-cannot-have-a-space.patch";
+      url = "https://github.com/foonathan/memory/commit/0f5ebe9f4ac2d2ad106d596c993d13e107b27820.patch?full_index=1";
+      hash = "sha256-RtLGDe6ZQ4CQD25pjS20+SZLhxGSrm/A7cO6VUgPbfo=";
+    })
   ];
 
   outputs = [
@@ -46,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/lib/foonathan_memory
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://memory.foonathan.net/";
     changelog = "https://github.com/foonathan/memory/releases/tag/${finalAttrs.src.rev}";
     description = "STL compatible C++ memory allocator library";
@@ -64,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
       trying to change the STL, it works with the current implementation.
     '';
 
-    license = licenses.zlib;
-    maintainers = with maintainers; [ panicgh ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ panicgh ];
+    platforms = with lib.platforms; unix ++ windows;
   };
 })

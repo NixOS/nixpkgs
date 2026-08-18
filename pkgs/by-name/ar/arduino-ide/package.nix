@@ -2,29 +2,35 @@
   appimageTools,
   fetchurl,
   lib,
+  python3,
 }:
 
 let
   pname = "arduino-ide";
-  version = "2.3.6";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-3Zx6XRhkvAt1Erv13wF3p3lm3guRDYreh+ATBzoO6pk=";
+    hash = "sha256-echZChdEwiDXLL7Q6pHG4qf0WUKSaZsvszZOvXE81WY=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-    install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
-    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
+    install -Dm444 ${appimageContents}/arduino-ide.desktop -t $out/share/applications/
+    install -Dm444 ${appimageContents}/arduino-ide.png -t $out/share/icons/hicolor/512x512/apps
+    substituteInPlace $out/share/applications/arduino-ide.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=arduino-ide %U'
   '';
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    (python3.withPackages (ps: [
+      ps.pyserial # for esptool
+    ]))
+  ];
 
   meta = {
     description = "Open-source electronics prototyping platform";

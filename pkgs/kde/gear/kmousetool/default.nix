@@ -1,14 +1,14 @@
 {
   mkKdeDerivation,
   qtmultimedia,
-  xorg,
+  libxt,
 }:
 mkKdeDerivation {
   pname = "kmousetool";
 
   extraBuildInputs = [
     qtmultimedia
-    xorg.libXt
+    libxt
   ];
   meta.mainProgram = "kmousetool";
 }

@@ -10,12 +10,12 @@ build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
 
-  noisily rustc \
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" "${RUSTC_DRIVER:-rustc}" \
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
     -L dependency=target/deps \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $LINK \
     $EXTRA_LINK_ARGS \
     $EXTRA_LINK_ARGS_LIB \
@@ -36,31 +36,36 @@ build_bin() {
   local crate_name=$1
   local crate_name_=$(echo $crate_name | tr '-' '_')
   local main_file=""
+  local out_dir="${3:-target/bin}"
 
   if [[ ! -z $2 ]]; then
     main_file=$2
   fi
-  echo_build_heading $@
-  noisily rustc \
+  echo_build_heading $crate_name $main_file
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" "${RUSTC_DRIVER:-rustc}" \
     --crate-name $crate_name_ \
     $main_file \
     --crate-type bin \
     $BIN_RUSTC_OPTS \
-    --out-dir target/bin \
+    --out-dir "$out_dir" \
     -L dependency=target/deps \
     $LINK \
     $EXTRA_LINK_ARGS \
     $EXTRA_LINK_ARGS_BINS \
     $EXTRA_LIB \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
     $EXTRA_RUSTC_FLAGS \
-    --color ${colors} \
+    --color ${colors} || return 1
 
   if [ "$crate_name_" != "$crate_name" ]; then
-    mv target/bin/$crate_name_ target/bin/$crate_name
+    if [ -f "$out_dir/$crate_name_.wasm" ]; then
+      mv "$out_dir/$crate_name_.wasm" "$out_dir/$crate_name.wasm"
+    else
+      mv "$out_dir/$crate_name_" "$out_dir/$crate_name"
+    fi
   fi
 }
 
@@ -83,6 +88,12 @@ build_bin_test_file() {
     # above.
     derived_crate_name=${derived_crate_name#"tests_"}
     derived_crate_name="${derived_crate_name%.rs}"
+    # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main — strip the
+    # trailing _main that the `/`→`_` substitution produced. Guarded so
+    # a flat-style tests/<name>_main.rs keeps its _main suffix.
+    if [[ "$file" == */main.rs ]]; then
+        derived_crate_name="${derived_crate_name%_main}"
+    fi
     build_bin_test "$derived_crate_name" "$file"
 }
 

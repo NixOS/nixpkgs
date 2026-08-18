@@ -6,15 +6,15 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openresolv";
-  version = "3.13.2";
+  version = "3.17.4";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
-    rev = "v${version}";
-    sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I86BHiSI3G4xlYRJC99elHw8RyUd3eHdkV5kiEGRXNE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,11 +38,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    changelog = "https://github.com/NetworkConfiguration/openresolv/releases/tag/${finalAttrs.src.tag}";
     description = "Program to manage /etc/resolv.conf";
     mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openresolv_project" finalAttrs.version;
   };
-}
+})

@@ -5,7 +5,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,
@@ -13,15 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-charts";
-  version = "6.8.0";
+  version = "6.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    pname = "PyQt6_Charts";
+    pname = "pyqt6_charts";
     inherit version;
-    hash = "sha256-+GcFuHQOMEFmfOIRrqogW3UOtrr0yQj04/bcjHINEPE=";
+    hash = "sha256-EJHNkZgGo84F0idnKfeb5Oy9CpOVAKiJkCbD71dpxlA=";
   };
 
   # fix include path and increase verbosity
@@ -34,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project

@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
   m4,
   cairo,
-  libX11,
+  libx11,
   mesa,
   mesa_glu,
   ncurses,
@@ -14,34 +14,35 @@
   tcsh,
   tk,
   fixDarwinDylibNames,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.530";
+  version = "8.3.681";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
-    tag = "${version}";
-    sha256 = "sha256-OQPOEDcU0BuGdI7+saOTntosa8+mQcGbZuwzIlvRBSk=";
+    tag = finalAttrs.version;
+    hash = "sha256-ImG9NpcHkYOVCIrECOCl+VBZBPTIC4tk+4xoQMFYokk=";
     leaveDotGit = true;
   };
 
-  nativeBuildInputs =
-    [
-      python3
-      git
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  hardeningDisable = [ "fortify" ];
+
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     cairo
-    libX11
+    libx11
     m4
-    mesa
     mesa_glu
     ncurses
     tcl
@@ -88,13 +89,16 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

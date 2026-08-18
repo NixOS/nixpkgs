@@ -1,0 +1,13 @@
+diff --git a/third_party/dawn/tools/generate-sources-gn.py b/third_party/dawn/tools/generate-sources-gn.py
+index 85d11bbd8416350f6dbe14c15a4846744797b437..084a5c8e26ed9a4267ed61db4d599e251a9d0c10 100644
+--- a/third_party/dawn/tools/generate-sources-gn.py
++++ b/third_party/dawn/tools/generate-sources-gn.py
+@@ -55,7 +55,7 @@ def main() -> int:
+     tool_dir = './' + tool_dir.replace(os.path.sep, '/')
+ 
+     cmd = [
+-        go_binary,
++        'go',
+         'run',
+         tool_dir,
+         os.path.join(os.getcwd(), sys.argv[1]),

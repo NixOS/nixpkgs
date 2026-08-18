@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "starboard";
-  version = "0.15.26";
+  version = "0.15.38";
 
   __darwinAllowLocalNetworking = true; # for tests
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "starboard";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-yQ4ABzN8EvD5qs0yjTaihM145K79LglprC2nlqAw0XU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DcNvkXPVcsS0czQhuLub7xlpZ3jfjW8Er3YclXerjMI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-6SqghCM2dwNyosZo0wfMMHlgrgY+Ts+7lIN7+qSp0GI=";
+  vendorHash = "sha256-UpPhTP+JObPJJMpMKPDriRgA5DETkMUlsobPACOfeho=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Remove test that requires networking
     rm pkg/plugin/aqua/client/client_integration_test.go
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       # Remove "[It] should make a request to fetch registries" test that fails on x86_64-darwin
       rm pkg/plugin/aqua/client/client_test.go
     ''}
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     }
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd starboard \
       --bash <($out/bin/starboard completion bash) \
       --fish <($out/bin/starboard completion fish) \

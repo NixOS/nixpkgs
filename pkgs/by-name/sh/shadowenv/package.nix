@@ -5,19 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shadowenv";
-  version = "3.3.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "shadowenv";
-    rev = version;
-    hash = "sha256-s70tNeF0FnWYZ0xLGIL1lTM0LwJdhPPIHrNgrY1YNBs=";
+    rev = finalAttrs.version;
+    hash = "sha256-1LsOt0+jF00EEDLALXZhrKpLTpoNINgh23OevK0KztM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Cg01yM3FbrYpZrv2dhGJnezugNhcuwDcXIU47/AWrC4=";
+  cargoHash = "sha256-995toHrVVEZ/24ZgEWcgXwz0AFVPdXmylKiEimEBwNQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shopify.github.io/shadowenv/";
-    description = "reversible directory-local environment variable manipulations";
-    license = licenses.mit;
+    description = "Reversible directory-local environment variable manipulations";
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "shadowenv";
   };
-}
+})

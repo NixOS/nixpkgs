@@ -1,26 +1,19 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   flit-core,
 
-  # tests
-  chex,
-  jaxlib,
-  pytest-subtests,
-  pytest-xdist,
-  pytestCheckHook,
-  yapf,
-
-  # optional
+  # optional-dependencies
   jupyter,
   mediapy,
   numpy,
   packaging,
   protobuf,
   fsspec,
-  importlib-resources,
   typing-extensions,
   zipp,
   absl-py,
@@ -32,101 +25,140 @@
   dm-tree,
   jax,
   tensorflow,
+
+  # tests
+  chex,
+  ffmpeg,
+  jaxlib,
+  optree,
+  pydantic,
+  pytest-xdist,
+  pytestCheckHook,
+  torch,
+  yapf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "etils";
-  version = "1.12.2";
+  version = "1.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xrnh8M5m0bv1T5kgGwimC6OW00RtnrGNS8ObJqLhpe4=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "etils";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gjWA+y1dXihmOBzCxfgUZJLvtSHzpRLQIhNxzk+y11M=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  optional-dependencies = rec {
-    array-types = enp;
+  optional-dependencies = lib.fix (self: {
+    array-types = self.enp;
     eapp = [
       absl-py
       simple-parsing
-    ] ++ epy;
-    ecolab =
-      [
-        jupyter
-        numpy
-        mediapy
-        packaging
-        protobuf
-      ]
-      ++ enp
-      ++ epy
-      ++ etree;
-    edc = epy;
+    ]
+    ++ self.epy;
+    ecolab = [
+      jupyter
+      numpy
+      mediapy
+      packaging
+      protobuf
+    ]
+    ++ self.enp
+    ++ self.epy
+    ++ self.etree;
+    edc = self.epy;
     enp = [
       numpy
       einops
-    ] ++ epy;
+    ]
+    ++ self.epy;
     epath = [
       fsspec
-      importlib-resources
       typing-extensions
       zipp
-    ] ++ epy;
-    epath-gcs = [ gcsfs ] ++ epath;
-    epath-s3 = [ s3fs ] ++ epath;
+    ]
+    ++ self.epy;
+    epath-gcs = [ gcsfs ] ++ self.epath;
+    epath-s3 = [ s3fs ] ++ self.epath;
     epy = [ typing-extensions ];
     etqdm = [
       absl-py
       tqdm
-    ] ++ epy;
-    etree = array-types ++ epy ++ enp ++ etqdm;
-    etree-dm = [ dm-tree ] ++ etree;
-    etree-jax = [ jax ] ++ etree;
-    etree-tf = [ tensorflow ] ++ etree;
-    lazy-imports = ecolab;
+    ]
+    ++ self.epy;
+    etree = self.array-types ++ self.epy ++ self.enp ++ self.etqdm;
+    etree-dm = [ dm-tree ] ++ self.etree;
+    etree-jax = [ jax ] ++ self.etree;
+    etree-tf = [ tensorflow ] ++ self.etree;
+    lazy-imports = self.ecolab;
     all =
-      array-types
-      ++ eapp
-      ++ ecolab
-      ++ edc
-      ++ enp
-      ++ epath
-      ++ epath-gcs
-      ++ epath-s3
-      ++ epy
-      ++ etqdm
-      ++ etree
-      ++ etree-dm
-      ++ etree-jax
-      ++ etree-tf;
-  };
+      self.array-types
+      ++ self.eapp
+      ++ self.ecolab
+      ++ self.edc
+      ++ self.enp
+      ++ self.epath
+      ++ self.epath-gcs
+      ++ self.epath-s3
+      ++ self.epy
+      ++ self.etqdm
+      ++ self.etree
+      ++ self.etree-dm
+      ++ self.etree-jax
+      ++ self.etree-tf;
+  });
 
   pythonImportsCheck = [ "etils" ];
 
   nativeCheckInputs = [
     chex
+    optree
+    ffmpeg
     jaxlib
-    pytest-subtests
+    torch
+    pydantic
     pytest-xdist
     pytestCheckHook
     yapf
-  ] ++ optional-dependencies.all;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
+
+  # enabledTestPaths = [ ];
 
   disabledTests = [
-    "test_public_access" # requires network access
+    # Requires network access
+    "test_public_access"
+
+    # AttributeError: module 'jax._src' has no attribute 'prng'
+    "test_array_spec_is_fake"
+    "test_array_spec_repr"
+    "test_array_spec_tensors"
+    "test_array_spec_valid"
+    "test_obj"
+    "test_spec_like"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert '/tmp/to/something' == '/private/tmp/to/something'
+    "test_repr"
   ];
 
-  doCheck = false; # error: infinite recursion encountered
+  disabledTestPaths = [
+    # Circular dependency with tensorflow-datasets
+    "etils/epy/lazy_imports_utils_test.py"
 
-  meta = with lib; {
-    changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
+    # Requires unpackaged fiddle
+    "etils/epy/text_utils_test.py"
+  ];
+
+  meta = {
     description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    changelog = "https://github.com/google/etils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
-}
+})

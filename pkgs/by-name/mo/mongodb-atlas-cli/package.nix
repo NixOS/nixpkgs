@@ -1,36 +1,39 @@
 {
+  stdenv,
+  fetchFromGitHub,
   lib,
   buildGoModule,
-  fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   testers,
   mongodb-atlas-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mongodb-atlas-cli";
-  version = "1.44.0";
-
-  vendorHash = "sha256-FSf+JbIbM7EumkVmQ/ASRCIu7X6tyerhRx01/Rn0+LM=";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
-    rev = "refs/tags/atlascli/v${version}";
-    sha256 = "sha256-1XSIXLI0ItQPOcFXhswnnrKN5LqWRs/th4EdfvdS/G8=";
+    tag = "atlascli/v${finalAttrs.version}";
+    hash = "sha256-kpgHmKm9gmAll+zuzXeUGv4oYRE4XL4LbSsFAB6Sj1M=";
   };
+
+  vendorHash = "sha256-PuwDBGVM7I0s2m8WppG6YdEM5sORTg0OfFFNpo0F31c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.GitCommit=${src.rev}"
-    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.Version=v${version}"
+    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.GitCommit=${finalAttrs.src.rev}"
+    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.Version=v${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  subPackages = [ "cmd/atlas" ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atlas \
       --bash <($out/bin/atlas completion bash) \
       --fish <($out/bin/atlas completion fish) \
@@ -43,15 +46,18 @@ buildGoModule rec {
     };
     tests.version = testers.testVersion {
       package = mongodb-atlas-cli;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
-    homepage = "https://www.mongodb.com/try/download/shell";
     description = "CLI utility to manage MongoDB Atlas from the terminal";
-    maintainers = with lib.maintainers; [ aduh95 ];
+    homepage = "https://github.com/mongodb/mongodb-atlas-cli";
+    changelog = "https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-changelog/#atlas-cli-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      iamanaws
+    ];
     mainProgram = "atlas";
   };
-}
+})

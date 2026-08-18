@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "robustirc-bridge";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "robustirc";
     repo = "bridge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8SNy3xqVahBuEXCrG21zIggXeahbzJtqtFMxfp+r48g=";
   };
 
@@ -24,11 +24,11 @@ buildGoModule rec {
 
   passthru.tests.robustirc-bridge = nixosTests.robustirc-bridge;
 
-  meta = with lib; {
+  meta = {
     description = "Bridge to robustirc.net-IRC-Network";
     mainProgram = "robustirc-bridge";
     homepage = "https://robustirc.net/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.hax404 ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.hax404 ];
   };
-}
+})

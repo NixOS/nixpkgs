@@ -6,21 +6,25 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zvm";
-  version = "0.8.7";
+  version = "0.8.27";
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
-    tag = "v${version}";
-    hash = "sha256-yRdORWnWcVZGUhVnPVDhK4VO1eJHrbPkY00QQB1JwmI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NDkvTghdqabfzzXSyxYHZj67u+upY0WfLOAO5DWAZ3s=";
   };
 
-  vendorHash = "sha256-wo+vA9AYXIjv6SGb7hNY6ZIVMyJ5enMd8gpQ6u3F7To=";
+  vendorHash = "sha256-kJrCUxzbpyxEUF9UQeAI28tWKA+T7zT1DBI1wf3pjjM=";
+
+  postPatch = ''
+    substituteInPlace cli/meta/version.go \
+      --replace-fail 'VERSION = "v0.8.25"' 'VERSION = "v${finalAttrs.version}"'
+  '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
@@ -28,11 +32,11 @@ buildGoModule rec {
   meta = {
     homepage = "https://www.zvm.app/";
     downloadPage = "https://github.com/tristanisham/zvm";
-    changelog = "https://github.com/tristanisham/zvm/releases/tag/v${version}";
+    changelog = "https://github.com/tristanisham/zvm/releases/tag/v${finalAttrs.version}";
     description = "Tool to manage and use different Zig versions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.unix;
     mainProgram = "zvm";
   };
-}
+})

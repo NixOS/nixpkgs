@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # make the testsuite run with pytest, so we can disable individual tests
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/testextensions.py" ];
+  enabledTestPaths = [ "tests/testextensions.py" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/python/mypy_extensions/issues/65
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
     homepage = "https://www.mypy-lang.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 }

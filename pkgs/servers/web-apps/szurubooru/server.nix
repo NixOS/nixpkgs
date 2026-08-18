@@ -5,6 +5,8 @@
   nixosTests,
   fetchPypi,
   python3,
+  ffmpeg_4-full,
+  szurubooru,
 }:
 
 let
@@ -20,20 +22,7 @@ let
         doCheck = false;
       });
 
-      pyheif = super.pyheif.overridePythonAttrs (oldAttrs: {
-        doCheck = false;
-      });
-
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.23";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          sha256 = "sha256-b8ozZyV4Zm9lfBMVUsTviXnBYG5JT3jNUZl0LfsmkYs=";
-        };
-
-        doCheck = false;
-      });
+      sqlalchemy = self.sqlalchemy_1_4;
     })
   ];
 
@@ -50,23 +39,29 @@ python.pkgs.buildPythonApplication {
 
   src = "${src}/server";
 
+  patches = [
+    ./001-server-pillow-heif.patch
+  ];
+
   nativeBuildInputs = with python.pkgs; [ setuptools ];
   propagatedBuildInputs = with python.pkgs; [
-    alembic
     certifi
     coloredlogs
-    heif-image-plugin
+    legacy-cgi
     numpy
-    pillow-avif-plugin
     pillow
+    pillow-heif
     psycopg2-binary
-    pyheif
     pynacl
     pyrfc3339
     pytz
     pyyaml
     sqlalchemy
     yt-dlp
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg_4-full ]}"
   ];
 
   postInstall = ''
@@ -76,10 +71,24 @@ python.pkgs.buildPythonApplication {
 
   passthru.tests.szurubooru = nixosTests.szurubooru;
 
-  meta = with lib; {
+  # Database migration. Needs the szurubooru server in its environment for the
+  # migration to complete successfully.
+  passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      szurubooru.server
+    ];
+  });
+  # Waitress is used to run the serer.
+  passthru.waitress = python.pkgs.waitress.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      szurubooru.server
+    ];
+  });
+
+  meta = {
     description = "Server of szurubooru, an image board engine for small and medium communities";
     homepage = "https://github.com/rr-/szurubooru";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ratcornu ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ratcornu ];
   };
 }

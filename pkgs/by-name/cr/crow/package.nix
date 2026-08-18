@@ -3,33 +3,44 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  catch2_3,
   asio,
   python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow";
-  version = "1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "crowcpp";
-    repo = "crow";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fokj+KiS6frPVOoOvETxW3ue95kCcYhdhOlN3efzBd4=";
+    owner = "CrowCpp";
+    repo = "Crow";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MN2x1hgJ9TziZFPSZn6RuAEfl4mZv3ijU9LqQJkw6UM=";
   };
+
+  patches = [
+    ./cpm.patch
+  ];
 
   propagatedBuildInputs = [ asio ];
   nativeBuildInputs = [
-    asio
     cmake
-    python3
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "CROW_BUILD_EXAMPLES" false)
+    # Requires more non-trivial patches to get around CPM
+    (lib.cmakeBool "CROW_GENERATE_SBOM" false)
   ];
 
   doCheck = true;
+  nativeCheckInputs = [
+    python3
+  ];
+  checkInputs = [
+    catch2_3
+  ];
 
   meta = {
     description = "Fast and Easy to use microframework for the web";

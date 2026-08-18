@@ -2,28 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustywind";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
-    rev = "v${version}";
-    hash = "sha256-3cLpyY2Ec3XUDUoq4QLyDx8Nr85TOevBkfoReguVGII=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uxgp8cwOswrhDLtx5ZAxsdy96/+UjYhzNKwvt0DBmhk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jq8d+ndPOu07YO5PJ5YfWTeG70bZnr0i8vMwv7Dw5GY=";
+  cargoHash = "sha256-W5dPMSkihxWryLEpQhqt9IpiwyAYSsIgQLbwjnXVjEk=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CLI for organizing Tailwind CSS classes";
     mainProgram = "rustywind";
     homepage = "https://github.com/avencera/rustywind";
-    changelog = "https://github.com/avencera/rustywind/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/avencera/rustywind/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

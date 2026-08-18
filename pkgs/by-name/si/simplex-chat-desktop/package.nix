@@ -2,17 +2,28 @@
   lib,
   appimageTools,
   fetchurl,
-  gitUpdater,
+  stdenv,
 }:
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.3.6";
+  version = "7.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-EvDDWLgucqTPcf9eC2q9IJKfo1mxRAo82PAzkzxVESc=";
+  sources = {
+    "aarch64-linux" = fetchurl {
+      url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-aarch64.AppImage";
+      hash = "sha256-bvDEk8ub/OOfqlj6e5vF/FYYJWdWKv1iIjfh5WZR3/4=";
+    };
+    "x86_64-linux" = fetchurl {
+      url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
+      hash = "sha256-eNLDk5DCHd24nreOU7hT1Ky2ll1TyTvmabiwzFRtwXQ=";
+    };
   };
+
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "simplex-chat-desktop: Unsupported system: ${system}";
+
+  src = sources.${system} or throwSystem;
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -20,6 +31,8 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  extraPkgs = pkgs: [ pkgs.libnotify ];
 
   extraBwrapArgs = [
     "--setenv _JAVA_AWT_WM_NONREPARENTING 1"
@@ -32,11 +45,9 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/simplex-chat/simplex-chat";
-    rev-prefix = "v";
-    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
-    ignoredVersions = "-";
+  passthru = {
+    inherit sources;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -46,6 +57,9 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ terryg ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

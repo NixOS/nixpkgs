@@ -22,11 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-ui-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-W97PIb2NTfmqLsIQgrJkOb+8n3fDzlE91sDvgJbNFwY=";
+    hash = "sha256-Oibi7+LJK7K1a1fFN2SKy4XiA0gSC4u7Wmk0t86SHaw=";
   };
 
   patches = [
     ./dont_download_glfw_ui.patch
+    ./fix-cmake4-build.patch
   ];
 
   nativeBuildInputs = [

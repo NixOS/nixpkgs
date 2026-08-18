@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelnuke";
-  version = "unstable-2019-05-19";
+  version = "0-unstable-2019-05-19";
 
   src = fetchFromGitHub {
     owner = "defnull";
@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 ./pixelnuke $out/bin/pixelnuke
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer canvas (C implementation)";
     homepage = "https://cccgoe.de/wiki/Pixelflut";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mrVanDalo ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mrVanDalo ];
     mainProgram = "pixelnuke";
   };
 })

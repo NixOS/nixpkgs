@@ -59,6 +59,11 @@ buildNpmPackage (finalAttrs: {
     upower
   ];
 
+  patches = [
+    # Workaround for TypeScript 5.9: https://github.com/Aylur/ags/issues/725#issuecomment-3070009695
+    ./ts59.patch
+  ];
+
   postPatch = ''
     chmod u+x ./post_install.sh && patchShebangs ./post_install.sh
   '';
@@ -71,7 +76,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/Aylur/ags/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      foo-dogsquared
       johnrtitor
     ];
     mainProgram = "ags";

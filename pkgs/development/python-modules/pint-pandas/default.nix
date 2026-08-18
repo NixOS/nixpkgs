@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pint-pandas";
-  version = "0.6";
+  version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
     tag = version;
-    hash = "sha256-5/Qk6HZlfeKkfSqnVA8aADjJ99SUiurYCqSIUBPFIzc=";
+    hash = "sha256-B8nxGetnYpA+Nuhe//D8n+5g7rPO90Mm1iWswJ0+mPc=";
   };
 
   build-system = [

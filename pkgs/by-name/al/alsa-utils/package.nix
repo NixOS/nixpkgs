@@ -7,12 +7,14 @@
   alsa-plugins,
   gettext,
   makeWrapper,
+  pkg-config,
   ncurses,
   libsamplerate,
   pciutils,
   procps,
+  tree,
   which,
-  fftw,
+  fftwFloat,
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
@@ -28,24 +30,25 @@ let
     paths = map (path: "${path}/lib/alsa-lib") plugin-packages;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.13";
+  version = "1.2.16";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
-    hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
+    url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-CSOZ1eh0mh1eGI45MVdSHOxLdWk7YOu3m7znKM/yIyw=";
   };
 
   nativeBuildInputs = [
     gettext
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     alsa-lib
     ncurses
     libsamplerate
-    fftw
+    fftwFloat
   ];
 
   configureFlags = [
@@ -62,9 +65,12 @@ stdenv.mkDerivation rec {
         which
         pciutils
         procps
+        tree
       ]
-    }"
-    wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
+    }" --prefix PATH : $out/bin
+    for program in $out/bin/*; do
+        wrapProgram "$program" --set-default ALSA_PLUGIN_DIR "${plugin-dir}"
+    done
   '';
 
   postInstall = ''
@@ -77,16 +83,24 @@ stdenv.mkDerivation rec {
     url = "https://www.alsa-project.org/files/pub/utils/";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
+    changelog = "https://github.com/alsa-project/alsa-utils/releases/tag/v${finalAttrs.version}";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl2Only # alsactl (init_{parse,sysdeps,sysfs,utils_{run,string}}.c, rest GPL 2.0+)
+      lgpl21Plus # alsaucm
+    ];
+
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
-}
+})

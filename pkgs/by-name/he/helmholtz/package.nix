@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "helmholtz";
+  pname = "helmholtz";
+  version = "1.0";
 
   src = fetchurl {
     url = "https://www.katjaas.nl/helmholtz/helmholtz~.zip";

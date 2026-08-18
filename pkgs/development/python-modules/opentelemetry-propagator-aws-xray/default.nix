@@ -30,7 +30,7 @@ buildPythonPackage {
     requests
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "opentelemetry.propagators.aws" ];
 

@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "wlvncc";
-  version = "0-unstable-2025-04-21";
+  version = "0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "wlvncc";
-    rev = "a6a5463a9c69ce4db04d8d699dd58e1ba8560a0a";
-    hash = "sha256-8p2IOQvcjOV5xe0c/RWP6aRHtQnu9tYI7QgcC13sg4k=";
+    rev = "cc0abf87c37920540f2439a556e6a480c28f8f46";
+    hash = "sha256-VPZJd4/yerWZeLl+NVH1EDtSokeS/XMS6lQUXOn9a7Q=";
   };
 
   nativeBuildInputs = [

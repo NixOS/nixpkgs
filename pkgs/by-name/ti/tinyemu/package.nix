@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-voNR8hIYGbMXL87c5csYJvoSyH2ht+2Y8mnT6AKgVVU=";
   };
 
+  postPatch = ''
+    substituteInPlace fs_wget.c \
+      --replace-fail '#include <curl/multi.h>' '#include <curl/curl.h>'
+  '';
+
   nativeBuildInputs = [ SDL ];
 
   buildInputs = [
@@ -46,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       Main features:
 
       - RISC-V system emulator supporting the RV128IMAFDQC base ISA (user level
-        ISA version 2.2, priviledged architecture version 1.10) including:
+        ISA version 2.2, privileged architecture version 1.10) including:
         - 32/64/128 bit integer registers
         - 32/64/128 bit floating point instructions (using the SoftFP Library)
         - Compressed instructions
@@ -56,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
       - Graphical display with SDL
       - JSON configuration file
       - Remote HTTP block device and filesystem
-      - Small code, easy to modify, few external dependancies
-      - Javascript version running Linux and Windows 2000.
+      - Small code, easy to modify, few external dependencies
+      - JavaScript version running Linux and Windows 2000.
     '';
     license = with lib.licenses; [
       mit
       bsd2
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -4,63 +4,72 @@
   buildGoModule,
   installShellFiles,
   stdenv,
-  testers,
-  gh,
+  versionCheckHook,
+  makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.74.2";
+  version = "2.97.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-6R5BU+snCkO0pwQalWG2cZ6PrfD8fVFXFqqJfVXRd8s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yG3bo7YVs1Q//9PePusU0m4TilujQMxI4Faz26iAb5g=";
   };
 
-  vendorHash = "sha256-hliYyuA3gAzyHNwdGg1fygrKam6gNYC2qdvIIu5VOYM=";
+  vendorHash = "sha256-XeXHMEhe1ZVWtenyYIzaYjNovaArvI0xBRWVabUF9KU=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # N.B.: using the Makefile is intentional.
   # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
   buildPhase = ''
     runHook preBuild
-    make GO_LDFLAGS="-s -w -X github.com/cli/cli/v${lib.versions.major version}/internal/build.Date=nixpkgs" GH_VERSION=${version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
+    make GO_LDFLAGS="-s -w -X github.com/cli/cli/v${lib.versions.major finalAttrs.version}/internal/build.Date=nixpkgs" GH_VERSION=${finalAttrs.version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 bin/gh -t $out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installManPage share/man/*/*.[1-9]
+  installPhase = ''
+    runHook preInstall
+    installBin bin/gh
+    wrapProgram $out/bin/gh \
+      --set-default GH_TELEMETRY false
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installManPage share/man/*/*.[1-9]
 
-      installShellCompletion --cmd gh \
-        --bash <($out/bin/gh completion -s bash) \
-        --fish <($out/bin/gh completion -s fish) \
-        --zsh <($out/bin/gh completion -s zsh)
-    ''
-    + ''
-      runHook postInstall
-    '';
+    installShellCompletion --cmd gh \
+      --bash <($out/bin/gh completion -s bash) \
+      --fish <($out/bin/gh completion -s fish) \
+      --zsh <($out/bin/gh completion -s zsh)
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   # most tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = gh;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
-    changelog = "https://github.com/cli/cli/releases/tag/v${version}";
+    changelog = "https://github.com/cli/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "gh";
-    maintainers = with lib.maintainers; [ zowoq ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      zowoq
+      savtrip
+    ];
   };
-}
+})

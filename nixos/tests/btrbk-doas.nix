@@ -16,8 +16,8 @@ let
 in
 {
   name = "btrbk-doas";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [
       symphorien
       tu-maurice
     ];

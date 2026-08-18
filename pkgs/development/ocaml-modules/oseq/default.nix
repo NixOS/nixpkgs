@@ -6,14 +6,14 @@
   qcheck,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "0.5.1";
   pname = "oseq";
 
   src = fetchFromGitHub {
     owner = "c-cube";
-    repo = pname;
-    rev = "v${version}";
+    repo = "oseq";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fyr/OKlvvHBfovtdubSW4rd4OwQbMLKWXghyU3uBy/k=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafadruid-druid-datasource";
-  version = "1.4.1";
-  zipHash = "sha256-7atxqRqKqop6ABQ+ead6wR/YRpJaV8j/Ri4VB9FXMu8=";
-  meta = with lib; {
+  version = "1.8.0";
+  zipHash = "sha256-iCd6OejO+AQtN3tzEJUDZUGa4Fg1X9k4DzUXN9U0Udc=";
+  meta = {
     description = "Connects Grafana to Druid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nukaduka ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nukaduka ];
+    platforms = lib.platforms.unix;
   };
 }

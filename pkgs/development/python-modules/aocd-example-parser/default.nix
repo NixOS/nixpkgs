@@ -3,21 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "aocd-example-parser";
-  version = "2024.12.25";
+  version = "2025.12.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "aocd-example-parser";
-    rev = "c86bfc714d2f413965a46a2caf3483e823ea9ade";
-    hash = "sha256-1Le1jrLCFRJcUngoq5bt22gM1lpAMBNBRWjOl3yLlsw=";
+    rev = "6331ed538dcb25c6d9fd2ef679ccd361ea4ea0af";
+    hash = "sha256-RgTs17TxLhmexkWjPTWMcERVrmPkhMZfVL195JVToU0=";
   };
 
   build-system = [ flit-core ];

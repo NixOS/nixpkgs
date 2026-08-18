@@ -16,19 +16,15 @@ let
   pname = "keymapp";
   version = "1.3.7";
 
-  sources = rec {
+  sources = {
     aarch64-darwin = {
-      # Upstream does not provide archives of previous versions,
-      # therefore a capture using the wayback machine is used
-      url = "https://web.archive.org/web/20250520135916/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
+      url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.dmg";
       hash = "sha256-H6xRau7pWuSF5Aa6lblwi/Lg5KxC+HM3rtUMjX+hEE8=";
     };
-    x86_64-darwin = aarch64-darwin;
-    aarch64-linux = {
+    x86_64-linux = {
       url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
       hash = "sha256-qHvHCDzWRhuhDg2kuU8kmikQDXElQtVEmPAelHz4aPo=";
     };
-    x86_64-linux = aarch64-linux;
   };
   src = fetchurl {
     inherit (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) url hash;
@@ -42,7 +38,7 @@ let
       jankaifer
       shawn8901
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
   };

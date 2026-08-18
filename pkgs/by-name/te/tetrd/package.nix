@@ -9,25 +9,27 @@
   libevent,
   libvpx,
   libxslt,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
   minizip,
   nss,
   re2,
   snappy,
   libnotify,
-  libappindicator-gtk3,
   libappindicator,
   udev,
   libgbm,
+  libGL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tetrd";
-  version = "1.0.4";
+  version = "1.3.1-1";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20211130190525/https://download.tetrd.app/files/tetrd.linux_amd64.pkg.tar.xz";
-    sha256 = "1bxp7rg2dm9nnvkgg48xd156d0jgdf35flaw0bwzkkh3zz9ysry2";
+    url = "https://web.archive.org/web/20260108185127/https://download.tetrd.app/files/tetrd.linux_amd64.pkg.tar.xz";
+    sha256 = "0mpixs20jrxkbxvd7nl0p664jgqfp3m6qf7kmsj7frkhky697fbm";
   };
 
   sourceRoot = ".";
@@ -40,20 +42,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libGL
     c-ares
     ffmpeg
     libevent
     libvpx
     libxslt
-    xorg.libXScrnSaver
-    xorg.libXdamage
-    xorg.libXtst
+    libxscrnsaver
+    libxdamage
+    libxtst
     minizip
     nss
     re2
     snappy
     libnotify
-    libappindicator-gtk3
     libappindicator
     udev
     libgbm
@@ -69,6 +71,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/Tetrd/tetrd \
       --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath buildInputs}
 
+    mkdir $out/bin
+    ln -s $out/opt/Tetrd/tetrd $out/bin/tetrd
+
     runHook postInstall
   '';
 
@@ -76,12 +81,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/tetrd.desktop --replace /opt $out/opt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Share your internet connection from your device to your PC and vice versa through a USB cable";
     homepage = "https://tetrd.app";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Madouura ];
+    mainProgram = "tetrd";
   };
 }

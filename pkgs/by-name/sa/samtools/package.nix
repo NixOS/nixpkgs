@@ -8,13 +8,13 @@
   ncurses ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samtools";
-  version = "1.21";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-BXJLCDprbwMF/K5SQ6BWzDbPgmMJw8uTR6a4nuP8Wto=";
+    url = "https://github.com/samtools/samtools/releases/download/${finalAttrs.version}/samtools-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Aqpc0LpS4GwggAVOBZ19d6iF3+lxfDHNid/npAR+2g4=";
   };
 
   # tests require `bgzip` from the htslib package
@@ -28,15 +28,16 @@ stdenv.mkDerivation rec {
     htslib
   ];
 
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="-lz -lbz2 -llzma"
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
 
-  configureFlags =
-    [ "--with-htslib=${htslib}" ]
-    ++ lib.optional (ncurses == null) "--without-curses"
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ "--without-curses" ];
+  configureFlags = [
+    "--with-htslib=${htslib}"
+  ]
+  ++ lib.optional (ncurses == null) "--without-curses"
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ "--without-curses" ];
 
   preCheck = ''
     patchShebangs test/
@@ -46,14 +47,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating SAM/BAM/CRAM format";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://www.htslib.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       mimame
       unode
     ];
   };
-}
+})

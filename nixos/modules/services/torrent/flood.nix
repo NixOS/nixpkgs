@@ -19,7 +19,7 @@ in
       description = "Whether to open the firewall for the port in {option}`services.flood.port`.";
     };
     port = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       description = "Port to bind webserver.";
       default = 3000;
       example = 3001;
@@ -80,6 +80,7 @@ in
           "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

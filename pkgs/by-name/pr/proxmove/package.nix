@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "proxmove";
   version = "1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ossobv";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-8xzsmQsogoMrdpf8+mVZRWPGQt9BO0dBT0aKt7ygUe4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     proxmoxer
   ];
 
@@ -33,12 +37,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proxmox VM migrator: migrates VMs between different Proxmox VE clusters";
     mainProgram = "proxmove";
     homepage = "https://github.com/ossobv/proxmove";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ AngryAnt ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ AngryAnt ];
   };
 }

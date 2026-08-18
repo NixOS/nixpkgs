@@ -21,11 +21,11 @@
 }:
 let
   pname = "gcc";
-  version = "13.2.0";
+  version = "15.3.0";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
+    hash = "sha256-+lnBvu+JlfJ8TXHB3yJ1hxiTFdPm+v8btDBuYbDFMOs=";
   };
 
   gmpVersion = "6.3.0";
@@ -34,22 +34,16 @@ let
     hash = "sha256-o8K4AgG4nmhhb0rTC8Zq7kknw85Q4zkpyoGdXENTiJg=";
   };
 
-  mpfrVersion = "4.2.1";
+  mpfrVersion = "4.2.2";
   mpfr = fetchurl {
     url = "mirror://gnu/mpfr/mpfr-${mpfrVersion}.tar.xz";
-    hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
-  mpcVersion = "1.3.1";
+  mpcVersion = "1.4.1";
   mpc = fetchurl {
-    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
-    hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
-  };
-
-  islVersion = "0.24";
-  isl = fetchurl {
-    url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
-    hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
+    url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.xz";
+    hash = "sha256-kSBM0y8WS9O3yZLUpqjOZRlRGq2rMPeLaYLQv41z6TE=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -94,12 +88,13 @@ bash.runCommand "${pname}-${version}"
           mkdir $out
         '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU Compiler Collection, version ${version}";
       homepage = "https://gcc.gnu.org";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
@@ -108,13 +103,11 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Patch
     # force musl even if host triple is gnu
@@ -123,25 +116,54 @@ bash.runCommand "${pname}-${version}"
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
     export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
-    export CFLAGS_FOR_TARGET="-Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CFLAGS="-O1"
+    export CXXFLAGS="-O1"
+    export CFLAGS_FOR_TARGET="-O0 -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CXXFLAGS_FOR_TARGET="$CFLAGS_FOR_TARGET"
     export LIBRARY_PATH="${musl}/lib"
 
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-native-system-header-dir=/include \
-      --with-sysroot=${musl} \
+      --with-native-system-header-dir=${musl}/include \
+      --with-sysroot=/ \
       --enable-languages=c,c++ \
+      --enable-checking=release \
+      --enable-static \
+      --disable-shared \
       --disable-bootstrap \
+      --disable-dependency-tracking \
       --disable-libsanitizer \
+      --disable-libssp \
+      --disable-libgomp \
+      --disable-libquadmath \
+      --disable-libitm \
+      --disable-libvtv \
+      --disable-libatomic \
+      --disable-libstdcxx-pch \
       --disable-lto \
       --disable-multilib \
-      --disable-plugin
+      --disable-nls \
+      --disable-plugin \
+      --without-isl
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    # libstdc++ gdb pretty-printers + man pages are unused downstream.
+    rm -rf $out/share/gcc-*/python $out/share/man $out/share/info
+
+    if [ -d "$out/lib64" ]; then
+      shopt -s dotglob
+      for lib in $out/lib64/*; do
+        mv --no-clobber "$lib" "$out/lib/"
+      done
+      shopt -u dotglob
+      rm -rf "$out/lib64"
+      ln -s lib "$out/lib64"
+    fi
   ''

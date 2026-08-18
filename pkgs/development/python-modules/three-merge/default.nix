@@ -1,28 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   diff-match-patch,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "three-merge";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0w6rv7rv1zm901wbjkmm6d3vkwyf3csja9p37bb60mar8khszxk0";
+  __structuredAttrs = true;
+
+  # pypi does not contain test files
+  src = fetchFromGitHub {
+    owner = "spyder-ide";
+    repo = "three-merge";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BtWgBOSddLB7mQoc8vhGKxBBkdnvyASyrwRLA7lGgrs=";
   };
 
-  propagatedBuildInputs = [ diff-match-patch ];
+  build-system = [ setuptools ];
+
+  dependencies = [ diff-match-patch ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "three_merge" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for merging two strings with respect to a base one";
     homepage = "https://github.com/spyder-ide/three-merge";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

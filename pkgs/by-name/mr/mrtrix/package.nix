@@ -14,21 +14,21 @@
   qt5,
   libGL,
   libGLU,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   less,
   withGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.6";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
     rev = finalAttrs.version;
-    hash = "sha256-5GcQVZaRV7A6aA/ES6qR0dNBrToJiUXt/LyLYmnpvlQ=";
+    hash = "sha256-X/slZuDyVzfsfq3F2uZ0tqOUmK+qEqSwGy8eAJ1bVbg=";
     fetchSubmodules = true;
   };
 
@@ -36,26 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     less
     python3
-  ] ++ lib.optional withGui qt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional withGui qt5.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      ants
-      eigen_3_4_0
-      python3
-      fftw
-      libtiff
-      libpng
-      zlib
-    ]
-    ++ lib.optionals withGui [
-      libGL
-      libGLU
-      libX11
-      libXext
-      qt5.qtbase
-      qt5.qtsvg
-    ];
+  buildInputs = [
+    ants
+    eigen_3_4_0
+    python3
+    fftw
+    libtiff
+    libpng
+    zlib
+  ]
+  ++ lib.optionals withGui [
+    libGL
+    libGLU
+    libx11
+    libxext
+    qt5.qtbase
+    qt5.qtsvg
+  ];
 
   nativeInstallCheckInputs = [ bc ];
 
@@ -126,12 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
         done
       '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mpl20;
   };
 })

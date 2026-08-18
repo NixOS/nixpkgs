@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   subversion,
   apr,
   aprutil,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     subversion
     apr
     aprutil

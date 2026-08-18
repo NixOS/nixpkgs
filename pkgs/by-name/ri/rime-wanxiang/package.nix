@@ -2,54 +2,29 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  librime,
-  rime-data,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "7.1.1";
+  version = "17.2.2";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
-    repo = "rime_wanxiang";
+    repo = "rime-wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-SPKUTWwyxN/pLn9cSFZL3+RfPYfQuNoOehYRMTOoC4I=";
+    hash = "sha256-wMBhRSSo/PwQ8kW7URflrYO5xqB7qCEo1ME+ai0SJQ4=";
   };
-
-  nativeBuildInputs = [
-    librime
-  ];
-
-  buildInputs = [
-    rime-data
-  ];
-
-  dontConfigure = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    for s in *.schema.yaml; do
-        rime_deployer --compile "$s" . ${rime-data}/share/rime-data ./build
-    done
-
-    rm build/*.txt
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
-    dst=$out/share/rime-data
-    mkdir -p $dst
+    rm -rf README.md .git* custom LICENSE
 
-    rm -r .github custom LICENSE squirrel.yaml weasel.yaml *.md *.trime.yaml
     mv default.yaml wanxiang_suggested_default.yaml
 
-    cp -pr -t $dst *
+    mkdir -p $out/share
+    cp -r . $out/share/rime-data
 
     runHook postInstall
   '';
@@ -57,12 +32,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Feature-rich pinyin schema for Rime, basic edition";
+    description = "Feature-rich pinyin schema for Rime";
     longDescription = ''
-      万象拼音基础版 is a basic quanpin and shuangpin input schema for Rime based on
+      万象拼音 is a quanpin and shuangpin input schema for Rime based on
       [万象 dictionaries and grammar models](https://github.com/amzxyz/RIME-LMDG),
       supporting traditional shuangpin as well as tonal schemata such as 自然龙 and
       龙码.
+
+      This package is built from the upstream repository snapshots, and includes
+      all the auxiliary encodings.
 
       The schema requires to work the grammar model `wanxiang-lts-zh-hans.gram`.
       However, this file is
@@ -81,9 +59,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         __include: wanxiang_suggested_default:/
       ```
     '';
-    homepage = "https://github.com/amzxyz/rime_wanxiang";
-    downloadPage = "https://github.com/amzxyz/rime_wanxiang/releases";
-    changelog = "https://github.com/amzxyz/rime_wanxiang/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/amzxyz/rime-wanxiang";
+    downloadPage = "https://github.com/amzxyz/rime-wanxiang/releases";
+    changelog = "https://github.com/amzxyz/rime-wanxiang/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc-by-40;
     maintainers = with lib.maintainers; [ rc-zb ];
     platforms = lib.platforms.all;

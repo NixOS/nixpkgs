@@ -2,33 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
+  file,
   python3Packages,
   rsync,
   versionCheckHook,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "barman";
-  version = "3.14.1";
+  version = "3.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
-    tag = "release/${version}";
-    hash = "sha256-Z3+PgUJcyG/M05hMmIhRr3HttzHUDx7BGIs44LA/qE4=";
+    tag = "release/${finalAttrs.version}";
+    hash = "sha256-7K7ibg2/hr5wBzGR8cW5FZNtPPFEBA7xPwmOl2c1fOU=";
   };
 
   patches = [
     ./unwrap-subprocess.patch
-    # fix building with Python 3.13
-    (fetchpatch2 {
-      url = "https://github.com/EnterpriseDB/barman/commit/931f997f1d73bbe360abbca737bea9ae93172989.patch?full_index=1";
-      hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
-    })
   ];
+
+  # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
+  postPatch = ''
+    substituteInPlace barman/encryption.py \
+      --replace-fail '"file"' '"${lib.getExe file}"'
+  '';
 
   build-system = with python3Packages; [
     distutils
@@ -59,16 +60,16 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  disabledTests =
-    [
-      # Assertion error
-      "test_help_output"
-      "test_exits_on_unsupported_target"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # FsOperationFailed
-      "test_get_file_mode"
-    ];
+  disabledTests = [
+    # Assertion error
+    "test_help_output"
+    "test_exits_on_unsupported_target"
+    "test_resolve_mounted_volume_failure"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -82,10 +83,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
-    changelog = "https://github.com/EnterpriseDB/barman/blob/${src.tag}/RELNOTES.md";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/${finalAttrs.src.tag}/RELNOTES.md";
     mainProgram = "barman";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

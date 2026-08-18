@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   vala,
+  json-glib,
   libadwaita,
   libgee,
   libgtop,
@@ -19,7 +20,7 @@
   packagekit,
   polkit,
   switchboard,
-  udisks2,
+  udisks,
   fwupd,
   appstream,
   elementary-settings-daemon,
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "8.2.1";
+  version = "8.2.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-H4BDLP3yzQi+ougpvBvnv1R1TImzUjSOVDGbOqw9hvg=";
+    repo = "settings-system";
+    tag = version;
+    hash = "sha256-skuMgLZTkJEWrmDGwSuCivsJrvKIUYT2YISYj7/BVe4=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     fwupd
     granite7
     gtk4
+    json-glib
     libadwaita
     libgee
     libgtop
@@ -59,19 +61,19 @@ stdenv.mkDerivation rec {
     packagekit
     polkit
     switchboard
-    udisks2
+    udisks
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard About Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-about";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    homepage = "https://github.com/elementary/settings-system";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 
 }

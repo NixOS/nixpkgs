@@ -16,8 +16,8 @@ in
   ca = buildOpenRAMod {
     version = "96.git.fc3cf0b";
     title = "Combined Arms";
-    description = "A game that combines units from the official OpenRA Red Alert and Tiberian Dawn mods";
-    homepage = "https://github.com/Inq8/CAmod";
+    meta.description = "A game that combines units from the official OpenRA Red Alert and Tiberian Dawn mods";
+    meta.homepage = "https://github.com/Inq8/CAmod";
     src = fetchFromGitHub {
       owner = "Inq8";
       repo = "CAmod";
@@ -40,8 +40,8 @@ in
   d2 = unsafeBuildOpenRAMod rec {
     version = "134.git.69a4aa7";
     title = "Dune II";
-    description = "A modernization of the original ${title} game";
-    homepage = "https://github.com/OpenRA/d2";
+    meta.description = "A modernization of the original ${title} game";
+    meta.homepage = "https://github.com/OpenRA/d2";
     src = fetchFromGitHub {
       owner = "OpenRA";
       repo = "d2";
@@ -73,8 +73,8 @@ in
   dr = buildOpenRAMod rec {
     version = "324.git.ffcd6ba";
     title = "Dark Reign";
-    description = "A re-imagination of the original Command & Conquer: ${title} game";
-    homepage = "https://github.com/drogoganor/DarkReign";
+    meta.description = "A re-imagination of the original Command & Conquer: ${title} game";
+    meta.homepage = "https://github.com/drogoganor/DarkReign";
     src = fetchFromGitHub {
       owner = "drogoganor";
       repo = "DarkReign";
@@ -97,8 +97,8 @@ in
   gen = buildOpenRAMod {
     version = "1157.git.4f5e11d";
     title = "Generals Alpha";
-    description = "Re-imagination of the original Command & Conquer: Generals game";
-    homepage = "https://github.com/MustaphaTR/Generals-Alpha";
+    meta.description = "Re-imagination of the original Command & Conquer: Generals game";
+    meta.homepage = "https://github.com/MustaphaTR/Generals-Alpha";
     src = fetchFromGitHub {
       owner = "MustaphaTR";
       repo = "Generals-Alpha";
@@ -126,8 +126,8 @@ in
     (buildOpenRAMod rec {
       inherit version;
       title = "Krush, Kill 'n' Destroy";
-      description = "Re-imagination of the original ${title} game";
-      homepage = "https://kknd-game.com/";
+      meta.description = "Re-imagination of the original ${title} game";
+      meta.homepage = "https://kknd-game.com/";
       src = fetchFromGitHub {
         owner = "IceReaper";
         repo = "KKnD";
@@ -157,8 +157,8 @@ in
   mw = buildOpenRAMod rec {
     version = "257.git.c9be8f2";
     title = "Medieval Warfare";
-    description = "A re-imagination of the original Command & Conquer: ${title} game";
-    homepage = "https://github.com/CombinE88/Medieval-Warfare";
+    meta.description = "A re-imagination of the original Command & Conquer: ${title} game";
+    meta.homepage = "https://github.com/CombinE88/Medieval-Warfare";
     src = fetchFromGitHub {
       owner = "CombinE88";
       repo = "Medieval-Warfare";
@@ -181,8 +181,8 @@ in
   ra2 = buildOpenRAMod rec {
     version = "903.git.2f7c700";
     title = "Red Alert 2";
-    description = "Re-imagination of the original Command & Conquer: ${title} game";
-    homepage = "https://github.com/OpenRA/ra2";
+    meta.description = "Re-imagination of the original Command & Conquer: ${title} game";
+    meta.homepage = "https://github.com/OpenRA/ra2";
     src = fetchFromGitHub {
       owner = "OpenRA";
       repo = "ra2";
@@ -209,8 +209,8 @@ in
   raclassic = buildOpenRAMod {
     version = "183.git.c76c13e";
     title = "Red Alert Classic";
-    description = "A modernization of the original Command & Conquer: Red Alert game";
-    homepage = "https://github.com/OpenRA/raclassic";
+    meta.description = "A modernization of the original Command & Conquer: Red Alert game";
+    meta.homepage = "https://github.com/OpenRA/raclassic";
     src = fetchFromGitHub {
       owner = "OpenRA";
       repo = "raclassic";
@@ -233,8 +233,8 @@ in
   rv = unsafeBuildOpenRAMod {
     version = "1330.git.9230e6f";
     title = "Romanov's Vengeance";
-    description = "Re-imagination of the original Command & Conquer: Red Alert 2 game";
-    homepage = "https://github.com/MustaphaTR/Romanovs-Vengeance";
+    meta.description = "Re-imagination of the original Command & Conquer: Red Alert 2 game";
+    meta.homepage = "https://github.com/MustaphaTR/Romanovs-Vengeance";
     src = fetchFromGitHub {
       owner = "MustaphaTR";
       repo = "Romanovs-Vengeance";
@@ -262,8 +262,8 @@ in
   sp = unsafeBuildOpenRAMod {
     version = "221.git.ac000cc";
     title = "Shattered Paradise";
-    description = "Re-imagination of the original Command & Conquer: Tiberian Sun game";
-    homepage = "https://github.com/ABrandau/OpenRAModSDK";
+    meta.description = "Re-imagination of the original Command & Conquer: Tiberian Sun game";
+    meta.homepage = "https://github.com/ABrandau/OpenRAModSDK";
     src = fetchFromGitHub {
       owner = "ABrandau";
       repo = "OpenRAModSDK";
@@ -290,8 +290,8 @@ in
   ss = buildOpenRAMod rec {
     version = "77.git.23e1f3e";
     title = "Sole Survivor";
-    description = "A re-imagination of the original Command & Conquer: ${title} game";
-    homepage = "https://github.com/MustaphaTR/sole-survivor";
+    meta.description = "A re-imagination of the original Command & Conquer: ${title} game";
+    meta.homepage = "https://github.com/MustaphaTR/sole-survivor";
     src = fetchFromGitHub {
       owner = "MustaphaTR";
       repo = "sole-survivor";
@@ -314,8 +314,8 @@ in
   ura = buildOpenRAMod {
     version = "431.git.128dc53";
     title = "Red Alert Unplugged";
-    description = "Re-imagination of the original Command & Conquer: Red Alert game";
-    homepage = "http://redalertunplugged.com/";
+    meta.description = "Re-imagination of the original Command & Conquer: Red Alert game";
+    meta.homepage = "http://redalertunplugged.com/";
     src = fetchFromGitHub {
       owner = "RAunplugged";
       repo = "uRA";
@@ -337,9 +337,9 @@ in
 
   yr = unsafeBuildOpenRAMod rec {
     version = "199.git.5b8b952";
-    homepage = "https://github.com/cookgreen/yr";
     title = "Yuri's Revenge";
-    description = "Re-imagination of the original Command & Conquer: ${title} game";
+    meta.description = "Re-imagination of the original Command & Conquer: ${title} game";
+    meta.homepage = "https://github.com/cookgreen/yr";
     src = fetchFromGitHub {
       owner = "cookgreen";
       repo = "yr";

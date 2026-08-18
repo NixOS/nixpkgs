@@ -12,29 +12,31 @@
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
-  version = "2.0.31";
+  version = "2.0.32";
 
   src = fetchurl {
     urls = [
       "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-io81Ddxm4ckFo6tSWn6bqWyB4E5w72k5ewFVtnuSLDE=";
+    sha256 = "sha256-j4FCKl/SNiz2ywAbUR5TVWXtDzLC9EUfteto/tZxCl0=";
   };
 
   patches = [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv2) [
     # Use ELFv2 ABI on ppc64be
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/6c1192cbf166698932030c2e3de71db1885a572d/srcpkgs/kexec-tools/patches/ppc64-elfv2.patch";
       sha256 = "19wzfwb0azm932v0vhywv4221818qmlmvdfwpvvpfyw4hjsc2s1l";
     })
-  ] ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
+  ]
+  ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
 
   hardeningDisable = [
     "format"
     "pic"
     "relro"
-    "pie"
   ];
 
   # Prevent kexec-tools from using uname to detect target, which is wrong in
@@ -61,10 +63,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "microblaze-linux"
       "microblazeel-linux"
@@ -72,8 +74,9 @@ stdenv.mkDerivation rec {
       "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"
+      "powerpc-linux"
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "kexec";
   };
 }

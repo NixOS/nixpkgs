@@ -17,7 +17,7 @@
   zlib,
   tcl,
   tk,
-  xorg,
+  libxmu,
   libjpeg,
   ffmpeg,
   catch2,
@@ -35,24 +35,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2504";
+  version = "6.2.2605";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4mmh2H2qvc+3Pa9CHm38arViI76Qvwp8fOVGZbMv1M=";
+    hash = "sha256-067PzJymS6ayVoenaXEdvK3fraLTKPJTC54Aok1UUtg=";
   };
 
   patches = [
-    # disable some platform specified code used by downstream ngsolve
-    # can be enabled with -march=armv8.3-a+simd when compiling ngsolve
-    # note compiling netgen itself is not influenced by this feature
-    (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/pull/197/commits/1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7.patch";
-      hash = "sha256-3Nom4uGhGLtSGn/k+qKKSxVxrGtGTHqPtcNn3D/gkZU";
-    })
-
     (fetchpatch2 {
       url = "${patchSource}/use-local-catch2.patch";
       hash = "sha256-h4ob8tl6mvGt5B0qXRFNcl9MxPXxRhYw+PrGr5iRGGk=";
@@ -69,31 +61,36 @@ stdenv.mkDerivation (finalAttrs: {
       url = "${patchSource}/include_stdlib.patch";
       hash = "sha256-W+NgGBuy/UmzVbPTSqR8FRUlyN/9dl9l9e9rxKklmIc=";
     })
+    ./ensure_python_before_getting_gil.patch
+    ./macos_use_tk_default_color_map.patch
   ];
 
   # when generating python stub file utilizing system python pybind11_stubgen module
   # cmake need to inherit pythonpath
-  postPatch =
-    ''
-      sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
-      -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
-      ' CMakeLists.txt
+  postPatch = ''
+    sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
+    -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
+    ' CMakeLists.txt
 
-      substituteInPlace python/CMakeLists.txt \
-        --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
-                       ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
+    substituteInPlace python/CMakeLists.txt \
+      --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
+                     ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
 
-      substituteInPlace ng/ng.tcl ng/onetcl.cpp \
-        --replace-fail "libnggui" "$out/lib/libnggui"
+    substituteInPlace ng/ng.tcl ng/onetcl.cpp \
+      --replace-fail "libnggui" "$out/lib/libnggui"
 
-      substituteInPlace ng/Togl2.1/CMakeLists.txt \
-        --replace-fail "/usr/bin/gcc" "$CC"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      # mesh generation differs on x86_64 and aarch64 platform
-      # test_tutorials will fail on aarch64 platform
-      rm tests/pytest/test_tutorials.py
-    '';
+    substituteInPlace ng/Togl2.1/CMakeLists.txt \
+      --replace-fail "/usr/bin/gcc" "$CC"
+
+    # Fix UB when size == 0, otherwise test_archive will fail when hardening enable glibcxxassertions
+    substituteInPlace libsrc/core/archive.hpp \
+      --replace-fail "Do(&v[0], size);" "Do(v.data(), size);"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    # mesh generation differs on x86_64 and aarch64 platform
+    # test_tutorials will fail on aarch64 platform
+    rm tests/pytest/test_tutorials.py
+  '';
 
   nativeBuildInputs = [
     libicns
@@ -101,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3Packages.pybind11-stubgen
     python3Packages.pythonImportsCheckHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     metis
@@ -110,15 +108,15 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
     tk
     libGLU
-    xorg.libXmu
+    libxmu
     libjpeg
     ffmpeg
     mpi
+    python3Packages.pybind11
   ];
 
   propagatedBuildInputs = with python3Packages; [
     packaging
-    pybind11
     mpi4py
     numpy
   ];
@@ -143,6 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+  ) "-flax-vector-conversions";
 
   __darwinAllowLocalNetworking = true;
 

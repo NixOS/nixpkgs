@@ -4,28 +4,29 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
   testers,
   nix-update-script,
   k9s,
+  kubectl,
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k9s";
-  version = "0.50.6";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
-    rev = "v${version}";
-    hash = "sha256-cL7OD9OtkVx325KcANU8FudcOk6HMct6ve2p0qSkEoc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-70Rfu1BVd/QnwWXRRpwIeZ2UJNWIGixpdiOHo4v7adA=";
   };
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/derailed/k9s/cmd.version=${version}"
-    "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
+    "-X github.com/derailed/k9s/cmd.version=${finalAttrs.version}"
+    "-X github.com/derailed/k9s/cmd.commit=${finalAttrs.src.rev}"
     "-X github.com/derailed/k9s/cmd.date=1970-01-01T00:00:00Z"
   ];
 
@@ -33,7 +34,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-dATWFH5XKicdP8sftGGm2zopTef189MJWd9AM/Gxsjw=";
+  vendorHash = "sha256-PkYDJK2oGl+siCG9p4R8shC0e5BhGFdJsc+ksL9J5zw=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -44,12 +45,15 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = k9s;
       command = "HOME=$(mktemp -d) k9s version -s";
-      inherit version;
+      inherit (finalAttrs) version;
     };
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
   postInstall = ''
     # k9s requires a writeable log directory
     # Otherwise an error message is printed
@@ -60,6 +64,16 @@ buildGoModule rec {
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
       --zsh <($out/bin/k9s completion zsh)
+
+    wrapProgram $out/bin/k9s \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          kubectl
+        ]
+      }"
+
+    mkdir -p $out/share/k9s/skins
+    cp -r $src/skins/* $out/share/k9s/skins/
   '';
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -67,16 +81,14 @@ buildGoModule rec {
   meta = {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
-    changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
+    changelog = "https://github.com/derailed/k9s/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "k9s";
     maintainers = with lib.maintainers; [
-      Gonzih
       markus1189
-      bryanasdev000
       qjoly
       devusb
       ryan4yin
     ];
   };
-}
+})

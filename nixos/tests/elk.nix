@@ -15,11 +15,10 @@ let
 
   mkElkTest =
     name: elk:
-    import ./make-test-python.nix ({
+    import ./make-test-python.nix {
       inherit name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [
-          offline
           basvandijk
         ];
       };
@@ -49,7 +48,7 @@ let
               journalbeat = {
                 enable = elk ? journalbeat;
                 package = elk.journalbeat;
-                extraConfig = pkgs.lib.mkOptionDefault (''
+                extraConfig = pkgs.lib.mkOptionDefault ''
                   logging:
                     to_syslog: true
                     level: warning
@@ -59,7 +58,7 @@ let
                   journalbeat.inputs:
                   - paths: []
                     seek: cursor
-                '');
+                '';
               };
 
               filebeat = {
@@ -276,7 +275,7 @@ let
                   '! curl --silent --show-error --fail-with-body "${esUrl}/_cat/indices" | grep logstash | grep ^'
               )
         '';
-    }) { inherit pkgs system; };
+    } { inherit pkgs system; };
 in
 {
   # We currently only package upstream binaries.

@@ -52,6 +52,11 @@ let
     # Remove hardcoded NATIVE_SYSTEM_HEADER_DIR
     ./no-system-headers.patch
   ];
+
+  # config.sub was generated with outdated autotools, which get confused by
+  # 4-component target tuples
+  fakeBuildPlatform = lib.strings.removeSuffix "-musl" buildPlatform.config;
+  fakeHostPlatform = lib.strings.removeSuffix "-musl" hostPlatform.config;
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -78,12 +83,13 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU Compiler Collection, version ${version}";
       homepage = "https://gcc.gnu.org";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
@@ -104,6 +110,7 @@ bash.runCommand "${pname}-${version}"
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
+    export CFLAGS="-O2"
     export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
     export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 
@@ -114,12 +121,14 @@ bash.runCommand "${pname}-${version}"
 
     bash ./configure \
       --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
+      --build=${fakeBuildPlatform} \
+      --host=${fakeHostPlatform} \
       --with-native-system-header-dir=${tinycc.libs}/include \
       --with-build-sysroot=${tinycc.libs}/include \
+      --enable-checking=release \
       --disable-bootstrap \
       --disable-decimal-float \
+      --disable-dependency-tracking \
       --disable-libatomic \
       --disable-libcilkrts \
       --disable-libgomp \
@@ -132,6 +141,7 @@ bash.runCommand "${pname}-${version}"
       --disable-lto \
       --disable-lto-plugin \
       --disable-multilib \
+      --disable-nls \
       --disable-plugin \
       --disable-threads \
       --enable-languages=c \
@@ -145,5 +155,5 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
   ''

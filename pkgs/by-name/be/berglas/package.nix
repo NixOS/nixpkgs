@@ -27,32 +27,37 @@ let
     ''
       ${acc}
       substituteInPlace pkg/berglas/${goFileName}_test.go \
-        --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
-        --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
+        --replace-fail "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
+        --replace-fail "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
     ''
   ) "" (builtins.attrNames skipTests);
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "berglas";
-  version = "2.0.8";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
-    rev = "v${version}";
-    sha256 = "sha256-gBZY/xj/T7UYQ5mnN6udpBKViE/RYz9tmbmYN+JqsBk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-p+HWZCyFouy+FycCPesKLV7UIeMogz9oKX+mynzBTKw";
   };
 
-  vendorHash = "sha256-NR4YoaJ5ztc7eokRexNzDBtAH7JM4vZH13K550KWFNM=";
+  vendorHash = "sha256-Bz+4hlT5ZqpDnquGirooyFMG8FNUU2NO60Ih3Et3Y3o";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${version}"
+    "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${finalAttrs.version}"
   ];
 
-  postPatch = skipTestsCommand;
+  postPatch = skipTestsCommand + ''
+    substituteInPlace go.mod \
+              --replace-fail \
+                "go 1.26.3" \
+                "go 1.26"
+  '';
 
   passthru.tests = {
     version = testers.testVersion {
@@ -60,10 +65,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "berglas";
   };
-}
+})

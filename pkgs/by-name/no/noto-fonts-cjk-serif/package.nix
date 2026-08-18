@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    rev = "Serif${version}";
+    tag = "Serif${version}";
     hash = "sha256-Bwuu64TAnOnqUgLlBsUw/jnv9emngqFBmVn6zEqySlc=";
     sparseCheckout = [
       "Serif/OTC"
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "Serif";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful and free fonts for CJK languages";
     homepage = "https://www.google.com/get/noto/help/cjk/";
     longDescription = ''
@@ -51,9 +51,9 @@ stdenvNoCC.mkDerivation rec {
       Japanese kana, vertical forms, and variant characters (itaiji); it
       supports Korean hangeul — both contemporary and archaic.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       mathnerd314
       emily
       leana8959

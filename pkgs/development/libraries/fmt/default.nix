@@ -53,18 +53,22 @@ let
           ;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
           used as a fast and safe alternative to printf and IOStreams.
         '';
         homepage = "https://fmt.dev/";
-        changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
+        changelog =
+          let
+            ext = if lib.versionOlder version "10" then "rst" else "md";
+          in
+          "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.${ext}";
         downloadPage = "https://github.com/fmtlib/fmt/";
-        maintainers = [ maintainers.jdehaas ];
-        license = licenses.mit;
-        platforms = platforms.all;
+        maintainers = [ ];
+        license = lib.licenses.mit;
+        platforms = lib.platforms.all;
       };
     };
 in
@@ -87,13 +91,27 @@ in
   };
 
   fmt_11 = generic {
-    version = "11.0.2";
-    hash = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
+    version = "11.2.0";
+    hash = "sha256-sAlU5L/olxQUYcv8euVYWTTB8TrVeQgXLHtXy8IMEnU=";
     patches = [
+      # Fixes the build with libc++ ≥ 21.
       (fetchpatch {
-        name = "get-rid-of-std-copy-fix-clang.patch";
-        url = "https://github.com/fmtlib/fmt/commit/6e462b89aa22fd5f737ed162d0150e145ccb1914.patch";
-        hash = "sha256-tRU1y1VCxtQ5J2yvFmwUx+YNcQs8izzLImD37KBiCFk=";
+        url = "https://github.com/fmtlib/fmt/commit/3cabf3757b6bc00330b55975317b2c145e4c689d.patch";
+        hash = "sha256-SJFzNNC0Bt2aEQJlHGc0nv9KOpPQ+TgDX5iuFMUs9tk=";
+      })
+    ];
+  };
+
+  fmt_12 = generic {
+    version = "12.2.0";
+    hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
+
+    patches = lib.optionals stdenv.hostPlatform.is32bit [
+      # fix build on 32-bit targets
+      # FIXME: remove in next update
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/588b3a0f8f6a8bcf2a959cae882d5b2703e86737.patch";
+        hash = "sha256-DiE3nwYrtNDJ6cqYreU499Y0auH6dsAW21TRPe16Tx8=";
       })
     ];
   };

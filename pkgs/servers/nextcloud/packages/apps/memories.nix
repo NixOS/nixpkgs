@@ -12,22 +12,27 @@
 }:
 let
   latestVersionForNc = {
-    "31" = latestVersionForNc."30";
-    "30" = {
-      version = "7.5.2";
-      appHash = "sha256-BfxJDCGsiRJrZWkNJSQF3rSFm/G3zzQn7C6DCETSzw4=";
-      srcHash = "sha256-imBO/64NW5MiozpufbMRcTI9WCaN8grnHlVo+fsUNlU=";
+    "32" = {
+      version = "7.8.2";
+      appHash = "sha256-O59G5kUkYlYxr8p/vEqs3LqLRKJZbeEgDhdY5eHfnZg=";
+      srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
     };
+    "33" = {
+      version = "8.1.0";
+      appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
+      srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
+    };
+    "34" = latestVersionForNc."33";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
       or (throw "memories currently does not support nextcloud version ${ncVersion}");
 
-  commonMeta = with lib; {
+  commonMeta = {
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 
   go-vod = buildGoModule rec {
@@ -73,8 +78,9 @@ stdenv.mkDerivation rec {
     rm appinfo/signature.json
     rm -rf bin-ext/
 
+    sed -i 's/EXIFTOOL_VER = .*/EXIFTOOL_VER = @;/' lib/Service/BinExt.php
     substituteInPlace lib/Service/BinExt.php \
-      --replace-fail "EXIFTOOL_VER = '12.70'" "EXIFTOOL_VER = '${exiftool.version}'"
+      --replace-fail "EXIFTOOL_VER = @" "EXIFTOOL_VER = '${exiftool.version}'"
   '';
 
   installPhase = ''

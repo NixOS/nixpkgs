@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   unasync,
@@ -13,28 +12,26 @@
   loguru,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhive-integration";
-  version = "1.0.2";
+  version = "1.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    tag = "v${version}";
-    hash = "sha256-lfBr889s6NHcos/kdzQa9HJEcQ4dfCEMjuLYiLzesfE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Lv41xgkwVpisdJpzhhBxdAG3VdKYazmbvl3V7lAjYA=";
   };
 
   pythonRemoveDeps = [ "pre-commit" ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     unasync
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     requests
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhiveapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
-    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

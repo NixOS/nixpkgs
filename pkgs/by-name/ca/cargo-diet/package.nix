@@ -4,29 +4,27 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-diet";
-  version = "1.2.7";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "the-lean-crate";
     repo = "cargo-diet";
-    rev = "v${version}";
-    hash = "sha256-SuJ1H/2YfSVVigdgLUd9veMClI7ZT7xkkyQ4PfXoQdQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3fH4x83uSRuLwjTatBNicUODCb37HGuLBdTR34yXV8k=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-crdRRlRi3H8j/ojGH+oqmaeSS8ee8dUALorZPWE/j1Y=";
+  cargoHash = "sha256-3oz+q8Hxa/ZzmvlJzt/8xGlFWgWArbHAEVr7chNgl5M=";
 
   meta = {
     description = "Help computing optimal include directives for your Cargo.toml manifest";
     mainProgram = "cargo-diet";
     homepage = "https://github.com/the-lean-crate/cargo-diet";
-    changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };
-}
+})

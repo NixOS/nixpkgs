@@ -5,6 +5,7 @@
   google-api-core,
   protobuf,
   freezegun,
+  pytest-benchmark,
   pytestCheckHook,
   typedunits,
 }:
@@ -27,10 +28,12 @@ buildPythonPackage rec {
     google-api-core
     protobuf
     typedunits
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     freezegun
+    pytest-benchmark
     pytestCheckHook
   ];
 

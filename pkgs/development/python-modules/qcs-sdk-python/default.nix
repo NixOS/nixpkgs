@@ -1,38 +1,36 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   qcs-api-client-common,
   quil,
   rustPlatform,
-  libiconv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.18";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
-    tag = "python/v${version}";
-    hash = "sha256-uN9SQnQR5y4gyJeQI5H04hT1OL1ZQBwCdz8GkNMMTLY=";
+    tag = "lib/v${version}";
+    hash = "sha256-XqsxtFwQnAJHYMaR+uO8wzlxA+GtqfllJUCIt0l1i9o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-PqQMG8RKF8Koz796AeoG/X9SeL1TruwOVPqwfKuq984=";
+    hash = "sha256-ENWGL8N7shXYI31GDLu7SHqPhZUuIWWnYk/ziRoG9Gg=";
   };
 
-  buildAndTestSubdir = "crates/python";
+  buildAndTestSubdir = "crates/lib";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -48,10 +46,6 @@ buildPythonPackage rec {
     tracing-opentelemetry = [ opentelemetry-api ];
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
-
   nativeCheckInputs = [
     opentelemetry-sdk
     pytest-asyncio
@@ -64,7 +58,7 @@ buildPythonPackage rec {
     "test_conjugate_pauli_by_clifford"
     "test_execute_qvm"
     "test_generate_randomized_benchmark_sequence"
-    "test_get_instruction_set_actitecture_public"
+    "test_get_instruction_set_architecture_public"
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"
@@ -72,8 +66,12 @@ buildPythonPackage rec {
     "test_qvm_tracing"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "lib/v";
+  };
+
   meta = {
-    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/${buildAndTestSubdir}/CHANGELOG.md";
     description = "Python interface for the QCS Rust SDK";
     homepage = "https://github.com/rigetti/qcs-sdk-rust/tree/main/crates/python";
     license = lib.licenses.asl20;

@@ -1,39 +1,36 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitea,
   async-timeout,
-  httpx,
+  buildPythonPackage,
+  fetchFromCodeberg,
   httpx-socks,
+  httpx,
   proxy-py,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   python-socks,
   rencode,
   setuptools,
+  tiny-proxy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientrpc";
-  version = "5.0.1";
+  version = "6.0.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientrpc";
-    tag = "v${version}";
-    hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4FWfzt+A9BY4nnaQU3xwdDFhuOMtfBFHYNoHaEOy7+0=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
-  ];
+  pythonRelaxDeps = [ "async-timeout" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     async-timeout
@@ -41,13 +38,15 @@ buildPythonPackage rec {
     httpx-socks
     python-socks
     rencode
-  ] ++ python-socks.optional-dependencies.asyncio;
+  ];
 
   nativeCheckInputs = [
     proxy-py
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    tiny-proxy
   ];
 
   disabledTests = [
@@ -62,6 +61,10 @@ buildPythonPackage rec {
     "test_timeout[rtorrent_http]"
     "test_event_subscriptions_survive_reconnecting[rtorrent_http]"
     "test_waiting_for_event[rtorrent_http]"
+    "test_proxy[rtorrent_http-socks4_proxy]"
+    "test_proxy[rtorrent_http-socks5_proxy]"
+    # Tests are outdated
+    "test_DelugeRPCRequest_equality"
   ];
 
   pythonImportsCheck = [ "aiobtclientrpc" ];
@@ -72,4 +75,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

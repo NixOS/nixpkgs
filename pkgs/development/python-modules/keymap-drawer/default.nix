@@ -2,6 +2,7 @@
   lib,
 
   buildPythonPackage,
+  callPackages,
   fetchFromGitHub,
   pythonOlder,
 
@@ -17,11 +18,8 @@
   tree-sitter-grammars,
   versionCheckHook,
 }:
-let
-  version = "0.22.0";
-in
-buildPythonPackage {
-  inherit version;
+buildPythonPackage (finalAttrs: {
+  version = "0.23.0";
   pname = "keymap-drawer";
   pyproject = true;
   disabled = pythonOlder "3.12";
@@ -29,11 +27,15 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "caksoylar";
     repo = "keymap-drawer";
-    tag = "v${version}";
-    hash = "sha256-SPnIfrUA0M9xznjEe60T+0VHh9lCmY4cni9hyqFlZqM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yrZidTATnOPacAfdk0gFIgH/3MaZqVOjmzkWNnMa01s=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "tree-sitter-devicetree"
+  ];
 
   dependencies = [
     pcpp
@@ -52,18 +54,19 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "keymap_drawer" ];
 
-  versionCheckProgram = "${placeholder "out"}/bin/keymap";
-  versionCheckProgramArg = "--version";
-
+  passthru.tests = callPackages ./tests {
+    keymap-drawer = finalAttrs.finalPackage;
+  };
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module and CLI tool to help parse and draw keyboard layouts";
     homepage = "https://github.com/caksoylar/keymap-drawer";
+    changelog = "https://github.com/caksoylar/keymap-drawer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       MattSturgeon
     ];
     mainProgram = "keymap";
   };
-}
+})

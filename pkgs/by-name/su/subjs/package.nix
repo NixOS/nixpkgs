@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subjs";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = "subjs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
 
@@ -20,19 +20,19 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=${version}"
+    "-X main.AppVersion=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
-    description = "Fetcher for Javascript files";
+  meta = {
+    description = "Fetcher for JavaScript files";
     mainProgram = "subjs";
     longDescription = ''
-      subjs fetches Javascript files from a list of URLs or subdomains.
-      Analyzing Javascript files can help you find undocumented endpoints,
+      subjs fetches JavaScript files from a list of URLs or subdomains.
+      Analyzing JavaScript files can help you find undocumented endpoints,
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

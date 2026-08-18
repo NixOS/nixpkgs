@@ -35,7 +35,9 @@ stdenv.mkDerivation {
   patches =
     useBoost.boostBuildPatches or [ ]
     ++ lib.optional (
-      useBoost ? version && lib.versionAtLeast useBoost.version "1.81"
+      useBoost ? version
+      && lib.versionAtLeast useBoost.version "1.81"
+      && lib.versionOlder useBoost.version "1.88"
     ) ./fix-clang-target.patch;
 
   postPatch =
@@ -74,10 +76,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.boost.org/build/";
     license = lib.licenses.boost;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -15,15 +15,47 @@
   markdown-code-runner,
   roboto,
   treefmt,
+  nixosOptionsDoc,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
     inherit (finalAttrs.finalPackage.optionsDoc) optionsJSON;
     inherit (finalAttrs.finalPackage) epub lib-docs pythonInterpreterTable;
+
+    # Make anything from lib (the module system internals) invisible
+    hide-lib =
+      opt:
+      opt
+      // {
+        visible = if lib.all (decl: decl == "lib/modules.nix") opt.declarations then false else opt.visible;
+      };
+
+    toURL =
+      decl:
+      let
+        declStr = toString decl;
+        root = toString ../..;
+        subpath = lib.removePrefix "/" (lib.removePrefix root declStr);
+      in
+      if lib.hasPrefix root declStr then
+        {
+          url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}";
+          name = "nixpkgs/${subpath}";
+        }
+      else
+        decl;
+
+    mapURLs = opt: opt // { declarations = map toURL opt.declarations; };
+
+    docs.generic.meta-maintainers = nixosOptionsDoc {
+      inherit (lib.evalModules { modules = [ ../../modules/generic/meta-maintainers.nix ]; }) options;
+      transformOptions = opt: hide-lib (mapURLs opt);
+    };
   in
   {
-    name = "nixpkgs-manual";
+    version = lib.trivial.release;
+    pname = "nixpkgs-manual";
 
     nativeBuildInputs = [ nixos-render-docs ];
 
@@ -41,6 +73,7 @@ stdenvNoCC.mkDerivation (
             ../anchor.min.js
             ../manpage-urls.json
             ../redirects.json
+            ../nav.json
           ]
         );
     };
@@ -49,6 +82,7 @@ stdenvNoCC.mkDerivation (
       ln -s ${optionsJSON}/share/doc/nixos/options.json ./config-options.json
       ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
       ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
+      ln -s ${docs.generic.meta-maintainers.optionsJSON}/share/doc/nixos/options.json ./options-modules-generic-meta-maintainers.json
     '';
 
     buildPhase = ''
@@ -83,8 +117,10 @@ stdenvNoCC.mkDerivation (
         --script ./highlightjs/loader.js \
         --script ./anchor.min.js \
         --script ./anchor-use.js \
-        --toc-depth 1 \
-        --section-toc-depth 1 \
+        --sidebar-depth 3 \
+        --experimental-config ./nav.json \
+        --header ${./header.html}\
+        --no-navheader \
         manual.md \
         out/index.html
 
@@ -125,7 +161,7 @@ stdenvNoCC.mkDerivation (
             buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/index.html";
           };
-          nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
+          nixos-render-docs-redirects' = writeShellScriptBin "redirects" ''${lib.getExe nixos-render-docs-redirects} --file '${toString ../redirects.json}' "$@"'';
         in
         mkShellNoCC {
           packages = [
@@ -136,8 +172,8 @@ stdenvNoCC.mkDerivation (
         };
 
       tests = {
+        # Don't run this in CI because it's not reproducible
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
-        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
       };
     };
   }

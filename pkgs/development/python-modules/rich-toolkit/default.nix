@@ -13,24 +13,28 @@
 
   # tests
   inline-snapshot,
+  pydantic,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-toolkit";
-  version = "0.14.6";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick91";
     repo = "rich-toolkit";
-    tag = "v${version}";
-    hash = "sha256-SHQZ0idEx/zDEtP0xQoJg7eUT8+SqLdWljxfTgXzjkk=";
+    tag = finalAttrs.version;
+    hash = "sha256-XYSksCMCCxO6wzsEEJ6X340iT32hU5n/EikKLZ2m7A0=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  postPatch = ''
+    # the commit updating the version happens only after tagging
+    sed -i 's/version = ".*"/version = "${finalAttrs.version}"/' pyproject.toml
+  '';
+
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -40,18 +44,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     inline-snapshot
+    pydantic
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "rich_toolkit"
-  ];
+  pythonImportsCheck = [ "rich_toolkit" ];
 
   meta = {
-    changelog = "https://github.com/patrick91/rich-toolkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/patrick91/rich-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Rich toolkit for building command-line applications";
-    homepage = "https://pypi.org/project/rich-toolkit";
+    homepage = "https://github.com/patrick91/rich-toolkit/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

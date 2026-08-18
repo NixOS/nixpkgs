@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deer";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Vifon";
     repo = "deer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1xnbnbi0zk2xsyn8dqsmyxqlfnl36pb1wwibnlp0dxixw6sfymyl";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     cp deer $out/share/zsh/site-functions/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ranger-like file navigation for zsh";
     homepage = "https://github.com/Vifon/deer";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vyp ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

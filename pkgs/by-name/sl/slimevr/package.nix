@@ -1,131 +1,132 @@
 {
   lib,
-  fetchFromGitHub,
-  fetchpatch,
   stdenv,
+  fetchFromGitHub,
+  fetchPnpmDeps,
   replaceVars,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_10,
+  electron,
   makeWrapper,
   slimevr-server,
-  nodejs,
-  pnpm_9,
-  rustPlatform,
-  cargo-tauri,
-  wrapGAppsHook3,
-  pkg-config,
-  openssl,
-  glib-networking,
-  webkitgtk_4_1,
-  gst_all_1,
-  libayatana-appindicator,
+  copyDesktopItems,
+  makeDesktopItem,
+  udevCheckHook,
 }:
-
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slimevr";
-  version = "0.16.0";
+  version = "20.1.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    rev = "v${version}";
-    hash = "sha256-ZYL+aBrADbzSXnhFzxNk8xRrY0WHmHCtVaC6VfXfLJw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8ti1uyDtgf9JuWurAkE0Twj3/ROOd9ai94htEvoVo50=";
     # solarxr
     fetchSubmodules = true;
   };
 
-  buildAndTestSubdir = "gui/src-tauri";
-
-  cargoHash = "sha256-+WrBVL4/XslJSOwuxs4IzqXG9l1/lMSbKil/8OHc9Xw=";
-
-  pnpmDeps = pnpm_9.fetchDeps {
-    pname = "${pname}-pnpm-deps";
-    inherit version src;
-    hash = "sha256-lh5IKdBXuH9GZFUTrzaQFDWCEYj0UJhKwCdPmsiwfCs=";
+  pnpmDeps = fetchPnpmDeps {
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-Y8TSsoXqRxexar9uFKHiIuogAuLSTMqK9blFbMVTwOE=";
   };
-
-  nativeBuildInputs = [
-    nodejs
-    pnpm_9.configHook
-    cargo-tauri.hook
-    pkg-config
-    wrapGAppsHook3
-    makeWrapper
-  ];
-
-  buildInputs =
-    [
-      openssl
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      webkitgtk_4_1
-    ];
 
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      version = src.rev;
+      version = finalAttrs.src.tag;
     })
     # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
     ./no-java-tool-options-warning.patch
+    # Correct udev instructions for NixOS.
+    ./nixos-udev-instructions.patch
   ];
 
-  postPatch =
-    ''
-      # Tauri bundler expects slimevr.jar to exist.
-      mkdir -p server/desktop/build/libs
-      touch server/desktop/build/libs/slimevr.jar
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-      substituteInPlace gui/src-tauri/src/tray.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  strictDeps = true;
 
-      # tao < version 0.31 has a GTK crash. Manually apply the fix.
-      pushd $cargoDepsCopy/tao-0.30.*
-      patch -p1 < ${
-        fetchpatch {
-          name = "fix-gtk-crash.patch";
-          url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
-          hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
-        }
-      }
-      popd
-    '';
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm_10
+    makeWrapper
+    copyDesktopItems
+    udevCheckHook
+  ];
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
-  # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.
+  # done the first time, because `pnpmConfigHook` ignores `package.json` scripts.
   preBuild = ''
     pnpm --filter solarxr-protocol build
   '';
 
   doCheck = false; # No tests
+  doInstallCheck = true; # Check udev
 
-  # Get rid of placeholder slimevr.jar
-  postInstall = ''
-    rm $out/share/slimevr/slimevr.jar
-    rm -d $out/share/slimevr
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  buildPhase = ''
+    runHook preBuild
+
+    pushd gui
+    pnpm build
+    pnpm exec electron-builder \
+      --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
+    popd
+
+    runHook postBuild
   '';
 
-  # `JAVA_HOME`, `JAVA_TOOL_OPTIONS`, and `--launch-from-path` are so the GUI can
-  # launch the server.
-  postFixup = ''
-    wrapProgram "$out/bin/slimevr" \
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/slimevr
+    cp -r gui/dist/artifacts/*/*-unpacked/{locales,resources{,.pak}} $out/share/slimevr/
+    # `JAVA_HOME`, `JAVA_TOOL_OPTIONS`, and `--path` are so the GUI can
+    # launch the server.
+    makeWrapper ${lib.getExe electron} $out/bin/slimevr \
+      --add-flags $out/share/slimevr/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set JAVA_HOME "${slimevr-server.passthru.java.home}" \
       --set JAVA_TOOL_OPTIONS "${slimevr-server.passthru.javaOptions}" \
-      --add-flags "--launch-from-path ${slimevr-server}/share/slimevr"
+      --add-flags "--path ${slimevr-server}/share/slimevr" \
+      --inherit-argv0
+
+    install -Dm444 gui/electron/resources/icons/icon.png $out/share/icons/hicolor/512x512/apps/slimevr.png
+    install -Dm644 -t $out/lib/udev/rules.d/ gui/electron/resources/69-slimevr-devices.rules
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "slimevr";
+      desktopName = "SlimeVR";
+      genericName = "Full-body tracking";
+      comment = finalAttrs.meta.description;
+      categories = [ "Game" ];
+      keywords = [
+        "FBT"
+        "VR"
+        "Steam"
+        "VRChat"
+        "IMU"
+      ];
+      icon = "slimevr";
+      exec = "slimevr";
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://slimevr.dev";
+    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${finalAttrs.version}";
     description = "App for facilitating full-body tracking in virtual reality";
     longDescription = ''
       App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.
@@ -151,10 +152,10 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       gale-username
-      imurx
+      loucass003
     ];
     platforms = with lib.platforms; darwin ++ linux;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr";
   };
-}
+})

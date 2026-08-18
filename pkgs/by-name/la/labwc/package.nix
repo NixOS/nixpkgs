@@ -22,21 +22,29 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_18,
-  xcbutilwm,
+  wlroots_0_20,
+  libxcb-wm,
   xwayland,
+
+  enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.8.4";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-JeEw1xKwgsTMllZXvNaXXdgmZnmIFUyG/cJ14QFQf/E=";
+    hash = "sha256-1LINOZsdN5btT0VQvUwYXbSjuKdQdbkaI062OYAJSiE=";
   };
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "install_dir: systemd.get_variable('systemduserunitdir')" \
+                     "install_dir: '$out/lib/systemd/user'"
+  '';
 
   outputs = [
     "out"
@@ -67,19 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     wayland
     wayland-protocols
-    wlroots_0_18
-    xcbutilwm
+    wlroots_0_20
+    libxcb-wm
     xwayland
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  mesonFlags = [ (lib.mesonEnable "xwayland" true) ];
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" true)
+    (lib.mesonEnable "systemd-session" enableSystemd)
+  ];
 
   strictDeps = true;
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     providedSessions = [ "labwc" ];
@@ -89,9 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/labwc/labwc";
     description = "Wayland stacking compositor, inspired by Openbox";
     changelog = "https://github.com/labwc/labwc/blob/master/NEWS.md";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "labwc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

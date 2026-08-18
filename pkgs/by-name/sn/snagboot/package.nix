@@ -9,16 +9,16 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snagboot";
-  version = "2.2";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
-    tag = "v${version}";
-    hash = "sha256-JXhh+Ed/ZwytNrMwvGw7jaDBvwDQiUKe+gBDezOCHO4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZjN4k5prOoEdAT4z37XiHdnUgLsz3zeR3+0zxY+2420=";
   };
 
   build-system = with python3Packages; [
@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "pylibfdt"
     "swig"
   ];
 
@@ -40,10 +39,13 @@ python3Packages.buildPythonApplication rec {
     pyserial
     tftpy
     crccheck
-    # pylibfdt
+    libfdt
     # swig
     packaging
+    xmodem
   ];
+
+  pythonRelaxDeps = [ "pylibfdt" ];
 
   optional-dependencies = with python3Packages; {
     gui = [ kivy ];
@@ -69,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = snagboot;
       command = "snagrecover --version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -79,4 +81,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

@@ -1,39 +1,40 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.3.1";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-CrcLyG8fpThYHFHH2w+UAlGxuqwpUCWsYUx2gaW9RLw=";
+    hash = "sha256-OAuLee6hbShgEDN/3oD7O6KzxylnfrJoCgMPjluYcG8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail 'setuptools>=68.0,<79.1' setuptools
+      --replace-fail "setuptools>=68.0,<83.1" "setuptools"
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -45,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-aiohttp
     pytest-cov-stub
     pytest-timeout

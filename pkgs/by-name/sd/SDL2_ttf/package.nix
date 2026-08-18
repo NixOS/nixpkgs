@@ -21,20 +21,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Cyvx57ZWitvbybuSRkP3nZ3tr+Bh+h7Wh9HZrE5FO/0=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     SDL2
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      freetype
-      harfbuzz
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-    ];
+  buildInputs = [
+    SDL2
+    freetype
+    harfbuzz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+  ];
 
   configureFlags = [
     (lib.enableFeature false "harfbuzz-builtin")

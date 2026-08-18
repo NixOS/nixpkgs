@@ -5,20 +5,20 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argo-expr";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "blacha";
     repo = "argo-expr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XQnPFzT3PRmKeAQXLzBE5R2VvXotzxmsq+u9u5iE1QA=";
   };
 
   vendorHash = "sha256-HGmJVxmAj9ijsWX+qJ7J9l3uO7WvXtRU2gvx2G7N7/M=";
 
-  ldflags = [ "-X main.Version=v${version}" ];
+  ldflags = [ "-X main.Version=v${finalAttrs.version}" ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "argo-expr";
   };
-}
+})

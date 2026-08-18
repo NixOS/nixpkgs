@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   cachecontrol,
   cryptography,
@@ -19,16 +20,16 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firebase-admin";
-  version = "6.9.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
-    tag = "v${version}";
-    hash = "sha256-TB5YIprtSXHbeWlu9U4fDjWCZdO5vM695u28Hv6w2e0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jjCUk20RWB2Qc2qBh4CIGtUGsdCSqsbtmKKamSLCwQw=";
   };
 
   build-system = [ setuptools ];
@@ -69,11 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "Firebase Admin Python SDK";
     homepage = "https://github.com/firebase/firebase-admin-python";
-    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jhahn
       sarahec
     ];
   };
-}
+})

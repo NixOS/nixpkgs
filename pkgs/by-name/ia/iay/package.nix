@@ -5,21 +5,21 @@
   rustPlatform,
   openssl,
   pkg-config,
+  gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iay";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "aaqaishtyaq";
     repo = "iay";
-    rev = "v${version}";
-    sha256 = "sha256-oNUK2ROcocKoIlAuNZcJczDYtSchzpB1qaYbSYsjN50=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-H0h3ChS+B8+Pnet8rNQIkpr4k/t7P2hYrS06dademUU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QO9gzJKSBMs5s1fCfpBuyHDK9uE1B148bMjp8RjH4nY=";
+  cargoHash = "sha256-66bhmIk/YCweL9GquPpObkkl2Sn45IlU2HqnKn43294=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -27,19 +27,22 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-framework"
-    "AppKit"
-  ];
+  nativeCheckInputs = [ gitMinimal ];
 
-  meta = with lib; {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "AppKit"
+    ];
+  };
+
+  meta = {
     description = "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
     homepage = "https://github.com/aaqaishtyaq/iay";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaqaishtyaq
-      omasanori
     ];
     mainProgram = "iay";
   };
-}
+})

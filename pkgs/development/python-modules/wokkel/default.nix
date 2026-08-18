@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   incremental,
   python-dateutil,
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     # Fixes compat with current-day twisted
     # https://github.com/ralphm/wokkel/pull/32 with all the CI & doc changes excluded
     ./0001-Remove-py2-compat.patch
+
+    # Fix test failure with Twisted >= 26
+    # https://github.com/ralphm/wokkel/issues/33
+    (fetchpatch2 {
+      name = "fix-test-for-twisted-26.patch";
+      url = "https://salsa.debian.org/python-team/packages/wokkel/-/raw/f9425d127449a47a7578a01a1b802b7b26b0677f/debian/patches/fix-test-for-twisted-26.patch";
+      hash = "sha256-gyVKKqDCFFXyA5LG0q2p8SWIh9DJCUkdK6slOaYsAw0=";
+    })
   ];
 
   postPatch = ''

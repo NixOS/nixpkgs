@@ -8,19 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aichat";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
-    tag = "v${version}";
-    hash = "sha256-5fXZfRrHBAtjUa1VzzsdoFvXQSPQ8YUNJ7yhZlp58tM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xgTGii1xGtCc1OLoC53HAtQ+KVZNO1plB2GVtVBBlqs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-YK2mps9DUs4HNFmYHtZHTJREuImlQ24y64ykGr8ovTs=";
+  cargoHash = "sha256-u2JBPm03qvuLEUOEt4YL9O750V2QPgZbxvsvlTQe2nk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -48,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mwdomino ];
     mainProgram = "aichat";
   };
-}
+})

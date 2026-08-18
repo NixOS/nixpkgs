@@ -10,6 +10,10 @@ let
 
 in
 {
+  meta = {
+    inherit (pkgs.rasdaemon.meta) maintainers;
+  };
+
   options.hardware.rasdaemon = {
 
     enable = lib.mkEnableOption "RAS logging daemon";
@@ -100,16 +104,17 @@ in
         text = cfg.config;
       };
     };
-    environment.systemPackages =
-      [ cfg.package ]
-      ++ lib.optionals (cfg.testing) (
-        with pkgs.error-inject;
-        [
-          edac-inject
-          mce-inject
-          aer-inject
-        ]
-      );
+    environment.systemPackages = [
+      cfg.package
+    ]
+    ++ lib.optionals (cfg.testing) (
+      with pkgs.error-inject;
+      [
+        edac-inject
+        mce-inject
+        aer-inject
+      ]
+    );
 
     boot.initrd.kernelModules =
       cfg.extraModules
@@ -175,7 +180,4 @@ in
       };
     };
   };
-
-  meta.maintainers = [ lib.maintainers.evils ];
-
 }

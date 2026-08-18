@@ -38,24 +38,25 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.6.2";
+  version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-MTgpwpJWxULCiZhDG+MFpOp8ZHoj1ZDmOD05OaGfXhM=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-EE4JuiiwgdQlTsX6dE8KRjcGZHRiQVDXlDVFHchfyYs=";
   };
 
   build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -63,7 +64,8 @@ buildPythonPackage rec {
     numpy
     opt-einsum
     scipy
-  ] ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ]
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -83,23 +85,34 @@ buildPythonPackage rec {
   # high parallelism will result in the tests getting stuck
   dontUsePytestXdist = true;
 
+  pytestFlags = [
+    "--numprocesses=4"
+    "-Wignore::DeprecationWarning"
+  ];
+
   # NOTE: Don't run the tests in the experimental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
-  pytestFlagsArray =
-    [
-      "--numprocesses=4"
-      "-W ignore::DeprecationWarning"
-      "tests/"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-      # reported at: https://github.com/jax-ml/jax/issues/26106
-      "--deselect tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
-      "--deselect tests/shape_poly_test.py::ShapePolyTest"
-      "--deselect tests/tree_util_test.py::TreeTest"
-    ];
+  enabledTestPaths = [
+    "tests/"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    # reported at: https://github.com/jax-ml/jax/issues/26106
+    "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
+    "tests/shape_poly_test.py::ShapePolyTest"
+    "tests/tree_util_test.py::TreeTest"
+
+    # Mostly AssertionError on numerical tests failing since 0.7.0
+    # https://github.com/jax-ml/jax/issues/31428
+    "tests/export_back_compat_test.py"
+    "tests/lax_numpy_test.py"
+    "tests/lax_scipy_test.py"
+    "tests/lax_test.py"
+    "tests/linalg_test.py"
+  ];
 
   # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
   # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
@@ -109,37 +122,47 @@ buildPythonPackage rec {
     export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
   '';
 
-  disabledTests =
-    [
-      # Exceeds tolerance when the machine is busy
-      "test_custom_linear_solve_aux"
-    ]
-    ++ lib.optionals usingMKL [
-      # See
-      #  * https://github.com/google/jax/issues/9705
-      #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
-      #  * https://github.com/NixOS/nixpkgs/issues/161960
-      "test_custom_linear_solve_cholesky"
-      "test_custom_root_with_aux"
-      "testEigvalsGrad_shape"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # Fails on some hardware due to some numerical error
-      # See https://github.com/google/jax/issues/18535
-      "testQdwhWithOnRankDeficientInput5"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-      # reported at: https://github.com/jax-ml/jax/issues/26106
-      "testInAxesPyTreePrefixMismatchError"
-      "testInAxesPyTreePrefixMismatchErrorKwargs"
-      "testOutAxesPyTreePrefixMismatchError"
-      "test_tree_map"
-      "test_tree_prefix_error"
-      "test_vjp_rule_inconsistent_pytree_structures_error"
-      "test_vmap_in_axes_tree_prefix_error"
-      "test_vmap_mismatched_axis_sizes_error_message_issue_705"
-    ];
+  disabledTests = [
+    # Exceeds tolerance when the machine is busy
+    "test_custom_linear_solve_aux"
+
+    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
+    # self.subTest(dtype=...) when shipping subtest reports between workers.
+    # The assertions themselves pass; the failure is a harness artifact of running with
+    # --numprocesses.
+    # New test in jax 0.10.2 (tests/random_impl_test.py).
+    "test_random_bits"
+
+    # Jax uses deprecated numpy logic as an oracle. Fixed upstream in jax 0.11.0, can't be properly backported.
+    # https://github.com/jax-ml/jax/commit/d219f03b589a1075f499148113aa9c647e1be0b9
+    "testCross"
+  ]
+  ++ lib.optionals usingMKL [
+    # See
+    #  * https://github.com/google/jax/issues/9705
+    #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+    #  * https://github.com/NixOS/nixpkgs/issues/161960
+    "test_custom_linear_solve_cholesky"
+    "test_custom_root_with_aux"
+    "testEigvalsGrad_shape"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Fails on some hardware due to some numerical error
+    # See https://github.com/google/jax/issues/18535
+    "testQdwhWithOnRankDeficientInput5"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    # reported at: https://github.com/jax-ml/jax/issues/26106
+    "testInAxesPyTreePrefixMismatchError"
+    "testInAxesPyTreePrefixMismatchErrorKwargs"
+    "testOutAxesPyTreePrefixMismatchError"
+    "test_tree_map"
+    "test_tree_prefix_error"
+    "test_vjp_rule_inconsistent_pytree_structures_error"
+    "test_vmap_in_axes_tree_prefix_error"
+    "test_vmap_mismatched_axis_sizes_error_message_issue_705"
+  ];
 
   pythonImportsCheck = [ "jax" ];
 
@@ -167,7 +190,11 @@ buildPythonPackage rec {
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
+    changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
   };
-}
+})

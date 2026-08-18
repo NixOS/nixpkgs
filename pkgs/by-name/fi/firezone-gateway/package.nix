@@ -4,21 +4,20 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firezone-gateway";
-  version = "1.4.11";
+  version = "1.5.2";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
-    tag = "gateway-${version}";
-    hash = "sha256-tKkp9EHcwAEGHImEjfXrxIhdNyDYe/0w5wXb31EIHjc=";
+    tag = "gateway-${finalAttrs.version}";
+    hash = "sha256-bfLPOhxv0xfnU3Q1zZWbhqvNe9Hav2RgF/ESMk81F4I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-NCKT6GS6V/5W1BaNl6uQ4hiNTj6ExQTRPR8T7pxMopc=";
-  sourceRoot = "${src.name}/rust";
+  cargoHash = "sha256-oOJ/UkamQrlWjAz2A4oObdBssHH9iJWN2BHFgMPOxck=";
+  sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "gateway";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   # Required to remove profiling arguments which conflict with this builder
   postPatch = ''
@@ -43,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "firezone-gateway";
     platforms = lib.platforms.linux;
   };
-}
+})

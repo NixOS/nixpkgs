@@ -8,12 +8,12 @@
   libGL,
   glfw2,
   glew,
-  libX11,
+  libx11,
   xorgproto,
-  libXi,
-  libXmu,
+  libxi,
+  libxmu,
   fetchpatch,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     libGL
     glfw2
     glew
-    libX11
+    libx11
     xorgproto
-    libXi
-    libXmu
-    libXrandr
+    libxi
+    libxmu
+    libxrandr
   ];
 
   postInstall = ''
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     cp demo/chipmunk_demos $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and lightweight 2D game physics library";
     mainProgram = "chipmunk_demos";
     homepage = "http://chipmunk2d.net/";
-    license = licenses.mit;
-    platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix; # supports Windows and MacOS as well, but those require more work
   };
 }

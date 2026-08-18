@@ -7,43 +7,34 @@
   poetry-core,
 
   # dependencies
-  aiohttp,
-  attrs,
+  httpx,
   packaging,
-  structlog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wapiti-arsenic";
-  version = "28.2";
+  version = "28.5";
   pyproject = true;
 
-  # Latest tag is not on GitHub
   src = fetchPypi {
     pname = "wapiti_arsenic";
-    inherit version;
-    hash = "sha256-QxjM0BsiHm/LPUuGLLPG6OUcr4YXBEpfJGTwKp1zTWQ=";
+    inherit (finalAttrs) version;
+    hash = "sha256-snIKEdrBOIfPeHkVLv0X5lsBzDbOtDrbOj4m8UNCj60=";
   };
+
+  pythonRelaxDeps = [ "packaging" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "poetry>=0.12" "poetry-core" \
+      --replace-fail "poetry>=2.1.3" "poetry-core" \
       --replace-fail "poetry.masonry" "poetry.core.masonry"
   '';
 
-  build-system = [
-    poetry-core
-  ];
-
-  pythonRelaxDeps = [
-    "structlog"
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
-    aiohttp
-    attrs
+    httpx
     packaging
-    structlog
   ];
 
   pythonImportsCheck = [ "wapiti_arsenic" ];
@@ -54,7 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous WebDriver client";
     homepage = "https://github.com/wapiti-scanner/arsenic";
+    changelog = "https://github.com/wapiti-scanner/arsenic/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -1,34 +1,58 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  openssl,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dezoomify-rs";
-  version = "2.13.0";
+  version = "2.18.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
-    tag = "v${version}";
-    hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4WO+vhX5X/ee/4DdFsdotCHoH/xWhLeBfFxKFtehmxA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-v5hlG/VnRyU4lR84IXal5GmrAyfxJTjmwzRKRcfaSIY=";
-
-  checkFlags = [
-    # Tests failing due to networking errors in Nix build environment
-    "--skip=local_generic_tiles"
-    "--skip=custom_size_local_zoomify_tiles"
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    pkg-config
   ];
+
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openssl
+  ];
+
+  nativeCheckInputs = [
+    cacert
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  cargoHash = "sha256-UXJnoeP/J6zyhakH6SJMGkSS6M65Y58XFxgCkvPsK14=";
+
+  # hyper uses SystemConfiguration.framework to read system proxy settings.
+  # Allow access to the Mach service to prevent the tests from failing.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
 
   meta = {
     description = "Zoomable image downloader for Google Arts & Culture, Zoomify, IIIF, and others";
+    changelog = "https://github.com/lovasoa/dezoomify-rs/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/lovasoa/dezoomify-rs/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fsagbuya ];
+    maintainers = with lib.maintainers; [
+      fsagbuya
+      kybe236
+    ];
     mainProgram = "dezoomify-rs";
   };
-}
+})

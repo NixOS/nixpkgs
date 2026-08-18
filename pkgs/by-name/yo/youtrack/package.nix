@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  dockerTools,
   makeBinaryWrapper,
   jdk21_headless,
   gawk,
@@ -10,12 +10,22 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2025.1.82518";
+  version = "2026.2.17765";
 
-  src = fetchzip {
-    url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
-    hash = "sha256-xltAkkD6JuRk+Bl3yP9l44ix/6+rTVuhgKqlroIUIFs=";
+  src = dockerTools.exportImage {
+    diskSize = 8192;
+    fromImage = dockerTools.pullImage {
+      imageName = "jetbrains/youtrack";
+      arch = "amd64";
+      imageDigest = "sha256:54d25c6f100330cc43cc60219846711eed5e598bad11ce3611c42756b5ba197a";
+      hash = "sha256-009ZLutj1fv8gPlRuDB+vI3sosIRBg6r87o69aW0v5s=";
+    };
   };
+  unpackPhase = ''
+    mkdir source
+    tar -C source -xvf $src ./opt/youtrack
+    cd source
+  '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -25,12 +35,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    cp -r * $out
+    cp -r opt/youtrack/* $out
     makeWrapper $out/bin/youtrack.sh $out/bin/youtrack \
       --prefix PATH : "${lib.makeBinPath [ gawk ]}" \
       --set JRE_HOME ${jdk21_headless}
     rm -rf $out/internal/java
     mv $out/conf $out/conf.orig
+    rmdir $out/{backups,data,logs,temp}
     ln -s ${statePath}/backups $out/backups
     ln -s ${statePath}/conf $out/conf
     ln -s ${statePath}/data $out/data
@@ -44,8 +55,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Issue tracking and project management tool for developers";
     maintainers = [ lib.maintainers.leona ];
-    teams = [ lib.teams.serokell ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = [ "x86_64-linux" ];
     # https://www.jetbrains.com/youtrack/buy/license.html
     license = lib.licenses.unfree;
   };

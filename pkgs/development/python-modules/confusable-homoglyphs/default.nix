@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   click,
 }:
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   optional-dependencies = {
     cli = [ click ];

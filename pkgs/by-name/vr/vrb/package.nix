@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vrb";
   version = "0.5.1";
 
   src = fetchurl {
-    url = "http://vrb.sourceforge.net/download/${pname}-${version}.tar.bz2";
+    url = "http://vrb.sourceforge.net/download/vrb-${finalAttrs.version}.tar.bz2";
     sha256 = "d579ed1998ef2d78e2ef8481a748d26e1fa12cdda806d2e31d8ec66ffb0e289f";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     cp -p vrb/man/man3/*.3 $out/share/man/man3/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual ring buffer library written in C";
     mainProgram = "vbuf";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "http://vrb.sourceforge.net/";
-    maintainers = [ maintainers.bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.bobvanderlinden ];
+    platforms = lib.platforms.linux;
   };
-}
+})

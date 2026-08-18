@@ -5,36 +5,32 @@
   curl,
   pkg-config,
   wrapGAppsHook3,
+  nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgdboop";
-  version = "1.3.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "SteamGridDB";
     repo = "SGDBoop";
-    tag = "v${version}";
-    hash = "sha256-FpVQQo2N/qV+cFhYZ1FVm+xlPHSVMH4L+irnQEMlUQs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l4l5CWupL/V/qlnFZIgqUBagc5qg0DDv/zz2yc0mtng=";
   };
 
-  patches = [
-    # Hide the app from app launchers, as it is not meant to be run directly
-    # Remove when https://github.com/SteamGridDB/SGDBoop/pull/112 is merged
-    ./hide_desktop_entry.patch
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  makeFlags = [
-    # The flatpak install just copies things to /app - otherwise wants to do things with XDG
-    "FLATPAK_ID=fake"
-  ];
+    install -Dm755 SGDBoop \
+      $out/bin/SGDBoop
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "/app/" "$out/"
-  '';
+    install -Dm644 res/linux/com.steamgriddb.SGDBoop.desktop \
+      $out/share/applications/com.steamgriddb.SGDBoop.desktop
 
-  postInstall = ''
-    rm -r "$out/share/metainfo"
+    install -Dm444 res/com.steamgriddb.SGDBoop.svg \
+      $out/share/icons/hicolor/scalable/apps/com.steamgriddb.SGDBoop.svg
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
@@ -45,6 +41,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Applying custom artwork to Steam, using SteamGridDB";
@@ -57,4 +55,4 @@ stdenv.mkDerivation rec {
     mainProgram = "SGDBoop";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -17,14 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.84-unstable-2024-12-06";
+  version = "1.86";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "surelog";
-    # Once we're back on a stable tag, use "v$(finalAttrs.version}" below.
-    rev = "298a9cddc672cce7f25ec352f9f8f36f5b23aa4e";
-    hash = "sha256-Qv4dosj2dwakNCcvu483ZMuw+LlYs4fhZTULszERLSI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EEhaYimyzOgQB7dxbbTfsa7APC6SlFkz9ah9BLcKDq4=";
     fetchSubmodules = false; # we use all dependencies from nix
   };
 
@@ -44,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libuuid
-    gperftools
     uhdm
     capnproto
     antlr4.runtime.cpp
     nlohmann_json
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gperftools ];
 
   cmakeFlags = [
     "-DSURELOG_USE_HOST_CAPNP=On"
@@ -58,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSURELOG_USE_HOST_ANTLR=On"
     "-DSURELOG_USE_HOST_JSON=On"
     "-DANTLR_JAR_LOCATION=${antlr4.jarLocation}"
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DSURELOG_WITH_TCMALLOC=Off" ];
 
   doCheck = true;
   checkPhase = ''

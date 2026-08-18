@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading log file lines that have not been read";
     mainProgram = "pygtail";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/bgreenlee/pygtail";
   };
 }

@@ -10,8 +10,6 @@ let
     builtins.concatStringsSep "\n\n" config.services.pcscd.readerConfigs
   );
 
-  package = if config.security.polkit.enable then pkgs.pcscliteWithPolkit else pkgs.pcsclite;
-
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
@@ -35,6 +33,11 @@ in
 
   options.services.pcscd = {
     enable = lib.mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
+
+    package = (lib.mkPackageOption pkgs "pcsclite" { }) // {
+      default = if config.security.polkit.enable then pkgs.pcscliteWithPolkit else pkgs.pcsclite;
+      defaultText = lib.literalExpression "if config.security.polkit.enable then pkgs.pcscliteWithPolkit else pkgs.pcsclite";
+    };
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;
@@ -66,20 +69,62 @@ in
       default = [ ];
       description = "Extra command line arguments to be passed to the PCSC daemon.";
     };
+
+    ignoreReaderNames = lib.mkOption {
+      type = lib.types.listOf (lib.types.strMatching "[^:]+");
+      default = [ ];
+      description = ''
+        List of reader name patterns for the PCSC daemon to ignore.
+
+        For more precise control, readers can be ignored through udev rules
+        (cf. {option}`services.udev.extraRules`) by setting the
+        `PCSCLITE_IGNORE` property, for example:
+
+        ```
+        ACTION!="remove|unbind", SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ENV{PCSCLITE_IGNORE}="1"
+        ```
+      '';
+      example = [
+        "Nitrokey"
+        "YubiKey"
+      ];
+    };
+
+    extendReaderNames = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        String to append to every reader name. The special variable `$HOSTNAME`
+        will be expanded to the current host name.
+      '';
+      example = " $HOSTNAME";
+    };
   };
 
   config = lib.mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package ];
-    systemd.packages = [ package ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
+
+    services.udev.packages = [ pkgs.ccid ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
     systemd.services.pcscd = {
-      environment.PCSCLITE_HP_DROPDIR = pluginEnv;
+      environment = {
+        PCSCLITE_HP_DROPDIR = pluginEnv;
+
+        PCSCLITE_FILTER_IGNORE_READER_NAMES = lib.mkIf (cfg.ignoreReaderNames != [ ]) (
+          lib.concatStringsSep ":" cfg.ignoreReaderNames
+        );
+
+        PCSCLITE_FILTER_EXTEND_READER_NAMES = lib.mkIf (
+          cfg.extendReaderNames != null
+        ) cfg.extendReaderNames;
+      };
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
@@ -91,8 +136,15 @@ in
       # https://github.com/NixOS/nixpkgs/issues/121088
       serviceConfig.ExecStart = [
         ""
-        "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
+        "${lib.getExe cfg.package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
       ];
     };
+
+    users.users.pcscd = {
+      isSystemUser = true;
+      group = "pcscd";
+    };
+
+    users.groups.pcscd = { };
   };
 }

@@ -15,19 +15,23 @@
 
 buildPythonPackage rec {
   pname = "google-maps-routing";
-  version = "0.6.16";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-maps-routing-v${version}";
-    hash = "sha256-VYkgkVrUgBiUEFF2J8ZFrh2Sw7h653stYxNcpYfRAj4=";
+    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${src.name}/packages/google-maps-routing";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -35,7 +39,8 @@ buildPythonPackage rec {
     proto-plus
     protobuf
     google-geo-type
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   pythonImportsCheck = [ "google.maps.routing_v2" ];
 
@@ -44,6 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  passthru.skipBulkUpdate = true; # picks wrong tag
   passthru.updateScript = gitUpdater { rev-prefix = "google-maps-routing-v"; };
 
   meta = {

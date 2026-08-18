@@ -3,7 +3,7 @@
   wrapGAppsHook3,
   glib,
   stdenv,
-  xorg,
+  lndir,
   wingpanel,
   wingpanelIndicators,
   switchboard-with-plugs,
@@ -27,16 +27,15 @@ stdenv.mkDerivation {
 
   paths = [
     wingpanel
-  ] ++ selectedIndicators;
-
-  passAsFile = [ "paths" ];
+  ]
+  ++ selectedIndicators;
 
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs) ++ selectedIndicators;
+  buildInputs = lib.concatMap (x: x.buildInputs) selectedIndicators ++ selectedIndicators;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -47,8 +46,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+    for i in "''${paths[@]}"; do
+      ${lndir}/bin/lndir -silent $i $out
     done
   '';
 
@@ -58,6 +57,8 @@ stdenv.mkDerivation {
       --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard-3"
     )
   '';
+
+  __structuredAttrs = true;
 
   inherit (wingpanel) meta;
 }

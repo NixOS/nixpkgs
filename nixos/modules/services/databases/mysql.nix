@@ -9,9 +9,6 @@ let
   cfg = config.services.mysql;
 
   isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
-  isOracle = lib.getName cfg.package == lib.getName pkgs.mysql80;
-  # Oracle MySQL has supported "notify" service type since 8.0
-  hasNotify = isMariaDB || (isOracle && lib.versionAtLeast cfg.package.version "8.0");
 
   mysqldOptions = "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${cfg.package}";
 
@@ -111,6 +108,9 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
+        default = (
+          if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
+        );
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
@@ -293,6 +293,19 @@ in
         '';
       };
 
+      secureSuperUserByDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to automatically secure the root@localhost user with auth_socket authentication.
+
+          ::: {.note}
+          When enabled (default), the module will ensure root@localhost uses socket authentication,
+          preventing any local user from connecting as root without proper credentials.
+          :::
+        '';
+      };
+
       replication = {
         role = lib.mkOption {
           type = lib.types.enum [
@@ -406,34 +419,33 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = !cfg.galeraCluster.enable || isMariaDB;
-          message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
-        }
-      ]
-      # galeraCluster options checks
-      ++ lib.optionals cfg.galeraCluster.enable [
-        {
-          assertion =
-            cfg.galeraCluster.localAddress != ""
-            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
-          message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
-        }
-        {
-          assertion = cfg.galeraCluster.clusterPassword == "" || cfg.galeraCluster.clusterAddress == "";
-          message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
-        }
-        {
-          assertion = cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "";
-          message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
-        }
-      ];
-
-    services.mysql.dataDir = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
-    );
+    assertions = [
+      {
+        assertion = !cfg.galeraCluster.enable || isMariaDB;
+        message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
+      }
+      {
+        assertion = !isMariaDB || cfg.secureSuperUserByDefault == true;
+        message = "'services.mysql.secureSuperUserByDefault' has no effect on MariaDB (which is already secure by default)";
+      }
+    ]
+    # galeraCluster options checks
+    ++ lib.optionals cfg.galeraCluster.enable [
+      {
+        assertion =
+          cfg.galeraCluster.localAddress != ""
+          && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
+        message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
+      }
+      {
+        assertion = cfg.galeraCluster.clusterPassword == "" || cfg.galeraCluster.clusterAddress == "";
+        message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
+      }
+      {
+        assertion = cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "";
+        message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
+      }
+    ];
 
     services.mysql.settings.mysqld = lib.mkMerge [
       {
@@ -521,29 +533,28 @@ in
 
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
-      path =
-        [
-          # Needed for the mysql_install_db command in the preStart script
-          # which calls the hostname command.
-          pkgs.nettools
-        ]
-        # tools 'wsrep_sst_rsync' needs
-        ++ lib.optionals cfg.galeraCluster.enable [
-          cfg.package
-          pkgs.bash
-          pkgs.gawk
-          pkgs.gnutar
-          pkgs.gzip
-          pkgs.inetutils
-          pkgs.iproute2
-          pkgs.netcat
-          pkgs.procps
-          pkgs.pv
-          pkgs.rsync
-          pkgs.socat
-          pkgs.stunnel
-          pkgs.which
-        ];
+      path = [
+        # Needed for the mysql_install_db command in the preStart script
+        # which calls the hostname command.
+        pkgs.hostname-debian
+      ]
+      # tools 'wsrep_sst_rsync' needs
+      ++ lib.optionals cfg.galeraCluster.enable [
+        cfg.package
+        pkgs.bash
+        pkgs.gawk
+        pkgs.gnutar
+        pkgs.gzip
+        pkgs.inetutils
+        pkgs.iproute2
+        pkgs.netcat
+        pkgs.procps
+        pkgs.pv
+        pkgs.rsync
+        pkgs.socat
+        pkgs.stunnel
+        pkgs.which
+      ];
 
       preStart =
         if isMariaDB then
@@ -577,17 +588,9 @@ in
         let
           # The super user account to use on *first* run of MySQL server
           superUser = if isMariaDB then cfg.user else "root";
+          isStateVersion2611Plus = lib.versionAtLeast config.system.stateVersion "26.11";
         in
         ''
-          ${lib.optionalString (!hasNotify) ''
-            # Wait until the MySQL server is available for use
-            while [ ! -e /run/mysqld/mysqld.sock ]
-            do
-                echo "MySQL daemon not yet started. Waiting for 1 second..."
-                sleep 1
-            done
-          ''}
-
           ${lib.optionalString isMariaDB ''
             # If MariaDB is used in an Galera cluster, we have to check if the sync is done,
             # or it will fail to init the database while joining, so we get in an broken non recoverable state
@@ -666,8 +669,34 @@ in
                 cat ${toString cfg.initialScript} | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
+              # Secure root@localhost for MySQL/Percona on first initialization
+              ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
+                echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
+              ''}
+
               rm ${cfg.dataDir}/mysql_init
           fi
+
+          ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
+            # We try to detect if we are in the default insecure auth mode for MySQL (all users can connect with password)
+            # If the configuration has been moved to the socket-peer credential authentication we do nothing
+            # If we are not able to connect it also means the default setup has been adjusted, so we also skip and do not do any changes
+            if plugin_info=$(${cfg.package}/bin/mysql -u ${superUser} --skip-column-names 2>/dev/null -e "SELECT plugin FROM mysql.user WHERE user = 'root' AND host = 'localhost';"); then
+              case "$plugin_info" in
+                *auth_socket*) ;;
+                *)
+                  ${lib.optionalString isStateVersion2611Plus ''
+                    # Attempt to auto-fix to prevent local authentication without a password
+                    echo "Securing root@localhost with auth_socket to local connection without password, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-6qxx-6rg8-c4p8" >&2
+                    echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
+                  ''}
+                  ${lib.optionalString (!isStateVersion2611Plus) ''
+                    echo "Security warning: root@localhost seems to have open authentication, consider adjusting your configuration. See https://github.com/NixOS/nixpkgs/security/advisories/GHSA-6qxx-6rg8-c4p8" >&2
+                  ''}
+                  ;;
+              esac
+            fi
+          ''}
 
           ${lib.optionalString (cfg.ensureDatabases != [ ]) ''
             (
@@ -692,8 +721,8 @@ in
 
       serviceConfig = lib.mkMerge [
         {
-          Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
+          Type = "notify";
+          Restart = "on-abnormal";
           RestartSec = "5s";
 
           # User and group

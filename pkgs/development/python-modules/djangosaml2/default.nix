@@ -5,22 +5,19 @@
   defusedxml,
   django,
   pysaml2,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangosaml2";
-  version = "1.11.0";
+  version = "1.11.1-1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "djangosaml2";
     tag = "v${version}";
-    hash = "sha256-AkyXxWcckBVWUZAhjuUru2b1/t4iwoCKxmTvvqSziV0=";
+    hash = "sha256-f7VgysfGpwt4opmXXaigRsOBS506XB/jZV1zRiYwZig=";
   };
 
   build-system = [ setuptools ];

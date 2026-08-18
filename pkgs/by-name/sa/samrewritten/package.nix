@@ -1,52 +1,65 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  unstableGitUpdater,
-  curl,
-  gtkmm3,
-  glibmm,
-  gnutls,
-  yajl,
+  nix-update-script,
+  # Deps
+  gdk-pixbuf,
+  glib,
+  graphene,
+  gtk4,
+  openssl,
+  pango,
   pkg-config,
+  wrapGAppsHook4,
 }:
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "202008-unstable-2025-03-11";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
-    # The latest release is too old, use latest commit instead
-    rev = "cac0291f3e4465135f5cf7d5b99fdb005fb23ade";
-    hash = "sha256-+f/j2q1lJ3yp3/BBgnK9kS4P3ULQ5onQPAcUV12LYnI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IUiEr9JfxZb3FBfQGoN3Ck7I7Ypk6SGIlI2oj3sbsvc=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  cargoHash = "sha256-XA/7wcYUmDf0+Ku3vSpzpuRBZGepiH5+dYgOh2T0Akw=";
 
-  nativeBuildInputs = [ pkg-config ];
+  # Tests require network access and a running Steam client. Skipping.
+  doCheck = false;
+
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [
-    curl
-    gtkmm3
-    glibmm
-    gnutls
-    yajl
+    gdk-pixbuf
+    glib
+    graphene
+    gtk4
+    openssl
+    pango
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/applications/samrewritten.desktop \
-      --replace-fail "Exec=/usr/bin/samrewritten" "Exec=samrewritten"
+    install -Dm644 assets/org.samrewritten.SamRewritten.gschema.xml \
+      $out/share/glib-2.0/schemas/org.samrewritten.SamRewritten.gschema.xml
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Steam Achievement Manager For Linux. Rewritten in C++";
+    description = "Modern Steam achievements manager for Windows and Linux";
     mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
     changelog = "https://github.com/PaulCombal/SamRewritten/releases";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ludovicopiero ];
     platforms = [ "x86_64-linux" ];
   };

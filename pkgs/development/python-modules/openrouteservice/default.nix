@@ -30,10 +30,10 @@ buildPythonPackage rec {
     "test_raise_timeout_retriable_requests"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GIScience/openrouteservice-py";
     description = "Python API to consume openrouteservice(s) painlessly";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

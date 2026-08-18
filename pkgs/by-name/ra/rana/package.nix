@@ -4,18 +4,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rana";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "grunch";
     repo = "rana";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gzyjOCGh45zEJvc0xFkp8gAH9Kxwfc2oPeMzbrTjnk8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YOit8z1GAUmPz56M5jXA2EdyN5Pbo7517W3PNXgQnDs=";
 
   meta = {
@@ -25,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ jigglycrumb ];
     mainProgram = "rana";
   };
-}
+})

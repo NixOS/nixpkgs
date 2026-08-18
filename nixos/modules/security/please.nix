@@ -97,7 +97,7 @@ in
 
       etc."please.ini".source = ini.generate "please.ini" (
         cfg.settings
-        // (rec {
+        // rec {
           # The "root" user is allowed to do anything by default and this cannot
           # be overridden.
           root_run_as_any = {
@@ -113,7 +113,7 @@ in
           root_list_as_any = root_run_as_any // {
             type = "list";
           };
-        })
+        }
       );
     };
 

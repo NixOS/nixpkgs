@@ -10,36 +10,32 @@
   glib,
   sane-backends,
   libnotify,
+  libtiff,
 }:
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.5.3";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-vX+ZyCQsYqJjgYaufWJRnzX8retiFK5QHSP40bbBaCc=";
+    hash = "sha256-LGnrQc8/iO/uThiB2M9nx3dJHLXb6Kf3koByUIl7Uxk=";
   };
+
+  patches = [
+    ./01-donate-button.patch
+    ./02-button-dpi.patch
+  ];
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
 
-  postPatch = ''
-    substituteInPlace NAPS2.Images.Gtk/NAPS2.Images.Gtk.csproj \
-      --replace-fail TargetFramework TargetFrameworks \
-  '';
-
-  dotnetFlags = [
-    "-p:TargetFrameworks=net8"
-    "-p:EnablePreviewFeatures=true"
-  ];
-
   executables = [ "naps2" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
@@ -50,6 +46,7 @@ buildDotnetModule rec {
     glib
     sane-backends
     libnotify
+    libtiff
   ];
 
   postInstall = ''
@@ -60,6 +57,14 @@ buildDotnetModule rec {
     install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolor/64x64/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolor/72x72/apps/com.naps2.Naps2.png
     install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolor/128x128/apps/com.naps2.Naps2.png
+    case "${stdenv.hostPlatform.system}" in
+      x86_64-linux)
+        chmod a+x $out/lib/naps2/_linux/tesseract
+        ;;
+      aarch64-linux)
+        chmod a+x $out/lib/naps2/_linuxarm/tesseract
+        ;;
+    esac
   '';
 
   meta = {
@@ -67,7 +72,10 @@ buildDotnetModule rec {
     homepage = "https://www.naps2.com";
     changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eliandoran ];
+    maintainers = with lib.maintainers; [
+      eliandoran
+      magicquark
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
   };

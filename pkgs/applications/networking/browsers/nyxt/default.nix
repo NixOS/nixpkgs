@@ -28,6 +28,7 @@
   xclip,
   wl-clipboard,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # for cffi
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     glib
     gobject-introspection
     gdk-pixbuf
@@ -104,17 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nyxt; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
     mainProgram = "nyxt";
     homepage = "https://nyxt.atlas.engineer";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       lewo
       dariof4
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

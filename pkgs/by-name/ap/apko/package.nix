@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "0.29.1";
+  version = "1.2.37";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PRT29c7WqjkWR4hqzzz8ek5IytsS3ntDlPQ/tzpARCk=";
+    hash = "sha256-sdupa5t+YrTiPsqb1fLz/OuaNVGZ2+gSHobcV8YhVbk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,11 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-j7f9cbcbX4PdaRxg5lare6aRz1B5lCfj2RSvs+XOfe4=";
+  vendorHash = "sha256-l0vecLj11UA2WLiZ2hbNOFDOu3StjMCBND/fEk5ewSI=";
+
+  excludedPackages = [
+    "internal/gen-jsonschema"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,7 +55,7 @@ buildGoModule (finalAttrs: {
   # skip tests on darwin due to some local networking failures
   # `__darwinAllowLocalNetworking = true;` wasn't sufficient for
   # aarch64 or x86_64
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     # some test data include SOURCE_DATE_EPOCH (which is different from our default)
     # and the default version info which we get by unsetting our ldflags
@@ -60,8 +64,9 @@ buildGoModule (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking (apk.chainreg.biz)
-    "-skip=TestInitDB_ChainguardDiscovery"
+    # requires networking (apk.chainreg.biz and dl-cdn.alpinelinux.org)
+    # TestSpecialModeBits fails because of sandbox setuid/setgid restrictions
+    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage|TestLock/apko-discover|TestSpecialModeBits"
   ];
 
   postInstall =
@@ -79,20 +84,19 @@ buildGoModule (finalAttrs: {
         --zsh <(${apko}/bin/apko completion zsh)
     '';
 
-  nativeCheckInstallInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "version";
 
   meta = {
     homepage = "https://apko.dev/";
-    changelog = "https://github.com/chainguard-dev/apko/blob/main/NEWS.md";
+    changelog = "https://github.com/chainguard-dev/apko/releases/tag/v${finalAttrs.version}";
     description = "Build OCI images using APK directly without Dockerfile";
     mainProgram = "apko";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
       developer-guy
-      emilylange
     ];
   };
 })

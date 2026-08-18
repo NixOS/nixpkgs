@@ -9,7 +9,7 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aaphoto";
   version = "0.45";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/${pname}
+    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/aaphoto
   '';
 
   meta = {
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
       saturation and gamma levels of the image by analization.
 
       This can be a solution for those kind of users who are not able to manage
-      and correct images with complicated graphical softwares, or just simply
+      and correct images with complicated graphical software, or just simply
       don't intend to spend a lot of time with manually correcting the images
       one-by-one.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "aaphoto";
   };

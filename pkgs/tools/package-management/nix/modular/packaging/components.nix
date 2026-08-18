@@ -3,7 +3,6 @@
   pkgs,
   src,
   officialRelease,
-  maintainers,
   teams,
   version,
 }:
@@ -44,12 +43,12 @@ let
     preConfigure =
       prevAttrs.preConfigure or ""
       +
-        # Update the repo-global .version file.
-        # Symlink ./.version points there, but by default only workDir is writable.
-        ''
-          chmod u+w ./.version
-          echo ${finalAttrs.version} > ./.version
-        '';
+      # Update the repo-global .version file.
+      # Symlink ./.version points there, but by default only workDir is writable.
+      ''
+        chmod u+w ./.version
+        echo ${finalAttrs.version} > ./.version
+      '';
   };
 
   localSourceLayer =
@@ -123,11 +122,9 @@ let
       +
         lib.optionalString
           (
-            !stdenv.hostPlatform.isWindows
+            !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
-            # LTO breaks exception handling on x86-64-darwin.
-            && stdenv.system != "x86_64-darwin"
           )
           ''
             case "$mesonBuildType" in
@@ -138,7 +135,8 @@ let
     nativeBuildInputs = [
       meson
       ninja
-    ] ++ prevAttrs.nativeBuildInputs or [ ];
+    ]
+    ++ prevAttrs.nativeBuildInputs or [ ];
     mesonCheckFlags = prevAttrs.mesonCheckFlags or [ ] ++ [
       "--print-errorlogs"
     ];
@@ -149,18 +147,30 @@ let
       pkg-config
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
-    hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-    env =
-      prevAttrs.env or { }
-      // lib.optionalAttrs (
-        stdenv.isLinux
-        && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
-        && !(stdenv.system == "loongarch64-linux")
-        && !(stdenv.hostPlatform.useLLVM or false)
-      ) { LDFLAGS = "-fuse-ld=gold"; };
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
+    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
+    # reports of undefined behavior on previous versions. Note that this does //not// use
+    # `finalAttrs.version` in order to avoid infinite recursion.
+    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+      let
+        interpositionFlags = [
+          "-fno-semantic-interposition"
+          "-Wl,-Bsymbolic-functions"
+        ];
+      in
+      # NOTE: By default GCC disables interprocedular optimizations (in particular inlining) for
+      # position-independent code and thus shared libraries.
+      # Since LD_PRELOAD tricks aren't worth losing out on optimizations, we disable it for good.
+      # This is not the case for Clang, where inlining is done by default even without -fno-semantic-interposition.
+      # https://reviews.llvm.org/D102453
+      # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+      prevAttrs.preConfigure or ""
+      + lib.optionalString stdenv.cc.isGNU ''
+        export CFLAGS="''${CFLAGS:-} ${toString interpositionFlags}"
+        export CXXFLAGS="''${CXXFLAGS:-} ${toString interpositionFlags}"
+      '';
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
   };
 
@@ -178,6 +188,12 @@ let
     pos = builtins.unsafeGetAttrPos "pname" prevAttrs;
     meta = prevAttrs.meta or { } // {
       homepage = prevAttrs.meta.homepage or "https://nixos.org/nix";
+      donationPage = prevAttrs.meta.donationPage or "https://nixos.org/donate/";
+      changelog =
+        let
+          ver = lib.versions.majorMinor finalAttrs.version;
+        in
+        prevAttrs.meta.changelog or "https://nix.dev/manual/nix/${ver}/release-notes/rl-${ver}.html";
       longDescription =
         prevAttrs.longDescription or ''
           Nix is a powerful package manager for mainly Linux and other Unix systems that
@@ -187,7 +203,6 @@ let
           environments.
         '';
       license = prevAttrs.meta.license or lib.licenses.lgpl21Plus;
-      maintainers = prevAttrs.meta.maintainers or [ ] ++ scope.maintainers;
       teams = prevAttrs.meta.teams or [ ] ++ scope.teams;
       platforms = prevAttrs.meta.platforms or (lib.platforms.unix ++ lib.platforms.windows);
     };
@@ -211,7 +226,6 @@ in
 # This becomes the pkgs.nixComponents attribute set
 {
   inherit version;
-  inherit maintainers;
   inherit teams;
 
   inherit filesetToSource;
@@ -358,8 +372,11 @@ in
   nix-main-c = callPackage ../src/libmain-c/package.nix { };
 
   nix-cmd = callPackage ../src/libcmd/package.nix { };
+  # TODO: upstream nix-cmd-c to Nix from devenv
+  nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
+  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
@@ -367,7 +384,8 @@ in
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
   nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
-  nix-perl-bindings = callPackage ../src/perl/package.nix { };
+  nix-perl-bindings =
+    if (lib.versionAtLeast version "2.35pre") then null else callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
     # Note: no `passthru.overrideAllMesonComponents` etc

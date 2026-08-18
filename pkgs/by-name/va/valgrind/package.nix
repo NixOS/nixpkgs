@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.25.1";
+  version = "3.27.1";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-Yd640HJ7RcJo79wbO2yeZ5zZfL9e5LKNHerXyLeica8=";
+    url = "https://sourceware.org/pub/valgrind/valgrind-${version}.tar.bz2";
+    hash = "sha256-XViRUuuAccAv6rjOarcZ5DGh+8PisXAPVDJjKouSZNw=";
   };
 
   patches = [
@@ -25,6 +25,17 @@ stdenv.mkDerivation rec {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
+    # https://bugs.kde.org/show_bug.cgi?id=511548
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=186451";
+      hash = "sha256-IGmyHwwGoy00hcz3XxQSDcwcU8zHLBJ9dfqTvWDQ520=";
+    })
+    (fetchpatch {
+      name = "reallocarray-test-musl.patch";
+      url = "https://sourceware.org/git/?p=valgrind.git;a=patch;h=991961ece87e4cdc0771a05c956c55baa437bb07";
+      hash = "sha256-U16384rLXMhLE5Em9z8FKYbshPlnq8l9ejC2+epL7M4=";
+    })
+
     # Fix build on armv7l.
     # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
@@ -41,7 +52,6 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [
-    "pie"
     "stackprotector"
   ];
 
@@ -81,14 +91,14 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-valgrind" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of:
       #  'Current release: <a href="/downloads/current.html#current">valgrind-3.19.0</a>'
       new_version="$(curl -s https://valgrind.org/ |
-          pcregrep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
+          pcre2grep -o1 'Current release: .*>valgrind-([0-9.]+)</a>')"
       update-source-version ${pname} "$new_version"
     '';
   };
@@ -105,9 +115,11 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "valgrind";
 
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = with lib.maintainers; [ albfsg ];
+
     platforms =
       with lib.platforms;
       lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips ++ riscv64) (

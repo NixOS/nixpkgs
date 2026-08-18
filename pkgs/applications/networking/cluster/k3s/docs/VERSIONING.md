@@ -1,12 +1,12 @@
 # Versioning
 
-K3s, Kubernetes, and other clustered software has the property of not being able to update atomically. Most software in nixpkgs, like for example bash, can be updated as part of a "nixos-rebuild switch" without having to worry about the old and the new bash interacting in some way.
+K3s, Kubernetes, and other clustered software have the property of not being able to update atomically. Most software in Nixpkgs, like for example bash, can be updated as part of a "nixos-rebuild switch" without having to worry about the old and the new bash interacting in some way.
 
 K3s/Kubernetes, on the other hand, is typically run across several NixOS machines, and each NixOS machine is updated independently. As such, different versions of the package and NixOS module must maintain compatibility with each other through temporary version skew during updates.
 
 The upstream Kubernetes project [documents this in their version-skew policy](https://kubernetes.io/releases/version-skew-policy/#supported-component-upgrade-order).
 
-Within nixpkgs, we strive to maintain a valid "upgrade path" that does not run
+Within Nixpkgs, we strive to maintain a valid "upgrade path" that does not run
 afoul of the upstream version skew policy.
 
 ## Patch Release Support Lifecycle
@@ -15,11 +15,11 @@ K3s is built on top of K8s and typically provides a similar release cadence and 
 
 In short, a new Kubernetes version is released roughly every 4 months and each release is supported for a little over 1 year.
 
-## Versioning in nixpkgs
+## Versioning in Nixpkgs
 
-There are two package types that are maintained within nixpkgs when we are looking at the `nixos-unstable` branch. A standard `k3s` package and versioned releases such as `k3s_1_28`, `k3s_1_29`, and `k3s_1_30`.
+There are two package types that are maintained within Nixpkgs when we are looking at the `nixos-unstable` branch. A standard `k3s` package and versioned releases such as `k3s_1_28`, `k3s_1_29`, and `k3s_1_30`.
 
-The standard `k3s` package will be updated as new versions of k3s are released upstream. Versioned releases, on the other hand, will follow the path release support lifecycle as detailed in the previous section and be removed from `nixos-unstable` when they are either end-of-life upstream or older than the current `k3s` package in `nixos-stable`.
+The standard `k3s` package will be updated as new versions of k3s are released upstream. Versioned releases, on the other hand, will follow the patch release support lifecycle as detailed in the previous section and be removed from `nixos-unstable` when they are either end-of-life upstream or older than the current `k3s` package in `nixos-stable`.
 
 ## Versioning in NixOS Releases
 

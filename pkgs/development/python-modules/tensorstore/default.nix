@@ -12,33 +12,34 @@
 let
   pythonVersionNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   systemToPlatform = {
-    "aarch64-linux" = "manylinux_2_17_aarch64.manylinux2014_aarch64";
-    "x86_64-linux" = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+    "aarch64-linux" = "manylinux_2_27_aarch64.manylinux_2_28_aarch64";
+    "x86_64-linux" = "manylinux_2_27_x86_64.manylinux_2_28_x86_64";
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
   hashes = {
-    "310-x86_64-linux" = "sha256-GmzcxS5LhB0j5Qovoo4Bbm2fYdbqkYjUVV6hibBAoPY=";
-    "311-x86_64-linux" = "sha256-NzVYuAPYwsV/xhOxEAeuWBOfGaPN3UQ6DeXXtTIeWWE=";
-    "312-x86_64-linux" = "sha256-ztVDC836f8s6a9xEczF2FYy4d7Nb3SM8rILiW0zJTpI=";
-    "313-x86_64-linux" = "sha256-UrVG8Hayw78hfGDwXeQSTMEZfOkvjoJufsc64yQHSlo=";
-    "310-aarch64-linux" = "sha256-lQQbVaLshtH2aQUS0Yg1gbGPL09Gw9l4lK6wrC22r38=";
-    "311-aarch64-linux" = "sha256-ZcOhoqNaG1N0A/NkA9JYyqtHflZLwPZBCblBzHe08gM=";
-    "312-aarch64-linux" = "sha256-h6l6NLBHXdx9KvxA5d1/jRJSKqge37zMs5Yoz1kUVNU=";
-    "313-aarch64-linux" = "sha256-YnbiebRetdm5XE3z55ViVfQU/UsSjS3hbYrs3obDY1c";
-    "310-aarch64-darwin" = "sha256-uWG7u3ocakjkwUBqmMrr60AEYeLnWgi23wwBMpQDehU=";
-    "311-aarch64-darwin" = "sha256-9A5zvNwzPfs/f+D88CO8vsQVM8mFZldxj/duzhoZAuA=";
-    "312-aarch64-darwin" = "sha256-06JP62GV8cIiFillwBB8n/VtMizKI+GfDmZjb264DxQ=";
-    "313-aarch64-darwin" = "sha256-3ohD+zRiiZ3nvN7qzLkjA6nWEAa8NjZN60qI30YyC6Q=";
+    "311-x86_64-linux" = "sha256-iudEUatcyKDNnlGSat8E9N/b2K1awxrHHxyqe9+ygo0=";
+    "312-x86_64-linux" = "sha256-ZMgDlVjVYHtzkDlI/OBYclcx30EMXBls9Ys/xiIjlbU=";
+    "313-x86_64-linux" = "sha256-jqU6hR6oaq09mcFKeQyFRo1jJL4Ux6whHx8CZej6twc=";
+    "314-x86_64-linux" = "sha256-fJEIrmwprckLcsome6K1dzhsXkEOovjofqvOXr2tMn4=";
+    "311-aarch64-linux" = "sha256-NDUvi6bl77pf6xiRfWjaGpK7/4DmTD/QbT0a9LNDgho=";
+    "312-aarch64-linux" = "sha256-Os4Azy5F3F1k/joQwsvvYTQ5FWg4CKEKPggSM1ZqcjE=";
+    "313-aarch64-linux" = "sha256-UK+wbFelCQkQFa9qhdpvSDp/WtA3IoTdldVRPYdzNuQ=";
+    "314-aarch64-linux" = "sha256-Gy/11VNqipsVlsUbkHXMnUC0xOpObMA8BIARHb5dlW0=";
+    "311-aarch64-darwin" = "sha256-NA/pcfGAjXBg8ic7ju41J4C8tl5QNfeBY/qbiTCqeVo=";
+    "312-aarch64-darwin" = "sha256-RHfqvibi9RMfGxo0RM2RZ/5p+rwpV56rglnSGDmbnms=";
+    "313-aarch64-darwin" = "sha256-AoRVzM3AXDHxlASM9FmiZmmybTjwUWyvkhPnIZse55o=";
+    "314-aarch64-darwin" = "sha256-19AXdZhfyqKw8QA0l2apU8UIbpLnRr85XpNhUdTY+aw=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorstore";
-  version = "0.1.71";
+  version = "0.1.84";
   format = "wheel";
+  __structuredAttrs = true;
 
   # The source build involves some wonky Bazel stuff.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     python = "cp${pythonVersionNoDot}";
     abi = "cp${pythonVersionNoDot}";
@@ -61,9 +62,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library for reading and writing large multi-dimensional arrays";
     homepage = "https://google.github.io/tensorstore";
-    changelog = "https://github.com/google/tensorstore/releases/tag/v${version}";
+    changelog = "https://github.com/google/tensorstore/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

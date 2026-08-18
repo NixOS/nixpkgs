@@ -78,10 +78,7 @@ in
     };
 
     secretFile = lib.mkOption {
-      type = lib.types.pathWith {
-        inStore = false;
-        absolute = true;
-      };
+      type = lib.types.externalPath;
       example = "/run/keys/oncall-dbpassword";
       description = ''
         A YAML file containing secrets such as database or user passwords.
@@ -106,10 +103,10 @@ in
 
     # Disable debug, only needed for development
     services.oncall.settings = lib.mkMerge [
-      ({
+      {
         debug = lib.mkDefault false;
         auth.debug = lib.mkDefault false;
-      })
+      }
     ];
 
     services.uwsgi = {

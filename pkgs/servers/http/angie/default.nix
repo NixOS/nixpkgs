@@ -4,27 +4,22 @@
   fetchurl,
   nixosTests,
   withAcme ? false,
-  withQuic ? false,
   ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.9.1";
-  pname = if withQuic then "angieQuic" else "angie";
+  pname = "angie";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-rxHMBt/r58F4MjdbNIqNeGrwUs785f+vqqiYSE4YzjY=";
+    hash = "sha256-X08gO+Kspv4gdwtInHIORuUdM35SEGXn5HK2HiTj0vU=";
   };
 
-  configureFlags =
-    lib.optionals withAcme [
-      "--with-http_acme_module"
-      "--http-acme-client-path=/var/lib/nginx/acme"
-    ]
-    ++ lib.optionals withQuic [
-      "--with-http_v3_module"
-    ];
+  configureFlags = lib.optionals withAcme [
+    "--with-http_acme_module"
+    "--http-acme-client-path=/var/lib/nginx/acme"
+  ];
 
   preInstall = ''
     if [[ -e man/angie.8 ]]; then
@@ -39,7 +34,7 @@ callPackage ../nginx/generic.nix args rec {
   passthru.tests = {
     angie = nixosTests.nginx-variants.angie;
     angie-api = nixosTests.angie-api;
-    angie-http3 = nixosTests.nginx-http3.angieQuic;
+    angie-http3 = nixosTests.nginx-http3.angie;
   };
 
   meta = {
@@ -48,5 +43,8 @@ callPackage ../nginx/generic.nix args rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
+    knownVulnerabilities = [
+      "angie is insufficiently maintained in nixpkgs. Security updates are frequently delayed. Please consider stepping up as maintainer or switching to an alternative."
+    ];
   };
 }

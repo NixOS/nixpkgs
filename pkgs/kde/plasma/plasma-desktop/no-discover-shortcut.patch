@@ -1,7 +1,5 @@
-diff --git a/applets/taskmanager/package/contents/config/main.xml b/applets/taskmanager/package/contents/config/main.xml
-index 6bb27695d..25e621810 100644
---- a/applets/taskmanager/package/contents/config/main.xml
-+++ b/applets/taskmanager/package/contents/config/main.xml
+--- a/applets/taskmanager/main.xml
++++ b/applets/taskmanager/main.xml
 @@ -85,7 +85,7 @@
      </entry>
      <entry name="launchers" type="StringList">

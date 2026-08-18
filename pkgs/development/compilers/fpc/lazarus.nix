@@ -5,15 +5,16 @@
   makeWrapper,
   writeText,
   fpc,
-  gtk2,
+  gtk3,
   glib,
   pango,
   atk,
   gdk-pixbuf,
-  libXi,
+  harfbuzz,
+  libxi,
   xorgproto,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   gdb,
   gnumake,
   binutils,
@@ -27,7 +28,7 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "4.0-0";
+  version = "4.8-0";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
@@ -43,6 +44,8 @@ let
     )
   );
 
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk3";
+
   qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
@@ -51,32 +54,32 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    hash = "sha256-vIM7RxzXqCYSiavND1OhFjuMcG5FmD+zq6kmEiM5z8s=";
+    hash = "sha256-a0yeyU/nn+TlgCfde/ENm2w1ycsvkdtZMLdYC0ogGpk=";
   };
 
   postPatch = ''
     cp ${overrides} ide/${overrides.name}
   '';
 
-  buildInputs =
-    [
-      # we need gtk2 unconditionally as that is the default target when building applications with lazarus
-      fpc
-      gtk2
-      glib
-      libXi
-      xorgproto
-      libX11
-      libXext
-      pango
-      atk
-      stdenv.cc
-      gdk-pixbuf
-    ]
-    ++ lib.optionals withQt [
-      libqtpas
-      qtbase
-    ];
+  buildInputs = [
+    # we need gtk unconditionally as that is the default target when building applications with lazarus
+    fpc
+    gtk3
+    glib
+    libxi
+    xorgproto
+    libx11
+    libxext
+    pango
+    atk
+    stdenv.cc
+    gdk-pixbuf
+    harfbuzz
+  ]
+  ++ lib.optionals withQt [
+    libqtpas
+    qtbase
+  ];
 
   # Disable parallel build, errors:
   #  Fatal: (1018) Compilation aborted
@@ -84,7 +87,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional withQt wrapQtAppsHook;
+  ]
+  ++ lib.optional withQt wrapQtAppsHook;
 
   makeFlags = [
     "FPC=fpc"
@@ -95,29 +99,32 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
-
-  NIX_LDFLAGS = lib.concatStringsSep " " (
-    [
-      "-L${lib.getLib stdenv.cc.cc}/lib"
-      "-lX11"
-      "-lXext"
-      "-lXi"
-      "-latk-1.0"
-      "-lc"
-      "-lcairo"
-      "-lgcc_s"
-      "-lgdk-x11-2.0"
-      "-lgdk_pixbuf-2.0"
-      "-lglib-2.0"
-      "-lgtk-x11-2.0"
-      "-lpango-1.0"
-    ]
-    ++ lib.optionals withQt [
-      "-L${lib.getLib libqtpas}/lib"
-      "-lQt${qtVersion}Pas"
-    ]
-  );
+  env = {
+    inherit LCL_PLATFORM;
+    NIX_LDFLAGS = toString (
+      [
+        "-L${lib.getLib stdenv.cc.cc}/lib"
+        "-lX11"
+        "-lXext"
+        "-lXi"
+        "-latk-1.0"
+        "-lc"
+        "-lcairo"
+        "-lgcc_s"
+        "-lgdk-3"
+        "-lgdk_pixbuf-2.0"
+        "-lglib-2.0"
+        "-lgtk-3"
+        "-lpango-1.0"
+        "-lharfbuzz"
+        "-lharfbuzz-gobject"
+      ]
+      ++ lib.optionals withQt [
+        "-L${lib.getLib libqtpas}/lib"
+        "-lQt${qtVersion}Pas"
+      ]
+    );
+  };
 
   preBuild = ''
     mkdir -p $out/share "$out/lazarus"
@@ -145,11 +152,11 @@ stdenv.mkDerivation rec {
         }"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

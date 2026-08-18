@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   protobuf,
   protobufc,
   asciidoc,
@@ -27,16 +28,24 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "criu";
-  version = "4.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
-    rev = "v${version}";
-    hash = "sha256-Z4prbaPYRdN/fPdBwDz7D3/gKybh2ulA3UM1LZGeAK0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "conflicting-redefinition-of-rseq-enums.patch";
+      url = "https://github.com/checkpoint-restore/criu/commit/3f3acc3200a23140abaa32a2017ae159d3c2d02c.patch?full_index=1";
+      hash = "sha256-J8n4TjqjzJLLULnpJdR/6YWa/8moFQMn+wNo4a0otgE=";
+    })
+  ];
 
   enableParallelBuilding = true;
   depsBuildBuild = [
@@ -65,20 +74,22 @@ stdenv.mkDerivation rec {
     libbsd
     libuuid
   ];
-  propagatedBuildInputs =
-    [
-      protobufc
-    ]
-    ++ (with python3.pkgs; [
-      python
-      python3.pkgs.protobuf
-    ]);
+  propagatedBuildInputs = [
+    protobufc
+  ]
+  ++ (with python3.pkgs; [
+    python
+    python3.pkgs.protobuf
+  ]);
+
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \
-      --replace "2>/dev/null" "" \
-      --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+      --replace-fail "2>/dev/null" "" \
+      --replace-fail "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Makefile \
+      --replace-fail "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${finalAttrs.version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
@@ -96,6 +107,7 @@ stdenv.mkDerivation rec {
         "s390" = "s390";
         "mips" = "mips";
         "loongarch" = "loongarch64";
+        "riscv" = "riscv64";
       };
     in
     [
@@ -139,16 +151,17 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace checkpoint/restore for Linux";
     homepage = "https://criu.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

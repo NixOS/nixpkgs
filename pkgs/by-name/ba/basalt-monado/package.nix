@@ -6,7 +6,7 @@
   cereal,
   cmake,
   eigen,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitLab,
   fmt,
   freeglut,
@@ -20,28 +20,32 @@
   opencv,
   pkg-config,
   stdenv,
-  tbb,
-  xorg,
+  onetbb,
+  libx11,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
+
+let
+  opencv' = opencv.override { enableGtk3 = true; };
+in
 stdenv.mkDerivation {
   pname = "basalt-monado";
-  version = "0-unstable-2024-06-21";
+  version = "0-unstable-2025-09-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mateosss";
     repo = "basalt";
-    rev = "385c161f35720df3a6c606054565f9d49a1c5787";
-    hash = "sha256-+2/pc2OWDwE04xPcfHL5GGyhQ1ZTN6o7cCNAilDgd2Y=";
+    rev = "5337898271f5c2ce523258e93e80fd870130be31";
+    hash = "sha256-IoXZlXyOc5y9aSHBU3WCNhHi4L9xzHmbv6VMEvX2ZeE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 
@@ -57,16 +61,18 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv.cxxdev
-    tbb
-    xorg.libX11
+    opencv'.cxxdev
+    onetbb
+    libx11
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BASALT_INSTANTIATIONS_DOUBLE" false)
     (lib.cmakeBool "BUILD_TESTS" false)
     (lib.cmakeFeature "EIGEN_ROOT" "${eigen}/include/eigen3")
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   passthru.updateScript = nix-update-script { };

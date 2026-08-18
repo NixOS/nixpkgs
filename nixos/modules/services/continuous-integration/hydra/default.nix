@@ -18,18 +18,17 @@ let
     HYDRA_DATA = "${baseDir}";
   };
 
-  env =
-    {
-      NIX_REMOTE = "daemon";
-      PGPASSFILE = "${baseDir}/pgpass";
-      NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
-    }
-    // lib.optionalAttrs (cfg.smtpHost != null) {
-      EMAIL_SENDER_TRANSPORT = "SMTP";
-      EMAIL_SENDER_TRANSPORT_host = cfg.smtpHost;
-    }
-    // hydraEnv
-    // cfg.extraEnv;
+  env = {
+    NIX_REMOTE = "daemon";
+    PGPASSFILE = "${baseDir}/pgpass";
+    NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
+  }
+  // lib.optionalAttrs (cfg.smtpHost != null) {
+    EMAIL_SENDER_TRANSPORT = "SMTP";
+    EMAIL_SENDER_TRANSPORT_host = cfg.smtpHost;
+  }
+  // hydraEnv
+  // cfg.extraEnv;
 
   serverEnv =
     env
@@ -399,6 +398,11 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
       after = [ "hydra-init.service" ];
+      path = [
+        # these are used to serve logs if they are compressed with zstd or bzip2
+        pkgs.zstd
+        pkgs.bzip2
+      ];
       environment = serverEnv // {
         HYDRA_DBI = "${serverEnv.HYDRA_DBI};application_name=hydra-server";
       };
@@ -423,11 +427,11 @@ in
         "network.target"
       ];
       path = [
-        hydra-package
-        pkgs.nettools
-        pkgs.openssh
-        pkgs.bzip2
         config.nix.package
+        hydra-package
+        pkgs.bzip2
+        pkgs.hostname-debian
+        pkgs.openssh
       ];
       restartTriggers = [ hydraConf ];
       environment = env // {
@@ -458,8 +462,8 @@ in
         "network-online.target"
       ];
       path = with pkgs; [
+        hostname-debian
         hydra-package
-        nettools
         jq
       ];
       restartTriggers = [ hydraConf ];

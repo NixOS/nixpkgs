@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tenant-schemas-celery";
-  version = "4.0.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maciej-gol";
     repo = "tenant-schemas-celery";
     tag = version;
-    hash = "sha256-rGLrP8rE9SACMDVpNeBU85U/Sb2lNhsgEgHJhAsdKNM=";
+    hash = "sha256-pwulEC7kZpM2f1s0ILi+S7KbxWJjg0O7AQ12/XPCzTQ=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maciej-gol/tenant-schemas-celery";
     changelog = "https://github.com/maciej-gol/tenant-schemas-celery/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

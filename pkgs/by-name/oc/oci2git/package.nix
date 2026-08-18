@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oci2git";
-  version = "0.1.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Virviil";
     repo = "oci2git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-axUNZWV9hKdnHfPqgIx1O2onHvBb4n5Wdv2laNV83Ik=";
+    hash = "sha256-Cppc+y5AzESlnNNx4TD72/odRUU3VuiKgbND29Lb9cQ=";
   };
 
-  cargoHash = "sha256-1U/kvuXAPYFU1YekY6xKeEsTJ03ol1uN2DDp7j/Sync=";
+  cargoHash = "sha256-wJbMG9Jv6bB+N7Zh610v9Ty48XchWL8EZ9Ta13tvvlg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Introspecting Docker images as easy as using Git";
     homepage = "https://github.com/Virviil/oci2git";
     changelog = "https://github.com/Virviil/oci2git/releases/tag/v${finalAttrs.version}";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kpbaks ];
     mainProgram = "oci2git";
     platforms = lib.platforms.all;

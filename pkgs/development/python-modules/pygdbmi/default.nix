@@ -5,19 +5,22 @@
   fetchFromGitHub,
   gdb,
   pytest,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygdbmi";
   version = "0.11.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs01";
     repo = "pygdbmi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     gdb
@@ -27,16 +30,17 @@ buildPythonPackage rec {
   # tests require gcc for some reason
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postPatch = ''
+  preCheck = ''
     # tries to execute flake8,
     # which is likely to break on flake8 updates
     echo "def main(): return 0" > tests/static_tests.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parse gdb machine interface output with Python";
     homepage = "https://github.com/cs01/pygdbmi";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    changelog = "https://github.com/cs01/pygdbmi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

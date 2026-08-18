@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   plan9port,
-  ...
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +21,11 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plan 9-inspired way to share your OS X clipboard";
     homepage = "https://github.com/eraserhd/osxsnarf";
-    license = licenses.unlicense;
-    platforms = platforms.darwin;
-    maintainers = [ maintainers.eraserhd ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.darwin;
+    maintainers = [ lib.maintainers.eraserhd ];
   };
 }

@@ -115,6 +115,10 @@ in
 
   config = mkIf (enabledAxports != { }) {
 
+    system.requiredKernelConfig = [
+      (config.lib.kernelConfig.isEnabled "ax25")
+    ];
+
     environment.etc."ax25/axports" = {
       text = concatStringsSep "\n" (
         mapAttrsToList (

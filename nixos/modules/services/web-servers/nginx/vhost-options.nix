@@ -99,7 +99,7 @@ with lib;
         Compared to `listen` this only sets the addresses
         and the ports are chosen automatically.
 
-        Note: This option overrides `enableIPv6`
+        Note: This option overrides `networking.enableIPv6`
       '';
       default = [ ];
       example = [
@@ -170,12 +170,6 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-    };
-
     forceSSL = mkOption {
       type = types.bool;
       default = false;
@@ -240,7 +234,7 @@ with lib;
         IP address / port.
         If there is one server block configured to enable http2, then it is
         enabled for all server blocks on this IP.
-        See https://stackoverflow.com/a/39466948/263061.
+        See <https://stackoverflow.com/a/39466948/263061>.
       '';
     };
 
@@ -249,12 +243,10 @@ with lib;
       default = true;
       description = ''
         Whether to enable the HTTP/3 protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that HTTP/3 support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
         HTTP/3 availability must be manually advertised, preferably in each location block.
       '';
     };
@@ -264,12 +256,10 @@ with lib;
       default = false;
       description = ''
         Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
-        and activate the QUIC transport protocol
+        This requires activating the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
         Note that special application protocol support is experimental and *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 
@@ -278,11 +268,9 @@ with lib;
       default = false;
       description = ''
         Whether to enable the QUIC transport protocol.
-        This requires using `pkgs.nginxQuic` package
-        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that QUIC support is experimental and
         *not* yet recommended for production.
-        Read more at https://quic.nginx.org/
+        Read more at <https://quic.nginx.org/>
       '';
     };
 

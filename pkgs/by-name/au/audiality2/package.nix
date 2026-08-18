@@ -20,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0ipqna7a9mxqm0fl9ggwhbc7i9yxz3jfyi0w3dymjp40v7jw1n20";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 3.5)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -30,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Realtime scripted modular audio engine for video games and musical applications";
     mainProgram = "a2play";
     homepage = "http://audiality.org";
-    license = licenses.zlib;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 })

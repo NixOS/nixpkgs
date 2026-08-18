@@ -7,34 +7,35 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.5.27";
+  version = "2.6.10";
 
   src = fetchFromGitHub {
-    owner = "dgarage";
+    owner = "btcpayserver";
     repo = "NBXplorer";
     tag = "v${version}";
-    hash = "sha256-WCrxAomVU1hPRtI91ppmDKdLZEmNZYH9C0o069/dIMk=";
+    hash = "sha256-bAAEB1wIaWgDygk79bCuvkNDiPvgsUhVDqIrR3LMp7Q=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   # macOS has a case-insensitive filesystem, so these two can be the same file
   postFixup = ''
     mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [
+    homepage = "https://github.com/btcpayserver/NBXplorer";
+    maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "nbxplorer";
   };
 }

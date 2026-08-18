@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oink";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "rlado";
     repo = "oink";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-e8FtjORTTIDnDANk8sWH8kmS35wyndDd6F7Vhepskb8=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
       pmw
     ];
   };
-}
+})

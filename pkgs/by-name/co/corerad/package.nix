@@ -6,14 +6,14 @@
   gitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "corerad";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tVK4chDV26vpuTaqVWe498j8ijZN2OOhe97LLE+xK9Y=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   # we fetch the expected tag's timestamp from a file in the root of the
   # repository.
   preBuild = ''
-    ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}"
+    ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkVersion=v${finalAttrs.version}"
     ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)"
   '';
 
@@ -34,15 +34,15 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mdlayher/corerad";
     description = "Extensible and observable IPv6 NDP RA daemon";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mdlayher
       jmbaur
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "corerad";
   };
-}
+})

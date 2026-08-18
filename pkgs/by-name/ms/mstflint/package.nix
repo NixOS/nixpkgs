@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   rdma-core,
   openssl,
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -25,24 +25,16 @@
   enableDPA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
+  version = "4.36.0-1";
 
-  # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.31.0-1";
-
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-wBUkFOdYChiSXHcH6+LLZZ06Hte4ABWjW+pNcjtk+Oc=";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
   };
-
-  patches = [
-    # fixes build errors due to missing declarations in headers
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Mellanox/mstflint/pull/1131.patch";
-      sha256 = "sha256-tn8EO9HkDrMroV6byUPgjclBIK8tq4xGyi4Kx/rIj+w=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -53,20 +45,20 @@ stdenv.mkDerivation rec {
     git
   ];
 
-  buildInputs =
-    [
-      rdma-core
-      zlib
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals (!onlyFirmwareUpdater) [
-      boost
-      curl
-      expat
-      xz
-      python3
-    ];
+  buildInputs = [
+    rdma-core
+    zlib
+    libxml2
+    openssl
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
+    boost
+    curl
+    expat
+    xz
+    python3
+  ];
 
   preConfigure = ''
     export CPPFLAGS="-I$(pwd)/tools_layouts -isystem ${libxml2.dev}/include/libxml2"
@@ -84,46 +76,43 @@ stdenv.mkDerivation rec {
   #
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
-  prePatch = [
-    ''
-      patchShebangs eval_git_sha.sh
-      substituteInPlace configure.ac \
-          --replace "build_cpu" "host_cpu"
-      substituteInPlace common/compatibility.h \
-          --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
-      substituteInPlace configure.ac \
-          --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
-    ''
-    (lib.optionals (!onlyFirmwareUpdater) ''
-      substituteInPlace common/python_wrapper.sh \
-        --replace \
-        'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-        'export PATH=$PATH:${
-          lib.makeBinPath [
-            (placeholder "out")
-            pciutils
-            busybox
-          ]
-        }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-    '')
-  ];
+  prePatch = ''
+    patchShebangs eval_git_sha.sh
+    substituteInPlace configure.ac \
+        --replace "build_cpu" "host_cpu"
+    substituteInPlace common/compatibility.h \
+        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+    substituteInPlace configure.ac \
+        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+  ''
+  + lib.optionalString (!onlyFirmwareUpdater) ''
+    substituteInPlace common/python_wrapper.sh \
+      --replace \
+      'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
+      'export PATH=$PATH:${
+        lib.makeBinPath [
+          (placeholder "out")
+          pciutils
+          busybox
+        ]
+      }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+  '';
 
-  configureFlags =
-    [
-      "--enable-xml2"
-      "--datarootdir=${placeholder "out"}/share"
-    ]
-    ++ lib.optionals (!onlyFirmwareUpdater) [
-      "--enable-adb-generic-tools"
-      "--enable-cs"
-      "--enable-dc"
-      "--enable-fw-mgr"
-      "--enable-inband"
-      "--enable-rdmem"
-    ]
-    ++ lib.optionals enableDPA [
-      "--enable-dpa"
-    ];
+  configureFlags = [
+    "--enable-xml2"
+    "--datarootdir=${placeholder "out"}/share"
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
+    "--enable-adb-generic-tools"
+    "--enable-cs"
+    "--enable-dc"
+    "--enable-fw-mgr"
+    "--enable-inband"
+    "--enable-rdmem"
+  ]
+  ++ lib.optionals enableDPA [
+    "--enable-dpa"
+  ];
 
   enableParallelBuilding = true;
 
@@ -131,14 +120,14 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
-  meta = with lib; {
+  meta = {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd2
     ];
-    maintainers = with maintainers; [ thillux ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thillux ];
+    platforms = lib.platforms.linux;
   };
-}
+})

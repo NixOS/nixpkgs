@@ -4,31 +4,30 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "darklua";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "seaofvoices";
     repo = "darklua";
-    rev = "v${version}";
-    hash = "sha256-D83cLJ6voLvgZ51qLoCUzBG83VFB3Y7HxuaZHpaiOn4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PEYQRUjd7Kil4y12shnw4CbIy75SiJdnzl26s7LTM+8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DQkj4t+l6FJnJQ+g96CXypssbRzHbS6X9AOG0LGDclg=";
+  cargoHash = "sha256-ocjGev1T6Y6XxYZpO/tLH0U/Ge5uNGPa0xn2cvbF27A=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool that transforms Lua code";
     mainProgram = "darklua";
     homepage = "https://darklua.com";
-    changelog = "https://github.com/seaofvoices/darklua/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 ];
+    changelog = "https://github.com/seaofvoices/darklua/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomodachi94 ];
   };
-}
+})

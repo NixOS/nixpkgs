@@ -21,6 +21,11 @@ in
           enable = true;
           openFirewall = true;
           port = 1337;
+          # required to match certificate principals
+          extraFlags = [
+            "--hostname"
+            "server"
+          ];
         };
       };
     client1 = client;
@@ -51,15 +56,14 @@ in
     client1.wait_until_succeeds("pgrep -u root bash")
 
     client1.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
-    client1.send_chars("TERM=xterm upterm host --server ssh://server:1337 --force-command hostname -- bash > /tmp/session-details\n")
+    client1.send_chars("TERM=xterm upterm host --server ssh://server:1337 --accept --force-command hostname -- bash > /tmp/session-details\n")
     client1.wait_for_file("/tmp/session-details")
-    client1.send_key("q")
 
     # uptermd can't connect if we don't have a keypair
     client2.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
 
     # Grep the ssh connect command from the output of 'upterm host'
-    ssh_command = client1.succeed("grep 'SSH Session' /tmp/session-details | cut -d':' -f2-").strip()
+    ssh_command = client1.succeed("grep -m1 '^[[:space:]]*ssh' /tmp/session-details").strip()
 
     # Connect with client2. Because we used '--force-command hostname' we should get "client1" as the output
     output = client2.succeed(ssh_command)

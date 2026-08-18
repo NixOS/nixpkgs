@@ -24,6 +24,8 @@ buildPythonPackage rec {
   prePatch = ''
     # patch fails to apply because of line endings
     dos2unix ldap3/utils/asn1.py
+    substituteInPlace _version.json \
+      --replace-fail '"version": "2.9",' '"version": "${version}",'
   '';
 
   patches = [
@@ -43,16 +45,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   preCheck = ''
     export SERVER=NONE
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cannatag/ldap3";
     description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

@@ -6,7 +6,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluetooth_sensor_state_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Models for storing and converting Bluetooth Sensor State Data";
     homepage = "https://github.com/bluetooth-devices/bluetooth-sensor-state-data";
     changelog = "https://github.com/Bluetooth-Devices/bluetooth-sensor-state-data/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

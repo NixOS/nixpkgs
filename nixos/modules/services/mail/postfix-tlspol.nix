@@ -23,6 +23,8 @@ let
 in
 
 {
+  meta.maintainers = pkgs.postfix-tlspol.meta.maintainers;
+
   options.services.postfix-tlspol = {
     enable = mkEnableOption "postfix-tlspol";
 
@@ -53,7 +55,7 @@ in
                 Due to hardening on the systemd unit the socket can never be created world readable/writable.
                 :::
               '';
-              apply = value: (builtins.fromTOML "v=0o${value}").v;
+              apply = value: (fromTOML "v=0o${value}").v;
             };
 
             log-level = mkOption {
@@ -90,11 +92,14 @@ in
           };
 
           dns = {
-            server = mkOption {
-              type = types.str;
-              default = "127.0.0.1:53";
+            address = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              example = "127.0.0.1:53";
               description = ''
-                IP and port to your DNS resolver
+                IP and port to your DNS resolver.
+
+                Uses resolvers from /etc/resolv.conf if unset.
 
                 ::: {.note}
                 The configured DNS resolver must validate DNSSEC signatures.
@@ -126,7 +131,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
       # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-      services.postfix.config = {
+      services.postfix.settings.main = {
         smtp_dns_support_level = "dnssec";
         smtp_tls_security_level = "dane";
         smtp_tls_policy_maps =
@@ -159,6 +164,20 @@ in
       };
       users.groups.postfix-tlspol = { };
 
+      systemd.sockets.postfix-tlspol = {
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          Accept = false;
+          ListenStream = [
+            (lib.removePrefix "unix:" cfg.settings.server.address)
+          ];
+          SocketUser = "postfix-tlspol";
+          SocketGroup = "postfix-tlspol";
+          SocketMode = cfg.settings.server.socket-permissions;
+          DirectoryMode = "0755";
+        };
+      };
+
       systemd.services.postfix-tlspol = {
         after = [
           "nss-lookup.target"
@@ -168,12 +187,11 @@ in
           "nss-lookup.target"
           "network-online.target"
         ];
-        wantedBy = [ "multi-user.target" ];
 
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
 
-        reloadTriggers = [ configFile ];
+        restartTriggers = [ configFile ];
 
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {
@@ -209,14 +227,10 @@ in
           ProtectSystem = "strict";
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-            ]
-            ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-              "AF_UNIX"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -233,7 +247,7 @@ in
           RuntimeDirectory = "postfix-tlspol";
           RuntimeDirectoryMode = "1750";
           WorkingDirectory = "/var/cache/postfix-tlspol";
-          UMask = "0117";
+          UMask = "0077";
         };
       };
     })

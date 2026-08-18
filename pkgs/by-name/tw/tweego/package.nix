@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tweego";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "tmedwards";
     repo = "tweego";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LE85mSByTz7uFjs0XtrpfD7OARoMPE56FpjFw+FlGYw=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ chrispwill ];
     mainProgram = "tweego";
   };
-}
+})

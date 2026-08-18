@@ -5,29 +5,31 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
-  version = "1.0.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "einarhauks";
     repo = "tesla-wall-connector";
-    rev = version;
-    hash = "sha256-GblKXWV9h37E3bxNsx17hEe0uDm8ahzJUx8wiE+Vc38=";
+    tag = version;
+    hash = "sha256-CQG4upa+DTuRIvnJ7dPy7ANELks8TrlWNOWMylXJPr4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.6,<0.12" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  dependencies = [
     aiohttp
     backoff
   ];
@@ -40,10 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tesla_wall_connector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/einarhauks/tesla-wall-connector/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

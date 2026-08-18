@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,16 @@ buildPythonPackage rec {
     hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
 
+  # xstatic uses pkg_resources.declare_namespace, removed in setuptools 83.
+  build-system = [ setuptools_80 ];
+
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-xstatic/font-awesome";
     description = "Font Awesome packaged for python";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ aither64 ];
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ aither64 ];
   };
 }

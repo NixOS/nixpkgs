@@ -16,7 +16,7 @@
 stdenv.mkDerivation {
   pname = "lkl";
 
-  version = "2025-03-20";
+  version = "2025-11-13";
 
   outputs = [
     "dev"
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lkl";
     repo = "linux";
-    rev = "fd33ab3d21a99a31683ebada5bd3db3a54a58800";
-    sha256 = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
+    rev = "9c51103caa1481493ebbbaf858f016e7f25ab921";
+    hash = "sha256-7S1lA6qfpGLj5lCqdOEEfcChxNw+35SC/NEjFWcwvko=";
   };
 
   nativeBuildInputs = [
@@ -43,23 +43,19 @@ stdenv.mkDerivation {
     libarchive
   ];
 
-  postPatch =
-    ''
-      # Fix a /usr/bin/env reference in here that breaks sandboxed builds
-      patchShebangs arch/lkl/scripts
+  postPatch = ''
+    # Fix a /usr/bin/env reference in here that breaks sandboxed builds
+    patchShebangs arch/lkl/scripts
 
-      patchShebangs scripts/ld-version.sh
-
-      # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
-      sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
-      echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
-      echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
-    ''
-    + lib.optionalString firewallSupport ''
-      cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
-    '';
+    patchShebangs scripts/ld-version.sh
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
+    echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
+    echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
+  ''
+  + lib.optionalString firewallSupport ''
+    cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $lib/lib $dev
@@ -107,7 +103,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel as a library";
     longDescription = ''
       LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as
@@ -115,9 +111,9 @@ stdenv.mkDerivation {
       overhead
     '';
     homepage = "https://github.com/lkl/linux/";
-    platforms = platforms.linux; # Darwin probably works too but I haven't tested it
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux; # Darwin probably works too but I haven't tested it
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       timschumi
     ];
   };

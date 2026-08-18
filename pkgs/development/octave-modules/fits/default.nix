@@ -36,7 +36,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/fits/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Functions for reading, and writing FITS (Flexible Image Transport System) files using cfitsio";
     # Hasn't been updated since 2015, and fails to build with octave >= 10.1.0
     broken = true;

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildGoModule,
-  buildGo123Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -83,8 +82,9 @@ let
       passthru = attrs // {
         inherit provider-source-address;
         updateScript = writeShellScript "update" ''
-          provider="$(basename ${provider-source-address})"
-          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
+          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "${
+            lib.replaceStrings [ "registry.terraform.io/" "/" ] [ "" "_" ] provider-source-address
+          }"
         '';
       };
     }
@@ -97,20 +97,26 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    aws = automated-providers.aws.override { mkProviderGoModule = buildGo123Module; };
     # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
-    checkly = automated-providers.checkly.override { spdx = "MIT"; };
-    gitlab = automated-providers.gitlab.override {
+    checkly_checkly = automated-providers.checkly_checkly.override { spdx = "MIT"; };
+    gitlabhq_gitlab = automated-providers.gitlabhq_gitlab.override {
       mkProviderFetcher = fetchFromGitLab;
       owner = "gitlab-org";
     };
-    # actions update always fails but can't reproduce the failure.
-    heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
     # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
-    libvirt = automated-providers.libvirt.overrideAttrs (_: {
+    dmacvicar_libvirt = automated-providers.dmacvicar_libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
-    minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
+    aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
+    # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
+    # platform-specific files leading to vendorHash varying across platforms.
+    "1password_onepassword" =
+      (automated-providers."1password_onepassword".override { proxyVendor = true; }).overrideAttrs
+        (finalAttrs: {
+          env = finalAttrs.env // {
+            CGO_ENABLED = "1";
+          };
+        });
   };
 
   # Put all the providers we not longer support in this list.
@@ -121,7 +127,10 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      fly = archived "fly" "2023/10";
+      ccloud = removed "ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
     };
 
   # excluding aliases, used by terraform-full

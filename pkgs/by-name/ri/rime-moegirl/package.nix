@@ -5,10 +5,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-moegirl";
-  version = "20250610";
+  version = "20260812";
   src = fetchurl {
     url = "https://github.com/outloudvi/mw2fcitx/releases/download/${finalAttrs.version}/moegirl.dict.yaml";
-    hash = "sha256-ctAxF/H4gnmAvHyLsC4oUNCdGFbi5X7+Db/Lwmknlsw=";
+    hash = "sha256-WDbIdQdBX03NsPxFrs9N166CGDplDN15MOHmY+MuOiQ=";
   };
 
   dontUnpack = true;
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "RIME dictionary file for entries from zh.moegirl.org.cn";
     homepage = "https://github.com/outloudvi/mw2fcitx/releases";
     license = with lib.licenses; [
-      unlicense # the tool packaging dictionary
+      mit # the tool packaging dictionary
       cc-by-nc-sa-30 # moegirl wiki itself
     ];
   };

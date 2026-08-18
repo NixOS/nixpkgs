@@ -6,100 +6,60 @@
   bzip2,
   zstd,
   stdenv,
-  rocksdb,
+  callPackage,
   nix-update-script,
   testers,
   matrix-continuwuity,
-  enableBlurhashing ? true,
-  # upstream continuwuity enables jemalloc by default, so we follow suit
-  enableJemalloc ? true,
-  rust-jemalloc-sys,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
+  rust-jemalloc-sys-unprefixed,
   liburing,
   nixosTests,
 }:
-let
-  rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.hostPlatform.isDarwin;
-  };
-  rocksdb' = rocksdb.override {
-    inherit enableLiburing;
-    # rocksdb does not support prefixed jemalloc, which is required on darwin
-    enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
-    jemalloc = rust-jemalloc-sys';
-  };
-in
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.6";
+  version = "26.7.3";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xK/jTURQzFJ1FkF1E9cItTxXAgXgTwAiA9/8aE51FvU=";
+    hash = "sha256-Uj4fcHoTiQ/G5vyEnSOatjdqaUquGSlOxeTt32F2xew=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+7k1dtrXdonFDXa2Z/qVo4n1hZRmMWEQKKlffki8+/k=";
+  cargoHash = "sha256-6C4dXm9+m2sKA4m1YXocifX4ss61s6/L2FeXzfkowMs=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      zstd
-    ]
-    ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing;
+  buildInputs = [
+    bzip2
+    zstd
+    rust-jemalloc-sys-unprefixed
+    liburing
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
+    ROCKSDB_INCLUDE_DIR = "${finalAttrs.rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${finalAttrs.rocksdb}/lib";
   };
 
-  buildNoDefaultFeatures = true;
-  # See https://forgejo.ellis.link/continuwuation/continuwuity/src/branch/main/Cargo.toml
-  # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
-  # we guard behind our own (default-enabled) flags.
-  buildFeatures =
-    [
-      "brotli_compression"
-      "direct_tls"
-      "element_hacks"
-      "gzip_compression"
-      "media_thumbnail"
-      "release_max_log_level"
-      "systemd"
-      "url_preview"
-      "zstd_compression"
-    ]
-    ++ lib.optional enableBlurhashing "blurhashing"
-    ++ lib.optional enableJemalloc [
-      "jemalloc"
-      "jemalloc_conf"
-    ]
-    ++ lib.optional enableLiburing "io_uring";
+  rocksdb = callPackage ./rocksdb.nix { }; # make used rocksdb version available (e.g., for backup scripts)
 
   passthru = {
-    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
-    tests =
-      {
-        version = testers.testVersion {
-          inherit (finalAttrs) version;
-          package = matrix-continuwuity;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) matrix-continuwuity;
+    tests = {
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = matrix-continuwuity;
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) matrix-continuwuity;
+    };
   };
 
   meta = {
@@ -108,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyabinary
       snaki
     ];

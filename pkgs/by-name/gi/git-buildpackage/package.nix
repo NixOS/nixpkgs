@@ -1,10 +1,11 @@
 {
   lib,
+  stdenv,
 
   coreutils,
   fetchFromGitHub,
+  nix-update-script,
   python3Packages,
-  stdenv,
 
   # nativeCheckInputs
   debian-devscripts,
@@ -14,16 +15,16 @@
   man,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-buildpackage";
-  version = "0.9.37";
+  version = "0.9.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agx";
     repo = "git-buildpackage";
-    tag = "debian/${version}";
-    hash = "sha256-0gfryd1GrVfL11u/IrtLSJAABRsTpFfPOGxWfVdYtgE=";
+    tag = "debian/${finalAttrs.version}";
+    hash = "sha256-glj0WtlZb42wetD5sKHbWvgPOZ/lQofPYtChuk3rie0=";
     fetchSubmodules = true;
   };
 
@@ -39,45 +40,52 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     python-dateutil
+    pyyaml
+    rpm
   ];
 
   pythonImportsCheck = [
     "gbp"
   ];
 
-  nativeCheckInputs =
-    [
-      debian-devscripts
-      dpkg
-      gitMinimal
-      gitSetupHook
-      man
-    ]
-    ++ (with python3Packages; [
-      coverage
-      pytest-cov
-      pytestCheckHook
-      pyyaml
-      rpm
-    ]);
+  # don't add pytest and pytest-cov to setup_requires
+  env.WITHOUT_PYTESTS = true;
 
-  disabledTests =
-    [
-      # gbp.command_wrappers.CommandExecFailed:
-      # Couldn't commit to 'pristine-tar' with upstream 'upstream':
-      # execution failed: [Errno 2] No such file or directory: 'pristine-tar'
-      "tests.doctests.test_PristineTar.test_pristine_tar"
+  nativeCheckInputs = [
+    debian-devscripts
+    dpkg
+    gitMinimal
+    gitSetupHook
+    man
+  ]
+  ++ (with python3Packages; [
+    pytest-cov-stub
+    pytestCheckHook
+  ]);
 
-      # When gitMinimal is used instead of git:
-      # UNEXPECTED EXCEPTION: GitRepositoryError("Invalid git command 'branch': No manual entry for git-branch")
-      "tests.doctests.test_GitRepository.test_repo"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # gbp.git.repository.GitRepositoryError:
-      # Cannot create Git repository at '/does/not/exist':
-      # [Errno 30] Read-only file system: '/does'
-      "tests.doctests.test_GitRepository.test_create_noperm"
+  disabledTests = [
+    # gbp.command_wrappers.CommandExecFailed:
+    # Couldn't commit to 'pristine-tar' with upstream 'upstream':
+    # execution failed: [Errno 2] No such file or directory: 'pristine-tar'
+    "tests.doctests.test_PristineTar.test_pristine_tar"
+
+    # When gitMinimal is used instead of git:
+    # UNEXPECTED EXCEPTION: GitRepositoryError("Invalid git command 'branch': No manual entry for git-branch")
+    "tests.doctests.test_GitRepository.test_repo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # gbp.git.repository.GitRepositoryError:
+    # Cannot create Git repository at '/does/not/exist':
+    # [Errno 30] Read-only file system: '/does'
+    "tests.doctests.test_GitRepository.test_create_noperm"
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "debian/(.*)"
     ];
+  };
 
   meta = {
     description = "Suite to help with maintaining Debian packages in Git repositories";
@@ -86,4 +94,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ nim65s ];
     mainProgram = "git-buildpackage";
   };
-}
+})

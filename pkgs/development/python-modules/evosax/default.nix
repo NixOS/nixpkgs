@@ -7,14 +7,11 @@
   setuptools,
 
   # dependencies
-  chex,
   dotmap,
   flax,
   jax,
-  jaxlib,
   matplotlib,
   numpy,
-  pyyaml,
 
   # tests
   # brax, (unpackaged)
@@ -61,6 +58,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires unpackaged gymnax
     "test_env_ffw_rollout"
+
+    # TypeError: ShapedArray.__init__() got an unexpected keyword argument 'named_shape'
+    "test_base_api"
+    "test_run"
+    "test_run_scan"
 
     # Tries to download a data set from the internet
     "test_brax_problem_eval"

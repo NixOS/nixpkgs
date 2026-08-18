@@ -5,12 +5,12 @@
   lib,
   gnugrep,
   gnused,
-  curl,
+  curl-impersonate,
   catt,
   syncplay,
   ffmpeg,
   fzf,
-  aria2,
+  yt-dlp,
   mpv,
   vlc,
   iina,
@@ -27,27 +27,29 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
-  version = "4.10";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R/YQ02ctTcAEzrVyWlaCHi1YW82iPrMBbbMNP21r0p8=";
+    hash = "sha256-rRQESi0Skoyf1jy/dRRK6ooKRPQhkak107kk5ulwZYI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeInputs =
-    [
-      gnugrep
-      gnused
-      curl
-      fzf
-      ffmpeg
-      aria2
-    ]
-    ++ lib.optional chromecastSupport catt
-    ++ lib.optional syncSupport syncplay;
+  runtimeInputs = [
+    gnugrep
+    gnused
+    curl-impersonate
+    fzf
+    ffmpeg
+    yt-dlp
+  ]
+  ++ lib.optional chromecastSupport catt
+  ++ lib.optional syncSupport syncplay;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
@@ -65,11 +67,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pystardust/ani-cli";
     description = "Cli tool to browse and play anime";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      skykanin
-      diniamo
-    ];
+    maintainers = with lib.maintainers; [ skykanin ];
     platforms = lib.platforms.unix;
     mainProgram = "ani-cli";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+    ];
   };
 })

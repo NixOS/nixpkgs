@@ -5,6 +5,7 @@
   setuptools-scm,
   aiohttp,
   beautifulsoup4,
+  json5,
   lxml,
   pyjwt,
   freezegun,
@@ -12,19 +13,24 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "volkswagencarnet";
-  version = "5.0.2";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
-    tag = "v${version}";
-    hash = "sha256-NpfkhFGxd3VjLjQ8pPpamYgwc5zqWt5CojONe4L1s4s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0jjshQOqrqks0M3b6wXcF50iHZG7RmWSWvUt/Vsjtp8=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=84.0.0" setuptools \
+      --replace-fail "setuptools_scm>=10.2.1" setuptools_scm \
+      --replace-fail "wheel>=0.48.0" wheel
+
     substituteInPlace tests/conftest.py \
       --replace-fail 'pytest_plugins = ["pytest_cov"]' 'pytest_plugins = []'
   '';
@@ -34,6 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     beautifulsoup4
+    json5
     lxml
     pyjwt
   ];
@@ -47,9 +54,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A python library for volkswagen carnet";
+    changelog = "https://github.com/robinostlund/volkswagencarnet/releases/tag/${finalAttrs.src.tag}";
+    description = "Python library for volkswagen carnet";
     homepage = "https://github.com/robinostlund/volkswagencarnet";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

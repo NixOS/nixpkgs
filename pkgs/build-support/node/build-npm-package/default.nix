@@ -26,6 +26,9 @@ lib.extendMkDerivation {
       # The output hash of the dependencies for this project.
       # Can be calculated in advance with prefetch-npm-deps.
       npmDepsHash ? "",
+      # Fetcher format version for npmDeps. Set to 2 to enable packument caching
+      # for workspace support. Changing this will invalidate npmDepsHash.
+      npmDepsFetcherVersion ? 1,
       # Whether to force the usage of Git dependencies that have install scripts, but not a lockfile.
       # Use with care.
       forceGitDeps ? false,
@@ -66,6 +69,7 @@ lib.extendMkDerivation {
           ;
         name = "${name}-npm-deps";
         hash = npmDepsHash;
+        fetcherVersion = npmDepsFetcherVersion;
       },
       # Custom npmConfigHook
       npmConfigHook ? null,
@@ -85,6 +89,10 @@ lib.extendMkDerivation {
     {
       inherit npmDeps npmBuildScript;
 
+      env = (args.env or { }) // {
+        NIX_NPM_FETCHER_VERSION = npmDepsFetcherVersion;
+      };
+
       nativeBuildInputs =
         nativeBuildInputs
         ++ [
@@ -102,16 +110,6 @@ lib.extendMkDerivation {
 
       # Stripping takes way too long with the amount of files required by a typical Node.js project.
       dontStrip = args.dontStrip or true;
-
-      env = {
-        npm_config_arch =
-          {
-            "x86_64" = "x64";
-            "aarch64" = "arm64";
-          }
-          .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
-        npm_config_platform = stdenv.hostPlatform.parsed.kernel.name;
-      } // (args.env or { });
 
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or nodejs.meta.platforms;

@@ -5,16 +5,15 @@
   git,
   fishtape_3,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "pure";
-  version = "4.11.3";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
-    rev = "v${version}";
-    hash = "sha256-mMUFR/n4aLsmZNbVAYmx57AMXT6U2P+wTuuN3opCeqs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KV43PlJmAjQxoNHWJRhAYUyzaqhKwLJSTeuo3cX98AA=";
   };
 
   nativeCheckInputs = [ git ];
@@ -32,4 +31,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

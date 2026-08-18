@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     mainProgram = "yodl";
-    license = lib.licenses.agpl3Only; # Upstream did not clarify the license used. https://gitlab.com/fbb-git/yodl/-/issues/4
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };

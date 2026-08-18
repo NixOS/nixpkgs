@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-Lgtq+Jho2IkXnVLVlPRxL2hvhB8gW/9Et2yqXOkM8MI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -54,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nettigo_air_monitor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";
     homepage = "https://github.com/bieniu/nettigo-air-monitor";
     changelog = "https://github.com/bieniu/nettigo-air-monitor/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

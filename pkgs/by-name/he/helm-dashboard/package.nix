@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helm-dashboard";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "komodorio";
     repo = "helm-dashboard";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hjIo2AEXNcFK0z4op59NnC2R8GspF5t808DZ72AxgMw=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -37,4 +37,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

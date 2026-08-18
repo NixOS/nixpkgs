@@ -1,7 +1,8 @@
 {
+  lib,
+  stdenv,
   copyDesktopItems,
   fetchFromGitLab,
-  lib,
   makeDesktopItem,
   python3Packages,
   qt5,
@@ -13,7 +14,7 @@ let
   description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
-  format = "setuptools";
+  pyproject = true;
   inherit pname version;
 
   src = fetchFromGitLab {
@@ -28,23 +29,26 @@ python3Packages.buildPythonApplication {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qt5.qtbase
+  # qtwayland is a Linux-only Qt platform plugin; it is unsupported on Darwin.
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     editdistance
     pyqt5
     translitcodec
   ];
 
-  dontWrapQtApps = true;
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
 
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
-
+  # no tests
   doCheck = false;
 
   desktopItems = [
@@ -61,11 +65,11 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "amphetype";
     homepage = "https://gitlab.com/franksh/amphetype";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rycee ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rycee ];
   };
 }

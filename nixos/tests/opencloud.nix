@@ -21,12 +21,14 @@ let
         from selenium.webdriver.common.by import By
         from selenium.webdriver import Firefox
         from selenium.webdriver.firefox.options import Options
+        from selenium.webdriver.firefox.service import Service
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
 
         options = Options()
         options.add_argument('--headless')
-        driver = Firefox(options=options)
+        service = Service(executable_path="${lib.getExe pkgs.geckodriver}")
+        driver = Firefox(options=options, service=service)
 
         host = sys.argv[1]
         user = sys.argv[2]
@@ -41,7 +43,7 @@ let
         driver.find_element(By.ID, 'oc-login-password').send_keys(password)
         wait.until(EC.visibility_of_element_located((By.XPATH, '//button[@type="submit"]')))
         driver.find_element(By.XPATH, '//button[@type="submit"]').click()
-        wait.until(EC.visibility_of_element_located((By.ID, 'new-file-menu-btn')))
+        wait.until(EC.visibility_of_element_located((By.ID, 'app-floating-action-button-com-github-opencloud-eu-web-files-floating-action-button')))
         wait.until(EC.title_contains("Personal"))
       '';
 in
@@ -71,6 +73,7 @@ in
       environment = {
         ADMIN_PASSWORD = adminPassword;
         IDM_CREATE_DEMO_USERS = "true";
+        IDM_LDAPS_ADDR = "127.0.0.1:9235";
         IDM_LDAPS_CERT = "${certs.${domain}.cert}";
         IDM_LDAPS_KEY = "${certs.${domain}.key}";
         OC_INSECURE = "false";

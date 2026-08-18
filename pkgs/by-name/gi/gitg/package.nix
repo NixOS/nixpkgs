@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   vala,
   pkg-config,
   gtk3,
@@ -29,14 +30,23 @@
   libdazzle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitg";
   version = "44";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor version}/gitg-${version}.tar.xz";
+    url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor finalAttrs.version}/gitg-${finalAttrs.version}.tar.xz";
     hash = "sha256-NCoxaE2rlnHNNBvT485mWtzuBGDCoIHdxJPNvAMTJTA=";
   };
+
+  patches = [
+    # Switch to girepository-2.0
+    # https://gitlab.gnome.org/GNOME/gitg/-/merge_requests/278
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gitg/raw/630cf1bdb50ad37fb20b81d76caa8622e7225c58/f/gitg-gir-2.0.patch";
+      hash = "sha256-9pC7wrxWcI1C/8yB5AcaED0RyaVbQzT0Ajuz0TM4hmo=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -91,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gitg";
-    changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
     maintainers = with lib.maintainers; [
@@ -100,4 +110,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

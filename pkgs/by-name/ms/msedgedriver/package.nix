@@ -4,6 +4,7 @@
   glib,
   lib,
   libxcb,
+  microsoft-edge,
   nspr,
   nss,
   stdenvNoCC,
@@ -11,33 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
-  # finding a version that has all 4 builds is a pain
-  # https://msedgewebdriverstorage.z22.web.core.windows.net/?form=MA13LH
-  version = "130.0.2849.1";
+  version = "150.0.4078.105";
 
-  src =
-    let
-      inherit (stdenvNoCC.hostPlatform) system;
-      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
-      suffix = selectSystem {
-        x86_64-linux = "linux64";
-        aarch64-linux = "arm64";
-        x86_64-darwin = "mac64";
-        aarch64-darwin = "mac64_m1";
-      };
-
-      hash = selectSystem {
-        x86_64-linux = "sha256-U6YGD2PAhVUa7f+R5pmKLazGLOBbf3bRqzlwIJewA+w=";
-        aarch64-linux = "sha256-QJ1jRw8kkWbT8US5qI8DMZI/7Q8yJWpFXrfzGdxDWKE=";
-        x86_64-darwin = "sha256-Ejcv1DtuEiLJvTsv48AwoCQlFO3xM9PkM3HvZG65AC4=";
-        aarch64-darwin = "sha256-ykn4bYREE6xmJY02WiCRGsGnyWjnmnZM8FemK4XZqhc=";
-      };
-    in
-    fetchzip {
-      url = "https://msedgedriver.azureedge.net/${finalAttrs.version}/edgedriver_${suffix}.zip";
-      inherit hash;
-      stripRoot = false;
-    };
+  src = fetchzip {
+    url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_linux64.zip";
+    hash = "sha256-dFXj22lTP3lBN8gLooHFn6OzBWb7ha+dEHl/+jFjctI=";
+    stripRoot = false;
+  };
 
   buildInputs = [
     glib
@@ -46,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nss
   ];
 
-  nativeBuildInputs = lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase =
     if stdenvNoCC.hostPlatform.isDarwin then
@@ -72,12 +53,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "WebDriver implementation that controls an Edge browser running on the local machine";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ cholli ];
+    maintainers = microsoft-edge.meta.maintainers;
     platforms = [
       "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
     ];
     mainProgram = "msedgedriver";
   };

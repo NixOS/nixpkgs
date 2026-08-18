@@ -2,6 +2,7 @@
 #!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.beautifulsoup4 ps.click ps.httpx ps.jinja2 ps.packaging ps.pyyaml ])" nix-update
 import base64
 import binascii
+import hashlib
 import json
 import pathlib
 import subprocess
@@ -36,6 +37,7 @@ PROJECTS_WITH_RUST = {
     "akonadi-search",
     "angelfish",
     "kdepim-addons",
+    "kdeplasma-addons",
 }
 
 def to_sri(hash):
@@ -112,8 +114,17 @@ def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | No
 
         url = urljoin(sources_url, link.attrs["href"])
 
-        hash = client.get(url + ".sha256").text.split(" ", maxsplit=1)[0]
-        assert hash
+        hash = client.get(url + ".sha256").text.strip()
+
+        if hash == "Hash type not supported":
+            print(f"{url} missing hash on CDN, downloading...")
+            hasher = hashlib.sha256()
+            with client.stream("GET", url, follow_redirects=True) as r:
+                for data in r.iter_bytes():
+                    hasher.update(data)
+            hash = hasher.hexdigest()
+        else:
+            hash = hash.split(" ", maxsplit=1)[0]
 
         if existing := results.get(project_name):
             old_version = existing["version"]

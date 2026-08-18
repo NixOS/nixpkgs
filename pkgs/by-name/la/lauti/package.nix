@@ -1,19 +1,18 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   callPackage,
   nixosTests,
 }:
 
 let
-  version = "1.0.0";
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  version = "1.2.0";
+  src = fetchFromCodeberg {
     owner = "Klasse-Methode";
     repo = "lauti";
     tag = "v${version}";
-    hash = "sha256-cO9rK7GAVRlv5x4WI/xbXNJ594QqB+KIPUteB3TifKM=";
+    hash = "sha256-llmXXaCy6V4DE0B1a0K0rRCb6XSvC1+EaG9legx0u4I=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
@@ -22,7 +21,7 @@ buildGoModule rec {
   pname = "lauti";
   inherit version src;
 
-  vendorHash = "sha256-ushTvIpvRLZP3q6tLN6BA4tl2Xp/UImWugm2ZgTAm8k=";
+  vendorHash = "sha256-XO2Fo4rH6YDlj8x9f0847OEBLLpLlzFpK72uOEgW65o=";
 
   ldflags = [
     "-s"

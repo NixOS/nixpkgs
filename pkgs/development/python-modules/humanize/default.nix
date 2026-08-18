@@ -5,7 +5,6 @@
   freezegun,
   gettext,
   pytestCheckHook,
-  pythonOlder,
   python,
   hatch-vcs,
   hatchling,
@@ -13,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.12.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "4.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = "humanize";
     tag = version;
-    hash = "sha256-VsB59tS2KRZ0JKd1FzA+RTEzpkUyj9RhhSopseHg+m8=";
+    hash = "sha256-EG0QrW4b5NK9+78B0Cs4eAuicIsN/V/77+JxyYrTReA=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "humanize" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
-    changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/python-humanize/humanize/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rmcgibbo
       Luflosi
     ];

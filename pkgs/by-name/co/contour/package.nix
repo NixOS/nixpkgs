@@ -5,13 +5,13 @@
   cmake,
   pkg-config,
   boxed-cpp,
+  cairo,
   freetype,
   fontconfig,
   libunicode,
   libutempter,
   termbench-pro,
   qt6,
-  pcre,
   boost,
   catch2_3,
   fmt,
@@ -20,8 +20,7 @@
   yaml-cpp,
   ncurses,
   file,
-  libutil,
-  sigtool,
+  darwin,
   nixosTests,
   installShellFiles,
   reflection-cpp,
@@ -29,16 +28,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.6.1.7494";
+  version = "0.6.3.8249";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jgasZhdcJ+UF3VIl8HLcxBayvbA/dkaOG8UtANRgeP4=";
+    hash = "sha256-+rr1bn4O5v9rXyoIx+ejL+qe5Kf2bFpgWA3DkWRcDYk=";
   };
 
-  patches = [ ./dont-fix-app-bundle.diff ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./dont-fix-app-bundle.diff
+    ./remove-deep-flag-from-codesign.diff
+  ];
+
+  # Dependencies are already managed by nix
+  cmakeFlags = [ "-DCONTOUR_USE_CPM=OFF" ];
 
   outputs = [
     "out"
@@ -52,50 +57,47 @@ stdenv.mkDerivation (finalAttrs: {
     file
     qt6.wrapQtAppsHook
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
-  buildInputs =
-    [
-      boxed-cpp
-      fontconfig
-      freetype
-      libunicode
-      termbench-pro
-      qt6.qtmultimedia
-      qt6.qt5compat
-      pcre
-      boost
-      catch2_3
-      fmt
-      microsoft-gsl
-      range-v3
-      yaml-cpp
-      reflection-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libutil
-    ];
+  buildInputs = [
+    boxed-cpp
+    cairo
+    fontconfig
+    freetype
+    libunicode
+    termbench-pro
+    qt6.qtmultimedia
+    qt6.qt5compat
+    boost
+    catch2_3
+    fmt
+    microsoft-gsl
+    range-v3
+    yaml-cpp
+    reflection-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
-  cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
-
-  postInstall =
-    ''
-      mkdir -p $out/nix-support $terminfo/share
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications
-      cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
-      mv $out/contour.app $out/Applications
-      ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv $out/share/terminfo $terminfo/share/
-    ''
-    + ''
-      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-      rm -r $out/share/contour
-    '';
+  postInstall = ''
+    mkdir -p $out/nix-support $terminfo/share
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications $out/bin
+    cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
+    mv $out/contour.app $out/Applications
+    ln -s $out/Applications/contour.app/Contents/MacOS/contour $out/bin/contour
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mv $out/share/terminfo $terminfo/share/
+    rm -r $out/share/contour
+  ''
+  + ''
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 

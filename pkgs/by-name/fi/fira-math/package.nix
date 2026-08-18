@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  installFonts,
   stdenvNoCC,
 }:
 
@@ -21,6 +22,7 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
+    installFonts
     (python3.withPackages (
       ps: with ps; [
         fontmake
@@ -39,19 +41,11 @@ stdenvNoCC.mkDerivation {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D "build/"*.otf -t "$out/share/fonts/opentype/"
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Math font with Unicode math support based on FiraSans and FiraGO";
     homepage = "https://github.com/firamath/firamath";
-    license = licenses.ofl;
-    maintainers = [ maintainers.loicreynier ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.loicreynier ];
+    platforms = lib.platforms.all;
   };
 }

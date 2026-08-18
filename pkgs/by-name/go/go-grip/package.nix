@@ -2,22 +2,19 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  gitUpdater,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-grip";
-  version = "0.5.6";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "chrishrb";
     repo = "go-grip";
-    tag = "v${version}";
-    hash = "sha256-c3tl5nALPqIAMSqjbbQDi6mN6M1mKJvzxxDHcj/QyuY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O3f7kLlcWfpxZb2mw+nNjmsGX4YiuzIfN5e6KE+CJDs=";
   };
 
-  vendorHash = "sha256-aU6vo/uqJzctD7Q8HPFzHXVVJwMmlzQXhAA6LSkRAow=";
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  vendorHash = "sha256-QsLiCsFY6nI85jsEZtAgmObEKpBSZWhzZk+TlukM8JU=";
 
   meta = {
     description = "Preview Markdown files locally before committing them";
@@ -26,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "go-grip";
   };
-}
+})

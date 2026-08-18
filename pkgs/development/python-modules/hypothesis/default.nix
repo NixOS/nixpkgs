@@ -3,37 +3,44 @@
   buildPythonPackage,
   isPyPy,
   fetchFromGitHub,
-  setuptools,
   attrs,
-  exceptiongroup,
+  gitMinimal,
   pexpect,
   doCheck ? true,
   pytestCheckHook,
   pytest-xdist,
-  python,
+  rustPlatform,
   sortedcontainers,
-  stdenv,
-  pythonAtLeast,
-  pythonOlder,
-  sphinxHook,
-  sphinx-rtd-theme,
-  sphinx-hoverxref,
-  sphinx-codeautolink,
+  syrupy,
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hypothesis";
-  version = "6.131.17";
+  version = "6.156.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
-    rev = "hypothesis-python-${version}";
-    hash = "sha256-bNaDC2n0VaI7L4/FdD8eQ4cqn5ewquy89wV/pQn9uo0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z3LffzA+tsJtvXebTayfRZo32b0LcU2RFDS6bAdCDqU=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/hypothesis";
+
+  cargoRoot = "rust";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      cargoRoot
+      ;
+    hash = "sha256-WEuCK1jpemnNpO+UxsfpdAkFLSM0v2WRjZr3qmSLBJI=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -49,20 +56,27 @@ buildPythonPackage rec {
     sed -i -e '/sphinx_selective_exclude.eager_only/ d' docs/conf.py
   '';
 
-  postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+  ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    rustPlatform.maturinBuildHook
+  ];
 
   dependencies = [
     attrs
     sortedcontainers
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   nativeCheckInputs = [
+    gitMinimal
     pexpect
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals isPyPy [ tzdata ];
+    (syrupy.overridePythonAttrs { doCheck = false; })
+  ]
+  ++ lib.optionals isPyPy [ tzdata ];
 
   inherit doCheck;
 
@@ -74,9 +88,14 @@ buildPythonPackage rec {
   preCheck = ''
     rm tox.ini
     export HYPOTHESIS_PROFILE=ci
+    export TMPDIR=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [ "tests/cover" ];
+  pytestFlags = [
+    "-p no:cacheprovider"
+  ];
+
+  enabledTestPaths = [ "tests/cover" ];
 
   # Hypothesis by default activates several "Health Checks", including one that fires if the builder is "too slow".
   # This check is disabled [1] if Hypothesis detects a CI environment, i.e. either `CI` or `TF_BUILD` is defined [2].
@@ -90,68 +109,32 @@ buildPythonPackage rec {
   # [3]: https://github.com/NixOS/nixpkgs/issues/393637
   setupHook = ./setup-hook.sh;
 
-  disabledTests =
-    [
-      # racy, fails to find a file sometimes
-      "test_recreate_charmap"
-      "test_uses_cached_charmap"
-      # fail when using CI profile
-      "test_given_does_not_pollute_state"
-      "test_find_does_not_pollute_state"
-      "test_does_print_on_reuse_from_database"
-      "test_prints_seed_only_on_healthcheck"
-      # calls script with the naked interpreter
-      "test_constants_from_running_file"
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      # not sure why these tests fail with only 3.9
-      # FileNotFoundError: [Errno 2] No such file or directory: 'git'
-      "test_observability"
-      "test_assume_has_status_reason"
-      "test_observability_captures_stateful_reprs"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # AssertionError: assert [b'def      \...   f(): pass'] == [b'def\\', b'    f(): pass']
-      # https://github.com/HypothesisWorks/hypothesis/issues/4355
-      "test_clean_source"
-    ];
+  disabledTests = [
+    # fail when using CI profile
+    "test_given_does_not_pollute_state"
+    "test_find_does_not_pollute_state"
+    "test_does_print_on_reuse_from_database"
+    "test_prints_seed_only_on_healthcheck"
+    "test_prints_seed_on_very_slow_shrinking"
+    "test_regex_output_should_print_as_string"
+  ]
+  ++ lib.optionals isPyPy [
+    # hypothesis.errors.Unsatisfiable: Could not find any examples from datetimes(min_value=datetime.datetime(2003, 1, 1, 0, 0), max_value=datetime.datetime(2005, 12, 31, 23, 59, 59, 999999)) that satisfied lambda x: x.month == 2 and x.day == 29
+    "test_bordering_on_a_leap_year"
+  ];
 
   pythonImportsCheck = [ "hypothesis" ];
-
-  passthru = {
-    doc = stdenv.mkDerivation {
-      # Forge look and feel of multi-output derivation as best as we can.
-      #
-      # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-      name = "${pname}-${version}-doc";
-      inherit src pname version;
-
-      postInstallSphinx = ''
-        mv $out/share/doc/* $out/share/doc/python$pythonVersion-$pname-$version
-      '';
-
-      nativeBuildInputs = [
-        sphinxHook
-        sphinx-rtd-theme
-        sphinx-hoverxref
-        sphinx-codeautolink
-      ];
-
-      inherit (python) pythonVersion;
-      inherit meta;
-    };
-  };
 
   meta = {
     description = "Library for property based testing";
     mainProgram = "hypothesis";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.mpl20;
     maintainers = [
       lib.maintainers.fliegendewurst
     ];
   };
-}
+})

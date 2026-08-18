@@ -5,6 +5,7 @@
   fetchFromGitHub,
   olm,
   libsignal-ffi,
+  zlib,
   versionCheckHook,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
@@ -19,13 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.4";
+  version = "26.07";
+  tag = "v0.2607.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    tag = "v${version}";
-    hash = "sha256-8F9wk83F3wB9vXvAFz4IiBmGbDOp/SyqQkYnhHPlYj0=";
+    inherit tag;
+    hash = "sha256-l6IIL2bClC6t5+P0/AkFIjkD/eDpQnnmA8x4i5ROaY4=";
   };
 
   buildInputs =
@@ -35,24 +37,31 @@ buildGoModule rec {
       # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
       # see https://github.com/mautrix/signal/issues/401
       libsignal-ffi
+      zlib
     ];
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
+  env = lib.optionalAttrs withGoolm {
+    CGO_LDFLAGS = toString [ cppStdLib ];
+  };
 
-  vendorHash = "sha256-0eh1PaExf87zJ4E/ix1Mjcx2Sms6qNAFc8LD80A5n7M=";
+  vendorHash = "sha256-0ifGza94s4+ED5OrlrqoDKIDZIYJWJhB2q3LJRpKiJs=";
+
+  ldflags = [
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   doCheck = true;
-  preCheck =
-    ''
-      # Needed by the tests to be able to find libstdc++
-      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
-    ''
-    + (lib.optionalString (!withGoolm) ''
-      # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="${cppStdLib}"
-    '');
+  preCheck = ''
+    # Needed by the tests to be able to find libstdc++
+    export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+  ''
+  + (lib.optionalString (!withGoolm) ''
+    # When using libolm, the tests need explicit linking to libstdc++
+    export CGO_LDFLAGS="${cppStdLib}"
+  '');
 
   postCheck = ''
     unset LD_LIBRARY_PATH
@@ -60,15 +69,15 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       pentane
       ma27
+      SchweGELBin
     ];
     mainProgram = "mautrix-signal";
   };

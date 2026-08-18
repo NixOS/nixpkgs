@@ -11,20 +11,22 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findutils";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
-    sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
+    url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-v9GcsGzHHzNS1WfpAoTYzawCrIl3S76t8LUzsMEUMv0=";
   };
 
   postPatch = ''
-    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${lib.getExe' coreutils "echo"}";'
   '';
 
-  patches = [ ./no-install-statedir.patch ];
+  patches = [
+    ./no-install-statedir.patch
+  ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
@@ -46,15 +48,17 @@ stdenv.mkDerivation rec {
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
-    "SORT=${coreutils}/bin/sort"
+    "SORT=${lib.getExe' coreutils "sort"}"
     "--localstatedir=/var/cache"
   ];
 
-  CFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
-    # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
-    "-D__nonnull\\(params\\)="
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS = toString [
+      # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
+      # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
+      "-D__nonnull\\(params\\)="
+    ];
+  };
 
   postInstall = ''
     moveToOutput bin/locate $locate
@@ -77,8 +81,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
+    changelog = "https://cgit.git.savannah.gnu.org/cgit/findutils.git/tree/NEWS?h=v${finalAttrs.version}";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
-
     longDescription = ''
       The GNU Find Utilities are the basic directory searching
       utilities of the GNU operating system.  These programs are
@@ -96,11 +100,11 @@ stdenv.mkDerivation rec {
           * locate - list files in databases that match a pattern;
           * updatedb - update a file name database;
     '';
-
     platforms = lib.platforms.all;
-
     license = lib.licenses.gpl3Plus;
-
     mainProgram = "find";
+    maintainers = [ lib.maintainers.mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

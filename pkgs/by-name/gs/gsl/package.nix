@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsl";
   version = "2.8";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/gsl/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gsl/gsl-${finalAttrs.version}.tar.gz";
     hash = "sha256-apnu7RVjLGNUiVsd1ULtWoVcDxXZrRMmxv4rLJ5CMZA=";
   };
 
@@ -44,8 +44,12 @@ stdenv.mkDerivation rec {
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-mno-fma";
 
-  # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
-  doCheck = stdenv.hostPlatform.system != "i686-linux";
+  doCheck =
+    # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
+    stdenv.hostPlatform.system != "i686-linux"
+    # https://lists.gnu.org/archive/html/bug-gsl/2021-10/msg00001.html
+    # https://lists.gnu.org/archive/html/bug-gsl/2025-03/msg00010.html
+    && !stdenv.hostPlatform.isBigEndian;
 
   meta = {
     description = "GNU Scientific Library, a large numerical library";
@@ -64,4 +68,4 @@ stdenv.mkDerivation rec {
     '';
     platforms = lib.platforms.all;
   };
-}
+})

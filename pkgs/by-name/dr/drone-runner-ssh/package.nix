@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "drone-runner-ssh";
-  version = "unstable-2022-12-22";
+  version = "1.0.1-unstable-2022-12-22";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
@@ -17,11 +17,10 @@ buildGoModule {
 
   vendorHash = "sha256-Vj6ZmNwegKBVJPh6MsjtLMmX9WR76msuR2DPM8Qyhe0=";
 
-  meta = with lib; {
+  meta = {
     description = "Experimental Drone runner that executes a pipeline on a remote machine";
     homepage = "https://github.com/drone-runners/drone-runner-ssh";
-    license = licenses.unfreeRedistributable;
-    teams = [ teams.c3d2 ];
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "drone-runner-ssh";
   };
 }

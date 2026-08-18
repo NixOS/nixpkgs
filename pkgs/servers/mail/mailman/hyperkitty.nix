@@ -8,15 +8,13 @@
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperkitty";
   version = "1.3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchurl {
-    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
+    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${finalAttrs.version}/downloads/hyperkitty-${finalAttrs.version}.tar.gz";
     hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
 
@@ -32,7 +30,24 @@ buildPythonPackage rec {
       url = "https://gitlab.com/mailman/hyperkitty/-/commit/6c3d402dc0981e545081a3baf13db7e491356e75.patch";
       hash = "sha256-ep9cFZe9/sIfIP80pLBOMYkJKWvNT7DRqg80DQSdRFw=";
     })
+    # Fix test with Django 5.2
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/e815be11752ac6a3e839b155f0c43808619c56b0.patch";
+      hash = "sha256-fsJyNsh3l5iR9WgsiEsHlptkN+nlWoop0m2STyucDEc=";
+    })
+    # Fix test with mistune >= 3.3
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/7e8aa0150d8dcaef66039db3a0205dfd4160a265.patch";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-BpjnLugUU0nyn3XN0zZ0eEeK0sFd64GOUaQsen6fFyw=";
+    })
   ];
+
+  prePatch = ''
+    # Upstream: https://gitlab.com/mailman/hyperkitty/-/commit/b8b7536c2cb7380ec55ed62140617cff8ae36b1d
+    substituteInPlace pyproject.toml \
+      --replace-fail '"django>=4.2,<5.1"' '"django>=4.2,<5.3"'
+  '';
 
   build-system = [
     pdm-backend
@@ -66,7 +81,8 @@ buildPythonPackage rec {
     elasticsearch
     mock
     whoosh
-  ] ++ beautifulsoup4.optional-dependencies.lxml;
+  ]
+  ++ beautifulsoup4.optional-dependencies.lxml;
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot
@@ -84,4 +100,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+})

@@ -6,26 +6,19 @@
   pytest-repeat,
   pytestCheckHook,
   setuptools,
-  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stringzilla";
-  version = "3.12.5";
+  version = "5.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
-    tag = "v${version}";
-    hash = "sha256-Hp66R4+gic0WstRVnutMBx8g+DMzLEnxPzt3sgvWGG4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RENsISsEfDJaoQK9v9i6vM3OId7FREw5hixpEUETfEw=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # error: unsupported option '-mfloat-abi=' for target 'aarch64-apple-darwin'
-    substituteInPlace setup.py \
-      --replace-fail '"-mfloat-abi=hard",' ""
-  '';
 
   build-system = [
     setuptools
@@ -39,13 +32,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "scripts/test.py" ];
+  disabledTestPaths = [
+    # ignored in .github/workflows/prerelease.yml
+    "test/stringzillas.py"
+    "test/similarities.py"
+    "test/fingerprints.py"
+    "test/szs_helpers.py"
+  ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
+    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${finalAttrs.src.tag}";
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
     homepage = "https://github.com/ashvardanian/stringzilla";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      dotlambda
+    ];
   };
-}
+})

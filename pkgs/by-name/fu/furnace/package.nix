@@ -11,7 +11,7 @@
   fmt,
   freetype,
   libsndfile,
-  libX11,
+  libx11,
   libGL,
   rtmidi,
   SDL2,
@@ -43,40 +43,38 @@ stdenv.mkDerivation (finalAttrs: {
     # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
     # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
     substituteInPlace src/gui/scaling.cpp \
-      --replace-fail 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+      --replace-fail 'libX11.so' '${lib.getLib libx11}/lib/libX11.so'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      fftw
-      fmt
-      freetype
-      libsndfile
-      rtmidi
-      SDL2
-      zlib
-      portaudio
-    ]
-    ++ lib.optionals withGL [
-      libGL
-    ]
-    ++ lib.optionals withJACK [
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
-      alsa-lib
-      libX11
-    ];
+  buildInputs = [
+    fftw
+    fmt
+    freetype
+    libsndfile
+    rtmidi
+    SDL2
+    zlib
+    portaudio
+  ]
+  ++ lib.optionals withGL [
+    libGL
+  ]
+  ++ lib.optionals withJACK [
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
+    alsa-lib
+    libx11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_GUI" withGUI)
@@ -126,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
     changelog = "https://github.com/tildearrow/furnace/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
     mainProgram = "furnace";

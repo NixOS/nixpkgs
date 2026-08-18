@@ -3,9 +3,9 @@
   dotnetCorePackages,
   fontconfig,
   lib,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
   stdenv,
   writeText,
 }:
@@ -56,12 +56,21 @@
       lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
         setupHook = writeText "setupHook.sh" ''
           prependToVar dotnetRuntimeDeps \
-            "${lib.getLib libICE}" \
-            "${lib.getLib libSM}" \
-            "${lib.getLib libX11}"
+            "${lib.getLib libice}" \
+            "${lib.getLib libsm}" \
+            "${lib.getLib libx11}"
         '';
       }
     );
+
+  "Avalonia.BuildServices" =
+    package:
+    package.overrideAttrs (old: {
+      postPatch = ''
+        shopt -s extglob
+        rm -rf !(*.nuspec)
+      '';
+    });
 
   "SkiaSharp.NativeAssets.Linux" =
     package:
@@ -72,16 +81,14 @@
 
         buildInputs = old.buildInputs or [ ] ++ [ fontconfig ];
 
-        preInstall =
-          old.preInstall or ""
-          + ''
-            cd runtimes
-            for platform in *; do
-              [[ $platform == "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ]] ||
-                rm -r "$platform"
-            done
-            cd - >/dev/null
-          '';
+        preInstall = old.preInstall or "" + ''
+          cd runtimes
+          for platform in *; do
+            [[ $platform == "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ]] ||
+              rm -r "$platform"
+          done
+          cd - >/dev/null
+        '';
       }
     );
 }

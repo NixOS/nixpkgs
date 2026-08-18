@@ -9,7 +9,7 @@
   curl,
   dbus-glib,
   gtk3,
-  libXtst,
+  libxtst,
   libva,
   pciutils,
   pipewire,
@@ -39,9 +39,7 @@ let
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-aarch64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -52,7 +50,8 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  } // config.firefox.policies or { };
+  }
+  // config.firefox.policies or { };
 
   policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
@@ -76,32 +75,30 @@ stdenv.mkDerivation {
 
   sourceRoot = lib.optional stdenv.hostPlatform.isDarwin ".";
 
-  nativeBuildInputs =
-    [
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      autoPatchelfHook
-      patchelfUnstable
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      undmg
-    ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    autoPatchelfHook
+    patchelfUnstable
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    undmg
+  ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
     adwaita-icon-theme
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
-  runtimeDependencies =
-    [
-      curl
-      pciutils
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libva.out
-    ];
+  runtimeDependencies = [
+    curl
+    pciutils
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libva.out
+  ];
   appendRunpaths = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "${pipewire}/lib"
   ];
@@ -156,7 +153,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+    changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
     license = {

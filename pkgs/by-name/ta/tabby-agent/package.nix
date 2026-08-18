@@ -4,22 +4,25 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wrapGAppsHook3,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-agent";
-  version = "0.29.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NwFDY2bBT7w+nbHMPm+E4VcgIL5+BgXQmgxywqwQ8zc=";
+    hash = "sha256-OeHRJOg7UEOVBG7jTUGCpiuKZI0Jj7Gl7QDKpsjX5Bc=";
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
     wrapGAppsHook3
   ];
 
@@ -46,9 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-SiJJxRzmKQxqw3UESN7q+3qkU1nK+7z6K5RpIMRRces=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-idEByCnQmqpnvni0RahZ7qEa0C/0zVPRFv0jaj3BcnM=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -60,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/TabbyML/tabby";
-    changelog = "https://github.com/TabbyML/tabby/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/TabbyML/tabby/releases/tag/v${finalAttrs.src.tag}";
     description = "Language server used to communicate with Tabby server";
     mainProgram = "tabby-agent";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.skohtv ];
   };
 })

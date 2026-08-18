@@ -11,27 +11,26 @@ let
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseSettings = {
-    production =
-      {
-        adapter = cfg.database.type;
-        database =
-          if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
-      }
-      // lib.optionalAttrs (cfg.database.type != "sqlite3") {
-        host =
-          if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
-            cfg.database.socket
-          else
-            cfg.database.host;
-        port = cfg.database.port;
-        username = cfg.database.user;
-      }
-      // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
-        password = "#dbpass#";
-      }
-      // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
-        socket = cfg.database.socket;
-      };
+    production = {
+      adapter = cfg.database.type;
+      database =
+        if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
+    }
+    // lib.optionalAttrs (cfg.database.type != "sqlite3") {
+      host =
+        if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
+          cfg.database.socket
+        else
+          cfg.database.host;
+      port = cfg.database.port;
+      username = cfg.database.user;
+    }
+    // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+      password = "#dbpass#";
+    }
+    // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      socket = cfg.database.socket;
+    };
   };
 
   databaseYml = format.generate "database.yml" databaseSettings;
@@ -81,7 +80,7 @@ in
       enable = lib.mkEnableOption "Redmine, a project management web application";
 
       package = lib.mkPackageOption pkgs "redmine" {
-        example = "redmine.override { ruby = pkgs.ruby_3_2; }";
+        example = "redmine.override { ruby = pkgs.ruby_3_3; }";
       };
 
       user = lib.mkOption {
@@ -246,19 +245,19 @@ in
       };
 
       components = {
-        subversion = lib.mkEnableOption "Subversion integration.";
+        subversion = lib.mkEnableOption "Subversion integration";
 
-        mercurial = lib.mkEnableOption "Mercurial integration.";
+        mercurial = lib.mkEnableOption "Mercurial integration";
 
-        git = lib.mkEnableOption "git integration.";
+        git = lib.mkEnableOption "git integration";
 
-        cvs = lib.mkEnableOption "cvs integration.";
+        cvs = lib.mkEnableOption "cvs integration";
 
-        breezy = lib.mkEnableOption "bazaar integration.";
+        breezy = lib.mkEnableOption "bazaar integration";
 
-        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG.";
+        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG";
 
-        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
+        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF";
 
         minimagick_font_path = lib.mkOption {
           type = lib.types.str;
@@ -266,6 +265,8 @@ in
           description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
+
+        pandoc = lib.mkEnableOption "pandoc integration for previewing LibreOffice and Microsoft Office documents";
       };
     };
   };
@@ -311,6 +312,7 @@ in
         imagemagick_convert_command = lib.optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
         gs_command = lib.optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
+        pandoc_command = lib.optionalString cfg.components.pandoc "${pkgs.pandoc}/bin/pandoc";
       };
     };
 
@@ -357,24 +359,14 @@ in
       "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
-
-      "d /run/redmine - - - - -"
-      "d /run/redmine/public - - - - -"
-      "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
-      "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
-      "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
-      "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
-      "L+ /run/redmine/public/assets - - - - ${cfg.stateDir}/public/assets"
-      "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
-      "L+ /run/redmine/themes - - - - ${cfg.stateDir}/themes"
-      "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
     ];
 
     systemd.services.redmine = {
-      after =
-        [ "network.target" ]
-        ++ lib.optional mysqlLocal "mysql.service"
-        ++ lib.optional pgsqlLocal "postgresql.target";
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional mysqlLocal "mysql.service"
+      ++ lib.optional pgsqlLocal "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
@@ -393,6 +385,19 @@ in
         ++ lib.optional cfg.components.ghostscript ghostscript;
 
       preStart = ''
+        # Create symlinks for the basic directory layout the redmine package
+        # expects. This part must be done in preStart rather than tmpfiles,
+        # because /run/redmine is re-created when the service is restarted
+        mkdir /run/redmine/public
+        ln -s "${cfg.stateDir}/config" /run/redmine/config
+        ln -s "${cfg.stateDir}/files" /run/redmine/files
+        ln -s "${cfg.stateDir}/log" /run/redmine/log
+        ln -s "${cfg.stateDir}/plugins" /run/redmine/plugins
+        ln -s "${cfg.stateDir}/public/assets" /run/redmine/public/assets
+        ln -s "${cfg.stateDir}/public/plugin_assets" /run/redmine/public/plugin_assets
+        ln -s "${cfg.stateDir}/themes" /run/redmine/themes
+        ln -s "${cfg.stateDir}/tmp" /run/redmine/tmp
+
         rm -rf "${cfg.stateDir}/plugins/"*
         rm -rf "${cfg.stateDir}/themes/"*
 
@@ -455,25 +460,32 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port}";
+        RuntimeDirectory = "redmine";
+        RuntimeDirectoryMode = "0750";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
-        ProtectSystem = "full";
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.stateDir
+        ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"

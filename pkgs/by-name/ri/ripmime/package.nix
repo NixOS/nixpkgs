@@ -1,15 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ripmime";
-  version = "1.4.0.10";
-  src = fetchurl {
-    url = "https://pldaniels.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0sj06ibmlzy34n8v0mnlq2gwidy7n2aqcwgjh0xssz3vi941aqc9";
+  version = "1.4.1.0";
+  src = fetchFromGitHub {
+    owner = "inflex";
+    repo = "ripMIME";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-D05cz10NTkgc+d3BzUvEkrmMGV/iw4r6m6tizc5TmaI=";
   };
 
   preInstall = ''
@@ -17,25 +19,19 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/share/man/man1"
   '';
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = " -Wno-error ";
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_LDFLAGS = "-liconv";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = " -Wno-error ";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Attachment extractor for MIME messages";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [ raskin ];
     homepage = "https://pldaniels.com/ripmime/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "ripmime";
+    license = lib.licenses.bsd3;
   };
-
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://pldaniels.com/ripmime/";
-    };
-  };
-}
+})

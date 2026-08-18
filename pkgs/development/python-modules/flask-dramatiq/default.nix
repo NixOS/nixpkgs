@@ -1,58 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitLab,
-  poetry-core,
   dramatiq,
-  flask,
-  requests,
-  pytestCheckHook,
-  pytest-cov-stub,
+  fetchFromGitHub,
   flask-migrate,
+  flask-sqlalchemy,
+  flask,
+  httpx,
   periodiq,
+  hatchling,
   postgresql,
   postgresqlTestHook,
   psycopg2,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  requests,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "flask-dramatiq";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchFromGitLab {
-    owner = "bersace";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
     repo = "flask-dramatiq";
-    rev = "840209e9bf582b4dda468e8bba515f248f3f8534";
-    hash = "sha256-qjV1zyVzHPXMt+oUeGBdP9XVlbcSz2MF9Zygj543T4w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gt9yynbmFWMISP1U0jRjU6oY3ImrLxYa2D0xf0llCEg=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
-
     patchShebangs --build ./example.py
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ dramatiq ];
+  pythonRelaxDeps = [ "dramatiq" ];
+
+  dependencies = [ dramatiq ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
+    flask-sqlalchemy
     flask
-    requests
     flask-migrate
+    httpx
     periodiq
     postgresql
     postgresqlTestHook
     psycopg2
-  ] ++ dramatiq.optional-dependencies.rabbitmq;
+    pytest-cov-stub
+    pytest-mock
+    pytestCheckHook
+    requests
+  ]
+  ++ dramatiq.optional-dependencies.rabbitmq
+  ++ dramatiq.optional-dependencies.watch;
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \
@@ -61,24 +64,17 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
-  pytestFlagsArray = [
-    "-x"
-    "tests/func/"
-    "tests/unit"
-  ];
-
-  pythonImportsCheck = [ "flask_dramatiq" ];
-
-  # Does HTTP requests to localhost
   disabledTests = [
     "test_fast"
     "test_other"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "flask_dramatiq" ];
+
+  meta = {
     description = "Adds Dramatiq support to your Flask application";
-    homepage = "https://gitlab.com/bersace/flask-dramatiq";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ traxys ];
+    homepage = "https://github.com/pallets-eco/flask-dramatiq";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

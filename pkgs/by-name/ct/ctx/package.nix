@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx";
-  version = "unstable-2023-09-03";
+  version = "0-unstable-2023-09-03";
 
   src = fetchgit {
     name = "ctx-source"; # because of a dash starting the directory
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       a vector graphics protocol.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

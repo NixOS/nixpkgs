@@ -1,6 +1,9 @@
 { pkgs, package, ... }:
 let
   testPath = pkgs.hello;
+
+  # Same stateDir logic as in nixos/modules/services/web-servers/varnish/default.nix
+  stateDir = "/var/run/varnishd";
 in
 {
   name = "varnish";
@@ -10,7 +13,12 @@ in
 
   nodes = {
     varnish =
-      { config, pkgs, ... }:
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
       {
         services.nix-serve = {
           enable = true;
@@ -19,9 +27,29 @@ in
         services.varnish = {
           inherit package;
           enable = true;
-          http_address = "0.0.0.0:80";
+          http_address = "0.0.0.0:81";
+          listen = [
+            {
+              address = "0.0.0.0";
+              port = 80;
+              proto = "HTTP";
+            }
+            {
+              name = "proxyport";
+              address = "0.0.0.0";
+              port = 8080;
+              proto = "PROXY";
+            }
+            {
+              address = "/var/run/varnishd/client.http.sock";
+              user = "varnish";
+              group = "varnish";
+              mode = "660";
+            }
+            { address = "@asdf"; }
+          ];
           config = ''
-            vcl 4.0;
+            vcl 4.1;
 
             backend nix-serve {
               .host = "127.0.0.1";
@@ -32,6 +60,23 @@ in
 
         networking.firewall.allowedTCPPorts = [ 80 ];
         system.extraDependencies = [ testPath ];
+
+        assertions =
+          let
+            cmdline = config.systemd.services.varnish.serviceConfig.ExecStart;
+          in
+          map
+            (pattern: {
+              assertion = lib.hasInfix pattern cmdline;
+              message = "Address argument `${pattern}` missing in commandline `${cmdline}`.";
+            })
+            [
+              " -a 0.0.0.0:80,HTTP "
+              " -a proxyport=0.0.0.0:8080,PROXY "
+              " -a /var/run/varnishd/client.http.sock,HTTP,user=varnish,group=varnish,mode=660 "
+              " -a 0.0.0.0:81 "
+              " -a @asdf,HTTP "
+            ];
       };
 
     client =
@@ -47,6 +92,7 @@ in
   testScript = ''
     start_all()
     varnish.wait_for_open_port(80)
+
 
     client.wait_until_succeeds("curl -f http://varnish/nix-cache-info");
 

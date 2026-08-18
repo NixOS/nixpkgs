@@ -4,29 +4,27 @@
   cython,
   fetchPypi,
   numpy,
+  setuptools,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cftime";
-  version = "1.6.4.post1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.6.5";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UKx2zJ8Qq3vUbkSnHFGmknBRtJm0QH308pqxPXQblC8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-giX+1rm0P7h2g+urUhMEUPwXMAERUNMJIJapDlTR6B4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
-    numpy
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytest-cov-stub
@@ -35,10 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cftime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Time-handling functionality from netcdf4-python";
+    changelog = "https://github.com/Unidata/cftime/blob/v${finalAttrs.version}rel/Changelog";
     homepage = "https://github.com/Unidata/cftime";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -1,3 +1,4 @@
+# dbeaver doesn't seem feasible to package from source, see https://github.com/NixOS/nixpkgs/pull/311888
 {
   lib,
   stdenvNoCC,
@@ -7,6 +8,7 @@
   openjdk21,
   gnused,
   autoPatchelfHook,
+  darwin,
   wrapGAppsHook3,
   gtk3,
   glib,
@@ -17,23 +19,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.1.1";
+  version = "26.1.4";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64-nojdk.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
-        x86_64-darwin = "macos-x86_64.dmg";
+        x86_64-linux = "linux-x86_64.tar.gz";
+        aarch64-linux = "linux-aarch64.tar.gz";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-PFY1eZFG8mvbG6D7pDJBBbsySeNmw6/DlxSyNvCJcSI=";
-        aarch64-linux = "sha256-Fny8+XA7N3rmXqP2UfTPYFIwHHSZTLbABjm+ESMoFJ4=";
-        x86_64-darwin = "sha256-/U8lcvJotAB+K0pQWpy6RIRqbfJzqVefS67qF9arzw0=";
-        aarch64-darwin = "sha256-lfz+B2ZHaBoyDKduDn45ocSTMAsS/bBXrByBeIZb0Ew=";
+        x86_64-linux = "sha256-vySdu/BStELNyi5kO6cixwnlM7fgpQdfumoh18UBMeI=";
+        aarch64-linux = "sha256-WulNI5kAvrBBFue17uxHPpOQW+dmYrq6l4XnQaukZ2M=";
+        aarch64-darwin = "sha256-KPZvcTExThKM7+Sr0I8WG+B7+hTJFMqIqAEH+RDd70s=";
       };
     in
     fetchurl {
@@ -43,14 +43,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    undmg
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -58,6 +62,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   prePatch = ''
     substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
       --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  ''
+  # remove the bundled JRE configuration on Darwin
+  # dont use substituteInPlace here because it would match "-vmargs"
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
   '';
 
   preInstall = ''
@@ -66,6 +75,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
+
+    # remove the bundled JRE
+    rm -r ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}jre/
   '';
 
   installPhase =
@@ -108,9 +120,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
           --prefix PATH : "${openjdk21}/bin" \
           --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';
@@ -129,10 +142,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001
+      staticdev
       yzx9
     ];
     mainProgram = "dbeaver";

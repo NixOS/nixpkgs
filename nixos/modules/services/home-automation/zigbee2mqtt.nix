@@ -12,10 +12,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    sweber
-    hexa
-  ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
 
   imports = [
     (lib.mkRemovedOptionModule [
@@ -41,7 +38,7 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          homeassistant = config.services.home-assistant.enable;
+          homeassistant.enabled = config.services.home-assistant.enable;
           permit_join = true;
           serial = {
             port = "/dev/ttyACM1";
@@ -60,7 +57,7 @@ in
 
     # preset config values
     services.zigbee2mqtt.settings = {
-      homeassistant = lib.mkDefault config.services.home-assistant.enable;
+      homeassistant.enabled = lib.mkDefault config.services.home-assistant.enable;
       permit_join = lib.mkDefault false;
       mqtt = {
         base_topic = lib.mkDefault "zigbee2mqtt";
@@ -79,6 +76,7 @@ in
       after = [ "network.target" ];
       environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "cp"} --no-preserve=mode ${configFile} '${cfg.dataDir}/configuration.yaml'";
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
@@ -86,6 +84,7 @@ in
         StateDirectory = "zigbee2mqtt";
         StateDirectoryMode = "0700";
         Restart = "on-failure";
+        RestartSec = 10;
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -114,6 +113,8 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -129,9 +130,6 @@ in
         ];
         UMask = "0077";
       };
-      preStart = ''
-        cp --no-preserve=mode ${configFile} "${cfg.dataDir}/configuration.yaml"
-      '';
     };
 
     users.users.zigbee2mqtt = {

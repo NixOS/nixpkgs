@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-codeartifact-proxy";
-  version = "0.6.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sktan";
     repo = "aws-codeartifact-proxy";
-    rev = "v${version}";
-    hash = "sha256-+P0AIg5m7nePy+Yd445nVfLVxya80Om9lJTPKZeTshc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iCUnlpQBXMI99gYE/YqNHq0pMsjHaB8BR2HV5GZwPi4=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-3MO+mRCstXw0FfySiyMSs1vaao7kUYIyJB2gAp1IE48=";
+  vendorHash = "sha256-pBKVg4h2Ta99ekQHNwaVjlTp6YhKa5tsq3zw1y4/IU0=";
 
   meta = {
     description = "AWS CodeArtifact proxy to allow unauthenticated read access";
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "aws-codeartifact-proxy";
   };
-}
+})

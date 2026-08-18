@@ -1,0 +1,16 @@
+diff --git a/jpeg/62/jpeglib.h b/jpeg/62/jpeglib.h
+index d1be8dd..38436ef 100644
+--- a/jpeg/62/jpeglib.h
++++ b/jpeg/62/jpeglib.h
+@@ -814,11 +814,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
+  * Note JPP requires double parentheses.
+  */
+ 
+-#ifdef HAVE_PROTOTYPES
+ #define JPP(arglist)	arglist
+-#else
+-#define JPP(arglist)	()
+-#endif
+ 
+ 
+ /* Short forms of external names for systems with brain-damaged linkers.

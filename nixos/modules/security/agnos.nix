@@ -15,7 +15,7 @@ let
       inherit (lib) types mkOption;
     in
     types.submodule {
-      freeformType = format.type;
+      freeformType = types.attrsOf format.type;
 
       options = {
         email = mkOption {
@@ -53,7 +53,7 @@ let
       inherit (lib) types literalExpression mkOption;
     in
     types.submodule {
-      freeformType = format.type;
+      freeformType = types.attrsOf format.type;
 
       options = {
         domains = mkOption {
@@ -91,7 +91,7 @@ in
       settings = mkOption {
         description = "Settings";
         type = types.submodule {
-          freeformType = format.type;
+          freeformType = types.attrsOf format.type;
 
           options = {
             dns_listen_addr = mkOption {

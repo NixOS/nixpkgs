@@ -7,13 +7,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duo-unix";
-  version = "2.1.0";
+  version = "2.2.3";
 
   src = fetchurl {
-    url = "https://dl.duosecurity.com/duo_unix-${version}.tar.gz";
-    sha256 = "sha256-QpF+qZeCd4n7A+dl7e0KfwpQ+CIJIoNZMafEPz2Dtik=";
+    url = "https://dl.duosecurity.com/duo_unix-${finalAttrs.version}.tar.gz";
+    hash = "sha256-t7MBY4P0Nz4m3FZv7LlOe4uX632bVGR9zKNyeQAYwD4=";
   };
 
   buildInputs = [
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

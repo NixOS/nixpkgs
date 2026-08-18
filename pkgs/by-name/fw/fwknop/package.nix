@@ -15,44 +15,42 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwknop";
   version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "mrash";
     repo = "fwknop";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jnEBRJCt7pAmXRIBVT2OwJqT5Zr/JaRgPDqccx0W/9o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      libpcap
-      texinfo
-    ]
-    ++ lib.optionals gnupgSupport [
-      gnupg
-      gpgme.dev
-    ]
-    ++ lib.optionals wgetSupport [ wget ];
+  buildInputs = [
+    libpcap
+    texinfo
+  ]
+  ++ lib.optionals gnupgSupport [
+    gnupg
+    gpgme.dev
+  ]
+  ++ lib.optionals wgetSupport [ wget ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--localstatedir=/run"
-      "--with-iptables=${iptables}/sbin/iptables"
-      (lib.enableFeature buildServer "server")
-      (lib.enableFeature buildClient "client")
-      (lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
-    ]
-    ++ lib.optionalString gnupgSupport [
-      "--with-gpgme"
-      "--with-gpgme-prefix=${gpgme.dev}"
-      "--with-gpg=${gnupg}"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/run"
+    "--with-iptables=${iptables}/sbin/iptables"
+    (lib.enableFeature buildServer "server")
+    (lib.enableFeature buildClient "client")
+    (lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
+  ]
+  ++ lib.optionalString gnupgSupport [
+    "--with-gpgme"
+    "--with-gpgme-prefix=${gpgme.dev}"
+    "--with-gpg=${gnupg}"
+  ];
 
   # Temporary hack to copy the example configuration files into the nix-store,
   # this'll probably be helpful until there's a NixOS module for that (feel free
@@ -66,15 +64,15 @@ stdenv.mkDerivation rec {
       "wknopddir = $out/etc/fwknop"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single Packet Authorization (and Port Knocking) server/client";
     longDescription = ''
       fwknop stands for the "FireWall KNock OPerator", and implements an
       authorization scheme called Single Packet Authorization (SPA).
     '';
     homepage = "https://www.cipherdyne.org/fwknop/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

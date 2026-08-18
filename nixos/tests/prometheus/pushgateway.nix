@@ -56,6 +56,9 @@
       + "jq '.data.result[0].metric.version' | grep '\"${pkgs.prometheus-pushgateway.version}\"'"
     )
 
+    client.systemctl("start network-online.target")
+    client.wait_for_unit("network-online.target")
+
     # Add a metric and check in Prometheus
     client.wait_until_succeeds(
       "echo 'some_metric 3.14' | curl --data-binary @- http://pushgateway:9091/metrics/job/some_job"

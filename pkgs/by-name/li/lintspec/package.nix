@@ -1,27 +1,42 @@
 {
-  lib,
   fetchFromGitHub,
+  installShellFiles,
+  lib,
   rustPlatform,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lintspec";
-  version = "0.6.1";
+  version = "0.18.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "lintspec";
-    tag = "v${version}";
-    hash = "sha256-pZ9fq8bVZs7ihWeYyM4vDthpASXFS0U9b/F8NVkvHTA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CPyMP/UGP2PJ9tjNT0Ytj7jnA4BFBIXw3ZT1NHfKGAA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-eZct2zpnh07Fazd34rUcAxAWfMJYkwq8nWNfpG8gFak=";
+  cargoHash = "sha256-WMe9/7rk6tkpWQ7hezHTAoyvCE6Oo66RAfhz7NpT7JM=";
+  cargoBuildFlags = [
+    "--package"
+    "lintspec"
+  ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd lintspec \
+      --bash <($out/bin/lintspec completions -s bash) \
+      --fish <($out/bin/lintspec completions -s fish) \
+      --zsh <($out/bin/lintspec completions -s zsh)
+  '';
 
   meta = {
     description = "Blazingly fast linter for NatSpec comments in Solidity code";
     homepage = "https://github.com/beeb/lintspec";
-    changelog = "https://github.com/beeb/lintspec/releases/tag/v${version}";
+    changelog = "https://github.com/beeb/lintspec/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -29,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ beeb ];
     mainProgram = "lintspec";
   };
-}
+})

@@ -4,19 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-mqtt";
-  version = "1.4.0"; # nixpkgs-update: no auto update
+  version = "1.10.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-mqtt";
-    tag = version;
-    hash = "sha256-ijoKL8TReNER3a9dwsPeh56l1Ze2rz6jN6L9rYQLYRU=";
+    tag = finalAttrs.version;
+    hash = "sha256-GLSRs3qV8AwaSPPqAKt/PchIQnlDr0IeqbJkCqkDBY8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZKpyVVzXC+c7JzktSOMubWl610ujoZ3Vgo4tC0/1JHk=";
+  cargoHash = "sha256-XteKnrfKrOGbjCz7njaDlxSPOZ73UWt91dg8R2hB3PM=";
 
   # Some test time out
   doCheck = false;
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "zenoh-bridge-mqtt";
   };
-}
+})

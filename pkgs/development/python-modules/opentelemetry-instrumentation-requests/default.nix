@@ -7,17 +7,16 @@
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
   httpretty,
+  mocket,
   opentelemetry-test-utils,
+  pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-requests";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-requests";
 
@@ -33,8 +32,14 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     httpretty
+    mocket
     opentelemetry-test-utils
+    pytest-benchmark
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "--benchmark-disable"
   ];
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.requests" ];

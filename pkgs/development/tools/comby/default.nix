@@ -48,7 +48,8 @@ let
         ocamlPackages.ppx_deriving_yojson
         ocamlPackages.ppx_sexp_conv
         ocamlPackages.ppx_sexp_message
-      ] ++ extraBuildInputs;
+      ]
+      ++ extraBuildInputs;
 
       nativeCheckInputs = [ cacert ];
 
@@ -57,6 +58,7 @@ let
         mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
+        broken = true; # Not compatible with ocamlPackages.tar ≥ 3
       };
     };
 
@@ -79,36 +81,35 @@ mkCombyPackage {
     rm test/common/{test_cli_list,test_cli_helper,test_cli}.ml
   '';
 
-  extraBuildInputs =
-    [
-      zlib
-      gmp
-      libev
-      sqlite
-      ocamlPackages.shell # This input must appear before `parany` or any other input that propagates `ocamlnet`
-      ocamlPackages.lwt
-      ocamlPackages.patience_diff
-      ocamlPackages.toml
-      ocamlPackages.cohttp-lwt-unix
-      ocamlPackages.textutils
-      ocamlPackages.jst-config
-      ocamlPackages.parany
-      ocamlPackages.conduit-lwt-unix
-      ocamlPackages.lwt_react
-      ocamlPackages.tar-unix
-      ocamlPackages.tls
-      ocamlPackages.ppx_jane
-      ocamlPackages.ppx_expect
-      ocamlPackages.dune-configurator
-      combyKernel
-      combySemantic
-    ]
-    ++ (
-      if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
-        [ ocamlPackages.hack_parallel ]
-      else
-        [ ]
-    );
+  extraBuildInputs = [
+    zlib
+    gmp
+    libev
+    sqlite
+    ocamlPackages.shell # This input must appear before `parany` or any other input that propagates `ocamlnet`
+    ocamlPackages.lwt
+    ocamlPackages.patience_diff
+    ocamlPackages.toml
+    ocamlPackages.cohttp-lwt-unix
+    ocamlPackages.textutils
+    ocamlPackages.jst-config
+    ocamlPackages.parany
+    ocamlPackages.conduit-lwt-unix
+    ocamlPackages.lwt_react
+    ocamlPackages.tar-unix
+    ocamlPackages.tls
+    ocamlPackages.ppx_jane
+    ocamlPackages.ppx_expect
+    ocamlPackages.dune-configurator
+    combyKernel
+    combySemantic
+  ]
+  ++ (
+    if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
+      [ ocamlPackages.hack_parallel ]
+    else
+      [ ]
+  );
 
   extraNativeInputs = [
     autoconf

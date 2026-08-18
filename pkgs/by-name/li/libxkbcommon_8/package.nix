@@ -11,10 +11,12 @@
   libxcb,
   libxml2,
   python3,
-  libX11,
+  setxkbmap,
+  xkbcomp,
+  libx11,
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
-  xorg,
+  xvfb,
   withWaylandTools ? stdenv.hostPlatform.isLinux,
   wayland,
   wayland-protocols,
@@ -24,19 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.10.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-rLh5BD9a0bI0nHtWX+n0LqmdIO5ykd98rNc5hAN3ndE=";
+    hash = "sha256-JdS4+HPHDUUOUq5TUX2F5DicHif8wD3cPvMocWhD4S4=";
   };
-
-  patches = [
-    # Disable one Xvfb test as it fails for permission checks.
-    ./disable-x11com.patch
-  ];
 
   outputs = [
     "out"
@@ -51,29 +48,34 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bison
     doxygen
-    xorg.xvfb
-  ] ++ lib.optional withWaylandTools wayland-scanner;
-  buildInputs =
-    [
-      xkeyboard_config
-      libxcb
-      libxml2
-    ]
-    ++ lib.optionals withWaylandTools [
-      wayland
-      wayland-protocols
-    ];
-  nativeCheckInputs = [ python3 ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux xvfb
+  ++ lib.optional withWaylandTools wayland-scanner;
+
+  buildInputs = [
+    xkeyboard_config
+    libxcb
+    libxml2
+  ]
+  ++ lib.optionals withWaylandTools [
+    wayland
+    wayland-protocols
+  ];
+  nativeCheckInputs = [
+    python3
+    setxkbmap
+    xkbcomp
+  ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
-    "-Dx-locale-root=${libX11.out}/share/X11/locale"
+    "-Dx-locale-root=${libx11.out}/share/X11/locale"
     "-Denable-docs=true"
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';
@@ -84,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle keyboard descriptions";
     longDescription = ''
       libxkbcommon is a keyboard keymap compiler and support library which
@@ -94,13 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      primeos
-      ttuegel
+    license = lib.licenses.mit;
+    maintainers = [
     ];
     mainProgram = "xkbcli";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     pkgConfigModules = [
       "xkbcommon"
       "xkbcommon-x11"

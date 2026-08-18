@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  aiohttp,
   attrdict,
   beautifulsoup4,
   cython,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "paddleocr";
-  version = "3.0.3";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     tag = "v${version}";
-    hash = "sha256-K01RIyxlh9gp0RerGkqY/AiUy6/u1GAICwj2oz27muw=";
+    hash = "sha256-uOtxJmhhPkl1l9R4Qzx8wuMEVXKTUt5YDK4WHozlmMc=";
   };
 
   patches = [
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     # unmaintained and has been removed from nixpkgs.
     #
     # The image OCR feature of PaddleOCR doesn't use these classes though, so
-    # they work even after stripping the the `IaaAugment` and `CopyPaste`
+    # they work even after stripping the `IaaAugment` and `CopyPaste`
     # exports. It probably breaks some of the OCR model creation tooling that
     # PaddleOCR provides, however.
     ./remove-import-imaug.patch
@@ -56,7 +57,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==72.1.0" ""
+      --replace-fail "setuptools==72.1.0" "setuptools"
   '';
 
   build-system = [
@@ -64,15 +65,8 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
-  ];
-
   dependencies = [
+    aiohttp
     attrdict
     beautifulsoup4
     cython
@@ -117,7 +111,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

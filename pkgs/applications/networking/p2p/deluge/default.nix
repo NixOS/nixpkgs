@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator,
   glib,
   gobject-introspection,
   librsvg,
@@ -40,31 +41,34 @@ let
           service-identity
           libtorrent-rasterbar.dev
           libtorrent-rasterbar.python
-          setuptools
+          # pkg_resources was removed in setuptools>=82; deluge 2.2.0 still uses it
+          # standard-pkg-resources is an independent PyPI redistribution providing it
+          # TODO: remove once deluge migrates off pkg_resources
+          standard-pkg-resources
           setproctitle
           pillow
           rencode
           six
           zope-interface
           dbus-python
-          pycairo
-          librsvg
         ]
         ++ optionals withGUI [
+          pycairo
+          librsvg
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator
         ];
 
-      nativeBuildInputs =
-        [
-          intltool
-          glib
-        ]
-        ++ optionals withGUI [
-          gobject-introspection
-          wrapGAppsHook3
-        ];
+      nativeBuildInputs = [
+        intltool
+        glib
+      ]
+      ++ optionals withGUI [
+        gobject-introspection
+        wrapGAppsHook3
+      ];
 
       nativeCheckInputs = with pypkgs; [
         pytestCheckHook
@@ -77,24 +81,23 @@ let
 
       doCheck = false; # tests are not working at all
 
-      postInstall =
-        ''
-          install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
-        ''
-        + (
-          if withGUI then
-            ''
-              mkdir -p $out/share
-              cp -R deluge/ui/data/{icons,pixmaps} $out/share/
-              install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
-            ''
-          else
-            ''
-              rm -r $out/bin/deluge-gtk
-              rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
-              rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
-            ''
-        );
+      postInstall = ''
+        install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
+      ''
+      + (
+        if withGUI then
+          ''
+            mkdir -p $out/share
+            cp -R deluge/ui/data/{icons,pixmaps} $out/share/
+            install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+          ''
+        else
+          ''
+            rm -r $out/bin/deluge-gtk
+            rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
+            rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
+          ''
+      );
 
       postFixup = ''
         for f in $out/lib/systemd/system/*; do
@@ -104,14 +107,12 @@ let
 
       passthru.tests = { inherit (nixosTests) deluge; };
 
-      meta = with lib; {
+      meta = {
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
-        license = licenses.gpl3Plus;
-        maintainers = with maintainers; [
-          ebzzry
-        ];
-        platforms = platforms.all;
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [ a-peirogon ];
+        platforms = lib.platforms.all;
       };
     };
 

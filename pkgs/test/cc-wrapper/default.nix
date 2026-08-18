@@ -116,6 +116,16 @@ stdenv.mkDerivation {
       ''
     }
 
+    ${
+      # Check whether fuse-ld=gold works on our GNU toolchain
+      # Regression test for https://github.com/NixOS/nixpkgs/issues/49071
+      lib.optionalString stdenv.cc.isGNU ''
+        echo "checking whether compiler builds valid C binaries... " >&2
+        CFLAGS="-fuse-ld=gold" ${CC} -o cc-check ${./cc-main.c}
+        ${emulator} ./cc-check
+      ''
+    }
+
     echo "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2
     mkdir -p foo/include
     cp ${./foo.c} foo/include/foo.h

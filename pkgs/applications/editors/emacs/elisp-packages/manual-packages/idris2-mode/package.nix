@@ -16,7 +16,7 @@ melpaBuild {
   src = fetchFromGitHub {
     owner = "idris-community";
     repo = "idris2-mode";
-    rev = version;
+    tag = version;
     hash = "sha256-rTeVjkAw44Q35vjaERs4uoZRJ6XR3FKplEUCVPHhY7Q=";
   };
 

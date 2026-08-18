@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsnake";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "alexdantas";
     repo = "nSnake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MixwIhyymruruV8G8PjmR9EoZBpaDVBCKBccSFL0lS8=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ clerie ];
   };
-}
+})

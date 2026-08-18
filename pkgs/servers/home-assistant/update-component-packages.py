@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt-rfc-style
+#! nix-shell -i python3 -p "python314.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -25,7 +25,7 @@ import tarfile
 import tempfile
 from functools import reduce
 from io import BytesIO
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 from urllib.request import urlopen
 
 from packaging import version as Version
@@ -34,17 +34,21 @@ from rich.console import Console
 from rich.table import Table
 
 COMPONENT_PREFIX = "homeassistant.components"
-PKG_SET = "home-assistant.python.pkgs"
+PKG_SET = "home-assistant.python3Packages"
 
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "av": "av",
+    "caldav": "caldav",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
+    "fints": "fints",
     "HAP-python": "hap-python",
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
     "paho-mqtt": "paho-mqtt",
+    "pyrate-limiter": "pyrate-limiter",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
@@ -55,9 +59,7 @@ PKG_PREFERENCES = {
 # Some dependencies are loaded dynamically at runtime, and are not
 # mentioned in the manifest files.
 EXTRA_COMPONENT_DEPS = {
-    "conversation": [
-        "intent"
-    ],
+    "conversation": ["intent"],
     "default_config": [
         "backup",
     ],
@@ -69,17 +71,17 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
+    "ouman-eh-800-api": "0.5.0",
+    "proxmoxer": "2.2.0",
+    "py-cpuinfo": "9.0.0",
     "pybluez": "0.22",
+    "pyps4-2ndscreen": "1.3.1",
 }
 
 
-
-def run_sync(cmd: List[str]) -> None:
+def run_sync(cmd: list[str]) -> None:
     print(f"$ {' '.join(cmd)}")
-    process = subprocess.run(cmd)
-
-    if process.returncode != 0:
-        sys.exit(1)
+    subprocess.run(cmd, check=True)
 
 
 def get_version() -> str:
@@ -94,10 +96,13 @@ def parse_components(version: str = "master"):
     components = {}
     components_with_tests = []
     with tempfile.TemporaryDirectory() as tmp:
-        with urlopen(
-            f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
-        ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
+        with (
+            urlopen(
+                f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
+            ) as response,
+            tarfile.open(fileobj=BytesIO(response.read())) as tar,
+        ):
+            tar.extractall(tmp, filter="data")
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
 
@@ -107,6 +112,7 @@ def parse_components(version: str = "master"):
 
         sys.path.append(core_path)
         from script.hassfest.model import Config, Integration  # type: ignore
+
         config = Config(
             root=pathlib.Path(core_path),
             specific_integrations=None,
@@ -125,7 +131,9 @@ def parse_components(version: str = "master"):
 
 
 # Recursively get the requirements of a component and its dependencies
-def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
+def get_reqs(
+    components: dict[str, dict[str, Any]], component: str, processed: set[str]
+) -> set[str]:
     requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
     deps.extend(components[component].get("after_dependencies", []))
@@ -140,7 +148,7 @@ def repository_root() -> str:
     return os.path.abspath(sys.argv[0] + "/../../../..")
 
 
-# For a package attribute and and an extra, check if the package exposes it via passthru.optional-dependencies
+# For a package attribute and an extra, check if the package exposes it via passthru.optional-dependencies
 def has_extra(package: str, extra: str):
     cmd = [
         "nix-instantiate",
@@ -160,7 +168,7 @@ def has_extra(package: str, extra: str):
     return True
 
 
-def dump_packages() -> Dict[str, Dict[str, str]]:
+def dump_packages() -> dict[str, dict[str, str]]:
     # Store a JSON dump of Nixpkgs' python3Packages
     output = subprocess.check_output(
         [
@@ -170,21 +178,23 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
             "-qa",
             "-A",
             PKG_SET,
-            "--arg", "config", "{ allowAliases = false; }",
+            "--arg",
+            "config",
+            "{ allowAliases = false; }",
             "--json",
         ]
     )
     return json.loads(output)
 
 
-def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+def name_to_attr_path(req: str, packages: dict[str, dict[str, str]]) -> str | None:
     if req in PKG_PREFERENCES:
         return f"{PKG_SET}.{PKG_PREFERENCES[req]}"
     attr_paths = []
     names = [req]
     # E.g. python-mpd2 is actually called python3.6-mpd2
     # instead of python-3.6-python-mpd2 inside Nixpkgs
-    if req.startswith("python-") or req.startswith("python_"):
+    if req.startswith(("python-", "python_")):
         names.append(req[len("python-") :])
     for name in names:
         # treat "-" and "_" equally
@@ -192,7 +202,9 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         # python(minor).(major)-(pname)-(version or unstable-date)
         # we need the version qualifier, or we'll have multiple matches
         # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
-        pattern = re.compile(f"^python\\d+\\.\\d+-{name}-(?:\\d|unstable-.*)", re.I)
+        pattern = re.compile(
+            f"^python\\d+\\.\\d+-{name}-(?:\\d|unstable-.*)", re.IGNORECASE
+        )
         for attr_path, package in packages.items():
             if pattern.match(package["name"]):
                 attr_paths.append(attr_path)
@@ -204,7 +216,7 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         return None
 
 
-def get_pkg_version(attr_path: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+def get_pkg_version(attr_path: str, packages: dict[str, dict[str, str]]) -> str | None:
     pkg = packages.get(attr_path, None)
     if not pkg:
         return None
@@ -214,7 +226,7 @@ def get_pkg_version(attr_path: str, packages: Dict[str, Dict[str, str]]) -> Opti
 def main() -> None:
     packages = dump_packages()
     version = get_version()
-    print("Generating component-packages.nix for version {}".format(version))
+    print(f"Generating component-packages.nix for version {version}")
     components, components_with_tests = parse_components(version=version)
     build_inputs = {}
     outdated = {}
@@ -233,34 +245,43 @@ def main() -> None:
             # Split package name and extra requires
             extras = []
             if name.endswith("]"):
-                extras = name[name.find("[")+1:name.find("]")].split(",")
-                name = name[:name.find("[")]
+                extras = name[name.find("[") + 1 : name.find("]")].split(",")
+                name = name[: name.find("[")]
             attr_path = name_to_attr_path(name, packages)
-            if attr_path:
+            if attr_path:  # noqa: SIM102
                 if our_version := get_pkg_version(attr_path, packages):
                     attr_name = attr_path.split(".")[-1]
                     attr_outdated = False
                     try:
                         Version.parse(our_version)
                     except InvalidVersion:
-                        print(f"Attribute {attr_name} has invalid version specifier {our_version}", file=sys.stderr)
+                        print(
+                            f"Attribute {attr_name} has invalid version specifier {our_version}",
+                            file=sys.stderr,
+                        )
 
                         # allow specifying that our unstable version is newer than some version
-                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(attr_name):
-                            attr_outdated = Version.parse(newer_than_version) < Version.parse(required_version)
+                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(
+                            attr_name
+                        ):
+                            attr_outdated = Version.parse(
+                                newer_than_version
+                            ) < Version.parse(required_version)
                         else:
                             attr_outdated = True
                     else:
-                        attr_outdated = Version.parse(our_version) < Version.parse(required_version)
+                        attr_outdated = Version.parse(our_version) < Version.parse(
+                            required_version
+                        )
                     finally:
                         if attr_outdated:
                             outdated[attr_name] = {
-                              'wanted': required_version,
-                              'current': our_version
+                                "wanted": required_version,
+                                "current": our_version,
                             }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
-                pname = attr_path[len(PKG_SET + "."):]
+                pname = attr_path[len(PKG_SET + ".") :]
                 attr_paths.append(pname)
                 for extra in extras:
                     # Check if package advertises extra requirements
@@ -272,8 +293,7 @@ def main() -> None:
 
             else:
                 missing_reqs.append(name)
-        else:
-            build_inputs[component] = (attr_paths, extra_attrs, missing_reqs)
+        build_inputs[component] = (attr_paths, extra_attrs, missing_reqs)
 
     outpath = os.path.dirname(sys.argv[0]) + "/component-packages.nix"
     with open(outpath, "w") as f:
@@ -295,10 +315,12 @@ def main() -> None:
                 f.write(f" # missing inputs: {' '.join(sorted(missing))}")
             f.write("\n")
         f.write("  };\n")
-        f.write("  # components listed in tests/components for which all dependencies are packaged\n")
+        f.write(
+            "  # components listed in tests/components for which all dependencies are packaged\n"
+        )
         f.write("  supportedComponentsWithTests = [\n")
         for component, deps in build_inputs.items():
-            available, extras, missing = deps
+            _available, _extras, missing = deps
             if len(missing) == 0 and component in components_with_tests:
                 f.write(f'    "{component}"' + "\n")
         f.write("  ];\n")
@@ -306,11 +328,14 @@ def main() -> None:
 
     run_sync(["nixfmt", outpath])
 
-    supported_components = reduce(lambda n, c: n + (build_inputs[c][2] == []),
-                                  components.keys(), 0)
+    supported_components = reduce(
+        lambda n, c: n + (build_inputs[c][2] == []), components.keys(), 0
+    )
     total_components = len(components)
-    print(f"{supported_components} / {total_components} components supported, "
-          f"i.e. {supported_components / total_components:.2%}")
+    print(
+        f"{supported_components} / {total_components} components supported, "
+        f"i.e. {supported_components / total_components:.2%}"
+    )
 
     if outdated:
         table = Table(title="Outdated dependencies")
@@ -318,7 +343,7 @@ def main() -> None:
         table.add_column("Current")
         table.add_column("Wanted")
         for package, version in sorted(outdated.items()):
-            table.add_row(package, version['current'], version['wanted'])
+            table.add_row(package, version["current"], version["wanted"])
 
         console = Console()
         console.print(table)
@@ -326,6 +351,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "check", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=E501,EXE", __file__])
     run_sync(["isort", __file__])
     main()

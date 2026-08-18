@@ -6,16 +6,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tzf-rs";
-  version = "1.0.0";
+  version = "1.3.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ringsaturn";
     repo = "tzf-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cYi8FsB1aR0h1HxqkdFlLwCLzRwVM9Ak1LtjHezCSe0=";
+    hash = "sha256-YFDoNlBLeFqv2aGa4Wbd9CwDAz6FOd+8OjSksGzzzlI=";
   };
 
-  cargoHash = "sha256-9bUQpEP+vc3xwWCicHpl+56OYz3huirSOA4yw1iaxaY=";
+  buildFeatures = [
+    # no method named `to_geojson` found for struct `DefaultFinder` in the current scope
+    "export-geojson"
+  ];
+
+  cargoHash = "sha256-FehvfC5cvmTjMqUR0nTkcUDC/IK+e5S/snKMI9OBJaM=";
 
   passthru.updateScript = nix-update-script { };
 

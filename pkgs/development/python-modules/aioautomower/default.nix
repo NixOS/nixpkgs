@@ -1,54 +1,54 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   ical,
   mashumaro,
-  poetry-core,
+  orjson,
+  hatchling,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  python-dateutil,
+  pyprojectVersionPatchHook,
   syrupy,
   time-machine,
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "2025.6.0";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    tag = version;
-    hash = "sha256-6V3utjqCLQmO2iuWdn6kE8oz9XcJ/sCfeSMWmxL/2NE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Glgh4MIbr1kZUvUzJ43G1sKTCZRGlBknEOBKY4q3iE=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  build-system = [ hatchling ];
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
     ical
     mashumaro
+    orjson
     pyjwt
+    python-dateutil
     tzlocal
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     freezegun
     pytest-asyncio
@@ -61,20 +61,17 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioautomower" ];
 
   disabledTests = [
-    # File is missing
-    "test_standard_mower"
-    # Call no found
-    "test_post_commands"
     # Timezone mismatches
-    "test_full_planner_event"
-    "test_sinlge_planner_event"
+    "test_set_datetime"
+    "test_message_event"
+    "test_async_get_messages"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
-    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

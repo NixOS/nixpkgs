@@ -4,6 +4,7 @@
   fetchurl,
   SDL2,
   ftgl,
+  autoreconfHook,
   pkg-config,
   libpng,
   libjpeg,
@@ -13,19 +14,19 @@
   glew,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   boost,
   glm,
   tinyxml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gource";
-  version = "0.55";
+  version = "0.56";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Gource/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-yCOSEtKLB1CNnkd2GZdoAmgWKPwl6z4E9mcRdwE8AUI=";
+    url = "https://github.com/acaudwell/Gource/releases/download/gource-${finalAttrs.version}/gource-${finalAttrs.version}.tar.gz";
+    hash = "sha256-My2Jual5sXQX+84O3XKxmRTxQJ/RJqE9EXh9DhXcDXk=";
   };
 
   postPatch = ''
@@ -33,7 +34,11 @@ stdenv.mkDerivation rec {
     rm -r src/tinyxml
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
     glew
     SDL2
@@ -44,7 +49,7 @@ stdenv.mkDerivation rec {
     SDL2_image
     libGLU
     libGL
-    libX11
+    libx11
     boost
     glm
     freetype
@@ -58,10 +63,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gource.io/";
     description = "Software version control visualization tool";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Software projects are displayed by Gource as an animated tree with
       the root directory of the project at its centre. Directories
@@ -72,8 +77,8 @@ stdenv.mkDerivation rec {
       Mercurial and Bazaar and SVN. Gource can also parse logs produced
       by several third party tools for CVS repositories.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "gource";
   };
-}
+})

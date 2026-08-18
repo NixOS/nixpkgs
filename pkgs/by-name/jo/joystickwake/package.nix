@@ -1,24 +1,28 @@
 {
   lib,
   python3,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
-  version = "0.4.2";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "foresto";
+  src = fetchFromCodeberg {
+    owner = "forestix";
     repo = "joystickwake";
-    tag = "v${version}";
-    sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qIXXlwZec4CQk93gmY5O3mdGdlNCeXWTr/DDw4vwRUM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    dbus-next
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    dbus-fast
     pyudev
-    xlib
+    python-xlib
   ];
 
   postInstall = ''
@@ -26,16 +30,16 @@ python3.pkgs.buildPythonApplication rec {
     ln -s $out/${python3.sitePackages}/etc $out/etc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Joystick-aware screen waker";
     mainProgram = "joystickwake";
     longDescription = ''
       Linux gamers often find themselves unexpectedly staring at a blank screen, because their display server fails to recognize game controllers as input devices, allowing the screen blanker to activate during gameplay.
       This program works around the problem by temporarily disabling screen blankers when joystick activity is detected.
     '';
-    homepage = "https://github.com/foresto/joystickwake";
-    maintainers = with maintainers; [ bertof ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    homepage = "https://codeberg.org/forestix/joystickwake";
+    maintainers = with lib.maintainers; [ bertof ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

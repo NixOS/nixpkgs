@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   libGL,
   libxkbcommon,
@@ -9,20 +10,27 @@
   rustPlatform,
   shaderc,
   vulkan-loader,
+  stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+let
+  platformPaths = {
+    "aarch64-linux" = "bin/linuxarm64";
+    "i686-linux" = "bin";
+    "x86_64-linux" = "bin/linux64";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
-  version = "0.2";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
-    tag = "v${version}";
-    hash = "sha256-0RICNxF8RBHthve69Z9msTg2+jegg5K4aHYRF0YZ8a4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/K+eXECUi9wGol0IUuIUI9hqhEN8GHaOO5i1xMFNQo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-87JcULH1tAA487VwKVBmXhYTXCdMoYM3gOQTkM53ehE=";
+  cargoHash = "sha256-btGPIujawY5NPmx7hGBxW5ZYi2RvboyQpfw6fA3c3jE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +52,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/lib/xrizer/bin/linux64
-    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/bin/linux64/vrclient.so"
+    mkdir -p $out/lib/xrizer/$platformPath
+    mv "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
   '';
+
+  platformPath = platformPaths."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -55,9 +65,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Supreeeme/xrizer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    # TODO: support more systems
-    # To do so, we need to map systems to the format openvr expects.
-    # i.e. x86_64-linux -> linux64, aarch64-linux -> linuxarm64
-    platforms = [ "x86_64-linux" ];
+    platforms = builtins.attrNames platformPaths;
   };
-}
+})

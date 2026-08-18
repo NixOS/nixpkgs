@@ -16,11 +16,9 @@ with lib;
 
 let
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   cfg = config.virtualisation;
-
-  opt = options.virtualisation;
 
   qemu = cfg.qemu.package;
 
@@ -28,17 +26,11 @@ let
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOpts =
+  driveOptions =
     { ... }:
     {
 
       options = {
-
-        file = mkOption {
-          type = types.str;
-          description = "The file image used for this drive.";
-        };
-
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -137,21 +129,27 @@ let
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
-        echo "Disk image do not exist, creating the virtualisation disk image..."
+        echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
           if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
+              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${lib.getExe hostPkgs.jq} -r '."virtual-size"') / 1024 / 1024 ))
+              DISK_SIZE_MB=${toString cfg.diskSize}
+              if (( DISK_SIZE_MB < BACKING_SIZE_MB )); then
+                OVERLAY_SIZE_MB=$BACKING_SIZE_MB
+              else
+                OVERLAY_SIZE_MB=$DISK_SIZE_MB
+              fi
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                 ''${OVERLAY_SIZE_MB}M
             ''
           else if cfg.useDefaultFilesystems then
             ''
@@ -174,29 +172,19 @@ let
     ${lib.optionalString (cfg.useNixStoreImage) ''
       echo "Creating Nix store image..."
 
-      ${hostPkgs.gnutar}/bin/tar --create \
-        --absolute-names \
-        --verbatim-files-from \
-        --transform 'flags=rSh;s|/nix/store/||' \
-        --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
-        --files-from ${
+      ${import ../../lib/erofs-store-image.nix {
+        inherit hostPkgs;
+        storePaths = "${
           hostPkgs.closureInfo {
             rootPaths = [
               config.system.build.toplevel
               regInfo
             ];
           }
-        }/store-paths \
-        | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-          --quiet \
-          --force-uid=0 \
-          --force-gid=0 \
-          -L ${nixStoreFilesystemLabel} \
-          -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-          -T 0 \
-          --tar=f \
-          "$TMPDIR"/store.img
-
+        }/store-paths";
+        label = nixStoreFilesystemLabel;
+        destination = ''"$TMPDIR"/store.img'';
+      }}
       echo "Created Nix store image."
     ''}
 
@@ -298,15 +286,51 @@ let
 
     ${lib.pipe cfg.emptyDiskImages [
       (lib.imap0 (
-        idx: size: ''
-          test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
+        idx:
+        { size, ... }:
+        ''
+          test -e "empty${toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${toString idx}.qcow2" "${toString size}M"
         ''
       ))
       (builtins.concatStringsSep "")
     ]}
 
+    ${lib.optionalString cfg.qemu.forceAccel (
+      if hostPkgs.stdenv.hostPlatform.isLinux then
+        ''
+          # Check for hardware-accelerated virtualisation support (KVM)
+          if [ ! -e /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm does not exist." >&2
+            echo "Hardware-accelerated virtualisation (KVM) is not available on this system." >&2
+            exit 1
+          elif [ ! -r /dev/kvm ] || [ ! -w /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm is not accessible (permission denied)." >&2
+            echo "Check that the nix build user is in the 'kvm' group or that /dev/kvm has the correct permissions." >&2
+            exit 1
+          fi
+        ''
+      else if hostPkgs.stdenv.hostPlatform.isDarwin then
+        ''
+          # Check for hardware-accelerated virtualisation support (HVF)
+          if ! sysctl -n kern.hv_support 2>/dev/null | grep -q 1; then
+            echo "forceAccel is enabled but Hypervisor.framework is not available on this system." >&2
+            exit 1
+          fi
+        ''
+      else
+        ''
+          echo "forceAccel is enabled but no known accelerator is available for this platform." >&2
+          exit 1
+        ''
+    )}
+
     # Start QEMU.
-    exec ${qemu-common.qemuBinary qemu} \
+    exec ${
+      qemu-common.qemuBinaryWith {
+        qemuPkg = qemu;
+        forceAccel = cfg.qemu.forceAccel;
+      }
+    } \
         -name ${config.system.name} \
         -m ${toString config.virtualisation.memorySize} \
         -smp ${toString config.virtualisation.cores} \
@@ -364,6 +388,7 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
+    ./credentials-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -395,6 +420,10 @@ in
       ]
       "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`"
     )
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "useSecureBoot"
+    ] "The default OVMF now always supports Secure Boot.")
   ];
 
   options = {
@@ -405,7 +434,7 @@ in
       type = types.ints.positive;
       default = 1024;
       description = ''
-        The memory size in megabytes of the virtual machine.
+        The memory size of the virtual machine in MiB (1024×1024 bytes).
       '';
     };
 
@@ -436,7 +465,7 @@ in
     virtualisation.bootLoaderDevice = mkOption {
       type = types.path;
       default = "/dev/disk/by-id/virtio-${rootDriveSerialAttr}";
-      defaultText = literalExpression ''/dev/disk/by-id/virtio-${rootDriveSerialAttr}'';
+      defaultText = literalExpression "/dev/disk/by-id/virtio-${rootDriveSerialAttr}";
       example = "/dev/disk/by-id/virtio-boot-loader-device";
       description = ''
         The path (inside th VM) to the device to boot from when legacy booting.
@@ -468,7 +497,7 @@ in
     virtualisation.rootDevice = mkOption {
       type = types.nullOr types.path;
       default = "/dev/disk/by-label/${rootFilesystemLabel}";
-      defaultText = literalExpression ''/dev/disk/by-label/${rootFilesystemLabel}'';
+      defaultText = literalExpression "/dev/disk/by-label/${rootFilesystemLabel}";
       example = "/dev/disk/by-label/nixos";
       description = ''
         The path (inside the VM) to the device containing the root filesystem.
@@ -476,11 +505,25 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf types.ints.positive;
+      type = types.listOf (
+        types.coercedTo types.ints.positive (size: { inherit size; }) (
+          types.submodule {
+            options.size = mkOption {
+              type = types.ints.positive;
+              description = "The size of the disk in MiB";
+            };
+            options.driveConfig = mkOption {
+              type = lib.types.submodule driveOptions;
+              default = { };
+              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
+            };
+          }
+        )
+      );
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
-        a list of size in megabytes of each disk. These disks are
+        a list of size in MiB (1024×1024 bytes) of each disk. These disks are
         writeable by the VM.
       '';
     };
@@ -502,7 +545,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display.
+        The resolution of the virtual machine display (relevant only if virtualised machine uses grub bootloader).
       '';
     };
 
@@ -664,57 +707,6 @@ in
       '';
     };
 
-    virtualisation.vlans = mkOption {
-      type = types.listOf types.ints.unsigned;
-      default = if config.virtualisation.interfaces == { } then [ 1 ] else [ ];
-      defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
-      example = [
-        1
-        2
-      ];
-      description = ''
-        Virtual networks to which the VM is connected.  Each
-        number «N» in this list causes
-        the VM to have a virtual Ethernet interface attached to a
-        separate virtual network on which it will be assigned IP
-        address
-        `192.168.«N».«M»`,
-        where «M» is the index of this VM
-        in the list of VMs.
-      '';
-    };
-
-    virtualisation.interfaces = mkOption {
-      default = { };
-      example = {
-        enp1s0.vlan = 1;
-      };
-      description = ''
-        Network interfaces to add to the VM.
-      '';
-      type =
-        with types;
-        attrsOf (submodule {
-          options = {
-            vlan = mkOption {
-              type = types.ints.unsigned;
-              description = ''
-                VLAN to which the network interface is connected.
-              '';
-            };
-
-            assignIP = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically assign an IP address to the network interface using the same scheme as
-                virtualisation.vlans.
-              '';
-            };
-          };
-        });
-    };
-
     virtualisation.writableStore = mkOption {
       type = types.bool;
       default = cfg.mountHostNixStore;
@@ -737,26 +729,12 @@ in
       '';
     };
 
-    networking.primaryIPAddress = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IP address used in /etc/hosts.";
-    };
-
-    networking.primaryIPv6Address = mkOption {
-      type = types.str;
-      default = "";
-      internal = true;
-      description = "Primary IPv6 address used in /etc/hosts.";
-    };
-
     virtualisation.host.pkgs = mkOption {
       type = options.nixpkgs.pkgs.type;
       default = pkgs;
       defaultText = literalExpression "pkgs";
       example = literalExpression ''
-        import pkgs.path { system = "x86_64-darwin"; }
+        import pkgs.path { system = "aarch64-darwin"; }
       '';
       description = ''
         Package set to use for the host-specific packages of the VM runner.
@@ -765,6 +743,8 @@ in
     };
 
     virtualisation.qemu = {
+      enableSharedMemory = mkEnableOption "shared memory";
+
       package = mkOption {
         type = types.package;
         default =
@@ -775,6 +755,17 @@ in
         defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
         example = literalExpression "pkgs.qemu_test";
         description = "QEMU package to use.";
+      };
+
+      forceAccel = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to force the use of hardware-accelerated virtualisation.
+          When enabled, QEMU will not fall back to the slower software
+          emulation (TCG) and will instead error out if the accelerator is not
+          available.
+        '';
       };
 
       options = mkOption {
@@ -828,7 +819,18 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (types.submodule driveOpts);
+        type = types.listOf (
+          types.submodule {
+            imports = [ driveOptions ];
+
+            options = {
+              file = mkOption {
+                type = types.str;
+                description = "The file image used for this drive.";
+              };
+            };
+          }
+        );
         description = "Drives passed to qemu.";
       };
 
@@ -888,6 +890,23 @@ in
       defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
       description = ''
         Mount the host Nix store as a 9p mount.
+      '';
+    };
+
+    virtualisation.nixStore9pCache = mkOption {
+      type = types.enum [
+        "loose"
+        "none"
+        "fscache"
+      ];
+      default = "loose";
+      description = ''
+        Type of 9p cache to use when mounting host nix store. "none" provides
+        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
+        fscache subsystem.
+
+        This option is only respected when {option}`virtualisation.mountHostNixStore`
+        is enabled.
       '';
     };
 
@@ -971,18 +990,7 @@ in
     };
 
     virtualisation.efi = {
-      OVMF = mkOption {
-        type = types.package;
-        default =
-          (pkgs.OVMF.override {
-            secureBoot = cfg.useSecureBoot;
-          }).fd;
-        defaultText = ''
-          (pkgs.OVMF.override {
-                    secureBoot = cfg.useSecureBoot;
-                  }).fd'';
-        description = "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
-      };
+      OVMF = lib.mkPackageOption pkgs "OVMFFull" { };
 
       firmware = mkOption {
         type = types.path;
@@ -1073,14 +1081,6 @@ in
       '';
     };
 
-    virtualisation.useSecureBoot = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable Secure Boot support in the EFI firmware.
-      '';
-    };
-
     virtualisation.bios = mkOption {
       type = types.nullOr types.package;
       default = null;
@@ -1098,6 +1098,24 @@ in
         If enabled, when `NIX_SSL_CERT_FILE` is set on the host,
         pass the CA certificates from the host to the VM.
       '';
+    };
+
+    virtualisation.credentials = mkOption {
+      type = types.attrsOf (
+        lib.types.submodule {
+          options.mechanism = lib.mkOption {
+            type = lib.types.enum [
+              "fw_cfg"
+              "smbios"
+            ];
+            default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
+            defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
+            description = ''
+              The mechanism used to pass the credential to the VM.
+            '';
+          };
+        }
+      );
     };
 
   };
@@ -1129,7 +1147,7 @@ in
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
-            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047 MiB RAM on 32bit max.
           '';
         }
         {
@@ -1178,15 +1196,43 @@ in
     # allow `system.build.toplevel' to be included.  (If we had a direct
     # reference to ${regInfo} here, then we would get a cyclic
     # dependency.)
-    boot.postBootCommands = lib.mkIf config.nix.enable ''
-      if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
-        ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
-      fi
-    '';
+    systemd.services.register-nix-paths = lib.mkIf config.nix.enable {
+      # Run early during boot so the nix store DB is populated before any
+      # service (or test backdoor) tries to use nix commands.
+      # nix-store --load-db writes to the SQLite DB directly, so it does not
+      # need the nix-daemon.
+      unitConfig.DefaultDependencies = false;
+      wantedBy = [
+        "sysinit.target"
+      ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "nix-daemon.socket"
+        "nix-daemon.service"
+      ];
+      after = [
+        "local-fs.target"
+      ];
+      conflicts = [
+        "shutdown.target"
+      ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = lib.mkIf (config.nix.daemonUser != "root") config.nix.daemonUser;
+        Group = lib.mkIf (config.nix.daemonGroup != "root") config.nix.daemonGroup;
+      };
+      script = ''
+        if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
+          ${lib.getExe' config.nix.package.out "nix-store"} --load-db < "''${BASH_REMATCH[1]}"
+        fi
+      '';
+    };
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
-      ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1231,7 +1277,7 @@ in
             + "${guest.address}:${toString guest.port},"
           else
             "'guestfwd=${proto}:${guest.address}:${toString guest.port}-"
-            + "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
+            + "cmd:${hostPkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
         );
         restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
@@ -1249,10 +1295,13 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
+      ])
+      (mkIf cfg.qemu.enableSharedMemory [
+        "-object memory-backend-memfd,id=mem0,size=${toString config.virtualisation.memorySize}M,share=on"
+        "-machine memory-backend=mem0"
       ])
       (
         let
@@ -1289,6 +1338,14 @@ in
         "-global"
         "driver=cfi.pflash01,property=secure,value=on"
       ])
+      (lib.mapAttrsToList (
+        name: cred:
+        if cred.mechanism == "fw_cfg" then
+          "-fw_cfg name=opt/io.systemd.credentials/${name},file=${cred.source}"
+        # smbios - must use base64 encoding (SMBIOS can't handle null bytes)
+        else
+          "-smbios type=11,path=<(echo 'io.systemd.credential.binary:${name}='; base64 -w0 '${cred.source}')"
+      ) cfg.credentials)
     ];
 
     virtualisation.qemu.drives = mkMerge [
@@ -1310,10 +1367,16 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0 (
+        idx: imgCfg:
+        lib.mkMerge [
+          {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          }
+          imgCfg.driveConfig
+        ]
+      ) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
@@ -1337,7 +1400,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ] ++ lib.optional (tag == "nix-store") "cache=loose";
+          ]
+          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
       in
       lib.mkMerge [
@@ -1381,6 +1445,7 @@ in
             else
               {
                 device = "/nix/.ro-store";
+                fsType = "none";
                 options = [ "bind" ];
               }
           );

@@ -8,50 +8,56 @@
   telegraf,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "telegraf";
-  version = "1.35.1";
+  version = "1.39.3";
 
   subPackages = [ "cmd/telegraf" ];
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "telegraf";
-    rev = "v${version}";
-    hash = "sha256-vdn/c3EVtGnCh750IqjMjRxeW2Zimn8PazREL9KZX2Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2Pt5lTRo8twIVoKP8BxJr8LIylZjFAdHYGc2vINyGNo=";
   };
 
-  vendorHash = "sha256-W5Ng7IH4WKq1v1PfO1Wi3eBDonITcIuJzJTmtHPnCmg=";
+  vendorHash = "sha256-Y+FHFWq6eVycNci/Br9WWfJUrBPTLG5xCp/WrA6uzR4=";
   proxyVendor = true;
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/influxdata/telegraf/internal.Commit=${src.rev}"
-    "-X=github.com/influxdata/telegraf/internal.Version=${version}"
+    "-X=github.com/influxdata/telegraf/internal.Commit=${finalAttrs.src.rev}"
+    "-X=github.com/influxdata/telegraf/internal.Version=${finalAttrs.version}"
+  ]
+  # Binary is too large for the default GOT PLT displacements on 32-bit ARM;
+  # need to use larger encoding otherwise linking fails with:
+  # BFD (GNU Binutils) 2.46 assertion fail /build/binutils-with-gold-2.46/bfd/elf32-arm.c:9783
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-extldflags"
+    "-Wl,--long-plt"
   ];
 
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = telegraf;
-      };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) telegraf;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = telegraf;
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) telegraf;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Plugin-driven server agent for collecting & reporting metrics";
     mainProgram = "telegraf";
     homepage = "https://www.influxdata.com/time-series-platform/telegraf/";
-    changelog = "https://github.com/influxdata/telegraf/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/influxdata/telegraf/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mic92
       roblabla
       timstott
       zowoq
     ];
   };
-}
+})

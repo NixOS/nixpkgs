@@ -1,41 +1,33 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildDunePackage,
   ppxlib,
   menhir,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mlx";
-  version = "0.9";
+  version = "0.11";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "mlx";
-    rev = version;
-    hash = "sha256-3hPtyBKD2dp4UJBykOudW6KR2KXPnBuDnuJ1UNLpAp0=";
+    tag = finalAttrs.version;
+    hash = "sha256-6cz/nbFGSxE1minncJujZi14TmM8ctDygJP4rmewYgo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ocaml-mlx/mlx/commit/01771e2a8b45f4f70cfd93533af2af9ed4a28a7e.patch";
-      hash = "sha256-czA2sIORmunIeaHn7kpcuv0y97uJhe6aUEMj/QHEag4=";
-    })
-  ];
 
   buildInputs = [
     ppxlib
     menhir
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml syntax dialect which adds JSX syntax expressions";
     homepage = "https://github.com/ocaml-mlx/mlx";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ Denommus ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ Denommus ];
   };
-}
+})

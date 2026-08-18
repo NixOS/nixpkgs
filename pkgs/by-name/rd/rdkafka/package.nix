@@ -6,20 +6,25 @@
   zstd,
   openssl,
   curl,
+  cyrus_sasl,
   cmake,
   ninja,
+  pkg-config,
   deterministic-host-uname,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.10.1";
+  version = "2.15.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-+ACn+1fjWEnUB32gUCoMpnq+6YBu+rufPT8LY920DBk=";
+    hash = "sha256-WW64fwh0xR4lEVwmrv00tP9mo6b49aCNgLLH/P0YS8k=";
   };
 
   outputs = [
@@ -30,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
     # cross: build system uses uname to determine host system
     deterministic-host-uname
   ];
@@ -39,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     openssl
     curl
+    cyrus_sasl
   ];
 
   # examples and tests don't build on darwin statically
@@ -57,21 +64,23 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isStatic ''
+  postFixup =
     # rdkafka changes the library names for static libraries but users in pkgsStatic aren't likely to be aware of this
     # make sure the libraries are findable with both names
-    for pc in rdkafka{,++}; do
-      ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
-    done
-  '';
+    lib.optionalString stdenv.hostPlatform.isStatic ''
+      for pc in rdkafka{,++}; do
+        ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
+      done
+    '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "librdkafka - Apache Kafka C/C++ client library";
+  meta = {
+    description = "Apache Kafka C/C++ client library";
     homepage = "https://github.com/confluentinc/librdkafka";
-    license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ commandodev ];
+    changelog = "https://github.com/confluentinc/librdkafka/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ commandodev ];
   };
 })

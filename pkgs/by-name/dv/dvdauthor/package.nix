@@ -15,12 +15,12 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvdauthor";
   version = "0.7.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dvdauthor/dvdauthor-${version}.tar.gz";
+    url = "mirror://sourceforge/dvdauthor/dvdauthor-${finalAttrs.version}.tar.gz";
     hash = "sha256-MCCpLen3jrNvSLbyLVoAHEcQeCZjSnhaYt/NCA9hLrc=";
   };
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ldo/dvdauthor/commit/45705ece5ec5d7d6b9ab3e7a68194796a398e855.patch?full_index=1";
       hash = "sha256-tykCr2Axc1qhUvjlGyXQ6X+HwzuFTm5Va2gjGlOlSH0=";
     })
+    ./gettext-0.25.patch
   ];
 
   buildInputs = [
@@ -60,10 +61,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for generating DVD files to be played on standalone DVD players";
     homepage = "https://dvdauthor.sourceforge.net/"; # or https://github.com/ldo/dvdauthor
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -57,14 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://randombytes.cr.yp.to/";
     description = "Simple API for applications generating fresh randomness";
     changelog = "https://randombytes.cr.yp.to/download.html";
-    license = with lib.licenses; [
-      # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
-      publicDomain
-      cc0
-      bsd0
-      mit
-      mit0
-    ];
+    license =
+      # Upstream specifies the public domain licenses with the terms here https://randombytes.cr.yp.to/license.html
+      lib.licenses.OR [
+        lib.licenses.publicDomain
+        lib.licenses.cc0
+        lib.licenses.bsd0
+        lib.licenses.mit
+        lib.licenses.mit0
+      ];
     maintainers = with lib.maintainers; [
       kiike
       imadnyc
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       "riscv64-linux"
       "s390x-linux"
       # Upstream package supports sparc, but nix does not
-    ] ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
+    ]
+    ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
   };
 })

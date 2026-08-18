@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "photon";
   version = "1.3.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Photon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "02z1xj72bq35dilr4b6njry4kixz6j2a3ag02nla98q0fvgmgnvy";
   };
 
@@ -34,11 +34,11 @@ python3Packages.buildPythonApplication rec {
       --add-flags "-O $out/share/photon/photon.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightning fast web crawler which extracts URLs, files, intel & endpoints from a target";
     homepage = "https://github.com/s0md3v/Photon";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "photon";
   };
-}
+})

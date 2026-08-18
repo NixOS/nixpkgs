@@ -6,35 +6,43 @@
 
 python3Packages.buildPythonApplication {
   pname = "joycond-cemuhook";
+  version = "0-unstable-2024-12-27";
   pyproject = true;
-  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "joaorb64";
     repo = "joycond-cemuhook";
-    rev = "3c0e07374ff431a0f8ae70dbb0b5a62fb3de06ee";
-    hash = "sha256-K24CEmYWhgkvVX4geg2bylH8TSvHIpsWjsPwY5BpquI=";
+    rev = "fc2f29e22640b6615a32941cbdc03d41e3ee6f26";
+    hash = "sha256-ud9X+GfVzoPQM4bSDzczgrn8rJRmXy7tT6mBY3BNnFA=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools-git-versioning<2' "setuptools-git-versioning"
+  '';
+
+  build-system = with python3Packages; [
     setuptools
+    wheel
     setuptools-git-versioning
-    setuptools-git
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    dbus-python
+  dependencies = with python3Packages; [
     evdev
     pyudev
+    dbus-python
     termcolor
+    pygobject-stubs
+    # Not explicitly stated, but required
+    pygobject3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joaorb64/joycond-cemuhook";
     description = "Support for cemuhook's UDP protocol for joycond devices";
-    license = licenses.mit;
-    maintainers = [ maintainers.noodlez1232 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.noodlez1232 ];
     mainProgram = "joycond-cemuhook";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

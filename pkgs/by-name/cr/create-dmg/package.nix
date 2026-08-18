@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "create-dmg";
     repo = "create-dmg";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oWrQT9nuFcJRwwXd5q4IqhG7M77aaazBG0+JSHAzPvw=";
   };
 

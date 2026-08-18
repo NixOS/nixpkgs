@@ -7,7 +7,7 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 makeTest {
   name = "tigervnc";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 
@@ -17,7 +17,7 @@ makeTest {
       {
         environment.systemPackages = with pkgs; [
           tigervnc # for Xvnc
-          xorg.xwininfo
+          xwininfo
           imagemagickBig # for display with working label: support
         ];
         networking.firewall.allowedTCPPorts = [ 5901 ];

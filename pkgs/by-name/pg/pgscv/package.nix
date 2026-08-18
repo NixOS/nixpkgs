@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgscv";
-  version = "0.14.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "CHERTS";
     repo = "pgscv";
-    tag = "v${version}";
-    hash = "sha256-jUTHaZvJ6O3dVhBGO+ZFT9A7KmKieR2viGhZXwOv5S8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xU06W4364pozLfK4viFRyclrqTXnSQoGmwNTwwiUH10=";
   };
 
-  vendorHash = "sha256-v4Xi2R+q2jGD3Fy6xvKNRaf+P725acr+tvdDxod2KiI=";
+  vendorHash = "sha256-MYju9DexwrVSGBg70knry0qfYxjkif/sDLEKWNDygnM=";
 
   ldflags = [
     "-X=main.appName=pgscv"
-    "-X=main.gitTag=${src.tag}"
-    "-X=main.gitCommit=${src.tag}"
-    "-X=main.gitBranch=${src.tag}"
+    "-X=main.gitTag=${finalAttrs.src.tag}"
+    "-X=main.gitCommit=${finalAttrs.src.tag}"
+    "-X=main.gitBranch=${finalAttrs.src.tag}"
   ];
 
   # tests rely on a pretty complex Postgres setup
@@ -32,12 +32,12 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "PgSCV is a PostgreSQL ecosystem metrics collector";
+    description = "PostgreSQL ecosystem metrics collector";
     homepage = "https://github.com/CHERTS/pgscv/";
-    changelog = "https://github.com/CHERTS/pgscv/releases/${version}";
+    changelog = "https://github.com/CHERTS/pgscv/releases/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "pgscv";
   };
-}
+})

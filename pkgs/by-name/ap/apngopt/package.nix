@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apngopt";
   version = "1.4";
 
   src = fetchzip {
-    url = "mirror://sourceforge/apng/apngopt-${version}-src.zip";
+    url = "mirror://sourceforge/apng/apngopt-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-MAqth5Yt7+SabY6iEgSFcaBmuHvA0ZkNdXSgvhKao1Y=";
   };
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/apng/";
     description = "Optimizes APNG animations";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
-}
+})

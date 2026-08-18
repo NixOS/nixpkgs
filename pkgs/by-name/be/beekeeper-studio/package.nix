@@ -3,8 +3,10 @@
   stdenv,
   fetchurl,
   dpkg,
+  unzip,
   autoPatchelfHook,
   makeWrapper,
+  runtimeShell,
   glibc,
   gcc,
   glib,
@@ -18,7 +20,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   alsa-lib,
   expat,
   libxkbcommon,
@@ -27,43 +35,48 @@
   systemd,
   libGL,
   krb5,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.2.12";
+  version = "6.0.0";
 
   src =
     let
       selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
-      arch = selectSystem {
-        x86_64-linux = "amd64";
-        aarch64-linux = "arm64";
+      asset = selectSystem {
+        x86_64-linux = "beekeeper-studio_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "beekeeper-studio_${finalAttrs.version}_arm64.deb";
+        aarch64-darwin = "Beekeeper-Studio-${finalAttrs.version}-arm64-mac.zip";
       };
     in
     fetchurl {
-      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
+      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-hpzvu4SyVLXhQ5wbh5hyx+8tM19SxkKZvlMVhzhDCW4=";
-        aarch64-linux = "sha256-s567NOTzTItfOdsABIzYoF8iYSpwDsDzbnLZhUSfT8o=";
+        x86_64-linux = "sha256-mTS5elz54AbbYF6AtPaeZvbR7ysB6a6iu+lbaTrwv5k=";
+        aarch64-linux = "sha256-KSz60oSR5UcVM5p8swRqBCZknGob7/MEMtAI2UmN2Q0=";
+        aarch64-darwin = "sha256-71xe4uWRb83WgvZvwqv52tubZ+8CKKuU1/zQnV0aSGw=";
       };
     };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxcb
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxcb
     libxkbcommon
     glibc
     gcc
@@ -84,13 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     krb5
+    unixodbc
   ];
 
-  runtimeDependencies = map lib.getLib [ systemd ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     cp -r usr $out
     substituteInPlace $out/share/applications/beekeeper-studio.desktop \
       --replace-fail '"/opt/Beekeeper Studio/beekeeper-studio"' "beekeeper-studio"
@@ -98,11 +113,24 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r opt/"Beekeeper Studio" $out/opt/beekeeper-studio
     makeWrapper $out/opt/beekeeper-studio/beekeeper-studio-bin $out/bin/beekeeper-studio \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications" "$out/bin"
+    cp -R . "$out/Applications/Beekeeper Studio.app"
+    # Create a launcher script to run from the command line
+    cat > "$out/bin/beekeeper-studio" << EOF
+    #!${runtimeShell}
+    open -na "$out/Applications/Beekeeper Studio.app" --args "\$@"
+    EOF
+    chmod +x "$out/bin/beekeeper-studio"
+  ''
+  + ''
     runHook postInstall
   '';
 
-  preFixup = ''
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-needed libGL.so.1 \
       --add-needed libEGL.so.1 \
       --add-rpath ${
@@ -124,11 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       milogert
       alexnortung
+      iamanaws
     ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
+      "aarch64-darwin"
     ];
-    knownVulnerabilities = [ "Electron version 31 is EOL" ];
   };
 })

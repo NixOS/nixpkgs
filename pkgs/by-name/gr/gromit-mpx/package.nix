@@ -6,9 +6,9 @@
   pkg-config,
   gtk3,
   glib,
-  libappindicator-gtk3,
-  libpthreadstubs,
-  xorg,
+  libappindicator,
+  libpthread-stubs,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   at-spi2-core,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gromit-mpx";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     tag = finalAttrs.version;
-    hash = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
+    hash = "sha256-DgPhQtLmrhcRInaY4s23izWte86DczprjnWhfiiYsSE=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     glib
-    libappindicator-gtk3
-    libpthreadstubs
-    xorg.libXdmcp
+    libappindicator
+    libpthread-stubs
+    libxdmcp
     libxkbcommon
     libepoxy
     at-spi2-core

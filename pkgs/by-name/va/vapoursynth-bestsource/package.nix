@@ -7,13 +7,13 @@
   pkg-config,
   vapoursynth,
   ffmpeg,
-  xxHash,
+  xxhash,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-bestsource";
-  version = "11";
+  version = "13";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapoursynth";
     repo = "bestsource";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-/hRjo7MQhm/ANUC38p9btOO5ek4Q6IaeKtcSbTzD3BQ=";
+    hash = "sha256-c+FMFWICDS8Plj6GE2vvhWPmf56Vk10j41HUK1q20/U=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     vapoursynth
     (ffmpeg.override { withLcms2 = true; })
-    xxHash
+    xxhash
   ];
 
   postPatch = ''

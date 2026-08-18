@@ -13,48 +13,50 @@
   libffi,
   wayland,
   egl-wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiliwili";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "xfangfang";
     repo = "wiliwili";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-37DQafP+PFjrfNXJt88oK0ghqQEVQjDdVbYsf1tHAN4=";
+    hash = "sha256-J6oUMUzfogsIBj1GpwWmKhjphTV628rG+3w28Dc81Fw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      openssl
-      curl
-      libxkbcommon
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi # needed for wayland
-      wayland
-      egl-wayland
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXi
-    ];
+  buildInputs = [
+    mpv-unwrapped
+    openssl
+    curl
+    libxkbcommon
+    dbus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi # needed for wayland
+    wayland
+    egl-wayland
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "PLATFORM_DESKTOP" true)

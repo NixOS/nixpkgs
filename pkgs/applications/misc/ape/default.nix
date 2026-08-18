@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     makeWrapper $out/ape.exe $out/bin/ape --add-flags ace
   '';
 
-  meta = with lib; {
+  meta = {
     description = description;
     homepage = "https://github.com/Attempto/APE";
     license = license;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yrashk ];
     mainProgram = "ape";
   };
 }

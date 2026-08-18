@@ -33,14 +33,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Crypto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
     changelog = "https://github.com/Legrandin/pycryptodome/blob/${src.tag}/Changelog.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2 # and
       asl20
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

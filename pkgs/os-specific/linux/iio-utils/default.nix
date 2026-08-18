@@ -14,10 +14,10 @@ stdenv.mkDerivation {
     cd tools/iio
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace tool for interacting with Linux IIO";
     homepage = "https://www.kernel.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

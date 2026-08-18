@@ -5,7 +5,7 @@
   libspelling,
   fetchFromGitHub,
   python312Packages,
-  nodePackages,
+  mathjax,
   meson,
   ninja,
   pkg-config,
@@ -20,14 +20,14 @@
 }:
 
 let
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NPpBu6Wmd8z99vzVQ394CyHRV2RQBtkbuqcaFqKqlkQ=";
+    tag = "v${version}";
+    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
 
   reveal-js = fetchFromGitHub {
@@ -36,7 +36,7 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    rev = "refs/tags/5.1.0";
+    tag = "5.1.0";
     hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in
@@ -48,18 +48,17 @@ python312Packages.buildPythonApplication {
   pname = "apostrophe";
   pyproject = false;
 
-  postPatch =
-    ''
-      substituteInPlace build-aux/meson_post_install.py \
-        --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+  postPatch = ''
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
 
-      patchShebangs --build build-aux/meson_post_install.py
-    ''
-    # Use mathjax from nixpkgs to avoid loading from CDN
-    + ''
-      substituteInPlace apostrophe/preview_converter.py \
-        --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
-    '';
+    patchShebangs --build build-aux/meson_post_install.py
+  ''
+  # Use mathjax from nixpkgs to avoid loading from CDN
+  + ''
+    substituteInPlace apostrophe/preview_converter.py \
+      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
+  '';
 
   # Should be done in postInstall, but meson checks this eagerly before build
   preConfigure = ''
@@ -88,6 +87,7 @@ python312Packages.buildPythonApplication {
     pypandoc
     chardet
     levenshtein
+    regex
   ];
 
   dontWrapGApps = true;

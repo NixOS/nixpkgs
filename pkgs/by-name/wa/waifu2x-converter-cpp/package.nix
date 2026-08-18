@@ -12,14 +12,14 @@
   cudatoolkit ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waifu2x-converter-cpp";
   version = "5.3.4";
 
   src = fetchFromGitHub {
     owner = "DeadSix27";
     repo = "waifu2x-converter-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0rv8bnyxz89za6gwk9gmdbaf3j7c1j52mip7h81rir288j35m84x";
   };
 
@@ -28,15 +28,14 @@ stdenv.mkDerivation rec {
     ./waifu2x_darwin_build.diff
   ];
 
-  buildInputs =
-    [
-      opencv4
-    ]
-    ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      ocl-icd
-      opencl-headers
-    ];
+  buildInputs = [
+    opencv4
+  ]
+  ++ lib.optional cudaSupport cudatoolkit
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ocl-icd
+    opencl-headers
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "waifu2x-converter-cpp";
   };
-}
+})

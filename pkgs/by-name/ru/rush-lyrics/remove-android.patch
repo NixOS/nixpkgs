@@ -1,0 +1,133 @@
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index 1535716..ccca9fb 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -45,8 +45,4 @@ plugins { id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+ 
+ include(":shared:core", ":shared:ui", ":shared:logic")
+ 
+-include(":androidLibs:romanization", ":androidLibs:visualizer-helper")
+-
+-include(":androidApp")
+-
+ include(":desktopApp")
+diff --git a/shared/core/build.gradle.kts b/shared/core/build.gradle.kts
+index a4e7587..f2404ee 100644
+--- a/shared/core/build.gradle.kts
++++ b/shared/core/build.gradle.kts
+@@ -17,7 +17,6 @@
+ plugins {
+     alias(libs.plugins.kotlin.multiplatform)
+     alias(libs.plugins.kotlin.serialization)
+-    alias(libs.plugins.android.kotlin.multiplatform.library)
+ }
+ 
+ kotlin {
+@@ -26,13 +25,6 @@ kotlin {
+         freeCompilerArgs.add("-Xexpect-actual-classes")
+     }
+ 
+-    android {
+-        namespace = "com.shub39.rush.shared.core"
+-        compileSdk { version = release(libs.versions.compileSdk.get().toInt()) }
+-        minSdk { version = release(libs.versions.minSdk.get().toInt()) }
+-        withHostTest {}
+-    }
+-
+     jvm()
+ 
+     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+diff --git a/shared/logic/build.gradle.kts b/shared/logic/build.gradle.kts
+index ef5a1dd..db72417 100644
+--- a/shared/logic/build.gradle.kts
++++ b/shared/logic/build.gradle.kts
+@@ -19,7 +19,6 @@ import java.util.Properties
+ plugins {
+     alias(libs.plugins.kotlin.multiplatform)
+     alias(libs.plugins.kotlin.serialization)
+-    alias(libs.plugins.android.kotlin.multiplatform.library)
+     alias(libs.plugins.compose.multiplatform)
+     alias(libs.plugins.compose.compiler)
+     alias(libs.plugins.build.config)
+@@ -35,15 +34,6 @@ kotlin {
+         freeCompilerArgs.add("-Xexpect-actual-classes")
+     }
+ 
+-    android {
+-        namespace = "com.shub39.rush.shared.logic"
+-        compileSdk { version = release(libs.versions.compileSdk.get().toInt()) }
+-        minSdk { version = release(libs.versions.minSdk.get().toInt()) }
+-        withHostTest {}
+-
+-        androidResources { enable = true }
+-    }
+-
+     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+         iosTarget.binaries.framework {
+             baseName = "SharedLogic"
+@@ -81,10 +71,6 @@ kotlin {
+             implementation(libs.ktor.client.darwin)
+             implementation(libs.androidx.sqlite.bundled)
+         }
+-        androidMain.dependencies {
+-            implementation(libs.ktor.client.okhttp)
+-            implementation(projects.androidLibs.romanization)
+-        }
+         jvmMain.dependencies {
+             implementation(libs.ktor.client.okhttp)
+             implementation(libs.androidx.sqlite.bundled)
+@@ -117,7 +103,6 @@ room3 { schemaDirectory("$projectDir/schemas") }
+ 
+ dependencies {
+     add("kspJvm", libs.androidx.room.compiler)
+-    add("kspAndroid", libs.androidx.room.compiler)
+     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+     add("kspIosArm64", libs.androidx.room.compiler)
+ }
+diff --git a/shared/ui/build.gradle.kts b/shared/ui/build.gradle.kts
+index cf0d519..9ab57e2 100644
+--- a/shared/ui/build.gradle.kts
++++ b/shared/ui/build.gradle.kts
+@@ -18,7 +18,6 @@
+ plugins {
+     alias(libs.plugins.kotlin.multiplatform)
+     alias(libs.plugins.kotlin.serialization)
+-    alias(libs.plugins.android.kotlin.multiplatform.library)
+     alias(libs.plugins.compose.multiplatform)
+     alias(libs.plugins.compose.compiler)
+     alias(libs.plugins.koin.compiler)
+@@ -42,13 +41,6 @@ kotlin {
+         )
+     }
+ 
+-    android {
+-        namespace = "com.shub39.rush.shared.ui"
+-        compileSdk { version = release(libs.versions.compileSdk.get().toInt()) }
+-        minSdk { version = release(libs.versions.minSdk.get().toInt()) }
+-        androidResources { enable = true }
+-    }
+-
+     jvm()
+ 
+     sourceSets {
+@@ -79,20 +71,9 @@ kotlin {
+             implementation(libs.koin.compose.viewmodel.navigation)
+             implementation(libs.koin.annotations)
+         }
+-        androidMain.dependencies {
+-            implementation(projects.androidLibs.visualizerHelper)
+-            implementation(libs.accompanist.permissions)
+-        }
+     }
+ }
+ 
+ dependencies {
+-    androidRuntimeClasspath(libs.compose.ui.tooling)
+-    androidRuntimeClasspath(libs.compose.ui.tooling.preview)
+ }
+ 
+-androidComponents {
+-    onVariants { variant ->
+-        variant.sources.res?.addStaticSourceDirectory("src/commonMain/composeResources")
+-    }
+-}

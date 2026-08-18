@@ -15,7 +15,6 @@
   pytestCheckHook,
   python-box,
   python-dateutil,
-  pythonOlder,
   requests-pkcs12,
   requests-toolbelt,
   requests,
@@ -26,24 +25,17 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.8.0";
+  version = "26.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = version;
-    hash = "sha256-859+qKkOZBVU96QJI4YlQGXM9O81yjMmmwhAlxqO4QY=";
+    tag = finalAttrs.version;
+    hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-    "defusedxml"
-  ];
 
   build-system = [ setuptools ];
 
@@ -73,6 +65,10 @@ buildPythonPackage rec {
     responses
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   disabledTestPaths = [
     # Disable tests that requires network access
     "tests/io/"
@@ -87,15 +83,23 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    "test_session_ssl_error"
+    # https://github.com/tenable/pyTenable/issues/953
+    "test_construct_query_str"
+    "test_construct_query_stored_file"
+    "test_iterator_empty_page"
+    "test_iterator_max_page_term"
+    "test_iterator_pagination"
+    "test_iterator_total_term"
   ];
 
   pythonImportsCheck = [ "tenable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   callPackage,
   installShellFiles,
   mkShell,
@@ -9,31 +8,16 @@
   python3Packages,
   runCommand,
   scdoc,
-  withNgSuffix ? true,
-  withReexec ? false,
   withShellFiles ? true,
-  # Very long tmp dirs lead to "too long for Unix domain socket"
-  # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-  withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
-  # This version is kind of arbitrary, we use some features that were
-  # implemented in newer versions of Nix, but not necessary 2.18.
-  # However, Lix is a fork of Nix 2.18, so this looks like a good version
-  # to cut specific functionality.
-  # ATTN: This currently doesn't disambiguate between Nix and Lix, so using this
-  # in a conditional needs careful checking against both Nix implementations.
-  withNix218 ? lib.versionAtLeast nix.version "2.18",
   # passthru.tests
   nixosTests,
-  nixVersions,
-  lixPackageSets,
-  nixos-rebuild-ng,
 }:
 let
-  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+  executable = "nixos-rebuild";
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
-  version = "0.0.0";
+  version = lib.trivial.release;
   src = ./src;
   pyproject = true;
 
@@ -62,12 +46,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
-      --subst-var-by withNix218 ${lib.boolToString withNix218} \
-      --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
-
-    substituteInPlace pyproject.toml \
-      --replace-fail nixos-rebuild ${executable}
   '';
 
   postInstall = lib.optionalString withShellFiles ''
@@ -76,6 +55,7 @@ python3Packages.buildPythonApplication rec {
 
     installShellCompletion --cmd ${executable} \
       --bash <(shtab --shell bash nixos_rebuild.get_main_parser) \
+      --fish <(shtab --shell fish nixos_rebuild.get_main_parser) \
       --zsh <(shtab --shell zsh nixos_rebuild.get_main_parser)
   '';
 
@@ -83,11 +63,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-vv" ];
-
-  makeWrapperArgs = lib.optionals (withTmpdir != null) [
-    "--set TMPDIR ${withTmpdir}"
-  ];
+  pytestFlags = [ "-vv" ];
 
   passthru =
     let
@@ -111,45 +87,28 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
-        with_reexec = nixos-rebuild-ng.override {
-          withReexec = true;
-          withNgSuffix = false;
-        };
-        with_nix_latest = nixos-rebuild-ng.override {
-          nix = nixVersions.latest;
-        };
-        with_nix_stable = nixos-rebuild-ng.override {
-          nix = nixVersions.stable;
-        };
-        with_nix_2_3 = nixos-rebuild-ng.override {
-          # oldest / minimum supported version in nixpkgs
-          nix = nixVersions.nix_2_3;
-        };
-        with_lix_latest = nixos-rebuild-ng.override {
-          nix = lixPackageSets.latest.lix;
-        };
-        with_lix_stable = nixos-rebuild-ng.override {
-          nix = lixPackageSets.stable.lix;
-        };
-
         inherit (nixosTests)
           # FIXME: this test is disabled since it times out in @ofborg
-          # nixos-rebuild-install-bootloader-ng
-          nixos-rebuild-specialisations-ng
-          nixos-rebuild-target-host-ng
+          # nixos-rebuild-install-bootloader
+          nixos-rebuild-specialisations
+          nixos-rebuild-store-path
+          nixos-rebuild-target-host
           ;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
         linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+          export MYPY_CACHE_DIR="$(mktemp -d)"
           export RUFF_CACHE_DIR="$(mktemp -d)"
 
+          pushd ${src}
           echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy ${src}
+          mypy .
           echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check ${src}
+          ruff check .
           echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check ${src}
+          ruff format --check .
+          popd
 
           touch $out
         '';

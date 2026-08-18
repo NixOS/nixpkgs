@@ -4,18 +4,21 @@
   buildPythonPackage,
   isPyPy,
   fetchFromGitHub,
+  fetchpatch2,
   curl,
   openssl,
   bottle,
   pytestCheckHook,
   flaky,
   flask,
+  numpy,
+  websockets,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.6";
+  version = "7.46.0";
   pyproject = true;
 
   disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
@@ -24,8 +27,16 @@ buildPythonPackage rec {
     owner = "pycurl";
     repo = "pycurl";
     tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-M4rO0CaI2SmjdJVS7hWnJZrL72WvayB4aKn707KoNiQ=";
+    hash = "sha256-F40bJ7TYFK2dVkDJGGxl7XV46fKmjwvUYYulcwGL6hk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "pycurl-curl-8.21.0-ws-support.patch";
+      url = "https://github.com/pycurl/pycurl/commit/c78fd8aba82e2f8037275063138eaa7706c111af.diff?full_index=1";
+      hash = "sha256-EBXgGiaMtXTsgJOOrzzZFJ7Q/ofAlc4zuipoEpfdFqU=";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -48,12 +59,14 @@ buildPythonPackage rec {
     bottle
     flaky
     flask
+    numpy
+    websockets
     pytestCheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # don't pick up the tests directory below examples/
     "tests"
   ];
@@ -62,45 +75,35 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests =
-    [
-      # tests that require network access
-      "test_keyfunction"
-      "test_keyfunction_bogus_return"
-      # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_openssl"
-      # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_nss"
-      # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
-      "test_libcurl_ssl_gnutls"
-      # AssertionError: assert 'crypto' in ['curl']
-      "test_ssl_in_static_libs"
-      # https://github.com/pycurl/pycurl/issues/819
-      "test_multi_socket_select"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # https://github.com/pycurl/pycurl/issues/729
-      "test_easy_pause_unpause"
-      "test_multi_socket_action"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # Fatal Python error: Segmentation fault
-      "cadata_test"
-    ];
-
-  disabledTestPaths = [
-    # https://github.com/pycurl/pycurl/issues/856
-    "tests/multi_test.py"
+  disabledTests = [
+    # tests that require network access
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_openssl"
+    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_nss"
+    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_gnutls"
+    # AssertionError: assert 'crypto' in ['curl']
+    "test_ssl_in_static_libs"
+    # expected socketp to be None again after unassign()
+    "test_clear_via_assign_none_inside_callback_resets_socketp"
+    "test_multi_unassign_inside_socket_callback"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "cadata_test"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Interface To The cURL library";
     homepage = "http://pycurl.io/";
     changelog =
       "https://github.com/pycurl/pycurl/blob/REL_"
-      + replaceStrings [ "." ] [ "_" ] version
+      + lib.replaceStrings [ "." ] [ "_" ] version
       + "/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Only
       mit
     ];

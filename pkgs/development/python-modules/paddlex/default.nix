@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -17,54 +18,33 @@
   ruamel-yaml,
   typing-extensions,
   ujson,
-  distutils,
+  gputil,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
+  nix-update-script,
 }:
 
-let
-  gputil = buildPythonPackage rec {
-    pname = "gputil";
-    version = "1.4.0";
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "anderskm";
-      repo = "gputil";
-      tag = "v${version}";
-      hash = "sha256-iOyB653BMmDBtK1fM1ZyddjlnaypsuLMOV0sKaBt+yE=";
-    };
-
-    build-system = [ setuptools ];
-
-    dependencies = [ distutils ];
-
-    pythonImportsCheck = [ "GPUtil" ];
-
-    meta = {
-      homepage = "https://github.com/anderskm/gputil";
-      license = lib.licenses.mit;
-      description = "Getting GPU status from NVIDA GPUs using nvidia-smi";
-      changelog = "https://github.com/anderskm/gputil/releases/tag/${src.tag}";
-    };
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paddlex";
-  version = "3.0.3";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
-    tag = "v${version}";
-    hash = "sha256-uIpt2I6Lx/nJDh4sZYBI6dL8IveQf6aOxA/9vKFU2nU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E9WvXQTqpD9y/1tSNjOEws1ELRp65w9hTgeVq1lLBvI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
+    "pyyaml"
     "numpy"
-    "pandas"
   ];
 
   dependencies = [
@@ -84,19 +64,22 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
-    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ emaryn ];
+    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${finalAttrs.src.tag}";
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
-}
+})

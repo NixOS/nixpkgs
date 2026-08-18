@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   python3Packages,
   libunistring,
   harfbuzz,
@@ -11,16 +12,16 @@
   imagemagick,
   libstartup_notification,
   libGL,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   libxkbcommon,
-  libXi,
-  libXext,
+  libxi,
+  libxext,
   wayland-protocols,
   wayland,
-  xxHash,
+  xxhash,
   nerd-fonts,
   lcms2,
   librsync,
@@ -39,90 +40,88 @@
   zsh,
   fish,
   nixosTests,
-  go_1_24,
-  buildGo124Module,
+  go_1_26,
+  buildGo126Module,
   nix-update-script,
   makeBinaryWrapper,
-  autoSignDarwinBinariesHook,
+  darwin,
   cairo,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.42.1";
-  format = "other";
+  version = "0.48.2";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-dW6WgIi+3GJE4OlwxrnY8SUMCQ37eG19UGNfAU4Ts1o=";
+    hash = "sha256-qNgVPpvMm8Y/nbBjVvWVuZ954ZXIuWmXhldP3w8MBhU=";
   };
 
   goModules =
-    (buildGo124Module {
+    (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-gTzonKFXo1jhTU+bX3+4/5wvvLGDHE/ppUg1ImkVpAs=";
+      vendorHash = "sha256-BZudfNfREwNrgalaimC5Lp+UIdFS+jHFLl9mEXcHYMI=";
     }).goModules;
 
-  buildInputs =
-    [
-      harfbuzz
-      ncurses
-      simde
-      lcms2
-      librsync
-      matplotlib
-      openssl.dev
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-      python3
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      libunistring
-      libcanberra
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libxkbcommon
-      libXi
-      libXext
-      wayland-protocols
-      wayland
-      dbus
-      libGL
-      cairo
-    ];
+  buildInputs = [
+    harfbuzz
+    ncurses
+    simde
+    lcms2
+    librsync
+    matplotlib
+    openssl.dev
+    xxhash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+    python3
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    libunistring
+    libcanberra
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxkbcommon
+    libxi
+    libxext
+    wayland-protocols
+    wayland
+    dbus
+    libGL
+    cairo
+  ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      ncurses
-      pkg-config
-      sphinx
-      furo
-      sphinx-copybutton
-      sphinxext-opengraph
-      sphinx-inline-tabs
-      go_1_24
-      fontconfig
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns # For the png2icns tool.
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
+    go_1_26
+    fontconfig
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns # For the png2icns tool.
+    darwin.autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
@@ -144,6 +143,9 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    (replaceVars ./libxkbcommon-runtime-path.patch {
+      libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
+    })
   ];
 
   hardeningDisable = [
@@ -151,8 +153,11 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  env.CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+    GOTOOLCHAIN = "local";
+  };
 
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -200,47 +205,59 @@ buildPythonApplication rec {
       runHook postBuild
     '';
 
-  nativeCheckInputs =
-    [
-      pillow
+  nativeCheckInputs = [
+    pillow
 
-      # Shells needed for shell integration tests
-      bashInteractive
-      zsh
-      fish
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # integration tests need sudo
-      sudo
-    ];
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # integration tests need sudo
+    sudo
+  ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+
+      # These depend on cgroups and other resources that don't work as the tests expect in the sandbox
+      rm kitty_tests/child.py
+    '';
 
   checkPhase = ''
     runHook preCheck
 
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-
     # Required for `test_ssh_shell_integration` to pass.
     export TERM=kitty
 
@@ -310,18 +327,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
-      tex
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

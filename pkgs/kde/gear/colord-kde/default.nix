@@ -2,7 +2,7 @@
   mkKdeDerivation,
   pkg-config,
   lcms2,
-  xorg,
+  libxrandr,
 }:
 mkKdeDerivation {
   pname = "colord-kde";
@@ -10,7 +10,7 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     lcms2
-    xorg.libXrandr
+    libxrandr
   ];
   meta.mainProgram = "colord-kde-icc-importer";
 }

@@ -2,82 +2,123 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bash,
   cmake,
-  runCommandLocal,
+  ninja,
+  git,
   bison,
   flex,
+  zlib,
   intel-compute-runtime,
-  llvmPackages_15,
-  opencl-clang,
   python3,
-  spirv-tools,
   spirv-headers,
-  spirv-llvm-translator,
-
-  buildWithPatches ? true,
+  spirv-tools,
 }:
 
 let
-  vc_intrinsics_src = fetchFromGitHub {
-    owner = "intel";
-    repo = "vc-intrinsics";
-    rev = "v0.22.1";
-    hash = "sha256-dSK+kNEZoF4bBx24S0No9aZLZiHK0U9TR1jRyEBL+2U=";
-  };
-
-  inherit (llvmPackages_15) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
-  spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
-
-  # Handholding the braindead build script
-  # cmake requires an absolute path
-  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
-    mkdir $out
-    ln -s ${clang}/bin/clang $out/
-    ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
-  '';
+  llvmVersion = "17.0.6";
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.12.5";
+  version = "2.40.13";
 
-  src = fetchFromGitHub {
-    owner = "intel";
-    repo = "intel-graphics-compiler";
-    tag = "v${version}";
-    hash = "sha256-1no41/YUr63OwPEaFFP/7n5GxfZqprCLk37zq60O2eM=";
-  };
+  # See the repository for expected versions:
+  # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
+  srcs = [
+    (fetchFromGitHub {
+      name = "igc";
+      owner = "intel";
+      repo = "intel-graphics-compiler";
+      tag = "v${version}";
+      hash = "sha256-koc3ee6ItemDkNpWlBhJX8Dr8Wa4Zpvo08LxiR6BNLE=";
+    })
+    (fetchFromGitHub {
+      name = "llvm-project";
+      owner = "llvm";
+      repo = "llvm-project";
+      tag = "llvmorg-${llvmVersion}";
+      hash = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
+    })
+    (fetchFromGitHub {
+      name = "vc-intrinsics";
+      owner = "intel";
+      repo = "vc-intrinsics";
+      tag = "v0.25.0";
+      hash = "sha256-ozc1w3V5RqWHwqNHuefZJMN8RAYxrJxH9bd1BEqxfiQ=";
+    })
+    (fetchFromGitHub {
+      name = "opencl-clang";
+      owner = "intel";
+      repo = "opencl-clang";
+      tag = "v17.0.9";
+      hash = "sha256-hnwUBOy+NebhPyBf4GtsXHdzKEWAFsq8sj0ssIlGjtw=";
+    })
+    (fetchFromGitHub {
+      name = "llvm-spirv";
+      owner = "KhronosGroup";
+      repo = "SPIRV-LLVM-Translator";
+      tag = "v17.0.26";
+      hash = "sha256-Q3tUr4FjHDjDRCyOqOKyVx29mMz/88POHs2rWnjBGb4=";
+    })
+  ];
+
+  patches = [
+    # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
+    # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
+    # on https://github.com/intel/intel-graphics-compiler/pull/383.
+    ./gcc15-llvm-header-fixes.patch
+
+    # Fix for GCC 15 by disabling `-Werror` for `-Wfree-nonheap-object`
+    # warnings within LLVM. This is in accordance with IGC disabling warnings
+    # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
+    ./gcc15-allow-llvm-free-nonheap-object-warning.patch
+
+    ./fix-create-directories-to-apply-patches.diff
+  ];
+
+  sourceRoot = ".";
+
+  cmakeDir = "../igc";
+
+  postUnpack = ''
+    chmod -R +w .
+    mv opencl-clang llvm-spirv llvm-project/llvm/projects/
+  '';
 
   postPatch = ''
-    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
+    substituteInPlace igc/IGC/AdaptorOCL/igc-opencl.pc.in \
       --replace-fail '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
       --replace-fail '/@CMAKE_INSTALL_LIBDIR@' "/lib"
 
-    chmod +x IGC/Scripts/igc_create_linker_script.sh
-    patchShebangs --build IGC/Scripts/igc_create_linker_script.sh
+    chmod +x igc/IGC/Scripts/igc_create_linker_script.sh
+    patchShebangs --build igc/IGC/Scripts/igc_create_linker_script.sh
+
+    # The build system only applies patches when the sources are in a Git repository.
+    git -C llvm-project init
+    git -C llvm-project add .
+    git -C llvm-project -c user.name=nixbld -c user.email= commit -m stub
+
+    substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
+                     'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0 '
   '';
 
   nativeBuildInputs = [
-    bash
     bison
     cmake
     flex
+    git
+    ninja
     (python3.withPackages (
       ps: with ps; [
         mako
         pyyaml
       ]
     ))
+    zlib
   ];
 
   buildInputs = [
-    lld
-    llvm
     spirv-headers
-    spirv-llvm-translator'
     spirv-tools
   ];
 
@@ -87,11 +128,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   cmakeFlags = [
-    "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
-    "-DCCLANG_BUILD_PREBUILDS=ON"
-    "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
-    "-DIGC_OPTION__VC_INTRINSICS_MODE=Source"
+    "-DIGC_OPTION__USE_PREINSTALLED_SPIRV_HEADERS=ON"
+    "-DSPIRV-Headers_INCLUDE_DIR=${spirv-headers}/include"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
     "-Wno-dev"
   ];
 
@@ -99,12 +139,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

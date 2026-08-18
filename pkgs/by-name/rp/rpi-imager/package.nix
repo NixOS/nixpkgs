@@ -4,83 +4,116 @@
   cmake,
   curl,
   fetchFromGitHub,
+  gnutls,
   libarchive,
+  libtasn1,
+  libusb1,
+  liburing,
   nix-update-script,
   pkg-config,
   qt6,
   testers,
-  util-linux,
+  wrapGAppsHook4,
+  writeShellScriptBin,
   xz,
-  gnutls,
   zstd,
-  libtasn1,
   enableTelemetry ? false,
+  enableUring ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.4";
+  version = "2.0.10-1-proto1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
+    hash = "sha256-5EmriYrjm73fEgcbL/WJ5ggnFqyPQ/DXLBOnhDq1NxA=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  # By default, the builder checks for JSON support in lsblk by running "lsblk --json",
-  # but that throws an error, as /sys/dev doesn't exist in the sandbox.
-  # This patch removes the check.
-  # remove-vendoring.patch from
-  # https://gitlab.archlinux.org/archlinux/packaging/packages/rpi-imager/-/raw/main/remove-vendoring.patch
-  patches = [ ./remove-vendoring-and-lsblk-check.patch ];
+  patches = [ ./remove-vendoring.patch ];
 
   postPatch = ''
-    substituteInPlace ../debian/org.raspberrypi.rpi-imager.desktop \
+    substituteInPlace debian/com.raspberrypi.rpi-imager.desktop \
       --replace-fail "/usr/bin/" ""
+
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    qt6.wrapQtAppsHook
-    util-linux
+  preConfigure = ''
+    cd src
+  '';
+
+  nativeBuildInputs =
+    let
+      # Fool upstream's cmake lsblk check a bit
+      fake-lsblk = writeShellScriptBin "lsblk" ''
+        echo "our lsblk has --json support but it doesn't work in our sandbox"
+      '';
+
+      # Upstream uses `git describe` to define a `IMAGER_VERSION` CMake variable,
+      # and we fool it to take a version from a fake `git` executable.
+      fake-git = writeShellScriptBin "git" ''
+        echo "v${finalAttrs.version}"
+      '';
+    in
+    [
+      cmake
+      fake-git
+      fake-lsblk
+      pkg-config
+      qt6.wrapQtAppsHook
+      wrapGAppsHook4
+    ];
+
+  buildInputs = [
+    curl
+    gnutls
+    libarchive
+    libtasn1
+    libusb1
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qttools
+    xz
+    zstd
+  ]
+  ++ lib.optional enableUring liburing
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
   ];
 
-  buildInputs =
-    [
-      curl
-      libarchive
-      qt6.qtbase
-      qt6.qtdeclarative
-      qt6.qtsvg
-      qt6.qttools
-      xz
-      gnutls
-      zstd
-      libtasn1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  cmakeFlags = [
+    # Isn't relevant for Nix
+    (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
+    (lib.cmakeBool "ENABLE_TELEMETRY" enableTelemetry)
+    # Disable fetching external data files
+    (lib.cmakeBool "GENERATE_CAPITAL_CITIES" false)
+    (lib.cmakeBool "GENERATE_COUNTRIES_FROM_REGDB" false)
+    (lib.cmakeBool "GENERATE_TIMEZONES_FROM_IANA" false)
+  ];
 
-  cmakeFlags =
-    # Disable vendoring
-    [
-      (lib.cmakeBool "ENABLE_VENDORING" false)
-    ]
-    # Disable telemetry and update check.
-    ++ lib.optionals (!enableTelemetry) [
-      (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
-      (lib.cmakeBool "ENABLE_TELEMETRY" false)
-    ];
+  qtWrapperArgs = [
+    "--unset QT_QPA_PLATFORMTHEME"
+    "--unset QT_STYLE_OVERRIDE"
+  ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  env.LANG = "C.UTF-8";
 
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "QT_QPA_PLATFORM=offscreen rpi-imager --version";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
@@ -92,11 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "rpi-imager";
     maintainers = with lib.maintainers; [
-      ymarkus
       anthonyroussel
+      agustinmista
     ];
-    platforms = lib.platforms.all;
-    # does not build on darwin
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # could not find xz
+    badPlatforms = lib.platforms.darwin;
   };
 })

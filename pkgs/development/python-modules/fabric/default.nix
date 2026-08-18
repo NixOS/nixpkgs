@@ -3,27 +3,26 @@
   buildPythonPackage,
   decorator,
   deprecated,
-  fetchPypi,
+  fetchFromGitHub,
   icecream,
   invoke,
   mock,
   paramiko,
   pytest-relaxed,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fabric";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h4PKQuOwB28IsmkBqsa52bHxnEEAdOesz6uQLBhP9KM=";
+  src = fetchFromGitHub {
+    owner = "fabric";
+    repo = "fabric";
+    tag = version;
+    hash = "sha256-GbZQ6rFKQyJZXYfe9b4j6yjKgAB0ct8AD1xYG0yGZl8=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   pythonImportsCheck = [ "fabric" ];
 
@@ -58,6 +57,15 @@ buildPythonPackage rec {
     "preserves_remote_mode_by_default"
     "proxy_jump"
     "raises_TypeError_for_disallowed_kwargs"
+    # Assertion failures on mocks
+    # https://github.com/fabric/fabric/issues/2341
+    "client_defaults_to_a_new_SSHClient"
+    "defaults_to_auto_add"
+
+    # Fixture "fake_agent" called directly. Fixtures are not meant to be called directly
+    "no_stdin"
+    "fake_agent"
+    "fake"
   ];
 
   meta = {

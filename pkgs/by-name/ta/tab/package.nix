@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "9.2";
   pname = "tab";
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";
     repo = "tab";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UOXfnpzYMKDdp8EeBo2HsVPGn61hkCqHe8olX9KAgOU=";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming language/shell calculator";
     mainProgram = "tab";
     homepage = "https://tab-lang.xyz";
-    license = licenses.boost;
-    maintainers = with maintainers; [ mstarzyk ];
-    platforms = with platforms; unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ mstarzyk ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

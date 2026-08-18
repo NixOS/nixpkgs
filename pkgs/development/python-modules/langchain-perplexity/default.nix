@@ -4,11 +4,12 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
   openai,
+  perplexityai,
 
   # tests
   langchain-tests,
@@ -21,25 +22,27 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-perplexity";
-  version = "0.1.1";
+  version = "1.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-perplexity==${version}";
-    hash = "sha256-s20AnDsyLCzpG45QqgZp0WzlbdVrHNfpUQsMPUaF1qs=";
+    tag = "langchain-perplexity==${finalAttrs.version}";
+    hash = "sha256-YWVTghbLE6jXrkwS9shTdDr0pp4ILEVq+dgjg9njRhA=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/perplexity";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/perplexity";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     openai
+    perplexityai
   ];
 
   pythonRelaxDeps = [
@@ -56,21 +59,26 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-perplexity==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-perplexity==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.sarahec
+    maintainers = with lib.maintainers; [
+      sarahec
     ];
   };
-}
+})

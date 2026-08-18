@@ -8,28 +8,17 @@
 let
   common = opts: callPackage (import ./common.nix opts) { };
 
-  # Gets the correct OpenSSH URL for a given version.
-  urlFor =
-    version:
-    let
-      urlVersion =
-        {
-          # 10.0p1 was accidentally released as 10.0p2:
-          # https://www.openwall.com/lists/oss-security/2025/04/09/6
-          "10.0p2" = "10.0p1";
-        }
-        .${version} or version;
-    in
-    "mirror://openbsd/OpenSSH/portable/openssh-${urlVersion}.tar.gz";
+  # Gets the OpenSSH mirror URL.
+  urlFor = version: "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
 in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "10.0p2";
+    version = "10.5p1";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-1E0oqDnqna+WnMaRUP3lmRCys5Nh2tgaO9bL0ZIY2xE=";
     };
 
     extraPatches = [
@@ -41,42 +30,54 @@ in
     ];
     extraMeta = {
       maintainers = with lib.maintainers; [
-        philiptaron
+        das_j
+        helsinki-Jo
         numinit
+        philiptaron
       ];
-      teams = [ lib.teams.helsinki-systems ];
     };
   };
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "10.0p2";
+    version = "10.5p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-1E0oqDnqna+WnMaRUP3lmRCys5Nh2tgaO9bL0ZIY2xE=";
     };
 
     extraPatches =
       let
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/dde9561b3ff73639aeebe8ec33ad52ecca0bf58d/security/openssh-portable/files/extra-patch-hpn";
+        urlBase = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b6e1767f0a502a384a7b9270a89123775a4bdc21/security/openssh-portable/files";
+        noBlocklistdHpnGluePatch = "${urlBase}/extra-patch-no-blocklistd-hpn-glue";
+        hpnPatch = "${urlBase}/extra-patch-hpn";
       in
       [
         ./ssh-keysign-8.5.patch
 
+        # the blocklistd patch from FreeBSD ports is now required for HPN,
+        # unless we apply this HPN glue patch
+        (fetchpatch {
+          name = "ssh-no-blocklistd-hpn-glue.patch";
+          url = noBlocklistdHpnGluePatch;
+          extraPrefix = "";
+          hash = "sha256-+AeJ9fLmmT/P07JZvGaXpNft+2F9PoFsbzr+s9wfdro=";
+        })
+
         # HPN Patch from FreeBSD ports
         (fetchpatch {
           name = "ssh-hpn-wo-channels.patch";
-          inherit url;
+          url = hpnPatch;
           stripLen = 1;
           excludes = [ "channels.c" ];
-          hash = "sha256-0HQAacNdvqX+7CTDhkbgAyb0WbqnnH6iAYQBFh8XenA=";
+          hash = "sha256-Hq30DZ5i32aHalliyjdELe91aMDTT7/vAANY8RVn6B4=";
         })
 
         (fetchpatch {
           name = "ssh-hpn-channels.patch";
-          inherit url;
+          url = hpnPatch;
           extraPrefix = "";
           includes = [ "channels.c" ];
           hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
@@ -93,21 +94,27 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "10.0p2";
+    version = "10.4p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-72Am3SrqjVYFljjV0yYpAsiSzrqfiDlYNeDQbT+2Mjg=";
     };
 
     extraPatches = [
       ./ssh-keysign-8.5.patch
 
       (fetchpatch {
-        name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.0p1-1/debian/patches/gssapi.patch";
-        hash = "sha256-7Q27tvtCY3b9evC3lbqEz4u7v5DcerjWZfhh8azIAQo=";
+        name = "servconf-fix-gssapi.patch";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.4p1-1/debian/patches/servconf-fix-gssapi.patch";
+        hash = "sha256-ypyaoEhwxo7SYVpjMkCQnrcFgY2ouWJQlrbJy50Lidk=";
+      })
+
+      (fetchpatch {
+        name = "gssapi.patch";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.4p1-1/debian/patches/gssapi.patch";
+        hash = "sha256-K12AE4C0zMdRdMsRMQCMRIFvN+NhNvCgyt0NDZp7n24=";
       })
     ];
 

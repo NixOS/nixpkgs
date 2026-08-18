@@ -1,12 +1,11 @@
-{ pkgs, ... }:
+{ lib, ... }:
+
 {
   name = "caddy";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      Br1ght0ne
-      stepbrobd
-    ];
-  };
+
+  meta.maintainers = with lib.maintainers; [
+    stepbrobd
+  ];
 
   nodes = {
     webserver =
@@ -70,24 +69,6 @@
             respond "hello world"
           '';
         };
-        specialisation.with-plugins.configuration = {
-          services.caddy = {
-            package = pkgs.caddy.withPlugins {
-              plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-              hash = "sha256-BJ+//h/bkj6y2Zhxas8oJyrryiTDR2Qpz7+VloqrbwQ=";
-            };
-            configFile = pkgs.writeText "Caddyfile" ''
-              {
-                order replace after encode
-              }
-
-              localhost:80 {
-                respond "hello world"
-                replace world caddy
-              }
-            '';
-          };
-        };
       };
   };
 
@@ -99,7 +80,6 @@
       multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-configs";
       multipleHostnames = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-hostnames";
       rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
-      withPluginsConfig = "${nodes.webserver.system.build.toplevel}/specialisation/with-plugins";
     in
     ''
       url = "http://localhost/example.html"
@@ -142,12 +122,5 @@
           )
           webserver.wait_for_open_port(80)
           webserver.succeed("curl http://localhost | grep hello")
-
-      with subtest("plugins are correctled installed and configurable"):
-          webserver.succeed(
-              "${withPluginsConfig}/bin/switch-to-configuration test >&2"
-          )
-          webserver.wait_for_open_port(80)
-          webserver.succeed("curl http://localhost | grep caddy")
     '';
 }

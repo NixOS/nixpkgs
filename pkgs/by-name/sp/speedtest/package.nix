@@ -15,21 +15,21 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "speedtest";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ketok4321";
     repo = "speedtest";
-    tag = "v${version}";
-    hash = "sha256-BFPOumMuFKttw8+Jp4c2d9r9C2eIzEX52SNdASdNldw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-00qHHCGXAzV38BLUIENwxmWUhp+t7BsM7w6xu1Xs/UA=";
   };
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace-fail "run_command('git', 'describe', '--tags', check: false).stdout().strip()" "'v${version}'"
+      --replace-fail "run_command('git', 'describe', '--tags', check: false).stdout().strip()" "'v${finalAttrs.version}'"
   '';
 
   strictDeps = true;
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "speedtest";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,67 +7,79 @@
   setuptools-scm,
 
   # dependencies
-  cwcwidth,
   lxml,
+  unicode-segmentation-rs,
 
-  # tests
-  aeidon,
+  # optional-dependencies
   charset-normalizer,
-  cheroot,
   fluent-syntax,
-  gettext,
+  vobject,
   iniparse,
+  rapidfuzz,
   mistletoe,
   phply,
   pyparsing,
-  pytestCheckHook,
+  pyenchant,
+  aeidon,
+  tomlkit,
   ruamel-yaml,
+
+  # tests
+  pytestCheckHook,
+  addBinToPathHook,
+  pytest-xdist,
+  gettext,
   syrupy,
-  vobject,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.15.5";
-
+  version = "3.19.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
-    tag = version;
-    hash = "sha256-VrnL9hD7NroXCyTydLIJlpBTGkUuCLKhrQJPWe3glAM=";
+    tag = finalAttrs.version;
+    hash = "sha256-+94oo6IYnRR4jnR60C3WNjesK6Tk6jND3xsYyx6sw0U=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    cwcwidth
     lxml
+    unicode-segmentation-rs
   ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
+  optional-dependencies = {
+    chardet = [ charset-normalizer ];
+    fluent = [ fluent-syntax ];
+    ical = [ vobject ];
+    ini = [ iniparse ];
+    levenshtein = [ rapidfuzz ];
+    markdown = [ mistletoe ];
+    php = [ phply ];
+    rc = [ pyparsing ];
+    spellcheck = [ pyenchant ];
+    subtitles = [ aeidon ];
+    toml = [ tomlkit ];
+    yaml = [ ruamel-yaml ];
+  };
+
   nativeCheckInputs = [
-    aeidon
-    charset-normalizer
-    cheroot
-    fluent-syntax
-    gettext
-    iniparse
-    mistletoe
-    phply
-    pyparsing
     pytestCheckHook
-    ruamel-yaml
+    addBinToPathHook
+    pytest-xdist
     syrupy
-    vobject
-  ];
+    gettext
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-
-    # Requires network
-    "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
@@ -77,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${src.tag}.html";
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

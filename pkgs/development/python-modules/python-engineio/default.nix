@@ -11,7 +11,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   simple-websocket,
   tornado,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.12.2";
+  version = "4.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     tag = "v${version}";
-    hash = "sha256-VgdqVzO3UToXpD9pMEDqAH2DfdBwaWUfulALAEG2DNs=";
+    hash = "sha256-3KWhQE4STzwEtFzuhiTQZcc9a3lWoQlW74oHtbR4N6M=";
   };
 
   build-system = [ setuptools ];
@@ -51,9 +48,8 @@ buildPythonPackage rec {
     tornado
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -73,7 +69,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time
@@ -81,7 +77,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
     changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

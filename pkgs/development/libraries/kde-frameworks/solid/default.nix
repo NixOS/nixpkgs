@@ -3,6 +3,7 @@
   lib,
   stdenv,
   bison,
+  cmake,
   extra-cmake-modules,
   flex,
   media-player-info,
@@ -16,9 +17,11 @@ mkDerivation {
   patches = [ ./fix-search-path.patch ];
   nativeBuildInputs = [
     bison
+    cmake
     extra-cmake-modules
     flex
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ media-player-info ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ media-player-info ];
   buildInputs = [
     qtdeclarative
     qttools

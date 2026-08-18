@@ -16,19 +16,19 @@
   onionshare-gui,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare-cli";
-  version = "2.6.3";
+  version = "2.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
-    tag = "v${version}";
-    hash = "sha256-DY5rSHkmiqLIa49gcbq7VfcMM1AMFTJ5FPQtS2kR2Zs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RAUTBUU29wON2RLVL7fa2iofMamjXjP2BONP9Bd9ZN0=";
   };
 
-  sourceRoot = "${src.name}/cli";
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   patches = [
     # hardcode store paths of dependencies
@@ -48,6 +48,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "pkgconfig"
+  ];
 
   dependencies =
     with python3Packages;
@@ -83,14 +87,13 @@ python3Packages.buildPythonApplication rec {
     tor
   ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+  ]);
 
   disabledTests =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -133,7 +136,7 @@ python3Packages.buildPythonApplication rec {
       person you're sharing with can access the files.
     '';
     homepage = "https://onionshare.org/";
-    changelog = "https://github.com/onionshare/onionshare/releases/tag/${src.tag}";
+    changelog = "https://github.com/onionshare/onionshare/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       bbjubjub
@@ -141,4 +144,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "onionshare-cli";
   };
-}
+})

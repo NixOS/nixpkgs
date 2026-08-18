@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   meson,
   ninja,
   gettext,
+  fetchpatch,
   fetchurl,
   pkg-config,
   gtk4,
@@ -25,6 +27,7 @@
   gcr_4,
   isocodes,
   desktop-file-utils,
+  docutils,
   nettle,
   gdk-pixbuf,
   gst_all_1,
@@ -37,15 +40,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "48.5";
+  version = "50.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D2ZVKtZZPHlSo93uW/UVZWyMQ0hxB22fGpGnr5NGsbQ=";
+    hash = "sha256-Hib5kB8PCL/pQ6pwFjyVMzTH7D1K78jTVOipwUCzNKc=";
   };
 
+  patches = [
+    # Required for `CVE-2026-18487.patch` to apply
+    (fetchpatch {
+      name = "fix-ipv6-address-prettification.patch";
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/e63bfdc7f117c9b60ea54b5760363ab256b9ff2b.patch";
+      hash = "sha256-9m8R5GUOBCm3xDXVHBDrV/HbjfIDL+D3wUGkkqc4RmA==";
+    })
+    # Upstream issue: https://gitlab.gnome.org/GNOME/epiphany/-/work_items/2897
+    # Upstream PR: https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/2123
+    ./CVE-2026-18487.patch
+  ];
+
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
+    docutils # for rst2man
     gettext
     itstool
     meson
@@ -56,46 +73,44 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.gtk4
   ];
 
-  buildInputs =
-    [
-      gcr_4
-      gdk-pixbuf
-      glib
-      glib-networking
-      gnome-desktop
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gstreamer
-      gtk4
-      icu
-      isocodes
-      json-glib
-      libadwaita
-      libportal-gtk4
-      libarchive
-      libsecret
-      libsoup_3
-      libxml2
-      nettle
-      p11-kit
-      sqlite
-      webkitgtk_6_0
-    ]
-    ++ lib.optionals withPantheon [
-      pantheon.granite7
-    ];
+  buildInputs = [
+    gcr_4
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-desktop
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
+    gtk4
+    icu
+    isocodes
+    json-glib
+    libadwaita
+    libportal-gtk4
+    libarchive
+    libsecret
+    libsoup_3
+    libxml2
+    nettle
+    p11-kit
+    sqlite
+    webkitgtk_6_0
+  ]
+  ++ lib.optionals withPantheon [
+    pantheon.granite7
+  ];
 
   # Tests need an X display
-  mesonFlags =
-    [
-      "-Dunit_tests=disabled"
-    ]
-    ++ lib.optionals withPantheon [
-      "-Dgranite=enabled"
-    ];
+  mesonFlags = [
+    "-Dunit_tests=disabled"
+  ]
+  ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -103,15 +118,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Epiphany/";
     description = "WebKit based web browser for GNOME";
     mainProgram = "epiphany";
     teams = [
-      teams.gnome
-      teams.pantheon
+      lib.teams.gnome
+      lib.teams.pantheon
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 })

@@ -9,10 +9,10 @@
   gtk3,
   harfbuzz,
   lib,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   libepoxy,
-  libpthreadstubs,
+  libpthread-stubs,
   libselinux,
   libsepol,
   libtasn1,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roxterm";
-  version = "3.16.6";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = finalAttrs.version;
-    hash = "sha256-T6xFExsgYGUVLgDS7sx5juoraMjzIYyfsXHvQUAm1fc=";
+    hash = "sha256-6izxSEGPu3svO3uRb2oPUm1Mcky9EogIrnadt6czyEk=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     harfbuzz
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     libepoxy
-    libpthreadstubs
+    libpthread-stubs
     libselinux
     libsepol
     libtasn1
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/realh/roxterm";
-    description = " A highly configurable terminal emulator";
+    description = "Highly configurable terminal emulator";
     longDescription = ''
       ROXTerm is a terminal emulator intended to provide similar features to
       gnome-terminal, based on the same VTE library. It was originally designed
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Plus
     ];
     mainProgram = "roxterm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

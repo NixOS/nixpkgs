@@ -2,22 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   cmake,
   ninja,
   pybind11,
   scikit-build-core,
+
+  # dependencies
   numpy,
+
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward-cpp";
-  version = "47";
+  version = "56";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "awkward_cpp";
-    inherit version;
-    hash = "sha256-Z2z0l2gQ7asyGH7fWopxavlQR7kDjJbSfTvkTxMxlQ8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-zTY1+rkmxmMMCoXZK1mhWFHE9aiB6nSZhAaQJ2NPj1I=";
   };
 
   build-system = [
@@ -33,10 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awkward_cpp" ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   meta = {
     description = "CPU kernels and compiled extensions for Awkward Array";
     homepage = "https://github.com/scikit-hep/awkward";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

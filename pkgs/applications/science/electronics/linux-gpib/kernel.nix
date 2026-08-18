@@ -21,6 +21,7 @@ stdenv.mkDerivation (
 
     makeFlags = [
       "LINUX_SRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "LINUX_SSRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
     ];
 
     installFlags = [

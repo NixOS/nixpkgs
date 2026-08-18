@@ -7,19 +7,20 @@
   pkgs,
   pyahocorasick,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
+  setuptools,
   unidiff,
+  writableTmpDirAsHomeHook,
+  withGibberish ? true,
+  withWordList ? true,
 }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
   version = "1.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
@@ -29,12 +30,23 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
-  propagatedBuildInputs = [
-    gibberish-detector
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
-    pyahocorasick
     requests
-  ];
+  ]
+  ++ lib.optionals withGibberish optional-dependencies.gibberish
+  ++ lib.optionals withWordList optional-dependencies.word_list;
+
+  optional-dependencies = {
+    gibberish = [
+      gibberish-detector
+    ];
+    word_list = [
+      pyahocorasick
+    ];
+  };
 
   nativeCheckInputs = [
     mock
@@ -42,31 +54,26 @@ buildPythonPackage rec {
     responses
     unidiff
     pkgs.gitMinimal
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update
     "test_basic"
     "test_handles_each_path_separately"
     "test_handles_multiple_directories"
-    "test_load_and_output"
     "test_make_decisions"
-    "test_restores_line_numbers"
     "test_saves_to_baseline"
-    "test_scan_all_files"
     "test_start_halfway"
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
-    license = licenses.asl20;
+    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

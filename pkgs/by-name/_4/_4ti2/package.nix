@@ -5,18 +5,28 @@
   autoreconfHook,
   glpk,
   gmp,
+  which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
-  version = "1.6.12";
+  version = "1.6.15";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
-    rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-B01KfZUlG50qCjVLy8+nql8AR+exNMLDWHGhTDhOpg0=";
+    tag = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-6X8zNp68KlKxplg1rdcotmXyIZE27POJs9/3n2BZLZE=";
   };
+
+  postPatch = ''
+    substituteInPlace src/{groebner/script.template.in,zsolve/{graver,hilbert}.template} \
+      --replace-fail 'SCRIPT=$(realpath $(which "$0"))' \
+                     'SCRIPT=$(realpath $(${lib.getExe which} "$0"))'
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -27,13 +37,15 @@ stdenv.mkDerivation rec {
     gmp
   ];
 
+  enableParallelBuilding = true;
+
   installFlags = [ "install-exec" ];
 
   meta = {
     homepage = "https://4ti2.github.io/";
     description = "Software package for algebraic, geometric and combinatorial problems on linear spaces";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.all;
   };
-}
+})

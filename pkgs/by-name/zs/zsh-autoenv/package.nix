@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
-  version = "unstable-2017-12-16";
+  version = "0-unstable-2017-12-16";
 
   src = fetchFromGitHub {
     owner = "Tarrasch";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/zsh-autoenv-share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically sources whitelisted .autoenv.zsh files";
     longDescription = ''
       zsh-autoenv automatically sources (known/whitelisted)
@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Tarrasch/zsh-autoenv";
     mainProgram = "zsh-autoenv-share";
     platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
   };
 }

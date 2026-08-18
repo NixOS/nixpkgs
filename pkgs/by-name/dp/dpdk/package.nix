@@ -11,6 +11,7 @@
   libbpf,
   zlib,
   elfutils,
+  intel-ipsec-mb,
   jansson,
   openssl,
   libpcap,
@@ -18,7 +19,6 @@
   doxygen,
   python3,
   pciutils,
-  fetchpatch,
   withExamples ? [ ],
   shared ? false,
   machine ? (
@@ -31,14 +31,17 @@
   ),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk";
-  version = "25.03";
+  version = "26.03";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
+    url = "https://fast.dpdk.org/rel/dpdk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hJiSArvg+67rYvj9xj9pGICsC2bNDcZMFnhDxZ2ynSw=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -59,6 +62,9 @@ stdenv.mkDerivation rec {
     openssl.dev
     zlib
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    intel-ipsec-mb
   ];
 
   propagatedBuildInputs = [
@@ -73,49 +79,49 @@ stdenv.mkDerivation rec {
     patchShebangs config/arm buildtools
   '';
 
-  mesonFlags =
-    [
-      "-Dtests=false"
-      "-Denable_docs=true"
-      "-Ddeveloper_mode=disabled"
-    ]
-    ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
-    ++ lib.optional (machine != null) "-Dmachine=${machine}"
-    ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  mesonFlags = [
+    (lib.mesonBool "tests" false)
+    (lib.mesonBool "enable_docs" true)
+    (lib.mesonEnable "developer_mode" false)
+    (lib.mesonOption "default_library" (if shared then "shared" else "static"))
+  ]
+  ++ lib.optionals (machine != null) [ (lib.mesonOption "machine" machine) ]
+  ++ lib.optionals (withExamples != [ ]) [
+    (lib.mesonOption "examples" (lib.concatStringsSep "," withExamples))
+  ];
 
-  postInstall =
-    ''
-      # Remove Sphinx cache files. Not only are they not useful, but they also
-      # contain store paths causing spurious dependencies.
-      rm -rf $out/share/doc/dpdk/html/.doctrees
+  postInstall = ''
+    # Remove Sphinx cache files. Not only are they not useful, but they also
+    # contain store paths causing spurious dependencies.
+    rm -rf $out/share/doc/dpdk/html/.doctrees
 
-      wrapProgram $out/bin/dpdk-devbind.py \
-        --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-    ''
-    + lib.optionalString (withExamples != [ ]) ''
-      mkdir -p $examples/bin
-      find examples -type f -executable -exec install {} $examples/bin \;
-    '';
+    wrapProgram $out/bin/dpdk-devbind.py \
+      --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
+  ''
+  + lib.optionalString (withExamples != [ ]) ''
+    mkdir -p $examples/bin
+    find examples -type f -executable -exec install {} $examples/bin \;
+  '';
 
   outputs = [
     "out"
     "doc"
-  ] ++ lib.optional (withExamples != [ ]) "examples";
+  ]
+  ++ lib.optional (withExamples != [ ]) "examples";
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       gpl2Only
       bsd2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      magenbluten
-      orivej
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
+      stepbrobd
       zhaofengli
     ];
   };
-}
+})

@@ -3,22 +3,31 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  # doc: https://github.com/ivmai/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
+  # doc: https://github.com/bdwgc/bdwgc/blob/v8.2.12/doc/README.macros (LARGE_CONFIG)
   enableLargeConfig ? false,
   enableMmap ? true,
   enableStatic ? false,
+  # Allows derivation users to increase the initial mark stack size to avoid stack overflows,
+  # since these inhibit parallel marking (see `GC_mark_some()` in `mark.c`.)
+  #
+  # Run Nix with the `GC_PRINT_STATS=1` environment set to check if the mark stack is too small.
+  # Look for messages such as `Mark stack overflow`, `No room to copy back mark stack`, and
+  # `Grew mark stack to ... frames`.
+  #
+  # If this parameter is set to `null`, the default from upstream is used, which is 4096 as of 8.2.8
+  initialMarkStackSize ? null,
   nixVersions,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.8";
+  version = "8.2.12";
 
   src = fetchFromGitHub {
-    owner = "ivmai";
+    owner = "bdwgc";
     repo = "bdwgc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UQSLK/05uPal6/m+HMz0QwXVII1leonlmtSZsXjJ+/c=";
+    hash = "sha256-5yeAB5Y92YjOutwRXBJkMxoOLkmzmqIJs4PirKX89fE=";
   };
 
   outputs = [
@@ -28,31 +37,33 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "musl";
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
   ];
 
-  configureFlags =
-    [
-      "--enable-cplusplus"
-      "--with-libatomic-ops=none"
-    ]
-    ++ lib.optional enableStatic "--enable-static"
-    ++ lib.optional enableMmap "--enable-mmap"
-    ++ lib.optional enableLargeConfig "--enable-large-config";
+  configureFlags = [
+    "--enable-cplusplus"
+    "--with-libatomic-ops=none"
+  ]
+  ++ lib.optional enableStatic "--enable-static"
+  ++ lib.optional enableMmap "--enable-mmap"
+  ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  # This stanza can be dropped when a release fixes this issue:
-  #   https://github.com/ivmai/bdwgc/issues/376
-  # The version is checked with == instead of versionAtLeast so we
-  # don't forget to disable the fix (and if the next release does
-  # not fix the problem the test failure will be a reminder to
-  # extend the set of versions requiring the workaround).
-  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.8") [
-    # do not use /proc primitives to track dirty bits; see:
-    # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
-    # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
-    "CFLAGS_EXTRA=-DNO_SOFT_VDB"
-  ];
+  makeFlags =
+    let
+      defineFlag = flag: "-D${flag}";
+
+      initialMarkStackSizeFlag = lib.optionals (initialMarkStackSize != null) [
+        "INITIAL_MARK_STACK_SIZE=${toString initialMarkStackSize}"
+      ];
+
+      cflagsExtra = initialMarkStackSizeFlag;
+    in
+    lib.optionals (cflagsExtra != [ ]) [
+      "CFLAGS_EXTRA=${lib.concatMapStringsSep " " defineFlag cflagsExtra}"
+    ];
 
   # OpenBSD patches lld (!!!!) to inject this symbol into every linker invocation.
   # We are obviously not doing that.
@@ -71,7 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests = nixVersions;
+  passthru.tests = {
+    inherit (nixVersions) latest stable;
+  };
 
   meta = {
     homepage = "https://hboehm.info/gc/";
@@ -92,9 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
       Alternatively, the garbage collector may be used as a leak detector for
       C or C++ programs, though that is not its primary goal.
     '';
-    changelog = "https://github.com/ivmai/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
-    license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
-    maintainers = with lib.maintainers; [ ];
+    changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.boehmGC;
+    maintainers = [ ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts =
+      lib.meta.cpeFullVersionWithVendor "boehm-demers-weiser" finalAttrs.version
+      // {
+        product = "garbage_collector";
+      };
   };
 })

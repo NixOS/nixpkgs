@@ -28,27 +28,26 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapserver";
-  version = "8.4.0";
+  version = "8.6.5";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
-    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-XEjRklbvYV7UoVX12iW6s1mS8pzIljla488CQNuFfto=";
+    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-HEQ+bBb6cXXqR+4Yw5H+3xwQMQvlv0LjlBRT0baFeZQ=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withPython [
-      swig
-      python3.pkgs.setuptools
-      python3.pkgs.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withPython [
+    swig
+    python3.pkgs.setuptools
+    python3.pkgs.pythonImportsCheckHook
+  ];
 
   buildInputs = [
     cairo
@@ -68,7 +67,8 @@ stdenv.mkDerivation rec {
     proj
     protobufc
     zlib
-  ] ++ lib.optional withPython python3;
+  ]
+  ++ lib.optional withPython python3;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_KML" true)
@@ -88,6 +88,12 @@ stdenv.mkDerivation rec {
     cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
   '';
 
+  # Fix mapscript library reference on Darwin
+  postFixup = lib.optionalString (withPython && stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -change "@rpath/libmapserver.2.dylib" "$out/lib/libmapserver.2.dylib" \
+      $out/${python3.sitePackages}/mapscript/_mapscript.so
+  '';
+
   pythonImportsCheck = [ "mapscript" ];
 
   meta = {
@@ -98,4 +104,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

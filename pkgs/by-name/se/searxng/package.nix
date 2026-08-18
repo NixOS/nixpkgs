@@ -7,55 +7,30 @@
 }:
 let
   python = python3.override {
-    packageOverrides = final: prev: {
-      httpx = prev.httpx.overridePythonAttrs (old: rec {
-        version = "0.27.2";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
-        };
-      });
-
-      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
-        version = "0.9.2";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
-        };
-      });
-
-      starlette = prev.starlette.overridePythonAttrs (old: {
-        disabledTests = old.disabledTests or [ ] ++ [
-          # fails in assertion with spacing issue
-          "test_request_body"
-          "test_request_stream"
-          "test_wsgi_post"
-        ];
-      });
-    };
+    packageOverrides = final: prev: { };
   };
 in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-06-28";
-    format = "setuptools";
+    version = "0-unstable-2026-08-13";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "df76647c52b56101f152c5dec7c1d08f1732ceb7";
-      hash = "sha256-8Rh42DFLyQz+4cWA8x5wpFO41DusMuTo8NAloprw5w0=";
+      rev = "ef9a188cc8d13acb85923ab9b1eee5a4a484ea64";
+      hash = "sha256-ir7mqLRrvDjxysUALzODJFFfOXjsXO6cnB4NSrrNdEc=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRelaxDeps = true;
 
     preBuild =
       let
         versionString = lib.concatStringsSep "." (
-          builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version))
+          map (lib.removePrefix "0") (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)))
         );
         commitAbbrev = builtins.substring 0 8 src.rev;
       in
@@ -71,31 +46,34 @@ python.pkgs.toPythonModule (
         EOF
       '';
 
+    build-system = with python.pkgs; [ setuptools ];
+
     dependencies =
       with python.pkgs;
       [
         babel
-        brotli
         certifi
-        fasttext-predict
+        cloudscraper
         flask
         flask-babel
+        httpx
+        httpx-socks
         isodate
         jinja2
         lxml
+        markdown-it-py
         msgspec
         pygments
         python-dateutil
         pyyaml
-        redis
+        sniffio
         typer
-        uvloop
-        setproctitle
-        httpx
-        httpx-socks
-        markdown-it-py
+        typing-extensions
+        valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
+      ++ httpx.optional-dependencies.socks
       ++ httpx-socks.optional-dependencies.asyncio;
 
     # tests try to connect to network
@@ -117,12 +95,12 @@ python.pkgs.toPythonModule (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/searxng/searxng";
       description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       mainProgram = "searxng-run";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         SuperSandro2000
         _999eagle
       ];

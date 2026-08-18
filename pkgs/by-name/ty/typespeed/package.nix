@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "typespeed";
   version = "0.6.5";
   buildInputs = [ ncurses ];
   src = fetchurl {
-    url = "https://typespeed.sourceforge.net/typespeed-${version}.tar.gz";
+    url = "https://typespeed.sourceforge.net/typespeed-${finalAttrs.version}.tar.gz";
     sha256 = "5c860385ceed8a60f13217cc0192c4c2b4705c3e80f9866f7d72ff306eb72961";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--datadir=\${out}/share/" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Curses based typing game";
     mainProgram = "typespeed";
     homepage = "https://typespeed.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.auntie ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.auntie ];
   };
-}
+})

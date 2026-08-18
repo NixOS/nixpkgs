@@ -2,22 +2,45 @@
   lib,
   dbus,
   fetchFromGitHub,
+  nixosTests,
   python3,
+  sphinxHook,
+  withDocs ? true,
+  withMan ? true,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
-  version = "7.2.0";
+  version = "11.3.0";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.10";
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals withDocs [ "doc" ]
+  ++ lib.optionals withMan [ "man" ];
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = "autosuspend";
-    tag = "v${version}";
-    hash = "sha256-of2b5K4ccONPGZfUwEIoFs86xLM2aLCV8tVGxVqykiQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KG1Cv3Fmdf3VDdZR+k0SeA97g6R+oI6+NgtaWHWPVUQ=";
   };
+
+  postPatch = ''
+    # This mapping triggers network access on docs generation
+    substituteInPlace doc/source/conf.py \
+      --replace-fail 'intersphinx_mapping' '# intersphinx_mapping'
+  '';
+
+  nativeBuildInputs = lib.optionals (withDocs || withMan) (
+    [
+      sphinxHook
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.docs
+  );
+
+  sphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -28,15 +51,25 @@ python3.pkgs.buildPythonApplication rec {
     icalendar
     jsonpath-ng
     lxml
-    mpd2
-    portalocker
     psutil
+    pygobject3
     python-dateutil
-    pytz
+    python-mpd2
     requests
     requests-file
+    tzdata
     tzlocal
   ];
+
+  optional-dependencies = {
+    docs = with python3.pkgs; [
+      furo
+      recommonmark
+      sphinx-autodoc-typehints
+      sphinx-issues
+      sphinxcontrib-plantuml
+    ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
@@ -55,18 +88,21 @@ python3.pkgs.buildPythonApplication rec {
     "test_multiple_sessions"
   ];
 
-  doCheck = true;
+  passthru.tests = {
+    inherit (nixosTests) autosuspend;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
-    changelog = "https://github.com/languitar/autosuspend/releases/tag/${src.tag}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       bzizou
       anthonyroussel
+      adamcstephens
     ];
     mainProgram = "autosuspend";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

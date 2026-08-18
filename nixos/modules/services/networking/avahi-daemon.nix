@@ -7,8 +7,6 @@
 let
   cfg = config.services.avahi;
 
-  yesNo = yes: if yes then "yes" else "no";
-
   avahiDaemonConf =
     with cfg;
     pkgs.writeText "avahi-daemon.conf" ''
@@ -21,8 +19,8 @@ let
         lib.optionalString (hostName != "") "host-name=${hostName}"
       }
       browse-domains=${lib.concatStringsSep ", " browseDomains}
-      use-ipv4=${yesNo ipv4}
-      use-ipv6=${yesNo ipv6}
+      use-ipv4=${lib.boolToYesNo ipv4}
+      use-ipv6=${lib.boolToYesNo ipv6}
       ${lib.optionalString (
         allowInterfaces != null
       ) "allow-interfaces=${lib.concatStringsSep "," allowInterfaces}"}
@@ -30,22 +28,22 @@ let
         denyInterfaces != null
       ) "deny-interfaces=${lib.concatStringsSep "," denyInterfaces}"}
       ${lib.optionalString (domainName != null) "domain-name=${domainName}"}
-      allow-point-to-point=${yesNo allowPointToPoint}
+      allow-point-to-point=${lib.boolToYesNo allowPointToPoint}
       ${lib.optionalString (cacheEntriesMax != null) "cache-entries-max=${toString cacheEntriesMax}"}
 
       [wide-area]
-      enable-wide-area=${yesNo wideArea}
+      enable-wide-area=${lib.boolToYesNo wideArea}
 
       [publish]
-      disable-publishing=${yesNo (!publish.enable)}
-      disable-user-service-publishing=${yesNo (!publish.userServices)}
-      publish-addresses=${yesNo (publish.userServices || publish.addresses)}
-      publish-hinfo=${yesNo publish.hinfo}
-      publish-workstation=${yesNo publish.workstation}
-      publish-domain=${yesNo publish.domain}
+      disable-publishing=${lib.boolToYesNo (!publish.enable)}
+      disable-user-service-publishing=${lib.boolToYesNo (!publish.userServices)}
+      publish-addresses=${lib.boolToYesNo (publish.userServices || publish.addresses)}
+      publish-hinfo=${lib.boolToYesNo publish.hinfo}
+      publish-workstation=${lib.boolToYesNo publish.workstation}
+      publish-domain=${lib.boolToYesNo publish.domain}
 
       [reflector]
-      enable-reflector=${yesNo reflector}
+      enable-reflector=${lib.boolToYesNo reflector}
       ${extraConfig}
     '';
 in
@@ -157,8 +155,12 @@ in
 
     wideArea = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Whether to enable wide-area service discovery.";
+      default = false;
+      description = ''
+        Whether to enable wide-area service discovery.
+
+        It is recommended to keep this options disabled as it exposes the system to `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
+      '';
     };
 
     reflector = lib.mkOption {
@@ -260,6 +262,28 @@ in
       '';
     };
 
+    nssmdnsFull = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to enable the full mDNS NSS (Name Service Switch) plug-in.
+
+        By default, only the minimal module is enabled. The minimal module
+        will only resolve `.local` domains and only perform reverse hostname
+        lookups for `169.254.0.0/16`. The full module will use mDNS to resolve any
+        domain allowed by [`/etc/mdns.allow`][1] and will perform reverse hostname
+        lookups for any IP address.
+
+        [1]: https://github.com/avahi/nss-mdns/tree/master#etcmdnsallow
+
+        ::: {.note}
+        Enabling this option will introduce a 5 second delay to failed reverse
+        hostname lookups. For example, this will often add a 5 second delay to
+        ping.
+        :::
+      '';
+    };
+
     cacheEntriesMax = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
       default = null;
@@ -276,9 +300,24 @@ in
         Extra config to append to avahi-daemon.conf.
       '';
     };
+
+    debug = lib.mkEnableOption "debug logging";
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = [
+      (lib.mkIf cfg.wideArea "Enabling `services.avahi.wideArea` exposes this system to `CVE-2024-52615`.")
+    ];
+
+    assertions = [
+      {
+        assertion = cfg.nssmdnsFull -> (cfg.nssmdns4 || cfg.nssmdns6);
+        message = ''
+          `services.avahi.nssmdnsFull` requires one or both of `services.avahi.nssmdns4` and/or `services.avahi.nssmdns6` to be enabled.
+        '';
+      }
+    ];
+
     users.users.avahi = {
       description = "avahi-daemon privilege separation user";
       home = "/var/empty";
@@ -304,7 +343,7 @@ in
       lib.optionals (cfg.nssmdns4 || cfg.nssmdns6) (
         lib.mkMerge [
           (lib.mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
-          (lib.mkAfter [ "${mdns}" ]) # after dns
+          (lib.mkAfter (lib.optional cfg.nssmdnsFull "${mdns}")) # after dns
         ]
       );
 
@@ -356,7 +395,7 @@ in
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf} ${lib.optionalString cfg.debug "--debug"}";
         ConfigurationDirectory = "avahi/services";
 
         # Hardening
@@ -397,6 +436,15 @@ in
           "@system-service"
           "~@privileged"
           "@chown setgroups setresuid"
+        ]
+        ++ lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+          # glibc's setresuid()/setgroups() invoke the kernel's 32-bit compat
+          # syscalls (setresuid32/setgroups32) on 32-bit architectures --
+          # distinct syscalls from the ones already allowlisted above, so
+          # without these 2, avahi-daemon is killed with SIGSYS as soon as it
+          # tries to drop privileges.
+          "setgroups32"
+          "setresuid32"
         ];
         UMask = "0077";
       };

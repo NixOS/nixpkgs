@@ -1,71 +1,69 @@
 {
   lib,
   stdenvNoCC,
-  buildFHSEnv,
+  makeWrapper,
   fetchzip,
   nix-update-script,
+  nodejs-slim,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
-
 let
-  arch =
-    {
-      aarch64-darwin = "arm64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      x86_64-linux = "x64";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-  os =
-    {
-      aarch64-darwin = "darwin";
-      aarch64-linux = "linux";
-      x86_64-darwin = "darwin";
-      x86_64-linux = "linux";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-
-  executableName = "copilot-language-server";
-  fhs =
-    { package }:
-    buildFHSEnv {
-      name = package.meta.mainProgram;
-      version = package.version;
-      targetPkgs = pkgs: [ pkgs.stdenv.cc.cc.lib ];
-      runScript = lib.getExe package;
-
-      meta = package.meta // {
-        description =
-          package.meta.description
-          + " (FHS-wrapped, expand package details for further information when to use it)";
-        longDescription = "Use this version if you encounter an error like `Could not start dynamically linked executable` or `SyntaxError: Invalid or unexpected token` (see nixpkgs issue [391730](https://github.com/NixOS/nixpkgs/issues/391730)).";
-      };
-    };
+  inherit (stdenvNoCC.hostPlatform.node) arch platform;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.337.0";
+  version = "1.530.0";
 
   src = fetchzip {
-    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-F8D45LrL4vzmAH6J4hVWvEIkwzSRaCeMluPFimJPiXk=";
+    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
+    hash = "sha256-dnlkzbJpoQHm7ua1wEBu9FWorrbzLK97ezM0hX/EN2Q=";
     stripRoot = false;
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    nodejs-slim
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    install "${os}-${arch}/${executableName}" -Dm755 -t "$out"/bin
+    server=$out/share/copilot-language-server
+
+    mkdir -p $server
+    cp -r ./* $server/
+
+    find "$server/node_modules/@github" -mindepth 1 -maxdepth 1 \
+      \( -name 'copilot-linux-*' -o -name 'copilot-darwin-*' -o -name 'copilot-win32-*' \) \
+      ! -name "copilot-${platform}-${arch}" -exec rm -rf {} +
+
+    find "$server/bin" "$server/compiled" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
+    find "$server/bin/${platform}" "$server/compiled/${platform}" -mindepth 1 -maxdepth 1 ! -name "${arch}" -exec rm -rf {} +
+
+    find "$server/policy-templates" -mindepth 1 -maxdepth 1 ! -name "${platform}" -exec rm -rf {} +
+
+    find "$server" -name '*.map' -delete
+
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/copilot-language-server \
+      --add-flags $out/share/copilot-language-server/main.js
 
     runHook postInstall
   '';
 
-  dontStrip = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  # uv_os_homedir returned ENOENT (no such file or directory)
+  versionCheckKeepEnvironment = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ "HOME" ];
 
   passthru = {
     updateScript = nix-update-script { };
-    fhs = fhs { package = finalAttrs.finalPackage; };
   };
 
   meta = {
@@ -79,11 +77,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       shortName = "GitHub Copilot License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
-    mainProgram = executableName;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # prebuild directory
+      binaryBytecode # WASM files
+      obfuscatedCode # minified JavaScript
+    ];
+    mainProgram = "copilot-language-server";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

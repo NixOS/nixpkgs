@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     "dev"
     "lib"
     "man"
-  ] ++ lib.optionals enablePython [ "py" ];
+  ]
+  ++ lib.optionals enablePython [ "py" ];
 
   src = fetchFromGitHub {
     owner = "libpwquality";
@@ -67,7 +68,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ] ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
+  ]
+  ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags =
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
       # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
       [ "--disable-python-bindings" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libpwquality/libpwquality";
     description = "Password quality checking and random password generation library";
     longDescription = ''
@@ -95,12 +97,12 @@ stdenv.mkDerivation rec {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [ jk ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jk ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  meta = with lib; {
-    description = "For relaying IP packets between two devices to build a IP bridge between them";
+  meta = {
+    description = "For relaying IP packets between two devices to build an IP bridge between them";
     longDescription = ''
       A kernel module that relays ethernet packets between two devices (similar to a bridge),
       but without any MAC address checks.
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
       supposed to exit from.
     '';
     homepage = "https://github.com/openwrt/openwrt/tree/main/package/kernel/trelay";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.aprl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.aprl ];
+    platforms = lib.platforms.linux;
     broken = lib.versionOlder kernel.version "5.10";
   };
 })

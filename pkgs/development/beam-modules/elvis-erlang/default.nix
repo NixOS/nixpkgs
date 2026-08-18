@@ -11,12 +11,12 @@
 rebar3Relx rec {
   releaseType = "escript";
   pname = "elvis-erlang";
-  version = "4.1.1";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "inaka";
     repo = "elvis";
-    hash = "sha256-9aOJpKYb+M07bi6aEMt5Gtr/edOGm+jyA8bxiLyUd0g=";
+    hash = "sha256-T1LRumm3mP6Vfv3vEiCBm7XnkcY3GvDbe0nYcaxlrGg=";
     tag = version;
   };
 
@@ -29,7 +29,7 @@ rebar3Relx rec {
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}" nixfmt-rfc-style
+    #!nix-shell -i bash -p bash common-updater-scripts git nix-prefetch-git gnutar gzip "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}"
 
     set -euo pipefail
 

@@ -7,7 +7,9 @@
 
 let
   cfg = config.services.murmur;
-  forking = cfg.logFile != null;
+  acmeHostDir = config.security.acme.certs."${cfg.tls.useACMEHost}".directory;
+
+  forking = cfg.logToFile;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
@@ -16,7 +18,7 @@ let
     autobanTimeframe=${toString cfg.autobanTimeframe}
     autobanTime=${toString cfg.autobanTime}
 
-    logfile=${lib.optionalString (cfg.logFile != null) cfg.logFile}
+    logfile=${lib.optionalString cfg.logToFile "/var/log/murmur/murmurd.log"}
     ${lib.optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
@@ -41,9 +43,9 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.tls.certPath != null) "sslCert=${cfg.tls.certPath}"}
+    ${lib.optionalString (cfg.tls.keyPath != null) "sslKey=${cfg.tls.keyPath}"}
+    ${lib.optionalString (cfg.tls.caPath != null) "sslCA=${cfg.tls.caPath}"}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -51,6 +53,21 @@ let
   '';
 in
 {
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "murmur"
+      "logFile"
+    ] "This option has been superseded by services.murmur.logToFile")
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslCa" ] [ "services" "murmur" "tls" "caPath" ])
+    (lib.mkRenamedOptionModule [ "services" "murmur" "sslKey" ] [ "services" "murmur" "tls" "keyPath" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "murmur" "sslCert" ]
+      [ "services" "murmur" "tls" "certPath" ]
+    )
+  ];
+
   options = {
     services.murmur = {
       enable = lib.mkEnableOption "Mumble server";
@@ -84,7 +101,7 @@ in
       };
 
       autobanAttempts = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 10;
         description = ''
           Number of attempts a client is allowed to make in
@@ -94,7 +111,7 @@ in
       };
 
       autobanTimeframe = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 120;
         description = ''
           Timeframe in which a client can connect without being banned
@@ -103,17 +120,12 @@ in
       };
 
       autobanTime = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 300;
         description = "The amount of time an IP ban lasts (in seconds).";
       };
 
-      logFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        example = "/var/log/murmur/murmurd.log";
-        description = "Path to the log file for Murmur daemon. Empty means log to journald.";
-      };
+      logToFile = lib.mkEnableOption "logging to a file instead of journald, which is stored in /var/log/murmur";
 
       welcometext = lib.mkOption {
         type = lib.types.str;
@@ -142,7 +154,7 @@ in
       };
 
       bandwidth = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 72000;
         description = ''
           Maximum bandwidth (in bits per second) that clients may send
@@ -151,19 +163,19 @@ in
       };
 
       users = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 100;
         description = "Maximum number of concurrent clients allowed.";
       };
 
       textMsgLength = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 5000;
         description = "Max length of text messages. Set 0 for no limit.";
       };
 
       imgMsgLength = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.unsigned;
         default = 131072;
         description = "Max length of image messages. Set 0 for no limit.";
       };
@@ -233,22 +245,41 @@ in
 
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
-      sslCert = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "Path to your SSL certificate.";
-      };
+      tls = {
+        certPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/cert.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS certificate.";
+        };
 
-      sslKey = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "Path to your SSL key.";
-      };
+        keyPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/key.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS key.";
+        };
 
-      sslCa = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "Path to your SSL CA certificate.";
+        caPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = if (cfg.tls.useACMEHost != null) then "${acmeHostDir}/chain.pem" else null;
+          defaultText = lib.literalMD "If {option}`services.murmur.tls.useACMEHost` is set, defaults to what's provided by the ACME module.";
+          description = "Path to your TLS CA certificate.";
+        };
+
+        useACMEHost = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "mumble.example.com";
+          description = ''
+            Host of an existing Let's Encrypt certificate to use for TLS.
+            Make sure that the certificate directory is readable by the
+            `murmur` user or group. *Note that this option does not
+            create any certificates and it doesn't add subdomains to
+            existing ones – you will need to create them manually using
+            {option}`security.acme.certs`.*
+          '';
+        };
       };
 
       extraConfig = lib.mkOption {
@@ -312,23 +343,29 @@ in
       allowedUDPPorts = [ cfg.port ];
     };
 
+    security.acme.certs = lib.mkIf (cfg.tls.useACMEHost != null) {
+      "${cfg.tls.useACMEHost}".reloadServices = [ "murmur.service" ];
+    };
+
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      preStart = ''
-        ${pkgs.envsubst}/bin/envsubst \
-          -o /run/murmur/murmurd.ini \
-          -i ${configFile}
-      '';
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional (cfg.tls.useACMEHost != null) "acme-${cfg.tls.useACMEHost}.service";
+      wants = lib.mkIf (cfg.tls.useACMEHost != null) [ "acme-${cfg.tls.useACMEHost}.service" ];
 
       serviceConfig = {
         # murmurd doesn't fork when logging to the console.
         Type = if forking then "forking" else "simple";
         PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o /run/murmur/murmurd.ini";
         ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
+        LogsDirectory = lib.mkIf cfg.logToFile "murmur";
+        LogsDirectoryMode = "0750";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = cfg.user;
@@ -339,18 +376,29 @@ in
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectSystem = "full";
-        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.stateDir
+        ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         RestrictRealtime = true;
@@ -384,44 +432,43 @@ in
       })
     ];
 
-    security.apparmor.policies."bin.mumble-server".profile =
-      ''
-        include <tunables/global>
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      abi <abi/4.0>,
+      include <tunables/global>
 
-        ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
-          include <abstractions/base>
-          include <abstractions/nameservice>
-          include <abstractions/ssl_certs>
-          include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
-          pix ${cfg.package}/bin/.mumble-server-wrapped,
+      profile ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        ${cfg.package}/bin/.mumble-server-wrapped pix,
 
-          r ${config.environment.etc."os-release".source},
-          r ${config.environment.etc."lsb-release".source},
-          owner rwk ${cfg.stateDir}/murmur.sqlite,
-          owner rw ${cfg.stateDir}/murmur.sqlite-journal,
-          owner r ${cfg.stateDir}/,
-          r /run/murmur/murmurd.pid,
-          r /run/murmur/murmurd.ini,
-          r ${configFile},
-      ''
-      + lib.optionalString (cfg.logFile != null) ''
-        rw ${cfg.logFile},
-      ''
-      + lib.optionalString (cfg.sslCert != "") ''
-        r ${cfg.sslCert},
-      ''
-      + lib.optionalString (cfg.sslKey != "") ''
-        r ${cfg.sslKey},
-      ''
-      + lib.optionalString (cfg.sslCa != "") ''
-        r ${cfg.sslCa},
-      ''
-      + lib.optionalString (cfg.dbus != null) ''
-        dbus bus=${cfg.dbus}
-      ''
-      + ''
-        }
-      '';
+        ${config.environment.etc."os-release".source} r,
+        ${config.environment.etc."lsb-release".source} r,
+        owner ${cfg.stateDir}/murmur.sqlite rwk,
+        owner ${cfg.stateDir}/murmur.sqlite-journal rw,
+        owner ${cfg.stateDir}/ r,
+        /run/murmur/murmurd.pid r,
+        /run/murmur/murmurd.ini r,
+        ${configFile} r,
+        ${lib.optionalString cfg.logToFile ''
+          /var/log/murmur/murmurd.log rw,
+        ''}
+        ${lib.optionalString (cfg.tls.certPath != null) ''
+          ${cfg.tls.certPath} r,
+        ''}
+        ${lib.optionalString (cfg.tls.keyPath != null) ''
+          ${cfg.tls.keyPath} r,
+        ''}
+        ${lib.optionalString (cfg.tls.caPath != null) ''
+          ${cfg.tls.caPath} r,
+        ''}
+        ${lib.optionalString (cfg.dbus != null) ''
+          dbus bus=${cfg.dbus},
+        ''}
+        include if exists <local/bin.mumble-server>
+      }
+    '';
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];

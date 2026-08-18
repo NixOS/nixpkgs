@@ -2,8 +2,13 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  bash,
+  bashInteractive,
+  bc,
+  gitMinimal,
+  gnugrep,
+  jq,
   which,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   coreutils,
   makeBinaryWrapper,
@@ -12,27 +17,32 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.19.1";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-LoPtWf4Vo7hodWa0WJmqYDW7p7xJDrRZ5/qwUy/rB3U=";
+    hash = "sha256-5GsSJKgMxzy4tAMtecwF1aopDsXOsOT0KTykHuTGHm4=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-
-  postConfigure = ''
-    patchShebangs tests build.sh bashunit
-    substituteInPlace Makefile \
-      --replace-fail "SHELL=/bin/bash" "SHELL=${lib.getExe bash}"
+  postPatch = ''
+    patchShebangs bashunit build.sh tests
+    # Tests emit scripts with #!/usr/bin/env bash at runtime; patch the literals
+    substituteInPlace tests/unit/build_test.sh \
+      --replace-fail "#!/usr/bin/env bash" "#!${lib.getExe bashInteractive}"
   '';
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    bashInteractive # needed for compgen in checkPhase
+  ];
 
   buildPhase = ''
     runHook preBuild
     ./build.sh
+    patchShebangs bin/bashunit
     runHook postBuild
   '';
 
@@ -43,10 +53,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ which ];
+  nativeCheckInputs = [
+    bc
+    gitMinimal
+    jq
+    which
+  ];
+
   checkPhase = ''
     runHook preCheck
-    make test
+    make test/parallel
     runHook postCheck
   '';
 
@@ -54,15 +70,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/bashunit \
       --prefix PATH : "${
         lib.makeBinPath [
-          coreutils
+          coreutils # cat, mktemp
+          gnugrep # grep
           which
         ]
       }"
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
+
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "PATH"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

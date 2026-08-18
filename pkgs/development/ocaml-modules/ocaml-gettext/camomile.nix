@@ -18,7 +18,7 @@ buildDunePackage {
   doCheck = true;
   checkInputs = [ ounit2 ];
 
-  meta = (builtins.removeAttrs ocaml_gettext.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs ocaml_gettext.meta [ "mainProgram" ]) // {
     description = "Internationalization library using camomile (i18n)";
   };
 

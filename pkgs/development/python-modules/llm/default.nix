@@ -4,8 +4,8 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   click-default-group,
@@ -24,6 +24,7 @@
   pytest-asyncio,
   pytest-httpx,
   pytest-recording,
+  sqlite,
   sqlite-utils,
   syrupy,
   llm-echo,
@@ -75,11 +76,13 @@ let
       llm-gemini ? false,
       llm-gguf ? false,
       llm-git ? false,
+      llm-github-copilot ? false,
       llm-grok ? false,
       llm-groq ? false,
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
@@ -161,24 +164,30 @@ let
       '') withPluginsArgNames
     )
   );
-
-  llm = buildPythonPackage rec {
+  llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.26";
+    version = "0.31.1";
     pyproject = true;
+    __structuredAttrs = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      tag = version;
-      hash = "sha256-KTlNajuZrR0kBX3LatepsNM3PfRVsQn+evEfXTu6juE=";
+      tag = finalAttrs.version;
+      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
     };
 
-    patches = [ ./001-disable-install-uninstall-commands.patch ];
+    patches = [
+      ./001-disable-install-uninstall-commands.patch
+      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
+      ./do-not-commit-inside-content_hash-embeddings.patch
+      (fetchpatch2 {
+        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
+        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace llm/cli.py \
@@ -219,9 +228,23 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
+    ];
+
+    disabledTests = [
+      # AssertionError: The following responses are mocked but not requested:
+      # - Match POST request on https://api.openai.com/v1/chat/completions
+      # https://github.com/simonw/llm/issues/1292
+      "test_gpt4o_mini_sync_and_async"
+
+      # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
+      # https://github.com/simonw/llm/issues/1293
+      "test_embed_multi_files_encoding"
     ];
 
     pythonImportsCheck = [ "llm" ];
@@ -234,13 +257,13 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       mainProgram = "llm";
       maintainers = with lib.maintainers; [
@@ -249,6 +272,6 @@ let
         philiptaron
       ];
     };
-  };
+  });
 in
 llm

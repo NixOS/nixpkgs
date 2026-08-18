@@ -8,49 +8,48 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doppler";
-  version = "3.75.1";
+  version = "3.76.4";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
-    rev = version;
-    hash = "sha256-YyhDvBgdcy3CtVpQj60XQ0aqE2zT1LV9QXQJiJvlaic=";
+    rev = finalAttrs.version;
+    hash = "sha256-GkM4pSmMIjoyOMPmtb4GoSrZdz69kL1s1r+krRhedR8=";
   };
 
-  vendorHash = "sha256-tSRtgkDPvDlEfwuNhahvs3Pvt4h7QAJrJtb1XQXGaFM=";
+  vendorHash = "sha256-rDpr4qWhMWXEhgZrmoW5tzPZif3KAv3gDtJNtXzbVq0=";
 
   ldflags = [
     "-s -w"
-    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}"
+    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      mv $out/bin/cli $out/bin/doppler
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME=$TMPDIR
-      mkdir $HOME/.doppler # to avoid race conditions below
-      installShellCompletion --cmd doppler \
-        --bash <($out/bin/doppler completion bash) \
-        --fish <($out/bin/doppler completion fish) \
-        --zsh <($out/bin/doppler completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/cli $out/bin/doppler
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export HOME=$TMPDIR
+    mkdir $HOME/.doppler # to avoid race conditions below
+    installShellCompletion --cmd doppler \
+      --bash <($out/bin/doppler completion bash) \
+      --fish <($out/bin/doppler completion fish) \
+      --zsh <($out/bin/doppler completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = doppler;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for interacting with your Doppler Enclave secrets and configuration";
     mainProgram = "doppler";
     homepage = "https://doppler.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

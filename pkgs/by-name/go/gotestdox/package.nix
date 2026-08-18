@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotestdox";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "bitfield";
     repo = "gotestdox";
-    rev = "v${version}";
-    hash = "sha256-AZDXMwADOjcaMiofMWoHp+eSnD3a8iFtwpWDKl9Ess8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8zGCaxlyh98HVpuYLbL4wr1HqYB0XoEUdDyoJwkdPtk=";
   };
 
-  vendorHash = "sha256-kDSZ4RZTHDFmu7ernYRjg0PV7eBB2lH8q5wW3kTExDs=";
+  vendorHash = "sha256-YPgT8atTGt4kWaPfC9KrINnDs8FFUPrYeBbw4Ybozqs=";
 
   ldflags = [
     "-s"
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "gotestdox";
   };
-}
+})

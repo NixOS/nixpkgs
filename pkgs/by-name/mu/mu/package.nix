@@ -8,7 +8,8 @@
   pkg-config,
   python3,
   cld2,
-  coreutils,
+  cli11,
+  fmt_11,
   emacs,
   glib,
   gmime3,
@@ -16,9 +17,9 @@
   xapian,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.12.11";
+  version = "1.14.3";
 
   outputs = [
     "out"
@@ -28,17 +29,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
-    rev = "v${version}";
-    hash = "sha256-t4Jv1RX1mMGwiYg9mFrRuO2j54EfaGM3ouOdg8upds8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nDAtegMqKsUiKLQuTY7clFh2oBeW0OrG7LY1yeIW+R4=";
   };
 
   postPatch = ''
-    substituteInPlace lib/utils/mu-utils-file.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/tests/bench-indexer.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/mu-maildir.cc \
-      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     patchShebangs build-aux/date.py
   '';
 
@@ -63,7 +58,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cld2
+    cli11
     emacs
+    fmt_11
     glib
     gmime3
     texinfo
@@ -71,9 +68,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dguile=disabled"
-    "-Dreadline=disabled"
-    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
+    (lib.strings.mesonEnable "guile" false)
+    (lib.strings.mesonEnable "scm" false)
+    (lib.strings.mesonEnable "readline" false)
+    (lib.strings.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")
   ];
 
   nativeBuildInputs = [
@@ -93,7 +92,7 @@ stdenv.mkDerivation rec {
     description = "Collection of utilities for indexing and searching Maildirs";
     license = lib.licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
-    changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
+    changelog = "https://github.com/djcb/mu/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       antono
       chvp
@@ -102,4 +101,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mu";
     platforms = lib.platforms.unix;
   };
-}
+})

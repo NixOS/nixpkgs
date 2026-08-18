@@ -9,14 +9,13 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkRenamedOptionModule
     teams
     ;
 in
 
 {
   meta = {
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 
   options = {

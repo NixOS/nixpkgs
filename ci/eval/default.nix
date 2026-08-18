@@ -14,10 +14,21 @@
   runCommand,
   writeShellScript,
   symlinkJoin,
-  time,
-  procps,
-  nix,
+  busybox,
   jq,
+  nix,
+  perf,
+}:
+
+{
+  # The number of attributes per chunk, see ./README.md for more info.
+  chunkSize ? 5000,
+  # Whether to just evaluate a single chunk for quick testing
+  quickTest ? false,
+  # Don't try to eval packages marked as broken.
+  includeBroken ? false,
+  # Customize the config used to evaluate nixpkgs
+  extraNixpkgsConfig ? { },
 }:
 
 let
@@ -27,45 +38,51 @@ let
       root = ../..;
       fileset = unions (
         map (lib.path.append ../..) [
+          ".version"
+          "ci/eval/pre-eval.nix"
+          "ci/eval/chunk.nix"
+          "ci/eval/outpaths.nix"
           "default.nix"
           "doc"
           "lib"
           "maintainers"
+          "modules"
           "nixos"
           "pkgs"
-          ".version"
-          "ci/supportedSystems.json"
         ]
       );
     };
 
-  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
+  supportedSystems = builtins.fromJSON (
+    builtins.readFile ../../pkgs/top-level/release-supported-systems.json
+  );
 
-  attrpathsSuperset =
+  preEval =
     {
       evalSystem,
     }:
-    runCommand "attrpaths-superset.json"
+    runCommand "pre-eval"
       {
         src = nixpkgs;
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          busybox
           nix
-          time
         ];
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
+        command time -f "Pre-eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
-            "$src/pkgs/top-level/release-attrpaths-superset.nix" \
-            -A paths \
+            "$src/ci/eval/pre-eval.nix" \
+            -A result \
             -I "$src" \
+            --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --option eval-system "${evalSystem}" \
-            --arg enableWarnings false > $out/paths.json
+            --option eval-system "${evalSystem}" > $out/result.json
       '';
 
   singleSystem =
@@ -73,17 +90,11 @@ let
       # The system to evaluate.
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
-      evalSystem,
-      # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
-      checkMeta ? true,
-
-      # Don't try to eval packages marked as broken.
-      includeBroken ? false,
-      # Whether to just evaluate a single chunk for quick testing
-      quickTest ? false,
+      evalSystem ? builtins.currentSystem,
+      # The path to the `result.json` file from `preEval`
+      preEvalFile ? "${preEval { inherit evalSystem; }}/result.json",
+      # Output the number of assembly instructions executed during evaluation
+      countInstructions ? false,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -92,6 +103,11 @@ let
         myChunk=$2
         system=$3
         outputDir=$4
+        preEvalFile=$5
+
+        # Default is 5, higher values effectively disable the warning.
+        # This randomly breaks Eval.
+        export GC_LARGE_ALLOC_WARN_INTERVAL=1000
 
         export NIX_SHOW_STATS=1
         export NIX_SHOW_STATS_PATH="$outputDir/stats/$myChunk"
@@ -99,21 +115,22 @@ let
         set +e
         command time -o "$outputDir/timestats/$myChunk" \
           -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          nix-env -f "${nixpkgs}/ci/eval/chunk.nix" \
           --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
           --out-path --json \
+          --meta \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
-          --arg attrpathFile "${attrpathFile}" \
+          --arg preEvalFile "$preEvalFile" \
           --arg systems "[ \"$system\" ]" \
-          --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
-          -I ${attrpathFile} \
+          -I "$preEvalFile" \
           > "$outputDir/result/$myChunk" \
           2> "$outputDir/stderr/$myChunk"
         exitCode=$?
@@ -132,15 +149,20 @@ let
     in
     runCommand "nixpkgs-eval-${evalSystem}"
       {
-        nativeBuildInputs = [
-          nix
-          time
-          procps
-          jq
-        ];
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin (
+          [
+            busybox
+            jq
+            nix
+          ]
+          ++ lib.optionals countInstructions [ perf ]
+        );
         env = {
-          inherit evalSystem chunkSize;
+          inherit evalSystem chunkSize countInstructions;
         };
+        __structuredAttrs = true;
+        unsafeDiscardReferences.out = true;
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
@@ -149,54 +171,98 @@ let
         echo "System: $evalSystem"
         cores=$NIX_BUILD_CORES
         echo "Cores: $cores"
-        attrCount=$(jq length "${attrpathFile}")
-        echo "Attribute count: $attrCount"
-        echo "Chunk size: $chunkSize"
-        # Same as `attrCount / chunkSize` but rounded up
-        chunkCount=$(( (attrCount - 1) / chunkSize + 1 ))
-        echo "Chunk count: $chunkCount"
 
         mkdir -p $out/${evalSystem}
 
         # Record and print stats on free memory and swap in the background
         (
           while true; do
-            availMemory=$(free -b | grep Mem | awk '{print $7}')
-            freeSwap=$(free -b | grep Swap | awk '{print $4}')
-            echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
+            availMemory=$(free -m | grep Mem | awk '{print $7}')
+            freeSwap=$(free -m | grep Swap | awk '{print $4}')
+            echo "Available memory: $(( availMemory )) MiB, free swap: $(( freeSwap )) MiB"
 
             if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
               echo "$availMemory" > $out/${evalSystem}/min-avail-memory
             fi
-            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( availMemory < $(<$out/${evalSystem}/min-free-swap) )); then
+            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( freeSwap < $(<$out/${evalSystem}/min-free-swap) )); then
               echo "$freeSwap" > $out/${evalSystem}/min-free-swap
             fi
             sleep 4
           done
         ) &
 
-        seq_end=$(( chunkCount - 1 ))
+        chunkedEval() {
+          local chunkOutputDir=$1
+          local preEvalFile=$2
 
-        ${lib.optionalString quickTest ''
-          seq_end=0
-        ''}
+          local attrCount=$(jq '.paths | length' "$preEvalFile")
+          echo "Attribute count: $attrCount"
+          echo "Chunk size: $chunkSize"
+          # Same as `attrCount / chunkSize` but rounded up
+          local chunkCount=$(( (attrCount - 1) / chunkSize + 1 ))
+          echo "Chunk count: $chunkCount"
 
-        chunkOutputDir=$(mktemp -d)
-        mkdir "$chunkOutputDir"/{result,stats,timestats,stderr}
+          local seq_end=$(( chunkCount - 1 ))
+          ${lib.optionalString quickTest ''
+            seq_end=0
+          ''}
 
-        seq -w 0 "$seq_end" |
-          command time -f "%e" -o "$out/${evalSystem}/total-time" \
-          xargs -I{} -P"$cores" \
-          ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir"
+          mkdir -p "$chunkOutputDir"/{result,stats,timestats,stderr}
 
-        cp -r "$chunkOutputDir"/stats $out/${evalSystem}/stats-by-chunk
+          runAllChunks() {
+            seq -w 0 "$seq_end" |
+              xargs -I{} -P"$cores" \
+              ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir" "$preEvalFile"
+          }
 
-        if (( chunkSize * chunkCount != attrCount )); then
-          # A final incomplete chunk would mess up the stats, don't include it
-          rm "$chunkOutputDir"/stats/"$seq_end"
+          if [[ -n "$countInstructions" ]]; then
+            export seq_end cores chunkSize evalSystem chunkOutputDir preEvalFile
+            export -f runAllChunks
+            perf stat \
+              --event instructions:u --field-separator , --output "$chunkOutputDir"/perf-output-file \
+              bash -c runAllChunks
+            cat "$chunkOutputDir"/perf-output-file | tail -n 1 | cut -d, -f1 > "$chunkOutputDir"/instructions
+            rm "$chunkOutputDir"/perf-output-file
+          else
+            runAllChunks
+          fi
+
+          if (( chunkSize * chunkCount != attrCount )); then
+            # A final incomplete chunk would mess up the stats, don't include it
+            rm "$chunkOutputDir"/stats/"$seq_end"
+          fi
+        }
+
+        chunkOutputDirs=$(mktemp -d)
+
+        # Preparation for the second eval
+        disallowedAttributesPreEvalFile=$(mktemp)
+        jq '{
+          paths: (.attrPathsDisallowedForInternalUse | map(.attrPath)),
+          attrPathsDisallowedForInternalUse: []
+        }' ${preEvalFile} > "$disallowedAttributesPreEvalFile"
+
+        startEpoch=$(date +%s)
+
+        # The first eval evaluates only attributes that are not disallowed for internal Nixpkgs use, ensuring that they don't depend on disallowed attributes
+        # Because the first eval doesn't evaluate the disallowed attributes themselves, but we still want to check that they don't fail evaluation, we evaluate them separately in a second eval
+        # The reason we need two evals is because we want disallowed attributes to be able to depend on other disallowed attributes, which inherently needs a separate Nixpkgs instantiation
+        # And while we could interleave that instantiation into a single eval, that would ~double memory usage for all chunks, while doing it separately doesn't
+        echo "Evaluating the internally allowed attributes"
+        chunkedEval "$chunkOutputDirs"/allowed ${preEvalFile}
+        echo "Evaluating the internally disallowed attributes"
+        chunkedEval "$chunkOutputDirs"/disallowed "$disallowedAttributesPreEvalFile"
+
+        echo $(( $(date +%s) - startEpoch )) > "$out/${evalSystem}/total-time"
+
+        # We only use the stats from the allowed attrs eval, because the disallowed attrs are generally not even a full chunk
+        cp -r "$chunkOutputDirs"/allowed/stats $out/${evalSystem}/stats-by-chunk
+        if [[ -f "$chunkOutputDirs"/allowed/instructions ]]; then
+          cp "$chunkOutputDirs"/allowed/instructions $out/${evalSystem}/instructions
         fi
 
-        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
+        cat "$chunkOutputDirs"/*/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
+        cat "$chunkOutputDirs"/*/result/* | jq -s 'add | map_values(.meta)' > $out/${evalSystem}/meta.json
       '';
 
   diff = callPackage ./diff.nix { };
@@ -207,7 +273,8 @@ let
     }:
     runCommand "combined-eval"
       {
-        nativeBuildInputs = [
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
           jq
         ];
       }
@@ -219,64 +286,106 @@ let
           reduce .[] as $item ({}; {
             added: (.added + $item.added),
             changed: (.changed + $item.changed),
-            removed: (.removed + $item.removed)
+            removed: (.removed + $item.removed),
+            rebuilds: (.rebuilds + $item.rebuilds)
           })
         ' > $out/combined-diff.json
 
-        mkdir -p $out/before/stats
+        # Combine maintainers from all systems
+        cat ${diffDir}/*/maintainers.json | jq -s '
+          add | group_by(.package) | map({
+            key: .[0].package,
+            value: map(.maintainers) | flatten | unique
+          }) | from_entries
+        ' > $out/maintainers.json
+
+        mkdir -p $out/before/stats $out/before/instructions
         for d in ${diffDir}/before/*; do
           cp -r "$d"/stats-by-chunk $out/before/stats/$(basename "$d")
+          if [[ -f "$d"/instructions ]]; then
+            cp "$d"/instructions $out/before/instructions/$(basename "$d")
+          fi
         done
 
-        mkdir -p $out/after/stats
+        mkdir -p $out/after/stats $out/after/instructions
         for d in ${diffDir}/after/*; do
           cp -r "$d"/stats-by-chunk $out/after/stats/$(basename "$d")
+          if [[ -f "$d"/instructions ]]; then
+            cp "$d"/instructions $out/after/instructions/$(basename "$d")
+          fi
         done
       '';
 
   compare = callPackage ./compare { };
 
+  baseline =
+    {
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
+      # Output the number of assembly instructions executed during evaluation on
+      # each system
+      countInstructions ? false,
+    }:
+    symlinkJoin {
+      name = "nixpkgs-eval-baseline";
+      paths = map (
+        evalSystem:
+        singleSystem {
+          inherit evalSystem countInstructions;
+        }
+      ) evalSystems;
+    };
+
   full =
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
-      # The number of attributes per chunk, see ./README.md for more info.
-      chunkSize,
-      quickTest ? false,
+      baseline,
+      # What files have been touched? Defaults to none; use the expression below to calculate it.
+      # ```
+      # git diff --name-only --merge-base master HEAD \
+      #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
+      # ```
+      touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
+      # The branch the local comparison is made against; matches the `master`
+      # used in the touched-files expression above.
+      baseBranch ? "master",
+      # Output the number of assembly instructions executed during evaluation on
+      # each system
+      countInstructions ? false,
     }:
     let
       diffs = symlinkJoin {
-        name = "diffs";
+        name = "nixpkgs-eval-diffs";
         paths = map (
           evalSystem:
-          let
-            eval = singleSystem {
-              inherit quickTest evalSystem chunkSize;
-            };
-          in
           diff {
             inherit evalSystem;
-            # Local "full" evaluation doesn't do a real diff.
-            beforeDir = eval;
-            afterDir = eval;
+            beforeDir = baseline;
+            afterDir = singleSystem {
+              inherit evalSystem countInstructions;
+            };
           }
         ) evalSystems;
       };
+      comparisonReport = compare {
+        combinedDir = combine { diffDir = diffs; };
+        inherit touchedFilesJson baseBranch;
+      };
     in
-    combine {
-      diffDir = diffs;
-    };
+    comparisonReport;
 
 in
 {
   inherit
-    attrpathsSuperset
+    preEval
     singleSystem
     diff
     combine
     compare
     # The above three are used by separate VMs in a GitHub workflow,
-    # while the below is intended for testing on a single local machine
+    # while the below are intended for testing on a single local machine
+    baseline
     full
     ;
 }

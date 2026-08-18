@@ -4,6 +4,7 @@
   buildPythonPackage,
   cairosvg,
   fetchPypi,
+  setuptools,
   pillow,
   pytestCheckHook,
   pyyaml,
@@ -13,19 +14,24 @@
   xmldiff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wavedrom";
   version = "2.0.3.post3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MntNXcpZPIElfCAv6lFvepCHR/sRUnw1nwNPW3r39Hs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrdict
     pyyaml
     svgwrite
@@ -46,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wavedrom" ];
 
-  meta = with lib; {
+  meta = {
     description = "WaveDrom compatible Python command line";
     mainProgram = "wavedrompy";
     homepage = "https://github.com/wallento/wavedrompy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ airwoodix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ airwoodix ];
   };
-}
+})

@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2025.3.2";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
     tag = version;
-    hash = "sha256-FsgDILnnr+WApoTv/y1zVFSeBNysvkizdKtMeRegbfI=";
+    hash = "sha256-MQkrSqXILUkIwm1r1Ins4ZLSATBvFDbylgRLTWQyQOQ=";
   };
 
   build-system = [
@@ -117,20 +117,19 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests =
-    [
-      # network access to aws s3
-      "test_async_cat_file_ranges"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # works locally on APFS, fails on hydra with AssertionError comparing timestamps
-      # darwin hydra builder uses HFS+ and has only one second timestamp resolution
-      # this two tests however, assume nanosecond resolution
-      "test_modified"
-      "test_touch"
-      # tries to access /home, ignores $HOME
-      "test_directories"
-    ];
+  disabledTests = [
+    # network access to aws s3
+    "test_async_cat_file_ranges"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+    # this two tests however, assume nanosecond resolution
+    "test_modified"
+    "test_touch"
+    # tries to access /home, ignores $HOME
+    "test_directories"
+  ];
 
   disabledTestPaths = [
     # network access to github.com
@@ -142,7 +141,7 @@ buildPythonPackage rec {
   meta = {
     description = "Specification that Python filesystems should adhere to";
     homepage = "https://github.com/fsspec/filesystem_spec";
-    changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/filesystem_spec/raw/${src.tag}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };

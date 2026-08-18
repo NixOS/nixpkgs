@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://colobot.info/";
     description = "Game data for colobot";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

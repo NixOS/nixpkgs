@@ -5,54 +5,75 @@
   python3Packages,
   installShellFiles,
   procps,
+
+  buildPackages,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.7.2";
+  version = "5.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     tag = version;
-    hash = "sha256-dgOi9gJ7jO3+EjZQjHfx+KDsBtj6b4JWR3Bp9xWM6FI=";
+    hash = "sha256-9ngsjXkQ3YUc5nCgG1i592LoVERr4jRSKi8POBaP/aw=";
   };
 
   postPatch = ''
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace 'pkill' '${if stdenv.hostPlatform.isLinux then procps else "/usr"}/bin/pkill'
+      --replace-fail 'pkill' '${if stdenv.hostPlatform.isLinux then procps else "/usr"}/bin/pkill'
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    cryptography
-    pyscard
-    fido2
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  dependencies = with python3Packages; [
     click
+    cryptography
+    fido2
     keyring
+    pyscard
+    python-pskc
   ];
 
   pythonRelaxDeps = [
-    "keyring"
+    "cryptography"
   ];
 
   postInstall = ''
     installManPage man/ykman.1
-
-    installShellCompletion --cmd ykman \
-      --bash <(_YKMAN_COMPLETE=bash_source "$out/bin/ykman") \
-      --zsh  <(_YKMAN_COMPLETE=zsh_source  "$out/bin/ykman") \
-      --fish <(_YKMAN_COMPLETE=fish_source "$out/bin/ykman") \
-  '';
+  ''
+  + (
+    let
+      compOpts =
+        x:
+        if stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform then
+          "--${x} <(_YKMAN_COMPLETE=${x}_source ${placeholder "out"}/bin/ykman)"
+        else
+          ''--${x} <(_YKMAN_COMPLETE=${x}_source PYTHONPATH= "${buildPackages.yubikey-manager}/bin/ykman")'';
+    in
+    ''
+      installShellCompletion --cmd ykman ${
+        lib.strings.concatMapStringsSep " " compOpts [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      }
+    ''
+  );
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
+    astroid
     makefun
+    pytestCheckHook
   ];
 
   meta = {

@@ -1,47 +1,51 @@
 {
   lib,
   buildPythonPackage,
-  cramjam,
-  cython,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  gitMinimal,
+
+  # dependencies
+  cramjam,
   fsspec,
-  git,
   numpy,
   packaging,
   pandas,
-  pytestCheckHook,
+
+  # optional-dependencies
   python-lzo,
+
+  # tests
+  pytestCheckHook,
   python,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.11.0";
+  version = "2026.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-GJ6dr36hGjpfEKcA96RpEqY8I1vXooLDGwc0A57yFTY=";
+    hash = "sha256-thvoMXXiGtHGcJ0/IrGujjhVAvSmTMGmrlDHjG8R7PQ=";
   };
 
   build-system = [
+    cython
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeBuildInputs = [
-    cython
-    git
-    numpy
+    gitMinimal
   ];
 
   dependencies = [
@@ -58,6 +62,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated,
+    # and will raise an error in the future. This includes implicit conversion of bare
+    # integers (e.g. `+ 1`).Please use a specific unit instead.
+    "test_import_without_warning"
+  ];
+
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
     mv fastparquet/test .
@@ -72,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastparquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

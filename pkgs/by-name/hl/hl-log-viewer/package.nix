@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   installShellFiles,
   fetchFromGitHub,
@@ -8,21 +9,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";
-  version = "0.31.2";
+  version = "0.36.3";
 
   src = fetchFromGitHub {
     owner = "pamburus";
     repo = "hl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SYPzYdbrXltBk/A5T/yZo3IJXdowsHk38yL86BreF0k=";
+    hash = "sha256-Azt1jfBZP7N5ZAgdY2Hww6nt5ty2VEKZpaHZDodP/zM=";
   };
 
-  cargoHash = "sha256-1iBpzoTyNB6ECDuGW26JMdu2YolrPmIT040V35Pi+C4=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-RXIXoF3z2Zleje1OakHXQxPmNkRcqHjINRZYqMXS8U0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hl \
       --bash <($out/bin/hl --shell-completions bash) \
       --fish <($out/bin/hl --shell-completions fish) \
@@ -31,12 +31,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage hl.1
   '';
 
+  checkFlags = [
+    # test broken on zero-width TTY, see https://github.com/pamburus/hl/issues/1140
+    "--skip=help::tests::test_formatter_new"
+  ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/hl";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

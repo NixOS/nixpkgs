@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "16.0.03";
 
   src = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${version}/${pname}-${version}.otf";
+    url = "mirror://gnu/unifont/unifont-${version}/unifont_upper-${version}.otf";
     hash = "sha256-ACW+6xiQAd9QMidqJ2MQGTkYbW9fvateIR2FyoM7rIs=";
   };
 
@@ -23,13 +23,16 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for glyphs above the Unicode Basic Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
-    license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.mathnerd314 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      gpl2Plus
+      fontException
+    ];
+    maintainers = [ lib.maintainers.mathnerd314 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "geminicommit";
-  version = "0.4.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tfkhdyt";
     repo = "geminicommit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QUI5JI1udOo3IOXegoes3pwwgSfxXIjxXIPsA5SuAJo=";
+    hash = "sha256-OgcbPnZ88snTky8Uzbq2LIwSpMv44JvE75MPbTih7+c=";
   };
 
-  vendorHash = "sha256-AFm+1RQ6sMSe+kY/cw1Ly/8WEj2/yk0nJQiEJzV6jKg=";
+  vendorHash = "sha256-FFWptw1kSbl7f8DR3FrM0jAfr06NaJT+i/8ZaQjav/E=";
 
   nativeBuildInputs = [
     installShellFiles

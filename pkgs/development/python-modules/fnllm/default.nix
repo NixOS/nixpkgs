@@ -14,24 +14,26 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
   tenacity,
   tiktoken,
+  uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fnllm";
-  version = "0.2.8";
+  version = "0.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FafxygW5aZ3U24mesFZI5cmLd1L1FE8rHOrOgL3R+9g=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-gKdFBpNpG/CDLhKi1wQgZHv+o1pDy5HEqcteLzkXK1A=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiolimiter
@@ -57,7 +59,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "fnllm" ];
 
@@ -76,12 +79,17 @@ buildPythonPackage rec {
     "test_clear"
     "test_handles_common_errors"
     "test_children"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "test_call_batch_raises_if_response_length_mismatch"
   ];
 
   meta = {
-    description = "A function-based LLM protocol and wrapper";
+    description = "Function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
+    changelog = "https://github.com/microsoft/essex-toolkit/blob/fnllm-v${finalAttrs.version}/python/fnllm/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

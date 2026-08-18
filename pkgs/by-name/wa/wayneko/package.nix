@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     hash = "sha256-2cbEcDK6WZPe4HvY1pxmZVyDAj617VP1l0Gn7uSlNaE=";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail -Werror ""

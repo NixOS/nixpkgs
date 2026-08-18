@@ -1,31 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flake8,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
   six,
-  pythonOlder,
-  importlib-metadata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orderedmultidict";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bc2v0yflsxjyyjx4q9wqx0j3bvzcw9z87d5pz4iqac7bsxhn1q4";
+  src = fetchFromGitHub {
+    owner = "gruns";
+    repo = "orderedmultidict";
+    # https://github.com/gruns/orderedmultidict/issues/32
+    rev = "901194bed9c2de9e336358f3328132a81a14314e";
+    hash = "sha256-XJKmchG3BmPKrw20BEMLe2V6XlN9tXcgkf5G+P97uAQ=";
   };
 
-  nativeCheckInputs = [ flake8 ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [ six ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "orderedmultidict" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Ordered Multivalue Dictionary";
     homepage = "https://github.com/gruns/orderedmultidict";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ vanzef ];
+    license = lib.licenses.unlicense;
   };
-}
+})

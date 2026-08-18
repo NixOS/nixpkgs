@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchFromGitHub,
   fetchYarnDeps,
@@ -18,26 +18,22 @@ let
     hash = "sha256-f0vd/Xp/kBbZkg6CBM4cZPlwg5WUL/zv3mCAEmugzCE=";
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "incus-ui-canonical";
-  version = "0.17.1.0";
+  version = "0.21.6";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
-    tag = "incus-${version}";
-    hash = "sha256-dAYcput4qGLQT6G10O52UUrQ7HN9kXQFgZlm5QN4xI0=";
+    tag = "incus-${finalAttrs.version}";
+    hash = "sha256-emg02O8WUk9RWsA3Uz+bIfNXkE1IUa3ob1Xm14AAj98=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-or/lPf6pamFVJnSWU9CLTss9s6amMNd9A7H8CAFJ6RU=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-61z48VlhImykD/GJ5581Z95dIn7pv2ODZJfFKydGSPs=";
   };
-
-  patchPhase = ''
-    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
-  '';
 
   nativeBuildInputs = [
     nodejs
@@ -45,6 +41,15 @@ stdenv.mkDerivation rec {
     yarn
     git
   ];
+
+  postPatch = ''
+    # run the canonical renames sed script
+    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
+
+    # fix missing git repository issue for Vite
+    substituteInPlace vite.config.ts \
+      --replace-fail "git rev-parse --short HEAD" "echo ${finalAttrs.version}"
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -92,4 +97,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
   };
-}
+})

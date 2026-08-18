@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "attr";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "mirror://savannah/attr/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Ob9nRS+kHQlIwhl2AQU/SLPXigKTiXNDMqYwmmgMbIc=";
+    url = "mirror://savannah/attr/attr-${version}.tar.gz";
+    hash = "sha256-1C+jdFExgLtIyxGkZpb0iCQOUST/HmrYiwq/9waYVhI=";
   };
 
   outputs = [
@@ -29,19 +29,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
-  patches = [ ./musl.patch ];
-
   postPatch = ''
     for script in install-sh include/install-sh; do
       patchShebangs $script
     done
   '';
 
-  meta = with lib; {
+  # See nixos/tests/attr.nix
+  doCheck = false;
+
+  meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
-    platforms = platforms.linux;
-    badPlatforms = platforms.microblaze;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    badPlatforms = lib.platforms.microblaze;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" version;
   };
 }

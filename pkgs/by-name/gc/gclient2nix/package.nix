@@ -46,6 +46,7 @@ let
       substitutions = {
         jq = lib.getExe buildPackages.jq;
       };
+      meta.license = lib.licenses.mit;
     } ./gclient-unpack-hook.sh
   ) { };
 
@@ -68,8 +69,8 @@ runCommand "gclient2nix"
     # substitutions
     depot_tools_checkout = fetchgit {
       url = "https://chromium.googlesource.com/chromium/tools/depot_tools";
-      rev = "452fe3be37f78fbecefa1b4b0d359531bcd70d0d";
-      hash = "sha256-8IiJOm0FLa/u1Vd96tb33Ruj4IUTCeYgBpTk88znhPw=";
+      rev = "1b1b01fa912786b88a79f3504176a275183839b5";
+      hash = "sha256-SRPeosetXYUklafhcuqsJiIKfItUJACG70m4Z5pBQiU=";
     };
 
     passthru = {

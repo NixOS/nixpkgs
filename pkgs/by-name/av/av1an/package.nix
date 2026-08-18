@@ -46,19 +46,18 @@ symlinkJoin {
 
   postBuild =
     let
-      runtimePrograms =
-        [
-          vapoursynth
-          (ffmpeg.override { inherit withVmaf; })
-        ]
-        ++ lib.optional withAom libaom
-        ++ lib.optional withMkvtoolnix mkvtoolnix-cli
-        ++ lib.optional withRav1e rav1e
-        ++ lib.optional withSvtav1 svt-av1
-        ++ lib.optional withVmaf libvmaf
-        ++ lib.optional withVpx libvpx
-        ++ lib.optional withX264 x264
-        ++ lib.optional withX265 x265;
+      runtimePrograms = [
+        vapoursynth
+        (ffmpeg.override { inherit withVmaf; })
+      ]
+      ++ lib.optional withAom libaom
+      ++ lib.optional withMkvtoolnix mkvtoolnix-cli
+      ++ lib.optional withRav1e rav1e
+      ++ lib.optional withSvtav1 svt-av1
+      ++ lib.optional withVmaf libvmaf
+      ++ lib.optional withVpx libvpx
+      ++ lib.optional withX264 x264
+      ++ lib.optional withX265 x265;
     in
     ''
       wrapProgram $out/bin/av1an \

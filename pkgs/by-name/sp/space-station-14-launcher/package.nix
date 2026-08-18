@@ -1,81 +1,75 @@
 {
   lib,
+  stdenv,
+  config,
+  nix-update-script,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
-  wrapGAppsHook4,
   iconConvTools,
   copyDesktopItems,
   makeDesktopItem,
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
-  fontconfig,
-  glew,
-  SDL2,
-  glfw,
-  glibc,
+  libx11,
+  libice,
+  libsm,
+  libxi,
+  libxcursor,
+  libxext,
+  libxrandr,
   libGL,
   freetype,
-  openal,
-  fluidsynth,
-  gtk3,
-  pango,
-  atk,
-  cairo,
-  zlib,
   glib,
-  gdk-pixbuf,
+  alsa-lib,
+  libjack2,
+  pipewire,
+  libpulseaudio,
+  at-spi2-atk,
+  at-spi2-core,
+  libxkbcommon,
+  wayland,
+  fontconfig,
+  dbus,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  jackSupport ? stdenv.hostPlatform.isLinux,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   soundfont-fluid,
 
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.32.1";
-  pname = "space-station-14-launcher";
+  version = "0.39.1";
+  buildType = "Release";
 in
-buildDotnetModule rec {
-  inherit pname;
+buildDotnetModule {
+  inherit version buildType;
 
-  # Workaround to prevent buildDotnetModule from overriding assembly versions.
-  name = "${pname}-${version}";
+  pname = "SS14.Launcher";
 
-  # A bit redundant but I don't trust this package to be maintained by anyone else.
   src = fetchFromGitHub {
     owner = "space-wizards";
     repo = "SS14.Launcher";
-    rev = "v${version}";
-    hash = "sha256-Es+DBwWh2QxCev+Aepi8ItTXSYIgNgb05zdScOBZNJs=";
+    tag = "v${version}";
+    hash = "sha256-u3tsPWAFMckWSHhiPqL50i9BMxR+VrLnpUSWGRRu9AA=";
     fetchSubmodules = true;
   };
 
-  buildType = "Release";
-  selfContainedBuild = false;
+  _structuredAttrs = true;
+  strictDeps = true;
+
+  nugetDeps = ./deps.json;
+
+  passthru.updateScript = nix-update-script { };
 
   projectFile = [
     "SS14.Loader/SS14.Loader.csproj"
     "SS14.Launcher/SS14.Launcher.csproj"
   ];
 
-  nugetDeps = ./deps.json;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  passthru = {
-    inherit version;
-  };
-
-  # SDK 8.0 required for Robust.LoaderApi
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_9_0
-      sdk_8_0
-    ];
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  executables = [ "SS14.Launcher" ];
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -83,101 +77,71 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [
-    wrapGAppsHook4
-    iconConvTools
-    copyDesktopItems
-  ];
-
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
-    fontconfig
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-
-    glfw
-    SDL2
-    glibc
-    libGL
-    openal
-    freetype
-    fluidsynth
-  ];
+  # Workaround to prevent buildDotnetModule from overriding assembly versions.
+  # If this is not done it will break Robust.LoaderApi when connecting to a server!
+  # I do not believe there is any way in nix (apart from overrideAttrs) to do this
+  preBuild = ''
+    version=""
+    versionForDotnet=""
+  '';
 
   runtimeDeps = [
-    # Required by the game.
-    glfw
-    SDL2
-    glibc
     libGL
-    openal
     freetype
-    fluidsynth
-
-    # Needed for file dialogs.
-    gtk3
-    pango
-    cairo
-    atk
-    zlib
     glib
-    gdk-pixbuf
-
-    # Avalonia UI dependencies.
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
-    glew
-
-    # TODO: Figure out dependencies for CEF support.
-  ];
+    libx11
+    libice
+    libsm
+    libxi
+    libxcursor
+    libxext
+    libxrandr
+    at-spi2-atk
+    at-spi2-core
+    libxkbcommon
+    wayland
+    fontconfig.lib
+    dbus
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # ${soundfont-path} is escaped here:
   # https://github.com/NixOS/nixpkgs/blob/d29975d32b1dc7fe91d5cb275d20f8f8aba399ad/pkgs/build-support/setup-hooks/make-wrapper.sh#L126C35-L126C45
   # via https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html under ${parameter@operator}
-  makeWrapperArgs = [ ''--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}'' ];
+  makeWrapperArgs = [ "--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}" ];
 
-  executables = [ "SS14.Launcher" ];
+  nativeBuildInputs = [
+    iconConvTools
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = meta.mainProgram;
-      icon = pname;
+      name = "SS14.Launcher";
+      exec = "SS14.Launcher";
+      icon = "SS14";
       desktopName = "Space Station 14 Launcher";
-      comment = meta.description;
+      comment = "A multiplayer disaster simulator";
       categories = [ "Game" ];
-      startupWMClass = meta.mainProgram;
+      startupWMClass = "SS14.Launcher";
     })
   ];
 
   postInstall = ''
-    mkdir -p $out/lib/space-station-14-launcher/loader
-    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
+    mkdir -p $out/lib/SS14.Launcher/loader
+    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/SS14.Launcher/loader/
 
-    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico space-station-14-launcher $out
+    icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico SS14 $out
   '';
 
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
-    homepage = "https://spacestation14.io";
-    license = licenses.mit;
-    maintainers = [ ];
+    homepage = "https://spacestation14.com";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.coca ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };

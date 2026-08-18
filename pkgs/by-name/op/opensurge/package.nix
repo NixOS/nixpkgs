@@ -8,20 +8,20 @@
   libglvnd,
   surgescript,
   physfs,
-  xorg,
+  libx11,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensurge";
-  version = "0.6.1.2";
+  version = "0.6.1.3";
 
   src = fetchFromGitHub {
     owner = "alemart";
     repo = "opensurge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HvpKZ62mYy7XkZOnIn7QRA2rFVREFnKO1NO83aCR76k=";
+    hash = "sha256-gTJaP2sW8dTOxcd+gjYEDW01SEBSXv9gEg0+1xCqmlk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     physfs
     surgescript
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [
@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/alemart/opensurge/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = [ ];
   };
 })

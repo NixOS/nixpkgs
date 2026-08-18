@@ -9,44 +9,62 @@
   compressDrvWeb,
   gitea,
   gzip,
+  nodejs,
   openssh,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
+  stdenv,
   sqliteSupport ? true,
   nixosTests,
-  buildNpmPackage,
 }:
 
 let
-  frontend = buildNpmPackage {
+  pnpm = pnpm_11;
+
+  frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-+o7/A+Pqr8LZi+q0fOajQgLkWqquBrJSf0dpEXEJtwM=";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-rduD3GqgdUlF95HTnKe8smToyHop4RrO6QDTRzh2RCk=";
+    };
 
-    # use webpack directly instead of 'make frontend' as the packages are already installed
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    __darwinAllowLocalNetworking = true;
+
     buildPhase = ''
-      BROWSERSLIST_IGNORE_OLD_DATA=true npx webpack
+      make frontend
     '';
 
     installPhase = ''
       mkdir -p $out
       cp -R public $out/
     '';
-  };
+  });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.24.2";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    tag = "v${gitea.version}";
-    hash = "sha256-NQSilSF/W69j1qEYYmlQfu2T0OefB+8yf9rCHAL8a6c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-376YyRYcZGya/k5zg2zL2iqtrE7r2Q/DMd3DbOnKyOA=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-VmlF86Sv6R2NmCtWi4kZ4rfmFAjgMB1RU/1jmnPiIkw=";
+  vendorHash = "sha256-YRBMGWKIZgMxOXaXG2bIBj1XzkhSwiMyfRy+yQGw+Bo=";
 
   outputs = [
     "out"
@@ -58,10 +76,17 @@ buildGoModule rec {
   # go-modules derivation doesn't provide $data
   # so we need to wait until it is built, and then
   # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: { postPatch = null; };
+  overrideModAttrs = _: {
+    postPatch = ''
+      substituteInPlace go.mod \
+        --replace-fail "go 1.26.4" "go 1.26.0"
+    '';
+  };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.4" "go 1.26.0"
   '';
 
   subPackages = [ "." ];
@@ -76,8 +101,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+    "-X main.Version=${finalAttrs.version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " finalAttrs.tags}'"
   ];
 
   postInstall = ''
@@ -87,6 +112,7 @@ buildGoModule rec {
     mkdir -p $out
     cp -R ./options/locale $out/locale
 
+    mv $out/bin/gitea{.dev,}
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -107,14 +133,15 @@ buildGoModule rec {
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/go-gitea/gitea/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       techknowlogick
       SuperSandro2000
     ];
     mainProgram = "gitea";
   };
-}
+})

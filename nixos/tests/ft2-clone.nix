@@ -11,6 +11,13 @@
       imports = [
         ./common/x11.nix
       ];
+
+      boot.kernelModules = [ "snd-dummy" ];
+      services.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      services.pipewire.enable = false;
       environment.systemPackages = [ pkgs.ft2-clone ];
     };
 
@@ -18,8 +25,6 @@
 
   testScript = ''
     machine.wait_for_x()
-    # Add a dummy sound card, or the program won't start
-    machine.execute("modprobe snd-dummy")
 
     machine.execute("ft2-clone >&2 &")
 

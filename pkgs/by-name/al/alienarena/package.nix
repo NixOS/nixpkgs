@@ -7,8 +7,8 @@
   libjpeg,
   libogg,
   libvorbis,
-  libX11,
-  libXxf86vm,
+  libx11,
+  libxxf86vm,
   openal,
   pkg-config,
   stdenv,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alienarena";
-  version = "7.71.7";
+  version = "7.72.1";
 
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
     rev = version;
-    hash = "sha256-ri0p/0onI5DU7kDxwdFxRyT1LQLVe89VNEYPXPgilOs=";
+    hash = "sha256-GRvscAOYPY9wah9jweDSlWKT1oY4ZY0Bh79v4W/qKk8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     libjpeg
     libogg
     libvorbis
-    libX11
-    libXxf86vm
+    libx11
+    libxxf86vm
     openal
   ];
 

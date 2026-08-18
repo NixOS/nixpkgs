@@ -2,32 +2,41 @@
   lib,
   stdenv,
   pnpm_10,
-  nodejs_22,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.21";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E8iHTYK9iUtIjYgBNj54Xeulj9WaxSGDbzOLLFhCSqA=";
+    hash = "sha256-HJjRdQl164eneEQFHC5V28jyWjqAh9LJZRpntTxR/Ro=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_10.configHook
+    nodejs
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-
-    buildInputs = [ nodejs_22 ];
-
-    hash = "sha256-FOhaBm0mc7rHBGzenqRWsxGwktXTq25n/6yz7IURYXY=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-g1wlpbUlGwE3Chrry89gJX2+3+jY/jyXYwiAWAfoHlA=";
   };
 
   env = {
@@ -56,9 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Discord client modification, focused on enhancing user and developer experience";
     longDescription = ''
       Moonlight is a ***passion project***—yet another Discord client mod—focused on providing a decent user
@@ -69,10 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
     changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       ilys
-      donteatoreo
+      _4evy
+      isabelroses
     ];
   };
 })

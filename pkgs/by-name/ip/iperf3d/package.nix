@@ -6,14 +6,14 @@
   iperf3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iperf3d";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "wobcom";
     repo = "iperf3d";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pMwGoBgFRVY+H51k+YCamzHgBoaJVwEVqY0CvMPvE0w=";
   };
 
@@ -23,15 +23,16 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/iperf3d --prefix PATH : ${iperf3}/bin
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eijsPyoe3/+yR5kRmzk0dH62gTAFFURTVT8wN6Iy0HI=";
 
-  meta = with lib; {
+  meta = {
     description = "Iperf3 client and server wrapper for dynamic server ports";
     mainProgram = "iperf3d";
     homepage = "https://github.com/wobcom/iperf3d";
-    license = licenses.mit;
-    maintainers = with maintainers; [ netali ];
-    teams = [ teams.wdz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      netali
+      johannwagner
+    ];
   };
-}
+})

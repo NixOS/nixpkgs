@@ -1,28 +1,24 @@
 {
   lib,
   stdenv,
-  cairo,
   expat,
   fftwSinglePrec,
   fluidsynth,
-  glib,
-  gtk2,
   libjack2,
-  ladspaH,
-  gnome2,
+  ladspa-header,
   lv2,
   pkg-config,
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calf";
   version = "0.90.6";
 
   src = fetchFromGitHub {
     owner = "calf-studio-gear";
     repo = "calf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rcMuQFig6BrnyGFyvYaAHmOvabEHGl+1lMNfffLHn1w=";
   };
 
@@ -33,21 +29,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  cmakeFlags = [ (lib.cmakeBool "WANT_GUI" false) ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   buildInputs = [
-    cairo
     expat
     fftwSinglePrec
     fluidsynth
-    glib
-    gtk2
     libjack2
-    ladspaH
-    gnome2.libglade
+    ladspa-header
     lv2
   ];
 
@@ -59,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wireless-tools";
   version = "30.pre9";
 
   src = fetchurl {
-    url = "https://hewlettpackard.github.io/wireless-tools/wireless_tools.${version}.tar.gz";
+    url = "https://hewlettpackard.github.io/wireless-tools/wireless_tools.${finalAttrs.version}.tar.gz";
     sha256 = "0qscyd44jmhs4k32ggp107hlym1pcyjzihiai48xs7xzib4wbndb";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
-}
+})

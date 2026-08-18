@@ -7,13 +7,13 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pure-ftpd";
-  version = "1.0.52";
+  version = "1.0.54";
 
   src = fetchurl {
-    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${version}.tar.gz";
-    sha256 = "sha256-ESbzqVhW0IiJ/4lwPLGqnsmSTZOdFU6WkEySDwXcPHQ=";
+    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3JFAQg7ET3gpV5WR/zeKpjlrRgS5xq6uhHNo4PNb17I=";
   };
 
   buildInputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-tls" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, secure, production-quality and standard-conformant FTP server";
     homepage = "https://www.pureftpd.org";
-    license = licenses.isc; # with some parts covered by BSD3(?)
+    license = lib.licenses.isc; # with some parts covered by BSD3(?)
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

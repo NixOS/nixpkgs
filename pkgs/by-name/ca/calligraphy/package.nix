@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "calligraphy";
   version = "1.2.0";
   pyproject = false; # Built with meson
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GeopJr";
     repo = "Calligraphy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KDml96oxnmTygTC+3rZ//wKv7xDSjw37+UHu3a3zuO4=";
   };
 
@@ -60,8 +60,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "calligraphy";
     maintainers = with lib.maintainers; [
       aleksana
-      awwpotato
+      da157
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

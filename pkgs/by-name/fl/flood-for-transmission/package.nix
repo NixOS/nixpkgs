@@ -3,20 +3,21 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood-for-transmission";
-  version = "2024-11-16T12-26-17";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "johman10";
     repo = "flood-for-transmission";
-    tag = version;
-    hash = "sha256-OED2Ypi1V+wwnJ5KFVRbJAyh/oTYs90E6uhSnSwJwJU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c1K7ldraw9lzVtABz39B9569jHEuo6N3Iy8aCCfBOXE=";
   };
 
-  npmDepsHash = "sha256-J3gRzvSXXyoS0OoLrTSV1vBSupFqky0Jt99nyz+hy1k=";
+  npmDepsHash = "sha256-yD9VwnAqE+k2/Z60YdJD6F1f4Cn3fcROCTopDq+DUWU=";
 
   strictDeps = true;
 
@@ -28,12 +29,15 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
     downloadPage = "https://github.com/johman10/flood-for-transmission/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ al3xtjames ];
-    platforms = platforms.all;
+    changelog = "https://github.com/johman10/flood-for-transmission/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ al3xtjames ];
+    platforms = lib.platforms.all;
   };
-}
+})

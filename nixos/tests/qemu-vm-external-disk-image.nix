@@ -23,14 +23,17 @@ let
 
       fileSystems = {
         "/".device = rootFsDevice;
+        "/".fsType = "ext4";
       };
+
+      system.switch.enable = true;
 
       system.build.diskImage = import ../lib/make-disk-image.nix {
         inherit config lib pkgs;
         label = rootFslabel;
         partitionTableType = "efi";
         format = "qcow2";
-        bootSize = "32M";
+        bootSize = "128M";
         additionalSpace = "0M";
         copyChannel = false;
       };

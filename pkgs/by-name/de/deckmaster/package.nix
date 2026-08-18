@@ -6,14 +6,14 @@
   roboto,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "deckmaster";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "deckmaster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1hZ7yAKTvkk20ho+QOqFEtspBvFztAtfmITs2uxhdmQ=";
   };
 
@@ -33,16 +33,16 @@ buildGoModule rec {
   # Let the app find Roboto-*.ttf files (hard-coded file names).
   postFixup = ''
     wrapProgram $out/bin/deckmaster \
-      --prefix XDG_DATA_DIRS : "${roboto.out}/share/" \
+      --prefix XDG_DATA_DIRS : "${roboto.out}/share/"
   '';
 
   meta = {
     description = "Application to control your Elgato Stream Deck on Linux";
     mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
-    changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
+    changelog = "https://github.com/muesli/deckmaster/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

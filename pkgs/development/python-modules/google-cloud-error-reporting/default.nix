@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.12.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-error-reporting";
     tag = "v${version}";
-    hash = "sha256-V97V3WbsChc93nqhCOh34O/hn8fqLMwR4/DcHmc9vdU=";
+    hash = "sha256-do/pxm+Bo2c57ehg1cRlpax+UggSUMv8WSK30sXhHpo=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,8 @@ buildPythonPackage rec {
     google-cloud-logging
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     google-cloud-testutils

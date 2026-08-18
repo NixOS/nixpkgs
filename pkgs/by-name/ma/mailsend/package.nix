@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   enableParallelBuilding = true;
 

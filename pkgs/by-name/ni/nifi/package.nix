@@ -7,12 +7,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nifi";
   version = "1.28.1";
 
   src = fetchzip {
-    url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
+    url = "mirror://apache/nifi/${finalAttrs.version}/nifi-${finalAttrs.version}-bin.zip";
     hash = "sha256-YFQIV2/B+8/fBmrWPs7Q3FkqaIxBqNBP0BIkIm4M7Zo=";
   };
 
@@ -38,16 +38,16 @@ stdenv.mkDerivation rec {
     tests.nifi = nixosTests.nifi;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use, powerful, and reliable system to process and distribute data";
     longDescription = ''
       Apache NiFi supports powerful and scalable directed graphs of data routing,
       transformation, and system mediation logic.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://nifi.apache.org";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ izorkin ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

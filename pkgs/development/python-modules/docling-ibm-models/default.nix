@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   docling-core,
   huggingface-hub,
   jsonlines,
@@ -15,6 +15,7 @@
   opencv-python-headless,
   pillow,
   pydantic,
+  rtree,
   safetensors,
   torch,
   torchvision,
@@ -27,35 +28,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-ibm-models";
-  version = "3.4.4";
+  version = "3.13.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
-    tag = "v${version}";
-    hash = "sha256-a2y4vXgALPRtLhdH0Tqqht1gpdcfa1Gv4puthKDMk7U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b//8cPXEPGNYXVd6wAQcNDh240i3gjdRPFzz4tYfeUk=";
   };
 
   build-system = [
     poetry-core
-  ];
-
-  dependencies = [
-    docling-core
-    huggingface-hub
-    jsonlines
-    numpy
-    opencv-python-headless
-    pillow
-    pydantic
-    safetensors
-    torch
-    torchvision
-    tqdm
-    transformers
   ];
 
   pythonRelaxDeps = [
@@ -63,10 +50,24 @@ buildPythonPackage rec {
     "numpy"
     "transformers"
   ];
-
-  pythonImportsCheck = [
-    "docling_ibm_models"
+  dependencies = [
+    accelerate
+    docling-core
+    huggingface-hub
+    jsonlines
+    numpy
+    opencv-python-headless
+    pillow
+    pydantic
+    rtree
+    safetensors
+    torch
+    torchvision
+    tqdm
+    transformers
   ];
+
+  pythonImportsCheck = [ "docling_ibm_models" ];
 
   nativeCheckInputs = [
     datasets
@@ -74,8 +75,13 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTestPaths = [
+    # Require network access
+    "tests/test_tableformer_v2.py"
+  ];
+
   disabledTests = [
-    # Requires network access
+    # Require network access
     "test_code_formula_predictor" # huggingface_hub.errors.LocalEntryNotFoundError
     "test_figure_classifier" # huggingface_hub.errors.LocalEntryNotFoundError
     "test_layoutpredictor"
@@ -84,10 +90,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Docling IBM models";
     homepage = "https://github.com/DS4SD/docling-ibm-models";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
-}
+})

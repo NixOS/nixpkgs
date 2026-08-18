@@ -13,20 +13,15 @@
 
 buildPythonPackage rec {
   pname = "xontrib-fish-completer";
-  version = "0.0.1";
+  version = "0.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xontrib-fish-completer";
     tag = version;
-    hash = "sha256-PhhdZ3iLPDEIG9uDeR5ctJ9zz2+YORHBhbsiLrJckyA=";
+    hash = "sha256-9S0Gj1CQxuX1mGL1+4Xyyld/NHUYUi7DJ424lUlExVc=";
   };
-
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"xonsh>=0.12.5"' ""
-  '';
 
   build-system = [
     setuptools
@@ -45,6 +40,9 @@ buildPythonPackage rec {
     description = "Populate rich completions using fish and remove the default bash based completer";
     homepage = "https://github.com/xonsh/xontrib-fish-completer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

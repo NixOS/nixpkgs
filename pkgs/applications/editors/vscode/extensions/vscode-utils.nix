@@ -5,11 +5,21 @@
   writeShellScriptBin,
   fetchurl,
   vscode,
+  buildPackages,
   unzip,
+  makeSetupHook,
+  writeScript,
   jq,
   vscode-extension-update-script,
 }:
 let
+  unpackVsixSetupHook = makeSetupHook {
+    name = "unpack-vsix-setup-hook";
+    substitutions = {
+      unzip = "${buildPackages.unzip}/bin/unzip";
+    };
+    meta.license = lib.licenses.mit;
+  } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
     excludeDrvArgNames = [
@@ -41,14 +51,13 @@ let
       {
         pname = "vscode-extension-${pname}";
 
-        passthru =
-          {
-            updateScript = vscode-extension-update-script { };
-          }
-          // passthru
-          // {
-            inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
-          };
+        passthru = {
+          updateScript = vscode-extension-update-script { };
+        }
+        // passthru
+        // {
+          inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
+        };
 
         inherit
           configurePhase
@@ -64,7 +73,10 @@ let
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-        nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
+        strictDeps = true;
+        __structuredAttrs = true;
+
+        nativeBuildInputs = [ unpackVsixSetupHook ] ++ nativeBuildInputs;
 
         installPhase =
           args.installPhase or ''
@@ -128,7 +140,7 @@ let
 
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace =
-    mktplcExtRefList: builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
+    mktplcExtRefList: map extensionFromVscodeMarketplace mktplcExtRefList;
 
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
     inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;

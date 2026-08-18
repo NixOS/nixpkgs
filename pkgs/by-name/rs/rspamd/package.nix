@@ -2,47 +2,58 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nixosTests,
+
+  # build
   cmake,
-  doctest,
-  fmt_11,
-  perl,
   glib,
+  perl,
+  pkg-config,
+
+  # runtime
+  blas,
+  fmt,
+  icu,
+  jemalloc,
+  lapack,
+  libarchive,
+  libsodium,
+  lua,
   luajit,
   openssl,
-  pcre,
-  pkg-config,
-  sqlite,
+  pcre2,
   ragel,
-  fasttext,
-  icu,
+  sqlite,
   vectorscan,
-  jemalloc,
-  blas,
-  lapack,
-  lua,
-  libsodium,
-  xxHash,
+  xxhash,
   zstd,
-  libarchive,
-  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+
+  # flags
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  # Enabling blas support breaks Bayes filter training from within Sieve pipe in Dovecot
   withBlas ? false,
-  withLuaJIT ? stdenv.hostPlatform.isx86_64,
-  nixosTests,
+  withLuaJIT ? true,
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib)
+    cmakeFeature
+    ;
+
+  # rspamd doesn't consistently accept bools
+  cmakeBool' = feature: condition: cmakeFeature feature (if condition then "ON" else "OFF");
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "3.12.1";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
-    rev = version;
-    hash = "sha256-bAkT0msUkgGkjAIlF7lnJbimBKW1NSn2zjkCj3ErJ1I=";
+    tag = finalAttrs.version;
+    hash = "sha256-roDYMA8uPytPu50wAJ17zZVWl4KxJWaXO1kVVC3+t8g=";
   };
-
-  hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [
     cmake
@@ -51,61 +62,58 @@ stdenv.mkDerivation rec {
     ragel
   ];
 
-  buildInputs =
-    [
-      doctest
-      fmt_11
-      glib
-      openssl
-      pcre
-      sqlite
-      ragel
-      fasttext
-      icu
-      jemalloc
-      libsodium
-      xxHash
-      zstd
-      libarchive
-      vectorscan
-    ]
-    ++ lib.optionals withBlas [
-      blas
-      lapack
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional (!withLuaJIT) lua;
+  buildInputs = [
+    fmt
+    glib
+    icu
+    jemalloc
+    libarchive
+    libsodium
+    (if withLuaJIT then luajit else lua)
+    openssl
+    pcre2
+    ragel
+    sqlite
+    vectorscan
+    xxhash
+    zstd
+  ]
+  ++ lib.optionals withBlas [
+    blas
+    lapack
+  ];
 
   cmakeFlags = [
-    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
-    "-DENABLE_PCRE2=OFF"
-    "-DDEBIAN_BUILD=ON"
-    "-DRUNDIR=/run/rspamd"
-    "-DDBDIR=/var/lib/rspamd"
-    "-DLOGDIR=/var/log/rspamd"
-    "-DLOCAL_CONFDIR=/etc/rspamd"
-    "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
-    "-DENABLE_FASTTEXT=ON"
-    "-DENABLE_JEMALLOC=ON"
-    "-DSYSTEM_DOCTEST=ON"
-    "-DSYSTEM_FMT=ON"
-    "-DSYSTEM_XXHASH=ON"
-    "-DSYSTEM_ZSTD=ON"
-    "-DENABLE_HYPERSCAN=ON"
-  ] ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+    (cmakeFeature "RUNDIR" "/run/rspamd")
+    (cmakeFeature "DBDIR" "/var/lib/rspamd")
+    (cmakeFeature "LOGDIR" "/var/log/rspamd")
+    (cmakeFeature "LOCAL_CONFDIR" "/etc/rspamd")
+    (cmakeBool' "ENABLE_BLAS" withBlas)
+    (cmakeBool' "ENABLE_HYPERSCAN" true)
+    (cmakeBool' "ENABLE_JEMALLOC" true)
+    (cmakeBool' "ENABLE_LUAJIT" withLuaJIT)
+    (cmakeBool' "ENABLE_PCRE2" true)
+    # doctest 2.5.0 compat problems https://github.com/rspamd/rspamd/issues/5994
+    (cmakeBool' "SYSTEM_DOCTEST" false)
+    (cmakeBool' "SYSTEM_XXHASH" true)
+    (cmakeBool' "SYSTEM_ZSTD" true)
+  ];
 
-  passthru.tests.rspamd = nixosTests.rspamd;
+  __structuredAttrs = true;
 
-  meta = with lib; {
+  passthru.tests = nixosTests.rspamd;
+
+  meta = {
+    changelog = "https://github.com/rspamd/rspamd/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://rspamd.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       fpletz
-      globin
       lewo
     ];
-    platforms = with platforms; linux;
+    mainProgram = "rspamd";
+    platforms = with lib.platforms; linux;
   };
-}
+})

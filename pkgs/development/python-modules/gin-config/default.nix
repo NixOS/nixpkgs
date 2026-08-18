@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   tensorflow,
   torch,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "gin-config";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gin provides a lightweight configuration framework for Python, based on dependency injection";
     homepage = "https://github.com/google/gin-config";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jethro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jethro ];
   };
 }

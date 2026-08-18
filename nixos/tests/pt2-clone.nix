@@ -12,7 +12,12 @@
         ./common/x11.nix
       ];
 
-      services.xserver.enable = true;
+      boot.kernelModules = [ "snd-dummy" ];
+      services.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      services.pipewire.enable = false;
       environment.systemPackages = [ pkgs.pt2-clone ];
     };
 
@@ -20,16 +25,13 @@
 
   testScript = ''
     machine.wait_for_x()
-    # Add a dummy sound card, or the program won't start
-    machine.execute("modprobe snd-dummy")
 
     machine.execute("pt2-clone >&2 &")
 
     machine.wait_for_window(r"ProTracker")
     machine.sleep(5)
     # One of the few words that actually get recognized
-    if "LENGTH" not in machine.get_screen_text():
-        raise Exception("Program did not start successfully")
+    machine.wait_for_text("LENGTH")
     machine.screenshot("screen")
   '';
 }

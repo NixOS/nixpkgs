@@ -11,15 +11,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-town";
-  version = "21.1.0";
+  version = "24.0.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    tag = "v${version}";
-    hash = "sha256-T+5qZBziXiCeCJJaW/EcbgnRLv+AUKDD4ODKbJKvbjY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Es2FextJFPV3SVIIuZOv7EjUHwFar3C5wBMlWlhMu1M=";
   };
 
   vendorHash = null;
@@ -33,12 +33,12 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major finalAttrs.version}";
     in
     [
       "-s"
       "-w"
-      "-X ${modulePath}/src/cmd.version=v${version}"
+      "-X ${modulePath}/src/cmd.version=v${finalAttrs.version}"
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
@@ -56,11 +56,14 @@ buildGoModule rec {
     let
       # Disable tests requiring local operations
       skippedTests = [
-        "TestGodog"
         "TestMockingRunner/MockCommand"
         "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
+        "TestTestCommands/CreateChildBranch"
+        "TestTestCommands/CreateLocalBranchUsingGitTown"
+        "TestFrontendRunner_RetryOnIndexLock" # Timing issues.
+
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -79,7 +82,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = git-town;
     command = "git-town --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -92,4 +95,4 @@ buildGoModule rec {
     ];
     mainProgram = "git-town";
   };
-}
+})

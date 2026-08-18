@@ -4,32 +4,32 @@
   fetchFromGitHub,
   writeText,
   fontconfig,
-  libX11,
-  libXft,
-  libXpm,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxft,
+  libxpm,
+  libxrandr,
+  libxrender,
   conf ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shod";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "shod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0bKp1BTIdYVBDVdeGnTVo76UtBxa4UbXLZihdjHS/og=";
   };
 
   buildInputs = [
     fontconfig
-    libX11
-    libXft
-    libXpm
-    libXrandr
-    libXrender
+    libx11
+    libxft
+    libxpm
+    libxrandr
+    libxrender
   ];
 
   postPatch =
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mouse-based window manager that can tile windows inside floating containers";
     longDescription = ''
       shod is a multi-monitor floating reparenting X11 window manager that
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       (shod's remote controller).
     '';
     homepage = "https://github.com/phillbush/shod";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

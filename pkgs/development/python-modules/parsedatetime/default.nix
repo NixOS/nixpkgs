@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -21,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/Test*.py" ];
+  enabledTestPaths = [ "tests/Test*.py" ];
 
   disabledTests = [
     # https://github.com/bear/parsedatetime/issues/263
@@ -32,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parsedatetime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

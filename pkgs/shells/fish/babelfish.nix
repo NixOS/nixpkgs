@@ -3,27 +3,29 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "babelfish";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "bouk";
     repo = "babelfish";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
   };
 
   vendorHash = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Translate bash scripts to fish";
     mainProgram = "babelfish";
     homepage = "https://github.com/bouk/babelfish";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bouk
       kevingriffin
     ];
   };
-}
+})

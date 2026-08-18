@@ -4,21 +4,20 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firezone-headless-client";
-  version = "1.5.0";
+  version = "1.5.6";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
-    tag = "headless-client-${version}";
-    hash = "sha256-3iU7AHu3GupqiZEDkuOEb+rFPA2KB1fjVNX1BY4abXc=";
+    tag = "headless-client-${finalAttrs.version}";
+    hash = "sha256-yEceZJBqSF35herNjbqFHKaIoFJwbkDN28wlxFa1UbU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-p2zLhLFL6NbHvVojQU5+1amf+Kh0jRAbIESPt2vqWwg=";
-  sourceRoot = "${src.name}/rust";
+  cargoHash = "sha256-3V2eMxUtNcnWsh7cYA5Wf979sKmFl7bjwwrqwcfW4tI=";
+  sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "headless-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   # Required to remove profiling arguments which conflict with this builder
   postPatch = ''
@@ -48,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "firezone-headless-client";
     platforms = lib.platforms.linux;
   };
-}
+})

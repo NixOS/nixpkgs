@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.012";
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/${pname}/archive/${version}R.zip";
+    url = "https://github.com/adobe-fonts/source-han-code-jp/archive/${version}R.zip";
     hash = "sha256-ljO/1/CaE9Yj+AN5xxlIr30/nV/axGQPO0fGACAZGCQ=";
   };
 

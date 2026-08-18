@@ -14,7 +14,6 @@ systems = [
     ("aarch64", "darwin"),
     ("aarch64", "linux"),
     ("i686", "linux"),
-    ("x86_64", "darwin"),
     ("x86_64", "linux"),
 ]
 
@@ -38,7 +37,7 @@ package_attrs = json.loads(subprocess.run(
         "--json",
         "--file", nixpkgs_path,
         "--apply", """p: {
-          dir = builtins.dirOf p.meta.position;
+          dir = dirOf p.meta.position;
           version = p.version;
         }""",
         "--",

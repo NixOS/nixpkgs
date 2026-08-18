@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jimtcl";
-  version = "0.82";
+  version = "0.84";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = finalAttrs.version;
-    sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
+    sha256 = "sha256-MvsC82PMmh7PP1sXNwZRNDNFU7r5LWRA6YqvuvZ9yZE=";
   };
 
   nativeBuildInputs = [
@@ -34,16 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
   ];
 
-  buildInputs =
-    [
-      sqlite
-      readline
-      openssl
-    ]
-    ++ (lib.optionals SDLSupport [
-      SDL2
-      SDL2_gfx
-    ]);
+  buildInputs = [
+    sqlite
+    readline
+    openssl
+  ]
+  ++ (lib.optionals SDLSupport [
+    SDL2
+    SDL2_gfx
+  ]);
 
   configureFlags = [
     "--shared"
@@ -55,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ext=json"
     "--enable-utf8"
     "--ipv6"
-  ] ++ (lib.optional SDLSupport "--with-ext=sdl");
+  ]
+  ++ (lib.optional SDLSupport "--with-ext=sdl");
 
   enableParallelBuilding = true;
 
@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+    mainProgram = "jimsh";
     maintainers = with lib.maintainers; [
       dbohdan
       fgaz

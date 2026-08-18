@@ -45,6 +45,11 @@ let
       ${listToConf "add-priority-node" priorityNodes}
       ${listToConf "add-exclusive-node" exclusiveNodes}
 
+      ${lib.optionalString prune ''
+        prune-blockchain=1
+        sync-pruned-blocks=1
+      ''}
+
       ${extraConfig}
     '';
 
@@ -75,7 +80,7 @@ in
           Path to a text file containing IPs to block.
           Useful to prevent DDoS/deanonymization attacks.
 
-          https://github.com/monero-project/meta/issues/1124
+          <https://github.com/monero-project/meta/issues/1124>
         '';
         example = lib.literalExpression ''
           builtins.fetchurl {
@@ -102,7 +107,7 @@ in
       };
 
       mining.threads = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Number of threads used for mining.
@@ -169,7 +174,7 @@ in
       };
 
       limits.threads = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Maximum number of threads used for a parallel job.
@@ -178,7 +183,7 @@ in
       };
 
       limits.syncSize = lib.mkOption {
-        type = lib.types.addCheck lib.types.int (x: x >= 0);
+        type = lib.types.ints.unsigned;
         default = 0;
         description = ''
           Maximum number of blocks to sync at once.
@@ -212,6 +217,39 @@ in
         '';
       };
 
+      prune = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to prune the blockchain.
+          <https://www.getmonero.org/resources/moneropedia/pruning.html>
+        '';
+      };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/var/lib/monero/monerod.env";
+        description = ''
+          Path to an EnvironmentFile for the monero service as defined in {manpage}`systemd.exec(5)`.
+
+          Secrets may be passed to the service by specifying placeholder variables in the Nix config
+          and setting values in the environment file.
+
+          Example:
+
+          ```
+          # In environment file:
+          MINING_ADDRESS=888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H
+          ```
+
+          ```
+          # Service config
+          services.monero.mining.address = "$MINING_ADDRESS";
+          ```
+        '';
+      };
+
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -233,7 +271,7 @@ in
       group = "monero";
       description = "Monero daemon user";
       home = cfg.dataDir;
-      createHome = true;
+      createHome = !(lib.strings.hasPrefix "/var/lib/" cfg.dataDir);
     };
 
     users.groups.monero = { };
@@ -243,14 +281,56 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      preStart = ''
+        umask 077
+        ${pkgs.envsubst}/bin/envsubst \
+          -i ${configFile} \
+          -o ${cfg.dataDir}/monerod.conf
+      '';
+
       serviceConfig = {
         User = "monero";
         Group = "monero";
-        ExecStart = "${lib.getExe' pkgs.monero-cli "monerod"} --config-file=${configFile} --non-interactive";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        ExecStart = "${lib.getExe' pkgs.monero-cli "monerod"} --config-file=${cfg.dataDir}/monerod.conf --non-interactive";
         Restart = "always";
         SuccessExitStatus = [
           0
           1
+        ];
+        StateDirectory = lib.mkIf (lib.strings.hasPrefix "/var/lib/" cfg.dataDir) (
+          lib.strings.removePrefix "/var/lib/" cfg.dataDir
+        );
+        ReadWritePaths = lib.mkIf (!(lib.strings.hasPrefix "/var/lib/" cfg.dataDir)) [ cfg.dataDir ];
+        WorkingDirectory = "${cfg.dataDir}";
+        LockPersonality = lib.mkDefault true;
+        NoNewPrivileges = lib.mkDefault true;
+        PrivateDevices = lib.mkDefault true;
+        PrivateMounts = lib.mkDefault true;
+        PrivateNetwork = lib.mkDefault false;
+        PrivateTmp = lib.mkDefault true;
+        PrivateUsers = lib.mkDefault true;
+        ProcSubset = lib.mkDefault "pid";
+        ProtectClock = lib.mkDefault true;
+        ProtectHome = lib.mkDefault true;
+        ProtectHostname = lib.mkDefault true;
+        ProtectSystem = lib.mkDefault "strict";
+        ProtectControlGroups = lib.mkDefault true;
+        ProtectKernelLogs = lib.mkDefault true;
+        ProtectKernelModules = lib.mkDefault true;
+        ProtectKernelTunables = lib.mkDefault true;
+        ProtectProc = lib.mkDefault "invisible";
+        CapabilityBoundingSet = lib.mkDefault "";
+        RemoveIPC = lib.mkDefault true;
+        RestrictNamespaces = lib.mkDefault true;
+        RestrictRealtime = lib.mkDefault true;
+        RestrictSUIDSGID = lib.mkDefault true;
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
         ];
       };
     };

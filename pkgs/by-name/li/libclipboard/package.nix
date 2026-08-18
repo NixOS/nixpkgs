@@ -4,13 +4,13 @@
   cmake,
   pkg-config,
   libxcb,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libclipboard";
+  pname = "libclipboard";
   version = "1.1";
 
   src = fetchFromGitHub {
@@ -20,10 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-553hNG8QUlt/Aff9EKYr6w279ELr+2MX7nh1SKIklhA=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   buildInputs = [
     libxcb
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
   ];
   nativeBuildInputs = [
     cmake

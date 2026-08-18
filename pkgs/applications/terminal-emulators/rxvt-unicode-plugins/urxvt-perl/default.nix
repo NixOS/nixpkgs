@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     cp newterm $out/lib/urxvt/perl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perl extensions for the rxvt-unicode terminal emulator";
     homepage = "https://github.com/effigies/urxvt-perl";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

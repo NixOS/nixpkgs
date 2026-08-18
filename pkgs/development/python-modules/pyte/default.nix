@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyte" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple VTXXX-compatible linux terminal emulator";
     homepage = "https://github.com/selectel/pyte";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

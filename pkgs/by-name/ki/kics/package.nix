@@ -6,18 +6,18 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kics";
-  version = "2.1.10";
+  version = "2.1.21";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
-    tag = "v${version}";
-    hash = "sha256-mGWUlJhOv/aYdAWaN3isqJCKKos7epJArjNk7yTlFso=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dVgUHsUX2xgO9HGhBFid7s8T+2Ky4R/jB8/dNR3jQ/4=";
   };
 
-  vendorHash = "sha256-H+k3CtzyxXOCw12Fo1EdAckj0fS+Py9QOdMxYiR56Fo=";
+  vendorHash = "sha256-+/M0pIEr8SFjIlL6wCAy6c0X3cL4djRT3fQNy+PdfGs=";
 
   subPackages = [ "cmd/console" ];
 
@@ -28,8 +28,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/Checkmarx/kics/v2/internal/constants.SCMCommit=${version}"
-    "-X=github.com/Checkmarx/kics/v2/internal/constants.Version=${version}"
+    "-X=github.com/Checkmarx/kics/v2/internal/constants.SCMCommit=${finalAttrs.version}"
+    "-X=github.com/Checkmarx/kics/v2/internal/constants.Version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -45,9 +45,9 @@ buildGoModule rec {
       cycle of your infrastructure-as-code.
     '';
     homepage = "https://github.com/Checkmarx/kics";
-    changelog = "https://github.com/Checkmarx/kics/releases/tag/v${version}";
+    changelog = "https://github.com/Checkmarx/kics/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ patryk4815 ];
     mainProgram = "kics";
   };
-}
+})

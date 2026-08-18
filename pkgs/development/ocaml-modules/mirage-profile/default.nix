@@ -8,14 +8,14 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-profile";
   version = "0.9.1";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-profile/releases/download/v${version}/mirage-profile-v${version}.tbz";
+    url = "https://github.com/mirage/mirage-profile/releases/download/v${finalAttrs.version}/mirage-profile-v${finalAttrs.version}.tbz";
     sha256 = "0lh3591ad4v7nxpd410b75idmgdq668mqdilvkg4avrwqw1wzdib";
   };
 
@@ -26,10 +26,10 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect runtime profiling information in CTF format";
     homepage = "https://github.com/mirage/mirage-profile";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

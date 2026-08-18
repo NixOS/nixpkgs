@@ -28,18 +28,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "11.3.2";
-  versiondate = "20250415";
-
+  version = "12.1.2";
+  versiondate = "20260605";
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-97L3BueekbZfFAdiLX1DHlVSzNyspu4exafpFVraMWE=";
+    hash = "sha256-ulIBecjWAnrM8iJmqQZAZRerUCKpIBcXyv6KIB7I/ZA=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -72,21 +72,21 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     mainProgram = "ghidra";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ck3d
       govanify
+      tbaldwin
       mic92
     ];
   };

@@ -46,8 +46,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KillianLucas";
-    repo = "open-interpreter";
+    owner = "openinterpreter";
+    repo = "openinterpreter";
     tag = "v${version}";
     hash = "sha256-fogCcWAhcrCrrcV0q4oKttkf/GeJaJSZnbgiFxvySs8=";
   };
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "anthropic"
     "google-generativeai"
+    "html2text"
     "psutil"
     "rich"
     "starlette"
@@ -111,10 +112,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    broken = true;
     description = "OpenAI's Code Interpreter in your terminal, running locally";
-    homepage = "https://github.com/KillianLucas/open-interpreter";
+    homepage = "https://github.com/openinterpreter/openinterpreter";
     license = lib.licenses.mit;
-    changelog = "https://github.com/KillianLucas/open-interpreter/releases/tag/v${version}";
+    changelog = "https://github.com/openinterpreter/openinterpreter/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "interpreter";
   };

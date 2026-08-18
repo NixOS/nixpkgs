@@ -5,7 +5,7 @@
   makeWrapper,
   tcl,
   tk,
-  libX11,
+  libx11,
   zlib,
 }:
 
@@ -31,9 +31,11 @@ tcl.mkTclDerivation rec {
 
   buildInputs = [
     tk
-    libX11
+    libx11
     zlib
   ];
+
+  addTclConfigureFlags = false;
 
   configureFlags = [
     "BINDIR=$(out)/bin"

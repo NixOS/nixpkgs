@@ -35,25 +35,34 @@ rec {
     };
   };
 
-  sheevaplug = {
+  ppc32 = {
+    config = "powerpc-unknown-linux-gnu";
+    rust.rustcTarget = "powerpc-unknown-linux-gnu";
+  };
+
+  armv5tel-multiplatform = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+  };
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
-  } // platforms.raspberrypi;
+  }
+  // platforms.raspberrypi;
 
   bluefield2 = {
     config = "aarch64-unknown-linux-gnu";
-  } // platforms.bluefield2;
+  }
+  // platforms.bluefield2;
 
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-gravitas;
+  }
+  // platforms.zero-gravitas;
 
   remarkable2 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-sugar;
+  }
+  // platforms.zero-sugar;
 
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
@@ -66,63 +75,67 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
-  } // platforms.armv7a-android;
+  }
+  // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    androidSdkVersion = "33";
-    androidNdkVersion = "26";
-    libc = "bionic";
+    androidSdkVersion = "35";
+    androidNdkVersion = "27";
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
 
-  pogoplug4 = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
-
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
-  } // platforms.ben_nanonote;
+  }
+  // platforms.ben_nanonote;
 
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
-  } // platforms.fuloong2f_n32;
+  }
+  // platforms.fuloong2f_n32;
 
   # can execute on 32bit chip
   mips-linux-gnu = {
     config = "mips-unknown-linux-gnu";
-  } // platforms.gcc_mips32r2_o32;
+  }
+  // platforms.gcc_mips32r2_o32;
   mipsel-linux-gnu = {
     config = "mipsel-unknown-linux-gnu";
-  } // platforms.gcc_mips32r2_o32;
+  }
+  // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
   mips64-linux-gnuabin32 = {
     config = "mips64-unknown-linux-gnuabin32";
-  } // platforms.gcc_mips64r2_n32;
+  }
+  // platforms.gcc_mips64r2_n32;
   mips64el-linux-gnuabin32 = {
     config = "mips64el-unknown-linux-gnuabin32";
-  } // platforms.gcc_mips64r2_n32;
+  }
+  // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
   mips64-linux-gnuabi64 = {
     config = "mips64-unknown-linux-gnuabi64";
-  } // platforms.gcc_mips64r2_64;
+  }
+  // platforms.gcc_mips64r2_64;
   mips64el-linux-gnuabi64 = {
     config = "mips64el-unknown-linux-gnuabi64";
-  } // platforms.gcc_mips64r2_64;
+  }
+  // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -135,7 +148,6 @@ rec {
   gnu64 = {
     config = "x86_64-unknown-linux-gnu";
   };
-  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32 = {
     config = "i686-unknown-linux-gnu";
   };
@@ -156,22 +168,18 @@ rec {
 
   riscv64-embedded = {
     config = "riscv64-none-elf";
-    libc = "newlib";
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
-    libc = "newlib";
   };
 
   mips64-embedded = {
     config = "mips64-none-elf";
-    libc = "newlib";
   };
 
   mips-embedded = {
     config = "mips-none-elf";
-    libc = "newlib";
   };
 
   # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
@@ -188,17 +196,17 @@ rec {
 
   mmix = {
     config = "mmix-unknown-mmixware";
+    # Not `isNone`: the OS here is `mmixware`, so the bare-metal default does
+    # not apply.
     libc = "newlib";
   };
 
   rx-embedded = {
     config = "rx-none-elf";
-    libc = "newlib";
   };
 
   msp430 = {
     config = "msp430-elf";
-    libc = "newlib";
   };
 
   avr = {
@@ -207,16 +215,22 @@ rec {
 
   vc4 = {
     config = "vc4-elf";
-    libc = "newlib";
   };
 
   or1k = {
     config = "or1k-elf";
-    libc = "newlib";
   };
 
   m68k = {
     config = "m68k-unknown-linux-gnu";
+  };
+
+  arc = {
+    config = "arc-unknown-linux-gnu";
+  };
+
+  sh4 = {
+    config = "sh4-unknown-linux-gnu";
   };
 
   s390 = {
@@ -229,7 +243,6 @@ rec {
 
   arm-embedded = {
     config = "arm-none-eabi";
-    libc = "newlib";
   };
   arm-embedded-nano = {
     config = "arm-none-eabi";
@@ -237,7 +250,6 @@ rec {
   };
   armhf-embedded = {
     config = "arm-none-eabihf";
-    libc = "newlib";
     # GCC8+ does not build without this
     # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
     gcc = {
@@ -248,47 +260,31 @@ rec {
 
   aarch64-embedded = {
     config = "aarch64-none-elf";
-    libc = "newlib";
     rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
     config = "aarch64_be-none-elf";
-    libc = "newlib";
   };
 
   ppc-embedded = {
     config = "powerpc-none-eabi";
-    libc = "newlib";
   };
 
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
-    libc = "newlib";
   };
 
   i686-embedded = {
     config = "i686-elf";
-    libc = "newlib";
   };
 
   x86_64-embedded = {
     config = "x86_64-elf";
-    libc = "newlib";
   };
 
   microblaze-embedded = {
     config = "microblazeel-none-elf";
-    libc = "newlib";
-  };
-
-  #
-  # Redox
-  #
-
-  x86_64-unknown-redox = {
-    config = "x86_64-unknown-redox";
-    libc = "relibc";
   };
 
   #
@@ -320,52 +316,85 @@ rec {
     platform = { };
   };
 
-  x86_64-darwin = {
-    config = "x86_64-apple-darwin";
-    xcodePlatform = "MacOSX";
-    platform = { };
+  #
+  # UEFI
+  #
+
+  x86_64-unknown-uefi = {
+    config = "x86_64-unknown-uefi";
+  };
+
+  aarch64-unknown-uefi = {
+    config = "aarch64-unknown-uefi";
   };
 
   #
   # Windows
   #
 
-  # 32 bit mingw-w64
-  mingw32 = {
+  # mingw-w64 with MSVCRT for i686
+  mingw-msvcrt-i686 = {
     config = "i686-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  # 64 bit mingw-w64
-  mingwW64 = {
+  # mingw-w64 with MSVCRT for x86_64
+  mingw-msvcrt-x86_64 = {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  ucrt64 = {
+  # mingw-w64 with UCRT for x86_64, default compiler
+  mingw-ucrt-x86_64 = {
     config = "x86_64-w64-mingw32";
     libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  # LLVM-based mingw-w64 for ARM
-  ucrtAarch64 = {
+  # mingw-w64 with UCRT for x86_64, LLVM
+  mingw-ucrt-x86_64-llvm = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt";
+    rust.rustcTarget = "x86_64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
+  # mingw-w64 with ucrt for Aarch64, default compiler (which is LLVM
+  # see ./default.nix).
+  mingw-ucrt-aarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
-    useLLVM = true;
+  };
+
+  # mingw-64 back compat
+  # TODO: Warn after 26.05, and remove after 26.11.
+  mingw32 = mingw-msvcrt-i686;
+  mingwW64 = mingw-msvcrt-x86_64;
+  ucrt64 = mingw-ucrt-x86_64;
+  ucrtAarch64 = mingw-ucrt-aarch64;
+
+  # Target the MSVC ABI
+  x86_64-windows = {
+    config = "x86_64-pc-windows-msvc";
+  };
+
+  aarch64-windows = {
+    config = "aarch64-pc-windows-msvc";
+  };
+
+  x86_64-cygwin = {
+    config = "x86_64-pc-cygwin";
   };
 
   # BSDs
 
   aarch64-freebsd = {
     config = "aarch64-unknown-freebsd";
-    useLLVM = true;
   };
 
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";
-    useLLVM = true;
   };
 
   x86_64-netbsd = {
@@ -387,8 +416,14 @@ rec {
   # WASM
   #
 
+  wasm32-wasip1 = {
+    config = "wasm32-unknown-wasip1";
+    useLLVM = true;
+  };
+
+  # Historical-reasons alias for wasm32-wasip1.
   wasi32 = {
-    config = "wasm32-unknown-wasi";
+    config = "wasm32-unknown-wasip1";
     useLLVM = true;
   };
 

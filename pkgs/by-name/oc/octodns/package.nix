@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3,
   runCommand,
+  versionCheckHook,
 
   # passthru
   octodns,
@@ -17,18 +18,16 @@ let
   };
   python3Packages = python.pkgs;
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "octodns";
-  version = "1.11.0";
+  version = "1.21.1";
   pyproject = true;
-
-  disabled = python.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";
-    tag = "v${version}";
-    hash = "sha256-zCEfg6AAyclDBzSVQiGrE8Ol/9C7STq0VChepBt73GQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V4C7KlRK+PejwnUyodRKlscfesJj4SCqr6JZyiDZqXU=";
   };
 
   build-system = with python3Packages; [
@@ -46,9 +45,13 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    jsonschema
   ];
 
   pythonImportsCheck = [ "octodns" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     providers = lib.recurseIntoAttrs (
@@ -72,8 +75,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tools for managing DNS across multiple providers";
     homepage = "https://github.com/octodns/octodns";
-    changelog = "https://github.com/octodns/octodns/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/octodns/octodns/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+    mainProgram = "octodns-sync";
     teams = [ lib.teams.octodns ];
   };
-}
+})

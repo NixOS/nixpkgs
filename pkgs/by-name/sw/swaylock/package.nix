@@ -17,15 +17,15 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock";
-  version = "1.8.2";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
-    tag = "v${version}";
-    hash = "sha256-VZxUyASWyg+UMTTYeuyRIO+++ZKL0nAqjNS6nJ756yk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AkH3i9egklFm8z+0M46jFx9VubGWsRGwN1eLkrwkgfs=";
   };
 
   strictDeps = true;
@@ -55,17 +55,17 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
       Important note: If you don't use the Sway module (programs.sway.enable)
       you need to set "security.pam.services.swaylock = {};" manually.
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     mainProgram = "swaylock";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
-}
+})

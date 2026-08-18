@@ -9,10 +9,9 @@
   gitlabEnterprise ? false,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   nixosTests,
-  nodejs_20,
-  replace,
+  nodejs_22,
   ruby_3_3,
   stdenv,
   tzdata,
@@ -47,7 +46,7 @@ let
     owner = data.owner;
     repo = data.repo;
     rev = data.rev;
-    sha256 = data.repo_hash;
+    hash = data.repo_hash;
   };
 
   rubyEnv = bundlerEnv rec {
@@ -67,7 +66,8 @@ let
         buildInputs = [ file ];
         buildFlags = [ "--enable-system-libraries" ];
       };
-      gitlab-glfm-markdown = attrs: {
+
+      gitlab-glaz = attrs: {
         cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
             inherit (buildRubyGem { inherit (attrs) gemName version source; })
@@ -78,12 +78,11 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
-              cp -R ext/glfm_markdown $out
-              rm $out/Cargo.lock
+              cp -R ext/glaz $out
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-TG2pUE80o/Sa147Lcb7yIJC+mfaDzzW7m2d7dTi5yi0=";
+          hash = "sha256-5fGoW6TpkIQ8OIXjt2fLGzG9xhZ2TT+v2zLH1ecItII=";
         };
 
         dontBuild = false;
@@ -104,7 +103,159 @@ let
         '';
 
         postInstall = ''
-          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      gitlab-glfm-markdown = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/gitlab_glfm_markdown $out
+              rm $out/Cargo.lock
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-ikizLu1B+stdk+HDGjrACOpgptg0jfbHcoqfrJtUpEY=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      gitlab_query_language = attrs: rec {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            installPhase = ''
+              mkdir -p $out
+              cp Cargo.lock $out
+              cp -R ext/gitlab_query_language/* $out
+            '';
+          };
+
+          # GitLab publishes a Cargo.lock for gitlab_query_language that does not contain the `source` attribute
+          # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
+          # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
+          nativeBuildInputs = [ cargo ];
+          postPatch = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+            cargo fetch
+          '';
+          postBuild = ''
+            cp Cargo.lock $out
+          '';
+
+          hash = "sha256-v0XIAyBqwFpO4n6EUgXaE7/yuyYAva8arv4unVPqqN4=";
+        };
+
+        postPatch = ''
+          cp ${cargoDeps}/Cargo.lock .
+        '';
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        # The gem builder wrongly copies Cargo.lock within the gem, while it's missing in the outer rust project
+        # before rustc ran.
+        # This fixes this and makes the rustc invocation work.
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+          # Unpack
+          tar xvf $gempkg
+          # Modify
+          gzip -d data.tar.gz
+          chmod +w data.tar
+          mv Cargo.lock ./ext/gitlab_query_language
+          tar rf data.tar ./ext/gitlab_query_language/Cargo.lock
+          # Repack
+          gzip data.tar
+          tar -cf $gempkg data.tar.gz metadata.gz
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+
+      prometheus-client-mmap = attrs: {
+        dontBuild = false;
+        postPatch =
+          let
+            getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+          in
+          ''
+            substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+          '';
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          src = stdenv.mkDerivation {
+            inherit (buildRubyGem { inherit (attrs) gemName version source; })
+              name
+              src
+              unpackPhase
+              nativeBuildInputs
+              ;
+            dontBuilt = true;
+            installPhase = ''
+              cp -R ext/fast_mmaped_file_rs $out
+              rm $out/Cargo.lock
+              cp Cargo.lock $out
+            '';
+          };
+          hash = "sha256-lhD8vlqK9a38ZLBD6YagWnJ/DQ8YqbC1NxEyzYnoLh8=";
+        };
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
           find $out -type f -name .rustc_info.json -delete
         '';
       };
@@ -144,13 +295,18 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/yarn.lock";
-      sha256 = data.yarn_hash;
+      hash = data.yarn_hash;
+    };
+    frontendIslandsYarnOfflineCache = fetchYarnDeps {
+      # Revert to this when GitLab fixes their frontend_islands yarn.lock
+      yarnLock = src + "/ee/frontend_islands/yarn.lock";
+      hash = data.frontend_islands_yarn_hash;
     };
 
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs_20
+      nodejs_22
       git
       cacert
       yarnConfigHook
@@ -167,13 +323,17 @@ let
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
       ./Remove-unsupported-database-names.patch
     ];
-    # One of the patches uses this variable - if it's unset, execution
-    # of rake tasks fails.
-    GITLAB_LOG_PATH = "log";
-    FOSS_ONLY = !gitlabEnterprise;
 
-    SKIP_YARN_INSTALL = 1;
-    NODE_OPTIONS = "--max-old-space-size=8192";
+    env = {
+      # One of the patches uses this variable - if it's unset, execution
+      # of rake tasks fails.
+      GITLAB_LOG_PATH = "log";
+      FOSS_ONLY = !gitlabEnterprise;
+      SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
+
+      SKIP_YARN_INSTALL = 1;
+      NODE_OPTIONS = "--max-old-space-size=8192";
+    };
 
     postConfigure = ''
       # Some rake tasks try to run yarn automatically, which won't work
@@ -184,6 +344,26 @@ let
       mv config/gitlab.yml.example config/gitlab.yml
 
       patchShebangs scripts/frontend/
+      patchShebangs scripts/
+    ''
+    + lib.optionalString gitlabEnterprise ''
+      # Get node modules for frontend islands
+      export HOME=$(mktemp -d)
+      pushd ee/frontend_islands
+      yarn config --offline set yarn-offline-mirror "$frontendIslandsYarnOfflineCache"
+      fixup-yarn-lock yarn.lock
+      yarn install \
+          --frozen-lockfile \
+          --force \
+          --production=false \
+          --ignore-engines \
+          --ignore-platform \
+          --ignore-scripts \
+          --no-progress \
+          --non-interactive \
+          --offline
+      patchShebangs node_modules
+      popd
     '';
 
     buildPhase = ''
@@ -194,6 +374,12 @@ let
       pushd node_modules/vue-demi
       yarn run postinstall
       popd
+
+      # Apply node_modules patches
+      node scripts/frontend/postinstall.js
+
+      # Creates a `infection_scanner.json` needed for the assets compiler to succeed.
+      node scripts/frontend/infection_scanner/infection_scanner.mjs
 
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
@@ -210,9 +396,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "gitlab${lib.optionalString gitlabEnterprise "-ee"}-${version}";
+  pname = "gitlab${lib.optionalString gitlabEnterprise "-ee"}";
 
-  inherit src;
+  inherit src version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -221,7 +407,7 @@ stdenv.mkDerivation {
     rubyEnv.bundler
     tzdata
     git
-    nettools
+    net-tools
   ];
 
   patches = [
@@ -252,10 +438,10 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
-    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
-    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
+    find config -type f -exec sed -i -e "s|\.\./\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|require_relative 'application'|require_relative '$out/share/gitlab/config/application'|" {} +
+    find config -type f -exec sed -i -e "s|require_relative \"/home/git/gitlab/lib/gitlab/puma/error_handler\"|require_relative \"$out/share/gitlab/lib/gitlab/puma/error_handler\"|" {} +
   '';
 
   buildPhase = ''
@@ -296,21 +482,21 @@ stdenv.mkDerivation {
   };
 
   meta =
-    with lib;
+
     {
       homepage = "http://www.gitlab.com/";
-      platforms = platforms.linux;
-      teams = [ teams.gitlab ];
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.gitlab ];
     }
     // (
       if gitlabEnterprise then
         {
-          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          license = lib.licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
           description = "GitLab Enterprise Edition";
         }
       else
         {
-          license = licenses.mit;
+          license = lib.licenses.mit;
           description = "GitLab Community Edition";
           longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
         }

@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "WITH_LIBTOMCRYPT" true)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   strictDeps = true;

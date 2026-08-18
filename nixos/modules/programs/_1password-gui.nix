@@ -6,9 +6,7 @@
 }:
 
 let
-
   cfg = config.programs._1password-gui;
-
 in
 {
   imports = [
@@ -30,31 +28,32 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "1Password GUI" {
-        default = [ "_1password-gui" ];
-      };
+      package =
+        lib.mkPackageOption pkgs "1Password GUI" {
+          default = [ "_1password-gui" ];
+        }
+        // {
+          apply =
+            pkg:
+            pkg.override {
+              inherit (cfg) polkitPolicyOwners;
+            };
+        };
     };
   };
 
-  config =
-    let
-      package = cfg.package.override {
-        polkitPolicyOwners = cfg.polkitPolicyOwners;
-      };
-    in
-    lib.mkIf cfg.enable {
-      environment.systemPackages = [ package ];
-      users.groups.onepassword.gid = config.ids.gids.onepassword;
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+    users.groups.onepassword.gid = config.ids.gids.onepassword;
 
-      security.wrappers = {
-        "1Password-BrowserSupport" = {
-          source = "${package}/share/1password/1Password-BrowserSupport";
-          owner = "root";
-          group = "onepassword";
-          setuid = false;
-          setgid = true;
-        };
+    security.wrappers = {
+      "1Password-BrowserSupport" = {
+        source = "${cfg.package}/share/1password/1Password-BrowserSupport";
+        owner = "root";
+        group = "onepassword";
+        setuid = false;
+        setgid = true;
       };
-
     };
+  };
 }

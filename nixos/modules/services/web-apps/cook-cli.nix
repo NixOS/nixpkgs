@@ -9,11 +9,7 @@ let
   cfg = config.services.cook-cli;
   inherit (lib)
     mkIf
-    mkEnableOption
-    mkPackageOption
-    mkOption
     getExe
-    types
     ;
 in
 {

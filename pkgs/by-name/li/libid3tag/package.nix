@@ -1,27 +1,26 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   gperf,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libid3tag";
-  version = "0.16.3";
+  version = "0.16.4";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "libid3tag";
-    rev = version;
-    hash = "sha256-6/49rk7pmIpJRj32WmxC171NtdIOaMNhX8RD7o6Jbzs=";
+    rev = finalAttrs.version;
+    hash = "sha256-v3tvZmQE6G8Xsk+eluVtlou0Nyhyaisv0UclivQBi28=";
   };
 
   postPatch = ''
@@ -47,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

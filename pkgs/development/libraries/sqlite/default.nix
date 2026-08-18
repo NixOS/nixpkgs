@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
+  tcl,
   zlib,
   readline,
   ncurses,
@@ -27,17 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.1";
+  version = "3.53.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-AKZRFNaXz6qP4GMCgddv0bd6/Nlc1eQOxqAsu62/6nE=";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-ZiIF9jOC5X0Qceqr08eQjdchFKggqOvPGg1xqdazgrQ=";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-Fo+Zhph2vPTbjZPvoqSDqcgVNlN9AZAMWM110KZ8yic=";
   };
 
   outputs = [
@@ -55,13 +56,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    tcl
   ];
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals interactive [
-      readline
-      ncurses
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals interactive [
+    readline
+    ncurses
+  ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
@@ -73,16 +76,20 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
-  configureFlags =
-    [
-      "--bindir=${placeholder "bin"}/bin"
-      "--includedir=${placeholder "dev"}/include"
-      "--libdir=${placeholder "out"}/lib"
-    ]
-    ++ lib.optional (!interactive) "--disable-readline"
-    # autosetup only looks up readline.h in predefined set of directories.
-    ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
-    ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
+  configureFlags = [
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--libdir=${placeholder "out"}/lib"
+    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
+    # Enabling limit-on-update/delete by adding -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT to NIX_CFLAGS_COMPILE does not work: the lemon parser generator (built early in buildPhase) doesn't receive the flag when it's invoked, as it's not been wrapped with Nix magic.
+    "--enable-update-limit"
+  ]
+  ++ lib.optional (!interactive) "--disable-readline"
+  # autosetup only looks up readline.h in predefined set of directories.
+  ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
+  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -95,6 +102,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS5"
     "-DSQLITE_ENABLE_GEOPOLY"
     "-DSQLITE_ENABLE_MATH_FUNCTIONS"
+    "-DSQLITE_ENABLE_PERCENTILE"
     "-DSQLITE_ENABLE_PREUPDATE_HOOK"
     "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
@@ -109,19 +117,6 @@ stdenv.mkDerivation rec {
 
   # Test for features which may not be available at compile time
   preBuild = ''
-    # Use pread(), pread64(), pwrite(), pwrite64() functions for better performance if they are available.
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread_pwrite_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread(0, NULL, 0, 0);\n  pwrite(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD"
-    fi
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64"
-    elif cc -D_LARGEFILE64_SOURCE -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64 -D_LARGEFILE64_SOURCE"
-    fi
-
     # Necessary for FTS5 on Linux
     export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lm"
 
@@ -136,7 +131,11 @@ stdenv.mkDerivation rec {
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
+  # The tests are only defined for Darwin, Linux, Windows, and OpenBSD, not any other unix-like OS.
+  doCheck = stdenv.hostPlatform.isLinux;
+  # When tcl is not available, only run test targets that don't need it.
+  checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 
   passthru = {
     tests = {
@@ -157,15 +156,17 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = licenses.publicDomain;
+    license = lib.licenses.blessing;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ np ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ np ];
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
   };
 }

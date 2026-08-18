@@ -9,6 +9,7 @@
   wayland-scanner,
   aml,
   jansson,
+  libdrm,
   libxkbcommon,
   libgbm,
   neatvnc,
@@ -17,15 +18,15 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayvnc";
-  version = "0.9.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "wayvnc";
-    rev = "v${version}";
-    hash = "sha256-LINzkC18gitj1a8Giqlt/6LyydOdV+8YXRJmuxT/Nq8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XVu+sj7O6usFXljkGvQHU9KARjW9jYhFltgbY900TyA=";
   };
 
   strictDeps = true;
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     aml
     jansson
+    libdrm
     libxkbcommon
     libgbm
     neatvnc
@@ -54,10 +56,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "tests" true)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "VNC server for wlroots based Wayland compositors";
@@ -68,11 +72,11 @@ stdenv.mkDerivation rec {
       headless one, so it is also possible to run wayvnc without a physical
       display attached.
     '';
-    mainProgram = "wayvnc";
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
+    homepage = "https://github.com/any1/wayvnc";
+    changelog = "https://github.com/any1/wayvnc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
+    mainProgram = "wayvnc";
   };
-}
+})

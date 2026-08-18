@@ -4,11 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   accountsservice,
-  adwaita-icon-theme,
   budgie-desktop,
-  cheese,
-  clutter,
-  clutter-gtk,
   colord,
   colord-gtk,
   cups,
@@ -22,17 +18,12 @@
   glibc,
   gnome,
   gst_all_1,
-  gnome-bluetooth_1_0,
-  gnome-color-manager,
   gnome-desktop,
-  gnome-remote-desktop,
   gnome-settings-daemon,
-  gnome-user-share,
   gsettings-desktop-schemas,
   gsound,
   gtk3,
   ibus,
-  libcanberra-gtk3,
   libepoxy,
   libgnomekbd,
   libgtop,
@@ -44,12 +35,10 @@
   libpwquality,
   librsvg,
   libsecret,
-  libwacom,
   libxml2,
   libxslt,
   meson,
   modemmanager,
-  mutter,
   networkmanager,
   networkmanagerapplet,
   ninja,
@@ -61,29 +50,37 @@
   shared-mime-info,
   testers,
   tzdata,
-  udisks2,
+  udisks,
   upower,
+  wdisplays,
   webp-pixbuf-loader,
   wrapGAppsHook3,
   enableSshSocket ? false,
 }:
 
+let
+  introduction_list = (
+    replaceVars ./introduction.list {
+      budgie_desktop = budgie-desktop;
+      inherit wdisplays;
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "1.4.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
+    hash = "sha256-y/3qXIn8HI4S7K02ovZGT4ec/KJ93k/U82g4Rw3ZJQA=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
-      gcm = gnome-color-manager;
       inherit
         cups
         libgnomekbd
@@ -106,8 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     accountsservice
-    clutter
-    clutter-gtk
     colord
     colord-gtk
     fontconfig
@@ -117,18 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-desktop
     gst_all_1.gstreamer
-    adwaita-icon-theme
-    cheese
-    gnome-bluetooth_1_0
-    gnome-remote-desktop
     gnome-settings-daemon
-    gnome-user-share
-    mutter
     gsettings-desktop-schemas
     gsound
     gtk3
     ibus
-    libcanberra-gtk3
     libepoxy
     libgtop
     libgudev
@@ -137,15 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
     libnma
     libpulseaudio
     libpwquality
-    librsvg
     libsecret
-    libwacom
     libxml2
     modemmanager
     networkmanager
     polkit
     samba
-    udisks2
+    udisks
     upower
   ];
 
@@ -167,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
         ];
       }
     }"
+
+    install -Dm644 ${introduction_list} $out/share/budgie-control-center/introduction/introduction.list
   '';
 
   preFixup = ''
@@ -176,17 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Thumbnailers (for setting user profile pictures)
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
-      # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
   '';
 
   separateDebugInfo = true;
-
-  # Fix GCC 14 build.
-  # cc-display-panel.c:962:41: error: passing argument 1 of 'gtk_widget_set_sensitive'
-  # from incompatible pointer type [-Wincompatible-pointer-types]
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };

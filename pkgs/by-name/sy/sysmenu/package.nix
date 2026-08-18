@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "sysmenu";
-  version = "unstable-2024-06-13";
+  version = "0-unstable-2024-06-13";
 
   src = fetchFromGitHub {
     owner = "System64fumo";

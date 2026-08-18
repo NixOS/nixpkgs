@@ -6,26 +6,23 @@
   pytestCheckHook,
   pyyaml,
   pythonAtLeast,
-  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.7";
+  version = "1.7.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    tag = version;
-    hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
+    tag = "v${version}";
+    hash = "sha256-ZRdwA3X1TCv0BIwr1gFeSi6UuziXiazciKw/6ewkpRE=";
   };
 
-  patches = [
-    # https://github.com/bw2/ConfigArgParse/pull/295
-    ./python3.13-compat.patch
+  build-system = [
+    setuptools-scm
   ];
 
   optional-dependencies = {
@@ -35,7 +32,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # regex mismatch
@@ -44,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configargparse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
-    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

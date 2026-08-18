@@ -2,33 +2,35 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
-
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.38.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
-    rev = "v${version}";
-    hash = "sha256-yxHQvJuwfoG74e3WnlvfIVpY0t8TICo/dtjUEjGRRiI=";
+    tag = "v${version}";
+    hash = "sha256-BLApJ1RWI2nUM3EDFLWBPwIbT+wUUCqxCRjc7QlkFd4=";
   };
 
-  postPatch = ''
-    # entirely separate package that breaks the build
-    rm -rf pkg/e2e/
+  vendorHash = "sha256-NCHNe+aLNsJNtKdgQxyL6cMuu9XxA5ycleHf9gToEks=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  modPostBuild = ''
+    patch -d vendor/github.com/docker/cli/ -p1 < ${./cli-system-plugin-dir-from-env.patch}
   '';
 
-  vendorHash = "sha256-fAe0Bp8fkIe+eHRSCIaeKCH4cAN3DNqJnhTVi6eRHgQ=";
-
   ldflags = [
-    "-X github.com/docker/compose/v2/internal.Version=${version}"
+    "-X github.com/docker/compose/v5/internal.Version=${version}"
     "-s"
     "-w"
   ];
 
   doCheck = false;
+  doInstallCheck = true;
   installPhase = ''
     runHook preInstall
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose
@@ -38,11 +40,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ airone01 ];
   };
 }

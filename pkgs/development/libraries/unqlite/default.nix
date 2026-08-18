@@ -7,18 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "unqlite";
-  version = "1.1.9";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "symisc";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
+    repo = "unqlite";
+    tag = version;
+    hash = "sha256-HXhI+IEnBBsWzI+EriGqqkJmeyOF+Y/NJzu4rMd0eY0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://unqlite.org/";
     description = "Self-contained, serverless, zero-conf, transactional NoSQL DB library";
     longDescription = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       freely copy a database between 32-bit and 64-bit systems or between
       big-endian and little-endian architectures.
     '';
-    maintainers = with maintainers; [ ];
-    license = licenses.bsd2;
+    maintainers = [ ];
+    license = lib.licenses.bsd2;
   };
 }

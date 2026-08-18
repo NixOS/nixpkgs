@@ -3,12 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numactl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "py-libnuma";
   version = "1.2";
   pyproject = true;

@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-findutils";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "findutils";
     tag = finalAttrs.version;
-    hash = "sha256-i+ryTF2hlZFbyFft/769c800FkzL26E4snUsxU79sKY=";
+    hash = "sha256-0M3sOHVsIKG3rPthikommvKvHB1Q1RohogjS9LT5yU0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gtaD2jqnGhoJGw9FAJefnU9BSGIODi/RrhTeB3MC69U=";
+  cargoHash = "sha256-6M3kLNtvZ1nsCAkVJExQBWV72Bf9Kq5iei7SVpYsYio=";
 
   postInstall = ''
     rm $out/bin/testing-commandline
@@ -31,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/find";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -44,10 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
     mainProgram = "find";
-    maintainers = with lib.maintainers; [
-      defelo
-      drupol
-    ];
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.unix;
   };
 })

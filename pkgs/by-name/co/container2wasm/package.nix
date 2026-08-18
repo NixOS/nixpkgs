@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "container2wasm";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
-    owner = "ktock";
+    owner = "container2wasm";
     repo = "container2wasm";
-    tag = "v${version}";
-    hash = "sha256-uMZD2FytXNK9XErSsiuUVDTeQ+Pjx0RrDnGa7Sj8MsY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cE/cKMMslu4GGVV3aRcdsu7cTdsVABZLs8GX6ihgW38=";
   };
 
-  vendorHash = "sha256-RqLhGDmtSthYh9GexFuTjLHp9kL7QvyL+O27+5suhlA=";
+  vendorHash = "sha256-vKvQyrdmtPAjcaXU374eYPll5+Samo+zbaiMjOtGp7I=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/ktock/container2wasm/version.Version=${version}"
+    "-X=github.com/container2wasm/container2wasm/version.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -29,10 +29,10 @@ buildGoModule rec {
 
   meta = {
     description = "Container to WASM converter";
-    homepage = "https://github.com/ktock/container2wasm";
-    changelog = "https://github.com/ktock/container2wasm/releases/tag/v${version}";
+    homepage = "https://github.com/container2wasm/container2wasm";
+    changelog = "https://github.com/container2wasm/container2wasm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "c2w";
   };
-}
+})

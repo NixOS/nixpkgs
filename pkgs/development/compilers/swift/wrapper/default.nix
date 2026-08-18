@@ -4,6 +4,7 @@
   swift,
   useSwiftDriver ? true,
   swift-driver,
+  clang,
 }:
 
 stdenv.mkDerivation (
@@ -28,12 +29,44 @@ stdenv.mkDerivation (
       swiftStaticLibSubdir
       ;
     swiftDriver = lib.optionalString useSwiftDriver "${swift-driver}/bin/swift-driver";
+    cc_wrapper = clang.override (prev: {
+      extraBuildCommands =
+        prev.extraBuildCommands
+        # We need to use the resource directory corresponding to Swift’s
+        # version of Clang instead of passing along the one from the
+        # `cc-wrapper` flags.
+        + ''
+          rm -r $out/resource-root
+          substituteInPlace $out/nix-support/cc-cflags \
+            --replace-fail \
+              "-resource-dir=$out/resource-root" \
+              "-resource-dir=${lib.getLib swift}/lib/swift/clang"
+        ''
+        +
+          lib.optionalString
+            (
+              stdenv.targetPlatform.isLinux
+              && stdenv.targetPlatform.isx86
+              && lib.versionAtLeast (lib.getVersion clang) "19.1"
+            )
+            ''
+              # Swift bundles Clang 16, which predates -mtls-dialect=gnu2
+              # support (added in Clang 19.1). The cc-wrapper adds it based
+              # on the system Clang version, so strip it here.
+              substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
+                --replace-fail "'-mtls-dialect=gnu2'" ""
+            ''
+        # We need the libc++ headers corresponding to the LLVM version of
+        # Swift’s Clang.
+        + lib.optionalString (clang.libcxx != null) ''
+          include -isystem "${lib.getDev swift}/include/c++/v1" > $out/nix-support/libcxx-cxxflags
+        '';
+    });
 
     env.darwinMinVersion = lib.optionalString stdenv.targetPlatform.isDarwin (
       stdenv.targetPlatform.darwinMinVersion
     );
 
-    passAsFile = [ "buildCommand" ];
     buildCommand = ''
       mkdir -p $out/bin $out/nix-support
 
@@ -79,6 +112,7 @@ stdenv.mkDerivation (
         swiftArch
         swiftModuleSubdir
         swiftLibSubdir
+        tests
         ;
     };
   }

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  espeak-ng,
   fetchpatch,
   ffmpeg,
   fontconfig,
@@ -18,44 +19,66 @@
   libusb1,
   libwebp,
   nix-update-script,
+  onnxruntime,
   optipng,
   piper-tts,
   pkg-config,
-  podofo_0_10,
+  podofo0,
   poppler-utils,
-  python3Packages,
+  python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
+  versionCheckHook,
   xdg-utils,
   wrapGAppsHook3,
   popplerSupport ? true,
   speechSupport ? true,
   unrarSupport ? false,
 }:
-
+let
+  python3Packages = python314Packages; # Calibre 9.0+ requires python3.14+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.4.0";
+  version = "9.13.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
+    hash = "sha256-ONfYjXq8vGLG/jV1SD+1STzpYtJhqXihpNtNWLxLN5M=";
   };
 
-  patches = [
-    #  allow for plugin update check, but no calibre version check
-    (fetchpatch {
-      name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
-      hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
-    })
-    (fetchpatch {
-      name = "0007-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
-    })
-  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  patches =
+    let
+      debian-source = "ds+_0.10.6-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
+    in
+    [
+      #  allow for plugin update check, but no calibre version check
+      (fetchpatch {
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-2QhNf9CBxvoMiK9ZqBWnA/zdcIYpY+HGG0uguUZbinw=";
+      })
+      (fetchpatch {
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        hash = "sha256-ItJalYmBhK4Qgz6QDGbPpBMaa6oGQetQvg5ie3oxFMM=";
+      })
+    ];
+
+  postPatch =
+    lib.optionalString (!unrarSupport)
+      # Don't build the unrar plugin
+      ''
+        substituteInPlace src/calibre/ebooks/metadata/archive.py \
+          --replace-fail \
+            "file_types = {'zip', 'rar', '7z'}" \
+            "file_types = {'zip', '7z'}"
+      '';
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -67,16 +90,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseQmakeConfigure = true;
   dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    # `pdftotext`/`pdftohtml` are run by the test suite
+    poppler-utils
+    python3Packages.python
     qt6.qmake
     qt6.wrapQtAppsHook
     wrapGAppsHook3
+    # `xdg-icon-resource` & co. are run by the desktop integration setup in `installPhase`
+    xdg-utils
   ];
 
   buildInputs = [
+    espeak-ng
     ffmpeg
     fontconfig
     hunspell
@@ -89,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
-    piper-tts
-    podofo_0_10
+    onnxruntime
+    podofo0
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -110,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
         dnspython
         faust-cchardet
         feedparser
+        feedparser-sgmllib
         html2text
         html5-parser
         lxml
@@ -122,10 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
         pykakasi
         pyqt-builder
         pyqt6
+        pystache
         python
         regex
         sip
         setuptools
+        tzdata
+        tzlocal
         zeroconf
         jeepney
         pycryptodome
@@ -133,34 +167,42 @@ stdenv.mkDerivation (finalAttrs: {
         # the following are distributed with calibre, but we use upstream instead
         odfpy
       ]
-      ++
-        lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms)
-          [
-            # much of calibre's functionality is usable without a web
-            # browser, so we enable building on platforms which qtwebengine
-            # does not support by simply omitting qtwebengine.
-            pyqt6-webengine
-          ]
+      ++ lib.optionals (lib.lists.elem stdenv.hostPlatform.system pyqt6-webengine.meta.platforms) [
+        # much of calibre's functionality is usable without a web
+        # browser, so we enable building on platforms which qtwebengine
+        # does not support by simply omitting qtwebengine.
+        pyqt6-webengine
+      ]
       ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional speechSupport speechd-minimal;
+  ]
+  ++ lib.optionals speechSupport [
+    piper-tts
+    (speechd-minimal.override { inherit python3Packages; })
+  ];
+
+  env = {
+    HOME = "/tmp";
+    MAGICK_INC = "${lib.getDev imagemagick}/include/ImageMagick";
+    MAGICK_LIB = "${lib.getLib imagemagick}/lib";
+    FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
+    FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo0}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo0}/lib";
+    XDG_DATA_HOME = "${placeholder "out"}/share";
+    XDG_UTILS_INSTALL_MODE = "user";
+  }
+  // lib.optionalAttrs popplerSupport {
+    POPPLER_INC_DIR = "${lib.getDev poppler-utils}/include/poppler";
+    POPPLER_LIB_DIR = "${lib.getLib poppler-utils}/lib";
+  }
+  // lib.optionalAttrs speechSupport {
+    PIPER_TTS_DIR = "${lib.getBin piper-tts}/bin";
+  };
 
   installPhase = ''
     runHook preInstall
-
-    export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
-    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
-    export MAGICK_LIB=${imagemagick.out}/lib
-    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
-    export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo_0_10}/lib
-    export XDG_DATA_HOME=$out/share
-    export XDG_UTILS_INSTALL_MODE="user"
-    export PIPER_TTS_DIR=${piper-tts}/bin
 
     python setup.py install --root=$out \
       --prefix=$out \
@@ -195,6 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
               libjpeg
@@ -202,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
               optipng
             ]
           } \
-          ${if popplerSupport then popplerArgs else ""}
+          ${lib.optionalString popplerSupport popplerArgs}
       done
     '';
 
@@ -210,24 +253,60 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckInputs = with python3Packages; [
     psutil
   ];
-  installCheckPhase = ''
-    runHook preInstallCheck
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # `calibre --version` drops a trailing `.0`, so check against a binary reporting the full version
+  versionCheckProgram = "${placeholder "out"}/bin/ebook-convert";
+  installCheckPhase =
+    let
+      excludedTestNames = [
+        "test_7z" # we don't include 7z support
+        "test_zstd" # we don't include zstd support
+        "test_qt" # we don't include svg or webp support
+        "test_import_of_all_python_modules" # explores actual file paths, gets confused
+        "test_websocket_basic" # flaky
 
-    ETN='--exclude-test-name'
-    EXCLUDED_FLAGS=(
-      $ETN 'test_7z'  # we don't include 7z support
-      $ETN 'test_zstd'  # we don't include zstd support
-      $ETN 'test_qt'  # we don't include svg or webp support
-      $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
-      $ETN 'test_websocket_basic'  # flakey
-      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
-      ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
-    )
+        # Flaky: asserts on page-granularity RSS deltas, which are 0 (assertion skipped)
+        # on most runs and allocator noise otherwise
+        "test_mem_leaks"
 
-    python setup.py test ''${EXCLUDED_FLAGS[@]}
+        # hangs with cuda enabled, also:
+        # eglInitialize: Failed to get system egl display
+        # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+        "test_recipe_browser_webengine"
+        # Flaky test, occasionally errors with python exception:
+        # urllib.error.URLError: <urlopen error NetworkError.RemoteHostClosedError: Connection closed>
+        "test_recipe_browser_qt"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+        # https://github.com/microsoft/onnxruntime/issues/10038
+        "test_piper"
 
-    runHook postInstallCheck
-  '';
+        # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+        #  what():  /build/source/include/onnxruntime/core/common/logging/logging.h:371
+        # static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
+        # Attempt to use DefaultLogger but none has been registered.
+        "test_plugins"
+      ]
+      ++ lib.optionals (!speechSupport) [
+        "test_speech_dispatcher"
+      ]
+      ++ lib.optionals (!unrarSupport) [
+        "test_unrar"
+      ];
+
+      testFlags = lib.concatStringsSep " " (
+        lib.map (testName: "--exclude-test-name ${testName}") excludedTestNames
+      );
+    in
+    ''
+      runHook preInstallCheck
+
+      python setup.py test ${testFlags}
+
+      runHook postInstallCheck
+    '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
@@ -236,6 +315,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
+    mainProgram = "calibre";
     longDescription = ''
       calibre is a powerful and easy to use e-book manager. Users say it’s
       outstanding and a must-have. It’ll allow you to do nearly everything and
@@ -244,7 +324,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

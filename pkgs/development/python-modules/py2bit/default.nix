@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "py2bitTest/test.py" ];
+  enabledTestPaths = [ "py2bitTest/test.py" ];
 
   meta = {
     homepage = "https://github.com/deeptools/py2bit";
@@ -35,6 +35,5 @@ buildPythonPackage rec {
       A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ scalavision ];
   };
 }

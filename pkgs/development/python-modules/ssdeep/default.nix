@@ -4,28 +4,30 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
   six,
   ssdeep,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ssdeep";
   version = "3.4.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DinoTools";
     repo = "python-ssdeep";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I5ci5BS+B3OE0xdLSahu3HCh99jjhnRHJFz830SvFpg=";
   };
 
   buildInputs = [ ssdeep ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     six
   ];
@@ -39,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ssdeep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ssdeep library";
     homepage = "https://github.com/DinoTools/python-ssdeep";
-    changelog = "https://github.com/DinoTools/python-ssdeep/blob/${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/DinoTools/python-ssdeep/blob/${finalAttrs.version}/CHANGELOG.rst";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

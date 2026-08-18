@@ -74,6 +74,7 @@ let
 
   needUserConfig =
     stdenv.hostPlatform != stdenv.buildPlatform
+    || enablePython
     || useMpi
     || (stdenv.hostPlatform.isDarwin && enableShared);
 
@@ -125,14 +126,16 @@ let
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
-          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+          "target-os=${
+            if stdenv.hostPlatform.isCygwin then "cygwin" else toString stdenv.hostPlatform.parsed.kernel.name
+          }"
 
           # adapted from table in boost manual
           # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
           "abi=${
             if stdenv.hostPlatform.parsed.cpu.family == "arm" then
               "aapcs"
-            else if stdenv.hostPlatform.isWindows then
+            else if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) then
               "ms"
             else if stdenv.hostPlatform.isMips32 then
               "o32"
@@ -168,7 +171,17 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionOlder version "1.88" && stdenv.hostPlatform.isDarwin
     ) ./darwin-no-system-python.patch
-    ++ lib.optional (lib.versionOlder version "1.88") ./cmake-paths-173.patch
+    ++ lib.optionals (lib.versionOlder version "1.88") [
+      ./cmake-paths-173.patch
+      # A typo in a template fails with clang >= 19 and gcc >= 15
+      (fetchpatch {
+        url = "https://github.com/boostorg/thread/commit/49ccf9c30a0ca556873dbf64b12b0d741d1b3e66.patch";
+        relative = "include";
+        sha256 = "sha256-O1dH8H1kPZvj4ol47TvlW7+MIejy7uggcIOnZ2t8/UI=";
+      })
+    ]
+
+    ++ lib.optional (lib.versionAtLeast version "1.88") ./cmake-paths-188.patch
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
@@ -181,6 +194,35 @@ stdenv.mkDerivation {
       extraPrefix = "libs/context/";
       sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
     })
+    # Backports https://github.com/boostorg/context/pull/331, which prevents
+    # an optimisation that breaks coroutine migration between threads.
+    # (mostly needed to avoid conflicts when applying the patch below,
+    # but it's a meaningful standalone fix too).
+    ++
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.92.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/0921b9fd5c776aec7748475c6c10807e0d51bc6d.patch";
+          relative = "include";
+          hash = "sha256-nQYMd3HFsDLxijnGdyas0ZHs3ylQVMGQL14K7F6MkF0=";
+        })
+    # Backports https://github.com/boostorg/context/pull/337 which fixes a regression that breaks
+    # std::uncaught_exceptions for abandoned coroutines under libstdc++ and fcontext implementation.
+    # This bug also caused subtle breakage in Nix. See https://github.com/NixOS/nix/issues/16174.
+    ++
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.93.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/5883212311535a0046031d74d1568ae173c1e35b.patch";
+          relative = "include";
+          hash = "sha256-CytNLi2d0wjI/lY5lDv98mwwQaEt7qeIs4UkE6QgCBU=";
+        })
+    ++
+      # This also broke Nix https://github.com/NixOS/nix/issues/13145 and probably much more dependants too.
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.89.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/c79564d0de69422ed33f2fbc892908ad510e6a19.patch";
+          relative = "include";
+          hash = "sha256-5iZ+rSdtyOupBUYws6U8whd43XMkTlQlApW5xvE0ZB4=";
+        })
     # This fixes another issue regarding ill-formed constant expressions, which is a default error
     # in clang 16 and will be a hard error in clang 17.
     ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
@@ -196,7 +238,7 @@ stdenv.mkDerivation {
         url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
         hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
       })
-      # This fixes another ill-formed contant expressions issue flagged by clang 16.
+      # This fixes another ill-formed constant expressions issue flagged by clang 16.
       (fetchpatch {
         url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
         relative = "include";
@@ -215,17 +257,20 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
     ) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
-      # Backport fix for NumPy 2 support.
-      (fetchpatch {
-        name = "boost-numpy-2-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
-      })
-    ]
-    ++ lib.optional (version == "1.87.0") [
+    ++
+      lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87")
+        # Backport fix for NumPy 2 support.
+        (
+          fetchpatch {
+            name = "boost-numpy-2-compatibility.patch";
+            url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+            stripLen = 1;
+            extraPrefix = "libs/python/";
+            hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+          }
+        )
+
+    ++ lib.optionals (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
@@ -240,18 +285,23 @@ stdenv.mkDerivation {
         extraPrefix = "libs/context/";
         hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
       })
-    ];
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.87" && lib.versionOlder version "1.88"
+    ) ./Fix-cygwin-build-187.patch
+    ++ lib.optional (
+      stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.89" && lib.versionOlder version "1.90"
+    ) ./Fix-cygwin-build-189.patch;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
-    license = licenses.boost;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.boost;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     # boost-context lacks support for the N32 ABI on mips64.  The build
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
-    maintainers = with maintainers; [ hjones2199 ];
     broken =
       enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
@@ -346,34 +396,33 @@ stdenv.mkDerivation {
     which
     boost-build
     copyPkgconfigItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    zlib
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+  ++ [ xz ]
+  ++ lib.optional enableIcu icu
+  ++ lib.optionals enablePython [
+    libxcrypt
+    python
+  ]
+  ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+  configureFlags = [
+    "--includedir=$(dev)/include"
+    "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+  ]
+  ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+  ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild
@@ -394,19 +443,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup =
-    ''
-      # Make boost header paths relative so that they are not runtime dependencies
-      cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-        -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      $RANLIB "$out/lib/"*.a
-    '';
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    $RANLIB "$out/lib/"*.a
+  '';
 
   outputs = [
     "out"
     "dev"
   ];
   setOutputFlags = false;
+
+  strictDeps = true;
+
+  __structuredAttrs = true;
 }

@@ -1,25 +1,25 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   nix-update-script,
 }:
 
-buildGo123Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "avalanchego";
-  version = "1.13.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyYBPkMPwgbxgr5Q/mpAUpsXhQ9Y++91XkPHScZ1MtI=";
+    hash = "sha256-W2doc8jwSzYpM+K74UONAkUun6tPhPJ0yCJ1a3J71IQ=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-pMrkXv9vgED6e1qtgz+pJj3T0Nyemy0PKr8w7ZiKbgk=";
+  vendorHash = "sha256-frp74RENkkE3IFTCQvjZI+DNnv9vIKvcKvO/59vEpPI=";
 
   subPackages = [ "main" ];
 
@@ -33,7 +33,10 @@ buildGo123Module (finalAttrs: {
     mv $out/bin/{main,avalanchego}
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Needed to avoid pre-releases
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "Go implementation of an Avalanche node";
@@ -41,7 +44,6 @@ buildGo123Module (finalAttrs: {
     changelog = "https://github.com/ava-labs/avalanchego/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      urandom
       qjoly
     ];
     mainProgram = "avalanchego";

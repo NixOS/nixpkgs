@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -22,33 +22,27 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-xai";
-  version = "0.2.4";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-xai==${version}";
-    hash = "sha256-uH9D1mbpVfoxhF8e4uUycrj3hwV4r+hc/CBpeCVZ2eE=";
+    tag = "langchain-xai==${finalAttrs.version}";
+    hash = "sha256-RUklm627HiwMcpKkm+0uWZgHp4iDtSsmEpLb9MxumqI=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/xai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/xai";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
     langchain-core
     langchain-openai
     requests
-  ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
   nativeCheckInputs = [
@@ -58,16 +52,27 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Breaks when langchain-core is updated
+    # Also: Compares a diff to a string literal and misses platform differences (aarch64-linux)
+    "test_serdes"
+  ];
 
   pythonImportsCheck = [ "langchain_xai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-xai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-xai==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with X AI";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/xai";
     license = lib.licenses.mit;
@@ -75,4 +80,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

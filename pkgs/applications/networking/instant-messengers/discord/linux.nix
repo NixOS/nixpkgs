@@ -1,196 +1,255 @@
 {
+  # Package metadata
   pname,
-  version,
-  src,
+  source,
   meta,
   binaryName,
   desktopName,
-  autoPatchelfHook,
-  makeDesktopItem,
+  passthru,
+  moduleSrcs,
+  # Package utilities
+  disableBreakingUpdates,
+  stageModules,
+  # Feature flags (cross-platform)
+  withOpenASAR ? false,
+  withVencord ? false,
+  withEquicord ? false,
+  withMoonlight ? false,
+  # Disabling this would normally break Discord.
+  # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
+  # for example if a settings.json is linked declaratively (e.g., with home-manager).
+  disableUpdates ? true,
+  # Feature flags (Linux exclusive)
+  withTTS ? true,
+  enableAutoscroll ? false,
+  # Package arguments
+  commandLineArgs ? "",
+  useFHSEnv ? true,
+  # Miscellaneous
   lib,
   stdenv,
-  wrapGAppsHook3,
   makeShellWrapper,
+  gtk3,
+  brotli,
+  addDriverRunpath,
+  fetchurl,
+  makeDesktopItem,
+  autoPatchelfHook,
+  cups,
+  libdrm,
+  libuuid,
+  libxdamage,
+  libx11,
+  libxscrnsaver,
+  libxtst,
+  libxcb,
+  libxshmfence,
+  wrapGAppsHook3,
   alsa-lib,
+  libgbm,
+  nspr,
+  nss,
+  libpulseaudio,
+  libcxx,
+  systemdLibs,
+  atk,
   at-spi2-atk,
   at-spi2-core,
-  atk,
   cairo,
-  cups,
   dbus,
   expat,
   fontconfig,
   freetype,
   gdk-pixbuf,
   glib,
-  gtk3,
-  libcxx,
-  libdrm,
   libglvnd,
   libnotify,
-  libpulseaudio,
-  libuuid,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libxcb,
-  libxshmfence,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  systemd,
-  libappindicator-gtk3,
-  libdbusmenu,
-  writeScript,
-  pipewire,
-  python3,
-  runCommand,
+  libxcomposite,
   libunity,
-  speechd-minimal,
+  libva,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxkbcommon,
+  pango,
+  pipewire,
+  libappindicator,
+  libdbusmenu,
   wayland,
-  branch,
-  withOpenASAR ? false,
+  speechd-minimal,
   openasar,
-  withVencord ? false,
   vencord,
-  withMoonlight ? false,
+  equicord,
   moonlight,
-  withTTS ? true,
-  enableAutoscroll ? false,
-  # Disabling this would normally break Discord.
-  # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
-  # for example if a settings.json is linked declaratively (e.g., with home-manager).
-  disableUpdates ? true,
-}:
-assert lib.assertMsg (
-  !(withMoonlight && withVencord)
-) "discord: Moonlight and Vencord can not be enabled at the same time";
+}@args:
+
 let
-  disableBreakingUpdates =
-    runCommand "disable-breaking-updates.py"
-      {
-        pythonInterpreter = "${python3.interpreter}";
-        configDirName = lib.toLower binaryName;
-        meta.mainProgram = "disable-breaking-updates.py";
-      }
-      ''
-        mkdir -p $out/bin
-        cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
-        substituteAllInPlace $out/bin/disable-breaking-updates.py
-        chmod +x $out/bin/disable-breaking-updates.py
-      '';
+  inherit (source) version;
+
+  src = fetchurl { inherit (source.distro) url hash; };
+
+  targetPkgs =
+    pkgs:
+    (lib.attrValues {
+      inherit (pkgs)
+        libcxx
+        systemdLibs
+        libpulseaudio
+        libdrm
+        libgbm
+        alsa-lib
+        atk
+        at-spi2-atk
+        at-spi2-core
+        cairo
+        cups
+        dbus
+        expat
+        fontconfig
+        freetype
+        gdk-pixbuf
+        glib
+        gtk3
+        libglvnd
+        libnotify
+        libx11
+        libxcomposite
+        libunity
+        libuuid
+        libva
+        libxcursor
+        libxdamage
+        libxext
+        libxfixes
+        libxi
+        libxrandr
+        libxrender
+        libxtst
+        nspr
+        libxcb
+        libxkbcommon
+        pango
+        pipewire
+        libxscrnsaver
+        libappindicator
+        libdbusmenu
+        wayland
+        ;
+
+      inherit (pkgs.stdenv.cc) cc;
+    })
+    ++ lib.optionals withTTS [ pkgs.speechd-minimal ]
+    # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH
+    # to xdg-open and break Firefox children when versions diverge (#514859,
+    # PR #186603)
+    ++ lib.optionals useFHSEnv [ pkgs.nss ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit
-    pname
     version
     src
     meta
+    disableBreakingUpdates
+    stageModules
     ;
 
+  pname = if useFHSEnv then "${pname}-unwrapped" else pname;
+
+  libPath = if useFHSEnv then null else lib.makeLibraryPath (targetPkgs args);
+
   nativeBuildInputs = [
-    alsa-lib
+    makeShellWrapper
+    brotli
+  ]
+  ++ lib.optionals (!useFHSEnv) [
     autoPatchelfHook
     cups
     libdrm
     libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
     libxcb
     libxshmfence
-    libgbm
-    nss
     wrapGAppsHook3
-    makeShellWrapper
   ];
 
-  dontWrapGApps = true;
+  buildInputs = lib.optionals (!useFHSEnv) [
+    alsa-lib
+    libgbm
+    nspr
+    nss
+    # The distro layout ships prebuilt `.node` modules:
+    # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio.
+    # Ignore the missing dependency on insecure openssl_1_1: discord_dispatch is
+    # effectively unused in practice.
+    libpulseaudio
+  ];
 
-  libPath = lib.makeLibraryPath (
-    [
-      libcxx
-      systemd
-      libpulseaudio
-      libdrm
-      libgbm
-      stdenv.cc.cc
-      alsa-lib
-      atk
-      at-spi2-atk
-      at-spi2-core
-      cairo
-      cups
-      dbus
-      expat
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gtk3
-      libglvnd
-      libnotify
-      libX11
-      libXcomposite
-      libunity
-      libuuid
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      nspr
-      libxcb
-      pango
-      pipewire
-      libXScrnSaver
-      libappindicator-gtk3
-      libdbusmenu
-      wayland
-    ]
-    ++ lib.optional withTTS speechd-minimal
-  );
+  strictDeps = true;
+
+  dontUnpack = true;
+
+  dontPatchELF = useFHSEnv;
+  dontStrip = useFHSEnv;
+
+  autoPatchelfIgnoreMissingDeps = lib.optionals (!useFHSEnv) [
+    "libssl.so.1.1"
+    "libcrypto.so.1.1"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
-    mv * $out/opt/${binaryName}
+    mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
 
+    # The host distro is a brotli-compressed tar with all files under a `files/`
+    # prefix (the channel binary, libffmpeg.so, resources/, etc). Module distros
+    # follow the same format with module contents under `files/`
+    brotli -d < $src | tar xf - --strip-components=1 -C $out/opt/${binaryName}
     chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
 
+    # The module directory layout must match what Discord's node runtime
+    # expects: modules/<name>/ (the moduleUpdater extracts zips into
+    # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: src: ''
+        mkdir -p $out/opt/${binaryName}/modules/${name}
+        brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
+      '') moduleSrcs
+    )}
+
+    mkdir -p $out/opt/${binaryName}/modules/discord_krisp/KMS/logs
+
+    # Chromium 148 multiplies Plasma's GTK DPI scale by the native Wayland surface
+    # scale, which makes the UI too large. See #551645
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
+        --run 'case ":''${XDG_CURRENT_DESKTOP:-}:" in *:KDE:*) discordKdeWayland=1 ;; *) unset discordKdeWayland ;; esac' \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${WAYLAND_DISPLAY:+\''${discordKdeWayland:+--force-device-scale-factor=1}}" \
         ${lib.strings.optionalString withTTS ''
           --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
           --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
         ''} \
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
-        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"}
+        --prefix LD_LIBRARY_PATH : $out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib \
+        ${lib.strings.optionalString (!useFHSEnv) "--prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}"} \
+        --suffix VK_ADD_DRIVER_FILES : "${addDriverRunpath.driverLink}/share/vulkan/icd.d" \
+        ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
+        --run "${finalAttrs.stageModules} $out/opt/${binaryName}/modules" \
+        --run '[ -t 1 ] || exec > /dev/null 2>&1' \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
 
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "$desktopItem/share/applications" $out/share/
@@ -207,6 +266,12 @@ stdenv.mkDerivation rec {
       mkdir $out/opt/${binaryName}/resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
+    ''
+    + lib.strings.optionalString withEquicord ''
+      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+      mkdir $out/opt/${binaryName}/resources/app.asar
+      echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+      echo 'require("${equicord}/desktop/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
     ''
     + lib.strings.optionalString withMoonlight ''
       mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
@@ -229,16 +294,7 @@ stdenv.mkDerivation rec {
     startupWMClass = "discord";
   };
 
-  passthru = {
-    # make it possible to run disableBreakingUpdates standalone
-    inherit disableBreakingUpdates;
-    updateScript = writeScript "discord-update-script" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-      set -eou pipefail;
-      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=linux&format=tar.gz")
-      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
-    '';
+  passthru = passthru // {
+    inherit targetPkgs;
   };
-}
+})

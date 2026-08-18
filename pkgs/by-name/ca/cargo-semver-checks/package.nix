@@ -9,19 +9,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-semver-checks";
-  version = "0.41.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
-    tag = "v${version}";
-    hash = "sha256-84tRzqJqvm+ermtWMCkOIUmNeH/RLf8IUTIsEVPbGQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tXUEWla7dUjx7eaNzKyHNg59LXr8LP+jXxkexR3vSdk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8VtSQZHR8L6nijcN71ey9nW5nrAsPK6qyqJSWQDz8uw=";
+  cargoHash = "sha256-rc3F104atiV+KecsNtThfFwe80jyKOFLHKn53Nhm++w=";
 
   nativeBuildInputs = [
     cmake
@@ -47,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace test_outputs/integration_snapshots__bugreport.snap \
       --replace-fail \
         'cargo-semver-checks [VERSION] ([HASH])' \
-        'cargo-semver-checks ${version}'
+        'cargo-semver-checks ${finalAttrs.version}'
   '';
 
   passthru = {
@@ -59,14 +58,14 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to scan your Rust crate for semver violations";
     mainProgram = "cargo-semver-checks";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
-    changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${version}";
+    changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
+      chrjabs
     ];
   };
-}
+})

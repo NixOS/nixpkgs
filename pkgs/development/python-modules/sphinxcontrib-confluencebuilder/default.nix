@@ -5,22 +5,19 @@
   fetchPypi,
   flit-core,
   jinja2,
-  pythonOlder,
   requests,
   sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-confluencebuilder";
-  version = "2.13.0";
+  version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";
     inherit version;
-    hash = "sha256-2Sl0ZwdHn0dXf+kbNcxaDMfWLaGdfUgCRjKTADA+unM=";
+    hash = "sha256-gC0GnwncJ3MPrWrdzz537ihhbJN5uHl/opLnUmcM+RE=";
   };
 
   build-system = [ flit-core ];
@@ -39,12 +36,12 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluence builder for sphinx";
     homepage = "https://github.com/sphinx-contrib/confluencebuilder";
     changelog = "https://github.com/sphinx-contrib/confluencebuilder/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd1;
-    maintainers = with maintainers; [ graysonhead ];
+    license = lib.licenses.bsd1;
+    maintainers = with lib.maintainers; [ graysonhead ];
     mainProgram = "sphinx-build-confluence";
   };
 }

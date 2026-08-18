@@ -16,23 +16,24 @@
   libsoup_3,
   webkitgtk_6_0,
   sqlite,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "read-it-later";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "read-it-later";
     tag = version;
-    hash = "sha256-ia65XGJonf/327o7L/862tOh04DOM2oXbKq86cCaVp4=";
+    hash = "sha256-m4s5oW8JlRogPVriJ+WHhEmf1asmZoC8f5zgPW0Crpc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-mn3Jl5XEHYbCCFjLd8TBqtZKEdevH95IWKdgHwAtXk0=";
+    hash = "sha256-hAdWDzEs1Xs5Ywa7uxCvB8E9NqKVWbMtJSjoCeXHklM=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
     webkitgtk_6_0
     sqlite
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple Wallabag client with basic features to manage articles";

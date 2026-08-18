@@ -5,16 +5,16 @@
   ffmpeg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ffsubsync";
-  version = "0.4.29";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    tag = version;
-    hash = "sha256-XMFobdr/nzr5pXjz/jWa/Pp14ITdbxAce0Iz+5qcBO4=";
+    tag = finalAttrs.version;
+    hash = "sha256-n9bYQgbBHGRJl79EiK7pTMDCcbI4ALudZUNc2SU0Wgg=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -36,6 +36,9 @@ python3.pkgs.buildPythonApplication rec {
     webrtcvad
   ];
 
+  # webrtcvad provides the same import as upstream's wheel-only dependency.
+  pythonRemoveDeps = [ "webrtcvad-wheels" ];
+
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ffsubsync" ];
@@ -51,7 +54,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/smacke/ffsubsync";
     description = "Automagically synchronize subtitles with video";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      davinci42
+    ];
     mainProgram = "ffsubsync";
   };
-}
+})

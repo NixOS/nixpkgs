@@ -13,7 +13,7 @@ Maintaining our own documentation rendering framework may appear extreme but has
 - The amount of code involved is minimal because it's single-purpose
 
 Several alternatives to `nixos-render-docs` were discussed in the past.
-A detailed analysis can be found in a [table comparing documentation rendering framework](https://ethercalc.net/dc4vcnnl8zv0).
+A detailed analysis can be found in a [table comparing documentation rendering frameworks](https://ethercalc.net/dc4vcnnl8zv0).
 
 ## Redirects system
 
@@ -40,7 +40,7 @@ The chosen design is a trade-off between speed, repository size, and contributor
     - It would also require keeping an impure or otherwise continuously updated reference to those other revisions.
     - The static mapping acts like a semi-automatically updated cache that we drag along with version history.
     - Other setups, such as a dedicated service to cache a history of moved content, are more complicated and would still be impure.
-- Checking in large amounts of data that is touched often, bears a risk of more merge conflicts or related build failures.
+- Checking in large amounts of data that is touched often bears a risk of more merge conflicts or related build failures.
 
 The solution picked here is to have a static mapping of the historical locations checked into the Git tree, such that it can be read during the build process.
 This also ensures that an improper redirect mapping will cause `nixos-render-docs` to fail the build and thus enforce that redirects stay up-to-date with every commit.
@@ -78,7 +78,7 @@ In case this identifier is renamed, the mapping would change into:
 
 ## Rendering multiple pages
 
-The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered to. We can use this argument to set up multipage rendering of the manuals.
+The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered. We can use this argument to set up multipage rendering of the manuals.
 
 For example
 

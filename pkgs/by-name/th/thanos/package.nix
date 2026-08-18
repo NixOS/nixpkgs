@@ -7,29 +7,36 @@
   nixosTests,
   testers,
   thanos,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "thanos";
-  version = "0.38.0";
+  version = "0.42.4";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    tag = "v${version}";
-    hash = "sha256-3rNtiVTrA+MoCVuTSLIzh65U0kjA86EF+bQCyfVa6rA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aqYKctocTdg6i0wMee6fJhRC3wcv9u07zyGj1NzNg98=";
   };
 
-  vendorHash = "sha256-Z/S4mVg+VbP8hNVB1xz1uGWR6N/1aTA0DqTHbntGMLg=";
+  vendorHash = "sha256-YKiFfXA93/L3LRCYUbuwpOIhbeqw6fXNSK+Fb8Gltn0=";
 
   subPackages = "cmd/thanos";
+
+  # Verify in sync with https://github.com/thanos-io/thanos/blob/main/.promu.yml
+  tags = [
+    "netgo"
+    "slicelabels"
+  ];
 
   ldflags =
     let
       t = "github.com/prometheus/common/version";
     in
     [
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -38,6 +45,11 @@ buildGoModule rec {
     ];
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -53,7 +65,7 @@ buildGoModule rec {
   meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
-    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
+    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "thanos";
     maintainers = with lib.maintainers; [
@@ -61,4 +73,4 @@ buildGoModule rec {
       anthonyroussel
     ];
   };
-}
+})

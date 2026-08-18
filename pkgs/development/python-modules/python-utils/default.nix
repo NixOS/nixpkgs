@@ -6,7 +6,6 @@
   loguru,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-utils";
   version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
@@ -41,22 +38,23 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.loguru;
+  ]
+  ++ optional-dependencies.loguru;
 
   pythonImportsCheck = [ "python_utils" ];
 
-  pytestFlagsArray = [ "_python_utils_tests" ];
+  enabledTestPaths = [ "_python_utils_tests" ];
 
   disabledTests = [
     # Flaky tests
     "test_timeout_generator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
     changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

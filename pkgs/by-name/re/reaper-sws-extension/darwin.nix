@@ -16,37 +16,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     let
       plugin = fetchurl {
-        url =
-          let
-            arch = if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then "x86_64" else "arm64";
-          in
-          "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-${arch}.dylib";
-        hash =
-          {
-            x86_64-darwin = "sha256-B185QWS9FaC/0XDhxUBbgr9zu2Ot8OIsfaPQ3sUHh4s=";
-            aarch64-darwin = "sha256-8gbyPlnIXdWtSD+Aj70xzacJhO34edTTG2IOryB67os=";
-          }
-          .${stdenvNoCC.hostPlatform.system};
+        url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-arm64.dylib";
+        hash = "sha256-jmuob0qslYhxiE2ShfTwY4RJAKBLJSUb+VBEM0sQPbo=";
       };
     in
     [
       plugin
       (fetchurl {
         url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python64.py";
-        hash = "sha256-Yujj60+jOEfdSZ74cRU1Wxoh7RL2fo/IhJIpa+BDYV0=";
+        hash = "sha256-GDlvfARg1g5oTH2itEug6Auxr9iFlPDdGueInGmHqSI=";
       })
       (fetchurl {
         url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python32.py";
-        hash = "sha256-QktzdIDpTvNs9IrH7TOI6LTIBkfuQ3cqw06iqLxSSTI=";
+        hash = "sha256-np2r568csSdIS7VZHDASroZlXhpfxXwNn0gROTinWU4=";
       })
     ];
 
-  dontUnpack = true;
+  unpackCmd = ''
+    cp $curSrc $(stripHash $curSrc)
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -D *.py -t $out/Scripts
-    install -D *.dylib -t $out/UserPlugins
+    install -D -t $out/Scripts *.py
+    install -D -t $out/UserPlugins *.dylib
     runHook postInstall
   '';
 })

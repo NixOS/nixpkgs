@@ -27,7 +27,6 @@
   calindori = callPackage ./calindori { };
   calligra = callPackage ./calligra { };
   cantor = callPackage ./cantor { };
-  cervisia = callPackage ./cervisia { };
   colord-kde = callPackage ./colord-kde { };
   dolphin = callPackage ./dolphin { };
   dolphin-plugins = callPackage ./dolphin-plugins { };
@@ -199,7 +198,6 @@
   kwordquiz = callPackage ./kwordquiz { };
   libgravatar = callPackage ./libgravatar { };
   libkcddb = callPackage ./libkcddb { };
-  libkcompactdisc = callPackage ./libkcompactdisc { };
   libkdcraw = callPackage ./libkdcraw { };
   libkdegames = callPackage ./libkdegames { };
   libkdepim = callPackage ./libkdepim { };
@@ -233,6 +231,9 @@
   pim-data-exporter = callPackage ./pim-data-exporter { };
   pim-sieve-editor = callPackage ./pim-sieve-editor { };
   pimcommon = callPackage ./pimcommon { };
+  plasma-camera = callPackage ./plasma-camera { };
+  plasma-phonebook = callPackage ./plasma-phonebook { };
+  plasma-settings = callPackage ./plasma-settings { };
   plasmatube = callPackage ./plasmatube { };
   poxml = callPackage ./poxml { };
   qmlkonsole = callPackage ./qmlkonsole { };

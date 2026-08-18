@@ -1,13 +1,13 @@
 import argparse
 import logging
-import os
 import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, Profile
+from .constants import EXECUTABLE, WITH_SHELL_FILES
+from .elevate import NO_ELEVATOR, ElevatorKind
+from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
 
@@ -41,22 +41,28 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
+    # Flags that apply to both flake evaluation and building
     flake_common_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_common_flags.add_argument("--refresh", action="store_true")
-    flake_common_flags.add_argument("--impure", action="store_true")
     flake_common_flags.add_argument("--offline", action="store_true")
     flake_common_flags.add_argument("--no-net", action="store_true")
-    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_common_flags.add_argument("--no-registries", action="store_true")
-    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input", action="append")
-    flake_common_flags.add_argument("--override-input", nargs=2, action="append")
+
+    # Flags that only apply during flake evaluation (and thus aren't passed to remote builders)
+    flake_eval_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    flake_eval_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_eval_flags.add_argument("--refresh", action="store_true")
+    flake_eval_flags.add_argument("--impure", action="store_true")
+    flake_eval_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--no-registries", action="store_true")
+    flake_eval_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_eval_flags.add_argument("--update-input", action="append")
+    flake_eval_flags.add_argument("--override-input", nargs=2, action="append")
 
     classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
+    classic_build_flags.add_argument(
+        "--no-build-output", "--no-link", "-Q", action="store_true"
+    )
 
     copy_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     copy_flags.add_argument(
@@ -73,13 +79,14 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
         "flake_common_flags": flake_common_flags,
+        "flake_eval_flags": flake_eval_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
 
     main_parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
-        parents=list(sub_parsers.values()),
+        parents=sub_parsers.values(),
         description="Reconfigure a NixOS machine",
         add_help=False,
         allow_abbrev=False,
@@ -99,6 +106,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--flake",
+        "-F",
         nargs="?",
         const=True,
         help="Build the NixOS system from the specified flake",
@@ -135,6 +143,11 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Roll back to the previous configuration",
     )
     main_parser.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
+    )
+    main_parser.add_argument(
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
@@ -151,17 +164,32 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="JSON output, only implemented for 'list-generations' right now",
     )
     main_parser.add_argument(
-        "--ask-sudo-password",
-        action="store_true",
-        help="Asks for sudo password for remote activation, implies --sudo",
+        "--elevate",
+        choices=ElevatorKind.choices(),
+        default=None,
+        help="Privilege-elevation method for activation commands",
     )
     main_parser.add_argument(
-        "--sudo", action="store_true", help="Prefixes activation commands with sudo"
+        "--ask-elevate-password",
+        "-S",
+        action="store_true",
+        help="Prompt locally for the password to feed to the elevation "
+        "method, implies --elevate=sudo if --elevate is not given",
+    )
+    main_parser.add_argument(
+        "--sudo",
+        action="store_true",
+        help="Alias for '--elevate=sudo'",
+    )
+    main_parser.add_argument(
+        "--ask-sudo-password",
+        action="store_true",
+        help="Alias for '--elevate=sudo --ask-elevate-password'",
     )
     main_parser.add_argument(
         "--use-remote-sudo",
         action="store_true",
-        help="Deprecated, use '--sudo' instead",
+        help="Deprecated, use '--elevate=sudo' instead",
     )
     main_parser.add_argument("--no-ssh-tty", action="store_true", help="Deprecated")
     main_parser.add_argument(
@@ -184,6 +212,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Selects an image variant to build from the "
         "config.system.build.images attribute of the given configuration",
     )
+    main_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="prints out the diff between the current system "
+        "and the newly built one using nix store diff-closures",
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -196,21 +230,28 @@ def get_main_parser() -> argparse.ArgumentParser:
 
 def parse_args(
     argv: list[str],
-) -> tuple[argparse.Namespace, dict[str, argparse.Namespace]]:
+) -> tuple[argparse.Namespace, GroupedNixArgs]:
     parser, sub_parsers = get_parser()
     args = parser.parse_args(argv[1:])
-    args_groups = {
-        group: parser.parse_known_args(argv[1:])[0]
-        for group, parser in sub_parsers.items()
-    }
+    grouped_nix_args = GroupedNixArgs.from_parsed_args_groups(
+        {
+            group: parser.parse_known_args(argv[1:])[0]
+            for group, parser in sub_parsers.items()
+        }
+    )
 
-    if args.help or args.action is None:
+    if args.help:
         if WITH_SHELL_FILES:
             r = run(["man", "8", EXECUTABLE], check=False)
             parser.exit(r.returncode)
         else:
             parser.print_help()
             parser.exit()
+
+    if args.action is None:
+        parser.error(
+            f"No valid subcommands. Type {parser.prog} --help for more information"
+        )
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
@@ -219,20 +260,35 @@ def parse_args(
     if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
     if args.action == Action.DRY_RUN.value:
         args.action = Action.DRY_BUILD.value
 
     if args.ask_sudo_password:
-        args.sudo = True
+        args.ask_elevate_password = True
+
+    if args.use_remote_sudo:
+        parser_warn("--use-remote-sudo is deprecated, use --elevate=sudo instead")
+
+    # Map the elevate flags onto an Elevator. The password itself is
+    # attached later via Elevator.with_prompted_password() once the
+    # target host (used in the prompt) is known.
+    if args.elevate is not None:
+        args.elevator = ElevatorKind.from_name(args.elevate)
+    elif args.sudo or args.use_remote_sudo or args.ask_sudo_password:
+        args.elevator = ElevatorKind.SUDO.make()
+    elif args.ask_elevate_password:
+        # -S historically implied --sudo. Keep that for muscle memory
+        # but be explicit now that there is more than one backend.
+        parser_warn(
+            "--ask-elevate-password without --elevate, falling back to --elevate=sudo"
+        )
+        args.elevator = ElevatorKind.SUDO.make()
+    else:
+        args.elevator = NO_ELEVATOR
 
     if args.install_grub:
         parser_warn("--install-grub is deprecated, use --install-bootloader instead")
         args.install_bootloader = True
-
-    if args.use_remote_sudo:
-        parser_warn("--use-remote-sudo is deprecated, use --sudo instead")
-        args.sudo = True
 
     if args.fast:
         parser_warn("--fast is deprecated, use --no-reexec instead")
@@ -244,8 +300,21 @@ def parse_args(
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
+    if (
+        args.action
+        in (
+            Action.DRY_BUILD.value,  # --diff breaks dry-build
+            Action.EDIT.value,
+            Action.LIST_GENERATIONS.value,
+            Action.REPL.value,
+        )
+        and args.diff
+    ):
+        parser_warn(f"--diff is a no-op with '{args.action}'")
+        args.diff = False
+
     if args.action == Action.EDIT.value and (args.file or args.attr):
-        parser.error("--file and --attr are not supported with 'edit'")
+        parser.error(f"--file and --attr are not supported with '{args.action}'")
 
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
@@ -264,24 +333,34 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
-    return args, args_groups
+    if (args.file or args.attr) and args.flake is None:
+        # Disable flake auto-detection when --file or --attr is used
+        args.flake = False
+
+    if args.store_path:
+        if args.rollback:
+            parser.error("--store-path and --rollback are mutually exclusive")
+        if args.flake or args.file or args.attr:
+            parser.error("--store-path cannot be used with --flake, --file, or --attr")
+        if args.action not in (
+            Action.SWITCH.value,
+            Action.BOOT.value,
+            Action.TEST.value,
+            Action.DRY_ACTIVATE.value,
+        ):
+            parser.error(f"--store-path cannot be used with '{args.action}'")
+        if args.flake is None:
+            # Disable flake auto-detection since we're using a pre-built store path
+            args.flake = False
+
+    return args, grouped_nix_args
 
 
 def execute(argv: list[str]) -> None:
-    args, args_groups = parse_args(argv)
-
-    if not WITH_NIX_2_18:
-        logger.warning("you're using Nix <2.18, some features will not work correctly")
-
-    common_flags = vars(args_groups["common_flags"])
-    common_build_flags = common_flags | vars(args_groups["common_build_flags"])
-    build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
-    flake_build_flags = common_build_flags | flake_common_flags
-    copy_flags = common_flags | vars(args_groups["copy_flags"])
+    args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
+        nix.upgrade_channels(args.upgrade_all, args.elevator)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -293,22 +372,24 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if (
-        WITH_REEXEC
-        and can_run
-        and not args.no_reexec
-        and not os.environ.get("_NIXOS_REBUILD_REEXEC")
-    ):
-        services.reexec(argv, args, build_flags, flake_build_flags)
+    if can_run and not args.no_reexec:
+        services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    target_host = Remote.from_arg(args.target_host)
+    build_host = Remote.from_arg(args.build_host, validate_opts=False)
+    args.elevator = args.elevator.with_prompted_password(
+        ask=args.ask_elevate_password,
+        host_label=target_host.host if target_host else "localhost",
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
-    if can_run and not flake:
-        services.write_version_suffix(build_flags)
+    if flake and (args.upgrade or args.upgrade_all):
+        logger.warning("'--upgrade(-all)' flag has no effect for flake-based systems")
+
+    if can_run and not flake and not args.store_path:
+        services.write_version_suffix(grouped_nix_args)
 
     match action:
         case (
@@ -330,15 +411,11 @@ def execute(argv: list[str]) -> None:
                 profile=profile,
                 flake=flake,
                 build_attr=build_attr,
-                build_flags=build_flags,
-                common_flags=common_flags,
-                copy_flags=copy_flags,
-                flake_build_flags=flake_build_flags,
-                flake_common_flags=flake_common_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case Action.EDIT:
-            services.edit(flake=flake, flake_build_flags=flake_build_flags)
+            services.edit(flake=flake, grouped_nix_args=grouped_nix_args)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
@@ -350,8 +427,7 @@ def execute(argv: list[str]) -> None:
             services.repl(
                 flake=flake,
                 build_attr=build_attr,
-                flake_build_flags=flake_build_flags,
-                build_flags=build_flags,
+                grouped_nix_args=grouped_nix_args,
             )
 
         case _:
@@ -365,20 +441,20 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(130)
     except CalledProcessError as ex:
-        _handle_called_process_error(ex)
-    except (Exception, KeyboardInterrupt) as ex:
+        sys.exit(_handle_called_process_error(ex))
+    except Exception as ex:
         if logger.isEnabledFor(logging.DEBUG):
             raise
         else:
             sys.exit(str(ex))
 
 
-def _handle_called_process_error(ex: CalledProcessError) -> None:
+def _handle_called_process_error(ex: CalledProcessError) -> int:
     if logger.isEnabledFor(logging.DEBUG):
-        import traceback
-
-        traceback.print_exception(ex)
+        sys.excepthook(*sys.exc_info())
     else:
         import shlex
 
@@ -399,4 +475,4 @@ def _handle_called_process_error(ex: CalledProcessError) -> None:
         print(str(ex), file=sys.stderr)
 
     # Exit with the error code of the process that failed
-    sys.exit(ex.returncode)
+    return ex.returncode

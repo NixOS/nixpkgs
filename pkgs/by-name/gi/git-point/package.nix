@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-point";
   version = "0.2.2";
 
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mH++Ddfv+OqjRTTGhagAtnNZpD13OtKhAiGxh7Mu0lY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YwinEAJ8djCE2tHp8VcfcyHSa8rUn8RBnsdW0YqIM3o=";
 
   postInstall = ''
@@ -25,12 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/Qyriad/git-point";
-    description = "Set arbitrary refs without shooting yourself in the foot, a procelain `git update-ref`";
+    description = "Set arbitrary refs without shooting yourself in the foot, a porcelain `git update-ref`";
     maintainers = [
       lib.maintainers.qyriad
       lib.maintainers.philiptaron
     ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = lib.platforms.all;
     mainProgram = "git-point";

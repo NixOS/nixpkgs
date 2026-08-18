@@ -1,38 +1,56 @@
 {
-  fetchFromGitHub,
+  fetchFromCodeberg,
+  fetchNpmDeps,
   lib,
   stdenv,
+  nodejs_24,
+  npmHooks,
   postgresql,
   postgresqlTestHook,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "0.10.3";
+  version = "1.3.4";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "SamR1";
+  src = fetchFromCodeberg {
+    owner = "FitTrackee";
     repo = "FitTrackee";
-    tag = "v${version}";
-    hash = "sha256-rJ3/JtbzYwsMRk5OZKczr/BDwfDU4NH48JdYWC5/fNk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PN+YHRKvsAgTaSm4dl2t5voRxbgIo+yoieMfGEuE0oI=";
   };
+
+  patches = [
+    # https://codeberg.org/FitTrackee/FitTrackee/pulls/1205
+    ./0001-pytest-Parametrize-compatability-with-9.1.1.patch
+  ];
+
+  makeCacheWritable = true;
+  npmRoot = "fittrackee_client";
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-kN/J7hIeEcnCKaramIPhoBsbBg32VgF372f9KOPi+nY=";
+    sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
+  };
+
+  nativeBuildInputs = [
+    nodejs_24
+    npmHooks.npmConfigHook
+  ];
+
+  preBuild = ''
+    pushd fittrackee_client
+    npm run build-only
+    popd
+  '';
 
   build-system = [
     python3Packages.poetry-core
   ];
 
-  pythonRelaxDeps = [
-    "authlib"
-    "flask"
-    "flask-limiter"
-    "flask-migrate"
-    "nh3"
-    "lxml"
-    "pyopenssl"
-    "pytz"
-    "sqlalchemy"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies =
     with python3Packages;
@@ -42,21 +60,31 @@ python3Packages.buildPythonApplication rec {
       click
       dramatiq
       dramatiq-abort
+      feedgenerator
       fitdecode
       flask
+      flask-babel
       flask-bcrypt
       flask-dramatiq
       flask-limiter
       flask-migrate
       flask-sqlalchemy
+      geoalchemy2
+      geopandas
       gpxpy
       gunicorn
       humanize
       jsonschema
+      lxml
+      mistune
       nh3
+      numpy
+      pandas
       psycopg2-binary
       pyjwt
       pyopenssl
+      pyproj
+      python-magic
       pytz
       shortuuid
       sqlalchemy
@@ -65,7 +93,9 @@ python3Packages.buildPythonApplication rec {
       xmltodict
     ]
     ++ dramatiq.optional-dependencies.redis
-    ++ flask-limiter.optional-dependencies.redis;
+    ++ flask-limiter.optional-dependencies.redis
+    ++ geoalchemy2.optional-dependencies.shapely
+    ++ staticmap3.optional-dependencies.filecache;
 
   pythonImportsCheck = [ "fittrackee" ];
 
@@ -73,15 +103,16 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     freezegun
     postgresqlTestHook
-    postgresql
+    (postgresql.withPackages (ps: with ps; [ postgis ]))
     time-machine
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "fittrackee"
   ];
 
   postgresqlTestSetupPost = ''
+    echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
@@ -94,12 +125,12 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Self-hosted outdoor activity tracker";
-    homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://docs.fittrackee.org/";
+    changelog = "https://codeberg.org/FitTrackee/FitTrackee/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       tebriel
       traxys
     ];
   };
-}
+})

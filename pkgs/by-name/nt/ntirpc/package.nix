@@ -7,26 +7,34 @@
   liburcu,
   libtirpc,
   libnsl,
+  prometheus-cpp-lite,
+  rdma-core,
+  openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntirpc";
-  version = "6.3";
+  version = "14.1";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
-    rev = "v${version}";
-    sha256 = "sha256-e4eF09xwX2Qf/y9YfOGy7p6yhDFnKGI5cnrQy3o8c98=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cOEmlsmXHTXiQcTmCkiQ8PeA+0U3W+xyUQ0Ba8kwvrw=";
   };
 
   outputs = [
     "out"
     "dev"
   ];
+
+  patches = [
+    ./pkg-config.patch
+  ];
+
   postPatch = ''
-    substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
-    sed '1i#include <assert.h>' -i src/work_pool.c
+    substituteInPlace ntirpc/netconfig.h --replace-fail \
+      "/etc/netconfig" "$out/etc/netconfig"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -34,6 +42,15 @@ stdenv.mkDerivation rec {
     krb5
     liburcu
     libnsl
+    prometheus-cpp-lite
+    rdma-core
+    openssl
+  ];
+
+  cmakeFlags = [
+    "-DUSE_MONITORING=ON"
+    "-DUSE_RPC_RDMA=ON"
+    "-DUSE_TLS=ON"
   ];
 
   postInstall = ''
@@ -44,11 +61,11 @@ stdenv.mkDerivation rec {
     cp ${libtirpc}/etc/netconfig $out/etc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
-}
+})

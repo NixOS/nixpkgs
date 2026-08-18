@@ -11,33 +11,26 @@
   fontconfig,
   gtk3,
   wrapGAppsHook3,
+  python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openboardview";
-  version = "9.95.0";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
-    rev = version;
-    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    tag = finalAttrs.version;
+    hash = "sha256-rvCWzIbjEZOHh5diaeP4xVIRsMHqt4PGMuYOGfWvwhA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/OpenBoardView/OpenBoardView/commit/b03d0f69ec1611f5eb93f81291b4ba8c58cd29eb.patch";
-      hash = "sha256-Hp7KgzulPC2bPtRsd6HJrTLu0oVoQEoBHl0p2DcOLQw=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
+    python3Packages.jinja2
     wrapGAppsHook3
   ];
   buildInputs = [
@@ -63,7 +56,7 @@ stdenv.mkDerivation rec {
       mv "$out/openboardview.app" "$out/Applications/OpenBoardView.app"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      wrapGApp "$out/bin/${pname}" \
+      wrapGApp "$out/bin/${finalAttrs.pname}" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
     '';
 
@@ -71,12 +64,13 @@ stdenv.mkDerivation rec {
     ignoredVersions = ''.*\.90\..*'';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux SDL/ImGui edition software for viewing .brd files";
     mainProgram = "openboardview";
     homepage = "https://github.com/OpenBoardView/OpenBoardView";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ k3a ];
+    changelog = "https://github.com/OpenBoardView/OpenBoardView/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ k3a ];
   };
-}
+})

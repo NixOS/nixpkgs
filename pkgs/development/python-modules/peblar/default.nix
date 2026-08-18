@@ -1,19 +1,19 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   mashumaro,
   orjson,
+  poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  rich,
   syrupy,
+  tenacity,
   typer,
   yarl,
   zeroconf,
@@ -21,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "peblar";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-peblar";
     tag = "v${version}";
-    hash = "sha256-cHb/VTaa7tkePqV7eLpDSxrnY8hAnjshwtwyWmJnt/4=";
+    hash = "sha256-58PIvbl0QqOrvEc2rIieImWSnGZVIrhVAwsN+fZcWT4=";
   };
 
   postPatch = ''
@@ -39,31 +37,33 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
     mashumaro
     orjson
+    tenacity
     yarl
   ];
 
   optional-dependencies = {
     cli = [
+      rich
       typer
       zeroconf
     ];
   };
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "peblar" ];
 
@@ -72,6 +72,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/frenck/python-peblar";
     changelog = "https://github.com/frenck/python-peblar/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "peblar";
     maintainers = with lib.maintainers; [ fab ];
   };
 }

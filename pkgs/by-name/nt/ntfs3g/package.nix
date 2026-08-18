@@ -8,15 +8,15 @@
   mount,
   libuuid,
   kmod,
-  macfuse-stubs,
   crypto ? false,
   libgcrypt,
+  macfuse-stubs,
   gnutls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntfs3g";
-  version = "2022.10.3";
+  version = "2026.7.7";
 
   outputs = [
     "out"
@@ -28,22 +28,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tuxera";
     repo = "ntfs-3g";
-    rev = version;
-    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
+    tag = finalAttrs.version;
+    hash = "sha256-7Z3rMOHBwrWqkxeksic3+Z+WvwJy2ra9rRxGjESsd04=";
   };
 
-  buildInputs =
-    [
-      gettext
-      libuuid
-    ]
-    ++ lib.optionals crypto [
-      gnutls
-      libgcrypt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      macfuse-stubs
-    ];
+  buildInputs = [
+    gettext
+    libuuid
+  ]
+  ++ lib.optionals crypto [
+    gnutls
+    libgcrypt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ macfuse-stubs ];
 
   # Note: libgcrypt is listed here non-optionally because its m4 macros are
   # being used in ntfs-3g's configure.ac.
@@ -59,21 +56,26 @@ stdenv.mkDerivation rec {
     ./consistent-sbindir-usage.patch
   ];
 
-  configureFlags =
-    [
-      "--disable-ldconfig"
-      "--exec-prefix=\${prefix}"
-      "--enable-mount-helper"
-      "--enable-posix-acls"
-      "--enable-xattr-mappings"
-      "--${if crypto then "enable" else "disable"}-crypto"
-      "--enable-extras"
-      "--with-mount-helper=${mount}/bin/mount"
-      "--with-umount-helper=${mount}/bin/umount"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--with-modprobe-helper=${kmod}/bin/modprobe"
-    ];
+  configureFlags = [
+    "--disable-ldconfig"
+    "--exec-prefix=\${prefix}"
+    "--enable-mount-helper"
+    "--enable-posix-acls"
+    "--enable-xattr-mappings"
+    "--${if crypto then "enable" else "disable"}-crypto"
+    "--enable-extras"
+    "--with-mount-helper=${lib.getExe' mount "mount"}"
+    "--with-umount-helper=${lib.getExe' mount "umount"}"
+
+    # Use bundled FUSE as fuse2 is being deprecated
+    # https://github.com/tuxera/ntfs-3g/issues/54#issuecomment-3058178016
+    # Darwin doesn't support internal FUSE, so we use the external macFUSE stubs instead.
+    # https://github.com/tuxera/ntfs-3g/issues/8#issuecomment-920700418
+    "--with-fuse=${if stdenv.hostPlatform.isLinux then "internal" else "external"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-modprobe-helper=${lib.getExe' kmod "modprobe"}"
+  ];
 
   postInstall = ''
     # Prefer ntfs-3g over the ntfs driver in the kernel.
@@ -82,14 +84,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = with platforms; darwin ++ linux;
-    license = with licenses; [
+    maintainers = [ lib.maintainers.ryand56 ];
+    mainProgram = "ntfs-3g";
+    platforms = with lib.platforms; darwin ++ linux;
+    license = with lib.licenses; [
       gpl2Plus # ntfs-3g itself
       lgpl2Plus # fuse-lite
     ];
   };
-}
+})

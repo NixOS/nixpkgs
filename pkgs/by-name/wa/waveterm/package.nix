@@ -11,12 +11,12 @@
   gtk3,
   pango,
   cairo,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libgbm,
   expat,
   libxcb,
@@ -31,7 +31,7 @@
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.11.3";
+  version = "0.14.5";
 
   passthru.updateScript = ./update.sh;
 
@@ -44,9 +44,8 @@ let
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   linux = stdenv.mkDerivation {
@@ -62,8 +61,8 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-pcYJHj8Jt5RazHZNAgXuSL6mu0MnUVqM9lmAUVJvGfg=";
-          aarch64-linux = "sha256-HAnlEHhbl15W/ynRWTG7TLtGkC7EPPpJzWQfMK52loA=";
+          x86_64-linux = "sha256-aRrOVi5mog2XJ7i+6vmP5kpEXfZVI7sf0R7TD1b9E3s=";
+          aarch64-linux = "sha256-139jgwHkiQ3X/WTObXUyJwciiXg64PhAY/LRUeGGqlU=";
         };
       };
 
@@ -80,12 +79,12 @@ let
       gtk3
       pango
       cairo
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
       libgbm
       expat
       libxcb
@@ -126,20 +125,10 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version passthru;
 
-    src =
-      let
-        arch = selectSystem {
-          x86_64-darwin = "x64";
-          aarch64-darwin = "arm64";
-        };
-      in
-      fetchurl {
-        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
-        hash = selectSystem {
-          x86_64-darwin = "sha256-KmH5az2p2dRC1UCXCt7SBVfomj6dDaAtevIai1YIYO0=";
-          aarch64-darwin = "sha256-SdZY5MPi+oP3+ywW3BASMzYr16QiYS3MXyPs9jCqD+Y=";
-        };
-      };
+    src = fetchurl {
+      url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-arm64-${version}.zip";
+      hash = "sha256-84KU8LKKuEypdQhJCfxbII+w1qVhYBYmsQh9JGuxzA8=";
+    };
 
     nativeBuildInputs = [ unzip ];
 

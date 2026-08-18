@@ -10,20 +10,21 @@
   libpulseaudio,
   raylib-games,
   libGLU,
-  libX11,
+  libx11,
+  libxrandr,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
   sharedLib ? true,
   includeEverything ? true,
+  customFrameControlSupport ? false,
 }:
 let
   inherit (lib) optional;
 
-  pname = "raylib";
 in
 
-lib.checkListOfEnum "${pname}: platform"
+lib.checkListOfEnum "raylib: platform"
   [
     "Desktop"
     "Web"
@@ -36,37 +37,43 @@ lib.checkListOfEnum "${pname}: platform"
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
 
-      inherit pname;
-      version = "5.5";
+      pname = "raylib";
+      version = "6.0";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
         rev = finalAttrs.version;
-        hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
+        hash = "sha256-8+6MDTMc7Spix4ndAUzp51Q5iWcl7pQmyXuV2RutnOk=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths
       nativeBuildInputs = [
         cmake
-      ] ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
+      ]
+      ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
 
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 
       propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         libGLU
-        libX11
+        libx11
+        libxrandr
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
-      cmakeFlags =
-        [
-          "-DCUSTOMIZE_BUILD=ON"
-          "-DPLATFORM=${platform}"
-        ]
-        ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
-        ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-        ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+      cmakeFlags = [
+        (lib.cmakeBool "CUSTOMIZE_BUILD" true)
+        # The above also enables `SUPPORT_CUSTOM_FRAME_CONTROL` (otherwise off)
+        # That skips `SwapScreenBuffer` and `PollInputEvents` from `EndDrawing`
+        # In turn, normal `raylib-games` demos start but never present a window
+        # Keep the default game loop behavior unless explicitly requested
+        (lib.cmakeBool "SUPPORT_CUSTOM_FRAME_CONTROL" customFrameControlSupport)
+        (lib.cmakeFeature "PLATFORM" platform)
+      ]
+      ++ optional (platform == "Desktop") (lib.cmakeFeature "USE_EXTERNAL_GLFW" "ON")
+      ++ optional includeEverything (lib.cmakeBool "INCLUDE_EVERYTHING" true)
+      ++ optional sharedLib (lib.cmakeBool "BUILD_SHARED_LIBS" true);
 
       appendRunpaths = optional stdenv.hostPlatform.isLinux (
         lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)
@@ -79,10 +86,12 @@ lib.checkListOfEnum "${pname}: platform"
       meta = {
         description = "Simple and easy-to-use library to enjoy videogames programming";
         homepage = "https://www.raylib.com/";
+        downloadPage = "https://github.com/raysan5/raylib";
         license = lib.licenses.zlib;
-        maintainers = [ lib.maintainers.diniamo ];
+        maintainers = [ ];
+        teams = [ lib.teams.ngi ];
         platforms = lib.platforms.all;
-        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
+        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.src.rev}/CHANGELOG";
       };
     })
   )

@@ -6,25 +6,27 @@
   nodejs,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi-nodejs";
   inherit (pulumi) version src;
 
-  sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
+  sourceRoot = "${finalAttrs.src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-UvfSmHWRFRZkmcgzUrLkqktQAt8ZlVDEzP6y+pxUOGc=";
+  vendorHash = "sha256-41+98hPcHS6AkTpr0hhof6+2t9+2EmSRXW9zbKCTUlI=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
         "TestGetProgramDependencies"
+        "TestLanguageTSC"
+        "TestLanguageTSNode"
+        "TestLanguageBun"
       ]
     }$"
   ];
@@ -41,8 +43,7 @@ buildGoModule rec {
 
   postInstall = ''
     cp -t "$out/bin" \
-      ../../dist/pulumi-resource-pulumi-nodejs \
-      ../../dist/pulumi-analyzer-policy
+      ../../dist/pulumi-resource-pulumi-nodejs
   '';
 
   meta = {
@@ -50,8 +51,6 @@ buildGoModule rec {
     description = "Language host for Pulumi programs written in TypeScript & JavaScript (Node.js)";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-nodejs";
-    maintainers = with lib.maintainers; [
-      tie
-    ];
+    maintainers = lib.teams.pulumi.members;
   };
-}
+})

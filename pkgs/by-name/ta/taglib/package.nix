@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taglib";
-  version = "2.0.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3cJwCo2nUSRYkk8H8dzyg7UswNPhjfhyQ704Fn9yNV8=";
+    hash = "sha256-xup/c1giZadq8jYQgsZW+NJkjw9ofpdivnBVKTVkRjU=";
   };
 
   strictDeps = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Only
       mpl11
     ];
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     pkgConfigModules = [
       "taglib"
       "taglib_c"

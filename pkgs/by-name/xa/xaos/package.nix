@@ -9,65 +9,65 @@
 let
   datapath = "$out/share/XaoS";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
-  version = "4.3.4";
-  outputs = [
-    "out"
-    "man"
-  ];
+  version = "4.3.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "xaos-project";
     repo = "XaoS";
-    tag = "release-${version}";
-    hash = "sha256-vOFwZbdbcrcJLHUa1QzxzadPcx5GF5uNPg+MZ7NbAPc=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-3fXWUDja4DDc2+c17L4ifHN5vz25B42kapLJ15Ed0QI=";
   };
 
   nativeBuildInputs = [
     qt6.qmake
     qt6.qttools
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
   buildInputs = [ qt6.qtbase ];
 
-  QMAKE_LRELEASE = "lrelease";
+  env = {
+    QMAKE_LRELEASE = "lrelease";
 
-  DEFINES = [
-    "USE_OPENGL"
-    "USE_FLOAT128"
-  ];
+    DEFINES = toString [
+      "USE_OPENGL"
+      "USE_FLOAT128"
+    ];
+  };
 
   postPatch = ''
     substituteInPlace src/include/config.h \
       --replace-fail "/usr/share/XaoS" "${datapath}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace XaoS.pro \
+      --replace-fail \
+        "QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64" \
+        "QMAKE_APPLE_DEVICE_ARCHS = ${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"}"
   '';
 
-  desktopItems = [ "xdg/xaos.desktop" ];
+  desktopItems = [ "xdg/io.github.xaos_project.XaoS.desktop" ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D bin/xaos "$out/bin/xaos"
-
+  postInstall = ''
     mkdir -p "${datapath}"
     cp -r tutorial examples catalogs "${datapath}"
-
     install -D "xdg/xaos.png" "$out/share/icons/xaos.png"
-
-    install -D doc/xaos.6 "$man/man6/xaos.6"
-
-    runHook postInstall
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Real-time interactive fractal zoomer";
     mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ coolcuber ];
   };
-}
+})

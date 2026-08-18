@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   fetchFromGitHub,
+  installFonts,
 }:
 
 let
@@ -18,20 +19,14 @@ in
       hash = "sha256-ROuXO0tq/1dN5FTbEF3cI+Z0nCKUc0vZyx4Nc05M3Xk=";
     };
 
-    installPhase = ''
-      runHook preInstall
+    nativeBuildInputs = [ installFonts ];
 
-      install -m444 -Dt $out/share/fonts/truetype/${pname} *.ttf
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
+    meta = {
       description = "M+ Outline Fonts (legacy OSDN release)";
       homepage = "https://mplus-fonts.osdn.jp";
-      maintainers = with maintainers; [ uakci ];
-      platforms = platforms.all;
-      license = licenses.mplus;
+      maintainers = with lib.maintainers; [ uakci ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.mplus;
     };
   };
 
@@ -46,22 +41,14 @@ in
       hash = "sha256-jzDDUs1dKjqNjsMeTA2/4vm+akIisnOuE2mPQS7IDSA=";
     };
 
-    installPhase = ''
-      runHook preInstall
+    nativeBuildInputs = [ installFonts ];
 
-      mkdir -p $out/share/fonts/{truetype,opentype}/${pname}
-      mv fonts/ttf/* $out/share/fonts/truetype/${pname}
-      mv fonts/otf/* $out/share/fonts/opentype/${pname}
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
+    meta = {
       description = "M+ Outline Fonts (GitHub release)";
       homepage = "https://mplusfonts.github.io";
-      maintainers = with maintainers; [ uakci ];
-      platforms = platforms.all;
-      license = licenses.ofl;
+      maintainers = with lib.maintainers; [ uakci ];
+      platforms = lib.platforms.all;
+      license = lib.licenses.ofl;
     };
   };
 }

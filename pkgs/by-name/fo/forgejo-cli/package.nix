@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   installShellFiles,
   writableTmpDirAsHomeHook,
@@ -10,21 +10,22 @@
   oniguruma,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.3.0";
+  version = "0.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "Cyborus";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8KPR7Fx26hj5glKDjczCLP6GgQBUsA5TpjhO5UZOpik=";
+    hash = "sha256-XG7IPfl5yLToDQ+P0JkMxhfqsGd3cGWYCNrmlFf9j2Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kW7Pexydkosaufk1e8P5FaY+dgkeeTG5qgJxestWkVs=";
+  cargoHash = "sha256-+7WiOmYBjTMEsIGaqnMVTIHhzTpm8ObnljNXFnDazhI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,16 +52,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/fj completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   meta = {
     description = "CLI application for interacting with Forgejo";
-    homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/forgejo-contrib/forgejo-cli";
+    changelog = "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       isabelroses
     ];
     mainProgram = "fj";

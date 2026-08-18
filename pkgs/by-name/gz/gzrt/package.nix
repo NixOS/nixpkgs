@@ -1,17 +1,19 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gzrt";
-  version = "0.8";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url = "https://www.urbanophile.com/arenn/coding/gzrt/gzrt-${version}.tar.gz";
-    sha256 = "1vhzazj47xfpbfhzkwalz27cc0n5gazddmj3kynhk0yxv99xrdxh";
+  src = fetchFromGitHub {
+    owner = "arenn";
+    repo = "gzrt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2RzQ/xrtADplVqUeB6suU3fKhJePYM7EkuIV59JSR3Q=";
   };
 
   buildInputs = [ zlib ];
@@ -21,12 +23,12 @@ stdenv.mkDerivation rec {
     cp gzrecover $out/bin
   '';
 
-  meta = with lib; {
-    homepage = "https://www.urbanophile.com/arenn/hacking/gzrt/";
+  meta = {
+    homepage = "https://github.com/arenn/gzrt";
     description = "Gzip Recovery Toolkit";
     maintainers = [ ];
     mainProgram = "gzrecover";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

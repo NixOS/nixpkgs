@@ -12,18 +12,18 @@
   yamllint,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chart-testing";
-  version = "3.13.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "chart-testing";
-    rev = "v${version}";
-    hash = "sha256-59a86yR/TDAWGCsj3pbDjXJGMvyHYnjsnxzjWr61PuU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wdUUo19bFf3ov+Rd+JV6CtbH9TWGC73lWRrNLOfNGR8=";
   };
 
-  vendorHash = "sha256-aVXISRthJxxvtrfC0DpewLHCiJPh4tO+SKl3Q9uP14k=";
+  vendorHash = "sha256-29rGyStJsnhJiO01DIFf/ROaYsXGg3YRJatdzC6A7JU=";
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
@@ -33,8 +33,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/helm/chart-testing/v3/ct/cmd.Version=${version}"
-    "-X github.com/helm/chart-testing/v3/ct/cmd.GitCommit=${src.rev}"
+    "-X github.com/helm/chart-testing/v3/ct/cmd.Version=${finalAttrs.version}"
+    "-X github.com/helm/chart-testing/v3/ct/cmd.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/helm/chart-testing/v3/ct/cmd.BuildDate=19700101-00:00:00"
   ];
 
@@ -64,11 +64,11 @@ buildGoModule rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing Helm charts";
     homepage = "https://github.com/helm/chart-testing";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ atkinschang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ atkinschang ];
     mainProgram = "ct";
   };
-}
+})

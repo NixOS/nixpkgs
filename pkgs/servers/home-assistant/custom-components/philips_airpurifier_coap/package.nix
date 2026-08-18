@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "kongo09";
   domain = "philips_airpurifier_coap";
-  version = "0.34.0";
+  version = "0.37";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "philips-airpurifier-coap";
     rev = "v${version}";
-    hash = "sha256-jQXQdcgW8IDmjaHjmeyXHcNTXYmknNDw7Flegy6wj2A=";
+    hash = "sha256-oPdjf6eOkkywFQMavbeBty5E5zb215qIBHWND5zaJBs=";
   };
 
   dependencies = [

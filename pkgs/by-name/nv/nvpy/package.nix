@@ -1,25 +1,24 @@
 {
-  pkgs,
+  lib,
   fetchFromGitHub,
   python3Packages,
 }:
 
-let
-  pythonPackages = python3Packages;
-in
-pythonPackages.buildPythonApplication rec {
-  version = "2.3.1";
-  format = "setuptools";
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nvpy";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpbotha";
     repo = "nvpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     markdown
     docutils
     simplenote
@@ -37,11 +36,13 @@ pythonPackages.buildPythonApplication rec {
     install -m644 README.rst "$out/share/doc/nvpy/README"
   '';
 
-  meta = with pkgs.lib; {
+  pythonImportsCheck = [ "nvpy" ];
+
+  meta = {
     description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "nvpy";
   };
-}
+})

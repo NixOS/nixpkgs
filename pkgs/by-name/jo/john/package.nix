@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   openssl,
   nss,
   nspr,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2404";
+  version = "1.9.0-Jumbo-1-unstable-2026-07-07";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    rev = "b544069b36ac166fb0a2fb19d0dc144ca72da6bb";
+    hash = "sha256-dSdezI0+WSufYVLNChNJQ04VzuKczbfBLrI/5smR1fA=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -51,37 +52,36 @@ stdenv.mkDerivation {
     }' run/*.conf
   '';
 
-  preConfigure =
-    ''
-      cd src
-      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-      export AS=$CC
-      export LD=$CC
-    ''
-    + lib.optionalString withOpenCL ''
-      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
-    '';
+  preConfigure = ''
+    cd src
+    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+    export AS=$CC
+    export LD=$CC
+  ''
+  + lib.optionalString withOpenCL ''
+    python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+  '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
-  ] ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
+  ]
+  ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
-  buildInputs =
-    [
-      openssl
-      nss
-      nspr
-      libkrb5
-      gmp
-      zlib
-      libpcap
-      re2
-    ]
-    ++ lib.optionals withOpenCL [
-      opencl-headers
-      ocl-icd
-    ];
+  buildInputs = [
+    openssl
+    nss
+    nspr
+    libkrb5
+    gmp
+    zlib
+    libpcap
+    re2
+  ]
+  ++ lib.optionals withOpenCL [
+    opencl-headers
+    ocl-icd
+  ];
   nativeBuildInputs = [
     gcc
     python3Packages.wrapPython
@@ -95,6 +95,10 @@ stdenv.mkDerivation {
       scapy
       lxml
     ])
+    # For office2john.py
+    ++ (with python3Packages; [
+      olefile
+    ])
     ++ (with perlPackages; [
       # For pass_gen.pl
       DigestMD4
@@ -107,9 +111,7 @@ stdenv.mkDerivation {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
-  # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
-  # gcc: error: memdbg.o: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
@@ -131,15 +133,21 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9].*";
+  };
+
+  meta = {
     description = "John the Ripper password cracker";
-    license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
+    license = [
+      lib.licenses.gpl2Plus
+    ]
+    ++ lib.optionals enableUnfree [ lib.licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [
-      offline
-      matthewbauer
+    maintainers = with lib.maintainers; [
       cherrykitten
+      therealhammer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gh-classroom";
-  version = "0.1.14";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-classroom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h9j8B/MGZ4JJOJRj41IIQ9trQJZ4oqvT6ee9lc0P4oo=";
+    hash = "sha256-h/GLgqHN8dGWRCAjBOCqh5nUlj1RSx77obGZ2s1vV6o=";
   };
 
-  vendorHash = "sha256-UFV3KiRnefrdOwRsHQeo8mx8Z+sI1Rk5yu3jdZxUHxo=";
+  vendorHash = "sha256-anYKlaODkRYee8uvaraIbMLwRqdW2xkKo1DEG8FTwtU=";
 
   ldflags = [
     "-s"

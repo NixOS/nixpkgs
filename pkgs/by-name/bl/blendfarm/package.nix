@@ -5,14 +5,14 @@
   buildDotnetModule,
   dotnetCorePackages,
   xz,
-  pcre,
+  pcre2,
   autoPatchelfHook,
   bintools,
   fixDarwinDylibNames,
   darwin,
   fontconfig,
   libgdiplus,
-  libXrandr,
+  libxrandr,
   glib,
   writeShellScriptBin,
   blender,
@@ -86,11 +86,12 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     xz
-    pcre
+    pcre2
     libgdiplus
     glib
-    libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
+    libxrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning
   # and add it later
@@ -115,7 +116,7 @@ buildDotnetModule rec {
 
   # add libraries not found by autopatchelf
   libPath = lib.makeLibraryPath [
-    pcre
+    pcre2
     xz
   ];
   makeWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${libPath}" ];
@@ -130,12 +131,12 @@ buildDotnetModule rec {
       ln -s ${libgdiplus}/lib/libgdiplus.dylib $out/lib/blendfarm/
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
     homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "blendfarm-nix";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

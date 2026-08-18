@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "4.0.1";
+  version = "4.0.5";
   format = "setuptools";
 
   #pypi doesn't have test data
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "wummel";
     repo = "patool";
     tag = version;
-    hash = "sha256-KAOJi8vUP9kPa++dLEXf3mwrv1kmV7uDZmtvngPxQ90=";
+    hash = "sha256-Vo13tbZpMg8tc9LNBqTE+ypEkobU90hbEVq1bI++pUw=";
   };
 
   postPatch = ''
@@ -77,10 +77,11 @@ buildPythonPackage rec {
     "test_7z_file"
     "test_7za_file"
     "test_p7azip"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
   meta = {
-    description = "portable archive file manager";
+    description = "Portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
     license = lib.licenses.gpl3;

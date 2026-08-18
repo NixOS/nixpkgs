@@ -210,10 +210,16 @@ impl ToString for HOCONValue {
                 let content = (if includes.is_empty() {
                     items
                 } else {
-                    format!("{}{}", includes, items)
+                    format!("{}\n{}", includes, items)
                 })
                 .split('\n')
-                .map(|s| format!("  {}", s))
+                .map(|s| {
+                    if s.is_empty() {
+                        "".to_string()
+                    } else {
+                        format!("  {}", s)
+                    }
+                })
                 .collect::<Vec<String>>()
                 .join("\n");
 

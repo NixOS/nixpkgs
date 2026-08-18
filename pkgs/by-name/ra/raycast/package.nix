@@ -12,22 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.100.3";
+  version = "1.104.24";
 
-  src =
-    {
-      aarch64-darwin = fetchurl {
-        name = "Raycast.dmg";
-        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
-        hash = "sha256-2X+vv1OMXKmoXH+WGzHF49HWTCMA9a77BTJqKfkMg0E=";
-      };
-      x86_64-darwin = fetchurl {
-        name = "Raycast.dmg";
-        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=x86_64";
-        hash = "sha256-Ug9starsQ759+9WvGbIvxMf+Hvs+1lj3pViEvcfrc6k=";
-      };
-    }
-    .${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
+  src = fetchurl {
+    name = "Raycast.dmg";
+    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
+    hash = "sha256-kn9bZYSeASKj23NYiWX76OIRXCTonAbUCATyYhPdGgo=";
+  };
 
   dontPatch = true;
   dontConfigure = true;
@@ -60,15 +51,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version=$(echo "$url" | jq -r '.version')
 
       arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
-      x86_url="https://releases.raycast.com/releases/$version/download?build=x86_64"
-
       arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
-      x86_hash="sha256-$(curl -sL "$x86_url" | openssl dgst -sha256 -binary | openssl base64)"
 
       sed -i -E \
         -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
-        -e '/aarch64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
-        -e '/x86_64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$x86_hash"'";|' \
+        -e '/src = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
         ./pkgs/by-name/ra/raycast/package.nix
     '';
   });
@@ -80,12 +67,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lovesegfault
       stepbrobd
-      donteatoreo
+      _4evy
       jakecleary
     ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

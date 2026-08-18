@@ -2,25 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gfortran,
   tk,
   hdf5,
-  xorg,
+  libxmu,
   libGLU,
   withTools ? false,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgns";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "cgns";
     repo = "cgns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lPbXIC+O4hTtacxUcyNjZUWpEwo081MjEWhfIH3MWus=";
+    hash = "sha256-0cZtq8nVAHAubHD6IDofnh8N7xiNHQkbhXR5OpdhPQU=";
   };
+
+  patches = [
+    # Fixes crash for test_particlef on LoongArch64
+    (fetchpatch2 {
+      url = "https://github.com/CGNS/CGNS/commit/0ea14abf6da44f13ca8a01117ad7af8eb405394c.patch?full_index=1";
+      hash = "sha256-dtwTD8YqRm0NCXTDPRHmaPLTU17ZLzOyVii1aoGYge0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/cgnstools/tkogl/tkogl.c \
@@ -32,15 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    [
-      hdf5
-    ]
-    ++ lib.optionals withTools [
-      tk
-      xorg.libXmu
-      libGLU
-    ];
+  buildInputs = [
+    hdf5
+  ]
+  ++ lib.optionals withTools [
+    tk
+    libxmu
+    libGLU
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "CGNS_ENABLE_FORTRAN" true)
@@ -71,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cgns.github.io";
     downloadPage = "https://github.com/cgns/cgns";
     changelog = "https://github.com/cgns/cgns/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ zlib ];
+    license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };

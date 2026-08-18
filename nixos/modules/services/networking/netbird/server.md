@@ -9,34 +9,36 @@ To fully setup Netbird as a self-hosted server, we need both a Coturn server and
 There are quite a few settings that need to be passed to Netbird for it to function, and a minimal config looks like :
 
 ```nix
-services.netbird.server = {
-  enable = true;
-
-  domain = "netbird.example.selfhosted";
-
-  enableNginx = true;
-
-  coturn = {
+{
+  services.netbird.server = {
     enable = true;
 
-    passwordFile = "/path/to/a/secret/password";
-  };
+    domain = "netbird.example.selfhosted";
 
-  management = {
-    oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
+    enableNginx = true;
 
-    settings = {
-      TURNConfig = {
-        Turns = [
-          {
-            Proto = "udp";
-            URI = "turn:netbird.example.selfhosted:3478";
-            Username = "netbird";
-            Password._secret = "/path/to/a/secret/password";
-          }
-        ];
+    coturn = {
+      enable = true;
+
+      passwordFile = "/path/to/a/secret/password";
+    };
+
+    management = {
+      oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
+
+      settings = {
+        TURNConfig = {
+          Turns = [
+            {
+              Proto = "udp";
+              URI = "turn:netbird.example.selfhosted:3478";
+              Username = "netbird";
+              Password._secret = "/path/to/a/secret/password";
+            }
+          ];
+        };
       };
     };
   };
-};
+}
 ```

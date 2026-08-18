@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ezyrb";
-  version = "1.3.0.post2404";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "EZyRB";
     tag = "v${version}";
-    hash = "sha256-nu75Geyeu1nTLoGaohXB9pmbUWKgdgch9Z5OJqz9xKQ=";
+    hash = "sha256-dta8Vc7sUQEtcFEJaFbJUafSsjgZ7ZSLaFJTOMSfKmU=";
   };
 
   # AttributeError: module 'numpy' has no attribute 'VisibleDeprecationWarning'

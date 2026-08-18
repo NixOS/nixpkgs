@@ -17,10 +17,13 @@
   engine,
 }:
 
+let
+  version = "${engine.name}-${engine.version}";
+in
 stdenv.mkDerivation (
-  lib.recursiveUpdate packageAttrs rec {
+  {
     pname = "openra_2019";
-    version = "${engine.name}-${engine.version}";
+    inherit version;
 
     src = engine.src;
 
@@ -61,8 +64,7 @@ stdenv.mkDerivation (
       )}
     '';
 
-    meta = {
-      inherit (engine) description homepage;
-    };
+    meta = packageAttrs.meta // engine.meta;
   }
+  // removeAttrs packageAttrs [ "meta" ]
 )

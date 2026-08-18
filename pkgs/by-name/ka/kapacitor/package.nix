@@ -17,14 +17,14 @@ let
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "refs/tags/v${libflux_version}";
+      tag = "v${libflux_version}";
       hash = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     patches = [
       # This fixes a linting error due to an unneeded call to `.clone()`
       # that gets enforced by a strict `deny(warnings)` build config.
       # This is already fixed with newer versions of `libflux`, but it
-      # has been changed in a giant commit with a lot of autmated changes:
+      # has been changed in a giant commit with a lot of automated changes:
       # https://github.com/influxdata/flux/commit/e7f7023848929e16ad5bd3b41d217847bd4fd72b#diff-96572e971d9e19b54290a434debbf7db054b21c9ce19035159542756ffb8ab87
       #
       # Can be removed as soon as kapacitor depends on a newer version of `libflux`, cf:
@@ -43,7 +43,7 @@ let
       })
     ];
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-kbI1uUDE8JyFFtwV5k0EeeNGCZFQLXLobW/MilHX2Sg=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -54,17 +54,18 @@ let
       Cflags: -I/out/include
       Libs: -L/out/lib -lflux -lpthread
     '';
-    passAsFile = [ "pkgcfg" ];
-    postInstall =
-      ''
-        mkdir -p $out/include $out/pkgconfig
-        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-          --replace-fail /out $out
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-      '';
+    postInstall = ''
+      mkdir -p $out/include $out/pkgconfig
+      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+      printf "%s" "$pkgcfg" > $out/pkgconfig/flux.pc
+      substituteInPlace $out/pkgconfig/flux.pc \
+        --replace-fail /out $out
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+    '';
+
+    __structuredAttrs = true;
   };
 in
 buildGoModule rec {
@@ -74,7 +75,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxaLfJq0NFAJst0/AEhNJUl9dAaZY3blZAFthseMSX0=";
   };
 
@@ -82,7 +83,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -122,7 +123,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };

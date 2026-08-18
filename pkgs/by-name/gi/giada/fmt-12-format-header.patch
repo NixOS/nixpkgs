@@ -1,0 +1,434 @@
+Include <fmt/format.h> instead of <fmt/core.h>
+
+fmt 12.2.0 made <fmt/core.h> a shim for <fmt/base.h>, which no longer
+declares fmt::format.
+
+diff --git a/src/core/channels/channel.cpp b/src/core/channels/channel.cpp
+index f17693d..5399f97 100644
+--- a/src/core/channels/channel.cpp
++++ b/src/core/channels/channel.cpp
+@@ -30,7 +30,7 @@
+ #if G_DEBUG_MODE
+ #include "src/core/wave.h"
+ #include "src/utils/string.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ 
+ namespace giada::m
+diff --git a/src/core/engine.cpp b/src/core/engine.cpp
+index 04cfa95..3ef5f05 100644
+--- a/src/core/engine.cpp
++++ b/src/core/engine.cpp
+@@ -32,7 +32,7 @@
+ #include "src/utils/fs.h"
+ #include "src/utils/log.h"
+ #include "src/utils/string.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <memory>
+ 
+ namespace giada::m
+diff --git a/src/core/model/actions.cpp b/src/core/model/actions.cpp
+index 2c72147..f9b1bb0 100644
+--- a/src/core/model/actions.cpp
++++ b/src/core/model/actions.cpp
+@@ -32,7 +32,7 @@
+ #include <cassert>
+ #include <memory>
+ #if G_DEBUG_MODE
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ 
+ namespace utils = mcl::utils;
+diff --git a/src/core/model/channels.cpp b/src/core/model/channels.cpp
+index 857814f..53b2cd2 100644
+--- a/src/core/model/channels.cpp
++++ b/src/core/model/channels.cpp
+@@ -30,7 +30,7 @@
+ #include <cassert>
+ #if G_DEBUG_MODE
+ #include "src/utils/string.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ 
+ namespace utils = mcl::utils;
+diff --git a/src/core/model/mixer.cpp b/src/core/model/mixer.cpp
+index b20caaf..2de421d 100644
+--- a/src/core/model/mixer.cpp
++++ b/src/core/model/mixer.cpp
+@@ -27,7 +27,7 @@
+ #include "src/core/model/mixer.h"
+ #include "src/const.h"
+ #if G_DEBUG_MODE
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ 
+ namespace giada::m::model
+diff --git a/src/core/model/model.cpp b/src/core/model/model.cpp
+index 316a729..8ac1901 100644
+--- a/src/core/model/model.cpp
++++ b/src/core/model/model.cpp
+@@ -36,7 +36,7 @@
+ #include <cassert>
+ #include <memory>
+ #if G_DEBUG_MODE
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ #include <fmt/ostream.h>
+ 
+diff --git a/src/core/model/shared.cpp b/src/core/model/shared.cpp
+index 8603c24..cd01ac7 100644
+--- a/src/core/model/shared.cpp
++++ b/src/core/model/shared.cpp
+@@ -31,7 +31,7 @@
+ #include "src/core/waveFactory.h"
+ #include "src/deps/mcl-utils/src/container.hpp"
+ #if G_DEBUG_MODE
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ #include <fmt/ostream.h>
+ 
+diff --git a/src/core/model/track.cpp b/src/core/model/track.cpp
+index c88a0b4..a464483 100644
+--- a/src/core/model/track.cpp
++++ b/src/core/model/track.cpp
+@@ -28,7 +28,7 @@
+ #include "src/core/types.h"
+ #include <cassert>
+ #if G_DEBUG_MODE
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #endif
+ 
+ namespace giada::m::model
+diff --git a/src/core/wave.cpp b/src/core/wave.cpp
+index e21f9af..01c1334 100644
+--- a/src/core/wave.cpp
++++ b/src/core/wave.cpp
+@@ -27,7 +27,7 @@
+ #include "src/core/wave.h"
+ #include "src/deps/mcl-utils/src/fs.hpp"
+ #include <cassert>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ namespace utils = mcl::utils;
+ 
+diff --git a/src/core/waveFactory.cpp b/src/core/waveFactory.cpp
+index 73708d4..425f754 100644
+--- a/src/core/waveFactory.cpp
++++ b/src/core/waveFactory.cpp
+@@ -34,7 +34,7 @@
+ #include "src/deps/mcl-utils/src/fs.hpp"
+ #include "src/utils/log.h"
+ #include <cmath>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <memory>
+ #include <samplerate.h>
+ #include <sndfile.h>
+diff --git a/src/glue/config.cpp b/src/glue/config.cpp
+index e05b483..2856f72 100644
+--- a/src/glue/config.cpp
++++ b/src/glue/config.cpp
+@@ -37,7 +37,7 @@
+ #include "src/gui/elems/config/tabPlugins.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/fs.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui*     g_ui;
+ extern giada::m::Engine* g_engine;
+diff --git a/src/gui/dialogs/about.cpp b/src/gui/dialogs/about.cpp
+index 818e219..62b377d 100644
+--- a/src/gui/dialogs/about.cpp
++++ b/src/gui/dialogs/about.cpp
+@@ -32,7 +32,7 @@
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+ #include "src/utils/string.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/dialogs/actionEditor/baseActionEditor.cpp b/src/gui/dialogs/actionEditor/baseActionEditor.cpp
+index 5c5e6db..6850a07 100644
+--- a/src/gui/dialogs/actionEditor/baseActionEditor.cpp
++++ b/src/gui/dialogs/actionEditor/baseActionEditor.cpp
+@@ -43,7 +43,7 @@
+ #include <FL/Fl.H>
+ #include <FL/fl_draw.H>
+ #include <cassert>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <limits>
+ #include <string>
+ 
+diff --git a/src/gui/dialogs/bpmInput.cpp b/src/gui/dialogs/bpmInput.cpp
+index 0b862f8..737ba79 100644
+--- a/src/gui/dialogs/bpmInput.cpp
++++ b/src/gui/dialogs/bpmInput.cpp
+@@ -33,7 +33,7 @@
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+ #include <cstring>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/dialogs/channelRouting.cpp b/src/gui/dialogs/channelRouting.cpp
+index 8b1af7a..daa4661 100644
+--- a/src/gui/dialogs/channelRouting.cpp
++++ b/src/gui/dialogs/channelRouting.cpp
+@@ -37,7 +37,7 @@
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <ranges>
+ 
+ extern giada::v::Ui* g_ui;
+diff --git a/src/gui/dialogs/mainWindow.cpp b/src/gui/dialogs/mainWindow.cpp
+index 68446b8..ed83e69 100644
+--- a/src/gui/dialogs/mainWindow.cpp
++++ b/src/gui/dialogs/mainWindow.cpp
+@@ -42,7 +42,7 @@
+ #include "src/utils/gui.h"
+ #include <FL/Fl.H>
+ #include <FL/Fl_Tooltip.H>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/dialogs/sampleEditor.cpp b/src/gui/dialogs/sampleEditor.cpp
+index c41654f..fe849b7 100644
+--- a/src/gui/dialogs/sampleEditor.cpp
++++ b/src/gui/dialogs/sampleEditor.cpp
+@@ -52,7 +52,7 @@
+ #include <FL/Fl_Group.H>
+ #include <cassert>
+ #include <cmath>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #if G_OS_WINDOWS
+ #undef IN
+diff --git a/src/gui/elems/config/tabAudio.cpp b/src/gui/elems/config/tabAudio.cpp
+index a42422b..6af6802 100644
+--- a/src/gui/elems/config/tabAudio.cpp
++++ b/src/gui/elems/config/tabAudio.cpp
+@@ -35,7 +35,7 @@
+ #include "src/gui/elems/basics/textButton.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <string>
+ 
+ extern giada::v::Ui* g_ui;
+diff --git a/src/gui/elems/config/tabMisc.cpp b/src/gui/elems/config/tabMisc.cpp
+index 36b66ae..261538b 100644
+--- a/src/gui/elems/config/tabMisc.cpp
++++ b/src/gui/elems/config/tabMisc.cpp
+@@ -31,7 +31,7 @@
+ #include "src/gui/elems/config/stringMenu.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ constexpr int LABEL_WIDTH = 120;
+ 
+diff --git a/src/gui/elems/config/tabPlugins.cpp b/src/gui/elems/config/tabPlugins.cpp
+index 98305e2..0a1aa60 100644
+--- a/src/gui/elems/config/tabPlugins.cpp
++++ b/src/gui/elems/config/tabPlugins.cpp
+@@ -39,7 +39,7 @@
+ #include "src/utils/gui.h"
+ #include "src/utils/string.h"
+ #include <FL/Fl.H>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <functional>
+ 
+ extern giada::v::Ui* g_ui;
+diff --git a/src/gui/elems/mainWindow/cpuLoad.cpp b/src/gui/elems/mainWindow/cpuLoad.cpp
+index 19e0cab..087832a 100644
+--- a/src/gui/elems/mainWindow/cpuLoad.cpp
++++ b/src/gui/elems/mainWindow/cpuLoad.cpp
+@@ -30,7 +30,7 @@
+ #include "src/gui/drawing.h"
+ #include "src/gui/elems/basics/box.h"
+ #include "src/gui/elems/basics/progress.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ namespace giada::v
+ {
+diff --git a/src/gui/elems/mainWindow/keyboard/groupChannel.cpp b/src/gui/elems/mainWindow/keyboard/groupChannel.cpp
+index 961b2de..1c1bcef 100644
+--- a/src/gui/elems/mainWindow/keyboard/groupChannel.cpp
++++ b/src/gui/elems/mainWindow/keyboard/groupChannel.cpp
+@@ -34,7 +34,7 @@
+ #include "src/gui/elems/midiActivity.h"
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/mainWindow/keyboard/midiChannel.cpp b/src/gui/elems/mainWindow/keyboard/midiChannel.cpp
+index 4ddcca1..ccc7ad4 100644
+--- a/src/gui/elems/mainWindow/keyboard/midiChannel.cpp
++++ b/src/gui/elems/mainWindow/keyboard/midiChannel.cpp
+@@ -35,7 +35,7 @@
+ #include "src/gui/elems/midiActivity.h"
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/mainWindow/keyboard/midiChannelButton.cpp b/src/gui/elems/mainWindow/keyboard/midiChannelButton.cpp
+index a8da2c8..8025fd2 100644
+--- a/src/gui/elems/mainWindow/keyboard/midiChannelButton.cpp
++++ b/src/gui/elems/mainWindow/keyboard/midiChannelButton.cpp
+@@ -26,7 +26,7 @@
+ 
+ #include "src/gui/elems/mainWindow/keyboard/midiChannelButton.h"
+ #include "src/glue/channel.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ namespace giada::v
+ {
+diff --git a/src/gui/elems/mainWindow/keyboard/sampleChannel.cpp b/src/gui/elems/mainWindow/keyboard/sampleChannel.cpp
+index 549fbf1..540e342 100644
+--- a/src/gui/elems/mainWindow/keyboard/sampleChannel.cpp
++++ b/src/gui/elems/mainWindow/keyboard/sampleChannel.cpp
+@@ -37,7 +37,7 @@
+ #include "src/gui/elems/midiActivity.h"
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/mainWindow/mainTimer.cpp b/src/gui/elems/mainWindow/mainTimer.cpp
+index 55361d1..e7a6575 100644
+--- a/src/gui/elems/mainWindow/mainTimer.cpp
++++ b/src/gui/elems/mainWindow/mainTimer.cpp
+@@ -33,7 +33,7 @@
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/mainWindow/scenes.cpp b/src/gui/elems/mainWindow/scenes.cpp
+index a2aca20..bb92b06 100644
+--- a/src/gui/elems/mainWindow/scenes.cpp
++++ b/src/gui/elems/mainWindow/scenes.cpp
+@@ -31,7 +31,7 @@
+ #include "src/gui/elems/basics/flex.h"
+ #include "src/gui/elems/playButton.h"
+ #include "src/gui/ui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/midiIO/midiLearner.cpp b/src/gui/elems/midiIO/midiLearner.cpp
+index 76746df..87a1c55 100644
+--- a/src/gui/elems/midiIO/midiLearner.cpp
++++ b/src/gui/elems/midiIO/midiLearner.cpp
+@@ -30,7 +30,7 @@
+ #include "src/gui/elems/basics/textButton.h"
+ #include "src/gui/ui.h"
+ #include <cassert>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/panTool.cpp b/src/gui/elems/panTool.cpp
+index b431b5f..c282355 100644
+--- a/src/gui/elems/panTool.cpp
++++ b/src/gui/elems/panTool.cpp
+@@ -33,7 +33,7 @@
+ #include "src/utils/gui.h"
+ #include "src/utils/string.h"
+ #include <FL/Fl.H>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/plugin/pluginBrowser.cpp b/src/gui/elems/plugin/pluginBrowser.cpp
+index 0b87db5..078c3d1 100644
+--- a/src/gui/elems/plugin/pluginBrowser.cpp
++++ b/src/gui/elems/plugin/pluginBrowser.cpp
+@@ -30,7 +30,7 @@
+ #include "src/gui/elems/basics/boxtypes.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/sampleEditor/pitchTool.cpp b/src/gui/elems/sampleEditor/pitchTool.cpp
+index a9fe895..ec2e0eb 100644
+--- a/src/gui/elems/sampleEditor/pitchTool.cpp
++++ b/src/gui/elems/sampleEditor/pitchTool.cpp
+@@ -37,7 +37,7 @@
+ #include "src/gui/graphics.h"
+ #include "src/gui/ui.h"
+ #include "src/utils/gui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/gui/elems/volumeTool.cpp b/src/gui/elems/volumeTool.cpp
+index 22a8673..9e054ac 100644
+--- a/src/gui/elems/volumeTool.cpp
++++ b/src/gui/elems/volumeTool.cpp
+@@ -32,7 +32,7 @@
+ #include "src/gui/elems/basics/input.h"
+ #include "src/gui/elems/basics/textButton.h"
+ #include "src/gui/ui.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ extern giada::v::Ui* g_ui;
+ 
+diff --git a/src/utils/log.h b/src/utils/log.h
+index f9b1433..a35d894 100644
+--- a/src/utils/log.h
++++ b/src/utils/log.h
+@@ -32,7 +32,7 @@
+ #include "src/const.h"
+ #include "src/core/const.h"
+ #include "src/utils/fs.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ostream.h>
+ #include <fstream>
+ #include <string>

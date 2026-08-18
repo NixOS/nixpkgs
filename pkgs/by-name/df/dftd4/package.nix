@@ -3,6 +3,8 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
+  cmake,
   meson,
   ninja,
   pkg-config,
@@ -15,37 +17,55 @@
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dftd4";
-  version = "3.7.0";
+  version = "4.2.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = "dftd4";
-    rev = "v${version}";
-    hash = "sha256-dixPCLH5dWkE2/7ghGEXJmX2/g1DN30dB4jX2d7fmio=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uKjNOIza3/I0oREp88oFESoNqEdumo1AztIjcrVb1O8=";
   };
 
   patches = [
-    # Make sure fortran headers are installed directly in /include
-    ./fortran-module-dir.patch
+    # Fix pkg-config, meson and cmake paths for include and lib dirs
+    ./build-paths.patch
   ];
 
   nativeBuildInputs = [
     gfortran
-    meson
-    ninja
     pkg-config
     python3
-  ];
+  ]
+  ++ lib.optionals (buildType == "meson") [
+    meson
+    ninja
+  ]
+  ++ lib.optional (buildType == "cmake") cmake;
 
   buildInputs = [
     blas
     lapack
+  ];
+
+  propagatedBuildInputs = [
     mctc-lib
     mstore
     multicharge
+  ];
+
+  cmakeFlags = [
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   outputs = [
@@ -61,19 +81,16 @@ stdenv.mkDerivation rec {
       app/tester.py
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dftd4";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];
     homepage = "https://github.com/grimme-lab/dftd4";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

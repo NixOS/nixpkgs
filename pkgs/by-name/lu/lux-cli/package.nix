@@ -1,73 +1,91 @@
 {
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
-  libgit2,
   libgpg-error,
-  luajit,
+  lua5_4,
   makeWrapper,
   nix,
   openssl,
+  perl,
   pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.7.4";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
-    owner = "nvim-neorocks";
+    owner = "lumen-oss";
     repo = "lux";
-    tag = "v0.7.4";
-    hash = "sha256-m8GSs2gBw+WzDOBciOQHi7n4923XCd7z1TbfTnfJzUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FcJUZw4FnLOznaYd8TAdrPAcJs91tCv7bHDO38wqDRk=";
   };
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7q5NqAmsHcZEwDAeNRZLiQIKzFsx6BsWAgsv2s2dmRI=";
+
+  cargoHash = "sha256-/8MzwM23u3NxbcDGat595dgBky687dO/K863xKSPitY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   doInstallCheck = true;
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    perl
     pkg-config
   ];
 
   buildInputs = [
     gnupg
     gpgme
-    libgit2
     libgpg-error
-    luajit
+    lua5_4
     openssl
   ];
 
   env = {
-    LIBGIT2_NO_VENDOR = 1;
     LIBSSH2_SYS_USE_PKG_CONFIG = 1;
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  cargoTestFlags = "--lib"; # Disable impure integration tests
+  cargoTestFlags = [
+    "--lib" # Disable impure integration tests
+  ];
 
   nativeCheckInputs = [
-    luajit
+    lua5_4
     nix
   ];
 
-  postBuild = ''
-    cargo xtask dist-man
-    cargo xtask dist-completions
+  postInstall = ''
+    ${
+      # Using lx to generate man pages and completions is faster than xtask
+      if stdenv.hostPlatform.emulatorAvailable buildPackages then
+        let
+          lx = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lx";
+        in
+        ''
+          ${lx} util man --target-dir="target/dist"
+          ${lx} util completion --target-dir="target/dist"
+        ''
+      else
+        ''
+          cargo xtask dist-man
+          cargo xtask dist-completions
+        ''
+    }
+      installManPage target/dist/*.1
+      installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {
@@ -77,13 +95,14 @@ rustPlatform.buildRustPackage rec {
       compatible with luarocks.org and the Rockspec specification,
       with first-class support for Nix and Neovim.
     '';
-    homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://lux.lumen-labs.org/";
+    changelog = "https://github.com/lumen-oss/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
+      ALameLlama
     ];
     platforms = lib.platforms.all;
     mainProgram = "lx";
   };
-}
+})

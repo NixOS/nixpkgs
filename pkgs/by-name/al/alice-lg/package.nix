@@ -11,26 +11,26 @@
   fixup-yarn-lock,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alice-lg";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
-    rev = version;
-    hash = "sha256-BbwTLHDtpa8HCECIiy+UxyQiLf9iAD2GzE0azXk7QGU=";
+    tag = finalAttrs.version;
+    hash = "sha256-DlmUurpu/bs/91fLsSQ3xJ8I8NWJweynMgV6Svkf0Uo=";
   };
 
-  vendorHash = "sha256-8N5E1CW5Z7HujwXRsZLv7y4uNOJkjj155kmX9PCjajQ=";
+  vendorHash = "sha256-OkOUgW6BHJKIdY1soMqTXhL6RYy3567iL1/VZasIdvQ=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";
-    src = "${src}/ui";
-    inherit version;
+    src = "${finalAttrs.src}/ui";
+    inherit (finalAttrs) version;
 
     yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/ui/yarn.lock";
+      yarnLock = finalAttrs.src + "/ui/yarn.lock";
       hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
@@ -75,7 +75,7 @@ buildGoModule rec {
   };
 
   preBuild = ''
-    cp -R ${passthru.ui}/ ui/build/
+    cp -R ${finalAttrs.passthru.ui}/ ui/build/
   '';
 
   subPackages = [ "cmd/alice-lg" ];
@@ -94,4 +94,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "alice-lg";
   };
-}
+})

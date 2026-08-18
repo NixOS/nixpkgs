@@ -16,19 +16,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.12.2";
+  version = "0.16.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-BnQm0Q3KbtlGjvN+bkYWyllBjX4Z3HD4LTWCrDwj7fE=";
+    hash = "sha256-BTCsdcZA1XTQbisx1fE9VGwgDNX2ltMzP0yGHocvitA=";
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BVGH+i2p0O0nbbOKRNUTJcR0cxgwsTmfJYzeCmttu2M=";
+  cargoHash = "sha256-2IclEFpxoWq1eSyKSsANuSOqnRDHx8UPNXhCPhsJKM8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--exclude=ty_project"
     "--exclude=ty_python_semantic"
     "--exclude=ty_server"
+    "--exclude=ty_static"
     "--exclude=ty_test"
     "--exclude=ty_vendored"
     "--exclude=ty_wasm"
@@ -75,13 +77,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
@@ -93,7 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
       bengsparks
-      figsoda
       GaetanLepage
     ];
   };

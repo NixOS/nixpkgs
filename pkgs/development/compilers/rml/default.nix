@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "reactiveml";
-    repo = pname;
-    rev = "${pname}-${version}-2021-07-26";
+    repo = "rml";
+    rev = "rml-${version}-2021-07-26";
     hash = "sha256-UFqXQBeIQMSV4O439j9s06p1hh7xA98Tu79FsjK9PIY=";
   };
 
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  meta = with lib; {
+  meta = {
     description = "ReactiveML: a programming language for implementing interactive systems";
     homepage = "https://rml.lri.fr";
-    license = with licenses; [
+    license = with lib.licenses; [
       qpl
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

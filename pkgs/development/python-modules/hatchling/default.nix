@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # runtime
   editables,
   packaging,
   pathspec,
   pluggy,
-  tomli,
   trove-classifiers,
 
   # tests
@@ -19,14 +17,14 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatchling";
-  version = "1.27.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lxwpbZgZq7OBERL8UsepdRyNOBiY82Uzuxb5eR6UH9Y=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-a0itQGikgu1yObOoIVvFW0eq0zRdWN/JTlU8XS1GIRs=";
   };
 
   # listed in backend/pyproject.toml
@@ -36,7 +34,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [
     "hatchling"
@@ -67,11 +65,11 @@ buildPythonPackage rec {
     description = "Modern, extensible Python build backend";
     mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
+    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hexa
       ofek
     ];
   };
-}
+})

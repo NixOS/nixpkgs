@@ -39,7 +39,6 @@ let
     lib.trivial.pipe extensions [
       (map (extension: lib.nameValuePair extension.extensionUuid extension))
       builtins.listToAttrs
-      (attrs: attrs // { __attrsFailEvaluation = true; })
     ];
 
   # Map the list of extensions to an attrset based on the pname as key, which is more human readable than the UUID
@@ -77,17 +76,18 @@ rec {
   gnome46Extensions = mapUuidNames (produceExtensionsList "46");
   gnome47Extensions = mapUuidNames (produceExtensionsList "47");
   gnome48Extensions = mapUuidNames (produceExtensionsList "48");
+  gnome49Extensions = mapUuidNames (produceExtensionsList "49");
+  gnome50Extensions = mapUuidNames (produceExtensionsList "50");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome46Extensions // gnome47Extensions // gnome48Extensions) [
-    (v: builtins.removeAttrs v [ "__attrsFailEvaluation" ])
+  gnomeExtensions = lib.trivial.pipe (gnome48Extensions // gnome49Extensions // gnome50Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions
     (extensions: extensions // (import ./manuallyPackaged.nix { inherit callPackage; }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
-    (mapReadableNames)
+    mapReadableNames
     # Add some aliases
     (
       extensions:
@@ -95,12 +95,21 @@ rec {
       // lib.optionalAttrs config.allowAliases {
         unite-shell = gnomeExtensions.unite; # added 2021-01-19
         arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
-        disable-unredirect = gnomeExtensions.disable-unredirect-fullscreen-windows; # added 2021-11-20
 
+        clock-override = throw "'gnomeExtensions.clock-override' has been removed due to lack of upstream maintenance";
+        drop-down-terminal = throw "'gnomeExtensions.drop-down-terminal' has been removed due to lack of upstream maintenance";
         icon-hider = throw "gnomeExtensions.icon-hider was removed on 2024-03-15. The extension has not received any updates since 2020/3.34.";
-        nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
         mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
+        no-title-bar = throw "'gnomeExtensions.no-title-bar' has been removed due to lack of upstream maintenance";
+        nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
+        pano = throw "'gnomeExtensions.pano' has been removed due to lack of upstream maintenance";
+        pidgin-im-integration = throw "'gnomeExtensions.pidgin-im-integration' has been removed due to lack of upstream maintenance";
         remove-dropdown-arrows = throw "gnomeExtensions.remove-dropdown-arrows removed since 2021-05-25: The extensions has not seen an update sine GNOME 3.34. Furthermore, the functionality it provides is obsolete as of GNOME 40.";
+        sound-output-device-chooser = throw "'gnomeExtensions.sound-output-device-chooser' has been removed due to lack of upstream maintenance";
+        taskwhisperer = throw "'gnomeExtensions.taskwhisperer' has been removed due to lack of upstream maintenance";
+        tilingnome = throw "'gnomeExtensions.tilingnome' has been removed due to lack of upstream maintenance";
+        topicons-plus = throw "'gnomeExtensions.topicons-plus' has been removed due to lack of upstream maintenance";
+        window-corner-preview = throw "'gnomeExtensions.window-corner-preview' has been removed due to lack of upstream maintenance";
       }
     )
     # Export buildShellExtension function

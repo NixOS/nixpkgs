@@ -11,14 +11,14 @@
   todo-txt-cli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "todofi.sh";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hugokernel";
     repo = "todofi.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1gmy5inlghycsxiwnyyjyv81jn2fmfk3s9x78kcgyf7khzb5kwvj";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Todo-txt + Rofi = Todofi.sh";
     mainProgram = "todofi.sh";
     homepage = "https://github.com/hugokernel/todofi.sh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ewok ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ewok ];
+    platforms = lib.platforms.linux;
   };
-}
+})

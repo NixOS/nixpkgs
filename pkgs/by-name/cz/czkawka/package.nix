@@ -4,15 +4,24 @@
   cairo,
   callPackage,
   fetchFromGitHub,
+  fontconfig,
   gdk-pixbuf,
   glib,
   gobject-introspection,
   gtk4,
+  libglvnd,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
+  lld,
   pango,
   pkg-config,
   rustPlatform,
   stdenv,
   testers,
+  wayland,
   wrapGAppsHook4,
   xvfb-run,
   versionCheckHook,
@@ -21,31 +30,39 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "czkawka";
-    version = "9.0.0";
+    version = "12.0.1";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
       tag = self.version;
-      hash = "sha256-ePiHDfQ1QC3nff8uWE0ggiTuulBomuoZ3ta0redUYXY=";
+      hash = "sha256-nRXmRt+yJjOEffyyuWI/mCp+l4bxBJbJzIf3Nj7I1AU=";
     };
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-Djvb5Hen6XPm6aJuwa6cGPojz9+kXXidysr3URDwDFM=";
+    cargoHash = "sha256-oGgQqACKp4RGkowPJARPWEpfWuSz1FFucMY/Mykz970=";
 
     nativeBuildInputs = [
       gobject-introspection
       pkg-config
       wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld # ld crashes
     ];
 
     buildInputs = [
       atk
       cairo
+      fontconfig
       gdk-pixbuf
       glib
       gtk4
       pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libglvnd
+      libxkbcommon
+      wayland
     ];
 
     nativeCheckInputs = [ xvfb-run ];
@@ -62,17 +79,41 @@ let
 
     # Desktop items, icons and metainfo are not installed automatically
     postInstall = ''
+      # Czkawka
       install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+      # Krokiet
+      install -Dm444 -t $out/share/applications data/io.github.qarmin.krokiet.desktop
+      install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/io.github.qarmin.krokiet.svg
+      install -Dm444 -t $out/share/metainfo data/io.github.qarmin.krokiet.metainfo.xml
+    '';
+    dontWrapGApps = true;
+
+    postFixup = ''
+      wrapGApp $out/bin/czkawka_gui
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "${
+        lib.makeLibraryPath [
+          fontconfig
+          libglvnd
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+          libxkbcommon
+          wayland
+        ]
+      }" $out/bin/krokiet
     '';
 
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {
@@ -89,7 +130,7 @@ let
       homepage = "https://github.com/qarmin/czkawka";
       description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
       changelog = "https://github.com/qarmin/czkawka/raw/${self.version}/Changelog.md";
-      license = with lib.licenses; [ mit ];
+      license = lib.licenses.mit;
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
         yanganto

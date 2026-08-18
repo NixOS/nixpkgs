@@ -12,22 +12,27 @@
   vte-gtk4,
   gsettings-desktop-schemas,
   gtksourceview5,
+  glib-networking,
+  webkitgtk_6_0,
   lsb-release,
   bash,
   ffmpeg,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "1.4.5";
+in
+python3Packages.buildPythonApplication {
   pname = "newelle";
-  version = "0.9.8";
+  inherit version;
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-VyUng/ZX8+wInRX705IWdBgTbX439R60h62ONdpZ0+8=";
+    hash = "sha256-GcNAwrk5y6F0BgRy69nRePkX4WoYviWsB+8X/+N5QwE=";
   };
 
   postPatch = ''
@@ -49,11 +54,14 @@ python3Packages.buildPythonApplication rec {
     vte-gtk4
     gsettings-desktop-schemas
     gtksourceview5
+    webkitgtk_6_0
+    glib-networking
   ];
 
   dependencies = with python3Packages; [
     pygobject3
     libxml2
+    cssselect
     pydub
     gtts
     speechrecognition
@@ -70,6 +78,7 @@ python3Packages.buildPythonApplication rec {
     llama-index-readers-file
     google-genai
     anthropic
+    mcp
   ];
 
   strictDeps = true;
@@ -99,6 +108,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [
+      michaelAllen
+    ];
   };
 }

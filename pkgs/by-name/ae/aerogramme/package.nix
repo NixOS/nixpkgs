@@ -7,13 +7,13 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aerogramme";
   version = "0.3.0";
 
   src = fetchgit {
     url = "https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ER+P/XGqNzTLwDLK5EBZq/Dl29ZZKl2FdxDb+oLEJ8Y=";
   };
 
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GPj8qhfKgfAadQD9DJafN4ec8L6oY62PS/w/ljkPHpw=";
 
   # disable network tests as Nix sandbox breaks them
@@ -47,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "aerogramme";
     platforms = lib.platforms.linux;
   };
-}
+})

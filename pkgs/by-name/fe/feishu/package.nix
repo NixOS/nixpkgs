@@ -20,18 +20,18 @@
   gtk3,
   lib,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libappindicator-gtk3,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
+  libappindicator,
   libcxx,
   libdbusmenu,
   libdrm,
@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/91e64286/Feishu-linux_x64-7.42.17.deb";
-      sha256 = "sha256-Rsq+xQAyi7I1WcnkXzhPEgbUyfXU9XPVKIuv6Z9H5VA=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/6e3610b5/Feishu-linux_x64-7.66.11.deb";
+      sha256 = "sha256-3E8NLC2zzIO7l1jPcePhMfCafgjuyWOzeNZgxTTM/TE=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/49127814/Feishu-linux_arm64-7.42.17.deb";
-      sha256 = "sha256-UykQk8R8EDsHmRGy9BfDXhEZFlYT16bAkRuLXFZJDHw=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/36c6e858/Feishu-linux_arm64-7.66.11.deb";
+      sha256 = "sha256-2nMHCuJy2dYiokwR3dFAkITeBgH8K9poJ9gkJNp42aQ=";
     };
   };
 
@@ -95,18 +95,18 @@ let
     glibc
     gnutls
     libGL
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libappindicator-gtk3
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libappindicator
     libcxx
     libdbusmenu
     libdrm
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.42.17";
+  version = "7.66.11";
   pname = "feishu";
 
   src =
@@ -152,8 +152,8 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    libXdamage
-    libXtst
+    libxdamage
+    libxtst
     libdrm
     libgcrypt
     libpulseaudio

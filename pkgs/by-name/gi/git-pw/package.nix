@@ -7,18 +7,18 @@
   git-pw,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "git-pw";
-  version = "2.7.1";
-  format = "pyproject";
+  version = "2.8.1";
+  pyproject = true;
 
-  PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "getpatchwork";
     repo = "git-pw";
-    tag = version;
-    hash = "sha256-Ce+Nc2NZ42dIpeLg8OutD8ONxj1XRiNodGbTWlkK9qw=";
+    tag = finalAttrs.version;
+    hash = "sha256-r9jdGweNiWSynjTy9HeZI93Bcnh7VOU0OpMZY7bSRWQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -47,10 +47,10 @@ python3.pkgs.buildPythonApplication rec {
     buildInputs = (old.buildInputs or [ ]) ++ [ git ];
   });
 
-  meta = with lib; {
+  meta = {
     description = "Tool for integrating Git with Patchwork, the web-based patch tracking system";
     homepage = "https://github.com/getpatchwork/git-pw";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

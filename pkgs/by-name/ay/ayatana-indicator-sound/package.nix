@@ -16,8 +16,6 @@
   libgee,
   libnotify,
   libpulseaudio,
-  libqtdbusmock,
-  libqtdbustest,
   libsForQt5,
   libxml2,
   lomiri,
@@ -30,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.5.2";
+  version = "24.5.3";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
     tag = finalAttrs.version;
-    hash = "sha256-qdvte+Mm64O/JhI0luJAGAWoCgukKCbPrp5k8SIDuwM=";
+    hash = "sha256-6KrBlAh8do6O7CGb3mO25y1188w2cVwRxplQe8TBlQ4=";
   };
 
   postPatch = ''
@@ -48,6 +46,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Build-time Vala codegen
     substituteInPlace src/CMakeLists.txt \
       --replace-fail '/usr/share/gir-1.0/AccountsService-1.0.gir' '${lib.getDev accountsservice}/share/gir-1.0/AccountsService-1.0.gir'
+
+    # timeouts are too short for aarch64 OfBorg builder under loads, which leads to spurious test failures
+    substituteInPlace \
+      tests/accounts-service-user.cc \
+      tests/media-player-user.cc \
+      tests/name-watch-test.cc \
+      tests/notifications-test.cc \
+      tests/volume-control-test.cc \
+      --replace-quiet 'loop(50)' 'loop(500)' \
+      --replace-quiet 'loop(100)' 'loop(1000)' \
+      --replace-quiet 'loop(500)' 'loop(5000)'
   '';
 
   strictDeps = true;
@@ -62,23 +71,22 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      accountsservice
-      glib
-      gobject-introspection
-      libayatana-common
-      libgee
-      libnotify
-      libpulseaudio
-      libxml2
-      systemd
-    ]
-    ++ (with lomiri; [
-      cmake-extras
-      lomiri-api
-      lomiri-schemas
-    ]);
+  buildInputs = [
+    accountsservice
+    glib
+    gobject-introspection
+    libayatana-common
+    libgee
+    libnotify
+    libpulseaudio
+    libxml2
+    systemd
+  ]
+  ++ (with lomiri; [
+    cmake-extras
+    lomiri-api
+    lomiri-schemas
+  ]);
 
   nativeCheckInputs = [
     dbus
@@ -89,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     gtest
     libsForQt5.qtbase
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     lomiri.gmenuharness
   ];
 

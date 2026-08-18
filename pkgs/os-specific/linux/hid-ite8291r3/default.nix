@@ -4,17 +4,18 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hid-ite8291r3";
-  version = "unstable-2022-06-01";
+  version = "0-unstable-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "pobrn";
     repo = "hid-ite8291r3";
-    rev = "48e04cb96517f8574225ebabb286775feb942ef5";
-    hash = "sha256-/69vvVbAVULDW8rwDYSj5706vrqJ6t4s/T6s3vmG9wk=";
+    rev = "1e1f01b5d8d0e45d70275a0dc29369002c39eb39";
+    hash = "sha256-EyBZ1qhg7ebVdkHtQD6iBQpRjPJbJLYxjfECx1EffK0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,12 +31,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Linux driver for the ITE 8291 RGB keyboard backlight controller";
     homepage = "https://github.com/pobrn/hid-ite8291r3/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ aacebedo ];
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "5.9";
   };
 }

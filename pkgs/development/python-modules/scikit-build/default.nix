@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch2,
   hatch-fancy-pypi-readme,
@@ -11,7 +10,6 @@
   packaging,
   setuptools,
   wheel,
-  tomli,
   # Test Inputs
   cmake,
   cython,
@@ -24,24 +22,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.18.1";
+  version = "0.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
+    hash = "sha256-uajQf8otXRDZMiC8V6aFFh1yrx/HYoXVXFZN2qhi5YQ=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "setuptools-75.0-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
-      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
-    })
-  ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
   #  E   UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
@@ -60,7 +48,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cmake
@@ -94,14 +82,14 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ]; # BSD due to reuses of PyNE code
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

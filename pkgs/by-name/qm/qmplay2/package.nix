@@ -7,8 +7,8 @@
   ffmpeg,
   fribidi,
   game-music-emu,
-  libXdmcp,
-  libXv,
+  libxdmcp,
+  libxv,
   libass,
   libcddb,
   libcdio,
@@ -18,17 +18,30 @@
   libxcb,
   ninja,
   pkg-config,
+  shaderc,
   qt5,
   qt6,
   taglib,
   vulkan-headers,
   vulkan-tools,
+  deno,
+  expat,
+  libmpg123,
+  libogg,
+  libopenmpt,
+  libsysprof-capture,
+  libvorbis,
+  pipewire,
+  rubberband,
   # Configurable options
   qtVersion ? "6", # Can be 5 or 6
 }:
 
 let
   sources = callPackage ./sources.nix { };
+  vulkan-headers-qmplay2 = vulkan-headers.overrideAttrs (oldAttrs: {
+    inherit (sources.vulkan-headers-qmplay2) version src;
+  });
 in
 assert lib.elem qtVersion [
   "5"
@@ -43,48 +56,58 @@ stdenv.mkDerivation (finalAttrs: {
     cp -va ${sources.qmvk.src}/* qmvk/
     chmod --recursive 744 qmvk
     popd
-    substituteInPlace src/qmplay2/vulkan/VulkanWindow.cpp \
-      --replace-fail "getSubmitInfo()" "getSubmitInfo(0)"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
-    ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    shaderc
+  ]
+  ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
+  ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alsa-lib
-      ffmpeg
-      fribidi
-      game-music-emu
-      libXdmcp
-      libXv
-      libass
-      libcddb
-      libcdio
-      libpulseaudio
-      libsidplayfp
-      libva
-      libxcb
-      taglib
-      vulkan-headers
-      vulkan-tools
-    ]
-    ++ lib.optionals (qtVersion == "6") [
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-    ]
-    ++ lib.optionals (qtVersion == "5") [
-      qt5.qtbase
-      qt5.qttools
-    ];
+  buildInputs = [
+    alsa-lib
+    ffmpeg
+    fribidi
+    game-music-emu
+    libxdmcp
+    libxv
+    libass
+    libcddb
+    libcdio
+    libpulseaudio
+    libsidplayfp
+    libva
+    libxcb
+    taglib
+    vulkan-headers-qmplay2
+    vulkan-tools
+    deno
+    expat
+    libmpg123
+    libogg
+    libopenmpt
+    libsysprof-capture
+    libvorbis
+    pipewire
+  ]
+  ++ lib.optionals (qtVersion == "6") [
+    rubberband
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+  ]
+  ++ lib.optionals (qtVersion == "5") [
+    qt5.qtbase
+    qt5.qttools
+  ];
+
+  cmakeFlags = lib.optionals (qtVersion == "5") [
+    (lib.cmakeBool "BUILD_WITH_QT6" false)
+  ];
 
   strictDeps = true;
 
@@ -92,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
   # But sometimes we come across case-insensitive filesystems...
   postInstall = ''
     [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
+
+    wrapQtApp $out/bin/qmplay2 \
+      --prefix PATH : ${lib.makeBinPath [ deno ]}
   '';
 
   passthru = {
@@ -111,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [
       kashw2
+      ProxyVT
     ];
     platforms = lib.platforms.linux;
   };

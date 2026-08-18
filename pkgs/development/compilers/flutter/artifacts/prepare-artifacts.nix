@@ -15,9 +15,9 @@
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
-    cp -r . "$out/bin/cache"
-    rm -f "$out/bin/cache/flutter.version.json"
+    mkdir --parents "$out/bin"
+    cp --recursive . "$out/bin/cache"
+    rm --force "$out/bin/cache/flutter.version.json"
 
     runHook postInstall
   '';

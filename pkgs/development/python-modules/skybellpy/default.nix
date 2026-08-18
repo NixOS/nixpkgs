@@ -7,7 +7,6 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -19,12 +18,12 @@ buildPythonPackage rec {
   pyproject = true;
 
   # Still uses distrutils, https://github.com/MisterWil/skybellpy/issues/22
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "MisterWil";
     repo = "skybellpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/+9KYxXYTN0T6PoccAA/pwdwWqOzCSZdNxj6xi6oG74=";
   };
 
@@ -44,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skybellpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Skybell alarm API";
     homepage = "https://github.com/MisterWil/skybellpy";
     changelog = "https://github.com/MisterWil/skybellpy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "skybellpy";
   };
 }

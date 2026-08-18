@@ -2,72 +2,70 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
+  loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
-  pycrdt,
   pygments,
   pymdown-extensions,
+  python-multipart,
   pyyaml,
-  ruff,
+  pyzmq,
   starlette,
   tomlkit,
-  typing-extensions,
   uvicorn,
   websockets,
 
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.13.6";
+  version = "0.23.16";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qsz0SJvWOJ/MH9eIMyBODCBCGC7vp2lzPsq+32tRKU8=";
+    hash = "sha256-N4yJLw4bw5hbwLW2EQkHjgn8dnQ4uVI0v+yfqkWFjJg=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
-  pythonRelaxDeps = [
-    "pycrdt"
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     click
     docutils
     itsdangerous
     jedi
+    loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
-    pycrdt
     pygments
     pymdown-extensions
+    python-multipart
     pyyaml
-    ruff
+    pyzmq
     starlette
     tomlkit
     uvicorn
     websockets
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   pythonImportsCheck = [ "marimo" ];
 
@@ -75,7 +73,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

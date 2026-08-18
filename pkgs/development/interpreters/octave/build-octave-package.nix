@@ -46,6 +46,11 @@
   # requiredOctavePackages are ALSO installed into octave.
   requiredOctavePackages ? [ ],
 
+  # Dependencies and `env` for octave package tests,
+  # which are run with .passthru.tests.testOctavePkgTests
+  nativeOctavePkgTestInputs ? [ ],
+  octavePkgTestEnv ? { },
+
   preBuild ? "",
 
   meta ? { },
@@ -63,7 +68,8 @@ let
   nativeBuildInputs' = [
     octave
     writeRequiredOctavePackagesHook
-  ] ++ nativeBuildInputs;
+  ]
+  ++ nativeBuildInputs;
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
@@ -71,9 +77,11 @@ let
   # This used to mean that if a package defined extra nativeBuildInputs, it
   # would override the ones for building an Octave package (the hook and Octave
   # itself, causing everything to fail.
-  attrs' = builtins.removeAttrs attrs [
+  attrs' = removeAttrs attrs [
     "nativeBuildInputs"
+    "nativeOctavePkgTestInputs"
     "passthru"
+    "env"
   ];
 in
 stdenv.mkDerivation (
@@ -89,7 +97,9 @@ stdenv.mkDerivation (
     # packages are installed into octave during the environment building phase.
     isOctavePackage = true;
 
-    OCTAVE_HISTFILE = "/dev/null";
+    env = attrs.env or { } // {
+      OCTAVE_HISTFILE = "/dev/null";
+    };
 
     inherit src;
 
@@ -130,22 +140,24 @@ stdenv.mkDerivation (
     # together with Octave.
     dontInstall = true;
 
-    passthru =
-      {
-        updateScript = [
-          ../../../../maintainers/scripts/update-octave-packages
-          (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
-        ];
+    passthru = {
+      updateScript = [
+        ../../../../maintainers/scripts/update-octave-packages
+        (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
+      ];
+    }
+    // passthru
+    // {
+      tests = {
+        testOctaveBuildEnv = (octave.withPackages (os: [ finalAttrs.finalPackage ])).overrideAttrs (old: {
+          name = "${finalAttrs.name}-pkg-install";
+        });
+        testOctavePkgTests = callPackage ./run-pkg-test.nix {
+          inherit nativeOctavePkgTestInputs octavePkgTestEnv;
+        } finalAttrs.finalPackage;
       }
-      // passthru
-      // {
-        tests = {
-          testOctaveBuildEnv = (octave.withPackages (os: [ finalAttrs.finalPackage ])).overrideAttrs (old: {
-            name = "${finalAttrs.name}-pkg-install";
-          });
-          testOctavePkgTests = callPackage ./run-pkg-test.nix { } finalAttrs.finalPackage;
-        } // passthru.tests or { };
-      };
+      // passthru.tests or { };
+    };
 
     inherit meta;
   }

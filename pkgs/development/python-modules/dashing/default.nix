@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   blessed,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   version = "0.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JRRgjg8pp3Xb0bERFWEhnOg9U8+kuqL+QQH6uE/Vbxs=";
@@ -20,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ blessed ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FedericoCeratto/dashing";
     description = "Terminal dashboards for Python";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ juliusrickert ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ juliusrickert ];
   };
 }

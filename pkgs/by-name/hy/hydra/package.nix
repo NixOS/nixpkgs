@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  nix,
+  nixVersions,
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -38,7 +38,7 @@
   mdbook,
   foreman,
   python3,
-  libressl,
+  netcat,
   cacert,
   glibcLocales,
   meson,
@@ -50,6 +50,23 @@
 }:
 
 let
+  # Need these pins until we bump past https://github.com/NixOS/hydra/pull/1828
+  nix = nixVersions.nix_2_34;
+  nixEvalJobsVersion = "2.34.3";
+  nix-eval-jobs_2_34 =
+    (nix-eval-jobs.override {
+      nixComponents = nixVersions.nixComponents_2_34;
+    }).overrideAttrs
+      {
+        version = nixEvalJobsVersion;
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix-eval-jobs";
+          tag = "v${nixEvalJobsVersion}";
+          hash = "sha256-YaVQAgBxWbUBFHXLBLzdUyVvuA/DDw80SEnn9iq0Veo=";
+        };
+      };
+
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
@@ -102,6 +119,7 @@ let
         NetAmazonS3
         NetPrometheus
         NetStatsd
+        NumberBytesHuman
         PadWalker
         ParallelForkManager
         PerlCriticCommunity
@@ -116,13 +134,12 @@ let
         TermReadKey
         Test2Harness
         TestPostgreSQL
-        TestSimple13
         TextDiff
         TextTable
         UUID4Tiny
         XMLSimple
         YAML
-        (nix.libs.nix-perl-bindings or nix.perl-bindings)
+        (nix.libs.nix-perl-bindings or nix.perl-bindings or null)
         git
       ];
   };
@@ -130,13 +147,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-06-15";
+  version = "0-unstable-2026-03-16";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "ed500ca4345f7edaa6c3d84027a7599d38b15a29";
-    hash = "sha256-Mxz4n40VKxA2ILtIHX6fObgcy2WlgsM+ERfpjuVJ0BU=";
+    rev = "a40d42862da88cce78a27dd594e1484a034aac4d";
+    hash = "sha256-8pttLK/JQiUL6EXJfjBtBggiLw+769JdQGrpM7klXdg=";
   };
 
   outputs = [
@@ -169,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
-      nix-eval-jobs
+      nix-eval-jobs_2_34
       coreutils
       findutils
       pixz
@@ -206,8 +224,8 @@ stdenv.mkDerivation (finalAttrs: {
     foreman
     glibcLocales
     python3
-    libressl.nc
-    nix-eval-jobs
+    netcat
+    nix-eval-jobs_2_34
     openldap
     postgresql
   ];
@@ -244,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name or "unknown"} \
-            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs_2_34.name or "unknown"}
     done
   '';
 
@@ -256,12 +274,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ];
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      mindavi
+    ];
   };
 })

@@ -9,7 +9,7 @@
   patch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mozphab";
   version = "1.9.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CVpsq9YoEww47uruHYEsJk9YQ39ZFQsMdL0nBc8AHUM=";
   };
 
@@ -38,19 +38,18 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs =
-    [
-      git
-      mercurial
-      patch
-    ]
-    ++ (with python3.pkgs; [
-      callee
-      immutabledict
-      hg-evolve
-      mock
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+    mercurial
+    patch
+  ]
+  ++ (with python3.pkgs; [
+    callee
+    immutabledict
+    hg-evolve
+    mock
+    pytestCheckHook
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -76,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_sentry.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";
     mainProgram = "moz-phab";
     longDescription = ''
@@ -85,8 +84,8 @@ python3.pkgs.buildPythonApplication rec {
       submitting series of commits.
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

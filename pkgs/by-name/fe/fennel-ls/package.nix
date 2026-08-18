@@ -4,21 +4,23 @@
   fetchFromSourcehut,
   lua,
   luaPackages,
+  pandoc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
-  version = "0.1.3";
+  version = "0.2.4";
 
   src = fetchFromSourcehut {
     owner = "~xerool";
     repo = "fennel-ls";
     rev = finalAttrs.version;
-    hash = "sha256-7NifEbOH8TDzon3f6w4I/7uryE1e9M5iYvqEb0hLv5s=";
+    hash = "sha256-RIkwL/nF0LwQZOXlUidyQVfRWuFBO5TobNTZrUFuJ64=";
   };
   buildInputs = [
     lua
     luaPackages.fennel
   ];
+  nativeBuildInputs = [ pandoc ];
   makeFlags = [ "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 

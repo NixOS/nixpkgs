@@ -6,12 +6,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odt2txt";
   version = "0.5";
 
   src = fetchurl {
-    url = "${meta.homepage}/archive/v${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/archive/v${finalAttrs.version}.tar.gz";
     sha256 = "23a889109ca9087a719c638758f14cc3b867a5dcf30a6c90bf6a0985073556dd";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

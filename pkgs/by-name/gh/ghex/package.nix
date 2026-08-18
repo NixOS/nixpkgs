@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "48.beta2";
+  version = "50.2";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4vIgRVGNgWtG0wluCp075lTdggMBVGX8ck/okWrY70E=";
+    hash = "sha256-QTTSMYsqqtx6s90z4H1+bb8xZjzvW/0tIbqQ3tX1hKs=";
   };
 
   nativeBuildInputs = [
@@ -54,15 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Dvapi=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # mremap does not exist on darwin
-      "-Dmmap-buffer-backend=false"
-    ];
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -75,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
     changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

@@ -10,14 +10,14 @@
   SDL2_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdlpop";
   version = "1.23";
 
   src = fetchFromGitHub {
     owner = "NagyD";
     repo = "SDLPoP";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
   };
 
@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace src/Makefile \
-      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "CFLAGS += -I/opt/local/include" "CFLAGS += -I${lib.getInclude SDL2}/include/SDL2 -I${SDL2_image}/include/SDL2"
+      --replace-fail "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc"
   '';
 
   # The prince binary expects two things of the working directory it is called from:
@@ -82,10 +81,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open-source port of Prince of Persia";
     homepage = "https://github.com/NagyD/SDLPoP";
-    changelog = "https://github.com/NagyD/SDLPoP/blob/v${version}/doc/ChangeLog.txt";
+    changelog = "https://github.com/NagyD/SDLPoP/blob/v${finalAttrs.version}/doc/ChangeLog.txt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
     mainProgram = "prince";
   };
-}
+})

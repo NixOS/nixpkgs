@@ -2,7 +2,6 @@
   lib,
   stdenv,
   python3,
-  fetchpatch,
   fetchPypi,
   openssl,
   # Many Salt modules require various Python modules to be installed,
@@ -10,43 +9,39 @@
   extraInputs ? [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "salt";
-  version = "3007.4";
+  version = "3008.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-T7e2RVlJaGUX3IlafFpC2SLgD9riXalUn3N+LiEB9K8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-RKHiBqlVv1eq/74/HftfRHbJRC1k86EDznrAqmi/qQc=";
   };
 
   patches = [
     ./fix-libcrypto-loading.patch
-    (fetchpatch {
-      name = "urllib.patch";
-      url = "https://src.fedoraproject.org/rpms/salt/raw/1c6e7b7a88fb81902f5fcee32e04fa80713b81f8/f/urllib.patch";
-      hash = "sha256-yldIurafduOAYpf2X0PcTQyyNjz5KKl/N7J2OTEF/c0=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
       --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
-    substituteInPlace requirements/base.txt \
-      --replace contextvars ""
 
     # Don't require optional dependencies on Darwin, let's use
     # `extraInputs` like on any other platform
     echo -n > "requirements/darwin.txt"
 
-    # Remove windows-only requirement
-    substituteInPlace "requirements/zeromq.txt" \
-      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
+    # Fix duplicated script in bin and scripts:
+    # FileExistsError: File already exists: /nix/store/...-salt-3008.0/bin/salt
+    # See https://github.com/pypa/installer/pull/170 and https://github.com/saltstack/salt/issues/65083
+    substituteInPlace "tools/pkg/salt_build_backend.py" \
+      --replace-fail 'get_scripts(dist=None):' $'get_scripts(dist=None):\n    return []'
   '';
 
   propagatedBuildInputs =
     with python3.pkgs;
     [
+      cryptography
       distro
       jinja2
       jmespath
@@ -64,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
-  USE_STATIC_REQUIREMENTS = "0";
+  env.USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
   # possibly there are more issues but I didn't leave the test suite running
@@ -73,9 +68,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://saltproject.io/";
-    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${finalAttrs.version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
     maintainers = with lib.maintainers; [ Flakebi ];
     license = lib.licenses.asl20;
   };
-}
+})

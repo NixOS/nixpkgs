@@ -2,39 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  asciidoc,
-  libxslt,
+  scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kpack";
 
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kpack";
-    rev = version;
-    sha256 = "1l6bm2j45946i80qgwhrixg9sckazwb5x4051s76d3mapq9bara8";
+    rev = finalAttrs.version;
+    sha256 = "sha256-QIi960hlS+aE3DRMtHOndWlehVfD59ybAaO/Dl/qiyQ=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    asciidoc
-    cmake
-    libxslt.bin
-  ];
+  nativeBuildInputs = [ scdoc ];
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  installFlags = [ "PREFIX=$(out)" ];
+
+  meta = {
     homepage = "https://knightos.org/";
     description = "Tool to create or extract KnightOS packages";
     mainProgram = "kpack";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
-}
+})

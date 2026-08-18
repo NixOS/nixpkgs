@@ -17,20 +17,19 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [
-      perl
-    ]
-    ++ (with perlPackages; [
-      FileRemove
-      DigestSHA1
-      Later
-      MailBox
-      MailMaildir
-      MailTools
-      StringShellQuote
-      TermReadLineGnu
-    ]);
+  buildInputs = [
+    perl
+  ]
+  ++ (with perlPackages; [
+    FileRemove
+    DigestSHA1
+    Later
+    MailBox
+    MailMaildir
+    MailTools
+    StringShellQuote
+    TermReadLineGnu
+  ]);
 
   src = notmuch.src;
 
@@ -46,12 +45,12 @@ stdenv.mkDerivation {
       --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mutt support for notmuch";
     mainProgram = "notmuch-mutt";
     homepage = "https://notmuchmail.org/";
-    license = with licenses; gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = with lib.licenses; gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -13,6 +13,7 @@
 
   # buildInputs
   rdkafka,
+  rust-jemalloc-sys-unprefixed,
 
   # tests
   cacert,
@@ -25,17 +26,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.4.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4hNutU9WpzxOjQe+0t5teSjMhuoprR0INQo6H/wOygc=";
+    hash = "sha256-b3IjQDTl8ci5gimlGLkynNbihIbOzh58GqYPFqJGJF0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/ng8ONIszRgmfgRBKn65kcJFaTp1T0lNdZQb3t9Gol0=";
+  cargoHash = "sha256-ElTTl2erDT3+b21lKfkPRyFrn3cvL0+VziEMLELwNaU=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -57,16 +57,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64-unknown-linux-gnu" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "x86_64-unknown-linux-musl" = self.build ++ [
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "aarch64-unknown-linux-musl" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
         });
       in
@@ -74,6 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Have to be set to dynamically link librdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
+
+    # krb5-src contains K&R-style C code incompatible with GCC 14's default C23 standard;
+    # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
+    NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=int-conversion";
   };
 
   nativeBuildInputs = [
@@ -86,6 +93,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     rdkafka
+    # tikv-jemalloc-sys's vendored jemalloc configure breaks under gcc 15.
+    rust-jemalloc-sys-unprefixed
   ];
 
   nativeCheckInputs = [
@@ -98,13 +107,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Error: deadline has elapsed
-    "--skip replicated_loglet"
-
+    "--skip"
+    "replicated_loglet"
     # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
-
+    "--skip"
+    "fast_forward_over_trim_gap"
     # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
+    "--skip"
+    "restatectl_smoke_test"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -112,7 +122,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -132,7 +141,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Platform for developing distributed fault-tolerant applications.";
+    description = "Platform for developing distributed fault-tolerant applications";
     homepage = "https://restate.dev";
     changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";

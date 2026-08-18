@@ -19,17 +19,17 @@
   pkcs11helper,
   uriparser,
   zlib,
-  libX11,
-  libXcursor,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libXv,
+  libx11,
+  libxcursor,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxtst,
+  libxv,
   libxkbcommon,
   libxkbfile,
   wayland,
@@ -39,6 +39,8 @@
   orc,
   cairo,
   cjson,
+  libcbor,
+  libfido2,
   libusb1,
   libpulseaudio,
   cups,
@@ -46,6 +48,9 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  sdl3,
+  sdl3-ttf,
+  sdl3-image,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -53,45 +58,48 @@
   buildServer ? true,
   nocaps ? false,
   withUnfree ? false,
+  withWaylandSupport ? false,
+  withSDL2 ? false,
+  makeWrapper,
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
   gnome-remote-desktop,
   remmina,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.16.0";
+  version = "3.30.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = finalAttrs.version;
-    hash = "sha256-HF4Is3ak2nYD2Fq6HGHwyM5OTBVqYqbB22otOprzfiQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-Fy7TB7cRHXB86deb86eg05Cwf9SHU0C/Qnfj5Ylmjug=";
   };
 
-  postPatch =
-    ''
-      # skip NIB file generation on darwin
-      substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
-        --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
+  postPatch = ''
+    # skip NIB file generation on darwin
+    substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
+      --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
 
-      substituteInPlace "libfreerdp/freerdp.pc.in" \
-        --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+    substituteInPlace "libfreerdp/freerdp.pc.in" \
+      --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
 
-      substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
-        --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
-    ''
-    + lib.optionalString (pcsclite != null) ''
-      substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
-        --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
-    ''
-    + lib.optionalString nocaps ''
-      substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
-        --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
-    '';
+    substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
+      --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
+  ''
+  + lib.optionalString (pcsclite != null) ''
+    substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
+      --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
+  ''
+  + lib.optionalString nocaps ''
+    substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
+      --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -100,68 +108,77 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     writableTmpDirAsHomeHook
+    makeWrapper
   ];
 
-  buildInputs =
-    [
-      cairo
-      cjson
-      cups
-      faad2
-      ffmpeg
-      glib
-      icu
-      libX11
-      libXcursor
-      libXdamage
-      libXdmcp
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXrender
-      libXtst
-      libXv
-      libjpeg_turbo
-      libkrb5
-      libopus
-      libpulseaudio
-      libunwind
-      libusb1
-      libxkbcommon
-      libxkbfile
-      openh264
-      openssl
-      orc
-      pcre2
-      pcsclite
-      pkcs11helper
-      SDL2
-      SDL2_ttf
-      SDL2_image
-      uriparser
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      fuse3
-      systemd
-      wayland
-      wayland-scanner
-    ]
-    ++ lib.optionals withUnfree [
-      faac
-    ];
+  buildInputs = [
+    cairo
+    cjson
+    cups
+    faad2
+    ffmpeg
+    glib
+    icu
+    libcbor
+    libfido2
+    libx11
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxv
+    libjpeg_turbo
+    libkrb5
+    libopus
+    libpulseaudio
+    libunwind
+    libusb1
+    libxkbcommon
+    libxkbfile
+    openh264
+    openssl
+    orc
+    pcre2
+    pcsclite
+    pkcs11helper
+    sdl3
+    sdl3-ttf
+    sdl3-image
+    uriparser
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    fuse3
+    systemd
+    wayland
+    wayland-scanner
+  ]
+  ++ lib.optionals withSDL2 [
+    SDL2
+    SDL2_ttf
+    SDL2_image
+  ]
+  ++ lib.optionals withUnfree [
+    faac
+  ];
 
   # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
-  cmakeFlags =
-    [
-      "-Wno-dev"
-      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-      (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
-    ]
-    ++ lib.mapAttrsToList lib.cmakeBool {
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
+  ]
+  ++ lib.mapAttrsToList lib.cmakeBool (
+    {
       BUILD_TESTING = false; # false is recommended by upstream
+      CHANNEL_RDPEWA = true;
+      CHANNEL_RDPEWA_CLIENT = true;
       WITH_CAIRO = cairo != null;
       WITH_CUPS = cups != null;
       WITH_FAAC = withUnfree && faac != null;
@@ -178,11 +195,16 @@ stdenv.mkDerivation (finalAttrs: {
       WITH_SERVER = buildServer;
       WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
       WITH_VAAPI = false; # false is recommended by upstream
-      WITH_X11 = true;
     }
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
-    ];
+    // lib.filterAttrs (name: value: value) {
+      # Only select one
+      WITH_X11 = !withWaylandSupport;
+      WITH_WAYLAND = withWaylandSupport;
+    }
+  )
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -193,9 +215,16 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  passthru.tests = {
-    inherit remmina;
-    inherit gnome-remote-desktop;
+  postFixup = lib.optionalString (withWaylandSupport && withSDL2) ''
+    wrapProgram $out/bin/sdl2-freerdp \
+      --set SDL_VIDEODRIVER wayland
+  '';
+
+  passthru = {
+    tests = {
+      inherit gnome-remote-desktop remmina;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -204,9 +233,13 @@ stdenv.mkDerivation (finalAttrs: {
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      cizra
+      deimelias
+    ];
     platforms = lib.platforms.unix;
   };
 })

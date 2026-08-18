@@ -10,30 +10,30 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
+  requests,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.95.0";
+  version = "1.110.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-Gz2lU/8QtcU02JYWsz3l9EqJajusr3h2LiTtFdwNc1k=";
+    hash = "sha256-Zn+6cDyDZSsV9V+zAA8BOPs4aKl0j3dF92/azGYG+OI=";
   };
 
   postPatch = ''
     # don't try to use --cov or fail on new warnings
     rm pytest.ini
   '';
+
+  pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ setuptools ];
 
@@ -51,46 +51,30 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     pyyaml
+    requests
   ];
 
   preCheck = ''
     export AWS_DEFAULT_REGION=us-east-1
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests"
-    ''-m "not slow"''
   ];
 
-  disabledTests = [
-    # urllib3 2.0 compat
-    "test_plugin_accepts_different_sar_client"
-    "test_plugin_accepts_flags"
-    "test_plugin_accepts_parameters"
-    "test_plugin_default_values"
-    "test_plugin_invalid_configuration_raises_exception"
-    "test_plugin_must_setup_correct_name"
-    "test_must_process_applications"
-    "test_must_process_applications_validate"
-    "test_process_invalid_applications"
-    "test_process_invalid_applications_validate"
-    "test_resolve_intrinsics"
-    "test_sar_service_calls"
-    "test_sar_success_one_app"
-    "test_sar_throttling_doesnt_stop_processing"
-    "test_sleep_between_sar_checks"
-    "test_unexpected_sar_error_stops_processing"
+  disabledTestMarks = [
+    "slow"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "samtranslator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/aws/serverless-application-model";
     changelog = "https://github.com/aws/serverless-application-model/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

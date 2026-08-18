@@ -8,28 +8,24 @@
   pytest-env,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "6.0.2";
+  version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pynamodb";
     repo = "PynamoDB";
     tag = version;
-    hash = "sha256-i4cO1fzERKHJW2Ym0ogc2YID3IXVpBVDE33UumxvvHE=";
+    hash = "sha256-i4oxZO3gBVc2PMFSISeytaO8YrzYR9YuUMxrEqrg2c4=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ botocore ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = [ botocore ];
 
   optional-dependencies = {
     signal = [ blinker ];
@@ -40,7 +36,8 @@ buildPythonPackage rec {
     pytest-env
     pytest-mock
     pytestCheckHook
-  ] ++ optional-dependencies.signal;
+  ]
+  ++ optional-dependencies.signal;
 
   pythonImportsCheck = [ "pynamodb" ];
 
@@ -61,15 +58,15 @@ buildPythonPackage rec {
     "test_connection_make_api_call__binary_attributes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface for Amazon’s DynamoDB";
     longDescription = ''
       DynamoDB is a great NoSQL service provided by Amazon, but the API is
       verbose. PynamoDB presents you with a simple, elegant API.
     '';
     homepage = "http://jlafon.io/pynamodb.html";
-    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

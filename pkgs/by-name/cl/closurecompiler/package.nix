@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "closure-compiler";
-  version = "20250528";
+  version = "20260804";
 
   src = fetchurl {
-    url = "mirror://maven/com/google/javascript/closure-compiler/v${version}/closure-compiler-v${version}.jar";
-    sha256 = "sha256-P7NzTMgMdvG4LMKcmJx+x2LsPvmjtrr+RC6Oy/CVvD0=";
+    url = "mirror://maven/com/google/javascript/closure-compiler/v${finalAttrs.version}/closure-compiler-v${finalAttrs.version}.jar";
+    sha256 = "sha256-DLhqS5Z2nGebT8LS3A5azQq9Df+TKUW5D74yckdGaik=";
   };
 
   dontUnpack = true;
@@ -22,17 +22,17 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/java $out/bin
-    cp ${src} $out/share/java/closure-compiler-v${version}.jar
+    cp ${finalAttrs.src} $out/share/java/closure-compiler-v${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
-      --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
+      --add-flags "\$NIX_JAVA_ARGS -jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for making JavaScript download and run faster";
     mainProgram = "closure-compiler";
     homepage = "https://developers.google.com/closure/compiler/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
-}
+})

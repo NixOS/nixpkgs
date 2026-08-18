@@ -8,12 +8,12 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipvsadm";
   version = "1.31";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/kernel/ipvsadm/ipvsadm-${finalAttrs.version}.tar.xz";
     sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     sed -i -e "s|^PATH=.*|PATH=$out/bin:${gnugrep}/bin|" $out/sbin/ipvsadm-{restore,save}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux Virtual Server support programs";
     homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

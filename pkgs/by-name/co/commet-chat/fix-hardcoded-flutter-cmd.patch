@@ -1,0 +1,111 @@
+--- a/scripts/codegen.dart
++++ b/scripts/codegen.dart
+@@ -2,38 +2,7 @@
+
+ import 'dart:io';
+
+-Future<ProcessResult> getDependencies() async {
+-  var process = Process.runSync(
+-    "flutter",
+-    [
+-      "pub",
+-      "get",
+-    ],
+-    runInShell: true,
+-  );
+-
+-  print(process.stdout);
+-  print(process.stderr);
+-  return process;
+-}
+-
+-Future<ProcessResult> intlUtilsGenerate() async {
+-  var process = await Process.run(
+-    "flutter",
+-    [
+-      "pub",
+-      "run",
+-      "intl_utils:generate",
+-    ],
+-    runInShell: true,
+-  );
+-
+-  print(process.stdout);
+-  print(process.stderr);
+-  return process;
+-}
+-
+-Future<List<File>> generateFileLists() async {
++void main() async {
+   var dir = Directory("lib/generated/l10n");
+   if (!dir.existsSync()) {
+     dir.create(recursive: true);
+@@ -82,68 +51,4 @@
+
+   await arbFile.create(recursive: true);
+   arbFile.writeAsStringSync(fileList);
+-
+-  return [sourcesFile, arbFile];
+-}
+-
+-Future<ProcessResult> generateFromArb(List<File> files) async {
+-  var process = await Process.run(
+-    "flutter",
+-    [
+-      "pub",
+-      "run",
+-      "intl_translation:generate_from_arb",
+-      "--sources-list-file",
+-      files[0].absolute.path,
+-      "--translations-list-file",
+-      files[1].absolute.path,
+-      "--output-dir=lib/generated/l10n"
+-    ],
+-    runInShell: true,
+-  );
+-
+-  print(process.stdout);
+-  print(process.stderr);
+-  return process;
+-}
+-
+-Future<ProcessResult> buildRunner() async {
+-  var process = await Process.run(
+-    "flutter",
+-    [
+-      "pub",
+-      "run",
+-      "build_runner",
+-      "build",
+-      "--delete-conflicting-outputs",
+-    ],
+-    runInShell: true,
+-  );
+-
+-  print(process.stdout);
+-  print(process.stderr);
+-  return process;
+-}
+-
+-void main() async {
+-  var result = await getDependencies();
+-  if (result.exitCode != 0) {
+-    exit(result.exitCode);
+-  }
+-
+-  result = await intlUtilsGenerate();
+-  if (result.exitCode != 0) {
+-    exit(result.exitCode);
+-  }
+-
+-  var files = await generateFileLists();
+-  result = await generateFromArb(files);
+-  if (result.exitCode != 0) {
+-    exit(result.exitCode);
+-  }
+-
+-  result = await buildRunner();
+-  if (result.exitCode != 0) {
+-    exit(result.exitCode);
+-  }
+ }

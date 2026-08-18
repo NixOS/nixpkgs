@@ -1,61 +1,58 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "roadrunner";
-  version = "2025.1.2";
+  version = "2025.1.15";
 
   src = fetchFromGitHub {
-    repo = "roadrunner";
     owner = "roadrunner-server";
-    tag = "v${version}";
-    hash = "sha256-j/OXeKMsym09m1kh6Ox4Vy/VLJ2YI7NTcR+NerHweos=";
+    repo = "roadrunner";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T7JWA/O25s7A/jSrWJJF4oJbQD0hQyCRt6vFiuz8kwE=";
   };
+
+  vendorHash = "sha256-OhfqfLYHCoBU8QyrpaHwKXtGZf5eK8ocfTyjtZxsgSg=";
+  env.GOWORK = "off";
+
+  subPackages = [ "cmd/rr" ];
+
+  # Flags as provided by the build automation of the project:
+  # https://github.com/roadrunner-server/roadrunner/blob/3853ad693522e82d53d62950e5f1315402c910f2/.github/workflows/release.yml#L82
+  ldflags = [
+    "-s"
+    "-X=github.com/roadrunner-server/roadrunner/v${lib.versions.major finalAttrs.version}/internal/meta.version=${finalAttrs.version}"
+    "-X=github.com/roadrunner-server/roadrunner/v${lib.versions.major finalAttrs.version}/internal/meta.buildTime=1970-01-01T00:00:00Z"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  # Flags as provided by the build automation of the project:
-  # https://github.com/roadrunner-server/roadrunner/blob/fe572d0eceae8fd05225fbd99ba50a9eb10c4393/.github/workflows/release.yml#L89
-  ldflags = [
-    "-s"
-    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.version=${version}"
-    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.buildTime=1970-01-01T00:00:00Z"
-  ];
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rr \
       --bash <($out/bin/rr completion bash) \
       --zsh <($out/bin/rr completion zsh) \
       --fish <($out/bin/rr completion fish)
   '';
 
-  postPatch = ''
-    substituteInPlace internal/rpc/client_test.go \
-      --replace "127.0.0.1:55555" "127.0.0.1:55554"
-
-    substituteInPlace internal/rpc/test/config_rpc_ok.yaml \
-      --replace "127.0.0.1:55555" "127.0.0.1:55554"
-
-    substituteInPlace internal/rpc/test/config_rpc_conn_err.yaml \
-      --replace "127.0.0.1:0" "127.0.0.1:55554"
-  '';
-
   __darwinAllowLocalNetworking = true;
 
-  vendorHash = "sha256-Kl5YzTIgl5gza5iV9PlZ8BR5C5DANvtZ849aJtMrGSw=";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "High-performance PHP application server, process manager written in Go and powered with plugins";
     homepage = "https://roadrunner.dev";
     license = lib.licenses.mit;
     mainProgram = "rr";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

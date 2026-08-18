@@ -6,30 +6,37 @@
   yarnConfigHook,
   yarnInstallHook,
   nodejs,
+  makeBinaryWrapper,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cloudflare-cli";
-  version = "4.2.0";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "danielpigott";
     repo = "cloudflare-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cT+cMekXhHKfFi+dH1dCA/YNBSyYePJIZBSkDMPZZ14=";
+    hash = "sha256-3I8KvP9nlkiyYi4h7LpP5LE9xR+uvQyfkLLdSmDaG7E=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-0SFXgaLQE/MkqC9id7DAiP422tEyTt2gpgpIdXViFBI=";
+    hash = "sha256-XCqKC/uATKsWaqF9FnEd/p+CRl2OFP7zdmz7LAkm5HQ=";
   };
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnInstallHook
     nodejs
+    makeBinaryWrapper
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/cfcli \
+      --chdir $out/lib/node_modules/cloudflare-cli
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

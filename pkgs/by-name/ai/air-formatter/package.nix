@@ -4,36 +4,44 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
-  version = "0.7.0";
+  version = "0.11.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "air";
     tag = finalAttrs.version;
-    hash = "sha256-jFOhTol5e3TcU217HgcCKutydTePmc5/viilgiJqpqE=";
+    hash = "sha256-BWtQLgNFf/kULGvet33k3T1k2oL1hbDn2VPCj0JxrX4=";
   };
 
-  # Remove duplicate entries from cargo lock
-  cargoPatches = [ ./cargo-lock.patch ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3v/pgm6BjPvQToSmZ2PrUWTrgffjifB3Xmp1liWCUck=";
+  cargoHash = "sha256-xcNVioDbejCLrWMaUA06r9GK5KEIPq6w0W7G7290kOU=";
 
   useNextest = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/air";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  cargoBuildFlags = [ "--package=air" ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
+  postInstall = ''
+    installShellCompletion --cmd air-formatter \
+      --bash <($out/bin/air generate-shell-completion bash) \
+      --fish <($out/bin/air generate-shell-completion fish) \
+      --zsh  <($out/bin/air generate-shell-completion zsh)
+  '';
 
   meta = {
     description = "Extremely fast R code formatter";

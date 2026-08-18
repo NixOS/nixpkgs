@@ -10,7 +10,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 
   options.xdg.portal.lxqt = {
@@ -29,7 +29,6 @@ in
         [
           pkgs.libsForQt5.qtstyleplugin-kvantum
           pkgs.breeze-qt5
-          pkgs.qtcurve
         ];
       '';
       description = ''

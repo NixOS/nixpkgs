@@ -8,10 +8,10 @@
   gcr,
   glib-networking,
   gsettings-desktop-schemas,
-  gtk2,
-  libsoup_2_4,
-  webkitgtk_4_0,
-  xorg,
+  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
+  xprop,
   dmenu,
   findutils,
   gnused,
@@ -19,39 +19,37 @@
   gst_all_1,
   patches ? null,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "surf";
-  version = "2.1";
+  version = "2.1-unstable-2025-04-19";
 
   # tarball is missing file common.h
   src = fetchgit {
     url = "git://git.suckless.org/surf";
-    rev = version;
-    sha256 = "1v926hiayddylq79n8l7dy51bm0dsa9n18nx9bkhg666cx973x4z";
+    rev = "48517e586cdc98bc1af7115674b554cc70c8bc2e";
+    hash = "sha256-+qg1mF5X/hYxCy7N3CxIEM2yHi1jmUGiK/vaQBjKy1I=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      glib
-      gcr
-      glib-networking
-      gsettings-desktop-schemas
-      gtk2
-      libsoup_2_4
-      webkitgtk_4_0
-    ]
-    ++ (with gst_all_1; [
-      # Audio & video support for webkitgtk WebView
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gcr
+    glib-networking
+    gsettings-desktop-schemas
+    libsoup_3
+    gtk3
+    webkitgtk_4_1
+  ]
+  ++ (with gst_all_1; [
+    # Audio & video support for webkitgtk WebView
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   inherit patches;
 
@@ -62,7 +60,7 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       depsPath = lib.makeBinPath [
-        xorg.xprop
+        xprop
         dmenu
         findutils
         gnused
@@ -72,10 +70,11 @@ stdenv.mkDerivation rec {
     ''
       gappsWrapperArgs+=(
         --suffix PATH : ${depsPath}
+        --set GDK_BACKEND x11
       )
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple web browser based on WebKitGTK";
     mainProgram = "surf";
     longDescription = ''
@@ -85,8 +84,8 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
-    license = licenses.mit;
-    platforms = webkitgtk_4_0.meta.platforms;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.mit;
+    platforms = webkitgtk_4_1.meta.platforms;
+    maintainers = [ ];
   };
 }

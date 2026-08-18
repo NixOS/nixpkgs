@@ -1,30 +1,34 @@
 diff --git a/setup.py b/setup.py
-index c0c5c03..6373a2a 100755
+index 3b86748..543f5b8 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -71,15 +71,6 @@ setup(
-     license=LICENSE,
-     url="https://github.com/pytries/marisa-trie",
-     classifiers=CLASSIFIERS,
+@@ -7,7 +7,7 @@ from setuptools import setup, Extension
+ 
+ MARISA_ROOT_DIR = Path("marisa-trie")
+ MARISA_SOURCE_DIR = MARISA_ROOT_DIR / "lib"
+-MARISA_INCLUDE_DIR = MARISA_ROOT_DIR / "include"
++MARISA_INCLUDE_DIR = Path("@marisa@") / "include"
+ MARISA_FILES = [
+     "marisa/*.cc",
+     "marisa/grimoire.cc",
+@@ -27,19 +27,11 @@ extensions = [
+         sources=["src/*.pyx"],
+         language="c++",
+         include_dirs=[str(MARISA_INCLUDE_DIR)],
++        libraries=["marisa"],
+     ),
+ ]
+ 
+ setup(
 -    libraries=[
 -        (
 -            "libmarisa-trie",
 -            {
 -                "sources": MARISA_FILES,
--                "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR],
+-                "include_dirs": [str(MARISA_SOURCE_DIR), str(MARISA_INCLUDE_DIR)],
 -            },
 -        )
 -    ],
-     ext_modules=[
-         Extension(
-             "marisa_trie",
-@@ -94,7 +85,8 @@ setup(
-                 "src/std_iostream.cpp",
-                 "src/trie.cpp",
-             ],
--            include_dirs=[MARISA_INCLUDE_DIR],
-+            include_dirs=["@marisa@/include"],
-+            libraries=["marisa"],
-         )
-     ],
-     python_requires=">=3.8",
+     ext_modules=cythonize(
+         extensions,
+         language_level="3",

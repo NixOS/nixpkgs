@@ -4,67 +4,56 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   pyperclip,
   textual,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
+  tree-sitter,
   tree-sitter-python,
   tree-sitter-sql,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
-  version = "0.15.0";
+  version = "0.18.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
-    tag = "v${version}";
-    hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ixSzT6Mxh7n7pLlXnb9y2XJoSUwcETpJ9qylON0NxIo=";
   };
 
-  patches = [
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    ./textual-2.0.0.diff
-  ];
-
-  pythonRelaxDeps = [
-    "textual"
-  ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pyperclip
     textual
-  ] ++ textual.optional-dependencies.syntax;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
+    tree-sitter
     tree-sitter-python
     tree-sitter-sql
+  ]
+  ++ textual.optional-dependencies.syntax;
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
 
-  disabledTests = [
-    # AssertionError: assert Selection(sta...), end=(0, 6)) == Selection(sta...), end=(1, 0))
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    "test_keys"
-  ];
-
   meta = {
     description = "Text area (multi-line input) with syntax highlighting for Textual";
     homepage = "https://github.com/tconbeer/textual-textarea";
-    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
-}
+})

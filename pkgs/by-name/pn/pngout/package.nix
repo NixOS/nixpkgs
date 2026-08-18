@@ -22,9 +22,6 @@ let
       folder = "i686";
       ld-linux = "ld-linux.so.2";
     };
-    x86_64-darwin = {
-      folder = ".";
-    };
     x86_64-linux = {
       folder = "amd64";
       ld-linux = "ld-linux-x86-64.so.2";
@@ -59,14 +56,13 @@ stdenv.mkDerivation {
   # pngout is code-signed on Darwin, so don’t alter the binary to avoid breaking the signature.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp ${platform.folder}/pngout $out/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ${platform.folder}/pngout $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
+  '';
 
   meta = {
     description = "Tool that aggressively optimizes the sizes of PNG images";
@@ -74,7 +70,6 @@ stdenv.mkDerivation {
     license = lib.licenses.unfreeRedistributable;
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;
-    maintainers = [ lib.maintainers.sander ];
     mainProgram = "pngout";
   };
 }

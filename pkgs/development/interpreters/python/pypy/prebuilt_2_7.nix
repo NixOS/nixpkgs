@@ -48,6 +48,11 @@ let
     pythonOnBuildForTarget = throw "${pname} does not support cross compilation";
     pythonOnHostForHost = throw "${pname} does not support cross compilation";
     pythonOnTargetForTarget = throw "${pname} does not support cross compilation";
+
+    pythonABITags = [
+      "none"
+      "pypy${lib.concatStrings (lib.take 2 (lib.splitString "." pythonVersion))}_pp${sourceVersion.major}${sourceVersion.minor}"
+    ];
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -58,7 +63,6 @@ let
     aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
     x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
     aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.bz2";
-    x86_64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_x86_64.tar.bz2";
   };
 
 in
@@ -71,24 +75,23 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  buildInputs =
-    [
-      bzip2
-      expat
-      gdbm
-      ncurses6
-      sqlite
-      zlib
-      stdenv.cc.cc.libgcc or null
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      tcl-8_5
-      tk-8_5
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      tcl-8_6
-      tk-8_6
-    ];
+  buildInputs = [
+    bzip2
+    expat
+    gdbm
+    ncurses6
+    sqlite
+    zlib
+    stdenv.cc.cc.libgcc or null
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    tcl-8_5
+    tk-8_5
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tcl-8_6
+    tk-8_6
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -142,18 +145,17 @@ stdenv.mkDerivation {
   # Check whether importing of (extension) modules functions
   installCheckPhase =
     let
-      modules =
-        [
-          "ssl"
-          "sys"
-          "curses"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          "Tkinter"
-        ]
-        ++ lib.optionals isPy3k [
-          "tkinter"
-        ];
+      modules = [
+        "ssl"
+        "sys"
+        "curses"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        "Tkinter"
+      ]
+      ++ lib.optionals isPy3k [
+        "tkinter"
+      ];
       imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
     in
     ''
@@ -168,11 +170,11 @@ stdenv.mkDerivation {
 
   inherit passthru;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
-    license = licenses.mit;
-    platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
+    license = lib.licenses.mit;
+    platforms = lib.attrNames downloadUrls;
   };
 
 }

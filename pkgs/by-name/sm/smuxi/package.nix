@@ -13,10 +13,6 @@
   stfl,
   makeWrapper,
   lib,
-  guiSupport ? true,
-  gtk-sharp-2_0,
-  gdk-pixbuf,
-  pango,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,31 +34,24 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      autoconf
-      automake
-      itstool
-      intltool
-      gettext
-      mono
-      stfl
-    ]
-    ++ lib.optionals (guiSupport) [
-      gtk-sharp-2_0
-      # loaded at runtime by GTK#
-      gdk-pixbuf
-      pango
-    ];
+  buildInputs = [
+    autoconf
+    automake
+    itstool
+    intltool
+    gettext
+    mono
+    stfl
+  ];
 
   preConfigure = ''
-    NOCONFIGURE=1 NOGIT=1 ./autogen.sh
+    NOCONFIGURE=1 NOGIT=1 ACLOCAL_FLAGS="-I ${gettext}/share/gettext/m4" ./autogen.sh
   '';
 
   configureFlags = [
     "--disable-frontend-gnome"
     "--enable-frontend-stfl"
-  ] ++ lib.optional guiSupport "--enable-frontend-gnome";
+  ];
 
   postInstall = ''
     makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-message-buffer" \
@@ -95,16 +84,11 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-frontend-gnome" \
       --add-flags "$out/lib/smuxi/smuxi-frontend-gnome.exe" \
-      --prefix MONO_GAC_PREFIX : ${if guiSupport then gtk-sharp-2_0 else ""} \
       --prefix ${runtimeLoaderEnvVariableName} : ${
         lib.makeLibraryPath [
           gettext
           glib
           sqlite
-          gtk-sharp-2_0
-          gtk-sharp-2_0.gtk
-          gdk-pixbuf
-          pango
         ]
       }
 
@@ -112,17 +96,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/smuxi/
     cp -a lib/log4net.dll $out/lib/smuxi/
     cp -a lib/Nini.dll $out/lib/smuxi/
-
-    # install GTK+ icon theme on Darwin
-    ${
-      if guiSupport && stdenv.hostPlatform.isDarwin then
-        "
-      mkdir -p $out/lib/smuxi/icons/
-      cp -a images/Smuxi-Symbolic $out/lib/smuxi/icons/
-    "
-      else
-        ""
-    }
   '';
 
   meta = {

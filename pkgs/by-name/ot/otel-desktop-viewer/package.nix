@@ -2,23 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   apple-sdk,
   versionCheckHook,
   nix-update-script,
-  ...
 }:
 
 buildGoModule (finalAttrs: {
   pname = "otel-desktop-viewer";
-  version = "0.2.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qvMpebhbg/OnheZIZBoiitGYUUMdTghSwEapblE0DkA=";
+    hash = "sha256-hi9OLtyYlmpJVTSvRxBcOFPgebFfzqzRR+qUslhBGZw=";
   };
 
   # NOTE: This project uses Go workspaces, but 'buildGoModule' does not support
@@ -29,7 +27,7 @@ buildGoModule (finalAttrs: {
   #
   # cf. https://github.com/NixOS/nixpkgs/issues/203039
   proxyVendor = true;
-  vendorHash = "sha256-1TH9JQDnvhi+b3LDCAooMKgYhPudM7NCNCc+WXtcv/4=";
+  vendorHash = "sha256-5i9BpO4zc07nk577k7k0riDdjw96SwCLx0jIPp7YhhM=";
 
   ldflags = [
     "-s"
@@ -42,17 +40,15 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${finalAttrs.version}";
-    description = "Receive & visualize OpenTelemtry traces locally within one CLI tool";
+    description = "Receive & visualize OpenTelemetry traces locally within one CLI tool";
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      gaelreyrol
       jkachmar
       lf-
     ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fzwoch";
-    repo = pname;
+    repo = "obs-vaapi";
     rev = version;
     hash = "sha256-ykiLsHL3hoe0ibxMxp4zrqeSeQfgnJfNg7Yb5i9HDJQ=";
   };
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   # - We need "getLib" instead of default derivation, otherwise it brings gstreamer-bin;
   # - without gst-plugins-base it won't even show proper errors in logs;
   # - Without gst-plugins-bad it won't find element "vapostproc";
-  # - gst-vaapi adds "VA-API" to "Encoder type";
   # Tip: "could not link appsrc to videoconvert1" can mean a lot of things, enable GST_DEBUG=2 for help.
   passthru.obsWrapperArguments =
     let
@@ -44,11 +43,10 @@ stdenv.mkDerivation rec {
         package: "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${lib.getLib package}/lib/gstreamer-1.0";
     in
     with gst_all_1;
-    builtins.map gstreamerHook [
+    map gstreamerHook [
       gstreamer
       gst-plugins-base
       gst-plugins-bad
-      gst-vaapi
     ];
 
   # Fix output directory
@@ -66,9 +64,6 @@ stdenv.mkDerivation rec {
       pedrohlc
     ];
     license = lib.licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

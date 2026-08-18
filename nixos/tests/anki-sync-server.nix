@@ -4,11 +4,21 @@ let
     #!${pkgs.python3}/bin/python
 
     import sys
+    import os
 
-    # get site paths from anki itself
-    from runpy import run_path
-    run_path("${pkgs.anki}/bin/.anki-wrapped")
-    import anki
+    # anki is built with buildPythonApplication.
+    # anki.lib is not a 'proper' python library, meaning it
+    # is not recognized in 'withPackages' (due to hasPythonModule in
+    # https://github.com/NixOS/nixpkgs/blob/7ef35a9f3abb638647d68b10cccae549094b8054/pkgs/development/interpreters/python/python-packages-base.nix#L89
+    # and contains the collection of all python libraries used
+    # by anki rather than just the anki itself.
+    anki_libs = "${pkgs.anki.lib}/${pkgs.python3.sitePackages}"
+    if not os.path.isdir(anki_libs):
+      print(f"'{anki_libs}' not found, possible python version mismatch")
+      exit(1)
+    sys.path.append(anki_libs)
+
+    import anki.collection
 
     col = anki.collection.Collection('test_collection')
     endpoint = 'http://localhost:27701'

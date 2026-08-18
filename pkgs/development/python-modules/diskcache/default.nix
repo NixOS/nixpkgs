@@ -7,15 +7,12 @@
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
   version = "5.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
@@ -31,9 +28,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines
     "test_incr_update_keyerror"
@@ -48,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diskcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

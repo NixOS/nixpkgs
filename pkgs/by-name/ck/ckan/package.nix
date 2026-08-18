@@ -4,8 +4,6 @@
   fetchurl,
   makeWrapper,
   mono,
-  gtk2,
-  curl,
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
@@ -14,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.36.0";
+  version = "1.36.4";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    hash = "sha256-Tw8s86FtBz/92uq2imFZm4n88NCCpePTpydoAoYsE3U=";
+    hash = "sha256-d0gILN/PLbtfUCJhsYr8hQAxk4lMYEJ9BLCseo3+994=";
   };
 
   icon = fetchurl {
@@ -36,11 +34,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mono ];
 
-  libraries = lib.makeLibraryPath [
-    gtk2
-    curl
-  ];
-
   dontBuild = true;
 
   installPhase = ''
@@ -51,8 +44,7 @@ stdenv.mkDerivation rec {
     done
     install -m 644 -D $src $out/bin/ckan.exe
     makeWrapper ${mono}/bin/mono $out/bin/ckan \
-      --add-flags $out/bin/ckan.exe \
-      --set LD_LIBRARY_PATH $libraries
+      --add-flags $out/bin/ckan.exe
     runHook postInstall
   '';
 
@@ -78,16 +70,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mod manager for Kerbal Space Program";
     mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Baughn
-      ymarkus
       nullcube
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

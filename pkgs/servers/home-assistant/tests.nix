@@ -1,176 +1,210 @@
 {
   lib,
+  stdenv,
   home-assistant,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python3Packages;
+  inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
-  extraCheckInputs = with home-assistant.python.pkgs; {
+  extraCheckInputs = with home-assistant.python3Packages; {
+    alexa = concatMap getComponentDeps [
+      "cloud"
+      "frontend"
+      "stream"
+    ];
+    analytics = getComponentDeps "homeassistant_hardware";
+    anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
+    assist_pipeline = getComponentDeps "frontend";
+    automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "deconz";
+    backup = getComponentDeps "homeassistant_hardware";
+    bluetooth = getComponentDeps "switchbot";
+    braviatv = getComponentDeps "ssdp";
+    bthome = getComponentDeps "frontend";
+    camera = getComponentDeps "stream";
+    deconz = getComponentDeps "frontend";
+    elkm1 = getComponentDeps "frontend";
+    emulated_hue = [
+      defusedxml
+    ];
+    esphome = getComponentDeps "homeassistant_hardware";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
+    go2rtc = [
+      tqdm
+    ];
+    google_assistant_sdk = getComponentDeps "frontend";
+    google_drive = getComponentDeps "frontend";
+    google_generative_ai_conversation = getComponentDeps "ai_task";
     govee_ble = [
       ibeacon-ble
     ];
-    hassio = getComponentDeps "homeassistant_yellow";
+    hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
+    homeassistant_connect_zbt2 = getComponentDeps "zha";
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
     homeassistant_sky_connect = getComponentDeps "zha";
     homeassistant_yellow = getComponentDeps "zha";
-    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
-    lovelace = [
+    homekit = getComponentDeps "frontend";
+    http = concatMap getComponentDeps [
+      "cloud"
+      "frontend"
+      "homeassistant_hardware"
+    ];
+    influxdb = getComponentDeps "isal";
+    intelliclima = getComponentDeps "intellifire";
+    logbook = getComponentDeps "alexa";
+    lovelace = getComponentDeps "frontend" ++ [
       pychromecast
     ];
-    matrix = [
-      pydantic
+    lutron_caseta = getComponentDeps "frontend";
+    mastodon = concatMap getComponentDeps [
+      "stream"
     ];
+    matter = getComponentDeps "homeassistant_hardware";
+    miele = getComponentDeps "cloud";
+    mobile_app = getComponentDeps "frontend";
     mopeka = getComponentDeps "switchbot";
+    mqtt = getComponentDeps "homeassistant_hardware";
+    nest = [
+      av
+    ];
+    ollama = getComponentDeps "ai_task";
     onboarding = [
       pymetno
       radios
       rpi-bad-power
+    ]
+    ++ getComponentDeps "homeassistant_hardware"
+    ++ getComponentDeps "usb";
+    open_router = getComponentDeps "ai_task";
+    osoenergy = [
+      # loguru wants to write into HOME
+      writableTmpDirAsHomeHook
     ];
     raspberry_pi = [
       rpi-bad-power
     ];
-    shelly = [
-      pyswitchbot
+    reolink = getComponentDeps "stream";
+    rss_feed_template = [
+      defusedxml
     ];
+    script = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
+    shelly = getComponentDeps "frontend" ++ getComponentDeps "switchbot";
     songpal = [
       isal
     ];
+    sonos = getComponentDeps "frontend";
     swiss_public_transport = getComponentDeps "cookidoo";
     system_log = [
       isal
     ];
-    tesla_fleet = getComponentDeps "teslemetry";
+    unifi_discovery = getComponentDeps "unifiprotect";
     xiaomi_miio = [
       arrow
     ];
-    zeroconf = [
-      aioshelly
-    ];
-    zha = [
-      pydeconz
-    ];
+    yolink = getComponentDeps "cloud";
+    zeroconf = getComponentDeps "shelly";
+    zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
+    zwave_js = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_hardware";
   };
 
   extraDisabledTestPaths = {
-    overseerr = [
-      # imports broken future module
-      "tests/components/overseerr/test_event.py"
+    ecovacs = [
+      # [2026.7.2] Outdated snapshots
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_room_from_not_current_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_no_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_invalid_map_id"
+    ];
+    izone = [
+      # [2026.7.2] Failed: Description not found for placeholder `host` in component.izone.config.step.confirm.description
+      "tests/components/izone/test_config_flow.py::test_not_found"
+      "tests/components/izone/test_config_flow.py::test_found"
+    ];
+    jellyfin = [
+      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
+      "tests/components/jellyfin/test_media_source.py::test_resolve"
+      "tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
+      "tests/components/jellyfin/test_media_source.py::test_music_library"
+    ];
+    minecraft_server = [
+      # FileNotFoundError: [Errno 2] No such file or directory: '/etc/resolv.conf'
+      "tests/components/minecraft_server/test_binary_sensor.py"
+      "tests/components/minecraft_server/test_diagnostics.py"
+      "tests/components/minecraft_server/test_init.py"
+      "tests/components/minecraft_server/test_sensor.py"
+    ];
+    netatmo = [
+      # [2026.7.2] Language string mismatch (id vs ID)
+      "tests/components/netatmo/test_media_source.py::test_async_browse_media"
+    ];
+    remote_calendar = [
+      # [2026.8.0] AssertionError: assert '2026-05-18 06:40:00' == '2026-05-19 08:00:00'
+      "tests/components/remote_calendar/test_calendar.py::test_coordinator_refresh_updates_upcoming_event_state"
+    ];
+    systemmonitor = [
+      # sandbox doesn't grant access to /sys/class/power_supply
+      "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    wmspro = [
+      # [2026.7.2] Outdated snapshot
+      "tests/components/wmspro/test_number.py::test_number_update"
     ];
   };
 
   extraDisabledTests = {
-    conversation = [
-      # intent fixture mismatch
+    conversation = lib.optionals stdenv.hostPlatform.isAarch64 [
+      # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
-    forecast_solar = [
-      # language fixture mismatch
-      "test_enabling_disable_by_default"
+    homeassistant_connect_zbt2 = [
+      # [2026.6.1] AssertionError: assert <ConfigEntryState.LOADED: 'loaded'> is <ConfigEntryState.SETUP_RETRY: 'setup_retry'>
+      "test_usb_device_reactivity"
     ];
-    sensor = [
-      # Failed: Translation not found for sensor
-      "test_validate_unit_change_convertible"
-      "test_validate_statistics_unit_change_no_device_class"
-      "test_validate_statistics_state_class_removed"
-      "test_validate_statistics_state_class_removed_issue_cleaned_up"
-      "test_validate_statistics_unit_change_no_conversion"
-      "test_validate_statistics_unit_change_equivalent_units_2"
-      "test_update_statistics_issues"
-      "test_validate_statistics_mean_type_changed"
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
     ];
-    shell_command = [
-      # tries to retrieve file from github
-      "test_non_text_stdout_capture"
-    ];
-    smartthings = [
-      # outdated snapshots
-      "test_all_entities"
-    ];
-    websocket_api = [
-      # AssertionError: assert 'unknown_error' == 'template_error'
-      "test_render_template_with_timeout"
+    smlight = [
+      # [2026.7.1] outdated snapshot
+      "test_entry_diagnostics"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
     ];
   };
-
-  extraPytestFlagsArray = {
-    backup = [
-      # outdated snapshot
-      "--deselect tests/components/backup/test_sensors.py::test_sensors"
-    ];
-    bmw_connected_drive = [
-      # outdated snapshot
-      "--deselect tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
-    ];
-    dnsip = [
-      # Tries to resolve DNS entries
-      "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
-    ];
-    jellyfin = [
-      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
-      "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
-      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
-      "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
-    ];
-    matter = [
-      # outdated snapshot in eve_weather_sensor variant
-      "--deselect tests/components/matter/test_number.py::test_numbers"
-    ];
-    modem_callerid = [
-      # aioserial mock produces wrong state
-      "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
-    openai_conversation = [
-      # outdated snapshot
-      "--deselect tests/components/openai_conversation/test_conversation.py::test_function_call"
-    ];
-    technove = [
-      # outdated snapshot
-      "--deselect tests/components/technove/test_switch.py::test_switches"
-    ];
-  };
 in
-lib.listToAttrs (
-  map (
-    component:
-    lib.nameValuePair component (
-      home-assistant.overridePythonAttrs (old: {
-        pname = "homeassistant-test-${component}";
-        pyproject = null;
-        format = "other";
+lib.genAttrs home-assistant.supportedComponentsWithTests (
+  component:
+  home-assistant.overridePythonAttrs (old: {
+    pname = "homeassistant-test-${component}";
+    pyproject = false;
 
-        dontBuild = true;
-        dontInstall = true;
+    dontBuild = true;
+    dontInstall = true;
 
-        nativeCheckInputs =
-          old.nativeCheckInputs
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
-          ++ extraCheckInputs.${component} or [ ];
+    nativeCheckInputs =
+      old.requirementsTest
+      ++ home-assistant.getPackages component home-assistant.python3Packages
+      ++ extraCheckInputs.${component} or [ ];
 
-        disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
-        disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
+    disabledTests = extraDisabledTests.${component} or [ ];
+    disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
 
-        # components are more often racy than the core
-        dontUsePytestXdist = true;
+    # components are more often racy than the core
+    dontUsePytestXdist = true;
 
-        pytestFlagsArray =
-          lib.remove "tests" old.pytestFlagsArray
-          ++ extraPytestFlagsArray.${component} or [ ]
-          ++ [ "tests/components/${component}" ];
+    enabledTestPaths = [ "tests/components/${component}" ];
 
-        meta = old.meta // {
-          broken = lib.elem component [ ];
-          # upstream only tests on Linux, so do we.
-          platforms = lib.platforms.linux;
-        };
-      })
-    )
-  ) home-assistant.supportedComponentsWithTests
+    pytestFlags = [ "-vvv" ];
+
+    meta = old.meta // {
+      broken = lib.elem component [ ];
+      # upstream only tests on Linux, so do we.
+      platforms = lib.platforms.linux;
+    };
+  })
 )

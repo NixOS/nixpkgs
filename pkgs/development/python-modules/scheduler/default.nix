@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "scheduler";
-  version = "0.8.8";
+  version = "0.8.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RXWhLNJp5OSJZAmDb9kRVgy2P7djQ2DuYqovpOxJX/0=";
+    hash = "sha256-siNKBpRIphervFEbnhj0jE3rPc2dzFFyHZyQ7ylDtyo=";
   };
 
   nativeBuildInputs = [
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scheduler" ];
 
-  meta = with lib; {
-    description = "A simple in-process python scheduler library with asyncio, threading and timezone support. Use datetime standard library objects for planning of Jobs depending on time cycles, fixed times, weekdays, dates, weights, offsets and execution counts";
+  meta = {
+    description = "Simple in-process python scheduler library with asyncio, threading and timezone support";
     homepage = "https://pypi.org/project/scheduler/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ pinpox ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ pinpox ];
   };
 }

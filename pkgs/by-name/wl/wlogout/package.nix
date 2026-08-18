@@ -46,16 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      gtk3
-      libxkbcommon
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals withGtkLayerShell [
-      gtk-layer-shell
-    ];
+  buildInputs = [
+    gtk3
+    libxkbcommon
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals withGtkLayerShell [
+    gtk-layer-shell
+  ];
 
   strictDeps = true;
 
@@ -80,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
     description = "Wayland based logout menu";
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "wlogout";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ iogamaster ];
     inherit (wayland.meta) platforms;
   };
 })

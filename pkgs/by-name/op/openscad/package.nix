@@ -12,7 +12,7 @@
   libGL,
   glew,
   opencsg,
-  cgal,
+  cgal_5,
   mpfr,
   gmp,
   glib,
@@ -30,18 +30,21 @@
   wayland-protocols,
   wrapGAppsHook3,
   cairo,
+  callPackage,
   openscad,
   runCommand,
+  versionCheckHook,
+  openscadPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscad";
   version = "2021.01";
 
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
@@ -74,6 +77,28 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openscad/openscad/commit/cc49ad8dac24309f5452d5dea9abd406615a52d9.patch";
       hash = "sha256-B3i+o6lR5osRcVXTimDZUFQmm12JhmbFgG9UwOPebF4=";
     })
+    (fetchpatch {
+      name = "fix-application-icon-not-shown-on-wayland.patch";
+      url = "https://github.com/openscad/openscad/commit/5ea83e5117f5f3ac2197c63db69f523721b8fa85.patch";
+      hash = "sha256-nfeUv0R+J95fyqnVC0HNeBVZnxVoisY1pcdII82qUSU=";
+
+      # upstream's formatting conventions changed between 2021 and this patch
+      postFetch = ''
+        sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
+      '';
+    })
+    # unfortunately the archlinux patch does not apply cleanly
+    # source: https://gitlab.archlinux.org/archlinux/packaging/packages/openscad/-/raw/ecc27e16ae6fee51c6806690d76f9ba326af79c1/boost-1.89.patch
+    ./boost-1.89.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ref. https://github.com/openscad/openscad/pull/4013 merged upstream
+    (fetchpatch {
+      name = "mem_fun-to-mem_fn.patch";
+      url = "https://github.com/openscad/openscad/commit/c9a1abbedfbf6dda9a23d3ad5844d11e5278a928.patch";
+      hash = "sha256-Man9ledRREb7U+2UOQ0VkpiwbYQjyVOY21YaRFObZc8=";
+    })
+
   ];
 
   postPatch = ''
@@ -82,6 +107,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/openscad.cc \
       --replace-fail 'boost::join' 'boost::algorithm::join'
+  ''
+  # ref. https://github.com/openscad/openscad/pull/4253 merged upstream but does not apply
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/FreetypeRenderer.h \
+      --replace-fail ": public std::unary_function<const GlyphData *, void>" ""
   '';
 
   nativeBuildInputs = [
@@ -92,50 +122,50 @@ stdenv.mkDerivation rec {
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
+  ]
+  # versionCheckHook doesn't detect any output on darwin, even though the binary works.
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
+
+  buildInputs = [
+    eigen
+    boost
+    glew
+    opencsg
+    cgal_5
+    mpfr
+    gmp
+    glib
+    harfbuzz
+    lib3mf
+    libzip
+    double-conversion
+    freetype
+    fontconfig
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qscintilla
+    cairo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libGL
+    wayland
+    wayland-protocols
+    libsForQt5.qtwayland
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
+  ++ lib.optional spacenavSupport libspnav;
+
+  qmakeFlags = [
+    "VERSION=${finalAttrs.version}"
+    "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+    "LIB3MF_LIBPATH=${lib3mf}/lib"
+  ]
+  ++ lib.optionals spacenavSupport [
+    "ENABLE_SPNAV=1"
+    "SPNAV_INCLUDEPATH=${libspnav}/include"
+    "SPNAV_LIBPATH=${libspnav}/lib"
   ];
-
-  buildInputs =
-    [
-      eigen
-      boost
-      glew
-      opencsg
-      cgal
-      mpfr
-      gmp
-      glib
-      harfbuzz
-      lib3mf
-      libzip
-      double-conversion
-      freetype
-      fontconfig
-      libsForQt5.qtbase
-      libsForQt5.qtmultimedia
-      libsForQt5.qscintilla
-      cairo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      libGL
-      wayland
-      wayland-protocols
-      libsForQt5.qtwayland
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
-    ++ lib.optional spacenavSupport libspnav;
-
-  qmakeFlags =
-    [
-      "VERSION=${version}"
-      "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
-      "LIB3MF_LIBPATH=${lib3mf}/lib"
-    ]
-    ++ lib.optionals spacenavSupport [
-      "ENABLE_SPNAV=1"
-      "SPNAV_INCLUDEPATH=${libspnav}/include"
-      "SPNAV_LIBPATH=${libspnav}/lib"
-    ];
 
   enableParallelBuilding = true;
 
@@ -143,10 +173,12 @@ stdenv.mkDerivation rec {
     make objects/parser.cxx
   '';
 
+  doInstallCheck = true;
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
-    rmdir $out/bin || true
+    ln -s "$out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" "$out/bin/openscad"
 
     mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
       $out/share/openscad/{examples,color-schemes,locale,libraries,fonts,templates}
@@ -173,20 +205,27 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       bjornfor
       raskin
+      xoconoch
     ];
     mainProgram = "openscad";
   };
 
-  passthru.tests = {
-    lib3mf_support =
-      runCommand "${pname}-lib3mf-support-test"
-        {
-          nativeBuildInputs = [ openscad ];
-        }
-        ''
-          echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
-          echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
-          mv cube-import.3mf $out
-        '';
+  passthru = {
+    tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      lib3mf_support =
+        runCommand "${finalAttrs.pname}-lib3mf-support-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+            echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+            mv cube-import.3mf $out
+          '';
+    };
+    withPackages = callPackage ./wrapper.nix {
+      openscad = finalAttrs.finalPackage;
+      inherit openscadPackages;
+    };
   };
-}
+})

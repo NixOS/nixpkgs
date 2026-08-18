@@ -7,6 +7,7 @@
   installShellFiles,
   scdoc,
   bzip2,
+  cacert,
   openssl,
   sqlite,
   xz,
@@ -20,13 +21,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.24.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6LBTUb6kCR/oSyIhiVADSz+oE2xLSY5GKxUQ4HcDFJk=";
+    hash = "sha256-f+WfmkV0P4VfaOXxX3t5t9g/uJYCh2A587HEq9OK5QU=";
   };
 
   postPatch = ''
@@ -40,8 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-s6gXinH706tAxDyHrhPV4u+Z1tbLvBOhI1JhdiwrHG8=";
+  cargoHash = "sha256-se5u7+SF3fW5WqdUA3qmztUw5oPa0YXbgOp9GIVOQu0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -81,6 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       done
     '';
 
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert.out}/etc/ssl/certs/ca-bundle.crt
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [
     # Failing tests
     "--skip=decompress::tests::decompress_bzip2_compression"
@@ -101,7 +107,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests = {
@@ -114,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     mainProgram = "rebuilderd";
   };
 })

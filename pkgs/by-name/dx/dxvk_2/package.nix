@@ -11,6 +11,7 @@
   spirv-headers,
   vulkan-headers,
   SDL2,
+  sdl3,
   glfw,
   gitUpdater,
   sdl2Support ? (!stdenv.hostPlatform.isWindows),
@@ -37,31 +38,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-edu9JQAKu8yUZLh+37RB1s1A3+s8xeUYQ5Oibdes9ZI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c4QlFCUH5SdXT4J3jTGQBAgFXFD8waTjvLUePLAdpFs=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 
-  postPatch =
-    ''
-      substituteInPlace meson.build \
-        --replace-fail "dependency('glfw'" "dependency('glfw3'"
-      substituteInPlace subprojects/libdisplay-info/tool/gen-search-table.py \
-        --replace-fail "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
-    ''
-    + lib.optionalString glfwSupport ''
-      substituteInPlace src/wsi/glfw/wsi_platform_glfw.cpp \
-        --replace-fail '${libglfw}' '${lib.getLib glfw}/lib/${libglfw}'
-    ''
-    + lib.optionalString sdl2Support ''
-      substituteInPlace src/wsi/sdl2/wsi_platform_sdl2.cpp \
-        --replace-fail '${libSDL2}' '${lib.getLib SDL2}/lib/${libSDL2}'
-    '';
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "dependency('glfw'" "dependency('glfw3'"
+    substituteInPlace subprojects/libdisplay-info/tool/gen-search-table.py \
+      --replace-fail "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
+  ''
+  + lib.optionalString glfwSupport ''
+    substituteInPlace src/wsi/glfw/wsi_platform_glfw.cpp \
+      --replace-fail '${libglfw}' '${lib.getLib glfw}/lib/${libglfw}'
+  ''
+  + lib.optionalString sdl2Support ''
+    substituteInPlace src/wsi/sdl2/wsi_platform_sdl2.cpp \
+      --replace-fail '${libSDL2}' '${lib.getLib SDL2}/lib/${libSDL2}'
+  '';
 
   strictDeps = true;
 
@@ -69,16 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     meson
     ninja
-  ] ++ lib.optionals (glfwSupport || sdl2Support) [ pkg-config ];
+  ]
+  ++ lib.optionals (glfwSupport || sdl2Support) [ pkg-config ];
 
-  buildInputs =
-    [
-      spirv-headers
-      vulkan-headers
-    ]
-    ++ lib.optionals sdl2Support [ SDL2 ]
-    ++ lib.optionals glfwSupport [ glfw ]
-    ++ lib.optionals hostPlatform.isWindows [ windows.pthreads ];
+  buildInputs = [
+    spirv-headers
+    vulkan-headers
+  ]
+  ++ lib.optionals sdl2Support [
+    SDL2
+    sdl3
+  ]
+  ++ lib.optionals glfwSupport [ glfw ]
+  ++ lib.optionals hostPlatform.isWindows [ windows.pthreads ];
 
   # Build with the Vulkan SDK in nixpkgs.
   preConfigure = ''

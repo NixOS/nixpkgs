@@ -4,12 +4,13 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
 
   # tests
+  beautifulsoup4,
   httpx,
   pytest-asyncio,
   pytestCheckHook,
@@ -18,46 +19,46 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-text-splitters";
-  version = "0.3.8";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-text-splitters==${version}";
-    hash = "sha256-Ia3ZZ94uLZUVr1/w4HLPZLM6u8leA4OJtAwUf7eSAE0=";
+    tag = "langchain-text-splitters==${finalAttrs.version}";
+    hash = "sha256-AiRl8N2V2UfYLZfqxM8DHZmT76rH19I1gFyOYc/mpYY=";
   };
 
-  sourceRoot = "${src.name}/libs/text-splitters";
+  sourceRoot = "${finalAttrs.src.name}/libs/text-splitters";
 
-  build-system = [ pdm-backend ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    beautifulsoup4
     httpx
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-text-splitters==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-text-splitters==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;
@@ -66,4 +67,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

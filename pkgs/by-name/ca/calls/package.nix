@@ -1,14 +1,17 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   mesonEmulatorHook,
   ninja,
   pkg-config,
   libadwaita,
   libsecret,
+  mobile-broadband-provider-info,
   modemmanager,
+  gmobile,
+  gnome,
   gtk4,
   gom,
   gsound,
@@ -17,7 +20,7 @@
   evolution-data-server-gtk4,
   folks,
   desktop-file-utils,
-  appstream-glib,
+  appstream,
   libpeas2,
   dbus,
   vala,
@@ -36,15 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calls";
-  version = "48.2";
+  version = "50.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "calls";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-S1YWFkwK1tcIUOfyOxlEFtKcLlRDiSKf4iUGnb+VlG8=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/calls/${lib.versions.major finalAttrs.version}/calls-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8ozMjm+8UHnnuLXRGlUZabtw2QXl7ZDRsdho8SBFxy8=";
   };
 
   outputs = [
@@ -52,28 +51,29 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      desktop-file-utils
-      appstream-glib
-      vala
-      wrapGAppsHook4
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      docutils
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    appstream
+    vala
+    wrapGAppsHook4
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    docutils
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     modemmanager
     libadwaita
     libsecret
+    mobile-broadband-provider-info
+    gmobile
     evolution-data-server-gtk4 # UI part not needed, using gtk4 variant (over the default of gtk3) to reduce closure.
     folks
     gom
@@ -124,13 +124,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "calls";
+    };
+  };
+
+  meta = {
     description = "Phone dialer and call handler";
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://gitlab.gnome.org/GNOME/calls";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ craigem ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/GNOME/calls/-/blob/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ craigem ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-calls";
   };
 })

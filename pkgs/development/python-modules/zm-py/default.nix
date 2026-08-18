@@ -4,22 +4,19 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "zm-py";
-  version = "0.5.4";
+  version = "0.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "rohankapoorcom";
     repo = "zm-py";
     tag = "v${version}";
-    hash = "sha256-n9FRX2Pnn96H0HVT4SHLJgONc0XzQ005itMNpvl9IYg=";
+    hash = "sha256-0AfRgznm+6/ttZ5V5Tuh+5QG2b3BfMLNQMvlH0yTnr8=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zoneminder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Loose python wrapper around the ZoneMinder REST API";
     homepage = "https://github.com/rohankapoorcom/zm-py";
     changelog = "https://github.com/rohankapoorcom/zm-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

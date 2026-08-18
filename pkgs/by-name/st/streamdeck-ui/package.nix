@@ -11,16 +11,16 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamdeck-ui";
-  version = "4.1.3";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
-    rev = "v${version}";
-    hash = "sha256-KpsW3EycYRYU5YOg7NNGv5eeZbS9MAikj0Ke2ybPzAU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XRtIkDyLick9Pq55Br7lQb6FoygMs4DZEJoAD2/o+pQ=";
   };
 
   pythonRelaxDeps = [
@@ -49,19 +49,20 @@ python3Packages.buildPythonApplication rec {
       pynput
       pyside6
       streamdeck
-      xlib
+      python-xlib
       importlib-metadata
       evdev
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  nativeCheckInputs =
-    [ xvfb-run ]
-    ++ (with python3Packages; [
-      pytest
-      pytest-qt
-      pytest-mock
-    ]);
+  nativeCheckInputs = [
+    xvfb-run
+  ]
+  ++ (with python3Packages; [
+    pytest
+    pytest-qt
+    pytest-mock
+  ]);
 
   checkPhase = ''
     runHook preCheck
@@ -102,7 +103,7 @@ python3Packages.buildPythonApplication rec {
         categories = [ "Utility" ];
       };
     in
-    builtins.map makeDesktopItem [
+    map makeDesktopItem [
       common
       (
         common
@@ -122,7 +123,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/releases/tag/v${version}";
+    changelog = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/releases/tag/v${finalAttrs.version}";
     description = "Linux compatible UI for the Elgato Stream Deck";
     downloadPage = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/";
     homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
@@ -130,4 +131,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "streamdeck";
     maintainers = with lib.maintainers; [ majiir ];
   };
-}
+})

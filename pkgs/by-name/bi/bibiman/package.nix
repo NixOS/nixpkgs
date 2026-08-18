@@ -1,25 +1,23 @@
 {
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   nix-update-script,
   rustPlatform,
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bibiman";
-  version = "0.12.4";
+  version = "0.15.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lukeflo";
     repo = "bibiman";
-    tag = "v${version}";
-    hash = "sha256-6duqLBPm6GlBHm3Kr4foHF1MKodYOYKKDITk/BiX6mA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GAPlfHeo/g2QaRW3v9LatqYajJ2gE1ssK77yJPhOKuo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tbgzjTsK88+G4Wxex4Tl0K5Ii99tPNud3UEDzAHaI0M=";
+  cargoHash = "sha256-aQ9h+L232dxZRPOQ+6b+vI3v/QdBR4//3HV8K9vwWV8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -36,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bibiman";
     platforms = lib.platforms.linux;
   };
-}
+})

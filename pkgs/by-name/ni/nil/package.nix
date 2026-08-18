@@ -3,29 +3,28 @@
   rustPlatform,
   fetchFromGitHub,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nil";
-  version = "2025-06-13";
+  version = "2026-07-23";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = "nil";
-    rev = version;
-    hash = "sha256-oxvVAFUO9husnRk6XZcLFLjLWL9z0pW25Fk6kVKwt1c=";
+    rev = finalAttrs.version;
+    hash = "sha256-upJVI2pq9sOKgF2AILt8l6O4/3GNcMtT/s0rmnbO5UA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OZIajxv8xNfCGalVw/FUAwWdQzPqfGuDoeRg2E2RR7s=";
+  cargoHash = "sha256-ZyTrxGX0mRdskxp4o5ssDCyZzNn36rIgP9fDaA1fDws=";
 
   nativeBuildInputs = [ nix ];
 
   env = {
-    CFG_RELEASE = version;
-    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt-rfc-style;
+    CFG_RELEASE = finalAttrs.version;
+    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt;
   };
 
   # might be related to https://github.com/NixOS/nix/issues/5884
@@ -38,15 +37,14 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Yet another language server for Nix";
     homepage = "https://github.com/oxalica/nil";
-    changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
+    changelog = "https://github.com/oxalica/nil/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       oxalica
     ];
     mainProgram = "nil";
   };
-}
+})

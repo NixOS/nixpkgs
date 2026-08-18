@@ -5,44 +5,47 @@
 
   # build-system
   cython,
-  extension-helpers,
-  numpy,
-  setuptools,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
-  hankel,
   emcee,
+  gstools-cython,
+  hankel,
   meshio,
+  numpy,
   pyevtk,
   scipy,
 
+  # optional dependencies
+  matplotlib,
+  pyvista,
+
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gstools";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools";
-    tag = "v${version}";
-    hash = "sha256-Aieuk0Xjlut8rTZoFHcBpPtyIj/fstMrHiiKyDOpQlg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rQ7mSa1BWAaRiiE6aQD6jl8BktihY9bjFJV+5eT9n/M=";
   };
 
   build-system = [
-    cython
-    extension-helpers
-    numpy
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     emcee
+    gstools-cython
     hankel
     meshio
     numpy
@@ -50,14 +53,25 @@ buildPythonPackage rec {
     scipy
   ];
 
+  optional-dependencies = {
+    plotting = [
+      matplotlib
+      pyvista
+    ];
+  };
+
   pythonImportsCheck = [ "gstools" ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
     description = "Geostatistical toolbox";
     homepage = "https://github.com/GeoStat-Framework/GSTools";
-    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/GSTools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

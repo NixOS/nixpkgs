@@ -4,12 +4,14 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   tinycc,
   gnumake,
   gnused,
   gnugrep,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnutar";
   # >= 1.13 is incompatible with mes-libc
   version = "1.12";
@@ -21,9 +23,10 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
+      coreutils
       tinycc.compiler
       gnumake
       gnused
@@ -36,15 +39,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/tar --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -53,15 +47,25 @@ bash.runCommand "${pname}-${version}"
     rm tar.tar
     cd tar-${version}
 
+    # untar drops mtimes and +x on autotools helpers, restore them so
+    # parallel builds don't trip into automake regeneration.
+    touch Makefile.in Makefile aclocal.m4 config.h.in configure 2>/dev/null || true
+    for f in */Makefile.in; do touch "$f" 2>/dev/null || true; done
+    chmod +x configure config.guess config.sub install-sh missing compile \
+      depcomp mkinstalldirs help2man 2>/dev/null || true
+    [ -d build-aux ] && chmod +x build-aux/* 2>/dev/null || true
+
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     bash ./configure \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
       --disable-nls \
       --prefix=$out
 
     # Build
+    # NOTE: parallel build (-j) breaks gnutar build under tcc-mes; keep serial.
     make AR="tcc -ar"
 
     # Install

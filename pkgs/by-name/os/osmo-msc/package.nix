@@ -14,19 +14,19 @@
   lksctp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-msc";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-msc";
-    rev = version;
-    hash = "sha256-iS/N0+KhgMUFoJus/R/iFOLuvqCiceNtcuq3nbOvBts=";
+    rev = finalAttrs.version;
+    hash = "sha256-kRPGtMVNODh03oCqqo/AbApWasxiLYo/A9GrD3ECfaE=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Osmocom implementation of 3GPP Mobile Swtiching Centre (MSC)";
+    description = "Osmocom implementation of 3GPP Mobile Switching Centre (MSC)";
     mainProgram = "osmo-msc";
     homepage = "https://osmocom.org/projects/osmomsc/wiki";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

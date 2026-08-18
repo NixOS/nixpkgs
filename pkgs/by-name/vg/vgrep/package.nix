@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vgrep";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "vrothberg";
     repo = "vgrep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OQjuNRuzFluZLssM+q+WpoRncdJMj6Sl/A+mUZA7UpI=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -36,11 +36,11 @@ buildGoModule rec {
     installManPage docs/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly pager for grep/git-grep/ripgrep";
     mainProgram = "vgrep";
     homepage = "https://github.com/vrothberg/vgrep";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

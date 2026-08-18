@@ -27,11 +27,11 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     mv $out/bin/${pname} $out/bin/GoldenCheetah
     mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/512x512/apps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/
     substituteInPlace $out/share/applications/GoldenCheetah.desktop --replace-fail \
       "Exec=GoldenCheetah" "Exec=env QT_PLUGIN_PATH= GoldenCheetah"
-    cp ${appimageContents}/gc.png $out/share/pixmaps/
+    cp ${appimageContents}/gc.png $out/share/icons/hicolor/512x512/apps/
   '';
   meta = {
     inherit (commonMeta)

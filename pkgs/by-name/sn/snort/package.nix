@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snort";
-  version = "3.9.1.0";
+  version = "3.10.0.0";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "snort3";
     tag = finalAttrs.version;
-    hash = "sha256-Ciseo0mYmgyfZB44zeudEst98XnM8E2vTG5J6snA3q0=";
+    hash = "sha256-vxiZeJByZGS7rXtvPMgNjb94E/oju+mmEuzJ7tA+hE4=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       aycanirican
       brianmcgillion
     ];
-    changelog = "https://github.com/snort3/snort3/releases/tag/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/snort3/snort3/blob/${finalAttrs.src.rev}/ChangeLog.md";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
   };

@@ -4,10 +4,10 @@
   fetchurl,
   meson,
   ninja,
-  file,
-  docbook-xsl-nons,
-  gtk-doc ? null,
-  buildDevDoc ? gtk-doc != null,
+  # FIXME: hotdoc errors out due to issues discovering libclang paths
+  # See https://github.com/NixOS/nixpkgs/issues/514723
+  hotdoc,
+  buildDevDoc ? false,
 
   # for passthru.tests
   gnuradio,
@@ -18,17 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orc";
-  version = "0.4.41";
+  version = "0.4.42";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional buildDevDoc "devdoc";
+  ]
+  ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yxv9T2VSic05vARkLVl76d5UJ2I/CGHB/BnAjZhGf6I=";
+    hash = "sha256-fskSq1mvPMl4dMRWpWqK4e7FIMOF7ER+ihArK9EiyQw=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -37,19 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
-    (lib.mesonEnable "gtk_doc" buildDevDoc)
+    (lib.mesonEnable "examples" false)
+    (lib.mesonEnable "benchmarks" false)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "hotdoc" buildDevDoc)
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    ++ lib.optionals buildDevDoc [
-      gtk-doc
-      file
-      docbook-xsl-nons
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ]
+  ++ lib.optionals buildDevDoc [
+    hotdoc
+  ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
   doCheck =
@@ -66,17 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
     qt6-qtmultimedia = qt6.qtmultimedia;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       bsd2
     ];
-    platforms = platforms.unix;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

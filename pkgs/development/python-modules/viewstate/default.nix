@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "viewstate";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yuvadm";
     repo = "viewstate";
     tag = "v${version}";
-    sha256 = "sha256-cXT5niE3rNdqmNqnITWy9c9/MF0gZ6LU2i1uzfOzkUI=";
+    sha256 = "sha256-fvqz03rKkA2WVVXU74eo0otnuRseE83cv6pw3rMso34=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook

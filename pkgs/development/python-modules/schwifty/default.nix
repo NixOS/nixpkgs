@@ -23,14 +23,15 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2025.6.0";
+  version = "2026.07.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q62H94Kjj2N9bnHn3XuxmGuwkReFI0FgvrvnF/vsuLQ=";
+    inherit pname;
+    # The version is different missing leading zeros in the CalVer month.
+    # This is due to PyPI's normalization of integers
+    version = "2026.7.1";
+    hash = "sha256-Rux0m5MQG5aBrEiQAEjalxdbabYWAU33qFSuN+rddEA=";
   };
 
   build-system = [
@@ -42,7 +43,8 @@ buildPythonPackage rec {
     iso3166
     pycountry
     rstr
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     pydantic = [ pydantic ];
@@ -50,15 +52,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "schwifty" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
 }

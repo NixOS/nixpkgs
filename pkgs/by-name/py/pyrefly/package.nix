@@ -1,39 +1,42 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  bash,
+  replaceVars,
+  rustPlatform,
+  fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  rustPlatform,
-  maturin,
+  rust-jemalloc-sys,
 }:
-python3.pkgs.buildPythonApplication rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.17.1";
-  pyproject = true;
+  version = "1.3.0-dev.1";
 
-  # fetch from PyPI instead of GitHub, since source repo does not have Cargo.lock
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w4ivRtmApXiXQT95GI4vvYBop7yxdbbkpW+YTyFtgXM=";
+  src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "pyrefly";
+    tag = finalAttrs.version;
+    hash = "sha256-Yy++t4Dt9EqCIKWb9UUokJplc6bJe0zeZ0DjDTbPRKU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-Op5ueVkzZTiJ1zeBGVi8oeLcfSzXMYfk5zEg4OGyA5g=";
-  };
+  buildAndTestSubdir = "pyrefly";
 
-  build-system = [ maturin ];
+  cargoHash = "sha256-uccN2djXZPkWqbRGW/ssv7Usl85YPD4sgolOgXcqu/A=";
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  buildInputs = [ rust-jemalloc-sys ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  patches = [
+    (replaceVars ./fix-shebang.patch { bash = lib.getExe bash; })
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
-
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
+  # redirect tests writing to /tmp
+  preCheck = ''
+    export TMPDIR=$(mktemp -d)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -48,4 +51,4 @@ python3.pkgs.buildPythonApplication rec {
       QuiNzX
     ];
   };
-}
+})

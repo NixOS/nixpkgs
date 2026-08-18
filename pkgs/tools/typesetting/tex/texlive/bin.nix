@@ -4,31 +4,37 @@
   fetchurl,
   fetchFromGitHub,
   fetchpatch,
+  unzip,
   buildPackages,
   texlive,
+  gnum4,
+  jdk_headless,
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
-  ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
+  ghostscript_headless,
+  libxpm,
+  libxmu,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
   pkg-config,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   ninja,
   libpaper,
   graphite2,
   zziplib,
-  harfbuzz,
+  harfbuzzFull,
   potrace,
   gmp,
   mpfr,
@@ -36,17 +42,19 @@
   brotli,
   cairo,
   pixman,
-  xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
-  xxHash,
+  xxhash,
   makeWrapper,
-  shortenPerlShebang,
-  useFixedHashes,
+  useFixedHashes ? true,
   asymptote,
   biber-ms,
   tlpdb,
+  luajit,
+  ...
 }@args:
 
 # Useful resource covering build options:
@@ -131,68 +139,72 @@ let
     "luahbtex"
     "upmendex"
     "xetex"
-  ] ++ lib.optional withLuaJIT "luajittex";
+  ]
+  ++ lib.optional withLuaJIT "luajittex";
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
+    # initial TeX Live 2025 release
+    # src = fetchurl {
+    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
+    #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+    # };
+
+    # 2025.2 update
     src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-      ];
-      hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+      url = "https://github.com/TeX-Live/texlive-source/archive/refs/tags/svn74917.tar.gz";
+      hash = "sha256-QgUN5LOFeD6Jt0ENF6Uwi516D8PH+TXZ+MCO8bCTHqE=";
     };
 
-    prePatch =
-      ''
-        for i in texk/kpathsea/mktex*; do
-          sed -i '/^mydir=/d' "$i"
-        done
+    prePatch = ''
+      for i in texk/kpathsea/mktex*; do
+        sed -i '/^mydir=/d' "$i"
+      done
 
-        # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
-        # as leaves, even if they contain symlinks to other folders; must be
-        # disabled to work correctly with the nix store", see section 5.3.6
-        # “Subdirectory expansion” of the kpathsea manual
-        # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
-        # details
-        sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
-      ''
-      +
-        # when cross compiling, we must use himktables from PATH
-        # (i.e. from buildPackages.texlive.bin.core.dev)
-        lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-          sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
-        '';
+      # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
+      # as leaves, even if they contain symlinks to other folders; must be
+      # disabled to work correctly with the nix store", see section 5.3.6
+      # “Subdirectory expansion” of the kpathsea manual
+      # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
+      # details
+      sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
+    ''
+    +
+      # when cross compiling, we must use himktables from PATH
+      # (i.e. from buildPackages.texlive.bin.core.dev)
+      lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
+      '';
 
-    configureFlags =
-      [
-        "--with-banner-add=/nixos.org"
-        "--disable-missing"
-        # terminate if a requested program or feature must be
-        # disabled, e.g., due to missing libraries
-        "--disable-native-texlive-build" # do not build for the TeX Live binary distribution
-        "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
-        "--enable-tex-synctex"
-        "--disable-texlive" # do not build the texlive (TeX Live scripts) package
-        "--disable-linked-scripts" # do not install the linked scripts
-        "-C" # use configure cache to speed up
-      ]
-      ++ withSystemLibs [
-        # see "from TL tree" vs. "Using installed"  in configure output
-        "zziplib"
-        "mpfr"
-        "gmp"
-        "pixman"
-        "potrace"
-        "gd"
-        "freetype2"
-        "libpng"
-        "libpaper"
-        "zlib"
-      ]
-      ++ lib.optional (
-        stdenv.hostPlatform != stdenv.buildPlatform
-      ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
+    configureFlags = [
+      "--with-banner-add=/nixos.org"
+      "--disable-missing"
+      # terminate if a requested program or feature must be
+      # disabled, e.g., due to missing libraries
+      "--disable-native-texlive-build" # do not build for the TeX Live binary distribution
+      "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
+      "--enable-tex-synctex"
+      "--disable-texlive" # do not build the texlive (TeX Live scripts) package
+      "--disable-linked-scripts" # do not install the linked scripts
+      "-C" # use configure cache to speed up
+      "CFLAGS=-std=gnu17" # fix build with gcc15
+    ]
+    ++ withSystemLibs [
+      # see "from TL tree" vs. "Using installed"  in configure output
+      "zziplib"
+      "mpfr"
+      "gmp"
+      "pixman"
+      "potrace"
+      "gd"
+      "freetype2"
+      "libpng"
+      "libpaper"
+      "zlib"
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb
     binToOutput = lib.listToAttrs (
@@ -228,8 +240,7 @@ let
   };
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
-  withLuaJIT =
-    !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
+  withLuaJIT = lib.meta.availableOn stdenv.hostPlatform luajit;
 in
 rec {
   # un-indented
@@ -249,24 +260,24 @@ rec {
       "dev"
       "man"
       "info"
-    ] ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
+    ]
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
-    nativeBuildInputs =
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      with texlive.bin.core;
       [
-        pkg-config
+        # configure: error: tangle was not found but is required when cross-compiling.
+        # dev (himktables) is used when building hitex to generate the additional source file hitables.c
+        web # tangle
+        cweb # ctangle
+        omegaware # otangle
+        tie # tie see "Building TeX Live" 6.4.2 Cross problems
+        dev # himktables
       ]
-      ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-        with texlive.bin.core;
-        [
-          # configure: error: tangle was not found but is required when cross-compiling.
-          # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-          web # tangle
-          cweb # ctangle
-          omegaware # otangle
-          tie # tie see "Building TeX Live" 6.4.2 Cross problems
-          dev # himktables
-        ]
-      );
+    );
 
     buildInputs = [
       # teckit
@@ -350,17 +361,17 @@ rec {
 
     passthru = { inherit version buildInputs; };
 
-    meta = with lib; {
+    meta = {
       description = "Basic binaries for TeX Live";
       homepage = "http://www.tug.org/texlive";
       license = lib.licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         veprbl
-        lovek323
         raskin
         jwiegley
+        xworld21
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -407,39 +418,53 @@ rec {
 
     hardeningDisable = [ "format" ];
 
-    inherit (core) nativeBuildInputs depsBuildBuild;
+    inherit (core) depsBuildBuild;
+    nativeBuildInputs = core.nativeBuildInputs ++ [
+      autoconf
+      automake
+      libtool
+    ];
     buildInputs = core.buildInputs ++ [
       core
       cairo
-      harfbuzz
+      harfbuzzFull
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
-    /*
-      deleting the unused packages speeds up configure by a considerable margin
-      and ensures we do not rebuild existing libraries by mistake
-    */
-    preConfigure =
-      ''
-        rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-          libs/{mpfr,pixman,xpdf,zlib,zziplib} \
-          texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
-          texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
-          texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
-          texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,xdvik} \
-          utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
-          utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
-        mkdir WorkDir
-        cd WorkDir
-      ''
-      # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
-      # by tricking configure into thinking that the relevant test result is already in the config cache
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        export kpse_cv_have_ApplicationServices=no
-      '';
+    # autoconf 2.72 has a bug where AC_PROG_CXX would reject c++20 compilers,
+    # and attempts to switch to c++98 or c++11 instead of using the compiler's
+    # default. when using gcc 16, which defaults to c++20, this causes
+    # texlive-bin-big to be built with c++11, leading to issues with some of
+    # the included icu4c headers. this bug was fixed in autoconf 2.73, so we
+    # regenerate the autoconf declarations with the newest version of autconf.
+    # once the configure scripts distributed with the source are regenerated
+    # with autoconf 2.73+, the `reautoconf` call should be removed.
+    #
+    # deleting the unused packages speeds up configure by a considerable margin
+    # and ensures we do not rebuild existing libraries by mistake
+    preConfigure = ''
+      substituteInPlace ./reautoconf --replace-fail "/bin/pwd" "pwd"
+      ./reautoconf
+
+      rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
+        libs/{mpfr,pixman,xpdf,zlib,zziplib} \
+        texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
+        texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
+        texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
+        texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,xdvik} \
+        utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
+        utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
+      mkdir WorkDir
+      cd WorkDir
+    ''
+    # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
+    # by tricking configure into thinking that the relevant test result is already in the config cache
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export kpse_cv_have_ApplicationServices=no
+    '';
 
     configureFlags =
       common.configureFlags
@@ -488,28 +513,27 @@ rec {
 
     doCheck = false; # fails
 
-    outputs =
-      [
-        "out"
-        "dev"
-        "man"
-        "info"
-      ]
-      ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
-      # some outputs of metapost, omegaware are for ptex/uptex
-      ++ [
-        "ptex"
-        "uptex"
-      ]
-      # unavoidable duplicates from core
-      ++ [
-        "ctie"
-        "cweb"
-        "omegaware"
-        "texlive_scripts_extra"
-        "tie"
-        "web"
-      ];
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "info"
+    ]
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    # some outputs of metapost, omegaware are for ptex/uptex
+    ++ [
+      "ptex"
+      "uptex"
+    ]
+    # unavoidable duplicates from core
+    ++ [
+      "ctie"
+      "cweb"
+      "omegaware"
+      "texlive_scripts_extra"
+      "tie"
+      "web"
+    ];
     postInstall = common.moveBins;
   };
 
@@ -533,46 +557,49 @@ rec {
     enableParallelBuilding = true;
   };
 
-  # the LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately
-  # the sources used by TL are stored in the source TL repo
-  # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
-  context = stdenv.mkDerivation rec {
-    pname = "luametatex";
-    version = "2.11.07";
+  # The LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately.
+  # For details on how TeX Live packages ConTeXt, see
+  # https://github.com/gucci-on-fleek/context-packaging
+  context =
+    let
+      version = "2.11.08";
+      level = "20260217";
+    in
+    stdenv.mkDerivation {
+      pname = "luametatex";
+      version = "${version}-${level}";
 
-    src = fetchurl {
-      name = "luametatex-${version}.tar.xz";
-      url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=75382&view=co";
-      hash = "sha256-ou04WcKnyEJTkUV4HhlGwDTscdEJTflGv0cpN69qkWE=";
-    };
+      src = texlive.pkgs.context.texsource + "/source/context/base/luametatex-${level}.src.zip";
+      sourceRoot = ".";
 
-    enableParallelBuilding = true;
-    nativeBuildInputs = [
-      cmake
-      ninja
-    ];
-
-    meta = with lib; {
-      description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
-      homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-      license = licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [
-        apfelkuchen6
-        xworld21
+      enableParallelBuilding = true;
+      nativeBuildInputs = [
+        cmake
+        ninja
+        unzip
       ];
+
+      meta = {
+        description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+        homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
+          apfelkuchen6
+          xworld21
+        ];
+      };
     };
-  };
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
-    version = "3.2.2";
+    version = "3.6";
 
     src =
       assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
         "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-        hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+        hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
       };
 
     configureFlags = [
@@ -590,13 +617,13 @@ rec {
     buildInputs = [
       core
       brotli
-      ghostscript
+      ghostscript_headless
       zlib
       freetype
       ttfautohint
       woff2
       potrace
-      xxHash
+      xxhash
       mupdf-headless
     ];
 
@@ -620,7 +647,7 @@ rec {
       libpng
       freetype
       gd
-      ghostscript
+      ghostscript_headless
     ];
 
     preConfigure = ''
@@ -634,69 +661,37 @@ rec {
       "--disable-debug"
     ];
 
-    GS = "${ghostscript}/bin/gs";
+    GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
   };
 
-  pygmentex = python3Packages.buildPythonApplication rec {
-    pname = "pygmentex";
-    inherit (src) version;
-    format = "other";
+  asymptote =
+    let
+      version = "3.09";
+    in
+    args.asymptote.overrideAttrs (
+      finalAttrs: prevAttrs: {
+        version =
+          assert lib.assertMsg (version == texlive.pkgs.asymptote.version)
+            "asymptote: TeX Live version (${texlive.pkgs.asymptote.version}) different from source in bin.nix (${version}), please update it";
+          version;
 
-    src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
+        # keep local src and patches even if duplicated in the top level asymptote
+        # so that top level updates do not break texlive
+        src = fetchurl {
+          url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+          hash = "sha256-unM6mfyq8MCajo8wtG/ksr4E6mQNK/A03gGIa9Fxeuc=";
+        };
 
-    propagatedBuildInputs = with python3Packages; [
-      pygments
-      chardet
-    ];
+        texContainer = texlive.pkgs.asymptote.tex;
+        texdocContainer = texlive.pkgs.asymptote.texdoc;
 
-    dontBuild = true;
-
-    doCheck = false;
-
-    installPhase = ''
-      runHook preInstall
-
-      install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      homepage = "https://www.ctan.org/pkg/pygmentex";
-      description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
-      longDescription = ''
-        PygmenTeX is a Python-based LaTeX package that can be used for
-        typesetting code listings in a LaTeX document using Pygments.
-
-        Pygments is a generic syntax highlighter for general use in all kinds of
-        software such as forum systems, wikis or other applications that need to
-        prettify source code.
-      '';
-      license = licenses.lppl13c;
-      maintainers = with maintainers; [ romildo ];
-    };
-  };
-
-  asymptote = args.asymptote.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = texlive.pkgs.asymptote.version;
-
-      # keep local src and patches even if duplicated in the top level asymptote
-      # so that top level updates do not break texlive
-      src = fetchurl {
-        url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
-      };
-
-      texContainer = texlive.pkgs.asymptote.tex;
-      texdocContainer = texlive.pkgs.asymptote.texdoc;
-
-      # build issue with asymptote 2.95 has been fixed
-      postConfigure = "";
-    }
-  );
+        preConfigure = prevAttrs.preConfigure + ''
+          substituteInPlace Makefile.in --replace-fail '/bin/ls' 'ls'
+        '';
+      }
+    );
 
   inherit biber;
   inherit biber-ms;
@@ -730,22 +725,19 @@ rec {
     inherit (common) src;
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs =
-      [
-        core # kpathsea
-        freetype
-        ghostscript
-      ]
-      ++ (with xorg; [
-        libX11
-        libXaw
-        libXi
-        libXpm
-        libXmu
-        libXaw
-        libXext
-        libXfixes
-      ]);
+    buildInputs = [
+      core # kpathsea
+      freetype
+      ghostscript_headless
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 
@@ -769,11 +761,65 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 
     enableParallelBuilding = true;
+  };
+
+  # tex4ht.jar
+  # we build this as a TeX package, but under texlive.bin to avoid exposing it in texlivePackages
+  tex4htJar = stdenv.mkDerivation {
+    pname = "tex4ht-jar";
+    inherit (texlive.pkgs.tex4ht) meta version;
+
+    outputs = [ "tex" ];
+
+    src = texlive.pkgs.tex4ht.texsource + "/source/generic/tex4ht";
+
+    nativeBuildInputs = [
+      gnum4
+      jdk_headless
+      (texlive.schemes.texliveBasic.withPackages (ps: [
+        # override tex4ht-jar with an empty package to avoid a self dependency
+        { pname = "tex4ht-jar"; }
+        ps.protex
+        ps.tex4ht
+      ]))
+    ];
+
+    preHook = ''
+      export out="$tex"
+    '';
+
+    # the current Makefile is broken, so we build the artifact by hand
+    # we also use latex instead of htlatex as the latter is orders of magnitude slower
+    buildPhase = ''
+      make tex4ht-dir.tex
+
+      mkdir -p work.dir/src/tex4ht
+      for f in *-xtpipes.tex ; do
+        latex -output-directory=work.dir/src/tex4ht "\\RequirePackage{tex4ht}\\input $f"
+      done
+
+      mkdir -p work.dir/src/xtpipes
+      latex -output-directory=work.dir/src/xtpipes "\\RequirePackage{tex4ht}\\input xtpipes.tex"
+
+      mkdir -p work.dir/src/xtpipes/util
+      mv work.dir/src/xtpipes/xtpipes.java.java work.dir/src/xtpipes.java
+      mv work.dir/src/xtpipes/ScriptsManager*.java work.dir/src/xtpipes/util
+
+      mkdir -p xtpipes.dir/xtpipes/lib
+      cp work.dir/src/xtpipes/xtpipes*.{4xt,dtd} xtpipes.dir/xtpipes/lib
+
+      javac -d xtpipes.dir work.dir/src/{*,*/*,*/*/*}.java
+      jar cf tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar -C xtpipes.dir .
+    '';
+
+    installPhase = ''
+      install -D -t "$tex"/tex4ht/bin tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar
+    '';
   };
 
 } # un-indented

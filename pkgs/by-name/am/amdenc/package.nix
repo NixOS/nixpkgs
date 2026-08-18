@@ -7,16 +7,16 @@
 }:
 
 let
-  amdgpuVersion = "6.1.3";
-  ubuntuVersion = "22.04";
+  amdgpuVersion = "6.4.4";
+  ubuntuVersion = "24.04";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdenc";
-  version = "1.0-1787253";
+  version = "25.10-2203192";
 
   src = fetchurl {
     url = "https://repo.radeon.com/amdgpu/${amdgpuVersion}/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/libamdenc-amdgpu-pro_${finalAttrs.version}.${ubuntuVersion}_amd64.deb";
-    hash = "sha256-RSkWQ3g++uKVrk5J9R8WA6qL0f+B2z8/mlflQ/cQZcg=";
+    hash = "sha256-jEvHZxTzN8TzZJuouYaOGw9xaRINA/zEg+56s/13ruw=";
   };
 
   nativeBuildInputs = [

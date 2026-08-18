@@ -1,65 +1,106 @@
 {
   lib,
-  boto3,
+  stdenv,
   buildPythonPackage,
   celery,
-  django-storages,
-  django,
   fetchFromGitHub,
-  gitMinimal,
-  mock,
+  flit-core,
+  flit-scm,
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
   redis,
-  setuptools-scm,
-  sphinx,
+  psutil,
+  dnspython,
+  pytest-asyncio,
+  libredirect,
+  confluent-kafka,
+  aio-pika,
+  httpx,
+  feedparser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "3.18.3";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KristianOellegaard";
+    owner = "codingjoe";
     repo = "django-health-check";
-    tag = version;
-    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
+    tag = finalAttrs.version;
+    hash = "sha256-YisYa2YAVhg9fganL7w1fnanXvtQJh6iccDDOxHG5WQ=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  buildInputs = [
-    sphinx
-    django
+  build-system = [
+    flit-core
+    flit-scm
   ];
 
-  nativeBuildInputs = [ gitMinimal ];
+  dependencies = [
+    dnspython
+  ];
+
+  optional-dependencies = {
+    psutil = [ psutil ];
+    celery = [ celery ];
+    kafka = [ confluent-kafka ];
+    rabbitmq = [ aio-pika ];
+    redis = [ redis ];
+    rss = [
+      httpx
+      feedparser
+    ];
+    atlassian = [ httpx ];
+  };
 
   nativeCheckInputs = [
-    boto3
-    django-storages
     pytest-cov-stub
     pytest-django
     pytestCheckHook
-    mock
-    celery
-    redis
+    psutil
+    pytest-asyncio
+    libredirect.hook
   ];
 
   disabledTests = [
-    # commandline output mismatch
-    "test_command_with_non_existence_subset"
+    # require online DNS resolution
+    "test_run_check__dns_working"
+    "test_check_status__nonexistent_hostname"
+    "test_check_status__no_answer"
+    # not reproducible
+    "test_run_check__disk_accessible"
+    "test_run_check__custom_path"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # sensors_temperatures is not available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.sensors_temperatures
+    "TestTemperature"
+    # some metrics aren't available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.virtual_memory
+    "TestMemory"
+    # live_server not working on darwin
+    "TestHealthCheckCommand"
   ];
 
   pythonImportsCheck = [ "health_check" ];
 
-  meta = with lib; {
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  preInstallCheck = ''
+    export PYTHONPATH=$PWD:$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=tests.testapp.settings
+  '';
+
+  meta = {
     description = "Pluggable app that runs a full check on the deployment";
-    homepage = "https://github.com/KristianOellegaard/django-health-check";
-    changelog = "https://github.com/revsys/django-health-check/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    homepage = "https://github.com/codingjoe/django-health-check";
+    changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      onny
+      dav-wolff
+    ];
   };
-}
+})

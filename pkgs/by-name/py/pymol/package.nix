@@ -2,6 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
+  fetchpatch2,
   makeDesktopItem,
   cmake,
   python3Packages,
@@ -12,7 +14,7 @@
   libxml2,
   freetype,
   mmtf-cpp,
-  msgpack,
+  msgpack-cxx,
   qt5,
 }:
 let
@@ -57,14 +59,39 @@ python3Packages.buildPythonApplication rec {
 
   # A script is already created by the `[project.scripts]` directive
   # in `pyproject.toml`.
-  patches = [ ./script-already-exists.patch ];
+  patches = [
+    ./script-already-exists.patch
+
+    # Fix python3.13 and numpy 2 compatibility
+    (fetchpatch {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/fef4a026425d195185e84d46ab88b2bbd6d96cf8.patch";
+      hash = "sha256-F/5UcYwgHgcMQ+zeigedc1rr3WkN9rhxAxH+gQfWKIY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/97cc1797695ee0850621762491e93dc611b04165.patch";
+      hash = "sha256-H2PsRFn7brYTtLff/iMvJbZ+RZr7GYElMSINa4RDYdA=";
+    })
+    # Fixes failing test testLoadPWG
+    (fetchpatch {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/17c6cbd96d52e9692fd298daec6c9bda273a8aad.patch";
+      hash = "sha256-dcYRzUhiaGlR3CjQ0BktA5L+8lFyVdw0+hIz3Li7gDQ=";
+    })
+    # Fixes `set` command with int/float arguments, i.e. `set transparency, 0.5`
+    (fetchpatch2 {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/71246845f77ecfa2e14f01887abd180c18ebfb55.patch";
+      hash = "sha256-ES7v38daaDXgbHqtxJ6Pt6Xa3ggKwXcx1txWJWkkLgI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "self.install_libbase" '"${placeholder "out"}/${python3Packages.python.sitePackages}"'
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"cmake>=3.13.3",' ""
   '';
 
-  env.PREFIX_PATH = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${msgpack}";
+  env.PREFIX_PATH = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${msgpack-cxx}";
   build-system = [ python3Packages.setuptools ];
   dontUseCmakeConfigure = true;
 
@@ -73,22 +100,24 @@ python3Packages.buildPythonApplication rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      python3Packages.numpy_1
-      python3Packages.pyqt5
-      qt5.qtbase
-      glew
-      glm
-      libpng
-      libxml2
-      freetype
-      netcdf
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      mmtf-cpp
-      msgpack
-    ];
+  buildInputs = [
+    qt5.qtbase
+    glew
+    glm
+    libpng
+    libxml2
+    freetype
+    netcdf
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    mmtf-cpp
+    msgpack-cxx
+  ];
+
+  dependencies = with python3Packages; [
+    numpy
+    pyqt5
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
@@ -116,6 +145,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.msgpack
     pillow
     pytestCheckHook
+    requests
   ];
 
   # some tests hang for some reason
@@ -126,22 +156,21 @@ python3Packages.buildPythonApplication rec {
     "tests/api/seqalign.py"
   ];
 
-  disabledTests =
-    [
-      # the output image does not exactly match
-      "test_commands"
-      # touch the network
-      "testFetch"
-      # requires collada2gltf which is not included in nixpkgs
-      "testglTF"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # require mmtf-cpp which does not support darwin
-      "test_bcif"
-      "test_bcif_array"
-      "testMMTF"
-      "testSave_symmetry__mmtf"
-    ];
+  disabledTests = [
+    # the output image does not exactly match
+    "test_commands"
+    # touch the network
+    "testFetch"
+    # requires collada2gltf which is not included in nixpkgs
+    "testglTF"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # require mmtf-cpp which does not support darwin
+    "test_bcif"
+    "test_bcif_array"
+    "testMMTF"
+    "testSave_symmetry__mmtf"
+  ];
 
   preCheck = ''
     cd testing
@@ -153,12 +182,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtApp "$out/bin/pymol"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit description;
     mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       samlich
     ];

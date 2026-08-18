@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "blacken-docs";
-  version = "1.19.1";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "blacken-docs";
     tag = version;
-    hash = "sha256-cMnwOrkOma+su4CDheHRd484pG4GMSm+i/Xcus3E+m8=";
+    hash = "sha256-A8hSpywuhdS+RNm3QQJ11ofWrYZgiOFRwIoD3mlwc4k=";
   };
 
   build-system = [ setuptools ];

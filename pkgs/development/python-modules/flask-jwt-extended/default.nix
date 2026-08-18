@@ -7,22 +7,19 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "flask-jwt-extended";
-  version = "4.7.1";
+  version = "4.7.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flask_jwt_extended";
     inherit version;
-    hash = "sha256-gIXWdXUFtvMpGiY4yE0gfo8K0N5mLR9Gqi935ligyXY=";
+    hash = "sha256-eP0PRgMX+s86AISmRX/68vHdqe771Xb5TOo1sOrdVTE=";
   };
 
   build-system = [ setuptools ];
@@ -38,15 +35,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flask_jwt_extended" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/vimalloc/flask-jwt-extended/releases/tag/${version}";
     description = "JWT extension for Flask";
     homepage = "https://flask-jwt-extended.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

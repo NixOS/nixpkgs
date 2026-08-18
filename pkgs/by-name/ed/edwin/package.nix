@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,20 +14,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-F6BzwnrsaELegdo6Bdju1OG+RI9zKnn4tIASR3q6zYk=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/opentype
-    install *.otf $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Text font for musical scores";
     homepage = "https://github.com/MuseScoreFonts/Edwin";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

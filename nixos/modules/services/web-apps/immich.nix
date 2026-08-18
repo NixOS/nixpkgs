@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -9,6 +10,9 @@ let
   format = pkgs.formats.json { };
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
+  secretsReplacement = utils.genJqSecretsReplacement {
+    loadCredential = true;
+  } cfg.settings "/run/immich/config.json";
 
   commonServiceConfig = {
     Type = "simple";
@@ -51,6 +55,46 @@ let
     if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "secretSettings"
+      ]
+      ''
+        `secretSettings` has been deprecated as secrets can now be specified
+        directly in `settings`. To do so, set `_secret` of the desired
+        attribute to a file path, for example:
+          `services.immich.settings.oauth.clientSecret._secret = "/path/to/secret/file";`
+      ''
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "database"
+        "enableVectorChord"
+      ]
+      ''
+        `database.enableVectorChord` has been deprecated as the pgvecto.rs alternative
+        is no longer available. From now on, vectorchord is always enabled.
+      ''
+    )
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "immich"
+        "database"
+        "enableVectors"
+      ]
+      ''
+        `database.enableVectors` has been deprecated as pgvecto.rs is no longer available.
+        From now on, vectorchord is used instead.
+      ''
+    )
+  ];
+
   options.services.immich = {
     enable = mkEnableOption "Immich";
     package = lib.mkPackageOption pkgs "immich" { };
@@ -124,6 +168,7 @@ in
         <https://my.immich.app/admin/system-settings> for
         options and defaults.
         Setting it to `null` allows configuring Immich in the web interface.
+        You can load secret values from a file in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
       '';
       type = types.nullOr (
         types.submodule {
@@ -231,11 +276,6 @@ in
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
       }
-      {
-        # When removing this assertion, please adjust the nixosTests accordingly.
-        assertion = cfg.database.enable -> lib.versionOlder config.services.postgresql.package.version "17";
-        message = "Immich doesn't support PostgreSQL 17+, yet.";
-      }
     ];
 
     services.postgresql = mkIf cfg.database.enable {
@@ -248,27 +288,43 @@ in
           ensureClauses.login = true;
         }
       ];
-      extensions = ps: with ps; [ pgvecto-rs ];
+      extensions = ps: [
+        ps.pgvector
+        ps.vectorchord
+      ];
       settings = {
-        shared_preload_libraries = [ "vectors.so" ];
+        shared_preload_libraries = [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
     systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
       let
+        extensions = [
+          "unaccent"
+          "uuid-ossp"
+          "cube"
+          "earthdistance"
+          "pg_trgm"
+          "vector"
+          "vchord"
+        ];
         sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          CREATE EXTENSION IF NOT EXISTS unaccent;
-          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-          CREATE EXTENSION IF NOT EXISTS vectors;
-          CREATE EXTENSION IF NOT EXISTS cube;
-          CREATE EXTENSION IF NOT EXISTS earthdistance;
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
+          -- save previous version of vectorchord to trigger reindex on update
+          SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
 
+          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
           ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
-          GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
 
-          ALTER EXTENSION vectors UPDATE;
+          -- trigger reindex if vectorchord updates
+          -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+          SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+          SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+          \if :has_vchord_updated
+            REINDEX INDEX face_index;
+            REINDEX INDEX clip_index;
+          \endif
         '';
       in
       [
@@ -317,13 +373,14 @@ in
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
       }
       // lib.optionalAttrs (cfg.settings != null) {
-        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
+        IMMICH_CONFIG_FILE = "/run/immich/config.json";
       };
 
     services.immich.machine-learning.environment = {
       MACHINE_LEARNING_WORKERS = "1";
       MACHINE_LEARNING_WORKER_TIMEOUT = "120";
       MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+      XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
     };
@@ -335,7 +392,8 @@ in
 
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
       path = [
@@ -344,7 +402,10 @@ in
         postgresqlPackage
       ];
 
+      preStart = mkIf (cfg.settings != null) secretsReplacement.script;
+
       serviceConfig = commonServiceConfig // {
+        LoadCredential = secretsReplacement.credentials;
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";
@@ -362,11 +423,12 @@ in
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
+        ExecStart = lib.getExe cfg.package.machine-learning;
         Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;
@@ -398,5 +460,7 @@ in
     };
     users.groups = mkIf (cfg.group == "immich") { immich = { }; };
   };
-  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+  };
 }

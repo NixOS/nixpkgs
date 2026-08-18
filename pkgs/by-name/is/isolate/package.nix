@@ -8,17 +8,18 @@
   systemdLibs,
   installShellFiles,
   nixosTests,
+  libseccomp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isolate";
-  version = "2.1";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "ioi";
     repo = "isolate";
-    rev = "v${version}";
-    hash = "sha256-mTh2IAh4xtLWlRu7gp3aXsGJdUWXnocvDyi8JZwzz9s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-a6FQxyClE9cXB0wHV0Z4kjYY6S1+mUE4ReroOifNjKg=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libcap.dev
     systemdLibs.dev
+    libseccomp
   ];
 
   patches = [
@@ -58,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ virchau13 ];
   };
-}
+})

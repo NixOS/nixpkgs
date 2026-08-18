@@ -8,21 +8,20 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svix-server";
-  version = "1.68.0";
+  version = "1.96.1";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
-    rev = "v${version}";
-    hash = "sha256-AiMaYSLON4H39dUvRyXQDymE/SQ7gK9JrgXBc1Gn7no=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NRzumAmgpqCfoLC0s6cAUcQYCFMFD6MElhDFpW79CQs=";
   };
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wNaI5/AtStekJslO8wDl1/PzHaEi02xBEO8IvcqbMZM=";
+  cargoHash = "sha256-IZ3YPEU4QpTia3ekvr1AQDZCrg4xUmEj82ZU0y/dDzM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,11 +30,13 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  env = {
+    # needed for internal protobuf c wrapper library
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
 
-  OPENSSL_NO_VENDOR = 1;
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # disable tests because they require postgres and redis to be running
   doCheck = false;
@@ -44,9 +45,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "svix-server";
     description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
-    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
+    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
-}
+})

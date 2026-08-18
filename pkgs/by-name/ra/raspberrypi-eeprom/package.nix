@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2025.05.08-2712";
+  version = "2026.05.17-2711-0138c0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y3tBYKFyFz7ft82+zWGT6HUXR3hrq3mYMqJeUSsAKtQ=";
+    hash = "sha256-duzftioXXrLizQVLwAS285n6ve4Y3rCt/ERjcGQG+Dc=";
   };
 
   buildInputs = [ python3 ];
@@ -70,17 +70,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 and 5 bootloader EEPROMs";
     homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       unfreeRedistributableFirmware
     ];
-    maintainers = with maintainers; [
-      das_j
-      Luflosi
-    ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
   };
 })

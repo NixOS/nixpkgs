@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "git-toolbelt";
-  version = "1.9.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "nvie";
     repo = "git-toolbelt";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ANqv/iIDUyy2G4pKSw+2sutMEA0WhPN3OKfPTm5lwDU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5ywYbZeMqHU7/nnnINeR0BfVBxxgYmeXvjIuC45V43g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,8 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm755 git-* -t "$out"/bin
 
     for exe in "$out"/bin/*; do
-        wrapProgram "$exe" \
-            --prefix PATH : "$out"/bin:${lib.makeBinPath finalAttrs.buildInputs}
+      wrapProgram "$exe" \
+        --prefix PATH : "$out"/bin:${lib.makeBinPath finalAttrs.buildInputs}
     done
 
     runHook postInstall

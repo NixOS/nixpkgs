@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksndiamonds";
-  version = "4.4.0.5";
+  version = "4.4.2.4";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/rocksndiamonds/rocksndiamonds-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-8e6ZYpFoUQ4+ykHDLlKWWyUANPq1lXv7IRHYWfBOU/U=";
+    hash = "sha256-WevciYWSORmj88186y6aBzyltHVf/aD5CPS/SYvGH5k=";
   };
 
   desktopItems = [
@@ -76,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

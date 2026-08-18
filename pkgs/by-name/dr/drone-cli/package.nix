@@ -26,12 +26,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     mainProgram = "drone";
-    maintainers = with maintainers; [ techknowlogick ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ techknowlogick ];
+    license = lib.licenses.asl20;
     description = "Command line client for the Drone continuous integration server";
+    homepage = "https://github.com/harness/drone-cli";
   };
 }

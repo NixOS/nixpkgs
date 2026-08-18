@@ -2,24 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
+  ps,
 }:
 
 buildPythonPackage rec {
   pname = "duct-py";
-  version = "0.6.4";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "duct.py";
-    rev = version;
-    hash = "sha256-4ja/SQ9R/SbKlf3NqKxLi+Fl/4JI0Fl/zG9EmTZjWZc=";
+    tag = version;
+    hash = "sha256-i811nQB8CVJPYPR0Jdzpk64EXxrTMDIBpdDoUs9Xu/k=";
   };
+
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [ "duct" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    ps
+  ];
 
   disabledTests = [
     # This test completely empties the environment then tries to run a Python command.
@@ -28,10 +35,10 @@ buildPythonPackage rec {
     "test_full_env"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for running child processes";
     homepage = "https://github.com/oconnor663/duct.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zmitchell ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zmitchell ];
   };
 }

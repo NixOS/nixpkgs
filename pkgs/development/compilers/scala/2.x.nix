@@ -37,7 +37,7 @@ with versionMap.${majorVersion};
 stdenv.mkDerivation rec {
   inherit version;
 
-  name = "scala-${version}";
+  pname = "scala";
 
   src = fetchurl {
     inherit hash;
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     mv * $out
     # put docs in correct subdirectory
     mkdir -p $out/share/doc
-    mv $out/doc $out/share/doc/${name}
+    mv $out/doc $out/share/doc/${pname}-${version}
     mv $out/man $out/share/man
     for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "General purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express
@@ -109,11 +109,10 @@ stdenv.mkDerivation rec {
       compared to an equivalent Java application.
     '';
     homepage = "https://www.scala-lang.org/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    branch = versions.majorMinor version;
-    maintainers = with maintainers; [
-      nequissimus
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    branch = lib.versions.majorMinor version;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
   };

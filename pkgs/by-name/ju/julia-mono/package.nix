@@ -2,28 +2,22 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "JuliaMono-ttf";
-  version = "0.060";
+  version = "0.63.2";
 
   src = fetchzip {
-    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
+    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
     stripRoot = false;
-    hash = "sha256-PmMGro8K4OwtKBIBhe/RKpi+MveSfhpQsiJfF+iUBzI=";
+    hash = "sha256-trXylRLUUXW7x1bEKGQ/KtjlSlpHe0k6+9oIdeNuDQk=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Monospaced font for scientific and technical computing";
     longDescription = ''
       JuliaMono is a monospaced typeface designed for use in text editing
@@ -32,9 +26,9 @@ stdenvNoCC.mkDerivation rec {
       2020 JuliaCon conference in Lisbon, Portugal (which of course didn’t
       physically happen in Lisbon, but online).
     '';
-    maintainers = with maintainers; [ suhr ];
-    platforms = with platforms; all;
+    maintainers = with lib.maintainers; [ suhr ];
+    platforms = with lib.platforms; all;
     homepage = "https://juliamono.netlify.app/";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

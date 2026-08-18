@@ -8,7 +8,6 @@
   pytest-timeout,
   responses,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyvera";
   version = "0.3.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pavoni";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvera" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control devices via the Vera hub";
     homepage = "https://github.com/pavoni/pyvera";
     changelog = "https://github.com/maximvelichko/pyvera/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

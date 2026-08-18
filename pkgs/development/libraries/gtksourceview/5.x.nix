@@ -25,7 +25,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.16.0";
+  version = "5.20.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qzXUIBAvPosFXdO4ZC06SCCfiIGJ5iVND/tLan6MNWY=";
+    hash = "sha256-44vNI/UrhurfD+TYveaY46jKECMiuLTPGlGsKUpEjBs=";
   };
 
   patches = [
@@ -55,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     gtk4 # for gtk4-update-icon-cache checked during configure
+    libxml2 # xmllint
   ];
 
   buildInputs = [
@@ -111,12 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-5" ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

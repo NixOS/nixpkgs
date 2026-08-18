@@ -11,7 +11,9 @@
   wf-recorder,
   libdbusmenu,
   playerctl,
-  xorg,
+  libxdamage,
+  xrandr,
+  xinput,
   iio-sensor-proxy,
   inotify-tools,
   bluez,
@@ -58,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     grim
     wf-recorder
     playerctl
-    xorg.xrandr
-    xorg.xinput
-    xorg.libXdamage
+    xrandr
+    xinput
+    libxdamage
     iio-sensor-proxy
     inotify-tools
     bluez
@@ -81,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "shareIT";
     homepage = "https://gitlab.com/cubocore/coreapps/coretoppings";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -2,31 +2,49 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "2.0.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
-    tag = "v${version}";
-    hash = "sha256-d/jEtcBvOiebdI4DgWNWtP8ZfOy2x7EaQt/6mo7o2Ok=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QdyqECPzZZtphtjSJAKrWGwGKcYrlbSSkJ0GHs9+K10=";
   };
 
+  patches = [
+    # use pillow-heif instead of pi-heif as it has been discontinued
+    # https://github.com/bigcat88/pillow_heif/pull/431
+    (fetchpatch {
+      url = "https://github.com/yurijmikhalevich/rclip/commit/7207600d8da6aef0aacb2c2b52e90a564e3018aa.patch";
+      hash = "sha256-Bua9tIpRq2mWSQLP0dcHE8S0Ef7AZKvlOS5fXAqTcQY=";
+      revert = true;
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
+  '';
+
   build-system = with python3Packages; [
-    poetry-core
+    uv-build
   ];
 
   dependencies = with python3Packages; [
+    ftfy
+    huggingface-hub
     numpy
-    open-clip-torch
+    onnxruntime
     pillow
+    pillow-heif
+    regex
     requests
-    torch
-    torchvision
     tqdm
     rawpy
   ];
@@ -35,35 +53,28 @@ python3Packages.buildPythonApplication rec {
     "numpy"
     "pillow"
     "rawpy"
-    "torch"
-    "torchvision"
+    "regex"
   ];
 
   pythonImportsCheck = [ "rclip" ];
 
   nativeCheckInputs = [
     versionCheckHook
-  ] ++ (with python3Packages; [ pytestCheckHook ]);
-  versionCheckProgramArg = "--version";
+    python3Packages.jinja2
+  ]
+  ++ (with python3Packages; [ pytestCheckHook ]);
 
   disabledTestPaths = [
     # requires network
     "tests/e2e/test_rclip.py"
   ];
 
-  disabledTests = [
-    # requires network
-    "test_text_model_produces_the_same_vector_as_the_main_model"
-    "test_loads_text_model_when_text_processing_only_requested_and_checkpoint_exists"
-    "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
-  ];
-
   meta = {
     description = "AI-Powered Command-Line Photo Search Tool";
     homepage = "https://github.com/yurijmikhalevich/rclip";
-    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${src.tag}";
+    changelog = "https://github.com/yurijmikhalevich/rclip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "rclip";
   };
-}
+})

@@ -6,19 +6,23 @@
   cmake,
   makeWrapper,
   pkg-config,
+  arp-scan,
   curl,
   ffmpeg,
   glib,
+  iproute2,
   libjpeg,
   libselinux,
   libsepol,
   mp4v2,
   libmysqlclient,
   mariadb,
-  pcre,
+  nlohmann_json,
+  pcre2,
   perl,
   perlPackages,
   polkit,
+  systemd,
   util-linuxMinimal,
   x264,
   zlib,
@@ -26,6 +30,7 @@
   procps,
   psmisc,
   nixosTests,
+  nix-update-script,
 }:
 
 # NOTES:
@@ -68,6 +73,7 @@
 let
   addons = [
     {
+      # XXX: not tested with 1.38.x.
       path = "scripts/ZoneMinder/lib/ZoneMinder/Control/Xiaomi.pm";
       src = fetchurl {
         url = "https://gist.githubusercontent.com/joshstrange/73a2f24dfaf5cd5b470024096ce2680f/raw/e964270c5cdbf95e5b7f214f7f0fc6113791530e/Xiaomi.pm";
@@ -83,13 +89,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.35";
+  version = "1.38.4";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
-    rev = version;
-    hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
+    tag = version;
+    hash = "sha256-bowVUTRtrTyS1zSaF+wKua6Wx5F7C5S40y7BKr6q9sE=";
     fetchSubmodules = true;
   };
 
@@ -107,22 +113,29 @@ stdenv.mkDerivation rec {
       '') addons
     )}
 
-    for d in scripts/ZoneMinder onvif/{modules,proxy} ; do
+    for d in scripts/ZoneMinder onvif/modules ; do
       substituteInPlace $d/CMakeLists.txt \
-        --replace 'DESTDIR="''${CMAKE_CURRENT_BINARY_DIR}/output"' "PREFIX=$out INSTALLDIRS=site"
+        --replace-fail 'DESTDIR="''${CMAKE_CURRENT_BINARY_DIR}/output"' "PREFIX=$out INSTALLDIRS=site"
+      sed -i '/^install/d' $d/CMakeLists.txt
+    done
+
+    # Slightly different quoting.
+    for d in onvif/proxy ; do
+      substituteInPlace $d/CMakeLists.txt \
+        --replace-fail 'DESTDIR=''${CMAKE_CURRENT_BINARY_DIR}/output' "PREFIX=$out INSTALLDIRS=site"
       sed -i '/^install/d' $d/CMakeLists.txt
     done
 
     substituteInPlace misc/CMakeLists.txt \
-      --replace '"''${PC_POLKIT_PREFIX}/''${CMAKE_INSTALL_DATAROOTDIR}' "\"$out/share"
+      --replace-fail '"''${PC_POLKIT_PREFIX}/''${CMAKE_INSTALL_DATAROOTDIR}' "\"$out/share"
 
-    for f in misc/*.policy.in \
-             scripts/*.pl* \
+    for f in scripts/*.pl* \
              scripts/ZoneMinder/lib/ZoneMinder/Memory.pm.in ; do
       substituteInPlace $f \
-        --replace '/usr/bin/perl' '${perlBin}' \
-        --replace '/bin:/usr/bin' "$out/bin:${
+        --replace-quiet '/usr/bin/perl' '${perlBin}' \
+        --replace-quiet '/bin:/usr/bin' "$out/bin:${
           lib.makeBinPath [
+            arp-scan
             coreutils
             procps
             psmisc
@@ -130,75 +143,79 @@ stdenv.mkDerivation rec {
         }"
     done
 
+    substituteInPlace misc/com.zoneminder.systemctl.policy.in \
+      --replace-fail '/usr/bin/perl' '${perlBin}'
+
+    substituteInPlace misc/com.zoneminder.dnsmasq.policy.in \
+      --replace-fail '/bin/systemctl' '${systemd}/bin/systemctl'
+
+    substituteInPlace misc/com.zoneminder.arp-scan.policy.in \
+      --replace-fail '/usr/sbin/arp-scan' '${arp-scan}/bin/arp-scan'
+
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
+      --replace-fail /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
 
     substituteInPlace scripts/zmupdate.pl.in \
-      --replace "'mysql'" "'${mariadb.client}/bin/mysql'" \
-      --replace "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
+      --replace-fail "'mysql'" "'${mariadb.client}/bin/mysql'" \
+      --replace-fail "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
              src/zm_config_data.h.in \
              web/api/app/Config/bootstrap.php.in \
              web/includes/config.php.in ; do
-      substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
+      substituteInPlace $f --replace-fail @ZM_CONFIG_SUBDIR@ /etc/zoneminder
     done
 
-    for f in includes/Event.php views/image.php ; do
-      substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
-    done
-
-    for f in scripts/ZoneMinder/lib/ZoneMinder/Event.pm \
-             scripts/ZoneMinder/lib/ZoneMinder/Storage.pm ; do
-      substituteInPlace $f \
-        --replace '/bin/rm' "${coreutils}/bin/rm"
-    done
+    substituteInPlace scripts/ZoneMinder/lib/ZoneMinder/Storage.pm \
+      --replace-fail '/bin/rm' "${coreutils}/bin/rm"
 
     substituteInPlace web/includes/functions.php \
-      --replace "'date " "'${coreutils}/bin/date " \
+      --replace-fail "'date " "'${coreutils}/bin/date " \
+      --replace-fail "'rm " "'${coreutils}/bin/rm " \
       --subst-var-by srcHash "`basename $out`"
   '';
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      glib
-      libjpeg
-      libselinux
-      libsepol
-      mp4v2
-      libmysqlclient
-      mariadb
-      pcre
-      perl
-      polkit
-      x264
-      zlib
-      util-linuxMinimal # for libmount
-    ]
-    ++ (with perlPackages; [
-      # build-time dependencies
-      DateManip
-      DBI
-      DBDmysql
-      LWP
-      SysMmap
-      # run-time dependencies not checked at build-time
-      ClassStdFast
-      DataDump
-      DeviceSerialPort
-      JSONMaybeXS
-      LWPProtocolHttps
-      NumberBytesHuman
-      SysCPU
-      SysMemInfo
-      TimeDate
-      CryptEksblowfish
-      DataEntropy # zmupdate.pl
-    ]);
+  buildInputs = [
+    arp-scan
+    curl
+    ffmpeg
+    glib
+    iproute2
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb
+    nlohmann_json
+    pcre2
+    perl
+    polkit
+    x264
+    zlib
+    util-linuxMinimal # for libmount
+  ]
+  ++ (with perlPackages; [
+    # build-time dependencies
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
+    # run-time dependencies not checked at build-time
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
+  ]);
 
   nativeBuildInputs = [
     cmake
@@ -213,6 +230,7 @@ stdenv.mkDerivation rec {
     "-DZM_SOCKDIR=/run/${dirName}"
     "-DZM_TMPDIR=/tmp/${dirName}"
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
+    "-DZM_PATH_SHUTDOWN=${systemd}/bin/shutdown"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
   ];
@@ -220,6 +238,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit dirName;
     tests = nixosTests.zoneminder;
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   postInstall = ''
@@ -239,13 +260,21 @@ stdenv.mkDerivation rec {
     done
 
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
+
+    # Combine configs under $out/etc/zoneminder/conf.d/ into
+    # $out/etc/zoneminder/zm.conf, because we patch so that we read from
+    # /etc/zoneminder/conf.d instead of $out/zoneminder/conf.d.
+    for f in $out/etc/zoneminder/conf.d/*.conf; do
+      cat $f >>$out/etc/zoneminder/zm.conf
+      rm $f
+    done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
-    license = licenses.gpl3;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peat-psuwit ];
+    platforms = lib.platforms.linux;
   };
 }

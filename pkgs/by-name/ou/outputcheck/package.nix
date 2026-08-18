@@ -5,10 +5,10 @@
   lit,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "outputcheck";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stp";
@@ -23,15 +23,17 @@ python3.pkgs.buildPythonApplication rec {
   # - Fix version number cannot find error
   postPatch = ''
     substituteInPlace OutputCheck/Driver.py \
-      --replace "argparse.FileType('rU')" "argparse.FileType('r')"
+      --replace-fail "argparse.FileType('rU')" "argparse.FileType('r')"
 
     substituteInPlace tests/invalid-regex-syntax.smt2 \
-      --replace "unbalanced parenthesis" "missing ), unterminated subpattern"
+      --replace-fail "unbalanced parenthesis" "missing ), unterminated subpattern"
 
-    echo ${version} > RELEASE-VERSION
+    echo ${finalAttrs.version} > RELEASE-VERSION
   '';
 
   nativeCheckInputs = [ lit ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -46,9 +48,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for checking tool output inspired by LLVM's FileCheck";
     homepage = "https://github.com/stp/OutputCheck";
-    changelog = "https://github.com/stp/OutputCheck/releases/tag/${version}";
+    changelog = "https://github.com/stp/OutputCheck/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fsagbuya ];
     mainProgram = "OutputCheck";
   };
-}
+})

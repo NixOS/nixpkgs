@@ -142,6 +142,14 @@ runBuildTests {
     '';
   };
 
+  jsonNull = shouldPass {
+    format = formats.json { };
+    input = null;
+    expected = ''
+      null
+    '';
+  };
+
   yaml_1_1Atoms = shouldPass {
     format = formats.yaml_1_1 { };
     input = {
@@ -160,6 +168,8 @@ runBuildTests {
       time = "22:30:00";
     };
     expected = ''
+      %YAML 1.1
+      ---
       attrs:
         foo: null
       'false': false
@@ -173,6 +183,16 @@ runBuildTests {
       str: foo
       time: '22:30:00'
       'true': true
+    '';
+  };
+
+  yaml_1_1Null = shouldPass {
+    format = formats.yaml_1_1 { };
+    input = null;
+    expected = ''
+      %YAML 1.1
+      ---
+        null
     '';
   };
 
@@ -210,6 +230,16 @@ runBuildTests {
     '';
   };
 
+  yaml_1_2Null = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = null;
+    # nixfmt insists on removing indentation, so force it with ${"  "}
+    expected = ''
+
+      ${"  "}null
+    '';
+  };
+
   iniAtoms = shouldPass {
     format = formats.ini { };
     input = {
@@ -227,6 +257,110 @@ runBuildTests {
       int=10
       str=string
     '';
+  };
+
+  configobjAtoms = shouldPass {
+    format = formats.configobj { };
+    input = {
+      bool = true;
+      int = 10;
+      float = 3.141;
+      str = "string";
+    };
+    expected = ''
+      bool = True
+      float = 3.141
+      int = 10
+      str = string
+    '';
+  };
+
+  configobjListWithoutListToValue = shouldPass {
+    format = formats.configobj { };
+    input = {
+      items = [
+        1
+        true
+        "x"
+      ];
+    };
+    expected = ''
+      items = 1, True, x
+    '';
+  };
+
+  configobjNestedAttrsets = shouldPass {
+    format = formats.configobj { };
+    input = {
+      server = {
+        host = "127.0.0.1";
+        port = 8080;
+        enabled = true;
+        tags = [
+          "web"
+          "nix"
+          42
+        ];
+      };
+
+      logging = {
+        level = "info";
+        rotate = true;
+      };
+
+      interfaces = {
+        local = {
+          address = "123";
+          coin = {
+            foo = "bar";
+          };
+        };
+        remote = {
+          address = "456";
+        };
+      };
+    };
+    expected = ''
+      [interfaces]
+      [[local]]
+      address = 123
+      [[[coin]]]
+      foo = bar
+      [[remote]]
+      address = 456
+      [logging]
+      level = info
+      rotate = True
+      [server]
+      enabled = True
+      host = 127.0.0.1
+      port = 8080
+      tags = web, nix, 42
+    '';
+  };
+
+  configobjNullableValues = shouldPass {
+    format = formats.configobj { };
+    input = {
+      nullable = null;
+      nested = {
+        keep = "ok";
+        missing = null;
+      };
+    };
+    expected = ''
+      nullable = None
+      [nested]
+      keep = ok
+      missing = None
+    '';
+  };
+
+  configobjInvalidAtom = shouldFail {
+    format = formats.configobj { };
+    input = {
+      function = _: 1;
+    };
   };
 
   iniInvalidAtom = shouldFail {
@@ -706,6 +840,46 @@ runBuildTests {
     '';
   };
 
+  # Regression test for https://github.com/NixOS/nixpkgs/issues/511970
+  # yj crashes on arrays mixing scalars and attrsets (heterogeneous arrays),
+  # e.g. Helix language-server configs like ["bash-ls", {name = "ts-ls"; ...}].
+  # TOML 1.0 allows mixed-type arrays; the converter must emit them as
+  # inline arrays with inline tables.
+  tomlHeterogeneousArray = shouldPass {
+    format = formats.toml { };
+    input = {
+      language-server = [
+        "bash-language-server"
+        {
+          name = "typescript-language-server";
+          except-features = [ "diagnostics" ];
+        }
+      ];
+    };
+    expected = ''
+      language-server = ["bash-language-server", { except-features = ["diagnostics"], name = "typescript-language-server" }]
+    '';
+  };
+
+  # Regression test for https://github.com/sclevine/yj/issues/52
+  # yj truncates keys at the first comma because it stores TOML keys in Go
+  # struct tags, where commas are option separators.
+  # e.g. "stack(x,n)" is emitted as "stack(x" — silently losing data.
+  tomlCommaInKey = shouldPass {
+    format = formats.toml { };
+    input = {
+      "stack(x,n)" = "foobar";
+    };
+    expected = ''
+      "stack(x,n)" = "foobar"
+    '';
+  };
+
+  tomlNull = shouldFail {
+    format = formats.toml { };
+    input = null;
+  };
+
   cdnAtoms = shouldPass {
     format = formats.cdn { };
     input = {
@@ -737,6 +911,14 @@ runBuildTests {
       "path": "${./testfile}"
       "str": "foo"
       "true": true
+    '';
+  };
+
+  cdnNull = shouldPass {
+    format = formats.cdn { };
+    input = null;
+    expected = ''
+      null: null
     '';
   };
 
@@ -850,6 +1032,48 @@ runBuildTests {
     '';
   };
 
+  luaNull = shouldPass {
+    format = formats.lua { };
+    input = null;
+    expected = ''
+      return nil
+    '';
+  };
+
+  nixConfAtoms = shouldPass {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = "ignore-try = false";
+    };
+    input = {
+      auto-optimise-store = true;
+      cores = 0;
+      store = "auto";
+    };
+    # note that null type is hard to test here,
+    # as it involves a trailing space our formatter will remove here
+    expected = ''
+      # WARNING: this file is generated from the nix.* options in
+      # your NixOS configuration, typically
+      # /etc/nixos/configuration.nix.  Do not edit it!
+      auto-optimise-store = true
+      cores = 0
+      store = auto
+
+      ignore-try = false
+    '';
+  };
+
+  nixConfNull = shouldFail {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = "ignore-try = false";
+    };
+    input = null;
+  };
+
   phpAtoms = shouldPass rec {
     format = formats.php { finalVariable = "config"; };
     input = {
@@ -877,6 +1101,69 @@ runBuildTests {
       $config = ['attrs' => ['foo' => null], 'false' => false, 'float' => 3.141000, 'int' => 10, 'list' => [null, null], 'mixed' => [10, 3.141000, 'attrs' => ['foo' => null], 'str' => 'foo'], 'null' => null, 'raw' => random_function(), 'str' => 'foo', 'str_special' => 'foo
       testhello\'\'\'${"'"}, 'true' => true];
     '';
+  };
+
+  phpNull = shouldPass {
+    format = formats.php { finalVariable = "config"; };
+    input = null;
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      $config = null;
+    '';
+  };
+
+  pythonVars = shouldPass (
+    let
+      format = formats.pythonVars { };
+    in
+    {
+      inherit format;
+      input = {
+        _imports = [
+          "re"
+          "a.b.c"
+        ];
+
+        int = 10;
+        float = 3.141;
+        bool = true;
+        str = "foo";
+        str_special = "foo\ntesthello'''";
+        null = null;
+        list = [
+          null
+          1
+          "str"
+          true
+          (format.lib.mkRaw "1 if True else 2")
+        ];
+        attrs = {
+          foo = null;
+          conditional = format.lib.mkRaw "1 if True else 2";
+        };
+        func = format.lib.mkRaw "re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest')";
+      };
+      expected = ''
+        import re
+        import a.b.c
+
+        attrs = {"conditional": 1 if True else 2, "foo": None}
+        bool = True
+        float = 3.141
+        func = re.findall("\\bf[a-z]*", "which foot or hand fell fastest")
+        int = 10
+        list = [None, 1, "str", True, 1 if True else 2]
+        null = None
+        str = "foo"
+        str_special = "foo\ntesthello''''"
+      '';
+    }
+  );
+
+  pythonVarsNull = shouldFail {
+    format = formats.pythonVars { };
+    input = null;
   };
 
   phpReturn = shouldPass {
@@ -921,6 +1208,163 @@ runBuildTests {
         </child2>
         <nulltest></nulltest>
       </root>
+    '';
+  };
+
+  xmlNull = shouldFail {
+    format = formats.xml { };
+    input = null;
+  };
+
+  PlistGenerate = shouldPass {
+    format = formats.plist { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = 0;
+      list = [
+        1
+        "hello"
+        {
+          attrs = {
+            key = {
+              value = [
+                [
+                  1
+                  2
+                  3
+                ]
+                "test"
+              ];
+            };
+          };
+        }
+      ];
+    };
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+      ''\t<key>attrs</key>
+      ''\t<dict>
+      ''\t''\t<key>foo</key>
+      ''\t''\t<integer>0</integer>
+      ''\t</dict>
+      ''\t<key>false</key>
+      ''\t<false/>
+      ''\t<key>float</key>
+      ''\t<real>3.141000</real>
+      ''\t<key>int</key>
+      ''\t<integer>10</integer>
+      ''\t<key>list</key>
+      ''\t<array>
+      ''\t''\t<integer>1</integer>
+      ''\t''\t<string>hello</string>
+      ''\t''\t<dict>
+      ''\t''\t''\t<key>attrs</key>
+      ''\t''\t''\t<dict>
+      ''\t''\t''\t''\t<key>key</key>
+      ''\t''\t''\t''\t<dict>
+      ''\t''\t''\t''\t''\t<key>value</key>
+      ''\t''\t''\t''\t''\t<array>
+      ''\t''\t''\t''\t''\t''\t<array>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>1</integer>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>2</integer>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>3</integer>
+      ''\t''\t''\t''\t''\t''\t</array>
+      ''\t''\t''\t''\t''\t''\t<string>test</string>
+      ''\t''\t''\t''\t''\t</array>
+      ''\t''\t''\t''\t</dict>
+      ''\t''\t''\t</dict>
+      ''\t''\t</dict>
+      ''\t</array>
+      ''\t<key>str</key>
+      ''\t<string>foo</string>
+      ''\t<key>true</key>
+      ''\t<true/>
+      </dict>
+      </plist>'';
+  };
+
+  PlistNull = shouldPass {
+    format = formats.plist { };
+    input = null;
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+
+      </plist>'';
+  };
+
+  hcl1Atoms = shouldPass {
+    format = formats.hcl1 { };
+    input = {
+      resource = {
+        aws_instance = {
+          example = {
+            ami = "ami-12345";
+            instance_type = "t2.micro";
+          };
+        };
+      };
+      variable = {
+        region = {
+          default = "us-east-1";
+        };
+      };
+      output = {
+        ip = {
+          value = "127.0.0.1";
+        };
+      };
+      primitive = "just a string";
+      number = 42;
+      enabled = true;
+    };
+    expected = ''
+      {
+        "enabled": true,
+        "number": 42,
+        "output": [
+          {
+            "ip": [
+              {
+                "value": "127.0.0.1"
+              }
+            ]
+          }
+        ],
+        "primitive": "just a string",
+        "resource": [
+          {
+            "aws_instance": [
+              {
+                "example": [
+                  {
+                    "ami": "ami-12345",
+                    "instance_type": "t2.micro"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "variable": [
+          {
+            "region": [
+              {
+                "default": "us-east-1"
+              }
+            ]
+          }
+        ]
+      }
     '';
   };
 }

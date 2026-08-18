@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndhub-go";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-17vvC6J0VdXouGfX4k1kCVRlkXbNSX3AT8QIY8uKDUE=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false; # tests require networking
 
-  meta = with lib; {
+  meta = {
     description = "Accounting wrapper for the Lightning Network";
     homepage = "https://github.com/getAlby/lndhub.go";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "lndhub.go";
   };
-}
+})

@@ -19,21 +19,23 @@
   dbus,
   desktop-file-utils,
   versionCheckHook,
+  libxml2,
+  appstream,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
-  version = "0.21.0";
+  version = "26.7.1";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    tag = "v${version}";
-    hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PGd2dWmUfdOyBsfn2Jozb7tAxSy2sv8XOKL1K8FwuLE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lfDPrmCl+Fuf/AG8xiFv00HD76Wy63cBc9Iji7Cw2sw=";
   };
 
   nativeBuildInputs = [
@@ -45,28 +47,32 @@ stdenv.mkDerivation rec {
     rustc
     cargo
     desktop-file-utils
+    libxml2 # xmllint
+    appstream # appstreamcli
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      ffmpeg
-      libadwaita
-      openssl
-      libepoxy
-      dbus
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    mpv-unwrapped
+    ffmpeg
+    libadwaita
+    openssl
+    libepoxy
+    dbus
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
+
+  mesonFlags = [
+    "-Drust-target=release"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -82,4 +88,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
   };
-}
+})

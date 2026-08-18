@@ -1,8 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
   # build-system
   poetry-core,
 
@@ -37,8 +38,6 @@ buildPythonPackage rec {
   pname = "pygerber";
   version = "2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Argmaster";
@@ -92,7 +91,12 @@ buildPythonPackage rec {
     "test/gerberx3/test_language_server/tests.py"
   ];
 
-  pytestFlagsArray = [ "--override-ini required_plugins=''" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'open'
+    "test_project_render_with_file_type_tags"
+  ];
+
+  pytestFlags = [ "--override-ini=required_plugins=" ];
 
   pythonImportsCheck = [ "pygerber" ];
 

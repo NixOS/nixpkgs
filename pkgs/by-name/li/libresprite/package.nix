@@ -7,7 +7,6 @@
   pkg-config,
   ninja,
   gtest,
-
   curl,
   freetype,
   giflib,
@@ -15,10 +14,10 @@
   libpng,
   libwebp,
   libarchive,
-  libX11,
+  libx11,
   pixman,
   tinyxml-2,
-  xorg,
+  libxi,
   zlib,
   SDL2,
   SDL2_image,
@@ -34,11 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LibreSprite";
     repo = "LibreSprite";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-jXjrA859hR46Cp5qi6Z1C+hLWCUR7yGlASOGlTveeW8=";
   };
-
+  patches = [
+    # From https://github.com/LibreSprite/LibreSprite/pull/565
+    ./cmake4.diff
+    # Remove Homebrew-specific brew invocation for libarchive on Darwin;
+    # Nix provides libarchive directly via buildInputs.
+    ./no-brew.patch
+  ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -46,31 +51,31 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs =
-    [
-      curl
-      freetype
-      giflib
-      libjpeg
-      libpng
-      libwebp
-      libarchive
-      libX11
-      pixman
-      tinyxml-2
-      zlib
-      SDL2
-      SDL2_image
-      lua
-      # no v8 due to missing libplatform and libbase
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xorg.libXi
-    ];
+  buildInputs = [
+    curl
+    freetype
+    giflib
+    libjpeg
+    libpng
+    libwebp
+    libarchive
+    libx11
+    pixman
+    tinyxml-2
+    zlib
+    SDL2
+    SDL2_image
+    lua
+    # no v8 due to missing libplatform and libbase
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libxi
+  ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"
     "-DWITH_WEBP_SUPPORT=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
@@ -82,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       dst="$out"/share/icons/hicolor/"$size"x"$size"
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
+
+    substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
+      --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
+      --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
   '';
 
   passthru.tests = {
@@ -108,7 +117,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
-    # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

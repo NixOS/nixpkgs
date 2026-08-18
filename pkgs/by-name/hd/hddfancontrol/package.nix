@@ -11,17 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hddfancontrol";
-  version = "2.0.3";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "hddfancontrol";
     tag = finalAttrs.version;
-    hash = "sha256-GdvGFNmarLxtO6BoZ8PktVvAiKIxu4FdZWCJeVtW/fI=";
+    hash = "sha256-SQXzVUv+l14xUNJ7riXFwEq/T0HnL1Gmo6/bjU33Qz0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1GPct+CabVE8/tMpWsQ3/XRJQkcAmS6UDNuz5c/Oewo=";
+  cargoHash = "sha256-MJ9Cm/mzas8mapRF0vmwR6ivWTZevnhkxT5987dypD8=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -29,8 +28,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postBuild = ''
-    mkdir -p target/man
-    cargo run --features gen-man-pages -- target/man
+    mkdir -p target/man target/shell-completions
+    cargo run --features generate-extras -- gen-man-pages target/man
+    cargo run --features generate-extras -- gen-shell-completions target/shell-completions
   '';
 
   postInstall = ''
@@ -39,8 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /usr/bin/hddfancontrol $out/bin/hddfancontrol
     sed -i -e '/EnvironmentFile=.*/d' $out/etc/systemd/system/hddfancontrol.service
 
-    cd target/man
-    installManPage hddfancontrol-daemon.1 hddfancontrol-pwm-test.1 hddfancontrol.1
+    installManPage target/man/*.1
+
+    installShellCompletion --cmd hddfancontrol \
+      --bash target/shell-completions/hddfancontrol.bash \
+      --fish target/shell-completions/hddfancontrol.fish \
+      --zsh target/shell-completions/_hddfancontrol
   '';
 
   postFixup = ''
@@ -62,8 +66,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       benley
-      philipwilk
+      jadewilk
     ];
     mainProgram = "hddfancontrol";
+    platforms = lib.platforms.linux;
   };
 })

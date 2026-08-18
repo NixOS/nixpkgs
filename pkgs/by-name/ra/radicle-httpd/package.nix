@@ -1,6 +1,6 @@
 {
   asciidoctor,
-  fetchgit,
+  fetchFromRadicle,
   git,
   installShellFiles,
   lib,
@@ -9,23 +9,30 @@
   rustPlatform,
   stdenv,
   xdg-utils,
+  versionCheckHook,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "radicle-httpd";
-  version = "0.19.1";
-  env.RADICLE_VERSION = version;
 
-  # You must update the radicle-explorer source hash when changing this.
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
-    rev = "refs/namespaces/z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5/refs/tags/v${version}";
-    hash = "sha256-RDF36bEJg54DG/YgORGo+BwrHMfmd12FRCrP6fVvHPg=";
-    sparseCheckout = [ "radicle-httpd" ];
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "radicle-httpd";
+  version = "0.27.0";
+
+  env.RADICLE_VERSION = finalAttrs.version;
+
+  src = fetchFromRadicle {
+    seed = "seed.radicle.dev";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    tag = "releases/${finalAttrs.version}";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/crates"
+      "/Cargo.toml"
+      "/Cargo.lock"
+    ];
+    hash = "sha256-OJrHV5WdFNzoYrOkqpN1ctrJDB3JTJhH54q/C6IV9ZU=";
   };
 
-  sourceRoot = "${src.name}/radicle-httpd";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wSz0kM2XU717A0+mU+3eOHJWlRGdG9KjvfUkUq5bv14=";
+  cargoHash = "sha256-FjYhw27pAX9Tilgm/Tg18Vkv4/K5kEFJAbhv1mDY0rg=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -57,13 +64,23 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) radicle; };
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
       A Radicle HTTP daemon exposing a JSON HTTP API that allows someone to browse local
       repositories on a Radicle node via their web browser.
     '';
-    homepage = "https://radicle.xyz";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
@@ -71,10 +88,8 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      gador
-      lorenzleutgeb
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "radicle-httpd";
   };
-}
+})

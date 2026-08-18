@@ -5,12 +5,12 @@
 }:
 mkYaziPlugin {
   pname = "rsync.yazi";
-  version = "0-unstable-2025-06-09";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "GianniBYoung";
     repo = "rsync.yazi";
-    rev = "55631aaaa7654b86469a07bbedf62a5561caa2c9";
-    hash = "sha256-4U6tYAZboMV5YguQIBpcZtcLWwF3TYYFFUXLtVxYxwU=";
+    tag = "v1.0.1";
+    hash = "sha256-dwxbtfDOXmlZzH9Tetb71pGteP7lbOE59E+Ajl/bd3c=";
   };
 
   meta = {

@@ -6,24 +6,23 @@
   installShellFiles,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "homeassistant-cli";
-  version = "0.9.6";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "home-assistant-cli";
-    rev = version;
-    hash = "sha256-4OeHJ7icDZUOC5K4L0F0Nd9lbJPgdW4LCU0wniLvJ1Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-LF6JXELAP3Mvta3RuDUs4UiQ7ptNFh0vZmPh3ICJFRY=";
   };
 
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
-  '';
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  dependencies = with python3.pkgs; [
     aiohttp
     click
     click-log
@@ -57,8 +56,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line tool for Home Assistant";
     mainProgram = "hass-cli";
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
-    changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

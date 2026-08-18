@@ -6,21 +6,16 @@
   glib,
   intltool,
   libfm,
-  libX11,
+  libx11,
   pango,
   pkg-config,
   wrapGAppsHook3,
   adwaita-icon-theme,
-  withGtk3 ? true,
-  gtk2,
   gtk3,
+  gettext,
+  nix-update-script,
 }:
 
-let
-  libfm' = libfm.override { inherit withGtk3; };
-  gtk = if withGtk3 then gtk3 else gtk2;
-  inherit (lib) optional;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanfm";
   version = "1.4.0";
@@ -28,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "pcmanfm";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-4kJDCnld//Vbe2KbrLoYZJ/dutagY/GImoOnbpQIdDY=";
   };
 
@@ -41,20 +36,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gtk
-    libfm'
-    libX11
+    gtk3
+    libfm
+    libx11
     pango
     adwaita-icon-theme
   ];
 
-  configureFlags = optional withGtk3 "--with-gtk=3";
+  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
+
+  configureFlags = [ "--with-gtk=3" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
     license = lib.licenses.gpl2Plus;
     description = "File manager with GTK interface";
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "pcmanfm";
   };

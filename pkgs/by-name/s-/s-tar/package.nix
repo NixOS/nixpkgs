@@ -4,17 +4,18 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "s-tar";
   version = "1.6";
   src = fetchurl {
-    url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";
+    url = "mirror://sourceforge/s-tar/star-${finalAttrs.version}.tar.bz2";
     sha256 = "0xpp8gf0ghwdgncdwx17fpadxislwrj48gcm42851hz6p8p6c60v";
   };
 
   preConfigure = "rm configure";
   preBuild = "sed 's_/bin/__g' -i RULES/*";
   makeFlags = [ "GMAKE_NOWARN=true" ];
+  env.NIX_CFLAGS_COMPILE = "-std=c89";
   installFlags = [
     "DESTDIR=$(out)"
     "INS_BASE=/"
@@ -39,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

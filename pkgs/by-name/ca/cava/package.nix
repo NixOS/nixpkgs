@@ -5,6 +5,7 @@
   autoreconfHook,
   autoconf-archive,
   alsa-lib,
+  darwinMinVersionHook,
   fftw,
   iniparser,
   libGL,
@@ -20,38 +21,38 @@
   withPipewire ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cava";
-  version = "0.10.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
-    rev = version;
-    hash = "sha256-oKEUddzg7Gt3uu6x9D65JX0PvuC59r7Psb9VZz3+nCc=";
+    tag = finalAttrs.version;
+    hash = "sha256-0vQWobnt9pAZTJc45Lgcfad72BE8DUPGQ5/YwMSmU98=";
   };
 
-  buildInputs =
-    [
-      fftw
-      iniparser
-      libpulseaudio
-      libtool
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      portaudio
-    ]
-    ++ lib.optionals withSDL2 [
-      libGL
-      SDL2
-    ]
-    ++ lib.optionals withPipewire [
-      pipewire
-    ];
+  buildInputs = [
+    fftw
+    iniparser
+    libpulseaudio
+    libtool
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "14.2")
+    portaudio
+  ]
+  ++ lib.optionals withSDL2 [
+    libGL
+    SDL2
+  ]
+  ++ lib.optionals withPipewire [
+    pipewire
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -63,18 +64,17 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "-v";
 
   preAutoreconf = ''
-    echo ${version} > version
+    echo ${finalAttrs.version} > version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      offline
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mirrexagon
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "cava";
   };
-}
+})

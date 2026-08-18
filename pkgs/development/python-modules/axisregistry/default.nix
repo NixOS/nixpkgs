@@ -4,21 +4,19 @@
   fetchPypi,
   fonttools,
   protobuf,
+  gfmetadata,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.12";
+  version = "0.4.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d60VbzlDiAL+J8sCE0sp2RgB02WGrigqcdzqW55ex1s=";
+    hash = "sha256-y+x/EUp+LPVkviXKok3pg/mPxpzSiuYimIL27Xm4G28=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
@@ -33,6 +31,7 @@ buildPythonPackage rec {
 
   dependencies = [
     fonttools
+    gfmetadata
     protobuf
   ];
 
@@ -40,11 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "axisregistry" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Fonts registry of OpenType variation axis tags";
     homepage = "https://github.com/googlefonts/axisregistry";
     changelog = "https://github.com/googlefonts/axisregistry/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
 }

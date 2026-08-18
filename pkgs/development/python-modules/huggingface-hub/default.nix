@@ -7,109 +7,115 @@
   setuptools,
 
   # dependencies
+  click,
   filelock,
   fsspec,
   hf-xet,
+  httpx,
   packaging,
   pyyaml,
-  requests,
   tqdm,
   typing-extensions,
 
   # optional-dependencies
-  # cli
-  inquirerpy,
-  # inference
-  aiohttp,
   # torch
   torch,
   safetensors,
-  # hf_transfer
-  hf-transfer,
   # fastai
   toml,
   fastai,
   fastcore,
-  # tensorflow
-  tensorflow,
-  pydot,
-  graphviz,
-  # tensorflow-testing
-  keras,
+  # gradio
+  gradio,
+  requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
+  # mcp
+  mcp,
+
+  # tests
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "0.33.2";
+  version = "1.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    tag = "v${version}";
-    hash = "sha256-Com5lLcQqIPRvsXyqD5S3SW/1KmKEc85Rjxyc9iG5SY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AJglCIJZPeabIjgx+qeEpKM2HhX2hr4xx4SWpghDrhE=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
+    click
     filelock
     fsspec
     hf-xet
+    httpx
     packaging
     pyyaml
-    requests
     tqdm
     typing-extensions
   ];
 
   optional-dependencies = {
     all = [
-
-    ];
-    cli = [
-      inquirerpy
-    ];
-    inference = [
-      aiohttp
-    ];
-    torch = [
-      torch
-      safetensors
-    ] ++ safetensors.optional-dependencies.torch;
-    hf_transfer = [
-      hf-transfer
     ];
     fastai = [
       toml
       fastai
       fastcore
     ];
-    tensorflow = [
-      tensorflow
-      pydot
-      graphviz
-    ];
-    tensorflow-testing = [
-      tensorflow
-      keras
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet
     ];
+    mcp = [
+      mcp
+    ];
+    oauth = [
+      authlib
+      fastapi
+      httpx
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
   };
 
-  # Tests require network access.
-  doCheck = false;
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
-    mainProgram = "huggingface-cli";
+    mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      osbm
+    ];
   };
-}
+})

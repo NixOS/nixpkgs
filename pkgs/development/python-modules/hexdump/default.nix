@@ -29,13 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hexdump" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to dump binary data to hex format and restore from there";
     homepage = "https://pypi.org/project/hexdump/"; # BitBucket site returns 404
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [
-      frogamic
-      sbruder
+    license = lib.licenses.publicDomain;
+    maintainers = [
     ];
   };
 }

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
   loguru,
   platformdirs,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   version = "0.12.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "pawamoy";
     repo = "aria2p";
@@ -47,7 +44,8 @@ buildPythonPackage rec {
     setuptools # for pkg_resources
     toml
     websocket-client
-  ] ++ lib.optionals withTui optional-dependencies.tui;
+  ]
+  ++ lib.optionals withTui optional-dependencies.tui;
 
   optional-dependencies = {
     tui = [
@@ -68,7 +66,8 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ optional-dependencies.tui;
+  ]
+  ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server

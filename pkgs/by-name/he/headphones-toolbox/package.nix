@@ -12,7 +12,7 @@
   yarnConfigHook,
 }:
 
-rustPlatform.buildRustPackage (rec {
+rustPlatform.buildRustPackage rec {
   pname = "headphones-toolbox";
   version = "0.0.7";
   tag = "test-tauri-v2-2";
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage (rec {
     hash = "sha256-Ln5U0KKsKm6ZLViZIWfBiBjm/mQNEIxaj4nTR55PcRg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-VgCxYYNBV45sTzouS5NE7nOUViPj0gJO7DSKlJSAT4U=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
@@ -58,4 +57,4 @@ rustPlatform.buildRustPackage (rec {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

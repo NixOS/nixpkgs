@@ -23,20 +23,28 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.12";
+  version = "0.2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
     tag = version;
-    hash = "sha256-CMO3qhxYmwB9kWIiHWV/0gAfs/yCnHzpfNYLTy4wX78=";
+    hash = "sha256-8QXPvfVeT3qadxTvt/LQX3XM5tGj6SpfOhP/9xcZHW4=";
   };
 
+  patches = [ ./update-pyo3.patch ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    hash = "sha256-+2hENnrG35eRgQwtCCJUux9mYEkzD2astLgOqWHrH/M=";
+    hash = "sha256-n28jzS2+zbXsdR7rT0PBvcqNacuFMJKUug0mBYc4eFE=";
+    patchFlags = [ "-p4" ]; # strip i/aardwolf/utils/rlers/ prefix
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -63,19 +71,20 @@ buildPythonPackage rec {
     pyperclip
     tqdm
     unicrypto
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [ "aardwolf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous RDP protocol implementation";
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

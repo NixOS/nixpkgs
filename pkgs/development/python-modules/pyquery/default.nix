@@ -42,9 +42,9 @@ buildPythonPackage rec {
     }))
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # requires network
-    "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+    "tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
   ];
 
   disabledTests = [
@@ -58,10 +58,10 @@ buildPythonPackage rec {
     "test_session"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

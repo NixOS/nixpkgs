@@ -24,7 +24,14 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   pango,
   systemd,
   pciutils,
@@ -39,26 +46,21 @@ version: hashes:
 let
   pname = "electron";
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
-      yayayayaka
-      teutat3s
-      tomasajt
-    ];
+    teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "35.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "41.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -80,7 +82,6 @@ let
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -105,14 +106,14 @@ let
     gtk4
     nss
     nspr
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxkbfile
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxkbfile
     pango
     pciutils
     stdenv.cc.cc
@@ -184,6 +185,9 @@ let
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = finalAttrs: {

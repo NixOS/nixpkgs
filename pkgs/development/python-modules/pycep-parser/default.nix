@@ -4,30 +4,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
-  poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
-  pythonOlder,
   regex,
   typing-extensions,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycep-parser";
-  version = "0.5.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
-    tag = version;
-    hash = "sha256-yCcJUN+gDeuifFoYyFsS5Ak/AYxLo0Q8edmhFYfi/eA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z7OJWnVXINo4vdAVCm60l3TaoegKqaavG9pOsc+0NX4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv-build~=0.12.0" "uv-build"
+  '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  pythonRelaxDeps = [ "regex" ];
+
+  dependencies = [
     lark
     regex
     typing-extensions
@@ -40,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
-    changelog = "https://github.com/gruebel/pycep/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/gruebel/pycep/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

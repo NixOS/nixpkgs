@@ -23,22 +23,21 @@ let
     {
       aarch64-darwin = "arm64";
       aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
       x86_64-linux = "x64";
     }
     ."${system}" or (throw "Unsupported system: ${system}");
   hash =
     {
-      arm64-linux-hash = "sha256-iiyaPJm/x6rRIc7vWrzK72sB84xGgJTGV3YkxYsIpvY=";
-      arm64-osx-hash = "sha256-YQhVeFPl5L+VR/W3iFjdujNP/oZaxyWydy+Gw/wmEtU=";
-      x64-linux-hash = "sha256-IkxfmNRW77B5TENu7kg7i4aD9cHDDGu0A15AHFAX3h4=";
-      x64-osx-hash = "sha256-Ef03sYPk99xYferbofsYBVbacWD4g67LM0idtVLMxgA=";
+      arm64-linux-hash = "sha256-hFZ27VAIBDW8c7oP+Nl0rj6T2CRbee8Qxf4CzZJmCL8=";
+      arm64-osx-hash = "sha256-oFqnQnbBGAD4x97FANbY091nJrzHRMewalASwgOul8s=";
+      x64-linux-hash = "sha256-ZRgCJf2GGV1B+QgmYh4OfX7nMfRBdN6pIg5pU6Q/KCQ=";
+      x64-osx-hash = "sha256-H5qLdiL4hEkg5g50zzrv1HdZMc6ji69O5GUrpHWkrdo=";
     }
     ."${arch}-${os}-hash";
 in
 stdenv.mkDerivation rec {
   pname = "whisparr";
-  version = "2.0.0.1112";
+  version = "2.0.0.2151";
 
   src = fetchurl {
     name = "${pname}-${arch}-${os}-${version}.tar.gz";
@@ -86,11 +85,10 @@ stdenv.mkDerivation rec {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "Whisparr";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
   };
 }

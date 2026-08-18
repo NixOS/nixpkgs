@@ -1,5 +1,5 @@
 diff --git a/py/pyproject.toml b/py/pyproject.toml
-index 9afa6a63c7..c28f9a4cbc 100644
+index eca3222d38..69bd19773b 100644
 --- a/py/pyproject.toml
 +++ b/py/pyproject.toml
 @@ -1,5 +1,5 @@
@@ -9,13 +9,14 @@ index 9afa6a63c7..c28f9a4cbc 100644
  build-backend = "setuptools.build_meta"
  
  [project]
-@@ -43,9 +43,6 @@ exclude = ["test*"]
- namespaces = false
+@@ -66,10 +66,6 @@ exclude = ["test*"]
+ namespaces = true
  # include-package-data is `true` by default in pyproject.toml
  
--[[tool.setuptools-rust.bins]]
+-[[tool.setuptools-rust.ext-modules]]
 -target = "selenium.webdriver.common.selenium-manager"
+-binding = "Exec"
 -
- [project.urls]
- Repository = "https://github.com/SeleniumHQ/selenium/"
- BugTracker = "https://github.com/SeleniumHQ/selenium/issues"
+ [tool.setuptools.package-data]
+ "*" = [
+     "*.py",

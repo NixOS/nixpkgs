@@ -25,6 +25,8 @@ let
     postPatch = ''
       ln -s ${./Cargo.lock} Cargo.lock
     '';
+
+    env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
   };
 in
 vimUtils.buildVimPlugin {

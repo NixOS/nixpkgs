@@ -1,6 +1,11 @@
-{ stdenv, perl }:
+{
+  lib,
+  stdenv,
+  perl,
+}:
 stdenv.mkDerivation {
-  name = "mono-dll-fixer";
+  pname = "mono-dll-fixer";
+  version = lib.trivial.release;
   dllFixer = ./dll-fixer.pl;
   dontUnpack = true;
   installPhase = ''

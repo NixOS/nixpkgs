@@ -1,38 +1,48 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  bash,
+  fish,
+  hatch-vcs,
+  hatchling,
+  markdown,
+  mkdocs,
+  pexpect,
   pydantic,
+  pymdown-extensions,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
-  rich-rst,
   rich,
+  rich-rst,
+  sphinx,
+  syrupy,
   trio,
+  zsh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "3.22.1";
+  version = "4.22.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    tag = "v${version}";
-    hash = "sha256-/1H5PwG/X5XqXGh4lcaxr5ZrHbcHTBHAgG/XMnOCUb0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jjhlo8QWettZMvgHzY/QP6Q74IBSqdCqZWK6lYlYUng=";
   };
 
+  pythonRelaxDeps = [ "rich-rst" ];
+
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -45,27 +55,49 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    mkdocs = [
+      mkdocs
+      markdown
+      pymdown-extensions
+    ];
   };
 
   nativeCheckInputs = [
+    pexpect
     pydantic
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
-    pyyaml
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    syrupy
+
+    # integrations
+    sphinx
+    bash
+    fish
+    zsh
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Assertion error
-    "test_pydantic_error_msg"
+    # Building docs
+    "build_succeeds"
+    # timeouts under heavy concurrency
+    "test_behavior[zsh-root-subcommands]"
+    "test_behavior[zsh-subcommand-prefix]"
+    "test_path_completion_action"
+    "test_requires_equals_eq_form_value_completion"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
-    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      PerchunPak
+    ];
   };
-}
+})

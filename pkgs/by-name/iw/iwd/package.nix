@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.9";
+  version = "3.12";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     tag = finalAttrs.version;
-    hash = "sha256-NY0WB62ehxKH64ssAF4vkF6YroG5HHH+ii+AFG9EaE4=";
+    hash = "sha256-78Zw/i2dXecvC+DDSunPlUzqJj0FFYf7Sm6iN5VXBbA=";
   };
 
   patches = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
     "doc"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
   separateDebugInfo = true;
 
   nativeBuildInputs = [
@@ -78,16 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc
-      cp -a doc $doc/share/doc/iwd
-      cp -a README AUTHORS TODO $doc/share/doc/iwd
-    ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p $test/bin
-      cp -a test/* $test/bin/
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
+  ''
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
+  '';
 
   preFixup = ''
     wrapPythonPrograms
@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      dtzWill
       fpletz
     ];
   };

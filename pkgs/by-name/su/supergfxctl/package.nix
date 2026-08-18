@@ -7,18 +7,17 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "supergfxctl";
   version = "5.2.7";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d3jN4i4oHRFDgr5f6y42gahrCfXBPB61T72x6IeiskM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BM/fcXWyEWjAkqOdj2MItOzKknNUe9HMns30H1n5/xo=";
 
   postPatch = ''
@@ -43,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/lib/systemd/system/ data/supergfxd.service
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU switching utility, mostly for ASUS laptops";
     homepage = "https://gitlab.com/asus-linux/supergfxctl";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.k900 ];
+    maintainers = [ lib.maintainers.k900 ];
   };
-}
+})

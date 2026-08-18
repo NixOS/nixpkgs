@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "fcitx5-nord";
-  version = "unstable-2021-07-27";
+  version = "0-unstable-2021-07-27";
 
   src = fetchFromGitHub {
     owner = "tonyfettes";
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 theme based on Nord color";
     homepage = "https://github.com/tonyfettes/fcitx5-nord";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Cryolitia ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Cryolitia ];
+    platforms = lib.platforms.all;
   };
 }

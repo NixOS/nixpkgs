@@ -4,37 +4,41 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   testers,
   shadcn,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shadcn";
-  version = "2.0.3";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "shadcn-ui";
     repo = "ui";
     rev = "shadcn@${finalAttrs.version}";
-    hash = "sha256-OBLKCj+v5KgYslJGuwLgJHjgcrxLPiiyO5/ucrJ14Ws=";
+    hash = "sha256-jwZBYQKixm3YAC8uLSeQMwTFoOrw4EgkvgC1FWShxy0=";
   };
 
   pnpmWorkspaces = [ "shadcn" ];
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    hash = "sha256-/80LJm65ZRqyfhsNqGl83bsI2wjgVkvrA6Ij4v8rtoQ=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-XqdSa9ONpJ/QOu7njPMhG0xyTLEN9nt/dm3E0ivDaEs=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''
@@ -52,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r {packages,node_modules} $out/lib
 
     # cleanup
-    rm -r $out/lib/packages/{cli,shadcn/src}
     find $out/lib/packages/shadcn -name '*.ts' -delete
 
     makeWrapper ${lib.getExe nodejs} $out/bin/shadcn \
@@ -61,6 +64,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontCheckForBrokenSymlinks = true;
 
   passthru.tests.version = testers.testVersion {
     package = shadcn;

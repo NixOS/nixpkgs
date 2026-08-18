@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.3.8";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libidn/${pname}-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/libidn/libidn2-${version}.tar.gz";
     hash = "sha256-9VeRG/YXFiHh9y/zX1sYJbs1tS7UUyXc3ukx5dPAeHo=";
   };
 
@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
   };
 }

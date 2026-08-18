@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   options.boot.loader.efi = {
 
@@ -13,5 +13,11 @@
       type = lib.types.str;
       description = "Where the EFI System Partition is mounted.";
     };
+  };
+
+  config = {
+    # Applied to all bootloader support random seed initialization
+    systemd.services.systemd-boot-random-seed.environment.SYSTEMD_ESP_PATH =
+      config.boot.loader.efi.efiSysMountPoint;
   };
 }

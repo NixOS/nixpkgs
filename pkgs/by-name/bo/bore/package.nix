@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1fdnnx7d18gj4rkv1dc6q379dqabl66zks9i0rjarjwcci8m30d9";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6uIqvX50XoWCPQ8u38rUdi4LwtMTBcNuefNmzGY+vLU=";
   cargoBuildFlags = [
     "-p"
@@ -36,7 +35,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1
@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage rec {
     | grep -q ';; NoError #0 Query 0 0 0 0 flags'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DNS query tool";
     homepage = "https://crates.io/crates/bore";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
     mainProgram = "bore";
     broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident

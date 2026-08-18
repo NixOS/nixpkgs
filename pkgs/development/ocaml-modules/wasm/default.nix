@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   menhir,
-  odoc,
   buildDunePackage,
 }:
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "wasm";
   version = "2.0.2";
 
@@ -15,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
-    tag = "opam-${version}";
+    tag = "opam-${finalAttrs.version}";
     hash = "sha256-RbVGW6laC3trP6IhtA2tLrAYVbx0Oucox9FgoEvs6LQ=";
   };
 
@@ -24,12 +22,8 @@ buildDunePackage rec {
     export sourceRoot=$PWD
   '';
 
-  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
-  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-
   nativeBuildInputs = [
     menhir
-    odoc
   ];
 
   meta = {
@@ -39,4 +33,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/WebAssembly/spec/tree/main/interpreter";
   };
-}
+})

@@ -2,17 +2,16 @@
 
 grafanaPlugin {
   pname = "grafana-mqtt-datasource";
-  version = "1.1.0-beta.3";
+  version = "1.3.6";
   zipHash = {
-    x86_64-linux = "sha256-/0hZc0lFV1LXl6532nLJmJ6fJPdRx+sMt7Uep4GTeX0=";
-    aarch64-linux = "sha256-KPIa/yYkzbKm4/mB84/DdIsdqfQBOc0+LGxl2GHDVGk=";
-    x86_64-darwin = "sha256-7gGw/RCuzHmj/vaIAweXLPqQYAl0EMSXXjPCtjRC4vU=";
-    aarch64-darwin = "sha256-i2/lE7QickowFSvHoo7CuaZ1ChFVpsQgZjvuBTQapq4=";
+    x86_64-linux = "sha256-q6o+NfRqncZYCmtPSvnMxMwKPOmdkj3zWem108kLyF4=";
+    aarch64-linux = "sha256-ej1/EGDLdlyhyVIoEMrJSsn4h0c+DrRfYUM9Y7MrpWc=";
+    aarch64-darwin = "sha256-6UWLNK9dTOh+x8mQxwlDFwS6L5R74Lpspdl7U1uiuYA=";
   };
-  meta = with lib; {
-    description = "The MQTT data source plugin allows you to visualize streaming MQTT data from within Grafana.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+  meta = {
+    description = "Visualize streaming MQTT data from within Grafana";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

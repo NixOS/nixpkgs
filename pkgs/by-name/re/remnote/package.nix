@@ -2,25 +2,29 @@
   lib,
   fetchurl,
   appimageTools,
+  makeWrapper,
   writeScript,
 }:
-let
+
+appimageTools.wrapType2 (finalAttrs: {
   pname = "remnote";
-  version = "1.19.35";
+  version = "1.28.0";
+
   src = fetchurl {
-    url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
-    hash = "sha256-UrldNDYof3lYDyP6z3ukFdpiOkJZUJpO8iygI3JaBY4=";
+    url = "https://download2.remnote.io/remnote-desktop2/RemNote-${finalAttrs.version}.AppImage";
+    hash = "sha256-ufoxkQhlrf2BSf/D3whS3tfKlkfle0KHwJR/amEpads=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
+    install -Dm444 ${finalAttrs.contents}/remnote.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/remnote.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
-    install -Dm444 ${appimageContents}/remnote.png -t $out/share/pixmaps
+    install -Dm444 ${finalAttrs.contents}/remnote.png -t $out/share/icons/hicolor/512x512/apps
+
+    wrapProgram $out/bin/remnote \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}"
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
@@ -36,12 +40,13 @@ appimageTools.wrapType2 {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ chewblacka ];
-    license = licenses.unfree;
+    changelog = "https://feedback.remnote.com/changelog";
+    maintainers = with lib.maintainers; [ talal ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
   };
-}
+})

@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qt5,
+  qt6,
+  mdbtools,
   p7zip,
   python3,
+  sqlite,
   installShellFiles,
 
   # Whether to compile with XDG support
@@ -14,24 +16,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skyscraper";
-  version = "3.17.3";
+  version = "3.20.3";
 
   src = fetchFromGitHub {
     owner = "Gemba";
     repo = "skyscraper";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vQkvIQnTonvEByZaUQbumfR9aSiakEvy4MLXvllztis=";
+    tag = finalAttrs.version;
+    hash = "sha256-/N9yMJuz1S/kcPiO3AxHE2YlEnZzPwu2/yCfGjzbbcM=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-    qt5.qmake
+    qt6.wrapQtAppsHook
+    qt6.qmake
     installShellFiles
   ];
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    qt6.qtbase
+    mdbtools
+    sqlite
+    python3
+  ];
 
   postPatch = lib.optionalString enableXdg ''
     substituteInPlace skyscraper.pro --replace-fail "#DEFINES+=XDG" "DEFINES+=XDG"
@@ -45,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ p7zip ]})
     chmod +x $out/bin/*.py
+    sed -i '2i\\export PATH="${
+      lib.makeBinPath [
+        mdbtools
+        sqlite
+      ]
+    }:$PATH"' \
+      $out/bin/mdb2sqlite.sh
   '';
 
   env.PREFIX = placeholder "out";

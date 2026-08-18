@@ -1,9 +1,6 @@
 {
 
-  # Content-addressable Nix mirrors
-  hashedMirrors = [
-    "https://tarballs.nixos.org"
-  ];
+  hashedMirrors = throw "Use config.hashedMirrors instead of (import ./pkgs/build-support/fetchurl/mirrors.nix).hashedMirrors";
 
   # Mirrors for mirror://site/filename URIs, where "site" is
   # "sourceforge", "gnu", etc.
@@ -56,10 +53,13 @@
   ];
 
   # GCC
+  # The commented out ones don't seem to be keeping up with the latest releases
+  # as of 2026-07-07 they don't have tarballs for 14.4 or 15.3
   gcc = [
-    "https://mirror.koddos.net/gcc/"
-    "https://bigsearcher.com/mirrors/gcc/"
-    "ftp://ftp.nluug.nl/mirror/languages/gcc/"
+    # "https://mirror.koddos.net/gcc/"
+    # "https://bigsearcher.com/mirrors/gcc/"
+    "https://mirrorservice.org/sites/sourceware.org/pub/gcc/"
+    # "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
     "ftp://gcc.gnu.org/pub/gcc/"
@@ -69,12 +69,6 @@
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need
     "https://download.gnome.org/"
-
-    "https://fr2.rpmfind.net/linux/gnome.org/"
-    "https://ftp.acc.umu.se/pub/GNOME/"
-    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
-    "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   # GNU (https://www.gnu.org/prep/ftp.html)
@@ -99,9 +93,7 @@
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
     "https://mirrors.dotsrc.org/gcrypt/"
-    "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
     "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
-    "http://www.ring.gr.jp/pub/net/"
   ];
 
   # IBiblio (former metalab/sunsite)
@@ -123,9 +115,9 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
+  # See https://download.kde.org/ls-lR.mirrorlist
   kde = [
     "https://download.kde.org/"
-    "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree
@@ -341,6 +333,17 @@
   # Python Test-PyPI
   testpypi = [
     "https://test.pypi.io/packages/source/"
+  ];
+
+  # TeX historic archive (see https://tug.org/historic/)
+  texhistoric = [
+    "https://ftp.math.utah.edu/pub/tex/historic/"
+    "https://texlive.info/historic/"
+    "https://ftp.tu-chemnitz.de/pub/tug/historic/"
+    "https://pi.kwarc.info/historic/"
+    "https://mirrors.tuna.tsinghua.edu.cn/tex-historic-archive/"
+    "https://mirror.nju.edu.cn/tex-historic/"
+    "ftp://tug.org/texlive/historic/"
   ];
 
   ### Linux distros

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OjTwAQzKUuXfwZXLsL9XjrJc/0be38CmAGG+CoCeNwk=";
   };
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
     "-Wno-error=deprecated-declarations"
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://guacamole.apache.org/";
     license = lib.licenses.asl20;
     mainProgram = "guacd";
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

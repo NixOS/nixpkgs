@@ -7,15 +7,15 @@
 
 assert !blas.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plumed";
-  version = "2.9.3";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "plumed";
     repo = "plumed2";
-    rev = "v${version}";
-    hash = "sha256-KN412t64tp3QUQkhpLU3sAYDosQ3hw9HqpT1fzt5fwA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K22IE4bMk6b96Ac2yA2+dfGqy4BeoRuymYBk5hwrVok=";
   };
 
   postPatch = ''
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Molecular metadynamics library";
     homepage = "https://github.com/plumed/plumed2";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

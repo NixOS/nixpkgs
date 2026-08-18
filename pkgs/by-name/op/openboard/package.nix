@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libsForQt5,
+  qt6Packages,
   libGL,
   fontconfig,
   openssl,
@@ -22,44 +22,35 @@
   lame,
   fdk_aac,
   libass,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
 }:
 
 let
-  importer = stdenv.mkDerivation {
-    pname = "openboard-importer";
-    version = "unstable-2016-10-08";
-
-    src = fetchFromGitHub {
-      owner = "OpenBoard-org";
-      repo = "OpenBoard-Importer";
-      rev = "47927bda021b4f7f1540b794825fb0d601875e79";
-      sha256 = "19zhgsimy0f070caikc4vrrqyc8kv2h6rl37sy3iggks8z0g98gf";
-    };
-
-    nativeBuildInputs = [
-      libsForQt5.qmake
-      libsForQt5.wrapQtAppsHook
-    ];
-    buildInputs = [ libsForQt5.qtbase ];
-    dontWrapQtApps = true;
-
-    installPhase = ''
-      install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
-    '';
-  };
+  inherit (qt6Packages)
+    qtbase
+    qttools
+    qtmultimedia
+    qtwebengine
+    qmake
+    wrapQtAppsHook
+    quazip
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.3";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
+    hash = "sha256-MjUbfv+3o3f4qsLPxLDeUn+/h5YupMMhC/SecwmCR8Q=";
   };
+
+  patches = [
+    ./poppler-26-compat.patch # https://github.com/OpenBoard-org/OpenBoard/pull/1474
+  ];
 
   postPatch = ''
     substituteInPlace resources/etc/OpenBoard.config \
@@ -76,14 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtxmlpatterns
-    libsForQt5.qttools
-    libsForQt5.qtwebengine
+    qtbase
+    qttools
+    qtwebengine
+    qtmultimedia
     libGL
     fontconfig
     openssl
@@ -101,22 +92,19 @@ stdenv.mkDerivation (finalAttrs: {
     lame
     fdk_aac
     libass
-    libsForQt5.quazip
-    libXext
-    libXfixes
+    quazip
+    libxext
+    libxfixes
   ];
 
-  propagatedBuildInputs = [ importer ];
-
-  meta = with lib; {
+  meta = {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      atinba
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fufexan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "openboard";
   };
 })

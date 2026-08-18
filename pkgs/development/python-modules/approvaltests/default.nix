@@ -7,12 +7,12 @@
   empty-files,
   fetchFromGitHub,
   mock,
-  mrjob,
   numpy,
   pyperclip,
   pytest,
   pytest-asyncio,
   pytestCheckHook,
+  pyyaml,
   setuptools,
   testfixtures,
   typing-extensions,
@@ -20,15 +20,23 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.6.0";
+  version = "18.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-hoBT83p2PHZR5NtVChdWK5SMjLt8llj59K5ODaKtRhQ=";
+    hash = "sha256-2lz3TMI4/QoNVfnZga5Ro9rheixFpVJfNbvVLy0lnLA=";
   };
+
+  postPatch = ''
+    test -f setup.py || mv setup/setup.approvaltests.py setup.py
+
+    python3 setup/set_version.py '${version}'
+
+    patchShebangs internal_documentation/scripts
+  '';
 
   build-system = [ setuptools ];
 
@@ -38,7 +46,6 @@ buildPythonPackage rec {
     beautifulsoup4
     empty-files
     mock
-    mrjob
     pyperclip
     pytest
     testfixtures
@@ -49,14 +56,13 @@ buildPythonPackage rec {
     numpy
     pytest-asyncio
     pytestCheckHook
+    pyyaml
   ];
 
   disabledTests = [
-    "test_preceding_whitespace"
+    "test_warnings"
+    # test runs another python interpreter, ignoring $PYTHONPATH
     "test_command_line_verify"
-    # Tests expect paths below ApprovalTests.Python directory
-    "test_received_filename"
-    "test_pytest_namer"
   ];
 
   pythonImportsCheck = [

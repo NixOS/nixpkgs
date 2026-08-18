@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXScrnSaver,
-  libXext,
+  libx11,
+  libxscrnsaver,
+  libxext,
   glib,
   dbus,
   pkg-config,
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
   buildInputs = [
     dbus
     glib
-    libX11
-    libXScrnSaver
-    libXext
+    libx11
+    libxscrnsaver
+    libxext
     systemd
   ];
 

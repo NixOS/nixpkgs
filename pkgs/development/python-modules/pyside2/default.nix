@@ -4,7 +4,6 @@
   lib,
   stdenv,
   cmake,
-  libxcrypt,
   ninja,
   qt5,
   shiboken2,
@@ -36,6 +35,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cd sources/pyside2
+    for i in {.,doc}/CMakeLists.txt; do
+      substituteInPlace $i --replace-fail \
+        "cmake_minimum_required(VERSION 3.1)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace $i --replace-fail \
+        "cmake_policy(VERSION 3.1)" \
+        "cmake_policy(VERSION 3.10)"
+    done
   '';
 
   cmakeFlags = [
@@ -67,19 +74,13 @@ stdenv.mkDerivation rec {
       qtlocation
       qtscript
       qtwebsockets
-      qtwebengine
       qtwebchannel
       qtcharts
       qtsensors
       qtsvg
       qt3d
     ])
-    ++ (with python.pkgs; [ setuptools ])
-    ++ (lib.optionals (python.pythonOlder "3.9") [
-      # see similar issue: 202262
-      # libxcrypt is required for crypt.h for building older python modules
-      libxcrypt
-    ]);
+    ++ (with python.pkgs; [ setuptools ]);
 
   propagatedBuildInputs = [ shiboken2 ];
 
@@ -91,12 +92,12 @@ stdenv.mkDerivation rec {
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LGPL-licensed Python bindings for Qt";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

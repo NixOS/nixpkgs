@@ -1,14 +1,17 @@
-From c5fe9a321d83fc70cf30ef999c24377869cedbd8 Mon Sep 17 00:00:00 2001
-From: SomeoneSerge <else@someonex.net>
+From 85c36c4a692a229b7ce688ba92fa2bdd5b9d6877 Mon Sep 17 00:00:00 2001
+From: Else Someone <else@someonex.net>
 Date: Thu, 27 Jun 2024 11:15:38 +0000
 Subject: [PATCH] imgui: allow installing into split outputs
 
+Change install(... DESTINATION include) to
+install(... DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}.
+Use $<INSTALL_INTERFACE:...> where appropriate.
 ---
- ports/imgui/CMakeLists.txt | 74 +++++++++++++++++++++++---------------
- 1 file changed, 45 insertions(+), 29 deletions(-)
+ ports/imgui/CMakeLists.txt | 78 +++++++++++++++++++++++---------------
+ 1 file changed, 47 insertions(+), 31 deletions(-)
 
 diff --git a/ports/imgui/CMakeLists.txt b/ports/imgui/CMakeLists.txt
-index 1502a5aff2..be05d29f4f 100644
+index 03eefb8b8f..1b3fa8b285 100644
 --- a/ports/imgui/CMakeLists.txt
 +++ b/ports/imgui/CMakeLists.txt
 @@ -8,13 +8,15 @@ if(APPLE)
@@ -28,7 +31,7 @@ index 1502a5aff2..be05d29f4f 100644
  )
  
  target_sources(
-@@ -154,18 +156,32 @@ list(REMOVE_DUPLICATES BINDINGS_SOURCES)
+@@ -174,18 +176,32 @@ list(REMOVE_DUPLICATES BINDINGS_SOURCES)
  install(
      TARGETS ${PROJECT_NAME}
      EXPORT ${PROJECT_NAME}_target
@@ -67,7 +70,7 @@ index 1502a5aff2..be05d29f4f 100644
      )
  endforeach()
  
-@@ -178,47 +194,47 @@ if(NOT IMGUI_SKIP_HEADERS)
+@@ -198,47 +214,47 @@ if(NOT IMGUI_SKIP_HEADERS)
          ${CMAKE_CURRENT_SOURCE_DIR}/imstb_rectpack.h
          ${CMAKE_CURRENT_SOURCE_DIR}/imstb_truetype.h
          ${CMAKE_CURRENT_SOURCE_DIR}/misc/cpp/imgui_stdlib.h
@@ -126,7 +129,7 @@ index 1502a5aff2..be05d29f4f 100644
      endif()
  
      if(IMGUI_BUILD_OPENGL3_BINDING)
-@@ -227,16 +243,16 @@ if(NOT IMGUI_SKIP_HEADERS)
+@@ -247,16 +263,16 @@ if(NOT IMGUI_SKIP_HEADERS)
                  ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_opengl3.h
                  ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_opengl3_loader.h
              DESTINATION
@@ -146,7 +149,7 @@ index 1502a5aff2..be05d29f4f 100644
      endif()
  
      if(IMGUI_BUILD_SDLGPU3_BINDING)
-@@ -245,24 +261,24 @@ if(NOT IMGUI_SKIP_HEADERS)
+@@ -265,28 +281,28 @@ if(NOT IMGUI_SKIP_HEADERS)
                  ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_sdlgpu3.h
                  ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_sdlgpu3_shaders.h
              DESTINATION
@@ -170,13 +173,25 @@ index 1502a5aff2..be05d29f4f 100644
 +        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_win32.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
      endif()
  
+     if(IMGUI_BUILD_WEBGPU_BINDING)
+-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_wgpu.h DESTINATION include)
++        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/backends/imgui_impl_wgpu.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+     endif()
+ 
      if(IMGUI_FREETYPE)
 -        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/misc/freetype/imgui_freetype.h DESTINATION include)
 +        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/misc/freetype/imgui_freetype.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
      endif()
  
      if(IMGUI_TEST_ENGINE)
-@@ -285,13 +301,13 @@ if(NOT IMGUI_SKIP_HEADERS)
+@@ -303,19 +319,19 @@ if(NOT IMGUI_SKIP_HEADERS)
+                 ${CMAKE_CURRENT_SOURCE_DIR}/test-engine/imgui_te_ui.h
+                 ${CMAKE_CURRENT_SOURCE_DIR}/test-engine/imgui_te_utils.h
+             DESTINATION
+-                include
++                ${CMAKE_INSTALL_INCLUDEDIR}
+         )
+     endif()
  endif()
  
  include(CMakePackageConfigHelpers)
@@ -194,5 +209,5 @@ index 1502a5aff2..be05d29f4f 100644
 +    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
  )
 -- 
-2.47.2
+2.53.0
 

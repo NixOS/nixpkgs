@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyelftools";
   version = "0.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eliben";

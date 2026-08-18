@@ -19,6 +19,13 @@ stdenv.mkDerivation {
     hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -36,15 +43,15 @@ stdenv.mkDerivation {
       --bash ../etc/bash_completion.d/sd-mux-ctrl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling multiple sd-mux devices";
     homepage = "https://git.tizen.org/cgit/tools/testlab/sd-mux";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       newam
       sarcasticadmin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "sd-mux-ctrl";
   };
 }

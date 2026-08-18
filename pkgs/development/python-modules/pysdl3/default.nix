@@ -19,18 +19,18 @@
 let
   dochash =
     if stdenv.hostPlatform.isLinux then
-      "sha256-+1zLd308zL+m68kLMeOWWxT0wYDgCd6g9cc2hEtaeUs="
+      "sha256-7Uc1kfbfizpRmAr5h3rpTX565wvbZfbbbYcJh9s96DY="
     else if stdenv.hostPlatform.isDarwin then
-      "sha256-2uB9+ABgv5O376LyHb0ShGjM4LHYzMRMxk/k+1LBmv0="
+      "sha256-gumVIn/st/mgdPpQA/BLZD0sI5qLf1EJRQ90rKLXjvQ="
     else if stdenv.hostPlatform.isWindows then
-      "sha256-46bQSPYctycizf2GXichd5V74LjxwIAPhBmklXAJ/Jg="
+      "sha256-55Ti6HUzlptSf9ozaz0kmYMz+6EAcOcnZ0R64rZYISY="
     else
       throw "PySDL3 does not support ${stdenv.hostPlatform.uname.system}";
   lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 buildPythonPackage rec {
   pname = "pysdl3";
-  version = "0.9.8b1";
+  version = "0.9.11b1";
   pyproject = true;
 
   pythonImportsCheck = [ "sdl3" ];
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     owner = "Aermoss";
     repo = "PySDL3";
     tag = "v${version}";
-    hash = "sha256-FVUCcqKTq6qdNkYHTYFiUxt2HIaNC5LK0BEUfz8Mue8=";
+    hash = "sha256-fATBYZ4DYpOYYr09SwfODaWqEwQtig0smqI2Pjnv9uo=";
   };
 
   docfile = fetchurl {
     url = "https://github.com/Aermoss/PySDL3/releases/download/v${version}/${stdenv.hostPlatform.uname.system}-Docs.py";
-    hash = "${dochash}";
+    hash = dochash;
   };
 
   postUnpack = ''
@@ -83,20 +83,29 @@ buildPythonPackage rec {
     SDL_AUDIODRIVER = "dummy";
     SDL_RENDER_DRIVER = "software";
     PYTHONFAULTHANDLER = "1";
+
+    # For import checks, duplicated from setup hook.
+    SDL_CHECK_BINARY_VERSION = 0;
+    SDL_DISABLE_METADATA = 1;
+    # Checks for __doc__.py next to the file being executed.
+    # It's very fragile, and doesn't work during the import check.
+    SDL_DOC_GENERATOR = 0;
   };
 
   meta = {
     description = "Pure Python wrapper for SDL3";
     homepage = "https://github.com/Aermoss/PySDL3";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      jansol
+      alfarel
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-windows"
       "x86_64-windows"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 }

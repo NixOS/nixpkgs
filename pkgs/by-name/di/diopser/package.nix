@@ -8,11 +8,11 @@
   libjack2,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
 }:
 
 let
@@ -29,7 +29,7 @@ let
   };
 
   juce = {
-    version = "unstable-2021-04-07";
+    version = "6.0.8-unstable-2021-04-08";
     src = fetchFromGitHub {
       owner = "juce-framework";
       repo = "JUCE";
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "diopser";
-  version = "unstable-2021-5-13";
+  version = "0-unstable-2021-04-13";
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";
@@ -84,11 +84,11 @@ stdenv.mkDerivation {
     libjack2
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 
   cmakeFlags = [
@@ -96,11 +96,11 @@ stdenv.mkDerivation {
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Totally original phase rotation plugin";
     homepage = "https://github.com/robbert-vdh/diopser";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

@@ -8,12 +8,12 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "docbook2odf";
   version = "0.244";
 
   src = fetchurl {
-    url = "http://open.comsultia.com/docbook2odf/dwn/docbook2odf-${version}.tar.gz";
+    url = "http://open.comsultia.com/docbook2odf/dwn/docbook2odf-${finalAttrs.version}.tar.gz";
     sha256 = "10k44g0qqa37k30pfj8vz95j6zdzz0nmnqjq1lyahfs2h4glzgwb";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert DocBook to OpenDocument Format (ODF)";
     longDescription = ''
       Docbook2odf is a toolkit that automatically converts DocBook to OASIS
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
       documents are XML based.
     '';
     homepage = "http://open.comsultia.com/docbook2odf/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "docbook2odf";
   };
-}
+})

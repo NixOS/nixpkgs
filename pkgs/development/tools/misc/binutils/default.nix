@@ -19,7 +19,9 @@ in
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+  # shared lib linking fails on cygwin due to multiple definitions
+  # https://cygwin.com/cgit/cygwin-packages/binutils/blame/binutils.cygport
+  enableShared ? (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isCygwin),
   # WARN: Enabling all targets increases output size to a multiple.
   withAllTargets ? false,
 }:
@@ -32,7 +34,7 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.44";
+  version = "2.46";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
@@ -80,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
-    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
+    hash = "sha256-uMmj15bcCw6OqTXcJMXI1vNF6xd62lrGpbESLHfWIVg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -120,38 +122,36 @@ stdenv.mkDerivation (finalAttrs: {
     ./windres-locate-gcc.patch
   ];
 
-  outputs =
-    [
-      "out"
-      "info"
-      "man"
-      "dev"
-    ]
-    # Ideally we would like to always install 'lib' into a separate
-    # target. Unfortunately cross-compiled binutils installs libraries
-    # across both `$lib/lib/` and `$out/$target/lib` with a reference
-    # from $out to $lib. Probably a binutils bug: all libraries should go
-    # to $lib as binutils does not build target libraries. Let's make our
-    # life slightly simpler by installing everything into $out for
-    # cross-binutils.
-    ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "dev"
+  ]
+  # Ideally we would like to always install 'lib' into a separate
+  # target. Unfortunately cross-compiled binutils installs libraries
+  # across both `$lib/lib/` and `$out/$target/lib` with a reference
+  # from $out to $lib. Probably a binutils bug: all libraries should go
+  # to $lib as binutils does not build target libraries. Let's make our
+  # life slightly simpler by installing everything into $out for
+  # cross-binutils.
+  ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # texinfo was removed here in https://github.com/NixOS/nixpkgs/pull/210132
   # to reduce rebuilds during stdenv bootstrap.  Please don't add it back without
   # checking the impact there first.
-  nativeBuildInputs =
-    [
-      bison
-      perl
-    ]
-    ++ lib.optionals buildPlatform.isDarwin [
-      autoconf269
-      automake
-      gettext
-      libtool
-    ];
+  nativeBuildInputs = [
+    bison
+    perl
+  ]
+  ++ lib.optionals buildPlatform.isDarwin [
+    autoconf269
+    automake
+    gettext
+    libtool
+  ];
 
   buildInputs = [
     zlib
@@ -203,7 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [
     "format"
-    "pie"
   ];
 
   configurePlatforms = [
@@ -212,69 +211,68 @@ stdenv.mkDerivation (finalAttrs: {
     "target"
   ];
 
-  configureFlags =
-    [
-      "--enable-64-bit-bfd"
-      "--with-system-zlib"
+  configureFlags = [
+    "--enable-64-bit-bfd"
+    "--with-system-zlib"
 
-      "--enable-deterministic-archives"
-      "--disable-werror"
-      "--enable-fix-loongson2f-nop"
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
 
-      # Turn on --enable-new-dtags by default to make the linker set
-      # RUNPATH instead of RPATH on binaries.  This is important because
-      # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
-      "--enable-new-dtags"
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
 
-      # force target prefix. Some versions of binutils will make it empty if
-      # `--host` and `--target` are too close, even if Nixpkgs thinks the
-      # platforms are different (e.g. because not all the info makes the
-      # `config`). Other versions of binutils will always prefix if `--target` is
-      # passed, even if `--host` and `--target` are the same. The easiest thing
-      # for us to do is not leave it to chance, and force the program prefix to be
-      # what we want it to be.
-      "--program-prefix=${targetPrefix}"
+    # force target prefix. Some versions of binutils will make it empty if
+    # `--host` and `--target` are too close, even if Nixpkgs thinks the
+    # platforms are different (e.g. because not all the info makes the
+    # `config`). Other versions of binutils will always prefix if `--target` is
+    # passed, even if `--host` and `--target` are the same. The easiest thing
+    # for us to do is not leave it to chance, and force the program prefix to be
+    # what we want it to be.
+    "--program-prefix=${targetPrefix}"
 
-      # Unconditionally disable:
-      # - musl target needs porting: https://sourceware.org/PR29477
-      "--disable-gprofng"
+    # Unconditionally disable:
+    # - musl target needs porting: https://sourceware.org/PR29477
+    "--disable-gprofng"
 
-      # By default binutils searches $libdir for libraries. This brings in
-      # libbfd and libopcodes into a default visibility. Drop default lib
-      # path to force users to declare their use of these libraries.
-      "--with-lib-path=:"
-    ]
-    ++ lib.optionals withAllTargets [
-      "--enable-targets=all"
-      # gas will be built separately for each target.
-      "--disable-gas"
-    ]
-    ++ lib.optionals enableGold [
-      "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
-      "--enable-plugins"
-    ]
-    ++ (
-      if enableShared then
-        [
-          "--enable-shared"
-          "--disable-static"
-        ]
-      else
-        [
-          "--disable-shared"
-          "--enable-static"
-        ]
-    )
-    ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    # By default binutils searches $libdir for libraries. This brings in
+    # libbfd and libopcodes into a default visibility. Drop default lib
+    # path to force users to declare their use of these libraries.
+    "--with-lib-path=:"
+  ]
+  ++ lib.optionals withAllTargets [
+    "--enable-targets=all"
+    # gas will be built separately for each target.
+    "--disable-gas"
+  ]
+  ++ lib.optionals enableGold [
+    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+    "--enable-plugins"
+  ]
+  ++ (
+    if enableShared then
       [
-        # lld17+ passes `--no-undefined-version` by default and makes this a hard
-        # error; libctf.ver version script references symbols that aren't present.
-        #
-        # This is fixed upstream and can be removed with the future release of 2.43.
-        # For now we allow this with `--undefined-version`:
-        "LDFLAGS=-Wl,--undefined-version"
+        "--enable-shared"
+        "--disable-static"
       ]
-    );
+    else
+      [
+        "--disable-shared"
+        "--enable-static"
+      ]
+  )
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; libctf.ver version script references symbols that aren't present.
+      #
+      # This is fixed upstream and can be removed with the future release of 2.43.
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+    ]
+  );
 
   postConfigure = lib.optionalString withAllTargets ''
     for target in ${lib.escapeShellArgs allGasTargets}; do
@@ -356,7 +354,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
@@ -365,12 +363,12 @@ stdenv.mkDerivation (finalAttrs: {
       `gprof', `nm', `strip', etc.
     '';
     homepage = "https://www.gnu.org/software/binutils/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       ericson2314
       lovesegfault
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a
     # collision due to the ld/as wrappers/symlinks in the latter.

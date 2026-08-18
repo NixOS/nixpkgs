@@ -7,6 +7,7 @@
 
   # optional-dependencies
   numpy,
+  packaging,
   torch,
   tensorflow,
   flax,
@@ -19,28 +20,28 @@
   pytest,
   pytest-benchmark,
   hypothesis,
+  fsspec,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "safetensors";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
-    tag = "v${version}";
-    hash = "sha256-wAr/jvr0w+vOHjjqE7cPcAM/IMz+58YhfoJ2XC4987M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jD12fRcQ9mPQVr3M1G5pP9rC3cPE5Eu9m9Ga5N9Tsqg=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   optional-dependencies = lib.fix (self: {
     numpy = [ numpy ];
     torch = self.numpy ++ [
+      packaging
       torch
     ];
     tensorflow = self.numpy ++ [
@@ -79,6 +81,7 @@ buildPythonPackage rec {
       pytest
       pytest-benchmark
       hypothesis
+      fsspec
     ];
     all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
     dev = self.all;
@@ -89,8 +92,11 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     torch
+    fsspec
   ];
-  pytestFlagsArray = [ "tests" ];
+
+  enabledTestPaths = [ "tests" ];
+
   disabledTests = [
     # AttributeError: module 'torch' has no attribute 'float4_e2m1fn_x2'
     "test_odd_dtype_fp4"
@@ -103,25 +109,25 @@ buildPythonPackage rec {
     # != 'Erro[41 chars] 5]:  SliceOutOfRange { dim_index: 1, asked: 20, dim_size: 5 }'
     "test_numpy_slice"
   ];
+
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
-  disabledTestPaths =
-    [
-      "tests/test_flax_comparison.py"
-      "tests/test_paddle_comparison.py"
-      "tests/test_tf_comparison.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # don't require mlx (not in Nixpkgs) to run tests
-      "tests/test_mlx_comparison.py"
-    ];
+  disabledTestPaths = [
+    "tests/test_flax_comparison.py"
+    "tests/test_paddle_comparison.py"
+    "tests/test_tf_comparison.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # don't require mlx (not in Nixpkgs) to run tests
+    "tests/test_mlx_comparison.py"
+  ];
 
   pythonImportsCheck = [ "safetensors" ];
 
   meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
-    changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/safetensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

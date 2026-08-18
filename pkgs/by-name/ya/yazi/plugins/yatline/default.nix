@@ -3,21 +3,22 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-mkYaziPlugin {
+mkYaziPlugin (finalAttrs: {
   pname = "yatline.yazi";
-  version = "0-unstable-2025-06-11";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "imsi32";
     repo = "yatline.yazi";
-    rev = "73bce63ffb454ea108a96f316e2a8c2e16a35262";
-    hash = "sha256-pIaqnxEGKiWvtFZJm0e7GSbbIc2qaTCB+czHLcVuVzY=";
+    tag = "v0.5.0";
+    hash = "sha256-HjTRAfUHs6vlEWKruQWeA2wT/Mcd+WEHM90egFTYcWQ=";
   };
 
   meta = {
     description = "Yazi plugin for customizing both header-line and status-line";
     homepage = "https://github.com/imsi32/yatline.yazi";
+    changelog = "https://github.com/imsi32/yatline.yazi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
-}
+})

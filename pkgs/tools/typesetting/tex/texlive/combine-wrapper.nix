@@ -2,7 +2,7 @@
 {
   lib,
   toTLPkgList,
-  toTLPkgSets,
+  pkgs,
   buildTeXEnv,
 }:
 args@{
@@ -46,7 +46,11 @@ let
       in
       builtins.genericClosure {
         startSet = pkgListToSets pkgList;
-        operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or [ ]);
+        operator =
+          { pkg, ... }:
+          pkgListToSets (
+            if pkg ? tlDeps then if builtins.isFunction pkg.tlDeps then pkg.tlDeps pkgs else pkg.tlDeps else [ ]
+          );
       }
     );
   combined = combinePkgs (lib.attrValues pkgSet);
@@ -67,12 +71,16 @@ let
       tlOutputName = tlTypeToOut.${tlType};
     };
   all = lib.filter pkgFilter combined ++ lib.filter (pkg: pkg.tlType == "tlpkg") combined;
-  converted = builtins.map toSpecified all;
+  converted = map toSpecified all;
 in
-buildTeXEnv {
-  __extraName = extraName;
-  __extraVersion = extraVersion;
-  requiredTeXPackages = _: converted;
-  __combine = true;
-  __fromCombineWrapper = true;
-}
+lib.addMetaAttrs
+  {
+    problems.removal.message = "texlive.combine is deprecated and will be removed from Nixpkgs 27.05. Please switch to texliveSmall.withPackages. See https://nixos.org/manual/nixpkgs/stable/#sec-language-texlive-user-guide.";
+  }
+  (buildTeXEnv {
+    __extraName = extraName;
+    __extraVersion = extraVersion;
+    requiredTeXPackages = _: converted;
+    __combine = true;
+    __fromCombineWrapper = true;
+  })

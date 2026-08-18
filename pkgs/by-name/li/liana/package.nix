@@ -16,7 +16,10 @@
   libxkbcommon,
   wayland,
   vulkan-loader,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 let
@@ -31,25 +34,24 @@ let
     wayland
     libxkbcommon
     vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "11.1"; # keep in sync with lianad
+  version = "15.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     tag = "v${version}";
-    hash = "sha256-trP6jnhMPASPkV7VwSHCl7gUhmx4F+68YK/QK+SPPZg=";
+    hash = "sha256-mRBhpf4Risuq4TQ1y/5lWTOxN2RMHcZ2SC2BpbsOdhA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Zmxb4ZxuIyyKWrGaX3/1UHgkmo/XtqIHuP9luAnzgm4=";
+  cargoHash = "sha256-Mr6YOK7d6pfFliaiw2Mjj5wJvPk+6yH892uS7ksd4YU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -82,14 +84,14 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "liana-gui";
     description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
     changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dunxen ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dunxen ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -44,6 +44,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Manjari Malayalam Typeface";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ adtya ];
+    maintainers = [ ];
   };
 }

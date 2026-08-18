@@ -13,14 +13,14 @@ let
   confFile = settingsFormat.generate "stubby.yml" cfg.settings;
 in
 {
-  imports =
-    [
-      (mkRemovedOptionModule [
-        "stubby"
-        "debugLogging"
-      ] "Use services.stubby.logLevel = \"debug\"; instead.")
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [
+      "stubby"
+      "debugLogging"
+    ] "Use services.stubby.logLevel = \"debug\"; instead.")
+  ]
+  ++
+    map
       (
         x:
         (mkRemovedOptionModule [

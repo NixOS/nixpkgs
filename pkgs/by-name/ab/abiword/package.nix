@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  autoreconfHook269,
+  autoreconfHook,
   autoconf-archive,
   pkg-config,
   gtk3,
@@ -23,20 +23,20 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abiword";
-  version = "3.0.6";
+  version = "3.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-PPK4O+NKXdl7DKPOgGlVyCFTol8hhmtq0wdTTtwKQ/4=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-TjOHixfCXDQlUUbD1L5wcGe4Nl0+1UqZw4EF+1/eZ4w=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook269
+    autoreconfHook
     autoconf-archive
     pkg-config
     wrapGAppsHook3
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
       sna
     ];
   };
-}
+})

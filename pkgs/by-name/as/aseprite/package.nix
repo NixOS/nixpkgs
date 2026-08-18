@@ -4,24 +4,25 @@
   cmark,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   fontconfig,
   freetype,
   giflib,
-  gitUpdater,
   glib,
   harfbuzzFull,
+  libicns,
   lib,
   libGL,
   libjpeg,
   libpng,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxxf86vm,
+  libxcb,
+  libxrandr,
   ninja,
   pcre2,
   pixman,
@@ -33,40 +34,36 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.13";
+  version = "1.3.18.2";
 
-  srcs = [
-    (fetchFromGitHub {
-      name = "aseprite-source";
-      owner = "aseprite";
-      repo = "aseprite";
-      tag = "v${finalAttrs.version}";
-      fetchSubmodules = true;
-      hash = "sha256-eeB/4fQp1lbNYQj9LpNhOn7DYxaTc+BcmyvY2vPzpxk=";
-    })
+  src = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "aseprite";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-Blv/OXnQSofbwzjng24HwLjEViXx13EqkAZvBSjnB3Y=";
+  };
 
-    # Translation strings
-    (fetchFromGitHub {
-      name = "aseprite-strings";
-      owner = "aseprite";
-      repo = "strings";
-      rev = "7b0af61dec1d98242d7eb2e9cab835d442d21235";
-      hash = "sha256-8OwwHCFP55pwLjk5O+a36hDZf9uX3P7cNliJM5SZdAg=";
-    })
-  ];
+  asepriteStrings = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "strings";
+    rev = "b43be33343efa40c1c4bda00f985b8cd83bddf2a";
+    hash = "sha256-JxNEtWnP3RtntXM3CmJLXyByW6dri98COp2O0A6ZwBA=";
+  };
 
-  # Sets the main build directory to "aseprite-source" since multiple sources are fetched.
-  sourceRoot = "aseprite-source";
-
-  # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
+  # Translation files are copied without overwriting existing ones to preserve
+  # the potentially more up-to-date English file from the main source.
   postUnpack = ''
-    cp --no-clobber $PWD/aseprite-strings/* ./aseprite-source/data/strings
+    cp --no-clobber ${finalAttrs.asepriteStrings}/* "$sourceRoot/data/strings"
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   buildInputs = [
@@ -82,11 +79,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libwebp
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxxf86vm
+    libxcb
+    libxrandr
     pcre2
     pixman
     skia-aseprite
@@ -98,11 +97,21 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./shared-fmt.patch
     ./shared-libwebp.patch
     ./shared-skia-deps.patch
+    ./shared-libjpeg-turbo.patch
   ];
 
   postPatch = ''
     substituteInPlace src/ver/CMakeLists.txt \
       --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+
+    # fmt 12.2 no longer exposes fmt::format through fmt/core.h.
+    substituteInPlace src/app/i18n/strings.h \
+      --replace-fail '"fmt/core.h"' '"fmt/format.h"'
+
+    # Fix build on Darwin with `-Werror=format-security`
+    # (NSLog requires a string-literal format)
+    substituteInPlace laf/os/osx/logger.mm \
+      --replace-fail 'NSLog([NSString stringWithUTF8String:error]);' 'NSLog(@"%@", [NSString stringWithUTF8String:error]);'
   '';
 
   cmakeFlags = [
@@ -114,9 +123,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DUSE_SHARED_FREETYPE=ON"
     "-DUSE_SHARED_GIFLIB=ON"
     "-DUSE_SHARED_HARFBUZZ=ON"
-    "-DUSE_SHARED_JPEGLIB=ON"
     "-DUSE_SHARED_LIBPNG=ON"
-    "-DUSE_SHARED_LIBWEBP=ON"
     "-DUSE_SHARED_PIXMAN=ON"
     "-DUSE_SHARED_TINYXML=OFF"
     "-DUSE_SHARED_WEBP=ON"
@@ -132,6 +139,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DSKIA_LIBRARY_DIR=${skia-aseprite}/lib"
   ];
 
+  # `libskia.a` is static, so its deps must be linked explicitly on Darwin
+  # (otherwise we hit undefined `_jpeg_*`/`_WebP*` symbols, e.g. in the thumbnailer).
+  env.NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isDarwin "-ljpeg -lwebp -lwebpdemux -lwebpmux";
+
   postInstall = ''
     # Install desktop icons.
     src="$out/share/aseprite/data/icons"
@@ -142,9 +153,33 @@ clangStdenv.mkDerivation (finalAttrs: {
     done
     # Delete unneeded artifacts of bundled libraries.
     rm -rf "$out"/{include,lib,man}
+  ''
+  + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
+    install -d "$out/Applications"
+    if [ -d "$out/bin/aseprite.app" ]; then
+      rm -rf "$out/Applications/Aseprite.app"
+      mv "$out/bin/aseprite.app" "$out/Applications/Aseprite.app"
+    fi
+    # Generate the `.icns` files referenced by Info.plist from the shipped PNGs.
+    res="$out/Applications/Aseprite.app/Contents/Resources"
+    icons="$res/data/icons"
+    if [ -d "$icons" ] && command -v png2icns >/dev/null; then
+      for spec in "Aseprite ase" "Document doc" "Extension ext"; do
+        set -- $spec
+        name="$1"
+        prefix="$2"
+        png2icns "$res/$name.icns" \
+          "$icons/''${prefix}16.png" \
+          "$icons/''${prefix}32.png" \
+          "$icons/''${prefix}128.png" \
+          "$icons/''${prefix}256.png"
+      done
+    fi
+    # Keep $out/bin clean on Darwin; the bundle lives under $out/Applications.
+    rmdir "$out/bin" 2>/dev/null || true
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.aseprite.org/";
@@ -152,22 +187,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     longDescription = ''
       Aseprite is a program to create animated sprites. Its main features are:
-
-                - Sprites are composed by layers & frames (as separated concepts).
-                - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
-                - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
-                - Export/import animations to/from Sprite Sheets.
-                - Tiled drawing mode, useful to draw patterns and textures.
-                - Undo/Redo for every operation.
-                - Real-time animation preview.
-                - Multiple editors support.
-                - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
-                - Onion skinning.
+        - Sprites are composed by layers & frames (as separated concepts).
+        - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
+        - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
+        - Export/import animations to/from Sprite Sheets.
+        - Tiled drawing mode, useful to draw patterns and textures.
+        - Undo/Redo for every operation.
+        - Real-time animation preview.
+        - Multiple editors support.
+        - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
+        - Onion skinning.
     '';
-    maintainers = with lib.maintainers; [
-      orivej
-    ];
-    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.iamanaws ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "aseprite";
   };
 })

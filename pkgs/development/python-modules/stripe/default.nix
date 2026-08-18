@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
-  setuptools,
+  flit-core,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "12.1.0";
+  version = "15.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SkuFFpUs9QlemCJX8NR8RcHSu/d0PiyxLWaF9V2ouNQ=";
+    hash = "sha256-a3EEiycKBsE5nJ/2F55pB8eCXsOU9XmpczQNXCuFda4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     requests
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stripe" ];
 
-  meta = with lib; {
+  meta = {
     description = "Stripe Python bindings";
     homepage = "https://github.com/stripe/stripe-python";
     changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

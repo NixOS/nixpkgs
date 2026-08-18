@@ -15,7 +15,6 @@
   # Whether to support XDG portals at all
   xdgDesktopPortalSupport ? (
     plasma6XdgDesktopPortalSupport
-    || plasma5XdgDesktopPortalSupport
     || lxqtXdgDesktopPortalSupport
     || gnomeXdgDesktopPortalSupport
     || hyprlandXdgDesktopPortalSupport
@@ -25,9 +24,6 @@
 
   # This is Plasma 6 (KDE) XDG portal support
   plasma6XdgDesktopPortalSupport ? false,
-
-  # This is Plasma 5 (KDE) XDG portal support
-  plasma5XdgDesktopPortalSupport ? false,
 
   # This is LXQT XDG portal support
   lxqtXdgDesktopPortalSupport ? false,
@@ -50,42 +46,36 @@
   # This list can be overridden to add in extra packages
   # that are independent of the underlying package attrset
   targetPkgsFixed ? [ ],
-
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
 
-  # Zoom versions are released at different times for each platform
-  # and often with different versions. We write them on three lines
-  # like this (rather than using {}) so that the updater script can
+  # Zoom versions are released at different times per platform and often with different versions.
+  # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.5.1.58208";
-  versions.x86_64-darwin = "6.5.1.58208";
-  versions.x86_64-linux = "6.5.1.2550";
+  versions.aarch64-darwin = "7.1.5.84650";
+
+  # This is the fallback version so that evaluation can produce a meaningful result.
+  versions.x86_64-linux = "7.1.5.4332";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-hIYZ2OU5lww4MyRZOhcV4qQDGEN8Hdolw6a4g/ItcFQ=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-t/xIrVfjAl6dM9RWa+imyFHqS2KIJsKnoU0fiDQL9dQ=";
+      hash = "sha256-Sc9wr2dBdvNwi507UZ9YVCTEQsz3RP2WWTJ5Z5ccgnk=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-1YcbAlnUEk9R95r7RIuxAxNfRymdIOAjKkCw7a+1Lm4=";
+      hash = "sha256-5znZNrySgRrs9I5zhqN5p5dPfXpEHXKf8o2dWeYTPso=";
     };
   };
 
   unpacked = stdenv.mkDerivation {
     pname = "zoom";
-    version = versions.${system} or throwSystem;
+    version = versions.${system} or versions.x86_64-linux;
 
-    src = srcs.${system} or throwSystem;
+    src = srcs.${system} or srcs.x86_64-linux;
 
     dontUnpack = stdenv.hostPlatform.isLinux;
     unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -115,22 +105,21 @@ let
 
     installPhase = ''
       runHook preInstall
-      ${
-        rec {
-          aarch64-darwin = ''
-            mkdir -p $out/Applications
-            cp -R zoom.us.app $out/Applications/
-          '';
-          # darwin steps same on both architectures
-          x86_64-darwin = aarch64-darwin;
-          x86_64-linux = ''
-            mkdir $out
-            tar -C $out -xf $src
-            mv $out/usr/* $out/
-          '';
-        }
-        .${system} or throwSystem
-      }
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          cp -R zoom.us.app $out/Applications/
+        ''
+      else
+        ''
+          mkdir $out
+          tar -C $out -xf $src
+          mv $out/usr/* $out/
+        ''
+    )
+    + ''
       runHook postInstall
     '';
 
@@ -141,7 +130,6 @@ let
     dontPatchELF = true;
 
     passthru.updateScript = ./update.sh;
-    passthru.tests.startwindow = callPackage ./test.nix { };
     passthru.tests.nixos-module = nixosTests.zoom-us;
 
     meta = {
@@ -152,14 +140,12 @@ let
       license = lib.licenses.unfree;
       platforms = builtins.attrNames srcs;
       maintainers = with lib.maintainers; [
-        danbst
-        tadfisher
+        philiptaron
+        ryan4yin
       ];
       mainProgram = "zoom";
     };
   };
-  packages.aarch64-darwin = unpacked;
-  packages.x86_64-darwin = unpacked;
 
   # linux definitions
 
@@ -167,56 +153,55 @@ let
     pkgs:
     [
       pkgs.alsa-lib
-      pkgs.at-spi2-atk
-      pkgs.at-spi2-core
       pkgs.atk
       pkgs.cairo
-      pkgs.coreutils
       pkgs.cups
       pkgs.dbus
       pkgs.expat
       pkgs.fontconfig
       pkgs.freetype
-      pkgs.gdk-pixbuf
       pkgs.glib
-      pkgs.glib.dev
       pkgs.gtk3
+      pkgs.ibus
       pkgs.libGL
+      pkgs.libGLU
+      pkgs.libatomic_ops
       pkgs.libdrm
       pkgs.libgbm
       pkgs.libkrb5
+      pkgs.libsm
+      pkgs.libxi
       pkgs.libxkbcommon
+      pkgs.libxslt
+      pkgs.mesa-demos
       pkgs.nspr
       pkgs.nss
       pkgs.pango
       pkgs.pciutils
       pkgs.pipewire
-      pkgs.procps
-      pkgs.qt5.qt3d
-      pkgs.qt5.qtgamepad
-      pkgs.qt5.qtlottie
-      pkgs.qt5.qtmultimedia
-      pkgs.qt5.qtremoteobjects
-      pkgs.qt5.qtxmlpatterns
+      pkgs.qt6.qtbase
+      pkgs.qt6.qtdeclarative
       pkgs.stdenv.cc.cc
       pkgs.udev
-      pkgs.util-linux
       pkgs.wayland
-      pkgs.xorg.libX11
-      pkgs.xorg.libXcomposite
-      pkgs.xorg.libXdamage
-      pkgs.xorg.libXext
-      pkgs.xorg.libXfixes
-      pkgs.xorg.libXrandr
-      pkgs.xorg.libXrender
-      pkgs.xorg.libXtst
-      pkgs.xorg.libxcb
-      pkgs.xorg.libxshmfence
-      pkgs.xorg.xcbutilimage
-      pkgs.xorg.xcbutilkeysyms
-      pkgs.xorg.xcbutilrenderutil
-      pkgs.xorg.xcbutilwm
+      pkgs.libx11
+      pkgs.libxcomposite
+      pkgs.libxdamage
+      pkgs.libxext
+      pkgs.libxfixes
+      pkgs.libxrandr
+      pkgs.libxrender
+      pkgs.libxtst
+      pkgs.libxshmfence
+      pkgs.libxcb
+      pkgs.libxcb-util
+      pkgs.libxcb-cursor
+      pkgs.libxcb-image
+      pkgs.libxcb-keysyms
+      pkgs.libxcb-render-util
+      pkgs.libxcb-wm
       pkgs.zlib
+      pkgs.zstd
     ]
     ++ lib.optionals pulseaudioSupport [
       pkgs.libpulseaudio
@@ -224,7 +209,6 @@ let
     ]
     ++ lib.optional xdgDesktopPortalSupport pkgs.xdg-desktop-portal
     ++ lib.optional plasma6XdgDesktopPortalSupport pkgs.kdePackages.xdg-desktop-portal-kde
-    ++ lib.optional plasma5XdgDesktopPortalSupport pkgs.plasma5Packages.xdg-desktop-portal-kde
     ++ lib.optional lxqtXdgDesktopPortalSupport pkgs.lxqt.xdg-desktop-portal-lxqt
     ++ lib.optionals gnomeXdgDesktopPortalSupport [
       pkgs.xdg-desktop-portal-gnome
@@ -236,19 +220,17 @@ let
     ++ targetPkgs pkgs
     ++ targetPkgsFixed;
 
-  # We add the `unpacked` zoom archive to the FHS env
-  # and also bind-mount its `/opt` directory.
-  # This should assist Zoom in finding all its
-  # files in the places where it expects them to be.
-  packages.x86_64-linux = buildFHSEnv {
-    pname = "zoom"; # Will also be the program's name!
-    version = versions.${system} or throwSystem;
+in
+if !stdenv.hostPlatform.isLinux then
+  unpacked
+else
+  # We add the `unpacked` zoom archive to the FHS env and also bind-mount its `/opt` directory.
+  # This should assist Zoom in finding all its files in the places where it expects them to be.
+  buildFHSEnv {
+    inherit (unpacked) pname version;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = ''
-      unset QT_PLUGIN_PATH
-      unset LANG  # would break settings dialog on non-"en_XX" locales
-    '';
+    extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
@@ -258,7 +240,7 @@ let
           $out/share/applications/Zoom.desktop \
           --replace-fail Exec={/usr/bin/,}zoom
 
-      # Backwards compatibility: we used to call it zoom-us
+      # Backwards compatibility: we also call it zoom-us
       ln -s $out/bin/{zoom,zoom-us}
     '';
 
@@ -266,8 +248,4 @@ let
       inherit unpacked;
     };
     inherit (unpacked) meta;
-  };
-
-in
-
-packages.${system} or throwSystem
+  }

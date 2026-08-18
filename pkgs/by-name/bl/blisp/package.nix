@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blisp";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "pine64";
     repo = "blisp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cN35VLbdQFA3KTZ8PxgpbsLGXqfFhw5eh3nEBRZqAm4=";
+    hash = "sha256-qjZ5BNQR57J78Y6MT9I388OCLOiYTevPJ2btgmtkpJw=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "In-System-Programming (ISP) tool & library for Bouffalo Labs RISC-V Microcontrollers and SoCs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "blisp";
     homepage = "https://github.com/pine64/blisp";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bdd ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bdd ];
   };
 })

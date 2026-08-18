@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = "realmd";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-lmNlrXOOUSDk/8H/ge0IRA64bnau9nYUIkW6OyVxbBg=";
   };
 

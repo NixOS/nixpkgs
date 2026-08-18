@@ -5,12 +5,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboil";
   version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/download/liboil-${finalAttrs.version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
   # fixes a cast in inline asm: easier than patching
   buildFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-fheinous-gnu-extensions";
 
-  meta = with lib; {
+  meta = {
     description = "Library of simple functions that are optimized for various CPUs";
     mainProgram = "oil-bugreport";
     homepage = "https://liboil.freedesktop.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

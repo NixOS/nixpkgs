@@ -5,19 +5,18 @@
   git,
   lib,
   libffi,
-  llvmPackages_13,
+  llvmPackages_20,
   makeWrapper,
   ncurses,
   python3,
   zlib,
 
-  # *NOT* from LLVM 13!
-  # The compiler used to compile Cling may affect the runtime include and lib
-  # directories it expects to be run with. Cling builds against (a fork of) Clang,
-  # so we prefer to use Clang as the compiler as well for consistency.
-  # It would be cleanest to use LLVM 9's clang, but it errors. So, we use a later
-  # version of Clang to compile, but we check out the Cling fork of Clang 9 to
-  # build Cling against.
+  # The compiler used to *compile* Cling, independent of the LLVM/Clang that
+  # Cling is built against (the root-project/llvm-project fork checked out below)
+  # and of llvmPackages_20 (used only for the runtime wrapper flags). The compiler
+  # can affect the runtime include and lib directories Cling expects, and since
+  # Cling builds against a fork of Clang we use Clang as the compiler too for
+  # consistency.
   clangStdenv,
 
   # For runtime C++ standard library
@@ -34,41 +33,38 @@
 let
   stdenv = clangStdenv;
 
-  # The patched clang lives in the LLVM megarepo
-  clangSrc = fetchFromGitHub {
+  version = "1.3";
+
+  clingSrc = fetchFromGitHub {
     owner = "root-project";
-    repo = "llvm-project";
-    # cling-llvm13 branch
-    rev = "3610201fbe0352a63efb5cb45f4ea4987702c735";
-    sha256 = "sha256-Cb7BvV7yobG+mkaYe7zD2KcnPvm8/vmVATNWssklXyk=";
-    sparseCheckout = [ "clang" ];
+    repo = "cling";
+    rev = "v${version}";
+    sha256 = "sha256-/qCHd9KfPW4dMjktaSdnJG+VDD1lLSI4ZFllTcxWsmc=";
   };
 
-  llvm = llvmPackages_13.llvm.override { enableSharedLibraries = false; };
-
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = stdenv.mkDerivation {
     pname = "cling-unwrapped";
-    version = "1.0";
+    inherit version;
 
-    src = "${clangSrc}/clang";
-
-    clingSrc = fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "root-project";
-      repo = "cling";
-      rev = "v${version}";
-      sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
+      repo = "llvm-project";
+      rev = "cling-llvm20-20260119-01";
+      sha256 = "sha256-fv7nrpZ5Dhbf+nW0ED0pkc8NDBXeaBs9MV2TW6o7FGU=";
     };
 
-    prePatch = ''
-      echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
+    preConfigure = ''
+      cp -r ${clingSrc} cling-source
 
-      cp -r $clingSrc tools/cling
-      chmod -R a+w tools/cling
+      # cling 1.3 only builds the clingUserInterface library (which the cling
+      # driver always links) when CLING_INCLUDE_TESTS is on. Always build it.
+      chmod -R u+w cling-source
+      pushd cling-source
+      patch -p1 < ${./always-build-user-interface.patch}
+      popd
+
+      cd llvm
     '';
-
-    patches = [
-      ./no-clang-cpp.patch
-    ];
 
     nativeBuildInputs = [
       python3
@@ -83,52 +79,40 @@ let
 
     strictDeps = true;
 
-    cmakeFlags =
-      [
-        "-DLLVM_BINARY_DIR=${llvm.out}"
-        "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
-        "-DLLVM_LIBRARY_DIR=${llvm.lib}/lib"
-        "-DLLVM_MAIN_INCLUDE_DIR=${llvm.dev}/include"
-        "-DLLVM_TABLEGEN_EXE=${llvm.out}/bin/llvm-tblgen"
-        "-DLLVM_TOOLS_BINARY_DIR=${llvm.out}/bin"
-        "-DLLVM_BUILD_TOOLS=Off"
-        "-DLLVM_TOOL_CLING_BUILD=ON"
+    cmakeBuildType = if debug then "Debug" else "Release";
 
-        "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
-        "-DLLVM_ENABLE_RTTI=ON"
+    cmakeFlags = [
+      "-DLLVM_EXTERNAL_PROJECTS=cling"
+      "-DLLVM_EXTERNAL_CLING_SOURCE_DIR=../../cling-source"
+      "-DLLVM_ENABLE_PROJECTS=clang"
+      "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
+      "-DLLVM_INCLUDE_TESTS=OFF"
+      "-DLLVM_ENABLE_RTTI=ON"
+    ]
+    ++ lib.optionals useLLVMLibcxx [
+      "-DLLVM_ENABLE_LIBCXX=ON"
+      "-DLLVM_ENABLE_LIBCXXABI=ON"
+    ];
 
-        # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
-        # see cling/tools/CMakeLists.txt
-        "-DCLING_INCLUDE_TESTS=ON"
-        "-DCLANG-TOOLS=OFF"
-      ]
-      ++ lib.optionals debug [
-        "-DCMAKE_BUILD_TYPE=Debug"
-      ]
-      ++ lib.optionals useLLVMLibcxx [
-        "-DLLVM_ENABLE_LIBCXX=ON"
-        "-DLLVM_ENABLE_LIBCXXABI=ON"
-      ];
+    env.CPPFLAGS = lib.optionalString useLLVMLibcxx "-stdlib=libc++";
 
-    CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [ ];
-
-    postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    postInstall = ''
       mkdir -p $out/share/Jupyter
-      cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
+      cp -r ../../cling-source/tools/Jupyter/kernel $out/share/Jupyter
     '';
 
     dontStrip = debug;
 
-    meta = with lib; {
+    meta = {
       description = "Interactive C++ Interpreter";
       mainProgram = "cling";
       homepage = "https://root.cern/cling/";
-      license = with licenses; [
+      license = with lib.licenses; [
         lgpl21
         ncsa
       ];
-      maintainers = with maintainers; [ thomasjm ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ thomasjm ];
+      platforms = lib.platforms.unix;
     };
   };
 
@@ -143,47 +127,46 @@ let
   # Thus, if you're packaging a Jupyter kernel, you either need to pass these flags as extra
   # args to xcpp (for xeus-cling) or put them in the environment variable CLING_OPTS
   # (for jupyter-cling-kernel).
-  flags =
-    [
-      "-nostdinc"
-      "-nostdinc++"
+  flags = [
+    "-nostdinc"
+    "-nostdinc++"
 
-      "-resource-dir"
-      "${llvm.lib}/lib"
+    "-resource-dir"
+    "${llvmPackages_20.llvm.lib}/lib"
 
-      "-isystem"
-      "${lib.getLib unwrapped}/lib/clang/${llvmPackages_13.clang.version}/include"
-    ]
-    ++ lib.optionals useLLVMLibcxx [
-      "-I"
-      "${lib.getDev llvmPackages_13.libcxx}/include/c++/v1"
-      "-L"
-      "${llvmPackages_13.libcxx}/lib"
-      "-l"
-      "${llvmPackages_13.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
-    ]
-    ++ lib.optionals (!useLLVMLibcxx) [
-      "-I"
-      "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-      "-I"
-      "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
-    ]
-    ++ [
-      # System libc on Linux
-      # On Darwin, this is an empty directory, so we need a separate include with
-      # apple-sdk (see below)
-      "-isystem"
-      "${lib.getDev stdenv.cc.libc}/include"
+    "-isystem"
+    "${lib.getLib unwrapped}/lib/clang/20/include"
+  ]
+  ++ lib.optionals useLLVMLibcxx [
+    "-I"
+    "${lib.getDev llvmPackages_20.libcxx}/include/c++/v1"
+    "-L"
+    "${llvmPackages_20.libcxx}/lib"
+    "-l"
+    "${llvmPackages_20.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ]
+  ++ lib.optionals (!useLLVMLibcxx) [
+    "-I"
+    "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
+    "-I"
+    "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
+  ]
+  ++ [
+    # System libc on Linux
+    # On Darwin, this is an empty directory, so we need a separate include with
+    # apple-sdk (see below)
+    "-isystem"
+    "${lib.getDev stdenv.cc.libc}/include"
 
-      # cling includes
-      "-isystem"
-      "${lib.getDev unwrapped}/include"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # On Darwin, we need the system includes
-      "-isystem"
-      "${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
-    ];
+    # cling includes
+    "-isystem"
+    "${lib.getDev unwrapped}/include"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # On Darwin, we need the system includes
+    "-isystem"
+    "${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+  ];
 
 in
 

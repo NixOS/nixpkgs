@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   autoreconfHook,
+  autoconf269,
   cxxSupport ? true,
   compat185 ? true,
   dbmSupport ? false,
@@ -21,15 +23,22 @@ stdenv.mkDerivation (
     inherit version;
 
     src = fetchurl {
-      url = "https://download.oracle.com/berkeley-db/${pname}-${version}.tar.gz";
+      url = "https://download.oracle.com/berkeley-db/db-${version}.tar.gz";
       sha256 = sha256;
     };
 
-    # The provided configure script features `main` returning implicit `int`, which causes
-    # configure checks to work incorrectly with clang 16.
-    nativeBuildInputs = [ autoreconfHook ];
+    # autoreconfHook: the provided configure script features `main` returning implicit `int`,
+    # which causes configure checks to work incorrectly with clang 16.
+    nativeBuildInputs = lib.optionals stdenv.cc.isClang [ autoconf269 ] ++ [ autoreconfHook ];
 
-    patches = extraPatches;
+    patches = [
+      (fetchpatch {
+        name = "gcc15.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/db/files/db-4.8.30-tls-configure.patch?id=1ae36006c79ef705252f5f7009e79f6add7dc353";
+        hash = "sha256-OzQL+kgXtcvhvyleDLuH1abhY4Shb/9IXx4ZkeFbHOA=";
+      })
+    ]
+    ++ extraPatches;
 
     outputs = [
       "bin"
@@ -75,13 +84,16 @@ stdenv.mkDerivation (
       popd
     '';
 
-    configureFlags =
-      [
-        (if cxxSupport then "--enable-cxx" else "--disable-cxx")
-        (if compat185 then "--enable-compat185" else "--disable-compat185")
-      ]
-      ++ lib.optional dbmSupport "--enable-dbm"
-      ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+
+    configureFlags = [
+      (if cxxSupport then "--enable-cxx" else "--disable-cxx")
+      (if compat185 then "--enable-compat185" else "--disable-compat185")
+    ]
+    ++ lib.optional dbmSupport "--enable-dbm"
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
     preConfigure = ''
       cd build_unix
@@ -100,11 +112,11 @@ stdenv.mkDerivation (
       make examples_c examples_cxx
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
       description = "Berkeley DB";
       license = license;
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   // drvArgs

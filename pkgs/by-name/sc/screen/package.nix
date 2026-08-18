@@ -3,18 +3,19 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  texinfo,
   ncurses,
   libxcrypt,
   pam ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screen";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/screen-${version}.tar.gz";
-    hash = "sha256-La429Ns3n/zRS2kVlrpuwYrDqeIrxHrCOXiatYQJhp0=";
+    url = "mirror://gnu/screen/screen-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yposfiQJGbx6wSEkWTrkUpu0619zSdiFeCm34/CzszI=";
   };
 
   configureFlags = [
@@ -23,10 +24,11 @@ stdenv.mkDerivation rec {
   ];
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1";
 
   nativeBuildInputs = [
     autoreconfHook
+    texinfo
   ];
   buildInputs = [
     ncurses
@@ -34,14 +36,16 @@ stdenv.mkDerivation rec {
     pam
   ];
 
-  # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
-  # With pkgsLLVM: tests/test-winmsgcond.c:53: assertion 'wmc_end(&wmc, pos + 1, &chg) == pos' failed
-  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.useLLVM;
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/screen/";
     description = "Window manager that multiplexes a physical terminal";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     longDescription = ''
       GNU Screen is a full-screen window manager that multiplexes a physical
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
       terminal.
     '';
 
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

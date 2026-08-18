@@ -5,7 +5,7 @@
   clang,
   libclang,
   libllvm,
-  flint3,
+  flint,
   mpfr,
   pplite,
   ocaml,
@@ -17,7 +17,7 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mopsa";
   version = "1.1";
 
@@ -26,7 +26,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "mopsa";
     repo = "mopsa-analyzer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lO5dtGAl1dq8oJco/hPXrAbN05rKc62Zrci/8CLrQ0c=";
   };
 
@@ -39,14 +39,14 @@ buildDunePackage rec {
   buildInputs = [
     arg-complete
     camlidl
-    flint3
-    libclang
     mpfr
-    pplite
   ];
 
   propagatedBuildInputs = [
     apron
+    flint
+    libclang
+    pplite
     yojson
     zarith
   ];
@@ -75,8 +75,8 @@ buildDunePackage rec {
   meta = {
     license = lib.licenses.lgpl3Plus;
     homepage = "https://mopsa.lip6.fr/";
-    description = "A Modular and Open Platform for Static Analysis using Abstract Interpretation";
+    description = "Modular and Open Platform for Static Analysis using Abstract Interpretation";
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

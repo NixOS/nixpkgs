@@ -9,16 +9,16 @@
   mpiCheckPhaseHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpi-pytest";
-  version = "2025.6.0";
+  version = "2025.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "mpi-pytest";
-    tag = "v${version}";
-    hash = "sha256-hZPTVqVaCd75UMoUQTZXrmnFM6cpMp9ejKqct3lN0Bo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TZj1hObMVzYfAUC0UjXMvUThbKCNdiB1FMSA0AHjZ9s=";
   };
 
   build-system = [
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/firedrakeproject/mpi-pytest";
     description = "Pytest plugin that lets you run tests in parallel with MPI";
-    changelog = "https://github.com/firedrakeproject/mpi-pytest/releases/tag/${src.tag}";
+    changelog = "https://github.com/firedrakeproject/mpi-pytest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

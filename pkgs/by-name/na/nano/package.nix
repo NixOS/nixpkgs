@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.5";
+  version = "9.2";
 
   src = fetchurl {
-    url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-AAsBHTOcFBr5ZG1DKI9UMl/1xujTnW5IK3h7vGZUwmo=";
+    url = "mirror://gnu/nano/nano-${version}.tar.xz";
+    hash = "sha256-Bey5kke3guils6Je1BAd0DSwI2kC90SbyXlbcXZC9+k=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -43,18 +43,19 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "doc"
     "info"
+    "man"
   ];
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      (lib.enableFeature enableNls "nls")
-      (lib.enableFeature enableTiny "tiny")
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "gl_cv_func_strcasecmp_works=yes"
-    ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (lib.enableFeature enableNls "nls")
+    (lib.enableFeature enableTiny "tiny")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "gl_cv_func_strcasecmp_works=yes"
+  ];
 
   postInstall =
     if enableTiny then
@@ -100,16 +101,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nano-editor.org/";
     description = "Small, user-friendly console text editor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      joachifm
-      nequissimus
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       sigmasquadron
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "nano";
   };
 }

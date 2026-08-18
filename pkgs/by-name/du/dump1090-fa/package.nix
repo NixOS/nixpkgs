@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   hackrf,
   libbladeRF,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dump1090";
-  version = "10.1";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8J17fqNrn5Mqqv4lFHEp4zjc/zeyMUb+fWdk+ssPBwU=";
+    hash = "sha256-A6nkct7jvpPtPZ+iM2UKVckIXgNxxq5sxhyPiw5+EZk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,9 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
 
   buildFlags = [
     "DUMP1090_VERSION=${finalAttrs.version}"
@@ -65,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       earldouglas
       aciceri
+      ryand56
     ];
     mainProgram = "dump1090";
   };

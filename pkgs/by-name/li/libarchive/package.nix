@@ -2,12 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   acl,
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -25,6 +23,7 @@
   cmake,
   nix,
   samba,
+  testers,
 
   # for passthru.lore
   binlore,
@@ -33,29 +32,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.0";
+  version = "3.8.8";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
+    hash = "sha256-l8xh+z6lP7VnxMIf9tfoSByerjwN6Z4dE3JNA9zS3LM=";
   };
-
-  patches = [
-    # Remove in next release
-    #
-    # Fixes macOS metadata file handling when reading certain tarballs
-    # (e.g, bsdtar-produced tar containing a file with xattrs whose name is exactly 99 bytes long)
-    # <https://github.com/libarchive/libarchive/pull/2636>
-    #
-    # This also fixes test_copy in the test suite.
-    (fetchpatch {
-      name = "reset-header-state-after-mac-metadata.patch";
-      url = "https://github.com/libarchive/libarchive/commit/5bb36db5e19aecabccec8f351ec22f8c3a8695f0.patch";
-      hash = "sha256-eNGSunYZ5b0TrkBUtOO7MYGXc+SEn1Sxm8MYyI+4JsQ=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -65,24 +49,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      skipTestPaths =
-        [
-          # test won't work in nix sandbox
-          "libarchive/test/test_write_disk_perms.c"
-          # the filesystem does not necessarily have sparse capabilities
-          "libarchive/test/test_sparse_basic.c"
-          # the filesystem does not necessarily have hardlink capabilities
-          "libarchive/test/test_write_disk_hardlink.c"
-          # access-time-related tests flakey on some systems
-          "libarchive/test/test_read_disk_directory_traversals.c"
-          "cpio/test/test_option_a.c"
-          "cpio/test/test_option_t.c"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-          # only on some aarch64-linux systems?
-          "cpio/test/test_basic.c"
-          "cpio/test/test_format_newc.c"
-        ];
+      skipTestPaths = [
+        # test won't work in nix sandbox
+        "libarchive/test/test_write_disk_perms.c"
+        # the filesystem does not necessarily have sparse capabilities
+        "libarchive/test/test_sparse_basic.c"
+        # the filesystem does not necessarily have hardlink capabilities
+        "libarchive/test/test_write_disk_hardlink.c"
+        # access-time-related tests flakey on some systems
+        "libarchive/test/test_read_disk_directory_traversals.c"
+        "cpio/test/test_option_a.c"
+        "cpio/test/test_option_t.c"
+        # fails tests on filesystems with 64-bit inode values:
+        # FAIL: bsdcpio_test
+        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
+        "cpio/test/test_basic.c"
+        "cpio/test/test_format_newc.c"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # Locales are broken while building FreeBSD stdenv
+        # Optimally they would be fixed, but it is challenging to debug.
+        "libarchive/test/test_archive_string_conversion.c"
+      ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
         rm "${testPath}"
@@ -100,21 +88,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      lzo
-      openssl
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      e2fsprogs
-    ]
-    ++ lib.optional xarSupport libxml2;
+  buildInputs = [
+    bzip2
+    lzo
+    openssl
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+  ]
+  ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -122,13 +108,21 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
-  hardeningDisable = [ "strictflexarrays3" ];
+  hardeningDisable = [
+    "strictflexarrays3"
+  ]
+  # some tests won't compile because this makes memcpy a macro:
+  # libarchive/test/test_write_format_mtree_preset_digests.c:2020:29: error: macro "memcpy" passed 66 arguments, but takes just 3
+  ++ lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    echo "#include <windows.h>" >> config.h
-  '';
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
+  };
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
@@ -146,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
     longDescription = ''
@@ -156,14 +150,19 @@ stdenv.mkDerivation (finalAttrs: {
       tools that use the libarchive library.
     '';
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jcumming ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jcumming ];
+    platforms = lib.platforms.all;
     inherit (acl.meta) badPlatforms;
+    pkgConfigModules = [ "libarchive" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libarchive" finalAttrs.version;
   };
 
   passthru.tests = {
     inherit cmake nix samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to

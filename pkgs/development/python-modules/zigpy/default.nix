@@ -1,44 +1,46 @@
 {
   lib,
-  stdenv,
   aiohttp,
   aioresponses,
   aiosqlite,
-  async-timeout,
   attrs,
   buildPythonPackage,
   crccheck,
   cryptography,
   fetchFromGitHub,
+  filelock,
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio,
   pytest-asyncio,
   pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  serialx,
   setuptools,
   typing-extensions,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "0.80.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    tag = version;
-    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-zmgh+ihNgQMxGoWx3zQ+UWGh04IyXCQUfGf3ybJg3Sc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+
+    # do not install development tools
+    rm -r tools
   '';
 
   build-system = [ setuptools ];
@@ -51,30 +53,29 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio
+    serialx
     typing-extensions
     voluptuous
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aioresponses
+    filelock
     freezegun
     pytest-asyncio
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-      "test_quirks_v2"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      "test_periodic_scan_priority"
-    ];
+  disabledTests = [
+    # (Race condition) AssertionError: assert 4 == 3
+    "test_periodic_scan_priority"
+  ];
 
   disabledTestPaths = [
     # Tests require network access
+    "tests/ota/test_ota_image.py"
     "tests/ota/test_ota_providers.py"
   ];
 
@@ -86,12 +87,12 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
-    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -39,11 +39,12 @@ stdenv.mkDerivation {
     cp ./netris $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free networked version of T*tris";
+    homepage = "https://github.com/naclander/netris";
     mainProgram = "netris";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ patryk27 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ patryk27 ];
+    platforms = lib.platforms.unix;
   };
 }

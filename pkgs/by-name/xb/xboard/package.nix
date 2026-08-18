@@ -1,70 +1,70 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
-  libX11,
+  fetchgit,
+  libx11,
   xorgproto,
-  libXt,
-  libXaw,
-  libSM,
-  libICE,
-  libXmu,
-  libXext,
+  libxt,
+  libxaw,
+  libsm,
+  libice,
+  libxmu,
+  libxext,
   gnuchess,
   texinfo,
-  libXpm,
+  libxpm,
   pkg-config,
   librsvg,
   cairo,
   pango,
-  gtk2,
+  gtk3,
+  autoreconfHook,
+  perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xboard";
-  version = "4.9.1";
+  version = "4.9.1-unstable-2026-08-03";
 
-  src = fetchurl {
-    url = "mirror://gnu/xboard/xboard-${version}.tar.gz";
-    sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
+  src = fetchgit {
+    url = "https://https.git.savannah.gnu.org/git/xboard.git";
+    rev = "46b3c1d4ea45529cb2054516ff50feb902628d1c";
+    sha256 = "sha256-P21e6ikimEvm0k98RCeEuvC/ZVtWbosXzioOB18tUbI=";
   };
 
-  patches = [
-    # Pull patch pending upstream inclusion for -fno-common toolchain support:
-    #   https://savannah.gnu.org/patch/index.php?10211
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://savannah.gnu.org/patch/download.php?file_id=53275";
-      sha256 = "sha256-ZOo9jAy1plFjhC5HXJQvXL+Zf7FL14asV3G4AwfgqTY=";
-    })
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    perl
   ];
-
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     xorgproto
-    libXt
-    libXaw
-    libSM
-    libICE
-    libXmu
-    libXext
+    libxt
+    libxaw
+    libsm
+    libice
+    libxmu
+    libxext
     gnuchess
     texinfo
-    libXpm
+    libxpm
     librsvg
     cairo
     pango
-    gtk2
+    gtk3
   ];
 
-  meta = with lib; {
+  preConfigure = ''
+    patchShebangs .
+  '';
+
+  meta = {
     description = "GUI for chess engines";
     mainProgram = "xboard";
     homepage = "https://www.gnu.org/software/xboard/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

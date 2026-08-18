@@ -6,14 +6,14 @@
   lazr-uri,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wadllib";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HtuvI+T6NP6nDJs4C6oqE5sQhq5InrzMxLO2X8lzdCc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-acYKGIycYpoOlH36/Yms3It9jUBKa16wrSWP7yk2JQE=";
   };
 
   build-system = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # pypi tarball has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Navigate HTTP resources using WADL files as guides";
     homepage = "https://launchpad.net/wadllib";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})

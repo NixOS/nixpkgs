@@ -58,6 +58,8 @@ in
         type = lib.types.bool;
       };
 
+      package = lib.mkPackageOption pkgs "zsh" { };
+
       shellAliases = lib.mkOption {
         default = { };
         description = ''
@@ -195,7 +197,7 @@ in
           . ${config.system.build.setEnvironment}
       fi
 
-      HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
+      HELPDIR="${cfg.package}/share/zsh/$ZSH_VERSION/help"
 
       # Tell zsh how to find installed completions.
       for p in ''${(z)NIX_PROFILES}; do
@@ -249,13 +251,13 @@ in
         setopt ${builtins.concatStringsSep " " cfg.setOptions}
       ''}
 
-      # Alternative method of determining short and full hostname.
-      HOST=${config.networking.fqdnOrHostName}
+      # Determine current fqdn hostname
+      HOST=$(hostname --fqdn)
 
       # Setup command line history.
       # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
-      SAVEHIST=${builtins.toString cfg.histSize}
-      HISTSIZE=${builtins.toString cfg.histSize}
+      SAVEHIST=${toString cfg.histSize}
+      HISTSIZE=${toString cfg.histSize}
       HISTFILE=${cfg.histFile}
 
       # Configure sane keyboard defaults.
@@ -307,8 +309,9 @@ in
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
     environment.systemPackages = [
-      pkgs.zsh
-    ] ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
+      cfg.package
+    ]
+    ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = lib.optional cfg.enableCompletion "/share/zsh";
 
@@ -316,7 +319,7 @@ in
 
     environment.shells = [
       "/run/current-system/sw/bin/zsh"
-      "${pkgs.zsh}/bin/zsh"
+      "${cfg.package}/bin/zsh"
     ];
 
   };

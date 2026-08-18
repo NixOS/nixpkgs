@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  python,
   simple-dftd3,
   cffi,
   numpy,
@@ -8,23 +9,35 @@
   pyscf,
   ase,
   pytestCheckHook,
+  meson-python,
+  meson,
+  setuptools,
+  pkg-config,
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   inherit (simple-dftd3)
-    pname
     version
     src
     meta
     ;
 
-  # pytest is also required for installation, not only testing
-  nativeBuildInputs = [ pytestCheckHook ];
+  pname = "dftd3";
+  pyproject = true;
+
+  build-system = [
+    meson-python
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+  ];
 
   buildInputs = [ simple-dftd3 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     numpy
     toml
@@ -34,6 +47,7 @@ buildPythonPackage {
     ase
     qcengine
     pyscf
+    pytestCheckHook
   ];
 
   preConfigure = ''
@@ -43,5 +57,15 @@ buildPythonPackage {
   # The compiled CFFI is not placed correctly before pytest invocation
   preCheck = ''
     find . -name "_libdftd3*" -exec cp {} ./dftd3/. \;
+  '';
+
+  pythonImportsCheck = [ "dftd3" ];
+  doCheck = true;
+
+  # Parameters need to be present in the python site packages directory, but they
+  # are originally only present in the fortran package. This is a consequence of
+  # building the python bindings separately from the fortran library.
+  postInstall = ''
+    ln -s ${simple-dftd3}/share/s-dftd3/parameters.toml $out/${python.sitePackages}/dftd3/.
   '';
 }

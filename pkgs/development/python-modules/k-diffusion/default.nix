@@ -10,7 +10,6 @@
   jsonmerge,
   kornia,
   pillow,
-  pythonOlder,
   rotary-embedding-torch,
   safetensors,
   scikit-image,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "k-diffusion";
   version = "0.1.1.post1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "crowsonkb";
@@ -63,10 +60,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Karras et al. (2022) diffusion models for PyTorch";
     homepage = "https://github.com/crowsonkb/k-diffusion";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

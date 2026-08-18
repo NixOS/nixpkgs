@@ -7,15 +7,19 @@
   libedit,
   runCommand,
   dash,
+
+  # Reverse dependency smoke tests
+  tests,
+  patchRcPathPosix,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.12";
+  version = "0.5.13.5";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-akdKxG6LCzKRbExg32lMggWNMpfYs4W3RQgDDKSo8oo=";
+    hash = "sha256-QAkBAaKkkfE+kB09SOkEFPJmNGKLm//zX/VANjwien0=";
   };
 
   strictDeps = true;
@@ -28,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ "--with-libedit" ];
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 
@@ -43,14 +47,27 @@ stdenv.mkDerivation (finalAttrs: {
         [ -s $out/success ]
         grep -q "Hello World" $out/success
       '';
+
+      /**
+        Reverse dependency smoke tests. Build success of `dash.tests` informs
+        whether an update makes it into staging.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        writers = lib.recurseIntoAttrs {
+          simple = tests.writers.simple.dash;
+          bin = tests.writers.bin.dash;
+        };
+        # Not sure if effective smoke test, but cheap
+        patch-rc-path-posix = patchRcPathPosix.tests.test-posix;
+      };
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
     ];

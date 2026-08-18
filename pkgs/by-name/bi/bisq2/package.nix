@@ -1,60 +1,83 @@
 {
-  stdenvNoCC,
+  stdenv,
   lib,
   makeBinaryWrapper,
-  runtimeShell,
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  jdk23,
+  zulu25,
   dpkg,
   writeShellScript,
-  bash,
   tor,
   zip,
   gnupg,
   coreutils,
+  gnugrep,
+  gnused,
+
+  # Used by the bundled webcam-app
+  libv4l,
+
+  # Used by the testing package bisq2-webcam-app
+  callPackage,
+  socat,
+  unzip,
 }:
 
 let
-  version = "2.1.7";
+  version = "2.1.11";
 
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
+
+  argumentFile = builtins.toFile "app.args" ''
+    -Djpackage.app-version=${version}
+    -classpath
+    @out@/lib/app/desktop-app-launcher.jar:@classpath@
+  '';
 
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
       rm -fR $HOME/.local/share/Bisq2/tor
 
-      exec "${lib.getExe jdk}" -Djpackage.app-version=@version@ -classpath @out@/lib/app/desktop-app-launcher.jar:@out@/lib/app/* ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
+      exec "${lib.getExe jdk}" @@out@/lib/app.args ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
     '';
 
   # A given release will be signed by either Alejandro Garcia or Henrik Jannsen
   # as indicated in the file
   # https://github.com/bisq-network/bisq2/releases/download/v${version}/signingkey.asc
-  publicKey =
-    {
-      "E222AA02" = fetchurl {
-        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
-        hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
-      };
+  publicKey = {
+    "E222AA02" = fetchurl {
+      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
+      hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
+    };
 
-      "387C8307" = fetchurl {
-        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
-        hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
-      };
-    }
-    ."E222AA02";
+    "387C8307" = fetchurl {
+      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
+      hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+    };
+  };
+
+  binPath = lib.makeBinPath [
+    coreutils
+    tor
+  ];
+
+  libraryPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libv4l
+  ];
 in
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "bisq2";
 
+  # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
+    hash = "sha256-Ts0u1Rapgfz/z17U3VSN17/rdACr/KOGmiZjWnGJmcw=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -68,8 +91,9 @@ stdenvNoCC.mkDerivation rec {
       export GNUPGHOME=./gnupg
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
-      ln -s ${signature} ./signature.asc
-      gpg --import ${publicKey}
+      ln -s ${finalAttrs.signature} ./signature.asc
+      gpg --import ${publicKey."E222AA02"}
+      gpg --import ${publicKey."387C8307"}
       gpg --batch --verify signature.asc Bisq-${version}.deb
       popd
       mv $downloadedFile $out
@@ -78,7 +102,7 @@ stdenvNoCC.mkDerivation rec {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-Cl9EIp+ycD8Tp/bx5dXQK206jZzrYJkI/U9ItfXDRWw=";
+    hash = "sha256-/+HDj28uOFQwkrrzKfcQW0T5/qTIeB30Zd10EjeGhlU=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +112,8 @@ stdenvNoCC.mkDerivation rec {
     makeBinaryWrapper
     zip
     gnupg
+    gnugrep
+    gnused
   ];
 
   desktopItems = [
@@ -135,23 +161,17 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/lib $out/bin
     cp -r opt/bisq2/lib/app $out/lib
 
+    export classpath=$(ls -1 $out/lib/app/ | grep -v desktop-app-launcher.jar | sort | sed -e 's/^/@out@\/lib\/app\//g' | tr '\n' ':')
+    cp -L ${argumentFile} $out/lib/app.args
+    substituteAllInPlace $out/lib/app.args
+
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
-    wrapProgram $out/bin/bisq2 --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
+    wrapProgram $out/bin/bisq2 --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
-    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
+    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -162,15 +182,27 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  # The bisq2.webcam-app package is for maintainers to test scanning QR codes.
+  passthru.webcam-app = callPackage ./webcam-app.nix {
+    inherit
+      jdk
+      libraryPath
+      ;
+    bisq2 = finalAttrs.finalPackage.out;
+  };
+
+  meta = {
     description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     mainProgram = "bisq2";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ emmanuelrosa ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
-}
+})

@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "skribilo";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "mirror://savannah/skribilo/skribilo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jP9I7hds7f1QMmSaNJpGlSvqUOwGcg+CnBzMopIS9Q4=";
+    hash = "sha256-ZlwkHEKSC/Np8SMdS5xxzhi6Y63QuajyQYIf0Roo1ZI=";
   };
 
   nativeBuildInputs = [
@@ -38,20 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fig2dev
-      gettext
-      ghostscript
-      guile
-      guile-lib
-      guile-reader
-      imagemagick
-    ]
-    ++ optional enableEmacs emacs
-    ++ optional enableLout lout
-    ++ optional enablePloticus ploticus
-    ++ optional enableTex texliveSmall;
+  buildInputs = [
+    fig2dev
+    gettext
+    ghostscript
+    guile
+    guile-lib
+    guile-reader
+    imagemagick
+  ]
+  ++ optional enableEmacs emacs
+  ++ optional enableLout lout
+  ++ optional enablePloticus ploticus
+  ++ optional enableTex texliveSmall;
 
   postInstall = ''
     wrapProgram $out/bin/skribilo \
@@ -75,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       conventions used in emails, Usenet and text.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

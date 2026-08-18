@@ -1,9 +1,10 @@
 {
   lib,
   runCommand,
+  runCommandLocal,
   testers,
   treefmt,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
 let
   inherit (treefmt) buildConfig withConfig;
@@ -29,8 +30,30 @@ let
 
   nixfmtExamplePackage = withConfig {
     settings = nixfmtExampleConfig;
-    runtimeInputs = [ nixfmt-rfc-style ];
+    runtimeInputs = [ nixfmt ];
   };
+
+  wellFormattedTree = runCommandLocal "well-formatted-project" { } ''
+    mkdir "$out"
+    cat > "$out/file.nix" <<EOF
+    {
+      foo = "bar";
+      attrs = { };
+      list = [ ];
+    }
+    EOF
+  '';
+
+  unformattedTree = runCommandLocal "unformatted-project" { } ''
+    mkdir "$out"
+    cat > "$out/file.nix" <<EOF
+    {
+      foo="bar";
+      attrs={};
+      list=[];
+    }
+    EOF
+  '';
 in
 {
   buildConfigEmpty = testEqualContents {
@@ -45,6 +68,7 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = ".git/index"
+
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]
@@ -60,20 +84,33 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = "overridden"
+
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]
     '';
   };
 
+  nixfmtExampleCheckPasses = nixfmtExamplePackage.check wellFormattedTree;
+
+  nixfmtExampleCheckFails = testers.testBuildFailure' {
+    drv = nixfmtExamplePackage.check unformattedTree;
+    expectedBuilderExitCode = 1;
+    expectedBuilderLogEntries = [
+      "diff --git a/file.nix b/file.nix"
+      "-  foo=\"bar\";"
+      "+  foo = \"bar\";"
+      "-  attrs={};"
+      "+  attrs = { };"
+      "-  list=[];"
+      "+  list = [ ];"
+    ];
+  };
+
   runNixfmtExample =
     runCommand "run-nixfmt-example"
       {
         nativeBuildInputs = [ nixfmtExamplePackage ];
-        passAsFile = [
-          "input"
-          "expected"
-        ];
         input = ''
           {
             foo="bar";
@@ -88,18 +125,19 @@ in
             list = [ ];
           }
         '';
+        __structuredAttrs = true;
       }
       ''
         export XDG_CACHE_HOME=$(mktemp -d)
         # The example config assumes the tree root has a .git/index file
         mkdir .git && touch .git/index
 
-        # Copy the input file, then format it using the wrapped treefmt
-        cp $inputPath input.nix
+        # Create the input file, then format it using the wrapped treefmt
+        printf "%s" "$input" > input.nix
         treefmt
 
         # Assert that input.nix now matches expected
-        if diff -u $expectedPath input.nix; then
+        if diff -u <(printf "%s" "$expected") input.nix; then
           touch $out
         else
           echo

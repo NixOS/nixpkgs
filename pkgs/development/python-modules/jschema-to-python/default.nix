@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jschema_to_python" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate source code for Python classes from a JSON schema";
     homepage = "https://github.com/microsoft/jschema-to-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

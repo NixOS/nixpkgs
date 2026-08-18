@@ -6,29 +6,29 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "Lighthouse";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ShayBox";
     repo = "Lighthouse";
-    rev = version;
-    hash = "sha256-FiS+jB5l5xtFIVISA6+K/jbyJZFPwLvy7G+dA+78kZU=";
+    rev = finalAttrs.version;
+    hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5IrY1ohG5oJF+LvrcHrHYT2nslICQPZptJYrrwMEmwQ=";
+  cargoHash = "sha256-fOiVMg3K3wYhgYZ9kx3WfAgrgcSzUKjKyvXm5N386nw=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ dbus ];
+  buildFeatures = [ "cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "VR Lighthouse power state management";
     homepage = "https://github.com/ShayBox/Lighthouse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bddvlpr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bddvlpr ];
     mainProgram = "lighthouse";
   };
-}
+})

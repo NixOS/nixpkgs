@@ -8,20 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deputy";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "deputy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dTCikfHqfSVb1F6LYrLqFAEufD6dPgAi6F65yPlCO18=";
+    hash = "sha256-OdIhRdJvuSlZoKO0bDVplbcASc0w7iO9b1FnY8Uf33o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nGheg/HnkYsvfrsd/dPNbFQEHXFtjB5so436nrbKRqo=";
+  cargoHash = "sha256-pnpL3hLaJRo3VJ9EK5ewYHu/2JJtkvd7VUFeMq0kJKQ=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

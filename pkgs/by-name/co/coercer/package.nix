@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "coercer";
   version = "2.4.3";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "Coercer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WeaKToKYIB+jjTNIQvAUQQNb25TsNWALYZwIZuBjkPE=";
   };
 
@@ -36,9 +36,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to automatically coerce a Windows server";
     homepage = "https://github.com/p0dalirius/Coercer";
-    changelog = "https://github.com/p0dalirius/Coercer/releases/tag/${version}";
+    changelog = "https://github.com/p0dalirius/Coercer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "coercer";
   };
-}
+})

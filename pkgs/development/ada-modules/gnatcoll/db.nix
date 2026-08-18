@@ -49,19 +49,19 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
+  version = "25.0.0";
   # executables don't adhere to the string gnatcoll-* scheme
   pname =
     if onlyExecutable then
       builtins.replaceStrings [ "_" ] [ "-" ] component
     else
       "gnatcoll-${component}";
-  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0q35ii0aa4hh59v768l5cilg1b30a4ckcvlbfy0lkcbp3rcfnbz3";
   };
 
@@ -85,27 +85,27 @@ stdenv.mkDerivation rec {
   # the closure size dramatically
   ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [ ];
+  ]
+  ++ libsFor."${component}" or [ ];
 
-  makeFlags =
-    [
-      "-C"
-      component
-      "PROCESSORS=$(NIX_BUILD_CORES)"
-      # confusingly, for gprbuild --target is autoconf --host
-      "TARGET=${stdenv.hostPlatform.config}"
-      "prefix=${placeholder "out"}"
-    ]
-    ++ lib.optionals (component == "sqlite") [
-      # link against packaged, not vendored libsqlite3
-      "GNATCOLL_SQLITE=external"
-    ];
+  makeFlags = [
+    "-C"
+    component
+    "PROCESSORS=$(NIX_BUILD_CORES)"
+    # confusingly, for gprbuild --target is autoconf --host
+    "TARGET=${stdenv.hostPlatform.config}"
+    "prefix=${placeholder "out"}"
+  ]
+  ++ lib.optionals (component == "sqlite") [
+    # link against packaged, not vendored libsqlite3
+    "GNATCOLL_SQLITE=external"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "GNAT Components Collection - Database packages";
     homepage = "https://github.com/AdaCore/gnatcoll-db";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.all;
   };
-}
+})

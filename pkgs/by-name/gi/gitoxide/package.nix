@@ -18,17 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitoxide";
-  version = "0.44.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZK4H0PRxsjzDhW05bXD7GkP2JHrBb1tu/oid6GkAWs=";
+    hash = "sha256-2zNXe+niwH8oDZEx6It7APggOtL7vrnRGKO4OoteTIw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5kd9drLnejphmJ6KQ1jSmerIt+rRB4/rFKxhuedkpRk=";
+  cargoHash = "sha256-u9O4y6W0TuwdedNaQ127Bz4d3Olw9RzV/+AzxAstJQE=";
 
   nativeBuildInputs = [
     cmake
@@ -61,6 +60,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ syberant ];
+    maintainers = with lib.maintainers; [ hythera ];
+    # NB: `ein` is also provided by this package, but `nix run
+    # nixpkgs#gitoxide` doesn't work at all without this set.
+    mainProgram = "gix";
   };
 })

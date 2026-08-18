@@ -8,6 +8,7 @@
 
   # dependencies
   google-auth,
+  protobuf,
   requests,
 
   # tests
@@ -19,24 +20,31 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "databricks-sdk";
-  version = "0.57.0";
+  version = "0.127.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    tag = "v${version}";
-    hash = "sha256-QdqbUq2kzrP614BWIMdWAIKsVdXIG89BmLlh+Po98zI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZifBh5cCxrfbn3a3EUre7EavRoxBwJR3b6TdUDD3H7o=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    # For protobuf 7
+    "protobuf"
+  ];
+
   dependencies = [
     google-auth
+    protobuf
     requests
   ];
 
@@ -82,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

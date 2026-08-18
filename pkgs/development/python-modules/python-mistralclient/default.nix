@@ -2,10 +2,11 @@
   lib,
   buildPythonPackage,
   cliff,
-  fetchFromGitea,
+  fetchFromGitHub,
+  fetchpatch,
   keystoneauth1,
   openstackdocstheme,
-  os-client-config,
+  openstacksdk,
   osc-lib,
   oslo-i18n,
   oslo-serialization,
@@ -13,7 +14,6 @@
   oslotest,
   osprofiler,
   pbr,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -27,18 +27,23 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "5.4.0";
+  version = "6.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitea {
-    domain = "opendev.org";
+  src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
-    rev = version;
-    hash = "sha256-c1kMDyRNMZKnDvL993WvZSsjkXgYLM2+9KBmF+I4vnM=";
+    tag = version;
+    hash = "sha256-FNfee7d8gTcsTdv7lxqDbniUiKQvUXHRSkAlNOCn/k4=";
   };
+
+  patches = [
+    # Fix unit test failure caused by osprofiler 4.4.0
+    (fetchpatch {
+      url = "https://github.com/openstack/python-mistralclient/commit/4cee2bb25a4d15e7dd1802f3e7e75520177446db.patch";
+      hash = "sha256-H8JSvPFcHZJsnIWpV0WPvkqyvmg8SBbpsUzqcZeFBwA=";
+    })
+  ];
 
   env.PBR_VERSION = version;
 
@@ -69,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    os-client-config
+    openstacksdk
     oslotest
     osprofiler
     requests-mock
@@ -85,11 +90,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mistralclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Mistral Command-line Client";
-    homepage = "https://opendev.org/openstack/python-mistralclient/";
-    license = licenses.asl20;
+    homepage = "https://github.com/openstack/python-mistralclient";
+    license = lib.licenses.asl20;
     mainProgram = "mistral";
-    teams = [ teams.openstack ];
+    teams = [ lib.teams.openstack ];
   };
 }

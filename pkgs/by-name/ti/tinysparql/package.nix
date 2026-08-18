@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   gettext,
   meson,
   mesonEmulatorHook,
@@ -26,7 +27,6 @@
   libsoup_3,
   json-glib,
   avahi,
-  systemd,
   dbus,
   man-db,
   writeText,
@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.9.2";
+  version = "3.11.1";
 
   outputs = [
     "out"
@@ -47,8 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-FM4DkCQTXhgQIrzOSxqtLgA3fdnH2BK5g5HM/HVtrY4=";
+    hash = "sha256-z9RgIe4VFK1DXnFPeqHsenh8f1FqlPTHQ4iX7j1uyh4=";
   };
+
+  patches = [
+    # sqlite changed the precision of float <-> text conversions, causing
+    # failures in the test suite. patch here until this appears in a release.
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/work_items/496
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/811
+    (fetchpatch {
+      name = "tinysparql-sqlite-double-value-precision.patch";
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/-/commit/47d5bf9313d0ccb1feb7169eed9047d0e1597a39.patch";
+      hash = "sha256-k6eELZCEEtD8s7GiMckjTlf6QcAiUNY1Mraw7GROsm4=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -56,68 +68,59 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      asciidoc
-      gettext
-      glib
-      wrapGAppsNoGuiHook
-      (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    gettext
+    glib
+    wrapGAppsNoGuiHook
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      sqlite
-      icu
-      libsoup_3
-      libuuid
-      json-glib
-      avahi
-      libstemmer
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
-    ];
+  buildInputs = [
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup_3
+    libuuid
+    json-glib
+    avahi
+    libstemmer
+  ];
 
   nativeCheckInputs = [
     dbus
     man-db
   ];
 
-  mesonFlags =
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+  ]
+  ++ (
+    let
+      # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+      '';
+    in
     [
-      "-Ddocs=true"
-      (lib.mesonEnable "introspection" withIntrospection)
-      (lib.mesonEnable "vapi" withIntrospection)
+      "--cross-file=${crossFile}"
     ]
-    ++ (
-      let
-        # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
-        crossFile = writeText "cross-file.conf" ''
-          [properties]
-          sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
-        '';
-      in
-      [
-        "--cross-file=${crossFile}"
-      ]
-    )
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dsystemd_user_services=false"
-    ];
+  );
 
   doCheck = true;
 
@@ -179,13 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
     mainProgram = "tinysparql";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "tracker-sparql-3.0"
       "tinysparql-3.0"

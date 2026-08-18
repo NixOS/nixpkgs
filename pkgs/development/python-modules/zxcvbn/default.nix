@@ -2,29 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zxcvbn";
   version = "4.5.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "dwolfhub";
     repo = "zxcvbn-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0SVJkJMEMnZVMpamDVP02kMwWRSj5zGlrMYG9kn0aXQ=";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "zxcvbn" ];
+
+  meta = {
     description = "Python implementation of Dropbox's realistic password strength estimator";
     mainProgram = "zxcvbn";
     homepage = "https://github.com/dwolfhub/zxcvbn-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

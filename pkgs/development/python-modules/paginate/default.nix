@@ -35,11 +35,11 @@ buildPythonPackage rec {
     "test_unsliceable_sequence3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python pagination module";
     homepage = "https://github.com/Pylons/paginate";
     changelog = "https://github.com/Pylons/paginate/blob/${src.rev}/CHANGELOG.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

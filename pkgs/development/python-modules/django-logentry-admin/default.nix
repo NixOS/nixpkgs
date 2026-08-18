@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with lib; {
+  meta = {
     description = "Show all LogEntry objects in the Django admin site";
     homepage = "https://github.com/yprez/django-logentry-admin";
-    license = licenses.isc;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # Build
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "mkdocs-git-committers-plugin-2";
   version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ojacques";

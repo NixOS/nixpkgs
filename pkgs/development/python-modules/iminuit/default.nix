@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -21,17 +20,15 @@
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.31.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.32.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1eAE8f/YPSoHZAn79KeWkeehfJ1zlQu2NGWvMuEE3hg=";
+    hash = "sha256-oys00YZllZvnWta9sd2ARZu5RGbGK0VWMcAFaKzN99I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     scikit-build-core
     pybind11
@@ -40,19 +37,20 @@ buildPythonPackage rec {
     pyproject-metadata
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scikit-hep/iminuit";
+    changelog = "https://github.com/scikit-hep/iminuit/releases/tag/v${version}";
     description = "Python interface for the Minuit2 C++ library";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       lgpl2Only
     ];
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

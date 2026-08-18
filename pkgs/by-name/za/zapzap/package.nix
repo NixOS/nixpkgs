@@ -1,24 +1,41 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   qt6,
+  linkFarm,
+  hunspellDictsChromium,
+  dictionaries ? [
+    hunspellDictsChromium.en-us
+    hunspellDictsChromium.en-gb
+    hunspellDictsChromium.de-de
+    hunspellDictsChromium.fr-fr
+    hunspellDictsChromium.sv-se
+  ],
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  qtwebengineDictionaries = linkFarm "zapzap-qtwebengine-dictionaries" (
+    map (d: {
+      name = d.dictFileName;
+      path = d;
+    }) dictionaries
+  );
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "6.1";
-  format = "setuptools";
+  version = "7.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
-    tag = version;
-    hash = "sha256-g3J9oVIRiar0QoksRjJZsbvSKiFBILaUdSUscNs1VXE=";
+    tag = finalAttrs.version;
+    hash = "sha256-ERxMgNz5g9ozp/0CrHBMQnaaQi+OOG2AppCgNNpiMQg=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
+  nativeBuildInputs = [
     qt6.wrapQtAppsHook
   ];
 
@@ -31,7 +48,9 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     dbus-python
     pyqt6
     pyqt6-webengine
@@ -45,18 +64,25 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      ${lib.optionalString (dictionaries != [ ]) ''
+        --set-default QTWEBENGINE_DICTIONARIES_PATH "${qtwebengineDictionaries}"
+      ''}
+    )
   '';
 
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine.";
-    homepage = "https://rtosta.com/zapzap-web/";
+  pythonImportsCheck = [ "zapzap" ];
+
+  meta = {
+    description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine";
+    homepage = "https://rtosta.com/zapzap/";
     mainProgram = "zapzap";
-    license = licenses.gpl3Only;
-    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${src.tag}";
-    maintainers = [ maintainers.eymeric ];
+    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/rafatosta/zapzap/releases/tag/${finalAttrs.src.tag}";
+    maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "single-version";
   version = "1.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "single_version" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to let you have a single source of version in your code base";
     homepage = "https://github.com/hongquan/single-version";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

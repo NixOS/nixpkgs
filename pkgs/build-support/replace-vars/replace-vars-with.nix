@@ -72,7 +72,7 @@ let
 
   optionalAttrs =
     if (builtins.intersectAttrs attrs forcedAttrs == { }) then
-      builtins.removeAttrs attrs [ "replacements" ]
+      removeAttrs attrs [ "replacements" ]
     else
       throw "Passing any of ${builtins.concatStringsSep ", " (builtins.attrNames forcedAttrs)} to replaceVarsWith is not supported.";
 
@@ -122,7 +122,8 @@ in
 
 stdenvNoCC.mkDerivation (
   {
-    name = baseNameOf (toString src);
+    name =
+      if (attrs ? pname && attrs ? version) then "${attrs.pname}-${attrs.version}" else baseNameOf src;
   }
   // optionalAttrs
   // forcedAttrs

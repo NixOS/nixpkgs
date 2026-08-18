@@ -1,5 +1,6 @@
 {
   pkgs,
+  stdenv,
   withDoc ? false,
   requireSageTests ? true,
   extraPythonPackages ? ps: [ ],
@@ -10,15 +11,14 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
-  inherit (pkgs) symlinkJoin callPackage nodePackages;
+  inherit (pkgs) symlinkJoin callPackage mathjax;
 
-  # TODO: unpin python when #416039 reaches master
-  python3 = pkgs.python312 // {
-    pkgs = pkgs.python312.pkgs.overrideScope (
+  python3 = pkgs.python3 // {
+    pkgs = pkgs.python3.pkgs.overrideScope (
       self: super: {
         # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
         sagelib = self.callPackage ./sagelib.nix {
-          inherit flint3;
+          inherit flint;
           inherit sage-src env-locations singular;
           inherit (maxima) lisp-compiler;
           linbox = pkgs.linbox;
@@ -67,7 +67,7 @@ let
     inherit singular maxima;
     inherit three;
     cysignals = python3.pkgs.cysignals;
-    mathjax = nodePackages.mathjax;
+    mathjax = mathjax;
   };
 
   # The shell file that gets sourced on every sage start. Will also source
@@ -80,7 +80,7 @@ let
       python3
       singular
       palp
-      flint3
+      flint
       pythonEnv
       maxima
       ;
@@ -143,7 +143,7 @@ let
       extraLibs = pythonRuntimeDeps;
     }; # make the libs accessible
 
-  singular = pkgs.singular.override { inherit flint3; };
+  singular = pkgs.singular.override { inherit flint; };
 
   maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
@@ -165,7 +165,7 @@ let
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
-  flint3 = pkgs.flint3.override { withBlas = false; };
+  flint = pkgs.flint.override { withBlas = false; };
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.

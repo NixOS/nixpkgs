@@ -13,18 +13,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eww";
-  version = "0.6.0-unstable-2025-06-30";
+  version = "0.6.0-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "fddb4a09b107237819e661151e007b99b5cab36d";
-    hash = "sha256-PJW4LvW9FmkG9HyUtgXOq7MDjYtBc/iJuOxyf29nD0Y=";
+    rev = "4ded06345553e4c2bcf8179fc7438e53c5e54d89";
+    hash = "sha256-fnI8XgBowMxs/j9FGf+pQI2U8YjN8pTRqkVmFm8PBHE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Kf99eojqXvdbZ3eRS8GBgyLYNpZKJGIJtsOsvhhSVDk=";
 
   nativeBuildInputs = [
@@ -45,10 +44,7 @@ rustPlatform.buildRustPackage rec {
     "eww"
   ];
 
-  cargoTestFlags = cargoBuildFlags;
-
-  # requires unstable rust features
-  RUSTC_BOOTSTRAP = 1;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd eww \
@@ -71,12 +67,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/elkowar/eww";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      coffeeispower
-      figsoda
-      lom
       w-lfchen
     ];
     mainProgram = "eww";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

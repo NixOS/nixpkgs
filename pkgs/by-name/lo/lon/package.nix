@@ -1,30 +1,39 @@
 {
   rustPlatform,
   lib,
+  stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
+  pkg-config,
+  openssl,
   nix-prefetch-git,
   gitMinimal,
+  nix,
   nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lon";
-  version = "0.8.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "lon";
-    tag = version;
-    hash = "sha256-bxu83mbdfAeDZYOnjZQYyjTs5WgZS8o6Q2irlzgbYs0=";
+    tag = finalAttrs.version;
+    hash = "sha256-rNQ3RuTYu7gM/pmchuvb/xNeRo/m82M4iZq2g89r3UA=";
   };
 
   sourceRoot = "source/rust/lon";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-x+qxn0s64fPJpTG/d0PgzAdzMXegYdnsC1FFFuBpsaI=";
+  cargoHash = "sha256-mbGMStrC2GRMpL0+yr5WpLLZRT+vNDwjufymoRZwuIk=";
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   postInstall = ''
     wrapProgram $out/bin/lon --prefix PATH : ${
@@ -35,6 +44,15 @@ rustPlatform.buildRustPackage rec {
     }
   '';
 
+  nativeCheckInputs = [
+    gitMinimal
+    nix-prefetch-git
+    nix
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -42,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lock & update Nix dependencies";
     homepage = "https://github.com/nikstur/lon";
-    changelog = "https://github.com/nikstur/lon/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nikstur/lon/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       ma27
       nikstur
@@ -50,4 +68,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "lon";
   };
-}
+})

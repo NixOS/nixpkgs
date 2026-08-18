@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hwdata";
-  version = "2.4.1";
+  version = "2.4.3-1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xsuchy";
     repo = "python-hwdata";
-    rev = "python-hwdata-${version}-1";
-    hash = "sha256-hmvxVF9LOkezXnJdbtbEJWhU4uvUJgxQHYeWUoiniF0=";
+    tag = "python-hwdata-${version}";
+    hash = "sha256-5bcdyCGv1sM8HThoSsvJe68LprDq0kI801F/aTH5FVs=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings to hwdata";
     homepage = "https://github.com/xsuchy/python-hwdata";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lurkki ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lurkki ];
   };
 }

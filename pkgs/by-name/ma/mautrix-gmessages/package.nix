@@ -6,43 +6,51 @@
   nix-update-script,
   testers,
   mautrix-gmessages,
+  # This option enables the use of an experimental pure-Go implementation of the
+  # Olm protocol instead of libolm for end-to-end encryption. Using goolm is not
+  # recommended by the mautrix developers, but they are interested in people
+  # trying it out in non-production-critical environments and reporting any
+  # issues they run into.
+  withGoolm ? false,
 }:
 
 buildGoModule rec {
   pname = "mautrix-gmessages";
-  version = "0.6.3";
+  version = "26.08";
+  tag = "v0.2608.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "gmessages";
-    tag = "v${version}";
-    hash = "sha256-s6d0fUH0md4oHWDGFDRR3SKbJBCH6qJIk4En6J53yIM=";
+    inherit tag;
+    hash = "sha256-wqjc074zKHkgqFcnBPFmR36xE5CVzRvupF3AdlQ0Lwk=";
   };
 
-  vendorHash = "sha256-d6UVKu9Al445JqwhPXSlQDs0hOTom56p+hVZN2C4S0M=";
+  vendorHash = "sha256-UL7YxLF/DMwkGP8TEaN48wYGrlfBYHSZQqc7UqdhDKE=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "main.Tag=${version}"
+    "main.Tag=${tag}"
   ];
 
-  buildInputs = [ olm ];
+  buildInputs = lib.optional (!withGoolm) olm;
+  tags = lib.optional withGoolm "goolm";
 
-  doCheck = false;
+  doCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = mautrix-gmessages; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Google Messages puppeting bridge";
     homepage = "https://github.com/mautrix/gmessages";
     changelog = "https://github.com/mautrix/gmessages/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "mautrix-gmessages";
   };
 }

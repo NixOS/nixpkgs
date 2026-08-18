@@ -3,27 +3,28 @@
   stdenv,
   fetchFromGitHub,
   testers,
-  zig,
+  zig_0_15,
 }:
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "findup";
-  version = "1.1.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "booniepepper";
+    owner = "so-dang-cool";
     repo = "findup";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-EjfKNIYJBXjlKFNV4dJpOaXCfB5PUdeMjl4k1jFRfG0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6/rQ4xNfzJQwJgrpvFRuirqlx6fVn7sLXfVRFsG3fUw=";
   };
 
-  nativeBuildInputs = [ zig.hook ];
+  nativeBuildInputs = [ zig ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
-    # Doesn't support zig 0.12 or newer, last commit was 2 years ago.
-    broken = lib.versionAtLeast zig.version "0.12";
-    homepage = "https://github.com/booniepepper/findup";
+    homepage = "https://github.com/so-dang-cool/findup";
     description = "Search parent directories for sentinel files";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ booniepepper ];

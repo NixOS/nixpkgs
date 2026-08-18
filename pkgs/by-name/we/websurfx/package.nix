@@ -5,34 +5,25 @@
   openssl,
   pkg-config,
 }:
-let
-  version = "1.24.6";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websurfx";
-  inherit version;
+  version = "1.29.9";
 
   src = fetchFromGitHub {
     owner = "neon-mmd";
     repo = "websurfx";
-    tag = "v${version}";
-    hash = "sha256-T5ghMAR5fIFwbzBBl4wO+RIPkzbOK+ZAFnw5Id+aVlc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qSgNyK9W38wAkL0EM9HIFJOilPNQWeHRNpiasGbBL0I=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-vjvSOhyEQPW8sw1SjVWGvtnpzHGbyah1ufhLBUq7Qcw=";
+  cargoHash = "sha256-oI9+nMDkmRLxN0dw/X1zchsSUrr5ZC4qQgXoBKR0AbU=";
 
   postPatch = ''
-    substituteInPlace src/handler/mod.rs \
+    substituteInPlace src/handler.rs \
       --replace-fail "/etc/xdg" "$out/etc/xdg" \
       --replace-fail "/opt/websurfx" "$out/opt/websurfx"
   '';
@@ -41,8 +32,8 @@ rustPlatform.buildRustPackage {
     mkdir -p $out/etc/xdg
     mkdir -p $out/opt/websurfx
 
-    cp -r websurfx $out/etc/xdg/
-    cp -r public $out/opt/websurfx/
+    cp -r websurfx $out/etc/xdg
+    cp -r public $out/opt/websurfx
   '';
 
   meta = {
@@ -57,4 +48,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "websurfx";
   };
-}
+})

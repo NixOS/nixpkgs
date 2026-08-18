@@ -12,6 +12,7 @@
   postgresqlBuildExtension,
   postgresqlTestExtension,
   python3,
+  stdenv,
   unstableGitUpdater,
 }:
 
@@ -20,14 +21,39 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-06-27";
+  version = "0-unstable-2025-09-26";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "f1b35e623b2583d1124c593f0d9c8466d8fa3a56";
-    hash = "sha256-FiZuXvY+1qyLTnxZ9Y5MP9SxM4wncX4L4rDJEa6O7NE=";
+    rev = "247383198a95d045df0d97ece5a81adffb5c08e8";
+    hash = "sha256-RrdtUtrs0Mh1VyMbF89qJhr2fnCVcQy2l1/85/mJ/4Y=";
   };
+
+  postPatch = ''
+    substituteInPlace deps/libfyaml/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace deps/STC/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace deps/wslay/{,lib/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace deps/h2o/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace deps/uriparser/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace deps/metalang99/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.2)" "cmake_minimum_required(VERSION 3.10)"
+  ''
+  +
+    # This matches postInstall of PostgreSQL's generic.nix, which does this for the PGXS Makefile.
+    # Since omnigres uses a CMake file, which tries to replicate the things that PGXS does, we need
+    # to apply the same fix for darwin.
+    # The reason we need to do this is, because PG_BINARY will point at the postgres wrapper of
+    # postgresql.withPackages, which does not contain the same symbols as the original file, ofc.
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace "cmake/PostgreSQLExtension.cmake" \
+        --replace-fail '-bundle_loader ''${PG_BINARY}' "-bundle_loader ${postgresql}/bin/postgres"
+    '';
 
   strictDeps = true;
 
@@ -48,10 +74,8 @@ postgresqlBuildExtension (finalAttrs: {
   cmakeFlags = [
     "-DOPENSSL_CONFIGURED=1"
     "-DPG_CONFIG=${pgWithExtensions.pg_config}/bin/pg_config"
-    "-DPostgreSQL_EXTENSION_DIR=${pgWithExtensions}/share/postgresql/extension/"
-    "-DPostgreSQL_PACKAGE_LIBRARY_DIR=${pgWithExtensions}/lib/"
-    "-DPostgreSQL_TARGET_EXTENSION_DIR=${builtins.placeholder "out"}/share/postgresql/extension/"
-    "-DPostgreSQL_TARGET_PACKAGE_LIBRARY_DIR=${builtins.placeholder "out"}/lib/"
+    "-DPostgreSQL_TARGET_EXTENSION_DIR=${placeholder "out"}/share/postgresql/extension/"
+    "-DPostgreSQL_TARGET_PACKAGE_LIBRARY_DIR=${placeholder "out"}/lib/"
   ];
 
   enableParallelBuilding = true;

@@ -1,17 +1,17 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
   # build-system
   setuptools,
 
-  # dependencies
-  async-timeout,
-
   # optional-dependencies
   cryptography,
+  libvalkey,
   pyopenssl,
   requests,
 
@@ -29,24 +29,37 @@
 
 buildPythonPackage rec {
   pname = "valkey";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
     tag = "v${version}";
-    hash = "sha256-TaAkifgasirA72OSO+up0+1EUhCENKba7vPIJxhTkh8=";
+    hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
+
+  patches = [
+    # valkey 9.0 compat
+    (fetchpatch {
+      url = "https://github.com/valkey-io/valkey-py/commit/c01505e547f614f278b882a016557b6ed652bb9f.patch";
+      hash = "sha256-rvA65inIioqdc+QV4KaaUv1I/TMZUq0TWaFJcJiy8NU=";
+    })
+    # valkey 9.1 compat
+    (fetchpatch {
+      url = "https://github.com/valkey-io/valkey-py/commit/df5c44903dc8e2dda733e5576324ba0ff8c4c6a0.patch";
+      hash = "sha256-0wsWuaOYWBgf6BjlJuciZYRbugYfchTU2khQX7rtRJg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/valkey-io/valkey-py/commit/046c7fb9e8260c2d69d05141b1519903c4e40efe.patch";
+      hash = "sha256-/yN1y0hbmBR6o6ab4h0qkn/qhU6jASOIeqWhxUi5w/I=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
-
   optional-dependencies = {
-    # TODO: libvalkey = [ libvalkey ];
+    libvalkey = [ libvalkey ];
     ocsp = [
       cryptography
       pyopenssl
@@ -74,9 +87,13 @@ buildPythonPackage rec {
     redisTestHook
     ujson
     uvloop
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
+  disabledTestMarks = [
+    "onlycluster"
+    "ssl"
+  ];
 
   disabledTests = [
     # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
@@ -84,13 +101,29 @@ buildPythonPackage rec {
     "test_cache_decode_response"
     # Expects another valkey instance on port 6380 *shrug*
     "test_psync"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    #  OSError: AF_UNIX path too long
+    "test_uds_connect"
+    "test_network_connection_failure"
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    # multiple disconnects are counted instead of just one
+    "test_valkey_from_pool"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: Can't get local object 'TestMultiprocessing.test_valkey_client.<locals>.target'
+    "tests/test_multiprocessing.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/valkey-io/valkey-py";
     changelog = "https://github.com/valkey-io/valkey-py/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

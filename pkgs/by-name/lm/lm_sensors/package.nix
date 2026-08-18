@@ -53,7 +53,8 @@ stdenv.mkDerivation {
   buildInputs = [
     bash
     perl
-  ] ++ lib.optional sensord rrdtool;
+  ]
+  ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -68,7 +69,8 @@ stdenv.mkDerivation {
 
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
+  ]
+  ++ lib.optional sensord "PROG_EXTRA=sensord";
 
   enableParallelBuilding = true;
 
@@ -78,7 +80,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
+    homepage = "https://hwmon.wiki.kernel.org/lm_sensors.html";
     changelog = "https://raw.githubusercontent.com/hramrach/lm-sensors/${tag}/CHANGES";
     description = "Tools for reading hardware sensors - maintained fork";
     license = with lib.licenses; [

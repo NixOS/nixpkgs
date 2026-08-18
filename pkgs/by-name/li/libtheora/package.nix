@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isArmv7 ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch32 ''
     patchShebangs lib/arm/arm2gnu.pl
   '';
 
@@ -37,16 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputDoc = "devdoc";
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isArmv7 [
-      # Needed to run lib/arm/arm2gnu.pl for ARM assembly optimizations
-      perl
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    # Needed to run lib/arm/arm2gnu.pl for ARM assembly optimizations
+    perl
+  ];
 
   propagatedBuildInputs = [
     libogg

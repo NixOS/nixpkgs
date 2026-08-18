@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jailer";
-  version = "16.7";
+  version = "17.2.1";
 
   src = fetchFromGitHub {
     owner = "Wisser";
     repo = "Jailer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lHBthOZu4utJd2X8cTJ7HCp8zLs0su78RIdf/QBbSJk=";
+    hash = "sha256-/9VXlvoUU0fMQAOucL3GtaPDSpw5cUSZ97MS3owFj6Y=";
   };
 
   nativeBuildInputs = [
@@ -53,9 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     mkdir -p $out/share
-    mkdir -p $out/share/pixmaps
     cp driverlist.csv $out/share
-    cp admin/jailer.png $out/share/pixmaps
+    install -D admin/jailer.png -t $out/share/icons/hicolor/256x256/apps
 
     # On first run, create a local configuration folder and copy driverlist.csv there.
     cat << EOF > $out/bin/jailer

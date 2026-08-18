@@ -32,7 +32,7 @@
 
   `attrs`
 
-  : An AttrSet with the following definitions. See https://specifications.freedesktop.org/desktop-entry-spec/1.4/recognized-keys.html#id-1.7.6 for definitions.
+  : An AttrSet with the following definitions. See https://specifications.freedesktop.org/desktop-entry-spec/1.5/recognized-keys.html#id-1.7.6 for definitions.
 
     - `name` (string): The name of the desktop file (excluding the .desktop or .directory file extensions)
     - `destination` (string): The directory that will contain the desktop entry file (Default: "/share/applications")
@@ -57,7 +57,8 @@
     - `startupNotify` (bool): The `StartupNotify` of the desktop entry
     - `startupWMClass` (string): The `StartupWMClass` of the desktop entry
     - `url` (string): The `URL` of the Link-type desktop entry
-    - `prefersNonDefaultGPU` (bool): The `PrefersNonDefaultGPU` (non-standard) of the desktop entry
+    - `prefersNonDefaultGPU` (bool): The `PrefersNonDefaultGPU` of the desktop entry
+    - `singleMainWindow` (bool): The `SingleMainWindow` of the desktop entry
     - `extraConfig` (AttrSet): Additional values to be added literally to the final item, e.g. vendor extensions
 
   # Output
@@ -66,7 +67,7 @@
 
   # Developer Note
 
-  All possible values are as defined by the spec, version 1.4.
+  All possible values are as defined by the spec, version 1.5.
   Please keep in spec order for easier maintenance.
   When adding a new value, don't forget to update the Version field below!
   See https://specifications.freedesktop.org/desktop-entry-spec/latest
@@ -99,8 +100,7 @@ lib.makeOverridable (
     startupWMClass ? null,
     url ? null,
     prefersNonDefaultGPU ? null,
-    # not supported until version 1.5, which is not supported by our desktop-file-utils as of 2022-02-23
-    # singleMainWindow ? null,
+    singleMainWindow ? null,
     extraConfig ? { }, # Additional values to be added literally to the final item, e.g. vendor extensions
   }:
   let
@@ -133,7 +133,7 @@ lib.makeOverridable (
     # Please keep in spec order.
     mainSection = {
       "Type" = type;
-      "Version" = "1.4";
+      "Version" = "1.5";
       "Name" = desktopName;
       "GenericName" = genericName;
       "NoDisplay" = boolOrNullToString noDisplay;
@@ -155,8 +155,9 @@ lib.makeOverridable (
       "StartupWMClass" = startupWMClass;
       "URL" = url;
       "PrefersNonDefaultGPU" = boolOrNullToString prefersNonDefaultGPU;
-      # "SingleMainWindow" = boolOrNullToString singleMainWindow;
-    } // extraConfig;
+      "SingleMainWindow" = boolOrNullToString singleMainWindow;
+    }
+    // extraConfig;
 
     # Render a single attribute pair to a Key=Value line.
     # FIXME: this isn't entirely correct for arbitrary strings, as some characters

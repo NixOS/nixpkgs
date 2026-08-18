@@ -38,26 +38,25 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      libmicrohttpd
-      curl
-      openssl
-      jsoncpp
-      libxml2
-      boost
-      websocketpp
-      libadwaita
-      gtkmm4
-      libsecret
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    libmicrohttpd
+    curl
+    openssl
+    jsoncpp
+    libxml2
+    boost
+    websocketpp
+    libadwaita
+    gtkmm4
+    libsecret
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -71,12 +70,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 / Libadwaita Reddit client written in C++";
     homepage = "https://gitlab.com/caveman250/Headlines";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chuangzhu ];
     mainProgram = "headlines";
   };
 }

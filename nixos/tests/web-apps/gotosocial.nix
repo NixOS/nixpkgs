@@ -3,7 +3,7 @@
   name = "gotosocial";
   meta.maintainers = with lib.maintainers; [ blakesmith ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       environment.systemPackages = [ pkgs.jq ];

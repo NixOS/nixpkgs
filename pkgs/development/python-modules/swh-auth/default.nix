@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -18,9 +19,9 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-auth";
-  version = "0.10.0";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -28,8 +29,8 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-auth";
-    tag = "v${version}";
-    hash = "sha256-8ctd5D7zT66oVNZlvRIs8pN7Fe2BhTgC+S9p1HBDO9E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fRkhSpgguBff+vIOploi8i2qzd9qmsswiC62rIcY5bE=";
   };
 
   build-system = [
@@ -47,6 +48,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.auth" ];
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     aiocache
     djangorestframework
@@ -63,4 +67,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

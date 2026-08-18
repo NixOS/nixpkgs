@@ -8,19 +8,26 @@ testModuleArgs@{
 }:
 let
   inherit (lib) mkOption types;
-  inherit (types) either str functionTo;
+  inherit (types) either lines functionTo;
 in
 {
   options = {
     testScript = mkOption {
-      type = either str (functionTo str);
+      type = either lines (functionTo lines);
+      apply =
+        v:
+        if lib.isFunction v then
+          # Only pass args the testScript function expects.
+          args: v (builtins.intersectAttrs (lib.functionArgs v) args)
+        else
+          v;
       description = ''
         A series of python declarations and statements that you write to perform
         the test.
       '';
     };
     testScriptString = mkOption {
-      type = str;
+      type = lines;
       readOnly = true;
       internal = true;
     };
@@ -56,11 +63,12 @@ in
               # reuse memoized config
               v
           ) config.nodesCompat;
+          containers = config.containers;
         }
       else
         config.testScript;
 
-    defaults =
+    nodeDefaults =
       { config, name, ... }:
       {
         # Make sure all derivations referenced by the test

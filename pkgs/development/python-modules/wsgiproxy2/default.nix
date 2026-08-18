@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   webob,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "wsgiproxy2";
   version = "0.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gawel";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wsgiproxy" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP proxying tools for WSGI apps";
     homepage = "https://wsgiproxy2.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

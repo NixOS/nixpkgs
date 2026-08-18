@@ -19,30 +19,29 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-progs";
-  version = "6.14";
+  version = "7.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    hash = "sha256-31q4BPyzbikcQq2DYfgBrR4QJBtDvTBP5Qzj355+PaE=";
+    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${finalAttrs.version}.tar.xz";
+    hash = "sha256-0fVcwpcTmMkULqp50gPmPVhqO0uGf5VmZKHWgyLNTjQ=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals udevSupport [
-      udevCheckHook
-    ]
-    ++ [
-      (buildPackages.python3.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinx-rtd-theme
-        ]
-      ))
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals udevSupport [
+    udevCheckHook
+  ]
+  ++ [
+    (buildPackages.python3.withPackages (
+      ps: with ps; [
+        sphinx
+        sphinx-rtd-theme
+      ]
+    ))
+  ];
 
   buildInputs = [
     acl
@@ -63,19 +62,31 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags =
-    [
-      # Built separately, see python3Packages.btrfsutil
-      "--disable-python"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "--disable-backtrace"
-    ]
-    ++ lib.optionals (!udevSupport) [
-      "--disable-libudev"
-    ];
+  configureFlags = [
+    # Built separately, see python3Packages.btrfsutil
+    "--disable-python"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ]
+  ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+
+  separateDebugInfo = true;
+
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "lib"
+  ];
 
   enableParallelBuilding = true;
 
@@ -100,10 +111,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.readthedocs.io/en/latest/";
-    changelog = "https://github.com/kdave/btrfs-progs/raw/v${version}/CHANGES";
+    changelog = "https://github.com/kdave/btrfs-progs/raw/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.gpl2Only;
     mainProgram = "btrfs";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

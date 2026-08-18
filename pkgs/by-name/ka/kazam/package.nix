@@ -11,29 +11,29 @@
   keybinder3,
   intltool,
   libcanberra-gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   libpulseaudio,
   libgudev,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kazam";
-  version = "unstable-2021-06-22";
-  format = "setuptools";
+  version = "1.5.5-unstable-2025-01-02";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niknah";
     repo = "kazam";
-    rev = "13f6ce124e5234348f56358b9134a87121f3438c";
-    sha256 = "1jk6khwgdv3nmagdgp5ivz3156pl0ljhf7b6i4b52w1h5ywsg9ah";
+    rev = "b6c1bddc9ac93aad50476f2c87fec9f0cf204f2a";
+    hash = "sha256-xllpNoKeSXVWZhzlY60ZDnWIKoAW+cd08Tb1413Ldpk=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.distutils-extra
     intltool
     wrapGAppsHook3
   ];
+
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -41,16 +41,22 @@ python3Packages.buildPythonApplication {
     gtk3
     libwnck
     keybinder3
-    libappindicator-gtk3
+    libappindicator
     libgudev
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    distutils-extra
+  ];
+
+  dependencies = with python3Packages; [
+    distro
     pygobject3
     pyxdg
     pycairo
     dbus-python
-    xlib
+    python-xlib
   ];
 
   patches = [
@@ -64,12 +70,15 @@ python3Packages.buildPythonApplication {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "kazam" ];
+
+  meta = {
     description = "Screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    changelog = "https://github.com/niknah/kazam/raw/${finalAttrs.src.rev}/NEWS";
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "kazam";
   };
-}
+})

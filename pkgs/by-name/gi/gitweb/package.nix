@@ -10,18 +10,19 @@ let
   gitwebThemeSrc = fetchFromGitHub {
     owner = "kogakure";
     repo = "gitweb-theme";
-    rev = "049b88e664a359f8ec25dc6f531b7e2aa60dd1a2";
+    rev = "d4cc1792f10dac16dbeee06d7e0902715e4fa51a";
     postFetch = ''
       mkdir -p "$TMPDIR/gitwebTheme"
       mv "$out"/* "$TMPDIR/gitwebTheme/"
       mkdir "$out/static"
       mv "$TMPDIR/gitwebTheme"/* "$out/static/"
     '';
-    sha256 = "17hypq6jvhy6zhh26lp3nyi52npfd5wy5752k6sq0shk4na2acqi";
+    hash = "sha256-+e8ZP8hVGWQsXgyWUd/rF9+GRHNHJLFpOr5nsNIieyo";
   };
 in
 buildEnv {
-  name = "gitweb-${lib.getVersion git}";
+  inherit (git) version;
+  pname = "gitweb";
 
   ignoreCollisions = true;
   paths = lib.optional gitwebTheme gitwebThemeSrc ++ [ "${git}/share/gitweb" ];

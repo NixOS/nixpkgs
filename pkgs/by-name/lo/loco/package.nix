@@ -4,17 +4,16 @@
   fetchCrate,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "loco";
-  version = "0.15.0";
+  version = "1.0.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-sTPFDdiYmw+ODAcuBh4XXpSXVZbbYxfjr+WiTGit18E=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-W1V1N+zTCtX15Te7XYRQRK2X39Ji2sl0rIgn5xvQTT0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EsNFdk7bLRzyfncDRxqS0CQGdtPFdRRSlpTTxbQ8csI=";
+  cargoHash = "sha256-BjMxJenYQet9BxQ/bM5Ai8WEXYcf+sWTE/A9TKmY3Hc=";
 
   #Skip trycmd integration tests
   checkFlags = [ "--skip=cli_tests" ];
@@ -31,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ sebrut ];
     mainProgram = "loco";
   };
-}
+})

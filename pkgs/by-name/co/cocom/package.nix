@@ -4,28 +4,28 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocom";
-  version = "1.1.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "LamdaLamdaLamda";
     repo = "cocom";
-    rev = "v${version}";
-    sha256 = "0sl4ivn95sr5pgw2z877gmhyfc4mk9xr457i5g2i4wqnf2jmy14j";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Kdkpal+jPudmkzNM1dVa5L89YZ61Us17sEk9Iwb2sNk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kfseD0dYNC1IFAamLJee7LozGppE2mZgBMCUHJC0dP4=";
+  cargoHash = "sha256-SwrweqDUPQVhqSZxkwvu+fPUka9/5KG8cy1YeG1Nm4o=";
 
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "NTP client";
     homepage = "https://github.com/LamdaLamdaLamda/cocom";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/LamdaLamdaLamda/cocom/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cocom";
   };
-}
+})

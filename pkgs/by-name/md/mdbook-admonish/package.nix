@@ -4,18 +4,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-admonish";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "tommilligan";
     repo = "mdbook-admonish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5SVYfXXY1EmEMuhPHao3w9OzSayQDOWWvhL+1JoudzA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PwYtqde8ZccMqlkKy7i/qjWDYsUoxs2cMWOWrChjMM4=";
 
   meta = {
@@ -29,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     homepage = "https://github.com/tommilligan/mdbook-admonish";
   };
-}
+})

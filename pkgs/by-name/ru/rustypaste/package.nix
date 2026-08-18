@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustypaste";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "rustypaste";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Jfi2Q6551g58dfOqtHtWxkbxwYV71f7MIuLB8RbaR94=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-10tBbn4XtdUNhfzb+KpwFGZAc7YVIEQRaqNLzJC1GGI=";
 
   dontUseCargoParallelTests = true;
@@ -31,12 +30,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimal file upload/pastebin service";
     homepage = "https://github.com/orhun/rustypaste";
-    changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/rustypaste/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       seqizz
     ];
     mainProgram = "rustypaste";
   };
-}
+})

@@ -16,16 +16,15 @@ rustPlatform.buildRustPackage {
     hash = "sha256-7CAlYYwsanlOCGeY7gYE5Fzk5IEO4hThgINiJmXql7s=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/ypaTrctJo88DHtF/hv6B0dqB06axd/qKFnuI8zs8KA=";
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Language server implementation for htmx";
     homepage = "https://github.com/ThePrimeagen/htmx-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "htmx-lsp";
   };
 }

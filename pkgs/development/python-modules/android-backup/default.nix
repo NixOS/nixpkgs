@@ -6,7 +6,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "android-backup";
   version = "0.2.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluec0re";
     repo = "android-backup-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0c436hv64ddqrjs77pa7z6spiv49pjflbmgg31p38haj5mzlrqvw";
   };
 
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "android_backup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unpack and repack android backups";
     homepage = "https://github.com/bluec0re/android-backup-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

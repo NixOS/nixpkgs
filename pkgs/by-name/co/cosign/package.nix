@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "2.5.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QvU+JpIcE9EX+ehRWvs2bS2VGgGVekNX8f5+mITIwU0=";
+    hash = "sha256-6YgCEeDwjNNMMh1tE/DUbScR7ZYf+FNMhFs+q7b0MuM=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-qIi+Pp4XZg1GxOhM9fCyD9rPaIiQHhoQudB50gzWgrM=";
+  vendorHash = "sha256-1ouPW3HBjyTB2qRg7DNNLs5eO8UF1UKJLYPPNfJX4NU=";
 
   subPackages = [
     "cmd/cosign"
@@ -50,13 +50,22 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # test all paths
     unset subPackages
-
-    rm pkg/cosign/ctlog_test.go # Require network access
-    rm pkg/cosign/tlog_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestLoadCertsKeylessVerification/default_fulcio"
+        "TestGetCTLogPubKeys"
+        "TestGetRekorPubKeys"
+        "TestVerifyEmbeddedSCT"
+        "TestValidateAndUnpackCertWithSCT"
+        "TestVerifySkWithoutIdentities"
+        "TestVerifyAttestationSkWithoutIdentities"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cosign \
@@ -71,13 +80,13 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${finalAttrs.version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     mainProgram = "cosign";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lesuisse
       jk
       developer-guy

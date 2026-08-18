@@ -3,11 +3,9 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   openssl,
   gflags,
@@ -17,7 +15,7 @@
   wangle,
   zlib,
   zstd,
-  xxHash,
+  xxhash,
 
   mvfst,
 
@@ -26,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2025.04.21.00";
+  version = "2026.07.27.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -40,31 +38,30 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W86jBqq0wC8ZYcE7MQ76rV3axPf7efXieEot6ahonUI=";
+    hash = "sha256-bzi4DRGOQy8HXLQa6roMY3CRqteoJxz2Xo6SsLfOdhY=";
   };
 
   patches = [
+    # Map `$NIX_BUILD_TOP` to `/build` in the Thrift compiler output to
+    # avoid reproducibility issues on Darwin.
+    ./scrub-build-directory-from-output.patch
+
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
 
-    ./glog-0.7.patch
-
-    # Backport upstream build system fixes. Remove on next update.
-    (fetchpatch {
-      url = "https://github.com/facebook/fbthrift/commit/638384afb83e5fae29a6483d20f9443b2342ca0b.patch";
-      hash = "sha256-q0VgaQtwAEgDHZ6btOLSnKfkP2cXstFPxPNdX1wcdCg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/facebook/fbthrift/commit/350955beef40abec1e9d13112c9d2b7f95c29022.patch";
-      hash = "sha256-SaCZ0iczj8He2wujWN08QpizsTsK6OhreroOHY9f0BA=";
-    })
+    # On some machines (potentially those with low parallelism), this build
+    # seems to have a missing dependency and seems to fail with:
+    # "/build/source/build/thrift/lib/thrift/gen-cpp2/any_rep_types.h:12:10:
+    # fatal error: thrift/lib/thrift/gen-cpp2/type_types.h: No such file or
+    # directory"
+    # https://github.com/facebook/fbthrift/pull/709
+    ./thriftmetadata-dependency-type-cpp2-target.patch
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -80,41 +77,47 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     mvfst
-    xxHash
+    xxhash
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-      (lib.cmakeBool "thriftpy" false)
+    (lib.cmakeBool "thriftpy" false)
 
-      # TODO: Can’t figure out where the C++ tests are wired up in the
-      # CMake build, if anywhere, and this requires Python.
-      #(lib.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
+    # TODO: Can’t figure out where the C++ tests are wired up in the
+    # CMake build, if anywhere, and this requires Python.
+    #(lib.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
 
-      (lib.cmakeFeature "BIN_INSTALL_DIR" "${placeholder "out"}/bin")
-      (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "out"}/include")
-      (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "lib"}/lib")
-      (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "out"}/lib/cmake/fbthrift")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Homebrew sets this, and the shared library build fails without
-      # it. I don‘t know, either. It scares me.
-      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
-    ];
+    (lib.cmakeFeature "BIN_INSTALL_DIR" "${placeholder "out"}/bin")
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "out"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "lib"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "out"}/lib/cmake/fbthrift")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Homebrew sets this, and the shared library build fails without
+    # it. I don’t know, either. It scares me.
+    (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+  ];
 
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$out/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$out" "$header"
-      done
-    )
-  '';
+  # Copied from Homebrew; fixes the following build error:
+  #
+  #     [ERROR:/nix/var/nix/b/5f3kn8spg6j0z0xlags8va6sq7/source/thrift/lib/thrift/RpcMetadata.thrift:1] unordered_map::at: key not found
+  #
+  # See:
+  #
+  # * <https://github.com/facebook/fbthrift/issues/618>
+  # * <https://github.com/facebook/fbthrift/issues/607>
+  # * <https://github.com/Homebrew/homebrew-core/blob/2135255c78d026541a4106fa98580795740db694/Formula/f/fbthrift.rb#L52-L55>
+  #
+  # I don’t know why we didn’t need this before the bump to 202
+  # to 2025.09.08.00 when we’d been on LLVM 19 for an entire release
+  # cycle already, or why we’re getting different errors to those
+  # reports, or why this fixes the build anyway. Most of what I do to
+  # maintain these packages is copy compilation flags from Homebrew
+  # that scare me. I don’t have very much fun with these libraries, to
+  # be honest with you.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-fno-assume-unique-vtables";
 
   passthru.updateScript = nix-update-script { };
 
@@ -129,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

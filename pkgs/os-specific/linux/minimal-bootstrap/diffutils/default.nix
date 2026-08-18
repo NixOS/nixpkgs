@@ -43,12 +43,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Commands for showing the differences between files (diff, cmp, etc.)";
       homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
-      license = licenses.gpl3Only;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Only;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''
@@ -65,7 +65,8 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES AR="tcc -ar"

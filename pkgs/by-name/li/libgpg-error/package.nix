@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  autoreconfHook,
   buildPackages,
   fetchurl,
   gettext,
@@ -25,15 +26,37 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.51";
+    version = "1.61";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-      hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
+      hash = "sha256-eoVBPyvDVPT4qoMrcYrxIuSJZeng65AS7mWcE8Y4XJM=";
     };
+
+    patches = [
+      # Fixes t-printf test on platforms where LDBL_MAX == DBL_MAX (armhf, ppc64)
+      # Upstream's git forge doesn't seem to have a nice way to download it :/
+      ./libgpg-error-tests-skip-a-test-when-not-HAVE_LONG_DOUBLE_WIDER.patch
+    ];
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    ''
+    # libgpg-error insists on having these generated files. They should be fairly ABI stable,
+    # so add one for FreeBSD.
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-freebsd") ''
+      cp ${./lock-obj-pub.x86_64-unknown-freebsd.h} src/syscfg/lock-obj-pub.freebsd.h
+    ''
+    # Fails on powerpc64-linux
+    # https://lists.gnupg.org/pipermail/gnupg-users/2026-July/068440.html
+    + lib.optionalString (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) ''
+      substituteInPlace tests/t-printf.c \
+        --replace-fail \
+          '# ifdef HAVE_LONG_DOUBLE_WIDER' \
+          '# if 0' \
+        --replace-fail \
+          'show ("LDBL_MAX == DBL_MAX - skipping LDBL_MAX test\n")' \
+          'show ("LDBL_MAX is weird on this platform - skipping LDBL_MAX test\n")'
     '';
 
     hardeningDisable = [ "strictflexarrays3" ];
@@ -53,7 +76,10 @@ stdenv.mkDerivation (
     # If architecture-dependent MO files aren't available, they're generated
     # during build, so we need gettext for cross-builds.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ gettext ];
+    nativeBuildInputs = [
+      autoreconfHook # HAVE_LONG_DOUBLE_WIDER patch changes configure.ac
+      gettext
+    ];
 
     postConfigure =
       # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
@@ -89,7 +115,7 @@ stdenv.mkDerivation (
 
       license = lib.licenses.lgpl2Plus;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   }
   // genPosixLockObjOnlyAttrs

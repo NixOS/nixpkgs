@@ -18,11 +18,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ (imgui.override { IMGUI_BUILD_GLFW_BINDING = true; }) ];
 
-  meta = with lib; {
+  meta = {
     description = "Standalone ImPlot Demos";
     homepage = "https://github.com/ocornut/imgui/tree/master/examples/example_glfw_opengl3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     mainProgram = "demo";
     platforms = lib.platforms.linux;
   };

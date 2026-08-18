@@ -1,47 +1,42 @@
 {
   lib,
-  coreutils,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
-  getopt,
-  libcap,
-  gnused,
-  nixosTests,
-  testers,
   autoreconfHook,
   po4a,
+  libcap,
+  getopt,
+  gnused,
+  coreutils,
+  versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.37.1.2";
+  version = "1.38.1";
   pname = "fakeroot";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
+    domain = "salsa.debian.org";
     owner = "clint";
     repo = "fakeroot";
-    rev = "upstream/${finalAttrs.version}";
-    domain = "salsa.debian.org";
-    hash = "sha256-2ihdvYRnv2wpZrEikP4hCdshY8Eqarqnw3s9HPb+xKU=";
+    tag = "upstream/${finalAttrs.version}";
+    hash = "sha256-sAzXeONjDT753lbu7amQY6yXpaTNCa4wFOzB01SRbCs=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
+    ./add-missing-wrapawk.patch
     ./einval.patch
-
-    # patches needed for musl libc, borrowed from alpine packaging.
-    # it is applied regardless of the environment to prevent patchrot
-    (fetchpatch {
-      name = "fakeroot-no64.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
-      sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
-    })
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     po4a
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux libcap;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   postUnpack = ''
     sed -i \
@@ -59,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
       # A lightweight *unit* test that exercises fakeroot and fakechroot together:
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };

@@ -11,24 +11,30 @@
   pipewire,
   taglib,
   libebur128,
-  libvgm,
   libsndfile,
   libarchive,
   libopenmpt,
+  soundtouch,
+  soxr,
   game-music-emu,
   SDL2,
-  fetchpatch,
+  icu,
+  zlib,
+  # Select bundled plugins to build. Leave empty for the default set, use none for no plugins, or use a semicolon/comma-separated list of plugin names to include or -name entries to exclude
+  pluginSelection ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.8.1";
+  version = "0.11.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "ludouzi";
+    owner = "fooyin";
     repo = "fooyin";
-    rev = "v" + finalAttrs.version;
-    hash = "sha256-pkzBuJkZs76m7I/9FPt5GxGa8v2CDNR8QAHaIAuKN4w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-228hxjKkxE0ILzP8dnIS21R3AW9Y0+wutgcYlQdCgXc=";
   };
 
   buildInputs = [
@@ -38,18 +44,21 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtwayland
     taglib
     ffmpeg
+    icu
     kdsingleapplication
+    zlib
     # output plugins
     alsa-lib
     pipewire
     SDL2
     # input plugins
     libebur128
-    libvgm
     libsndfile
     libarchive
     libopenmpt
     game-music-emu
+    soundtouch
+    soxr
   ];
 
   nativeBuildInputs = [
@@ -64,15 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     # we need INSTALL_FHS to be true as the various artifacts are otherwise just dumped in the root
     # of $out and the fixupPhase cleans things up anyway
     (lib.cmakeBool "INSTALL_FHS" true)
-  ];
-
-  # Remove after next release
-  patches = [
-    (fetchpatch {
-      name = "qbrush.patch";
-      url = "https://github.com/fooyin/fooyin/commit/e44e08abb33f01fe85cc896170c55dbf732ffcc9.patch";
-      hash = "sha256-soDj/SFctxxsnkePv4dZgyDHYD2eshlEziILOZC4ddM=";
-    })
+    (lib.cmakeFeature "PLUGIN_SELECTION" pluginSelection)
   ];
 
   env.LANG = "C.UTF-8";
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
+    changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     downloadPage = "https://github.com/fooyin/fooyin";
     mainProgram = "fooyin";
     license = lib.licenses.gpl3Only;

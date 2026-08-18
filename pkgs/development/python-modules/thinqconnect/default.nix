@@ -5,23 +5,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyopenssl,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "thinqconnect";
-  version = "1.0.7";
+  version = "1.0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "thinq-connect";
     repo = "pythinqconnect";
     tag = version;
-    hash = "sha256-wnlUwThmDRNosdWVvzqB3KP0LPL37+MnXXD84AeIUL8=";
+    hash = "sha256-0efPQ0fvBLi+Bp+JbBMRJPYFqRKBVpPQFyQ9rvHpEnY=";
   };
+
+  patches = [
+    # https://github.com/thinq-connect/pythinqconnect/pull/48
+    ./csr-generation-fix.patch
+  ];
 
   build-system = [ setuptools ];
 

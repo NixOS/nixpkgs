@@ -7,22 +7,22 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "audible-cli";
-  version = "0.3.1";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
-    tag = "v${version}";
-    hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ckI6nZUggIMvjJtN1zWXvTlVdiog0uJy6YR110A+JxM=";
   };
 
   nativeBuildInputs =
     with python3Packages;
     [
-      setuptools
+      hatchling
     ]
     ++ [
       addBinToPathHook
@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication rec {
     packaging
     pillow
     questionary
-    setuptools
     tabulate
     toml
     tqdm
@@ -50,7 +49,6 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
-      --fish <(source utils/code_completion/audible-complete-zsh-fish.sh) \
       --zsh <(source utils/code_completion/audible-complete-zsh-fish.sh)
   '';
 
@@ -64,16 +62,16 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "[0-9.]+"
+      "v([0-9.]+)"
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mkb79/audible-cli";
-    changelog = "https://github.com/mkb79/audible-cli/blob/${src.rev}/CHANGELOG.md";
-    maintainers = with maintainers; [ jvanbruegge ];
+    changelog = "https://github.com/mkb79/audible-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ jvanbruegge ];
     mainProgram = "audible";
   };
-}
+})

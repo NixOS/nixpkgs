@@ -31,6 +31,8 @@ args@{
   # and `urls` can be specified, not both.
   url ? "",
   urls ? [ ],
+  # Metadata
+  meta ? { },
   # The rest of the arguments are just forwarded to `fetchurl`.
   ...
 }:
@@ -64,13 +66,14 @@ let
     else
       map mkJarUrl repos;
   jar = fetchurl (
-    builtins.removeAttrs args [
+    removeAttrs args [
       "groupId"
       "artifactId"
       "version"
       "classifier"
       "repos"
       "url"
+      "meta"
     ]
     // {
       urls = urls_;
@@ -79,7 +82,7 @@ let
   );
 in
 stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version meta;
   dontUnpack = true;
   # By moving the jar to $out/share/java we make it discoverable by java
   # packages packages that mention this derivation in their buildInputs.

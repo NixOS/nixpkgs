@@ -2,23 +2,33 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  numpy,
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchsummary";
   version = "1.5.1";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # No tags on GitHub
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-mBv2ieIuDPf5XHRgAvIKJK0mqmudhhE0oUvGzpIjBZA=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ torch ];
+  dependencies = [
+    numpy
+    torch
+  ];
 
   # no tests in pypi tarball
   doCheck = false;
@@ -31,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

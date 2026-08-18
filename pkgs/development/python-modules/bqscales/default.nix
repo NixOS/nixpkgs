@@ -1,35 +1,67 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  nodejs,
+  yarn-berry_3,
+
+  # build-system
+  hatch,
   hatchling,
+  hatch-build-scripts,
   hatch-jupyter-builder,
+  hatch-nodejs-version,
   jupyterlab,
+
+  # dependencies
   ipywidgets,
   numpy,
   traitlets,
   traittypes,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bqscales";
-  version = "0.3.3";
+  version = "0.3.7";
   pyproject = true;
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SlnNw4dWOzRedwIN3kCyl95qVqkY92QGOMS3Eyoqk0I=";
+  src = fetchFromGitHub {
+    owner = "bqplot";
+    repo = "bqscales";
+    tag = finalAttrs.version;
+    hash = "sha256-AAKnOEwdycSlxJEK0qbFJp2Dpiw/rEIk7fUa3NTymqQ=";
+  };
+
+  missingHashes = ./missing-hashes.json;
+
+  yarnOfflineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-4Y5dRFwOyfHOzrdw2/epK3mN/+xrz+ccG86KP9axxjI=";
   };
 
   nativeBuildInputs = [
+    nodejs
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  preBuild = ''
+    npm run build
+  '';
+
+  build-system = [
+    hatch
+    hatch-build-scripts
     hatch-jupyter-builder
+    hatch-nodejs-version
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipywidgets
     numpy
     traitlets
@@ -38,7 +70,7 @@ buildPythonPackage rec {
 
   env.SKIP_JUPYTER_BUILDER = 1;
 
-  # no tests in PyPI dist
+  # no python tests
   doCheck = false;
 
   pythonImportsCheck = [ "bqscales" ];
@@ -49,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

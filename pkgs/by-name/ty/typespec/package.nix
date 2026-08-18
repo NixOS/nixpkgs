@@ -5,32 +5,37 @@
   makeWrapper,
   nix-update-script,
   nodejs,
-  pnpm,
-  testers,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
+  versionCheckHook,
 }:
 
 let
   workspace = "@typespec/compiler...";
+
+  pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typespec";
     tag = "typespec-stable@${finalAttrs.version}";
-    hash = "sha256-fUrBoDDv0UW5dqudD/bpzaT8SdIc5snI8Q/Fe5jWCvw=";
+    hash = "sha256-huyEQA+XhlGVxnxUzQH1aIZUE4EbCN6HakitzuDyR18=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   pnpmWorkspaces = [ workspace ];
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -38,7 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       postPatch
       ;
-    hash = "sha256-9RQZ2ycu78W3Ie6MLpo6x7Sa/iYsUdq5bYed56mOPxs=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-wZvnRSALrupyhpSN8zNL3b6SZnVPXX3BdHrbzHUNtUg=";
   };
 
   postPatch = ''
@@ -90,9 +97,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];

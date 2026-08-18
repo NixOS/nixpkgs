@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
+  replaceVars,
   tradcpp,
   xorg-cf-files,
   pkg-config,
@@ -10,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imake";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchurl {
     url = "mirror://xorg/individual/util/imake-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dd7LzqjXs1TPNq3JZ15TxHkO495WoUvYe0LI6KrS7PU=";
+    hash = "sha256-VZVVJ+rr6UYz5Ag9T+XyFgpl/kxtr97ki4n+pfHKing=";
   };
 
   patches = [
@@ -49,19 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
   ];
 
-  env = {
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
-      if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
-    }\"'";
-  };
+  env.CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
+    if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
+  }\"'";
 
   preInstall = ''
     mkdir -p $out/lib/X11/config
     ln -s ${xorg-cf-files}/lib/X11/config/* $out/lib/X11/config
   '';
 
-  inherit tradcpp xorg-cf-files;
-  setupHook = ./setup-hook.sh;
+  setupHook = replaceVars ./setup-hook.sh {
+    inherit tradcpp;
+  };
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''

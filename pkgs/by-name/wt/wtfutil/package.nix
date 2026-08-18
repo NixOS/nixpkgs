@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wtfutil";
-  version = "0.44.1";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
-    rev = "v${version}";
-    sha256 = "sha256-xjiNtaEgzJ9izGiYaR35NWpvUHvz54oCR2VYXwVQ8SU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-sq+8r317JMY8Wbl3KlrmHgIicbs6HZ3BLtG4VGBSHM4=";
   };
 
-  vendorHash = "sha256-Jc6kmeOLM3IWLxSwJA+nBdO76B504X/cKQ0UknlLUY4=";
+  vendorHash = "sha256-L6ZXbSsmsYH8yPcxNgJ99iJwGOjelsssPoYkeYQmglQ=";
   proxyVendor = true;
 
   doCheck = false;
@@ -35,7 +35,9 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${version}"'
+    substituteInPlace flags/flags.go \
+      --replace-fail 'version := info.Main.Version' 'version := "v${finalAttrs.version}"' \
+      --replace-fail 'var official bool' 'official := true'
   '';
 
   postInstall = ''
@@ -45,15 +47,14 @@ buildGoModule rec {
 
   doInstallCheck = true;
   # Darwin Error: mkdir /var/empty: file exists
-  nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
-    changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wtfutil/wtf/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
@@ -62,4 +63,4 @@ buildGoModule rec {
     mainProgram = "wtfutil";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

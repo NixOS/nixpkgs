@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "crowdsec-firewall-bouncer";
-  version = "0.0.33";
+  version = "0.0.36";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "cs-firewall-bouncer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4fxxAW2sXGNxjsc75fd499ciuN8tjGqlpRIaHYUXwQ0=";
+    hash = "sha256-MGFplf3keL5B7rr1BcS4PegPWGVAYnFVO6BmxQocBHs=";
   };
 
-  vendorHash = "sha256-Bhp6Z2UlCJ32vdc3uINCGleZFP2WeUn/XK+Q29szUzQ=";
+  vendorHash = "sha256-n3Do2eCmYHRdYNYqj5L+Ohkyw0OYAAp4HcTU9RI0ncs=";
 
   ldflags = [
     "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${finalAttrs.version}"

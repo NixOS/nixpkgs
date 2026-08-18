@@ -21,17 +21,35 @@ in
       package = lib.mkPackageOption pkgs "espanso" {
         example = "pkgs.espanso-wayland";
       };
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "with pkgs; [ bash curl python3 ];";
+        description = "Extra packages to be added to Espanso service path.";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    security.wrappers.espanso = lib.mkIf (cfg.package.waylandSupport or false) {
+      capabilities = "cap_dac_override+p";
+      owner = "root";
+      group = "root";
+      source = lib.getExe (cfg.package.override { securityWrapperPath = config.security.wrapperDir; });
+    };
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} daemon";
+        ExecStart = "${
+          if (cfg.package.waylandSupport or false) then
+            "${config.security.wrapperDir}/espanso"
+          else
+            lib.getExe cfg.package
+        } daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      path = cfg.extraPackages;
     };
 
     environment.systemPackages = [ cfg.package ];

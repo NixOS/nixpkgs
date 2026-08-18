@@ -1,5 +1,6 @@
 {
   lib,
+  git,
   stdenv,
   fetchurl,
   makeDesktopItem,
@@ -8,7 +9,7 @@
   glib,
   adwaita-icon-theme,
   wrapGAppsHook3,
-  libXtst,
+  libxtst,
   which,
 }:
 let
@@ -16,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartgit";
-  version = "24.1.3";
+  version = "26.1.052";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
+    url = "https://download.smartgit.dev/smartgit/smartgit-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }.tar.gz";
-    hash = "sha256-YhgE1Y0L8lzefJnvswKwIFnx6XIo40DszAr/cxOoOds=";
+    }-no-git-linux-amd64.tar.gz";
+    hash = "sha256-7fROWENB++s33v5TmSw94o3HimSMHr5nHsq4TJq2vac=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=( \
       --prefix PATH : ${
         lib.makeBinPath [
+          git
           jre
           which
         ]
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           gtk3
           glib
-          libXtst
+          libxtst
         ]
       } \
       --prefix SMARTGIT_JAVA_HOME : ${jre} \
@@ -103,11 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
       SmartGit is a multi-platform Git GUI client, free to use for active Open Source developers and users from academic institutions.
       Command line Git is required.
     '';
-    homepage = "https://www.syntevo.com/smartgit/";
-    changelog = "https://www.syntevo.com/smartgit/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
+    homepage = "https://www.smartgit.dev/";
+    changelog = "https://www.smartgit.dev/changelogs/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       jraygauthier
       tmssngr

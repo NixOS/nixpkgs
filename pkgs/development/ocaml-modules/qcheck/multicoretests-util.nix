@@ -5,15 +5,15 @@
   qcheck-core,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "qcheck-multicoretests-util";
-  version = "0.8";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "ocaml-multicore";
     repo = "multicoretests";
-    rev = version;
-    hash = "sha256-4aAukkhyxJ4EojLF+rrxSRRz4isUelcVEYNP2UYR7WY=";
+    rev = finalAttrs.version;
+    hash = "sha256-QABh33C1k5AAYkOa5zDIExwwJFlhgdvSuxShJt4ESM8=";
   };
 
   propagatedBuildInputs = [ qcheck-core ];
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

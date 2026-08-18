@@ -6,7 +6,7 @@ let
 in
 {
   name = "librenms";
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ johannwagner ];
 
   nodes.librenms = {
     time.timeZone = "Europe/Berlin";

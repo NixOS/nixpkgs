@@ -19,7 +19,7 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
+  env.HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   desktopItem = makeDesktopItem {
     categories = [ "Utility" ];
@@ -37,7 +37,6 @@ buildNimPackage (finalAttrs: {
     description = "Simple RSVP speed-reading utility";
     license = lib.licenses.unlicense;
     homepage = "https://git.sr.ht/~ehmry/hottext";
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "hottext";
   };
 })

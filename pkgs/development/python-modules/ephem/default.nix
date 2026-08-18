@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.2";
+  version = "4.2.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PE/WT0U+j0DPhiQgpw2pWnG2SHrOdejgz4XXNwfbYGU=";
+    hash = "sha256-kgyzA2nHn94QiMIGDVVepfilD9yAqSZYMv1b8ZXPFH8=";
   };
 
   nativeCheckInputs = [
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ephem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compute positions of the planets and stars";
     homepage = "https://github.com/brandon-rhodes/pyephem";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chrisrosset ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chrisrosset ];
   };
 }

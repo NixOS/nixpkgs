@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-policykit";
     rev = version;
-    hash = "sha256-TVgrr+Qakkk0rr7qwQPQNO7p5Wx6eVW8lK2gJ/HysZY=";
+    hash = "sha256-cMYBR0Uwc6v+s+F+uYbClbGh8BgovtxShgB62LX/WgU=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-policykit";
     description = "LXQt PolicyKit agent";
     mainProgram = "lxqt-policykit-agent";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

@@ -3,35 +3,31 @@
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "material-design-icons";
   version = "7.4.47";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/share/fonts/"{eot,truetype,woff,woff2}
-    cp fonts/*.eot "$out/share/fonts/eot/"
-    cp fonts/*.ttf "$out/share/fonts/truetype/"
-    cp fonts/*.woff "$out/share/fonts/woff/"
-    cp fonts/*.woff2 "$out/share/fonts/woff2/"
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "7000+ Material Design Icons from the Community";
     longDescription = ''
       Material Design Icons' growing icon collection allows designers and
@@ -39,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
       color and size they need for any project.
     '';
     homepage = "https://materialdesignicons.com";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       vlaci
       dixslyf
     ];
   };
-}
+})

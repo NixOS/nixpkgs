@@ -6,25 +6,23 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jellyfin-rpc";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
-    owner = "Radiicall";
+    owner = "JustRadical";
     repo = "jellyfin-rpc";
-    tag = version;
-    hash = "sha256-zKqP6Wt38ckqCPDS1oncmx92lZJm2oeb3bfpwVc6fUc=";
+    tag = finalAttrs.version;
+    hash = "sha256-6vlbANu3Eo51Zpdng4Ub3OYijwY5wekPLyyzIsG2zSE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-k9dGz+1HGcQoDMyqmJ1hEYklfYHibo1PI5jHEe0mr+w=";
+  cargoHash = "sha256-/g/qZM4wJuqqVUwoo8TzK1XsmRTGnDdo+toj/gO3QLo=";
 
-  # TODO: Re-enable when upstream bumps the version number internally
-  # nativeInstallCheckInputs = [
-  #   versionCheckHook
-  # ];
-  # doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -32,10 +30,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Displays the content you're currently watching on Discord";
-    homepage = "https://github.com/Radiicall/jellyfin-rpc";
-    changelog = "https://github.com/Radiicall/jellyfin-rpc/releases/tag/${version}";
+    homepage = "https://github.com/JustRadical/jellyfin-rpc";
+    changelog = "https://github.com/JustRadical/jellyfin-rpc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "jellyfin-rpc";
   };
-}
+})

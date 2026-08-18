@@ -6,18 +6,20 @@
   gawk,
   libarchive,
   pv,
-  squashfsTools,
+  squashfs-tools,
   buildFHSEnv,
-  pkgs,
+  replaceVarsWith,
+  runtimeShell,
+  runCommand,
 }:
 
 rec {
-  appimage-exec = pkgs.replaceVarsWith {
+  appimage-exec = replaceVarsWith {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
     replacements = {
-      inherit (pkgs) runtimeShell;
+      inherit runtimeShell;
       path = lib.makeBinPath [
         bash
         binutils-unwrapped
@@ -25,7 +27,7 @@ rec {
         gawk
         libarchive
         pv
-        squashfsTools
+        squashfs-tools
       ];
     };
   };
@@ -39,10 +41,10 @@ rec {
       src,
       ...
     }:
-    assert lib.assertMsg (
+    assert
       name == null
-    ) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
-    pkgs.runCommand "${pname}-${version}-extracted"
+      || throw "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    runCommand "${pname}-${version}-extracted"
       {
         nativeBuildInputs = [ appimage-exec ];
         strictDeps = true;
@@ -53,63 +55,59 @@ rec {
       '';
 
   # for compatibility, deprecated
-  extractType1 = extract;
-  extractType2 = extract;
-  wrapType1 = wrapType2;
+  extractType1 = lib.warn "'appimageTools.extractType1' is deprecated, use 'appimageTools.extract' instead" extract;
+  extractType2 = lib.warn "'appimageTools.extractType2' is deprecated, use 'appimageTools.extract' instead" extract;
+  wrapType1 = lib.warn "'appimageTools.wrapType1' is deprecated, use 'appimageTools.wrapType2' instead" wrapType2;
 
-  wrapAppImage =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      meta ? { },
-      ...
-    }:
-    buildFHSEnv (
+  wrapAppImage = lib.extendMkDerivation {
+    constructDrv = buildFHSEnv;
+    excludeDrvArgNames = [ "extraPkgs" ];
+    extendDrvArgs =
+      finalAttrs:
+      prev@{
+        contents ? prev.src,
+        extraPkgs ? pkgs: [ ],
+        meta ? { },
+        ...
+      }:
       defaultFhsEnvArgs
       // {
         targetPkgs = pkgs: [ appimage-exec ] ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-        runScript = "appimage-exec.sh -w ${src} --";
+        runScript = "appimage-exec.sh -w ${finalAttrs.contents or prev.src} --";
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        } // meta;
-      }
-      // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
-    );
+        }
+        // meta;
+      };
+  };
 
-  wrapType2 =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      ...
-    }:
-    wrapAppImage (
-      args
-      // {
-        inherit extraPkgs;
-        src = extract (
-          lib.filterAttrs (
-            key: value:
-            builtins.elem key [
-              "pname"
-              "version"
-              "src"
-            ]
-          ) args
-        );
-
-        # passthru src to make nix-update work
-        # hack to keep the origin position (unsafeGetAttrPos)
-        passthru =
-          lib.pipe args [
-            lib.attrNames
-            (lib.remove "src")
-            (removeAttrs args)
+  wrapType2 = lib.extendMkDerivation {
+    constructDrv = wrapAppImage;
+    extendDrvArgs = finalAttrs: args: {
+      contents = extract (
+        lib.filterAttrs (
+          key: value:
+          builtins.elem key [
+            "pname"
+            "version"
+            "src"
           ]
-          // args.passthru or { };
-      }
-    );
+        ) finalAttrs
+      );
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru =
+        lib.pipe finalAttrs [
+          lib.attrNames
+          (lib.remove "src")
+          (removeAttrs finalAttrs)
+        ]
+        // args.passthru or { };
+    };
+  };
 
   defaultFhsEnvArgs = {
     # Most of the packages were taken from the Steam chroot
@@ -118,14 +116,19 @@ rec {
         gtk3
         bashInteractive
         zenity
-        xorg.xrandr
+        xrandr
         which
         perl
+        xdg-user-dirs # flutter desktop apps
         xdg-utils
         iana-etc
         krb5
         gsettings-desktop-schemas
         hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
+
+        # libraries not on the upstream include list, but nevertheless expected
+        # by at least one appimage
+        libsecret # For bitwarden, appimage is x86_64 only
       ];
 
     # list of libraries expected in an appimage environment:
@@ -133,35 +136,35 @@ rec {
     multiPkgs =
       pkgs: with pkgs; [
         desktop-file-utils
-        xorg.libXcomposite
-        xorg.libXtst
-        xorg.libXrandr
-        xorg.libXext
-        xorg.libX11
-        xorg.libXfixes
+        libxcomposite
+        libxtst
+        libxrandr
+        libxext
+        libx11
+        libxfixes
         libGL
 
         gst_all_1.gstreamer
         gst_all_1.gst-plugins-ugly
         gst_all_1.gst-plugins-base
         libdrm
-        xorg.xkeyboardconfig
-        xorg.libpciaccess
+        xkeyboard-config
+        libpciaccess
 
         glib
         bzip2
         zlib
         gdk-pixbuf
 
-        xorg.libXinerama
-        xorg.libXdamage
-        xorg.libXcursor
-        xorg.libXrender
-        xorg.libXScrnSaver
-        xorg.libXxf86vm
-        xorg.libXi
-        xorg.libSM
-        xorg.libICE
+        libxinerama
+        libxdamage
+        libxcursor
+        libxrender
+        libxscrnsaver
+        libxxf86vm
+        libxi
+        libsm
+        libice
         freetype
         curlWithGnuTls
         nspr
@@ -181,23 +184,23 @@ rec {
         at-spi2-atk
         libudev0-shim
 
-        xorg.libXt
-        xorg.libXmu
-        xorg.libxcb
-        xorg.xcbutil
-        xorg.xcbutilwm
-        xorg.xcbutilimage
-        xorg.xcbutilkeysyms
-        xorg.xcbutilrenderutil
+        libxt
+        libxmu
+        libxcb
+        libxcb-util
+        libxcb-wm
+        libxcb-image
+        libxcb-keysyms
+        libxcb-render-util
         libGLU
         libuuid
         libogg
         libvorbis
         SDL2_image
-        glew110
+        glew_1_10
         openssl
         libidn
-        tbb
+        onetbb
         wayland
         libgbm
         libxkbcommon
@@ -222,7 +225,7 @@ rec {
         libgcrypt
         libvpx
         librsvg
-        xorg.libXft
+        libxft
         libvdpau
         alsa-lib
 
@@ -242,8 +245,6 @@ rec {
         at-spi2-core
         pciutils # for FreeCAD
         pipewire # immersed-vr wayland support
-
-        libsecret # For bitwarden
         libmpg123 # Slippi launcher
         brotli # TwitchDropsMiner
       ];

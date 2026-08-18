@@ -8,11 +8,14 @@
   yq,
   protobuf,
   installShellFiles,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  makeBinaryWrapper,
+  versionCheckHook,
+  librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
+  pkg-config,
+  zstd,
+  lcms2,
   lld,
   writableTmpDirAsHomeHook,
 
@@ -22,6 +25,10 @@
   git,
   python3,
   esbuild,
+  runCommand,
+
+  # self for passthru
+  deno,
 }:
 
 let
@@ -29,56 +36,56 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.4.0";
+  version = "2.9.4";
+
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "denort"
+    "libdenort"
+  ];
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-YEiqp5KwkzRB/b6HhAtxXJNxHsPMTf3LnNxkP6GgYKw=";
+    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WQle7a2OjZ5kNg/eCQo0USPZssMaifiXGhlnKJDEtsQ=";
+  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
 
   patches = [
-    ./tests-replace-hardcoded-paths.patch
-    ./tests-darwin-differences.patch
-    ./tests-no-chown.patch
+    ./patches/0002-tests-replace-hardcoded-paths.patch
+    ./patches/0003-tests-linux-no-chown.patch
+    ./patches/0004-tests-darwin-fixes.patch
   ];
-  postPatch =
-    ''
-      # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-      tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
-        ''
-          # LTO crashes with the latest Rust + LLVM combination.
-          # https://github.com/rust-lang/rust/issues/141737
-          # TODO: remove this once LLVM is upgraded to 20.1.7
-          tomlq -ti '.profile.release.lto = false' Cargo.toml
-        '';
+  postPatch = ''
+    # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
+  '';
 
   buildInputs = [
     libffi
     sqlite
+    zstd
   ];
 
-  # uses zlib-ng but can't dynamically link yet
-  # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     # for tomlq to adjust Cargo.toml
     yq
     # required by libz-ng-sys crate
     cmake
+    # required to de-vendor zstd
+    pkg-config
     # required by deno_kv crate
     protobuf
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
@@ -87,19 +94,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFlags = [ "--package=cli" ];
 
+  # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
+  buildNoDefaultFeatures = true;
+
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+  # Workaround for riscv64 because it has no pre-generated bindings.
+  env.RUSTY_V8_SRC_BINDING_PATH = librusty_v8.binding;
 
-  # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
-  # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
-  # these four arch+platform combinations.
-  doCheck =
-    stdenv.hostPlatform.isDarwin
-    || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
+  # de-vendor SQLite
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+  # de-vendor zstd
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  # de-vendor lcms2
+  env.LCMS2_LIB_DIR = lib.makeLibraryPath [ lcms2 ];
 
+  # Don't run checks on hydra as they've been observed to be flakey for us and
+  # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
+  # We haven't reproduced it on local machines, could be related to doing other
+  # builds simultaneously.
+  # A build with tests (+ librusty_v8 tests) is included in `deno.passhtru.tests`
+  doCheck = false;
+  # check related config is left in the main package so if someone uses
+  # `overrideAttrs` to always build with tests, it'll all work.
   preCheck =
     # Provide esbuild binary at `./third_party/prebuilt/` just like upstream:
     # https://github.com/denoland/deno_third_party/tree/master/prebuilt
@@ -117,6 +137,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64"
         else if stdenv.hostPlatform.isx86_64 then
           "x64"
+        else if stdenv.hostPlatform.isRiscV64 then
+          "riscv64"
         else
           throw "Unsupported architecture";
     in
@@ -132,7 +154,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test integration_tests"
+    "--test=integration_test"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
@@ -140,48 +162,71 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
     #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
   ];
-  checkFlags =
-    [
-      # Internet access
-      "--skip=check::ts_no_recheck_on_redirect"
-      "--skip=js_unit_tests::quic_test"
-      "--skip=js_unit_tests::net_test"
-      "--skip=node_unit_tests::http_test"
-      "--skip=node_unit_tests::http2_test"
-      "--skip=node_unit_tests::net_test"
-      "--skip=node_unit_tests::tls_test"
-      "--skip=npm::lock_file_lock_write"
+  checkFlags = [
+    # Internet access
+    "--skip=check::ts_no_recheck_on_redirect"
+    "--skip=js_unit_tests::quic_test"
+    "--skip=js_unit_tests::net_test"
+    "--skip=node_unit_tests::http_test"
+    "--skip=node_unit_tests::http2_test"
+    "--skip=node_unit_tests::net_test"
+    "--skip=node_unit_tests::tls_test"
+    "--skip=npm::lock_file_lock_write"
+    "--skip=happy_eyeballs::tests::test_parallel_second_wins"
 
-      # GPU access
-      "--skip=js_unit_tests::webgpu_test"
-      "--skip=js_unit_tests::jupyter_test"
+    # GPU access
+    "--skip=js_unit_tests::webgpu_test"
+    "--skip=js_unit_tests::jupyter_test"
 
-      # Use of /usr/bin
-      "--skip=specs::permission::proc_self_fd"
+    # Use of /usr/bin
+    "--skip=specs::permission::proc_self_fd"
 
-      # Flaky
-      "--skip=init::init_subcommand_serve"
-      "--skip=serve::deno_serve_parallel"
-      "--skip=js_unit_tests::stat_test" # timing-sensitive
-      "--skip=repl::pty_complete_imports"
-      "--skip=repl::pty_complete_expression"
+    # Flaky
+    "--skip=init::init_subcommand_serve"
+    "--skip=serve::deno_serve_parallel"
+    "--skip=js_unit_tests::stat_test" # timing-sensitive
+    "--skip=repl::pty_complete_imports"
+    "--skip=repl::pty_complete_expression"
 
-      # Test hangs, needs investigation
-      "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+    # Test hangs, needs investigation
+    "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
 
-      # Use of VSOCK, might not be available on all platforms
-      "--skip=js_unit_tests::serve_test"
-      "--skip=js_unit_tests::fetch_test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Expects specific shared libraries from macOS to be linked
-      "--skip=shared_library_tests::macos_shared_libraries"
+    # Use of VSOCK, might not be available on all platforms
+    "--skip=js_unit_tests::serve_test"
+    "--skip=js_unit_tests::fetch_test"
 
-      # Darwin sandbox issues
-      "--skip=watcher"
-      "--skip=node_unit_tests::_fs_watch_test"
-      "--skip=js_unit_tests::fs_events_test"
-    ];
+    # We disable the upgrade feature on purpose
+    "--skip=upgrade::upgrade_prompt"
+    "--skip=upgrade::upgrade_invalid_lockfile"
+
+    # Wants to access /etc/group
+    "--skip=node_unit_tests::process_test"
+
+    # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
+    "--skip=sqlite_extension_test"
+
+    # Needs deno in $PATH
+    "--skip=tests::test_rebuild_async_stubs"
+
+    # Causes SIGTRAP
+    "--skip=external::tests::test_external_deref_after_take"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Expects specific shared libraries from macOS to be linked
+    "--skip=shared_library_tests::macos_shared_libraries"
+
+    # Darwin sandbox issues
+    "--skip=watcher"
+    "--skip=node_unit_tests::_fs_watch_test"
+    "--skip=js_unit_tests::fs_events_test"
+    "--skip=js_unit_tests::utime_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
+    "--skip=tests::test_userspace_resolver"
+    # We don't have a tmp dir with sticky bit during build
+    "--skip=util::temp::test::test_ensure_secure_temp_parent_rejects_non_sticky_writable_dir"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -196,37 +241,53 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preInstall = ''
     # Delete generated shared libraries that aren't needed in the final package
     find ./target \
-      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      \( -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
       -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
-      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \) \
       -delete
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    moveToOutput "bin/denort" "$denort"
+    moveToOutput "lib/libdenort${stdenv.hostPlatform.extensions.sharedLibrary}" "$libdenort"
+
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
 
-    ${lib.optionalString canExecute ''
-      installShellCompletion --cmd deno \
-        --bash <($out/bin/deno completions bash) \
-        --fish <($out/bin/deno completions fish) \
-        --zsh <($out/bin/deno completions zsh)
-    ''}
+    # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
+    makeBinaryWrapper $out/bin/deno $out/bin/dx --add-flags "x"
+  ''
+  + lib.optionalString canExecute ''
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = (import ./tests { inherit deno runCommand lib; }) // {
+      build-with-unit-tests = deno.overrideAttrs (fa: {
+        # The tools test suite requires building the test server
+        dontBuild = false;
+        # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
+        # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
+        # these four arch+platform combinations.
+        doCheck =
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
+      });
+      # Also include librusty_v8 tests
+      librusty_v8-tests = librusty_v8.passthru.tests;
+    };
+    inherit librusty_v8;
+  };
 
-  meta = with lib; {
-    homepage = "https://deno.land/";
+  meta = {
+    homepage = "https://deno.com/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
@@ -238,16 +299,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Among other things, Deno is a great replacement for utility scripts that may have been historically written with
       bash or python.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       ofalvai
+      mynacol
+      anish
     ];
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
+      "riscv64-linux"
       "aarch64-darwin"
     ];
   };

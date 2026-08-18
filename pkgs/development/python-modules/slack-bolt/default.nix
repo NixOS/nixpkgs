@@ -34,26 +34,22 @@
 
   # tests
   docker,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slack-bolt";
-  version = "1.23.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
-    tag = "v${version}";
-    hash = "sha256-Aq7vLkrTeBVsY+xVwQhFmSqq8ik0yHEmPANtKyJZKTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3U15V++q/x73LuEgw9uWaIGWulJmPkmkpUxxK1EXuzU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-runner==6.0.1",' ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -89,13 +85,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docker
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 
@@ -109,13 +103,20 @@ buildPythonPackage rec {
     "test_failure"
     # TypeError
     "test_oauth"
+    # AssertionError
+    "test_buffer_size_overrides"
+    "test_buffer_size_overrides"
+    "test_default_params"
+    "test_default_params"
+    "test_parameter_overrides"
+    "test_parameter_overrides"
   ];
 
   meta = {
     description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
-    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

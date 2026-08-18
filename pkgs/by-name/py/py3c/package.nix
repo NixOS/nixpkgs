@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "py3c";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "encukou";
     repo = "py3c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
 
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-python";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/encukou/py3c";
     description = "Python 2/3 compatibility layer for C extensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

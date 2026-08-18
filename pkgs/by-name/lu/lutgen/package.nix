@@ -7,19 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lutgen";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
-    tag = "lutgen-v${version}";
-    hash = "sha256-hJ5yD8Yu08kcr2rWY59iVEFJH+chroEWSsP2g5agFuo=";
+    tag = "lutgen-v${finalAttrs.version}";
+    hash = "sha256-8sayt1gLJPdhesUvSoykUYjIiGLRJH5avsRSrWLfIVE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VsKRLxh6uRG2A5AvJBMdD+bXg/X9mp5o1iPR9MZhrbQ=";
+  cargoHash = "sha256-CJXobmGOFEOiycrtgKjupVwTCYLMQcEI7RdLGpwmSyg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,15 +43,15 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version-regex=^lutgen-v([0-9.]+)$" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ozwaldorf
       zzzsy
       donovanglover
     ];
     mainProgram = "lutgen";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

@@ -1,40 +1,43 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  llvmPackages_20,
+  btfdump,
+  rustc,
+  # Override this if you are compiling your BPF programs with a version of
+  # rustc that uses a different LLVM version, for example when using a rust
+  # overlay.
+  llvmPackagesForLinker ? rustc.llvmPackages,
   zlib,
-  ncurses,
   libxml2,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.14";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = "bpf-linker";
     tag = "v${version}";
-    hash = "sha256-accW1w0Mn9Mo9r2LrupQdgx+3850Dth8EfnnuzO+ZzM=";
+    hash = "sha256-W1ZrKSkAHH1CBFNhyD5qfVJuf9mhwzZuzkdWGX4prnI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-D1N4zQjpllQg6Nn92+HWWsSmGsOon0mygErWg3X8Gx8=";
+  cargoHash = "sha256-jgVuJ5xq/M2Bq1B1u8BnULqSsbwxXpSsIFhVU8ehDZM=";
 
   buildNoDefaultFeatures = true;
+  buildFeatures = [ "llvm-${lib.versions.major llvmPackagesForLinker.llvm.version}" ];
 
-  nativeBuildInputs = [ llvmPackages_20.llvm ];
   buildInputs = [
     zlib
-    ncurses
     libxml2
+    (lib.getLib llvmPackagesForLinker.llvm)
   ];
 
-  # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
-  # rust-src and `-Z build-std=core` are required to properly run the tests
-  doCheck = false;
+  nativeCheckInputs = [
+    btfdump
+    llvmPackagesForLinker.clang.cc
+    llvmPackagesForLinker.llvm
+  ];
 
   meta = {
     description = "Simple BPF static linker";
@@ -45,8 +48,5 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ nickcao ];
-    # llvm-sys crate locates llvm by calling llvm-config
-    # which is not available when cross compiling
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

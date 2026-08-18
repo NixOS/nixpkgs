@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "rangehttpserver";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danvk";
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RangeHTTPServer" ];
 
-  meta = with lib; {
+  meta = {
     description = "SimpleHTTPServer with support for Range requests";
     homepage = "https://github.com/danvk/RangeHTTPServer";
     changelog = "https://github.com/danvk/RangeHTTPServer/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

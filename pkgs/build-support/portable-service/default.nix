@@ -38,7 +38,7 @@
   contents ? [ ],
 
   # mksquashfs options
-  squashfsTools ? pkgs.squashfsTools,
+  squashfsTools ? pkgs.squashfs-tools,
   squash-compression ? "xz -Xdict-size 100%",
   squash-block-size ? "1M",
 }:
@@ -64,33 +64,32 @@ let
       pname = "root-fs-scaffold";
       inherit version;
 
-      buildCommand =
-        ''
-          # scaffold a file system layout
-          mkdir -p $out/etc/systemd/system $out/proc $out/sys $out/dev $out/run \
-                   $out/tmp $out/var/tmp $out/var/lib $out/var/cache $out/var/log
+      buildCommand = ''
+        # scaffold a file system layout
+        mkdir -p $out/etc/systemd/system $out/proc $out/sys $out/dev $out/run \
+                 $out/tmp $out/var/tmp $out/var/lib $out/var/cache $out/var/log
 
-          # empty files to mount over with host's version
-          touch $out/etc/resolv.conf $out/etc/machine-id
+        # empty files to mount over with host's version
+        touch $out/etc/resolv.conf $out/etc/machine-id
 
-          # required for portable services
-          cp ${os-release} $out/etc/os-release
+        # required for portable services
+        cp ${os-release} $out/etc/os-release
+      ''
+      # units **must** be copied to /etc/systemd/system/
+      + (lib.concatMapStringsSep "\n" (u: "cp ${u} $out/etc/systemd/system/${u.name};") units)
+      + (lib.concatMapStringsSep "\n" (
+        { object, symlink }:
         ''
-        # units **must** be copied to /etc/systemd/system/
-        + (lib.concatMapStringsSep "\n" (u: "cp ${u} $out/etc/systemd/system/${u.name};") units)
-        + (lib.concatMapStringsSep "\n" (
-          { object, symlink }:
-          ''
-            mkdir -p $(dirname $out/${symlink});
-            ln -s ${object} $out/${symlink};
-          ''
-        ) symlinks);
+          mkdir -p $(dirname $out/${symlink});
+          ln -s ${object} $out/${symlink};
+        ''
+      ) symlinks);
     };
 in
 
-assert lib.assertMsg (lib.all (
-  u: lib.hasPrefix pname u.name
-) units) "Unit names must be prefixed with the service name";
+assert
+  lib.all (u: lib.hasPrefix pname u.name) units
+  || throw "Unit names must be prefixed with the service name";
 
 stdenv.mkDerivation {
   pname = "${pname}-img";

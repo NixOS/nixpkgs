@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5sqTkaGqmKDDH7byDZ84rzB3FTu9AKsWxA6EIvUrLCU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-s5k23p0Fo+DQvGpDvy/VmGNFK7ZysqLIyDPuUn6n724=";
 
   buildAndTestSubdir = "inputmodule-control";

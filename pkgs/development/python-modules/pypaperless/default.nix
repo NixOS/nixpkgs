@@ -5,35 +5,30 @@
   fetchFromGitHub,
   hatchling,
   lib,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypaperless";
-  version = "4.1.1";
+  version = "5.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tb1337";
     repo = "paperless-api";
-    tag = "v${version}";
-    hash = "sha256-q2LQiO/9AGROczcKrfatO3P96Fvkdn0HqEDlUbRfhaE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G40x/3bb3h49eynwYCoJPeBLmX1Ty+mq3AGQoBAiZOA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "aiohttp"
-    "yarl"
-  ];
 
   dependencies = [
     aiohttp
@@ -50,10 +45,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tb1337/paperless-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/tb1337/paperless-api/releases/tag/${finalAttrs.src.tag}";
     description = "Little api client for paperless(-ngx)";
     homepage = "https://github.com/tb1337/paperless-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

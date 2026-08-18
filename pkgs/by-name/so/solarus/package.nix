@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
+  nix-update-script,
   cmake,
   ninja,
   luajit,
@@ -22,22 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
+    hash = "sha256-V9h27KvBNBGA7mRUkhQn4om7VBTe8ZEgIOBr1aDt8Mo=";
   };
-
-  patches = [
-    # https://gitlab.com/solarus-games/solarus/-/merge_requests/1570
-    (fetchpatch {
-      url = "https://gitlab.com/solarus-games/solarus/-/commit/8e1eee51cbfa5acf2511b059739153065b0ba21d.patch";
-      hash = "sha256-KevGavtUhpHRt85WLh9ApmZ8a+NeWB1zDDHKGT08yhQ=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -71,11 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     inherit solarus-quest-editor solarus-launcher;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Zelda-like ARPG game engine";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
-      Many full-fledged games have been writen for the engine.
+      Many full-fledged games have been written for the engine.
     '';
     homepage = "https://www.solarus-games.org";
     mainProgram = "solarus-run";

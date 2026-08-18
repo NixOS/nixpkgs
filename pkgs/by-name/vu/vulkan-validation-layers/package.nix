@@ -5,14 +5,15 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  python3,
   jq,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   spirv-headers,
   spirv-tools,
   vulkan-headers,
@@ -23,15 +24,15 @@
 let
   robin-hood-hashing = callPackage ./robin-hood-hashing.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-validation-layers";
-  version = "1.4.313.0";
+  version = "1.4.357.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-FavJ9QIv9J/QlY8bBSQ4C+8ZeNzge3Rov97GPOjltuA=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-AO1ci608M6CoCrPR6UI2ZjCRlyzOeN8lkimZZODazb0=";
   };
 
   strictDeps = true;
@@ -39,32 +40,34 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     jq
   ];
 
-  buildInputs =
-    [
-      glslang
-      robin-hood-hashing
-      spirv-headers
-      spirv-tools
-      vulkan-headers
-      vulkan-utility-libraries
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXau
-      libXdmcp
-      libXrandr
-      libffi
-      libxcb
-      wayland
-    ];
+  buildInputs = [
+    glslang
+    robin-hood-hashing
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+    vulkan-utility-libraries
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxau
+    libxdmcp
+    libxrandr
+    libffi
+    libxcb
+    wayland
+  ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
+    # Don't run update_deps.py which tries to git clone dependencies
+    "-DUPDATE_DEPS=OFF"
   ];
 
   # Tests require access to vulkan-compatible GPU, which isn't
@@ -82,11 +85,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

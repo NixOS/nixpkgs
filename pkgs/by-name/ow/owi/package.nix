@@ -7,21 +7,22 @@
   zig,
   makeWrapper,
   unstableGitUpdater,
+  nixosTests,
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages_5_1;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_4;
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-05-05";
+  version = "0.2-unstable-2026-05-22";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "e4c2e85f1364714a77a925ec29321cf9b8fe90f4";
+    rev = "2d6ec0d897a209f34849d25f8bcfc73298820be3";
     fetchSubmodules = true;
-    hash = "sha256-ewaAkSyxtiiE8WcHusOyZDesqI61kCEN3pMb99R7Dkw=";
+    hash = "sha256-A+mTFvojEpIfRPJkPRf5vfHf+nk+3/hdIbJqIDv/AzM=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -32,36 +33,34 @@ ocamlPackages.buildDunePackage rec {
     llvmPackages.clang-unwrapped
     # lld + llc isn't included in unwrapped, so we pull it in here
     llvmPackages.bintools-unwrapped
+    makeWrapper
     rustc
     zig
-    makeWrapper
   ];
 
   buildInputs = with ocamlPackages; [
+    dune-build-info
+    dune-site
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
     bos
     cmdliner
     digestif
-    dolmen_type
-    dune-build-info
-    dune-site
-    hc
-    integers
-    menhir
+    domainpc
     menhirLib
     ocaml_intrinsics
-    patricia-tree
+    ocamlgraph
     prelude
     processor
-    pyml
-    re2
     scfg
     sedlex
     smtml
+    symex
+    synchronizer
     uutf
     xmlm
     yojson
-    z3
-    zarith
   ];
 
   postInstall = ''
@@ -78,15 +77,22 @@ ocamlPackages.buildDunePackage rec {
 
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    tests = { inherit (nixosTests) owi; };
+  };
 
   meta = {
     description = "Symbolic execution for Wasm, C, C++, Rust and Zig";
     homepage = "https://ocamlpro.github.io/owi/";
     downloadPage = "https://github.com/OCamlPro/owi";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      redianthus
+    ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "owi";
+    badPlatforms = lib.platforms.darwin;
   };
 }

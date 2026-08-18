@@ -46,6 +46,8 @@ let
   mkdir = runCommand "mkdir" { coreutils = coreutils-big; } ''
     mkdir -p $out/bin
     cp $coreutils/bin/mkdir $out/bin
+    cp $coreutils/bin/cp $out/bin
+    cp $coreutils/bin/mv $out/bin
   '';
 in
 rec {
@@ -58,13 +60,13 @@ rec {
         gnutar
       ])
       ''
-        rm -rf include lib/*.a lib/i18n lib/bash share
+        rm -rf include lib/*.a lib/bash share
       '';
   bootstrap-tools = tar-all "bootstrap-tools.tar.xz" (
     with pkgs;
     # SYNCME: this version number must be synced with the one in default.nix
     let
-      llvmPackages = llvmPackages_18;
+      llvmPackages = llvmPackages_21;
     in
     [
       (runCommand "bsdcp" { } "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
@@ -84,14 +86,16 @@ rec {
       gzip
       bzip2
       bzip2.dev
-      curl
+      # We don't use wcurl, and it uses shebangs for the build system when cross-compiling.
+      # That pollutes the bootstrap tarballs and prevents it from working.
+      (curl.overrideAttrs (old: {
+        postFixup = "rm $bin/bin/wcurl";
+      }))
       expand-response-params
       binutils-unwrapped
       freebsd.libc
-      llvmPackages.libcxx
-      llvmPackages.libcxx.dev
-      llvmPackages.compiler-rt
-      llvmPackages.compiler-rt.dev
+      stdenv.cc.libcxx
+      stdenv.cc.libcxx.dev
       llvmPackages.clang-unwrapped
       (freebsd.locales.override { locales = [ "C.UTF-8" ]; })
     ]

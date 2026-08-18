@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Reusable deprecation helpers for Python projects";
     homepage = "https://github.com/beanbaginc/housekeeping";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

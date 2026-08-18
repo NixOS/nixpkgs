@@ -6,11 +6,11 @@
 }:
 let
   pname = "artisan";
-  version = "3.1.4";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
-    hash = "sha256-GU9DCAIMioPRUC1IDu8SbhD802pWEH7MlALnQH+Y4oU=";
+    hash = "sha256-KmjqM3gYpxxjEBaXjF5zvL8bgfgD8IKvAX0xYf29J48=";
   };
 
   appimageContents = appimageTools.extract {
@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
   };
 
   meta = {
-    description = "visual scope for coffee roasters";
+    description = "Visual scope for coffee roasters";
     homepage = "https://artisan-scope.org/";
     changelog = "https://github.com/artisan-roaster-scope/artisan/releases/tag/v${version}";
     downloadPage = "https://github.com/artisan-roaster-scope/artisan/releases";

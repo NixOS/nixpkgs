@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   perl,
   cmake,
   ninja,
@@ -22,9 +23,12 @@
   zfp,
   zlib,
   ucx,
+  libffi,
   yaml-cpp,
   nlohmann_json,
+  openssl,
   llvmPackages,
+  gtest,
   ctestCheckHook,
   mpiCheckPhaseHook,
   testers,
@@ -50,70 +54,88 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.10.2";
+  version = "2.11.0";
   pname = "adios2";
 
   src = fetchFromGitHub {
     owner = "ornladios";
     repo = "adios2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVyw7xoPutXeUS87jjVv1YxJnwNGZAT4QfkBLzvQbwg=";
+    hash = "sha256-yHPI///17poiCEb7Luu5qfqxTWm9Nh+o9r57mZT26U0=";
   };
 
-  postPatch =
-    ''
-      chmod +x cmake/install/post/adios2-config.pre.sh.in
-      patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
-    ''
-    # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
-        --replace-fail "dynamic_cast" "reinterpret_cast"
-    '';
+  postPatch = ''
+    chmod +x cmake/install/post/adios2-config.pre.sh.in
+    patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
+  '';
 
-  nativeBuildInputs =
-    [
-      perl
-      cmake
-      ninja
-      gfortran
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pybind11
-      python3Packages.pythonImportsCheckHook
-    ];
+  # TODO: remove these patches when updating to > v2.11.x, which will already include these commits
+  patches = [
+    # use upstream GoogleTest.cmake
+    # see https://github.com/ornladios/ADIOS2/issues/4659
+    (fetchpatch2 {
+      name = "googletest-cmake-fix.patch";
+      url = "https://github.com/ornladios/ADIOS2/commit/20aab0f99d38dc4437b086edf6b44ecf4100ed76.patch?full_index=1";
+      hash = "sha256-CZD3QUATX0JI75Oip0LNwirWIwgQakWuCHs1fIjwzj0=";
+    })
+    # fix double import cmake conflict
+    # see https://github.com/ornladios/ADIOS2/issues/4760
+    (fetchpatch2 {
+      name = "cmake-target-guard-fix.patch";
+      url = "https://github.com/ornladios/ADIOS2/commit/23fd08a10b52a971150f93f99d341b83b8096e3d.patch?full_index=1";
+      hash = "sha256-+29a9JgiCv2kBz0uUT8Kn/Tf3KDD1JNPdzeb/DruTBo=";
+    })
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      c-blosc2
-      adios2Packages.catalyst
-      adios2Packages.hdf5
-      libfabric
-      libpng
-      libsodium
-      pugixml
-      sqlite
-      zeromq
-      zfp
-      zlib
-      yaml-cpp
-      nlohmann_json
+  nativeBuildInputs = [
+    perl
+    cmake
+    ninja
+    gfortran
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pybind11
+    python3Packages.pythonImportsCheckHook
+  ];
 
-      # Todo: add these optional dependencies in nixpkgs.
-      # sz
-      # mgard
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
-    # openmp required by zfp
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs = [
+    bzip2
+    c-blosc2
+    adios2Packages.catalyst
+    adios2Packages.hdf5
+    libfabric
+    libpng
+    libsodium
+    pugixml
+    sqlite
+    zeromq
+    zlib
+    yaml-cpp
+    nlohmann_json
+    openssl
+
+    # Todo: add these optional dependencies in nixpkgs.
+    # sz
+    # mgard
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
+  ++ lib.optional (stdenv.hostPlatform.isLoongArch64) libffi
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp;
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
-    ++ lib.optional pythonSupport python3Packages.numpy
-    ++ lib.optional (mpiSupport && pythonSupport) adios2Packages.mpi4py;
+    # create meta package providing dist-info for python3Packages.adios2
+    ++ lib.optional pythonSupport (
+      python3Packages.mkPythonMetaPackage {
+        inherit (finalAttrs) pname version meta;
+        dependencies = [
+          python3Packages.numpy
+        ]
+        ++ lib.optional mpiSupport adios2Packages.mpi4py;
+      }
+    );
 
   cmakeFlags = [
     # adios2 builtin modules
@@ -125,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
     (lib.cmakeBool "ADIOS2_USE_Blosc2" true)
     (lib.cmakeBool "ADIOS2_USE_BZip2" true)
-    (lib.cmakeBool "ADIOS2_USE_ZFP" true)
+    (lib.cmakeBool "ADIOS2_USE_ZFP" (lib.meta.availableOn stdenv.hostPlatform zfp))
     (lib.cmakeBool "ADIOS2_USE_SZ" false)
     (lib.cmakeBool "ADIOS2_USE_LIBPRESSIO" false)
     (lib.cmakeBool "ADIOS2_USE_MGARD" false)
@@ -144,11 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_UCX" (lib.meta.availableOn stdenv.hostPlatform ucx))
     (lib.cmakeBool "ADIOS2_USE_Sodium" true)
     (lib.cmakeBool "ADIOS2_USE_Catalyst" true)
+    (lib.cmakeBool "ADIOS2_USE_OpenSSL" true)
     (lib.cmakeBool "ADIOS2_USE_Campaign" true)
     (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
 
-    # use vendored gtest as nixpkgs#gtest does not include <iomanip> in <gtest/gtest.h>
-    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_GTEST" false)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     # higher MPIEXEC_MAX_NUMPROCS>8 might cause tests failure in
     #   - Engine.BP.BPJoinedArray.MultiBlock.BP4.MPI
@@ -160,6 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Enable support for Little/Big Endian Interoperability
     (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
 
+    # force use of "-fallow-argument-mismatch"
+    (lib.cmakeBool "ADIOS2_USE_Fortran_flag_argument_mismatch" true)
+
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
@@ -167,13 +191,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
   ];
 
+  # python binding libraries should be linked against installed libraries
+  preInstall = lib.optionalString pythonSupport ''
+    export adios2_DIR=$out/lib/cmake/adios2
+  '';
+
   # Tests are time-consuming and moved to passthru.tests.withCheck.
   doCheck = false;
   dontUseNinjaCheck = true;
-
-  preCheck = ''
-    export adios2_DIR=$PWD
-  '';
 
   enableParallelChecking = false;
 
@@ -181,36 +206,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3Packages.python
+    gtest
     ctestCheckHook
     mpiCheckPhaseHook
   ];
 
-  # required for finding the generated adios2-config.cmake file
-  preInstall = ''
-    export adios2_DIR=$out/lib/cmake/adios2
-  '';
-
   pythonImportsCheck = [ "adios2" ];
 
   passthru.tests = {
-    withCheck = finalAttrs.finalPackage.overrideAttrs {
-      doCheck = true;
-
-      disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        # TypeError: cannot pickle 'TextIOWrapper' instances
-        "Test.Engine.DataMan1xN.Serial"
-        "Test.Engine.DataManSingleValues"
-        # The test assumed to always contain n*64 byte-length records. Right now the length of index buffer is 71 bytes.
-        "Staging.1x1.Local2.BPS.BB.BP4_stream"
-        # Timeout
-        "Staging.3x5LockGeometry.FS.BB.FileStream"
-        "Engine.Staging.TestOnDemandMPI.ADIOS2OnDemandMPI.SST.MPI"
-      ];
-    };
-
     cmake-config = testers.hasCmakeConfigModules {
       moduleNames = [ "adios2" ];
       package = finalAttrs.finalPackage;
+    };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
     };
   };
 

@@ -10,20 +10,17 @@
   spdlog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coeurl";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     domain = "nheko.im";
     owner = "nheko-reborn";
     repo = "coeurl";
-    rev = "v${version}";
-    hash = "sha256-NGplM5c/dMGSQbhKeuPOTWL8KsqvMd/76YuwCxnqNNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8BwyPfLgkJG1CHnRAKxgn8ObEGSK+lKKUhQibs1dCg4=";
   };
-  postPatch = ''
-    substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
-  '';
 
   nativeBuildInputs = [
     ninja
@@ -37,11 +34,11 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple async wrapper around CURL for C++";
     homepage = "https://nheko.im/nheko-reborn/coeurl";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

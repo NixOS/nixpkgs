@@ -9,19 +9,19 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-hlr";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
-    rev = version;
-    hash = "sha256-yi4sgcX8WOWz7qw/jGvVCtIYe867uBzLps8gdG6ziOA=";
+    rev = finalAttrs.version;
+    hash = "sha256-+wAwMP3zoFFOlZa4LhCr2hxP97mEZPViniwoOxpINyk=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Osmocom implementation of 3GPP Home Location Registr (HLR)";
+    description = "Osmocom implementation of 3GPP Home Location Register (HLR)";
     homepage = "https://osmocom.org/projects/osmo-hlr";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-hlr";
   };
-}
+})

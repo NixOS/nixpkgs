@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   tag ? "",
 
@@ -18,7 +19,7 @@
   gtksourceview,
   kakasi,
   keybinder3,
-  libappindicator-gtk3,
+  libappindicator,
   libmodplug,
   librsvg,
   libsoup_3,
@@ -34,7 +35,7 @@
   withGstPlugins ? withGstreamerBackend,
   withGstreamerBackend ? true,
   gst_all_1,
-  withXineBackend ? true,
+  withXineBackend ? !withGstreamerBackend,
   xine-lib,
 
   # tests
@@ -44,7 +45,7 @@
   python3,
   xvfb-run,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "quodlibet${tag}";
   version = "4.7.1";
   pyproject = true;
@@ -57,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-xr3c1e4tjw2YHuKbvNeUPBIFdHEcpztqXjHVDSSxYlo=";
   };
 
@@ -72,45 +73,43 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail 'quodlibet = "quodlibet.main:main"' ""
   '';
 
-  nativeBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      wrapGAppsHook3
-    ]
-    ++ (with python3.pkgs; [
-      sphinx-rtd-theme
-      sphinxHook
-    ]);
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook3
+  ]
+  ++ (with python3.pkgs; [
+    sphinx-rtd-theme
+    sphinxHook
+  ]);
 
-  buildInputs =
+  buildInputs = [
+    adwaita-icon-theme
+    gdk-pixbuf
+    glib
+    glib-networking
+    gtk3
+    gtksourceview
+    kakasi
+    keybinder3
+    libappindicator
+    libmodplug
+    libsoup_3
+  ]
+  ++ lib.optionals withXineBackend [ xine-lib ]
+  ++ lib.optionals withGstreamerBackend (
+    with gst_all_1;
     [
-      adwaita-icon-theme
-      gdk-pixbuf
-      glib
-      glib-networking
-      gtk3
-      gtksourceview
-      kakasi
-      keybinder3
-      libappindicator-gtk3
-      libmodplug
-      libsoup_3
+      gst-plugins-base
+      gstreamer
     ]
-    ++ lib.optionals (withXineBackend) [ xine-lib ]
-    ++ lib.optionals (withGstreamerBackend) (
-      with gst_all_1;
-      [
-        gst-plugins-base
-        gstreamer
-      ]
-      ++ lib.optionals (withGstPlugins) [
-        gst-libav
-        gst-plugins-bad
-        gst-plugins-good
-        gst-plugins-ugly
-      ]
-    );
+    ++ lib.optionals withGstPlugins [
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-ugly
+    ]
+  );
 
   dependencies =
     with python3.pkgs;
@@ -128,34 +127,19 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals withSoco [ soco ]
     ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
-  nativeCheckInputs =
-    [
-      dbus
-      gdk-pixbuf
-      glibcLocales
-      hicolor-icon-theme
-      xvfb-run
-      writableTmpDirAsHomeHook
-    ]
-    ++ (with python3.pkgs; [
-      polib
-      pytest
-      pytest-xdist
-    ]);
-
-  pytestFlags =
-    [
-      # missing translation strings in potfiles
-      "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
-      # require networking
-      "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
-      "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
-      # upstream does actually not enforce source code linting
-      "--ignore=tests/quality"
-    ]
-    ++ lib.optionals (withXineBackend || !withGstPlugins) [
-      "--ignore=tests/plugin/test_replaygain.py"
-    ];
+  nativeCheckInputs = [
+    dbus
+    gdk-pixbuf
+    glibcLocales
+    hicolor-icon-theme
+    xvfb-run
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3.pkgs; [
+    polib
+    pytest
+    pytest-xdist
+  ]);
 
   env.LC_ALL = "en_US.UTF-8";
 
@@ -164,15 +148,32 @@ python3.pkgs.buildPythonApplication rec {
     export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    let
+      pytestFlags = [
+        # missing translation strings in potfiles
+        "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+        # require networking
+        "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+        "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
+        # upstream does actually not enforce source code linting
+        "--ignore=tests/quality"
+        # marked as flaky, breaks in sandbox
+        "--deselect=tests/test_library_file.py::TWatchedFileLibrary::test_watched_adding"
+      ]
+      ++ lib.optionals (withXineBackend || !withGstPlugins) [
+        "--ignore=tests/plugin/test_replaygain.py"
+      ];
+    in
+    ''
+      runHook preCheck
 
-    xvfb-run -s '-screen 0 1920x1080x24' \
-      dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
-      pytest $pytestFlags
+      xvfb-run -s '-screen 0 1920x1080x24' \
+        dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
+        pytest ${lib.concatStringsSep " " pytestFlags}
 
-    runHook postCheck
-  '';
+      runHook postCheck
+    '';
 
   preFixup = lib.optionalString (kakasi != null) ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.getBin kakasi})
@@ -195,9 +196,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      coroa
-      pbogdan
-    ];
+    maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

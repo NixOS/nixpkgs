@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   cmake,
   pkg-config,
   docutils,
   pandoc,
-  ethtool,
-  iproute2,
   libnl,
   udev,
   udevCheckHook,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "58.0";
+  version = "64.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dCaxZeGmnf46XI0RZjVWy1JsQjpdCw63lbe2RkWNwQs=";
+    hash = "sha256-Y0pCGkvCjZ1F9Ojouesozn2Lxj+x7/0ck6/9tJmdkWw=";
   };
 
   strictDeps = true;
@@ -44,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ethtool
-    iproute2
     libnl
     perl
     udev
@@ -54,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
+    "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
   ];
 
   postPatch = ''
@@ -77,11 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";
     homepage = "https://github.com/linux-rdma/rdma-core";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = [ lib.maintainers.markuskowa ];
   };
 })

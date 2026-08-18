@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  squashfsTools,
+  squashfs-tools,
   closureInfo,
 
   fileName ? "squashfs",
@@ -27,42 +27,45 @@ stdenv.mkDerivation {
   name = "${fileName}${lib.optionalString (!hydraBuildProduct) ".img"}";
   __structuredAttrs = true;
 
-  nativeBuildInputs = [ squashfsTools ];
+  # the image will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
 
-  buildCommand =
-    ''
-      closureInfo=${closureInfo { rootPaths = storeContents; }}
+  nativeBuildInputs = [ squashfs-tools ];
 
-      # Also include a manifest of the closures in a format suitable
-      # for nix-store --load-db.
-      cp $closureInfo/registration nix-path-registration
+  buildCommand = ''
+    closureInfo=${closureInfo { rootPaths = storeContents; }}
 
-      imgPath="$out"
-    ''
-    + lib.optionalString hydraBuildProduct ''
+    # Also include a manifest of the closures in a format suitable
+    # for nix-store --load-db.
+    cp $closureInfo/registration nix-path-registration
 
-      mkdir $out
-      imgPath="$out/${fileName}.squashfs"
-    ''
-    + lib.optionalString stdenv.buildPlatform.is32bit ''
+    imgPath="$out"
+  ''
+  + lib.optionalString hydraBuildProduct ''
 
-      # 64 cores on i686 does not work
-      # fails with FATAL ERROR: mangle2:: xz compress failed with error code 5
-      if ((NIX_BUILD_CORES > 48)); then
-        NIX_BUILD_CORES=48
-      fi
-    ''
-    + ''
+    mkdir $out
+    imgPath="$out/${fileName}.squashfs"
+  ''
+  + lib.optionalString stdenv.buildPlatform.is32bit ''
 
-      # Generate the squashfs image.
-      # We have to set SOURCE_DATE_EPOCH to 0 here for reproducibility (https://github.com/NixOS/nixpkgs/issues/390696)
-      SOURCE_DATE_EPOCH=0 mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
-        -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
-        -processors $NIX_BUILD_CORES -root-mode 0755
-    ''
-    + lib.optionalString hydraBuildProduct ''
+    # 64 cores on i686 does not work
+    # fails with FATAL ERROR: mangle2:: xz compress failed with error code 5
+    if ((NIX_BUILD_CORES > 48)); then
+      NIX_BUILD_CORES=48
+    fi
+  ''
+  + ''
 
-      mkdir -p $out/nix-support
-      echo "file squashfs-image $out/${fileName}.squashfs" >> $out/nix-support/hydra-build-products
-    '';
+    # Generate the squashfs image.
+    # We have to set SOURCE_DATE_EPOCH to 0 here for reproducibility (https://github.com/NixOS/nixpkgs/issues/390696)
+    SOURCE_DATE_EPOCH=0 mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
+      -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
+      -processors $NIX_BUILD_CORES -root-mode 0755
+  ''
+  + lib.optionalString hydraBuildProduct ''
+
+    mkdir -p $out/nix-support
+    echo "file squashfs-image $out/${fileName}.squashfs" >> $out/nix-support/hydra-build-products
+  '';
 }

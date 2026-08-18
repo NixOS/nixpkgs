@@ -11,10 +11,11 @@
   libinput,
   fontconfig,
   freetype,
+  isocodes,
   pipewire,
   pulseaudio,
   udev,
-  util-linux,
+  dav1d,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -27,18 +28,20 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.0-alpha.7";
+  version = "1.5.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-rrPgCXl4uD4Gvstgj9Sdv6rB/0d8wa56CdBjAkTLQG8=";
+    hash = "sha256-V4SAO91L15JME9yXrGMGKeHF1g/aiANa+d5788mPszI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7Aoy/okgFSwDU6jMYzTGtwPbK82yMgL5bnKBfBUD3vA=";
+  cargoHash = "sha256-V0QuLP4QNJXuDZIvX/aSxNiyBtDyqWVbwzMb6/qtCwU=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -46,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook'
     pkg-config
     rustPlatform.bindgenHook
-    util-linux
   ];
 
   buildInputs = [
@@ -57,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
     pulseaudio
     udev
+    dav1d
   ];
 
   dontUseJustBuild = true;
@@ -67,13 +70,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPathOutput "bin" "share" [ isocodes ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
@@ -88,10 +92,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

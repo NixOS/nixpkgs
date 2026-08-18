@@ -13,9 +13,9 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
-  pcre,
+  pcre2,
   python3,
   SDL2,
   sqlite,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.4.0";
+  version = "10.8.7";
 
   src = fetchFromGitHub {
-    owner = "sjrc6";
-    repo = "taterclient-ddnet";
+    owner = "TaterClient";
+    repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-SSf9W+1yl7ExHsifbVM5IN4OfZvMdz62xMfdb++38II=";
+    hash = "sha256-jGi0eRKeYVGWes4AAzasKjdSqoYrEalxVHR/dYEzSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libnotify
-    pcre
+    pcre2
     sqlite
     freetype
     libGLU
@@ -76,13 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace-fail /usr/ $out/
+      --replace-fail "/usr/" "$out/"
+
+    # Substitute date and time CMake macros. It avoids to the client being banned on some Teeworlds servers.
+    substituteInPlace src/engine/client/client.cpp \
+      --replace-fail "__DATE__" "\"$(date +'%b %e %Y')\"" \
+      --replace-fail "__TIME__" "\"$(date +'%H:%M:%S')\""
   '';
 
   cmakeFlags = [
@@ -94,10 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
+  env = {
+    # It is also to avoid to the client being banned on some Teeworlds servers.
+    #
+    # The hash below has been generated with the command line below.
+    # git rev-parse --short=32 HEAD
+    #
+    # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
+    DDNET_GIT_SHORTREV_HASH = "4e4269396b97d06879c11ae3b9696c3d";
+  };
+
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.4.0/CMakeLists.txt#L3088
+  # See https://github.com/TaterClient/TClient/blob/V10.8.6/CMakeLists.txt#L3260
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

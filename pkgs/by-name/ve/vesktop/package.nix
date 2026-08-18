@@ -8,13 +8,16 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron,
+  electron_43,
   libicns,
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
+  jq,
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
@@ -22,45 +25,51 @@
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
+let
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.7";
+  version = "1.6.5-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2YVaDfvhmuUx2fVm9PuMPQ3Z5iu7IHJ7dgF52a1stoM=";
+    rev = "8a718e00785f1e17153e49c2d7ffae094e5cecef";
+    hash = "sha256-0t/1GIknc6NBW2E+BNZ/NTU+38IMVxEtOEXOwHkZrGo=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    hash = "sha256-C05rDd5bcbR18O6ACgzS0pQdWzB99ulceOBpW+4Zbqw=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-xvb3DfqmcCyOpGHaGjeCJxClfVcHpdezyzxLXNiz72k=";
   };
 
-  nativeBuildInputs =
-    [
-      nodejs
-      pnpm_10.configHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # vesktop uses venmic, which is a shipped as a prebuilt node module
-      # and needs to be patched
-      autoPatchelfHook
-      copyDesktopItems
-      # we use a script wrapper here for environment variable expansion at runtime
-      # https://github.com/NixOS/nixpkgs/issues/172583
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # on macos we don't need to expand variables, so we can use the faster binary wrapper
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm_11
+    jq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # vesktop uses venmic, which is a shipped as a prebuilt node module
+    # and needs to be patched
+    autoPatchelfHook
+    copyDesktopItems
+    # we use a script wrapper here for environment variable expansion at runtime
+    # https://github.com/NixOS/nixpkgs/issues/172583
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # on macos we don't need to expand variables, so we can use the faster binary wrapper
+    makeBinaryWrapper
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -68,31 +77,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches =
-    [
-      ./disable_update_checking.patch
-      ./fix_read_only_settings.patch
-    ]
-    ++ lib.optional withSystemVencord (
-      replaceVars ./use_system_vencord.patch {
-        inherit vencord;
-      }
-    );
+  patches = lib.optional withSystemVencord (
+    replaceVars ./use_system_vencord.patch {
+      inherit vencord;
+    }
+  );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-  # disable code signing on macos
-  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-  '';
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
 
-  # electron builds must be writable on darwin
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -r ${electron.dist}/Electron.app .
-    chmod -R u+w Electron.app
+    # electron builds must be writable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
   buildPhase = ''
@@ -102,8 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"} # disable code signing on macos, https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
 
     runHook postBuild
   '';
@@ -114,26 +121,25 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/opt/Vesktop
-      cp -r dist/*unpacked/resources $out/opt/Vesktop/
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/Vesktop
+    cp -r dist/*unpacked/resources $out/opt/Vesktop/
 
-      for file in build/icon_*x32.png; do
-        file_suffix=''${file//build\/icon_}
-        install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
-    ''
-    + ''
-      runHook postInstall
-    '';
+    for file in build/icon_*x32.png; do
+      file_suffix=''${file//build\/icon_}
+      install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -168,6 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
       "InstantMessaging"
       "Chat"
     ];
+    mimeTypes = [
+      "x-scheme-handler/discord"
+    ];
   });
 
   passthru = {
@@ -190,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

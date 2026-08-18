@@ -1,18 +1,28 @@
 { lib }:
 let
-  inherit (lib) lists;
+  inherit (lib)
+    lists
+    splitString
+    ;
   inherit (lib.systems) parse;
+  inherit (parse)
+    mkSystemFromSkeleton
+    mkSkeletonFromList
+    doubleFromSystem
+    ;
   inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
   all = [
+    # our primary systems. at the top of the list for fastest matching
+    # inside check-meta
+    "x86_64-linux"
+    "aarch64-darwin"
+    "aarch64-linux"
+
     # Cygwin
     "i686-cygwin"
     "x86_64-cygwin"
-
-    # Darwin
-    "x86_64-darwin"
-    "aarch64-darwin"
 
     # FreeBSD
     "i686-freebsd"
@@ -30,8 +40,8 @@ let
     # JS
     "javascript-ghcjs"
 
-    # Linux
-    "aarch64-linux"
+    # Linux (excluding the primary two at the top)
+    "arc-linux"
     "armv5tel-linux"
     "armv6l-linux"
     "armv7a-linux"
@@ -39,19 +49,20 @@ let
     "i686-linux"
     "loongarch64-linux"
     "m68k-linux"
+    "sh4-linux"
     "microblaze-linux"
     "microblazeel-linux"
     "mips-linux"
     "mips64-linux"
     "mips64el-linux"
     "mipsel-linux"
+    "powerpc-linux"
     "powerpc64-linux"
     "powerpc64le-linux"
     "riscv32-linux"
     "riscv64-linux"
     "s390-linux"
     "s390x-linux"
-    "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"
@@ -101,18 +112,30 @@ let
     "x86_64-redox"
 
     # WASI
-    "wasm64-wasi"
-    "wasm32-wasi"
+    "wasm64-wasip1"
+    "wasm32-wasip1"
 
     # Windows
     "aarch64-windows"
     "x86_64-windows"
     "i686-windows"
+
+    # UEFI
+    "aarch64-uefi"
+    "x86_64-uefi"
   ];
 
-  allParsed = map parse.mkSystemFromString all;
+  uncheckedSystemFromString =
+    let
+      systemType = {
+        _type = "system";
+      };
+    in
+    s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)) // systemType;
 
-  filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
+  allParsed = map uncheckedSystemFromString all;
+
+  filterDoubles = f: map doubleFromSystem (lists.filter f allParsed);
 
 in
 {
@@ -138,6 +161,8 @@ in
   vc4 = filterDoubles predicates.isVc4;
   or1k = filterDoubles predicates.isOr1k;
   m68k = filterDoubles predicates.isM68k;
+  arc = filterDoubles predicates.isArc;
+  sh4 = filterDoubles predicates.isSh4;
   s390 = filterDoubles predicates.isS390;
   s390x = filterDoubles predicates.isS390x;
   loongarch64 = filterDoubles predicates.isLoongArch64;
@@ -188,6 +213,7 @@ in
   redox = filterDoubles predicates.isRedox;
   windows = filterDoubles predicates.isWindows;
   genode = filterDoubles predicates.isGenode;
+  uefi = filterDoubles predicates.isUefi;
 
   embedded = filterDoubles predicates.isNone;
 }

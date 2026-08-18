@@ -5,8 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  poetry-core,
-  setuptools,
+  uv-build,
 
   # buildInputs
   cairo,
@@ -37,10 +36,13 @@
   tqdm,
   typing-extensions,
   watchdog,
+  pythonAtLeast,
+  audioop-lts,
 
   # optional-dependencies
   jupyterlab,
   notebook,
+  typst,
 
   # tests
   ffmpeg,
@@ -183,40 +185,42 @@ let
       cbfonts-fd
     ]
   );
-  # https://github.com/ManimCommunity/manim/pull/4037
-  av_13_1 = av.overridePythonAttrs (rec {
-    version = "13.1.0";
-    src = fetchFromGitHub {
-      owner = "PyAV-Org";
-      repo = "PyAV";
-      tag = "v${version}";
-      hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-    };
-  });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
+  version = "0.21.0";
   pyproject = true;
-  version = "0.19.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
   };
-
-  build-system = [
-    poetry-core
-    setuptools
-  ];
 
   patches = [ ./pytest-report-header.patch ];
 
+  postPatch =
+    # nixpkgs still ships uv-build < 0.12.1
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          "uv_build>=0.12.1,<0.13.0" \
+          "uv_build"
+    '';
+
+  build-system = [
+    uv-build
+  ];
+
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
-    av_13_1
+    av
     beautifulsoup4
     click
     cloup
@@ -241,6 +245,9 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     watchdog
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
   ];
 
   optional-dependencies = {
@@ -250,6 +257,9 @@ buildPythonPackage rec {
     ];
     # TODO package dearpygui
     # gui = [ dearpygui ];
+    typst = [
+      typst
+    ];
   };
 
   makeWrapperArgs = [
@@ -268,11 +278,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+    typst
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
-  # about 55 of ~600 tests failing mostly due to demand for display
+  # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];
@@ -286,9 +296,12 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      ivyfanchiang
+    ];
   };
-}
+})

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   httpx,
   microsoft-kiota-abstractions,
   opentelemetry-api,
@@ -10,34 +10,33 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-http";
-  version = "1.9.4";
+  version = "1.11.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
-    hash = "sha256-59vuJc7Wb/6PsPA4taAFA2UK8bdz+raZ+NB4S8LahtM=";
+    tag = "microsoft-kiota-http-v${finalAttrs.version}";
+    hash = "sha256-VjtOga7UvL6MH9C0ERJehpjY+p15rDnfxvKiJnk2r0Y=";
   };
 
-  sourceRoot = "${src.name}/packages/http/httpx/";
+  sourceRoot = "${finalAttrs.src.name}/packages/http/httpx/";
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     httpx
     microsoft-kiota-abstractions
     opentelemetry-api
     opentelemetry-sdk
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -48,11 +47,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_http" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-http-v";
+  };
+
+  meta = {
     description = "HTTP request adapter implementation for Kiota clients for Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-http-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

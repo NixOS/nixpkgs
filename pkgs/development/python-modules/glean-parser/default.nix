@@ -4,34 +4,29 @@
   click,
   diskcache,
   fetchPypi,
+  hatchling,
+  hatch-vcs,
   jinja2,
   jsonschema,
   platformdirs,
   pytestCheckHook,
   pyyaml,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "17.1.0";
+  version = "20.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-pZq2bdc0qL6n16LLYyJ2YC3YmUEe4cHLifQ5qDO6FZg=";
+    hash = "sha256-e6d4QMqOR8/7F/Tstk7cH/aj1s4AZyI+BS5AnewePKk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest-runner" ""
-  '';
-
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [

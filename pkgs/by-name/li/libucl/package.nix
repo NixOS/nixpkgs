@@ -25,15 +25,15 @@ let
     lua = [ lua ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libucl";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
-    rev = version;
-    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-m6VRtFNKm6+T7pPP2u3avMkVTmye4CM6Z7wjhddVMZE=";
   };
 
   nativeBuildInputs = [
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     feat: enabled: lib.strings.enableFeature enabled feat
   ) features;
 
-  meta = with lib; {
+  meta = {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jpotier ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jpotier ];
   };
-}
+})

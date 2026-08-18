@@ -1,15 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "dpcontracts";
-  version = "unstable-2018-11-20";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "0.6.0-unstable-2018-11-20";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deadpixi";
@@ -18,15 +20,29 @@ buildPythonPackage {
     hash = "sha256-FygJPXo7lZ9tlfqY6KmPJ3PLIilMGLBr3013uj9hCEs=";
   };
 
-  # package does not have any tests
-  doCheck = false;
+  patches = [
+    # Replacements in README.rst are necessary to check it with doctest
+    ./fix-doctests.patch
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "README.rst"
+  ];
 
   pythonImportsCheck = [ "dpcontracts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a collection of decorators that makes it easy to write software using contracts";
     homepage = "https://github.com/deadpixi/contracts";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

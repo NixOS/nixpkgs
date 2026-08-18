@@ -3,41 +3,53 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  intltool,
   autoreconfHook,
   wrapGAppsHook3,
+  gettext,
+  gspell,
   gtk3,
-  hicolor-icon-theme,
+  gtksourceview,
+  libappindicator,
   netpbm,
+  webkitgtk_4_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yad";
-  version = "14.1";
+  version = "15.0";
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
-    rev = "v${version}";
-    sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-z+t4eG8yXhfs4GfLFDaaOCAxrr5MIoFD6BKF8vr59IY=";
   };
 
   configureFlags = [
-    "--enable-icon-browser"
-    "--with-gtk=gtk3"
     "--with-rgb=${placeholder "out"}/share/yad/rgb.txt"
+    "--enable-html"
+    "--enable-tray"
+    "--enable-appindicator"
+    "--enable-spell"
+    "--enable-sourceview"
+    "--enable-deprecated"
+    "--enable-tools"
+    "--enable-icon-browser"
   ];
 
   buildInputs = [
+    gspell
     gtk3
-    hicolor-icon-theme
+    gtksourceview
+    libappindicator
+    webkitgtk_4_1
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    intltool
     wrapGAppsHook3
+    gettext
   ];
 
   postPatch = ''
@@ -48,12 +60,8 @@ stdenv.mkDerivation rec {
     install -Dm644 ${netpbm.out}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
   '';
 
-  postAutoreconf = ''
-    intltoolize
-  '';
-
-  meta = with lib; {
-    homepage = "https://sourceforge.net/projects/yad-dialog/";
+  meta = {
+    homepage = "https://github.com/v1cont/yad";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a
@@ -61,9 +69,9 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "yad";
-    maintainers = with maintainers; [ smironov ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ RoGreat ];
+    platforms = with lib.platforms; linux;
   };
-}
+})

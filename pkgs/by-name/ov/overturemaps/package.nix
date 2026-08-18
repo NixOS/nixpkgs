@@ -4,22 +4,48 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "overturemaps";
-  version = "0.14.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UtYS5FcNBT9IIiybKUXK+jwGnXQ+oR/HQI3ntfV8NYg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-yKl13Y9kRCGHzoqeZIQEac/PrByTCtCQFaz8sUgeVIs=";
   };
 
-  build-system = with python3Packages; [ poetry-core ];
+  nativeBuildInputs = with python3Packages; [
+    hatchling
+  ];
 
   dependencies = with python3Packages; [
     click
+    colorama
+    geopandas
+    numpy
+    orjson
     pyarrow
+    pyfiglet
     shapely
+    tqdm
+  ];
+
+  pythonImportsCheck = [ "overturemaps" ];
+
+  preCheck = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "testpaths = tests benchmarks" "testpaths = tests"
+  '';
+
+  disabledTestPaths = [
+    # requires network
+    "tests/test_changelog.py"
+    "tests/test_gers.py"
+    "tests/test_releases.py"
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
   ];
 
   meta = {
@@ -29,4 +55,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ crimeminister ];
   };
-}
+})

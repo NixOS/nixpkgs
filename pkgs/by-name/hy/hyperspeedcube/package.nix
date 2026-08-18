@@ -14,12 +14,12 @@
   harfbuzz,
   lib,
   libGL,
-  libX11,
+  libx11,
   libxcb,
-  libXcursor,
-  libXi,
+  libxcursor,
+  libxi,
   libxkbcommon,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   mold,
   pango,
@@ -39,18 +39,17 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyperspeedcube";
   version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "HactarCE";
     repo = "Hyperspeedcube";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ctBvc2xANM/gGzDDv8ygSO4nTOiG6iKyuSKnz385PIw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ebjkEWYeeXHuKQzqbMe8+zVol2vPyLiu7ke5Ng7gbs8=";
 
   nativeBuildInputs = [
@@ -87,10 +86,10 @@ rustPlatform.buildRustPackage rec {
     wayland
 
     # WINIT_UNIX_BACKEND=x11
-    libXcursor
-    libXrandr
-    libXi
-    libX11
+    libxcursor
+    libxrandr
+    libxi
+    libx11
 
     vulkan-headers
     vulkan-loader
@@ -112,7 +111,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Hyperspeedcube is a 3D and 4D Rubik's cube simulator";
+    description = "3D and 4D Rubik's cube simulator";
     longDescription = ''
       Hyperspeedcube is a modern, beginner-friendly 3D and 4D Rubik's cube
       simulator with customizable mouse and keyboard controls and advanced
@@ -120,8 +119,11 @@ rustPlatform.buildRustPackage rec {
       records and runs on all major operating systems plus the web.
     '';
     homepage = "https://ajfarkas.dev/hyperspeedcube/";
-    license = lib.licenses.cc-by-nc-sa-40;
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = [ lib.maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

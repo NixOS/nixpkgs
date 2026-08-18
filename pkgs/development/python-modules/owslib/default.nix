@@ -7,7 +7,6 @@
   pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -15,22 +14,19 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.34.1";
+  version = "0.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
     tag = version;
-    hash = "sha256-eLSODYal9rcualQrM03/hwLBngty+9fIlPIJh1EZduA=";
+    hash = "sha256-Of/CSLcNnpTYHRm4toQK4/HXTWNcuEMkW6obWpg96Tc=";
   };
 
   postPatch = ''
-    substituteInPlace tox.ini \
-      --replace-fail "--doctest-modules" "" \
-      --replace-fail "--doctest-glob='tests/**/*.txt'" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<69" "setuptools"
   '';
 
   build-system = [ setuptools ];
@@ -55,9 +51,9 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # Disable tests which require network access
-    "-m 'not online'"
+    "online"
   ];
 
   disabledTestPaths = [
@@ -65,11 +61,11 @@ buildPythonPackage rec {
     "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
     changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

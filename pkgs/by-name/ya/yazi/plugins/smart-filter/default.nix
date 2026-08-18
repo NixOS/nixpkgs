@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "smart-filter.yazi";
-  version = "25.5.28-unstable-2025-05-28";
+  version = "0-unstable-2026-07-04";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "d642bfb0822eb0c3c5c891ab0f4b6f897a2083cb";
-    hash = "sha256-WF2b9t0VPGNP3QXgr/GMDFcSh5bsXC7KKd2ICL4WDHo=";
+    rev = "5d461d85908338371b9433ab6c29707bee3a813b";
+    hash = "sha256-vRElXxEe2Am7p6SoxJ7g8GSaka7/4/yZ2zfiOOqUR2I=";
   };
 
   meta = {

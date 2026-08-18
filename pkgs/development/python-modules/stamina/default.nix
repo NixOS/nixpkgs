@@ -1,54 +1,51 @@
 {
   lib,
+  anyio,
   buildPythonPackage,
+  dirty-equals,
   fetchFromGitHub,
-
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
-
-  tenacity,
-  typing-extensions,
-
-  anyio,
   pytestCheckHook,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "stamina";
-  version = "24.3.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
     tag = version;
-    hash = "sha256-DasubVqKRhX4CRyKyJ3fIA9Rxmy+kGxkW0pDdu8OPPo=";
+    hash = "sha256-3cCaYAoWPriynITcMnWn1WndXP2gLro/0ba/87hrnIk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tenacity
-    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    anyio
+    dirty-equals
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "stamina" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    anyio
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Production-grade retries for Python";
     homepage = "https://github.com/hynek/stamina";
-    changelog = "https://github.com/hynek/stamina/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

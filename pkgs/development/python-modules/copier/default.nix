@@ -6,6 +6,8 @@
   fetchFromGitHub,
   funcy,
   git,
+  hatchling,
+  hatch-vcs,
   iteration-utilities,
   jinja2,
   jinja2-ansible-filters,
@@ -17,8 +19,6 @@
   packaging,
   pathspec,
   plumbum,
-  poetry-core,
-  poetry-dynamic-versioning,
   pydantic,
   pygments,
   pyyaml,
@@ -26,27 +26,27 @@
   questionary,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "copier";
-  version = "9.6.0";
+  version = "9.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "copier-org";
     repo = "copier";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # Conflict on APFS on darwin
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-mezmXrOvfqbZGZadNZklQZt/OEKqRYnwugNkZc88t6o=";
+    hash = "sha256-Bv3jXePZwF6fbOcMq1eNPrRZiCXXp0598t6qQJXol1o=";
   };
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -77,9 +77,12 @@ buildPythonPackage rec {
   meta = {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
-    changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/copier-org/copier/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      savtrip
+    ];
     mainProgram = "copier";
   };
-}
+})

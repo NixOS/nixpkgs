@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fichub-cli";
   version = "0.10.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fichub_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MTExXpuCwi/IfNDUVLMcxfFRwHHNfGJerHkHnh6/hls=";
   };
 
@@ -44,10 +44,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "CLI for the fichub.net API";
-    changelog = "https://github.com/FicHub/fichub-cli/releases/tag/v${version}";
+    changelog = "https://github.com/FicHub/fichub-cli/releases/tag/v${finalAttrs.version}";
     mainProgram = "fichub_cli";
     homepage = "https://github.com/FicHub/fichub-cli";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.samasaur ];
   };
-}
+})

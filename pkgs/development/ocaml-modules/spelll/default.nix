@@ -6,7 +6,7 @@
   stdlib-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "spelll";
   version = "0.4";
 
@@ -14,8 +14,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "c-cube";
-    repo = pname;
-    rev = "v${version}";
+    repo = "spelll";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nI8fdArYynR70PUJIgyogGBCe4gFhfVzuRdZzFGKqOc=";
   };
 
@@ -25,9 +25,9 @@ buildDunePackage rec {
   ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Fuzzy string searching, using Levenshtein automaton";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

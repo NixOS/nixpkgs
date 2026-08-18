@@ -1,26 +1,29 @@
 {
   mkKdeDerivation,
   replaceVars,
-  mediainfo,
   mlt,
   glaxnimate,
   ffmpeg-full,
+  ffmpegthumbs,
   pkg-config,
   shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
   libv4l,
-  open-timeline-io,
+  kio-extras,
+  opentimelineio,
   frei0r,
+  qtimageformats,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      inherit mediainfo mlt glaxnimate;
+      inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];
@@ -38,13 +41,17 @@ mkKdeDerivation {
     qtsvg
     qtmultimedia
     qtnetworkauth
+    qtimageformats # UI uses webp images
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
     ffmpeg-full
+    ffmpegthumbs
     libv4l
     mlt
-    open-timeline-io
+    opentimelineio
   ];
 
   qtWrapperArgs = [

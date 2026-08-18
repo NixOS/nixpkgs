@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   exiv2,
   graphicsmagick,
   libarchive,
@@ -15,44 +15,43 @@
   zxing-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
-  version = "4.9.2";
+  version = "5.4.1";
 
   src = fetchurl {
-    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-kPhxWekecE57wY45qLy/EnfmjFLn0cEmZ+4qWHGbL4U=";
+    url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-vCihM84yDfDbz77qigIFQH/LIarH6IHKS3QdFPLZ8Lc=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.qttools
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      exiv2
-      graphicsmagick
-      libarchive
-      libraw
-      pugixml
-      qt6.qtbase
-      qt6.qtcharts
-      qt6.qtdeclarative
-      qt6.qtimageformats
-      qt6.qtlocation
-      qt6.qtmultimedia
-      qt6.qtpositioning
-      qt6.qtsvg
-      qt6Packages.poppler
-      zxing-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mpv
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    exiv2
+    graphicsmagick
+    libarchive
+    libraw
+    pugixml
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtdeclarative
+    qt6.qtimageformats
+    qt6.qtlocation
+    qt6.qtmultimedia
+    qt6.qtpositioning
+    qt6.qtsvg
+    qt6Packages.poppler
+    zxing-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mpv
+    qt6.qtwayland
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DEVIL" false)
@@ -77,5 +76,7 @@ stdenv.mkDerivation rec {
     mainProgram = "photoqt";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+    # cplusplus/singletons/scripts/pqc_scriptsimages.cpp:1740:19: error: no matching function for call to 'setxattr'
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})

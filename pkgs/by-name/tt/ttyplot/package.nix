@@ -6,15 +6,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ttyplot";
-  version = "1.7.2";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
-    rev = version;
-    hash = "sha256-zTbcl8hM/XYdkV8V/BCQ94fuFXWOMGdQZeowKRhvYNo=";
+    rev = finalAttrs.version;
+    hash = "sha256-ez8++rn6tfx2M2FDEU5a0Td0HPC2Ra9dCY1gKesDtbQ=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple general purpose plotting utility for tty with data input from stdin";
     homepage = "https://github.com/tenox7/ttyplot";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "ttyplot";
   };
-}
+})

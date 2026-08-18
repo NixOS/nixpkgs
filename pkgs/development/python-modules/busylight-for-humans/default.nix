@@ -2,37 +2,39 @@
   lib,
   bitvector-for-humans,
   buildPythonPackage,
+  busylight-core,
+  fastapi,
   fetchFromGitHub,
   hidapi,
+  httpx,
   loguru,
-  poetry-core,
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
-  webcolors,
   udevCheckHook,
+  uv-build,
+  uvicorn,
+  webcolors,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busylight-for-humans";
-  version = "0.35.2";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    tag = "v${version}";
-    hash = "sha256-0jmaVMN4wwqoO5wGMaV4kJefNUPOuJpWbsqHcZZ0Nh4=";
+    tag = "busylight-cli/v${finalAttrs.version}";
+    hash = "sha256-h+YPrcf32SgzdQDYCeQlh4enzsXfsHr470W3tiFBO7g=";
+    rootDir = "packages/busylight";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
-    bitvector-for-humans
+    busylight-core
     hidapi
     loguru
     pyserial
@@ -40,13 +42,20 @@ buildPythonPackage rec {
     webcolors
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    udevCheckHook
-  ];
+  optional-dependencies = {
+    web = [ fastapi ];
+    webapi = [
+      fastapi
+      uvicorn
+    ];
+  };
 
-  disabledTestPaths = [ "tests/test_pydantic_models.py" ];
+  nativeCheckInputs = [
+    httpx
+    pytestCheckHook
+    udevCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "busylight" ];
 
@@ -55,12 +64,12 @@ buildPythonPackage rec {
     $out/bin/busylight udev-rules -o $out/lib/udev/rules.d/99-busylight.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
-    license = licenses.asl20;
-    teams = [ teams.helsinki-systems ];
+    changelog = "https://github.com/JnyJny/busylight/blob/${finalAttrs.src.tag}/${finalAttrs.src.rootDir}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
     mainProgram = "busylight";
   };
-}
+})

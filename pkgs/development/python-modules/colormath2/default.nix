@@ -5,7 +5,7 @@
   setuptools,
   networkx,
   numpy,
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   pythonImportsCheck = [ "colormath2" ];
 

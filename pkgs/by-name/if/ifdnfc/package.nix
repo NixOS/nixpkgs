@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "nfc-tools";
     repo = "ifdnfc";
-    rev = "0e48e8e";
+    rev = "0e48e8e107dc42f68fb472bb06d257503ad45b1d";
     sha256 = "1cxnvhhlcbm8h49rlw5racspb85fmwqqhd3gzzpzy68vrs0b37vg";
   };
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     "usbdropdir=$(out)/pcsc/drivers"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PC/SC IFD Handler based on libnfc";
     mainProgram = "ifdnfc-activate";
     longDescription = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation {
       the SCM SCL3711.
     '';
     homepage = "https://github.com/nfc-tools/ifdnfc";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

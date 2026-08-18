@@ -4,15 +4,16 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amf-headers";
-  version = "1.4.36";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
-    tag = "v${version}";
-    sha256 = "sha256-u6gvdc1acemd01TO5EbuF3H7HkEJX4GUx73xCo71yPY=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-ardO9GojOIQUnuSa2fGOCfFHI5PJYBsffCpNCh2dyRw=";
+    sparseCheckout = [ "amf/public/include" ];
   };
 
   installPhase = ''
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     cp -r amf/public/include/* $out/include/AMF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Headers for The Advanced Media Framework (AMF)";
     homepage = "https://github.com/GPUOpen-LibrariesAndSDKs/AMF";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devusb ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.unix;
   };
-}
+})

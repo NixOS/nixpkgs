@@ -1,9 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
-  xlib,
+  python-xlib,
   xvfb-run,
   scrot,
 }:
@@ -20,22 +21,23 @@ buildPythonPackage {
   };
 
   pythonImportsCheck = [ "pyscreeze" ];
-  nativeCheckInputs = [
+  doCheck = stdenv.hostPlatform.isLinux;
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     scrot
-    xlib
+    python-xlib
     xvfb-run
   ];
-  checkPhase = ''
+  checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     python -m unittest tests.test_pillow_unavailable
     xvfb-run python -m unittest tests.test_pyscreeze
   '';
 
   propagatedBuildInputs = [ pillow ];
 
-  meta = with lib; {
+  meta = {
     description = "PyScreeze is a simple, cross-platform screenshot module for Python 2 and 3";
     homepage = "https://github.com/asweigart/pyscreeze";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lucasew ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

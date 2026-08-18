@@ -44,7 +44,7 @@ flutter332.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm644 assets/logo.png $out/share/pixmaps/simple-live-app.png
+    install -Dm644 assets/logo.png $out/share/icons/simple-live-app.png
   '';
 
   extraWrapProgramArgs = ''
@@ -57,8 +57,8 @@ flutter332.buildFlutterApplication rec {
     description = "Simply Watch Live";
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

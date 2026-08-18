@@ -17,16 +17,16 @@
   libcanberra-gtk3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ayatana-webmail";
-  version = "24.5.17";
-  format = "setuptools";
+  version = "26.6.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
-    tag = version;
-    hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
+    tag = finalAttrs.version;
+    hash = "sha256-AVH4SQ2yoC2SXuKt8MJVGAgB32cTOD7mCVxcBZn/PPM=";
   };
   postConfigure = ''
     # Fix fhs paths
@@ -53,7 +53,11 @@ python3Packages.buildPythonApplication rec {
     glib # For compiling gsettings-schemas
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     urllib3
     babel
     psutil
@@ -89,4 +93,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

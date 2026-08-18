@@ -4,32 +4,28 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.2.0";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
-    rev = "v${version}";
-    sha256 = "04dzfdzjwcwwaw9min322g30q0saxpq5kqzld4f22fmk820ki6gp";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-/abdmhDCakSbVj1SK9EqVw2MDdCc760IFIUIg3HGAJU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "clap-3.0.0-beta.1" = "sha256-tErZmEiAF1v39AtgRUHoEmoYqXPWRDXBEkWUbH+fPyY=";
-      "clap_derive-0.3.0" = "sha256-VijH+XB4WeKYUsJH9h/ID8EGZ89R3oauYO8Yg331dPU=";
-    };
-  };
+  cargoHash = "sha256-0buTnenDDLTW8Cy72Hsg4raTj0t3TaHskh1ed1QzmLc=";
+
+  # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     mainProgram = "kubernix";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ saschagrunert ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ saschagrunert ];
+    platforms = lib.platforms.linux;
   };
-}
+})

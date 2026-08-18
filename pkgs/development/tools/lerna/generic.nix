@@ -25,7 +25,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    description = "Lerna is a fast, modern build system for managing and publishing multiple JavaScript/TypeScript packages from the same repository";
+    description = "Fast, modern build system for managing and publishing multiple JavaScript/TypeScript packages from the same repository";
     homepage = "https://lerna.js.org/";
     changelog = "https://github.com/lerna/lerna/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;

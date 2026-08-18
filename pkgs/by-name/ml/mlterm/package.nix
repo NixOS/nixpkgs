@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoconf,
   makeDesktopItem,
@@ -42,8 +43,8 @@
     xft = enableX11;
     cairo = true;
   },
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   cairo,
   # List of external tools to create, this default list includes all default
   # tools, as recorded on release 3.9.3.
@@ -110,110 +111,99 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      autoconf
-    ]
-    ++ lib.optionals enableTools.mlconfig [
-      wrapGAppsHook3
-    ];
-  buildInputs =
-    [
-      gtk
-      vte
-      gdk-pixbuf
-    ]
-    ++ lib.optionals enableTypeEngines.xcore [
-      libX11
-    ]
-    ++ lib.optionals enableTypeEngines.xft [
-      libXft
-    ]
-    ++ lib.optionals enableTypeEngines.cairo [
-      cairo
-    ]
-    ++ lib.optionals enableGuis.wayland [
-      libxkbcommon
-      wayland
-    ]
-    ++ lib.optionals enableGuis.sdl2 [
-      SDL2
-    ]
-    ++ lib.optionals enableFeatures.otl [
-      harfbuzz
-    ]
-    ++ lib.optionals enableFeatures.bidi [
-      fribidi
-    ]
-    ++ lib.optionals enableFeatures.ssh2 [
-      libssh2
-    ]
-    ++ lib.optionals enableFeatures.m17n [
-      m17n_lib
-    ]
-    ++ lib.optionals enableFeatures.fcitx [
-      fcitx5
-      fcitx5-gtk
-    ]
-    ++ lib.optionals enableFeatures.ibus [
-      ibus
-    ]
-    ++ lib.optionals enableFeatures.uim [
-      uim
-    ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arakiken/mlterm/commit/819366f9c3c015d1be501d626ca954ce3ce38a60.patch";
+      hash = "sha256-xI0CzXN3gfXZXrL1/tFgQDtpY5hnzGLPruidOuMrbPQ=";
+      excludes = [
+        "ChangeLog"
+      ];
+    })
+  ];
 
-  #bad configure.ac and Makefile.in everywhere
-  preConfigure = ''
-    sed -i -e 's;-L/usr/local/lib -R/usr/local/lib;;g' \
-      main/Makefile.in \
-      tool/mlfc/Makefile.in \
-      tool/mlimgloader/Makefile.in \
-      tool/mlconfig/Makefile.in \
-      uitoolkit/libtype/Makefile.in \
-      uitoolkit/libotl/Makefile.in
-    sed -i -e 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
-      tool/mlconfig/po/Makefile.in.in
-    #utmp and mlterm-fb
-    substituteInPlace configure.in \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-    substituteInPlace configure \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+  ]
+  ++ lib.optionals enableTools.mlconfig [
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    gtk
+    vte
+    gdk-pixbuf
+  ]
+  ++ lib.optionals enableTypeEngines.xcore [
+    libx11
+  ]
+  ++ lib.optionals enableTypeEngines.xft [
+    libxft
+  ]
+  ++ lib.optionals enableTypeEngines.cairo [
+    cairo
+  ]
+  ++ lib.optionals enableGuis.wayland [
+    libxkbcommon
+    wayland
+  ]
+  ++ lib.optionals enableGuis.sdl2 [
+    SDL2
+  ]
+  ++ lib.optionals enableFeatures.otl [
+    harfbuzz
+  ]
+  ++ lib.optionals enableFeatures.bidi [
+    fribidi
+  ]
+  ++ lib.optionals enableFeatures.ssh2 [
+    libssh2
+  ]
+  ++ lib.optionals enableFeatures.m17n [
+    m17n_lib
+  ]
+  ++ lib.optionals enableFeatures.fcitx [
+    fcitx5
+    fcitx5-gtk
+  ]
+  ++ lib.optionals enableFeatures.ibus [
+    ibus
+  ]
+  ++ lib.optionals enableFeatures.uim [
+    uim
+  ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types";
+  env = {
+    NIX_CFLAGS_COMPILE =
+      # GCC15 defaults to C23 which is stricter about prototypes
+      # There are upstream fixes, but they are not in 3.9.4 release
+      lib.optionalString stdenv.cc.isGNU " -std=c17 ";
   };
 
-  configureFlags =
-    [
-      (withFeaturesList "type-engines" enableTypeEngines)
-      (withFeaturesList "tools" enableTools)
-      (withFeaturesList "gui" enableGuis)
-      (lib.withFeature enableX11 "x")
-    ]
-    ++ lib.optionals (gtk != null) [
-      "--with-gtk=${lib.versions.major gtk.version}.0"
-    ]
-    ++ (lib.mapAttrsToList (n: v: lib.enableFeature v n) enableFeatures)
-    ++ [
-    ];
+  configureFlags = [
+    (withFeaturesList "type-engines" enableTypeEngines)
+    (withFeaturesList "tools" enableTools)
+    (withFeaturesList "gui" enableGuis)
+    (lib.withFeature enableX11 "x")
+  ]
+  ++ lib.optionals (gtk != null) [
+    "--with-gtk=${lib.versions.major gtk.version}.0"
+  ]
+  ++ (lib.mapAttrsToList (n: v: lib.enableFeature v n) enableFeatures)
+  ++ [
+  ];
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
-      install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
-      install -D -t $out/share/applications $desktopItem/share/applications/*
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications/
-      cp -a cocoa/mlterm.app $out/Applications/
-      install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/
-    '';
+  postInstall = ''
+    install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
+    install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
+    install -D -t $out/share/applications $desktopItem/share/applications/*
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/
+    cp -a cocoa/mlterm.app $out/Applications/
+    install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/
+  '';
 
   desktopItem = makeDesktopItem {
     name = "mlterm";

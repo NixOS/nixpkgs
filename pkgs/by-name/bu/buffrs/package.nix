@@ -4,19 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "buffrs";
-  version = "0.11.0";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "helsing-ai";
     repo = "buffrs";
-    tag = "v${version}";
-    hash = "sha256-VHzPOFOkwz3QlDt25gBbishM4ujtEPFjA21WuiNVw00=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AWAqSl7K9B3XFt4+EeyE6PqY/Jt+A187zkdYv1JFlHw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/cdBt23VSmwN/C2XdHeeRjUSqLWiEheqVl+hfEDKIP0=";
+  cargoHash = "sha256-+U15/T4yk5VK39UfoI9dIwlkxPNuCkwmAwRThTnUva0=";
 
   # Disabling tests meant to work over the network, as they will fail
   # inside the builder.
@@ -34,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "buffrs";
     maintainers = with lib.maintainers; [ danilobuerger ];
   };
-}
+})

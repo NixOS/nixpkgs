@@ -5,6 +5,7 @@
   meson,
   ninja,
   appstream,
+  gtksourceview5,
   desktop-file-utils,
   gobject-introspection,
   wrapGAppsHook4,
@@ -14,18 +15,25 @@
   libportal-gtk4,
   gnome,
   librsvg,
-  libavif,
+  webp-pixbuf-loader,
+  libsoup_3,
+  bash,
+  glib-networking,
+  tesseract,
+  nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
-  version = "1.5.0";
+  version = "1.13.0";
   pyproject = false;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
-    tag = "v${version}";
-    hash = "sha256-IamiF3mn3rVmDJrEOl0Ji+7muo8e8kunOxAZJTBNjM8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9gxxl59jceZZIja/fg7ygbhjcHUo4TEEnK/IzJLsRgM=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +48,24 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    gtksourceview5
     libadwaita
     libportal-gtk4
+    libsoup_3
+    bash
+    glib-networking
+    tesseract
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "/app/bin/tesseract" "${lib.getExe tesseract}"
+  '';
 
   dependencies = with python3Packages; [
     pygobject3
     pillow
+    pytesseract
   ];
 
   postInstall = ''
@@ -54,7 +73,7 @@ python3Packages.buildPythonApplication rec {
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
           librsvg
-          libavif
+          webp-pixbuf-loader
         ];
       }
     }"
@@ -62,18 +81,22 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Make your screenshots ready for the world";
     homepage = "https://github.com/AlexanderVanhee/Gradia";
-    changelog = "https://github.com/AlexanderVanhee/Gradia/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       Cameo007
       quadradical
+      claymorwan
     ];
     mainProgram = "gradia";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -23,21 +23,23 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installFlags = [ "DESTDIR=$(out)" ];
 
   passthru = {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
-    description = "framebuffer device maintenance program";
+  meta = {
+    description = "Framebuffer device maintenance program";
     # NOTE: the website of the original author disappeared, the only remaining
     # repository is maintained by the debian maintainer of the package at
     # https://github.com/sudipm-mukherjee/fbset
     homepage = "http://users.telenet.be/geertu/Linux/fbdev/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "fbset";
-    maintainers = with maintainers; [ baloo ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ baloo ];
+    platforms = lib.platforms.linux;
   };
 })

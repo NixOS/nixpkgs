@@ -70,12 +70,15 @@ lib.checkListOfEnum "${pname}: theme accent" validAccents accents lib.checkListO
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "gtk";
-      rev = "v${version}";
+      tag = "v${version}";
       fetchSubmodules = true;
       hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
     };
 
-    patches = [ ./fix-inconsistent-theme-name.patch ];
+    patches = [
+      ./fix-inconsistent-theme-name.patch
+      ./python-3.14.patch # Fix build with python 3.14+
+    ];
 
     nativeBuildInputs = [
       gtk3
@@ -95,9 +98,9 @@ lib.checkListOfEnum "${pname}: theme accent" validAccents accents lib.checkListO
       mkdir -p $out/share/themes
 
       python3 build.py ${variant} \
-        --accent ${builtins.toString accents} \
+        --accent ${toString accents} \
         ${lib.optionalString (size != [ ]) "--size " + size} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --dest $out/share/themes
 
       runHook postInstall

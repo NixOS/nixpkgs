@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "sdat2img";
-  version = "unstable-2021-11-09";
+  version = "0-unstable-2021-11-09";
 
   src = fetchFromGitHub {
     repo = "sdat2img";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-NCbf9H0hoJgeDtP6cQY0H280BQqgKXv3ConZ87QixVY=";
   };
 
-  format = "other";
+  pyproject = false;
   installPhase = ''
     install -D $src/sdat2img.py $out/bin/sdat2img
   '';

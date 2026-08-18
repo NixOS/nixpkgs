@@ -39,10 +39,6 @@ stdenv.mkDerivation rec {
           url = url + "linux-arm64.tar.gz";
           sha256 = "1ws5h337xq0l06zrs9010h6wj2hq5cqk5ikp9arq7hj7lxf43vn5";
         };
-        "x86_64-darwin" = fetchurl {
-          url = url + "macos.tar.gz";
-          sha256 = "178ix54k2yragcgn0j8z1cfa78s1qbh1bsx3v9jnngby8igr6yn3";
-        };
         "aarch64-darwin" = fetchurl {
           url = url + "macos-arm64.tar.gz";
           sha256 = "0bi231z1yhb7kjfn228wjkj6rv9lgpagz9f4djr2wy3kqgck4xg0";
@@ -59,18 +55,17 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      PURS="$out/bin/purs"
+  installPhase = ''
+    mkdir -p $out/bin
+    PURS="$out/bin/purs"
 
-      install -D -m555 -T purs $PURS
-      ${patchelf libPath}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      mkdir -p $out/share/bash-completion/completions
-      $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
-    '';
+    install -D -m555 -T purs $PURS
+    ${patchelf libPath}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p $out/share/bash-completion/completions
+    $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -79,20 +74,18 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       justinwoo
-      mbbx6spp
       cdepillabout
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "purs";

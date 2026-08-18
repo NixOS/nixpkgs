@@ -10,9 +10,11 @@ let
 
   format = pkgs.formats.yaml { };
 
+  autheliaName = name: "authelia" + lib.optionalString (name != "") "-${name}";
+
   autheliaOpts =
     with lib;
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         enable = mkEnableOption "Authelia instance";
@@ -23,21 +25,28 @@ let
           description = ''
             Name is used as a suffix for the service name, user, and group.
             By default it takes the value you use for `<instance>` in:
-            {option}`services.authelia.<instance>`
+            {option}`services.authelia.instances.<instance>`
+
+            When set to the empty string `""`, the service name, user, and group
+            will be just `authelia` without a suffix.
           '';
         };
 
         package = mkPackageOption pkgs "authelia" { };
 
         user = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the user for this authelia instance.";
         };
 
         group = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the group for this authelia instance.";
         };
 
@@ -48,7 +57,7 @@ let
             as the values will be preserved in your nix store.
             This attribute allows you to configure the location of secret files to be loaded at runtime.
 
-            https://www.authelia.com/configuration/methods/secrets/
+            <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
           type = types.submodule {
@@ -67,7 +76,7 @@ let
 
               # required
               jwtSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your JWT secret used during identity verificaton.
@@ -75,7 +84,7 @@ let
               };
 
               oidcIssuerPrivateKeyFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your private key file used to encrypt OIDC JWTs.
@@ -83,7 +92,7 @@ let
               };
 
               oidcHmacSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your HMAC secret used to sign OIDC JWTs.
@@ -91,7 +100,7 @@ let
               };
 
               sessionSecretFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your session secret. Only used when redis is used as session storage.
@@ -100,7 +109,7 @@ let
 
               # required
               storageEncryptionKeyFile = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.externalPath;
                 default = null;
                 description = ''
                   Path to your storage encryption key.
@@ -117,7 +126,7 @@ let
             If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
             or make sure you use the `_FILE` suffix.
             If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
-            For more details: https://www.authelia.com/configuration/methods/secrets/
+            For more details: <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
         };
@@ -128,7 +137,7 @@ let
             There are several values that are defined and documented in nix such as `default_2fa_method`,
             but additional items can also be included.
 
-            https://github.com/authelia/authelia/blob/master/config.template.yml
+            <https://github.com/authelia/authelia/blob/master/config.template.yml>
           '';
           default = { };
           example = ''
@@ -202,7 +211,7 @@ let
                 };
 
                 file_path = mkOption {
-                  type = types.nullOr types.path;
+                  type = types.nullOr types.externalPath;
                   default = null;
                   example = "/var/log/authelia/authelia.log";
                   description = "File path where the logs will be written. If not set logs are written to stdout.";
@@ -252,16 +261,12 @@ let
           '';
         };
       };
-    };
 
-  writeOidcJwksConfigFile =
-    oidcIssuerPrivateKeyFile:
-    pkgs.writeText "oidc-jwks.yaml" ''
-      identity_providers:
-        oidc:
-          jwks:
-            - key: {{ secret "${oidcIssuerPrivateKeyFile}" | mindent 10 "|" | msquote }}
-    '';
+      config = {
+        user = mkDefault (autheliaName config.name);
+        group = mkDefault (autheliaName config.name);
+      };
+    };
 
   # Remove an attribute in a nested set
   # https://discourse.nixos.org/t/modify-an-attrset-in-nix/29919/5
@@ -270,7 +275,7 @@ let
     lib.updateManyAttrsByPath [
       {
         path = lib.init pathList;
-        update = old: lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+        update = old: lib.removeAttrs old [ (lib.last pathList) ];
       }
     ] set;
 in
@@ -284,7 +289,7 @@ in
         Multi-domain protection currently requires multiple instances of Authelia.
         If you don't require multiple instances of Authelia you can define just the one.
 
-        https://www.authelia.com/roadmap/active/multi-domain-protection/
+        <https://www.authelia.com/roadmap/active/multi-domain-protection/>
       '';
       example = ''
         {
@@ -348,7 +353,12 @@ in
           execCommand = "${instance.package}/bin/authelia";
           configFile = format.generate "config.yml" cleanedSettings;
           oidcJwksConfigFile = lib.optional (instance.secrets.oidcIssuerPrivateKeyFile != null) (
-            writeOidcJwksConfigFile instance.secrets.oidcIssuerPrivateKeyFile
+            pkgs.writeText "oidc-jwks.yaml" ''
+              identity_providers:
+                oidc:
+                  jwks:
+                    - key: {{ mustEnv "CREDENTIALS_DIRECTORY" | printf "%s/oidcIssuerPrivateKeyFile" | secret | mindent 10 "|" | msquote }}
+            ''
           );
           configArg = "--config ${
             builtins.concatStringsSep "," (
@@ -359,31 +369,41 @@ in
               ]
             )
           }";
+          # Mapping between the Authelia env variables and the secret keys defined in the module
+          envSecretsMap = {
+            AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "jwtSecretFile";
+            AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "storageEncryptionKeyFile";
+            AUTHELIA_SESSION_SECRET_FILE = "sessionSecretFile";
+            AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "oidcHmacSecretFile";
+          };
+          nonNullEnvSecretsMap = lib.filterAttrs (_: v: instance.secrets.${v} != null) envSecretsMap;
         in
         {
           description = "Authelia authentication and authorization server";
           wantedBy = [ "multi-user.target" ];
           after = [ "network-online.target" ]; # Checks SMTP notifier creds during startup
           wants = [ "network-online.target" ];
-          environment =
-            (lib.filterAttrs (_: v: v != null) {
-              X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";
-              AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = instance.secrets.jwtSecretFile;
-              AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = instance.secrets.storageEncryptionKeyFile;
-              AUTHELIA_SESSION_SECRET_FILE = instance.secrets.sessionSecretFile;
-              AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = instance.secrets.oidcHmacSecretFile;
-            })
-            // instance.environmentVariables;
+          environment = {
+            X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";
+          }
+          // lib.mapAttrs (_: v: "%d/${v}") nonNullEnvSecretsMap
+          // instance.environmentVariables;
 
-          preStart = "${execCommand} ${configArg} validate-config";
           serviceConfig = {
             User = instance.user;
             Group = instance.group;
+            ExecStartPre = "${execCommand} ${configArg} validate-config";
             ExecStart = "${execCommand} ${configArg}";
             Restart = "always";
             RestartSec = "5s";
-            StateDirectory = "authelia-${instance.name}";
+            StateDirectory = autheliaName instance.name;
             StateDirectoryMode = "0700";
+
+            LoadCredential =
+              lib.optional (
+                instance.secrets.oidcIssuerPrivateKeyFile != null
+              ) "oidcIssuerPrivateKeyFile:${instance.secrets.oidcIssuerPrivateKeyFile}"
+              ++ lib.mapAttrsToList (_: v: "${v}:${instance.secrets.${v}}") nonNullEnvSecretsMap;
 
             # Security options:
             AmbientCapabilities = "";
@@ -431,20 +451,17 @@ in
           };
         };
       mkInstanceUsersConfig = instance: {
-        groups."authelia-${instance.name}" = lib.mkIf (instance.group == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
-        };
-        users."authelia-${instance.name}" = lib.mkIf (instance.user == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
+        groups.${autheliaName instance.name} = lib.mkIf (instance.group == autheliaName instance.name) { };
+        users.${autheliaName instance.name} = lib.mkIf (instance.user == autheliaName instance.name) {
           isSystemUser = true;
           group = instance.group;
         };
       };
-      instances = lib.attrValues cfg.instances;
+      enabledInstances = lib.filterAttrs (name: instance: instance.enable) cfg.instances;
     in
     {
       assertions = lib.flatten (
-        lib.flip lib.mapAttrsToList cfg.instances (
+        lib.flip lib.mapAttrsToList enabledInstances (
           name: instance: [
             {
               assertion =
@@ -453,8 +470,8 @@ in
               message = ''
                 Authelia requires a JWT Secret and a Storage Encryption Key to work.
                 Either set them like so:
-                services.authelia.${name}.secrets.jwtSecretFile = /my/path/to/jwtsecret;
-                services.authelia.${name}.secrets.storageEncryptionKeyFile = /my/path/to/encryptionkey;
+                services.authelia.${name}.secrets.jwtSecretFile = "/my/path/to/jwtsecret";
+                services.authelia.${name}.secrets.storageEncryptionKeyFile = "/my/path/to/encryptionkey";
                 Or set services.authelia.${name}.secrets.manual = true and provide them yourself via
                 environmentVariables or settingsFiles.
                 Do not include raw secrets in nix settings.
@@ -465,21 +482,18 @@ in
       );
 
       systemd.services = lib.mkMerge (
-        map (
-          instance:
-          lib.mkIf instance.enable {
-            "authelia-${instance.name}" = mkInstanceServiceConfig instance;
-          }
-        ) instances
+        map (instance: {
+          ${autheliaName instance.name} = mkInstanceServiceConfig instance;
+        }) (lib.attrValues enabledInstances)
       );
       users = lib.mkMerge (
-        map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances
+        map (instance: (mkInstanceUsersConfig instance)) (lib.attrValues enabledInstances)
       );
     };
 
   meta.maintainers = with lib.maintainers; [
     jk
-    dit7ya
     nicomem
+    connor-grady
   ];
 }

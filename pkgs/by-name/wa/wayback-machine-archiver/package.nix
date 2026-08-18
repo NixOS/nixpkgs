@@ -1,40 +1,43 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wayback-machine-archiver";
-  version = "1.9.1";
-  format = "setuptools";
+  version = "3.6.0";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agude";
     repo = "wayback-machine-archiver";
-    rev = "v${version}";
-    sha256 = "0dnnqx507gpj8wsx6f2ivfmha969ydayiqsvxh23p9qcixw9257x";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YIVrz+TUx2SFIDOCR/P+2R3jpXN1K+SM2xyiVL2Hjfo=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ pypandoc ];
-  propagatedBuildInputs = with python3.pkgs; [ requests ];
-  nativeCheckInputs = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
+    requests
+    python-dotenv
+  ];
+
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     requests-mock
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace \"pytest-runner\", ""
-  '';
-
   pythonImportsCheck = [ "wayback_machine_archiver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python script to submit web pages to the Wayback Machine for archiving";
     homepage = "https://github.com/agude/wayback-machine-archiver";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    changelog = "https://github.com/agude/wayback-machine-archiver/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dandellion ];
     mainProgram = "archiver";
   };
-}
+})

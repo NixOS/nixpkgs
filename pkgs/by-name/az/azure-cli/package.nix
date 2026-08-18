@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.75.0";
+  version = "2.89.1";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-u6umAqRUfiACt23mxTtfosLdxKSPvDVJMkVjPCtxr24=";
+    hash = "sha256-05P5z7qzdj5++yu0HELQbp3lnslfNgzRHkU5Sw/pwfw=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -58,7 +58,8 @@ let
           passthru = {
             updateScript = extensionUpdateScript { inherit pname; };
             tests.azWithExtension = testAzWithExts [ self ];
-          } // args.passthru or { };
+          }
+          // args.passthru or { };
           meta = {
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
@@ -66,7 +67,8 @@ let
             changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
             license = lib.licenses.mit;
             sourceProvenance = [ lib.sourceTypes.fromSource ];
-          } // args.meta or { };
+          }
+          // args.meta or { };
         }
         // (removeAttrs args [
           "url"
@@ -152,19 +154,19 @@ py.pkgs.toPythonApplication (
     ];
 
     # Dependencies from:
-    # https://github.com/Azure/azure-cli/blob/azure-cli-2.62.0/src/azure-cli/setup.py#L52
+    # https://github.com/Azure/azure-cli/blob/azure-cli-2.77.0/src/azure-cli/setup.py#L52
     # Please, keep ordered by upstream file order. It facilitates reviews.
     propagatedBuildInputs =
       with py.pkgs;
       [
         antlr4-python3-runtime
+        azure-ai-projects
         azure-appconfiguration
         azure-batch
         azure-cli-core
         azure-cosmos
         azure-data-tables
         azure-datalake-store
-        azure-graphrbac
         azure-keyvault-administration
         azure-keyvault-certificates
         azure-keyvault-keys
@@ -185,12 +187,12 @@ py.pkgs.toPythonApplication (
         azure-mgmt-compute
         azure-mgmt-containerinstance
         azure-mgmt-containerregistry
+        azure-mgmt-containerregistrytasks
         azure-mgmt-containerservice
         azure-mgmt-cosmosdb
-        azure-mgmt-databoxedge
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
-        azure-mgmt-dns
+        azure-mgmt-domainregistration
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
         azure-mgmt-extendedlocation
@@ -201,24 +203,29 @@ py.pkgs.toPythonApplication (
         azure-mgmt-iothubprovisioningservices
         azure-mgmt-keyvault
         azure-mgmt-loganalytics
-        azure-mgmt-managedservices
         azure-mgmt-managementgroups
         azure-mgmt-maps
         azure-mgmt-marketplaceordering
         azure-mgmt-media
         azure-mgmt-monitor
         azure-mgmt-msi
-        azure-mgmt-mysqlflexibleservers
         azure-mgmt-netapp
         azure-mgmt-policyinsights
         azure-mgmt-postgresqlflexibleservers
         azure-mgmt-privatedns
         azure-mgmt-rdbms
+        azure-mgmt-mysqlflexibleservers
         azure-mgmt-recoveryservicesbackup
         azure-mgmt-recoveryservices
-        azure-mgmt-redis
         azure-mgmt-redhatopenshift
-        azure-mgmt-resource
+        azure-mgmt-redis
+        azure-mgmt-resource-all
+        # Added through azure-mgmt-resource-all package
+        # azure-mgmt-resource
+        # azure-mgmt-resource-deployments
+        # azure-mgmt-resource-deploymentscripts
+        # azure-mgmt-resource-deploymentstacks
+        # azure-mgmt-resource-templatespecs
         azure-mgmt-search
         azure-mgmt-security
         azure-mgmt-servicebus
@@ -233,8 +240,11 @@ py.pkgs.toPythonApplication (
         azure-mgmt-trafficmanager
         azure-mgmt-web
         azure-monitor-query
-        azure-multiapi-storage
         azure-storage-common
+        azure-storage-blob
+        azure-storage-file-datalake
+        azure-storage-file-share
+        azure-storage-queue
         azure-synapse-accesscontrol
         azure-synapse-artifacts
         azure-synapse-managedprivateendpoints
@@ -248,6 +258,7 @@ py.pkgs.toPythonApplication (
         javaproperties
         jsondiff
         packaging
+        paramiko
         pycomposefile
         pygithub
         pynacl
@@ -294,19 +305,18 @@ py.pkgs.toPythonApplication (
 
     # wrap the executable so that the python packages are available
     # it's just a shebang script which calls `python -m azure.cli "$@"`
-    postFixup =
-      ''
-        wrapProgram $out/bin/az \
-      ''
-      + lib.optionalString withImmutableConfig ''
-        --set AZURE_IMMUTABLE_DIR $out/etc/azure \
-      ''
-      + lib.optionalString (withExtensions != [ ]) ''
-        --set AZURE_EXTENSION_DIR ${extensionDir} \
-      ''
-      + ''
-        --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
-      '';
+    postFixup = ''
+      wrapProgram $out/bin/az \
+    ''
+    + lib.optionalString withImmutableConfig ''
+      --set AZURE_IMMUTABLE_DIR $out/etc/azure \
+    ''
+    + lib.optionalString (withExtensions != [ ]) ''
+      --set AZURE_EXTENSION_DIR ${extensionDir} \
+    ''
+    + ''
+      --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
+    '';
 
     doInstallCheck = true;
     installCheckPhase = ''
@@ -323,7 +333,6 @@ py.pkgs.toPythonApplication (
       "azure.cli.telemetry"
       "azure.cosmos"
       "azure.datalake.store"
-      "azure.graphrbac"
       "azure.keyvault"
       "azure.mgmt.advisor"
       "azure.mgmt.apimanagement"
@@ -343,7 +352,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.containerservice"
       "azure.mgmt.cosmosdb"
       "azure.mgmt.datamigration"
-      "azure.mgmt.dns"
       "azure.mgmt.eventgrid"
       "azure.mgmt.eventhub"
       "azure.mgmt.hdinsight"
@@ -353,7 +361,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.iothubprovisioningservices"
       "azure.mgmt.keyvault"
       "azure.mgmt.loganalytics"
-      "azure.mgmt.managedservices"
       "azure.mgmt.managementgroups"
       "azure.mgmt.maps"
       "azure.mgmt.marketplaceordering"
@@ -368,6 +375,8 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.recoveryservicesbackup"
       "azure.mgmt.redis"
       "azure.mgmt.resource"
+      "azure.mgmt.resource.deployments"
+      "azure.mgmt.resource.deployments.models"
       "azure.mgmt.search"
       "azure.mgmt.security"
       "azure.mgmt.servicebus"
@@ -476,7 +485,6 @@ py.pkgs.toPythonApplication (
       license = lib.licenses.mit;
       mainProgram = "az";
       maintainers = with lib.maintainers; [ katexochen ];
-      teams = [ lib.teams.stridtech ];
       platforms = lib.platforms.all;
     };
   }

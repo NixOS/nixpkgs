@@ -5,7 +5,8 @@
   pythonAtLeast,
 
   # build-system
-  setuptools,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   param,
@@ -16,18 +17,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyct";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3Z9KxcvY43w1LAQDYGLTxfZ+/sdtQEdh7xawy/JqpqA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-1OUTss81thZWBa5fzl8qSZhbxnRzxXnehRNLjHHTdKg=";
   };
 
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -51,8 +53,8 @@ buildPythonPackage rec {
     description = "ClI for Python common tasks for users";
     mainProgram = "pyct";
     homepage = "https://github.com/pyviz/pyct";
-    changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${version}";
+    changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

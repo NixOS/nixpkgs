@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
       sha256 = "1l3xbrs67025595k9ba5794q3s74anizpbxwsshcfhmbrzd9h8hg";
     })
   ];
-  format = "other";
+  pyproject = false;
   nativeBuildInputs = [
     (lib.getBin cups)
     patchPpdFilesHook

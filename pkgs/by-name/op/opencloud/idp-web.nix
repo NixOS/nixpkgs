@@ -2,42 +2,46 @@
   stdenvNoCC,
   lib,
   opencloud,
-  pnpm_10,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-idp-web";
 
-  inherit (opencloud) version src;
+  inherit (opencloud) src version;
 
   pnpmRoot = "services/idp";
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_11;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    hash = "sha256-yseRO1tClLTRpQj5BzMscElUlgLEzj1u8ndT1+di2+Y=";
+    fetcherVersion = 4;
+    hash = "sha256-rj6KFrzuINVpxrrel2p2iWtJVH8Zg1jrZEIAs8S+8Qs=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm_11
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    cd $pnpmRoot
-    pnpm build
-    mkdir -p assets/identifier/static
-    cp -v src/images/favicon.svg assets/identifier/static/favicon.svg
-    cp -v src/images/icon-lilac.svg assets/identifier/static/icon-lilac.svg
-    runHook postBuild
+  postBuild = ''
+    mkdir -p services/idp/assets/identifier/static
+    cp -v services/idp/src/images/favicon.svg services/idp/assets/identifier/static/favicon.svg
+    cp -v services/idp/src/images/icon-lilac.svg services/idp/assets/identifier/static/icon-lilac.svg
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir $out
-    cp -r assets $out
+    cp -r services/idp/assets $out
+
     runHook postInstall
   '';
 

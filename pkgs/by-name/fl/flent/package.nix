@@ -2,27 +2,45 @@
   lib,
   python3Packages,
   fetchPypi,
+  qt6,
+  irtt,
+  iputils,
+  netperf,
   procps,
-  qt5,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flent";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BPwh3oWIY1YEI+ecgi9AUiX4Ka/Y5dYikwmfvvNB+eg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-qy+BvMpBDBtBqEEM9yEko/Gb2pusxF/LqiutSKlS2eE=";
   };
 
-  build-system = [ python3Packages.sphinx ];
+  build-system = with python3Packages; [
+    setuptools
+    sphinx
+  ];
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  buildInputs = [ qt6.qtbase ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      iputils
+      irtt
+      netperf
+      procps
+    ])
+  ];
 
   dependencies = with python3Packages; [
     matplotlib
-    pyqt5
+    pyqt6
     qtpy
   ];
 
@@ -33,15 +51,8 @@ python3Packages.buildPythonApplication rec {
     sed -i 's|self.skip|pass; #&|' unittests/test_gui.py
 
     # Dummy qt setup for gui tests
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
-  '';
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${qtWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ procps ]}
-    )
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -53,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "flent";
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

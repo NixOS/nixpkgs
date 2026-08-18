@@ -3,7 +3,11 @@
   stdenv,
   fetchzip,
   zlib,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   freetype,
   jdk17,
   curl,
@@ -11,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.22.1";
+  version = "2.26.3";
 
   dontConfigure = true;
   dontBuild = true;
@@ -19,16 +23,16 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    hash = "sha256-wXwFrAFODwVj/6b9Nh2wWnNjMMyjlnGXOWiT2/HW2r4=";
+    hash = "sha256-WXiiTl1nsKP8EVI84H8Pb4JeB0MUSdkhOJF/K0Vy1QE=";
   };
 
   nativeBuildInputs = [
     zlib
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
-    xorg.libXrender
+    libx11
+    libxext
+    libxi
+    libxtst
+    libxrender
     freetype
     jdk17
     (lib.getLib stdenv.cc.cc)
@@ -54,11 +58,14 @@ stdenv.mkDerivation rec {
     ln -s $out/codeql/codeql $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Semantic code analysis engine";
     homepage = "https://codeql.github.com";
-    maintainers = [ maintainers.dump_stack ];
+    maintainers = with lib.maintainers; [
+      dump_stack
+      tree-sapii
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

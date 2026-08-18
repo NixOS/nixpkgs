@@ -1,33 +1,34 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iredis";
-  version = "1.15.1";
+  version = "1.16.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
-    tag = "v${version}";
-    hash = "sha256-ZA4q2Z3X9zhzW/TH8aRliVij8UxqDVUamhKcfVxWb/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m8XDNzHgMWBgcN3AyFlb8K/UNXbGhH4toKBiX5Q4/QY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'packaging = "^23.0"' 'packaging = "*"' \
-      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
-  '';
+  pythonRelaxDeps = [
+    "packaging"
+    "redis"
+  ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     configobj
     mistune
@@ -36,38 +37,44 @@ python3.pkgs.buildPythonApplication rec {
     pygments
     python-dateutil
     redis
-    wcwidth
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pexpect
     pytestCheckHook
   ];
 
-  pytestFlagsArray =
-    [
-      # Fails on sandbox
-      "--ignore=tests/unittests/test_client.py"
-      "--deselect=tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
-      "--deselect=tests/unittests/test_render_functions.py::test_render_time"
-      # Only execute unittests, because cli tests require a running Redis
-      "tests/unittests/"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky tests
-      "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
-      "--deselect=tests/unittests/test_utils.py::test_timer"
-    ];
+  enabledTestPaths = [
+    # Only execute unittests, because cli tests require a running Redis
+    "tests/unittests/"
+  ];
+
+  disabledTestPaths = [
+    # Fails on sandbox
+    "tests/unittests/test_client.py"
+    "tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
+    "tests/unittests/test_render_functions.py::test_render_time"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests
+    "tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
+    "tests/unittests/test_utils.py::test_timer"
+  ];
 
   pythonImportsCheck = [ "iredis" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
-    changelog = "https://github.com/laixintao/iredis/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/laixintao/iredis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "iredis";
   };
-}
+})

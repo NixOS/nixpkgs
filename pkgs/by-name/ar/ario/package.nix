@@ -11,7 +11,6 @@
   gettext,
   gtk3,
   libmpdclient,
-  libsoup_2_4,
   libxml2,
   taglib,
   wrapGAppsHook3,
@@ -40,10 +39,13 @@ stdenv.mkDerivation rec {
     dbus-glib
     gtk3
     libmpdclient
-    libsoup_2_4
     libxml2
     taglib
   ];
+
+  preAutoreconf = ''
+    gettextize --force --copy
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/ario/plugins/*.dylib; do
@@ -51,12 +53,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK client for MPD (Music player daemon)";
     mainProgram = "ario";
     homepage = "https://ario-player.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.garrison ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.garrison ];
+    platforms = lib.platforms.all;
   };
 }

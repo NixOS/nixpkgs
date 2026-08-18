@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  xorg,
+  mkfontscale,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
     mkdir -p "$out/share/fonts/misc"
@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     mkfontdir "$out/share/fonts/misc"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tobiasjung.name/profont/";
     description = "Monospaced font created to be a most readable font for programming";
-    maintainers = with maintainers; [ myrl ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ myrl ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 
 }

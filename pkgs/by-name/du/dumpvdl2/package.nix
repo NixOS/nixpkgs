@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dumpvdl2";
-  version = "2.4.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "szpajder";
     repo = "dumpvdl2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kb8FLVuG9tSZta8nmaKRCRZinF1yy4+NNxD5s7X82Wk=";
+    hash = "sha256-sKbJdSUmtwFdn1f6GR24L5fmUA351icLm6rsfK81+Gw=";
   };
 
   buildInputs = [
@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     zeromq
     libacars
-  ] ++ lib.optionals sdrplaySupport [ sdrplay ];
+  ]
+  ++ lib.optionals sdrplaySupport [ sdrplay ];
 
   nativeBuildInputs = [
     cmake

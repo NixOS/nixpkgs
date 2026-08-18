@@ -1,23 +1,25 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
-  flit-core,
+  buildPythonPackage,
   click,
   colorama,
   deprecation-alias,
   domdf-python-tools,
+  fetchPypi,
+  flit-core,
   mistletoe,
+  psutil,
   typing-extensions,
 }:
+
 buildPythonPackage rec {
   pname = "consolekit";
-  version = "1.9.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gePFFOq6jQF0QA0gls1+cjdNMRutZfM2Og6/FpP0w3Q=";
+    hash = "sha256-IOyOjl2rSsXSowbBWTgDTxoj1UOFNn0el2wrJxIE2BQ=";
   };
 
   build-system = [ flit-core ];
@@ -31,9 +33,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    terminals = [ psutil ];
+  };
+
+  pythonImportsCheck = [ "consolekit" ];
+
   meta = {
     description = "Additional utilities for click";
     homepage = "https://github.com/domdfcoding/consolekit";
+    changelog = "https://github.com/domdfcoding/consolekit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };

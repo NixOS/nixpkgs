@@ -26,25 +26,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional doCheck check;
 
-  buildInputs =
-    [
-      gnutls
-      libotr
-      python3
-    ]
-    ++ lib.optional enableLibPurple pidgin
-    ++ lib.optional enablePam pam;
+  buildInputs = [
+    gnutls
+    libotr
+    python3
+  ]
+  ++ lib.optional enableLibPurple pidgin
+  ++ lib.optional enablePam pam;
 
   propagatedBuildInputs = [ glib ];
 
-  configureFlags =
-    [
-      "--otr=1"
-      "--ssl=gnutls"
-      "--pidfile=/var/lib/bitlbee/bitlbee.pid"
-    ]
-    ++ lib.optional enableLibPurple "--purple=1"
-    ++ lib.optional enablePam "--pam=1";
+  configureFlags = [
+    "--otr=1"
+    "--ssl=gnutls"
+    "--pidfile=/var/lib/bitlbee/bitlbee.pid"
+  ]
+  ++ lib.optional enableLibPurple "--purple=1"
+  ++ lib.optional enablePam "--pam=1";
 
   patches = [
     # This should be dropped once the issue is fixed upstream.
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "IRC instant messaging gateway";
     mainProgram = "bitlbee";
 
@@ -83,12 +81,12 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.bitlbee.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lassulus
       pSub
     ];
-    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

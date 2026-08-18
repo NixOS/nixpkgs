@@ -1,36 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
+  pytest-asyncio,
   pytest-httpbin,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
+  urllib3,
   yarl,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "7.0.0";
-  format = "setuptools";
+  version = "8.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F2ORrQQl7d4WgMWyBzjqPcf7lCUgpI0pk0SAUJhrOlA=";
+  src = fetchFromGitHub {
+    owner = "kevin1024";
+    repo = "vcrpy";
+    tag = "v${version}";
+    hash = "sha256-WQLWUr1EgOibdAVVASxMzeFi1YikYAjjye/NtCEJ6Kk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
     six
-    yarl
+    urllib3
     wrapt
+    yarl
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-httpbin
     pytestCheckHook
   ];
@@ -46,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vcr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
     homepage = "https://github.com/kevin1024/vcrpy";
-    changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/kevin1024/vcrpy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

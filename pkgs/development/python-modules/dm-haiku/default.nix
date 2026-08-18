@@ -33,119 +33,119 @@
   tensorflow,
 }:
 
-let
-  dm-haiku = buildPythonPackage rec {
-    pname = "dm-haiku";
-    version = "0.0.13";
-    pyproject = true;
+buildPythonPackage (finalAttrs: {
+  pname = "dm-haiku";
+  version = "0.0.17";
+  pyproject = true;
+  __srtructuredAttrs = true;
 
-    # ImportError: `haiku.experimental.flax` features require `flax` to be installed.
-    disabled = pythonAtLeast "3.13";
-
-    src = fetchFromGitHub {
-      owner = "deepmind";
-      repo = "dm-haiku";
-      tag = "v${version}";
-      hash = "sha256-RJpQ9BzlbQ4X31XoJFnsZASiaC9fP2AdyuTAGINhMxs=";
-    };
-
-    patches = [
-      # https://github.com/deepmind/dm-haiku/pull/672
-      (fetchpatch {
-        name = "fix-find-namespace-packages.patch";
-        url = "https://github.com/deepmind/dm-haiku/commit/728031721f77d9aaa260bba0eddd9200d107ba5d.patch";
-        hash = "sha256-qV94TdJnphlnpbq+B0G3KTx5CFGPno+8FvHyu/aZeQE=";
-      })
-    ];
-
-    # AttributeError: jax.core.Var was removed in JAX v0.6.0. Use jax.extend.core.Var instead, and
-    # see https://docs.jax.dev/en/latest/jax.extend.html for details.
-    # Already on master: https://github.com/google-deepmind/dm-haiku/commit/cfe8480d253a93100bf5e2d24c40435a95399c96
-    # TODO: remove at the next release
-    postPatch = ''
-      substituteInPlace haiku/_src/jaxpr_info.py \
-        --replace-fail "jax.core.JaxprEqn" "jax.extend.core.JaxprEqn" \
-        --replace-fail "jax.core.Var" "jax.extend.core.Var" \
-        --replace-fail "jax.core.Jaxpr" "jax.extend.core.Jaxpr"
-    '';
-
-    build-system = [ setuptools ];
-
-    dependencies = [
-      absl-py
-      jaxlib # implicit runtime dependency
-      jmp
-      numpy
-      tabulate
-    ];
-
-    optional-dependencies = {
-      jax = [
-        jax
-        jaxlib
-      ];
-      flax = [ flax ];
-    };
-
-    pythonImportsCheck = [ "haiku" ];
-
-    nativeCheckInputs = [
-      bsuite
-      chex
-      cloudpickle
-      dill
-      dm-env
-      dm-haiku
-      dm-tree
-      jaxlib
-      optax
-      pytest-xdist
-      pytestCheckHook
-      rlax
-      tensorflow
-    ];
-
-    disabledTests = [
-      # See https://github.com/deepmind/dm-haiku/issues/366.
-      "test_jit_Recurrent"
-
-      # Assertion errors
-      "testShapeChecking0"
-      "testShapeChecking1"
-
-      # This test requires a more recent version of tensorflow. The current one (2.13) is not enough.
-      "test_reshape_convert"
-
-      # This test requires JAX support for double precision (64bit), but enabling this causes several
-      # other tests to fail.
-      # https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#double-64bit-precision
-      "test_doctest_haiku.experimental"
-    ];
-
-    disabledTestPaths = [
-      # Those tests requires a more recent version of tensorflow. The current one (2.13) is not enough.
-      "haiku/_src/integration/jax2tf_test.py"
-    ];
-
-    doCheck = false;
-
-    # check in passthru.tests.pytest to escape infinite recursion with bsuite
-    passthru.tests.pytest = dm-haiku.overridePythonAttrs (_: {
-      pname = "${pname}-tests";
-      doCheck = true;
-
-      # We don't have to install because the only purpose
-      # of this passthru test is to, well, test.
-      # This fixes having to set `catchConflicts` to false.
-      dontInstall = true;
-    });
-
-    meta = {
-      description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
-      homepage = "https://github.com/deepmind/dm-haiku";
-      license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ ndl ];
-    };
+  src = fetchFromGitHub {
+    owner = "deepmind";
+    repo = "dm-haiku";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CXEMEuQY6VyQ3Ahn1vYYN6slyqABSbIBeJuxJTPapvw=";
   };
-in
-dm-haiku
+
+  # https://github.com/deepmind/dm-haiku/pull/672
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "packages=find_namespace_packages(exclude=['*_test.py', 'examples'])," \
+        "packages=find_namespace_packages(exclude=['*_test.py', 'examples*', 'docs*']),"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    absl-py
+    jaxlib # implicit runtime dependency
+    jmp
+    numpy
+    tabulate
+  ];
+
+  optional-dependencies = {
+    jax = [
+      jax
+      jaxlib
+    ];
+    flax = [ flax ];
+  };
+
+  pythonImportsCheck = [ "haiku" ];
+
+  nativeCheckInputs = [
+    bsuite
+    chex
+    cloudpickle
+    dill
+    dm-env
+    dm-tree
+    flax
+    jaxlib
+    optax
+    pytest-xdist
+    pytestCheckHook
+    rlax
+    tensorflow
+  ];
+
+  disabledTests = [
+    # tensorflow.python.framework.errors_impl.InvalidArgumentError: Graph execution error:
+    # Cannot deserialize computation: UNKNOWN: <unknown>:0: error: loc("erf"):
+    # unregistered operation 'vhlo.composite_v2' found in dialect ('vhlo') that does not allow unknown operations
+    "JaxToTfTest"
+
+    # See https://github.com/deepmind/dm-haiku/issues/366.
+    "test_jit_Recurrent"
+
+    # Assertion errors
+    "testShapeChecking0"
+    "testShapeChecking1"
+
+    # This test requires a more recent version of tensorflow. The current one (2.13) is not enough.
+    "test_reshape_convert"
+
+    # This test requires JAX support for double precision (64bit), but enabling this causes several
+    # other tests to fail.
+    # https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#double-64bit-precision
+    "test_doctest_haiku.experimental"
+
+    # AssertionError: 1 != 0 : 1 doctests failed
+    "test_doctest_haiku"
+
+    # ValueError: pmap wrapped function must be passed at least one argument containing an array,
+    # got empty *args=() and **kwargs={}
+    "test_equivalent_when_passing_transformed_fn2"
+
+    # AssertionError: ValueError not raised
+    "test_passing_function_to_transform_pmap_transform"
+    "test_passing_function_to_transform_pmap_transform_with_state"
+  ];
+
+  disabledTestPaths = [
+    # Require rlax which is unavailable as its dependency tensorflow-probability is broken
+    "examples/impala/actor_test.py"
+    "examples/impala/learner_test.py"
+    "examples/impala_lite_test.py"
+  ];
+
+  doCheck = false;
+
+  # check in passthru.tests.pytest to escape infinite recursion with bsuite
+  passthru.tests.pytest = finalAttrs.finalPackage.overrideAttrs {
+    pname = "${finalAttrs.pname}-tests";
+    doInstallCheck = true;
+
+    # This is only a test derivation; its metadata still identifies the package as "dm-haiku"
+    dontCheckPythonMetadata = true;
+  };
+
+  meta = {
+    description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
+    homepage = "https://github.com/deepmind/dm-haiku";
+    changelog = "https://github.com/google-deepmind/dm-haiku/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
+  };
+})

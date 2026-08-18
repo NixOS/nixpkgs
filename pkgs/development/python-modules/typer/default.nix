@@ -8,71 +8,69 @@
   pdm-backend,
 
   # dependencies
+  annotated-doc,
   click,
-  typing-extensions,
 
   # optional-dependencies
   rich,
   shellingham,
 
   # tests
-  coverage,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   writableTmpDirAsHomeHook,
   procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.15.4";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-lZJKE8bxYxmDxAmnL7L/fL89gMe44voyHT20DUazd9E=";
+    hash = "sha256-HIvXseuR7zUXFuTWzntDfHhAp8BcFjxo35gn0i4+03w=";
   };
+
+  postPatch = ''
+    for f in $(find tests -type f -print); do
+      # replace `sys.executable -m coverage run` with `sys.executable`
+      sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+    done
+  '';
+
+  env.TIANGOLO_BUILD_PACKAGE = "typer";
 
   build-system = [ pdm-backend ];
 
   dependencies = [
+    annotated-doc
     click
-    typing-extensions
-    # Build includes the standard optional by default
-    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
-  ] ++ optional-dependencies.standard;
+    rich
+    shellingham
+  ];
 
-  optional-dependencies = {
-    standard = [
-      rich
-      shellingham
-    ];
-  };
+  nativeCheckInputs = [
+    pytest-xdist
+    pytest9_0CheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    procps
+  ];
 
-  nativeCheckInputs =
-    [
-      coverage # execs coverage in tests
-      pytest-xdist
-      pytestCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      procps
-    ];
-
-  disabledTests =
-    [
-      "test_scripts"
-      # Likely related to https://github.com/sarugaku/shellingham/issues/35
-      # fails also on Linux
-      "test_show_completion"
-      "test_install_completion"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      "test_install_completion"
-    ];
+  disabledTests = [
+    "test_scripts"
+    # Likely related to https://github.com/sarugaku/shellingham/issues/35
+    # fails also on Linux
+    "test_show_completion"
+    "test_install_completion"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    "test_install_completion"
+  ];
 
   pythonImportsCheck = [ "typer" ];
 

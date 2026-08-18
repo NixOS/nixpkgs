@@ -7,16 +7,16 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   mktplcRef = {
     name = "amazon-q-vscode";
     publisher = "AmazonWebServices";
-    version = "1.81.0";
-    hash = "sha256-zuE+KR0iLEkQrxxS835ZYq20yxWgV1S14bay4shqVWg=";
+    version = "2.4.0";
+    hash = "sha256-K1G5D9S29jV+KkWrCWC7f1pP+ptKezZ4n/7eAnmTCAk=";
   };
 
   meta = {
-    changelog = "https://github.com/aws/aws-toolkit-vscode/releases/tag/amazonq%2Fv${finalAttrs.version}";
+    # changelog = "https://github.com/aws/aws-toolkit-vscode/releases/tag/amazonq%2Fv${finalAttrs.version}";
     description = "Amazon Q, CodeCatalyst, Local Lambda debug, SAM/CFN syntax, ECS Terminal, AWS resources";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.amazon-q-vscode";
     homepage = "https://github.com/aws/aws-toolkit-vscode";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 })

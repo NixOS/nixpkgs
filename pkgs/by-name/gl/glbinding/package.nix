@@ -6,24 +6,24 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glbinding";
   version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "cginternals";
     repo = "glbinding";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oLtOsiXfl/18rY/89vl9JDDWpPmEELOFKAHuClveU0c=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cginternals/glbinding/";
     description = "C++ binding for the OpenGL API, generated using the gl.xml specification";
-    license = licenses.mit;
-    maintainers = [ maintainers.mt-caret ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mt-caret ];
   };
-}
+})

@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     mv $d/man $out/share/
   '';
 
-  meta = with lib; {
-    platforms = platforms.linux;
+  meta = {
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/brendangregg/perf-tools";
     description = "Performance analysis tools based on Linux perf_events (aka perf) and ftrace";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "pup";
-  version = "unstable-2022-03-06";
+  version = "0.4.0-unstable-2022-03-06";
 
   src = fetchFromGitHub {
     owner = "ericchiang";
@@ -17,11 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-/MDSWIuSYNxKbTslqIooI2qKA8Pye0yJF2dY8g8qbWI=";
 
-  meta = with lib; {
+  meta = {
     description = "Parsing HTML at the command line";
     mainProgram = "pup";
     homepage = "https://github.com/ericchiang/pup";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

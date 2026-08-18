@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2025_06_11.0293c6f";
+  version = "2026_07_16.090d739";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ovkFQlUa5gLYwCpNjwfGVJ055aDKCXIZou/t4pf6q5o=";
+    hash = "sha256-UD4fkctSqMDQTmZxpmBjR1uKLV0Lf9QoqtSK1u8EQ+4=";
   };
 
   separateDebugInfo = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://passt.top/passt/about/";
     description = "Plug A Simple Socket Transport";
     longDescription = ''
@@ -58,11 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
       privileges.
     '';
     license = [
-      licenses.bsd3 # and
-      licenses.gpl2Plus
+      lib.licenses.bsd3 # and
+      lib.licenses.gpl2Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _8aed ];
+    platforms = lib.platforms.linux;
     mainProgram = "passt";
   };
 })

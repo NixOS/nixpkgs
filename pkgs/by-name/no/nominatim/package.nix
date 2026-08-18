@@ -7,6 +7,7 @@
   python3Packages,
 
   nominatim, # required for testVersion
+  nixosTests,
   testers,
 }:
 
@@ -18,16 +19,16 @@ let
     hash = "sha256-/mY5Oq9WF0klXOv0xh0TqEJeMmuM5QQJ2IxANRZd4Ek=";
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nominatim";
-  version = "5.1.0";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
-    tag = "v${version}";
-    hash = "sha256-eMCXXPrUZvM4ju0mi1+f+LXhThCCCEH+HDz6lurw+Jo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jP/OkEuFdVdvA8Uztv/49FXm9dsExVDjw2l2gyMOSsg=";
   };
 
   postPatch = ''
@@ -56,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     pyicu
     python-dotenv
     pyyaml
+    mwparserfromhell
   ];
 
   propagatedBuildInputs = [
@@ -64,8 +66,9 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nominatim_db" ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = nominatim; };
+  passthru.tests = {
+    version = testers.testVersion { package = nominatim; };
+    inherit (nixosTests) nominatim;
   };
 
   meta = {
@@ -80,4 +83,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nominatim";
   };
-}
+})

@@ -6,17 +6,18 @@
   nix-update-script,
   testers,
   python3,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.3.0";
+  version = "9.4.3";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     tag = "release/v${finalAttrs.version}";
-    hash = "sha256-VL58h8sdJIpzMiWNqTvfp8oITjb0b3X/F8ygaE9cH94=";
+    hash = "sha256-wz87FgdZn0vtdlTWOZL5/Ujhs/uzSwFMHzQ6D9S7dH8=";
   };
 
   outputs = [
@@ -26,10 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "LLHTTP_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "LLHTTP_BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
   ];
 
   passthru.updateScript = nix-update-script {
@@ -40,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "libllhttp" ];
     };
   };
 
@@ -51,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "libllhttp" ];
   };
 })

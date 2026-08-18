@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
@@ -13,38 +13,41 @@
   pydantic,
   requests,
   requests-toolbelt,
+  uuid-utils,
+  websockets,
+  xxhash,
   zstandard,
 
   # tests
   anthropic,
+  attrs,
   dataclasses-json,
-  fastapi,
-  freezegun,
-  instructor,
+  multipart,
+  opentelemetry-sdk,
   pytest-asyncio,
+  pytest-httpx,
+  pytest-socket,
   pytest-vcr,
   pytestCheckHook,
-  uvicorn,
-  attr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.3.45";
+  version = "0.8.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
-    tag = "v${version}";
-    hash = "sha256-uR3Uukt8LwoBKBcgyX2srK0C6O04IEECe/cFhBQFO2s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YQ49pg0+RepwlEHtu8GDUpfnXQF3yFiz6ZeRcnHXSWU=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx
@@ -52,49 +55,57 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    uuid-utils
+    websockets
+    xxhash
     zstandard
   ];
 
   nativeCheckInputs = [
     anthropic
+    attrs
     dataclasses-json
-    fastapi
-    freezegun
-    instructor
+    multipart
+    opentelemetry-sdk
     pytest-asyncio
+    pytest-httpx
+    pytest-socket
     pytest-vcr
     pytestCheckHook
-    uvicorn
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ];
+
+  # evaluation and external tests require OpenAPI key
+  # integration tests are all marked flaky
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
+
+  disabledTestMarks = [
+    "flaky"
+  ];
 
   disabledTests = [
-    # These tests require network access
-    "integration_tests"
     # due to circular import
     "test_as_runnable"
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
-    # Test requires git repo
-    "test_git_info"
-    # Tests require OpenAI API key
-    "test_chat_async_api"
-    "test_chat_sync_api"
-    "test_completions_async_api"
-    "test_completions_sync_api"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky (timing sensitive)
+    "test_refresh_loop_continues_after_500_errors"
   ];
 
   disabledTestPaths = [
-    # Circular import
-    "tests/integration_tests/"
+    # due to circular import
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    "tests/unit_tests/evaluation/test_runner.py"
-    # Require a Langsmith API key
-    "tests/evaluation/test_evaluation.py"
-    "tests/external/test_instructor_evals.py"
-    # Marked as flaky in source
-    "tests/unit_tests/test_run_helpers.py"
+
+    # google-adk isn't packaged (and has an enormous number of dependencies)
+    "tests/unit_tests/wrappers/test_google_adk.py"
+
+    # strands-agents isn't packaged
+    "tests/unit_tests/wrappers/test_strands_agents.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
@@ -104,7 +115,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
@@ -112,4 +123,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "langsmith";
   };
-}
+})

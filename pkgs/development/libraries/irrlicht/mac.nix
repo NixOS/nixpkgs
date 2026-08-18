@@ -27,7 +27,6 @@ stdenv.mkDerivation {
   '';
 
   patches = [ ./mac_device.patch ];
-  dontFixCmake = true;
 
   cmakeFlags = [
     "-DIRRLICHT_STATIC_LIBRARY=ON"
@@ -44,5 +43,6 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.darwin;
+    broken = true;
   };
 }

@@ -37,11 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional enableGUI qt6.wrapQtAppsHook;
+  ]
+  ++ lib.optional enableGUI qt6.wrapQtAppsHook;
 
   buildInputs = [
     (libusb1.override { withStatic = stdenv.hostPlatform.isWindows; })
-  ] ++ lib.optional enableGUI qt6.qtbase;
+  ]
+  ++ lib.optional enableGUI qt6.qtbase;
 
   preInstall = ''
     mkdir -p $udev/lib/udev/rules.d
@@ -51,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   # heimdall cli looked up from PATH by gui
-  preFixup = lib.optional enableGUI ''
+  preFixup = lib.optionalString enableGUI ''
     qtWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
 

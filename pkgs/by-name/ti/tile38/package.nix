@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tile38";
-  version = "1.35.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "tile38";
-    tag = version;
-    hash = "sha256-n17W/JOtVV6Mjhp81xx25j6GUbR9WCd3JLh9voyMeC0=";
+    tag = finalAttrs.version;
+    hash = "sha256-jmUvsSOA16tGp1nAam8ae3cqHU6K2Lfiukfj16N3Hy0=";
   };
 
-  vendorHash = "sha256-/EgUacA9xTUw3e8208NWxhaeZ/KgHLSnxy/fIqC+gZE=";
+  vendorHash = "sha256-zSH5/AQFS73YJpy7kVxHXTF4kPuaxVl4aNdKUq1aqDM=";
 
   subPackages = [
     "cmd/tile38-cli"
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/tidwall/tile38/core.Version=${version}"
+    "-X github.com/tidwall/tile38/core.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

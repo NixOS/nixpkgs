@@ -14,18 +14,18 @@
 ##############
 
 let
-  # Haxl has relatively tight version requirements and is thus often marked as broken.
+  # Haxl has relatively tight version requirements and is often marked as broken.
   haxlJailbroken = haskell.lib.markUnbroken (haskell.lib.doJailbreak haskellPackages.haxl);
 
   generated = haskellPackages.callPackage ./generated.nix { haxl = haxlJailbroken; };
 
-  derivationWithVersion = haskell.lib.compose.overrideCabal (rec {
-    version = "0.1.6";
+  derivationWithVersion = haskell.lib.compose.overrideCabal rec {
+    version = "0.1.8";
     src = fetchFromGitHub {
       owner = "mzabani";
       repo = "codd";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-KdZCL09TERy/PolQyYYykEbPtG5yhxrLZSSo9n6p2WE=";
+      tag = "v${version}";
+      hash = "sha256-7MKlR3oepOwlBwiEpzz3NFepEYGqROT5RrYoe/vvBKM=";
     };
 
     # We only run codd's tests that don't require postgresql nor strace. We need to support unix sockets in codd's test suite
@@ -48,6 +48,6 @@ let
     changelog = "https://github.com/mzabani/codd/releases/tag/v${version}";
 
     maintainers = with lib.maintainers; [ mzabani ];
-  }) generated;
+  } generated;
 in
 haskell.lib.compose.justStaticExecutables derivationWithVersion

@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
-  version = "1.4.6";
+  version = "1.6.7";
 
   src = fetchzip {
     url = "https://github.com/aonez/Keka/releases/download/v${finalAttrs.version}/Keka-${finalAttrs.version}.zip";
-    hash = "sha256-IgPnXHVtAaSOsaAYvo0ELRqvXpF2qAnJ/1QZ+FHzqn4=";
+    hash = "sha256-6zC8lQLkJ/Qppyo3XwK6fy4f/bLsIg0L+4GwFfiVlvg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.keka.io";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      kinnrai
+    ];
     platforms = lib.platforms.darwin;
   };
 })

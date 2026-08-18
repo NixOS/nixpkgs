@@ -1,44 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "1.20";
+  version = "2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
+  src = fetchFromGitHub {
+    owner = "arthurdejong";
+    repo = "python-stdnum";
+    tag = version;
+    hash = "sha256-X/VmD9bgOfs58m4YtmIdsYI5B4T0a68Wiiq2Ae27A8w=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    SOAP = [ zeep ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  optional-dependencies = {
-    SOAP = [ zeep ];
-  };
-
   pythonImportsCheck = [ "stdnum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to handle standardized numbers and codes";
     homepage = "https://arthurdejong.org/python-stdnum/";
     changelog = "https://github.com/arthurdejong/python-stdnum/blob/${version}/ChangeLog";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

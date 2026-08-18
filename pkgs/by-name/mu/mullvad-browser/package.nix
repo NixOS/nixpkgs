@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -73,11 +73,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "14.5.4";
+  version = "15.0.19";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-DJEc+2GJHxG49euVpwH8h/yLoR6DVn0a0ZUFS429XaA=";
+      hash = "sha256-9Vbv7A8JarYtT0Ll1bveQmwif7/IViq6geMxMqeF+S4=";
     };
   };
 
@@ -121,12 +121,6 @@ let
         version = "1.0";
         about = "Mullvad Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -149,7 +143,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -200,7 +194,7 @@ stdenv.mkDerivation rec {
     mv mullvadbrowser.real mullvadbrowser
 
     # store state at `~/.mullvad` instead of relative to executable
-    touch "$MB_IN_STORE/system-install"
+    touch "$MB_IN_STORE/is-packaged-app"
 
     # Add bundled libraries to libPath.
     libPath=${libPath}:$MB_IN_STORE
@@ -282,7 +276,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/mullvad-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/mullvad-browser/distribution/policies.json
 
     runHook postInstall
   '';
@@ -291,30 +284,31 @@ stdenv.mkDerivation rec {
     inherit sources;
     updateScript = callPackage ./update.nix {
       inherit pname version meta;
-      baseUrl = "https://cdn.mullvad.net/browser/";
+      baseUrl = "https://dist.torproject.org/mullvadbrowser/";
       name = "mullvad-browser";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
       lgpl3Plus
       free
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

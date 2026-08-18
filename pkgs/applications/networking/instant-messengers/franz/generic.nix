@@ -5,7 +5,17 @@
   wrapGAppsHook3,
   autoPatchelfHook,
   dpkg,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   atk,
   glib,
   pango,
@@ -25,7 +35,9 @@
   xdg-utils,
   libgbm,
   libglvnd,
-  libappindicator-gtk3,
+  libappindicator,
+  pipewire,
+  libpulseaudio,
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -40,7 +52,7 @@
   ...
 }@args:
 let
-  cleanedArgs = builtins.removeAttrs args [
+  cleanedArgs = removeAttrs args [
     "pname"
     "name"
     "version"
@@ -69,19 +81,19 @@ stdenv.mkDerivation (
     ];
     buildInputs =
       extraBuildInputs
-      ++ (with xorg; [
-        libXi
-        libXcursor
-        libXdamage
-        libXrandr
-        libXcomposite
-        libXext
-        libXfixes
-        libXrender
-        libX11
-        libXtst
-        libXScrnSaver
-      ])
+      ++ [
+        libxi
+        libxcursor
+        libxdamage
+        libxrandr
+        libxcomposite
+        libxext
+        libxfixes
+        libxrender
+        libx11
+        libxtst
+        libxscrnsaver
+      ]
       ++ [
         libgbm
         gtk3
@@ -99,13 +111,17 @@ stdenv.mkDerivation (
         cups
         expat
         stdenv.cc.cc
+        pipewire
+        libpulseaudio
       ];
     runtimeDependencies = [
       libglvnd
       (lib.getLib stdenv.cc.cc)
       (lib.getLib udev)
       libnotify
-      libappindicator-gtk3
+      libappindicator
+      pipewire
+      libpulseaudio
     ];
 
     installPhase = ''

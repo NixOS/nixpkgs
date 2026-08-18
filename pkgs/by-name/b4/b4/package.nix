@@ -2,17 +2,18 @@
   lib,
   python3Packages,
   fetchPypi,
+  fetchgit,
   patatt,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.14.2";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-T4NbblrjDv9gBLslwV/Y9Pbs0RBVluhtsYcf730YET0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-uBXyrtIohxjP4qFMdkIaALxPCRjqMrRd0WRcmZ/dpp0=";
   };
 
   # tests make dns requests and fails
@@ -28,17 +29,27 @@ python3Packages.buildPythonApplication rec {
     dkimpy
     patatt
     git-filter-repo
+    textual
   ];
 
-  meta = with lib; {
+  passthru = {
+    src-misc = fetchgit {
+      url = "https://git.kernel.org/pub/scm/utils/b4/b4.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-NjYL3RKQpjDkU98qbXyl/cvLTJYVAfIowm8E2Rg8AgI=";
+      fetchSubmodules = false;
+    };
+  };
+
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       qyliss
       mfrw
     ];
   };
-}
+})

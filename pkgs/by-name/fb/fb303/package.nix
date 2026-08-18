@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2025.04.21.00";
+  version = "2026.07.27.00";
 
   outputs = [
     "out"
@@ -30,12 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fb303";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cgr+uuUl+tlyWdAvBCVMK/mInYu+M5N9QLMTvvJ3oEk=";
+    hash = "sha256-euqoTxNizn4cA9UY/U6X6m2bV1owEuqEQIDEiDM9n5w=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -75,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

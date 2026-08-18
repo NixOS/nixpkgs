@@ -23,6 +23,10 @@ buildNimSbom (finalAttrs: {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [
+    ./nil.patch
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/nim_lk \
       --suffix PATH : ${
@@ -40,6 +44,5 @@ buildNimSbom (finalAttrs: {
     mainProgram = "nim_lk";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 }) ./sbom.json

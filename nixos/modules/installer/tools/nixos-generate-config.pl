@@ -171,21 +171,6 @@ sub pciCheck {
         }
     }
 
-    # broadcom STA driver (wl.ko)
-    # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
-    if ($vendor eq "0x14e4" &&
-        ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
-         $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
-         $device eq "0x4329" || $device eq "0x432a" || $device eq "0x432b" ||
-         $device eq "0x432c" || $device eq "0x432d" || $device eq "0x4353" ||
-         $device eq "0x4357" || $device eq "0x4358" || $device eq "0x4359" ||
-         $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
-        ) )
-     {
-        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
-        push @kernelModules, "wl";
-     }
-
     # broadcom FullMac driver
     # list taken from
     # https://wireless.wiki.kernel.org/en/users/Drivers/brcm80211#brcmfmac
@@ -219,6 +204,15 @@ sub pciCheck {
         $vendor eq "0x8086" &&
         ($device eq "0x4229" || $device eq "0x4230" ||
          $device eq "0x4222" || $device eq "0x4227");
+
+    # Intel NPU driver
+    # list taken from linux(v7.1): drivers/accel/ivpu/ivpu_drv.h
+    if ($vendor eq "0x8086" &&
+        ($device eq "0x7d1d" || $device eq "0xad1d" || $device eq "0x643e" ||
+         $device eq "0xb03e" || $device eq "0xfd3e" || $device eq "0xd71d"))
+    {
+        push @attrs, "hardware.cpu.intel.npu.enable = true;";
+    }
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
@@ -305,7 +299,7 @@ if ($virt eq "oracle") {
 # It is blocked by https://github.com/systemd/systemd/pull/23859
 if ($virt eq "parallels") {
     push @attrs, "hardware.parallels.enable = true;";
-    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+    push @attrs, "nixpkgs.config.allowUnfreePackages = [ \"prl-tools\" ];";
 }
 
 # Likewise for QEMU.
@@ -321,7 +315,7 @@ if ($virt eq "microsoft") {
 
 # Pull in NixOS configuration for containers.
 if ($virt eq "systemd-nspawn") {
-    push @attrs, "boot.isContainer = true;";
+    push @attrs, "boot.isNspawnContainer = true;";
 }
 
 
@@ -344,7 +338,12 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (
+        glob("/dev/stratis/*/*"),
+        glob("/dev/mapper/*"),
+        glob("/dev/disk/by-uuid/*"),
+        glob("/dev/disk/by-label/*"),
+    ) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
@@ -506,7 +505,7 @@ EOF
     # This should work for single and multi-device systems.
     # still needs subvolume support
     if ($fsType eq "bcachefs") {
-        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@bcachefs@ fs usage $rootDir$mountPoint");
         my $UUID = $info[0];
 
         if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {

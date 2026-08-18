@@ -4,47 +4,47 @@
   fetchFromGitHub,
 
   libGL,
-  libX11,
-  libXcursor,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fyne";
-  version = "1.26.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "tools";
-    rev = "v${version}";
-    hash = "sha256-eBwbXyhI1s4se7krzTemoSehgSXN7mht70q8mk+yGoM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kLhh44zRYEPD6kwh+DHaRYidbV+YWq9Tc0yB3f290Z4=";
   };
 
-  vendorHash = "sha256-7B0PCKMfLULmqzIlNFeXhOUThnWSe9+gRhpswbiwLP4=";
+  vendorHash = "sha256-EzwSZDq3s74ohGk0s9NV5RwSFqlUA5AFM8DvKSZeXnM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXinerama
-    libXi
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxinerama
+    libxi
+    libxrandr
+    libxxf86vm
   ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fyne.io";
     description = "Cross platform GUI toolkit in Go";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ greg ];
     mainProgram = "fyne";
   };
-}
+})

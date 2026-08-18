@@ -2,25 +2,26 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  go-mockery,
+  go-mockery_2,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-team";
-  version = "1.8.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "hekmekk";
     repo = "git-team";
-    rev = "v${version}";
-    hash = "sha256-+j5d1tImVHaTx63uzLdh2YNCFa1ErAVv4OMwxOutBQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0nDt4i6RK6/guLVNpgZE1HRJjIu9YIzaA296s5aAKF4=";
   };
 
-  vendorHash = "sha256-NTOUL1oE2IhgLyYYHwRCMW5yCxIRxUwqkfuhSSBXf6A=";
+  proxyVendor = true;
+  vendorHash = "sha256-5rS4EgY4x6zSoBF4ylg4R9rcI6Ia5bmx04k+Bc+8PlQ=";
 
   nativeBuildInputs = [
-    go-mockery
+    go-mockery_2
     installShellFiles
   ];
 
@@ -37,11 +38,11 @@ buildGoModule rec {
       --zsh <($out/bin/git-team completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for managing and enhancing git commit messages with co-authors";
     homepage = "https://github.com/hekmekk/git-team";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lockejan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lockejan ];
     mainProgram = "git-team";
   };
-}
+})

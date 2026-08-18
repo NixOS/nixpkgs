@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "pyrender";
   version = "0.1.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mmatl";
@@ -79,13 +76,12 @@ buildPythonPackage rec {
 
   env.PYOPENGL_PLATFORM = "egl"; # enables headless rendering during check
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-    ]
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-      mesa.llvmpipeHook
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    mesa.llvmpipeHook
+  ];
 
   disabledTestPaths = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook) [
     # requires opengl context
@@ -94,10 +90,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrender" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyrender.readthedocs.io/en/latest/";
     description = "Easy-to-use glTF 2.0-compliant OpenGL renderer for visualization of 3D scenes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

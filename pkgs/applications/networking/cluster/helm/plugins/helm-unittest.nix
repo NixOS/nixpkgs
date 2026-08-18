@@ -1,38 +1,85 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  kubernetes-helm,
   lib,
+  nix-update-script,
+  runCommand,
+  wrapHelm,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+let
+  version = "1.1.2";
+in
+buildGoModule (finalAttrs: {
   pname = "helm-unittest";
-  version = "0.7.2";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-RWucFZlyVYV5pHFGP7x5I+SILAJ9k12R7l5o7WKGS/c=";
+    owner = "helm-unittest";
+    repo = "helm-unittest";
+    tag = "v${version}";
+    hash = "sha256-4555mm73Q5YMJ6k7fy86JyCXeSjJ/0fJkFS2o5HQsMA=";
   };
 
-  vendorHash = "sha256-tTM9n/ahtAJoQt0fwf1jrSokWER+cOnpPX7NTNrhKc4=";
+  vendorHash = "sha256-JjFhF/vaf39DYtcESV5N/wvjCFb2KrwU8rQXgZUwjrs=";
 
-  # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
-    sed -i '/^hooks:/,+2 d' plugin.yaml
+    # Remove the install and upgrade hooks.
+    sed -i '/^platformHooks:[[:space:]]*$/,/^[^[:space:]]/d' plugin.yaml
+    # Remove the per-platform commands
+    sed -i '/^platformCommand:[[:space:]]*$/,/^[^[:space:]]/d' plugin.yaml
+    # Add a simple runtime config
+    cat <<'EOF' >> ./plugin.yaml
+    platformCommand:
+      - command: "''$HELM_PLUGIN_DIR/helm-unittest"
+    EOF
   '';
 
-  postInstall = ''
-    install -dm755 $out/${pname}
-    mv $out/bin/helm-unittest $out/${pname}/untt
-    rmdir $out/bin
-    install -m644 -Dt $out/${pname} plugin.yaml
+  subPackages = [ "cmd/helm-unittest" ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -dm755 "$out/helm-unittest"
+    install -m755 -Dt "$out/helm-unittest" "$GOPATH/bin/helm-unittest"
+    install -m644 -Dt "$out/helm-unittest" ./plugin.yaml
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.smoke =
+      let
+        helm = wrapHelm kubernetes-helm {
+          plugins = [ finalAttrs.finalPackage ];
+        };
+      in
+      runCommand "helm-unittest-plugin-smoke"
+        {
+          nativeBuildInputs = [
+            helm
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          cp -r ${./tests/helm-unittest/smoke} chart
+          chmod -R u+w chart
+          helm unittest chart
+          touch $out
+        '';
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "BDD styled unit test framework for Kubernetes Helm charts as a Helm plugin";
     homepage = "https://github.com/helm-unittest/helm-unittest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      booxter
+      yurrriq
+    ];
   };
-}
+})

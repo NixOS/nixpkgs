@@ -1,35 +1,41 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
 
   # native check inputs
   git,
+  jujutsu,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.11.0";
+  version = "0.18.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nzWRMCIeZ1RmZO4v5UqX1JrbN1UjBHkl/bYaERCzfew=";
+    hash = "sha256-PfGiPH7CU8z+Flj3X04XnRdWcv5K+hTZMfvHpM52Fic=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9OjcEmed9nLM/fp6Qk/Gh9hTVnn5cqCxTUpAJUkI4/M=";
+  cargoHash = "sha256-1MDjaaH2PcvQz0DKSTADRB+8YEUWP1GN2edHk4EDVGA=";
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    jujutsu
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
+  cargoBuildFlags = [
+    # don't install the `mgf_dev`
+    "--bin"
+    "mergiraf"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  click,
   click-shell,
+  click,
   fetchFromGitHub,
+  hatchling,
   iterfzf,
-  poetry-core,
-  pythonOlder,
   pyyaml,
   rich,
   typer,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "typer-shell";
-  version = "0.1.12";
+  version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "FergusFettes";
     repo = "typer-shell";
     tag = "v${version}";
-    hash = "sha256-fnqI+nKMaQocBWd9i/lqq8OzKwFdxJ8+7aYG5sNQ55E=";
+    hash = "sha256-vjinzBCaEPWbroxT7OmUQIvtwlPivYO0soGqvyRXVc4=";
   };
 
   pythonRelaxDeps = [
@@ -32,7 +29,7 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -48,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typer_shell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for making beautiful shells/REPLs with Typer";
     homepage = "https://github.com/FergusFettes/typer-shell";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

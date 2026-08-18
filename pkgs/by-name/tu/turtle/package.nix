@@ -9,17 +9,17 @@
   meld,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "turtle";
-  version = "0.13.3";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "turtle";
-    tag = version;
-    hash = "sha256-bfoo2xWBr4jR5EX5H8hiXl6C6HSpNJ93icDg1gwWXqE=";
+    tag = finalAttrs.version;
+    hash = "sha256-+XDDscw5xBUp39tbZLqZWK+wsRDi401mRDjx+VR6Cu0=";
   };
 
   postPatch = ''
@@ -57,23 +57,25 @@ python3Packages.buildPythonApplication rec {
   # to get $program_PYTHONPATH
   dontWrapPythonPrograms = true;
 
-  postFixup =
-    ''
-      makeWrapperArgs+=(''${gappsWrapperArgs[@]})
-      wrapPythonPrograms
-    ''
-    # Dialogs are not imported, but executed. The same does
-    # nautilus-python plugins. So we need to patch them as well.
-    + ''
-      for dialog_scripts in $out/lib/python*/site-packages/turtlevcs/dialogs/*.py; do
-        patchPythonScript $dialog_scripts
-      done
-      for nautilus_extensions in $out/share/nautilus-python/extensions/*.py; do
-        patchPythonScript $nautilus_extensions
-      done
-      substituteInPlace $out/share/nautilus-python/extensions/turtle_nautilus_compare.py \
-        --replace-fail 'Popen(["meld"' 'Popen(["${lib.getExe meld}"'
-    '';
+  postFixup = ''
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
+      --prefix PATH : ${lib.makeBinPath [ meld ]}
+    )
+    wrapPythonPrograms
+  ''
+  # Dialogs are not imported, but executed. The same does
+  # nautilus-python plugins. So we need to patch them as well.
+  + ''
+    for dialog_scripts in $out/lib/python*/site-packages/turtlevcs/dialogs/*.py; do
+      patchPythonScript $dialog_scripts
+    done
+    for nautilus_extensions in $out/share/nautilus-python/extensions/*.py; do
+      patchPythonScript $nautilus_extensions
+    done
+    substituteInPlace $out/share/nautilus-python/extensions/turtle_nautilus_compare.py \
+      --replace-fail 'Popen(["meld"' 'Popen(["${lib.getExe meld}"'
+  '';
 
   meta = {
     description = "Graphical interface for version control intended to run on gnome and nautilus";
@@ -83,4 +85,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chatgpt";
   version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "chatgpt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+U5fDG/t1x7F4h+D3rVdgvYICoQDH7dd5GUNOCkXw/Q=";
   };
 
@@ -18,11 +18,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/chatgpt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive CLI for ChatGPT";
     homepage = "https://github.com/j178/chatgpt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "chatgpt";
-    maintainers = with maintainers; [ Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [ Ruixi-rebirth ];
   };
-}
+})

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.7.3";
+  version = "1.9.3";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     tag = finalAttrs.version;
-    hash = "sha256-zVmVh1iljidcXU+c7DAGBPkYyJkA11SvXtuCosB/Foc=";
+    hash = "sha256-1V3L10YgRnOoJud/lybfSj2AYOY0kRAJdfamJg+S1fo=";
   };
 
   depsBuildBuild = [
@@ -55,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags =
-    [
-      "-Ddocumentation=true"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=false"
-    ];
+  mesonFlags = [
+    "-Ddocumentation=true"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=false"
+  ];
 
   buildInputs = [
     appstream
@@ -72,13 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
   ];
 
-  nativeCheckInputs =
-    [
-      adwaita-icon-theme
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xvfb-run
-    ];
+  nativeCheckInputs = [
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    xvfb-run
+  ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #
@@ -129,15 +127,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [ "libadwaita-1" ];
   };
 })
