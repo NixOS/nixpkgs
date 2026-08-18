@@ -8,6 +8,7 @@
   gobject-introspection,
   blueprint-compiler,
   gtk4,
+  gtksourceview5,
   libadwaita,
   libglycin,
   webkitgtk_6_0,
@@ -24,14 +25,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "50.11.0";
+  version = "50.15.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WO0wqDZP6rIe7B2oboJctQ302Ot2ooecqCSWOERdURg=";
+    hash = "sha256-YX93DC2CHSLB/pWW/pvAVkNbD7AR1/7WOyYBm3fwlak=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     glib
     glib-networking
     gtk4
+    gtksourceview5
     libadwaita
     libglycin
     webkitgtk_6_0
@@ -72,6 +74,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pygobject3
     pyjwt
     pypdf
+    pytesseract
     python-magic
     rarfile
     requests
