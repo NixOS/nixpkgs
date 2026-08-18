@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pkg-resources-backport,
   poetry-core,
   setuptools,
 }:
@@ -30,7 +31,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ setuptools ];
+  dependencies = [
+    pkg-resources-backport
+    setuptools
+  ];
 
   # Tests require a running NATS server
   doCheck = false;
