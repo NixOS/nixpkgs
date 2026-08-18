@@ -62,35 +62,50 @@ else
   {
     _type = "vars-configuration";
 
-    promptBackends = lib.mapAttrs (_: backend: {
-      script = evalDeferredPackage backend.script;
+    promptBackends = lib.mapAttrs' (_: backend: {
+      inherit (backend) name;
+      value = {
+        script = evalDeferredPackage backend.script;
+      };
     }) cfg.promptBackends;
 
-    prompts = lib.mapAttrs (_: prompt: {
-      inherit (prompt)
-        label
-        description
-        type
-        backend
-        ;
+    prompts = lib.mapAttrs' (_: prompt: {
+      inherit (prompt) name;
+      value = {
+        inherit (prompt)
+          label
+          description
+          type
+          backend
+          ;
+      };
     }) cfg.prompts;
 
-    generatorBackends = lib.mapAttrs (_: backend: {
-      get = evalDeferredPackage backend.get;
-      set = evalDeferredPackage backend.set;
-      exists = evalDeferredPackage backend.exists;
-      delete = evalDeferredPackage backend.delete;
-      list = evalDeferredPackage backend.list;
-      fixup = evalDeferredPackage backend.fixup;
-      deploy.local = evalDeferredPackage backend.deploy.local;
-      deploy.remote = evalDeferredPackage backend.deploy.remote;
+    generatorBackends = lib.mapAttrs' (_: backend: {
+      inherit (backend) name;
+      value = {
+        get = evalDeferredPackage backend.get;
+        set = evalDeferredPackage backend.set;
+        exists = evalDeferredPackage backend.exists;
+        delete = evalDeferredPackage backend.delete;
+        list = evalDeferredPackage backend.list;
+        fixup = evalDeferredPackage backend.fixup;
+        deploy.local = evalDeferredPackage backend.deploy.local;
+        deploy.remote = evalDeferredPackage backend.deploy.remote;
+      };
     }) cfg.generatorBackends;
 
-    generators = lib.mapAttrs (_: generator: {
-      inherit (generator) prompts dependencies backend;
-      script = evalDeferredPackage generator.script;
-      files = lib.mapAttrs (_: file: {
-        inherit (file) name local;
-      }) generator.files;
+    generators = lib.mapAttrs' (_: generator: {
+      inherit (generator) name;
+      value = {
+        inherit (generator) prompts dependencies backend;
+        script = evalDeferredPackage generator.script;
+        files = lib.mapAttrs' (_: file: {
+          inherit (file) name;
+          value = {
+            inherit (file) local;
+          };
+        }) generator.files;
+      };
     }) cfg.generators;
   }

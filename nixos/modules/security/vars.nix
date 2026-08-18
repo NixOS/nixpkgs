@@ -27,7 +27,6 @@ let
         name = lib.mkOption {
           description = "The name of the backend.";
           type = lib.types.str;
-          readOnly = true;
           default = name;
         };
 
@@ -115,7 +114,6 @@ let
         name = lib.mkOption {
           description = "name of the generated file";
           type = safeName;
-          readOnly = true;
           default = name;
           defaultText = "Name of the file";
         };
@@ -149,7 +147,6 @@ let
             This name will be used to refer to the generator in other generators.
           '';
           type = safeName;
-          readOnly = true;
           default = name;
           defaultText = "Name of the generator";
         };
@@ -215,7 +212,6 @@ let
         name = lib.mkOption {
           description = "The name of the backend.";
           type = lib.types.str;
-          readOnly = true;
           default = name;
         };
 
@@ -232,6 +228,12 @@ let
     { name, ... }:
     {
       options = {
+        name = lib.mkOption {
+          description = "The name generators can use to refer to this prompt.";
+          type = lib.types.str;
+          default = name;
+        };
+
         label = lib.mkOption {
           description = "The label to attach to the prompt.";
           type = lib.types.str;
