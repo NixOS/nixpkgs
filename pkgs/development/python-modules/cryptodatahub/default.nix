@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptodatahub";
-  version = "1.2.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptodatahub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zu8E3k6jHFK+IIHWOalmdv/mPGhT7JjgjFkGiLxA4iI=";
+    hash = "sha256-iXM3LV/obJu3Rvl57ny7/BJINxK2b+qTgBCyu3BDris=";
   };
 
   build-system = [
@@ -59,6 +59,8 @@ buildPythonPackage (finalAttrs: {
     # Tests require network access
     "test/common/test_utils.py"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Repository of cryptography-related data";
