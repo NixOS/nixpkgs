@@ -4,6 +4,7 @@
   configparser,
   fetchFromGitHub,
   pip,
+  pkg-resources-backport,
   pytest-mock,
   pytestCheckHook,
   python3-openid,
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   dependencies = [
     configparser
+    pkg-resources-backport
     semantic-version
     toml
   ];
