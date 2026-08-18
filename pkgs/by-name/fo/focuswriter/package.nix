@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "focuswriter";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wGm+0bB4dxH6PA6993pDZopSMDNVoIHPcQXkdllcjHU=";
+    hash = "sha256-Rr2v9WpyeE57uikPGvbS58Zzhb1NAIAUMblF8LWIcVo=";
   };
 
   nativeBuildInputs = [

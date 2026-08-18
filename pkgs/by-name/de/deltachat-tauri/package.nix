@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-0/TmIwg8y1vUN9SvlBhKQ3krvdaBcWFfk/+CVhBgXaU=";
+  cargoHash = "sha256-Z3uZ+IARmCZbJiIotYjdQRzYZFplRwE3xO0Yb0tLbcE=";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh";
-  version = "1.9.0"; # nixpkgs-update: no auto update
+  version = "1.10.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
     rev = finalAttrs.version;
-    hash = "sha256-sFHUphFu5a+buSa3GQvSmGo8SFtn3V5ZqTOnWMPlvs8=";
+    hash = "sha256-5cRS9N4MgVkCaydN1FBgzOXRhwyUESnk6UwIfsEnHXE=";
   };
 
-  cargoHash = "sha256-1PjtZ5/bAnLlMbkcKAA6DCKDafItGiATjct5Pv8muas=";
+  cargoHash = "sha256-qsULjxLwXcrJQbH2qf9rOhterde8G73hYlBbCQQUUYc=";
 
   cargoBuildFlags = [
     "--workspace"

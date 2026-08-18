@@ -41,7 +41,7 @@
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
-  squashfsTools,
+  squashfs-tools,
   squashfuse,
   # Test dependencies
   singularity-tools,
@@ -143,7 +143,7 @@ in
     gpgme
     libuuid
     openssl
-    squashfsTools # Required at build time by SingularityCE
+    squashfs-tools # Required at build time by SingularityCE
   ]
   # Optional dependencies.
   # Formatting: Optional dependencies are likely to increase.
@@ -179,7 +179,7 @@ in
     fuse2fs # Mount ext3 filesystems
     go
     mount # mount
-    squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
+    squashfs-tools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ]
   ++ lib.optional enableNvidiaContainerCli nvidia-docker;

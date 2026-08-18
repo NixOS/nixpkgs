@@ -20,7 +20,7 @@ let
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "18.17.0";
+  version = "18.19.0";
 
   inherit nodejs;
 
@@ -28,7 +28,7 @@ buildNpmPackage rec {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-Zp5qhSo6uj6eGM0mGFIhSuKHmX+eIpdVJhc2xfxMqpc=";
+    hash = "sha256-tUK2vytQ/fBSw8drjBLh4HlrnQh/0tX9e9otYMhXYsA=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -74,7 +74,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-Gn3H6YQZTxINOSrfqh5hVFGe19b2UNVLKcR8Ey0S5Gk=";
+      hash = "sha256-Je3pHgkBwt35sIvxQqnYX3F+uJQeBGc5kzCAL9czCYs=";
     }
   );
 
