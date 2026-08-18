@@ -17,12 +17,11 @@ python3.pkgs.buildPythonApplication {
   };
 
   pythonRelaxDeps = [
+    "chardet"
     "impacket"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     chardet
