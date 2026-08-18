@@ -9,6 +9,7 @@
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
   libiconv,
   openssl,
@@ -35,6 +36,27 @@ buildPythonPackage rec {
     inherit pname version src;
     hash = "sha256-mp+1Fw8xNBJD1DM8obAqYBP8erxXiP768+ifqRN1Uqs=";
   };
+
+  patches = [
+    # CVE-2026-69247
+    (fetchpatch2 {
+      url = "https://github.com/pyca/cryptography/commit/53fccd93413a8d7f07d6d8999681f27b75cffa3f.patch?full_index=1";
+      excludes = [ "CHANGELOG.rst" ];
+      hash = "sha256-BBMsnFozpIJCkRejCYZrfiEikLJSJXCAMCBqa5vRL5E=";
+    })
+    # CVE-2026-69248
+    (fetchpatch2 {
+      url = "https://github.com/pyca/cryptography/commit/4d035a4225965edeffd312079a510ef25fcfdcb2.patch?full_index=1";
+      excludes = [ ".github/actions/**" ];
+      hash = "sha256-Uct2j+kMYVJ0PJ0WtPqQkACVFyqKjK4bi5LMuRHWCZo=";
+    })
+    # CVE-2026-69249
+    (fetchpatch2 {
+      url = "https://github.com/pyca/cryptography/commit/4a12cf49675a184e47f912b00b04f3a629283582.patch?full_index=1";
+      excludes = [ ".github/actions/**" ];
+      hash = "sha256-9WFoA+H/OMLLkSfJvhBf9cgSYrhuVokYKLr6WeNJAgI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

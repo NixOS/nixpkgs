@@ -3,15 +3,21 @@
   argcomplete,
   black,
   buildPythonPackage,
+  email-validator,
   fetchFromGitHub,
   genson,
   graphql-core,
+  grpcio-tools,
   hatch-vcs,
   hatchling,
   httpx,
+  hypothesis,
+  hypothesis-jsonschema,
   inflect,
   inline-snapshot,
   isort,
+  jsonschema,
+  msgspec,
   jinja2,
   openapi-spec-validator,
   packaging,
@@ -20,6 +26,8 @@
   pydantic,
   pysnooper,
   pytest-mock,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
   pyyaml,
   time-machine,
@@ -28,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.55.0";
+  version = "0.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-zsLJv7gKhmnEIS/AUvnBzm+07QFQoMdiFo/PkfRyHek=";
+    hash = "sha256-0vh/iynZzmMzvdUXNScb+JWANdSrzPLT1qt+jyKleg4=";
   };
 
   pythonRelaxDeps = [
@@ -65,6 +73,7 @@ buildPythonPackage rec {
     debug = [ pysnooper ];
     graphql = [ graphql-core ];
     http = [ httpx ];
+    protobuf = [ grpcio-tools ];
     ruff = [ ruff ];
     validation = [
       openapi-spec-validator
@@ -76,19 +85,30 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    email-validator
     inline-snapshot
+    hypothesis
+    hypothesis-jsonschema
+    jsonschema
+    msgspec
     pytest-mock
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
     time-machine
   ]
   ++ optional-dependencies.all;
 
-  pythonImportsCheck = [ "datamodel_code_generator" ];
+  pytestFlags = [
+    "--maxfail=2"
+  ];
 
   disabledTests = [
     # remote testing, name resolution failure.
     "test_openapi_parser_parse_remote_ref"
   ];
+
+  pythonImportsCheck = [ "datamodel_code_generator" ];
 
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
