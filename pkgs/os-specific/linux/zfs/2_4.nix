@@ -18,12 +18,19 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.4.3";
 
+  # if adding a patch here, check if it also needs to be applied to zfs_unstable
   extraPatches = [
     # https://github.com/openzfs/zfs/issues/18366
     # dedup data corruption fix unreleased as of OpenZFS 2.4.3
     (fetchpatch {
       url = "https://github.com/openzfs/zfs/commit/6fb72fda0f60d9efb591e320f83f78b19ec451cc.patch?full_index=1";
       hash = "sha256-UuSVmO61Ux5S3F+JAtRnHyeVS4EFobDTKBuD5s8PI+k=";
+    })
+    # backport kernel memory corruption fix
+    # https://github.com/openzfs/zfs/issues/18787
+    (fetchpatch {
+      url = "https://github.com/openzfs/zfs/commit/223b8bc446851e5e796e5446ac24d03bbf468f43.patch?full_index=1";
+      hash = "sha256-I29A+NLYLzy7cMC8FQpBdSYbjFu/kscgTW8mAauPVf4=";
     })
   ];
 

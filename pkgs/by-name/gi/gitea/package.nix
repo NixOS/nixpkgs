@@ -30,7 +30,7 @@ let
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-VAXSj+AYV6uEdCAD/sEzeydqn4cqNL+ITfrGq41jaLI=";
+      hash = "sha256-rduD3GqgdUlF95HTnKe8smToyHop4RrO6QDTRzh2RCk=";
     };
 
     nativeBuildInputs = [
@@ -53,13 +53,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.27.1";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OCThp8432WAD+9v7c7phY2u4JndXAfve4XRbJTLdn6g=";
+    hash = "sha256-376YyRYcZGya/k5zg2zL2iqtrE7r2Q/DMd3DbOnKyOA=";
   };
 
   proxyVendor = true;
