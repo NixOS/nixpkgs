@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nats-python";
   version = "0.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "nats-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7/AGQfPEuSeoRGUXeyDZNbLhapfQa7vhrSPHRruf+sg=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for NATS messaging system";
     homepage = "https://github.com/Gr1N/nats-python";
-    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${version}";
+    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
