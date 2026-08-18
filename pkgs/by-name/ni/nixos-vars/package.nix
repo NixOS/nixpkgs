@@ -10,6 +10,8 @@
 }:
 
 python3Packages.buildPythonApplication {
+  __structuredAttrs = true;
+
   name = "nixos-vars";
   format = "pyproject";
   nativeBuildInputs = [
