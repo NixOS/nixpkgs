@@ -15,8 +15,8 @@ let
   derivations = [
     (lib.mapAttrsToList (_: x: [
       x.delete
-      x.deploy
-      x.deployLocal
+      x.deploy.local
+      x.deploy.remote
       x.exists
       x.fixup
       x.get
