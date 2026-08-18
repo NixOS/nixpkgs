@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocom";
-  version = "1.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "LamdaLamdaLamda";
     repo = "cocom";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cupe6O/b1aXpve84sv8pW7hrJKMUfWcieM6LwsoRj5o=";
+    sha256 = "sha256-Kdkpal+jPudmkzNM1dVa5L89YZ61Us17sEk9Iwb2sNk=";
   };
 
-  cargoHash = "sha256-ekgdz95JdWYBUU3pRoCFT7QuagXHEjl5rLoW8CrLVdw=";
+  cargoHash = "sha256-SwrweqDUPQVhqSZxkwvu+fPUka9/5KG8cy1YeG1Nm4o=";
 
   # Tests require network access
   doCheck = false;
