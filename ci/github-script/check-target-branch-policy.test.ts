@@ -53,14 +53,14 @@ const cases: Array<{
     expected: 'mass-rebuild',
   },
   {
-    name: 'does not check mass rebuilds on staging-nixos',
+    name: 'flags a mass rebuild on staging-nixos',
     facts: { base: 'staging-nixos', maxRebuildCount: 24_000 },
-    expected: 'dismiss',
+    expected: 'mass-rebuild',
   },
   {
-    name: 'does not check mass rebuilds on a release staging-nixos branch',
+    name: 'flags a mass rebuild on a release staging-nixos branch',
     facts: { base: 'staging-nixos-26.05', maxRebuildCount: 1000 },
-    expected: 'dismiss',
+    expected: 'mass-rebuild',
   },
   {
     name: 'allows mass rebuilds on staging',
@@ -97,9 +97,9 @@ const cases: Array<{
     expected: 'dismiss',
   },
   {
-    name: 'does not check possible mass rebuilds on staging-nixos',
+    name: 'flags other possible mass rebuilds on staging-nixos',
     facts: { base: 'staging-nixos', maxRebuildCount: 500 },
-    expected: 'dismiss',
+    expected: 'possible-mass-rebuild',
   },
   {
     name: 'skips staging into master',
@@ -127,13 +127,13 @@ const cases: Array<{
     expected: 'skip-development-merge',
   },
   {
-    name: 'skips staging into staging-nixos',
+    name: 'checks staging into staging-nixos',
     facts: {
       base: 'staging-nixos',
       head: 'staging',
       maxRebuildCount: 24_000,
     },
-    expected: 'skip-development-merge',
+    expected: 'mass-rebuild',
   },
   {
     name: 'skips release staging-nixos into its release branch',
@@ -154,13 +154,13 @@ const cases: Array<{
     expected: 'skip-development-merge',
   },
   {
-    name: 'skips release staging into its staging-nixos branch',
+    name: 'checks release staging into its staging-nixos branch',
     facts: {
       base: 'staging-nixos-26.05',
       head: 'staging-26.05',
       maxRebuildCount: 24_000,
     },
-    expected: 'skip-development-merge',
+    expected: 'mass-rebuild',
   },
   {
     name: 'kernel exemption suppresses a possible mass rebuild',
