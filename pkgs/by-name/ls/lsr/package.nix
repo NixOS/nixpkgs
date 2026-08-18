@@ -2,7 +2,7 @@
   lib,
   stdenv,
   installShellFiles,
-  fetchgit,
+  fetchFromTangled,
   zig_0_14,
   versionCheckHook,
 }:
@@ -16,14 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchgit {
-    url = "https://tangled.sh/@rockorager.dev/lsr";
-    rev = "v${finalAttrs.version}";
-    sparseCheckout = [
-      "src"
-      "docs"
-    ];
-    hash = "sha256-VeB0R/6h9FXSzBfx0IgpGlBz16zQScDSiU7ZvTD/Cds=";
+  src = fetchFromTangled {
+    did = "did:plc:7sufqp5jkgsrtsit7gd5wpo2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Te6GKPnW0XFliSjTI9UhkmT72AEmuUXfO7xNrV01mJk=";
   };
 
   zigDeps = zig.fetchDeps {
