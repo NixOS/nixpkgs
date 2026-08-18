@@ -1,14 +1,15 @@
 const assert = require('node:assert/strict')
 const test = require('node:test')
-const { decideTargetBranchReview } = require('./check-target-branch-policy.ts')
+const {
+  evaluateTargetBranchPolicy,
+} = require('./check-target-branch-policy.ts')
 
 type DecisionFacts = {
   base: string
   head: string
   maxRebuildCount: number
   rebuildsAllTests: boolean
-  isExemptKernelUpdate: boolean
-  isExemptHomeAssistantUpdate: boolean
+  onlyChangedFile: string | null
 }
 
 type Decision =
@@ -23,8 +24,7 @@ const defaults: DecisionFacts = {
   head: 'topic-branch',
   maxRebuildCount: 0,
   rebuildsAllTests: false,
-  isExemptKernelUpdate: false,
-  isExemptHomeAssistantUpdate: false,
+  onlyChangedFile: null,
 }
 
 const cases: Array<{
@@ -164,33 +164,47 @@ const cases: Array<{
   },
   {
     name: 'kernel exemption suppresses a possible mass rebuild',
-    facts: { maxRebuildCount: 999, isExemptKernelUpdate: true },
+    facts: {
+      maxRebuildCount: 999,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',
+    },
     expected: 'dismiss',
   },
   {
     name: 'kernel exemption suppresses a definite mass rebuild',
-    facts: { maxRebuildCount: 1000, isExemptKernelUpdate: true },
+    facts: {
+      maxRebuildCount: 1000,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',
+    },
     expected: 'dismiss',
   },
   {
     name: 'kernel exemption suppresses a NixOS test rebuild',
-    facts: { rebuildsAllTests: true, isExemptKernelUpdate: true },
+    facts: {
+      rebuildsAllTests: true,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',
+    },
     expected: 'dismiss',
   },
   {
     name: 'Home Assistant exemption suppresses a mass rebuild',
     facts: {
+      head: 'wip-home-assistant',
       maxRebuildCount: 1500,
-      isExemptHomeAssistantUpdate: true,
     },
     expected: 'dismiss',
   },
   {
+    name: 'does not exempt a Home Assistant update above 1500 rebuilds',
+    facts: { head: 'wip-home-assistant', maxRebuildCount: 1501 },
+    expected: 'mass-rebuild',
+  },
+  {
     name: 'Home Assistant exemption does not suppress a NixOS test rebuild',
     facts: {
+      head: 'wip-home-assistant',
       maxRebuildCount: 1500,
       rebuildsAllTests: true,
-      isExemptHomeAssistantUpdate: true,
     },
     expected: 'nixos-rebuild',
   },
@@ -198,6 +212,9 @@ const cases: Array<{
 
 for (const { name, facts, expected } of cases) {
   test(name, () => {
-    assert.equal(decideTargetBranchReview({ ...defaults, ...facts }), expected)
+    assert.equal(
+      evaluateTargetBranchPolicy({ ...defaults, ...facts }).decision,
+      expected,
+    )
   })
 }
