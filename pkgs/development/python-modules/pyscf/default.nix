@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   lib,
+  stdenv,
   fetchFromGitHub,
 
   # build-sysetm
@@ -124,8 +125,13 @@ buildPythonPackage (finalAttrs: {
     "pyscf/pbc/gw"
     "pyscf/nac/test/test_sacasscf.py"
     "pyscf/grad/test/test_casscf.py"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # XCFun produces different numerical results on aarch64-linux.
+    "test_xcfun_gga_deriv3"
+    "test_vs_libxc_rks"
+    "test_vs_libxc_uks"
   ];
-
   meta = {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
