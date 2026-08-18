@@ -23,7 +23,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
         except json.decoder.JSONDecodeError as e:
             raise VarsError(f"Error parsing JSON: {e}")
     elif args.flake is not None:
-        expr = f"config: ({jsonify_source}) {{ inherit config; }}"
+        expr = f"configuration: ({jsonify_source}) {{ inherit configuration; }}"
         evalCommand = [
             "nix",
             "eval",
@@ -38,7 +38,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
     elif args.file is not None:
         expr = f"""
 ({jsonify_source}) {{
-    config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
+    configuration = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
         evalCommand = [

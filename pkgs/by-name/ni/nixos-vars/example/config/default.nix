@@ -38,7 +38,7 @@
     generators.derived = {
       backend = "age";
       dependencies = [ "example" ];
-      files.derived.local = false;
+      files.derived = { };
       script =
         pkgs:
         pkgs.writeScript "gen-derived" ''

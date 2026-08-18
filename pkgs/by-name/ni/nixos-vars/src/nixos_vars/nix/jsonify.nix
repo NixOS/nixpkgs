@@ -9,7 +9,7 @@
 # Note that this is *not* a NixOS module! This will be evaluated by the vars
 # CLI.
 {
-  config,
+  configuration,
   pkgsHost ? null,
   pkgsTarget ? null,
 }:
@@ -17,8 +17,8 @@ let
   pkgsTarget' =
     if pkgsTarget != null then
       pkgsTarget
-    else if config._type or null == "configuration" then
-      config.pkgs
+    else if configuration._type or null == "configuration" then
+      configuration.pkgs
     else
       import <nixpkgs> { };
 
@@ -29,11 +29,11 @@ let
   # If the configuration has been evaluated already, simply keep it that way.
   # Otherwise, evaluate it.
   cfg =
-    if config._type or null == "configuration" then
-      config.config.vars
+    if configuration._type or null == "configuration" then
+      configuration.config.vars
     else
       (import (pkgsTarget'.path + "/nixos/lib/eval-config.nix") {
-        modules = [ config ];
+        modules = [ configuration ];
       }).config.vars;
 
   evalDeferredPackage =
@@ -55,8 +55,8 @@ let
       drv.drvPath;
 in
 # Make this call idempotent
-if config._type or null == "vars-configuration" then
-  config
+if configuration._type or null == "vars-configuration" then
+  configuration
 else
   {
     _type = "vars-configuration";
