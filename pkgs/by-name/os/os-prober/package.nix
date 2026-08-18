@@ -16,14 +16,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.84";
+  version = "1.85";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "os-prober";
     rev = finalAttrs.version;
-    sha256 = "sha256-91UTiwg4qIi+aCzAto7tCd5WZFjI15XxR1/hZQ0fUa4=";
+    sha256 = "sha256-JK1+xzbl1EyHZ4E6pmQ5NDbtivZvFySHX+JkWodxyl4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
