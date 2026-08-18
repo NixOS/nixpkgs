@@ -9,7 +9,6 @@
   ninja,
   pkg-config,
   python3,
-  gettext,
   gst-plugins-base,
   gst-plugins-bad,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    gettext
     pkg-config
     python3
   ]
