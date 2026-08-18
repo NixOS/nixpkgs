@@ -57,7 +57,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lmms";
-  version = "1.2.2-unstable-2026-04-21";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
