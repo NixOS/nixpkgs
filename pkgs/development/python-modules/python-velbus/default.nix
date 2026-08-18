@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pkg-resources-backport,
   pyserial,
 }:
 
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-3eDfXPMO167QI/umLBjlHTBV67XQ8QYkg4EzfrRTw6M=";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  propagatedBuildInputs = [
+    pkg-resources-backport
+    pyserial
+  ];
 
   # Project has not tests
   doCheck = false;
