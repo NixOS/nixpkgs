@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       hustlerone
       yvnth
+      samiser
     ];
     platforms = lib.platforms.linux;
   };
