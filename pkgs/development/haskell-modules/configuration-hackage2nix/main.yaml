@@ -215,13 +215,10 @@ package-maintainers:
     - elynx-seq
     - elynx-tools
     - elynx-tree
-    - glasso
     - mcmc
     - pava
     - slynx
     - tlynx
-    - xmonad
-    - xmonad-contrib
   erictapen:
     - hakyll
   gridaphobe:
