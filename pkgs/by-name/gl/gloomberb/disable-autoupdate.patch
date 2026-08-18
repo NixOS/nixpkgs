@@ -1,0 +1,15 @@
+diff --git a/src/updater.ts b/src/updater.ts
+index 7ee2b1d8..5f1d7e3d 100644
+--- a/src/updater.ts
++++ b/src/updater.ts
+@@ -164,6 +164,10 @@ export function detectUpdateAction(
+   execPath = getRuntimeProcess()?.execPath ?? "",
+   argv = getRuntimeProcess()?.argv ?? [],
+ ): UpdateAction | null {
++  // Self-update rewrites the binary in place, which is impossible when running
++  // from the read-only Nix store. Disable it for nixpkgs builds.
++  if (execPath.includes("/nix/store/")) return null;
++
+   if (isMacAppBundleExecutable(execPath)) return null;
+   if (isBundledDesktopTuiRuntime(execPath, argv)) return null;
+ 
