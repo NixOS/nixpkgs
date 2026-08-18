@@ -5,41 +5,40 @@
   logs,
   fmt,
   ptime,
-  mirage-clock,
+  mirage-ptime,
   cmdliner,
-  lwt,
   alcotest,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "mirage-logs";
-  version = "2.1.0";
-
-  duneVersion = "3";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-logs/releases/download/v${finalAttrs.version}/mirage-logs-${finalAttrs.version}.tbz";
-    hash = "sha256-rorCsgw7QCQmjotr465KShQGWdoUM88djpwgqwBGnLs=";
+    hash = "sha256-ptt9/Dr9h+W3j/9SAHpWvKZnIgeuBn5oxj72kxiSZ1A=";
   };
 
   propagatedBuildInputs = [
     logs
     fmt
     ptime
-    mirage-clock
+    mirage-ptime
     cmdliner
   ];
 
   doCheck = true;
-  checkInputs = [
-    lwt
-    alcotest
-  ];
+  checkInputs = [ alcotest ];
 
   meta = {
-    description = "Reporter for the Logs library that writes log messages to stderr, using a Mirage `CLOCK` to add timestamps";
+    description = "Mirage reporter for the Logs library";
     homepage = "https://github.com/mirage/mirage-logs";
-    license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.vbgl ];
+    changelog = "https://raw.githubusercontent.com/mirage/mirage-logs/v${finalAttrs.version}/CHANGES.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      stepbrobd
+      vbgl
+    ];
+    teams = [ lib.teams.ngi ];
   };
 })
