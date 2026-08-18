@@ -1730,11 +1730,7 @@ mapAliases {
   nix_2_3 = throw "'nix_2_3' has been removed, because it was unmaintained and insecure."; # Converted to throw 2025-07-24
   nixbang = throw "'nixbang' has been removed because it was unmaintained upstream. Use nix-shell shebang instead'"; # Added 2026-07-02
   nixfmt-classic = throw "nixfmt-classic has been removed as it is deprecated and unmaintained." haskellPackages.nixfmt.bin; # Converted to throw 2026-07-01
-  nixfmt-rfc-style =
-    if lib.oldestSupportedReleaseIsAtLeast 2511 then
-      warnAlias "nixfmt-rfc-style is now the same as pkgs.nixfmt which should be used instead." nixfmt # Added 2025-07-14
-    else
-      nixfmt;
+  nixfmt-rfc-style = warnAlias "nixfmt-rfc-style is now the same as pkgs.nixfmt which should be used instead." nixfmt; # Added 2025-07-14
   nixForLinking = throw "nixForLinking has been removed, use `nixVersions.nixComponents_<version>` instead"; # Added 2025-08-14
   nixnote2 = throw "'nixnote2' has been removed as upstream has been unmaintained since 2017"; # Added 2026-04-26
   nixos-rebuild = nixos-rebuild-ng; # Added 2025-12-02
