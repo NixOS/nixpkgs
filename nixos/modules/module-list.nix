@@ -1831,6 +1831,8 @@
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
+  ./services/web-apps/prosody-filer.nix
+  ./services/web-apps/pterodactyl-panel.nix
   ./services/web-apps/readeck.nix
   ./services/web-apps/remark42.nix
   ./services/web-apps/reposilite.nix
