@@ -5183,8 +5183,11 @@ with pkgs;
 
   inherit (callPackage ../misc/optee-os { })
     buildOptee
-    opteeQemuArm
+    opteeAllwinnerA64
     opteeQemuAarch64
+    opteeQemuArm
+    opteeRockchipRK3399
+    opteeRockchipRK3588
     ;
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
