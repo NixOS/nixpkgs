@@ -271,6 +271,8 @@ let
 
         cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+        cmdliner-stdlib = callPackage ../development/ocaml-modules/cmdliner-stdlib { };
+
         cmdliner_1_0 = cmdliner.override { version = "1.0.4"; };
 
         cmdliner_1 = cmdliner.override { version = "1.3.0"; };
