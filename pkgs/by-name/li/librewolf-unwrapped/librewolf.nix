@@ -34,6 +34,9 @@ rec {
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
+    sed -i 's/5bc8c9bbe8c0eabe408d9a7cd7a8e6e09eee0ead817607643882b38a36d07c91/bddacbe056ce7458663a39dc99d5bb3434099aa69cae793cf0c57d4e54f5a6a4/g' third_party/rust/glean-core/.cargo-checksum.json
+    sed -i 's/c20989b1aa336b0849e96ec1b2beea1eab825ffd192c2c3a636e20f830b811d0/0b43fbc5f86c6c247c5189af58be425a829c3b09018c6b26589661eec9a5ad24/g' third_party/rust/glean-core/.cargo-checksum.json
+
     rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
     rm -rf toolkit/components/ml/vendor/openai
 
