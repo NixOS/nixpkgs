@@ -21889,6 +21889,12 @@
     githubId = 4908217;
     name = "Paho Lurie-Gregg";
   };
+  paige = {
+    email = "paigely@tuta.io";
+    github = "ssalggnikool";
+    githubId = 235818692;
+    name = "paige";
+  };
   pakhfn = {
     email = "pakhfn@gmail.com";
     github = "pakhfn";
