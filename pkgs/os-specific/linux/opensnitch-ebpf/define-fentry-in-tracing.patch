@@ -1,0 +1,31 @@
+--- a/common_defs.h
++++ b/common_defs.h
+@@ -1,6 +1,8 @@
+ #ifndef OPENSNITCH_COMMON_DEFS_H
+ #define OPENSNITCH_COMMON_DEFS_H
+ 
++#define CC_USING_FENTRY
++
+ #include <linux/sched.h>
+ #include <linux/ptrace.h>
+ #include <linux/byteorder/generic.h>
+diff --git a/ebpf_prog/opensnitch-dns.c b/ebpf_prog/opensnitch-dns.c
+index 13bd9b66..becc30e3 100644
+--- a/opensnitch-dns.c
++++ b/opensnitch-dns.c
+@@ -20,6 +20,7 @@
+ 
+ #define KBUILD_MODNAME "opensnitch-dns"
+ 
++#include "common_defs.h"
+ #include <linux/in.h>
+ #include <linux/in6.h>
+ #include <linux/ptrace.h>
+@@ -27,7 +28,6 @@
+ #include <net/sock.h>
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/tcp.h>
+-#include "common_defs.h"
+ #include "bpf_headers/bpf_helpers.h"
+ #include "bpf_headers/bpf_tracing.h"
+ 

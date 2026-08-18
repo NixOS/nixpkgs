@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/evilsocket/opensnitch/commit/614537c92ec82f54f76a45fb406ad2fb6e6fa618.patch?full_index=1";
       hash = "sha256-FCJfDhgmnm1GXPDaxr+YpVWTRrwBvjVzvGdZSFB6SqQ=";
     })
+    ./define-fentry-in-tracing.patch
   ];
 
   sourceRoot = "${src.name}/ebpf_prog";
