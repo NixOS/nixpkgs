@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,7 +25,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/cloudbase/garm-provider-incus/provider.Version=v${finalAttrs.version}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) garm-incus;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Incus external provider for GARM";

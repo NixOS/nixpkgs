@@ -7,6 +7,7 @@
   nix-update-script,
   npm-lockfile-fix,
   stdenv,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -69,6 +70,10 @@ buildGoModule (finalAttrs: {
         "--subpackage"
         "webapp"
       ];
+    };
+
+    tests = {
+      inherit (nixosTests) garm-incus;
     };
   };
 
