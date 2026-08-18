@@ -11,7 +11,6 @@
   nodejs,
 
   makeWrapper,
-  v2ray,
   v2ray-geoip,
   v2ray-domain-list-community,
   nix-update-script,
@@ -106,12 +105,7 @@ buildGoModule {
       --replace-fail 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
 
     wrapProgram $out/bin/v2rayA \
-      --prefix PATH ":" "${
-        lib.makeBinPath [
-          core
-          v2ray
-        ]
-      }" \
+      --prefix PATH ":" "${lib.makeBinPath [ core ]}" \
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
 
