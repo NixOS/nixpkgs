@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   poetry-core,
@@ -9,16 +9,22 @@
   # tests
   pytestCheckHook,
   pyyaml,
+
+  # passthru.tests
+  remarshal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tomlkit";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fRqey6MIZjghGxOBTqeckN1U3RGZNWQ3bzqpInH1x6M=";
+  src = fetchFromGitHub {
+    owner = "python-poetry";
+    repo = "tomlkit";
+    tag = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-6zPz07MdVgXIgmsTK7Sic9cHouP/BR8KAR0dN1hUEjU=";
   };
 
   build-system = [ poetry-core ];
@@ -30,11 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tomlkit" ];
 
+  passthru.tests = {
+    inherit remarshal;
+  };
+
   meta = {
-    homepage = "https://github.com/sdispater/tomlkit";
-    changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/python-poetry/tomlkit";
+    changelog = "https://github.com/python-poetry/tomlkit/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jakewaksbaum ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jakewaksbaum
+    ];
   };
-}
+})
