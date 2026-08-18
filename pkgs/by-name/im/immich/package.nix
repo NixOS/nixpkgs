@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
-    pnpm --filter immich... --filter immich-web... --filter @immich/plugin-core... build
+    pnpm --reporter=append-only --filter immich... --filter immich-web... --filter @immich/plugin-core... build
 
     runHook postBuild
   '';
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # install node_modules and built files in $out
     # upstream uses pnpm deploy to build their docker images
-    pnpm --filter immich deploy --prod --no-optional "$packageOut"
+    pnpm --reporter=append-only --filter immich deploy --prod --no-optional "$packageOut"
 
     # remove build artifacts that bloat the closure
     find "$packageOut/node_modules" \( \
