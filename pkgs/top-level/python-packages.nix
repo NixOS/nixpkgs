@@ -7390,6 +7390,8 @@ self: super: with self; {
 
   ha-iotawattpy = callPackage ../development/python-modules/ha-iotawattpy { };
 
+  ha-mcp = callPackage ../development/python-modules/ha-mcp { };
+
   ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs { };
