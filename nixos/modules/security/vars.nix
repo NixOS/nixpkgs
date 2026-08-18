@@ -3,7 +3,7 @@ let
   safeName = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
   cfg = config.vars;
 
-  delayedPackage =
+  deferredPackage =
     description:
     lib.mkOption {
       inherit description;
@@ -11,7 +11,7 @@ let
       example = pkgs: pkgs.writeShellScript "echo 'Hi!'";
     };
 
-  nullableDelayedPackage =
+  nullableDeferredPackage =
     description:
     lib.mkOption {
       inherit description;
@@ -31,29 +31,29 @@ let
           default = name;
         };
 
-        get = nullableDelayedPackage ''
+        get = nullableDeferredPackage ''
           Given $1=gen_name and $2=file_name, the script retrieves the
           respective secret to $out.
         '';
 
-        set = delayedPackage ''
+        set = deferredPackage ''
           Given $1=gen_name and $2=file_name, the script retrieves the
           respective secret from $in and stores it in the appropriate location.
         '';
 
-        exists = delayedPackage ''
+        exists = deferredPackage ''
           Given $1=gen_name and $2=file_name, the script exists with status
           code 0 if the secret exists, and with status code 42 otherwise.
 
           This script must not perform side effects.
         '';
 
-        delete = nullableDelayedPackage ''
+        delete = nullableDeferredPackage ''
           Given $1=gen_name and $2=file_name, the script deletes the respective
           secret if it does exist.
         '';
 
-        list = nullableDelayedPackage ''
+        list = nullableDeferredPackage ''
           A script that lists all files managed by this backend. Should output
           space-separated or newline-separated pairs of: generator_name
           file_name.
@@ -67,7 +67,7 @@ let
           This script must not perform side effects.
         '';
 
-        fixup = nullableDelayedPackage ''
+        fixup = nullableDeferredPackage ''
           This script will be run on every invocation of the CLI's generator
           command. Given $1=file_list in the same format used by `list`, the
           script performs any necessary updates to the secrets' files (e.g.
@@ -75,14 +75,14 @@ let
           but must be idempotent.
         '';
 
-        deploy.remote = nullableDelayedPackage ''
+        deploy.remote = nullableDeferredPackage ''
           Deploys every available file to the given machine. The list of files
           to deploy is provided as $1 in the same format used by `list`. Any
           additional information required by the deploy script can be provided
           by the user through environment variables.
         '';
 
-        deploy.local = nullableDelayedPackage ''
+        deploy.local = nullableDeferredPackage ''
           Deploys every available file to the machine with system root mounted
           at $1=system_root. The list of files to deploy is provided as $2 in
           the same format used by `list`. This is useful for fresh installs
@@ -188,7 +188,7 @@ let
           );
         };
 
-        script = delayedPackage ''
+        script = deferredPackage ''
           The script to run to generate the files. The script will be run with
           the following environment variables:
             - $in: The directory containing the output values of all declared
@@ -219,7 +219,7 @@ let
           default = name;
         };
 
-        script = delayedPackage ''
+        script = deferredPackage ''
           Given $1=prompt_type, $2=prompt_label, and optionally
           $3=prompt_description, the script runs the prompt by the user, then
           saves respective value to $out.
