@@ -4,35 +4,58 @@
   lib,
   version ? null,
 }:
-mkRocqDerivation {
 
-  pname = "stdlib";
-  repo = "stdlib";
-  owner = "rocq-prover";
-  opam-name = "rocq-stdlib";
+let
+  derivation = mkRocqDerivation {
 
-  inherit version;
-  defaultVersion =
-    let
-      case = case: out: { inherit case out; };
-    in
-    with lib.versions;
-    lib.switch rocq-core.version [
-      (case (range "9.3" "9.3") "9.2.0")
-      (case (range "9.2" "9.2") "9.1.0")
-      (case (range "9.0" "9.1") "9.0.0")
-    ] null;
-  releaseRev = v: "V${v}";
+    pname = "stdlib";
+    repo = "stdlib";
+    owner = "rocq-prover";
+    opam-name = "rocq-stdlib";
 
-  release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
-  release."9.1.0".sha256 = "sha256-D/kCMsJDg5OnP37GhvXIr2Fi/xCbgCCzoikKx5rL6p4=";
-  release."9.2.0".sha256 = "sha256-ySNY8XUQOH6B1B2p+39jdJ7UjIMrRDl499JJwpLEHuM=";
+    inherit version;
+    defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
+      with lib.versions;
+      lib.switch rocq-core.version [
+        (case (range "9.3" "9.3") "9.2.0")
+        (case (range "9.2" "9.2") "9.1.0")
+        (case (isLe "9.1") "9.0.0")
+      ] null;
+    releaseRev = v: "V${v}";
 
-  mlPlugin = true;
+    release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
+    release."9.1.0".sha256 = "sha256-D/kCMsJDg5OnP37GhvXIr2Fi/xCbgCCzoikKx5rL6p4=";
+    release."9.2.0".sha256 = "sha256-ySNY8XUQOH6B1B2p+39jdJ7UjIMrRDl499JJwpLEHuM=";
 
-  meta = {
-    description = "Rocq Proof Assistant -- Standard Library";
-    license = lib.licenses.lgpl21Only;
+    mlPlugin = true;
+
+    meta = {
+      description = "Rocq Proof Assistant -- Standard Library";
+      license = lib.licenses.lgpl21Only;
+    };
+
   };
-
-}
+  # the < 9.0 above is artificial as stdlib was included in Coq before
+  patched-derivation = derivation.overrideAttrs (
+    o:
+    lib.optionalAttrs
+      (rocq-core.rocq-version != "dev" && lib.versions.isLe "8.20" rocq-core.rocq-version)
+      {
+        configurePhase = ''
+          echo no configuration
+        '';
+        buildPhase = ''
+          echo building nothing
+        '';
+        installPhase = ''
+          echo installing nothing
+          # Make an output directory rather than a file, so this is more friendly to buildEnv
+          mkdir $out
+        '';
+      }
+  );
+in
+patched-derivation

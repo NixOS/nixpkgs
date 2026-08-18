@@ -1,0 +1,12 @@
+diff --git a/external/llvm/llvm_patch_sources.cmake b/external/llvm/llvm_patch_sources.cmake
+index 5ffcfb260..0c488aec9 100644
+--- a/igc/external/llvm/llvm_patch_sources.cmake
++++ b/igc/external/llvm/llvm_patch_sources.cmake
+@@ -20,6 +20,7 @@ if(EXISTS "${IGC_LLVM_SOURCE_DIR}")
+ endif()
+ 
+ # Copy stock LLVM sources to IGC_LLVM_SOURCE_DIR to apply patches.
++file(MAKE_DIRECTORY ${IGC_LLVM_WORKSPACE_SRC})
+ message(STATUS "[LLVM] : Copying stock LLVM sources ${IGC_OPTION__LLVM_SOURCES_DIR} to ${IGC_LLVM_SOURCE_DIR}")
+ execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${IGC_OPTION__LLVM_SOURCES_DIR}/.git ${IGC_LLVM_WORKSPACE_SRC}/.git)
+ execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${IGC_OPTION__LLVM_SOURCES_DIR}/llvm ${IGC_LLVM_SOURCE_DIR})
