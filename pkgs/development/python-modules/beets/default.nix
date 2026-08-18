@@ -198,15 +198,13 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths =
-    finalAttrs.finalPackage.passthru.plugins.disabledTestPaths
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky: several tests fail randomly with:
-      # if not self._poll(timeout):
-      #   raise Empty
-      #   _queue.Empty
-      "test/plugins/test_bpd.py"
-    ];
+  disabledTestPaths = finalAttrs.finalPackage.passthru.plugins.disabledTestPaths ++ [
+    # Flaky: several tests fail randomly with:
+    # if not self._poll(timeout):
+    #   raise Empty
+    #   _queue.Empty
+    "test/plugins/test_bpd.py"
+  ];
   disabledTests = extraDisabledTests ++ [
     # touches network
     "test_merge_duplicate_album"
