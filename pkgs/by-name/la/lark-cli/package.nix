@@ -26,7 +26,8 @@ buildGoModule (finalAttrs: {
   subPackages = [ "." ];
 
   metaData = fetchurl {
-    name = "meta_data.json";
+    pname = "meta_data.json";
+    inherit (finalAttrs) version;
     url = "https://open.feishu.cn/api/tools/open/api_definition?protocol=meta&client_version=v${finalAttrs.version}";
     hash = "sha256-ihPrq/VzFIBnlrKxE2762NpQZzBRk7ylM3Mvg0iJfCE=";
     postFetch = ''
