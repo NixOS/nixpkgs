@@ -55,6 +55,7 @@ let
         ];
 
         strictDeps = true;
+        __structuredAttrs = true;
 
         enableParallelBuilding = true;
 
