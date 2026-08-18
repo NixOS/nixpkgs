@@ -45,6 +45,11 @@ let
     x86_64-linux.target = "i386";
   };
 
+  corebootSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386";
+  };
+
   efiSystemsBuild = {
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
@@ -295,6 +300,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals corebootSupport [
     "--with-platform=coreboot"
+    "--target=${corebootSystemsBuild.${stdenv.hostPlatform.system}.target}"
     "--enable-boot-time" # Log boot times. Might be useful for debugging loading issues.
   ];
 
@@ -305,7 +311,7 @@ stdenv.mkDerivation rec {
     else if ieee1275Support then
       "${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}-ieee1275"
     else if corebootSupport then
-      "i386"
+      "${corebootSystemsBuild.${stdenv.hostPlatform.system}.target}-coreboot"
     else
       lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
@@ -354,6 +360,8 @@ stdenv.mkDerivation rec {
         lib.attrNames xenSystemsBuild
       else if xenPvhSupport then
         lib.attrNames xenPvhSystemsBuild
+      else if corebootSupport then
+        lib.attrNames corebootSystemsBuild
       else
         lib.platforms.gnu ++ lib.platforms.linux;
 
