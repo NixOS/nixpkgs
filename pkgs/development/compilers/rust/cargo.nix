@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage.override
     pname = "cargo";
     inherit (rustc.unwrapped) version src;
 
-    patches = [
+    patches = lib.optionals (lib.versionOlder rustc.unwrapped.version "1.97.0") [
       (fetchpatch {
         name = "CVE-2026-5222.patch";
         url = "https://github.com/rust-lang/cargo/commit/c4d63a44234de22dc745231c416b80ed848d997f.patch";
