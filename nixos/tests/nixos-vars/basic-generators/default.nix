@@ -11,11 +11,11 @@
       system.extraDependencies = [
         (import ../collect-vars-scripts.nix {
           inherit pkgs;
-          config = ./config/config1.nix;
+          configuration = ./config/config1.nix;
         })
         (import ../collect-vars-scripts.nix {
           inherit pkgs;
-          config = ./config/config2.nix;
+          configuration = ./config/config2.nix;
         })
       ];
     };

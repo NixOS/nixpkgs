@@ -1,7 +1,8 @@
 import json
 import subprocess
+import functools
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 from .error import VarsError
 from .args import VarsArgs
 from .config import VarsConfig
@@ -39,6 +40,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
         expr = f"""
 ({jsonify_source}) {{
     configuration = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
+    pkgsDefault = import {nixpkgs_path()} {{}};
 }}
 """
         evalCommand = [
@@ -62,3 +64,18 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
         return json.loads(result.stdout)
     except subprocess.CalledProcessError as e:
         raise VarsError(f"Error evaluating nix expression:\n{e.stderr}")
+
+
+@functools.cache
+def nixpkgs_path() -> Optional[str]:
+    try:
+        result = subprocess.run(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return None
