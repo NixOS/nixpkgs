@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lightning-pool";
-  version = "0.6.4-beta";
+  version = "0.7.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "pool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lSc/zOZ5VpmaZ7jrlGvSaczrgOtAMS9tDUxcMoFdBmQ=";
+    hash = "sha256-jhHshr8THkact/xTVPoD5GyDxj+Cot7fFU8riPMSsYg=";
   };
 
-  vendorHash = "sha256-DD27zUW524qe9yLaVPEzw/c4sSzlH89HMw0PdtNYEhg=";
+  vendorHash = "sha256-zl6KwVWwk6uFPqMEd7e0pw3TbtP8IEwTaVJZd59dHTA=";
 
   subPackages = [
     "cmd/pool"
