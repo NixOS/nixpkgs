@@ -47,6 +47,7 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
             "--json",
             "--strict",
             "--expr",
+            "--read-write-mode",
             expr,
         ]
 

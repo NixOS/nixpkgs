@@ -201,12 +201,10 @@ def deploy_secrets(
         inputLines.append(f"{generator} {filename}")
 
     local = args.local is not None
-    script = backend.deployLocal if local else backend.deploy
+    script = backend.deployLocal if local else backend.deployRemote
     if script is None:
-        scriptName = "deployLocal" if local else "deploy"
-        raise VarsError(
-            f"Backend '{backend.name}' has no '{scriptName}' script, yet the generator ''{generator.name}' requires one"
-        )
+        scriptName = "deploy.local" if local else "deploy.remote"
+        raise VarsError(f"Backend '{backend.name}' has no '{scriptName}' script")
 
     binary = build_binary(script)
     try:
