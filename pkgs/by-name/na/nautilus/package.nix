@@ -85,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     gnome-user-share
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
     gtk4
     libadwaita
     libportal-gtk4
