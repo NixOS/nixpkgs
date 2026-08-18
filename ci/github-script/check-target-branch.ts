@@ -6,9 +6,13 @@ import type { GitHub } from '@actions/github/lib/utils'
 // They do seem quite similar, but this needs to run after eval,
 // and prepare.js obviously doesn't.
 
-const { classify, split } = require('../supportedBranches.js')
+const { split } = require('../supportedBranches.js')
 const { readFile } = require('node:fs/promises')
 const { postReview, dismissReviews } = require('./reviews.js')
+const {
+  decideTargetBranchReview,
+  getTargetBranchPolicy,
+} = require('./check-target-branch-policy.ts')
 
 const reviewKey = 'check-target-branch'
 
@@ -152,11 +156,11 @@ async function checkTargetBranch({
   ).data
   const base = prInfo.base.ref
   const head = prInfo.head.ref
-  const baseClassification = classify(base)
-  const headClassification = classify(head)
+  const { shouldSkipDevelopmentMerge, shouldCheckMassRebuild } =
+    getTargetBranchPolicy({ base, head })
 
   // Don't run on, e.g., staging-nixos to master merges.
-  if (headClassification.type.includes('development')) {
+  if (shouldSkipDevelopmentMerge) {
     core.info(
       `Skipping checkTargetBranch: PR is from a development branch (${head})`,
     )
@@ -172,7 +176,7 @@ async function checkTargetBranch({
     return
   }
   // Don't run on PRs against staging branches, wip branches, haskell-updates, etc.
-  if (!baseClassification.type.includes('primary')) {
+  if (!shouldCheckMassRebuild) {
     core.info(
       `Skipping checkTargetBranch: PR is against a non-primary base branch (${base})`,
     )
@@ -214,6 +218,14 @@ async function checkTargetBranch({
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
   const isExemptHomeAssistantUpdate =
     maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+  const decision = decideTargetBranchReview({
+    base,
+    head,
+    maxRebuildCount,
+    rebuildsAllTests,
+    isExemptKernelUpdate,
+    isExemptHomeAssistantUpdate,
+  })
 
   core.info(
     [
@@ -234,19 +246,11 @@ async function checkTargetBranch({
     maxRebuildCount,
   }
 
-  if (
-    maxRebuildCount >= 1000 &&
-    !isExemptHomeAssistantUpdate &&
-    !isExemptKernelUpdate
-  ) {
+  if (decision === 'mass-rebuild') {
     await postMassRebuildReview(reviewFacts)
-  } else if (rebuildsAllTests && !isExemptKernelUpdate) {
+  } else if (decision === 'nixos-rebuild') {
     await postNixosRebuildReview(reviewFacts)
-  } else if (
-    maxRebuildCount >= 500 &&
-    !isExemptKernelUpdate &&
-    !isExemptHomeAssistantUpdate
-  ) {
+  } else if (decision === 'possible-mass-rebuild') {
     await postPossibleMassRebuildReview(reviewFacts)
   } else {
     core.info('checkTargetBranch: this PR is against an appropriate branch.')
