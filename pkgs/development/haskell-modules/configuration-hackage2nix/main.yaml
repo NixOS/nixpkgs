@@ -353,8 +353,6 @@ package-maintainers:
     - xmonad-contrib
   phijor:
     - cornelis
-  poscat:
-    - hinit
   psibi:
     - path-pieces
     - persistent
