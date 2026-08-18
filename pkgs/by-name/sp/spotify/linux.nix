@@ -215,6 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = meta // {
     maintainers = with lib.maintainers; [
+      letgamer
       ma27
     ];
   };
