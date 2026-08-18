@@ -11055,6 +11055,12 @@
     githubId = 79340822;
     keys = [ { fingerprint = "3582 5B85 66C8 4F36 45C7  EC42 809F 7938 9CB1 8650"; } ];
   };
+  havunen = {
+    email = "sampo.kivisto@live.fi";
+    github = "havunen";
+    githubId = 2021355;
+    name = "Sampo Kivistö";
+  };
   hawkw = {
     email = "eliza@elizas.website";
     github = "hawkw";
