@@ -41,18 +41,18 @@ let
   auroraSrc = fetchFromGitHub {
     owner = "encounter";
     repo = "aurora";
-    rev = "cb2c340d6cde6827387f14c31ce19e5f28a40e09";
-    hash = "sha256-fiAe5DChCFeakI3pga/g0tXd27osnhQtMBQchuP2NwQ=";
+    rev = "22351fb0b76a4f4f2c4a4dff95aa300101e861aa";
+    hash = "sha256-gDY09IKlTu1Pj7mKw4eQYVXFDJ7j/aTp0iT/Ke93s6s=";
   };
   dawnSrc = fetchzip (
     {
       x86_64-linux = {
-        url = "https://github.com/encounter/dawn-build/releases/download/v20260523.201736/dawn-linux-x86_64.tar.gz";
-        hash = "sha256-KkdlSeiaw2gbQa+phZOpgbequshxQaFITzFdiuGBZvc=";
+        url = "https://github.com/encounter/dawn-build/releases/download/v20260603.191052/dawn-linux-x86_64.tar.gz";
+        hash = "sha256-yTanM4TUIv6akgpt2tai/2W6q4RAt48CxKobRgxK8WU=";
       };
       aarch64-linux = {
-        url = "https://github.com/encounter/dawn-build/releases/download/v20260523.201736/dawn-linux-aarch64.tar.gz";
-        hash = "sha256-accDTIBzgByQ8Rk2a1dAm85s8hj9SYI7NoHkih0vvAg=";
+        url = "https://github.com/encounter/dawn-build/releases/download/v20260603.191052/dawn-linux-aarch64.tar.gz";
+        hash = "sha256-C9pMaUOkSknwQfIw45+WIFve+noTiqud+RiQ0/kV4fA=";
       };
     }
     .${stdenv.hostPlatform.system}
@@ -77,13 +77,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dusklight";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "TwilitRealm";
     repo = "dusklight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TarPuCE6bjn4nGtHU54pE2gAo/dIgTyghWn7hjdFFgk=";
+    hash = "sha256-wrbsgK9lAiO3+qfQcQ/o+6zEFS27CymJm76FAEanrdM=";
   };
 
   strictDeps = true;
@@ -154,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "AURORA_SDL3_PROVIDER" "system")
     (lib.cmakeFeature "AURORA_NOD_PROVIDER" "system")
     (lib.cmakeFeature "AURORA_NOD_LINKAGE" "static")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS_INIT" "-include cstring")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
     (lib.cmakeBool "DUSK_ENABLE_SENTRY_NATIVE" false)
   ];
