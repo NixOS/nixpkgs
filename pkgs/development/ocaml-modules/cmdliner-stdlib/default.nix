@@ -9,8 +9,6 @@ buildDunePackage (finalAttrs: {
   pname = "cmdliner-stdlib";
   version = "1.0.1";
 
-  minimalOCamlVersion = "4.08";
-
   src = fetchurl {
     url = "https://github.com/mirage/cmdliner-stdlib/releases/download/${finalAttrs.version}/cmdliner-stdlib-${finalAttrs.version}.tbz";
     hash = "sha256-GbW5Y8Ibb+mNL2LkBOU2EcO8x7r1OO/QH1mO+Sgleq4=";
