@@ -29783,6 +29783,13 @@
     githubId = 5356506;
     name = "Tricia Tan";
   };
+  tristan957 = {
+    name = "Tristan Partin";
+    email = "tristan@partin.io";
+    github = "tristan957";
+    githubId = 11936772;
+    matrix = "@tristan957:matrix.org";
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";
