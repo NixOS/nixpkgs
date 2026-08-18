@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fakechroot";
-  version = "2.20.1";
+  version = "master/2.20.1";
 
   src = fetchFromGitHub {
     owner = "dex4er";
     repo = "fakechroot";
     rev = finalAttrs.version;
-    sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
+    sha256 = "sha256-i6FIkX1+UBUOuVxtML3MRa9lYsA65MJT/khnjfjo7Ws=";
   };
 
   # Use patch from https://github.com/dex4er/fakechroot/pull/46 , remove once merged!
