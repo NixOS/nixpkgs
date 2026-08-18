@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  msrest,
   setuptools,
 }:
 
@@ -26,7 +25,6 @@ buildPythonPackage (finalAttrs: {
     azure-common
     azure-mgmt-core
     isodate
-    msrest
   ];
 
   # Module has no tests
