@@ -5,12 +5,6 @@
 # early and make bisection less painful.
 
 {
-  nixpkgs ? {
-    outPath = (import ../../lib).cleanSource ../..;
-    revCount = 1234;
-    shortRev = "abcdef";
-    revision = "0000000000000000000000000000000000000000";
-  },
   # The platform doubles for which we build Nixpkgs.
   supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -30,9 +24,11 @@ let
 
   inherit (release-lib)
     all
+    linux
     mapTestOn
     ;
 in
 mapTestOn {
   stdenv = all;
+  cargo = linux;
 }
