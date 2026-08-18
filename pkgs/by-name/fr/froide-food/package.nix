@@ -9,32 +9,45 @@
   froide-govplan,
   gettext,
   gdal,
+  fetchPnpmDeps,
+  pnpm_10,
 }:
 let
-  python = python3Packages.python.override {
-    packageOverrides = self: super: {
-      django = super.django_5.override { withGdal = true; };
-      django_fix = self.django;
-    };
-  };
+  inherit (froide) python;
+  # python = python3Packages.python.override {
+  #   packageOverrides = self: super: {
+  #     django = super.django_5.override { withGdal = true; };
+  #     django_fix = self.django;
+  #   };
+  # };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "froide-food";
-  version = "0-unstable-2025-09-18";
+  version = "0-unstable-2026-02-02";
   pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide-food";
     # No tagged release yet
-    rev = "a70bfc44e56e5d2338dc4ba3111ed376152d550b";
-    hash = "sha256-yzlT0iEcmUMQwlNj/MyW/GavLupGEMk2e0JrUV/z9g0=";
+    rev = "29b2817b7545a4d06110d40cfd3ab16f3383f58e";
+    hash = "sha256-EgucdiMh0i9dIpQ+mq+3aCkOIGNgzLmkJnS2a3mp2Yc=";
   };
 
   patches = [
     ./add_manage_py.patch
-    #./add_settings_py.patch
+    ./add_settings_py.patch
   ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-5AxyrK91Dm58b/32KJmVysno4WizXBG71IluwS5JT2Q=";
+  };
 
   build-system = [ python.pkgs.setuptools ];
 
@@ -47,12 +60,30 @@ python.pkgs.buildPythonApplication rec {
 
   dependencies = with python.pkgs; [
     django-amenities
-    django_fix
+    # django_fix
     geopy
-    psycopg2
     python-dateutil
 
     requests
+
+    celery
+    django-configurations
+    dj-database-url
+    psycopg
+
+    # Patch froide to avoid loading account module
+    (toPythonModule (
+      froide.overridePythonAttrs (prev: {
+        patches = prev.patches ++ [ ./froide_avoid_loading_account_module.patch ];
+        doCheck = false;
+      })
+    ))
+
+    django-filingcabinet
+    django-cms
+    djangocms-alias
+    django-sekizai
+    django-cors-headers
   ];
 
   #env.DJANGO_SETTINGS_MODULE = "froide_food.settings";
@@ -67,7 +98,7 @@ python.pkgs.buildPythonApplication rec {
     cp manage.py $out/${python.sitePackages}/froide_food/
     cp -r frontend $out/${python.sitePackages}/froide_food/
     makeWrapper $out/${python.sitePackages}/froide_food/manage.py $out/bin/froide-food \
-      --prefix PYTHONPATH : ${passthru.pythonPath}:$out/${python.sitePackages}
+      --prefix PYTHONPATH : ${finalAttrs.passthru.pythonPath}:$out/${python.sitePackages}
   '';
 
   passthru = {
@@ -75,7 +106,7 @@ python.pkgs.buildPythonApplication rec {
       inherit (nixosTests) froide-food;
     };
     inherit python;
-    pythonPath = "${python.pkgs.makePythonPath dependencies}";
+    pythonPath = "${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}";
   };
 
   meta = {
@@ -86,4 +117,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "froide-food";
   };
 
-}
+})

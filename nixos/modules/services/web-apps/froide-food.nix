@@ -192,6 +192,7 @@ in
             PYTHONPATH = "${pkg.pythonPath}:${pkg}/${pkg.python.sitePackages}";
             GDAL_LIBRARY_PATH = "${pkgs.gdal}/lib/libgdal.so";
             GEOS_LIBRARY_PATH = "${pkgs.geos}/lib/libgeos_c.so";
+            DJANGO_CONFIGURATION = "Production";
           }
           // lib.optionalAttrs (cfg.secretKeyFile != null) {
             SECRET_KEY_FILE = cfg.secretKeyFile;
@@ -210,7 +211,7 @@ in
           script = ''
             ${pkg.python.pkgs.uvicorn}/bin/uvicorn --uds /run/froide-food/froide-food.socket \
               --app-dir ${pkg}/${pkg.python.sitePackages}/froide_food \
-              project.asgi:application
+              froide_food.asgi:application
           '';
         };
       };
