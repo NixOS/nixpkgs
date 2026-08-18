@@ -239,11 +239,14 @@ in
 
           serviceConfig = commonConfig // {
             Restart = "always";
-            ExecStartPre = [
-              "${pkg}/opt/healthchecks/manage.py collectstatic --no-input"
-              "${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input"
-            ]
-            ++ lib.optionals (cfg.settings.DEBUG != "True") [ "${pkg}/opt/healthchecks/manage.py compress" ];
+            ExecStartPre =
+              lib.optionals (cfg.settings.DEBUG != "True") [
+                "${pkg}/opt/healthchecks/manage.py compress"
+              ]
+              ++ [
+                "${pkg}/opt/healthchecks/manage.py collectstatic --no-input"
+                "${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input"
+              ];
             ExecStart = ''
               ${pkgs.python3Packages.gunicorn}/bin/gunicorn hc.wsgi \
                 --bind ${cfg.listenAddress}:${toString cfg.port} \

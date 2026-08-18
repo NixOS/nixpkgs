@@ -11,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vega-cli";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vega";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YO3YzTRNJKDOgCxMXnw2P2d1ZN79Db3//L9iLjDGiyM=";
+    hash = "sha256-0b040dKo3QZQhR5blZpHVKE5E060f5sdm/qgBZrV1JU=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
     mv lerna.json.tmp lerna.json
   '';
 
-  npmDepsHash = "sha256-mBe1fHnhor7ZR8CuRNs1zD7JzaZXZI5VM7mdAieVKqE=";
+  npmDepsHash = "sha256-VZweWyBxZ702FNr5KV5lkukp8MctTfSbPzJEaEEqgi8=";
 
   npmWorkspace = "vega-cli";
 

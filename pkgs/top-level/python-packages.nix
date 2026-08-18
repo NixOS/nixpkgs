@@ -12978,6 +12978,8 @@ self: super: with self; {
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
+  owlrl = callPackage ../development/python-modules/owlrl { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
@@ -14748,6 +14750,8 @@ self: super: with self; {
 
   pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
 
+  pyduktape2 = callPackage ../development/python-modules/pyduktape2 { };
+
   pyduotecno = callPackage ../development/python-modules/pyduotecno { };
 
   pydy = callPackage ../development/python-modules/pydy { };
@@ -16079,6 +16083,8 @@ self: super: with self; {
   pysfcgal = callPackage ../development/python-modules/pysfcgal { };
 
   pysftp = callPackage ../development/python-modules/pysftp { };
+
+  pyshacl = callPackage ../development/python-modules/pyshacl { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
 
@@ -18424,6 +18430,8 @@ self: super: with self; {
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
+  sanic-cors = callPackage ../development/python-modules/sanic-cors { };
+
   sanic-ext = callPackage ../development/python-modules/sanic-ext { };
 
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
@@ -18789,6 +18797,8 @@ self: super: with self; {
   sgp4 = callPackage ../development/python-modules/sgp4 { };
 
   sh = callPackage ../development/python-modules/sh { };
+
+  shacl2code = callPackage ../development/python-modules/shacl2code { };
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
@@ -19358,6 +19368,8 @@ self: super: with self; {
   spdx = callPackage ../development/python-modules/spdx { };
 
   spdx-license-list = callPackage ../development/python-modules/spdx-license-list { };
+
+  spdx-python-model = callPackage ../development/python-modules/spdx-python-model { };
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
@@ -21626,6 +21638,8 @@ self: super: with self; {
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
   types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
+
+  types-jsonschema = callPackage ../development/python-modules/types-jsonschema { };
 
   types-lxml = callPackage ../development/python-modules/types-lxml { };
 
