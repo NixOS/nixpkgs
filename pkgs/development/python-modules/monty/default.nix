@@ -112,6 +112,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/materialyzeai/monty";
     changelog = "https://github.com/materialyzeai/monty/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ psyanticy ];
+    maintainers = with lib.maintainers; [
+      psyanticy
+      berquist
+    ];
   };
 }
