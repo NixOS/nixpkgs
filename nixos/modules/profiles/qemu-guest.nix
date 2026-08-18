@@ -10,6 +10,7 @@
     "virtio_mmio"
     "virtio_blk"
     "virtio_scsi"
+    "virtio_iommu"
     "9p"
     "9pnet_virtio"
     "virtiofs"
