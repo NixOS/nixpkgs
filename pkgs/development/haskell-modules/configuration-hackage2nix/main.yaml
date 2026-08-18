@@ -172,10 +172,6 @@ package-maintainers:
     - universe
     - universe-some
     - warp
-  Anton-Latukha:
-    - hnix
-    - hnix-store-core
-    - hnix-store-remote
   artem:
     - BNFC-meta
     - alex-meta
