@@ -14,18 +14,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonfire-nvr";
-  version = "0.7.31";
+  version = "0.7.32";
 
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QgsaiWcXeU4y7z9mcqUAl4mQ/M4p38yRjOB/4MKlpVA=";
+    hash = "sha256-TPyH7kbI09qkwT1Y6vJussYRSpUH12rLWK+ruXrI/Ts=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  cargoHash = "sha256-TDFe5pD+8eSwvw0h9GLM+JfODlSBU1CO8fw4FVjy8xk=";
+  cargoHash = "sha256-4/jit53vE2D8BMulFEChv+KRImKzjvIczmZgP90KZRI=";
 
   env.VERSION = "v${finalAttrs.version}";
 
