@@ -173,10 +173,10 @@ in
     list = pkgs: ageScript pkgs "list";
     delete = pkgs: ageScript pkgs "delete";
     fixup = pkgs: ageScript pkgs "fixup";
-    deployLocal = pkgs: ageScript pkgs "deploy-local";
-    deploy = lib.mkIf (cfg.ssh.target != null) (
+    deploy.local = pkgs: ageScript pkgs "deploy-local";
+    deploy.remote = lib.mkIf (cfg.ssh.target != null) (
       pkgs:
-      pkgs.writeScript "deploy" ''
+      pkgs.writeScript "deploy-remote" ''
         #!/bin/sh
         set -euo pipefail
         ${ageScript pkgs "deploy"} | ssh "${cfg.ssh.target}" -i "${cfg.ssh.identity}" '

@@ -39,7 +39,7 @@ class VarsGeneratorBackend:
     delete: Optional[str]
     list: Optional[str]
     fixup: Optional[str]
-    deploy: Optional[str]
+    deployRemote: Optional[str]
     deployLocal: Optional[str]
 
     def from_jsom(name: str, json: Any) -> Self:
@@ -51,8 +51,8 @@ class VarsGeneratorBackend:
             delete=json.get("delete"),
             list=json.get("list"),
             fixup=json.get("fixup"),
-            deploy=json["deploy"],
-            deployLocal=json.get("deployLocal"),
+            deployRemote=json["deploy"].get("remote"),
+            deployLocal=json["deploy"].get("local"),
         )
 
 
@@ -62,7 +62,7 @@ class VarsFile:
     local: bool
 
     def from_jsom(name: str, json: Any) -> Self:
-        return VarsFile(name=name, deploy=json["deploy"], secret=json["secret"])
+        return VarsFile(name=name, local=json["local"])
 
 
 @dataclass

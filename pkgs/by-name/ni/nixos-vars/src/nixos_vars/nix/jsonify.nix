@@ -81,8 +81,8 @@ else
       delete = evalDeferredPackage backend.delete;
       list = evalDeferredPackage backend.list;
       fixup = evalDeferredPackage backend.fixup;
-      deploy = evalDeferredPackage backend.deploy;
-      deployLocal = evalDeferredPackage backend.deployLocal;
+      deploy.local = evalDeferredPackage backend.deploy.local;
+      deploy.remote = evalDeferredPackage backend.deploy.remote;
     }) cfg.generatorBackends;
 
     generators = lib.mapAttrs (_: generator: {

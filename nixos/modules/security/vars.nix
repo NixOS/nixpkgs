@@ -75,14 +75,14 @@ let
           but must be idempotent.
         '';
 
-        deploy = nullableDelayedPackage ''
+        deploy.remote = nullableDelayedPackage ''
           Deploys every available file to the given machine. The list of files
           to deploy is provided as $1 in the same format used by `list`. Any
           additional information required by the deploy script can be provided
           by the user through environment variables.
         '';
 
-        deployLocal = nullableDelayedPackage ''
+        deploy.local = nullableDelayedPackage ''
           Deploys every available file to the machine with system root mounted
           at $1=system_root. The list of files to deploy is provided as $2 in
           the same format used by `list`. This is useful for fresh installs
