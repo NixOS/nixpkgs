@@ -6,13 +6,13 @@
 
 pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "zsnes2";
-  version = "2.1.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "zsnes";
     tag = finalAttrs.version;
-    hash = "sha256-jH1NoodprQlUSJHWz0gjM6LdgJtE6AvQ6/7hQQCUl5U=";
+    hash = "sha256-GmfCqMwdGVlWlmWKYjpgdnH79nh6R0wsIujRTpABj44=";
   };
 
   nativeBuildInputs = [

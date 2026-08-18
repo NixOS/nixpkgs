@@ -3,7 +3,10 @@
   src,
   version,
 
+  lib,
   buildGoModule,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,6 +26,17 @@ buildGoModule (finalAttrs: {
     "-X main.version=v${finalAttrs.version}"
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd veans \
+      --bash <($out/bin/veans completion bash) \
+      --zsh <($out/bin/veans completion zsh) \
+      --fish <($out/bin/veans completion fish)
+  '';
+
   # needs a running vikunja instance
   doCheck = false;
 
@@ -30,5 +44,6 @@ buildGoModule (finalAttrs: {
     description = "A beans-shaped CLI for Vikunja";
     homepage = "https://vikunja.io/docs/veans/";
     mainProgram = "veans";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
