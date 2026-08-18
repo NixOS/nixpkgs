@@ -60,6 +60,8 @@ buildPythonPackage (finalAttrs: {
     "test/common/test_utils.py"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Repository of cryptography-related data";
     homepage = "https://gitlab.com/coroner/cryptodatahub";

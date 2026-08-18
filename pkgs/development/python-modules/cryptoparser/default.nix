@@ -62,6 +62,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "cryptoparser" ];
 
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
   meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
