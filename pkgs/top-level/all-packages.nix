@@ -618,6 +618,7 @@ with pkgs;
             byacc = buildPackages.byacc.override { fetchurl = stdenv.fetchurlBoot; };
             keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
           };
+          scpSupport = !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin;
           nghttp2 = buildPackages.nghttp2.override {
             fetchurl = stdenv.fetchurlBoot;
             inherit pkg-config;

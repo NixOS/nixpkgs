@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Avoid messing with libnghttp2.
       curl_ = curlMinimal.override (prevArgs: {
         http2Support = false;
-        scpSupport = false;
       });
 
       unpackScript = writeText "bootstrap-tools-unpack.sh" ''

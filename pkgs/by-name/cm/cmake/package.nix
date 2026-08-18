@@ -115,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       (curlMinimal.override {
         # TODO: remove this override on staging
         gssSupport = true;
+        scpSupport = !stdenv.hostPlatform.isSunOS;
       })
       expat
       libarchive

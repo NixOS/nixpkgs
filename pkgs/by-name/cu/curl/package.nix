@@ -12,6 +12,7 @@ curlMinimal.override (
     http3Support = true;
     idnSupport = true;
     pslSupport = true;
+    scpSupport = !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin;
     zstdSupport = true;
 
     gssSupport = !(curlMinimal.override { gssSupport = true; }).meta.broken;
