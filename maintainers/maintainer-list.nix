@@ -506,6 +506,12 @@
     githubId = 15805292;
     name = "Abdirahman Osman";
   };
+  abhi-kr-2100 = {
+    email = "abhi.kr.2100@gmail.com";
+    github = "abhi-kr-2100";
+    githubId = 66527624;
+    name = "Abhishek Kumar";
+  };
   abhi18av = {
     email = "abhi18av@gmail.com";
     github = "abhi18av";
