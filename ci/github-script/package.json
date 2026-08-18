@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --build",
-    "test": "npm run typecheck"
+    "testsuite": "node --test",
+    "test": "npm run typecheck && npm run testsuite"
   },
   "//": [
     "Keep `@actions/core` and `@actions/github` in sync with",
