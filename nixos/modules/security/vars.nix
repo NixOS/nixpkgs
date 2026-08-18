@@ -8,7 +8,7 @@ let
     lib.mkOption {
       inherit description;
       type = lib.types.functionTo lib.types.pathInStore;
-      example = pkgs: pkgs.writeShellScript "echo 'Hi!'";
+      example = pkgs: pkgs.writeShellScript "example" "echo 'Hi!'";
     };
 
   nullableDeferredPackage =
@@ -16,7 +16,7 @@ let
     lib.mkOption {
       inherit description;
       type = lib.types.nullOr (lib.types.functionTo lib.types.pathInStore);
-      example = pkgs: pkgs.writeShellScript "echo 'Hi!'";
+      example = pkgs: pkgs.writeShellScript "example" "echo 'Hi!'";
       default = null;
     };
 
