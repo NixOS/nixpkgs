@@ -1,12 +1,15 @@
 {
   fetchFromGitHub,
   lib,
+  stdenv,
   rustPlatform,
   versionCheckHook,
   installShellFiles,
   nix-update-script,
   pkg-config,
   libgit2,
+  neovim,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,14 +53,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  # E2E Tests fail reporting:
-  # Before running e2e tests you must build /build/source/target/debug/teamtype
-  checkFlags = [
-    "--skip=nvim_processes_deltas_correctly"
-    "--skip=nvim_sends_correct_delta"
-    "--skip=nvim_sends_something_to_socket"
-    "--skip=plugin_loaded"
-    "--skip=teamtype_executable_from_nvim"
+  nativeCheckInputs = [
+    neovim
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail 'target/debug/teamtype' 'target/${stdenv.hostPlatform.rust.rustcTarget}/release/teamtype'
+  '';
+
+  # watcher tests use FSEvents which hangs in the macOS sandbox
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=watcher::"
   ];
 
   passthru.updateScript = nix-update-script { };
