@@ -3,19 +3,23 @@
   lib,
   fetchurl,
   testers,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
   meson,
   ninja,
   pkg-config,
   python3,
   gettext,
-  gobject-introspection,
   gst-plugins-base,
   gst-plugins-bad,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,9 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     gettext
-    gobject-introspection
     pkg-config
     python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
@@ -62,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     examples = false; # requires many dependencies and probably not useful for our users
     doc = enableDocumentation;
     tests = finalAttrs.finalPackage.doCheck;
+    introspection = withIntrospection;
   };
 
   postPatch = ''
