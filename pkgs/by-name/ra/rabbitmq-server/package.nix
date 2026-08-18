@@ -40,7 +40,7 @@ let
     ]
   );
 
-  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 in
 
 stdenv.mkDerivation (finalAttrs: {

@@ -20,10 +20,11 @@
   debug ? false,
   meta ? { },
   patches ? [ ],
-  elixir ? inputs.elixir,
-  hex ? inputs.hex.override { inherit elixir; },
   ...
 }@attrs:
+
+assert lib.assertMsg (!(attrs ? elixir || attrs ? hex))
+  "fetchMixDeps no longer takes `elixir` or `hex`. Build with the package set that has the versions you need, e.g. `beam27Packages.fetchMixDeps`, or derive one with `beamPackages.overrideScope (final: prev: { elixir = prev.elixir_1_18; })`.";
 
 let
   hash_ =

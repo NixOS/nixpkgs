@@ -17,8 +17,6 @@ beamPackages.mixRelease rec {
   pname = "livebook";
   version = "0.19.9";
 
-  inherit (beamPackages) elixir;
-
   buildInputs = [ beamPackages.erlang ];
 
   nativeBuildInputs = [
