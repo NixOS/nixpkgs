@@ -21,23 +21,21 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/brandonyoungdev/tldx/cmd.Version=${finalAttrs.version}"
+    "-X=github.com/brandonyoungdev/tldx/cmd.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
 
   meta = {
-    license = lib.licenses.asl20;
-    mainProgram = "tldx";
     description = "Domain availability research tool";
     homepage = "https://github.com/brandonyoungdev/tldx";
-    changelog = "https://github.com/brandonyoungdev/tldx/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/brandonyoungdev/tldx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sylonin ];
+    mainProgram = "tldx";
   };
 })
