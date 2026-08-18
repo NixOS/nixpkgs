@@ -13574,6 +13574,8 @@ self: super: with self; {
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
 
+  pkg-resources-backport = callPackage ../development/python-modules/pkg-resources-backport { };
+
   pkgconfig = callPackage ../development/python-modules/pkgconfig { };
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
