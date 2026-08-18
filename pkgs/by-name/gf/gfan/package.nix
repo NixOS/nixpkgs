@@ -11,9 +11,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gfan";
   version = "0.7";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://home.math.au.dk/jensen/software/gfan/gfan${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-q4M3V+Hk1KmGYvSqaROUAT6poib2QWuPhWU1bW/MmJ4=";
+    hash = "sha256-q4M3V+Hk1KmGYvSqaROUAT6poib2QWuPhWU1bW/MmJ4=";
   };
 
   patches = [
@@ -28,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "clang-fix-miscompilation.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/eea1f59394a5066e9acd8ae39a90302820914ee3/build/pkgs/gfan/patches/nodel.patch";
-      sha256 = "sha256-RrncSgFyrBIk/Bwe3accxiJ2rpOSJKQ84cV/uBvQsDc=";
+      hash = "sha256-RrncSgFyrBIk/Bwe3accxiJ2rpOSJKQ84cV/uBvQsDc=";
     })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
@@ -64,8 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
   # The test runner still exits successfully when there are failed tests, so check
   # stdout to see if anything failed.
   checkPhase = ''
+    runHook preCheck
     make check | tee "$TMPDIR/test.log"
     ! grep -q "Failed tests:" "$TMPDIR/test.log"
+    runHook postCheck
   '';
 
   meta = {
@@ -73,8 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     license =
       with lib.licenses;
       OR [
-        gpl2
-        gpl3
+        gpl2Only
+        gpl3Only
       ];
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
