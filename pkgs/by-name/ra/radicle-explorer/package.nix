@@ -23,13 +23,13 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  version = "0-unstable-2026-07-29";
+  version = "0-unstable-2026-08-12";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    rev = "427cece9850944d30f0d49ccd016f98dacd77d75";
-    hash = "sha256-FC78GCaC8IcBtXDRotYcaw040cggGWnrI2lgnWLwU68=";
+    rev = "ab514fe0d477c7cf7e0d5f24b63e302e755f98cf";
+    hash = "sha256-PGnOVKj1R5fWGeDJJJW0U0qdTBV5SHoY/VLtzFPg/Tw=";
   };
 
   npmDepsHash = "sha256-L/JOhI7KVXNDGHzk8RVNNcd8hHL+I7YKVg8sZyRSBtA=";
