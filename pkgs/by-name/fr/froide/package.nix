@@ -8,14 +8,14 @@
   geos,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {
@@ -40,7 +40,7 @@ let
   };
 
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "froide";
   version = "0-unstable-2026-08-19";
   pyproject = true;
@@ -116,14 +116,13 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
-      pnpm
       ;
-    fetcherVersion = 3;
-    hash = "sha256-ZBI3lmEKJkikP8oMVQf17UMkPHGPoIfm3r8eoSkxSEo=";
+    fetcherVersion = 4;
+    hash = "sha256-+ywpcwF4H2s6s+ls71S+sy6l3gikz62haXCBuI4z+f4=";
   };
 
   postBuild = ''
@@ -133,7 +132,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     cp -r build manage.py $out/${python.sitePackages}/froide/
     makeWrapper $out/${python.sitePackages}/froide/manage.py $out/bin/froide \
-      --prefix PYTHONPATH : "${python3Packages.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "${python3Packages.makePythonPath finalAttrs.passthru.dependencies}" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
@@ -222,4 +221,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.onny ];
     mainProgram = "froide";
   };
-}
+})
