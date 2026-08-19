@@ -15,13 +15,13 @@
 # upscayl-ncnn is a fork of /pkgs/by-name/re/realesrgan-ncnn-vulkan, so the nix package is basically the same.
 stdenv.mkDerivation (finalAttrs: {
   pname = "upscayl-ncnn";
-  version = "20240601-103425";
+  version = "20251207-174704";
 
   src = fetchFromGitHub {
     owner = "upscayl";
     repo = "upscayl-ncnn";
     tag = finalAttrs.version;
-    hash = "sha256-rGnjL+sU5x3VXHnvuYXVdxGmHdj9eBkIZK3CwL89lN0=";
+    hash = "sha256-wXf7Tj1e3eJ7dzhZFWp7kg+IK1iCzy4Kx8h8lJI29GY=";
   };
 
   models = fetchzip {
