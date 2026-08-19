@@ -10,13 +10,13 @@
 
 let
   pname = "hunk";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "modem-dev";
     repo = "hunk";
     tag = "v${version}";
-    hash = "sha256-IkARkW5haVmc+iZPYe22sUi5Ak+egImdrEugtr2O5A4=";
+    hash = "sha256-PWblqDS86PaSl5ToFawCNGTxmrWcmoBAfq8R5lMDbyk=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -56,7 +56,7 @@ let
 
     dontFixup = true;
 
-    outputHash = "sha256-ueZNCab0yDRgvftao1Wgy8yrcxh1mdnQl6zR237q8WI=";
+    outputHash = "sha256-Ixsv2wXb39kSRck9ZbjJjRlzn4KS2fkfl3v4MEeD7cE=";
     outputHashMode = "recursive";
   };
 in
@@ -76,9 +76,9 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace src/core/paths.ts \
       --replace-fail \
-        'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),' \
-        'join("node_modules", "hunkdiff", HUNK_REVIEW_SKILL_RELATIVE_PATH),
-    join("share", "skills", "hunk", "hunk-review", "SKILL.md"),'
+        'join("node_modules", "hunkdiff", skillRelativePath),' \
+        'join("node_modules", "hunkdiff", skillRelativePath),
+    join("share", "skills", "hunk", name, "SKILL.md"),'
   '';
 
   configurePhase = ''
@@ -110,8 +110,8 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/skills/hunk/hunk-review
-    cp skills/hunk-review/SKILL.md $out/share/skills/hunk/hunk-review/SKILL.md
+    mkdir -p $out/share/skills/hunk
+    cp -R skills/hunk-review skills/hunk-extensions $out/share/skills/hunk/
 
     runHook postInstall
   '';
@@ -131,6 +131,7 @@ stdenv.mkDerivation {
 
     $out/bin/hunk --version | grep -F ${version}
     test -f "$($out/bin/hunk skill path)"
+    test -f "$($out/bin/hunk skill path hunk-extensions)"
 
     runHook postInstallCheck
   '';
