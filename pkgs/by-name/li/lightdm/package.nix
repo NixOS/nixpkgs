@@ -39,7 +39,7 @@ assert !(withQt5 && withQt6);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm";
-  version = "1.33.0";
+  version = "1.33.1";
 
   outputs = [
     "out"
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ubuntu";
     repo = "lightdm";
     tag = finalAttrs.version;
-    hash = "sha256-/OgG3jtqxCl3tAXHs+LaAkEAAun+bsUm5pZBffv1AWg=";
+    hash = "sha256-/p5/V2KNRkm1cP9/Ld3crfAxAdHYc2mFyNl1rV6QXr0=";
   };
 
   nativeBuildInputs = [
@@ -127,12 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/shared-data-manager.c \
       --replace-fail /bin/rm ${busybox}/bin/rm
-
-    # Fix switching users
-    # https://github.com/ubuntu/lightdm/pull/454
-    substituteInPlace src/lightdm.c --replace-fail \
-      "gboolean can_multi_session = login1_seat_get_can_multi_session (login1_seat);" \
-      "gboolean can_multi_session = TRUE;"
   '';
 
   postInstall = ''
