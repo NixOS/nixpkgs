@@ -194,8 +194,6 @@ lib.makeOverridable (
         sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
       '';
 
-      preUnpack = kernel.preUnpack or "";
-
       inherit (kernel) src patches;
 
       buildPhase =
