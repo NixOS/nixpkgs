@@ -17,6 +17,7 @@
   avxSupport ? stdenv.hostPlatform.avxSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  python3Packages,
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
@@ -81,6 +82,9 @@
   );
 
   passthru = {
+    tests = {
+      python-dlib = python3Packages.dlib;
+    };
     inherit
       cudaSupport
       cudaPackages
