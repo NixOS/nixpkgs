@@ -1,4 +1,9 @@
-{ mkDerivation, base, fetchzip, lib }:
+{
+  mkDerivation,
+  base,
+  fetchzip,
+  lib,
+}:
 mkDerivation {
   pname = "xhtml";
   version = "3000.2.2.1";

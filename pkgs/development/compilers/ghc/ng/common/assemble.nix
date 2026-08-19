@@ -67,10 +67,7 @@ let
   # `ghc-pkg` resolves $topdir from its own path, so the external one is used
   # unprefixed: it is a compiler for the build platform in its own right.
   ghcPkgCmd =
-    if buildGhcPkg == null then
-      "$out/bin/${targetPrefix}ghc-pkg"
-    else
-      "${buildGhcPkg}/bin/ghc-pkg";
+    if buildGhcPkg == null then "$out/bin/${targetPrefix}ghc-pkg" else "${buildGhcPkg}/bin/ghc-pkg";
 in
 runCommand "ghc-${version}"
   {
@@ -108,7 +105,9 @@ runCommand "ghc-${version}"
     # the ghc-pkg package, not here:
     #
     #     ghc-pkg: Settings file doesn't exist: .../ghc-pkg-9.14.1/lib/settings
-    for exe in ${ghc-bin}/bin/* ${ghc-pkg}/bin/* ${unlit}/bin/* ${lib.concatMapStringsSep " " (p: "${p}/bin/*") programs}; do
+    for exe in ${ghc-bin}/bin/* ${ghc-pkg}/bin/* ${unlit}/bin/* ${
+      lib.concatMapStringsSep " " (p: "${p}/bin/*") programs
+    }; do
       cp "$exe" "$out/bin/$(basename "$exe")"
     done
     chmod -R u+w "$out/bin"

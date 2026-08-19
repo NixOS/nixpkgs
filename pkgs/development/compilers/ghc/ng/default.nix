@@ -16,8 +16,7 @@ let
     # A release ships the testsuite as its own tarball; `-src.tar.xz` has no
     # `testsuite/` directory at all. A git checkout carries it inline, so
     # `gitRelease` entries need nothing here.
-    "9.14.1".officialRelease.testsuiteSha256 =
-      "1va5ls4ng32hq8236w2aq5k0gjwxzdmwgfjf6b8z7pgpy0hzrbl4";
+    "9.14.1".officialRelease.testsuiteSha256 = "1va5ls4ng32hq8236w2aq5k0gjwxzdmwgfjf6b8z7pgpy0hzrbl4";
 
     "9.15".setupCabalVersion = "3_16_1_0";
     "9.15".gitRelease = {
@@ -53,9 +52,7 @@ let
       # `9.14`, or `head` for an in-development snapshot. Underscored elsewhere
       # (`ghcNG_9_14`) because attribute paths in `pkgs` may not contain dots.
       attrName =
-        args.name or (
-          if gitRelease != null then "head" else lib.versions.majorMinor release_version
-        );
+        args.name or (if gitRelease != null then "head" else lib.versions.majorMinor release_version);
     in
     lib.nameValuePair attrName (
       callPackage ./common (

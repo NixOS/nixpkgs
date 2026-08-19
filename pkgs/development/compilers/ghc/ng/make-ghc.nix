@@ -53,7 +53,9 @@ let
     inherit (ghcVersion) ghcSrc packagesDir setupCabalVersion;
   };
 
-  compose3 = a: b: c: lib.composeExtensions (lib.composeExtensions a b) c;
+  compose3 =
+    a: b: c:
+    lib.composeExtensions (lib.composeExtensions a b) c;
 
   # `setupCabal` here as well: `setupHaskellDepends` are resolved from
   # `buildHaskellPackages`, so a package's `Setup.hs` is compiled against *this*
@@ -63,9 +65,9 @@ let
   # `buildHaskellPackages` must be a set that carries the tools: the compiler
   # packages name `deriveConstants` and friends, and those are resolved out of
   # the build set.
-  stage1Pkgs =
-    (bootPkgs.override { buildHaskellPackages = toolsPkgs; }).extend
-      (compose3 overlays.setupCabal overlays.tools overlays.stage1);
+  stage1Pkgs = (bootPkgs.override { buildHaskellPackages = toolsPkgs; }).extend (
+    compose3 overlays.setupCabal overlays.tools overlays.stage1
+  );
 
   toolchainSettings = callPackage ./common/settings.nix {
     inherit (toolsPkgs) ghc-toolchain-bin;
@@ -120,14 +122,18 @@ let
       # package set exists to break.
       compilerConfig = _: _: { };
     }).extend
-      (compose3
-        # First: make every package in the set name the compiler explicitly.
-        # Later overlays refine specific packages on top of that.
-        overlays.explicitCompilerEverywhere
-        overlays.setupCabal
-        (compose3 overlays.systemCxxStdLib overlays.buildTools (
-          lib.composeExtensions overlays.hackageCore overlays.stage2
-        )));
+      (
+        compose3
+          # First: make every package in the set name the compiler explicitly.
+          # Later overlays refine specific packages on top of that.
+          overlays.explicitCompilerEverywhere
+          overlays.setupCabal
+          (
+            compose3 overlays.systemCxxStdLib overlays.buildTools (
+              lib.composeExtensions overlays.hackageCore overlays.stage2
+            )
+          )
+      );
 
   # No `with stage2Pkgs;` -- `with` binds less tightly than `let`, so `ghc`
   # would resolve to the compiler being defined below rather than to the
@@ -200,13 +206,13 @@ let
     # so naming it unconditionally breaks HEAD.
     programs = map (n: stage2Pkgs.${n}) (
       lib.filter (n: builtins.pathExists (ghcVersion.packagesDir + "/${n}")) [
-      "hsc2hs"
-      "hp2ps"
-      "hpc-bin"
-      "runghc"
-      # The external interpreter. Needed for `-fexternal-interpreter`, for the
-      # testsuite ext-interp way, and eventually for Template Haskell on a
-      # cross compiler, where the host code cannot run on the build machine.
+        "hsc2hs"
+        "hp2ps"
+        "hpc-bin"
+        "runghc"
+        # The external interpreter. Needed for `-fexternal-interpreter`, for the
+        # testsuite ext-interp way, and eventually for Template Haskell on a
+        # cross compiler, where the host code cannot run on the build machine.
         "iserv"
       ]
     );
@@ -228,7 +234,9 @@ let
   };
 
   compiler = compilerBase.overrideAttrs (o: {
-    passthru = (o.passthru or { }) // { inherit testsuite; };
+    passthru = (o.passthru or { }) // {
+      inherit testsuite;
+    };
   });
 in
 {

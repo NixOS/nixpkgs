@@ -32,7 +32,10 @@ let
   # sandbox -- the build fails with "No such file or directory" naming a file
   # that plainly exists in the working tree.
   versionDir =
-    ../. + ("/" + (if gitRelease != null then "head" else lib.versions.majorMinor releaseInfo.release_version));
+    ../.
+    + (
+      "/" + (if gitRelease != null then "head" else lib.versions.majorMinor releaseInfo.release_version)
+    );
 
   inherit
     (import ./common-let.nix {

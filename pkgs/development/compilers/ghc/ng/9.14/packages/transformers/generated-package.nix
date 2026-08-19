@@ -1,4 +1,9 @@
-{ mkDerivation, base, fetchzip, lib }:
+{
+  mkDerivation,
+  base,
+  fetchzip,
+  lib,
+}:
 mkDerivation {
   pname = "transformers";
   version = "0.6.1.2";

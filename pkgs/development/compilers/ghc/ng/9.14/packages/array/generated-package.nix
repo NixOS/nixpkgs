@@ -1,4 +1,9 @@
-{ mkDerivation, base, fetchzip, lib }:
+{
+  mkDerivation,
+  base,
+  fetchzip,
+  lib,
+}:
 mkDerivation {
   pname = "array";
   version = "0.5.8.0";

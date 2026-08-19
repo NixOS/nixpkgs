@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix -I nixpkgs=.
+#!nix-shell -i bash -p cabal2nix nixfmt -I nixpkgs=.
 
 # Regenerate the cabal2nix expressions for the GHC packages built by
 # `pkgs/development/compilers/ghc/ng`.
@@ -189,6 +189,14 @@ for entry in "${PACKAGES[@]}"; do
   # The patched copy, if we made one.
   if [ "$pkgdir" != "$SRC/$dir" ]; then rm -rf "$pkgdir"; fi
 done
+
+# nixfmt, exactly as `regenerate-hackage-packages.sh` does for
+# `hackage-packages.nix`. cabal2nix's pretty printer is not nixfmt style, and
+# `ci/treefmt.nix` runs nixfmt over every `*.nix` with no exclusions -- so
+# without this CI reformats these files and the next regeneration reverts them,
+# which would also make the "do not edit" header untrue.
+echo "Formatting..." >&2
+nixfmt "$OUT"/*/generated-package*.nix
 
 echo "Wrote $OUT" >&2
 

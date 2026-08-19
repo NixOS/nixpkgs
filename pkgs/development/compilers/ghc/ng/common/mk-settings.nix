@@ -62,8 +62,7 @@ let
     "Use interpreter" = yesNo useInterpreter;
     "Support SMP" = yesNo supportSMP;
     "RTS expects libdw" = yesNo rtsExpectsLibdw;
-    "target RTS linker only supports shared libraries" =
-      yesNo rtsLinkerOnlySupportsSharedLibs;
+    "target RTS linker only supports shared libraries" = yesNo rtsLinkerOnlySupportsSharedLibs;
   };
 in
 

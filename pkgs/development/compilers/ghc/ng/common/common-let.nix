@@ -24,8 +24,7 @@ rec {
     release_version = if gitRelease != null then gitRelease.version else argVersion;
     # A git release is identified by the date the revision was taken, so that
     # two snapshots of the same in-development version are distinguishable.
-    version =
-      release_version + lib.optionalString (gitRelease != null) "-unstable-${gitRelease.date}";
+    version = release_version + lib.optionalString (gitRelease != null) "-unstable-${gitRelease.date}";
   };
 
   ghc_meta = {

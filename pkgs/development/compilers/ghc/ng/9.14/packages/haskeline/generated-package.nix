@@ -1,6 +1,20 @@
-{ mkDerivation, base, bytestring, containers, directory, exceptions
-, fetchzip, filepath, HUnit, lib, process, stm, terminfo, text
-, transformers, unix
+{
+  mkDerivation,
+  base,
+  bytestring,
+  containers,
+  directory,
+  exceptions,
+  fetchzip,
+  filepath,
+  HUnit,
+  lib,
+  process,
+  stm,
+  terminfo,
+  text,
+  transformers,
+  unix,
 }:
 mkDerivation {
   pname = "haskeline";
@@ -13,12 +27,30 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base bytestring containers directory exceptions filepath process
-    stm terminfo transformers unix
+    base
+    bytestring
+    containers
+    directory
+    exceptions
+    filepath
+    process
+    stm
+    terminfo
+    transformers
+    unix
   ];
-  executableHaskellDepends = [ base containers ];
+  executableHaskellDepends = [
+    base
+    containers
+  ];
   testHaskellDepends = [
-    base bytestring containers HUnit process text unix
+    base
+    bytestring
+    containers
+    HUnit
+    process
+    text
+    unix
   ];
   homepage = "https://github.com/haskell/haskeline";
   description = "A command-line interface for user input, written in Haskell";

@@ -1,8 +1,26 @@
-{ mkDerivation, array, base, binary, bytestring, containers
-, deepseq, directory, fetchzip, filepath, ghc-prim, lib, QuickCheck
-, system-cxx-std-lib, tasty, tasty-bench, tasty-hunit
-, tasty-inspection-testing, tasty-quickcheck, template-haskell
-, temporary, transformers
+{
+  mkDerivation,
+  array,
+  base,
+  binary,
+  bytestring,
+  containers,
+  deepseq,
+  directory,
+  fetchzip,
+  filepath,
+  ghc-prim,
+  lib,
+  QuickCheck,
+  system-cxx-std-lib,
+  tasty,
+  tasty-bench,
+  tasty-hunit,
+  tasty-inspection-testing,
+  tasty-quickcheck,
+  template-haskell,
+  temporary,
+  transformers,
 }:
 mkDerivation {
   pname = "text";
@@ -12,17 +30,40 @@ mkDerivation {
     sha256 = "1wwbsjp63s0g0cb57rrgracvkjnsymcjsxwgfm6waw3dgczi3qpc";
   };
   libraryHaskellDepends = [
-    array base binary bytestring deepseq ghc-prim system-cxx-std-lib
+    array
+    base
+    binary
+    bytestring
+    deepseq
+    ghc-prim
+    system-cxx-std-lib
     template-haskell
   ];
   testHaskellDepends = [
-    base binary bytestring deepseq ghc-prim QuickCheck tasty
-    tasty-hunit tasty-inspection-testing tasty-quickcheck
-    template-haskell temporary transformers
+    base
+    binary
+    bytestring
+    deepseq
+    ghc-prim
+    QuickCheck
+    tasty
+    tasty-hunit
+    tasty-inspection-testing
+    tasty-quickcheck
+    template-haskell
+    temporary
+    transformers
   ];
   benchmarkHaskellDepends = [
-    base bytestring containers deepseq directory filepath tasty-bench
-    temporary transformers
+    base
+    bytestring
+    containers
+    deepseq
+    directory
+    filepath
+    tasty-bench
+    temporary
+    transformers
   ];
   doCheck = false;
   homepage = "https://github.com/haskell/text";

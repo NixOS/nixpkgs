@@ -215,21 +215,23 @@ in
       # derivation, because a compiler here is assembled out of packages
       # rather than being one build. `compiler.ghcNG_*` is the assembled
       # result; the intermediate sets are reachable through it.
-      ghcNG_9_14 = (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
-        ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { })."9.14";
-        bootPkgs = bb.packages.ghc9103;
-        # The host-indexed set, so a cross build gives stage2 a cross stdenv.
-        # Identical to `bootPkgs` natively.
-        hostBootPkgs = pkgs.haskell.packages.ghc9103;
-        haskellLib = haskellLibUncomposable.compose;
-      }).compiler;
+      ghcNG_9_14 =
+        (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
+          ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { })."9.14";
+          bootPkgs = bb.packages.ghc9103;
+          # The host-indexed set, so a cross build gives stage2 a cross stdenv.
+          # Identical to `bootPkgs` natively.
+          hostBootPkgs = pkgs.haskell.packages.ghc9103;
+          haskellLib = haskellLibUncomposable.compose;
+        }).compiler;
 
-      ghcNG_head = (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
-        ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { }).head;
-        bootPkgs = bb.packages.ghc9103;
-        hostBootPkgs = pkgs.haskell.packages.ghc9103;
-        haskellLib = haskellLibUncomposable.compose;
-      }).compiler;
+      ghcNG_head =
+        (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
+          ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { }).head;
+          bootPkgs = bb.packages.ghc9103;
+          hostBootPkgs = pkgs.haskell.packages.ghc9103;
+          haskellLib = haskellLibUncomposable.compose;
+        }).compiler;
 
       # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
       # with "native" and "gmp" backends.

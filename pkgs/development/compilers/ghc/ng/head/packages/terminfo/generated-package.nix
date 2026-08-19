@@ -1,4 +1,10 @@
-{ mkDerivation, base, fetchzip, lib, ncurses }:
+{
+  mkDerivation,
+  base,
+  fetchzip,
+  lib,
+  ncurses,
+}:
 mkDerivation {
   pname = "terminfo";
   version = "0.4.1.7";

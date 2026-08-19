@@ -133,28 +133,47 @@ let
 
   ghcArch =
     p:
-    if p.isx86_64 then "ArchX86_64"
-    else if p.isx86_32 then "ArchX86"
-    else if p.isAarch64 then "ArchAArch64"
-    else if p.isAarch32 then "ArchARM ARMv7 [] VFPv3"
-    else if p.isRiscV64 then "ArchRISCV64"
-    else if p.isPower64 then "ArchPPC_64 ELF_V2"
-    else if p.isS390x then "ArchS390X"
-    else if p.isWasm then "ArchWasm32"
-    else if p.isJavaScript then "ArchJavaScript"
-    else throw "ghc/ng: no GHC Arch spelling for ${p.system}";
+    if p.isx86_64 then
+      "ArchX86_64"
+    else if p.isx86_32 then
+      "ArchX86"
+    else if p.isAarch64 then
+      "ArchAArch64"
+    else if p.isAarch32 then
+      "ArchARM ARMv7 [] VFPv3"
+    else if p.isRiscV64 then
+      "ArchRISCV64"
+    else if p.isPower64 then
+      "ArchPPC_64 ELF_V2"
+    else if p.isS390x then
+      "ArchS390X"
+    else if p.isWasm then
+      "ArchWasm32"
+    else if p.isJavaScript then
+      "ArchJavaScript"
+    else
+      throw "ghc/ng: no GHC Arch spelling for ${p.system}";
 
   ghcOS =
     p:
-    if p.isLinux then "OSLinux"
-    else if p.isDarwin then "OSDarwin"
-    else if p.isWindows then "OSMinGW32"
-    else if p.isFreeBSD then "OSFreeBSD"
-    else if p.isNetBSD then "OSNetBSD"
-    else if p.isOpenBSD then "OSOpenBSD"
-    else if p.isWasi then "OSWasi"
-    else if p.isGhcjs then "OSGhcjs"
-    else throw "ghc/ng: no GHC OS spelling for ${p.system}";
+    if p.isLinux then
+      "OSLinux"
+    else if p.isDarwin then
+      "OSDarwin"
+    else if p.isWindows then
+      "OSMinGW32"
+    else if p.isFreeBSD then
+      "OSFreeBSD"
+    else if p.isNetBSD then
+      "OSNetBSD"
+    else if p.isOpenBSD then
+      "OSOpenBSD"
+    else if p.isWasi then
+      "OSWasi"
+    else if p.isGhcjs then
+      "OSGhcjs"
+    else
+      throw "ghc/ng: no GHC OS spelling for ${p.system}";
 
   # Per-package corrections to what cabal2nix produced, as `overrideCabal`
   # functions. Kept here rather than in the generated files, which are never
@@ -336,158 +355,158 @@ let
         boolToFlag = b: if b then "1" else "0";
       in
       final: _: {
-      # cabal2nix reads rts.cabal's `extra-libraries: c` as a nixpkgs package
-      # named `c`, which does not exist -- the stdenv supplies libc. `libffi`
-      # is real and needed: `ffi.h` for `include/rts/ghc_ffi.h`, and `-lffi`
-      # at link time, since `use-system-libffi` is on above.
-      librarySystemDepends = [ libffi ];
+        # cabal2nix reads rts.cabal's `extra-libraries: c` as a nixpkgs package
+        # named `c`, which does not exist -- the stdenv supplies libc. `libffi`
+        # is real and needed: `ffi.h` for `include/rts/ghc_ffi.h`, and `-lffi`
+        # at link time, since `use-system-libffi` is on above.
+        librarySystemDepends = [ libffi ];
 
-      # `rts` is `build-type: Configure`, and `rts/configure.ac` goes looking
-      # for these:
-      #
-      #     AC_PATH_PROG([NM], nm)
-      #     AC_PATH_PROG([OBJDUMP], objdump)
-      #     AC_PATH_PROG([DERIVE_CONSTANTS], deriveConstants)
-      #     AC_PATH_PROG([GENAPPLY], genapply)
-      #
-      # `deriveConstants --gen-header` writes `DerivedConstants.h`; `genapply`
-      # writes the `AutoApply*.cmm.h` files. Under hadrian these are
-      # `Rules.Generate`; here Cabal runs the configure script and we hand it
-      # the tools.
-      #
-      # `buildHaskellPackages` explicitly, not a bare scope name: these are
-      # interpolated into strings, and `__spliced` is only consulted for
-      # mkDerivation dependency lists. A bare name would silently give the
-      # host-target build of a program that has to run here.
-      preConfigure = ''
-        export DERIVE_CONSTANTS="${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants"
-        export GENAPPLY="${final.buildHaskellPackages.genapply}/bin/genapply"
-
-        # Run the package's own configure *before* Cabal gets a look in.
+        # `rts` is `build-type: Configure`, and `rts/configure.ac` goes looking
+        # for these:
         #
-        # `build-type: Configure` means Cabal runs `./configure` from its
-        # `postConf` hook -- but its own configure step runs first, and that
-        # step checks `includes: Rts.h`. `Rts.h` pulls in `ghcautoconf.h` and
-        # `ghcplatform.h`, which are `autogen-includes`: they do not exist
-        # until `rts/configure` has assembled them (see the tail of
-        # `rts/configure.ac`, which cats `ghcplatform.h.top` and
-        # `ghcautoconf.h.autoconf` into `include/`). Left to Cabal, the check
-        # fails with "Missing (or bad) header file: Rts.h" before the script
-        # that would have created them ever runs.
+        #     AC_PATH_PROG([NM], nm)
+        #     AC_PATH_PROG([OBJDUMP], objdump)
+        #     AC_PATH_PROG([DERIVE_CONSTANTS], deriveConstants)
+        #     AC_PATH_PROG([GENAPPLY], genapply)
         #
-        # Hadrian sidesteps this by generating those headers itself
-        # (`Rules.Generate`); we run the script.
-        ${lib.concatStringsSep "\n        " (
-          lib.mapAttrsToList (n: v: "export ${cabalFlagVar n}=${boolToFlag v}") rtsFlags
-        )}
-        ./configure ${lib.escapeShellArgs configurePlatformFlags}
+        # `deriveConstants --gen-header` writes `DerivedConstants.h`; `genapply`
+        # writes the `AutoApply*.cmm.h` files. Under hadrian these are
+        # `Rules.Generate`; here Cabal runs the configure script and we hand it
+        # the tools.
+        #
+        # `buildHaskellPackages` explicitly, not a bare scope name: these are
+        # interpolated into strings, and `__spliced` is only consulted for
+        # mkDerivation dependency lists. A bare name would silently give the
+        # host-target build of a program that has to run here.
+        preConfigure = ''
+          export DERIVE_CONSTANTS="${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants"
+          export GENAPPLY="${final.buildHaskellPackages.genapply}/bin/genapply"
 
-        # Three headers hadrian generates that neither `rts/configure` nor the
-        # .cabal produce (`Rules.Generate`: `genEventTypes`,
-        # `genPlatformConstantsHeader`). `rts.cabal` lists the first two under
-        # `install-includes` with a bare `-- ^ generated` comment, which is the
-        # only hint in the package that they do not exist yet.
-        python3 gen_event_types.py --event-types-defines include/rts/EventLogConstants.h
-        python3 gen_event_types.py --event-types-array   include/rts/EventTypes.h
+          # Run the package's own configure *before* Cabal gets a look in.
+          #
+          # `build-type: Configure` means Cabal runs `./configure` from its
+          # `postConf` hook -- but its own configure step runs first, and that
+          # step checks `includes: Rts.h`. `Rts.h` pulls in `ghcautoconf.h` and
+          # `ghcplatform.h`, which are `autogen-includes`: they do not exist
+          # until `rts/configure` has assembled them (see the tail of
+          # `rts/configure.ac`, which cats `ghcplatform.h.top` and
+          # `ghcautoconf.h.autoconf` into `include/`). Left to Cabal, the check
+          # fails with "Missing (or bad) header file: Rts.h" before the script
+          # that would have created them ever runs.
+          #
+          # Hadrian sidesteps this by generating those headers itself
+          # (`Rules.Generate`); we run the script.
+          ${lib.concatStringsSep "\n        " (
+            lib.mapAttrsToList (n: v: "export ${cabalFlagVar n}=${boolToFlag v}") rtsFlags
+          )}
+          ./configure ${lib.escapeShellArgs configurePlatformFlags}
 
-        # deriveConstants compiles probe programs that #include PosixSource.h,
-        # which #includes ghcplatform.h -- so this has to come after
-        # ./configure has assembled it. See GHC #18290.
-        # -fcommon because modern gcc defaults to -fno-common, which changes how
-        # deriveConstants' probe symbols are emitted and makes it report
-        # `CONTROL_GROUP_CONST_291 missing!`. hadrian passes it too, in
-        # `Settings.Builders.DeriveConstants.includeCcArgs`.
-        derivedTmp=$(mktemp -d)
-        "${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants" \
-          --gen-header \
-          -o include/DerivedConstants.h \
-          --tmpdir "$derivedTmp" \
-          --gcc-program "$CC" \
-          --gcc-flag -Iinclude \
-          --gcc-flag -I. \
-          --gcc-flag -fcommon \
-          --nm-program "$NM" \
-          --target-os "${ghcOS stdenv.hostPlatform}"
+          # Three headers hadrian generates that neither `rts/configure` nor the
+          # .cabal produce (`Rules.Generate`: `genEventTypes`,
+          # `genPlatformConstantsHeader`). `rts.cabal` lists the first two under
+          # `install-includes` with a bare `-- ^ generated` comment, which is the
+          # only hint in the package that they do not exist yet.
+          python3 gen_event_types.py --event-types-defines include/rts/EventLogConstants.h
+          python3 gen_event_types.py --event-types-array   include/rts/EventTypes.h
 
-        # `rts.cabal` lists AutoApply{,_V16,_V32,_V64}.cmm in `cmm-sources`, but
-        # unlike the `Jumps_V*.cmm` beside them those files are not in the tree
-        # -- hadrian generates them with `genapply` from the constants header
-        # (`Rules.Generate`, `Settings.Builders.GenApply`). Without this the
-        # build fails with `<command line>: does not exist: AutoApply.cmm`.
-        genapply='${final.buildHaskellPackages.genapply}/bin/genapply'
-        "$genapply" include/DerivedConstants.h > AutoApply.cmm
+          # deriveConstants compiles probe programs that #include PosixSource.h,
+          # which #includes ghcplatform.h -- so this has to come after
+          # ./configure has assembled it. See GHC #18290.
+          # -fcommon because modern gcc defaults to -fno-common, which changes how
+          # deriveConstants' probe symbols are emitted and makes it report
+          # `CONTROL_GROUP_CONST_291 missing!`. hadrian passes it too, in
+          # `Settings.Builders.DeriveConstants.includeCcArgs`.
+          derivedTmp=$(mktemp -d)
+          "${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants" \
+            --gen-header \
+            -o include/DerivedConstants.h \
+            --tmpdir "$derivedTmp" \
+            --gcc-program "$CC" \
+            --gcc-flag -Iinclude \
+            --gcc-flag -I. \
+            --gcc-flag -fcommon \
+            --nm-program "$NM" \
+            --target-os "${ghcOS stdenv.hostPlatform}"
 
-        # The vector apply thunks. Which of these actually contain code is
-        # decided by `Jumps.h`, which keys off `REG_XMM1`/`REG_YMM1`/`REG_ZMM1`
-        # from the generated `ghcplatform.h` -- so on a target without those
-        # registers they compile to nothing of their own accord, provided
-        # `./configure` was told the right host.
-        for w in 16 32 64; do
-          "$genapply" include/DerivedConstants.h "-V$w" > "AutoApply_V$w.cmm"
-        done
-      '';
+          # `rts.cabal` lists AutoApply{,_V16,_V32,_V64}.cmm in `cmm-sources`, but
+          # unlike the `Jumps_V*.cmm` beside them those files are not in the tree
+          # -- hadrian generates them with `genapply` from the constants header
+          # (`Rules.Generate`, `Settings.Builders.GenApply`). Without this the
+          # build fails with `<command line>: does not exist: AutoApply.cmm`.
+          genapply='${final.buildHaskellPackages.genapply}/bin/genapply'
+          "$genapply" include/DerivedConstants.h > AutoApply.cmm
 
-      # `gen_event_types.py` and, indirectly, `deriveConstants`.
-      libraryToolDepends = [ python3 ];
-      configureFlags =
-        # Must agree with `rtsFlags` above.
-        lib.mapAttrsToList (n: v: if v then "-f${n}" else "-f-${n}") rtsFlags
-        ++ [
-          # Defines hadrian passes in `Settings.Packages.rtsPackageArgs` and the
-          # .cabal does not. `RtsUtils.c:printRtsInfo` reads `RtsWay` directly,
-          # so without it the RTS does not compile at all -- the other macros it
-          # wants (`HOST_ARCH`, `HOST_OS`, `HOST_VENDOR`,
-          # `__GLASGOW_HASKELL_FULL_VERSION__`) come from the generated
-          # `ghcplatform.h` and `ghcversion.h`.
-          #
-          # `rts_v` is the vanilla way. When more ways are built each gets its
-          # own value, and the set of them is what the `RTS ways` settings entry
-          # has to report.
-          # GHC's own -I, not the C compiler's. When the home unit is `rts`,
-          # `GHC.Unit.State.initUnits` looks for `DerivedConstants.h` in
-          # `includePathsGlobal` -- "we're building the RTS!" -- and without it
-          # the compiler panics with "Platform constants not available!" the
-          # moment it has to compile Cmm.
-          "--ghc-option=-Iinclude"
-          # ... and the home unit has to actually *be* `rts` for that branch to
-          # be taken. `rts.cabal` says `ghc-options: -this-unit-id rts`, but
-          # Cabal appends its own hashed `-this-unit-id` afterwards and last
-          # wins, so the compiler does not recognise itself as building the
-          # RTS. Passing it again here puts it last.
-          #
-          # Verified by hand in a kept build tree: `ghc -this-unit-id rts
-          # -Iinclude -c Apply.cmm` compiles, without it the compiler panics.
-          "--ghc-option=-this-unit-id"
-          "--ghc-option=rts"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-          # `AutoApply_V32.cmm` and `AutoApply_V64.cmm` use 256- and 512-bit
-          # vectors, and GHC refuses without the matching ISA flag:
-          #
-          #     ghc: sorry! 256-bit wide vectors require -mavx2
-          #
-          # hadrian applies these per file
-          # (`Settings.Packages`: `inputs ["**/AutoApply_V32.cmm"] ? "-mavx2"`),
-          # and stable-haskell uses Cabal per-file options -- `AutoApply_V32.cmm
-          # (-mavx2)` -- which is one of their Cabal patches, not upstream
-          # syntax.
-          #
-          # Library-wide is equivalent here: these are the only RTS Cmm sources
-          # that use vectors at all, so the code GHC emits is the same. It does
-          # *permit* wider instructions elsewhere in the RTS rather than
-          # forbidding them, which is the one difference from hadrian.
-          "--ghc-option=-mavx2"
-          "--ghc-option=-mavx512f"
-        ]
-        ++ [
-          # These are architecture-independent and must stay outside the x86_64
-          # block above -- without them an aarch64 cross build fails with
-          # `RtsWay undeclared`.
-          ''--ghc-option=-optc-DRtsWay="rts_v"''
-          "--ghc-option=-optc-DCOMPILING_RTS"
-          "--ghc-option=-optc-DFS_NAMESPACE=rts"
-        ];
-    };
+          # The vector apply thunks. Which of these actually contain code is
+          # decided by `Jumps.h`, which keys off `REG_XMM1`/`REG_YMM1`/`REG_ZMM1`
+          # from the generated `ghcplatform.h` -- so on a target without those
+          # registers they compile to nothing of their own accord, provided
+          # `./configure` was told the right host.
+          for w in 16 32 64; do
+            "$genapply" include/DerivedConstants.h "-V$w" > "AutoApply_V$w.cmm"
+          done
+        '';
+
+        # `gen_event_types.py` and, indirectly, `deriveConstants`.
+        libraryToolDepends = [ python3 ];
+        configureFlags =
+          # Must agree with `rtsFlags` above.
+          lib.mapAttrsToList (n: v: if v then "-f${n}" else "-f-${n}") rtsFlags
+          ++ [
+            # Defines hadrian passes in `Settings.Packages.rtsPackageArgs` and the
+            # .cabal does not. `RtsUtils.c:printRtsInfo` reads `RtsWay` directly,
+            # so without it the RTS does not compile at all -- the other macros it
+            # wants (`HOST_ARCH`, `HOST_OS`, `HOST_VENDOR`,
+            # `__GLASGOW_HASKELL_FULL_VERSION__`) come from the generated
+            # `ghcplatform.h` and `ghcversion.h`.
+            #
+            # `rts_v` is the vanilla way. When more ways are built each gets its
+            # own value, and the set of them is what the `RTS ways` settings entry
+            # has to report.
+            # GHC's own -I, not the C compiler's. When the home unit is `rts`,
+            # `GHC.Unit.State.initUnits` looks for `DerivedConstants.h` in
+            # `includePathsGlobal` -- "we're building the RTS!" -- and without it
+            # the compiler panics with "Platform constants not available!" the
+            # moment it has to compile Cmm.
+            "--ghc-option=-Iinclude"
+            # ... and the home unit has to actually *be* `rts` for that branch to
+            # be taken. `rts.cabal` says `ghc-options: -this-unit-id rts`, but
+            # Cabal appends its own hashed `-this-unit-id` afterwards and last
+            # wins, so the compiler does not recognise itself as building the
+            # RTS. Passing it again here puts it last.
+            #
+            # Verified by hand in a kept build tree: `ghc -this-unit-id rts
+            # -Iinclude -c Apply.cmm` compiles, without it the compiler panics.
+            "--ghc-option=-this-unit-id"
+            "--ghc-option=rts"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+            # `AutoApply_V32.cmm` and `AutoApply_V64.cmm` use 256- and 512-bit
+            # vectors, and GHC refuses without the matching ISA flag:
+            #
+            #     ghc: sorry! 256-bit wide vectors require -mavx2
+            #
+            # hadrian applies these per file
+            # (`Settings.Packages`: `inputs ["**/AutoApply_V32.cmm"] ? "-mavx2"`),
+            # and stable-haskell uses Cabal per-file options -- `AutoApply_V32.cmm
+            # (-mavx2)` -- which is one of their Cabal patches, not upstream
+            # syntax.
+            #
+            # Library-wide is equivalent here: these are the only RTS Cmm sources
+            # that use vectors at all, so the code GHC emits is the same. It does
+            # *permit* wider instructions elsewhere in the RTS rather than
+            # forbidding them, which is the one difference from hadrian.
+            "--ghc-option=-mavx2"
+            "--ghc-option=-mavx512f"
+          ]
+          ++ [
+            # These are architecture-independent and must stay outside the x86_64
+            # block above -- without them an aarch64 cross build fails with
+            # `RtsWay undeclared`.
+            ''--ghc-option=-optc-DRtsWay="rts_v"''
+            "--ghc-option=-optc-DCOMPILING_RTS"
+            "--ghc-option=-optc-DFS_NAMESPACE=rts"
+          ];
+      };
   };
 
   # Arguments passed to `callPackage` for a package, where the generated
@@ -649,153 +668,154 @@ let
           # per-package fixup both have something to say, and a plain `//` would
           # keep only the last.
           preConfigure =
-            (drv.preConfigure or "")
-            + (extraAttrs.preConfigure or "")
-            + (fixupAttrs.preConfigure or "");
+            (drv.preConfigure or "") + (extraAttrs.preConfigure or "") + (fixupAttrs.preConfigure or "");
 
           # Setup dependencies belong to the build set -- see the note in
           # `explicitCompilerEverywhere`. It has to be repeated here because
           # that overlay maps over `prev`, and the overlays defining these
           # packages are composed afterwards and replace them wholesale.
-          setupHaskellDepends = map (
-            d: final.buildHaskellPackages.${d.pname or ""} or d
-          ) (drv.setupHaskellDepends or [ ]);
+          setupHaskellDepends = map (d: final.buildHaskellPackages.${d.pname or ""} or d) (
+            drv.setupHaskellDepends or [ ]
+          );
         }
       )
-      (final.callPackage
-        (if exprOverride != null then exprOverride else packagesDir + "/${name}/generated-package.nix")
-        ((callArgs final).${name} or { }));
+      (
+        final.callPackage (
+          if exprOverride != null then exprOverride else packagesDir + "/${name}/generated-package.nix"
+        ) ((callArgs final).${name} or { })
+      );
 
-# Which rung a package belongs to.
-#
-# Three, not two, and the third is forced by the RTS. `rts/Apply.cmm` uses
-# `PUSH_BH_UPD_FRAME`, which is not a CPP macro but a built-in of GHC's Cmm
-# parser (`compiler/GHC/Cmm/Parser.hs`). GHC 9.14 knows it; a 9.10 bootstrap
-# compiler does not, and says so:
-#
-#     Apply.cmm:703:3: error: [GHC-09848] unknown macro PUSH_BH_UPD_FRAME
-#
-# So the boot libraries cannot be built by the bootstrap compiler. They need a
-# compiler built from these same sources -- which is the whole reason
-# stable-haskell's Makefile has a stage1 at all.
-#
-#   o `tools`  -- build-platform programs, built by the bootstrap compiler
-#                 against *its* boot libraries. Nothing here may name a library
-#                 we build, or the set does not terminate:
-#                 rts -> deriveConstants -> base -> ghc-internal -> rts.
-#   o `stage1` -- the compiler itself, also built by the bootstrap compiler.
-#                 These use the `+bootstrap` cabal flags of
-#                 `cabal.project.stage1`, which make them compile against the
-#                 old `base`: `ghc-boot-th-next` vendors the TH AST from
-#                 `../ghc-internal/src` and depends on `ghc-prim` rather than
-#                 `ghc-internal`. See Note [Bootstrapping Template Haskell].
-#   o `stage2` -- the boot libraries proper, built by the stage1 compiler.
-#
-# Core libraries that are released on Hackage rather than living in the GHC
-# tree. `hackage-packages.nix` does not contain them -- hackage2nix skips GHC
-# core libraries because they are always `null` there -- so they get vendored
-# expressions of their own, generated from the tarball URLs at the versions
-# `cabal.project.stage2.common` pins.
-#
-# Unlike everything else here they bring their own `src` (cabal2nix emits a
-# self-contained `fetchzip`), so they must NOT get the `ghcSrc` + `postUnpack`
-# treatment.
-hackageNames = [
-  # `ghc-pkg` needs Cabal as a *library* dependency, not just a setup one, so
-  # the build set's copy will not do: it is built against the old `base` and
-  # GHC will not link it. 3.16 is the version that supports GHC 9.14.
-  "Cabal"
-  "Cabal-syntax"
-  "array"
-  "binary"
-  "bytestring"
-  "containers"
-  "deepseq"
-  "directory"
-  "exceptions"
-  "file-io"
-  "filepath"
-  "haskeline"
-  "hpc"
-  "mtl"
-  "os-string"
-  "parsec"
-  "pretty"
-  "process"
-  "semaphore-compat"
-  "stm"
-  "terminfo"
-  "text"
-  "time"
-  "transformers"
-  "unix"
-  "xhtml"
-  "template-haskell-lift"
-  "template-haskell-quasiquoter"
-];
+  # Which rung a package belongs to.
+  #
+  # Three, not two, and the third is forced by the RTS. `rts/Apply.cmm` uses
+  # `PUSH_BH_UPD_FRAME`, which is not a CPP macro but a built-in of GHC's Cmm
+  # parser (`compiler/GHC/Cmm/Parser.hs`). GHC 9.14 knows it; a 9.10 bootstrap
+  # compiler does not, and says so:
+  #
+  #     Apply.cmm:703:3: error: [GHC-09848] unknown macro PUSH_BH_UPD_FRAME
+  #
+  # So the boot libraries cannot be built by the bootstrap compiler. They need a
+  # compiler built from these same sources -- which is the whole reason
+  # stable-haskell's Makefile has a stage1 at all.
+  #
+  #   o `tools`  -- build-platform programs, built by the bootstrap compiler
+  #                 against *its* boot libraries. Nothing here may name a library
+  #                 we build, or the set does not terminate:
+  #                 rts -> deriveConstants -> base -> ghc-internal -> rts.
+  #   o `stage1` -- the compiler itself, also built by the bootstrap compiler.
+  #                 These use the `+bootstrap` cabal flags of
+  #                 `cabal.project.stage1`, which make them compile against the
+  #                 old `base`: `ghc-boot-th-next` vendors the TH AST from
+  #                 `../ghc-internal/src` and depends on `ghc-prim` rather than
+  #                 `ghc-internal`. See Note [Bootstrapping Template Haskell].
+  #   o `stage2` -- the boot libraries proper, built by the stage1 compiler.
+  #
+  # Core libraries that are released on Hackage rather than living in the GHC
+  # tree. `hackage-packages.nix` does not contain them -- hackage2nix skips GHC
+  # core libraries because they are always `null` there -- so they get vendored
+  # expressions of their own, generated from the tarball URLs at the versions
+  # `cabal.project.stage2.common` pins.
+  #
+  # Unlike everything else here they bring their own `src` (cabal2nix emits a
+  # self-contained `fetchzip`), so they must NOT get the `ghcSrc` + `postUnpack`
+  # treatment.
+  hackageNames = [
+    # `ghc-pkg` needs Cabal as a *library* dependency, not just a setup one, so
+    # the build set's copy will not do: it is built against the old `base` and
+    # GHC will not link it. 3.16 is the version that supports GHC 9.14.
+    "Cabal"
+    "Cabal-syntax"
+    "array"
+    "binary"
+    "bytestring"
+    "containers"
+    "deepseq"
+    "directory"
+    "exceptions"
+    "file-io"
+    "filepath"
+    "haskeline"
+    "hpc"
+    "mtl"
+    "os-string"
+    "parsec"
+    "pretty"
+    "process"
+    "semaphore-compat"
+    "stm"
+    "terminfo"
+    "text"
+    "time"
+    "transformers"
+    "unix"
+    "xhtml"
+    "template-haskell-lift"
+    "template-haskell-quasiquoter"
+  ];
 
-toolNames = [
-  "deriveConstants"
-  "genapply"
-  "genprimopcode"
-  "unlit"
-  "hsc2hs"
-  "ghc-platform"
-  "ghc-toolchain"
-  "ghc-toolchain-bin"
-];
+  toolNames = [
+    "deriveConstants"
+    "genapply"
+    "genprimopcode"
+    "unlit"
+    "hsc2hs"
+    "ghc-platform"
+    "ghc-toolchain"
+    "ghc-toolchain-bin"
+  ];
 
-stage1Names = [
-  "ghc-boot-th-next"
-  "ghc-boot"
-  "ghci"
-  "ghc"
-  "ghc-bin"
-  "ghc-pkg"
-];
+  stage1Names = [
+    "ghc-boot-th-next"
+    "ghc-boot"
+    "ghci"
+    "ghc"
+    "ghc-bin"
+    "ghc-pkg"
+  ];
 
-# A package built for stage1 uses its `+bootstrap` expression where one exists.
-# cabal2nix emits a different dependency list under that flag -- `ghc-boot`
-# depends on `ghc-boot-th-next` rather than `ghc-boot-th`, for instance -- so
-# the two cannot share a generated file.
-variantFile =
-  suffix: name:
-  let
-    f = packagesDir + "/${name}/generated-package-${suffix}.nix";
-  in
-  if builtins.pathExists f then f else null;
+  # A package built for stage1 uses its `+bootstrap` expression where one exists.
+  # cabal2nix emits a different dependency list under that flag -- `ghc-boot`
+  # depends on `ghc-boot-th-next` rather than `ghc-boot-th`, for instance -- so
+  # the two cannot share a generated file.
+  variantFile =
+    suffix: name:
+    let
+      f = packagesDir + "/${name}/generated-package-${suffix}.nix";
+    in
+    if builtins.pathExists f then f else null;
 
-bootstrapVariant = variantFile "bootstrap";
+  bootstrapVariant = variantFile "bootstrap";
 
-# `+internal-interpreter` compiles GHCi's evaluator into the compiler itself.
-# Without it Template Haskell fails at
-#
-#     Couldn't find a target code interpreter. Try with -fexternal-interpreter
-#
-# It changes the dependency list -- `ghc-bin` gains `ghci` and `haskeline` --
-# so it needs its own generated expression rather than just a flag.
-# stable-haskell sets it in `cabal.project.stage2.common` for `ghc`, `ghc-bin`
-# and `ghci`.
-interpreterVariant = variantFile "interpreter";
+  # `+internal-interpreter` compiles GHCi's evaluator into the compiler itself.
+  # Without it Template Haskell fails at
+  #
+  #     Couldn't find a target code interpreter. Try with -fexternal-interpreter
+  #
+  # It changes the dependency list -- `ghc-bin` gains `ghci` and `haskeline` --
+  # so it needs its own generated expression rather than just a flag.
+  # stable-haskell sets it in `cabal.project.stage2.common` for `ghc`, `ghc-bin`
+  # and `ghci`.
+  interpreterVariant = variantFile "interpreter";
 
-select =
-  { pred, bootstrap ? false, interpreter ? false, explicitCompiler ? false }:
-  final: prev:
-  lib.mapAttrs
-    (
+  select =
+    {
+      pred,
+      bootstrap ? false,
+      interpreter ? false,
+      explicitCompiler ? false,
+    }:
+    final: prev:
+    lib.mapAttrs (
       name: subdir:
-      mkPackage final name subdir
-        (
-          if bootstrap then
-            bootstrapVariant name
-          else if interpreter then
-            interpreterVariant name
-          else
-            null
-        )
-        (if explicitCompiler then withExplicitCompiler final else { })
-    )
-    (lib.filterAttrs (name: _: hasGenerated name && pred name) subdirs);
+      mkPackage final name subdir (
+        if bootstrap then
+          bootstrapVariant name
+        else if interpreter then
+          interpreterVariant name
+        else
+          null
+      ) (if explicitCompiler then withExplicitCompiler final else { })
+    ) (lib.filterAttrs (name: _: hasGenerated name && pred name) subdirs);
 in
 {
   tools = select { pred = name: lib.elem name toolNames; };
@@ -839,14 +859,13 @@ in
   # The Hackage-released core libraries, compiled by the stage1 compiler like
   # everything else in stage2.
   # Not a source package at all -- see ./system-cxx-std-lib.nix.
-  systemCxxStdLib =
-    final: prev: {
-      system-cxx-std-lib = callPackage ./system-cxx-std-lib.nix {
-        # The undecorated version: the conf has to land under the libdir the
-        # compiler actually uses, `lib/ghc-<cProjectVersion>`.
-        ghcVersion = ghcSrc.release_version;
-      };
+  systemCxxStdLib = final: prev: {
+    system-cxx-std-lib = callPackage ./system-cxx-std-lib.nix {
+      # The undecorated version: the conf has to land under the libdir the
+      # compiler actually uses, `lib/ghc-<cProjectVersion>`.
+      ghcVersion = ghcSrc.release_version;
     };
+  };
 
   # `Setup.hs` of the GHC packages needs a Cabal new enough to understand the
   # tree it comes from. HEAD's `ghc-boot/Setup.hs` calls
@@ -857,11 +876,10 @@ in
   #
   # Setup.hs is compiled by the *build* compiler, so this is the bootstrap set's
   # Cabal, and nixpkgs already packages newer ones there.
-  setupCabal =
-    final: prev: {
-      Cabal = final.buildHaskellPackages.${"Cabal_${setupCabalVersion}"};
-      Cabal-syntax = final.buildHaskellPackages.${"Cabal-syntax_${setupCabalVersion}"};
-    };
+  setupCabal = final: prev: {
+    Cabal = final.buildHaskellPackages.${"Cabal_${setupCabalVersion}"};
+    Cabal-syntax = final.buildHaskellPackages.${"Cabal-syntax_${setupCabalVersion}"};
+  };
 
   # Every package in a stage2 set must name the compiler explicitly, not only
   # the ones this overlay defines. `generic-builder` passes `--with-ghc` only
@@ -895,9 +913,9 @@ in
           # once: `ghc-pkg` links the stage1-built one as a library, while every
           # `Setup.hs` needs the bootstrap-built one. Same attribute name, two
           # different derivations.
-          setupHaskellDepends = map (
-            d: final.buildHaskellPackages.${d.pname or ""} or d
-          ) (old.setupHaskellDepends or [ ]);
+          setupHaskellDepends = map (d: final.buildHaskellPackages.${d.pname or ""} or d) (
+            old.setupHaskellDepends or [ ]
+          );
         }) drv
       else
         drv
@@ -914,10 +932,7 @@ in
   # set and its build set share a compiler. Here they do not, and the result is
   # `alex` being compiled by the stage1 GHC.
   buildTools =
-    final: prev:
-    lib.genAttrs [ "alex" "happy" "happy-lib" ] (
-      name: final.buildHaskellPackages.${name}
-    );
+    final: prev: lib.genAttrs [ "alex" "happy" "happy-lib" ] (name: final.buildHaskellPackages.${name});
 
   hackageCore =
     final: prev:

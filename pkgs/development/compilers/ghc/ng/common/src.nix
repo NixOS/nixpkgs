@@ -80,8 +80,7 @@ let
   # the current date. We don't want to force recompilation of the entire
   # compiler when this happens, so for GHC HEAD we omit the patchlevel."
   isHead = (lib.toInt projectPatchLevel1) > 20000000;
-  projectVersionMunged =
-    if isHead then "${versionMajor}.${versionMinor}" else release_version;
+  projectVersionMunged = if isHead then "${versionMajor}.${versionMinor}" else release_version;
 
   # "The version used for libraries tightly coupled with GHC (e.g. ghc-internal)
   # which need a major version bump for every minor/patchlevel GHC version.
@@ -93,8 +92,7 @@ let
   # patchlevel. We implement the intended behaviour, which is also what Hadrian
   # computes.
   projectVersionForLib =
-    "${versionMajor}.${pad2 versionMinor}"
-    + (if isHead then "00" else pad2 projectPatchLevel1);
+    "${versionMajor}.${pad2 versionMinor}" + (if isHead then "00" else pad2 projectPatchLevel1);
 
   # ---------------------------------------------------------------------------
   # The templated files, from `hadrian/src/Rules/Generate.hs:templateRules`.
@@ -152,16 +150,14 @@ let
   # `utils/iserv/iserv.cabal.in`, for instance -- so a missing `.in` is skipped
   # rather than fatal. It is still reported, because the alternative failure is
   # silent: a package that quietly keeps a stale `.cabal` from the tarball.
-  substituteTemplate =
-    src: dst: extra:
-    ''
-      if [ -e ${lib.escapeShellArg src} ]; then
-        cp ${lib.escapeShellArg src} ${lib.escapeShellArg dst}
-        substituteInPlace ${lib.escapeShellArg dst} ${substArgs} ${extra}
-      else
-        echo "note: no ${src}, skipping"
-      fi
-    '';
+  substituteTemplate = src: dst: extra: ''
+    if [ -e ${lib.escapeShellArg src} ]; then
+      cp ${lib.escapeShellArg src} ${lib.escapeShellArg dst}
+      substituteInPlace ${lib.escapeShellArg dst} ${substArgs} ${extra}
+    else
+      echo "note: no ${src}, skipping"
+    fi
+  '';
 
   # `rts` and `ghc-internal` are `build-type: Configure`, so Cabal -- not us --
   # runs their configure scripts at build time. We only have to make sure the
@@ -248,8 +244,12 @@ stdenvNoCC.mkDerivation {
     # them as Haskell version tuples.
     cp compiler/GHC/CmmToLlvm/Version/Bounds.hs.in compiler/GHC/CmmToLlvm/Version/Bounds.hs
     substituteInPlace compiler/GHC/CmmToLlvm/Version/Bounds.hs \
-      --replace-quiet '@LlvmMinVersion@' ${lib.escapeShellArg (builtins.replaceStrings [ "." ] [ "," ] llvmMinVersion)} \
-      --replace-quiet '@LlvmMaxVersion@' ${lib.escapeShellArg (builtins.replaceStrings [ "." ] [ "," ] llvmMaxVersion)}
+      --replace-quiet '@LlvmMinVersion@' ${
+        lib.escapeShellArg (builtins.replaceStrings [ "." ] [ "," ] llvmMinVersion)
+      } \
+      --replace-quiet '@LlvmMaxVersion@' ${
+        lib.escapeShellArg (builtins.replaceStrings [ "." ] [ "," ] llvmMaxVersion)
+      }
 
 
     # Recover the strictness that `--replace-quiet` gave up. A blanket
@@ -257,15 +257,17 @@ stdenvNoCC.mkDerivation {
     # and `@base@`/`@ghc-experimental@`/`@ghci@` in prose are monospace markup,
     # not variables. So check for the variables we actually know about, in every
     # file we templated.
-    for f in ${lib.escapeShellArgs (
-      projectVersionFiles
-      ++ [
-        "libraries/ghc-boot-th/ghc-boot-th.cabal"
-        "libraries/ghc-boot-th-next/ghc-boot-th-next.cabal"
-        "rts/include/ghcversion.h"
-        "compiler/GHC/CmmToLlvm/Version/Bounds.hs"
-      ]
-    )}; do
+    for f in ${
+      lib.escapeShellArgs (
+        projectVersionFiles
+        ++ [
+          "libraries/ghc-boot-th/ghc-boot-th.cabal"
+          "libraries/ghc-boot-th-next/ghc-boot-th-next.cabal"
+          "rts/include/ghcversion.h"
+          "compiler/GHC/CmmToLlvm/Version/Bounds.hs"
+        ]
+      )
+    }; do
       [ -e "$f" ] || continue
       if grep -nE '@(${lib.concatStringsSep "|" templatedVars})@' "$f"; then
         echo "ghc/ng: unsubstituted variable(s) left in $f (above)" >&2
