@@ -41,11 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
-  BINDGEN_EXTRA_CLANG_ARGS = lib.concatStringsSep " " [
-    "-I${lib.getDev glib}/include/glib-2.0"
-    "-I${lib.getLib glib}/lib/glib-2.0/include/"
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   doInstallCheck = true;
