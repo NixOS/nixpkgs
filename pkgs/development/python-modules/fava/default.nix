@@ -12,33 +12,34 @@
   click,
   flask,
   flask-babel,
+  hatch-vcs,
+  hatchling,
   jinja2,
-  markdown2,
+  markdown-it-py,
   nodejs,
   npmHooks,
   ply,
   pytestCheckHook,
-  setuptools-scm,
   simplejson,
   watchfiles,
   werkzeug,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "fava";
-  version = "1.30.14";
+  version = "1.30.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "fava";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-whfFXZjhZl69cUie/7xFLcsvqUmpDRHVAO56HEsz0HE=";
+    hash = "sha256-bU51m9B15rSdyacMbnHiOvTqJxYHGsYSJMWrEUpeP4g=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-FFqBomnTbiJLaxMtEKPkb4/ASFbtcF6lR/MbcK+MiaQ=";
+    hash = "sha256-b/zldJ9qDC5D0vQeh76vMZyraXJJXrgCPdurKXXr5d8=";
   };
 
   npmRoot = "frontend";
@@ -48,7 +49,10 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '"fava"' '"${placeholder "out"}/bin/fava"'
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     babel
@@ -60,7 +64,7 @@ buildPythonPackage (finalAttrs: {
     flask
     flask-babel
     jinja2
-    markdown2
+    markdown-it-py
     ply
     simplejson
     werkzeug
