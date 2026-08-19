@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from typing import Mapping, List, Any, Set, Self, Optional
 from .error import VarsError
+import re
+
+
+safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]*$")
 
 
 @dataclass
@@ -62,6 +66,11 @@ class VarsFile:
     local: bool
 
     def from_jsom(name: str, json: Any) -> Self:
+        if safe_name_regex.search(name) is None:
+            raise VarsError(
+                f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
+            )
+
         return VarsFile(name=name, local=json["local"])
 
 
@@ -75,6 +84,11 @@ class VarsGenerator:
     files: Mapping[str, VarsFile]
 
     def from_jsom(name: str, json: Any) -> Self:
+        if safe_name_regex.search(name) is None:
+            raise VarsError(
+                f"Generator '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
+            )
+
         result = VarsGenerator(
             name=name,
             backend=json["backend"],
