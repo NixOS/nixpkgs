@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdrkit";
-  version = "1.1.11-4";
+  version = "1.1.11-5";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "cdrkit";
     rev = "debian/9%${finalAttrs.version}";
-    hash = "sha256-oOqvSA2MAURf0YOrWM5Ft6Ln43gXw7SEvNxxRrDs8sI=";
+    hash = "sha256-47aZEk5zwaPmzEZxEeLes5hE5Byv/SYoWDn4pq86UW4=";
   };
 
   patches = [
