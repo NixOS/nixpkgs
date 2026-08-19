@@ -16,6 +16,35 @@
   boost188,
   suitesparse,
   tomlplusplus,
+
+  # VACASK's device models are compiled by OpenVAF, a Verilog-A compiler.
+  #
+  # By default, OpenVAF's `--target_cpu native` tells it to use every CPU
+  # instruction available on the machine doing the build (e.g. AVX-512, if the
+  # builder happens to have it). If the resulting binary is then run on a
+  # different, older CPU that doesn't support those instructions, it crashes
+  # with "illegal instruction" (SIGILL).
+  #
+  # To avoid this, we detect which instruction set the CPU we're building for
+  # actually supports and tell OpenVAF to target that instead, which keeps the
+  # compiled models runnable on other x86_64 machines as well.
+  #
+  # See:
+  #   - https://codeberg.org/arpadbuermen/VACASK/src/commit/bf59752fbfdfed18dc7fe2e3e11a9c02f8de28a0/README.md#installation-from-pre-built-packages
+  #   - https://github.com/NixOS/nixpkgs/blob/dc36b3c506df17272cdca29e85d0d0190b068981/lib/systems/architectures.nix
+  openvafTargetCpu ?
+    with stdenv.hostPlatform;
+    if isx86_64 then
+      if avx512Support then
+        "x86-64-v4"
+      else if avx2Support then
+        "x86-64-v3"
+      else if sse4_2Support then
+        "x86-64-v2"
+      else
+        "x86-64"
+    else
+      "generic",
 }:
 
 let
@@ -79,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${flex}/include")
     (lib.cmakeFeature "SuiteSparse_DIR" "${suitesparse-include}")
     (lib.cmakeFeature "TOMLPP_DIR" "${tomlplusplus}")
+    (lib.cmakeFeature "OPENVAF_OPTIONS" "--target_cpu ${openvafTargetCpu}")
   ];
 
   doCheck = true;
