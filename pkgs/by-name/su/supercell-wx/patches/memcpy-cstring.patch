@@ -1,0 +1,12 @@
+diff --git a/wxdata/source/scwx/zip/zip_stream_writer.cpp b/wxdata/source/scwx/zip/zip_stream_writer.cpp
+index 3822ea20..a455f63b 100644
+--- a/wxdata/source/scwx/zip/zip_stream_writer.cpp
++++ b/wxdata/source/scwx/zip/zip_stream_writer.cpp
+@@ -2,6 +2,7 @@
+ #include <scwx/util/logger.hpp>
+ 
+ #include <cstdlib>
++#include <cstring>
+ #include <fstream>
+ 
+ #include <zip.h>
