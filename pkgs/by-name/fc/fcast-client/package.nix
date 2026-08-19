@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fcast-client";
-  version = "0.1.0-unstable-2024-05-23";
+  version = "electron-v2.2.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
