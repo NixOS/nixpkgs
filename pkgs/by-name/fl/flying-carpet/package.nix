@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flying-carpet";
-  version = "10.0.3";
+  version = "10.0.4";
 
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "FlyingCarpet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PmUi4nN2PDgHgYl3Wx2LiGwDaz7hjQT2ccCFRciJqIo=";
+    hash = "sha256-v7W3rHmEmxR/YpmrSBMmFSkHwrlxwnutHyNju6Jsqh0=";
   };
 
   cargoHash = "sha256-WZ93Gk2n8GJox7I4o/McC0AgrBh6CZAJFcXWvALk9TM=";
