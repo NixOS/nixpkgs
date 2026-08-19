@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  gitUpdater,
+  nix-update-script,
   jre,
   makeWrapper,
   mysqlSupport ? true,
@@ -77,14 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/liquibase
     '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/liquibase/liquibase";
-    rev-prefix = "v";
-    # The latest versions are in the 4.xx series.  I am not sure where
-    # 10.10.10 and 5.0.0 came from, though it appears like they are
-    # for the commercial product.
-    ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
-  };
+  # Upstream tags things it never releases -- v5.0.4 exists right now with no
+  # release behind it -- so ask the release endpoint rather than the tags.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Version Control for your database";
