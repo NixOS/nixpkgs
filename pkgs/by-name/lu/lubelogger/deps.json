@@ -26,23 +26,23 @@
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.19.1",
-    "hash": "sha256-7Y4j3WTI5fIXnt5h7WNygm8jCWHTK4JbREumCc3SfnM="
+    "version": "8.22.0",
+    "hash": "sha256-7bBFHdYh/nftSX7dodUj17SB0jb2hmumyYihn53kZAw="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.19.1",
-    "hash": "sha256-HQYkEF4YAqSxOBBXzSB++frSxvjwLUgpI4AuQsbFY4g="
+    "version": "8.22.0",
+    "hash": "sha256-8TW85/8cHUZaQrVb68YYzvF3m6l20acJ+JCOoAP0FRI="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.19.1",
-    "hash": "sha256-zp+JxFS4feqSum93vDuckx/2P8ZhxWjtSryTGWudRc8="
+    "version": "8.22.0",
+    "hash": "sha256-yUuLjrNf/kqVf1W2txx2GKc0tqM6IqOlcJkno8pVhP8="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.19.1",
-    "hash": "sha256-kzZPJ0XvHCnKvxgxqhy5O4iJd2SbZPTXdA1czY/LNBc="
+    "version": "8.22.0",
+    "hash": "sha256-cI3VoDGdlniZL4xsq03h599bDLu+8tlQE9PbbSzhq8k="
   },
   {
     "pname": "MimeKit",
