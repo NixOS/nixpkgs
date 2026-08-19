@@ -35,6 +35,8 @@ let
     transmission-rpc
     authlib
     apprise
+    httpx
+    h2
   ];
 
   version = "1.3.9";
