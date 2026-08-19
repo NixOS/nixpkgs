@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
-  version = "7.18";
+  version = "trustmux-v7.18";
 
   src = fetchFromGitHub {
     owner = "dustinkirkland";
