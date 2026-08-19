@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "fcitx5-fluent";
-  version = "0.4.0-unstable-2024-03-30";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Reverier-Xu";
