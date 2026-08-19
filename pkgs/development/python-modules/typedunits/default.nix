@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typedunits";
   version = "0.0.2";
   pyproject = true;
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "TypedUnits";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dADN9zBwspfDPdgce5EKEclI1qLcqc0N09RGsiPrJ0c=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=__version__," 'version="${version}",'
+      --replace-fail "version=__version__," 'version="${finalAttrs.version}",'
   '';
 
   build-system = [
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})
