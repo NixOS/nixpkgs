@@ -14,7 +14,7 @@
   uwsgi,
 }:
 let
-  version = "1.46.1";
+  version = "1.46.2";
 
   python = python3.override {
     self = python;
@@ -77,7 +77,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "sissbruecker";
     repo = "linkding";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1tXWbcG4lKquI02nYw+CVKJWyCWbD3m5/ieRgbhtQnE=";
+    hash = "sha256-d/APoPxlrsvBqWGOSYLzLPfCgZd4PRPNh/zxcFnvCRA=";
   };
 
   __structuredAttrs = true;
