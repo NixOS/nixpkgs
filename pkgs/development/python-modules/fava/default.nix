@@ -26,20 +26,20 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "fava";
-  version = "1.30.15";
+  version = "1.30.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "fava";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bU51m9B15rSdyacMbnHiOvTqJxYHGsYSJMWrEUpeP4g=";
+    hash = "sha256-TXsDfNZrqTfHZ1rH3JHPSS103ab6nxP3BOFrUQ8CQH4=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-b/zldJ9qDC5D0vQeh76vMZyraXJJXrgCPdurKXXr5d8=";
+    hash = "sha256-WjdFEZqfD2rJpKs5ad7/YUlgBBrO92DGkiTp9v5PJhE=";
   };
 
   npmRoot = "frontend";
