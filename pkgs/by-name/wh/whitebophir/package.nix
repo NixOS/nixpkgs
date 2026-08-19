@@ -8,18 +8,18 @@
 
 buildNpmPackage rec {
   pname = "whitebophir";
-  version = "1.19.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "whitebophir";
     rev = "v${version}";
-    hash = "sha256-4T7s9WrpyHVPcw0QY0C0sczDJYKzA4bAAfEv8q2pOy4=";
+    hash = "sha256-A4w4dJHsYdBXClX0ZAb/th66uVD7zq+2AfnNXClIf44=";
   };
 
   inherit nodejs;
 
-  npmDepsHash = "sha256-mKDkkX7vWrnfEg1D65bqn/MtyUS0DKjTtkDW6ebso7g=";
+  npmDepsHash = "sha256-fXpv3CZsyHaCifyvbu1mXrJg1vLfTXaw+802FFv4eRQ=";
 
   # geckodriver tries to access network
   npmFlags = [ "--ignore-scripts" ];
