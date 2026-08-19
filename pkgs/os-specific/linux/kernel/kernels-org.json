@@ -20,8 +20,8 @@
         "lts": true
     },
     "6.6": {
-        "version": "6.6.151",
-        "hash": "sha256:1xv9k5r0rm3gda5hzw7i6rjrpwnhlryzk9j1xfy70as1ffpfa0fy",
+        "version": "6.6.152",
+        "hash": "sha256:1mkhvln2x9npklg1b9b2gkavxcjmj9826sq0fh5rv16scf60b2vp",
         "lts": true
     },
     "6.12": {
