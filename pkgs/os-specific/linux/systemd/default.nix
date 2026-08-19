@@ -828,7 +828,6 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-networkd-bridge
           systemd-networkd-dhcpserver
           systemd-networkd-dhcpserver-static-leases
-          systemd-networkd-ipv6-prefix-delegation
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
