@@ -120,18 +120,6 @@ in
                 ]
               '';
             };
-            recordings = {
-              enable = mkOption {
-                description = "Whether to enable session recording.";
-                default = true;
-                type = bool;
-              };
-              path = mkOption {
-                description = "Path to store session recordings.";
-                default = "/var/lib/warpgate/recordings";
-                type = str;
-              };
-            };
             external_host = mkOption {
               description = ''
                 Configure the domain name of this Warpgate instance.
@@ -581,6 +569,10 @@ in
         {
           assertion = !(lib.hasAttr "config_provider" cfg.settings);
           message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
+        }
+        {
+          assertion = !(lib.hasAttr "recordings" cfg.settings);
+          message = "`services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0. Please remove this section from your config and set it from admin UI.";
         }
       ];
 
