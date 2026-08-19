@@ -92,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
+    # Relicensed at 5.0.0. The FSL permits internal and commercial use but
+    # forbids competing products, so it is unfree by our definition; each
+    # release additionally becomes Apache-2.0 two years after publication.
+    license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [ jsoo1 ];
     platforms = with lib.platforms; unix;
   };
