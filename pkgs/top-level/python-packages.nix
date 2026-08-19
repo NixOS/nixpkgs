@@ -4617,6 +4617,10 @@ self: super: with self; {
 
   django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
 
+  django-extended-makemessages =
+    callPackage ../development/python-modules/django-extended-makemessages
+      { };
+
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
