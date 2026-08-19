@@ -108,20 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s zlib1.dll $out/bin/libz.dll
     '';
 
-  env =
-    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      # As zlib takes part in the stdenv building, we don't want references
-      # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-      NIX_CFLAGS_COMPILE = toString (
-        [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
-      );
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
-      # lld 16 enables --no-undefined-version by default
-      # This makes configure think it can't build dynamic libraries
-      # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
-      NIX_LDFLAGS = "--undefined-version";
-    };
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    # As zlib takes part in the stdenv building, we don't want references
+    # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+    NIX_CFLAGS_COMPILE = toString (
+      [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
+    );
+  };
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
