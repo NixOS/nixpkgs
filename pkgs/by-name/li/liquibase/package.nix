@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   nix-update-script,
+  testers,
   jre,
   makeWrapper,
   mysqlSupport ? true,
@@ -80,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Upstream tags things it never releases -- v5.0.4 exists right now with no
   # release behind it -- so ask the release endpoint rather than the tags.
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Version Control for your database";
