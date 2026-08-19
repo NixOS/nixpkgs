@@ -1203,6 +1203,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/ddns-updater.nix
   ./services/networking/deconz.nix
+  ./services/networking/devolo-cockpit.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy.nix
