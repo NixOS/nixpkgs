@@ -179,11 +179,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
-  ]
-  ++ optionals rpcSupport [
-    # This is done so we can move rpc-server out of bin because llama.cpp doesn't
-    # install rpc-server in their install target.
-    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -195,8 +190,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
-  ''
-  + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+  '';
 
   # the tests are failing as of 2025-08
   doCheck = false;
