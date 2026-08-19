@@ -612,13 +612,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
-    data_table = (
-      # added extra parentheses so that `keep-sorted` doesn't get tripped up
-      [
-        pkgs.pkg-config
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
-    );
+    data_table = [ pkgs.pkg-config ];
     datefixR = with pkgs; [
       cargo
       rustc
@@ -1297,7 +1291,13 @@ let
       curl
     ];
     curl = [ pkgs.curl ];
-    data_table = [ pkgs.zlib ];
+    data_table = (
+      # added extra parentheses so that `keep-sorted` doesn't get tripped up
+      [
+        pkgs.zlib
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
+    );
     deepSNV = with pkgs; [
       xz
       bzip2
