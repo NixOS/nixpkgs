@@ -28,6 +28,18 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
+    # LINUX: Disable osi_dnlc
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16927/revisions/a3bd427be8437a38c96ac34ef8216e58ab999945/patch";
+      hash = "sha256-q0AOGpWL1r2hMLQgowMBkfOcEvhXEhXVLe1A/tlawFo=";
+      decode = "base64 -d";
+    })
+    # linux: replace strncpy with strscpy
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16928/revisions/5f04ae748a1ede14882174a81dfa38baa2e66a20/patch";
+      hash = "sha256-fwzRzS799Y68l29vlzIAmHLda57gToLippgNMKWfWaw=";
+      decode = "base64 -d";
+    })
   ];
 
   nativeBuildInputs = [
