@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zensical";
-  version = "0.0.55";
+  version = "0.0.56";
   pyproject = true;
 
   # We fetch from PyPi, because GitHub repo does not contain all sources.
@@ -16,12 +16,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # We could combine sources, but then nix-update won't work.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-rcS1yWM4X/oisYuZnHz7dGiWcBcCdvsTcP5w94MUtDE=";
+    hash = "sha256-w1kWOADRw6jDmvSPTihp/PwrT8ANKGUr0qWwMww2Uww=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HyrV2nvQSQQUI8+BAz5iS2vFwP1h4wJ4cBugpjQJ9KA=";
+    hash = "sha256-7nQU/DBBHOEIAXbRNJyJb+6lrwikNmcyeAwPSgUE8eU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
