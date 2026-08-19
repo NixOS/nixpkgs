@@ -489,6 +489,7 @@ let
               pkgs.zlib
             ];
             nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
+            propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.qrencode ];
 
             postPatch = ''
               substituteInPlace telega-customize.el \
