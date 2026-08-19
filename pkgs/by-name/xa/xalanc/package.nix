@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "xalan-c";
-  version = "1.12.0";
+  version = "GSoC-2012_start";
 
   src = fetchFromGitHub {
     owner = "apache";
