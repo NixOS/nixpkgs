@@ -98357,6 +98357,7 @@ self: {
       ];
       description = "Unattended coding-agent runs for the Baikai abstraction";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "baikai";
     }
   ) { };
@@ -227870,6 +227871,7 @@ self: {
       ];
       description = "Real-time monitoring for any Haskell application with little to no instrumentation";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "eventlog-live-otlp";
     }
   ) { };
@@ -227910,6 +227912,7 @@ self: {
       ];
       description = "Stream eventlog data into InfluxDB";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "eventlog-live-influxdb";
     }
   ) { };
@@ -227992,6 +227995,7 @@ self: {
       ];
       description = "Stream eventlog data to the OpenTelemetry Collector";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "eventlog-live-otelcol";
     }
   ) { };
@@ -474241,7 +474245,6 @@ self: {
       ];
       description = "A new, simple, composable concurrency abstraction";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      maintainers = [ lib.maintainers.turion ];
     }
   ) { };
 
@@ -663251,7 +663254,6 @@ self: {
       testToolDepends = [ hspec-discover ];
       description = "A file watcher and development tool";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "sos";
     }
   ) { };
@@ -683399,6 +683401,7 @@ self: {
       testToolDepends = [ sydtest-discover ];
       description = "GHC plugin that instruments code for sydtest's mutation testing";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 

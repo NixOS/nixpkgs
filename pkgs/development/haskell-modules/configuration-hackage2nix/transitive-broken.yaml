@@ -192,6 +192,7 @@ dont-distribute-packages:
  - backblaze-b2-hs
  - backdropper
  - baikai
+ - baikai-agent
  - baikai-claude
  - baikai-effectful
  - baikai-kit
@@ -907,6 +908,9 @@ dont-distribute-packages:
  - eventium-memory
  - eventium-postgresql
  - eventium-sqlite
+ - eventlog-live
+ - eventlog-live-influxdb
+ - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -3392,7 +3396,6 @@ dont-distribute-packages:
  - statistics-dirichlet
  - statsd-client
  - statsdi
- - steeloverseer
  - stern-brocot
  - STLinkUSB
  - stm-sbchan
@@ -3452,6 +3455,7 @@ dont-distribute-packages:
  - syb-with-class-instances-text
  - SybWidget
  - sydtest-amqp
+ - sydtest-mutation-plugin
  - sydtest-sqitch-postgres
  - sydtest-sqitch-postgres-persistent
  - sydtest-webdriver-screenshot
