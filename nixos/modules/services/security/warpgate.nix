@@ -160,6 +160,11 @@ in
                 default = "[::]:2222";
                 type = str;
               };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
+              };
               external_host = mkOption {
                 description = "The SSH listener is reachable via this domain name externally.";
                 default = null;
@@ -200,6 +205,11 @@ in
                 description = "Listen endpoint of HTTP listener.";
                 default = "[::]:8888";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The HTTP listener is reachable via this domain name externally.";
@@ -281,6 +291,11 @@ in
                 default = "[::]:33306";
                 type = str;
               };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
+              };
               external_host = mkOption {
                 description = "The MySQL listener is reachable via this domain name externally.";
                 default = null;
@@ -321,6 +336,11 @@ in
                 default = "[::]:55432";
                 type = str;
               };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
+              };
               external_host = mkOption {
                 description = "The PostgreSQL listener is reachable via this domain name externally.";
                 default = null;
@@ -352,6 +372,11 @@ in
                 description = "Listen endpoint of Kubernetes listener.";
                 default = "[::]:8443";
                 type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from upstream reverse proxy.";
+                default = false;
+                type = bool;
               };
               external_host = mkOption {
                 description = "The Kubernetes listener is reachable via this domain name externally.";
