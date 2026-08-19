@@ -78020,7 +78020,6 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "annah";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -104162,7 +104161,6 @@ self: {
       description = "Command-line benchmark tool";
       license = lib.licenses.bsd3;
       mainProgram = "bench";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -118710,7 +118708,6 @@ self: {
       ];
       description = "Break from a loop";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -128869,7 +128866,6 @@ self: {
       description = "Derives cabal bounds from build plans";
       license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
       mainProgram = "cabal-plan-bounds";
-      maintainers = [ lib.maintainers.nomeata ];
     }
   ) { };
 
@@ -129822,7 +129818,6 @@ self: {
       description = "Convert Cabal files into rpm spec files";
       license = lib.licenses.gpl3Only;
       mainProgram = "cabal2spec";
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -149842,7 +149837,6 @@ self: {
       description = "CLI tool to easily spin up and control compute instances in various cloud environments";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "cloudy";
-      maintainers = [ lib.maintainers.cdepillabout ];
     }
   ) { };
 
@@ -194971,7 +194965,6 @@ self: {
       description = "A configuration language guaranteed to terminate";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "dhall";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195014,7 +195007,6 @@ self: {
       description = "Compile Dhall to Bash";
       license = lib.licenses.bsd3;
       mainProgram = "dhall-to-bash";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195220,7 +195212,6 @@ self: {
       description = "Generate HTML docs from a dhall package";
       license = lib.licenses.bsd3;
       mainProgram = "dhall-docs";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195378,7 +195369,6 @@ self: {
       ];
       description = "Convert between Dhall and JSON or YAML";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195511,10 +195501,6 @@ self: {
       description = "Language Server Protocol (LSP) server for Dhall";
       license = lib.licenses.mit;
       mainProgram = "dhall-lsp-server";
-      maintainers = [
-        lib.maintainers.dalpd
-        lib.maintainers.Gabriella439
-      ];
     }
   ) { };
 
@@ -195559,7 +195545,6 @@ self: {
       description = "Dhall to Nix compiler";
       license = lib.licenses.bsd3;
       mainProgram = "dhall-to-nix";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195618,7 +195603,6 @@ self: {
       description = "Convert Dhall projects to Nix packages";
       license = lib.licenses.bsd3;
       mainProgram = "dhall-to-nixpkgs";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195677,7 +195661,6 @@ self: {
       description = "Convert an OpenAPI specification to a Dhall package";
       license = lib.licenses.bsd3;
       mainProgram = "openapi-to-dhall";
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -195830,7 +195813,6 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "dhall-to-text";
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -196073,7 +196055,6 @@ self: {
       ];
       description = "Convert between Dhall and YAML";
       license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -201064,7 +201045,6 @@ self: {
       description = "Easily stream directory contents in constant memory";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -224235,7 +224215,6 @@ self: {
       ];
       description = "Simplified error-handling";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -246292,7 +246271,6 @@ self: {
       ];
       description = "Composable, streaming, and efficient left folds";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -254450,7 +254428,6 @@ self: {
       ];
       description = "Functional MetaPost is a Haskell frontend to the MetaPost language";
       license = lib.licenses.gpl3Only;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -269506,7 +269483,6 @@ self: {
       ];
       description = "Live visualization of data structures in GHCi";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      maintainers = [ lib.maintainers.dalpd ];
     }
   ) { };
 
@@ -276465,7 +276441,6 @@ self: {
       description = "manage files with git, without checking their contents into git";
       license = lib.licenses.agpl3Only;
       mainProgram = "git-annex";
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -279968,7 +279943,6 @@ self: {
       ];
       description = "Graphical Lasso algorithm";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.dschrempf ];
     }
   ) { };
 
@@ -333039,7 +333013,6 @@ self: {
           description = "Symbolic EVM Evaluator";
           license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
           mainProgram = "hevm";
-          maintainers = [ lib.maintainers.arturcygan ];
         }
       )
       {
@@ -339037,7 +339010,6 @@ self: {
       description = "Generic project initialization tool";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "hi";
-      maintainers = [ lib.maintainers.poscat ];
     }
   ) { };
 
@@ -342067,7 +342039,6 @@ self: {
       description = "computes interest for a given account";
       license = lib.licenses.bsd3;
       mainProgram = "hledger-interest";
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -346663,10 +346634,7 @@ self: {
       description = "Haskell implementation of the Nix language";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "hnix";
-      maintainers = [
-        lib.maintainers.Anton-Latukha
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -346764,10 +346732,7 @@ self: {
       testToolDepends = [ tasty-discover ];
       description = "Core effects for interacting with the Nix store";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
-      maintainers = [
-        lib.maintainers.Anton-Latukha
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -346847,10 +346812,7 @@ self: {
       description = "Core types used for interacting with the Nix store";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
       hydraPlatforms = lib.platforms.none;
-      maintainers = [
-        lib.maintainers.Anton-Latukha
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -347106,10 +347068,7 @@ self: {
       ];
       description = "Remote hnix store";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
-      maintainers = [
-        lib.maintainers.Anton-Latukha
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -347199,10 +347158,7 @@ self: {
       description = "Remote hnix store";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
       hydraPlatforms = lib.platforms.none;
-      maintainers = [
-        lib.maintainers.Anton-Latukha
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -350748,7 +350704,6 @@ self: {
       ];
       description = "FFI Bindings to OpenSSL's EVP Digest Interface";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { inherit (pkgs) openssl; };
 
@@ -362482,7 +362437,6 @@ self: {
       librarySystemDepends = [ adns ];
       description = "Asynchronous DNS Resolver";
       license = lib.licenses.lgpl3Only;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { inherit (pkgs) adns; };
 
@@ -362862,7 +362816,6 @@ self: {
       ];
       description = "Parsec parsers for the Internet Message format (e-mail)";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -370005,7 +369958,6 @@ self: {
       libraryHaskellDepends = [ base ];
       description = "FFI interface to syslog(3) from POSIX.1-2001";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -391732,7 +391684,6 @@ self: {
       description = "Indexed Types";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -431357,7 +431308,6 @@ self: {
       description = "Tutorial for the lens library";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -432423,7 +432373,6 @@ self: {
       description = "Preprocessor for typesetting Haskell sources with LaTeX";
       license = lib.meta.getLicenseFromSpdxId "GPL-2.0-or-later";
       mainProgram = "lhs2TeX";
-      maintainers = [ lib.maintainers.nomeata ];
     }
   ) { };
 
@@ -440862,7 +440811,6 @@ self: {
       ];
       description = "List monad transformer";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -445531,7 +445479,6 @@ self: {
       ];
       description = "A logging back-end to syslog(3) for the logging-facade library";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -453009,7 +452956,6 @@ self: {
       ];
       description = "A monad for managed values";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -469576,7 +469522,6 @@ self: {
       ];
       description = "Monad morphisms";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -474241,7 +474186,6 @@ self: {
       ];
       description = "A new, simple, composable concurrency abstraction";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      maintainers = [ lib.maintainers.turion ];
     }
   ) { };
 
@@ -479201,7 +479145,6 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "morte";
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -486621,7 +486564,6 @@ self: {
       ];
       description = "Model-view-controller";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -486645,7 +486587,6 @@ self: {
       ];
       description = "Concurrent and combinable updates";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -498227,10 +498168,7 @@ self: {
       description = "Parse and render *.drv files";
       license = lib.licenses.bsd3;
       mainProgram = "pretty-derivation";
-      maintainers = [
-        lib.maintainers.Gabriella439
-        lib.maintainers.sorki
-      ];
+      maintainers = [ lib.maintainers.sorki ];
     }
   ) { };
 
@@ -498315,7 +498253,6 @@ self: {
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "nix-diff";
       maintainers = [
-        lib.maintainers.Gabriella439
         lib.maintainers.sorki
         lib.maintainers.terlar
       ];
@@ -498633,7 +498570,6 @@ self: {
           ];
           description = "Knowledge of Nix's installation directories";
           license = lib.licenses.bsd3;
-          maintainers = [ lib.maintainers.peti ];
         }
       )
       {
@@ -514651,7 +514587,6 @@ self: {
       libraryHaskellDepends = [ base ];
       description = "Optional function arguments";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -514915,7 +514850,6 @@ self: {
       executableHaskellDepends = [ base ];
       description = "Auto-generate a command-line parser for your datatype";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -526776,7 +526710,6 @@ self: {
       ];
       description = "Hashing and checking of passwords";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.cdepillabout ];
     }
   ) { };
 
@@ -526927,7 +526860,6 @@ self: {
       ];
       description = "typeclass instances for password package";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.cdepillabout ];
     }
   ) { };
 
@@ -527291,7 +527223,6 @@ self: {
       description = "Terminal-based presentations using Pandoc";
       license = lib.licenses.gpl2Only;
       mainProgram = "patat";
-      maintainers = [ lib.maintainers.dalpd ];
     }
   ) { };
 
@@ -539970,7 +539901,6 @@ self: {
       ];
       description = "Compositional pipelines";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -540312,7 +540242,6 @@ self: {
       ];
       description = "ByteString support for pipes";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -540664,7 +540593,6 @@ self: {
       ];
       description = "Concurrency for the pipes ecosystem";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -540786,7 +540714,6 @@ self: {
       ];
       description = "Fast, streaming csv parser";
       license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -540909,7 +540836,6 @@ self: {
       ];
       description = "Extra utilities for pipes";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -541118,7 +541044,6 @@ self: {
       ];
       description = "Group streams into substreams";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -541146,7 +541071,6 @@ self: {
       ];
       description = "HTTP client with pipes interface";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -541731,7 +541655,6 @@ self: {
       ];
       description = "Parsing infrastructure for the pipes ecosystem";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -542002,7 +541925,6 @@ self: {
       ];
       description = "Safety for the pipes ecosystem";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -559790,7 +559712,6 @@ self: {
       description = "pretty printer for data types with a 'Show' instance";
       license = lib.licenses.bsd3;
       mainProgram = "pretty-simple";
-      maintainers = [ lib.maintainers.cdepillabout ];
     }
   ) { };
 
@@ -584076,7 +583997,6 @@ self: {
       ];
       description = "Recursively defined values";
       license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
-      maintainers = [ lib.maintainers.nomeata ];
     }
   ) { };
 
@@ -628448,7 +628368,6 @@ self: {
       description = "Auto-generate a server for your datatype";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -658735,7 +658654,6 @@ self: {
       description = "A program for developing Haskell projects";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
       mainProgram = "stack";
-      maintainers = [ lib.maintainers.cdepillabout ];
     }
   ) { };
 
@@ -676873,7 +676791,6 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "structured-haskell-mode";
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -681041,7 +680958,6 @@ self: {
       libraryPkgconfigDepends = [ librsvg ];
       description = "Binding to the libsvg-cairo library";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.dalpd ];
     }
   ) { inherit (pkgs) librsvg; };
 
@@ -693106,7 +693022,6 @@ self: {
       ];
       description = "Mark tasty tests as failure expected";
       license = lib.licenses.mit;
-      maintainers = [ lib.maintainers.nomeata ];
     }
   ) { };
 
@@ -711744,7 +711659,6 @@ self: {
       description = "Convert English Words to Title Case";
       license = lib.licenses.bsd3;
       mainProgram = "titlecase";
-      maintainers = [ lib.maintainers.peti ];
     }
   ) { };
 
@@ -715330,7 +715244,6 @@ self: {
       ];
       description = "Exhaustive pattern matching using lenses, traversals, and prisms";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -722594,7 +722507,6 @@ self: {
       ];
       description = "Shell programming, Haskell-style";
       license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.Gabriella439 ];
     }
   ) { };
 
@@ -726755,7 +726667,6 @@ self: {
       description = "Typed and composable spreadsheets";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      maintainers = [ lib.maintainers.Gabriella439 ];
       broken = true;
     }
   ) { };
@@ -769529,12 +769440,7 @@ self: {
       description = "A tiling window manager";
       license = lib.licenses.bsd3;
       mainProgram = "xmonad";
-      maintainers = [
-        lib.maintainers.dschrempf
-        lib.maintainers.ivanbrennan
-        lib.maintainers.peti
-        lib.maintainers.slotThe
-      ];
+      maintainers = [ lib.maintainers.slotThe ];
     }
   ) { };
 
@@ -769642,12 +769548,7 @@ self: {
       ];
       description = "Community-maintained extensions for xmonad";
       license = lib.licenses.bsd3;
-      maintainers = [
-        lib.maintainers.dschrempf
-        lib.maintainers.ivanbrennan
-        lib.maintainers.peti
-        lib.maintainers.slotThe
-      ];
+      maintainers = [ lib.maintainers.slotThe ];
     }
   ) { };
 
