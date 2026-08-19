@@ -1,0 +1,20 @@
+--- a/rts.cabal
++++ b/rts.cabal
+@@ -112,7 +112,7 @@
+ 
+     if arch(javascript)
+ 
+-      include-dirs: include
++      include-dirs: include .
+ 
+       js-sources:
+         js/config.js
+@@ -266,7 +266,7 @@
+       if !flag(smp)
+          cpp-options: -DNOSMP
+ 
+-      include-dirs: include
++      include-dirs: include .
+       includes: Rts.h
+       autogen-includes: ghcautoconf.h ghcplatform.h
+       install-includes: Cmm.h HsFFI.h MachDeps.h Jumps.h Rts.h RtsAPI.h RtsSymbols.h Stg.h
