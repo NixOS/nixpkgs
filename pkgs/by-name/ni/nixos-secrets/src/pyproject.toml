@@ -1,0 +1,9 @@
+[project]
+name = "nixos-secrets"
+version = "0.1.0"
+
+[project.scripts]
+nixos-secrets = "nixos_secrets.cli:main"
+
+[tool.setuptools.package-data]
+nixos_secrets = ["nix/*"]
