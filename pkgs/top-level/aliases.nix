@@ -2079,6 +2079,7 @@ mapAliases {
   podofo_0_9 = throw "'podofo_0_9' has been deprecated, it may be replaced by 'podofo0'"; # Added 2026-05-08
   podofo_0_10 = warnAlias "'podofo_0_10' has been renamed to 'podofo0'" podofo0; # Added 2026-05-08
   podofo_1_0 = throw "'podofo_1_0' has been deprecated in favour of 'podofo'"; # Added 2026-05-08
+  pokemmo-installer = throw "'pokemmo-installer' has been removed due to an inactive upstream, and `pokemmo` is now directly packaged"; # Added 2026-10-01
   polar-bookshelf1 = throw "'polar-bookshelf1' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-01
   polar-bookshelf = throw "'polar-bookshelf' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-01
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
