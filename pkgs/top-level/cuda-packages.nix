@@ -3,7 +3,7 @@
   callPackage,
   config,
   lib,
-}:
+  }:
 let
   mkCudaPackages =
     manifestVersions:
