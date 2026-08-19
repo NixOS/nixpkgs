@@ -77,6 +77,10 @@ buildPythonPackage {
   preCheck = ''
     cd "$python_src"/Lib
     export HOME=$TMPDIR
+
+    # fix test that ignores PYTHONPATH and can't find tkinter
+    substituteInPlace test/support/script_helper.py \
+      --replace-fail "__cached_interp_requires_environment = None" "__cached_interp_requires_environment = True"
   ''
   + lib.optionalString (pythonAtLeast "3.13" && pythonOlder "3.15") ''
     # https://github.com/python/cpython/pull/143570
@@ -88,7 +92,7 @@ buildPythonPackage {
       test/test_tkinter/support.py \
         --replace-fail \
           "support.get_resource_value('wantobjects')" \
-          "0"
+          "1"
   '';
 
   checkPhase =

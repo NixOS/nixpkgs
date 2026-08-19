@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchurl,
-  fetchpatch,
   nixosTests,
   fixDarwinDylibNames,
   meson,
@@ -29,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.44.6";
+  version = "2.44.7";
 
   outputs = [
     "out"
@@ -41,19 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${lib.versions.majorMinor finalAttrs.version}/gdk-pixbuf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FAwtC4mfz4U+6SsmNzydwijbzeCCCkJGaT9DKKJ0Zvo=";
+    hash = "sha256-Fy+A42JuwxUgqXBADxo2lOBHGPbCzSiF91JQ+1pplaQ=";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    # Fix loading of xpm module if built-in
-    # https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/267
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/62b8f9fd0bb3b862823cd34afce4b389fbd27569.patch";
-      hash = "sha256-ECEIt8lq/jBtDdBetErKpap2PWGav10vqCXKCpIQSyA=";
-    })
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work

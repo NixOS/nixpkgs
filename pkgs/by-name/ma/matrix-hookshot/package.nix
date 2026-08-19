@@ -18,23 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.3.2";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-FHxR0rUrony/z8Nxv4HA0XCDlwsdoLXK/yBQlfkC6U4=";
+    hash = "sha256-Nsbs3m1sFQaJGqVW8Jk8kSMYXrRnqLBVs6glpuP76ps=";
   };
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Qodvybg0G2a6Jtcd89Mci/PoLXrozTJCRRVh/fedngk=";
+    hash = "sha256-93g8DvTZACDhURoMCaeg5Zqpk1dnbOqscRkSV9lnYCI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-X0k60VOG/VoffE5+pCJ33C0Oxjr7NsOHHsLNWFb/z6s=";
+    hash = "sha256-FKCzafDeqJs1o24H+Qy/9vRJeG5bEa+/y+yp4T2ADVg=";
   };
 
   buildInputs = [ openssl ];
@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     yarn run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
-    yarn run build:app:fix-defs
     yarn run build:app
     yarn run build:web
 
@@ -105,6 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "matrix-hookshot";
     maintainers = with lib.maintainers; [ chvp ];
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
