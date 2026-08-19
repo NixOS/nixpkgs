@@ -946,7 +946,7 @@ final: prev: {
       meta = {
         homepage = "https://github.com/NTBBloodbath/fallo";
         maintainers = with lib.maintainers; [ mrcjkb ];
-        license.fullName = "LGPL-2.0-only";
+        license = lib.licenses.lgpl2Only;
         description = "Modern and ergonomic error handling for Lua, inspired by Rust's Result.";
       };
     }

@@ -70,12 +70,12 @@ let
         ]
       );
 
-      common = rec {
+      common = finalAttrs: {
         # attributes common to both builds
         inherit version;
 
         src = fetchurl {
-          url = "https://archive.mariadb.org/mariadb-${version}/source/mariadb-${version}.tar.gz";
+          url = "https://archive.mariadb.org/mariadb-${finalAttrs.version}/source/mariadb-${finalAttrs.version}.tar.gz";
           inherit hash;
         };
 
@@ -104,7 +104,7 @@ let
             libkrb5
             systemd
           ]
-          ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ])
+          ++ (if (lib.versionOlder finalAttrs.version "10.6") then [ libaio ] else [ liburing ])
         )
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           cctools
@@ -134,7 +134,7 @@ let
         # Fixes a build issue as documented on
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
         ++ lib.optional (
-          !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
+          !stdenv.hostPlatform.isLinux && lib.versionAtLeast finalAttrs.version "10.6"
         ) ./patch/macos-MDEV-26769-regression-fix.patch;
 
         cmakeFlags = [
@@ -175,7 +175,7 @@ let
           "-DCONNECT_WITH_JDBC=OFF"
           "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast finalAttrs.version "10.6") [
           # workaround for https://jira.mariadb.org/browse/MDEV-29925
           "-Dhave_C__Wl___as_needed="
         ]
@@ -206,7 +206,9 @@ let
 
         passthru.tests =
           let
-            testVersion = "mariadb_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
+            testVersion = "mariadb_${
+              builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor finalAttrs.version)
+            }";
           in
           {
             mariadb-galera-rsync = nixosTests.mariadb-galera.${testVersion};
@@ -231,49 +233,60 @@ let
       };
 
       client = stdenv.mkDerivation (
-        common
+        finalAttrs:
+        let
+          common' = common finalAttrs;
+        in
+        common'
         // {
           pname = "mariadb-client";
 
-          patches = common.patches ++ [
+          patches = common'.patches ++ [
             ./patch/cmake-plugin-includedir.patch
           ];
 
           buildInputs =
-            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
+            common'.buildInputs ++ lib.optionals (lib.versionAtLeast common'.version "10.11") [ fmt ];
 
-          cmakeFlags = common.cmakeFlags ++ [
+          cmakeFlags = common'.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
             "-DWITHOUT_SERVER=ON"
             "-DWITH_WSREP=OFF"
             "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
           ];
 
-          postInstall = common.postInstall + ''
+          postInstall = common'.postInstall + ''
             rm "$out"/bin/{mariadb-test,mysqltest}
             libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
             rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
             mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
             ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
           '';
+
+          meta = common'.meta // {
+            mainProgram = "mariadb";
+          };
         }
       );
     in
 
     stdenv.mkDerivation (
       finalAttrs:
-      common
+      let
+        common' = common finalAttrs;
+      in
+      common'
       // {
         pname = "mariadb-server";
 
-        nativeBuildInputs = common.nativeBuildInputs ++ [
+        nativeBuildInputs = common'.nativeBuildInputs ++ [
           bison
           boost.dev
           flex
         ];
 
         buildInputs =
-          common.buildInputs
+          common'.buildInputs
           ++ [
             bzip2
             lz4
@@ -295,7 +308,7 @@ let
             msgpack-cxx
             zeromq
           ]
-          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
+          ++ lib.optionals (lib.versionAtLeast common'.version "10.11") [ fmt ];
 
         propagatedBuildInputs = lib.optional withNuma numactl;
 
@@ -305,7 +318,7 @@ let
         '';
 
         cmakeFlags =
-          common.cmakeFlags
+          common'.cmakeFlags
           ++ [
             "-DMYSQL_DATADIR=/var/lib/mysql"
             "-DENABLED_LOCAL_INFILE=OFF"
@@ -319,7 +332,7 @@ let
             "-DWITHOUT_FEDERATED=1"
             "-DWITHOUT_TOKUDB=1"
           ]
-          ++ lib.optionals (lib.versionOlder version "11.4") [
+          ++ lib.optionals (lib.versionOlder finalAttrs.version "11.4") [
             # Fix the build with CMake 4.
             "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
           ]
@@ -350,7 +363,7 @@ let
         '';
 
         postInstall =
-          common.postInstall
+          common'.postInstall
           + ''
             rm -r "$out"/share/aclocal
             chmod +x "$out"/bin/wsrep_sst_common
@@ -363,16 +376,18 @@ let
             lib.optionalString
               (
                 !stdenv.hostPlatform.isDarwin
-                && lib.versionAtLeast common.version "10.6"
-                && lib.versionOlder common.version "10.11"
+                && lib.versionAtLeast common'.version "10.6"
+                && lib.versionOlder common'.version "10.11"
               )
               ''
                 mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
               ''
-          + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.11") ''
-            mv "$out"/lib/mysql/plugin/test_pam_modules/pam_mariadb_mtr.so "$out"/share/pam/lib/security
-          ''
-          + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.6") ''
+          +
+            lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common'.version "10.11")
+              ''
+                mv "$out"/lib/mysql/plugin/test_pam_modules/pam_mariadb_mtr.so "$out"/share/pam/lib/security
+              ''
+          + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common'.version "10.6") ''
             mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
             rm -r "$out"/OFF
           '';
@@ -381,11 +396,15 @@ let
           lib.optionalAttrs stdenv.hostPlatform.isi686 {
             CXXFLAGS = "-fpermissive";
           }
-          // (common.env or { });
+          // (common'.env or { });
 
         passthru = {
           inherit client;
           server = finalAttrs.finalPackage;
+        };
+
+        meta = common'.meta // {
+          mainProgram = "mariadbd";
         };
       }
     );
