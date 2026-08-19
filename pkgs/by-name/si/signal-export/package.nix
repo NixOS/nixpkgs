@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     markdown
     pycryptodome
     sqlcipher3-wheels
+    filetype
   ];
 
   passthru.updateScript = nix-update-script { };
