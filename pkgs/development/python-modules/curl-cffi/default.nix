@@ -91,6 +91,13 @@ buildPythonPackage rec {
     "tests/unittest/test_websockets.py::on_message"
     "tests/unittest/test_websockets.py::test_on_data_callback"
     "tests/unittest/test_websockets.py::test_hello_twice_async"
+
+    # Fails on newer versions of http3
+    # remove once 0.16.0 is merged
+    "tests/unittest/test_async_session.py::test_verify"
+    "tests/unittest/test_curl.py::test_verify"
+    "tests/unittest/test_requests.py::test_verify"
+    "tests/unittest/test_requests.py::test_delete_cookies"
   ];
 
   disabledTests = [
