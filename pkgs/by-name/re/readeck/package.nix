@@ -8,17 +8,18 @@
   python3,
   templ,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-NH1d3kf0Q9IOAlI3qYpmttXTQsrciMrQJkWGF+Ji62I=";
+    hash = "sha256-iB8QXkBSQBbdztN00znoiCRbyhU2gB+B+UvIcKOFspc=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +75,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-hAqQRtlaHcMrtatMowL/lmS5U+Jx6AmF0Q2tuiXqTTs=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) readeck; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";
