@@ -28199,6 +28199,11 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  Teamofeyy = {
+    name = "Teamofeyy";
+    github = "Teamofeyy";
+    githubId = 128955381;
+  };
   teatwig = {
     email = "nix@teatwig.net";
     name = "tea";
