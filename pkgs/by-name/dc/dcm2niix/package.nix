@@ -26,14 +26,14 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.20250506";
+  version = "1.0.20260724";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KtUWrm3Nq3khDxpaQ4W57y+h/gPeEMwfzBv4XYkAhoA=";
+    hash = "sha256-vkExgIkyXFUMb37QIhy5FNynxXeIGl6WBbUBfw4nMvY=";
   };
 
   patches = lib.optionals withCloudflareZlib [
