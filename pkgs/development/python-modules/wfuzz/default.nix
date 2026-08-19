@@ -12,8 +12,8 @@
   pytestCheckHook,
   setuptools,
   six,
-  fetchpatch2,
   legacy-cgi,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -31,14 +31,20 @@ buildPythonPackage (finalAttrs: {
   patches = [
     # replace use of imp module for Python >= 3.12
     # https://github.com/xmendez/wfuzz/pull/365
-    (fetchpatch2 {
-      url = "https://github.com/xmendez/wfuzz/commit/f4c028b9ada4c36dabf3bc752f69f6ddc110920f.patch?full_index=1";
-      hash = "sha256-t7pUMcdFmwAsGUNBRdZr+Jje/yR0yzeGIgeYNEq4hFE=";
-    })
+    ./Update-loader.py.patch
     # replace removed `pipes` stdlib module with `shlex` for Python >= 3.13
     # https://github.com/xmendez/wfuzz/issues/380
     ./python-313-shlex.patch
+    # https://github.com/xmendez/wfuzz/pull/382
+    ./Drop-pkg_resources-from-filter-help-loader.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/wfuzz/__init__.py \
+      --replace-fail \
+        '__version__ = "3.1.0"' \
+        '__version__ = "${finalAttrs.version}"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -49,7 +55,6 @@ buildPythonPackage (finalAttrs: {
     netaddr # src/wfuzz/plugins/payloads/{iprange,ipnet}.py
     pycurl
     pyparsing
-    setuptools
     six
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
@@ -57,11 +62,8 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     netaddr
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # The tests are requiring a local web server
