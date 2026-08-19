@@ -225,13 +225,10 @@ in
           isSystemUser = true;
         };
       };
-      groups.fossorial = {
-        members = [
-          "pangolin"
-          "gerbil"
-          "traefik"
-        ];
-      };
+      groups.fossorial.members = [
+        "pangolin"
+        "gerbil"
+      ];
     };
     # order is as follows
     # "pangolin.service"
@@ -241,21 +238,18 @@ in
     # make tunnels declarative by calling API
     ###
     systemd = {
-      tmpfiles.settings."10-fossorial-paths" = {
-        "${cfg.dataDir}".d = {
-          user = "pangolin";
-          group = "fossorial";
-          mode = "0770";
-        };
-        "${cfg.dataDir}/config".d = {
-          user = "pangolin";
-          group = "fossorial";
-          mode = "0770";
-        };
-        "${cfg.dataDir}/config/letsencrypt".d = {
-          user = "traefik";
-          group = "fossorial";
-          mode = "0700";
+      tmpfiles.settings = {
+        "10-fossorial-paths" = {
+          "${cfg.dataDir}".d = {
+            user = "pangolin";
+            group = "fossorial";
+            mode = "0770";
+          };
+          "${cfg.dataDir}/config".d = {
+            user = "pangolin";
+            group = "fossorial";
+            mode = "0770";
+          };
         };
       };
       services = {
@@ -265,9 +259,11 @@ in
           requires = [ "network.target" ];
           after = [ "network.target" ];
 
+          # need to do the symlinks here because of strict
+          # systemd tmpfiles unsafe path transitions
           preStart = ''
-            mkdir -p ${cfg.dataDir}/config
-            cp -f ${cfgFile} ${cfg.dataDir}/config/config.yml
+            ln -sf  ${cfgFile} ${cfg.dataDir}/config/config.yml
+            ln -sft ${cfg.dataDir}/config/ ${config.services.traefik.dataDir}
           '';
 
           serviceConfig = {
@@ -455,17 +451,11 @@ in
 
     services.traefik = {
       enable = true;
-      group = "fossorial";
-      dataDir = "${cfg.dataDir}/config/traefik";
-      staticConfigOptions = {
+      localPlugins = [ pkgs.fosrl-badger ];
+      install.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
-        };
-        # TODO to change this once #437073 is merged.
-        experimental.plugins.badger = {
-          moduleName = "github.com/fosrl/badger";
-          version = "v1.2.0";
         };
         certificatesResolvers.letsencrypt.acme =
           (
@@ -483,7 +473,7 @@ in
           # common
           {
             email = cfg.letsEncryptEmail;
-            storage = "${cfg.dataDir}/config/letsencrypt/acme.json";
+            storage = "acme.json";
             caServer = "https://acme-v02.api.letsencrypt.org/directory";
           };
         entryPoints = {
@@ -495,7 +485,7 @@ in
           };
         };
       };
-      dynamicConfigOptions = {
+      routing.files."pangolin".settings = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
           routers = {
