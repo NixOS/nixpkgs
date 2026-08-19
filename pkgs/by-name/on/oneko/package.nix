@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   version_name = "1.2.hanami.6";
-  version = "1.2.6";
+  version = "1.2.hanami.6";
   pname = "oneko";
   src = fetchFromGitHub {
     owner = "IreneKnapp";
