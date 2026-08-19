@@ -7,6 +7,7 @@
   expat,
   fetchCrate,
   fetchFromGitLab,
+  fetchpatch,
   file,
   flex,
   glslang,
@@ -153,6 +154,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./opencl.patch
+    # radv/video: Fix AV1 decode qmatrix params
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/43787 (merged)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/d298e30ad819e92680c3b098c261e9642a4b1602.patch";
+      hash = "sha256-rBm4L34zNhlmq2V6qUSDaE+ZjDed3MzK7picuWBHcTA=";
+    })
+    # radeonsi/mm: Fix AV1 decode qmatrix params
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/43787 (merged)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/3c4d3e46d19f2f4e951f3ae059543b03592f7944.patch";
+      hash = "sha256-TmAHV+9URKd4QRVBi/PoZSoinMNlYvzKhIYHAUtgXV4=";
+    })
   ];
 
   postPatch = ''
