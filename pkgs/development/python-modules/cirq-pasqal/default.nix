@@ -7,18 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cirq-pasqal";
   pyproject = true;
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "requests"
-  ];
+  pythonRelaxDeps = [ "requests" ];
 
   dependencies = [
     cirq-core
@@ -37,4 +35,4 @@ buildPythonPackage rec {
     # No need to test the version number
     "cirq_pasqal/_version_test.py"
   ];
-}
+})

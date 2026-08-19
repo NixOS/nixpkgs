@@ -25,16 +25,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.114.1";
+  version = "0.115.0";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-EpcbOnEcu8llVNC9zGEo62dHIHUJnyRRxP4sV8kSUwY=";
+    hash = "sha256-9QzdbNP8S9TmW8MRUVqvVRAi6dxTP3T2WY3+wuypsck=";
   };
 
-  cargoHash = "sha256-KZSWYJpyeN1fTeBSpuJ5r4HKZZ8a9k5KVft9uKqOJIE=";
+  cargoHash = "sha256-Vby1x3/W1IUs73bFz/+AZpn4IepWScqrGp0tXlF6an4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,6 +68,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "repl::test_config_path::test_default_config_path"
         "repl::test_config_path::test_xdg_config_bad"
         "repl::test_config_path::test_xdg_config_empty"
+
+        # https://github.com/nushell/nushell/pull/18716 added `| table` to these cases;
+        # the Nix build sandbox has no PTY, so nu-table's width detection panics on 0x0 width.
+        # Known upstream issue: https://github.com/nushell/nushell/issues/15328
+        "eval::eval_rendered_matches::case_3_literal_range"
+        "eval::eval_rendered_matches::case_4_literal_list"
+        "eval::eval_rendered_matches::case_5_literal_record"
+        "eval::eval_rendered_matches::case_6_literal_table"
+        "eval::eval_rendered_matches::case_8_call_spread"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "plugins::config::some"

@@ -653,6 +653,7 @@ mapAliases {
   curaPlugins = throw "'curaPlugins' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   curl-impersonate-chrome = warnAlias "curl-impersonate-chrome has been renamed to curl-impersonate" curl-impersonate; # Added 2025-11-02
   curl-impersonate-ff = throw "curl-impersonate-ff has been removed because it is unmaintained upstream and has vulnerable dependencies. Use curl-impersonate instead."; # Added 2025-11-02
+  curl-impersonateFull = throw "curl-impersonateFull has been removed because c-ares (only thing differentiating it from curl-impersonate) was removed upstream. Use curl-impersonate instead."; # Added 2026-08-18
   curlftpfs = throw "'curlftpfs' has been removed due to lack of fuse 3 support."; # Added 2026-06-05
   curlHTTP3 = warnAlias "'curlHTTP3' has been removed, as 'curl' now has HTTP/3 support enabled by default" curl; # Added 2025-08-22
   cvemap = vulnx; # Added 2026-04-19
@@ -1659,7 +1660,6 @@ mapAliases {
   minio_legacy_fs = throw "'minio_legacy_fs' has been removed. Users should migrate to alternatives such as Garage, SeaweedFS, or Ceph. S3-compatible clients such as rclone can be used to move data."; # Added 2026-02-02
   minizincide = warnAlias "'minizincide' has been renamed to 'minizinc-ide'" minizinc-ide; # Added 2026-01-03
   minizip2 = throw "'minizip2' has been renamed to/replaced by 'minizip-ng'"; # Converted to throw 2025-10-27
-  miru = throw "'miru' has been removed due to lack maintenance"; # Added 2025-08-21
   mkYarnModules = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
   mkYarnPackage = throw "'yarn2nix' and its tooling has been removed as it was unusable within nodePackages. Use the standard yarn v1 hooks available in nixpkgs instead."; # Added 2026-04-25
   mlir_16 = throw "mlir_16 has been removed, as it is unmaintained and obsolete"; # Added 2025-08-09
@@ -1784,7 +1784,7 @@ mapAliases {
   nix-plugin-pijul = throw "nix-plugin-pijul has been removed due to being discontinued"; # Added 2025-05-18
   nix_2_3 = throw "'nix_2_3' has been removed, because it was unmaintained and insecure."; # Converted to throw 2025-07-24
   nixbang = throw "'nixbang' has been removed because it was unmaintained upstream. Use nix-shell shebang instead'"; # Added 2026-07-02
-  nixfmt-classic = throw "nixfmt-classic has been removed as it is deprecated and unmaintained." haskellPackages.nixfmt.bin; # Converted to throw 2026-07-01
+  nixfmt-classic = throw "nixfmt-classic has been removed as it is deprecated and unmaintained."; # Converted to throw 2026-07-01
   nixfmt-rfc-style = warnAlias "nixfmt-rfc-style is now the same as pkgs.nixfmt which should be used instead." nixfmt; # Added 2025-07-14
   nixForLinking = throw "nixForLinking has been removed, use `nixVersions.nixComponents_<version>` instead"; # Added 2025-08-14
   nixnote2 = throw "'nixnote2' has been removed as upstream has been unmaintained since 2017"; # Added 2026-04-26
