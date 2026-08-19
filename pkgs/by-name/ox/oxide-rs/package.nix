@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   curl,
   pkg-config,
   libgit2,
@@ -25,6 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./rm-built-ref-head-lookup.patch
     ./rm-commit-hash-in-version-output.patch
   ];
+
+  nativeCheckInputs = [ cacert ];
+
+  # rust library: reqwest panicks without a bundle present
+  preCheck = ''
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
 
   checkFlags = [
     # skip since output check includes git commit hash
