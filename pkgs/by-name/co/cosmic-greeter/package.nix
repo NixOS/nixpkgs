@@ -7,6 +7,7 @@
   cmake,
   just,
   cosmic-randr,
+  dav1d,
   libinput,
   linux-pam,
   udev,
@@ -19,14 +20,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.5.0";
+  version = "1.6.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-QQfV8M/Bh5zEgzcMUcUmO1eP/PoZzFPYZEO/4n1d/lU=";
+    hash = "sha256-hDVdl2+7NVLA+YxO2HToni57IEr0i4OGTsYDc3YGTuw=";
   };
 
   postPatch = ''
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
   '';
 
-  cargoHash = "sha256-5A+7sgZqJcXjK51i5thAm9LK1SrW9ly8NHyf3IZfWQA=";
+  cargoHash = "sha256-vHR9go8/iVUT7oBV8h+mmBvhi2oSKNBKtV0uoDOr6go=";
 
   cargoBuildFlags = [ "--all" ];
 
@@ -52,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     cosmic-randr
+    dav1d
     libinput
     linux-pam
     udev

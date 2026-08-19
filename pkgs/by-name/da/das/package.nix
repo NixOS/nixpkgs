@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "defusedxml"
     "netaddr"
     "networkx"
+    "pandas"
     "plotly"
   ];
 
@@ -42,9 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "das" ];
 
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Divide full port scan results and use it for targeted Nmap runs";

@@ -1175,12 +1175,7 @@ let
 
         lutils = callPackage ../development/ocaml-modules/lutils { };
 
-        inherit
-          (callPackage ../development/ocaml-modules/luv {
-          })
-          luv-0-5-12
-          luv
-          ;
+        luv = callPackage ../development/ocaml-modules/luv { };
 
         lwd = callPackage ../development/ocaml-modules/lwd { };
 
@@ -2375,6 +2370,11 @@ let
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         hol_light = pkgs.hol_light; # Added 2026-06-02
         lablgtk-extras = throw "lablgtk-extras has been removed as it depends on sourceview2, which has been removed from nixpkgs"; # Added 2026-08-11
+        luv-0-5-12 = luv.overrideAttrs (_: {
+          # Added 2026-08-11
+          version = "0.5.12";
+          __intentionallyOverridingVersion = true;
+        });
         mirage-bootvar-unix = throw "ocamlPackages.mirage-bootvar-unix has been removed, superseded by ocamlPackages.mirage-bootvar"; # Added 2026-08-18
         mirage-bootvar-xen = throw "ocamlPackages.mirage-bootvar-xen has been removed, superseded by ocamlPackages.mirage-bootvar"; # Added 2026-08-18
         notty = throw "2026-05-05: notty is no longer maintained, use notty-community instead";
