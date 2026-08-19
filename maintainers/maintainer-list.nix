@@ -1685,6 +1685,12 @@
     githubId = 382798;
     name = "amfl";
   };
+  amielke = {
+    email = "gentoo-os@amielke.de";
+    github = "amielke";
+    githubId = 289922;
+    name = "Andreas Mielke";
+  };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
     github = "AmineChikhaoui";
