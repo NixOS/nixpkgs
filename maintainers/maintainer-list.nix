@@ -27393,6 +27393,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stefanboca = {
+    email = "stefan.r.boca@gmail.com";
+    github = "stefanboca";
+    githubId = 45266795;
+    name = "Stefan Boca";
+  };
   stefanfehrenbach = {
     email = "stefan.fehrenbach@gmail.com";
     github = "fehrenbach";
