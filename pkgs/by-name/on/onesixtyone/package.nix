@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "onesixtyone";
-  version = "0.3.4-unstable-2025-08-30";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
