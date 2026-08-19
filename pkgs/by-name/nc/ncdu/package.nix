@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "BratishkaErik";
     repo = "ncdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wKDo8f2PVXqFopnUgZ1mTJmsdzs6iUkzXFl3VpMkGIc=";
+    hash = "sha256-Fd7Drw+7vygY9t75B3O0inZPhiGAeUgmpLyq3ymbFSU=";
   };
 
   __structuredAttrs = true;
