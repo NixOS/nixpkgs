@@ -2,9 +2,9 @@
 {
   imports = [
     "${modulesPath}/security/secrets.nix"
-    ./backend-plain.nix
-    ./backend-prompt.nix
-    ./backend-age.nix
+    ../common/backend-plain.nix
+    ../common/backend-prompt.nix
+    ../common/backend-age.nix
   ];
 
   secrets = {
@@ -13,9 +13,11 @@
       "age195x33zrqzppjfnj2rjjlq3z8s64r5zlwe6rcywm9zu6agf449pmqdslyat" # Target
     ];
 
-    age.identity.host = ./key-host.txt;
-    age.identity.target = ./key-target.txt;
+    age.identity.host = ../common/key-host.txt;
+    age.identity.target = ../common/key-target.txt;
 
+    # I should probably set these to something else... These are the values I
+    # used while testing things
     age.ssh.target = "root@lapetus.overlay.moonythm.dev";
     age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
