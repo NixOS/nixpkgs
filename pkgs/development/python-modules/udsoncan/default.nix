@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -33,6 +34,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "udsoncan"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python implementation of UDS (ISO-14229) standard";
