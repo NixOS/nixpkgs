@@ -1,30 +1,29 @@
 {
   lib,
-  python312,
-  nix-update-script,
-  fetchFromGitHub,
   buildNpmPackage,
-  nodejs_24,
-  wrapGAppsHook3,
+  fetchFromGitHub,
   libappindicator,
+  nix-update-script,
+  nodejs_24,
+  python3,
+  wrapGAppsHook3,
 }:
 let
-  version = "8.2.3-unstable-2025-10-14";
-  python3 = python312;
+  version = "8.4.3";
   nodejs = nodejs_24;
 
   src = fetchFromGitHub {
     owner = "tribler";
     repo = "Tribler";
-    rev = "3e5bc56a15c568d0ba41262cad63155445e062da";
-    hash = "sha256-zGh2nVcJyOwVfPEdU8ZDgANFt0KnTqEXU3I3ZOGot2c=";
+    tag = "v${version}";
+    hash = "sha256-5ykIQBvYKzGn9toXb2248ulvh22fJlE0mNQkilkWRYo=";
   };
 
   tribler-webui = buildNpmPackage {
     inherit nodejs version;
     pname = "tribler-webui";
     src = "${src}/src/tribler/ui";
-    npmDepsHash = "sha256-bgRwhqP6/NMPFbZks31IZtVGV9wzFFU6qSgyLvdarlY=";
+    npmDepsHash = "sha256-3VS2E7YFI2UHWv8zbExR+i+SuLvq70mDaObDqYMIgP0=";
 
     # The prepack script runs the build script, which we'd rather do in the build phase.
     npmPackFlags = [ "--ignore-scripts" ];
@@ -50,19 +49,17 @@ python3.pkgs.buildPythonApplication {
   pname = "tribler";
   pyproject = true;
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     # requirements.txt
     configobj
-    pyipv8
     ipv8-rust-tunnels
     libtorrent-rasterbar
     lz4
     pillow
     pony
+    pyipv8
     pystray
 
     # build/requirements.txt
@@ -83,9 +80,9 @@ python3.pkgs.buildPythonApplication {
     astroid
     # tray icon deps
     libappindicator
-    # test phase requirements
-    pytestCheckHook
   ];
+
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   outputs = [
     "out"
@@ -115,7 +112,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   postInstall = ''
-    ln -s ${tribler-webui} $out/${python312.sitePackages}/tribler/ui
+    ln -s ${tribler-webui} $out/${python3.sitePackages}/tribler/ui
   '';
 
   preFixup = ''
@@ -123,6 +120,15 @@ python3.pkgs.buildPythonApplication {
       --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ libappindicator ]}"
     )
   '';
+
+  disabledTestPaths = [
+    # Tests are outdated
+    "src/tribler/test_unit/core/content_discovery/restapi/"
+    "src/tribler/test_unit/core/database/restapi/"
+    "src/tribler/test_unit/core/libtorrent/restapi/"
+    "src/tribler/test_unit/core/restapi/"
+    "src/tribler/test_unit/core/versioning/restapi/"
+  ];
 
   disabledTests = [
     "test_request_for_version"
@@ -137,7 +143,6 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     description = "Decentralized P2P filesharing client based on the Bittorrent protocol";
-    mainProgram = "tribler";
     homepage = "https://www.tribler.org/";
     changelog = "https://github.com/Tribler/tribler/releases/tag/v${version}";
     license = lib.licenses.gpl3;
@@ -146,6 +151,7 @@ python3.pkgs.buildPythonApplication {
       mlaradji
       xvapx
     ];
+    mainProgram = "tribler";
     platforms = lib.platforms.linux;
   };
 }

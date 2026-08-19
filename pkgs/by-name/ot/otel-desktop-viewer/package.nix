@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "otel-desktop-viewer";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "CtrlSpice";
     repo = "otel-desktop-viewer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9m1W2DxbMyBOGeECTn78X7I3GcToW5Gi33HWXGyWFO8=";
+    hash = "sha256-hi9OLtyYlmpJVTSvRxBcOFPgebFfzqzRR+qUslhBGZw=";
   };
 
   # NOTE: This project uses Go workspaces, but 'buildGoModule' does not support
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   #
   # cf. https://github.com/NixOS/nixpkgs/issues/203039
   proxyVendor = true;
-  vendorHash = "sha256-WTaPggKaQJY9t16jES9gbsFNHOn4ujxHsqezKOYMdCs=";
+  vendorHash = "sha256-5i9BpO4zc07nk577k7k0riDdjw96SwCLx0jIPp7YhhM=";
 
   ldflags = [
     "-s"

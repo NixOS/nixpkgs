@@ -335,8 +335,8 @@ in
       "sha256-3JYcWKFk0dKJg/qn+EBvxeAO5xh5PXCU3dTEWDr1oXI=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.71"
-      "sha256-BPpZx74PK6uCZJ05qw+r6DmPSXjG/9Sl5jRK9p1T/gA=";
+    buildMypyBoto3Package "connect" "1.43.73"
+      "sha256-2QzVxRO0JU0CWqv6RKGXMOkDloYoIHCqt98qcozFmQc=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.0"
@@ -423,8 +423,8 @@ in
       "sha256-67KqkSc8oUjKhuvQW6glmb211JZd+xkF03Mt8FISE8k=";
 
   mypy-boto3-drs =
-    buildMypyBoto3Package "drs" "1.43.48"
-      "sha256-tuVUCFE6CpcuKu9+hEOev1iIHqP3WFf9Ho4BTSvoMd8=";
+    buildMypyBoto3Package "drs" "1.43.73"
+      "sha256-qFlhBteatF0GN4ri990RBfLD05dT9IVNBN1mNX77wJw=";
 
   mypy-boto3-ds =
     buildMypyBoto3Package "ds" "1.43.0"
@@ -451,8 +451,8 @@ in
       "sha256-xJQTd7AglqOdFW1SuEV2Hr7BbDRhzhmmWvLg+k7Ie6s=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.43.0"
-      "sha256-tsQBQQYNC3qMWW7jwbRz6rVIfh1R/5Kh/xHq9Y5zf6s=";
+    buildMypyBoto3Package "ecr" "1.43.73"
+      "sha256-2Ow59L5miqnog1xPNszG/oMu4tJOfePiYdxpGGRiyQo=";
 
   mypy-boto3-ecr-public =
     buildMypyBoto3Package "ecr-public" "1.43.0"
@@ -982,8 +982,8 @@ in
       "sha256-JEuEjo0htTuDCZx2nNJK2Zq59oSUqkMf4BrNamerfVk=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.43.69"
-      "sha256-paBe5gVy3zwFWnrFlMJkSFsTezo8racFPocj7osxIss=";
+    buildMypyBoto3Package "organizations" "1.43.73"
+      "sha256-ez2VbSV/c+w7PWp9Auu984OsWe6JvN50PbKvZsvg1+Y=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.43.0"

@@ -1,39 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchFromGitHub,
+  nix-update-script,
   pytestCheckHook,
   python-dateutil,
   pytz,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crontab";
-  version = "3.3.0";
+  version = "1.0.5";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "doctormo";
-    repo = "python-crontab";
-    tag = "v${version}";
-    hash = "sha256-eJXtvTRwokbewWrTArHJ2FXGDLvlkGA/5ZZR01koMW8=";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "josiahcarlson";
+    repo = "parse-crontab";
+    tag = finalAttrs.version;
+    hash = "sha256-iZS4vkfp93BK5wp1S3qCg0bC7NcT7o5/nNMRI+SXTws=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  dependencies = [
     python-dateutil
     pytz
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "crontab" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Parse and use crontab schedules in Python";
-    homepage = "https://gitlab.com/doctormo/python-crontab/";
+    homepage = "https://github.com/josiahcarlson/parse-crontab";
+    changelog = "https://github.com/josiahcarlson/parse-crontab/blob/${finalAttrs.src.rev}/changelog.txt";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
