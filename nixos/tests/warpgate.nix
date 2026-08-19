@@ -9,7 +9,7 @@
     };
 
     machine2 = {
-      environment.etc."warpgate-db-url".text = "database: sqlite:/var/lib/warpgate/db/";
+      environment.etc."warpgate-db-url".text = "database_url: sqlite:/var/lib/warpgate/db/";
       services.warpgate = {
         enable = true;
         databaseUrlFile = "/etc/warpgate-db-url";
