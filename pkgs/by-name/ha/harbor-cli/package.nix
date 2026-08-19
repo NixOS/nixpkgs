@@ -3,14 +3,16 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  testers,
   installShellFiles,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "harbor-cli";
   version = "0.0.26";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "goharbor";
@@ -33,7 +35,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${finalAttrs.version}"
   ];
 
@@ -46,10 +47,13 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/harbor completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "HOME=\"$(mktemp -d)\" harbor version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/goharbor/harbor-cli";
