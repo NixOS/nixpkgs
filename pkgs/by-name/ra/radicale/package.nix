@@ -41,6 +41,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     waitress
   ];
 
+  # skip tests which try to measure how long something takes; makes the build fail sometimes
+  disabledTests = [ "delay" ];
+
   passthru.tests = {
     inherit (nixosTests) radicale;
   };
