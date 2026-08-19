@@ -10,12 +10,13 @@
   itstool,
   libtool,
   texinfo,
-  systemdLibs,
   util-linux,
   autoreconfHook,
   glib,
   dotconf,
   libsndfile,
+  withSystemd ? stdenv.hostPlatform.isLinux,
+  systemdLibs,
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     python
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals withSystemd [
     systemdLibs
   ]
   ++ lib.optionals withAlsa [
