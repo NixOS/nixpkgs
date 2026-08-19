@@ -430,7 +430,6 @@ let
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
-    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
     QF = [ pkgs.gsl ]; # for gsl-config
@@ -1073,6 +1072,7 @@ let
       ncurses
       zlib
     ];
+    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     NanoMethViz = [ pkgs.zlib ];
     OpenCL = with pkgs; [
       opencl-clhpp
