@@ -31,18 +31,19 @@
   playwright-driver,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   nodejs,
   markdown,
   nh3,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-filingcabinet";
   version = "0.17-unstable-2026-05-07";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
@@ -98,14 +99,13 @@ buildPythonPackage rec {
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
-      pnpm
       ;
-    fetcherVersion = 3;
-    hash = "sha256-p+RpEDVbdYmeSD4bB0oUMrTpsVDGYkqME13awnoTNd0=";
+    fetcherVersion = 4;
+    hash = "sha256-7MZIp4OD+h0G77U0GT7vblQ4fX53sg6xHE2fjie/90U=";
   };
 
   postBuild = ''
@@ -150,8 +150,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django app that manages documents with pages, annotations and collections";
     homepage = "https://github.com/okfde/django-filingcabinet";
-    changelog = "https://github.com/feincms/django-cabinet/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/feincms/django-cabinet/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})
