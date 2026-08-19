@@ -6871,8 +6871,8 @@ with pkgs;
   go = go_1_26;
   buildGoModule = buildGo126Module;
 
-  go_latest = go_1_26;
-  buildGoLatestModule = buildGo126Module;
+  go_latest = go_1_27;
+  buildGoLatestModule = buildGo127Module;
 
   go_1_25 = callPackage ../development/compilers/go/1.25.nix { };
   buildGo125Module = callPackage ../build-support/go/module.nix {
