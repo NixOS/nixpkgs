@@ -28,9 +28,12 @@ stdenv.mkDerivation (
         util-linux
         xvfb-run
       ];
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      libintl
-    ];
+
+    buildInputs =
+      (attrs.buildInputs or [ ])
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        libintl
+      ];
 
     enableParallelBuilding = true;
 
@@ -115,6 +118,7 @@ stdenv.mkDerivation (
     # if not listed, the passed value will override the default value
     "name"
     "nativeBuildInputs"
+    "buildInputs"
     "env"
     "installFlags"
     "postFixup"
