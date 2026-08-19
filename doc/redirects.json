@@ -3778,15 +3778,9 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
-  ],
-  "javascript-finding-examples": [
-    "index.html#javascript-finding-examples"
-  ],
-  "javascript-finding-examples-github": [
-    "index.html#javascript-finding-examples-github"
-  ],
-  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
     "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [
