@@ -11,10 +11,13 @@ let
   ageNixConfig = {
     generators = lib.pipe config.secrets.generators [
       (lib.filterAttrs (_: generator: generator.backend == "age"))
-      (lib.mapAttrs (
+      (lib.mapAttrs' (
         _: generator: {
-          inherit (generator.age) publicKeys;
-          identity = { inherit (generator.age.identity) target host; };
+          inherit (generator) name;
+          value = {
+            inherit (generator.age) publicKeys;
+            identity = { inherit (generator.age.identity) target host; };
+          };
         }
       ))
     ];
