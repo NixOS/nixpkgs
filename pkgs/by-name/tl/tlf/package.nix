@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlf";
-  version = "1.4.1-unstable-2026-03-27";
+  version = "tlf-1.4.1";
 
   src = fetchFromGitHub {
     owner = "Tlf";
