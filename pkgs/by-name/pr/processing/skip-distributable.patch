@@ -1,17 +1,16 @@
 diff --git a/app/build.gradle.kts b/app/build.gradle.kts
-index 0d3fcbd..88a0b63 100644
+index 6acfc49..5de69b1 100644
 --- a/app/build.gradle.kts
 +++ b/app/build.gradle.kts
-@@ -280,16 +280,7 @@ tasks.register<Exec>("packageSnap"){
-     commandLine("snapcraft")
+@@ -366,15 +366,8 @@ tasks.register<Exec>("packageFlatpak"){
+     )
  }
  tasks.register<Zip>("zipDistributable"){
 -    dependsOn("createDistributable", "setExecutablePermissions")
      group = "compose desktop"
--
--    val distributable = tasks.named<AbstractJPackageTask>("createDistributable").get()
--    val dir = distributable.destinationDir.get()
--    val packageName = distributable.packageName.get()
+ 
+-    val dir = distributable().destinationDir.get()
+-    val packageName = distributable().packageName.get()
 -
 -    from(dir){ eachFile{ permissions{ unix("755") } } }
 -    archiveBaseName.set(packageName)
