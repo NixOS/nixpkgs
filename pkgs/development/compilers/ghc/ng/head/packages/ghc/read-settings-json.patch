@@ -1,0 +1,11 @@
+--- a/GHC/Settings/IO.hs
++++ b/GHC/Settings/IO.hs
+@@ -51,7 +51,7 @@
+         False -> throwE $ SettingsError_MissingData $ "Missing file: " ++ path
+ 
+   settingsStr <- readFileSafe settingsFile
+-  settingsList <- case maybeReadFuzzy settingsStr of
++  settingsList <- case parseSettingsFile settingsStr of
+     Just s -> pure s
+     Nothing -> throwE $ SettingsError_BadData $
+       "Can't parse " ++ show settingsFile

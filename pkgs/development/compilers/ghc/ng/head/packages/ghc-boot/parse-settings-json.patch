@@ -1,0 +1,100 @@
+--- a/GHC/Settings/Utils.hs
++++ b/GHC/Settings/Utils.hs
+@@ -20,6 +20,97 @@
+   [(x, s)] | all isSpace s -> Just x
+   _ -> Nothing
+ 
++-- Note [JSON settings files]
++-- ~~~~~~~~~~~~~~~~~~~~~~~~~~
++--
++-- The settings file has historically been the `show` of a `[(String, String)]`,
++-- read back with `reads`. That is convenient to produce from Haskell and
++-- inconvenient to produce from anything else, which matters because the file is
++-- not the product of a single program: most of it describes the C toolchain and
++-- is discovered by `ghc-toolchain`, but a handful of entries -- `base unit-id`,
++-- `RTS ways`, `Relative Global Package DB` -- are facts about the build that
++-- only the build system knows.
++--
++-- Accepting JSON lets those two sources be produced independently and merged by
++-- ordinary tooling, rather than requiring whoever writes the file to link
++-- against Haskell.
++--
++-- Both formats are accepted: `parseSettingsFile` tries JSON and falls back to
++-- the `Read` representation, so existing settings files keep working.
++
++-- | Parse a settings file in either the JSON or the legacy `Read` format.
++parseSettingsFile :: String -> Maybe [(String, String)]
++parseSettingsFile str =
++  case parseFlatJsonObject str of
++    Just kvs -> Just kvs
++    Nothing -> maybeReadFuzzy str
++
++-- | Parse a flat JSON object whose values are all strings, e.g.
++--
++-- > { "target arch": "ArchX86_64", "target os": "OSLinux" }
++--
++-- Deliberately not a general JSON parser: settings are a string-to-string map,
++-- so anything else is a malformed settings file rather than something to
++-- represent.
++parseFlatJsonObject :: String -> Maybe [(String, String)]
++parseFlatJsonObject s0 = do
++  s1 <- expect '{' (skipSpace s0)
++  case skipSpace s1 of
++    '}' : rest | all isSpace rest -> Just []
++    s2 -> members s2
++  where
++    members s = do
++      (k, s1) <- jsonString (skipSpace s)
++      s2 <- expect ':' (skipSpace s1)
++      (v, s3) <- jsonString (skipSpace s2)
++      case skipSpace s3 of
++        ',' : rest -> ((k, v) :) <$> members rest
++        '}' : rest | all isSpace rest -> Just [(k, v)]
++        _ -> Nothing
++
++    expect c (c' : rest) | c == c' = Just rest
++    expect _ _ = Nothing
++
++    skipSpace = dropWhile isSpace
++
++-- | Parse a JSON string literal, returning it and the unconsumed input.
++jsonString :: String -> Maybe (String, String)
++jsonString ('"' : s0) = go s0
++  where
++    go ('"' : rest) = Just ("", rest)
++    go ('\\' : c : rest) = do
++      (c', rest') <- unescape c rest
++      (cs, rest'') <- go rest'
++      Just (c' ++ cs, rest'')
++    go (c : rest) = do
++      (cs, rest') <- go rest
++      Just (c : cs, rest')
++    go [] = Nothing
++
++    unescape '"' rest = Just ("\"", rest)
++    unescape '\\' rest = Just ("\\", rest)
++    unescape '/' rest = Just ("/", rest)
++    unescape 'b' rest = Just ("\b", rest)
++    unescape 'f' rest = Just ("\f", rest)
++    unescape 'n' rest = Just ("\n", rest)
++    unescape 'r' rest = Just ("\r", rest)
++    unescape 't' rest = Just ("\t", rest)
++    unescape 'u' (a : b : c : d : rest) = do
++      code <- hex4 a b c d
++      Just ([toEnum code], rest)
++    unescape _ _ = Nothing
++
++    hex4 a b c d = do
++      as <- mapM hexDigit [a, b, c, d]
++      Just (foldl (\acc x -> acc * 16 + x) 0 as)
++
++    hexDigit c
++      | c >= '0' && c <= '9' = Just (fromEnum c - fromEnum '0')
++      | c >= 'a' && c <= 'f' = Just (fromEnum c - fromEnum 'a' + 10)
++      | c >= 'A' && c <= 'F' = Just (fromEnum c - fromEnum 'A' + 10)
++      | otherwise = Nothing
++jsonString _ = Nothing
++
+ 
+ -- Note [Settings file]
+ -- ~~~~~~~~~~~~~~~~~~~~

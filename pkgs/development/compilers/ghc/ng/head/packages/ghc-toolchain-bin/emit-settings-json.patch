@@ -1,0 +1,234 @@
+--- a/Main.hs
++++ b/Main.hs
+@@ -1,3 +1,4 @@
++{-# LANGUAGE RecordWildCards #-}
+ {-# LANGUAGE NamedFieldPuns #-}
+ {-# LANGUAGE LambdaCase #-}
+ {-# LANGUAGE TypeApplications #-}
+@@ -34,12 +35,15 @@
+ import GHC.Toolchain.NormaliseTriple (normaliseTriple)
+ import Text.Read (readMaybe)
+ 
++import SettingsJson (targetToSettings, renderSettingsJson)
++
+ data Opts = Opts
+     { optTriple    :: Maybe String
+     , optTargetPrefix :: Maybe String
+     , optLocallyExecutable :: Maybe Bool
+     , optLlvmTriple :: Maybe String
+     , optOutput    :: Maybe String
++    , optOutputSettingsJson :: Bool -- ^ Emit GHC's settings as JSON, not a Target
+     , optCc        :: ProgOpt
+     , optCxx       :: ProgOpt
+     , optCpp       :: ProgOpt
+@@ -92,6 +96,7 @@
+     , optLocallyExecutable = Nothing
+     , optLlvmTriple = Nothing
+     , optOutput    = Nothing
++    , optOutputSettingsJson = False
+     , optCc        = po0
+     , optCxx       = po0
+     , optCpp       = po0
+@@ -154,6 +159,9 @@
+ _optOutput :: Lens Opts (Maybe String)
+ _optOutput = Lens optOutput (\x o -> o {optOutput=x})
+ 
++_optOutputSettingsJson :: Lens Opts Bool
++_optOutputSettingsJson = Lens optOutputSettingsJson (\x o -> o {optOutputSettingsJson=x})
++
+ _optTargetPrefix :: Lens Opts (Maybe String)
+ _optTargetPrefix = Lens optTargetPrefix (\x o -> o {optTargetPrefix=x})
+ 
+@@ -178,6 +186,7 @@
+     , verbosityOpt
+     , keepTempOpt
+     , outputOpt
++    , outputSettingsJsonOpt
+     ] ++
+     concat
+     [ enableDisable "unregisterised" "unregisterised backend" _optUnregisterised
+@@ -254,6 +263,9 @@
+     keepTempOpt = Option [] ["keep-temp"] (NoArg (set _optKeepTemp True))
+         "do not remove temporary files"
+ 
++    outputSettingsJsonOpt = Option [] ["output-settings-json"] (NoArg (set _optOutputSettingsJson True))
++        "Emit the toolchain-derived subset of GHC's settings file as JSON, rather than a Target"
++
+     outputOpt = Option ['o'] ["output"] (ReqArg (set _optOutput . Just) "OUTPUT")
+         "The output path for the generated target toolchain configuration"
+ 
+@@ -330,7 +342,10 @@
+     tgt <- mkTarget opts
+     logDebug $ "Final Target: " ++ show tgt
+     let file = fromMaybe (error "undefined --output") (optOutput opts)
+-    writeFile file (show tgt)
++    writeFile file $
++      if optOutputSettingsJson opts
++        then renderSettingsJson (targetToSettings tgt)
++        else show tgt
+ 
+ optional :: M a -> M (Maybe a)
+ optional k = fmap Just k <|> pure Nothing
+--- /dev/null
++++ b/SettingsJson.hs
+@@ -0,0 +1,140 @@
++{-# LANGUAGE RecordWildCards #-}
++-- | The toolchain-derived subset of GHC's settings file, as JSON.
++--
++-- Kept in its own module rather than appended to `Main.hs` so that the patch
++-- carrying it is a new file plus a few small context hunks. An end-of-file
++-- append does not survive a version bump: it failed outright against 9.15,
++-- while the small hunks applied with offsets.
++module SettingsJson (targetToSettings, renderSettingsJson) where
++
++import Prelude
++
++import GHC.Platform.ArchOS
++import GHC.Toolchain.Program
++import GHC.Toolchain.Target
++import GHC.Toolchain.Tools.Ar
++import GHC.Toolchain.Tools.Cc
++import GHC.Toolchain.Tools.Cpp
++import GHC.Toolchain.Tools.Cxx
++import GHC.Toolchain.Tools.Link
++import GHC.Toolchain.Tools.MergeObjs
++import GHC.Toolchain.Tools.Ranlib
++
++import qualified Data.Aeson as Aeson
++import qualified Data.Aeson.Key as Aeson (fromString)
++import qualified Data.Aeson.KeyMap as Aeson (fromList)
++import qualified Data.ByteString.Lazy as ByteString
++import qualified Data.Text as Text
++import qualified Data.Text.Encoding as Text
++
++-- Note [Toolchain-derived settings as JSON]
++-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++--
++-- GHC's settings file is not a function of the toolchain alone. Compare
++-- hadrian's Rules.Generate.generateSettings: alongside the compiler and
++-- binutils paths, which we discover here, it writes entries that are facts
++-- about the *build* rather than about the target --
++--
++--   ("base unit-id", "base-4.22.0.0-95fb")   -- the unit-id of the base that got built
++--   ("RTS ways", "v thr thr_debug ...")      -- the ways that got built
++--   ("Relative Global Package DB", ...)      -- the layout being assembled
++--
++-- none of which any amount of probing can produce.
++--
++-- So this emits only the subset we can honestly answer for, as a JSON object,
++-- leaving the rest to whoever is driving the build. They can merge the two with
++-- any JSON tool; GHC accepts a settings file in either JSON or the legacy
++-- `Read` format (see Note [JSON settings files] in GHC.Settings.Utils).
++--
++-- The alternative -- emitting the whole file with the build-dependent entries
++-- guessed at -- is what makes such entries silently wrong, which for
++-- "base unit-id" means a compiler that cannot find base.
++
++-- | The entries of GHC's settings file that follow from the 'Target' alone.
++targetToSettings :: Target -> [(String, String)]
++targetToSettings tgt@Target{..} =
++  [ ("C compiler command",   prgPath $ ccProgram tgtCCompiler)
++  , ("C compiler flags",     flags $ ccProgram tgtCCompiler)
++  , ("C++ compiler command", prgPath $ cxxProgram tgtCxxCompiler)
++  , ("C++ compiler flags",   flags $ cxxProgram tgtCxxCompiler)
++  , ("C compiler link flags",       flags $ ccLinkProgram tgtCCompilerLink)
++  , ("C compiler supports -no-pie", yesNo $ ccLinkSupportsNoPie tgtCCompilerLink)
++  , ("CPP command",         prgPath $ cppProgram tgtCPreprocessor)
++  , ("CPP flags",           flags $ cppProgram tgtCPreprocessor)
++  , ("Haskell CPP command", prgPath $ hsCppProgram tgtHsCPreprocessor)
++  , ("Haskell CPP flags",   flags $ hsCppProgram tgtHsCPreprocessor)
++  , ("JavaScript CPP command", maybe "" (prgPath . jsCppProgram) tgtJsCPreprocessor)
++  , ("JavaScript CPP flags",   maybe "" (flags . jsCppProgram) tgtJsCPreprocessor)
++  , ("C-- CPP command",      prgPath $ cmmCppProgram tgtCmmCPreprocessor)
++  , ("C-- CPP flags",        flags $ cmmCppProgram tgtCmmCPreprocessor)
++  , ("C-- CPP supports -g0", yesNo $ cmmCppSupportsG0 tgtCmmCPreprocessor)
++  , ("ld supports compact unwind", yesNo $ ccLinkSupportsCompactUnwind tgtCCompilerLink)
++  , ("ld supports filelist",       yesNo $ ccLinkSupportsFilelist tgtCCompilerLink)
++  , ("ld supports single module",  yesNo $ ccLinkSupportsSingleModule tgtCCompilerLink)
++  , ("ld is GNU ld",               yesNo $ ccLinkIsGnu tgtCCompilerLink)
++  , ("Merge objects command", maybe "" (prgPath . mergeObjsProgram) tgtMergeObjs)
++  , ("Merge objects flags",   maybe "" (flags . mergeObjsProgram) tgtMergeObjs)
++  , ("Merge objects supports response files",
++       maybe "NO" (yesNo . mergeObjsSupportsResponseFiles) tgtMergeObjs)
++  , ("ar command",          prgPath $ arMkArchive tgtAr)
++  , ("ar flags",            flags $ arMkArchive tgtAr)
++  , ("ar supports at file", yesNo $ arSupportsAtFile tgtAr)
++  , ("ar supports -L",      yesNo $ arSupportsDashL tgtAr)
++  , ("ranlib command",      maybe "" (prgPath . ranlibProgram) tgtRanlib)
++  , ("otool command",             maybe "" prgPath tgtOtool)
++  , ("install_name_tool command", maybe "" prgPath tgtInstallNameTool)
++  , ("windres command",           maybe "/bin/false" prgPath tgtWindres)
++  , ("target platform string", targetPlatformTriple tgt)
++  , ("target os",              show $ archOS_OS tgtArchOs)
++  , ("target arch",            show $ archOS_arch tgtArchOs)
++  , ("target word size",       show $ wordSize2Bytes tgtWordSize)
++  , ("target word big endian", yesNo $ case tgtEndianness of
++                                         BigEndian -> True
++                                         LittleEndian -> False)
++  , ("target has GNU nonexec stack",       yesNo tgtSupportsGnuNonexecStack)
++  , ("target has .ident directive",        yesNo tgtSupportsIdentDirective)
++  , ("target has subsections via symbols", yesNo tgtSupportsSubsectionsViaSymbols)
++  , ("Unregisterised",        yesNo tgtUnregisterised)
++  , ("Tables next to code",   yesNo tgtTablesNextToCode)
++  , ("Leading underscore",    yesNo tgtSymbolsHaveLeadingUnderscore)
++  , ("Use LibFFI",            yesNo tgtUseLibffiForAdjustors)
++  , ("LLVM target",           tgtLlvmTarget)
++    -- Unlike stable-haskell's port of this function, which hardcodes "llc"
++    -- and "opt", these are real fields of the Target and may be absent.
++  , ("LLVM llc command",      maybe "llc" prgPath tgtLlc)
++  , ("LLVM opt command",      maybe "opt" prgPath tgtOpt)
++  , ("LLVM llvm-as command",  maybe "clang" prgPath tgtLlvmAs)
++    -- Always empty; see ec826009b3a9d5f8e975ca2c8002832276043c18 and #25793.
++  , ("LLVM llvm-as flags",    "")
++  ]
++  where
++    yesNo True  = "YES"
++    yesNo False = "NO"
++    flags = escapeArgs . prgFlags
++
++-- | Just like 'GHC.ResponseFile.escapeArgs', but using spaces rather than
++-- newlines to separate elements, which is what the settings file expects.
++escapeArgs :: [String] -> String
++escapeArgs = unwords . map escapeArg
++  where
++    escapeArg = reverse . foldl escape []
++    escape cs c
++      | c `elem` (" \t\n\\'\"" :: String) = c : '\\' : cs
++      | otherwise                         = c : cs
++
++-- | Render a string-to-string map as a JSON object.
++--
++-- Uses aeson rather than hand-rolling an encoder. Note that the *reader* on
++-- GHC's side cannot do the same: it lives in `ghc-boot`, a boot library
++-- compiled as part of GHC itself, and giving GHC a dependency on aeson and its
++-- transitive closure is not on the table. See Note [JSON settings files] in
++-- GHC.Settings.Utils.
++renderSettingsJson :: [(String, String)] -> String
++renderSettingsJson =
++    Text.unpack
++  . Text.decodeUtf8
++  . ByteString.toStrict
++  . Aeson.encode
++  . Aeson.Object
++  . Aeson.fromList
++  . map (\(k, v) -> (Aeson.fromString k, Aeson.String (Text.pack v)))
+--- a/ghc-toolchain-bin.cabal
++++ b/ghc-toolchain-bin.cabal
+@@ -10,6 +10,7 @@
+ 
+ executable ghc-toolchain-bin
+     main-is:          Main.hs
++    other-modules:    SettingsJson
+     ghc-options:      -Wall
+     default-extensions: NoImplicitPrelude
+     build-depends:    base,
+@@ -18,5 +19,8 @@
+                       process,
+                       transformers,
+                       ghc-platform,
+-                      ghc-toolchain
++                      ghc-toolchain,
++                      aeson,
++                      bytestring,
++                      text
+     default-language: Haskell2010

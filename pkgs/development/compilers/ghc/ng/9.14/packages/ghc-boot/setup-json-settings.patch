@@ -1,0 +1,111 @@
+--- a/Setup.hs
++++ b/Setup.hs
+@@ -39,12 +39,26 @@
+       ghcVersionFile = "GHC/Version.hs"
+       ghcVersionPath = autogenPackageModulesDir lbi </> ghcVersionFile
+ 
+-  -- Get compiler settings
+-  settings <- lookupEnv "HADRIAN_SETTINGS" >>= \case
+-    Just settings -> pure $ Left $ read settings
+-    Nothing -> do
+-      (ghc,withPrograms) <- requireProgram normal ghcProgram withPrograms
+-      Right . read <$> getProgramOutput normal ghc ["--info"]
++  -- Get compiler settings.
++  --
++  -- `GHC_BOOT_SETTINGS` is the JSON spelling of what `HADRIAN_SETTINGS` has
++  -- always carried. Both are accepted: the value is parsed as a JSON object of
++  -- string values if it looks like one, and as the `Read` of a
++  -- `[(String, String)]` otherwise, so existing callers are unaffected.
++  --
++  -- JSON because this is the same string-to-string map as `lib/settings`, and
++  -- anything that is not a Haskell program should be able to write it.
++  settings <- do
++    mEnv <- do
++      json <- lookupEnv "GHC_BOOT_SETTINGS"
++      case json of
++        Just _ -> pure json
++        Nothing -> lookupEnv "HADRIAN_SETTINGS"
++    case mEnv of
++      Just s -> pure $ Left $ parseSettings s
++      Nothing -> do
++        (ghc,withPrograms) <- requireProgram normal ghcProgram withPrograms
++        Right . parseSettings <$> getProgramOutput normal ghc ["--info"]
+ 
+   -- Write GHC.Platform.Host
+   createDirectoryIfMissingVerbose verbosity True (takeDirectory platformHostPath)
+@@ -118,3 +132,75 @@
+         , "cProjectPatchLevel2   :: String"
+         , "cProjectPatchLevel2   = " ++ show cProjectPatchLevel2
+         ]
++
++-- | Parse a settings map in either the JSON or the legacy `Read` format.
++--
++-- Setup.hs is compiled before the library it configures, so it cannot import
++-- `GHC.Settings.Utils.parseSettingsFile`; this is the same logic, kept in step
++-- with it deliberately.
++parseSettings :: String -> [(String, String)]
++parseSettings str =
++  case parseFlatJsonObject str of
++    Just kvs -> kvs
++    Nothing -> read str
++
++-- | Parse a flat JSON object whose values are all strings. Deliberately not a
++-- general JSON parser: these settings are a string-to-string map, so anything
++-- else is malformed rather than something to represent.
++parseFlatJsonObject :: String -> Maybe [(String, String)]
++parseFlatJsonObject s0 = do
++  s1 <- expect '{' (skipSpace s0)
++  case skipSpace s1 of
++    '}' : rest | all isSpace rest -> Just []
++    s2 -> members s2
++  where
++    members s = do
++      (k, s1) <- jsonString (skipSpace s)
++      s2 <- expect ':' (skipSpace s1)
++      (v, s3) <- jsonString (skipSpace s2)
++      case skipSpace s3 of
++        ',' : rest -> ((k, v) :) <$> members rest
++        '}' : rest | all isSpace rest -> Just [(k, v)]
++        _ -> Nothing
++
++    expect c (c' : rest) | c == c' = Just rest
++    expect _ _ = Nothing
++
++    skipSpace = dropWhile isSpace
++
++jsonString :: String -> Maybe (String, String)
++jsonString ('"' : s0) = go s0
++  where
++    go ('"' : rest) = Just ("", rest)
++    go ('\\' : c : rest) = do
++      (c', rest') <- unescape c rest
++      (cs, rest'') <- go rest'
++      Just (c' ++ cs, rest'')
++    go (c : rest) = do
++      (cs, rest') <- go rest
++      Just (c : cs, rest')
++    go [] = Nothing
++
++    unescape '"' rest = Just ("\"", rest)
++    unescape '\\' rest = Just ("\\", rest)
++    unescape '/' rest = Just ("/", rest)
++    unescape 'b' rest = Just ("\b", rest)
++    unescape 'f' rest = Just ("\f", rest)
++    unescape 'n' rest = Just ("\n", rest)
++    unescape 'r' rest = Just ("\r", rest)
++    unescape 't' rest = Just ("\t", rest)
++    unescape 'u' (a : b : c : d : rest) = do
++      code <- hex4 a b c d
++      Just ([toEnum code], rest)
++    unescape _ _ = Nothing
++
++    hex4 a b c d = do
++      as <- mapM hexDigit [a, b, c, d]
++      Just (foldl (\acc x -> acc * 16 + x) 0 as)
++
++    hexDigit c
++      | c >= '0' && c <= '9' = Just (fromEnum c - fromEnum '0')
++      | c >= 'a' && c <= 'f' = Just (fromEnum c - fromEnum 'a' + 10)
++      | c >= 'A' && c <= 'F' = Just (fromEnum c - fromEnum 'A' + 10)
++      | otherwise = Nothing
++jsonString _ = Nothing

@@ -1,0 +1,20 @@
+--- a/Main.hs
++++ b/Main.hs
+@@ -28,7 +28,7 @@
+ import GHC.Unit.Database hiding (mkMungePathUrl)
+ import GHC.HandleEncoding
+ import GHC.BaseDir (getBaseDir)
+-import GHC.Settings.Utils (getTargetArchOS, maybeReadFuzzy, getGlobalPackageDb, RawSettings)
++import GHC.Settings.Utils (getTargetArchOS, maybeReadFuzzy, parseSettingsFile, getGlobalPackageDb, RawSettings)
+ import GHC.Platform.Host (hostPlatformArchOS)
+ import GHC.UniqueSubdir (uniqueSubdir)
+ import qualified GHC.Data.ShortText as ST
+@@ -578,7 +578,7 @@
+ readFromSettingsFile settingsFile f = do
+   settingsStr <- readFile settingsFile
+   pure $ do
+-    mySettings <- case maybeReadFuzzy settingsStr of
++    mySettings <- case parseSettingsFile settingsStr of
+       Just s -> pure $ Map.fromList s
+       -- It's excusable to not have a settings file (for now at
+       -- least) but completely inexcusable to have a malformed one.
