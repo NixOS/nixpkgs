@@ -15,8 +15,8 @@
         "lts": true
     },
     "5.10": {
-        "version": "5.10.264",
-        "hash": "sha256:17j8bdqsq6n0zl5a59chiapxpn7yapqvihqq37414dbq6bn54xgj",
+        "version": "5.10.265",
+        "hash": "sha256:0i96z6iq218bcqyy4hllz9jnaj0j012ix82lf5gkvnj9kqbbj36i",
         "lts": true
     },
     "6.6": {
