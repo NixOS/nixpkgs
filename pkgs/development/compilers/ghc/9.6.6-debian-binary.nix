@@ -314,7 +314,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames ghcDebs;
-    maintainers = [ lib.maintainers.OPNA2608 ];
+    maintainers = [
+      # powerpc64-linux
+      lib.maintainers.OPNA2608
+      # riscv64-linux
+      lib.maintainers.liberodark
+    ];
     teams = [ lib.teams.haskell ];
   };
 })
