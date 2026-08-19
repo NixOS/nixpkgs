@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lamco-rdp-server";
   version = "1.4.4";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/lamco-admin/lamco-rdp-server/releases/download/v${finalAttrs.version}/lamco-rdp-server-${finalAttrs.version}.tar.xz";
     hash = "sha256-gMqzhHFpvRqZqhP1XAqMO3tUQRM6hRV5yhr7TKEeyek=";
