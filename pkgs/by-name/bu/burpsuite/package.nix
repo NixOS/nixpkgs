@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildFHSEnv,
   fetchurl,
@@ -8,6 +9,7 @@
 
   # Either "community" or "pro"
   iconName ? "community",
+  licenseAccepted ? config.burpsuite.accept_license or false,
 }:
 assert lib.assertMsg (
   iconName == "pro" || iconName == "community"
@@ -45,7 +47,9 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  runScript = "${lib.getExe jdk} -jar ${src}";
+  runScript =
+    "${lib.getExe jdk} -jar ${src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
+    + lib.optionalString licenseAccepted " --i-accept-the-license-agreement";
 
   targetPkgs =
     pkgs: with pkgs; [

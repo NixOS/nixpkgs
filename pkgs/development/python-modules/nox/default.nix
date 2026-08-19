@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nox";
-  version = "2026.08.10";
+  version = "2026.08.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wntrblm";
     repo = "nox";
     tag = finalAttrs.version;
-    hash = "sha256-tPYOtLjH7P4ygFI6zshhB3Xy31hd/Z/XnzEGOWZul7M=";
+    hash = "sha256-zHgxU2Gq04dOb8Xd6+VtTf6KRYNrwX7tYjO0eDBidxU=";
   };
 
   build-system = [ hatchling ];
