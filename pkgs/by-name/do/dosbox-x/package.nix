@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   alsa-lib,
   autoreconfHook,
@@ -29,14 +30,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.07.02";
+  version = "2026.08.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-HO5JJQHeEJYXU7TtNCXZALgqkNbIMGI+TjDwbvs5L8w=";
+    hash = "sha256-zipg/eTz/k6IQeUovgpZ/ezOJNEjSQwHpkpGYOtdpS0=";
   };
+
+  patches = [
+    # https://github.com/joncampbell123/dosbox-x/issues/6446
+    # Remove when version > 2026.08.02
+    (fetchpatch {
+      name = "0001-dosbox-x-Fix-FFmpeg-9-compat.patch";
+      url = "https://github.com/joncampbell123/dosbox-x/commit/18062c0ffb33db35fa52ce937ce25223140c0293.patch";
+      hash = "sha256-S6DMmofFBloZFut0M3ZVAV/awG8Af9xjO2AcfVusOdg=";
+    })
+  ];
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
   # iconutil is unavailable, replace with png2icns from libicns

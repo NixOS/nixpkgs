@@ -11118,6 +11118,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neo-tree-diagnostics-nvim = buildVimPlugin {
+    pname = "neo-tree-diagnostics.nvim";
+    version = "0-unstable-2024-02-28";
+    src = fetchFromGitHub {
+      owner = "mrbjarksen";
+      repo = "neo-tree-diagnostics.nvim";
+      rev = "e00434c3cf8637bcaf70f65c2b9d82b0cc9bd7dc";
+      hash = "sha256-HU7pFsICHK6bg03chgZ1oP6Wx2GQxk7ZJHGQnD0IMBA=";
+    };
+    meta.homepage = "https://github.com/mrbjarksen/neo-tree-diagnostics.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   neo-tree-nvim = buildVimPlugin {
     pname = "neo-tree.nvim";
     version = "3.41.0";
