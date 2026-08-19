@@ -13,13 +13,13 @@
 }:
 let
   pname = "onedriver";
-  version = "0.15.0";
+  version = "0.15.0-4";
 
   src = fetchFromGitHub {
     owner = "jstaf";
     repo = "onedriver";
     rev = "v${version}";
-    hash = "sha256-DCxF52CtA9KAP+yz5Rgzc/nUAXtZwfYAVU7oHREJlRY=";
+    hash = "sha256-8kJP6OAB/qykAiPvJS7hYbdWFFFhWuV+yjhSeeO5aBA=";
   };
 in
 buildGoModule {
