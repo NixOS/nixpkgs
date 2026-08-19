@@ -5,20 +5,21 @@
   stdenv,
   beanquery,
   fava,
+  flask,
   hatch-vcs,
   hatchling,
   pyyaml,
 }:
 buildPythonPackage rec {
   pname = "fava-dashboards";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-dashboards";
     tag = "v${version}";
-    hash = "sha256-48WS5ymgTN3843Rx3Va5/0ZoLsImrFat8BExOqvhL/c=";
+    hash = "sha256-1NJBV12/OIbJau2Z4RAp+QgV0jVlkznyDI/tWlfw2Bk=";
   };
 
   build-system = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     beanquery
     fava
+    flask
     pyyaml
   ];
 
