@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "xmonad-log";
-  version = "0.1.0-unstable-2024-06-14";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "xintron";
