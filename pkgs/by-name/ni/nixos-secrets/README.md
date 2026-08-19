@@ -284,4 +284,4 @@ One can also sidestep going through Nix-lang altogether by using the `--json` fl
 
 ## Available backends
 
-We are currently not planning to ship a production-ready backend alongside the CLI. The goal of the interface is to be lean enough such that anyone can write a simple backend meeting their needs in their language of choice. Still, two (currently somewhat scuffed) example backends can be found in [`example/config`](./example/config)
+We are currently not planning to ship a production-ready backend alongside the CLI. The goal of the interface is to be lean enough such that anyone can write a simple backend meeting their needs in their language of choice. Still, two (currently somewhat scuffed) example backends can be found in [`example/common`](./example/common).
