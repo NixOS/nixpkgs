@@ -23,6 +23,8 @@ buildPythonPackage (finalAttrs: {
   version = "2025.6.4";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
