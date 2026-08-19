@@ -7,6 +7,8 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "lua";
+  # The version needs to fit to lua-resty-core.
+  # Adapt both.
   version = "0.10.31";
 
   src = fetchFromGitHub {

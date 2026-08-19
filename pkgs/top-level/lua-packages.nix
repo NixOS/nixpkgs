@@ -165,6 +165,8 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
+      # The version needs to fit to nginxModules.lua
+      version = "0.1.34rc3";
 
       src = fetchFromGitHub {
         owner = "openresty";
