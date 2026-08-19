@@ -301,6 +301,14 @@ in
                 default = "/var/lib/warpgate/tls.key.pem";
                 type = str;
               };
+              advertised_version = mkOption {
+                description = ''
+                  The server version advertised to clients during the handshake.
+                  Warpgate can't auto-match the target's version since the target is only known after the handshake, but Warpgate's clients use it to pick a protocol dialect.
+                '';
+                default = "8.0.3-Warpgate";
+                type = str;
+              };
             };
             postgres = {
               enable = mkOption {
