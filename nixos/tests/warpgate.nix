@@ -24,6 +24,12 @@
         enable = true;
         settings = {
           http.listen = "[::]:443";
+          ssh.enable = true;
+          rdp.enable = true;
+          vnc.enable = true;
+          mysql.enable = true;
+          postgres.enable = true;
+          kubernetes.enable = true;
         };
       };
     };
@@ -43,6 +49,12 @@
 
     machine3.wait_for_unit("warpgate.service")
     machine3.wait_for_open_port(443)
+    machine3.wait_for_open_port(2222)
+    machine3.wait_for_open_port(3389)
+    machine3.wait_for_open_port(5900)
+    machine3.wait_for_open_port(33306)
+    machine3.wait_for_open_port(55432)
+    machine3.wait_for_open_port(8443)
     machine3.succeed("curl -k --fail https://localhost/@warpgate")
     machine3.shutdown()
   '';
