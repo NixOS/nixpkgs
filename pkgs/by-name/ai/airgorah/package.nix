@@ -1,15 +1,19 @@
 {
-  rustPlatform,
   lib,
+  aircrack-ng,
+  copyDesktopItems,
   fetchFromGitHub,
-  pkg-config,
-  glib,
-  pango,
   gdk-pixbuf,
+  glib,
   graphene,
   gtk4,
-  copyDesktopItems,
+  iw,
+  macchanger,
   makeDesktopItem,
+  pango,
+  pkg-config,
+  rustPlatform,
+  wireshark-cli,
   wrapGAppsHook4,
 }:
 
@@ -42,6 +46,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm644 crates/gui/icons/app_icon.png $out/share/icons/airgorah.png
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${
+      lib.makeBinPath [
+        iw
+        aircrack-ng
+        wireshark-cli
+        macchanger
+      ]
+    })
   '';
 
   desktopItems = [
