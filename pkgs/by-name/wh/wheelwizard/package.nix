@@ -19,7 +19,7 @@ buildDotnetModule (finalAttrs: {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Dex2PDgwnxKguf0jtC1T0+jm7bA7jDfvspwkiqJgUg";
+    hash = "sha256-8Dex2PDgwnxKguf0jtC1T0+jm7bA7jDfvspwkiqJgUg=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
