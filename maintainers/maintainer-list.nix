@@ -27311,6 +27311,12 @@
     githubId = 4340859;
     name = "Stian Lågstad";
   };
+  stig = {
+    email = "stig@circleci.com";
+    github = "stig";
+    githubId = 45407;
+    name = "Stig Brautaset";
+  };
   StijnDW = {
     email = "nixdev@rinsa.eu";
     github = "Stekke";
