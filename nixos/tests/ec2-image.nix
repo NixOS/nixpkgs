@@ -25,6 +25,7 @@ let
         ../modules/profiles/qemu-guest.nix
         {
           amazonImage.format = "qcow2";
+          amazonImage.bootSize = 512;
 
           # In a NixOS test the serial console is occupied by the "backdoor"
           # (see testing/test-instrumentation.nix) and is incompatible with
@@ -296,6 +297,14 @@ in
 
           with subtest("Basic EC2 functionality"):
               machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+
+          with subtest("Boot partition honors amazonImage.bootSize"):
+              if ${if imageCfg.ec2.efi then "True" else "False"}:
+                  esp_bytes = int(machine.succeed("blockdev --getsize64 /dev/vda1").strip())
+                  mib = 1024 * 1024
+                  # parted may round the end upto the next alignment boundary,
+                  # so allow a small margin of error.
+                  assert (512 - 8) * mib <= esp_bytes <= 513 * mib, f"unexpected ESP size: {esp_bytes}"
 
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
