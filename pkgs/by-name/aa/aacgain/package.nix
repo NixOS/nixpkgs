@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "aacgain";
-  version = "2.0.0-unstable-2022-07-12";
+  version = "2.0.0-unstable-2022-07-13";
 
   src = fetchFromGitHub {
     owner = "dgilman";
