@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tldx";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "brandonyoungdev";
     repo = "tldx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3eVVN5PP3MxMSlZK+cASw7twgUZryMdTNOuseoynSZI=";
+    hash = "sha256-vQgEfbUsWM+UN7jEMfAy/ufjq9lA9xRiLdeZSWGmF6c=";
   };
 
-  vendorHash = "sha256-ApR/XDuOpXiZuyJWEsMbrwYn81Rq9XAYh38fbPoh7rM=";
+  vendorHash = "sha256-HLajM4Ary2GT+R9Pv7LVGwXKl4mxWvyPdCE4exzg+a4=";
 
   ldflags = [
     "-s"
