@@ -17,7 +17,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "editres";
-  version = "1.0.9";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "editres";
     tag = "editres-${finalAttrs.version}";
-    hash = "sha256-fdp6j8zS8mtzHpG9js9c8iIt1vsKsqGG9MdkpLh8UB0=";
+    hash = "sha256-JDRa3IVHw44SQ+eYICoTlhVY0+9q+Bul8zQ/zTU9QiY=";
   };
 
   strictDeps = true;
