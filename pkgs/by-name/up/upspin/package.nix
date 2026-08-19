@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "upspin";
-  version = "unstable-2023-02-05";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "upspin";
