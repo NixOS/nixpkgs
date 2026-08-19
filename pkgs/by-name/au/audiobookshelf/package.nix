@@ -5,7 +5,7 @@
   runCommand,
   buildNpmPackage,
   nodejs_22,
-  ffmpeg-full,
+  ffmpeg_8-full,
   nunicode,
   util-linux,
   python3,
@@ -14,6 +14,8 @@
 }:
 
 let
+  ffmpeg-full = ffmpeg_8-full;
+
   source = {
     version = "2.36.0";
     hash = "sha256-oohjRiKARpIyoPFEXR24nlKK4xBBEHUMVTaq/i6NfV8=";
