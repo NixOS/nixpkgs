@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   grayjay,
   curl-impersonateFull,
@@ -11,7 +10,7 @@ stdenv.mkDerivation {
   # nixpkgs-update: no auto update
   inherit (grayjay) version src;
 
-  sourceRoot = "source/curlbind/native";
+  sourceRoot = "${grayjay.src.name}/curlbind/native";
 
   dontConfigure = true;
 
@@ -19,14 +18,11 @@ stdenv.mkDerivation {
   strictDeps = true;
   separateDebugInfo = true;
   buildInputs = [ curl-impersonateFull ];
+
   buildPhase = ''
     runHook preBuild
 
-    $CC -shared -fPIC \
-      -I ${lib.getDev curl-impersonateFull}/include \
-      "curlshim.c" \
-      -o libcurlshim.so \
-      -L ${lib.getLib curl-impersonateFull}/lib -lcurl-impersonate
+    $CC -shared -fPIC -lcurl-impersonate "curlshim.c" -o libcurlshim.so
 
     runHook postBuild
   '';
@@ -34,8 +30,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
-    cp libcurlshim.so $out/lib/
+    install -Dm755 libcurlshim.so -t "$out/lib/"
 
     runHook postInstall
   '';
