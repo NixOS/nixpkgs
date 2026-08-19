@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wired";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "Toqozz";
     repo = "wired-notify";
     tag = finalAttrs.version;
-    hash = "sha256-AWIV/+vVwDZECZ4lFMSFyuyUKJc/gb72PiBJv6lbhnc=";
+    hash = "sha256-tImxEsXDbWczkZwEjR2aGz0FE/UCdzDhPDRGJ80ICpY=";
   };
 
-  cargoHash = "sha256-xE6r8l3d9WAXf4DsGbhEiaeMPs02kXY2dG9dk0/7flQ=";
+  cargoHash = "sha256-oEyyVhA0G17GMrJQ6z/rJgopSolute/qrcC1Qpg+YQU=";
 
   strictDeps = true;
 

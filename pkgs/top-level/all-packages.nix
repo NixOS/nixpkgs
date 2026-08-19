@@ -668,6 +668,8 @@ with pkgs;
   fetchFromRadicle = callPackage ../build-support/fetchradicle { };
   fetchRadiclePatch = callPackage ../build-support/fetchradiclepatch { };
 
+  fetchFromTangled = callPackage ../build-support/fetchtangled { };
+
   fetchgx = callPackage ../build-support/fetchgx { };
 
   fetchItchIo = callPackage ../build-support/fetchitchio { };
@@ -5179,8 +5181,11 @@ with pkgs;
 
   inherit (callPackage ../misc/optee-os { })
     buildOptee
-    opteeQemuArm
+    opteeAllwinnerA64
     opteeQemuAarch64
+    opteeQemuArm
+    opteeRockchipRK3399
+    opteeRockchipRK3588
     ;
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
@@ -7321,11 +7326,6 @@ with pkgs;
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
-  mdbook-rss-feed-full = mdbook-rss-feed.override {
-    withAtom = true;
-    withJsonFeed = true;
-  };
-
   micro-full = micro.wrapper.override {
     extraPackages = [
       wl-clipboard
@@ -7893,9 +7893,6 @@ with pkgs;
     qemu.override {
       smbdSupport = lib.meta.availableOn stdenv.hostPlatform samba;
       cephSupport = lib.meta.availableOn stdenv.hostPlatform ceph;
-      glusterfsSupport =
-        lib.meta.availableOn stdenv.hostPlatform glusterfs
-        && lib.meta.availableOn stdenv.hostPlatform libuuid;
     }
   );
 
@@ -8582,7 +8579,7 @@ with pkgs;
           buildMozillaMach
           ;
       };
-  firefox-esr-unwrapped = firefox-esr-140-unwrapped;
+  firefox-esr-unwrapped = firefox-esr-153-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
@@ -8600,7 +8597,7 @@ with pkgs;
     wmClass = "firefox-esr";
     icon = "firefox-esr";
   };
-  firefox-esr = firefox-esr-140;
+  firefox-esr = firefox-esr-153;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (firefox-unwrapped.passthru) applicationName;
@@ -10245,6 +10242,20 @@ with pkgs;
     rocq-core
     ;
 
+  inherit (rocqPackages) coq;
+
+  # Deprecated aliases
+
+  coqPackages = rocqPackages;
+  coqPackages_9_0 = rocqPackages_9_0;
+  coq_9_0 = rocqPackages_9_0.coq;
+  coqPackages_9_1 = rocqPackages_9_1;
+  coq_9_1 = rocqPackages_9_1.coq;
+  coqPackages_9_2 = rocqPackages_9_2;
+  coq_9_2 = rocqPackages_9_2.coq;
+  coqPackages_9_3 = rocqPackages_9_3;
+  coq_9_3 = rocqPackages_9_3.coq;
+
   inherit
     (callPackage ./coq-packages.nix {
       inherit (ocaml-ng)
@@ -10253,13 +10264,6 @@ with pkgs;
         ocamlPackages_4_12
         ocamlPackages_4_14
         ocamlPackages_5_5
-        ;
-      inherit
-        rocqPackages_9_0
-        rocqPackages_9_1
-        rocqPackages_9_2
-        rocqPackages_9_3
-        rocqPackages
         ;
     })
     mkCoqPackages
@@ -10291,16 +10295,6 @@ with pkgs;
     coq_8_19
     coqPackages_8_20
     coq_8_20
-    coqPackages_9_0
-    coq_9_0
-    coqPackages_9_1
-    coq_9_1
-    coqPackages_9_2
-    coq_9_2
-    coqPackages_9_3
-    coq_9_3
-    coqPackages
-    coq
     ;
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seadrive-gui";
-  version = "3.0.23";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seadrive-gui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FnZ96NkS31xC5iImZToz6lRjpJ0ui4UbrTGyA9ij7y8=";
+    hash = "sha256-Oz1eervLKIE4dUVtFnIIsokZYIt8RYLBj6sesqoPDHo=";
   };
 
   # Fix cmake modernization warning.

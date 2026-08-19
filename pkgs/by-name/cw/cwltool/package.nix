@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
+    distutils
     mock
     nodejs
     pytest-mock

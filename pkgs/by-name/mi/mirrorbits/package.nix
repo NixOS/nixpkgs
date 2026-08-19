@@ -10,20 +10,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "mirrorbits";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = "mirrorbits";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PqPE/PgIyQylbYoABC/saxLF83XjgRAS0QimragJ8P8=";
+    hash = "sha256-oMUBLWwyNtGRMVd8nQrkQsuLdx57jiGdH0L7HrHcr9U=";
   };
 
   postPatch = ''
     rm -rf vendor
   '';
 
-  vendorHash = "sha256-cdD9RvOtgN/SHtgrtrucnUI+nnO/FabUyPRdvgoL44o=";
+  vendorHash = "sha256-AxBGSFbg8KpO3Yq5y3PXY2Yh2Xn+YeyYnp4mXw1iZe8=";
 
   nativeBuildInputs = [ pkg-config ];
 
