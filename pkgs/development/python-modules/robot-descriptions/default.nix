@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "robot-descriptions";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robot-descriptions";
     repo = "robot_descriptions.py";
     tag = "v${version}";
-    hash = "sha256-THLGQWZVeXwbanBIyYw8ymM+c/x5rXJxD7YWgn8GCWw=";
+    hash = "sha256-tbyMcoZXnzWGZ9tO/2hBXNimJQa1UTxPLpyrI1yalWI=";
   };
 
   build-system = [
