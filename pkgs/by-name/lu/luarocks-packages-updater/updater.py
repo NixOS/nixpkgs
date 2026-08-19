@@ -87,6 +87,7 @@ LICENSE_NORMALIZATION = {
     "ISC": "lib.licenses.isc",
     "LGPL": "lib.licenses.free",  # Too unspecific
     "LGPL-2.0": "lib.licenses.lgpl2Only",
+    "LGPL-2.0-only": "lib.licenses.lgpl2Only",
     "LGPL-2.1": "lib.licenses.lgpl21Only",
     "LGPL-3.0": "lib.licenses.lgpl3Only",
     "MIT": "lib.licenses.mit",
