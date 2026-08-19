@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-08-14";
+  version = "0.17-unstable-2026-05-07";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -49,8 +49,8 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
-    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
+    rev = "53fe999d9c984bed84bf0e76aca5d0dab9d2954b";
+    hash = "sha256-RIl3x6UrcS9IIlnKanI+XIjPPJeBDPsrlMdMDEREEbg=";
   };
 
   postPatch = ''
