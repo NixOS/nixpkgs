@@ -17,11 +17,16 @@ python3Packages.buildPythonApplication rec {
   };
 
   postPatch = ''
+    # Fix typo (https://github.com/jarun/pdd/pull/33)
+    substituteInPlace Makefile --replace-fail \
+      'bash-completion/compilations/pdd' \
+      'bash-completion/completions/pdd'
+
     patchShebangs auto-completion/zsh/zsh_completion.py
   '';
 
   preInstall = ''
-    mkdir -p $out/share/bash-completion/compilations
+    mkdir -p $out/share/bash-completion/completions
     mkdir -p $out/share/zsh/site-functions
     mkdir -p $out/share/fish/vendor_completions.d
   '';
