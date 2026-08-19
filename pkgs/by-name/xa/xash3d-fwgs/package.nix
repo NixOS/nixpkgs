@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "xash3d-fwgs";
-  version = "0-unstable-2026-04-03";
+  version = "continuous-back-to-the-c99";
 
   src = fetchFromGitHub {
     owner = "FWGS";
