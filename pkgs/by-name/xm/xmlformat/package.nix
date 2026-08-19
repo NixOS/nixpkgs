@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "xmlformat";
-  version = "1.9-unstable-2026-02-12";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "someth2say";
