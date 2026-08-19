@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pdf-cli";
-  version = "2.0";
+  version = ".2.0";
 
   src = fetchFromGitHub {
     owner = "Yujonpradhananga";
     repo = "pdf-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TvfSauT9UWjQjkzQtepEVyxm/LaiCANmxMtVmjiw8kI=";
+    hash = "sha256-DIHLwHXV3C3WcA5C+01da0a4Eb7KCpJjGb2fVxdQSVg=";
   };
 
   vendorHash = "sha256-LCIv135ywuq494hZbrKdbqkGPSsSlSkVQ9hCE8i7www=";
