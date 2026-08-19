@@ -1,0 +1,22 @@
+--- a/gdk/x11/gdkapplaunchcontext-x11.c
++++ b/gdk/x11/gdkapplaunchcontext-x11.c
+@@ -26,7 +26,6 @@
+ #include <unistd.h>
+ 
+ #include <glib.h>
+-#include <gio/gdesktopappinfo.h>
+ 
+ #include "gdkx.h"
+ #include "gdkapplaunchcontext.h"
+@@ -363,10 +362,7 @@
+   else
+     workspace_str = NULL;
+ 
+-  if (G_IS_DESKTOP_APP_INFO (info))
+-    application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
+-  else
+-    application_id = NULL;
++  application_id = NULL;
+ 
+   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
+                                 g_get_prgname (),

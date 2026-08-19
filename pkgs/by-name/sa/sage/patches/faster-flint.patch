@@ -1,0 +1,22 @@
+diff --git a/src/sage/rings/polynomial/multi_polynomial_libsingular.pyx b/src/sage/rings/polynomial/multi_polynomial_libsingular.pyx
+index 191667c0d8d..8dff6c52aa0 100644
+--- a/src/sage/rings/polynomial/multi_polynomial_libsingular.pyx
++++ b/src/sage/rings/polynomial/multi_polynomial_libsingular.pyx
+@@ -4659,7 +4659,7 @@ cdef class MPolynomial_libsingular(MPolynomial_libsingular_base):
+         Ensure interrupt does not make the internal state inconsistent::
+ 
+             sage: R.<x,y,z> = QQ[]
+-            sage: n = 11  # chosen so that the computation takes > 1 second but not excessively long.
++            sage: n = 12  # chosen so that the computation takes > 1 second but not excessively long.
+             ....: # when Singular improves the algorithm or hardware gets faster, increase n.
+             sage: alarm(0.5); h = (x^2^n-y^2^n).factor()
+             Traceback (most recent call last):
+@@ -4671,7 +4671,7 @@ cdef class MPolynomial_libsingular(MPolynomial_libsingular_base):
+             AlarmInterrupt
+             sage: h = (x^2^n-y^2^n).factor()
+             sage: h
+-            (x - y) * (x + y) * (x^2 + y^2) * (x^4 + y^4) * (x^8 + y^8) * (x^16 + y^16) * (x^32 + y^32) * (x^64 + y^64) * (x^128 + y^128) * (x^256 + y^256) * (x^512 + y^512) * (x^1024 + y^1024)
++            (x - y) * (x + y) * (x^2 + y^2) * (x^4 + y^4) * (x^8 + y^8) * (x^16 + y^16) * (x^32 + y^32) * (x^64 + y^64) * (x^128 + y^128) * (x^256 + y^256) * (x^512 + y^512) * (x^1024 + y^1024) * (x^2048 + y^2048)
+         """
+         cdef ring *_ring = self._parent_ring
+         cdef intvec *iv

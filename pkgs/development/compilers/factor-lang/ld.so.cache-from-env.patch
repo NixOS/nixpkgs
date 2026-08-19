@@ -1,0 +1,27 @@
+diff -ur factor.orig/basis/alien/libraries/finder/linux/linux.factor factor/basis/alien/libraries/finder/linux/linux.factor
+--- factor.orig/basis/alien/libraries/finder/linux/linux.factor	2024-02-09 14:38:33.966439078 +0100
++++ factor/basis/alien/libraries/finder/linux/linux.factor	2024-02-09 14:41:16.775938179 +0100
+@@ -2,7 +2,7 @@
+ ! See https://factorcode.org/license.txt for BSD license
+ USING: accessors alien.libraries.finder arrays assocs
+ combinators.short-circuit environment io io.encodings.utf8
+-io.launcher kernel make sequences sets splitting system
++io.files io.launcher kernel make sequences sets splitting system
+ unicode ;
+ IN: alien.libraries.finder.linux
+ 
+@@ -25,8 +25,12 @@
+     ] map ;
+ 
+ : load-ldconfig-cache ( -- seq )
+-    "/sbin/ldconfig -p" utf8 [ read-lines ] with-process-reader*
+-    2drop [ f ] [ rest parse-ldconfig-lines ] if-empty ;
++    "FACTOR_LD_SO_CACHE" os-env [
++        utf8 [ read-lines ] with-file-reader
++    ] [
++        { } clone
++    ] if*
++    [ f ] [ rest parse-ldconfig-lines ] if-empty ;
+ 
+ : ldconfig-arch ( -- str )
+     mach-map cpu of { "libc6" } or ;

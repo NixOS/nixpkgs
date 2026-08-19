@@ -1,0 +1,33 @@
+diff --git a/src/oncall/app.py b/src/oncall/app.py
+index 370fcf4..59f014e 100644
+--- a/src/oncall/app.py
++++ b/src/oncall/app.py
+@@ -62,9 +62,19 @@ class AuthMiddleware(object):
+ 
+ application = None
+ 
++def handle_uncaught_exception(req, resp, ex, params):
++    logging.exception('Unhandled error')
++    raise falcon.HTTPInternalServerError(title='App error')
++
++
++def handle_http_error(req, resp, ex, params):
++    logging.exception('HTTP error')
++    raise ex
++
+ 
+ def init_falcon_api(config):
+     global application
++
+     cors = CORS(allow_origins_list=config.get('allow_origins_list', []))
+     middlewares = [
+         SecurityHeaderMiddleware(),
+@@ -74,6 +84,8 @@ def init_falcon_api(config):
+     if config.get('require_auth'):
+         middlewares.append(AuthMiddleware())
+     application = falcon.App(middleware=middlewares)
++    application.add_error_handler(falcon.HTTPError, handle_http_error)
++    application.add_error_handler(Exception, handle_uncaught_exception)
+     application.req_options.auto_parse_form_urlencoded = False
+     application.set_error_serializer(json_error_serializer)
+     application.req_options.strip_url_path_trailing_slash = True

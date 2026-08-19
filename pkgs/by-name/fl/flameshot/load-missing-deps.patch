@@ -1,0 +1,46 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,27 +35,7 @@
+ #Needed due to linker error with QtColorWidget
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+-
+-# Dependency can be fetched via flatpak builder
+-if(EXISTS "${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets/CMakeLists.txt")
+-  add_subdirectory("${CMAKE_SOURCE_DIR}/external/Qt-Color-Widgets" EXCLUDE_FROM_ALL)
+-else()
+-  FetchContent_Declare(
+-    qtColorWidgets
+-    GIT_REPOSITORY https://gitlab.com/mattbas/Qt-Color-Widgets.git
+-    GIT_TAG 5d52e907e50dc88cf969b41cea44665ff6c475b1
+-  )
+-  #Workaround for duplicate GUID in windows WIX installer
+-  if(WIN32)
+-    FetchContent_GetProperties(qtColorWidgets)
+-    if(NOT qtcolorwidgets_POPULATED)
+-      FetchContent_Populate(qtColorWidgets)
+-      add_subdirectory(${qtcolorwidgets_SOURCE_DIR} ${qtcolorwidgets_BINARY_DIR} EXCLUDE_FROM_ALL)
+-    endif()
+-  else()
+-    FetchContent_MakeAvailable(qtColorWidgets)
+-  endif()
+-endif()
++find_package(QtColorWidgets REQUIRED)
+ 
+ # This can be read from ${PROJECT_NAME} after project() is called
+ if(APPLE)
+@@ -124,12 +104,7 @@
+ # ToDo: Check if this is used anywhere
+ option(BUILD_STATIC_LIBS ON)
+ 
+ if(WIN32 OR APPLE)
+-  FetchContent_Declare(
+-    qHotKey
+-    GIT_REPOSITORY https://github.com/flameshot-org/QHotkey
+-    GIT_TAG master
+-  )
+-  FetchContent_MakeAvailable(QHotKey)
++  find_package(QHotKey REQUIRED)
+ endif()
+ 
+ add_subdirectory(src)

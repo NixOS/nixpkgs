@@ -1,0 +1,125 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  ctestCheckHook,
+  dbus,
+  doxygen,
+  graphviz,
+  gtest,
+  libxml2,
+  lomiri,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "dbus-cpp";
+  version = "5.0.6";
+
+  src = fetchFromGitLab {
+    owner = "ubports";
+    repo = "development/core/lib-cpp/dbus-cpp";
+    tag = finalAttrs.version;
+    hash = "sha256-ehP+QW/tTR6tLHEiWGDbiYT9oAqlS346UaVTkJC5bSE=";
+  };
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "examples"
+  ];
+
+  postPatch = ''
+    substituteInPlace doc/CMakeLists.txt \
+      --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+
+    # Warning on aarch64-linux breaks build due to -Werror
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' ""
+
+    # pkg-config output patching hook expects prefix variable here
+    substituteInPlace data/dbus-cpp.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    pkg-config
+  ];
+
+  buildInputs = [
+    boost
+    lomiri.cmake-extras
+    dbus
+    libxml2
+    process-cpp
+    properties-cpp
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    dbus
+  ];
+
+  checkInputs = [
+    gtest
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "DBUS_CPP_ENABLE_DOC_GENERATION" true)
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # DBus, parallelism messes with communication
+  enableParallelChecking = false;
+
+  disabledTests = [
+    # Flaky flaky flaky. Spams D-Bus with hundreds of requests, and if any is dropped, the test fails.
+    "async_execution_load_test"
+
+    # Possible memory corruption in Executor.TimeoutsAreHandledCorrectly
+    # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/10
+    "executor_test"
+  ];
+
+  preFixup = ''
+    moveToOutput libexec/examples $examples
+  '';
+
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
+    updateScript = gitUpdater { };
+  };
+
+  meta = {
+    description = "Dbus-binding leveraging C++-11";
+    homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
+    changelog = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    mainProgram = "dbus-cppc";
+    platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "dbus-cpp"
+    ];
+  };
+})

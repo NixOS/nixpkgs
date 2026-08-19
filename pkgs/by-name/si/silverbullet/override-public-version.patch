@@ -1,0 +1,55 @@
+diff --git a/build/build_plugs.ts b/build/build_plugs.ts
+index e72beaaa..e0660eef 100644
+--- a/build/build_plugs.ts
++++ b/build/build_plugs.ts
+@@ -42,41 +42,15 @@ export async function buildPlugsAndLibraries(options?: {
+
+ export function updateVersionFile(): Promise<void> {
+   return new Promise<void>((resolve, reject) => {
+-    const gitProcess = spawn("git", ["describe", "--tags", "--long"], {
+-      stdio: ["ignore", "pipe", "pipe"],
+-    });
+-
+-    let stdout = "";
+-
+-    gitProcess.stdout?.on("data", (data) => {
+-      stdout += data.toString();
+-    });
+-
+-    gitProcess.on("close", async (code) => {
+-      let commitVersion = stdout.trim();
+-
+-      if (!commitVersion || code !== 0) {
+-        // Probably no valid .git repo, fallback to GITHUB_SHA env var (used in CI)
+-        commitVersion = `${version}-${process.env.GITHUB_SHA || "unknown"}`;
+-      }
+-
+-      const versionFilePath = "./public_version.ts";
+-      // Write version to file with date in YYYY-MM-DDTHH-MM-SSZ format attached to the version
+-      const versionContent = `export const publicVersion = "${commitVersion}-${new Date()
+-        .toISOString()
+-        .split(".")[0]
+-        .replaceAll(":", "-")
+-        .concat("Z")}";`;
+-
+-      try {
+-        await writeFile(versionFilePath, versionContent, "utf-8");
+-        resolve();
+-      } catch (err) {
+-        reject(err);
+-      }
+-    });
+-
+-    gitProcess.on("error", reject);
++    const versionFilePath = "./public_version.ts";
++    const versionContent = `export const publicVersion = "@version@";`;
++
++    try {
++      writeFile(versionFilePath, versionContent, "utf-8");
++      resolve();
++    } catch (err) {
++      reject(err);
++    }
+   });
+ }
+

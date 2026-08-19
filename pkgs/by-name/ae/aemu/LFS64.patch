@@ -1,0 +1,98 @@
+From 455341880f52b4df3b30490db1c17eb65110c00c Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Wed, 29 May 2024 10:29:02 +0200
+Subject: [PATCH] Stop using transitional LFS64 APIs
+
+The *64 APIs were intended for transitional use, and have been removed
+in musl 1.2.4.  Nowadays, the best practice is to set
+_FILE_OFFSET_BITS=64 across the board, making all the unsuffixed APIs
+will be 64-bit.  This fixes building with recent versions of musl, and
+avoids the need to remember to use the *64 variants every time to
+properly handle large files on 32-bit platforms.
+
+Test: build with musl 1.2.4.
+Change-Id: I7fa7a3ae4aa19a765740f5b2af916fd6f0ed0b32
+---
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4de86a4..10c402a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -69,7 +69,7 @@
+     add_subdirectory(build-config/${AEMU_COMMON_BUILD_CONFIG})
+ endif()
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-extern-c-compat -Wno-return-type-c-linkage")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-extern-c-compat -Wno-return-type-c-linkage -D_FILE_OFFSET_BITS=64")
+ 
+ add_subdirectory(base)
+ add_subdirectory(snapshot)
+diff --git a/snapshot/TextureLoader.cpp b/snapshot/TextureLoader.cpp
+index 31e02e8..5c21134 100644
+--- a/snapshot/TextureLoader.cpp
++++ b/snapshot/TextureLoader.cpp
+@@ -46,7 +46,7 @@
+ void TextureLoader::loadTexture(uint32_t texId, const loader_t& loader) {
+     android::base::AutoLock scopedLock(mLock);
+     assert(mIndex.count(texId));
+-    HANDLE_EINTR(fseeko64(mStream.get(), mIndex[texId], SEEK_SET));
++    HANDLE_EINTR(fseeko(mStream.get(), mIndex[texId], SEEK_SET));
+     switch (mVersion) {
+         case 1:
+             loader(&mStream);
+@@ -71,7 +71,7 @@
+         mDiskSize = size;
+     }
+     auto indexPos = mStream.getBe64();
+-    HANDLE_EINTR(fseeko64(mStream.get(), static_cast<int64_t>(indexPos), SEEK_SET));
++    HANDLE_EINTR(fseeko(mStream.get(), static_cast<int64_t>(indexPos), SEEK_SET));
+     mVersion = mStream.getBe32();
+     if (mVersion < 1 || mVersion > 2) {
+         return false;
+diff --git a/snapshot/TextureSaver.cpp b/snapshot/TextureSaver.cpp
+index 537626b..c8854e9 100644
+--- a/snapshot/TextureSaver.cpp
++++ b/snapshot/TextureSaver.cpp
+@@ -50,7 +50,7 @@
+                         [texId](FileIndex::Texture& tex) {
+                             return tex.texId == texId;
+                         }));
+-    mIndex.textures.push_back({texId, ftello64(mStream.get())});
++    mIndex.textures.push_back({texId, ftello(mStream.get())});
+ 
+     CompressingStream stream(mStream);
+     saver(&stream, &mBuffer);
+@@ -60,7 +60,7 @@
+     if (mFinished) {
+         return;
+     }
+-    mIndex.startPosInFile = ftello64(mStream.get());
++    mIndex.startPosInFile = ftello(mStream.get());
+     writeIndex();
+     mEndTime = base::getHighResTimeUs();
+ #if SNAPSHOT_PROFILE > 1
+@@ -74,7 +74,7 @@
+ 
+ void TextureSaver::writeIndex() {
+ #if SNAPSHOT_PROFILE > 1
+-    auto start = ftello64(mStream.get());
++    auto start = ftello(mStream.get());
+ #endif
+ 
+     mStream.putBe32(static_cast<uint32_t>(mIndex.version));
+@@ -83,13 +83,13 @@
+         mStream.putBe32(b.texId);
+         mStream.putBe64(static_cast<uint64_t>(b.filePos));
+     }
+-    auto end = ftello64(mStream.get());
++    auto end = ftello(mStream.get());
+     mDiskSize = uint64_t(end);
+ #if SNAPSHOT_PROFILE > 1
+     printf("texture: index size: %d\n", int(end - start));
+ #endif
+ 
+-    fseeko64(mStream.get(), 0, SEEK_SET);
++    fseeko(mStream.get(), 0, SEEK_SET);
+     mStream.putBe64(static_cast<uint64_t>(mIndex.startPosInFile));
+ }
+ 

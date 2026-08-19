@@ -1,0 +1,20 @@
+diff --git a/Onboard/SpellChecker.py b/Onboard/SpellChecker.py
+index 6a92757..46e755e 100644
+--- a/Onboard/SpellChecker.py
++++ b/Onboard/SpellChecker.py
+@@ -506,6 +506,10 @@ class hunspell(SCBackend):
+         if dicpath:
+             paths.extend(dicpath.split(pathsep))
+ 
++        datadirs = os.getenv("XDG_DATA_DIRS")
++        if datadirs:
++            paths.extend(map(lambda datadir: os.path.join(datadir, 'hunspell'), datadirs.split(pathsep)))
++
+         paths.extend(LIBDIRS)
+ 
+         home = os.getenv("HOME")
+@@ -723,4 +727,3 @@ class aspell_cmd(SCBackend):
+             _logger.error(_format("Failed to execute '{}', {}", \
+                             " ".join(args), e))
+         return [id for id in dict_ids if id]
+-

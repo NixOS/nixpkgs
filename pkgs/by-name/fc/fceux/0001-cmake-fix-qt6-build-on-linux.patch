@@ -1,0 +1,37 @@
+From 3635c26d6d5ec08b197c4903ed46a3221e574899 Mon Sep 17 00:00:00 2001
+From: Lukas Sabota <lukas@lwsabota.com>
+Date: Sun, 19 Apr 2026 13:05:51 -0400
+Subject: [PATCH] cmake: fix qt6 build on linux
+
+---
+ src/CMakeLists.txt | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7a432669..16386a70 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -47,8 +47,6 @@ if ( ${QT} EQUAL 6 )
+ 	find_package( Qt6 COMPONENTS Help QUIET)
+ 	find_package( Qt6 COMPONENTS Qml)
+ 	find_package( Qt6 COMPONENTS UiTools)
+-	add_definitions( ${Qt6Widgets_DEFINITIONS} ${Qt6Qml_DEFINITIONS} ${Qt6Network_DEFINITIONS} ${Qt6Help_DEFINITIONS} ${Qt6OpenGLWidgets_DEFINITIONS} )
+-	# add_definitions(${Qt6UiTools_DEFINITIONS}) # Leave ${Qt6UiTools_DEFINITIONS} out as this is causing a build error
+ 	include_directories( ${Qt6Widgets_INCLUDE_DIRS} ${Qt6Qml_INCLUDE_DIRS} ${Qt6UiTools_INCLUDE_DIRS} ${Qt6Network_INCLUDE_DIRS} ${Qt6Help_INCLUDE_DIRS} ${Qt6OpenGLWidgets_INCLUDE_DIRS} )
+ 
+ 	if (${Qt6Help_FOUND})
+@@ -757,6 +755,11 @@ target_link_libraries( ${APP_NAME}
+  	${SYS_LIBS}
+ )
+ 
++if(NOT MSVC)
++	# Add minizip subdirectory so #include<unzip.h> works without the "minizip" subdirectory in the directive
++	target_include_directories(${APP_NAME} PRIVATE ${MINIZIP_INCLUDE_DIRS}/minizip)
++endif()
++
+ if (WIN32)
+ 	#   target_link_libraries( ${APP_NAME} wsock32 ws2_32 )
+ 
+-- 
+2.51.2
+

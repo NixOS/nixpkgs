@@ -1,0 +1,193 @@
+From 727f4c5aed5960bb429c7df0bbc3a547e05db7dd Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Fri, 10 Jul 2026 12:21:12 +0300
+Subject: [PATCH 3/4] use runtime dispatch for Liquid Glass with SDK 14
+
+---
+ src/switcher/Appearance.swift                 |   2 +-
+ .../TilesPanelBackgroundView.swift            | 122 +++++++++++-------
+ 2 files changed, 77 insertions(+), 47 deletions(-)
+
+diff --git a/src/switcher/Appearance.swift b/src/switcher/Appearance.swift
+index dd033fa4..efb70c77 100644
+--- a/src/switcher/Appearance.swift
++++ b/src/switcher/Appearance.swift
+@@ -83,7 +83,7 @@ class Appearance {
+             lightTheme()
+         }
+         // for Liquid Glass, we don't want a shadow around the panel
+-        if #available(macOS 26.0, *), currentStyle == .appIcons && LiquidGlass.canUsePrivateLook {
++        if #available(macOS 26.0, *), currentStyle == .appIcons && LiquidGlassEffectView.canUsePrivateLook {
+             enablePanelShadow = false
+         } else {
+             enablePanelShadow = true
+diff --git a/src/switcher/main-window/TilesPanelBackgroundView.swift b/src/switcher/main-window/TilesPanelBackgroundView.swift
+index cea0819c..99d12b06 100644
+--- a/src/switcher/main-window/TilesPanelBackgroundView.swift
++++ b/src/switcher/main-window/TilesPanelBackgroundView.swift
+@@ -7,12 +7,81 @@ protocol EffectView: NSView {
+ }
+ 
+ @available(macOS 26.0, *)
+-extension NSGlassEffectView: EffectView {
+-    func updateAppearance() {
+-        cornerRadius = Appearance.windowCornerRadius
++class LiquidGlassEffectView: NSView, EffectView {
++    private typealias SetIntType = @convention(c) (AnyObject, Selector, Int) -> Void
++    private typealias SetCGFloatType = @convention(c) (AnyObject, Selector, CGFloat) -> Void
++    private typealias SetObjectType = @convention(c) (AnyObject, Selector, AnyObject) -> Void
++    private static let setVariantSelector = NSSelectorFromString("set_variant:")
++    private static let setStyleSelector = NSSelectorFromString("setStyle:")
++    private static let setCornerRadiusSelector = NSSelectorFromString("setCornerRadius:")
++    private static let setContentViewSelector = NSSelectorFromString("setContentView:")
++    private static let glassClass: AnyClass? = NSClassFromString("NSGlassEffectView")
++
++    static let canUsePrivateLook: Bool = {
++        guard let cls = glassClass else { return false }
++        return class_getInstanceMethod(cls, setVariantSelector) != nil
++    }()
++
++    private var glassView: NSView?
++    private var contentHost: NSView!
++
++    var hostView: NSView { contentHost }
++
++    convenience init(clear: Bool) {
++        self.init(frame: .zero)
++        wantsLayer = true
++        layer!.masksToBounds = true
++
++        let glass: NSView
++        if let cls = Self.glassClass as? NSView.Type {
++            glass = cls.init(frame: .zero)
++        } else {
++            glass = NSView(frame: .zero)
++        }
++        glass.translatesAutoresizingMaskIntoConstraints = false
++        addSubview(glass)
++        NSLayoutConstraint.activate([
++            glass.leadingAnchor.constraint(equalTo: leadingAnchor),
++            glass.trailingAnchor.constraint(equalTo: trailingAnchor),
++            glass.topAnchor.constraint(equalTo: topAnchor),
++            glass.bottomAnchor.constraint(equalTo: bottomAnchor),
++        ])
++        glassView = glass
++
++        // NSGlassEffectView.Style: regular = 0, clear = 1
++        Self.invokeIntSetter(glass, Self.setStyleSelector, clear ? 1 : 0)
++        if clear {
++            Self.invokeIntSetter(glass, Self.setVariantSelector, 3)
++        }
++        contentHost = NSView(frame: .zero)
++        Self.invokeObjectSetter(glass, Self.setContentViewSelector, contentHost)
++        updateAppearance()
++    }
++
++    private static func invokeIntSetter(_ target: AnyObject, _ selector: Selector, _ value: Int) {
++        guard let method = class_getInstanceMethod(object_getClass(target), selector) else { return }
++        let function = unsafeBitCast(method_getImplementation(method), to: SetIntType.self)
++        function(target, selector, value)
+     }
+ 
+-    var hostView: NSView { contentView! }
++    private static func invokeCGFloatSetter(_ target: AnyObject, _ selector: Selector, _ value: CGFloat) {
++        guard let method = class_getInstanceMethod(object_getClass(target), selector) else { return }
++        let function = unsafeBitCast(method_getImplementation(method), to: SetCGFloatType.self)
++        function(target, selector, value)
++    }
++
++    private static func invokeObjectSetter(_ target: AnyObject, _ selector: Selector, _ value: AnyObject) {
++        guard let method = class_getInstanceMethod(object_getClass(target), selector) else { return }
++        let function = unsafeBitCast(method_getImplementation(method), to: SetObjectType.self)
++        function(target, selector, value)
++    }
++
++    func updateAppearance() {
++        let radius = Appearance.windowCornerRadius
++        layer?.cornerRadius = radius
++        guard let glass = glassView else { return }
++        Self.invokeCGFloatSetter(glass, Self.setCornerRadiusSelector, radius)
++    }
+ }
+ 
+ class FrostedGlassEffectView: NSVisualEffectView, EffectView {
+@@ -51,28 +120,6 @@ class FrostedGlassEffectView: NSVisualEffectView, EffectView {
+     }
+ }
+ 
+-/// The App Icons style uses the private `set_variant:` on `NSGlassEffectView` to get the macOS
+-/// Cmd-Tab-like clear glass look. `style = .clear` alone renders nearly fully transparent, so the
+-/// variant is what makes the panel visible. Lives here as a free helper (no NSGlassEffectView subclass).
+-enum LiquidGlass {
+-    private static let setVariantSelector = NSSelectorFromString("set_variant:")
+-    private typealias SetVariantFn = @convention(c) (AnyObject, Selector, Int) -> Void
+-
+-    static let canUsePrivateLook: Bool = {
+-        if #available(macOS 26.0, *) {
+-            return class_getInstanceMethod(object_getClass(NSGlassEffectView()), setVariantSelector) != nil
+-        }
+-        return false
+-    }()
+-
+-    @available(macOS 26.0, *)
+-    static func applyClearVariant(_ view: NSGlassEffectView) {
+-        guard let method = class_getInstanceMethod(object_getClass(view), setVariantSelector) else { return }
+-        let f = unsafeBitCast(method_getImplementation(method), to: SetVariantFn.self)
+-        f(view, setVariantSelector, 3)
+-    }
+-}
+-
+ enum EffectViewKind {
+     case frosted
+     case liquidGlassRegular
+@@ -82,7 +129,7 @@ enum EffectViewKind {
+ func requiredEffectViewKind() -> EffectViewKind {
+     if #available(macOS 26.0, *) {
+         if Preferences.effectiveAppearanceStyle(SwitcherSession.activeShortcutIndex) == .appIcons,
+-           LiquidGlass.canUsePrivateLook {
++           LiquidGlassEffectView.canUsePrivateLook {
+             return .liquidGlassClear
+         }
+         return .liquidGlassRegular
+@@ -90,28 +137,11 @@ func requiredEffectViewKind() -> EffectViewKind {
+     return .frosted
+ }
+ 
+-@available(macOS 26.0, *)
+-private func makeGlassEffectView(clear: Bool) -> NSGlassEffectView {
+-    let glass = NSGlassEffectView()
+-    glass.style = clear ? .clear : .regular
+-    if clear {
+-        LiquidGlass.applyClearVariant(glass)
+-    }
+-    // NSGlassEffectView only renders views embedded in `contentView`; this single host holds the
+-    // scroll view, search field and empty-state label so they all sit inside the glass.
+-    glass.contentView = NSView()
+-    glass.updateAppearance()
+-    // without this, there are weird shadows around the corners (most visible with .regular glass)
+-    glass.wantsLayer = true
+-    glass.layer!.masksToBounds = true
+-    return glass
+-}
+-
+ func makeEffectView(for kind: EffectViewKind) -> EffectView {
+     if #available(macOS 26.0, *) {
+         switch kind {
+             case .liquidGlassClear:
+-                return makeGlassEffectView(clear: true)
++                return LiquidGlassEffectView(clear: true)
+             case .liquidGlassRegular:
+                 if Preferences.effectiveAppearanceStyle(SwitcherSession.activeShortcutIndex) == .appIcons {
+                     Logger.error {
+@@ -119,7 +149,7 @@ func makeEffectView(for kind: EffectViewKind) -> EffectView {
+                         return "Private API set_variant is no longer available. macOS version: \(os.majorVersion).\(os.minorVersion).\(os.patchVersion)"
+                     }
+                 }
+-                return makeGlassEffectView(clear: false)
++                return LiquidGlassEffectView(clear: false)
+             case .frosted:
+                 break
+         }
+-- 
+2.55.0
+

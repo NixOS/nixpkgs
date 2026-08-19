@@ -1,0 +1,13 @@
+diff --git a/bsnes/target-bsnes/GNUmakefile b/bsnes/target-bsnes/GNUmakefile
+index 4c67bde..7a3ab9f 100644
+--- a/bsnes/target-bsnes/GNUmakefile
++++ b/bsnes/target-bsnes/GNUmakefile
+@@ -33,7 +33,7 @@ ifeq ($(platform),macos)
+ 	cp Database/* out/$(name).app/Contents/MacOS/Database/
+ 	cp -r ../shaders/* out/$(name).app/Contents/macOS/Shaders/
+ 	cp $(ui)/resource/$(name).plist out/$(name).app/Contents/Info.plist
+-	sips -s format icns $(ui)/resource/$(name).png --out out/$(name).app/Contents/Resources/$(name).icns
++	png2icns out/$(name).app/Contents/Resources/$(name).icns $(ui)/resource/$(name).png
+ endif
+ 
+ verbose: hiro.verbose ruby.verbose nall.verbose all;

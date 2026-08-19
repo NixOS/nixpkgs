@@ -1,0 +1,20 @@
+diff --git a/ci/build/build-vscode.sh b/ci/build/build-vscode.sh
+index a72549fb..3aed1ad5 100755
+--- a/ci/build/build-vscode.sh
++++ b/ci/build/build-vscode.sh
+@@ -58,7 +58,6 @@ main() {
+   # telemetry available; telemetry can still be disabled by flag or setting).
+   # This needs to be done before building as Code will read this file and embed
+   # it into the client-side code.
+-  git checkout product.json             # Reset in case the script exited early.
+   cp product.json product.original.json # Since jq has no inline edit.
+   jq --slurp '.[0] * .[1]' product.original.json <(
+     cat << EOF
+@@ -105,7 +104,6 @@ EOF
+   # Reset so if you develop after building you will not be stuck with the wrong
+   # commit (the dev client will use `oss-dev` but the dev server will still use
+   # product.json which will have `stable-$commit`).
+-  git checkout product.json
+ 
+   popd
+ 

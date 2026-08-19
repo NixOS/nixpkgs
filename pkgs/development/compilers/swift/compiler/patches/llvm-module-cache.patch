@@ -1,0 +1,30 @@
+The compiler fails if LLVM modules are enabled and it cannot write its module
+cache. This patch detects and rejects the fake, non-existant $HOME used in Nix
+builds.
+
+We could simply return false in `cache_directory`, but that completely disables
+module caching, and may unnecessarily slow down builds. Instead, let it use
+'/tmp/.cache'.
+
+--- a/lib/Support/Unix/Path.inc
++++ b/lib/Support/Unix/Path.inc
+@@ -1380,6 +1380,9 @@ bool user_config_directory(SmallVectorImpl<char> &result) {
+   if (!home_directory(result)) {
+     return false;
+   }
++  if (std::equal(result.begin(), result.end(), "/homeless-shelter")) {
++    return false;
++  }
+   append(result, ".config");
+   return true;
+ }
+@@ -1401,6 +1404,9 @@ bool cache_directory(SmallVectorImpl<char> &result) {
+   if (!home_directory(result)) {
+     return false;
+   }
++  if (std::equal(result.begin(), result.end(), "/homeless-shelter")) {
++    system_temp_directory(true/*ErasedOnReboot*/, result);
++  }
+   append(result, ".cache");
+   return true;
+ }

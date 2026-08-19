@@ -1,0 +1,56 @@
+diff --git a/src/go/plugin/go.d/pkg/pathvalidate/validate_unix.go b/src/go/plugin/go.d/pkg/pathvalidate/validate_unix.go
+index fae97e7be..153999fa3 100644
+--- a/src/go/plugin/go.d/pkg/pathvalidate/validate_unix.go
++++ b/src/go/plugin/go.d/pkg/pathvalidate/validate_unix.go
+@@ -8,6 +8,7 @@ import (
+ 	"fmt"
+ 	"os"
+ 	"path/filepath"
++	"strings"
+ 	"syscall"
+ )
+ 
+@@ -42,13 +43,15 @@ func ValidateBinaryPath(path string) (string, error) {
+ 	if !ok {
+ 		return "", fmt.Errorf("unable to get file stat information for %s", absPath)
+ 	}
+-	if fileStat.Uid != 0 {
+-		return "", fmt.Errorf("binary at %s must be owned by root (current uid: %d)", absPath, fileStat.Uid)
+-	}
++	if !strings.HasPrefix(absPath, "/nix/store/") {
++		if fileStat.Uid != 0 {
++			return "", fmt.Errorf("binary at %s must be owned by root (current uid: %d)", absPath, fileStat.Uid)
++		}
+ 
+-	if perm := fileInfo.Mode().Perm(); perm&0022 != 0 {
+-		return "", fmt.Errorf("binary at %s must not be writable by group/others (current permissions: %s / %04o)",
+-			absPath, fileInfo.Mode().String(), perm)
++		if perm := fileInfo.Mode().Perm(); perm&0022 != 0 {
++			return "", fmt.Errorf("binary at %s must not be writable by group/others (current permissions: %s / %04o)",
++				absPath, fileInfo.Mode().String(), perm)
++		}
+ 	}
+ 
+ 	// Step 6: Check executable bit
+@@ -67,13 +70,15 @@ func ValidateBinaryPath(path string) (string, error) {
+ 		if !ok {
+ 			return "", fmt.Errorf("unable to get directory stat information for %s", dir)
+ 		}
+-		if dirStat.Uid != 0 {
+-			return "", fmt.Errorf("directory %s must be owned by root (current uid: %d)", dir, dirStat.Uid)
+-		}
++		if !strings.HasPrefix(dir, "/nix/store") {
++			if dirStat.Uid != 0 {
++				return "", fmt.Errorf("directory %s must be owned by root (current uid: %d)", dir, dirStat.Uid)
++			}
+ 
+-		if perm := dirInfo.Mode().Perm(); perm&0022 != 0 {
+-			return "", fmt.Errorf("directory %s must not be writable by group/others (current permissions: %s / %04o)",
+-				dir, dirInfo.Mode().String(), perm)
++			if perm := dirInfo.Mode().Perm(); perm&0022 != 0 {
++				return "", fmt.Errorf("directory %s must not be writable by group/others (current permissions: %s / %04o)",
++					dir, dirInfo.Mode().String(), perm)
++			}
+ 		}
+ 
+ 		if dir == filepath.Dir(dir) {

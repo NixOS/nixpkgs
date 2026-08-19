@@ -1,0 +1,13 @@
+diff --git a/pyquaternion/test/test_quaternion.py b/pyquaternion/test/test_quaternion.py
+index f56afff..1a121c4 100644
+--- a/pyquaternion/test/test_quaternion.py
++++ b/pyquaternion/test/test_quaternion.py
+@@ -936,7 +936,7 @@ class TestQuaternionFeatures(unittest.TestCase):
+         for i in range(20):
+             v = np.random.uniform(-1, 1, 3)
+             v /= np.linalg.norm(v)
+-            theta = float(np.random.uniform(-2,2, 1)) * pi
++            theta = np.random.uniform(-2,2, 1).item() * pi
+             self.validate_axis_angle(v, theta)
+ 
+     def test_exp(self):

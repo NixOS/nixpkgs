@@ -1,0 +1,44 @@
+diff --git a/src/plugins/colorscheme.cpp b/src/plugins/colorscheme.cpp
+index 7c51806..4d8015b 100644
+--- a/src/plugins/colorscheme.cpp
++++ b/src/plugins/colorscheme.cpp
+@@ -3,16 +3,7 @@
+ #include <QProcess>
+ 
+ void ColorScheme::setTheme(QString themeName) {
+-  QProcess process;
+-  QString locateProgram = "whereis";
+-  QStringList programToLocate = {"plasma-apply-colorscheme"};
+-
+-  process.start(locateProgram, programToLocate);
+-  process.waitForFinished();
+-
+-  QString program(process.readAllStandardOutput());
+-  program.replace("plasma-apply-colorscheme: ", "");
+-  program.replace("\n", "");
++  QString program("@plasma-apply-colorscheme@");
+ 
+   QStringList arguments{themeName};
+   QProcess::startDetached(program, arguments);
+diff --git a/src/plugins/icons.cpp b/src/plugins/icons.cpp
+index 1cc306f..745d042 100644
+--- a/src/plugins/icons.cpp
++++ b/src/plugins/icons.cpp
+@@ -5,16 +5,7 @@
+ void Icons::setTheme(QString iconTheme) {
+ 
+   // locate plasma-changeicons program
+-  QProcess process;
+-  QString locateProgram = "whereis";
+-  QStringList programToLocate = {"plasma-changeicons"};
+-
+-  process.start(locateProgram, programToLocate);
+-  process.waitForFinished();
+-
+-  QString program(process.readAllStandardOutput());
+-  program.replace("plasma-changeicons: ", "");
+-  program.replace("\n", "");
++  QString program("@plasma-changeicons@");
+ 
+   // apply the icon theme
+   QStringList arguments{iconTheme};

@@ -1,0 +1,21 @@
+diff --git a/configure.ac b/configure.ac
+index cf96d6f..3a621bc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -102,13 +102,13 @@ bash_version=`$SH_PROG --version`
+ [bash_major=`$SH_PROG -c 'echo ${BASH_VERSINFO[0]}'`]
+ [bash_minor=`$SH_PROG -c 'echo ${BASH_VERSINFO[1]}'`]
+ bash_5_or_greater=no
+-case "${bash_major}.${bash_minor}" in
+-  'OK_BASH_VERS' | '5.0' | '5.1')
++case "${bash_major}" in
++  '5')
+     bash_5_or_greater=yes
+     ;;
+   *)
+     AC_MSG_WARN([You have Bash $bash_version installed.])
+-    AC_MSG_ERROR([This package is only known to work with Bash 5.0 or 5.1])
++    AC_MSG_ERROR([This package is only known to work with Bash 5])
+     ;;
+ esac
+ 

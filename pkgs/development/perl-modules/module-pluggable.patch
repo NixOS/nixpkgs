@@ -1,0 +1,27 @@
+diff -ru Module-Pluggable-4.8/lib/Module/Pluggable/Object.pm Module-Pluggable-4.8-new/lib/Module/Pluggable/Object.pm
+--- Module-Pluggable-4.8/lib/Module/Pluggable/Object.pm	2013-05-28 01:30:06.000000000 +0200
++++ Module-Pluggable-4.8-new/lib/Module/Pluggable/Object.pm	2013-06-02 23:24:52.704125205 +0200
+@@ -180,12 +180,13 @@
+         my $sp = catdir($dir, (split /::/, $searchpath));
+ 
+         # if it doesn't exist or it's not a dir then skip it
+-        next unless ( -e $sp && -d _ ); # Use the cached stat the second time
++        next unless ( -d $sp );
+ 
+         my @files = $self->find_files($sp);
+ 
+         # foreach one we've found 
+         foreach my $file (@files) {
++             
+             # untaint the file; accept .pm only
+             next unless ($file) = ($file =~ /(.*$file_regex)$/); 
+             # parse the file to get the name
+@@ -314,7 +315,7 @@
+                              (my $path = $File::Find::name) =~ s#^\\./##;
+                              push @files, $path;
+                            }
+-                      }, $search_path );
++                      }, "$search_path/." );
+     }
+     #chdir $cwd;
+     return @files;

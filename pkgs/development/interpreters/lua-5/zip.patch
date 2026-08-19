@@ -1,0 +1,23 @@
+--- a/Makefile	2007-10-30 01:59:10.000000000 +0300
++++ b/Makefile	2014-09-18 11:04:53.176320021 +0400
+@@ -6,10 +6,6 @@
+
+ include $(CONFIG)
+
+-ifeq "$(LUA_VERSION_NUM)" "500"
+-COMPAT_O= $(COMPAT_DIR)/compat-5.1.o
+-endif
+-
+ SRCS= src/lua$T.c
+ OBJS= src/lua$T.o $(COMPAT_O)
+
+@@ -19,9 +15,6 @@
+ src/$(LIBNAME): $(OBJS)
+ 	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(CFLAGS) $(LIB_OPTION) -o src/$(LIBNAME) $(OBJS) -lzzip
+
+-$(COMPAT_DIR)/compat-5.1.o: $(COMPAT_DIR)/compat-5.1.c
+-	$(CC) -c $(CFLAGS) -o $@ $(COMPAT_DIR)/compat-5.1.c
+-
+ install: src/$(LIBNAME)
+ 	mkdir -p $(LUA_LIBDIR)
+ 	cp src/$(LIBNAME) $(LUA_LIBDIR)

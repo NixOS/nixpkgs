@@ -1,0 +1,28 @@
+From 809a1e95a2d322ac2c00f95a274b639860d3b5bc Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 12 Jul 2026 16:07:29 +0530
+Subject: [PATCH 3/3] fix: quit tray on graceful shutdown
+
+---
+ cmd/backrest/tray.go | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/cmd/backrest/tray.go b/cmd/backrest/tray.go
+index 68db4f2..cca1b36 100644
+--- a/cmd/backrest/tray.go
++++ b/cmd/backrest/tray.go
+@@ -16,7 +16,10 @@ func startTray() {
+ 	status := newTrayStatus()
+ 	// Observe oplog status in-process so the icon can reflect backup state.
+ 	onOpLogReady = status.attach
+-	go runApp()
++	go func() {
++		runApp()
++		systray.Quit()
++	}()
+ 	systray.Run(func() { onReady(status) }, func() {})
+ }
+ 
+-- 
+2.54.0
+

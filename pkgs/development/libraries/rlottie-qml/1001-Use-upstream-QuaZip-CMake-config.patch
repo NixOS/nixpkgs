@@ -1,0 +1,75 @@
+From 5656211dd8ae190795e343f47a3393fd3d8d25a4 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 2 Feb 2024 12:04:32 +0100
+Subject: [PATCH 1/2] Use upstream QuaZip CMake config
+
+---
+ CMakeLists.txt                  |  5 ++---
+ cmake/FindQuaZip.cmake          | 24 ------------------------
+ cmake/rLottieQmlConfig.cmake.in |  2 +-
+ 3 files changed, 3 insertions(+), 28 deletions(-)
+ delete mode 100644 cmake/FindQuaZip.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4bd97b4..4d06eb5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,10 +21,9 @@ find_package(Qt5 COMPONENTS Core Qml Quick Multimedia CONFIG REQUIRED)
+ # set(rlottie_DIR "${CMAKE_CURRENT_BINARY_DIR}/../rlottie/install/lib/cmake/rlottie")
+ find_package(rlottie REQUIRED)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+-find_package(QuaZip REQUIRED)
++find_package(QuaZip-Qt5 REQUIRED)
+ 
+-target_include_directories(${PLUGIN} SYSTEM PRIVATE ${QUAZIP_INCLUDE_DIR})
+-target_link_libraries(${PLUGIN} ${QUAZIP_LIBRARIES} rlottie::rlottie)
++target_link_libraries(${PLUGIN} QuaZip::QuaZip rlottie::rlottie)
+ target_link_libraries(${PLUGIN}
+   # PUBLIC
+   Qt5::Qml
+diff --git a/cmake/FindQuaZip.cmake b/cmake/FindQuaZip.cmake
+deleted file mode 100644
+index 76c1d8a..0000000
+--- a/cmake/FindQuaZip.cmake
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# QUAZIP_FOUND                   - QuaZip library was found
+-# QUAZIP_INCLUDE_DIR             - Path to QuaZip include dir
+-# QUAZIP_INCLUDE_DIRS            - Path to QuaZip and zlib include dir (combined from QUAZIP_INCLUDE_DIR + ZLIB_INCLUDE_DIR)
+-# QUAZIP_LIBRARIES               - List of QuaZip libraries
+-# QUAZIP_ZLIB_INCLUDE_DIR        - The include dir of zlib headers
+-
+-if(MINGW)
+-	find_library(QUAZIP_LIBRARIES libquazip5)
+-	find_path(QUAZIP_INCLUDE_DIR quazip.h PATH_SUFFIXES quazip5)
+-	find_path(QUAZIP_ZLIB_INCLUDE_DIR zlib.h)
+-else()
+-	find_library(QUAZIP_LIBRARIES
+-		NAMES quazip5 quazip quazip1-qt5
+-		PATHS /usr/lib /usr/lib64 /usr/local/lib
+-	)
+-	find_path(QUAZIP_INCLUDE_DIR quazip.h
+-		PATHS /usr/include /usr/local/include
+-		PATH_SUFFIXES quazip5 quazip "QuaZip-Qt5-1.1/quazip"
+-	)
+-	find_path(QUAZIP_ZLIB_INCLUDE_DIR zlib.h PATHS /usr/include /usr/local/include)
+-endif()
+-include(FindPackageHandleStandardArgs)
+-set(QUAZIP_INCLUDE_DIRS ${QUAZIP_INCLUDE_DIR} ${QUAZIP_ZLIB_INCLUDE_DIR})
+-find_package_handle_standard_args(QUAZIP DEFAULT_MSG QUAZIP_LIBRARIES QUAZIP_INCLUDE_DIR QUAZIP_ZLIB_INCLUDE_DIR QUAZIP_INCLUDE_DIRS)
+diff --git a/cmake/rLottieQmlConfig.cmake.in b/cmake/rLottieQmlConfig.cmake.in
+index 7848a1d..f606d25 100644
+--- a/cmake/rLottieQmlConfig.cmake.in
++++ b/cmake/rLottieQmlConfig.cmake.in
+@@ -2,7 +2,7 @@ get_filename_component(rLottieQml_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ include(CMakeFindDependencyMacro)
+ 
+ # find_dependency(rlottie REQUIRED)
+-# find_dependency(QuaZip REQUIRED)
++find_dependency(QuaZip-Qt5 REQUIRED)
+ 
+ if(NOT TARGET rLottieQml::rLottieQml)
+     include("${rLottieQml_CMAKE_DIR}/rLottieQmlExport.cmake")
+-- 
+2.51.0
+

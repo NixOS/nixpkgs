@@ -1,0 +1,45 @@
+--- old/linux/CMakeLists.txt	2024-07-16 18:45:19.000000000 +0800
++++ new/linux/CMakeLists.txt	2024-10-01 01:49:05.544910894 +0800
+@@ -16,6 +16,7 @@
+ set(PROJECT_NAME "printing")
+ project(${PROJECT_NAME} LANGUAGES CXX)
+
++set(PDFIUM_DIR @pdfium-binaries@)
+ set(PDFIUM_VERSION "5200" CACHE STRING "Version of pdfium used")
+ string(REPLACE "linux-" "" TARGET_ARCH ${FLUTTER_TARGET_PLATFORM})
+ set(PDFIUM_ARCH ${TARGET_ARCH} CACHE STRING "Architecture of pdfium used")
+@@ -32,18 +33,11 @@
+     )
+ endif()
+
+-# Download pdfium
+-include(../windows/DownloadProject.cmake)
+-download_project(PROJ
+-                 pdfium
+-                 URL
+-                 ${PDFIUM_URL})
+-
+ # This value is used when generating builds using this plugin, so it must not be
+ # changed
+ set(PLUGIN_NAME "printing_plugin")
+
+-include(${pdfium_SOURCE_DIR}/PDFiumConfig.cmake)
++include(${PDFIUM_DIR}/PDFiumConfig.cmake)
+
+ # System-level dependencies.
+ find_package(PkgConfig REQUIRED)
+@@ -67,7 +61,7 @@
+ target_link_libraries(${PLUGIN_NAME}
+                       PRIVATE PkgConfig::GTK PkgConfig::GTKUnixPrint)
+ target_link_libraries(${PLUGIN_NAME} PRIVATE pdfium)
+-get_filename_component(PDFium_lib_path "${PDFium_LIBRARY}" DIRECTORY)
++set(PDFium_lib_path "${PDFIUM_DIR}/lib")
+ set_target_properties(${PLUGIN_NAME}
+                       PROPERTIES SKIP_BUILD_RPATH
+                                  FALSE
+@@ -77,4 +71,4 @@
+                                  "$ORIGIN:${PDFium_lib_path}")
+
+ # List of absolute paths to libraries that should be bundled with the plugin
+-set(printing_bundled_libraries "${PDFium_LIBRARY}" PARENT_SCOPE)
++set(printing_bundled_libraries "${PDFIUM_DIR}/lib/libpdfium.so" PARENT_SCOPE)

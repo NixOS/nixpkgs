@@ -1,0 +1,68 @@
+{
+  lib,
+  anyio,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cpyparsing,
+  ipykernel,
+  mypy,
+  pexpect,
+  pygments,
+  pytestCheckHook,
+  pythonAtLeast,
+  prompt-toolkit,
+  setuptools,
+  tkinter,
+  tstr,
+  watchdog,
+}:
+
+buildPythonPackage rec {
+  pname = "coconut";
+  version = "3.2.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "evhub";
+    repo = "coconut";
+    tag = "v${version}";
+    hash = "sha256-3L5n0nOE8NMXw2tPWjxDCWnHH94yecdnjQ+GBsxt08c=";
+  };
+
+  disabled = pythonAtLeast "3.13";
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    anyio
+    async-generator
+    cpyparsing
+    ipykernel
+    mypy
+    pygments
+    prompt-toolkit
+    setuptools
+    tstr
+    watchdog
+  ];
+
+  nativeCheckInputs = [
+    pexpect
+    pytestCheckHook
+    tkinter
+  ];
+
+  # Currently most tests have performance issues
+  enabledTestPaths = [ "coconut/tests/constants_test.py" ];
+
+  pythonImportsCheck = [ "coconut" ];
+
+  meta = {
+    description = "Simple, elegant, Pythonic functional programming";
+    homepage = "http://coconut-lang.org/";
+    changelog = "https://github.com/evhub/coconut/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fabianhjr ];
+  };
+}

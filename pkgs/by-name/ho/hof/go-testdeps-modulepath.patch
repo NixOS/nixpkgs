@@ -1,0 +1,14 @@
+diff --git a/script/runtime/exe.go b/script/runtime/exe.go
+index d15bf50f..66f784a4 100644
+--- a/script/runtime/exe.go
++++ b/script/runtime/exe.go
+@@ -140,6 +140,9 @@ func (nopTestDeps) WriteProfileTo(name string, w io.Writer, debug int) error {
+ func (nopTestDeps) ImportPath() string {
+ 	return ""
+ }
++func (nopTestDeps) ModulePath() string {
++	return ""
++}
+ func (nopTestDeps) StartTestLog(w io.Writer) {}
+ 
+ func (nopTestDeps) StopTestLog() error {

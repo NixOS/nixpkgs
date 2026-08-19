@@ -1,0 +1,39 @@
+diff --git a/src/Linux/CMakeLists.txt b/src/Linux/CMakeLists.txt
+index 8567253..0137a7a 100644
+--- a/src/Linux/CMakeLists.txt
++++ b/src/Linux/CMakeLists.txt
+@@ -13,8 +13,8 @@ endif(__SERVICE_VM__)
+ 
+ find_package(OpenSSL REQUIRED)
+ 
+-set(CMAKE_CXX_STANDARD 14)
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+ 
+ # Link runTests with what we want to test and the GTest and pthread library
+ add_executable(dcap_provider_utests ../UnitTest/test_local_cache.cpp ../UnitTest/test_quote_prov.cpp ../UnitTest/main.cpp ../Linux/local_cache.cpp)
+diff --git a/src/Linux/Makefile.in b/src/Linux/Makefile.in
+index 58a1c77..1ce6431 100644
+--- a/src/Linux/Makefile.in
++++ b/src/Linux/Makefile.in
+@@ -8,15 +8,15 @@ DEBUG ?= 0
+ SERVICE_VM ?= 0
+ ifeq ($(DEBUG), 1)
+ ifeq ($(SERVICE_VM), 1)
+-	CFLAGS = -fPIC -std=c++14 -g -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -D__SERVICE_VM__ -Wno-unknown-pragmas -pthread
++	CFLAGS = -fPIC -std=c++17 -g -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -D__SERVICE_VM__ -Wno-unknown-pragmas -pthread
+ else
+-	CFLAGS = -fPIC -std=c++14 -g -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -Wno-unknown-pragmas -pthread
++	CFLAGS = -fPIC -std=c++17 -g -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -Wno-unknown-pragmas -pthread
+ endif
+ else
+ ifeq ($(SERVICE_VM), 1)
+-	CFLAGS = -fPIC -std=c++14 -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -D__SERVICE_VM__ -Wno-unknown-pragmas -pthread
++	CFLAGS = -fPIC -std=c++17 -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -D__SERVICE_VM__ -Wno-unknown-pragmas -pthread
+ else
+-	CFLAGS = -fPIC -std=c++14 -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -Wno-unknown-pragmas -pthread
++	CFLAGS = -fPIC -std=c++17 -Wall -I /usr/local/include/gtest/ -Werror $(INCLUDES) -D__LINUX__ -Wno-unknown-pragmas -pthread
+ endif
+ endif
+ 

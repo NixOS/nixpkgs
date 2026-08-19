@@ -1,0 +1,29 @@
+--- a/src/libical/icaltz-util.c
++++ b/src/libical/icaltz-util.c
+@@ -94,9 +94,9 @@
+ static const char *zdir = NULL;
+ 
+ static const char *search_paths[] = {
++    "/etc/zoneinfo",
+     "/usr/share/zoneinfo",
+     "/usr/lib/zoneinfo",
+-    "/etc/zoneinfo",
+     "/usr/share/lib/zoneinfo"
+ };
+ 
+@@ -178,6 +178,15 @@
+     const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+     size_t i, num_search_paths;
+ 
++   const char *env_tzdir = getenv ("TZDIR");
++   if (env_tzdir) {
++       sprintf (file_path, "%s/%s", env_tzdir, fname);
++       if (!access (file_path, F_OK|R_OK)) {
++           zdir = env_tzdir;
++           return;
++       }
++   }
++
+     num_search_paths = sizeof(search_paths) / sizeof(search_paths[0]);
+     for (i = 0; i < num_search_paths; i++) {
+         snprintf(file_path, MAXPATHLEN, "%s/%s", search_paths[i], fname);

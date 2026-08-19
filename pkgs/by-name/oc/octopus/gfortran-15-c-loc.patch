@@ -1,0 +1,41 @@
+--- a/src/basic/accel_inc.F90
++++ b/src/basic/accel_inc.F90
+@@ -61,7 +61,11 @@
+     if (ierr /= CL_SUCCESS) call opencl_print_error(ierr, "EnqueueWriteBuffer")
+ #endif
+ #ifdef HAVE_CUDA
+-    call cuda_memcpy_htod(this%mem, c_loc(data), fsize, offset_)
++    block
++      type(c_ptr) :: cptr
++      cptr = c_loc(data)
++      call cuda_memcpy_htod(this%mem, cptr, fsize, offset_)
++    end block
+ #endif
+ 
+     call profiling_count_transfers(size, data)
+@@ -240,7 +244,11 @@
+     if (ierr /= CL_SUCCESS) call opencl_print_error(ierr, "EnqueueReadBuffer")
+ #endif
+ #ifdef HAVE_CUDA
+-    call cuda_memcpy_dtoh(this%mem, c_loc(data), fsize, offset_)
++    block
++      type(c_ptr) :: cptr
++      cptr = c_loc(data)
++      call cuda_memcpy_dtoh(this%mem, cptr, fsize, offset_)
++    end block
+ #endif
+ 
+     call profiling_count_transfers(size, data)
+@@ -401,7 +409,11 @@
+ 
+   ! no push_sub, called too frequently
+ #ifdef HAVE_CUDA
+-  call cuda_kernel_set_arg_value(kernel%arguments, c_loc(data), narg, types_get_size(R_TYPE_VAL))
++  block
++      type(c_ptr) :: cptr
++      cptr = c_loc(data)
++      call cuda_kernel_set_arg_value(kernel%arguments, cptr, narg, types_get_size(R_TYPE_VAL))
++    end block
+ #endif
+ 
+ #ifdef HAVE_OPENCL

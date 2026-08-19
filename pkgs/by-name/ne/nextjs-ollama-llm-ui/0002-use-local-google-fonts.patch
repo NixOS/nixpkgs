@@ -1,0 +1,20 @@
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 647ed68..b08088e 100644
+--- a/src/app/(chat)/layout.tsx
++++ b/src/app/(chat)/layout.tsx
+@@ -1,10 +1,10 @@
+ import type { Metadata } from "next";
+-import { Inter } from "next/font/google";
++import localFont from "next/font/local";
+ import "../globals.css";
+ import { ThemeProvider } from "@/providers/theme-provider";
+ import { Toaster } from "@/components/ui/sonner";
+
+-const inter = Inter({ subsets: ["latin"] });
++const inter = localFont({ src: '../Inter.ttf' });
+
+ export const metadata: Metadata = {
+   title: "Ollama UI",
+-- 
+2.42.0
+

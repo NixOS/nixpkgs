@@ -1,0 +1,113 @@
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gtk3,
+  gobject-introspection,
+  libappindicator,
+  librsvg,
+  bluez,
+  linuxHeaders,
+  libx11,
+  libxext,
+  libxfixes,
+  libusb1,
+  udev,
+  udevCheckHook,
+  gtk-layer-shell,
+}:
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "sc-controller";
+  version = "0.6.6";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "C0rn3j";
+    repo = "sc-controller";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wbhRfTU+e/Xm+TwPyBcLBMypC365XHZwPjiGvJ8YdDU=";
+  };
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+    udevCheckHook
+  ];
+
+  buildInputs = [
+    gtk3
+    libappindicator
+    librsvg
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      evdev
+      pygobject3
+      pylibacl
+      vdf
+      ioctl-opt
+    ]
+    ++ [
+      gtk-layer-shell
+      python3Packages.libusb1
+    ];
+
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.libusb1
+    python3Packages.toml
+  ];
+
+  patches = [ ./scc_osd_keyboard.patch ];
+
+  postPatch = ''
+    substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
+    substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
+  '';
+
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
+    libx11
+    libxext
+    libxfixes
+    libusb1
+    udev
+    bluez
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
+  '';
+
+  postFixup = ''
+    (
+      # scc runs these scripts as programs. (See find_binary() in scc/tools.py.)
+      cd $out/lib/python*/site-packages/scc/x11
+      patchPythonScript scc-autoswitch-daemon.py
+      patchPythonScript scc-osd-daemon.py
+    )
+  '';
+
+  preCheck = ''
+    # Fix for tests not finding native libraries
+    ln -s build/lib.*/*.so -t .
+  '';
+
+  doInstallCheck = true;
+
+  meta = {
+    homepage = "https://github.com/C0rn3j/sc-controller";
+    # donations: https://www.patreon.com/kozec
+    description = "User-mode driver and GUI for Steam Controller and other controllers";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      rnhmjoj
+    ];
+  };
+})

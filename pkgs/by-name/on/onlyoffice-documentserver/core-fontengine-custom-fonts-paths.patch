@@ -1,0 +1,27 @@
+diff --git a/DesktopEditor/fontengine/ApplicationFonts.cpp b/DesktopEditor/fontengine/ApplicationFonts.cpp
+index ed1a01fb1b..ee071f9ebe 100644
+--- a/DesktopEditor/fontengine/ApplicationFonts.cpp
++++ b/DesktopEditor/fontengine/ApplicationFonts.cpp
+@@ -29,6 +29,7 @@
+  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+  *
+  */
++#include <sstream>
+ #include "ApplicationFonts.h"
+ #include "../common/File.h"
+ #include "../common/Directory.h"
+@@ -1845,6 +1846,14 @@ std::vector<std::wstring> CApplicationFonts::GetSetupFontFiles(const bool& bIsUs
+ 	std::wstring custom_fonts_path = NSSystemUtils::GetEnvVariable(L"CUSTOM_FONTS_PATH");
+ 	if (!custom_fonts_path.empty())
+ 		NSDirectory::GetFiles2(custom_fonts_path, _array, true);
++
++	std::wstring custom_fonts_paths = NSSystemUtils::GetEnvVariable(L"CUSTOM_FONTS_PATHS");
++	if (!custom_fonts_paths.empty()) {
++		std::wistringstream stream(custom_fonts_paths);
++		while (std::getline(stream, custom_fonts_path, L':')) {
++			NSDirectory::GetFiles2(custom_fonts_path, _array, true);
++		}
++	}
+ #endif
+ 
+ 	return _array;

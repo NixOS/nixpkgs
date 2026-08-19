@@ -1,0 +1,31 @@
+From 1384a554579747c0f91a859f1992aa7015db2dc7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sandro=20J=C3=A4ckel?= <sandro.jaeckel@gmail.com>
+Date: Thu, 5 Mar 2026 01:17:28 +0100
+Subject: [PATCH] Fix tests under Python 3.14
+
+---
+ tests/test_hdmi_network.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_hdmi_network.py b/tests/test_hdmi_network.py
+index 972b9ec..48ba8bb 100644
+--- a/tests/test_hdmi_network.py
++++ b/tests/test_hdmi_network.py
+@@ -12,7 +12,7 @@
+ 
+ 
+ def test_devices():
+-    loop = asyncio.get_event_loop()
++    loop = asyncio.new_event_loop()
+     network = HDMINetwork(
+         MockAdapter(
+             [
+@@ -56,7 +56,7 @@ def test_devices():
+ 
+ 
+ def test_scan():
+-    loop = asyncio.get_event_loop()
++    loop = asyncio.new_event_loop()
+     network = HDMINetwork(
+         MockAdapter(
+             [

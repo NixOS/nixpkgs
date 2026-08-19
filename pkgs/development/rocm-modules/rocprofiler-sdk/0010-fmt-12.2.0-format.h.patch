@@ -1,0 +1,529 @@
+From 4a06d995696453b4c65217e0b11228112fb444be Mon Sep 17 00:00:00 2001
+From: Darren Lao <Darren.Lao@amd.com>
+Date: Wed, 22 Jul 2026 11:46:17 -0400
+Subject: [PATCH] fix(rocprofiler-sdk): include fmt/format.h instead of
+ fmt/core.h for fmt::format (#8203)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+## Motivation
+
+Since fmt v12.2.0, `<fmt/core.h>` was made equivalent to `<fmt/base.h>`
+by default (fmtlib/fmt@0007426c). `base.h` is a lightweight subset that
+no longer declares the `std::string`-returning `fmt::format` /
+`fmt::vformat`, which now live only in `<fmt/format.h>`.
+
+As a result, any source that does `#include <fmt/core.h>` and calls
+`fmt::format(...)` fails to compile against system fmt 12.2.0:
+
+```
+error: 'format' is not a member of 'fmt'
+```
+
+Resolves ROCm/rocm-systems#8183.
+
+## Technical Details
+
+Replace `#include <fmt/core.h>` with `#include <fmt/format.h>` in the
+files that call `fmt::format` / `fmt::vformat`, across
+`rocprofiler-register`, `rocprofiler-sdk`, and `profiler-hub` (44
+files).
+
+- Only files that use the format.h-only symbols are changed; files that
+use just `fmt::print` / `fmt::format_to` (satisfied by `base.h`) are
+left on `core.h`.
+- Where a file already included `<fmt/format.h>` next to `<fmt/core.h>`,
+the redundant `core.h` line is dropped.
+- The change is backward compatible: `<fmt/format.h>` is a strict
+superset of `<fmt/core.h>` and has provided `fmt::format` in every fmt
+version these components build against. Verified against the pinned
+submodule (fmt 11.1.4) and system fmt 12.2.0.
+
+## Test Plan
+
+Built each affected component against a locally-installed fmt 12.2.0,
+forcing the `find_package(fmt)` path (`*_BUILD_FMT=OFF`) that the report
+hits:
+
+- `rocprofiler-register` — full library build
+- `rocprofiler-sdk` — full object/shared libraries plus the changed test
+targets (`counter-tests`, `aql-test`, `parser-test`)
+- `profiler-hub` — full static + shared library build
+
+## Test Result
+
+- With the fix: all three components build cleanly against fmt 12.2.0 (0
+compile errors).
+
+## Submission Checklist
+
+- [x] Look over the contributing guidelines at
+https://github.com/ROCm/ROCm/blob/develop/CONTRIBUTING.md#pull-requests.
+
+---------
+---
+ source/lib/common/stringize_arg.hpp                             | 2 +-
+ source/lib/output/format_path.cpp                               | 2 +-
+ source/lib/output/generatePerfetto.cpp                          | 2 +-
+ source/lib/output/metadata.cpp                                  | 1 -
+ source/lib/output/metadata.hpp                                  | 2 +-
+ source/lib/output/output_stream.cpp                             | 1 -
+ source/lib/rocprofiler-sdk-rocpd/sql.cpp                        | 2 +-
+ source/lib/rocprofiler-sdk-tool/config.cpp                      | 2 +-
+ source/lib/rocprofiler-sdk-tool/tool.cpp                        | 2 +-
+ source/lib/rocprofiler-sdk/agent.cpp                            | 1 -
+ source/lib/rocprofiler-sdk/aql/helpers.cpp                      | 2 +-
+ source/lib/rocprofiler-sdk/aql/packet_construct.cpp             | 2 +-
+ source/lib/rocprofiler-sdk/counters.cpp                         | 2 +-
+ source/lib/rocprofiler-sdk/counters/evaluate_ast.cpp            | 2 +-
+ source/lib/rocprofiler-sdk/counters/metrics.hpp                 | 2 +-
+ source/lib/rocprofiler-sdk/counters/parser/raw_ast.hpp          | 2 +-
+ source/lib/rocprofiler-sdk/counters/parser/scanner.cpp          | 2 +-
+ source/lib/rocprofiler-sdk/counters/parser/scanner.l            | 2 +-
+ source/lib/rocprofiler-sdk/counters/tests/core.cpp              | 2 +-
+ source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp   | 2 +-
+ source/lib/rocprofiler-sdk/counters/tests/dimension.cpp         | 2 +-
+ source/lib/rocprofiler-sdk/counters/tests/evaluate_ast_test.cpp | 2 +-
+ source/lib/rocprofiler-sdk/hip/utils.hpp                        | 2 +-
+ source/lib/rocprofiler-sdk/hsa/agent_cache.cpp                  | 2 +-
+ source/lib/rocprofiler-sdk/hsa/aql_packet.cpp                   | 2 +-
+ source/lib/rocprofiler-sdk/hsa/utils.hpp                        | 2 +-
+ source/lib/rocprofiler-sdk/kfd/kfd.cpp                          | 2 +-
+ source/lib/rocprofiler-sdk/marker/utils.hpp                     | 2 +-
+ source/lib/rocprofiler-sdk/ompt.cpp                             | 2 +-
+ source/lib/rocprofiler-sdk/ompt/utils.hpp                       | 2 +-
+ .../rocprofiler-sdk/pc_sampling/parser/pc_record_interface.hpp  | 2 +-
+ source/lib/rocprofiler-sdk/rocdecode/utils.hpp                  | 2 +-
+ source/lib/rocprofiler-sdk/tests/agent.cpp                      | 2 +-
+ 33 files changed, 30 insertions(+), 33 deletions(-)
+
+diff --git a/source/lib/common/stringize_arg.hpp b/source/lib/common/stringize_arg.hpp
+index d211fdd549..6b4b3ebdc5 100644
+--- a/source/lib/common/stringize_arg.hpp
++++ b/source/lib/common/stringize_arg.hpp
+@@ -25,7 +25,7 @@
+ #include "lib/common/container/small_vector.hpp"
+ #include "lib/common/mpl.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <cstdint>
+diff --git a/source/lib/output/format_path.cpp b/source/lib/output/format_path.cpp
+index 19d6f14737..9e5816903f 100644
+--- a/source/lib/output/format_path.cpp
++++ b/source/lib/output/format_path.cpp
+@@ -35,7 +35,7 @@
+ 
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <linux/limits.h>
+ #include <unistd.h>
+diff --git a/source/lib/output/generatePerfetto.cpp b/source/lib/output/generatePerfetto.cpp
+index 7935aae95a..998f05281f 100644
+--- a/source/lib/output/generatePerfetto.cpp
++++ b/source/lib/output/generatePerfetto.cpp
+@@ -33,7 +33,7 @@
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ #include <rocprofiler-sdk/cxx/perfetto.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <atomic>
+ #include <future>
+diff --git a/source/lib/output/metadata.cpp b/source/lib/output/metadata.cpp
+index abe9e00b50..f68d46de5b 100644
+--- a/source/lib/output/metadata.cpp
++++ b/source/lib/output/metadata.cpp
+@@ -41,7 +41,6 @@
+ #include <rocprofiler-sdk/rocprofiler.h>
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
+ #include <fmt/format.h>
+ 
+ #include <dlfcn.h>
+diff --git a/source/lib/output/metadata.hpp b/source/lib/output/metadata.hpp
+index 069401f962..a283896f29 100644
+--- a/source/lib/output/metadata.hpp
++++ b/source/lib/output/metadata.hpp
+@@ -45,7 +45,7 @@
+ #include <rocprofiler-sdk/cxx/name_info.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <cstdint>
+ #include <map>
+diff --git a/source/lib/output/output_stream.cpp b/source/lib/output/output_stream.cpp
+index 7c1307e5e7..fbfffe5014 100644
+--- a/source/lib/output/output_stream.cpp
++++ b/source/lib/output/output_stream.cpp
+@@ -25,7 +25,6 @@
+ #include "lib/common/filesystem.hpp"
+ #include "lib/common/logging.hpp"
+ 
+-#include <fmt/core.h>
+ #include <fmt/format.h>
+ 
+ #include <string_view>
+diff --git a/source/lib/rocprofiler-sdk-rocpd/sql.cpp b/source/lib/rocprofiler-sdk-rocpd/sql.cpp
+index b052ec51c3..7fd5421fe3 100644
+--- a/source/lib/rocprofiler-sdk-rocpd/sql.cpp
++++ b/source/lib/rocprofiler-sdk-rocpd/sql.cpp
+@@ -35,7 +35,7 @@
+ 
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <dlfcn.h>
+diff --git a/source/lib/rocprofiler-sdk-tool/config.cpp b/source/lib/rocprofiler-sdk-tool/config.cpp
+index f172d74c1b..35fff5b170 100644
+--- a/source/lib/rocprofiler-sdk-tool/config.cpp
++++ b/source/lib/rocprofiler-sdk-tool/config.cpp
+@@ -34,7 +34,7 @@
+ 
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <linux/limits.h>
+ #include <unistd.h>
+diff --git a/source/lib/rocprofiler-sdk-tool/tool.cpp b/source/lib/rocprofiler-sdk-tool/tool.cpp
+index e36582550d..6ddb2274e5 100644
+--- a/source/lib/rocprofiler-sdk-tool/tool.cpp
++++ b/source/lib/rocprofiler-sdk-tool/tool.cpp
+@@ -78,7 +78,7 @@
+ #include <rocprofiler-sdk/cxx/hash.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <time.h>
+diff --git a/source/lib/rocprofiler-sdk/agent.cpp b/source/lib/rocprofiler-sdk/agent.cpp
+index fe5af0c1d6..89b912b822 100644
+--- a/source/lib/rocprofiler-sdk/agent.cpp
++++ b/source/lib/rocprofiler-sdk/agent.cpp
+@@ -34,7 +34,6 @@
+ #include <rocprofiler-sdk/fwd.h>
+ #include <rocprofiler-sdk/cxx/details/tokenize.hpp>
+ 
+-#include <fmt/core.h>
+ #include <fmt/format.h>
+ #include <fmt/ranges.h>
+ #include <hsa/hsa.h>
+diff --git a/source/lib/rocprofiler-sdk/aql/helpers.cpp b/source/lib/rocprofiler-sdk/aql/helpers.cpp
+index 35842b1233..eaf7f5dd2a 100644
+--- a/source/lib/rocprofiler-sdk/aql/helpers.cpp
++++ b/source/lib/rocprofiler-sdk/aql/helpers.cpp
+@@ -30,7 +30,7 @@
+ 
+ #include <rocprofiler-sdk/fwd.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ namespace rocprofiler
+ {
+diff --git a/source/lib/rocprofiler-sdk/aql/packet_construct.cpp b/source/lib/rocprofiler-sdk/aql/packet_construct.cpp
+index 3417bd090d..e51f103ff5 100644
+--- a/source/lib/rocprofiler-sdk/aql/packet_construct.cpp
++++ b/source/lib/rocprofiler-sdk/aql/packet_construct.cpp
+@@ -24,7 +24,7 @@
+ #include "lib/common/logging.hpp"
+ #include "lib/rocprofiler-sdk/hsa/details/fmt.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <hsa/hsa_ext_amd.h>
+ #include "glog/logging.h"
+ 
+diff --git a/source/lib/rocprofiler-sdk/counters.cpp b/source/lib/rocprofiler-sdk/counters.cpp
+index 96667ee75e..026dcab909 100644
+--- a/source/lib/rocprofiler-sdk/counters.cpp
++++ b/source/lib/rocprofiler-sdk/counters.cpp
+@@ -41,7 +41,7 @@
+ #include <rocprofiler-sdk/cxx/constants.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ namespace rocprofiler
+ {
+diff --git a/source/lib/rocprofiler-sdk/counters/evaluate_ast.cpp b/source/lib/rocprofiler-sdk/counters/evaluate_ast.cpp
+index bbc3ea1a95..61d9a6c492 100644
+--- a/source/lib/rocprofiler-sdk/counters/evaluate_ast.cpp
++++ b/source/lib/rocprofiler-sdk/counters/evaluate_ast.cpp
+@@ -34,7 +34,7 @@
+ #include <rocprofiler-sdk/fwd.h>
+ #include <rocprofiler-sdk/rocprofiler.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <algorithm>
+diff --git a/source/lib/rocprofiler-sdk/counters/metrics.hpp b/source/lib/rocprofiler-sdk/counters/metrics.hpp
+index 7915bc8805..a65b98f6ad 100644
+--- a/source/lib/rocprofiler-sdk/counters/metrics.hpp
++++ b/source/lib/rocprofiler-sdk/counters/metrics.hpp
+@@ -25,7 +25,7 @@
+ #include <rocprofiler-sdk/agent.h>
+ #include <rocprofiler-sdk/fwd.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ #include <hsa/hsa_ven_amd_aqlprofile.h>
+ 
+diff --git a/source/lib/rocprofiler-sdk/counters/parser/raw_ast.hpp b/source/lib/rocprofiler-sdk/counters/parser/raw_ast.hpp
+index 2f1d6f4dd4..ff5ea7abd9 100644
+--- a/source/lib/rocprofiler-sdk/counters/parser/raw_ast.hpp
++++ b/source/lib/rocprofiler-sdk/counters/parser/raw_ast.hpp
+@@ -26,7 +26,7 @@
+ #include "lib/common/utility.hpp"
+ #include "lib/rocprofiler-sdk/counters/id_decode.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <map>
+diff --git a/source/lib/rocprofiler-sdk/counters/parser/scanner.cpp b/source/lib/rocprofiler-sdk/counters/parser/scanner.cpp
+index 57acd7186d..c08171e866 100644
+--- a/source/lib/rocprofiler-sdk/counters/parser/scanner.cpp
++++ b/source/lib/rocprofiler-sdk/counters/parser/scanner.cpp
+@@ -470,7 +470,7 @@ int        yy_flex_debug = 0;
+ char* yytext;
+ #line 1 "scanner.l"
+ #line 4 "scanner.l"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include "parser.h"
+ #include "raw_ast.hpp"
+diff --git a/source/lib/rocprofiler-sdk/counters/parser/scanner.l b/source/lib/rocprofiler-sdk/counters/parser/scanner.l
+index a1f7edf7ea..196bf2c3a1 100644
+--- a/source/lib/rocprofiler-sdk/counters/parser/scanner.l
++++ b/source/lib/rocprofiler-sdk/counters/parser/scanner.l
+@@ -1,7 +1,7 @@
+ %option noyywrap nodefault yylineno nounput
+ 
+ %{
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include "raw_ast.hpp"
+ #include "parser.h"
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/core.cpp b/source/lib/rocprofiler-sdk/counters/tests/core.cpp
+index 5ecbf5e3cc..61d2721c87 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/core.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/core.cpp
+@@ -41,7 +41,7 @@
+ #include <rocprofiler-sdk/rocprofiler.h>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+ #include <hsa/hsa_api_trace.h>
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp b/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
+index d82a6ec40b..514e129ad3 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/device_counting.cpp
+@@ -38,7 +38,7 @@
+ #include <rocprofiler-sdk/registration.h>
+ #include <rocprofiler-sdk/rocprofiler.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp b/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
+index 22fcda9bf7..6583ae0897 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/dimension.cpp
+@@ -38,7 +38,7 @@
+ #include <rocprofiler-sdk/registration.h>
+ #include <rocprofiler-sdk/rocprofiler.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+diff --git a/source/lib/rocprofiler-sdk/counters/tests/evaluate_ast_test.cpp b/source/lib/rocprofiler-sdk/counters/tests/evaluate_ast_test.cpp
+index b7aca0c638..40c4c88bbf 100644
+--- a/source/lib/rocprofiler-sdk/counters/tests/evaluate_ast_test.cpp
++++ b/source/lib/rocprofiler-sdk/counters/tests/evaluate_ast_test.cpp
+@@ -28,7 +28,7 @@
+ 
+ #include <rocprofiler-sdk/fwd.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <gtest/gtest.h>
+ 
+ #include <algorithm>
+diff --git a/source/lib/rocprofiler-sdk/hip/utils.hpp b/source/lib/rocprofiler-sdk/hip/utils.hpp
+index 53916cbb5d..360577a5e8 100644
+--- a/source/lib/rocprofiler-sdk/hip/utils.hpp
++++ b/source/lib/rocprofiler-sdk/hip/utils.hpp
+@@ -29,7 +29,7 @@
+ #include "lib/rocprofiler-sdk/hip/details/format.hpp"
+ #include "lib/rocprofiler-sdk/hip/details/ostream.hpp"
+ 
+-#include "fmt/core.h"
++#include "fmt/format.h"
+ #include "fmt/ranges.h"
+ 
+ #include <sstream>
+diff --git a/source/lib/rocprofiler-sdk/hsa/agent_cache.cpp b/source/lib/rocprofiler-sdk/hsa/agent_cache.cpp
+index 196a122abc..251ddaf75c 100644
+--- a/source/lib/rocprofiler-sdk/hsa/agent_cache.cpp
++++ b/source/lib/rocprofiler-sdk/hsa/agent_cache.cpp
+@@ -24,7 +24,7 @@
+ #include "lib/common/environment.hpp"
+ #include "lib/common/logging.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <stdexcept>
+ 
+ #include "lib/rocprofiler-sdk/context/context.hpp"
+diff --git a/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp b/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
+index f1c0c3a56e..389a182e9d 100644
+--- a/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
++++ b/source/lib/rocprofiler-sdk/hsa/aql_packet.cpp
+@@ -21,7 +21,7 @@
+ // THE SOFTWARE.
+ 
+ #include "lib/rocprofiler-sdk/hsa/aql_packet.hpp"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <cstdlib>
+ #include <iostream>
+ #include "lib/common/logging.hpp"
+diff --git a/source/lib/rocprofiler-sdk/hsa/utils.hpp b/source/lib/rocprofiler-sdk/hsa/utils.hpp
+index 004cb466b9..1560ef6a9e 100644
+--- a/source/lib/rocprofiler-sdk/hsa/utils.hpp
++++ b/source/lib/rocprofiler-sdk/hsa/utils.hpp
+@@ -27,7 +27,7 @@
+ #include "lib/common/stringize_arg.hpp"
+ #include "lib/rocprofiler-sdk/hsa/details/fmt.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ #include <hsa/hsa.h>
+ #include <hsa/hsa_ext_amd.h>
+diff --git a/source/lib/rocprofiler-sdk/kfd/kfd.cpp b/source/lib/rocprofiler-sdk/kfd/kfd.cpp
+index 83fef31bbc..fdeb6f9bd5 100644
+--- a/source/lib/rocprofiler-sdk/kfd/kfd.cpp
++++ b/source/lib/rocprofiler-sdk/kfd/kfd.cpp
+@@ -40,7 +40,7 @@
+ #include <rocprofiler-sdk/hsa/api_id.h>
+ #include <rocprofiler-sdk/hsa/table_id.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <sys/poll.h>
+ #include <unistd.h>
+diff --git a/source/lib/rocprofiler-sdk/marker/utils.hpp b/source/lib/rocprofiler-sdk/marker/utils.hpp
+index c0dd168575..4a50b91d83 100644
+--- a/source/lib/rocprofiler-sdk/marker/utils.hpp
++++ b/source/lib/rocprofiler-sdk/marker/utils.hpp
+@@ -28,7 +28,7 @@
+ #include "lib/common/mpl.hpp"
+ #include "lib/common/stringize_arg.hpp"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <sstream>
+diff --git a/source/lib/rocprofiler-sdk/ompt.cpp b/source/lib/rocprofiler-sdk/ompt.cpp
+index a9ccc571c8..0d7166465a 100644
+--- a/source/lib/rocprofiler-sdk/ompt.cpp
++++ b/source/lib/rocprofiler-sdk/ompt.cpp
+@@ -31,7 +31,7 @@
+ #include <rocprofiler-sdk/ompt/api_args.h>
+ #include <rocprofiler-sdk/ompt/omp-tools.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <cstdint>
+ #include <iostream>
+ 
+diff --git a/source/lib/rocprofiler-sdk/ompt/utils.hpp b/source/lib/rocprofiler-sdk/ompt/utils.hpp
+index 32da94c011..29f3780448 100644
+--- a/source/lib/rocprofiler-sdk/ompt/utils.hpp
++++ b/source/lib/rocprofiler-sdk/ompt/utils.hpp
+@@ -27,7 +27,7 @@
+ 
+ #include <rocprofiler-sdk/ompt/omp-tools.h>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <fmt/ranges.h>
+ 
+ #include <sstream>
+diff --git a/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.hpp b/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.hpp
+index 9652c8426c..736e6bc65f 100644
+--- a/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.hpp
++++ b/source/lib/rocprofiler-sdk/pc_sampling/parser/pc_record_interface.hpp
+@@ -31,7 +31,7 @@
+ #include <rocprofiler-sdk/cxx/hash.hpp>
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <sys/types.h>
+ #include <cassert>
+ #include <condition_variable>
+diff --git a/source/lib/rocprofiler-sdk/rocdecode/utils.hpp b/source/lib/rocprofiler-sdk/rocdecode/utils.hpp
+index 996419c015..42e5bbe0fc 100644
+--- a/source/lib/rocprofiler-sdk/rocdecode/utils.hpp
++++ b/source/lib/rocprofiler-sdk/rocdecode/utils.hpp
+@@ -25,7 +25,7 @@
+ #include "lib/common/stringize_arg.hpp"
+ #include "lib/rocprofiler-sdk/rocdecode/details/format.hpp"
+ 
+-#include "fmt/core.h"
++#include "fmt/format.h"
+ #include "fmt/ranges.h"
+ 
+ #include <sstream>
+diff --git a/source/lib/rocprofiler-sdk/tests/agent.cpp b/source/lib/rocprofiler-sdk/tests/agent.cpp
+index e951160899..7f6689b73f 100644
+--- a/source/lib/rocprofiler-sdk/tests/agent.cpp
++++ b/source/lib/rocprofiler-sdk/tests/agent.cpp
+@@ -31,7 +31,7 @@
+ #include <rocprofiler-sdk/cxx/operators.hpp>
+ #include <rocprofiler-sdk/cxx/utility.hpp>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <gtest/gtest.h>
+ #include <hsa/hsa.h>
+ #include <hsa/hsa_api_trace.h>
+-- 
+2.55.0
+

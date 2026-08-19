@@ -1,0 +1,13 @@
+diff --git a/electron/main/index.ts b/electron/main/index.ts
+index 78256e3..93e3881 100644
+--- a/electron/main/index.ts
++++ b/electron/main/index.ts
+@@ -4,6 +4,8 @@ import { createAppMenu } from './core/menu'
+ import { initAutoUpdater } from './core/updater'
+ import { createWindow, mainWindow } from './window'
+ 
++app.setDesktopName("Aonsoku.desktop")
++
+ export let isQuitting = false
+ 
+ const currentDesktop = process.env.XDG_CURRENT_DESKTOP ?? ''

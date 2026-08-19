@@ -1,0 +1,13 @@
+diff --git a/sys/conf/newvers.sh b/sys/conf/newvers.sh
+index c594724d814..d5287c7b992 100644
+--- a/sys/conf/newvers.sh
++++ b/sys/conf/newvers.sh
+@@ -177,7 +177,7 @@ u=${USER:-root}
+ d=$(pwd)
+ h=${HOSTNAME:-$(hostname)}
+ if [ -n "$SOURCE_DATE_EPOCH" ]; then
+-	if ! t=$(date -r $SOURCE_DATE_EPOCH 2>/dev/null); then
++	if ! t=$(date -d @$SOURCE_DATE_EPOCH 2>/dev/null); then
+ 		echo "Invalid SOURCE_DATE_EPOCH" >&2
+ 		exit 1
+ 	fi

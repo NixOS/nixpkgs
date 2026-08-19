@@ -1,0 +1,13 @@
+diff --git a/test/testfile.c b/test/testfile.c
+index cb311d5..0726244 100644
+--- a/test/testfile.c
++++ b/test/testfile.c
+@@ -92,8 +92,6 @@ do { \
+   WRITABLE (true, "../test/file/non-existing");
+   WRITABLE (false, "/kissat-test-file-writable");
+   WRITABLE (false, "non-existing-directory/file-in-non-existing-directory");
+-  if (kissat_file_exists ("/etc/passwd"))
+-    WRITABLE (false, "/etc/passwd");
+ #undef WRITABLE
+ }
+ 

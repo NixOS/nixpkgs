@@ -1,0 +1,38 @@
+diff --git a/radio/util/find_clang.py b/radio/util/find_clang.py
+index d9cdbb083..f78f87717 100644
+--- a/radio/util/find_clang.py
++++ b/radio/util/find_clang.py
+@@ -59,6 +59,7 @@ def getBuiltinHeaderPath(library_path):
+     return None
+ 
+ def findLibClang():
++    return "@libclang@"
+     if sys.platform == "darwin":
+         knownPaths = [
+             "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib",
+diff --git a/radio/util/generate_datacopy.py b/radio/util/generate_datacopy.py
+index a92b0c3e2..6385b2ff6 100755
+--- a/radio/util/generate_datacopy.py
++++ b/radio/util/generate_datacopy.py
+@@ -5,7 +5,8 @@ import sys
+ import clang.cindex
+ import time
+ import os
+-
++from pathlib import Path
++import re
+ 
+ structs = []
+ extrastructs = []
+@@ -102,6 +103,11 @@ def main():
+     if find_clang.builtin_hdr_path:
+         args.append("-I" + find_clang.builtin_hdr_path)
+ 
++    args.append("-resource-dir")
++    args.append("@resourceDir@")
++    for path in ["@libc-cflags@", "@libcxx-cflags@"]:
++        args.extend([flag.strip() for flag in re.split(r'\s+', Path(path).read_text()) if flag.strip()])
++
+     translation_unit = index.parse(sys.argv[1], args)
+ 
+     if translation_unit.diagnostics:

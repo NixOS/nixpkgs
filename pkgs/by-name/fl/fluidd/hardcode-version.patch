@@ -1,0 +1,15 @@
+diff --git a/vite.config.inject-version.ts b/vite.config.inject-version.ts
+index d1321fcf..fb3e4c6d 100644
+--- a/vite.config.inject-version.ts
++++ b/vite.config.inject-version.ts
+@@ -29,9 +29,7 @@ const vitePluginInjectVersion = (): Plugin => {
+   return {
+     name: 'version',
+     config: () => {
+-      const git_hash = child_process
+-        .execSync('git rev-parse --short HEAD')
+-        .toString()
++      const git_hash = '@version@'
+
+       return {
+         define: {

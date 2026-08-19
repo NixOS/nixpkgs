@@ -1,0 +1,21 @@
+diff --git a/cmake/SalmonDependencies.cmake b/cmake/SalmonDependencies.cmake
+index b6bebe0..a67571a 100644
+--- a/cmake/SalmonDependencies.cmake
++++ b/cmake/SalmonDependencies.cmake
+@@ -86,6 +86,8 @@ if(ZLIBNG_FOUND)
+   set(SALMON_ZLIB_LIBRARIES ZLIBNG::ZLIBNG)
+   set(ZLIB_INCLUDE_DIR ${ZLIBNG_INCLUDE_DIR})
+   set(ZLIB_LIBRARY ZLIBNG::ZLIBNG)
++  add_library(zlibstatic ALIAS ${ZLIB_LIBRARY})
++  message(STATUS "Created zlibstatic alias for pufferfish embedded mode")
+ elseif(SALMON_FETCH_MISSING_DEPS)
+   message(STATUS "zlib-ng not found; fetching pinned zlib-ng release in compatibility mode")
+   set(ZLIB_COMPAT ON CACHE BOOL "" FORCE)
+@@ -421,6 +423,7 @@ else()
+   set(SALMON_CURL_LIBRARIES "" CACHE INTERNAL "" FORCE)
+ endif()
+ if(SALMON_USE_SYSTEM_DEPS)
++  find_package(OpenSSL REQUIRED)
+   find_package(HTSlib QUIET)
+ endif()
+ if(HTSlib_FOUND)
