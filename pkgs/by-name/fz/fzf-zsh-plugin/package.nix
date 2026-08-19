@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "fzf-zsh-plugin";
-  version = "1.0.0-unstable-2026-08-01";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "unixorn";
