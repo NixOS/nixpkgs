@@ -10,7 +10,7 @@
   itstool,
   libtool,
   texinfo,
-  systemdMinimal,
+  systemdLibs,
   util-linux,
   autoreconfHook,
   glib,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     python
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemdMinimal # libsystemd
+    systemdLibs
   ]
   ++ lib.optionals withAlsa [
     alsa-lib
