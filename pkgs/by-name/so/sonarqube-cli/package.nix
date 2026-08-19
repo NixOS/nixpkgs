@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "sonarqube-cli";
-  version = "1.4.0.3748";
+  version = "1.5.0.4158";
 
   src =
     let
@@ -18,15 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     {
       x86_64-linux = fetchurl {
         url = "${baseUrl}/linux/sonarqube-cli-${finalAttrs.version}-linux-x86-64.bin";
-        hash = "sha256-pXQlyPPS6rG65mKPxTLxkYCwIu/UeigNPrcY4awJ04I=";
+        hash = "sha256-29TuICV/cwEK1/iiwlUjcwOe42EK8lJBbm8T9/+RVGA=";
       };
       aarch64-linux = fetchurl {
         url = "${baseUrl}/linux/sonarqube-cli-${finalAttrs.version}-linux-arm64.bin";
-        hash = "sha256-OvYvzWX6yks7tKO6rivJy7Qn8lsYnl9uB2DH1ZtkGFo=";
+        hash = "sha256-WWAY7AP2KCWI5r3laQRiWkq9DGXD5Nw+Bans0oOBxkQ=";
       };
       aarch64-darwin = fetchurl {
         url = "${baseUrl}/macos/sonarqube-cli-${finalAttrs.version}-macos-arm64.bin";
-        hash = "sha256-KiPLvQTJcgT4RWEDL0zyPwSgV9mPOcJ4gFiT+uVIVPY=";
+        hash = "sha256-GB32aiW2yrakQo94L+J54BN0CIwfMkD9lG97kdNUV+Y=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

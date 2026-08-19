@@ -2723,6 +2723,14 @@ assertNoAdditions {
     };
   });
 
+  neo-tree-diagnostics-nvim = super.neo-tree-diagnostics-nvim.overrideAttrs {
+    dependencies = with self; [ neo-tree-nvim ];
+    checkInputs = with self; [
+      plenary-nvim
+      nui-nvim
+    ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     checkInputs = [ git ];
     dependencies = with self; [

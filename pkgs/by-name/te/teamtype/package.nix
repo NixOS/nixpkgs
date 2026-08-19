@@ -1,28 +1,29 @@
 {
   fetchFromGitHub,
   lib,
+  stdenv,
   rustPlatform,
   versionCheckHook,
   installShellFiles,
   nix-update-script,
   pkg-config,
   libgit2,
+  neovim,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teamtype";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "teamtype";
     repo = "teamtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-74MufpLTACkPevzOyaXw2Rr7S7VvaFEYHEyTQYwKVT8=";
+    hash = "sha256-FsT1ako/3EIPynWuBqCSiwaZtMnsd7ypJnrh+4EDRwM=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/daemon";
-
-  cargoHash = "sha256-OIOffnCC9PlT/SXPOuTnKx3feZnkHP+jzbQIJWX0tzk=";
+  cargoHash = "sha256-gphTpVKbmfYJSUasOCtNgyMKI9JU/if8KcH7Lu3Svjs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,6 +52,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  nativeCheckInputs = [
+    neovim
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail 'target/debug/teamtype' 'target/${stdenv.hostPlatform.rust.rustcTarget}/release/teamtype'
+  '';
+
+  # watcher tests use FSEvents which hangs in the macOS sandbox
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=watcher::"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

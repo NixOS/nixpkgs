@@ -237,13 +237,13 @@
     "vendorHash": "sha256-4DvtpRivKWKIffzr8m0akSUjSxQ7Mtv6ziqe4su565g="
   },
   "cloudscale-ch_cloudscale": {
-    "hash": "sha256-JWor08TpsdlzOJlUUSfeGpgcGWFSFl/uBT0K+Olb6Sk=",
+    "hash": "sha256-ue4Ux6TQWxVWXVqJn9PlRzHvM3k2YDn/9cFHVghy4wY=",
     "homepage": "https://registry.terraform.io/providers/cloudscale-ch/cloudscale",
     "owner": "cloudscale-ch",
     "repo": "terraform-provider-cloudscale",
-    "rev": "v5.1.1",
+    "rev": "v5.2.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-sK0vxSYoc05S7sJy1GvS5TsQ3SjpuzsuOmMYcMi9Z2c="
+    "vendorHash": "sha256-3wv9pNnl+hNaC2K/PeEXemLOBlx3c1ZDZ70i9ZM/iEg="
   },
   "constellix_constellix": {
     "deleteVendor": true,
@@ -283,13 +283,13 @@
     "vendorHash": "sha256-3o6YRDrq4rQhNAFyqiGJrAoxuAykWw85OExRGSE3kGI="
   },
   "datadog_datadog": {
-    "hash": "sha256-MgYBUOb9zYaWKjzP/lol/n7PZUs7wRab8/jagFNjNAc=",
+    "hash": "sha256-d8PJlGRgXrbyUUpoFuapdQr4jXZSBq2+2kA98YCGkGI=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v4.17.0",
+    "rev": "v4.18.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-frrFEPGmvem2qQSpPn9fG5hUITa2k5fQ0NHfm65ehfI="
+    "vendorHash": "sha256-RZOMIbgfFZLuqDdW4E4aoVJqB9V6HN6YQp25jv/qdPU="
   },
   "datadrivers_nexus": {
     "hash": "sha256-t9hpZ4COmMPvs4TgcZLeuOA23oD5vvHw8UVK7SpzI0Y=",
@@ -508,13 +508,13 @@
     "vendorHash": "sha256-ikBqIxD5aTOcwNHCMN6EaOwSHCAP5n/SULuqQXPLpOc="
   },
   "hashicorp_aws": {
-    "hash": "sha256-+TkbHnCRDruCFeyyKOLdwl2JafLsy86d1osygP2/su8=",
+    "hash": "sha256-iXrHIUaRfqj9jKar7dt5aqKAv1gNJcbiapsyHkRasX8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.58.0",
+    "rev": "v6.60.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-zqirPhQ8sklb21OKGzRIjEJRangPPT2pna+FBNC5+0A="
+    "vendorHash": "sha256-pgGIsouEN0kg+JTMar46IlDFm1PkIFRNBX34AcFs+34="
   },
   "hashicorp_awscc": {
     "hash": "sha256-KDnW5wmuiDlMrAnEv8eOhRwQWuhS1GubTnFCg7GeBj4=",

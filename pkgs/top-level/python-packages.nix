@@ -8310,6 +8310,8 @@ self: super: with self; {
 
   ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
 
+  ini2toml = callPackage ../development/python-modules/ini2toml { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
@@ -13573,6 +13575,8 @@ self: super: with self; {
   pkce = callPackage ../development/python-modules/pkce { };
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
+
+  pkg-resources-backport = callPackage ../development/python-modules/pkg-resources-backport { };
 
   pkgconfig = callPackage ../development/python-modules/pkgconfig { };
 
@@ -22061,6 +22065,12 @@ self: super: with self; {
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
+
+  validate-pyproject = callPackage ../development/python-modules/validate-pyproject { };
+
+  validate-pyproject-schema-store =
+    callPackage ../development/python-modules/validate-pyproject-schema-store
+      { };
 
   validator-collection = callPackage ../development/python-modules/validator-collection { };
 
