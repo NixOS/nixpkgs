@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Units and dimensions library with support for static dimensionality checking and protobuffer serialization";
     homepage = "https://github.com/quantumlib/TypedUnits";
+    changelog = "https://github.com/quantumlib/TypedUnits/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
