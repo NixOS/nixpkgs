@@ -1,6 +1,27 @@
 { lib, config, ... }:
 let
-  safeName = lib.types.strMatching "[a-zA-Z0-9:_\\.-]*";
+  # A name containing only "safe" characters that we allow passing to the
+  # backends.
+  #
+  # Note that we often default options of type `safeName` to Nix attribute names.
+  # For example,
+  # ```
+  # vars.generators."foo bar" = {}
+  # ```
+  # will implicitly `vars.generators."foo bar".name = "foo bar"`. This is bad,
+  # because the error will get a confusing error coming from the wrong place.
+  # In the future, it might be worth creating a modified version of `attrsOf`
+  # that does not have this issue, although the added complexity is not worth
+  # it right now.
+  safeName =
+    of:
+    lib.types.addCheck lib.types.str (
+      s:
+      if lib.strings.match "[a-zA-Z0-9:_\\.-]*" s == null then
+        throw "Name '${toString s}' is not a valid ${of} name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
+      else
+        true
+    );
   cfg = config.vars;
 
   deferredPackage =
@@ -113,7 +134,7 @@ let
       options = {
         name = lib.mkOption {
           description = "name of the generated file";
-          type = safeName;
+          type = safeName "file";
           default = name;
           defaultText = "Name of the file";
         };
@@ -146,7 +167,7 @@ let
             The name of the generator.
             This name will be used to refer to the generator in other generators.
           '';
-          type = safeName;
+          type = safeName "generator";
           default = name;
           defaultText = "Name of the generator";
         };
@@ -155,7 +176,7 @@ let
           description = ''
             A list of prompts this generator will have at its disposal.
           '';
-          type = lib.types.listOf safeName;
+          type = lib.types.listOf lib.types.str;
           default = [ ];
         };
 
@@ -164,7 +185,7 @@ let
             A list of other generators this generator should be able to read the
             output(s) of.
           '';
-          type = lib.types.listOf safeName;
+          type = lib.types.listOf (safeName "generator");
           default = [ ];
         };
 
@@ -197,7 +218,7 @@ let
         '';
 
         backend = lib.mkOption {
-          type = safeName;
+          type = lib.types.str;
           description = "The backend responsible for handling this secret.";
           default = cfg.defaultGeneratorBackend;
         };
@@ -266,7 +287,7 @@ let
         };
 
         backend = lib.mkOption {
-          type = safeName;
+          type = lib.types.str;
           description = "The backend responsible for handling this prompt.";
           default = cfg.defaultPromptBackend;
         };
@@ -299,7 +320,7 @@ in
       description = ''
         The default backend to use for generators that do not specify one.
       '';
-      type = safeName;
+      type = lib.types.str;
     };
 
     promptBackends = lib.mkOption {
@@ -323,7 +344,7 @@ in
       description = ''
         The default backend to use for prompts that do not specify one.
       '';
-      type = safeName;
+      type = lib.types.str;
     };
   };
 }
