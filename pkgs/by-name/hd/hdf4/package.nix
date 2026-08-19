@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdf";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf4";
     tag = "hdf${finalAttrs.version}";
-    hash = "sha256-Q2VKwkp/iroStrOnwHI8d/dtMWkMoJesBVBVChwNa30=";
+    hash = "sha256-WM3VuwR2G2E4b4BMbQm6FqEFD2CUkRGUfCiRhSPaEbw=";
   };
 
   nativeBuildInputs = [
