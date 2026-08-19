@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-dADN9zBwspfDPdgce5EKEclI1qLcqc0N09RGsiPrJ0c=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=__version__," 'version="${version}",'
+  '';
+
   build-system = [
     cython
     setuptools
