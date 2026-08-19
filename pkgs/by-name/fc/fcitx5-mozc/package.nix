@@ -16,7 +16,7 @@
 
 buildBazelPackage {
   pname = "fcitx5-mozc";
-  version = "2.30.5544.102"; # make sure to update protobuf if needed
+  version = "fcitx-mozc-2.17.2102.102.1"; # make sure to update protobuf if needed
 
   src = fetchFromGitHub {
     owner = "fcitx";
