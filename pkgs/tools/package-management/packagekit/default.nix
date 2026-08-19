@@ -25,8 +25,8 @@
   enableCommandNotFound ? false,
   enableBashCompletion ? false,
   bash-completion ? null,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     boost
   ]
-  ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableSystemd systemdLibs
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
