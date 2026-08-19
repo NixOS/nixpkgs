@@ -1190,7 +1190,7 @@ in
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
   };
-  nixos-vars-basic-generators = runTest ./nixos-vars/basic-generators;
+  nixos-secrets-basic-generators = runTest ./nixos-secrets/basic-generators;
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
     pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix

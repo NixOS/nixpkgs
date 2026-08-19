@@ -1,9 +1,0 @@
-[project]
-name = "nixos-vars"
-version = "0.1.0"
-
-[project.scripts]
-nixos-vars = "nixos_vars.cli:main"
-
-[tool.setuptools.package-data]
-nixos_vars = ["nix/*"]
