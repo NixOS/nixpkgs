@@ -60,7 +60,7 @@ in
       description = ''
         Configuration written to {file}`/etc/atuin/config.toml`.
 
-        See <https://docs.atuin.sh/configuration/config/> for the full list
+        See <https://docs.atuin.sh/latest/configuration/config/> for the full list
         of options.
       '';
     };
@@ -99,7 +99,7 @@ in
         {file}`/etc/atuin/themes/theme-name.toml`
         where the name of each attribute is the theme-name
 
-        See <https://docs.atuin.sh/guide/theming/> for the full list
+        See <https://docs.atuin.sh/latest/guide/theming/> for the full list
         of options.
       '';
       default = { };
