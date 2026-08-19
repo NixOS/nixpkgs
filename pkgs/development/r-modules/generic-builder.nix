@@ -4,6 +4,7 @@
   R,
   xvfb-run,
   util-linux,
+  libintl,
 }:
 
 attrs:
@@ -27,6 +28,9 @@ stdenv.mkDerivation (
         util-linux
         xvfb-run
       ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      libintl
+    ];
 
     enableParallelBuilding = true;
 
