@@ -15,13 +15,12 @@
       services.xserver.enable = true;
       test-support.displayManager.auto.user = "alice";
 
-      environment.systemPackages = [
-        pkgs.devolo-cockpit
-      ];
+      services.devolo-cockpit.enable = true;
     };
 
   testScript = ''
     start_all()
+    machine.wait_for_unit("devolonetsvc.service")
     machine.wait_for_x()
 
     # Test that devolo-cockpit starts in the user desktop session
