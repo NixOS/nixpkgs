@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-KNxR8AiEJ9S15G5l3rB48BvLdgB5s6q6L1I83V7iMv0=";
+    hash = "sha256-P3MaS0wXyRCYyHW07ifPoglP95SUakhH5rdkAsktXag=";
   };
 
   build-system = [ flit-core ];
