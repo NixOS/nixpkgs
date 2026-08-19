@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   installFlags = [ "install-exec" ];
 
