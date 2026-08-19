@@ -29304,6 +29304,11 @@
     githubId = 47905926;
     name = "toyboot4e";
   };
+  tpansino = {
+    name = "Tom Pansino";
+    github = "tpansino";
+    githubId = 2768420;
+  };
   tphanir = {
     github = "tphanir";
     name = "phani";
