@@ -280,6 +280,88 @@ in
                 type = str;
               };
             };
+            rdp = {
+              enable = mkOption {
+                description = "Whether to enable RDP listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of RDP listener.";
+                default = "[::]:3389";
+                type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from the listener's peer.";
+                default = false;
+                type = bool;
+              };
+              external_host = mkOption {
+                description = "The RDP listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
+              external_port = mkOption {
+                description = "The RDP listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to RDP listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to RDP listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+            };
+            vnc = {
+              enable = mkOption {
+                description = "Whether to enable VNC listener.";
+                default = false;
+                type = bool;
+              };
+              listen = mkOption {
+                description = "Listen endpoint of VNC listener.";
+                default = "[::]:5900";
+                type = str;
+              };
+              proxy_protocol = mkOption {
+                description = "Accept HAProxy PROXY protocol v1/v2 headers from the listener's peer.";
+                default = false;
+                type = bool;
+              };
+              external_host = mkOption {
+                description = "The VNC listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
+              external_port = mkOption {
+                description = "The VNC listener is reachable via this port externally.";
+                default = null;
+                type = nullOr str;
+              };
+              certificate = mkOption {
+                description = "Path to VNC listener certificate.";
+                default = "/var/lib/warpgate/tls.certificate.pem";
+                type = str;
+              };
+              key = mkOption {
+                description = "Path to VNC listener private key.";
+                default = "/var/lib/warpgate/tls.key.pem";
+                type = str;
+              };
+              enable_ard_auth = mkOption {
+                description = ''
+                  Enable Apple-DH (Apple Remote Desktop / type 30) auth, which is to ensure compatibility with Apple clients.
+                  However [connections from macOS built-in VNC client with ARD auth is not supported](https://github.com/warp-tech/warpgate/blob/47e676969a0b1e0b8456f9a5f1474d6c58648c4f/warpgate-protocol-vnc/src/server/rfb.rs#L8-L10).
+                '';
+                default = false;
+                type = bool;
+              };
+            };
             mysql = {
               enable = mkOption {
                 description = "Whether to enable MySQL listener.";
