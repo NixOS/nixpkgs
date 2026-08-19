@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcrctl";
-  version = "1.8.0";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrctl";
     rev = "release-v${finalAttrs.version}";
-    hash = "sha256-Nm1r3hHTlW5ob2CLKUgMjVsdzR2gxlFuT6Q3j0pPDSg=";
+    hash = "sha256-dRPczMagEG2p9WBLLm6UnHQt9nlwI0pC2gq51F6x9mM=";
   };
 
-  vendorHash = "sha256-Ry3wR2u+vr97icP9jwAVWcFO98JVDo9TrDg9D8hfv5I=";
+  vendorHash = "sha256-THlkOwgggTEz3ajRNgSxK6n5dKhCS4UGw/61Rc9q1nc=";
 
   ldflags = [
     "-s"
