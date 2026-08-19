@@ -6,16 +6,16 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argcomplete";
-  version = "3.6.3";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kislyuk";
     repo = "argcomplete";
-    tag = "v${version}";
-    hash = "sha256-GK78gW54cFE0yXra56wG8LnBL9CLbf0TuIgxFwA9zZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKIhWlftH9xgdklljAOmW4XYMbclGrCFTtsxws2FRzg=";
   };
 
   build-system = [
@@ -31,9 +31,9 @@ buildPythonPackage rec {
   meta = {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    changelog = "https://github.com/kislyuk/argcomplete/blob/${src.tag}/Changes.rst";
+    changelog = "https://github.com/kislyuk/argcomplete/blob/${finalAttrs.src.tag}/Changes.rst";
     downloadPage = "https://github.com/kislyuk/argcomplete";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})
