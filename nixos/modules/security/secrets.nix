@@ -1,4 +1,5 @@
 { lib, config, ... }:
+with lib.types;
 let
   # A name containing only "safe" characters that we allow passing to the
   # backends.
@@ -15,7 +16,7 @@ let
   # not worth it right now.
   safeName =
     of:
-    lib.types.addCheck lib.types.str (
+    addCheck str (
       s:
       if lib.strings.match "[a-zA-Z0-9:_\\.-]*" s == null then
         throw "Name '${toString s}' is not a valid ${of} name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -28,7 +29,7 @@ let
     description:
     lib.mkOption {
       inherit description;
-      type = lib.types.functionTo lib.types.pathInStore;
+      type = functionTo pathInStore;
       example = pkgs: pkgs.writeShellScript "example" "echo 'Hi!'";
     };
 
@@ -36,18 +37,18 @@ let
     description:
     lib.mkOption {
       inherit description;
-      type = lib.types.nullOr (lib.types.functionTo lib.types.pathInStore);
+      type = nullOr (functionTo pathInStore);
       example = pkgs: pkgs.writeShellScript "example" "echo 'Hi!'";
       default = null;
     };
 
-  generatorBackendModule = lib.types.submodule (
+  generatorBackendModule = submodule (
     { name, ... }:
     {
       options = {
         name = lib.mkOption {
           description = "The name of the backend.";
-          type = lib.types.str;
+          type = str;
           default = name;
         };
 
@@ -111,7 +112,7 @@ let
         '';
 
         fileModule = lib.mkOption {
-          type = lib.types.deferredModule;
+          type = deferredModule;
           internal = true;
           default = { };
           description = ''
@@ -141,7 +142,7 @@ let
 
         path = lib.mkOption {
           description = "Path to the generated file; usually set by the backend";
-          type = lib.types.path;
+          type = path;
         };
 
         local = lib.mkOption {
@@ -149,13 +150,13 @@ let
             Files with this flag will not be included in the file list passed to
             the `deploy` script.
           '';
-          type = lib.types.bool;
+          type = bool;
           default = false;
         };
       };
     };
 
-  generatorModule = lib.types.submodule (
+  generatorModule = submodule (
     { name, config, ... }:
     let
       backend = cfg.generatorBackends.${config.backend};
@@ -176,7 +177,7 @@ let
           description = ''
             A list of prompts this generator will have at its disposal.
           '';
-          type = lib.types.listOf lib.types.str;
+          type = listOf str;
           default = [ ];
         };
 
@@ -185,7 +186,7 @@ let
             A list of other generators this generator should be able to read the
             output(s) of.
           '';
-          type = lib.types.listOf (safeName "generator");
+          type = listOf (safeName "generator");
           default = [ ];
         };
 
@@ -195,15 +196,13 @@ let
             produce exactly these files under $out.
           '';
           default = { };
-          type = lib.types.attrsOf (
-            lib.types.submoduleWith {
-              modules = [ fileModule ];
-              specialArgs = {
-                inherit backend;
-                generator = config;
-              };
-            }
-          );
+          type = attrsOf (submoduleWith {
+            modules = [ fileModule ];
+            specialArgs = {
+              inherit backend;
+              generator = config;
+            };
+          });
         };
 
         script = deferredPackage ''
@@ -218,7 +217,7 @@ let
         '';
 
         backend = lib.mkOption {
-          type = lib.types.str;
+          type = str;
           description = "The backend responsible for handling this secret.";
           default = cfg.defaultGeneratorBackend;
         };
@@ -226,13 +225,13 @@ let
     }
   );
 
-  promptBackendModule = lib.types.submodule (
+  promptBackendModule = submodule (
     { name, ... }:
     {
       options = {
         name = lib.mkOption {
           description = "The name of the backend.";
-          type = lib.types.str;
+          type = str;
           default = name;
         };
 
@@ -245,19 +244,19 @@ let
     }
   );
 
-  promptModule = lib.types.submodule (
+  promptModule = submodule (
     { name, ... }:
     {
       options = {
         name = lib.mkOption {
           description = "The name generators can use to refer to this prompt.";
-          type = lib.types.str;
+          type = str;
           default = name;
         };
 
         label = lib.mkOption {
           description = "The label to attach to the prompt.";
-          type = lib.types.str;
+          type = str;
           default = name;
         };
 
@@ -265,7 +264,7 @@ let
           description = ''
             An optional longer description of the prompted value.
           '';
-          type = lib.types.nullOr lib.types.str;
+          type = nullOr str;
           default = null;
           example = "SSH private key";
         };
@@ -278,7 +277,7 @@ let
               - line: A single line of text
               - multiline: A multiline text
           '';
-          type = lib.types.enum [
+          type = enum [
             "hidden"
             "line"
             "multiline"
@@ -287,7 +286,7 @@ let
         };
 
         backend = lib.mkOption {
-          type = lib.types.str;
+          type = str;
           description = "The backend responsible for handling this prompt.";
           default = cfg.defaultPromptBackend;
         };
@@ -302,7 +301,7 @@ in
         A set of backends that handle storing and retrieving generated files.
       '';
       default = { };
-      type = lib.types.attrsOf generatorBackendModule;
+      type = attrsOf generatorBackendModule;
     };
 
     generators = lib.mkOption {
@@ -313,14 +312,14 @@ in
         input.
       '';
       default = { };
-      type = lib.types.attrsOf generatorModule;
+      type = attrsOf generatorModule;
     };
 
     defaultGeneratorBackend = lib.mkOption {
       description = ''
         The default backend to use for generators that do not specify one.
       '';
-      type = lib.types.str;
+      type = str;
     };
 
     promptBackends = lib.mkOption {
@@ -328,7 +327,7 @@ in
         A set of backends that handle retrieving user inputs.
       '';
       default = { };
-      type = lib.types.attrsOf promptBackendModule;
+      type = attrsOf promptBackendModule;
     };
 
     prompts = lib.mkOption {
@@ -337,14 +336,14 @@ in
         generator backends.
       '';
       default = { };
-      type = lib.types.attrsOf promptModule;
+      type = attrsOf promptModule;
     };
 
     defaultPromptBackend = lib.mkOption {
       description = ''
         The default backend to use for prompts that do not specify one.
       '';
-      type = lib.types.str;
+      type = str;
     };
   };
 }
