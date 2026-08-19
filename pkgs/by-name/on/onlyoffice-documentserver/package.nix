@@ -147,7 +147,7 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
-    version = "9.3.1";
+    version = "99.99.99.4652";
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
