@@ -112,6 +112,11 @@ let
         # is a cleaner fix than explicitly adding 'gzip' to systemPackages.
         documentation.info.enable = lib.mkDefault false;
 
+        systemd.suppressedSystemUnits = [
+          # containers are discarded afterwards, so they need no persistent id
+          "systemd-machine-id-commit.service"
+        ];
+
         # Gross, insecure hack to make login work. See above.
         security.pam.services.login = {
           text = ''
