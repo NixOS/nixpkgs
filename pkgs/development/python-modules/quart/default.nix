@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-BrZtknO8Xne5r4CENF0Uz8NVc8Zc+Yu35spvPw7qZ/w=";
+    hash = "sha256-1rwkrxxk79EB8gkeXNvT2hR37it4H6RqewPxYny/VIs=";
   };
 
   build-system = [ flit-core ];
