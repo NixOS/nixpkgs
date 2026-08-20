@@ -656,6 +656,28 @@ let
       # which is annoying, so let's make it use Go from $PATH for
       # both (all) architectures instead.
       ./patches/chromium-151-dawn-use-Go-from-PATH.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !ungoogled) [
+      # Don't show misleading Terms of Service dialog on first run that literally says [^1]
+      #
+      # > This Space Intentionally Blank
+      # >
+      # > In official builds this space will show the terms of service.
+      #
+      # "official builds" refers to offical Google Chrome builds, not Chromium, for which we
+      # explicitly set is_official_build=true as gn flag. If this does ever change to something
+      # actually worthwhile, we can drop this revert and update our VM test to handle this dialog.
+      # Exclude ungoogled-chromium, as it ships its own variant of this patch.
+      # [^1]: https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/components/resources/terms/terms_chromium.txt
+      (fetchpatch {
+        name = "chromium-151-revert-Show-Linux-first-run-terms-of-service-dialog-by-default.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/8257374
+        url = "https://chromium.googlesource.com/chromium/src/+/ae9b17ac975d4b10af762e9344083d858f1347ce^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        includes = [ "chrome/browser/first_run/first_run.h" ];
+        hash = "sha256-d1Zm2flZPG++ROF4CCawn9U8T7/qgZFMHTXArqIShTk=";
+      })
     ];
 
     postPatch =

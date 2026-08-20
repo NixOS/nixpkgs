@@ -1,12 +1,12 @@
 {
   lib,
   coq,
-  mkCoqDerivation,
+  mkRocqDerivation,
   mathcomp-group-representation,
   version ? null,
 }:
 
-mkCoqDerivation {
+mkRocqDerivation {
   pname = "odd-order";
   owner = "math-comp";
 
@@ -43,6 +43,8 @@ mkCoqDerivation {
         (case (range "8.10" "8.14") (range "1.10.0" "1.12.0") "1.12.0")
       ]
       null;
+
+  useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "2.4.0" v;
 
   propagatedBuildInputs = [
     mathcomp-group-representation
