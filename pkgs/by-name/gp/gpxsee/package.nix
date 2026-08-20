@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "16.11";
+  version = "16.12";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-Kfwm72PBLjnOIF/G/XMyOa5BmoYzV2Bb4aDQiDd51PI=";
+    hash = "sha256-Yl+ZFSyhGkjcL4FqpLW9i68UYP4oWtpRiwgnxRmtEeA=";
   };
 
   buildInputs = [

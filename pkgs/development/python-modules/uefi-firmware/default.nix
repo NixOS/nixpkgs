@@ -8,7 +8,9 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "uefi-firmware-parser";
+  # The distribution is published as `uefi_firmware`; the project and its
+  # binary are `uefi-firmware-parser`.
+  pname = "uefi_firmware";
   version = "1.16";
   pyproject = true;
 

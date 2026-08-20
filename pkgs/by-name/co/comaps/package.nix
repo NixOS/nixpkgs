@@ -14,6 +14,7 @@
   icu,
   imgui,
   jansson,
+  jq,
   libxcursor,
   libxinerama,
   libxrandr,
@@ -35,19 +36,20 @@ let
     hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
 
-  # Update mapRev here based on v field near the top in https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
-  mapRev = 260603;
+  # Update mapRev based on v field and mapSeries near the top in https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
+  mapSeries = "2026.06.28";
+  mapRev = 260714;
 
   worldMap = fetchurl {
-    name = "World-${toString mapRev}.mwm";
-    url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/World.mwm";
-    hash = "sha256-1cq2gDiqeybA7VxjuSUFnlLagdZipdWiuAy5QI1LdZE=";
+    name = "World-${mapSeries}-${toString mapRev}.mwm";
+    url = "https://mapgen-fi-1.comaps.app/maps/${mapSeries}/${toString mapRev}/World.mwm";
+    hash = "sha256-+EttNsix+9bB0/eOsPaxtZEfPDqQrj8qfZg2qDaLFVc=";
   };
 
   worldCoasts = fetchurl {
-    name = "WorldCoasts-${toString mapRev}.mwm";
-    url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-MLRUPEXvXW2GqYdlxfhS5ODRiiWya4i2U+mpXnqc6rY=";
+    name = "WorldCoasts-${mapSeries}-${toString mapRev}.mwm";
+    url = "https://mapgen-fi-1.comaps.app/maps/${mapSeries}/${toString mapRev}/WorldCoasts.mwm";
+    hash = "sha256-MsXFqnoyQQTTJR1f8ihiqzCYuuRAVbRpoXfPPkVFa1E=";
   };
 
   pythonEnv = python3.withPackages (
@@ -58,19 +60,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "comaps";
-  version = "2026.06.05-11";
+  version = "2026.08.07-3";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "comaps";
     repo = "comaps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W05fZT82H78TqlH4MFaIexX1LYhjATYL1E6e0WCYrBI=";
+    hash = "sha256-ft7VYIMdg8IOl4gfm7Zg5EQjli0YDGuepwP1X9w2Sos=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./use-vendored-protobuf.patch
-  ];
+  patches = [ ./use-vendored-protobuf.patch ];
 
   postPatch = ''
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
@@ -89,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    jq
+    icu
     getopt
     which
     pkg-config
@@ -107,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     gflags
     glm
-    icu
     imgui
     jansson
     libxcursor
@@ -131,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-I/build/source/3party/fast_double_parser/include"
     ];
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+    SKIP_PYTHON_VENV = 1;
   };
 
   postInstall = ''
@@ -149,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Community-led fork of Organic Maps";
     homepage = "https://comaps.app";
+    downloadPage = "https://comaps.app/download";
+    donationPage = "https://comaps.app/donate";
     changelog = "https://codeberg.org/comaps/comaps/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ryand56 ];

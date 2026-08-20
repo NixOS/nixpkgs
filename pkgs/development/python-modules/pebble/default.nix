@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   setuptools,
 }:
@@ -18,6 +19,15 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-B2TFhBA0TgN+maqH+eELR2tdGUoPq1t31t2NM+K22vQ=";
   };
+
+  patches = [
+    # Fix cvise regression: https://github.com/noxdafox/pebble/issues/164
+    (fetchpatch {
+      name = "fix-mutex.patch";
+      url = "https://github.com/noxdafox/pebble/commit/711c98f4193f4006f699e3d245d6855385eb267e.patch";
+      hash = "sha256-dCoOvCv1r9YKSsoKyyZ9rXLNhVmopWnXglBrO5be1Bw=";
+    })
+  ];
 
   build-system = [
     setuptools

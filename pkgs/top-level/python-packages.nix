@@ -9018,6 +9018,8 @@ self: super: with self; {
 
   kanidm = callPackage ../development/python-modules/kanidm { };
 
+  kanjize = callPackage ../development/python-modules/kanjize { };
+
   kantoku = callPackage ../development/python-modules/kantoku { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
@@ -19966,6 +19968,8 @@ self: super: with self; {
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
+  streamingjson = callPackage ../development/python-modules/streamingjson { };
+
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
   streamlit = callPackage ../development/python-modules/streamlit { };
@@ -21781,7 +21785,7 @@ self: super: with self; {
     inherit (pkgs) libx11 libxext;
   };
 
-  uefi-firmware-parser = callPackage ../development/python-modules/uefi-firmware-parser { };
+  uefi-firmware = callPackage ../development/python-modules/uefi-firmware { };
 
   ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
 

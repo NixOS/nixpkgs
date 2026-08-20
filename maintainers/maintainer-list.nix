@@ -5617,6 +5617,12 @@
     githubId = 327028;
     name = "Cole Mickens";
   };
+  colepearson27 = {
+    name = "Cole Pearson";
+    email = "colepearson27@gmail.com";
+    github = "colepearson27";
+    githubId = 113060096;
+  };
   colescott = {
     email = "colescottsf@gmail.com";
     github = "colescott";
@@ -8016,6 +8022,12 @@
     github = "edgar-vincent";
     githubId = 63352906;
     keys = [ { fingerprint = "922F CA48 5FDB 20B1 ED1B  A61F 284D 11D3 33C4 D21B"; } ];
+  };
+  edgarpost = {
+    name = "Edgar Post-Buijs";
+    email = "github@edgarpost.com";
+    github = "EdgarPost";
+    githubId = 488221;
   };
   edlimerkaj = {
     name = "Edli Merkaj";
@@ -27511,6 +27523,12 @@
     githubId = 4340859;
     name = "Stian Lågstad";
   };
+  stig = {
+    email = "stig@circleci.com";
+    github = "stig";
+    githubId = 45407;
+    name = "Stig Brautaset";
+  };
   StijnDW = {
     email = "nixdev@rinsa.eu";
     github = "Stekke";
@@ -29298,6 +29316,11 @@
     githubId = 47905926;
     name = "toyboot4e";
   };
+  tpansino = {
+    name = "Tom Pansino";
+    github = "tpansino";
+    githubId = 2768420;
+  };
   tphanir = {
     github = "tphanir";
     name = "phani";
@@ -29708,6 +29731,11 @@
     github = "ufUNnxagpM";
     githubId = 12422133;
     name = "Chromo-residuum-opec";
+  };
+  ui-1 = {
+    name = "ui-1";
+    github = "ui-1";
+    githubId = 134524800;
   };
   uku3lig = {
     name = "uku";

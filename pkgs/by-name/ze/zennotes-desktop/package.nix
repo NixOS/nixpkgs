@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.29.0";
-  npmDepsHash = "sha256-Hml6oEZxNY6jK+dEDeA6KxfWa7k3/iqkUtlGRwHkO7U=";
+  version = "2.31.0";
+  npmDepsHash = "sha256-3PvR/WcQj3Eu0qr4o+MNY+rH5SIAgLVhbHk14vzjX/Q=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-naLrqLe5ED5c9OWBAlyP+1ar8wrcAxCEVaAsRDnQpgs=";
+    hash = "sha256-iptW9Pplvh8hGZcEXGAm1oC1y/5NOefbjHlYrft443o=";
   };
 
   npmWorkspace = "apps/desktop";
