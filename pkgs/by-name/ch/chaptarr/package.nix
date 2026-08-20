@@ -12,6 +12,7 @@
   prefetch-yarn-deps,
   writers,
   nix-update-script,
+  nixosTests,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "chaptarr";
@@ -103,7 +104,12 @@ buildDotnetModule (finalAttrs: {
     "--property:Copyright=Copyright © 2026 Chaptarr contributors (GNU General Public v3)"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) chaptarr;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "An audiobook and eBook collection manager";
