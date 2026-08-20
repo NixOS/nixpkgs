@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ddns-go";
-  version = "6.17.5";
+  version = "6.17.6";
 
   src = fetchFromGitHub {
     owner = "jeessy2";
     repo = "ddns-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OglGot/0QWn95kVIPuUvvXANRUYOXgd92rT891/8GGY=";
+    hash = "sha256-AZuwKI5nwDBunt+ddShbRJQoc68DA8bwXlSAa/7k0DU=";
   };
 
-  vendorHash = "sha256-FX+qhBx4MeQUDtCI7mNXwOxZT5T3oAvPtiVLY5qR+ok=";
+  vendorHash = "sha256-gM9DFy4tkYAm/M0UotodIrhUn5v+aTPx8dseMz4DB4Y=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
