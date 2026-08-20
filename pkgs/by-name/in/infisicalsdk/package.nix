@@ -4,17 +4,26 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "infisicalsdk";
   version = "1.0.16";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2bfT99ynl14CSbqIOG2SMQb3oW+uAWD+iJifdMQG8CE=";
   };
+
+  # fix version in setup.py AND pyproject.toml
+  postPatch = ''
+    substituteInPlace ./setup.py --replace-fail \
+      'VERSION = "1.0.1"' 'VERSION = "${finalAttrs.version}"'
+  '';
+  nativeBuildInputs = [ python3Packages.pyprojectVersionPatchHook ];
 
   build-system = [ python3Packages.setuptools ];
 
@@ -26,13 +35,15 @@ python3Packages.buildPythonPackage rec {
     botocore
   ];
 
-  doCheck = false;
   pythonImportsCheck = [ "infisical_sdk" ];
+
+  doCheck = false; # tests require network access + api keys
 
   meta = {
     homepage = "https://github.com/Infisical/python-sdk-official";
     description = "Infisical Python SDK";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artur-sannikov ];
+    teams = [ lib.teams.infisical ];
   };
-}
+})
