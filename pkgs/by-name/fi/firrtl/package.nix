@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "firrtl";
-  version = "1.5.3";
+  version = "1.6.0";
   scalaVersion = "2.13"; # pin, for determinism
 
   deps = stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       cp $(< deps) $out/share/java
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-xy3zdJZk6Q2HbEn5tRQ9Z0AjyXEteXepoWDaATjiUUw=";
+    outputHash = "sha256-gAdGGsFXPktqPPUEXD373e6R9psaeESZdpZTnMElGAc=";
   };
 
   nativeBuildInputs = [
