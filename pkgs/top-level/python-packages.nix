@@ -17039,8 +17039,6 @@ self: super: with self; {
 
   python-overseerr = callPackage ../development/python-modules/python-overseerr { };
 
-  python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
-
   python-oxmsg = callPackage ../development/python-modules/python-oxmsg { };
 
   python-packer = callPackage ../development/python-modules/python-packer { };
@@ -22921,6 +22919,8 @@ self: super: with self; {
   zammad-py = callPackage ../development/python-modules/zammad-py { };
 
   zapf = callPackage ../development/python-modules/zapf { };
+
+  zaproxy = callPackage ../development/python-modules/zaproxy { };
 
   zarr = callPackage ../development/python-modules/zarr { };
 

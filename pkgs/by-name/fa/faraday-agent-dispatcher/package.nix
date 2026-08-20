@@ -26,13 +26,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "python-socketio"
   ];
 
-  pythonRemoveDeps = [
-    "python-owasp-zap-v2.4"
-  ];
+  pythonRemoveDeps = [ "python-owasp-zap-v2.4" ];
 
   build-system = with python3.pkgs; [ setuptools-scm ];
-
-  nativeBuildInputs = with python3.pkgs; [ python-owasp-zap-v2-4 ];
 
   dependencies = with python3.pkgs; [
     aiohttp
@@ -43,13 +39,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     psutil
     pytenable
     python-gvm
-    python-owasp-zap-v2-4
     python-socketio
     pyyaml
     requests
     requests-ratelimiter
     syslog-rfc5424-formatter
     websockets
+    zaproxy
   ];
 
   nativeCheckInputs = with python3.pkgs; [
