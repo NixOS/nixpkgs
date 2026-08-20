@@ -849,7 +849,6 @@ let
       cargo
       rustc
     ];
-    rpanel = [ pkgs.tclPackages.bwidget ];
     rrd = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
       cargo
@@ -2794,12 +2793,13 @@ let
     });
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
-      preConfigure = ''
-        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
+      postPatch = ''
+        cat >> R/zzz.R <<EOF
+        .onLoad <- function(...) {
+          tcltk::tcl("lappend", "auto_path", "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}")
+        }
+        EOF
       '';
-      env = (attrs.env or { }) // {
-        TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
-      };
     });
 
     rstan = old.rstan.overrideAttrs (attrs: {
