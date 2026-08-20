@@ -30362,6 +30362,13 @@
     githubId = 59031302;
     name = "vmfunc";
   };
+  vmohammad = {
+    email = "git@vmohammad.dev";
+    github = "vMohammad24";
+    githubId = 62218284;
+    name = "vMohammad";
+    keys = [ { fingerprint = "2C85 FE6E 65F9 4C41 247E  A88D 2BCE A4D1 3803 80B8"; } ];
+  };
   vncsb = {
     email = "viniciusbernardino1@hotmail.com";
     github = "vncsb";
