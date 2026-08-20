@@ -8,6 +8,9 @@
   ];
 
   secrets = {
+    defaultGeneratorBackend = "plain";
+    defaultPromptBackend = "simple";
+
     age.publicKeys = [
       "age13ar5t7vvsssmckjhjtngy3p5y0v4k896ecjrxveql9ysu8gxhe9sdar3k3" # Host
       "age195x33zrqzppjfnj2rjjlq3z8s64r5zlwe6rcywm9zu6agf449pmqdslyat" # Target
@@ -27,7 +30,7 @@
 
     generators.example = {
       prompts = [ "example" ];
-      files.example.local = true;
+      files.example.deploy = false;
       script =
         pkgs:
         pkgs.writeScript "gen-example" ''
@@ -57,7 +60,6 @@
 
     generators.derivedPlain = {
       dependencies = [ "derived" ];
-      files.derived.local = true;
       script =
         pkgs:
         pkgs.writeScript "gen-derived-plain" ''

@@ -33,7 +33,6 @@ in
   };
 
   config.secrets = {
-    defaultGeneratorBackend = "plain";
     generatorBackends.plain = {
       get = mkScript "get" ''
         out=''${out:?} # Make shellcheck happy

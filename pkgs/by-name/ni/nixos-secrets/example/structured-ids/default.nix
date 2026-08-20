@@ -17,6 +17,9 @@ in
   ];
 
   secrets = {
+    defaultGeneratorBackend = "plain";
+    defaultPromptBackend = "simple";
+
     age.publicKeys = [
       "age13ar5t7vvsssmckjhjtngy3p5y0v4k896ecjrxveql9ysu8gxhe9sdar3k3" # Host
       "age195x33zrqzppjfnj2rjjlq3z8s64r5zlwe6rcywm9zu6agf449pmqdslyat" # Target
@@ -41,7 +44,8 @@ in
       };
 
       prompts = [ "example" ];
-      files.example = { };
+      files.example.deploy = false;
+
       script =
         pkgs:
         pkgs.writeScript "gen-example" ''
@@ -59,15 +63,16 @@ in
         };
       in
       {
+        backend = "age";
+
         id = {
           group = "first";
           name = "derived";
         };
 
-        backend = "age";
         dependencies = [ dep ];
-
         files.derived = { };
+
         script =
           pkgs:
           pkgs.writeScript "gen-derived" ''
@@ -96,8 +101,8 @@ in
         };
 
         dependencies = [ dep ];
-
         files.derived = { };
+
         script =
           pkgs:
           pkgs.writeScript "gen-derived-plain" ''

@@ -64,7 +64,7 @@ class SecretsGeneratorBackend:
 @dataclass
 class SecretsFile:
     name: str
-    local: bool
+    deploy: bool
 
     def from_jsom(name: str, json: Any) -> Self:
         if safe_name_regex.search(name) is None:
@@ -72,7 +72,7 @@ class SecretsFile:
                 f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
             )
 
-        return SecretsFile(name=name, local=json["local"])
+        return SecretsFile(name=name, deploy=json["deploy"])
 
 
 @dataclass
@@ -174,7 +174,7 @@ class SecretsConfig:
     def files_for_backend(
         self: Self,
         backend: SecretsGeneratorBackend,
-        no_local: bool = False,
+        deployed_only: bool = False,
     ) -> List[tuple[str, str]]:
         files = []
         for generator in self.generators.values():
@@ -182,8 +182,8 @@ class SecretsConfig:
                 continue
 
             for file in generator.files.values():
-                # Checks that no_local implies !file.local
-                if not no_local or no_local and not file.local:
+                # Checks that deployed_only implies file.deploy
+                if not deployed_only or deployed_only and file.deploy:
                     files.append((generator.name, file.name))
 
         return files
