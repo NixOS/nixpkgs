@@ -35,6 +35,7 @@ fetchLibrustyV8 {
   shas = {
     x86_64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz)";
     aarch64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz)";
+    riscv64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_riscv64gc-unknown-linux-gnu.a.gz)";
     aarch64-darwin = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/librusty_v8_release_aarch64-apple-darwin.a.gz)";
   };
 }
@@ -53,6 +54,7 @@ fetchLibrustyV8SrcBinding {
   shas = {
     x86_64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/src_binding_release_x86_64-unknown-linux-gnu.rs)";
     aarch64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/src_binding_release_aarch64-unknown-linux-gnu.rs)";
+    riscv64-linux = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/src_binding_release_riscv64gc-unknown-linux-gnu.rs)";
     aarch64-darwin = "$(nix-prefetch-url --type sha256 https://github.com/denoland/rusty_v8/releases/download/v"$NEW_VERSION"/src_binding_release_aarch64-apple-darwin.rs)";
   };
 }
