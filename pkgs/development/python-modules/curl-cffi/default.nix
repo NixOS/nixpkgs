@@ -16,8 +16,10 @@
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
+  python,
   python-multipart,
   rich,
+  stdenv,
   trustme,
   uvicorn,
   websockets,
@@ -25,14 +27,14 @@
 }:
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-I8rQj28IvLD7HWuog46E0dLFgnWSA6oE4Jyn9Flr7mQ=";
+    hash = "sha256-VqfJS6vztIBIkOW+ZrY7JSiuJsxBBqxRbqeQyWR7bTo=";
   };
 
   patches = [ ./use-system-libs.patch ];
@@ -49,6 +51,11 @@ buildPythonPackage rec {
     certifi
     rich
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -add_rpath "${curl-impersonate}/lib" \
+      $out/${python.sitePackages}/curl_cffi/_wrapper.abi3.so
+  '';
 
   pythonImportsCheck = [ "curl_cffi" ];
 
@@ -91,13 +98,6 @@ buildPythonPackage rec {
     "tests/unittest/test_websockets.py::on_message"
     "tests/unittest/test_websockets.py::test_on_data_callback"
     "tests/unittest/test_websockets.py::test_hello_twice_async"
-
-    # Fails on newer versions of http3
-    # remove once 0.16.0 is merged
-    "tests/unittest/test_async_session.py::test_verify"
-    "tests/unittest/test_curl.py::test_verify"
-    "tests/unittest/test_requests.py::test_verify"
-    "tests/unittest/test_requests.py::test_delete_cookies"
   ];
 
   disabledTests = [
