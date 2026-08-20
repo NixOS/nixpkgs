@@ -1,8 +1,8 @@
 diff --git a/compat/compat.h b/compat/compat.h
-index 3be1113..1e6a9f1 100644
+index 3be1113..f5437cc 100644
 --- a/compat/compat.h
 +++ b/compat/compat.h
-@@ -1444,4 +1444,15 @@ static inline void __compat_chacha20_crypt(struct chacha_state *state,
+@@ -1444,4 +1444,23 @@ static inline void __compat_chacha20_crypt(struct chacha_state *state,
  
  #endif
  
@@ -17,12 +17,39 @@ index 3be1113..1e6a9f1 100644
 +#define udp_tunnel_sock_release(sk) udp_tunnel_sock_release(sk->sk_socket)
 +#endif
 +
++/*
++* WQ_PERCPU introduced in 6.18, not passing it is deprecated and causes a splat in 7.2
++* https://github.com/torvalds/linux/commit/21c05ca88a548ca1353cbef189c97d4f03b90692
++*/
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 18, 0)
++#define WQ_PERCPU 0
++#endif
++
  #endif /* _WG_COMPAT_H */
+diff --git a/device.c b/device.c
+index c8f4312..4e7848e 100644
+--- a/device.c
++++ b/device.c
+@@ -379,12 +379,12 @@ static int wg_newlink(struct net_device *dev,
+ #endif
+ 
+ 	wg->handshake_receive_wq = alloc_workqueue("wg-kex-%s",
+-			WQ_CPU_INTENSIVE | WQ_FREEZABLE, 0, dev->name);
++			WQ_CPU_INTENSIVE | WQ_FREEZABLE | WQ_PERCPU, 0, dev->name);
+ 	if (!wg->handshake_receive_wq)
+ 		goto err_free_tstats;
+ 
+ 	wg->handshake_send_wq = alloc_workqueue("wg-kex-%s",
+-			WQ_UNBOUND | WQ_FREEZABLE, 0, dev->name);
++			WQ_UNBOUND | WQ_FREEZABLE | WQ_PERCPU, 0, dev->name);
+ 	if (!wg->handshake_send_wq)
+ 		goto err_destroy_handshake_receive;
+ 
 diff --git a/netlink.c b/netlink.c
-index f2c79b6..1f18583 100644
+index b1da877..28f1efa 100644
 --- a/netlink.c
 +++ b/netlink.c
-@@ -170,8 +170,8 @@ static inline int parse_ipv4_prefix(const char *prefix_str, struct ipv4_prefix *
+@@ -172,8 +172,8 @@ static inline int parse_ipv4_prefix(const char *prefix_str, struct ipv4_prefix *
  	if (slash - prefix_str >= INET_ADDRSTRLEN)
  		return -EINVAL;
  
@@ -33,7 +60,7 @@ index f2c79b6..1f18583 100644
  
  	ret = kstrtoint(slash + 1, 10, &prefix->prefix_len);
  	if (ret < 0)
-@@ -229,8 +229,8 @@ static inline int parse_ipv6_prefix(const char *prefix_str, struct ipv6_prefix *
+@@ -231,8 +231,8 @@ static inline int parse_ipv6_prefix(const char *prefix_str, struct ipv6_prefix *
  	if (slash - prefix_str >= INET6_ADDRSTRLEN)
  		return -EINVAL;
  
@@ -45,10 +72,10 @@ index f2c79b6..1f18583 100644
  	ret = kstrtoint(slash + 1, 10, &prefix->prefix_len);
  	if (ret < 0)
 diff --git a/socket.c b/socket.c
-index d069e10..f267362 100644
+index 24bf1ab..a84bdb2 100644
 --- a/socket.c
 +++ b/socket.c
-@@ -349,7 +349,7 @@ static void sock_free(struct sock *sock)
+@@ -375,7 +375,7 @@ static void sock_free(struct sock *sock)
  	if (unlikely(!sock))
  		return;
  	sk_clear_memalloc(sock);
@@ -57,7 +84,7 @@ index d069e10..f267362 100644
  }
  
  static void set_sock_opts(struct socket *sock)
-@@ -403,14 +403,14 @@ retry:
+@@ -429,14 +429,14 @@ retry:
  		goto out;
  	}
  	set_sock_opts(new4);
@@ -74,7 +101,7 @@ index d069e10..f267362 100644
  			if (ret == -EADDRINUSE && !port && retries++ < 100)
  				goto retry;
  			pr_err("%s: Could not create IPv6 socket\n",
-@@ -418,7 +418,7 @@ retry:
+@@ -444,7 +444,7 @@ retry:
  			goto out;
  		}
  		set_sock_opts(new6);

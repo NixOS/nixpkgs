@@ -112,6 +112,12 @@ buildNpmPackage rec {
     # not our app directory, so it would search the wrong location.
     substituteInPlace electron/idle-time-handler.ts \
       --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # build/icon.icns is checked in and already contains all ten macOS icon
+    # representations. Avoid regenerating it with sandbox-unavailable iconutil.
+    substituteInPlace electron-builder.yaml \
+      --replace-fail "beforePack: ./tools/beforePack.js" ""
   '';
 
   buildPhase = ''
