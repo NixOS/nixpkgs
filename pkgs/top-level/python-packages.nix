@@ -20866,6 +20866,8 @@ self: super: with self; {
 
   torcheval = callPackage ../development/python-modules/torcheval { };
 
+  torchimplicit = callPackage ../development/python-modules/torchimplicit { };
+
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchio = callPackage ../development/python-modules/torchio { };
