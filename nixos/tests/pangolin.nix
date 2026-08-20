@@ -99,7 +99,7 @@ in
             };
           };
           # set up local ca server, so we can get our certs signed without going on the internet
-          traefik.staticConfigOptions.certificatesResolvers.letsencrypt.acme.caServer =
+          traefik.install.settings.certificatesResolvers.letsencrypt.acme.caServer =
             lib.mkForce "https://${nodes.acme.test-support.acme.caDomain}/dir";
         };
       };
