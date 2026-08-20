@@ -8738,6 +8738,11 @@
     githubId = 965612;
     name = "York Wong";
   };
+  etiennelescot = {
+    github = "EtienneLescot";
+    githubId = 215859519;
+    name = "Etienne Lescot";
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";
