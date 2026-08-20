@@ -37,11 +37,14 @@ stdenv.mkDerivation (
 
     enableParallelBuilding = true;
 
-    env = (attrs.env or { }) // {
-      NIX_CFLAGS_COMPILE =
-        (attrs.env.NIX_CFLAGS_COMPILE or "")
-        + lib.optionalString stdenv.hostPlatform.isDarwin " -I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
-    };
+    env =
+      (attrs.env or { })
+      // (lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+        NIX_CFLAGS_COMPILE = "${
+          attrs.env.NIX_CFLAGS_COMPILE or ""
+        } -I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+
+      });
 
     configurePhase = ''
       runHook preConfigure
@@ -75,8 +78,7 @@ stdenv.mkDerivation (
       else
         "R";
 
-    installFlags =
-      (attrs.installFlags or [ ]) ++ (if finalAttrs.doCheck then [ ] else [ "--no-test-load" ]);
+    installFlags = (attrs.installFlags or [ ]) ++ (lib.optional (!finalAttrs.doCheck) "--no-test-load");
 
     installPhase = ''
       runHook preInstall

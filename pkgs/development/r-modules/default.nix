@@ -2019,7 +2019,7 @@ let
     ACME = old.ACME.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-incompatible-pointer-types";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-incompatible-pointer-types";
       };
     });
 
@@ -2034,7 +2034,7 @@ let
     BiocParallel = old.BiocParallel.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE
+          attrs.env.NIX_CFLAGS_COMPILE or ""
           + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
       };
     });
@@ -2072,7 +2072,7 @@ let
     FlexReg = old.FlexReg.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
 
       # consumes a lot of resources in parallel
@@ -2101,7 +2101,7 @@ let
     ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
+          attrs.env.NIX_CFLAGS_COMPILE or "" + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
       };
     });
 
@@ -2116,7 +2116,7 @@ let
     OpenMx = old.OpenMx.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
     });
 
@@ -2250,7 +2250,7 @@ let
 
     SAIGEgds = old.SAIGEgds.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fpermissive";
       };
     });
 
@@ -2410,7 +2410,7 @@ let
 
     data_table = old.data_table.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fopenmp";
       };
     });
 
@@ -2475,7 +2475,7 @@ let
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE
+          attrs.env.NIX_CFLAGS_COMPILE or ""
           + " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
       };
     });
@@ -2581,7 +2581,7 @@ let
     metahdep = old.metahdep.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-int-conversion";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-int-conversion";
       };
     });
 
@@ -2608,7 +2608,7 @@ let
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
 
       # consumes a lot of resources in parallel
@@ -2766,7 +2766,8 @@ let
 
     rhdf5 = old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
-      env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+      env.NIX_CFLAGS_COMPILE =
+        attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-error=implicit-function-declaration";
     });
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
@@ -2804,14 +2805,14 @@ let
 
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
       };
     });
 
     rstanarm = old.rstanarm.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
     });
 
@@ -2938,7 +2939,7 @@ let
 
     xslt = old.xslt.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fpermissive";
       };
     });
     # keep-sorted end
