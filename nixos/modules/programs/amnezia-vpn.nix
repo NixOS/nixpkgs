@@ -16,7 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
-    services.resolved.enable = true;
+    services.resolved.enable = lib.mkDefault true;
 
     systemd = {
       packages = [ cfg.package ];
