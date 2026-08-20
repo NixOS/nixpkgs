@@ -31,6 +31,7 @@ let
     mainProgram = "openobserve";
     maintainers = with lib.maintainers; [
       happysalada
+      kashw2
     ];
   };
 in
