@@ -71,8 +71,6 @@ let
   providerDependencies = lib.concatMap (
     provider: (providerPackages.${provider} pythonPackages)
   ) providers;
-
-  pythonPath = pythonPackages.makePythonPath providerDependencies;
 in
 
 assert
@@ -125,6 +123,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
     ./disable-default-provider.diff
+
+    # Fixes this warning on startup:
+    #  On-device ML inference capability probe was inconclusive (exit code 1); assuming this CPU is capable
+    # Music-Assistant's site-packages is injected via passthru.pythonPath, because $out cannot be used with replaceVars
+    ./inherit-env-for-avx2-check.diff
   ];
 
   postPatch = ''
@@ -322,11 +325,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ffmpeg = ffmpeg_7-headless;
     inherit
       pythonPackages
-      pythonPath
       providerPackages
       providerNames
       ;
     providersBuiltins = providersMeta.builtins;
+    pythonPath =
+      pythonPackages.makePythonPath providerDependencies
+      + ":${finalAttrs.finalPackage}/${pythonPackages.python.sitePackages}";
     tests = nixosTests.music-assistant;
   };
 
