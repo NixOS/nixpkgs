@@ -17,23 +17,9 @@ strictDeps = true;
     hash = "sha256-rGDXRZiIddn2t8mVQNdwpe/loe+9IIe++E7BGu42AKA=";
   };
 
-  buildPhase = ''
-    runHook preBuild
-    mkdir -p plasma/desktoptheme/Sweet
-    mv dialogs plasma/desktoptheme/Sweet/dialogs
-    mv icons plasma/desktoptheme/Sweet/icons
-    mv preview plasma/desktoptheme/Sweet/preview
-    mv widgets plasma/desktoptheme/Sweet/widgets
-    mv colors plasma/desktoptheme/Sweet/colors
-    mv metadata.desktop plasma/desktoptheme/Sweet/metadata.desktop
-    runHook postBuild
-  '';
-
   installPhase = ''
-    runHook preInstall
-    install -d $out/share
-    cp -r plasma $out/share
-    runHook postInstall
+    mkdir -p "$out/share/plasma/desktoptheme/Sweet"
+    cp -rd dialogs icons preview widgets colors metadata.desktop -t "$out/share/plasma/desktoptheme/Sweet"
   '';
 
   passthru.updateScript = gitUpdater { };
