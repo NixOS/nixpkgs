@@ -40,6 +40,13 @@ buildPythonPackage rec {
     "tests/test_run.py"
   ];
 
+  # qasync fails these tests due to a compatibility issue with Pytest 9:
+  # https://github.com/CabbageDevelopment/qasync/issues/178
+  disabledTests = [
+    "test_no_stale_reference_as_argument"
+    "test_no_stale_reference_as_result"
+  ];
+
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";
     homepage = "https://github.com/CabbageDevelopment/qasync";
