@@ -40,21 +40,28 @@ let
       rustyV8Hashes.${rustyV8Target}
         or (throw "no prebuilt librusty_v8 hash for target ${rustyV8Target}");
   };
+  tailwindcss = tailwindcss_4.overrideAttrs (oldAttrs: {
+    postFixup =
+      (oldAttrs.postFixup or "")
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        codesign --force --sign - $out/bin/.tailwindcss-wrapped
+      '';
+  });
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kopuz";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "Kopuz-org";
     repo = "kopuz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sqfI4v3J6GAMTQaB+UhnLlwpfBKFJq2JUl7fZMt1yxE=";
+    hash = "sha256-cF/NrSz5X83DotzNhs9q/IrwhOGX2OFmjxO5EC+ip2Y=";
   };
 
-  cargoHash = "sha256-lu1PaWf02D0dK+IV+fIzIKNr8ORfkSHFnRhnPdXaueI=";
+  cargoHash = "sha256-MkJE/pN4FCfygf5mSJmIcbyMgDEcwB4hh3OfiUUWhtc=";
 
   env = {
     RUSTY_V8_ARCHIVE = librustyV8;
@@ -64,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    tailwindcss_4
+    tailwindcss
     dioxus-cli
     git
   ]
@@ -118,16 +125,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ''
           cp -r target/dx/kopuz/release/linux/app/* $out/bin/
 
-          install -Dm644 data/com.temidaradev.kopuz.desktop \
-            $out/share/applications/com.temidaradev.kopuz.desktop
-          substituteInPlace $out/share/applications/com.temidaradev.kopuz.desktop \
+          install -Dm644 data/moe.kopuz.kopuz.desktop \
+            $out/share/applications/moe.kopuz.kopuz.desktop
+          substituteInPlace $out/share/applications/moe.kopuz.kopuz.desktop \
             --replace-fail "Exec=kopuz" "Exec=$out/bin/kopuz"
 
-          install -Dm644 data/com.temidaradev.kopuz.metainfo.xml \
-            $out/share/metainfo/com.temidaradev.kopuz.metainfo.xml
+          install -Dm644 data/moe.kopuz.kopuz.metainfo.xml \
+            $out/share/metainfo/moe.kopuz.kopuz.metainfo.xml
 
           install -Dm644 crates/kopuz/assets/logo.png \
-            $out/share/icons/hicolor/256x256/apps/com.temidaradev.kopuz.png
+            $out/share/icons/hicolor/256x256/apps/moe.kopuz.kopuz.png
         ''
       else
         ''
