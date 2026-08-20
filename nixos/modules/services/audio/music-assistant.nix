@@ -166,8 +166,18 @@ in
         );
         DynamicUser = true;
         StateDirectory = "music-assistant";
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = [ "" ];
+        # AirPlay 2 requires CAP_NET_BIND_SERVICE to bind to UDP ports 319 and 320 for synchronized group playback.
+        # Opening the ports in the firewall is not necessary.
+        # See this older version of the docs:
+        # https://github.com/music-assistant/music-assistant.io/blob/33175c11961beac4c6a27beff6d4cce269f29efe/src/content/docs/player-support/airplay.md#airplay-2-group-synchronization
+        AmbientCapabilities = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
         LockPersonality = true;
         # breaks pyopenssl's cffi calls, used in remote access feature
