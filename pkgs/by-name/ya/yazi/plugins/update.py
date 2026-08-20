@@ -111,12 +111,17 @@ def fetch_plugin_content(
     headers: dict[str, str],
 ) -> str:
     """Fetch the plugin's main.lua content from GitHub"""
-    plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
-    content_data = github_get(owner, repo, f"contents/{plugin_path}main.lua", headers, {"ref": ref})
-    if not isinstance(content_data, dict) or "content" not in content_data:
-        raise RuntimeError(f"Could not fetch main.lua at {ref}")
+    paths = [f"{plugin_pname}/main.lua", "main.lua"] if owner == "yazi-rs" else [
+        "main.lua",
+        f"{plugin_pname}/main.lua",
+    ]
 
-    return base64.b64decode(content_data["content"]).decode("utf-8")
+    for path in paths:
+        content_data = github_get(owner, repo, f"contents/{path}", headers, {"ref": ref}, allow_404=True)
+        if isinstance(content_data, dict) and "content" in content_data:
+            return base64.b64decode(content_data["content"]).decode("utf-8")
+
+    raise RuntimeError(f"Could not fetch main.lua at {ref}")
 
 
 def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
