@@ -12,6 +12,15 @@
   tomli-w,
   trove-classifiers,
   virtualenv,
+
+  # Disable checks by default, as checks require gitMinimal, which eventually
+  # depends on hatchling, which depends on tomlkit, which depends on
+  # poetry-core, leading to infinite recursion.
+  doCheck ? false,
+
+  # self-reference for tests, since finalAttrs.finalPackage exposes neither
+  # `override` nor `overridePythonAttrs`.
+  poetry-core,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -25,6 +34,8 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-Io2VpLxnJesO4QohsunD7ogr87NiNjGeTmEl9wFswkw=";
   };
+
+  inherit doCheck;
 
   nativeCheckInputs = [
     build
@@ -55,6 +66,10 @@ buildPythonPackage (finalAttrs: {
   pythonNamespaces = [ "poetry" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
+
+  # In passthru.tests, build with the check phase enabled, since that'll be
+  # outside the bootstrap dependency chain.
+  passthru.tests.withChecks = poetry-core.override { doCheck = true; };
 
   meta = {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
