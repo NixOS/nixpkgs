@@ -6585,12 +6585,12 @@ final: prev: {
 
   ghcid = buildVimPlugin {
     pname = "ghcid";
-    version = "0.8.9-unstable-2026-08-16";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "ndmitchell";
       repo = "ghcid";
-      rev = "94f309731a161fa31f3d1e61d14faf025b7b4934";
-      hash = "sha256-vw6SqutcgYEbRoMId/qF32Qw/7FRw0gZimigFjA6qAI=";
+      tag = "v1.0.0";
+      hash = "sha256-oFLq0rBd7O52iT55QAOH7w3O6BKx0K3J74sELHcjxCk=";
     };
     meta.homepage = "https://github.com/ndmitchell/ghcid/";
     meta.license = unfree;
