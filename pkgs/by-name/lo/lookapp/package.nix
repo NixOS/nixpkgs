@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kunkka19xx";
     repo = "look";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m8/FhPXmJvRDq92g5mE1k6ABkFigka2hzkJHV0ZH7lA=";
   };
 
   cargoRoot = "apps/linows/src-tauri";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoHash = "sha256-Z0PyN/xkqVfXJUX8VCU7rwcr7B74K/kLx5XI3kfkoaM=";
 
@@ -103,7 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Keyboard-first, local-first desktop launcher";
     homepage = "https://github.com/kunkka19xx/look";
-    changelog = "https://github.com/kunkka19xx/look/releases/tag/v${version}";
+    changelog = "https://github.com/kunkka19xx/look/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "lookapp";
