@@ -246,6 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = true;
     description = "Onion routing based messenger";
     mainProgram = "session-desktop";
     homepage = "https://getsession.org/";

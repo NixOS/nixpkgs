@@ -9,11 +9,9 @@ echoerr got fname $fname
 shift
 
 variant="$1"
-# See comment near version_major variable
-if [[ $variant == fresh ]]; then
-    head_tail=head
-elif [[ $variant == still ]]; then
-    head_tail=tail
+# not doing anything but checking correctness right now
+if [[ $variant == stable ]]; then
+    true
 elif [[ $variant == collabora ]]; then
     true
 elif [[ $variant == collabora-coda ]]; then
@@ -31,16 +29,16 @@ mkdir -p "$(dirname $fname)/src-$variant"
 cd "$(dirname $fname)/src-$variant"
 
 case $variant in
-(fresh|still)
+(stable)
     # The pup command prints both fresh and still versions one after another, and
     # we use either head -1 or tail -1 to get the right version, per the if elif
     # above.
-    version_major="$(curl --silent https://www.libreoffice.org/download/download-libreoffice/ |\
-        pup '.dl_version_number text{}' | $head_tail -1)"
-    echoerr got from website ${variant}_version $version_major
+    version_major="$(curl --silent https://www.libreoffice.org/download/ |\
+        pup '.version_heading' 'text{}' | xargs)"
+    echoerr got from website ${variant}_version "[[$version_major]]"
     baseurl=https://download.documentfoundation.org/libreoffice/src/$version_major
     tarballs=($(curl --silent $baseurl/ |\
-        pup 'table json{}' |\
+        pup 'table' 'json{}' |\
         jq --raw-output '.. | .href? | strings' |\
         grep "$version_major.*.tar.xz$"))
 

@@ -131,6 +131,11 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
+
+    # Not sure if meaningful for runCommand, but nixpkgs-vet demands this anyway
+    __structuredAttrs = true;
+    strictDeps = true;
+
     inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [

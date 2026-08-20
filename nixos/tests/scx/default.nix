@@ -20,6 +20,7 @@
       flow.configuration.services.scx.scheduler = "scx_flow";
       forge.configuration.services.scx.scheduler = "scx_forge";
       lavd.configuration.services.scx.scheduler = "scx_lavd";
+      mlfq.configuration.services.scx.scheduler = "scx_mlfq";
       p2dq.configuration.services.scx.scheduler = "scx_p2dq";
       pandemonium.configuration.services.scx.scheduler = "scx_pandemonium";
       rlfifo.configuration.services.scx.scheduler = "scx_rlfifo";
@@ -40,6 +41,7 @@
       "flow",
       "forge",
       "lavd",
+      "mlfq",
       "p2dq",
       "pandemonium",
       "rlfifo",
