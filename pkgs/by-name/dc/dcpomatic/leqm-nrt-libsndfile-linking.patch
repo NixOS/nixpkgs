@@ -1,0 +1,12 @@
+diff --git a/src/wscript b/src/wscript
+index cbea215..62b0a06 100644
+--- a/src/wscript
++++ b/src/wscript
+@@ -6,6 +6,7 @@ def build(bld):
+     obj.source = 'leqm_nrt.cc'
+ 
+     if bld.env.WITH_LIBSNDFILE:
++        obj.uselib = 'SNDFILE'
+         obj = bld(features='cxx cxxprogram')
+         obj.name = 'leqm_nrt_cli'
+         obj.target = 'leqm_nrt'
