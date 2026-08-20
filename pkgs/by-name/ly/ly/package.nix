@@ -9,6 +9,7 @@
   versionCheckHook,
   x11Support ? true,
   zig_0_16,
+  nix-update-script,
 }:
 let
   zig = zig_0_16;
@@ -54,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.tests = { inherit (nixosTests) ly; };
+  passthru = {
+    tests = { inherit (nixosTests) ly; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "TUI display manager";
