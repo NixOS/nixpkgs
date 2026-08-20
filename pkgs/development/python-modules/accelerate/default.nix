@@ -21,6 +21,8 @@
   addBinToPathHook,
   evaluate,
   parameterized,
+  pytest-order,
+  pytest-xdist,
   pytestCheckHook,
   torchvision,
   transformers,
@@ -57,6 +59,8 @@ buildPythonPackage (finalAttrs: {
     addBinToPathHook
     evaluate
     parameterized
+    pytest-order
+    pytest-xdist
     pytestCheckHook
     torchvision
     transformers
