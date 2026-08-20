@@ -23,14 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "salsa.debian.org";
     owner = "clint";
     repo = "fakeroot";
-    tag = "upstream/${finalAttrs.version}";
-    hash = "sha256-sAzXeONjDT753lbu7amQY6yXpaTNCa4wFOzB01SRbCs=";
+    # The upstream/1.38.1 tag has been rewritten twice (gbp re-imports),
+    # so pin the commit it currently points to instead of the tag.
+    rev = "225d248bdacff1240e27a4473a736326aac940f5"; # upstream/1.38.1
+    hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLinux [
-    ./add-missing-wrapawk.patch
-    ./einval.patch
-  ];
+  patches = lib.optionals stdenv.hostPlatform.isLinux [ ./einval.patch ];
 
   nativeBuildInputs = [
     autoreconfHook

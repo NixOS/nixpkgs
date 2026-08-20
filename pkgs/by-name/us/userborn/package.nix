@@ -39,6 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         userborn-immutable-users
         userborn-immutable-etc
         userborn-static
+        userborn-subids
+        userborn-subids-immutable-etc
+        userborn-subids-mutable-etc
         ;
     };
   };
