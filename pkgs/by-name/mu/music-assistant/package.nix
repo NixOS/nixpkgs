@@ -93,8 +93,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   patches = [
     (replaceVars ./ffmpeg.patch {
-      ffmpeg = "${lib.getBin ffmpeg_7-headless}/bin/ffmpeg";
-      ffprobe = "${lib.getBin ffmpeg_7-headless}/bin/ffprobe";
+      ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
+      ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
     })
 
     # Look up librespot from PATH at runtime
