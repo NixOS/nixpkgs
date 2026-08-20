@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastai";
-  version = "2.8.7";
+  version = "2.8.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "fastai";
     repo = "fastai";
     tag = finalAttrs.version;
-    hash = "sha256-qjBVqSVQV+v1Uc95Tz8NyLkKwCLdG+R7MkH+CugzY1Q=";
+    hash = "sha256-VqcJ33gVv3Nvau88ow8hg468slnmhKCy5EV3X2aL5lM=";
   };
 
   build-system = [
