@@ -6715,6 +6715,7 @@ with pkgs;
     zls_0_14
     zls_0_15
     zls_0_16
+    zls_0_17
     ;
 
   # This should be kept updated to ensure the default zls version matches the default zig version.
