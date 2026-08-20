@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pcapy-ng";
-  version = "1.0.9";
+  version = "2.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stamparm";
     repo = "pcapy-ng";
     rev = version;
-    hash = "sha256-6LA2n7Kv0MiZcqUJpi0lDN4Q+GcOttYw7hJwVqK/DU0=";
+    hash = "sha256-7Bm+cEK2cAvsRO1v9m3iwdt0kx0bz0YKSpCd4p3JsYk=";
   };
 
   nativeBuildInputs = [
