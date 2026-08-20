@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pkgs, # Only for pkgs.graphviz
   lib,
   setuptools,
@@ -18,6 +19,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-FUBRFImX5NOxyYAK7z5Bo8VKVQllTbEewEGZXtVMBQE=";
   };
+
+  patches = [
+    # Fix the version discrepancy between the package and the source code
+    # Should be removed at the next release
+    (fetchpatch {
+      url = "https://github.com/cesaremorel/markdown-inline-graphviz/commit/579f10af9fe7187c717c20615f65774f898c1a0d.patch";
+      hash = "sha256-PJdwQ6+vq28m55vbgFzlhMmgvFqGPsYfIaCYunG7bMU=";
+    })
+  ];
 
   # Using substituteInPlace because there's only one replacement
   postPatch = ''
