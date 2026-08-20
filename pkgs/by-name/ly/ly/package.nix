@@ -1,5 +1,4 @@
 {
-  callPackage,
   fetchFromCodeberg,
   lib,
   libxcb,
@@ -11,7 +10,6 @@
   x11Support ? true,
   zig_0_16,
 }:
-
 let
   zig = zig_0_16;
 in
@@ -36,11 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals x11Support [ libxcb ];
 
-  zigBuildFlags = [
-    "--system"
-    "${callPackage ./deps.nix { }}"
-    "-Denable_x11_support=${lib.boolToString x11Support}"
-  ];
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-ZTGQhsDTpWfG4giM0WsfCjlDVr4htC6WWBpSGyKZUr0=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
+
+  zigBuildFlags = [ "-Denable_x11_support=${lib.boolToString x11Support}" ];
 
   postInstall = ''
     install -Dm0644 res/config.ini "$out/etc/config.ini"
