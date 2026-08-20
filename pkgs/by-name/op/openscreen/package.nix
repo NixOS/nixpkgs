@@ -121,7 +121,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       etiennelescot
-      Renna42
     ];
     mainProgram = "openscreen";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
