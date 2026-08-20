@@ -226,7 +226,12 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit web idp-web;
     tests = { inherit (nixosTests) opencloud; }; # TODO: parametrize
-    updateScript = nix-update-script { }; # TODO: nixUpdateExtraArgs
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs ++ [
+        "--version-regex"
+        "v(${if production then lib.versions.majorMinor else lib.versions.major version}\\.[0-9.]+)"
+      ];
+    };
   };
 
   doInstallCheck = true;

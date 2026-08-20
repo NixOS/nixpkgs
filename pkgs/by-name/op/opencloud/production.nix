@@ -6,4 +6,8 @@ import ./generic.nix {
   webHash = "sha256-Wg4VGweWBiTRGDRIbe4spFQB1MEC25zXZBAIa4+YttY=";
   webPnpmDepsHash = "sha256-YEdZ5B11I6U140qam7e1TMOacRqUeINhr/TI13ddAa0=";
   idpWebPnpmDepsHash = "sha256-pQ01vBvC29B5oxDWtt7anI5QtFbvQFFBVamQtA2WTNo=";
+  nixUpdateExtraArgs = [
+    "--override-filename"
+    "pkgs/by-name/op/opencloud/production.nix"
+  ];
 }
