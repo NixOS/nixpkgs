@@ -8,7 +8,7 @@
   markdown,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "markdown-inline-graphviz-extension";
   version = "1.1.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cesaremorel";
     repo = "markdown-inline-graphviz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FUBRFImX5NOxyYAK7z5Bo8VKVQllTbEewEGZXtVMBQE=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Render inline graphs with Markdown and Graphviz";
     homepage = "https://github.com/cesaremorel/markdown-inline-graphviz/";
-    changelog = "https://github.com/cesaremorel/markdown-inline-graphviz/releases/tag/${src.tag}";
+    changelog = "https://github.com/cesaremorel/markdown-inline-graphviz/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
