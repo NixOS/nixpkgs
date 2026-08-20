@@ -87,11 +87,7 @@ in
     };
 
     identity.target = lib.mkOption {
-      type = lib.types.oneOf [
-        lib.types.str
-        lib.types.path
-      ];
-
+      type = lib.types.str;
       description = ''
         Path to the age private key file for decryption on the target machine
       '';
@@ -100,11 +96,7 @@ in
     };
 
     identity.host = lib.mkOption {
-      type = lib.types.oneOf [
-        lib.types.str
-        lib.types.path
-      ];
-
+      type = lib.types.str;
       description = ''
         Path to the age private key file for decryption on the host machine
       '';
@@ -140,12 +132,7 @@ in
 
           identity.target = lib.mkOption {
             default = cfg.identity.target;
-
-            type = lib.types.oneOf [
-              lib.types.str
-              lib.types.path
-            ];
-
+            type = lib.types.str;
             description = ''
               Path to the age private key file for decryption on the target
               machine
@@ -154,12 +141,7 @@ in
 
           identity.host = lib.mkOption {
             default = cfg.identity.host;
-
-            type = lib.types.oneOf [
-              lib.types.str
-              lib.types.path
-            ];
-
+            type = lib.types.str;
             description = ''
               Path to the age private key file for decryption on the host machine
             '';
