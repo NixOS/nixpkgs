@@ -1,6 +1,5 @@
 {
   lib,
-  backports-strenum,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -8,9 +7,11 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "archinfo";
-  version = "9.2.154";
+  # Keep angr-management, angr, archinfo, claripy, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "9.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "archinfo";
-    tag = "v${version}";
-    hash = "sha256-Vks7Rjd8x2zeHnJPs0laH56S4b8pnR1cK82SpK+XOgE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iiclggVwhllM7WNm35/u8zehECXePPXcp0AdmPlyWLo=";
   };
 
   build-system = [ setuptools ];
@@ -34,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
