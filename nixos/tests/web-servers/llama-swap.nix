@@ -91,6 +91,34 @@ let
                           cmd = "${llama-server} --port 5802 -m ${smollm2-135m} --alias smollm2-group-2 --no-webui --temp 0.2 --top-k 9 -c 1024";
                         };
                       };
+                      # Declarative backend test: proving settings.models and backends
+                      # merge, and that inheritance + override work.
+                      backends.llama-cpp = {
+                        # Backend-level defaults inherited by all models
+                        settings = {
+                          temp = 0.2;
+                          "top-k" = 9;
+                        };
+
+                        models = {
+                          "smollm2-declarative" = {
+                            settings = {
+                              model = smollm2-135m;
+                              "ctx-size" = 1024;
+                            };
+                            swapSettings.aliases = [ "smollm2-decl-alias" ];
+                          };
+                          # This model overrides the inherited temp and uses the
+                          # default ctx-size.
+                          "smollm2-declarative-override" = {
+                            settings = {
+                              model = smollm2-135m;
+                              temp = 0.5;
+                            };
+                          };
+                        };
+                      };
+
                       groups = {
                         "standalone" = {
                           swap = true;
@@ -144,7 +172,7 @@ let
           ''
           + lib.optionalString withUI ''
             with subtest('check is serving ui'):
-              machine.succeed('curl --fail http:/localhost:8080/ui/')
+              machine.succeed('curl --fail http://localhost:8080/ui/')
 
           ''
           + ''
@@ -155,6 +183,28 @@ let
           ''
           + lib.optionalString useSmollm2-135m ''
             # extended tests using SmolLM2
+            with subtest('check declarative backends are registered'):
+              models = get_json('/v1/models')
+              model_ids = [m['id'] for m in models['data']]
+              assert 'smollm2-declarative' in model_ids, f'declarative backend not in models: {model_ids}'
+              assert 'smollm2-declarative-override' in model_ids, f'declarative override backend not in models: {model_ids}'
+
+            with subtest('check declarative backend alias'):
+              models = get_json('/v1/models')
+              model_ids = [m['id'] for m in models['data']]
+              assert 'smollm2-decl-alias' in model_ids, f'declarative alias not in models: {model_ids}'
+
+            with subtest('check declarative settings are applied to generated cmd'):
+              exec_start = machine.succeed('systemctl show llama-swap -p ExecStart --value')
+              config_path = exec_start.split('--config=')[1].split()[0]
+              config = machine.succeed(f'cat {config_path}')
+              # inherited backend defaults: temp 0.2 and top-k 9, plus ctx-size 1024
+              assert '--temp 0.2' in config, f'inherited temp not in generated cmd: {config}'
+              assert '--top-k 9' in config, f'inherited top-k not in generated cmd: {config}'
+              assert '--ctx-size 1024' in config, f'ctx-size not in generated cmd: {config}'
+              # model-level override wins over the inherited temp
+              assert '--temp 0.5' in config, f'overridden temp not in generated cmd: {config}'
+
             with subtest('check `/running` for preloaded smollm2'):
               machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep "smollm2"')
               running_response = get_json('/running')
