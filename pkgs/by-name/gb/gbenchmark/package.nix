@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = lib.optionals (glibcLocales != null) [ glibcLocales ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)
     (lib.cmakeBool "BENCHMARK_ENABLE_WERROR" false)
@@ -72,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit prometheus-cpp;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Microbenchmark support library";

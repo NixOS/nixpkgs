@@ -4,7 +4,7 @@
   callPackage,
   distutils,
   fetchPypi,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-tGAE7DClMkZyaD7ISK7Z6PxQCw0mHUCjIpwtK7/O3Ck=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     distutils # for distutils.command in pbr/packaging.py
-    setuptools # for pkg_resources
+    setuptools_80 # for pkg_resources
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures

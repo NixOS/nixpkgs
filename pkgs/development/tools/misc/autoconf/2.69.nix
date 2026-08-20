@@ -6,13 +6,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoconf";
   version = "2.69";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
-    sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
+    url = "mirror://gnu/autoconf/autoconf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ZOvOyfisWySHElqGp3YNJZGsnh09vVlIljP53mKldoQ=";
   };
 
   nativeBuildInputs = [
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     perl
   ];
   buildInputs = [ m4 ];
+
+  strictDeps = true;
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = false; # fails
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
@@ -59,4 +63,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
   };
-}
+})

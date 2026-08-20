@@ -28,10 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     "host"
   ];
 
-  # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
-  # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
-  # cannot add bash to buildInputs due to infinite recursion
-  strictDeps = stdenv.hostPlatform != stdenv.buildPlatform;
+  strictDeps = true;
 
   nativeBuildInputs = [
     m4
@@ -39,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
+
+  # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
+  # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
+  # cannot add bash to buildInputs due to infinite recursion
+  postFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    patchShebangs --build $out/bin/yacc
+  '';
 
   enableParallelBuilding = true;
   # tests are flaky / timing sensitive on FreeBSD
@@ -49,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests were disabled on LLVM/Darwin due to https://github.com/NixOS/nixpkgs/issues/463659
   # TODO: enable doInstallCheck unconditionally when fixed upstream.
   doInstallCheck = !stdenv.cc.isClang;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";

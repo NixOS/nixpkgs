@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
-      --replace 'mode3=2755' 'mode3=1755'
+      --replace-fail 'mode3=2755' 'mode3=1755'
 
     # Fails on systems with a rootfs. Looks like a bug in the test, see
     # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
@@ -161,6 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
+
+  strictDeps = true;
 
   hardeningDisable = [ "trivialautovarinit" ];
 
@@ -270,6 +272,8 @@ stdenv.mkDerivation (finalAttrs: {
       execer can bin/${if withPrefix then "g" else ""}runcon
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";

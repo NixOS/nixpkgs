@@ -14,7 +14,7 @@
   dblatex,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gtk-doc";
   version = "1.36.1";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-doc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8hB43BCAtT1B7/ak2i0FAlYD3Kb4rNCWfsJ+wqGu3FA=";
   };
 
@@ -85,12 +85,14 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://gitlab.gnome.org/GNOME/gtk-doc/-/blob/${src.tag}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk-doc/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-doc";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pSub ];
     teams = [ lib.teams.gnome ];
   };
-}
+})

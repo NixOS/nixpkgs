@@ -171,6 +171,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals systemdSupport [ systemdLibs ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -228,6 +230,8 @@ stdenv.mkDerivation (finalAttrs: {
       ignoredVersions = "(-rc|-start|-devel).*";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";

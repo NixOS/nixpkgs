@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   removeReferencesTo,
   runtimeShellPackage,
   texinfo,
@@ -24,12 +23,12 @@
 
 assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gawk" + lib.optionalString interactive "-interactive";
   version = "5.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
+    url = "mirror://gnu/gawk/gawk-${finalAttrs.version}.tar.xz";
     hash = "sha256-B/b3NCt/6+QxP8LCVCrZPWT+IK2HFyABCfEFqCb1/Tc=";
   };
 
@@ -50,7 +49,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!interactive) "man";
 
+  __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
   # no-pma fix
   nativeBuildInputs = [
@@ -129,4 +130,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "gawk";
   };
-}
+})

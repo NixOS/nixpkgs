@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit curl;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/ngtcp2/nghttp3";

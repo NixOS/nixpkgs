@@ -28,4 +28,7 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 }

@@ -240,6 +240,35 @@ def find_first_matching_rpath_with_origin(binary: Path, lib_dir: Path, rpaths: l
             return Path(rpath)
     return None
 
+
+def relativize_rpath_to_origin(*, binary_path: Path, rpath_entries: list[Path], containing_path: Path) -> list[Path]:
+    """
+    Rewrite absolute RPATH entries to use $ORIGIN when the entry sits
+    under containing_path (the --paths entry the binary was found
+    under).
+
+    The resulting RPATH is relocatable: as long as the directory layout
+    within containing_path is preserved, the whole tree can be moved
+    and the binary will still find its dependencies.
+
+    Entries that already contain $ORIGIN are left untouched.
+    Entries outside containing_path are also left absolute.
+    """
+    containing_norm: Path = Path(os.path.normpath(containing_path))
+    new_rpath_entries: list[Path] = []
+    for entry in rpath_entries:
+        if "$ORIGIN" in entry.as_posix():
+            new_rpath_entries.append(entry)
+            continue
+        entry_norm: Path = Path(os.path.normpath(entry))
+        if not entry_norm.is_relative_to(containing_norm):
+            new_rpath_entries.append(entry)
+            continue
+        rel = os.path.relpath(entry_norm, binary_path.parent)
+        new_rpath_entries.append(Path("$ORIGIN") / rel)
+    return new_rpath_entries
+
+
 class Event(Protocol):
     """Protocol for loggable events that occur during the auto-patchelf process."""
     def to_human_readable_str(self) -> str: ...
@@ -317,7 +346,18 @@ class Logger:
 
 
 
-def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, preserve_origin: bool = False, extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(
+    *,
+    logger: Logger,
+    runtime_deps: list[Path],
+    append_rpaths: list[Path] = [],
+    keep_libc: bool = False,
+    preserve_origin: bool = False,
+    relativize_rpath: bool = False,
+    extra_args: list[str] = [],
+    path: Path,
+    containing_path: Path
+) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -436,6 +476,9 @@ def auto_patchelf_file(logger: Logger, path: Path, runtime_deps: list[Path], app
             if "$ORIGIN" in existing_rpath:
                 rpath.append(Path(existing_rpath))
 
+    if relativize_rpath:
+        rpath = relativize_rpath_to_origin(binary_path=path, rpath_entries=rpath, containing_path=containing_path)
+
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
@@ -458,6 +501,7 @@ def auto_patchelf(
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
         preserve_origin: bool = False,
+        relativize_rpath: bool = False,
         add_existing: bool = True,
         extra_args: list[str] = []) -> None:
 
@@ -472,9 +516,20 @@ def auto_patchelf(
     populate_cache(lib_dirs)
 
     dependencies = []
-    for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
-        if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(logger, path, runtime_deps, append_rpaths, keep_libc, preserve_origin, extra_args)
+    for containing_path in paths_to_patch:
+        for path in glob(containing_path, '*', recursive):
+            if not path.is_symlink() and path.is_file():
+                dependencies += auto_patchelf_file(
+                    logger=logger,
+                    runtime_deps=runtime_deps,
+                    append_rpaths=append_rpaths,
+                    keep_libc=keep_libc,
+                    preserve_origin=preserve_origin,
+                    relativize_rpath=relativize_rpath,
+                    extra_args=extra_args,
+                    path=path,
+                    containing_path=containing_path
+                )
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -561,6 +616,12 @@ def main() -> None:
         help="When possible, replace absolute RPATH entries with original $ORIGIN entries that resolve to the same directory.",
     )
     parser.add_argument(
+        "--relativize-rpath",
+        dest="relativize_rpath",
+        action="store_true",
+        help="Rewrite absolute RPATH entries to use $ORIGIN when the binary and the entry live under the same --paths root, so the patched tree is relocatable.",
+    )
+    parser.add_argument(
         "--ignore-existing",
         dest="add_existing",
         action="store_false",
@@ -597,6 +658,7 @@ def main() -> None:
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
         preserve_origin=args.preserve_origin,
+        relativize_rpath=args.relativize_rpath,
         add_existing=args.add_existing,
         extra_args=args.extra_args)
 

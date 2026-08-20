@@ -97,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "C library and tools to do XSL transformations";

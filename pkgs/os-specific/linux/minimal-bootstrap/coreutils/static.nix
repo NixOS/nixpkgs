@@ -19,11 +19,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "coreutils-static";
-  version = "9.10";
+  version = "9.11";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-4L3h+2hQlEf8cjzyUX6KjH+kZ2mRm7dJDtNQoukjhWI=";
+    hash = "sha256-IDO4owScBr/0mp486nK99Gg7zQy+uXUhHdVtuvi3Nq4=";
   };
 
   configureFlags = [

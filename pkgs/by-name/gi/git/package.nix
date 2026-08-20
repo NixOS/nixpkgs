@@ -133,6 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
       hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
     })
+    # Fix fortify darwin crashes when dealing with unicode filenames.
+    (fetchurl {
+      name = "darwin-unicode-filename-fix.patch";
+      url = "https://lore.kernel.org/git/20260704233724.16928-1-ihar.hrachyshka@gmail.com/raw";
+      hash = "sha256-lpGz3nFKQvFDtW2TtQLx/684ECJVBLGPGqip0XEtOdU=";
+    })
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -207,6 +213,8 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
+  strictDeps = true;
+
   env = {
     # required to support pthread_cancel()
     NIX_LDFLAGS =
@@ -228,7 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
-    makeFlagsArray+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
+    makeFlags+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
   '';
 
   makeFlags = [
@@ -274,7 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+    concatTo flagsArray makeFlags buildFlags
     echoCmd 'build flags' "''${flagsArray[@]}"
   ''
   + lib.optionalString withManual ''
@@ -335,7 +343,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''${enableParallelInstalling:+-j''${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+    concatTo flagsArray makeFlags installFlags
     echoCmd 'install flags' "''${flagsArray[@]}"
 
     # Install git-subtree.
@@ -478,7 +486,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckTarget = "test";
 
-  # see also installCheckFlagsArray
+  # see also installCheckFlags in preInstallCheck
   installCheckFlags = [
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
@@ -502,7 +510,7 @@ stdenv.mkDerivation (finalAttrs: {
       NIX_BUILD_CORES=32
     fi
 
-    installCheckFlagsArray+=(
+    installCheckFlags+=(
       GIT_PROVE_OPTS="--jobs $NIX_BUILD_CORES --failures --state=failed,save"
       GIT_TEST_INSTALLED=$out/bin
       ${lib.optionalString (!svnSupport) "NO_SVN_TESTS=y"}

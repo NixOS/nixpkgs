@@ -23,8 +23,6 @@ mkNginxPlugin (finalAttrs: {
     export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
   '';
 
-  allowMemoryWriteExecute = true;
-
   meta = {
     description = "Embed the Power of Lua";
     homepage = "https://github.com/openresty/lua-nginx-module";

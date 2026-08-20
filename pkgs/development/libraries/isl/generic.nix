@@ -44,6 +44,8 @@ stdenv.mkDerivation {
 
   makeFlags = lib.optional stdenv.hostPlatform.isPE "LDFLAGS=-no-undefined";
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://libisl.sourceforge.io/";
     license = lib.licenses.lgpl21;

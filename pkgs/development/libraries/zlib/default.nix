@@ -161,6 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit minizip;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";

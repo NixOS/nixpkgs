@@ -16,12 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
   # attempt to use C library functions without declaring them, which is raised as an error.
   env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
+  strictDeps = true;
+
   makeFlags = [
     "WITHOUT_GETTEXT=1"
     "LIBCGETOPT=0"
     "prefix=${placeholder "out"}"
     "CC:=$(CC)"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     platforms = lib.platforms.unix;

@@ -502,6 +502,7 @@ in
             dontUnpack = true;
             dontBuild = true;
             strictDeps = true;
+            __structuredAttrs = true;
             # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
             installPhase = ''
               mkdir -p "$out"/bin
@@ -516,12 +517,13 @@ in
 
         # TODO(amjoseph): It is not yet entirely clear why this is necessary.
         # Something strange is going on with xgcc and libstdc++ on pkgsMusl.
-        patchelf = super.patchelf.overrideAttrs (
-          previousAttrs:
-          lib.optionalAttrs super.stdenv.hostPlatform.isMusl {
-            NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or "") + " -static-libstdc++";
-          }
-        );
+        patchelf = super.patchelf.overrideAttrs (previousAttrs: {
+          env =
+            previousAttrs.env or { }
+            // lib.optionalAttrs super.stdenv.hostPlatform.isMusl {
+              NIX_CFLAGS_COMPILE = (previousAttrs.env.NIX_CFLAGS_COMPILE or "") + " -static-libstdc++";
+            };
+        });
 
       };
     }
@@ -850,7 +852,6 @@ in
               inherit (self)
                 stdenv
                 runCommandLocal
-                patchelf
                 libunistring
                 ;
             };

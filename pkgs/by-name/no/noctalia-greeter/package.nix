@@ -28,18 +28,6 @@
   nix-update-script,
 }:
 
-let
-  # nixpkgs stb doesn't have stb_image_resize2.h which noctalia-greeter needs
-  stb' = stb.overrideAttrs {
-    version = "0-unstable-2025-10-26";
-    src = fetchFromGitHub {
-      owner = "nothings";
-      repo = "stb";
-      rev = "f1c79c02822848a9bed4315b12c8c8f3761e1296";
-      hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-greeter";
   version = "1.2.1";
@@ -73,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     nlohmann_json
     pango
-    stb'
+    stb
     tomlplusplus
     wayland
     wayland-protocols

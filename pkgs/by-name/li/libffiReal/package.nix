@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-1emmY43b0lE921RRjrZ+S75vpwe8wBwQ9iEvCgiNgZ0=";
+    hash = "sha256-faPi2aFx6woDj1kuytP/K7JVDzSW2Hs7Ka0M9EMMDbQ=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Foreign function call interface library";

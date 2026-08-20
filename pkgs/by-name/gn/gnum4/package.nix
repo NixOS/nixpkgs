@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU M4, a macro processor";
     longDescription = ''

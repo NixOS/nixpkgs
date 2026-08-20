@@ -42,7 +42,6 @@
   nettle,
   libtasn1,
   p11-kit,
-  libidn,
   libedit,
   readline,
   libGL,
@@ -160,7 +159,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     libgbm
     libgcrypt
     libgpg-error
-    libidn
     libintl
     lcms2
     libpthread-stubs
