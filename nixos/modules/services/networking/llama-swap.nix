@@ -7,7 +7,39 @@
 let
   cfg = config.services.llama-swap;
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "config.yaml" cfg.settings;
+
+  generatedModels = lib.mapAttrs (
+    _: modelCfg:
+    let
+      args = [
+        "--port"
+        "\${PORT}"
+        "-m"
+        (toString modelCfg.model)
+        "-c"
+        (toString modelCfg.ctxSize)
+        "-ngl"
+        (toString modelCfg.gpuLayers)
+        "--threads"
+        (toString modelCfg.threads)
+        "--no-webui"
+      ]
+      ++ modelCfg.extraFlags;
+    in
+    {
+      cmd = "${lib.getExe' modelCfg.package "llama-server"} ${lib.escapeShellArgs args}";
+    }
+    // lib.optionalAttrs (modelCfg.aliases != [ ]) {
+      inherit (modelCfg) aliases;
+    }
+    // lib.optionalAttrs (modelCfg.concurrencyLimit != null) {
+      inherit (modelCfg) concurrencyLimit;
+    }
+  ) cfg.backends.llama-cpp.models;
+
+  configFile = settingsFormat.generate "config.yaml" (
+    lib.recursiveUpdate cfg.settings { models = (cfg.settings.models or { }) // generatedModels; }
+  );
 
   # Options shared between the backend defaults layer and individual models.
   # At the backend level they get real `mkOption` defaults.
