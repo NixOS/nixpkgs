@@ -147,7 +147,7 @@ else
         files = lib.mapAttrs' (_: file: {
           inherit (file) name;
           value = {
-            inherit (file) local;
+            inherit (file) deploy;
           };
         }) generator.files;
       };

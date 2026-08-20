@@ -10,7 +10,6 @@ let
 in
 {
   secrets = {
-    defaultPromptBackend = "simple";
     promptBackends.simple.script = mkScript "prompt" ''
       out=''${out:?} # Make shellcheck happy
 

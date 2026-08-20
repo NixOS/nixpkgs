@@ -10,7 +10,7 @@ def deploy(args: SecretsArgs, config: SecretsConfig):
     print(f"Running deploy scripts for {len(config.generatorBackends)} backends:")
 
     for backend in config.generatorBackends.values():
-        files = config.files_for_backend(backend, no_local=True)
+        files = config.files_for_backend(backend, deployed_only=True)
 
         if not files:
             print(f"- Skipping '{backend.name}' (no files to deploy)")
