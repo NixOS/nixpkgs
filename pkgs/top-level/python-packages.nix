@@ -1513,6 +1513,10 @@ self: super: with self; {
 
   atc-ble = callPackage ../development/python-modules/atc-ble { };
 
+  atheris = callPackage ../development/python-modules/atheris {
+    stdenv = pkgs.clangStdenv;
+  };
+
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
