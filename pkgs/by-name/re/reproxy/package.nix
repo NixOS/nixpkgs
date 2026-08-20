@@ -3,11 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "reproxy";
   version = "1.7.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "umputun";
@@ -22,7 +25,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.revision=${finalAttrs.version}"
   ];
 
@@ -35,6 +37,9 @@ buildGoModule (finalAttrs: {
     mv $out/bin/{app,reproxy}
     installShellCompletion completions/*
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;
 
