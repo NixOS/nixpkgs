@@ -10861,8 +10861,6 @@ with pkgs;
 
   openbsd = recurseIntoAttrs (callPackage ../os-specific/bsd/openbsd { });
 
-  radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
-
   olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
 
   newlib-nano = newlib.override {
