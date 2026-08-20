@@ -11,6 +11,7 @@
   librsvg,
   wrapGAppsHook3,
   nixosTests,
+  additionalPlugins ? [ ],
 }:
 
 let
@@ -97,7 +98,11 @@ let
             rm -r $out/${python3Packages.python.sitePackages}/deluge/ui/gtk3
             rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
           ''
-      );
+      )
+      + (lib.concatMapStringsSep "\n" (p: ''
+        find "${p}/" -type f -name "*.egg" -print0 | \
+          xargs -n1 -0 -I{} -- ln -s {} $out/${python3Packages.python.sitePackages}/deluge/plugins
+      '') additionalPlugins);
 
       postFixup = ''
         for f in $out/lib/systemd/system/*; do
