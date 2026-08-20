@@ -16,27 +16,27 @@
 }:
 
 let
-  # https://github.com/terralang/terra/blob/0776e640ba9eb20c7d5419686ef106a38d8e18a3/cmake/Modules/GetLuaJIT.cmake#L19
-  luajitRev = "04dca7911ea255f37be799c18d74c305b921c1a6";
+  # grep LUAJIT_COMMIT in cmake/Modules/GetLuaJIT.cmake
+  luajitRev = "14d8a7a27dc8c626ab9e7c7e9e50b6df6def4f03";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    hash = "sha256-IvkOwyKXUqo++A0XalCKuS0uLj5PlTOUQX1qXDP6JBk=";
+    hash = "sha256-c2f9wCiDyC+G16ryLNcBp8nm+rLNXAsgafJgXHaQUTk=";
   };
 
   llvmPackages = llvmPackages_22;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
-      llvm.out
-      llvm.dev
-      llvm.lib
-      clang-unwrapped.out
-      clang-unwrapped.dev
-      clang-unwrapped.lib
+      llvm
+      (lib.getDev llvm)
+      (lib.getLib llvm)
+      clang-unwrapped
+      (lib.getDev clang-unwrapped)
+      (lib.getLib clang-unwrapped)
     ];
   };
 
@@ -45,7 +45,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
-  version = "1.2.1";
+  version = "1.2.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -54,10 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "terralang";
     repo = "terra";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-K2AMNgqHBYIyPZ7wFocZcbQGlbrX7lyuks43pWqI4jU=";
+    hash = "sha256-DaV92X98GbVtOjp9rUEJTA8cZyCOqtzjAQd8idUOgoQ=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCUDA [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enableCUDA [
+    cudaPackages.cuda_nvcc
+  ];
   buildInputs = [
     llvmMerged
     ncurses
@@ -78,13 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
       resourceDir = "${llvmMerged}/lib/clang/${lib.versions.major clangVersion}";
     in
     [
-      "-DHAS_TERRA_VERSION=0"
-      "-DTERRA_VERSION=${finalAttrs.version}"
-      "-DTERRA_LUA=luajit"
-      "-DTERRA_SKIP_LUA_DOWNLOAD=ON"
-      "-DCLANG_RESOURCE_DIR=${resourceDir}"
+      (lib.cmakeFeature "HAS_TERRA_VERSION" "0")
+      (lib.cmakeFeature "TERRA_VERSION" finalAttrs.version)
+      (lib.cmakeFeature "TERRA_LUA" "luajit")
+      (lib.cmakeBool "TERRA_SKIP_LUA_DOWNLOAD" true)
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" resourceDir)
     ]
-    ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
+    ++ lib.optionals enableCUDA [
+      (lib.cmakeBool "TERRA_ENABLE_CUDA" true)
+    ];
 
   doCheck = true;
   hardeningDisable = [ "fortify" ];
@@ -128,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Low-level counterpart to Lua";
     homepage = "https://terralang.org/";
+    downloadPage = "https://github.com/terralang/terra";
+    changelog = "https://github.com/terralang/terra/blob/${finalAttrs.src.tag}/CHANGES.md";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       jb55

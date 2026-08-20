@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdfservices-sdk";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adobe";
     repo = "pdfservices-python-sdk";
     tag = "v${version}";
-    hash = "sha256-m2k+IS+M8UrdrpLnk2OwRolAVq73StMY1WnxzOujBIM=";
+    hash = "sha256-JH4NWtF5YWEKJ56kcw3sx4hZFEcSMN+PXIsDmOkSYQ4=";
   };
 
   pythonRelaxDeps = true;

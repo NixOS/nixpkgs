@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  squashfsTools,
+  squashfs-tools,
   makeBinaryWrapper,
   alsa-lib,
   atk,
@@ -26,18 +26,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "3.2.0";
-  revision = "71";
+  version = "3.3.0";
+  revision = "72";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-hT4U+RGqZ4OliAiLqWKkuv/OxeOpKHmFY0/ia9V7MZz1ZhogIaCLUUXXCmlfX1zhQDA1Xrw1uiwl/aeijgdq7g==";
+    hash = "sha512-Ah/+g/Pqd9HQfxjtKkZMtKoQ5u2IxmGPu6KqfSNCCW4ClQe5+l3QLAid8up436jPRwWlyeyIouANxUf02HRAug==";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
-    squashfsTools
+    squashfs-tools
   ];
 
   buildInputs = [

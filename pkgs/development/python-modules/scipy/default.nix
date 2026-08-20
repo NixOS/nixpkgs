@@ -131,10 +131,6 @@ buildPythonPackage (finalAttrs: {
     "test_hyp0f1_gh5764"
     "test_simple_det_shapes_real_complex"
   ]
-  ++ lib.optionals (python.isPy311) [
-    # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
-    "test_funcs"
-  ]
   ++ lib.optionals (python.isPy312) [
     # failure caused by the inconsistent RNG implementation across python versions
     # https://github.com/NixOS/nixpkgs/issues/547063

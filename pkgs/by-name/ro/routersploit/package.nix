@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       pysnmp
       requests
       setuptools
+      standard-pkg-resources
     ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       standard-telnetlib

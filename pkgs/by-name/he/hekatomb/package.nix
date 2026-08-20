@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "hekatomb";
   version = "1.5.14-unstable-2024-02-14";
   pyproject = true;
@@ -17,14 +17,13 @@ python3.pkgs.buildPythonApplication {
   };
 
   pythonRelaxDeps = [
+    "chardet"
     "impacket"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     chardet
     dnspython
     impacket
@@ -46,4 +45,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hekatomb";
   };
-}
+})

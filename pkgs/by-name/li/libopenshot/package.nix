@@ -3,15 +3,22 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
+  catch2_3,
   cmake,
   cppzmq,
+  ctestCheckHook,
   doxygen,
-  ffmpeg,
+  # FIXME: unpin when libopenshot supports ffmpeg 9 (AVCodec.{pix_fmts,sample_fmts,...} removed)
+  ffmpeg_8,
+  glib,
   imagemagick,
   jsoncpp,
   libopenshot-audio,
   llvmPackages,
+  opencv4,
+  pipewire,
   pkg-config,
+  protobuf,
   python3,
   qt6,
   swig,
@@ -21,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.7.0-unstable-2026-04-21";
+  version = "0.7.0-unstable-2026-07-22";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
-    rev = "a58565292cb84438b1c6a039c343b4c65003bd82";
-    hash = "sha256-zUzyi/VydrxDLCY7E/LBr7+btthOjal3c7md6PTXQWA=";
+    rev = "eac81cf91555438c54fbadef7fdd05bf803f26ee";
+    hash = "sha256-XeEXvKi5O/0J6rEc8rZs4+x/ImF4X0GFw/dOWn9HCCQ=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -39,15 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     pkg-config
+    protobuf
     swig
   ];
 
   buildInputs = [
+    catch2_3
     cppzmq
-    ffmpeg
+    ffmpeg_8
     imagemagick
     jsoncpp
     libopenshot-audio
+    (opencv4.override { ffmpeg_8-headless = ffmpeg_8; })
+    protobuf
     python3
     qt6.qtbase
     qt6.qtmultimedia
@@ -56,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    glib
+    pipewire
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -67,6 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   doCheck = true;
+
+  nativeCheckInputs = [ ctestCheckHook ];
+
+  # Spherical metadata is not round-tripped when writing/reading with FFmpeg 8
+  ctestFlags = [
+    "--exclude-regex"
+    "^SphericalMetadata"
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_RUBY" false)

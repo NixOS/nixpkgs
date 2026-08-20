@@ -366,6 +366,10 @@ in
           "hid_corsair"
 
         ]
+        ++ optionals (versionAtLeast kernel.version "7.2") [
+          # xhci-pci defers AMD 800-series chipset controllers to this driver.
+          "xhci_pci_prom21"
+        ]
         ++ optionals pkgs.stdenv.hostPlatform.isx86 [
           # Misc. x86 keyboard stuff.
           "pcips2"

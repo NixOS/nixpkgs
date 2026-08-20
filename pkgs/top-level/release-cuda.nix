@@ -132,7 +132,7 @@ let
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
-        flashinfer = linux;
+        flashinfer-python = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;

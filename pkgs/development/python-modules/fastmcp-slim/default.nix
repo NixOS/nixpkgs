@@ -1,6 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
+  pythonAtLeast,
   fastmcp,
 
   # build-system
@@ -40,6 +42,9 @@
   uvicorn,
   watchfiles,
   websockets,
+
+  # tests
+  anyio,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -47,6 +52,17 @@ buildPythonPackage (finalAttrs: {
   inherit (fastmcp) version src;
   sourceRoot = "${finalAttrs.src.name}/fastmcp_slim";
   pyproject = true;
+
+  patches = [
+    # Fix python 3.14 compatibility (https://github.com/PrefectHQ/fastmcp/pull/4796)
+    # TODO: remove when updating to the next release
+    (fetchpatch {
+      url = "https://github.com/PrefectHQ/fastmcp/commit/6be0ac8e15d35ff8f5121266855bc34c1158c9a1.patch";
+      includes = [ "fastmcp/tools/function_tool.py" ];
+      stripLen = 1;
+      hash = "sha256-zAWIPAH7q9pIOmqWIup5DIDpVk1hOEDxdqQt7QuU8oI=";
+    })
+  ];
 
   build-system = [
     hatchling
@@ -119,8 +135,41 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "fastmcp" ];
 
-  # tests are done in fastmcp package
-  doCheck = false;
+  nativeInstallCheckInputs = [
+    anyio
+    griffelib
+    jsonref
+    mcp
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd "$TMPDIR"
+    python - <<'PY'
+    from functools import partial
+
+    from fastmcp.tools.function_tool import _resolve_param_hints
+
+
+    class Item:
+        pass
+
+
+    async def base(prefix: str, items: list[Item]) -> str:
+        return prefix
+
+
+    hints = _resolve_param_hints(partial(base, "bound"))
+    assert hints["items"] == list[Item]
+    assert "prefix" not in hints
+    PY
+
+    runHook postInstallCheck
+  '';
+
+  # upstream tests are done in fastmcp package
+  doCheck = pythonAtLeast "3.14";
 
   meta = {
     description = "Dependency-slim FastMCP package";

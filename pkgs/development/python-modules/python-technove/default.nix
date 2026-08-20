@@ -3,7 +3,6 @@
   aiohttp,
   aresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
@@ -12,31 +11,30 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  python-backoff,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-technove";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
-    tag = "v${version}";
-    hash = "sha256-TAB70EVrjxpl+vm3ncg45l2duaIXHjn7YKOURkS6k0k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hbwrfib+ugjpYnVCuZZfbr+9eBeLN4q7WE5G2xGD0nk=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
+    python-backoff
     cachetools
     yarl
   ];
@@ -53,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interact with TechnoVE local device API";
     homepage = "https://github.com/Moustachauve/pytechnove";
-    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${src.tag}";
+    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

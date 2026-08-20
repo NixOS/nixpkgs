@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "roma";
-  version = "1.5.7";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naver";
     repo = "roma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9h1Gwcg9tH0iu2L2bNEvT4nNoPydoTyRCwFXDUcMqGY=";
+    hash = "sha256-oHGlbce/qfrEuikPK2LfRsNbQXJ/WJZTYW85FmxGnP4=";
   };
 
   build-system = [

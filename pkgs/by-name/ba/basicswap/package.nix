@@ -54,14 +54,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
-  version = "0.17.5";
+  version = "0.17.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ezBBe3ubLM1q99+sFfXg0iW9YUfbT4v3H6wG0J2fmTQ=";
+    hash = "sha256-JJ+Q49PaxMMiQ9ORa5enK/lprIJkW9vyw+dRnaZHf6s=";
   };
 
   postPatch = ''

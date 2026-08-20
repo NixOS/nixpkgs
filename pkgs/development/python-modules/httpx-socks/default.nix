@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.11.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
     tag = "v${version}";
-    hash = "sha256-/8nz/5LqEuSr8A8/BWzJM9vHuum6fOYIS2rozr4Omi4=";
+    hash = "sha256-sz7A72nvwy8P0VvVYUT2ZTGXXOe5u1eme7PLC38SIz8=";
   };
 
   build-system = [ setuptools ];

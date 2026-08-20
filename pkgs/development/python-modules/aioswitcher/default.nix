@@ -5,7 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
-  poetry-core,
+  hatchling,
   pycryptodome,
   pytest-asyncio,
   pytest-mockservers,
@@ -18,19 +18,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioswitcher";
-  version = "6.1.3";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";
     tag = finalAttrs.version;
-    hash = "sha256-keYdXySanOtJ0F/aT7KGvSB5GYFCDhwxXqUAMSXwYpA=";
+    hash = "sha256-1/XCtqz0Ubh3iPQRj5WCsFLe2doULFmGvOiGOoEw88g=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [ "aiohttp" ];
 

@@ -13,7 +13,7 @@
   pandas,
   pillow,
   requests,
-  retinaface,
+  retina-face,
   setuptools,
   tensorflow,
   tqdm,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pandas
     pillow
     requests
-    retinaface
+    retina-face
     tensorflow
     tqdm
   ];

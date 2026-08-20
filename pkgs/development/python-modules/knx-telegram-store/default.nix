@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "knx-telegram-store";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "XKNX";
     repo = "knx-telegram-store";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xTJ4mFmew4FbtE94kh+tBTEwH1j0x977qvcmi/ceVYg=";
+    hash = "sha256-otHKGgWjo8j6jlWlD7ojh/3LGlR41hQQGueCxvocCM4=";
   };
 
   build-system = [

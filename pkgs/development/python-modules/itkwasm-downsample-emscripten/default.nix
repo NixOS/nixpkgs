@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "itkwasm-downsample-emscripten";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "itkwasm_downsample_emscripten";
     inherit (finalAttrs) version;
-    hash = "sha256-Gz4sO6udvY/5AZzQcB5DE6+pk2cmSMmuQor7wNj9Wv8=";
+    hash = "sha256-XXyuPiaiP6UIkOXlC/WzjfRIobfzBW7SQgLbBFV+zuQ=";
   };
 
   build-system = [

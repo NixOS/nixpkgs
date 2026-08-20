@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Simple GNOME 3 application to access remote or virtual systems";
+    description = "Simple GNOME application to access virtual systems";
     mainProgram = "gnome-boxes";
     homepage = "https://apps.gnome.org/Boxes/";
     license = lib.licenses.lgpl2Plus;

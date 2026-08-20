@@ -107,17 +107,10 @@ in
 {
   emacs31 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "31.0.91";
+    version = "31.1-rc1";
     variant = "mainline";
-    rev = "emacs-31.0.91";
-    hash = "sha256-3nvCiLiEtII1C57CLfDIbVqhiwadYViF9Nv32yDtLIQ=";
-    patches = fetchpatch: [
-      (fetchpatch {
-        name = "nullify-read-symbol-shorthands-around-risky-intern-calls-80574.patch";
-        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8466eb44991707d128110bdc549fad14c8e1d61e";
-        hash = "sha256-SyRCay2MahCJovtzBHA9M1H9hXhtD5IG3ZFSEUwaWlg=";
-      })
-    ];
+    rev = "emacs-31.1-rc1";
+    hash = "sha256-ZNCYFfMA2f14p57g/LdG6YK7nwUio8fdXmllkChMOSc=";
   });
 
   emacs30 = import ./make-emacs.nix (mkArgs {

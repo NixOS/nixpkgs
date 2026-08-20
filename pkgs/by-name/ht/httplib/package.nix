@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "httplib";
-  version = "0.53.0";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0WyV3/yscOJsYkTXqloXoeL8DoPVxev3Qqou7XMpuGA=";
+    hash = "sha256-0qcBtQkE7b4o5M5zio6Ji/8HEt4qEI218h11uppNIdE=";
   };
 
   nativeBuildInputs = [

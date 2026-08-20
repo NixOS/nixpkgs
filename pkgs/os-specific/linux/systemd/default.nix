@@ -366,7 +366,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals (withHomed || withCryptsetup || withFido2) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (
@@ -789,7 +789,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          # systemd-repart-factory-reset # broken upstream
+          systemd-repart-factory-reset
           ;
       }
       // {
@@ -798,11 +798,11 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
-          # systemd # broken on master
+          systemd
           systemd-analyze
           systemd-bpf
           systemd-confinement
-          # systemd-coredump # broken on master
+          systemd-coredump
           systemd-cryptenroll
           systemd-credentials-tpm2
           systemd-escaping
@@ -821,7 +821,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-networkd-openvpn
           systemd-initrd-vlan
           systemd-journal
-          # systemd-journal-gateway # broken on master
+          systemd-journal-gateway
           systemd-journal-upload
           # systemd-machinectl # broken on master
           systemd-networkd
@@ -842,12 +842,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-sysusers-mutable
           systemd-sysusers-immutable
           systemd-sysusers-password-option-override-ordering
-          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-timesyncd
+          systemd-timesyncd-nscd-dnssec
           systemd-user-linger
           systemd-user-tmpfiles-rules
           systemd-misc
           systemd-userdbd
-          # systemd-homed # broken on master
+          systemd-homed
           ;
       };
 

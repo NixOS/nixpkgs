@@ -1,39 +1,32 @@
 {
   lib,
+  async-timeout,
   buildPythonPackage,
   fetchFromCodeberg,
-  async-timeout,
-  httpx,
   httpx-socks,
+  httpx,
   proxy-py,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   python-socks,
   rencode,
   setuptools,
-  fetchpatch,
+  tiny-proxy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiobtclientrpc";
-  version = "5.0.1";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientrpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
+    hash = "sha256-4FWfzt+A9BY4nnaQU3xwdDFhuOMtfBFHYNoHaEOy7+0=";
   };
-
-  patches = [
-    # compatibility with python3.14: fix retrieval of non-running event loop
-    (fetchpatch {
-      url = "https://codeberg.org/plotski/aiobtclientrpc/commit/1328e281d28f17c9b2c092539b4ab7402f1082b3.patch";
-      hash = "sha256-ixHyG/w2h7tkaVYxmvpInfNW4AxVTn4Bflztzt1TOwM=";
-    })
-  ];
 
   pythonRelaxDeps = [ "async-timeout" ];
 
@@ -50,8 +43,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     proxy-py
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    tiny-proxy
   ];
 
   disabledTests = [
@@ -66,6 +61,8 @@ buildPythonPackage (finalAttrs: {
     "test_timeout[rtorrent_http]"
     "test_event_subscriptions_survive_reconnecting[rtorrent_http]"
     "test_waiting_for_event[rtorrent_http]"
+    "test_proxy[rtorrent_http-socks4_proxy]"
+    "test_proxy[rtorrent_http-socks5_proxy]"
     # Tests are outdated
     "test_DelugeRPCRequest_equality"
   ];

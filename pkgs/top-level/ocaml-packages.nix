@@ -271,6 +271,8 @@ let
 
         cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+        cmdliner-stdlib = callPackage ../development/ocaml-modules/cmdliner-stdlib { };
+
         cmdliner_1_0 = cmdliner.override { version = "1.0.4"; };
 
         cmdliner_1 = cmdliner.override { version = "1.3.0"; };
@@ -1173,12 +1175,7 @@ let
 
         lutils = callPackage ../development/ocaml-modules/lutils { };
 
-        inherit
-          (callPackage ../development/ocaml-modules/luv {
-          })
-          luv-0-5-12
-          luv
-          ;
+        luv = callPackage ../development/ocaml-modules/luv { };
 
         lwd = callPackage ../development/ocaml-modules/lwd { };
 
@@ -1314,9 +1311,7 @@ let
 
         mirage-block-unix = callPackage ../development/ocaml-modules/mirage-block-unix { };
 
-        mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
-
-        mirage-bootvar-xen = callPackage ../development/ocaml-modules/mirage-bootvar-xen { };
+        mirage-bootvar = callPackage ../development/ocaml-modules/mirage-bootvar { };
 
         mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
@@ -1701,6 +1696,8 @@ let
         owl = callPackage ../development/ocaml-modules/owl { };
 
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
+
+        oxenstored = callPackage ../development/ocaml-modules/oxenstored { };
 
         ### P ###
 
@@ -2373,6 +2370,13 @@ let
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         hol_light = pkgs.hol_light; # Added 2026-06-02
         lablgtk-extras = throw "lablgtk-extras has been removed as it depends on sourceview2, which has been removed from nixpkgs"; # Added 2026-08-11
+        luv-0-5-12 = luv.overrideAttrs (_: {
+          # Added 2026-08-11
+          version = "0.5.12";
+          __intentionallyOverridingVersion = true;
+        });
+        mirage-bootvar-unix = throw "ocamlPackages.mirage-bootvar-unix has been removed, superseded by ocamlPackages.mirage-bootvar"; # Added 2026-08-18
+        mirage-bootvar-xen = throw "ocamlPackages.mirage-bootvar-xen has been removed, superseded by ocamlPackages.mirage-bootvar"; # Added 2026-08-18
         notty = throw "2026-05-05: notty is no longer maintained, use notty-community instead";
         ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";

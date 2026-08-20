@@ -23,6 +23,92 @@ let
   # inherit interpreter from neovim
   lua = neovim-unwrapped.lua;
 
+  /**
+    Build a wrapped Neovim with built-in configuration.
+
+    This is a lower-level alternative to wrapNeovim conceived to handle more
+    usecases when wrapping neovim. The interface is being actively worked on so
+    expect breakage. use `wrapNeovim` instead if you want a stable alternative
+
+    # Inputs
+    `attrs`
+    : Configuration for the wrapped Neovim application. See properties below.
+
+    # Configuration Properties
+    `extraName` (defaults to `""`)
+
+    `autoconfigure` (defaults to `true`)
+    : Certain plugins need a custom configuration (available in passthru.initLua) to work with nix. If true, the wrapper automatically appends those snippets when necessary
+
+    `autowrapRuntimeDeps` (defaults to `true`)
+    : Append to PATH runtime deps of plugins
+
+    `wrapperArgs` (defaults to `[ ]`)
+    : Should contain all args but the binary. Can be either a string or list
+
+    `withPython2` (defaults to `false`)
+
+    `withPython3` (defaults to `false`)
+
+    `extraPython3Packages` (defaults to `(_: [ ])`)
+    : The function you would have passed to python3.withPackages
+
+    `waylandSupport` (defaults to `lib.meta.availableOn stdenv.hostPlatform wayland`)
+
+    `withNodeJs` (defaults to `false`)
+
+    `withPerl` (defaults to `false`)
+
+    `withRuby` (defaults to `false`)
+
+    `vimAlias` (defaults to `false`)
+    : Whether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
+
+    `viAlias` (defaults to `false`)
+
+    `wrapRc` (defaults to `true`)
+    : It sets the VIMINIT environment variable to "lua dofile('${customRc}')"
+      set to false if you want to control where to save the generated config
+      (e.g., in ~/.config/init.vim or project/.nvimrc)
+
+    `neovimRcContent` (defaults to `null`)
+    : `vimL` code that should be sourced as part of the generated init.lua file
+
+    `luaRcContent` (defaults to `""`)
+    : `lua` code to put into the generated init.lua file
+
+    `packpathDirs` (defaults to `null`)
+    : DEPRECATED: entry to load in packpath
+      use 'plugins' instead
+
+    `plugins` (defaults to `[ ]`)
+    : A list of neovim plugin derivations. See example below.
+
+    `extraLuaPackages` (defaults to `(_: [ ])`)
+    : The function you would have passed to lua.withPackages
+
+    # Examples
+    :::{.example #example-neovim-plugins}
+    ## `plugins` usage example
+    ```nix
+    {
+      plugins = [
+        {
+          plugin   = vimPlugins.grug-far-nvim;
+          config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+          optional = false;
+        }
+        {
+          plugin = vimPlugins.far-vim;
+          type   = "lua";
+          config = "vim.g['far#source'] = 'rg'";
+        }
+        vimPlugins.vim-fugitive
+      ]
+    }
+    ```
+    :::
+  */
   wrapper =
     {
       extraName ? "",
@@ -64,8 +150,18 @@ let
 
       # a list of neovim plugin derivations, for instance
       #  plugins = [
-      # { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
-      # ]
+      #    {
+      #      plugin   = vimPlugins.grug-far-nvim;
+      #      config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+      #      optional = false;
+      #    }
+      #    {
+      #      plugin = vimPlugins.far-vim;
+      #      type   = "lua";
+      #      config = "vim.g['far#source'] = 'rg'";
+      #    }
+      #    vimPlugins.vim-fugitive
+      #  ]
       plugins ? [ ],
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),

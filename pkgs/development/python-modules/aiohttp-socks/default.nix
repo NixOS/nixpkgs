@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
-    hash = "sha256-Cv5RY4Unx5B35L1uVwUsh8SCQjPW4guwYcU3ZkIbEPA=";
+    hash = "sha256-PK+fWkFkYREi1BK8EbL5EU/SnIXhuie7OAYNPCNr3I0=";
   };
 
   build-system = [ setuptools ];

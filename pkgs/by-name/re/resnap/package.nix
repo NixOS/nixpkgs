@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "resnap";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "cloudsftp";
     repo = "resnap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-thVyf1gTDPLQVtZKoWL7SGiWI++ICWqmF/Ar57I3WP8=";
+    hash = "sha256-Uw7lRQv+NKSJzb29MIr6ki5BvLpetKHdeudHtyQnc4A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

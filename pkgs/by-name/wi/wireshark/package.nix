@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.6.7";
+  version = "4.6.8";
 
   outputs = [
     "out"
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wireshark";
     owner = "wireshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+y2OyCXHnUYNKVbUNeqcATKcTPZz+ikOHPAEs1C2hww=";
+    hash = "sha256-qUC2k8LZQxmSu19jj1LHM+oQiF/ao+rV6wwRQhISuzk=";
   };
 
   patches = [

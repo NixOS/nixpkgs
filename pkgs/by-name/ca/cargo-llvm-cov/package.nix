@@ -25,7 +25,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.8.7";
+  version = "0.9.0";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-flHZfjwEEIBEJHYGozlRgH9OHTJHgAR+OZxYJS/vHpQ=";
+    sha256 = "sha256-tPW36leXKuJCaZYOXF0mTd+WYHfGnHNg8foSQ2N+8kU=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "test-helper-0.0.0" = "sha256-MjylM9agdGIGMp1Iip/jolHCzErST2XiEl5PIqt+ykg=";
+      "test-helper-0.0.0" = "sha256-nPNYhfGVL6rNdfCoWLNJuVeP6Gt4m1CwEOyPtFYIXfk=";
     };
   };
 

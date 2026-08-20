@@ -2,6 +2,7 @@
   lib,
   buildGraalvmNativeImage,
   fetchurl,
+  versionCheckHook,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {
@@ -16,7 +17,15 @@ buildGraalvmNativeImage (finalAttrs: {
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "--no-fallback"
+    # GraalVM >= 25.1 removed @AutomaticFeature discovery, so the bundled
+    # graal-build-time feature no longer runs and the binary crashes at
+    # startup. Register it explicitly. Remove once a release carrying
+    # https://github.com/clj-kondo/clj-kondo/pull/2949 is packaged.
+    "--features=InitAtBuildTimeFeature"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Linter for Clojure code that sparks joy";

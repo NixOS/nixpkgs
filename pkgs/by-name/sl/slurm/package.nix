@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "26-05-2-1";
+  version = "26-05-3-1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     tag = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-HkBHwN/j0do+CPpouG6qswZEOeY17owmA980wVubiw4=";
+    hash = "sha256-pyzESnZoFxy3A2p3b23SimTUurMlB63VV7dqcXZ43Hw=";
   };
 
   outputs = [

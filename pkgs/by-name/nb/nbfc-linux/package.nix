@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbfc-linux";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "nbfc-linux";
     repo = "nbfc-linux";
     tag = finalAttrs.version;
-    hash = "sha256-468/dFRjEgyJ0AW98wKq04WKZ4sZyzswBASSF6hyjVY=";
+    hash = "sha256-x2boeFlTDnoVnazzQkCukZxZBFIW2rLjglarflNy334=";
   };
 
   nativeBuildInputs = [

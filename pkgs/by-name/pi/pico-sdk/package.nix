@@ -66,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/raspberrypi/pico-sdk";
     changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = with lib.maintainers; [
+      muscaln
+      nulleric
+    ];
     platforms = lib.platforms.unix;
   };
 })

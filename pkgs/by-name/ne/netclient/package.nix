@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "netclient";
-  version = "1.1.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gQvMT7hyh1yF/cS8+fXI4en1lj3dXyZ8/3LxrFwJos0=";
+    hash = "sha256-3vljlrWmetQfAwemRsC76e7DqlFVQKxnV1mpx/NtYvc=";
   };
 
-  vendorHash = "sha256-OzIp6tVVVh4xWuzaGI4FasCz5dMZQmRxeLqZhg/AgN0=";
+  vendorHash = "sha256-fnXekqGK1c6pf8UY1F44RYbU+wc9kZJQg3hmRPcBFCE=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux libx11;
 

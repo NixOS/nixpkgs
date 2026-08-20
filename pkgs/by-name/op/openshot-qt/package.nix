@@ -10,12 +10,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openshot-qt";
-  version = "3.5.1-unstable-2026-04-22";
+  version = "3.5.1-unstable-2026-07-23";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "930ff919762570eaf35a879574da8f8da9f196be";
-    hash = "sha256-o0BPEzkEAyoZkPkiR9G8i2nANgDFI4wjD5b9hGOqB0c=";
+    rev = "9cd2b3f3ee9024c3496487a2de30a402515ed659";
+    hash = "sha256-SoEt3tuydz+JUzhvUa7Pejxd1LYNia17YvGmVlnh48I=";
   };
   format = "setuptools";
 

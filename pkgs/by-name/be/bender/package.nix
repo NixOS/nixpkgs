@@ -14,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bender";
-  version = "0.32.0";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "pulp-platform";
     repo = "bender";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pyx68NTlCNTGKXdEGG9YML5E+vJlLHlPQjjbSV2uOsE=";
+    hash = "sha256-7f2ybZm74LZEHWieZeoCqqy3AwZuAltnSSA1fjOH41Y=";
   };
 
-  cargoHash = "sha256-XItTYqTTN8KBvyFmDSKIgVURox/1tmAFjDAM8Vq3zxo=";
+  cargoHash = "sha256-1exuDZPsmtorOeRWPb+UMX7U/Uc+0U0Rs0bG9L+/ipc=";
 
   patches = [
     (replaceVars ./build-rs.patch {

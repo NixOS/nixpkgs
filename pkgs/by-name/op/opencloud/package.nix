@@ -6,7 +6,6 @@
   ncurses,
   gettext,
   pigeon,
-  go-mockery,
   protoc-go-inject-tag,
   libxcrypt,
   vips,
@@ -20,7 +19,8 @@ let
   bingoBinsMakefile = builtins.concatStringsSep "\n" (
     lib.mapAttrsToList (n: v: "${n} := ${v}\n\\$(${n}):") {
       GO_XGETTEXT = "xgettext";
-      MOCKERY = "mockery";
+      # no need to generate mocks, as they are in-repo already
+      MOCKERY = "true";
       PIGEON = "pigeon";
       PROTOC_GO_INJECT_TAG = "protoc-go-inject-tag";
     }
@@ -76,7 +76,6 @@ buildGoModule (finalAttrs: {
     ncurses
     gettext
     pigeon
-    go-mockery
     protoc-go-inject-tag
     pkg-config
   ];
@@ -91,6 +90,9 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     rm services/search/pkg/opensearch/*_test.go
   '';
+
+  # The activitylog tests start a local NATS server.
+  __darwinAllowLocalNetworking = true;
 
   env = {
     # avoids 'make generate' calling `git`, otherwise no-op

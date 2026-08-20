@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  squashfsTools,
+  squashfs-tools,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -39,7 +39,7 @@
   fontconfig,
   dbus,
   expat,
-  ffmpeg_4,
+  ffmpeg_7-headless,
   curlWithGnuTls,
   zlib,
   zenity,
@@ -74,7 +74,7 @@ let
     curlWithGnuTls
     dbus
     expat
-    ffmpeg_4 # Requires libavcodec < 59 as of 1.2.9.743.g85d9593d
+    ffmpeg_7-headless # Requires libavcodec < 62
     fontconfig
     freetype
     gdk-pixbuf
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     wrapGAppsHook3
     makeShellWrapper
-    squashfsTools
+    squashfs-tools
   ];
 
   dontStrip = true;
@@ -200,8 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
     ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-    ln -s ${ffmpeg_4.lib}/lib/libavcodec.so* $libdir
-    ln -s ${ffmpeg_4.lib}/lib/libavformat.so* $libdir
+    ln -s ${ffmpeg_7-headless.lib}/lib/libavcodec.so* $libdir
+    ln -s ${ffmpeg_7-headless.lib}/lib/libavformat.so* $libdir
 
     rpath="$out/share/spotify:$libdir"
 
@@ -249,7 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = meta // {
     maintainers = with lib.maintainers; [
-      timokau
       ma27
     ];
   };

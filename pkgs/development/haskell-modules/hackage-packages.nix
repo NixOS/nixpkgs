@@ -496548,6 +496548,7 @@ self: {
       ];
       description = "An opinionated formatter for Nix";
       license = lib.licenses.mpl20;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "nixfmt";
     }
   ) { };

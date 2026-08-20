@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2605.16-noble";
+  version = "1.2607.4-noble";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-lPwOwxtsI40jeiLNKvWEz858QMOwGfxvhi7nFiidgLE=";
+    hash = "sha256-bBhWI8U+QCynHaXJBtEGsZH7leW2AdavRJE7r5EcG9M=";
   };
 
   nativeBuildInputs = [ dpkg ];

@@ -194,7 +194,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
@@ -534,7 +534,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;

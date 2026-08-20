@@ -79,7 +79,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.23";
+  version = "0.7.24";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,12 +87,12 @@ buildPythonPackage (finalAttrs: {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFK4iTmrXOgW/wRMs5kTQP+GcMK8W17nmMFbaXAydSU=";
+    hash = "sha256-HCqkeN9kmQTvzlPlweeE1nYPf2YjLep2RUUIFRXlGGw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-x/NOvQRqZhN7x1D/Mga/kMIAgK0bFn5Yuh3jfQPNj5Y=";
+    hash = "sha256-iKVKRI42G01yb2QQJn07hwPay2QGMyDhVeLUdwVIclQ=";
 
     # azure-sdk-for-rust omits svc/blobstorage from the services workspace
     postBuild = ''

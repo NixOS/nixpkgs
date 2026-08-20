@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -25,7 +26,6 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  tensorflow-probability,
   writableTmpDirAsHomeHook,
 
   nix-update-script,
@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.2.4";
+  version = "3.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-m+uAf5K7biExv8rmOsyCMAVoKSSRAgm0ugw54s2JvMs=";
+    hash = "sha256-Kq/kLjdDS/NHveeFmoy0PiHLLXviPpU2zf3lcXhx7Sk=";
   };
 
   # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
@@ -75,6 +75,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  # `tensorflow-probability` is deliberately omitted: it only unlocks a handful of jax tests but
+  # drags in `tensorflow-bin`/`tf2onnx`, which fail to evaluate on Python 3.14 and on Darwin.
+  # Most of them are guarded upstream by `TFP_INSTALLED`, the rest are listed in `disabledTests`.
   nativeCheckInputs = [
     jax
     jaxlib
@@ -82,7 +85,6 @@ buildPythonPackage (finalAttrs: {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
     writableTmpDirAsHomeHook
   ];
 
@@ -98,6 +100,22 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
     "test_Searchsorted"
+
+    # `det` of a singular matrix: jax returns -1.3e-116 where numpy returns 0.0
+    "test_jax_basic"
+
+    # NotImplementedError: No JAX implementation for Op {betaincinv,gammainccinv,gammaincinv}.
+    # These need `tensorflow-probability` but, unlike the other tfp tests, are not guarded
+    # upstream by `TFP_INSTALLED`.
+    "test_betaincinv"
+    "test_gammainccinv"
+    "test_gammaincinv"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
+    # references, so the count is one lower.
+    "test_sparse_creation_refcount"
+    "test_sparse_passthrough_refcount"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error

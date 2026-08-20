@@ -78,7 +78,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     # rejects -ftls-model; fall back to non-thread-local errno.
     (lib.mesonBool "thread-local-storage" false)
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     (lib.mesonBool "tests" true)
     (lib.mesonBool "native-tests" canExecute)
     (lib.mesonBool "native-math-tests" canExecute)

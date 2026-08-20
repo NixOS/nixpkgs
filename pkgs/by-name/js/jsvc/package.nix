@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsvc";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "mirror://apache/commons/daemon/source/commons-daemon-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-SPnE5jrw1zAy7vIzGrjp0+B4SwCLoufLef3XUcUgK6Y=";
+    hash = "sha256-FeqThrdgunTykm+8CmhTwQiKTA3VxG0NGGb5/wkaY2Q=";
   };
 
   buildInputs = [ commons-daemon ];

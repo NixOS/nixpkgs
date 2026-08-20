@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     psycopg2
     pyodbc
     pyperclip
+    pytz
     sqlparse
     sshtunnel
     textual
@@ -52,8 +53,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "sqlit" ];
 
-  disabledTests = [
+  disabledTestPaths = [
     "tests/ui/" # UI tests fail in the sandbox
+  ];
+
+  disabledTests = [
     "test_installer_cancel_terminates_process" # timeout error
     "test_detect_strategy_pip_user_fallback" # AssertionError: assert 'externally-managed' == 'pip-user'
   ];

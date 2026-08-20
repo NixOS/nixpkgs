@@ -436,6 +436,15 @@ in
           "@system-service"
           "~@privileged"
           "@chown setgroups setresuid"
+        ]
+        ++ lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+          # glibc's setresuid()/setgroups() invoke the kernel's 32-bit compat
+          # syscalls (setresuid32/setgroups32) on 32-bit architectures --
+          # distinct syscalls from the ones already allowlisted above, so
+          # without these 2, avahi-daemon is killed with SIGSYS as soon as it
+          # tries to drop privileges.
+          "setgroups32"
+          "setresuid32"
         ];
         UMask = "0077";
       };

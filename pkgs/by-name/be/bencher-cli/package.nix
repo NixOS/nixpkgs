@@ -66,6 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       The Nix derivation does not compile the proprietary features.
     '';
     homepage = "https://bencher.dev";
+    changelog = "https://github.com/bencherdev/bencher/releases/tag/v${finalAttrs.version}";
     license =
       if finalAttrs.buildNoDefaultFeatures then
         lib.licenses.OR [

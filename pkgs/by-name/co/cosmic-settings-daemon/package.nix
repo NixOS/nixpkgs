@@ -19,14 +19,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.5.0";
+  version = "1.6.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-e53lyq9tmZnrhS6CYL+KTlCMnunKoN2GEvCHhHAX2hI=";
+    hash = "sha256-l9CwNLIrYstWuiEUvw/UnXRq6dpLEIEKxr9AzNQzbac=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-Le0FRKuSJWx6zRwU2b1+hyJzZJ+bsT039vn/Nhkf+k0=";
+  cargoHash = "sha256-4rGgRc7EDdxGvFmAUY4kJ9aO/Pas9S2Q+b5ArZNydvs=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;

@@ -28,6 +28,9 @@ mkKdeDerivation {
 
   extraCmakeFlags = [
     "-DDATABASE_BACKEND=${lib.toUpper backend}"
+    # FIXME: depends on kcoreaddons typesystem info, we need
+    # a Shiboken wrapper to propagate this properly.
+    "-DBUILD_PYTHON_BINDINGS=OFF"
   ]
   ++ lib.optionals (backend == "mysql") [
     "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"

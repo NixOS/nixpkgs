@@ -108,7 +108,7 @@ buildPythonPackage (finalAttrs: {
         'default-version = "3.6.24+nogit"' \
         'default-version = "${finalAttrs.version}"'
   ''
-  + lib.optionalString finalAttrs.doCheck ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
     substituteInPlace src/prefect/__init__.py \
       --replace-fail \
         '__development_base_path__: pathlib.Path = __module_path__.parents[1]' \

@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyrsync";
-  version = "0.2.0";
+  version = "0.3.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "westpoint-io";
     repo = "lazyrsync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GKTHohpA9h+uqJS2dwgjMmGfl3KRbmE9Jt94YbprVKE=";
+    hash = "sha256-cM6FBNXSDOcPkAxf8gNtjaHl1mR7tH383zFIQlPj+GE=";
   };
 
-  cargoHash = "sha256-OE7TCcPRDqbtVXN/VDO4HckM6woV/0gzfNr8Di+m1Oo=";
+  cargoHash = "sha256-Qzy9N0km9kw+deg2tfFyffnTrLyuPWRS2yqmuX3CZrQ=";
 
   nativeCheckInputs = [ rsync ];
 

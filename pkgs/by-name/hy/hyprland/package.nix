@@ -14,6 +14,7 @@
   glslang,
   hyprcursor,
   hyprgraphics,
+  hyprland-protocols,
   hyprland-qtutils,
   hyprlang,
   hyprutils,
@@ -38,6 +39,7 @@
   readline,
   systemd,
   tomlplusplus,
+  udis86,
   uwsm,
   wayland,
   wayland-protocols,
@@ -90,9 +92,8 @@ customStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
-    fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jOcfiv+Zs2iz5oTIQcJXZ0+5MfqW0oLgGxD0cKdmXpE=";
+    hash = "sha256-IptZjFf/bE9lv8SQLef4Wmn3KOs3BwchYr6aFcCJ9NI=";
   };
 
   postPatch = ''
@@ -140,7 +141,6 @@ customStdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wayland-scanner
-    # for udis86
     python3
   ];
 
@@ -158,6 +158,7 @@ customStdenv.mkDerivation (finalAttrs: {
       glslang
       hyprcursor.dev
       hyprgraphics
+      hyprland-protocols
       hyprlang
       hyprutils
       lcms2
@@ -176,6 +177,7 @@ customStdenv.mkDerivation (finalAttrs: {
       re2
       readline
       tomlplusplus
+      udis86
       wayland
       wayland-protocols
     ]

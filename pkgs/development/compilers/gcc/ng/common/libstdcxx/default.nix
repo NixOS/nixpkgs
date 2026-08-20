@@ -11,6 +11,7 @@
   runCommand,
   gettext,
   libgcc,
+  libbacktrace,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstdcxx";
@@ -76,6 +77,24 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     })
     (getVersionFile "libstdcxx/force-regular-dirs.patch")
+
+    # From the posting to gcc-patches, which covers every component that links
+    # libbacktrace. Take only this component's non-generated files: the
+    # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
+    # slightly different from the one the patch was made against.
+    (fetchpatch {
+      name = "system-libbacktrace.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
+      includes = [
+        "config/libbacktrace.m4"
+        "libstdc++-v3/acinclude.m4"
+        "libstdc++-v3/src/Makefile.am"
+        "libstdc++-v3/src/c++23/Makefile.am"
+        "libstdc++-v3/src/c++23/stacktrace.cc"
+        "libstdc++-v3/src/experimental/Makefile.am"
+      ];
+      hash = "sha256-qcs5N+KgBs2FScqGUZRYbAKkI2oDnm+G/ZN9RCAgZpw=";
+    })
   ];
 
   postUnpack = ''
@@ -89,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  buildInputs = [ libbacktrace ];
 
   nativeBuildInputs = [
     autoreconfHook269
@@ -168,12 +189,15 @@ stdenv.mkDerivation (finalAttrs: {
     "cross_compiling=true"
     "--disable-multilib"
 
+    "--with-system-libbacktrace"
+
     # `gnu` is the glibc locale model: `config/locale/gnu/ctype_members.cc`
     # reads `__ctype_b`, which only glibc has. Forcing it everywhere breaks any
     # other libc -- on musl the build fails converting `const unsigned short *`
     # to `const ctype_base::mask *`. Configure picks the right model from the
     # host triple on its own, as it does for the monolithic build, which passes
     # no `--enable-clocale` at all.
+
     "--disable-libstdcxx-pch"
     "--disable-vtable-verify"
     "--enable-libstdcxx-visibility"

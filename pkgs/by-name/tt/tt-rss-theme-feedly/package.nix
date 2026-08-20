@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Feedly theme for Tiny Tiny RSS";
     license = lib.licenses.mit;
     homepage = "https://github.com/levito/tt-rss-feedly-theme";
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

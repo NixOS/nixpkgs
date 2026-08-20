@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptoparser";
-  version = "1.2.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptoparser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-thhpXfLH5yB3pMUKFrMUJ8+8IGchF813ApKUrN+UuZA=";
+    hash = "sha256-HlsjenwXFDOA1uK+sn1oDHWxbzxIDriWS6pcZycEsis=";
   };
 
   patches = [
@@ -61,6 +61,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "cryptoparser" ];
+
+  passthru.updateScript = ../cryptodatahub/update.sh;
 
   meta = {
     description = "Security protocol parser and generator";

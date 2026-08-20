@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-mockery";
-  version = "3.5.5";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-paoI7KkpLbpQyEwS/oW8Ck9KiJRTUxzFzihsnFyhrCw=";
+    hash = "sha256-lPyoWjLaRhE4SpVahJd8T3LsCyfdFMIsuxmWODRoLL0=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-YOhlytIMgMHwj2BM/6vOeheyQd4nUuDWpkwLdCqru8c=";
+  vendorHash = "sha256-izMi4MqbfKX1PmNMWyCwBOWqiPZfth/ZSzsuEcTN6Pg=";
 
   ldflags = [
     "-s"
@@ -38,11 +38,18 @@ buildGoModule (finalAttrs: {
     gotestsum
   ];
 
+  # the e2e remote template tests serve fixtures from an httptest server on
+  # loopback, which the darwin sandbox blocks by default
+  __darwinAllowLocalNetworking = true;
+
   prePatch = ''
     # remove test.ci's dependency on lint since we don't need it and
     # it tries to use remote golangci-lint
+    # remove test.ci's git-state check, which runs `git diff --exit-code`;
+    # the source has no .git directory, so the check cannot work here
     substituteInPlace Taskfile.yml \
       --replace-fail "deps: [lint]" "" \
+      --replace-fail "      - task: git-state" "" \
       --replace-fail "go run gotest.tools/gotestsum" "gotestsum"
 
     # patch scripts used in e2e testing

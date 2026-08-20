@@ -22,15 +22,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-mail";
-  version = "1.6.3";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    tag = "v${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-7Of7PSfY5lFbuxqBM5IyCnOa1CwbOijruSSrRylz3S8=";
   };
+
+  pythonRelaxDeps = [ "cryptography" ];
 
   build-system = [ poetry-core ];
 

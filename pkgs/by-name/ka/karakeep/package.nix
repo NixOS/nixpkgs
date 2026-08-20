@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-WL4M2rpbIDUTUUCuw2T5tG4VCMGZaLsWq+BCAQBa2Sc=";
+    hash = "sha256-/rEVeNxLgqeoxJTyzArZAGzAbJjfOjHuG+zpOnf40Mk=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-JhD1soZj8l6ZVtTOSZc1lMfWfi3R0PU/SsVHEvr50PI=";
+    hash = "sha256-0ExBj87CbzgTis9/Z0J2d82051SXlEOgwXO+jAWxCi4=";
   };
   buildPhase = ''
     runHook preBuild

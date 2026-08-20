@@ -7,19 +7,20 @@
   cmake,
   git,
   level-zero,
+  pkg-config,
   fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-npu-driver";
-  version = "1.28.0";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-npu-driver";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-aH7npJompKYlyq2RPXHn/lflQ1C/yYcTp2K+6kX/L0w=";
+    hash = "sha256-n23yb6ZEJ7bfLactFixBQTcRlSIsVMOJ1QESoHLIhPg=";
   };
 
   buildInputs = [
@@ -31,7 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
 
   outputs = [
     "out"
@@ -40,9 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    rm -rf third_party/level-zero
     rm third_party/cmake/level-zero.cmake
-    rm third_party/cmake/FindLevelZero.cmake
 
     substituteInPlace third_party/yaml-cpp/CMakeLists.txt --replace-fail \
       "cmake_minimum_required" \
@@ -50,7 +52,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace third_party/CMakeLists.txt --replace-fail \
       "include(cmake/level-zero.cmake)" \
-      ""
+      "include(cmake/FindLevelZero.cmake)"
+
     substituteInPlace third_party/level-zero-npu-extensions/ze_graph_ext.h --replace-fail \
     "#include \"ze_api.h\"" \
     "#include <level_zero/ze_api.h>"

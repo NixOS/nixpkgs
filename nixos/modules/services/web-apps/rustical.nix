@@ -145,7 +145,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = "${lib.getExe cfg.package} serve";
         EnvironmentFile = cfg.environmentFiles;
         Restart = "on-failure";
         StateDirectory = "rustical";

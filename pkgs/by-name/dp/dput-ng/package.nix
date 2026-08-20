@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "1.44";
+  version = "1.46";
 in
 python3.pkgs.buildPythonApplication {
   pname = "dput-ng";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
     owner = "debian";
     repo = "dput-ng";
     tag = "debian/${version}";
-    hash = "sha256-3MdxyTRnoK5SUJzY5DTzfOiurcbtxujhiNpMABNLxgY=";
+    hash = "sha256-7A9crJpdQKj8TlSfIQ41PxtR6hcIdGo2sIaQnXGiXvg=";
   };
 
   postPatch = ''

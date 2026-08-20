@@ -13,22 +13,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycep-parser";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gruebel";
     repo = "pycep";
     tag = finalAttrs.version;
-    hash = "sha256-pEFgpLfGcJhUWfs/nG1r7GfIS045cfNh7MVQokluXmM=";
+    hash = "sha256-Z7OJWnVXINo4vdAVCm60l3TaoegKqaavG9pOsc+0NX4=";
   };
 
   build-system = [ uv-build ];
 
-  # We can't use pythonRelaxDeps to relax the build-system
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build~=0.9.0" "uv_build"
+      --replace-fail "uv-build~=0.12.0" "uv-build"
   '';
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

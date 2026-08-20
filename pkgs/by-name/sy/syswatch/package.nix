@@ -7,31 +7,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syswatch";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "syswatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XB2m+gMzcRV2VgOpl4AdP/P/WdGXYMJdOsLg5ceRAYY=";
+    hash = "sha256-jGVgp4K51saPkbQDV798asCGqc/zhO5vJjbOuXtFWpE=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-NmFCDu6RKrDIBxGsH+HyO0cKfd/XSQIXXKqRa4SGI1E=";
+  cargoHash = "sha256-VfwNasoraA/OqsvhIWzAw/DLc+bwSU3Wgla3xuqh0AE=";
 
   nativeCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-V" ];
-
   meta = {
     description = "Single-host system diagnostics TUI tool";
-    homepage = "https://github.com/matthart1983/syswatch";
+    homepage = "https://www.netwatchlabs.com/labs/syswatch";
     changelog = "https://github.com/matthart1983/syswatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      tomasrivera
+    ];
     mainProgram = "syswatch";
   };
 })

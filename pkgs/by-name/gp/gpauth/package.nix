@@ -37,6 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail in sandbox because netdev tries to read SystemConfiguration
+    "--skip=cli::tests::host_id_arg_sets_profile_host_id_seed"
+    "--skip=cli::tests::client_version_arg_sets_profile_client_version"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

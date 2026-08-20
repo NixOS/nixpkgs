@@ -39,7 +39,7 @@ assert !(withQt5 && withQt6);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm";
-  version = "1.33.0";
+  version = "1.33.1";
 
   outputs = [
     "out"
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ubuntu";
     repo = "lightdm";
     tag = finalAttrs.version;
-    hash = "sha256-/OgG3jtqxCl3tAXHs+LaAkEAAun+bsUm5pZBffv1AWg=";
+    hash = "sha256-/p5/V2KNRkm1cP9/Ld3crfAxAdHYc2mFyNl1rV6QXr0=";
   };
 
   nativeBuildInputs = [
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     "localstatedir=\${TMPDIR}"
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace autogen.sh \
       --replace-fail "which" "${buildPackages.busybox}/bin/which"
 

@@ -8,7 +8,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-smi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6dh0f2Unlmmk5IOWlf7hKIrENRvubqfVTLmBIwPfI28=";
+    hash = "sha256-czlZ2C9GBgpNPsspUSe4lA4AU+8zNmTc5UHzqY/OUV8=";
   };
 
   build-system = with python3Packages; [

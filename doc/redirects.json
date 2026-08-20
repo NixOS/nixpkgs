@@ -143,6 +143,9 @@
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
+  "fetchfromtangled": [
+    "index.html#fetchfromtangled"
+  ],
   "first-package-go": [
     "index.html#first-package-go"
   ],
@@ -2798,9 +2801,6 @@
   "glycin-dont-wrap": [
     "index.html#glycin-dont-wrap"
   ],
-  "ghc": [
-    "index.html#ghc"
-  ],
   "gnome-platform": [
     "index.html#gnome-platform"
   ],
@@ -3648,7 +3648,8 @@
     "index.html#hareHook-cross-compilation"
   ],
   "haskell": [
-    "index.html#haskell"
+    "index.html#haskell",
+    "index.html#ghc"
   ],
   "haskell-available-packages": [
     "index.html#haskell-available-packages"
@@ -3777,15 +3778,9 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
-  ],
-  "javascript-finding-examples": [
-    "index.html#javascript-finding-examples"
-  ],
-  "javascript-finding-examples-github": [
-    "index.html#javascript-finding-examples-github"
-  ],
-  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
     "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [

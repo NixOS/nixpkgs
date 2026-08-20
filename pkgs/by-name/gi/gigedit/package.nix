@@ -10,17 +10,13 @@
   which,
   docbook_xml_dtd_45,
   docbook_xsl,
-  gtkmm2,
-  pangomm_2_42,
+  gtkmm3,
   libgig,
   libsndfile,
   libxslt,
   linuxsampler,
 }:
 
-let
-  gtkmm2_with_pango242 = gtkmm2.override { pangomm = pangomm_2_42; };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gigedit";
   version = "1.2.1";
@@ -44,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     docbook_xml_dtd_45
     docbook_xsl
-    gtkmm2_with_pango242
+    gtkmm3
     libgig
     libsndfile
     libxslt

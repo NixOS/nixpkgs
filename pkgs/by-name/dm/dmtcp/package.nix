@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dmtcp";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "dmtcp";
     repo = "dmtcp";
     tag = finalAttrs.version;
-    hash = "sha256-5laifZ/8oYJrNO5JOggCbPKmA9XiHEC79C/hk+0TdeQ=";
+    hash = "sha256-p+KvZM9/ZE4qRuRs7Ay3oJWl5eMdncig0li2ITVPsyA=";
   };
 
   dontDisableStatic = true;

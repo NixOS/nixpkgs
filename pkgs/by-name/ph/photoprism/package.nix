@@ -14,17 +14,18 @@
   callPackage,
   nixosTests,
   librsvg,
+  nix-update-script,
 }:
 
 let
-  version = "260601-a7d098548";
+  version = "260728-bbde8f452";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-6zE9bqHFF9ifcqbvA0yjSF69+BA/M2U6ABnPta4dpl4=";
+    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
@@ -34,8 +35,26 @@ let
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.app/tensorflow/${name}.zip";
+      extension = "zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
       stripRoot = false;
+    };
+
+  # NB: needs to be a derivation with a src attribute so the update script
+  # can ensure that these hashes remain up to date
+  wrapModelForUpdate =
+    src:
+    stdenv.mkDerivation {
+      inherit pname version src;
+
+      dontUnpack = true;
+      dontBuild = true;
+
+      installPhase = ''
+        mkdir $out
+      '';
+
+      passthru.updateScript = nix-update-script { };
     };
 
   facenet = fetchModel {
@@ -56,7 +75,7 @@ let
   assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname version src;
 
   nativeBuildInputs = [
     makeWrapper
@@ -96,8 +115,33 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-  passthru.tests.photoprism = nixosTests.photoprism;
+  passthru = {
+    inherit backend frontend;
+
+    facenet = wrapModelForUpdate facenet;
+    nasnet = wrapModelForUpdate nasnet;
+    nsfw = wrapModelForUpdate nsfw;
+
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      photoprism = nixosTests.photoprism;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "backend"
+        "--subpackage"
+        "frontend"
+        "--subpackage"
+        "facenet"
+        "--subpackage"
+        "nasnet"
+        "--subpackage"
+        "nsfw"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://photoprism.app";

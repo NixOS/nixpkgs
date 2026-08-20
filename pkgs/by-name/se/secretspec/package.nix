@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-4N567/oDMgV81zlusn7TFQcDyWATvpoq879ZL/pzbuU=";
+    hash = "sha256-hntOPTOrCfVWE4MaNmXfPQ4WAlOG1CFG5/ykSyviJ3A=";
   };
 
-  cargoHash = "sha256-oMoRoKXjaCOER2KvKnLmSh9nKeYErh54IlQPFLHW8sE=";
+  cargoHash = "sha256-KRC3b6AqSYxjSInULchYNQGm9hw97lDws0+stFZasmc=";
 
   postPatch = ''
     mkdir -p ../tests/fixtures

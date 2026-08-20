@@ -13,5 +13,6 @@ lib.makeScope newScope (
     buildOpenSCADPackage = self.callPackage ../build-support/build-openscad-package { };
     openscad = openscadOrig.override { openscadPackages = self; };
     bosl = self.callPackage ../development/openscad-packages/bosl { };
+    bosl2 = self.callPackage ../development/openscad-packages/bosl2 { };
   }
 )

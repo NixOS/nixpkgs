@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "dagmoller";
     repo = "whatsapp-electron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g7EYdPYN1KRS8JQtO0RMkoHyp/2A14YekI1MAzLFoFA=";
+    hash = "sha256-hz3pBudNFJprEZpT53UnsQtWRoiWXco+HnVZtunor2c=";
   };
 
   npmDeps = fetchNpmDeps {

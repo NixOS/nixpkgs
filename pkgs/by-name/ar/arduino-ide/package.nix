@@ -2,15 +2,16 @@
   appimageTools,
   fetchurl,
   lib,
+  python3,
 }:
 
 let
   pname = "arduino-ide";
-  version = "2.3.7";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-m4RYtjJMZ01M1qwKc70Gkey9QLQ4Gk59rwpunm4TY2g=";
+    hash = "sha256-echZChdEwiDXLL7Q6pHG4qf0WUKSaZsvszZOvXE81WY=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -24,7 +25,12 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/arduino-ide.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=arduino-ide %U'
   '';
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    (python3.withPackages (ps: [
+      ps.pyserial # for esptool
+    ]))
+  ];
 
   meta = {
     description = "Open-source electronics prototyping platform";

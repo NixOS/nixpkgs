@@ -101,7 +101,7 @@
   py-libnuma,
   # cuda-only
   cupy,
-  flashinfer,
+  flashinfer-python,
   nvidia-ml-py,
   # rocm-only
   bash,
@@ -595,7 +595,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cupy
-    flashinfer
+    flashinfer-python
     nvidia-ml-py
     tokenspeed-mla
   ]
@@ -703,10 +703,14 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       LunNova # esp. for ROCm
     ];
     badPlatforms = [
+      # error: could not find git for clone of arm_compute-populate
+      "aarch64-linux"
+
       # CMake Error at cmake/cpu_extension.cmake:188 (message):
       #   vLLM CPU backend requires AVX512, AVX2, Power9+ ISA, S390X ISA, ARMv8 or
       #   RISC-V support.
       "aarch64-darwin"
     ];
+    broken = cudaSupport;
   };
 })

@@ -6,7 +6,7 @@
   cubeb,
   curl,
   kdePackages,
-  ffmpeg,
+  ffmpeg_8,
   gtk3,
   libxrandr,
   libaio,
@@ -86,7 +86,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kdePackages.extra-cmake-modules
     curl
-    ffmpeg
+    ffmpeg_8
     gtk3
     libaio
     libbacktrace

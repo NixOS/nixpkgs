@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-IvWtoXuuIvpJfY4cyRUsPHgax2/aytYShSdxEStiPYI=";
+    sha256 = "sha256-WI0GLU/m3PVm1VjOTyPuKcopauiqdSullDyux9WUyKc=";
   };
 
   patches = [
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     # Prevent native cpu arch from leaking into binaries.
     (lib.cmakeBool "ENABLE_SIMD" false)
     (lib.cmakeBool "FIND_SIMD" false)
+    # Some build info is included as of 1.8.1. Most of these are not a problem
+    # or handled by the build sandbox but the hostname should be stripped.
+    (lib.cmakeBool "ENABLE_TIMESTAMPS" false)
   ];
 
   doCheck = true;

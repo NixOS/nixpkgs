@@ -36,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/raspberrypi/pico-sdk";
     changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      nulleric
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "pioasm";
   };

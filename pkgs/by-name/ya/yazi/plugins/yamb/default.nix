@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "yamb.yazi";
-  version = "0-unstable-2026-08-11";
+  version = "0-unstable-2026-08-08";
 
   src = fetchFromGitHub {
     owner = "h-hg";

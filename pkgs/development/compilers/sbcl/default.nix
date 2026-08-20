@@ -28,8 +28,6 @@ let
   versionMap = {
     # Necessary for Nyxt
     "2.4.6".sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
-    # Necessary for stumpwm
-    "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
     "2.6.6".sha256 = "sha256-plp6MIEqr1SSXRGSubnoEPUnx5kRxgALdUgQWu99o0s=";

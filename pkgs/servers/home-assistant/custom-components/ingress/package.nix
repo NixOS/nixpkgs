@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "lovelylain";
   domain = "ingress";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass_ingress";
     tag = version;
-    hash = "sha256-TvKmWDYiO4HlRWdsoya2fJalbIQnMzDodQWB9o6yGAo=";
+    hash = "sha256-YLrt1EGU8749cuqZP/Eu+A30M35fpFQcjgosAd36a8c=";
   };
 
   meta = {

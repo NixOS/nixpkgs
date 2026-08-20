@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
-  strictDeps = false; # why is it so hard?
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 

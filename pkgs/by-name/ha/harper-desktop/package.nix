@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "harper-desktop";
-  version = "2.7.0";
+  version = "2.8.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/Automattic/harper/releases/download/v${finalAttrs.version}/Harper_${finalAttrs.version}_universal.dmg";
-    hash = "sha256-/hVrBnfCun4nmx1k8eJZHdP5pZBJ52GpKkjt9gJ8FC0=";
+    hash = "sha256-qF9FGsSGzf9lD1jXutFgKTGmgKdgSDXKraFKPA3tvJY=";
   };
 
   sourceRoot = ".";

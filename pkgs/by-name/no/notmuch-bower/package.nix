@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notmuch-bower";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "wangp";
     repo = "bower";
     rev = finalAttrs.version;
-    sha256 = "sha256-THIMCIk6ugPpogfQ5DTHIgFD7no5IIVYfz2mqBvKBlY=";
+    sha256 = "sha256-SOGWYvTvfzmuvLlBIR3TE0U6AG495eCeWWyYTUe8IrQ=";
   };
 
   nativeBuildInputs = [

@@ -3,6 +3,8 @@
   fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
+  withRuntimeRules ? true,
+  withRequestAi ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
@@ -25,14 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "-p pay-respects"
-    "-p pay-respects-module-runtime-rules"
-    "-p pay-respects-module-request-ai"
-  ];
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
   cargoTestFlags = [
     "-p pay-respects"
-    "-p pay-respects-module-runtime-rules"
-    "-p pay-respects-module-request-ai"
-  ];
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

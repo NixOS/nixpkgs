@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  gtkmm2,
+  libx11,
   lv2,
   pkg-config,
   python3,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    gtkmm2
+    libx11
     lv2
     pugl
   ];

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-nymta";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "py-nymta";
     tag = finalAttrs.version;
-    hash = "sha256-JVcdpS7qcrULOLnlV2ZJr7NQPJGGUKfrQCFcb64X2ak=";
+    hash = "sha256-K7GJ8UsUjgdlzQ0AWhVN3dIJMWpRy82L2kp0m03A+tE=";
   };
 
   build-system = [ setuptools ];

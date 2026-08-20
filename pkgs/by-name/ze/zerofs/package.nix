@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8pODKvQWTbqBIG6vwoSbQ+CuliGspFQJZWM9lA8c2wQ=";
+    hash = "sha256-2QVMpd838AX2yvmPRwuAkCiLueUKdZrXACV7OWfvwLo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-eyVbpbo2XYp6jrocHD9VujqyBhnwy5w4r8EI6XOTRI0=";
+  cargoHash = "sha256-FlFC/jLtTYysBOoMOebapTaZ+6+wZJwPu1PLe5hjLXk=";
 
   nativeBuildInputs = [ cmake ];
 

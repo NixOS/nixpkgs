@@ -7,13 +7,13 @@
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "prometheus-speedtest-exporter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "podocarp";
     repo = "speedtest_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n9eunZRssS13mTOeFeZ/PpfSj430DKf3ZRS10hY4Ps8=";
+    hash = "sha256-xXTyxwECGlYv9bBco09zvlOpF4GcHeT3yZMNUQTPPoo=";
   };
 
   vendorHash = "sha256-HBg44D0CUc4HYCBwGrswnrqG5o5ltA6UT8L0oWetlIc=";

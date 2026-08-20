@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.4.4";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-rYDC+tujrkqS9RelVgCEOZbkwEv3wtE4CIuTn+TD0p4=";
+    hash = "sha256-YisYa2YAVhg9fganL7w1fnanXvtQJh6iccDDOxHG5WQ=";
   };
 
   build-system = [
@@ -68,6 +68,9 @@ buildPythonPackage (finalAttrs: {
     "test_run_check__dns_working"
     "test_check_status__nonexistent_hostname"
     "test_check_status__no_answer"
+    # not reproducible
+    "test_run_check__disk_accessible"
+    "test_run_check__custom_path"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # sensors_temperatures is not available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.sensors_temperatures

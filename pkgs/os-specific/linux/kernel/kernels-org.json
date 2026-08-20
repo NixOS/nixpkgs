@@ -5,38 +5,43 @@
         "lts": false
     },
     "6.1": {
-        "version": "6.1.182",
-        "hash": "sha256:118z7jqabpja5xzlqj73alvsg4sjs6fg5iv8x0da4940dsxid17k",
+        "version": "6.1.183",
+        "hash": "sha256:1qn0zw987amv77h7pj9rkc852haw783fxvqscp71bi1q97z0fb9n",
         "lts": true
     },
     "5.15": {
-        "version": "5.15.215",
-        "hash": "sha256:19xp4gyp9h341dmvg36i3jm4zgk4lgwrrrdjkzbacgw1l2fjfzym",
+        "version": "5.15.216",
+        "hash": "sha256:1v854sl38sxsl9zwm9sy6l3hgq24356angizxi7g98xf0lhgpbq9",
         "lts": true
     },
     "5.10": {
-        "version": "5.10.264",
-        "hash": "sha256:17j8bdqsq6n0zl5a59chiapxpn7yapqvihqq37414dbq6bn54xgj",
+        "version": "5.10.265",
+        "hash": "sha256:0i96z6iq218bcqyy4hllz9jnaj0j012ix82lf5gkvnj9kqbbj36i",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.151",
-        "hash": "sha256:1xv9k5r0rm3gda5hzw7i6rjrpwnhlryzk9j1xfy70as1ffpfa0fy",
+        "version": "6.6.152",
+        "hash": "sha256:1mkhvln2x9npklg1b9b2gkavxcjmj9826sq0fh5rv16scf60b2vp",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.103",
-        "hash": "sha256:0xiizhw3kk2ggx9yymzmpj0q9ckday1492vqdrhsayw7x2nslhzi",
+        "version": "6.12.104",
+        "hash": "sha256:16drg5rvgbg4s24byj3wkq4ib5l6azmlxd5aqpq0rgb329m1d7cl",
         "lts": true
     },
     "6.18": {
-        "version": "6.18.44",
-        "hash": "sha256:0hqd4izrmabjcp22z7h8zrxxp1r2azz78la0j0nfha38y0wdjwhg",
+        "version": "6.18.45",
+        "hash": "sha256:0cxbvrb43mqxjmxyz2i7n5xghrk4gx7n24js2an199lwaxb4myih",
         "lts": true
     },
     "7.1": {
-        "version": "7.1.8",
-        "hash": "sha256:0j9c88akklsdhivrlx7i0ccgzxcwcgp1zc6dzi65p79796sdq0gz",
+        "version": "7.1.9",
+        "hash": "sha256:1c3jq2y2isas3hi8dla4qs0wl6z6p9shjaqgk1987cwp72pa8w9j",
+        "lts": false
+    },
+    "7.2": {
+        "version": "7.2",
+        "hash": "sha256:1cq2jj1g06gav6xvbxfb1l5jlp43b52ffjvg08ckix8d9k8z7zpr",
         "lts": false
     }
 }

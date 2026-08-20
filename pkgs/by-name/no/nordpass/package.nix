@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  squashfsTools,
+  squashfs-tools,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -112,7 +112,7 @@ let
       hash = "sha256-t78kbKVI9WAhL1+1qZ4tJWXUoXhXUCuUYobbbm09peA=";
     };
 
-    nativeBuildInputs = [ squashfsTools ];
+    nativeBuildInputs = [ squashfs-tools ];
 
     dontStrip = true;
     dontPatchELF = true;

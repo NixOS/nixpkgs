@@ -11,10 +11,7 @@
 
   # tests
   pytestCheckHook,
-  beets-audible,
   mediafile,
-  reflink,
-  toml,
   typeguard,
   writableTmpDirAsHomeHook,
 }:
@@ -45,10 +42,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    beets-audible
-    mediafile
-    reflink
-    toml
     typeguard
     writableTmpDirAsHomeHook
   ];

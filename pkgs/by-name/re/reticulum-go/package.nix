@@ -3,11 +3,12 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "reticulum-go";
-  version = "0.9.6";
+  version = "1.0.2";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -15,14 +16,8 @@ buildGoModule (finalAttrs: {
     owner = "Quad4-Software";
     repo = "Reticulum-Go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rji6MJQAN48zKsLHQS8ukbi9pWjHPEbezXJu/700HZs=";
+    hash = "sha256-O5imnARJhpHOr3MtfvpwO2lcUqzE0egBJXmZpNOg260=";
   };
-
-  # TODO: Remove this when https://github.com/NixOS/nixpkgs/pull/527289 has landed in `master`
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "1.26.4" "1.26.3"
-  '';
 
   vendorHash = null;
 
@@ -31,10 +26,14 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X main.defaultVersion=${finalAttrs.version}"
   ];
 
   # Required for some tests on darwin.
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

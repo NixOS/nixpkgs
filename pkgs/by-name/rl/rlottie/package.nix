@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "rlottie";
-  version = "0.2-unstable-2026-07-03";
+  version = "0.2-unstable-2026-08-11";
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "rlottie";
-    rev = "f487eff2f8086b84ae1c7faa0418abec909e874b";
-    hash = "sha256-/Sv5qX1V6VltJN0+bkKU2utaj8Yw1owb0KjJFWv41Js=";
+    rev = "27f2f23ece8a98f3e0a870e2c125faaac37e8904";
+    hash = "sha256-wEcdPKmS0f6C0A/Rg7vsZGoRi2Uv1EmA31BR2EmIlGg=";
   };
 
   nativeBuildInputs = [

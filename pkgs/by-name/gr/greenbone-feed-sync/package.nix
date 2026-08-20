@@ -7,17 +7,17 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "greenbone-feed-sync";
-  version = "25.2.0";
+  version = "25.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "greenbone-feed-sync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpbbAODk/uLg1nbSPj9Ico5/8klM5Fm5tyXeRQao7N8=";
+    hash = "sha256-Nh5Nw2Rq+Zw4IiBOwcLzayO2J/dFSOJpjHPYcJ/L3Fs=";
   };
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     rich

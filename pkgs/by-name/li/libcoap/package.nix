@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcoap";
-  version = "4.3.5a";
+  version = "4.3.5b";
   src = fetchFromGitHub {
     repo = "libcoap";
     owner = "obgm";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mLVGIG2JkWMlnZOlLxFTZVGM0nF6q2PKJoEo0s4Vq54=";
+    hash = "sha256-QPRyySqUu3ZYcuhoJ7g49di66ZhVqYJacDP3wJgDEtY=";
   };
   nativeBuildInputs = [
     automake

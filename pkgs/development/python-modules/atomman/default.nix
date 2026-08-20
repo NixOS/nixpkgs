@@ -1,41 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
   cython,
-  numpy,
-  setuptools,
-
-  # dependencies
   datamodeldict,
+  fetchFromGitHub,
   matplotlib,
   numericalunits,
+  numpy,
   pandas,
+  phonopy,
   potentials,
+  pytestCheckHook,
   requests,
   scipy,
+  setuptools,
   toolz,
+  writableTmpDirAsHomeHook,
   xmltodict,
-
-  # tests
-  phonopy,
-  pytestCheckHook,
-
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "atomman";
-  version = "1.5.2";
+  version = "1.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UmvMYVM1YmLvSaVLzWHdxYpRU+Z3z65cy7mfmDZfDG0=";
+    hash = "sha256-9QDc4V1q179WupJEWYHyP8qs1afoB9OojjkGL1QlS5M=";
   };
+
+  postPatch = ''
+    # Upstream limits setuptools to top-level atomman only
+    substituteInPlace pyproject.toml \
+      --replace-fail "packages = ['atomman']" "packages = {find = {include = [\"atomman*\"]}}"
+  '';
 
   build-system = [
     cython
@@ -69,6 +69,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     phonopy
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -79,9 +80,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "atomman" ];
 
   meta = {
-    changelog = "https://github.com/usnistgov/atomman/blob/${finalAttrs.src.tag}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
+    changelog = "https://github.com/usnistgov/atomman/blob/${finalAttrs.src.tag}/UPDATES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arity";
-  version = "0.13.0";
+  version = "0.18.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jolars";
     repo = "arity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PveNcJisds0obKzUDzZ409kinWvhFO8qpvwCzhfdla8=";
+    hash = "sha256-ZB/1SgJFom4U5KztBAfMztXsG0/T5tETQZxsRt6N8jY=";
   };
 
-  cargoHash = "sha256-7Mvw9reJFmBPs8Ksn/mbSbeizdT8GhwvXT06NMlCXxc=";
+  cargoHash = "sha256-uwQlfK6YXqXNRyZaYTnoEzXn21l01k1Fuw903Gn/7AU=";
 
   nativeBuildInputs = [
     installShellFiles

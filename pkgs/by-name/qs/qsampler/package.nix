@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qsampler";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsampler/qsampler-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cvdnVE3FmsgLy5s6N2nX+2fM4Nyri+rUaxQQeWGluxo=";
+    hash = "sha256-z+rSHQD/HpEdpGpYqNoMXRUPnmmav5qORcLel43Ahk8=";
   };
 
   nativeBuildInputs = [

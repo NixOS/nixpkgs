@@ -12,18 +12,18 @@
 }:
 let
   pname = "beeper";
-  version = "4.3.0";
+  version = "4.3.34";
 
   inherit (stdenv.hostPlatform) system;
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-      hash = "sha256-/DJmQMQGzZFnONjQZ9fr9NDtGv9Kg8jF8aBzAOUyCUg=";
+      hash = "sha256-Y05Ce4CVjjg+T8qlFaMBFiiKREr7Yz0OTEqcVdH/TUI=";
     };
     aarch64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
-      hash = "sha256-zZIbcE78XcXremyWjs3jsiBRTwP24y45CfZHJym8MhQ=";
+      hash = "sha256-qE3Jl/KSj6dAbwLMH0UOLHNZTTHNa78mxPf5dqY90KU=";
     };
   };
 
@@ -50,14 +50,16 @@ let
       linuxConfigFilename=$appRoot/build/main/linux-*.mjs
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
-      # disable auto update
-      sed -i 's/c=d??{},p=c.hw_acceleration??!0/c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0/g' $appRoot/build/main/index-*.mjs
+      # Disable scheduled update checks.
+      autoUpdateConfigFilename=$(
+        grep -lF 'c=d??{},p=c.hw_acceleration??!0' $appRoot/build/main/index-*.mjs
+      )
+      substituteInPlace "$autoUpdateConfigFilename" \
+        --replace-fail 'c=d??{},p=c.hw_acceleration??!0' 'c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0'
 
-      # prevent updates
-      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $appRoot/build/main/main-entry-*.mjs
-
-      # hide version status element on about page otherwise an error message is shown
-      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $appRoot/build-browser/*.css
+      # Disable user-triggered update checks, which ignore auto_update_disabled.
+      substituteInPlace $appRoot/build/main/main-entry-*.mjs \
+        --replace-fail 'async checkForUpdates(r=!1){' 'async checkForUpdates(r=!1){return;'
     '';
   };
 in
@@ -75,7 +77,7 @@ appimageTools.wrapAppImage {
 
     . ${makeWrapper}/nix-support/setup-hook
     wrapProgram $out/bin/beeper \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set APPIMAGE beeper \
       --run 'exec >/dev/null' # as recommended in #486164
   '';

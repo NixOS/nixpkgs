@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_DOCUMENTATION" false)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_OMEMO" withOmemo)
     (lib.cmakeBool "WITH_ENCRYPTION" withEncryption)
     (lib.cmakeBool "WITH_GSTREAMER" withGstreamer)

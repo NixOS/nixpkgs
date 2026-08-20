@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "zigfetch";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "utox39";
     repo = "zigfetch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FDIZnmMzhHH1MmvwyuHnV6KiNSH1E5ZEg5G6C5BBJWE=";
+    hash = "sha256-xqB/S9fDUxx5K1iLbBCjYMsxYq+s/lYHv66QNHCDT8Y=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -41,7 +41,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai-cli";
-  version = "1.15.14";
+  version = "1.15.15";
   pyproject = true;
   __structuredAttrs = true;
 

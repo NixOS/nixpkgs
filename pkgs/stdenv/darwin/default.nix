@@ -10,7 +10,6 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
@@ -21,8 +20,6 @@
       throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
-
-assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system;

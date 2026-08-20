@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libudev-garden";
-  version = "0.2.1";
+  version = "0.2.2";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gardenhouse";
     repo = "libudev-garden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+95+3Hb6lkIhpNZF0pQdM9y5GxZCplp/o2nemZJb5Wc=";
+    hash = "sha256-hPNWoVggf1GV/2g2NRyCx36nB9bOkOBNNGl17BF40hY=";
   };
 
   strictDeps = true;

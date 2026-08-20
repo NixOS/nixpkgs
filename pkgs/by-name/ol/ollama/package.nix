@@ -111,12 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b10242";
+  llamaCppVersion = "b10380";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = llamaCppVersion;
-    hash = "sha256-mBqO6h9eiSAXqiHy1H3aK2ACbz1aYagmjAN7IpXNTcw=";
+    hash = "sha256-HT0QuIFJz5cgH2qinxhtyLEL/RrUpziZuntj/EDQtzI=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.32.7";
+  version = "0.32.13";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dCUDeAdzJETCMumbSMSkmc6n3uQR36jvjBnn+gaVr/U=";
+    hash = "sha256-KSvw7LsvpUVeSm9BKJ4wIp/fWGHjMp8bOTMUpFJCDmw=";
   };
 
   vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
@@ -225,6 +225,10 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
+    if [[ ${llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+      exit 1
+    fi
     cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
@@ -377,6 +381,7 @@ goBuild (finalAttrs: {
       service-rocm = nixosTests.ollama-rocm;
       service-vulkan = nixosTests.ollama-vulkan;
     };
+    updateScript = ./update.sh;
   }
   // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 

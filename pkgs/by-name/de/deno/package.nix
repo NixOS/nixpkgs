@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   outputs = [
     "out"
     "denort"
+    "libdenort"
   ];
 
   src = fetchFromGitHub {
@@ -240,14 +241,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preInstall = ''
     # Delete generated shared libraries that aren't needed in the final package
     find ./target \
-      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      \( -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
       -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
-      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \) \
       -delete
   '';
 
   postInstall = ''
     moveToOutput "bin/denort" "$denort"
+    moveToOutput "lib/libdenort${stdenv.hostPlatform.extensions.sharedLibrary}" "$libdenort"
 
     # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete

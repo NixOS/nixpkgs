@@ -17,25 +17,27 @@
   glib,
   gtk4,
   libadwaita,
+  libcdio,
   openssl,
   pango,
+  wimlib,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EyVbK+E9X9q+O/2RItJDXjQNsLZ3cn2YmK9Ct98w8IQ=";
+    hash = "sha256-kUes+hNtoi6jvZFDon2pFUPsLq7wOJ2SDrPBGzg3AIo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Mvpy5aDeu4qycSj+fp4DfRNLv6T2Ksqgjt5GFTkjS6U=";
+    hash = "sha256-PL+PJ5Diy9WvAuBJQQNp8bvjPK3Uvd0Um/B6lZHypXw=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    libcdio
     openssl
     pango
+    wimlib
   ];
 
   passthru = {

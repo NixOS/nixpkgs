@@ -9,30 +9,33 @@
 
   # dependencies
   joblib,
-  lxml,
   nibabel,
   numpy,
   pandas,
   requests,
   scikit-learn,
+  jinja2,
   scipy,
   packaging,
 
   pytestCheckHook,
   pytest-timeout,
+  pytest-rerunfailures,
   numpydoc,
+  polars,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nilearn";
-  version = "0.13.1";
+  version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
     tag = finalAttrs.version;
-    hash = "sha256-AStjr+rQoUU4WjKbn+OgT+T+xQ3cTjkKxgF6jX3SX64=";
+    hash = "sha256-WG+ijSNur7XWF3D+MwQU/VUcMalKEEMkFtH0Meca+Mk=";
   };
 
   postPatch = ''
@@ -47,12 +50,12 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     joblib
-    lxml
     nibabel
     numpy
     pandas
     requests
     scikit-learn
+    jinja2
     scipy
     packaging
   ];
@@ -60,7 +63,9 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
+    pytest-rerunfailures
     numpydoc
+    polars
   ];
 
   # do subset of tests which don't fetch resources

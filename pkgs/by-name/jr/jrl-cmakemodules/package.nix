@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "JRL_CMAKEMODULES_GENERATE_API_DOC" true)
-    (lib.cmakeBool "JRL_CMAKEMODULES_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "JRL_CMAKEMODULES_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;

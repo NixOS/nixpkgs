@@ -9,15 +9,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-dns";
-  version = "0.36.1";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dns";
-    inherit version;
-    hash = "sha256-Uf4riBDfgTadviwIe6KUSypgIZBeMQSOTe6cmP8fEkk=";
+    inherit (finalAttrs) version;
+    hash = "sha256-MJXO0NRtEGrEa1gvaPtzyVCHZvghttE0g54lwBspIaw=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # don#t shadow python imports
+    # don't shadow Python imports
     rm -r google
   '';
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud DNS API client library";
     homepage = "https://cloud.google.com/dns";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dns-v${version}/packages/google-cloud-dns/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dns-v${finalAttrs.version}/packages/google-cloud-dns/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

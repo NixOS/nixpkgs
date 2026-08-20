@@ -39,10 +39,10 @@ buildDotnetModule (finalAttrs: {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzPGtNdKszDT8VMgL13xUUp+IhP8UzpXVHkR0T2Ns1A=";
+    hash = "sha256-QbenIEfOvISgXXlsalZa51y0m8ZG5uc/MpLnddpxXLo=";
     leaveDotGit = true;
     postFetch = ''
-      git -C $out rev-parse --short HEAD > $out/.git-revision
+      git -C $out rev-parse HEAD > $out/.git-revision
       rm -rf $out/.git
     '';
   };
@@ -65,8 +65,8 @@ buildDotnetModule (finalAttrs: {
     mkdir -p $TMPDIR/bin
     cat > $TMPDIR/bin/git <<EOF
     #!${runtimeShell}
-    if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
-      echo $(cat $TMPDIR/src/.git-revision)
+    if [ \$# -eq 2 ] && [ "\$1" = "rev-parse" ] && [ "\$2" = "HEAD" ]; then
+      cat $TMPDIR/src/.git-revision
       exit 0
     fi
     exec ${buildPackages.git}/bin/git "\$@"
@@ -109,6 +109,9 @@ buildDotnetModule (finalAttrs: {
   };
 
   postConfigure = ''
+    # Avoid deriving assembly metadata from the nondeterministic temporary Git commit.
+    export SourceRevisionId="$(cat .git-revision)"
+
     # Generate src/Runner.Sdk/BuildConstants.cs
     dotnet msbuild \
       -t:GenerateConstant \
@@ -343,7 +346,7 @@ buildDotnetModule (finalAttrs: {
     fi
 
     commit=$($out/bin/Runner.Listener --commit)
-    if [[ "$commit" != "$(git rev-parse HEAD)" ]]; then
+    if [[ "$commit" != "$(cat .git-revision)" ]]; then
       printf 'Unexpected commit %s' "$commit"
       exit 1
     fi

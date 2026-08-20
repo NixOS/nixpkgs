@@ -9,7 +9,7 @@
   libgbm,
   lz4,
   zstd,
-  ffmpeg,
+  ffmpeg_8,
   cargo,
   rustc,
   vulkan-headers,
@@ -59,14 +59,15 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     libgbm
     lz4
     zstd
-    ffmpeg
+    # FFmpeg 9 dropped AVVulkanDeviceContext fixed-queue fields that waypipe 0.11.0 still uses.
+    ffmpeg_8
     vulkan-headers
     vulkan-loader
   ];
 
   runtimeDependencies = [
     libgbm
-    ffmpeg.lib
+    ffmpeg_8.lib
     vulkan-loader
   ];
 

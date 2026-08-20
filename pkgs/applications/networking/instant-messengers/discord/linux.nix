@@ -225,19 +225,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/opt/${binaryName}/modules/discord_krisp/KMS/logs
 
+    # Chromium 148 multiplies Plasma's GTK DPI scale by the native Wayland surface
+    # scale, which makes the UI too large. See #551645
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
+        --run 'case ":''${XDG_CURRENT_DESKTOP:-}:" in *:KDE:*) discordKdeWayland=1 ;; *) unset discordKdeWayland ;; esac' \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${WAYLAND_DISPLAY:+\''${discordKdeWayland:+--force-device-scale-factor=1}}" \
         ${lib.strings.optionalString withTTS ''
           --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
           --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
         ''} \
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        ${
-          lib.strings.optionalString (!useFHSEnv)
-            "--prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib"
-        } \
+        --prefix LD_LIBRARY_PATH : $out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib \
+        ${lib.strings.optionalString (!useFHSEnv) "--prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}"} \
         --suffix VK_ADD_DRIVER_FILES : "${addDriverRunpath.driverLink}/share/vulkan/icd.d" \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
         --run "${finalAttrs.stageModules} $out/opt/${binaryName}/modules" \

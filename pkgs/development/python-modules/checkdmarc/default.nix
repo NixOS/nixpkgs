@@ -19,18 +19,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.17.4";
+  version = "5.17.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-jAnxD3stiKhlnU15GVWf3VAJsvlSaQx3uBVeqJ7yN00=";
+    hash = "sha256-jwsAemOqJzMpQXliesr+wntAXjVoo/1rFr+1SSqqeRY=";
   };
 
   pythonRelaxDeps = [
     "cryptography"
+    "pyopenssl"
     "xmltodict"
   ];
 

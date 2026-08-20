@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bign-handheld-thumbnailer";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "MateusRodCosta";
     repo = "bign-handheld-thumbnailer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+iWf5ybCUHlZz3Ybw3bwLKzlsmiVwep2alVDvL9bG2A=";
+    hash = "sha256-RlqwAd1L5r3IQEQe1jY4oFKy615w5N1nB74V6DFTbxw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-vfTbfg1CAbc//UZtI5trw6znqnNGy6AiCSQNE68vch8=";
+    hash = "sha256-VPsmZeZfWOTt2O2E0h7UA4rVRCt4nCD8+7N0G2UrxgI=";
   };
 
   strictDeps = true;

@@ -42,9 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "BUILDFONT=1" ];
 
+  # The `sample` variants are not intended for general use.
+  #
+  # From the 2013 changelog:
+  #
+  # > These "Unifont Sample" fonts contain combining circles, and four-digit
+  # > hexadecimal glyphs for unassigned code points and Private Use Area glyphs.
+  # > Because of the inclusion of combining cirlces, "Unifont Sample" font
+  # > versions are only intended for illustrating individual glyphs, not for
+  # > general-purpose writing.
   postInstall = ''
     moveToOutput bin "$bin"
     moveToOutput share/unifont "$doc"
+
+    # Move `sample` into its own output.
+    mkdir -vp "$sample/share/fonts/X11/misc/"
+    mkdir -vp "$sample/share/fonts/opentype/unifont/"
+    mv -vt "$sample/share/fonts/X11/misc/" \
+      "$out"/share/fonts/X11/misc/*_sample.*
+    mv -vt "$sample/share/fonts/opentype/unifont/" \
+      "$out"/share/fonts/opentype/unifont/*_sample.*
   '';
 
   outputs = [
@@ -53,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "man"
     "info"
+    "sample"
   ];
+
+  # Don't bloat the font output with tools
+  propagatedBuildOutputs = [ ];
 
   passthru.updateScript = ./update.sh;
 

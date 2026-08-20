@@ -15,20 +15,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";
-  version = "7.2.1";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "conventional-changelog";
     tag = "conventional-changelog-v${finalAttrs.version}";
-    hash = "sha256-1unB4/naGc/V1Fjc7Arn4DjnGvyCdicNFOofdgpvRUI=";
+    hash = "sha256-GNXM81WISXHklMb/NkyW5s42CEUGhhMI64zVhyoGs9o=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-khAAFQeWUkALdkEdjW3tvCi5KiF9lN202yhLcj8ey1o=";
+    hash = "sha256-slrfozj1aDT2hQvxD6Uk0h8V3kgB8kJ9SztZKjK1gc8=";
   };
 
   nativeBuildInputs = [

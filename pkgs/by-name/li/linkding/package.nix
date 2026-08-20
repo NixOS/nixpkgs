@@ -14,7 +14,7 @@
   uwsgi,
 }:
 let
-  version = "1.45.0";
+  version = "1.46.2";
 
   python = python3.override {
     self = python;
@@ -77,7 +77,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "sissbruecker";
     repo = "linkding";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iGvUKmOPL0akfR52hzSGH6wu06/WP9ygiQ/HxsmrYWg=";
+    hash = "sha256-d/APoPxlrsvBqWGOSYLzLPfCgZd4PRPNh/zxcFnvCRA=";
   };
 
   __structuredAttrs = true;
@@ -121,7 +121,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     pname = "${finalAttrs.pname}-ui";
     src = finalAttrs.src;
 
-    npmDepsHash = "sha256-zUMgl+h0BPm9QzGi1WZG8f0tDoYk8p+Al3q6uEKXqLk=";
+    npmDepsHash = "sha256-XBrB2TaQe9I5bglsQ2BZLHAopx4DTkCjCCTD9vTfpgU=";
 
     installPhase = ''
       runHook preInstall

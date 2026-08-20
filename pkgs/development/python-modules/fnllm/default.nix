@@ -1,33 +1,23 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-
-  # build-system
-  hatchling,
-  uv-dynamic-versioning,
-
-  # dependencies
   aiolimiter,
-  httpx,
-  json-repair,
-  pydantic,
-  tenacity,
-
-  # optional-dependencies
-  # azure
   azure-identity,
   azure-storage-blob,
-  # openai
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  httpx,
+  json-repair,
   openai,
-  tiktoken,
-
-  # tests
   polyfactory,
+  pydantic,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonAtLeast,
+  tenacity,
+  tiktoken,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -90,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     "test_handles_common_errors"
     "test_children"
   ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
+  ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError: There is no current event loop in thread 'MainThread'
     "test_call_batch_raises_if_response_length_mismatch"
   ];
@@ -98,6 +88,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Function-based LLM protocol and wrapper";
     homepage = "https://github.com/microsoft/essex-toolkit/tree/main/python/fnllm";
+    changelog = "https://github.com/microsoft/essex-toolkit/blob/fnllm-v${finalAttrs.version}/python/fnllm/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resonarium";
-  version = "0.0.11";
+  version = "0.1.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "resonarium";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-/ezkq1er/OteoLrqXe60/QmC5BOqoRcoGvtr93wBioE=";
+    hash = "sha256-QR1EUCv7Mg52AEtfZikhnprUpPnTc/YPEssFnimfaPA=";
   };
 
   strictDeps = true;
@@ -69,15 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Upstream forgot to bump the in-source version for v0.0.11; sync it
-    # to the git tag so the About screen and plugin metadata agree.
-    substituteInPlace CMakeLists.txt \
-    --replace-fail "set(PLUGIN_VERSION 0.0.10)" \
-                    "set(PLUGIN_VERSION ${finalAttrs.version})"
-    substituteInPlace plugin/Source/PluginProcessor.cpp \
-    --replace-fail '"0.0.10 (INST) ALPHA"' '"${finalAttrs.version} (INST) ALPHA"' \
-    --replace-fail '"0.0.10 (FX) ALPHA"'   '"${finalAttrs.version} (FX) ALPHA"'
-
     # melatonin_perfetto's CMakeLists fetches CPM.cmake and the Perfetto SDK
     # from the network at configure time, which the Nix sandbox blocks. The
     # PERFETTO compile-time switch is OFF here, so melatonin_perfetto.h

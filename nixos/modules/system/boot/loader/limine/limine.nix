@@ -506,21 +506,18 @@ in
 
     # Fwupd binary needs to be signed in secure boot mode
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable && config.services.fwupd.enable) {
-      systemd.services.fwupd = {
-        environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
-      };
-
       systemd.services.fwupd-efi = {
         description = "Sign fwupd EFI app for secure boot";
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+        # /run/fwupd-efi is populated by the fwupd module.
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          RuntimeDirectory = "fwupd-efi";
         };
 
         script = ''

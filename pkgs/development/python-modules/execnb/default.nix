@@ -8,15 +8,17 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "execnb";
-  version = "0.1.18";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VM2WsdFICc7trCjfupL5wW0UFTzRW5RPfWs6jYpCSDM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-cj0By2OIwRKtDroUJGN8EFrS++2Vx4m6/3IWB4+uQdo=";
   };
+
+  pythonRelaxDeps = [ "fastcore" ];
 
   build-system = [ setuptools ];
 
@@ -34,9 +36,9 @@ buildPythonPackage rec {
   meta = {
     description = "Execute a jupyter notebook, fast, without needing jupyter";
     homepage = "https://github.com/fastai/execnb";
-    changelog = "https://github.com/fastai/execnb/releases/tag/${version}";
+    changelog = "https://github.com/fastai/execnb/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
     mainProgram = "exec_nb";
   };
-}
+})

@@ -10,6 +10,7 @@
   foundationdb,
   zstd,
   stdenv,
+  _experimental-update-script-combinators,
   nix-update-script,
   rocksdb,
   callPackage,
@@ -50,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.16";
+  version = "0.16.17";
 
   __structuredAttrs = true;
 
@@ -58,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-svf9J8oAMo427X6eiGdPiDMZ2/DdN7+FodGfhQL9hME=";
+    hash = "sha256-tQY5L8tTyVbhIX0VrWbaKfR+Q97coTVoMRRDSHv5Lms=";
   };
 
-  cargoHash = "sha256-QSEr2XPOh/iLARdjgCeClY2eN6UDF6E9Hoov4xprkag=";
+  cargoHash = "sha256-EUx/ELV85pdPKzv49SEQ1Q8e/4ism2x3ZrKPqL6uvoE=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual
@@ -279,7 +280,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
-    updateScript = nix-update-script { };
+    # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script { attrPath = "stalwart_0_16.webui"; })
+      (nix-update-script { attrPath = "stalwart_0_16.spam-filter"; })
+    ];
   };
 
   meta = {

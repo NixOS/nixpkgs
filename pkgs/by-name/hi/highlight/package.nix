@@ -15,7 +15,7 @@
 let
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
-    version = "4.20";
+    version = "4.21";
 
     strictDeps = true;
     __structuredAttrs = true;
@@ -24,7 +24,7 @@ let
       owner = "saalen";
       repo = "highlight";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-fMIyMR9RA60hdy1eniJkvLHK+WJPuVehWMyS9Lt6iQ4=";
+      hash = "sha256-lIfaiVM6M6RN4DeTGTdASNavFljyDRpts3a+N6I2gJY=";
     };
 
     enableParallelBuilding = true;
@@ -78,6 +78,7 @@ let
       description = "Source code highlighting tool";
       mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
+      changelog = "https://gitlab.com/saalen/highlight/-/blob/${finalAttrs.src.tag}/ChangeLog.adoc?ref_type=tags#user-content-highlight-${lib.versions.major finalAttrs.version}-${lib.versions.minor finalAttrs.version}";
       platforms = lib.platforms.unix;
       maintainers = [ ];
     };

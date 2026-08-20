@@ -13,11 +13,11 @@
 stdenv.mkDerivation rec {
 
   pname = "intercal";
-  version = "0.34";
+  version = "0.35";
 
   src = fetchurl {
     url = "http://catb.org/esr/intercal/intercal-${version}.tar.gz";
-    hash = "sha256-fvYUjDUd9mhGbi3L15UXci+RwzyqORWVcTfzgzcfjVU=";
+    hash = "sha256-tV6O3GjiUXoGepAnZuL1e5e1AlU/3LritaskY7pY8OE=";
   };
 
   postPatch = ''

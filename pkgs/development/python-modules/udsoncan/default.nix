@@ -23,6 +23,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  # test/test_connection.py binds a socket on 127.0.0.1
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];

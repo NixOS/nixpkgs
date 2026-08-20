@@ -16,7 +16,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberstrike";
-  version = "1.1.15";
+  version = "1.1.16";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "CyberStrikeus";
     repo = "CyberStrike";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U1yYTFZCjF3z+161CL4xyxYwcWJh5zCbGAOm/ctACSs=";
+    hash = "sha256-PKA+qWtyh0aCvefClWVXX9nYW5+hu/ZdNCcBzHQUQBE=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -75,7 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required so fixed-output derivation does not retain store references
     dontFixup = true;
 
-    outputHash = "sha256-O5p/2+14dFt/gbONLVSvqPdNmLgQ8L+cUTGp81Rm0js=";
+    outputHash = "sha256-SydjB3kzq/5m69tUZMMEAqTcK0JZJgwq3/ajL6Gjvbs=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

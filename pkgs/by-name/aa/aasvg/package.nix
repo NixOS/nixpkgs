@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "aasvg";
-  version = "0.5.3";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "martinthomson";
     repo = "aasvg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D3ompmRt9Mxmzr0TxFLBrSl/dNE986TZbOvfuyk9rJo=";
+    hash = "sha256-eM7wQfWroG5Kaqs6dLpwdNi8DC7K5x2NPnE7aOhtcvA=";
   };
 
   # the project has no dependencies
@@ -22,7 +22,7 @@ buildNpmPackage (finalAttrs: {
   forceEmptyCache = true;
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-FdVXR2Myit3GiA1/VXzHBRSihKAQlh+Zd1gzSMuYi6c=";
+  npmDepsHash = "sha256-S3ulEkkxc+kZqMX52f2wC4UBOnviuWsasRyHby9tTLs=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

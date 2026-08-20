@@ -1,60 +1,56 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchFromCodeberg,
   cmake,
   python3Packages,
-  libsForQt5,
   SDL2,
-  fmt,
-  toml11,
-  libunarr,
+  qt6,
+  zlib,
+  bzip2,
+  xz,
+  gtk3,
 }:
 
-let
-  gladSrc = fetchFromGitHub {
-    owner = "Dav1dde";
-    repo = "glad";
-    rev = "v2.0.5";
-    hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.2";
+  version = "1.8.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
+    hash = "sha256-G/STYu8vOTqoGAGfpPelYV/m0Cth4xMMD1QJ6TbqAF4=";
   };
 
-  patches = [
-    # <https://github.com/nba-emu/NanoBoyAdvance/pull/410>
-    ./fix-toml11-4.0.patch
-  ];
+  postPatch = ''
+    # don’t install unarr library to the package output
+    substituteInPlace thirdparty/CMakeLists.txt \
+      --replace-fail 'add_subdirectory(unarr-1.1.1-patch)' 'add_subdirectory(unarr-1.1.1-patch EXCLUDE_FROM_ALL)'
+  '';
 
   nativeBuildInputs = [
     cmake
     python3Packages.jinja2
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
     SDL2
-    fmt
-    toml11
-    libunarr
+    qt6.qtsvg
+    qt6.qtbase
+    zlib
+    bzip2
+    xz
+    gtk3
   ];
 
+  preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    export AR="gcc-ar"
+    export RANLIB="gcc-ranlib"
+  '';
+
   cmakeFlags = [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
-    (lib.cmakeBool "USE_SYSTEM_FMT" true)
-    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
     (lib.cmakeBool "PORTABLE_MODE" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -68,12 +64,23 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/Applications/NanoBoyAdvance.app/Contents/MacOS/NanoBoyAdvance" "$out/bin/NanoBoyAdvance"
   '';
 
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      --set QT_QPA_PLATFORM xcb
+      --set SDL_VIDEODRIVER x11
+    )
+  '';
+
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
-    homepage = "https://github.com/nba-emu/NanoBoyAdvance";
+    homepage = "https://nanoboyadvance.eu/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      lukas-sgx
+    ];
     platforms = lib.platforms.all;
   };
 })

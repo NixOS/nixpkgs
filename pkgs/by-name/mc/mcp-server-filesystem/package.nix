@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-server-filesystem";
-  version = "2026.7.4";
+  version = "2026.8.18";
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = finalAttrs.version;
-    hash = "sha256-rBdJoTC1wOEMbAAeSccFqaHL7lacf2SFfxZ/pp2Lx90=";
+    hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmPrune = true;
   npmWorkspace = "src/filesystem";
-  npmDepsHash = "sha256-KhlTXcS+VDSPGnEus9fA0xhIxfTGwX1Cr5hbxFvdc2k=";
+  npmDepsHash = "sha256-psy1XH4DuZu2+tkHpe/bQw3R7uNr8nF5u/AFKoxJeTg=";
 
   # TODO: revisit this when https://github.com/NixOS/nixpkgs/pull/333759 has landed
   postInstall = ''

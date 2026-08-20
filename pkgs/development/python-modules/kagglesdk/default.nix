@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kagglesdk";
-  version = "0.1.36";
+  version = "0.1.37";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kaggle";
     repo = "kagglesdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a7+/bAqRJyETzBFqD5AlrJsMtF227GLdM7EnYTlcfso=";
+    hash = "sha256-R88x9jlvY2UIksiDjgQJHvb+dpkda1GPYwEh9KWkZi4=";
   };
 
   build-system = [

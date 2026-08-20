@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "tmodbus";
     tag = "v${version}";
-    hash = "sha256-NbDa6AEhk28qGg2URqdfySXN6JIu/CMEQt8raNWv+A4=";
+    hash = "sha256-wBFIEgwzIC7eCzZpMXxwQY384XImTKL16qJ89OgEobc=";
   };
 
   rmodbus-server = rustPlatform.buildRustPackage (finalAttrs: {

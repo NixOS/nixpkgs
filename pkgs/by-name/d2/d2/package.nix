@@ -20,16 +20,16 @@ assert lib.assertMsg (
 
 buildGoModule (finalAttrs: {
   pname = "d2";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZRAvMcJKQmvcBbT2foKDYS0gTeqOZqFu3V3iXIbfLsQ=";
+    hash = "sha256-4RYKm8wq+KxzLQbd3sIEZLTy7xBtlWhJCHfggvkktXo=";
   };
 
-  vendorHash = "sha256-UZDk2upJ0xTSAg/DpRHCzdAOLnaeI0WLMJ6jNt8elKI=";
+  vendorHash = "sha256-4IhAb3UeqSGX9jTdhWonf7lEBhUlUrrVt31NyfSoQF8=";
 
   excludedPackages = [ "./e2etests" ];
 

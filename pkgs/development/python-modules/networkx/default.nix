@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "networkx";
-  # upgrade may break sage, please test the sage build or ping @timokau on upgrade
+  # upgrade may break sage, please test the sage build or ping the sage team on upgrade
   version = "3.6.1";
   pyproject = true;
 

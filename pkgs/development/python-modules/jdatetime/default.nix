@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "6.0.1";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40nsX+TNQriObxodnR3iORv6dwKl09POhw1ZOkdVl7A=";
+    hash = "sha256-5YEtfr9MZgmlVCMMwH3vyJ2cETQkNQ/i1bftfcUNMJc=";
   };
 
   build-system = [ setuptools ];

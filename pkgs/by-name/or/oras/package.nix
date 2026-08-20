@@ -9,16 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "oras";
-  version = "1.3.0";
+  version = "1.3.3";
+
+  # required for tests
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kGPHW+SSmCJhvhGxpzKFlc80sjYqeCEmwr/f0ltILE4=";
+    hash = "sha256-jA9x6Y/+3PZNKbHZbOOg9EJ+APz3jAI6RgHmAa/ykQ4=";
   };
 
-  vendorHash = "sha256-TDYvYmzAgkL+ZrYKt9HTW7NQAGxd/cYu7e7MRYbW8ho=";
+  vendorHash = "sha256-U+CJPrj404oI51mBTMJqjZEFq265of0K55WRzMhMyOQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-hammering";
-  version = "0-unstable-2026-07-20";
+  version = "0-unstable-2026-08-10";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "d131eb5c4d92c9b12001f8ff6ee79fcad4dc4f32";
-    hash = "sha256-rzmyA5s+7vlDazKCJSVy3bJH0ql/ekc7B2zsG+8YXLk=";
+    rev = "259202d424fa9793f2c212b380be047b83daa34f";
+    hash = "sha256-kCPQVWv/lK11SE9RL4KGTW7djwpE9KRr057l66jYuN0=";
   };
 
-  cargoHash = "sha256-0xk/HIK9urjhjotQaNzEJ5CRj50jZlsNOsTCHbfCdy8=";
+  cargoHash = "sha256-C/H9k7p5XGm+JE8L+BHkTlnBaejDTEwEYg4PI0usRXY=";
 
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''

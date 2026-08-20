@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "OPT_COMPILE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "OPT_COMPILE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;

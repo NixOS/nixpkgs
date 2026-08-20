@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eSKGu0l3Hif+MlT+5jjLkUYUuglnONasyA6AQiHb32s=";
+    hash = "sha256-CvuHgZ824jLF/L0/PAnbT4RXFLV+Uh2RJ30DA4PEEbE=";
   };
 
   nativeBuildInputs = [

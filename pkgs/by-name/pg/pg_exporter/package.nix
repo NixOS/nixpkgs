@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -8,14 +7,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pg_exporter";
-  version = "1.4.0";
+  version = "1.4.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "pg_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HDXs4yUeFmdITQATIxg6uRXHlgmA6yy1hA9Zasvk/zs=";
+    hash = "sha256-ZQWbDpKv7H2VMu49dsYmEoFYun3oHPccwFr4L4JoLYA=";
   };
 
   vendorHash = "sha256-XYgRwYKar/sqMCSnJ865FsM55mCVanbXrZ6aTf6Ksvc=";
@@ -24,6 +23,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-s" ];
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };

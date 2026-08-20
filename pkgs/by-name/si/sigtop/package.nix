@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sigtop";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NJl30LCIiPWTqbpTPW6wa9OsCl19bc//QZsMJIUImR4=";
+    sha256 = "sha256-zGDH3qdRI5yzcqEDH9sBg/7842qafCnf2Mc1W35iXY4=";
   };
 
   vendorHash = "sha256-6pNBYziJvJ1MMjzcbIjPFAUTW6ZrCNmtYzzAS/ANtEw=";

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "nanoemoji";
     tag = "v${version}";
-    hash = "sha256-gM53wlQSV/X7rDND6P7/fKpX0M28RDnWkGGOHQ+SK+g=";
+    hash = "sha256-FysyKC01XBnRiur5RR9fcsTxQqE8x0JJHSoe3q6JtKc=";
   };
 
   patches = [

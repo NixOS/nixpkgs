@@ -5,21 +5,9 @@
   config,
   overlays,
   crossOverlays,
+  bootStages,
 }:
 
-let
-  bootStages = import ../. {
-    inherit lib localSystem overlays;
-
-    crossSystem = localSystem;
-    crossOverlays = [ ];
-
-    # Ignore custom stdenvs when cross compiling for compatibility
-    # Use replaceCrossStdenv instead.
-    config = removeAttrs config [ "replaceStdenv" ];
-  };
-
-in
 lib.init bootStages
 ++ [
 

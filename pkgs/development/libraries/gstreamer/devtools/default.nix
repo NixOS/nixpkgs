@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    # dots-viewer requires nix 0.23.2, which is too old to build on loongarch64
+    (lib.mesonEnable "dots_viewer" (!stdenv.hostPlatform.isLoongArch64))
   ];
 
   cargoRoot = "dots-viewer";

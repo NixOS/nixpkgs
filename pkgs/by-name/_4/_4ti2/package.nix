@@ -12,6 +12,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
   version = "1.6.15";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
@@ -23,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/{groebner/script.template.in,zsolve/{graver,hilbert}.template} \
       --replace-fail 'SCRIPT=$(realpath $(which "$0"))' \
                      'SCRIPT=$(realpath $(${lib.getExe which} "$0"))'
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # configure.ac tries to compile and execute a specific test file here
+    substituteInPlace configure.ac \
+      --replace-fail "CHECK_TRAPV" ""
   '';
 
   nativeBuildInputs = [
@@ -33,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     glpk
     gmp
   ];
+
+  enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   installFlags = [ "install-exec" ];
 

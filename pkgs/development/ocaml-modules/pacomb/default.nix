@@ -8,12 +8,12 @@
 
 buildDunePackage (finalAttrs: {
   pname = "pacomb";
-  version = "1.4.3";
+  version = "1.4.4";
   src = fetchFromGitHub {
     owner = "craff";
     repo = "pacomb";
     tag = finalAttrs.version;
-    hash = "sha256-iS5H/xnMqZjSvrvj5YkBP8j/ChIn/xbQ9xa7WipBUvQ=";
+    hash = "sha256-wd/81NXXrKLq+SQI2E1ddcIld5tCCdSA9EYfdv8pkE0=";
   };
   buildInputs = [
     ppxlib

@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.18.2";
   pname = "chafa";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./xmlcatalog_patch.patch ];
 
   preConfigure = ''
-    substituteInPlace ./autogen.sh --replace pkg-config '$PKG_CONFIG'
+    substituteInPlace ./autogen.sh --replace-fail pkg-config '$PKG_CONFIG'
     NOCONFIGURE=1 ./autogen.sh
   '';
 

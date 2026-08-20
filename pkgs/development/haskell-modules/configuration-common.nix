@@ -720,8 +720,12 @@ with haskellLib;
   }) super.shell-conduit;
 
   # No maintenance planned until eventual removal
+  # Throw added 2026-08-19
   # https://github.com/NixOS/nixfmt/issues/340#issuecomment-3315920564
-  nixfmt = doJailbreak super.nixfmt;
+  nixfmt =
+    lib.throwIf pkgs.config.allowAliases
+      "haskell.packages.*.nixfmt has been removed as it is deprecated and unmaintained. Consider using top-level nixfmt instead."
+      (doJailbreak super.nixfmt);
 
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35

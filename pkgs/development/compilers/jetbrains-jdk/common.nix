@@ -35,7 +35,6 @@
   build,
   sourceDateEpoch,
   srcHash,
-  homePath,
   jcefPackage ? null,
   extraBuildPhase ? "",
   vendorVersionString ? null,
@@ -182,13 +181,15 @@ jdk.overrideAttrs (oldAttrs: {
       if [ "$output" = debug ]; then continue; fi
       LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
     done
-    # Add the local library paths to remove dependencies on the bootstrap
+    # Add the local library paths and drop rpath entries pointing at the
+    # boot JDK
     for output in ${lib.concatStringsSep " " oldAttrs.outputs}; do
       if [ "$output" = debug ]; then continue; fi
       OUTPUTDIR=$(eval echo \$$output)
       BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
       echo "$BINLIBS" | while read i; do
-        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+        OLD_RPATH="$(patchelf --print-rpath "$i" 2>/dev/null | tr ':' '\n' | grep -v "^${jdk}" | tr '\n' ':')" || true
+        patchelf --set-rpath "$LIBDIRS:''${OLD_RPATH%:}" "$i" || true
       done
     done
   '';
@@ -228,9 +229,5 @@ jdk.overrideAttrs (oldAttrs: {
     ];
 
     broken = stdenv.hostPlatform.isDarwin;
-  };
-
-  passthru = oldAttrs.passthru // {
-    home = homePath;
   };
 })

@@ -80,7 +80,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "10273";
+  version = "10408";
 
   outputs = [
     "out"
@@ -91,7 +91,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-A4VLmyOr19NaWI/L//BzK30EuaWNI+38em8YABvQ3wE=";
+    hash = "sha256-b01kyCjcrAJ4zFPNRM2GU/9TR5y1mi7WIJDNYrhSJZo=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -124,7 +124,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ [ openssl ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-B7uEynAG70a3xauBKc20RuFa9cnWaWzVBCh+LPLBnIM=";
+  npmDepsHash = "sha256-2Q7XhaLAArmviOLdQsNbYTfdyDE5pW9lR26cRHEVl9k=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -179,11 +179,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
-  ]
-  ++ optionals rpcSupport [
-    # This is done so we can move rpc-server out of bin because llama.cpp doesn't
-    # install rpc-server in their install target.
-    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -195,8 +190,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
-  ''
-  + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+  '';
 
   # the tests are failing as of 2025-08
   doCheck = false;
