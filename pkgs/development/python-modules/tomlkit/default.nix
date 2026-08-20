@@ -11,13 +11,13 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tomlkit";
   version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fRqey6MIZjghGxOBTqeckN1U3RGZNWQ3bzqpInH1x6M=";
   };
 
@@ -32,9 +32,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/sdispater/tomlkit";
-    changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sdispater/tomlkit/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

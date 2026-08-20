@@ -14,7 +14,7 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "poetry-core";
   version = "2.4.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Io2VpLxnJesO4QohsunD7ogr87NiNjGeTmEl9wFswkw=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
   meta = {
-    changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-poetry/poetry-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = lib.licenses.mit;
     teams = [ lib.teams.python ];
   };
-}
+})
