@@ -11,6 +11,7 @@
   wayland-scanner,
   makeBinaryWrapper,
   autoAddDriverRunpath,
+  installShellFiles,
 
   # libraries
   cairo,
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     makeBinaryWrapper
     autoAddDriverRunpath
+    installShellFiles
   ];
 
   buildInputs = [
@@ -124,6 +126,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonBuildType = "release";
+
+  postInstall = ''
+    installShellCompletion --cmd noctalia \
+      --bash <($out/bin/noctalia completions bash) \
+      --fish <($out/bin/noctalia completions fish) \
+      --zsh <($out/bin/noctalia completions zsh)
+  '';
 
   # plugins are installed by cloning their repos
   postFixup = ''
