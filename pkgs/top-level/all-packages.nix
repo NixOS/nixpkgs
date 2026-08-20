@@ -10749,6 +10749,7 @@ with pkgs;
     wordpress
     wordpress_6_9
     wordpress_7_0
+    wordpress_7_1
     ;
 
   wordpressPackages = recurseIntoAttrs (
