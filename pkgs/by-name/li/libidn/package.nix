@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-SZYIurOmVlCg6lKIjBOo3uvj9xQI4xms2exS4C6xOVk=";
+    hash = "sha256-SZYIurOmVlCg6lKIjBOo3uvj9xQI4xms2exS4C6xOVk=";
   };
 
   outputs = [
@@ -27,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://codeberg.org/libidn/libidn/src/tag/v${finalAttrs.version}/NEWS";
