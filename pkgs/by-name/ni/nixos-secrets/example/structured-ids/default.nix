@@ -25,11 +25,11 @@ in
       "age195x33zrqzppjfnj2rjjlq3z8s64r5zlwe6rcywm9zu6agf449pmqdslyat" # Target
     ];
 
-    age.identity.host = ../common/key-host.txt;
-    age.identity.target = ../common/key-target.txt;
+    # NOTE: do *not* do this with real keys!!! This will copy the keys to the
+    # world-readable Nix store, which is most probably not what you want!
+    age.identity.host = toString ../common/key-host.txt;
+    age.identity.target = toString ../common/key-target.txt;
 
-    # I should probably set these to something else... These are the values I
-    # used while testing things
     age.ssh.target = "root@lapetus.overlay.moonythm.dev";
     age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
