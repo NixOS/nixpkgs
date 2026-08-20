@@ -16,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wails";
-  version = "2.14.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+aCQgj3m9PnRVAib7fvJuXvZs30GueaVs+17bFMfgGY=";
+    hash = "sha256-/0GJ0RVBxuPTUqSuoZ8pLi1E2dR9n1n3aPlUKjpFVJw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
