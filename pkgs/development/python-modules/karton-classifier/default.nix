@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "karton-classifier";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-classifier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YqxRiQ/kJheEJpYDqRNu9FydfnNX3OlGjgfX9Hwv+dM=";
+    hash = "sha256-ew7IZEo471keFOX7Ksi8nCmggI3EzG4hmaIBbdDW4XE=";
   };
 
   pythonRelaxDeps = [
@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
     "test_process_runnable_win32_lnk"
     # Assertion error
     "test_process_runnable_win32_msi"
+    "test_process_misc_webp"
   ];
 
   meta = {

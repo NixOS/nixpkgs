@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-lxmf";
-  version = "1.1.0";
+  version = "1.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsLXMF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NxCLMFPQwNp1Igm1It+71jkyBCBHh6TQmTKMAjYi82k=";
+    hash = "sha256-5YV/XHpBoqN+XoE6Nf/zqq9JRAcMZKqWLsseRqZVt6o=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  cargoHash = "sha256-ayEH6+Y0tkA38S0nVCqHhPoIOl+ZsO/AtbVbn13ZpUM=";
+  cargoHash = "sha256-2/6e35IhetYXlN6M6ktrjWNZtIoURWMsWPeB6YSWmJo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

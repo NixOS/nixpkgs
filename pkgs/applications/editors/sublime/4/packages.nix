@@ -11,9 +11,9 @@ in
   } { };
 
   sublime4-dev = common {
-    buildVersion = "4206";
+    buildVersion = "4207";
     dev = true;
-    x64sha256 = "WZ+MfKnOYTTfVbyW2QRstkAOhAxEv4nXsxsQnnAeA6I=";
-    aarch64sha256 = "opMVWTGsPQSb/SpN4Cz9CC8jL42BaqO/da6uC++6t3o=";
+    x64sha256 = "q8UVYQhLu18Lh1sLp+1jR4Kx1taDsRUOmHY4km6opJA=";
+    aarch64sha256 = "sZwAZCMsvJuCvxpmjn829SxsV0IIuI+SEPjbQJwNO7Q=";
   } { };
 }
