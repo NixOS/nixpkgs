@@ -1659,6 +1659,7 @@
   ./services/web-apps/bluemap.nix
   ./services/web-apps/bluesky-pds.nix
   ./services/web-apps/bookstack.nix
+  ./services/web-apps/bulwark-webmail.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/castopod.nix
