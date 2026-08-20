@@ -6,6 +6,7 @@
   httpx,
   tqdm,
   urllib3,
+  packaging,
   vcrpy,
   pytestCheckHook,
 }:
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     httpx
     tqdm
     urllib3
+    packaging
   ];
 
   nativeCheckInputs = [
