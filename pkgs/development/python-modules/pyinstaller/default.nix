@@ -19,17 +19,16 @@
   # tests
   binutils,
   glibc,
-  pyinstaller,
-  testers,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinstaller";
   version = "6.22.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ibZaOtB9ndWDIlPje8RfMYctENf51cn9D91giKg4Kd0=";
   };
 
@@ -56,14 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyInstaller" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pyinstaller;
-  };
+  nativeCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Tool to bundle a python application with dependencies into a single package";
     homepage = "https://pyinstaller.org/";
-    changelog = "https://pyinstaller.org/en/v${version}/CHANGES.html";
+    changelog = "https://pyinstaller.org/en/v${finalAttrs.version}/CHANGES.html";
     downloadPage = "https://pypi.org/project/pyinstaller/";
     license = with lib.licenses; [
       mit
@@ -73,4 +70,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "pyinstaller";
   };
-}
+})
