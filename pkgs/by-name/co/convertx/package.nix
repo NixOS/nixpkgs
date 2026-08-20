@@ -145,7 +145,10 @@ stdenvNoCC.mkDerivation {
     description = "Self-hosted online file converter";
     homepage = "https://github.com/C4illin/ConvertX/tree/main";
     license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     changelog = "https://github.com/C4illin/ConvertX/blob/main/CHANGELOG.md";
     mainProgram = "convertx";
     maintainers = with lib.maintainers; [
