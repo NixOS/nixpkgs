@@ -8,7 +8,7 @@
 
 let
   pname = "everest";
-  version = "6458";
+  version = "stable-1.6458.0";
   phome = "$out/lib/Celeste";
 in
 stdenvNoCC.mkDerivation {
