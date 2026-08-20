@@ -5,20 +5,20 @@
   buildPythonPackage,
   fetchPypi,
   importlib-metadata,
-  poetry-core,
+  hatchling,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pypoolstation";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-blTvbvuIS2YISd0jBR/TXOSm594htGB7lc9JpA+3ayM=";
+    hash = "sha256-wg7bFdK5FkTqKoGXRdBD9MKwLRm9mHvBVVne/CONb1k=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

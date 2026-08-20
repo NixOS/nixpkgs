@@ -2,28 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   openpam,
 }:
 
 buildGoModule {
   pname = "scion-apps";
-  version = "unstable-2025-03-12";
+  version = "0.6.0-unstable-2026-06-04";
 
   src = fetchFromGitHub {
     owner = "netsec-ethz";
     repo = "scion-apps";
-    rev = "55667b489898af09ae9d8290410da0be176549f9";
-    hash = "sha256-Tj0vtdYDmKbMpcO+t9KrtFewqdjusr0JRXpX6gY69WM=";
+    rev = "6c990ccb5b39fe0f7a23a3d8dcb4528439c3f5c5";
+    hash = "sha256-qbz6lGnCSzIH0r1nJ5+oAQquiehRBw7hxgEfbXM1/Yc=";
   };
 
-  vendorHash = "sha256-/gBtKgCDyoCnJLfH5WgTCdOvoYRpPn8x2OHW0uYQnGQ=";
+  vendorHash = "sha256-svC4FlQ/e5XjPKuHBYPvqy5l8nWWQTdg1Bf4KSANrMw=";
 
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace webapp/web/tests/health/scmpcheck.sh \
@@ -54,8 +50,9 @@ buildGoModule {
 
   ldflags = [
     "-s"
-    "-w"
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
   meta = {
     description = "Public repository for SCION applications";

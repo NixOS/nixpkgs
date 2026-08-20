@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.5";
+  version = "1.6";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-laU2S7SPFCso/HzPSpbEM6hAE5/XYkNoBqFTT4PU8TU=";
+    hash = "sha256-Ih6cRUbmKIKRt8dIGNBbaLDomNvVdcl5P/lRBAzwwTI=";
   };
 
   nativeBuildInputs = [
