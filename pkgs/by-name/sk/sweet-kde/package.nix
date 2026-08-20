@@ -8,7 +8,8 @@
 stdenvNoCC.mkDerivation {
   pname = "sweet-kde";
   version = "1.0.0";
-
+__structuredAttrs = true;
+strictDeps = true;
   src = fetchFromGitHub {
     owner = "EliverLara";
     repo = "Sweet-kde";
