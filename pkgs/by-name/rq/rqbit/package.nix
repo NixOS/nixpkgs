@@ -15,13 +15,13 @@
 let
   pname = "rqbit";
 
-  version = "8.1.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-5ErcI3hwC2EgxsjgEVlbHP1MzBf/LndpgTfynQGc29s=";
+    hash = "sha256-zcd3oVNntKxV25UWan//H523ph227Yhub/3N0wLfPiU=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -29,15 +29,15 @@ let
 
     inherit version src nodejs;
 
-    sourceRoot = "${src.name}/crates/librqbit/webui";
+    npmWorkspace = [ "crates/librqbit/webui" ];
 
-    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
+    npmDepsHash = "sha256-4q8u2B3HB19mBaEAVl9EDtt38e8aYHpUMADNaT98P7M=";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/dist
-      cp -r dist/** $out/dist
+      cp -r ./crates/librqbit/webui/dist/** $out/dist
 
       runHook postInstall
     '';
@@ -46,7 +46,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
+  cargoHash = "sha256-h0dPVqiQtkFo50CNHYn5Cqrm+l/j6RNJtFYUVyvioxI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -76,6 +76,17 @@ rustPlatform.buildRustPackage {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  checkFlags = [
+    # skip these tests since they require internet access
+    "--skip=tests::e2e::test_e2e_download_tcp"
+    "--skip=tests::e2e::test_e2e_download_utp"
+    "--skip=tests::e2e_stream::test_e2e_stream"
+    "--skip=upnp_server_adapter::tests::test_browse"
+  ];
+
+  # required by test `read_buf::tests::can_read_long_metainfo_correctlyv` in `aarch64-darwin`(sandbox=relaxed)
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     webui = rqbit-webui;
