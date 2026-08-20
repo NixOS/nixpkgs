@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xsstrike";
   version = "3.1.6";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "XSStrike";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6U0e9JkYYIt+APZ6B4+kNO/hcC3BAfrn+QXbCnLqpbs=";
   };
 
@@ -29,14 +29,6 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = with python3Packages; [
-    tld
-    fuzzywuzzy
-    requests
-  ];
-
   postPatch = ''
     substituteInPlace xsstrike.py \
       --replace-fail "sys.path[0] + '/db/" "'$out/${python3Packages.python.sitePackages}/db/"
@@ -44,21 +36,33 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "sys.path[0] + '/db/" "'$out/${python3Packages.python.sitePackages}/db/"
 
     substituteInPlace xsstrike.py \
-      --replace-fail 'v3.1.5' 'v${version}'
+      --replace-fail 'v3.1.5' 'v${finalAttrs.version}'
   '';
+
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
+    tld
+    fuzzywuzzy
+    requests
+  ];
 
   postInstall = ''
     mv $out/bin/xsstrike{.py,}
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-h" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Most advanced XSS scanner";
+    description = "Advanced XSS scanner";
     homepage = "https://github.com/s0md3v/XSStrike";
+    changelog = "https://github.com/s0md3v/XSStrike/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
       # sqlmap WAF rules
@@ -69,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ letgamer ];
     mainProgram = "xsstrike";
   };
-}
+})
