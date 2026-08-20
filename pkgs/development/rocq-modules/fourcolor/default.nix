@@ -1,12 +1,12 @@
 {
   lib,
-  mkCoqDerivation,
+  mkRocqDerivation,
   coq,
   mathcomp,
   version ? null,
 }:
 
-mkCoqDerivation {
+mkRocqDerivation {
   pname = "fourcolor";
   owner = "math-comp";
 
@@ -37,15 +37,17 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (isGe "8.20") (isGe "2.5") "1.4.3")
-        (case (isGe "8.20") (range "2.4" "2.5") "1.4.2")
-        (case (isGe "8.16") (range "2.0" "2.4") "1.4.1")
-        (case (isGe "8.16") "2.0.0" "1.3.0")
-        (case (isGe "8.11") (range "1.12" "1.19") "1.2.5")
-        (case (isGe "8.11") (range "1.11" "1.14") "1.2.4")
-        (case (isLe "8.13") (lib.pred.inter (isGe "1.11.0") (isLt "1.13")) "1.2.3")
+        (case (range "8.20" "9.3") (isGe "2.5") "1.4.3")
+        (case (range "8.20" "9.1") (range "2.4" "2.5") "1.4.2")
+        (case (range "8.16" "9.0") (range "2.0" "2.4") "1.4.1")
+        (case (range "8.16" "8.17") "2.0.0" "1.3.0")
+        (case (range "8.11" "8.16") (range "1.12" "1.19") "1.2.5")
+        (case (range "8.11" "8.15") (range "1.11" "1.14") "1.2.4")
+        (case (range "8.10" "8.13") (lib.pred.inter (isGe "1.11.0") (isLt "1.13")) "1.2.3")
       ]
       null;
+
+  useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "1.4.3" v;
 
   propagatedBuildInputs = [
     mathcomp.boot
