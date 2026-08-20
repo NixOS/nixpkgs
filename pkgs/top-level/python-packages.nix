@@ -8286,6 +8286,8 @@ self: super: with self; {
 
   indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
 
+  indicio = callPackage ../development/python-modules/indicio { };
+
   inequality = callPackage ../development/python-modules/inequality { };
 
   inference-gym = callPackage ../development/python-modules/inference-gym { };
