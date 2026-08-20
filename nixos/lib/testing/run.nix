@@ -58,14 +58,14 @@ let
       };
       kvm = mkOption {
         type = types.bool;
-        default = isLinux;
-        defaultText = lib.literalMD "`true` if built to run on Linux.";
+        default = config.qemu.forceAccel && isLinux;
+        defaultText = lib.literalMD "`true` if `qemu.forceAccel` is enabled and built to run on Linux.";
         description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
       };
       apple-virt = mkOption {
         type = types.bool;
-        default = isDarwin;
-        defaultText = lib.literalMD "`true` if built to run on Darwin.";
+        default = config.qemu.forceAccel && isDarwin;
+        defaultText = lib.literalMD "`true` if `qemu.forceAccel` is enabled and built to run on Darwin.";
         description = "Whether Apple virtualization functionality is required for running this test.";
       };
     };
