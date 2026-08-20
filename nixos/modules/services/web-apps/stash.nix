@@ -116,8 +116,8 @@ let
           {
             stash = [
               {
-                Path = "/media/drive/videos";
-                ExcludeImage = true;
+                path = "/media/drive/videos";
+                excludeimage = true;
               }
             ];
           }
@@ -422,7 +422,7 @@ in
         default = null;
         example = "/path/to/password/file";
         description = ''
-          Path to file containing password for login.
+          Path to file containing a bcrypt-hashed password for login.
 
           ::: {.warning}
             This option takes precedence over {option}`services.stash.settings.password`
@@ -475,8 +475,8 @@ in
 
     services.stash.settings = {
       username = mkIf (cfg.username != null) cfg.username;
-      plugins_path = mkIf (!cfg.mutablePlugins) cfg.plugins;
-      scrapers_path = mkIf (!cfg.mutableScrapers) cfg.scrapers;
+      plugins_path = mkIf (!cfg.mutablePlugins && cfg.plugins != "") cfg.plugins;
+      scrapers_path = mkIf (!cfg.mutableScrapers && cfg.scrapers != "") cfg.scrapers;
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.port ];
@@ -514,7 +514,7 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
+                  password=${optionalString (cfg.passwordFile != null) "$(< ${cfg.passwordFile})"} \
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
                   sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
                   ${lib.getExe pkgs.yq-go} '
