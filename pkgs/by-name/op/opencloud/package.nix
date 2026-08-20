@@ -13,9 +13,22 @@
   nixosTests,
   nix-update-script,
   versionCheckHook,
+  stdenvNoCC,
+  nodejs,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmBuildHook,
+  pnpmConfigHook,
 }:
 
 let
+  version = "7.5.0";
+  src = fetchFromGitHub {
+    owner = "opencloud-eu";
+    repo = "opencloud";
+    tag = "v${version}";
+    hash = "sha256-OMQuNfm9xqXaDexuoDRvvSEoEb7hXEMF7ynRU3CawbI=";
+  };
   bingoBinsMakefile = builtins.concatStringsSep "\n" (
     lib.mapAttrsToList (n: v: "${n} := ${v}\n\\$(${n}):") {
       GO_XGETTEXT = "xgettext";
@@ -25,18 +38,111 @@ let
       PROTOC_GO_INJECT_TAG = "protoc-go-inject-tag";
     }
   );
+  web = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "opencloud-web";
+    version = "7.4.0";
+
+    src = fetchFromGitHub {
+      owner = "opencloud-eu";
+      repo = "web";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-idoR5R97k5ZfYBh7vboXzg2CdbVX5TBPrpL6s1k9qPA=";
+    };
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-h2QNq51GE8qnLsvPhDobzT/8am0jzbW6Mx6tnungY/k=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_11
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+      pnpm build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir $out
+      cp -r dist/* $out
+      runHook postInstall
+    '';
+
+    passthru.updateScript = nix-update-script { };
+
+    meta = {
+      description = "Web UI for OpenCloud built with Vue.js and TypeScript";
+      homepage = "https://github.com/opencloud-eu/web";
+      changelog = "https://github.com/opencloud-eu/web/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
+        christoph-heiss
+        k900
+      ];
+      platforms = lib.platforms.all;
+    };
+  });
+
+  idp-web = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "opencloud-idp-web";
+
+    inherit src version;
+
+    pnpmRoot = "services/idp";
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      pnpm = pnpm_11;
+      sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
+      fetcherVersion = 4;
+      hash = "sha256-rj6KFrzuINVpxrrel2p2iWtJVH8Zg1jrZEIAs8S+8Qs=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_11
+    ];
+
+    postBuild = ''
+      mkdir -p services/idp/assets/identifier/static
+      cp -v services/idp/src/images/favicon.svg services/idp/assets/identifier/static/favicon.svg
+      cp -v services/idp/src/images/icon-lilac.svg services/idp/assets/identifier/static/icon-lilac.svg
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r services/idp/assets $out
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "OpenCloud - IDP Web UI";
+      homepage = "https://github.com/opencloud-eu/opencloud";
+      changelog = "https://github.com/opencloud-eu/opencloud/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        christoph-heiss
+        k900
+      ];
+      platforms = lib.platforms.all;
+    };
+  });
 in
 buildGoModule (finalAttrs: {
+  inherit version src;
   pname = "opencloud";
-  version = "7.5.0";
-
-  src = fetchFromGitHub {
-    owner = "opencloud-eu";
-    repo = "opencloud";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OMQuNfm9xqXaDexuoDRvvSEoEb7hXEMF7ynRU3CawbI=";
-  };
-
   postPatch = ''
     echo "${bingoBinsMakefile}" >.bingo/Variables.mk
 
@@ -105,8 +211,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [ "tests/*" ];
 
   passthru = {
-    web = callPackage ./web.nix { };
-    idp-web = callPackage ./idp-web.nix { };
+    inherit web idp-web;
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
