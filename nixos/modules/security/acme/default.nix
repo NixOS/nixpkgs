@@ -471,9 +471,7 @@ let
           // {
             Group = data.group;
 
-            # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
-            # This avoids eating them all up if something is misconfigured upon the first try.
-            RestartSec = 15 * 60;
+            RestartSec = data.renewIntervalFailed;
 
             Restart = "on-failure";
 
@@ -686,6 +684,18 @@ let
             {manpage}`systemd.time(7)`.
 
             If you reduce this from daily you might also want to adapt {option}`security.acme.defaults.renewJitter`.
+          '';
+        };
+
+        renewIntervalFailed = lib.mkOption {
+          type = lib.types.str;
+          inherit (defaultAndText "renewIntervalFailed" "${toString (60 * 15)}") default defaultText;
+          description = ''
+            Systemd time-span value when to retry a renewal in case the service has failed.
+            See {manpage}`systemd.time(7)`
+
+            Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+            The default avoids eating them all up if something is misconfigured upon the first try.
           '';
         };
 
