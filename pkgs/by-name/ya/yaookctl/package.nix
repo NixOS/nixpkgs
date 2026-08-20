@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-/SXBwHO3Tf3YaefgFrvH0oc6+mYHjE9RySt7vLQuoiQ=";
   };
 
+  __structuredAttrs = true;
+
   pyproject = true;
   build-system = [ python3.pkgs.setuptools ];
 
