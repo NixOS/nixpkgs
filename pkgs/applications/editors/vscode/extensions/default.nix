@@ -3890,6 +3890,8 @@ let
         };
       };
 
+      quarto.quarto = callPackage ./quarto.quarto { };
+
       quicktype.quicktype = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "quicktype";
