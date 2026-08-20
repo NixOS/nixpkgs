@@ -145,13 +145,13 @@ let
           type = path;
         };
 
-        local = lib.mkOption {
+        deploy = lib.mkOption {
           description = ''
-            Files with this flag will not be included in the file list passed to
+            Files with this flag will be included in the file list passed to
             the `deploy` script.
           '';
           type = bool;
-          default = false;
+          default = true;
         };
       };
     };
