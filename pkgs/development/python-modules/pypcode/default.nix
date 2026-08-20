@@ -6,19 +6,22 @@
   nanobind,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pypcode";
-  version = "3.3.3";
+  version = "4.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "pypcode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m3Ee1n6TIbcihTwz1ihpn10gC1YsSlFO17Gj0QVya2A=";
+    hash = "sha256-OwnwgN2/MElH7SOwauS/hfVkgwAd0uMH0y00Ydkq+8I=";
   };
 
   build-system = [

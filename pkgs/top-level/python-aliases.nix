@@ -80,6 +80,7 @@ mapAliases {
   adbc-driver-bigquery = throw "'adbc-driver-bigquery' has been removed due to being archived upstream"; # added 2026-08-05
   adbc-driver-snowflake = throw "'adbc-driver-snowflake' has been removed due to being archived upstream"; # added 2026-08-05
   advocate = throw "'advocate' has been removed due to being archived upstream and unused"; # added 2026-07-01
+  ailment = throw "'ailment' has been merged into 'angr'"; # Added 2026-08-20
   aioinflux = throw "'aioinflux' was removed because it is abandoned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
   aiosasl = throw "'aiosasl' was removed because it is abandoned upstream and does not work on modern Python versions."; # Added 2026-06-28
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
@@ -366,6 +367,7 @@ mapAliases {
   ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   ledger_agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
   libarcus = throw "'libarcus' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
+  libbs = throw "'libbs' has been replaced by 'declib', which uses a different Python module name"; # Added 2026-08-20
   libclang = clang; # added 2026-06-18
   libgpiod = gpiod; # added 2026-03-30
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
@@ -533,6 +535,7 @@ mapAliases {
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
+  pyqodeng-angr = warnAlias "'pyqodeng-angr' has been renamed to 'pyqodeng'" pyqodeng; # Added 2026-08-20
   pyqt5-stubs = throw "'pyqt5-stubs' has been removed as it was unused and depended on vulnerable qt5 webengine"; # Added 2026-01-15
   pyqt5-webkit = throw "'pyqt5-webkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
@@ -743,6 +746,7 @@ mapAliases {
   uefi-firmware-parser = uefi-firmware; # Added 2026-08-19
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed because it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
+  unicorn-angr = throw "'unicorn-angr' has been removed as angr now uses upstream unicorn"; # Added 2026-08-20
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unifiled = throw "'unifiled' has been removed because Home Assistant dropped the integration"; # Added 2026-06-04
   unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22

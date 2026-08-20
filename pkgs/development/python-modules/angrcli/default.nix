@@ -24,6 +24,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='1.2.0'" "version='${version}'"
     substituteInPlace tests/test_derefs.py \
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '';
@@ -41,7 +43,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
+  disabledTests = [
+    # Exact SimProcedure prototype strings changed in angr 9.3.
+    "test_sims"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # expects the x86 register "rax" to exist
     "test_cc"
     "test_loop"
