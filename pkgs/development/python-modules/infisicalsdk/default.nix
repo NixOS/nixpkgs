@@ -1,10 +1,17 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
+  setuptools,
+  python-dateutil,
+  aenum,
+  requests,
+  boto3,
+  botocore,
 }:
 
-python3Packages.buildPythonPackage (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "infisicalsdk";
   version = "1.0.16";
   pyproject = true;
@@ -23,11 +30,11 @@ python3Packages.buildPythonPackage (finalAttrs: {
     substituteInPlace ./setup.py --replace-fail \
       'VERSION = "1.0.1"' 'VERSION = "${finalAttrs.version}"'
   '';
-  nativeBuildInputs = [ python3Packages.pyprojectVersionPatchHook ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     python-dateutil
     aenum
     requests

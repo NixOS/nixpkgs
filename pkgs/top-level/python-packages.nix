@@ -8292,6 +8292,8 @@ self: super: with self; {
 
   infinity = callPackage ../development/python-modules/infinity { };
 
+  infisicalsdk = callPackage ../development/python-modules/infisicalsdk { };
+
   inflate64 = callPackage ../development/python-modules/inflate64 { };
 
   inflect = callPackage ../development/python-modules/inflect { };
