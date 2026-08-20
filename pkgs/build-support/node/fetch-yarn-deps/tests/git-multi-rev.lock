@@ -1,0 +1,7 @@
+"semver-new@git+https://github.com/npm/node-semver.git#6e05b7637396ac66522cff8731f07cfe0ef49a29":
+  version "7.8.5"
+  resolved "git+https://github.com/npm/node-semver.git#6e05b7637396ac66522cff8731f07cfe0ef49a29"
+
+"semver-old@git+https://github.com/npm/node-semver.git#8640bd68f1653e504b53e9be4030eccdfe4c307a":
+  version "7.8.4"
+  resolved "git+https://github.com/npm/node-semver.git#8640bd68f1653e504b53e9be4030eccdfe4c307a"
