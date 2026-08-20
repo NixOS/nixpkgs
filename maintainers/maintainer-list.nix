@@ -19723,6 +19723,13 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  mysaa = {
+    name = "Samy Avrillon";
+    email = "mysaa@hadoly.fr";
+    github = "MysaaJava";
+    githubId = 33335046;
+    keys = [ { fingerprint = "8803 52F5 FD83 DF24 F414  13CC 4E77 7255 80DA 73CE"; } ];
+  };
   MysteryBlokHed = {
     name = "Adam Thompson-Sharpe";
     email = "nix@adamts.me";
