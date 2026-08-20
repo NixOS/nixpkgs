@@ -31,6 +31,20 @@ python3.pkgs.buildPythonApplication {
     typing-extensions
   ];
 
+  # Try to import all submodules in order to get warned of new dependencies
+  checkPhase = ''
+    runHook preCheck
+    ${python3.interpreter} -c "
+      import pkgutil, importlib
+      import yaookctl
+      for _, name, _ in pkgutil.walk_packages(yaookctl.__path__, yaookctl.__name__ + '.'):
+          if name.endswith('.__main__'):
+              continue
+          importlib.import_module(name)
+    "
+    runHook postCheck
+  '';
+
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
   };
