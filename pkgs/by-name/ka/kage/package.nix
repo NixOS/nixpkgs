@@ -5,6 +5,7 @@
   pkg-config,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   alsa-lib,
   libnotify,
   wl-clipboard,
@@ -52,12 +53,10 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    copyDesktopItems
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/*.desktop $out/share/applications/
-  '';
+  desktopItems = [ desktopItem ];
 
   postFixup = ''
     wrapProgram $out/bin/kage --prefix PATH : ${
