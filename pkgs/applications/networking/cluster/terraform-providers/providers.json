@@ -905,13 +905,13 @@
     "vendorHash": "sha256-8Zj4nrEJ38Tz0LOYtghlMnJZJnD2zJjsqawVMTEX0Wk="
   },
   "metio_migadu": {
-    "hash": "sha256-LS3G1jw6LRVrN8h96ogCzW13877U5OHZ7KQMZCVCYw0=",
+    "hash": "sha256-YzSCkHzbLzxhjh+ZNn5lxG7gpeLPYwICHBHy7JKFUKQ=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
     "owner": "metio",
     "repo": "terraform-provider-migadu",
-    "rev": "2026.8.6",
+    "rev": "2026.8.20",
     "spdx": "0BSD",
-    "vendorHash": "sha256-mv0LZx3MjfmsQ5QaaVlklFaGcgoJ/bfaZwyVEig/HZY="
+    "vendorHash": "sha256-pLUxFGVrSCIeDNe4gZEl3KoHKE6dqNvzGEZQTOBaM3Q="
   },
   "mongey_kafka": {
     "hash": "sha256-rTa6c7jAMH027V7h/yUGVGz6TS0PDdObilxU0Vpr6FI=",
