@@ -21,7 +21,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-fRqey6MIZjghGxOBTqeckN1U3RGZNWQ3bzqpInH1x6M=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ (poetry-core.overridePythonAttrs { doCheck = false; }) ];
+
+  # Disable checks by default, as checks require pytest, which eventually
+  # depends on hatchling, which depends on tomlkit, leading to infinite
+  # recursion.
+  doCheck = false;
 
   nativeCheckInputs = [
     pyyaml
@@ -29,6 +34,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "tomlkit" ];
+
+  # In passthru.tests, build with the check phase enabled, since that'll be
+  # outside the bootstrap dependency chain.
+  passthru.tests.withChecks = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
 
   meta = {
     homepage = "https://github.com/sdispater/tomlkit";
