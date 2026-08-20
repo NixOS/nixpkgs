@@ -20,6 +20,8 @@
   fontconfig,
   curl,
   procps,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Z0PyN/xkqVfXJUX8VCU7rwcr7B74K/kLx5XI3kfkoaM=";
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
     wrapGAppsHook3
   ];
@@ -60,6 +63,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libappindicator
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "lookapp";
+      desktopName = "Look";
+      comment = "Keyboard-first desktop launcher";
+      exec = "lookapp";
+      icon = "look";
+      categories = [ "Utility" ];
+      startupWMClass = "Look";
+    })
+  ];
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${
@@ -75,19 +90,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/applications
-
-    cat > $out/share/applications/lookapp.desktop <<'EOF'
-    [Desktop Entry]
-    Name=Look
-    Comment=Keyboard-first desktop launcher
-    Exec=lookapp
-    Icon=look
-    Type=Application
-    Categories=Utility;
-    StartupWMClass=Look
-    EOF
-
     for size in 32 128 256; do
       icon="$src/apps/linows/src-tauri/icons/''${size}x''${size}.png"
       if [ -f "$icon" ]; then
@@ -111,4 +113,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.maintainers.kunkka19xx
     ];
   };
-}
+})
