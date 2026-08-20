@@ -2587,6 +2587,10 @@ with pkgs;
     privsepPath = "/var/empty";
   };
 
+  openobserve-ee = callPackage ../by-name/op/openobserve/package.nix {
+    enableEnterprise = true;
+  };
+
   openrgb-with-all-plugins = openrgb.withPlugins [
     openrgb-plugin-effects
     openrgb-plugin-hardwaresync
