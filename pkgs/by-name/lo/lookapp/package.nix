@@ -22,7 +22,7 @@
   procps,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookapp";
   version = "0.6.11";
 
