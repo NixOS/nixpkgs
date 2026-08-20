@@ -1,6 +1,6 @@
 {
   coq,
-  mkCoqDerivation,
+  mkRocqDerivation,
   mathcomp,
   bignums,
   paramcoq,
@@ -11,7 +11,7 @@
 }:
 
 let
-  derivation = mkCoqDerivation {
+  derivation = mkRocqDerivation {
 
     pname = "CoqEAL";
 
@@ -58,6 +58,8 @@ let
     release."1.0.5".hash = "sha256:0cmvky8glb5z2dy3q62aln6qbav4lrf2q1589f6h1gn5bgjrbzkm";
     release."1.0.4".hash = "sha256:1g5m26lr2lwxh6ld2gykailhay4d0ayql4bfh0aiwqpmmczmxipk";
     release."1.0.3".hash = "sha256:0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
+
+    useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "2.1.2" v;
 
     propagatedBuildInputs = [
       mathcomp.algebra
