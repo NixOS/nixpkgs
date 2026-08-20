@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "reproxy";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "reproxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dxQWuONVYidNtppLd5S1tBEPXM64JdnAhdFWzOsaG6U=";
+    hash = "sha256-BTXe6xdEjeTQmKNcQ3g+bB7gU0tEvQQibLFBml4nBwg=";
   };
 
   vendorHash = null;
