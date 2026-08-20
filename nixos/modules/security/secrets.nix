@@ -18,7 +18,7 @@ let
     of:
     addCheck str (
       s:
-      if lib.strings.match "[a-zA-Z0-9:_\\.-]*" s == null then
+      if lib.strings.match "^[a-zA-Z0-9:_\\.-]+$" s == null then
         throw "Name '${toString s}' is not a valid ${of} name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
       else
         true

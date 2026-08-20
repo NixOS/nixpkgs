@@ -7,6 +7,7 @@
   ruff,
   makeWrapper,
   bubblewrap,
+  jsonschema,
 }:
 
 python3Packages.buildPythonApplication {
@@ -22,7 +23,12 @@ python3Packages.buildPythonApplication {
 
   postFixup = ''
     wrapProgram $out/bin/nixos-secrets \
-      --prefix PATH : ${bubblewrap}/bin
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bubblewrap
+          jsonschema
+        ]
+      }
   '';
 
   passthru.devShell = mkShell {
@@ -30,6 +36,7 @@ python3Packages.buildPythonApplication {
       python3
       bubblewrap
       ruff
+      jsonschema
     ];
   };
 
