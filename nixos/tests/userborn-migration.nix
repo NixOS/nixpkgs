@@ -1,8 +1,9 @@
 { lib, ... }:
 
 # Verifies that switching from update-users-groups.pl to userborn honours
-# /var/lib/nixos/{uid,gid}-map and declarative-{users,groups}, so removed
-# users keep their ids reserved and are not reassigned.
+# /var/lib/nixos/{uid,gid}-map, auto-subuid-map and declarative-{users,groups},
+# so removed users keep their ids reserved and are not reassigned, and
+# subordinate id allocations survive the migration.
 
 {
   name = "userborn-migration";
@@ -17,6 +18,7 @@
     users.users = {
       survivor = {
         isNormalUser = true;
+        autoSubUidGidRange = true;
       };
       ghost = {
         isNormalUser = true;
@@ -79,6 +81,10 @@
           t.assertEqual(uid_map["ghost"], ghost_uid)
           t.assertEqual(uid_map["survivor"], survivor_uid)
 
+          survivor_subuid = machine.succeed("grep '^survivor:' /etc/subuid").strip()
+          auto_subuid_map = json.loads(machine.succeed("cat /var/lib/nixos/auto-subuid-map"))
+          t.assertEqual(auto_subuid_map["survivor"], int(survivor_subuid.split(":")[1]))
+
       with subtest("perl: remove ghost"):
           switch("base-ghost-removed")
           machine.fail("getent passwd ghost")
@@ -111,6 +117,18 @@
           # so check the journal instead.
           machine.succeed(
               "journalctl -u userborn-import-legacy.service --grep 'synthesised.*previous-userborn.json'"
+          )
+
+      with subtest("userborn: subid allocations survive the migration"):
+          t.assertEqual(
+              machine.succeed("grep '^survivor:' /etc/subuid").strip(),
+              survivor_subuid,
+              "survivor's subuid range changed across migration",
+          )
+          t.assertEqual(
+              machine.succeed("grep '^survivor:' /etc/subgid").strip(),
+              survivor_subuid,
+              "survivor's subgid range changed across migration",
           )
 
       with subtest("userborn: no uid collision for new user"):
