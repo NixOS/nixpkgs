@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "markdown-inline-graphviz";
+  pname = "markdown-inline-graphviz-extension";
   version = "1.1.3";
   pyproject = true;
 
