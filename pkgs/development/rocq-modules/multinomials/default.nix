@@ -1,6 +1,6 @@
 {
   coq,
-  mkCoqDerivation,
+  mkRocqDerivation,
   mathcomp,
   mathcomp-finmap,
   mathcomp-bigenough,
@@ -8,10 +8,10 @@
   version ? null,
   useDune ? false,
 }@args:
-mkCoqDerivation {
+mkRocqDerivation {
 
   namePrefix = [
-    "coq"
+    "rocq"
     "mathcomp"
   ];
   pname = "multinomials";
@@ -71,6 +71,8 @@ mkCoqDerivation {
     "1.1".hash = "sha256:1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
     "1.0".hash = "sha256:1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
+
+  useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "2.4.0" v;
 
   useDuneifVersion = lib.versions.range "1.5.3" "2.2.0";
 
