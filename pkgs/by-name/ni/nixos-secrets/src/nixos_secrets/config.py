@@ -5,7 +5,7 @@ from .error import SecretsError
 import re
 
 
-safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]*$")
+safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]+$")
 
 
 @dataclass
