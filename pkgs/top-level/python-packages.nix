@@ -14199,8 +14199,6 @@ self: super: with self; {
 
   py-key-value-aio = callPackage ../development/python-modules/py-key-value-aio { };
 
-  py-key-value-shared-test = callPackage ../development/python-modules/py-key-value-shared-test { };
-
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
