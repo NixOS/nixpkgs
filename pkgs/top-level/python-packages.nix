@@ -20868,6 +20868,8 @@ self: super: with self; {
 
   torchio = callPackage ../development/python-modules/torchio { };
 
+  torchlensmaker = callPackage ../development/python-modules/torchlensmaker { };
+
   torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
 
   torchmd-net = callPackage ../development/python-modules/torchmd-net { };
