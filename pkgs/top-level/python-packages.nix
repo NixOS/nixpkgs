@@ -12466,6 +12466,8 @@ self: super: with self; {
 
   onvif-parsers = callPackage ../development/python-modules/onvif-parsers { };
 
+  onvif-python = callPackage ../development/python-modules/onvif-python { };
+
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
