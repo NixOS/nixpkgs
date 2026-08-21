@@ -4,6 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/knik0/faac/releases/tag/${finalAttrs.src.tag}";
