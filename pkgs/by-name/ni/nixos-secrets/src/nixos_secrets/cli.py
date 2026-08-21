@@ -95,7 +95,7 @@ def main() -> None:
         type=str,
         default=[],
         action="append",
-        help="Generator(s) to force the regeneration of.",
+        help="Generator(s) to import from external files.",
     )
 
     gc_parser = subparsers.add_parser("collect-garbage", help="Delete stale secrets")
