@@ -19952,6 +19952,8 @@ self: super: with self; {
 
   strct = callPackage ../development/python-modules/strct { };
 
+  stream-inflate = callPackage ../development/python-modules/stream-inflate { };
+
   streamcontroller-plugin-tools =
     callPackage ../development/python-modules/streamcontroller-plugin-tools
       { };
