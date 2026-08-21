@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.24.0";
+  version = "2.24.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ux5W+9mtvAdlINQfr58Fft4OtpqjoYQrQe3XZwhvovc=";
+    hash = "sha256-gDQl5UjSOyXg3l9yD1CXhfrSbUWUDYoquVvc2K4nv14=";
   };
 
   build-system = with python3Packages; [
@@ -104,6 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       rich
       rpds-py
       sentry-sdk
+      setproctitle
       six
       smmap
       sounddevice
@@ -151,7 +152,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # vibe is spawned in a sub-process and fails to import `mcp`
     # ModuleNotFoundError: No module named 'mcp'
-    "TestMCPConnectionPoolIntegration"
+    "test_aclose_terminates_real_subprocess"
+    "test_persists_real_subprocess_state_across_calls"
 
     # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
     "test_changes_when_file_changes"

@@ -18,13 +18,13 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "romm";
-    version = "5.1.0";
+    version = "5.2.0";
 
     src = fetchFromGitHub {
       owner = "rommapp";
       repo = "romm";
       tag = finalAttrs.version;
-      hash = "sha256-oFJ0R4m3bH2qQ18uTDm749la4oBMBj17Y5lF/eE/6tU=";
+      hash = "sha256-ixRgaDnyHzHWJjvC5yB6pD88aUgwtnkF6H7snAFODrE=";
     };
 
     __structuredAttrs = true;
@@ -149,7 +149,7 @@ stdenvNoCC.mkDerivation (
         inherit (finalAttrs) version;
         src = "${finalAttrs.src}/frontend";
 
-        npmDepsHash = "sha256-rNi0x8vbPkLEiDlf94SPTg4aKguSzVHR5zBouLJulKo=";
+        npmDepsHash = "sha256-k3MYizMevOfYJGRlu650bx1ERUkMBYdvg/JctmdwATo=";
         npmFlags = [ "--ignore-scripts" ];
         makeCacheWritable = true;
 

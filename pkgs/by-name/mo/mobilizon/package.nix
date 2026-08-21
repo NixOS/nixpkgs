@@ -14,7 +14,7 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
+  beamPackages = beam.packages.erlang_27.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 
   common = callPackage ./common.nix { };
 in

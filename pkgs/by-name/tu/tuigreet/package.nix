@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuigreet";
-  version = "0.11.0";
+  version = "0.11.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tuigreet";
     repo = "tuigreet";
     tag = finalAttrs.version;
-    hash = "sha256-4DB4Pl2UwIeab/MJaX3VfVNMsPWE6Q513z1NDdxvG3o=";
+    hash = "sha256-nZkZY4ZlywDUbOWmDpj1ubjoiLQamYCwTV72N0Lgb8g=";
   };
 
   cargoHash = "sha256-5Q4E8nnmQ109gcfxxctn/rne5N4Qvz2Pft6o7as2fSc=";

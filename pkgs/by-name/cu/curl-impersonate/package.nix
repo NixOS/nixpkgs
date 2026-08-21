@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Prebuild libidn2 (statically, with bundled libunistring) offline,
     # matching `make prepare-libidn2`.
-    BUILD_DIR="$PWD/build" ./scripts/build-libidn2.sh
+    BUILD_DIR="$PWD/build" ZIG_FLAGS='-target ${stdenv.hostPlatform.config}' ./scripts/build-libidn2.sh
   '';
 
   installPhase = ''
