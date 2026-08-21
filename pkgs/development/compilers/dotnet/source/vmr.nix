@@ -154,14 +154,21 @@ stdenv.mkDerivation {
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
     ++ lib.optionals (lib.versionAtLeast version "11") [
       ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+      (fetchpatch2 {
+        url = "https://github.com/dotnet/runtime/pull/132408/commits/76be9c11bc50bcfa7a13e027fb1cee486bca25a1.patch";
+        hash = "sha256-aJT4QVBaB96mc5m1xX8J5+Uh6h/XtKWV8m5gLOnFc+k=";
+        extraPrefix = "src/runtime/";
+        stripLen = 1;
+      })
     ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
+    # we purposely rename global.json first, because it can break dotnet --version
+    mv global.json{,~}
     sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
-    jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
-    mv global.json{~,}
+    jq '.tools.dotnet=$dotnet | .sdk.version=$dotnet' global.json~ --arg dotnet "$sdk_version" > global.json
 
     patchShebangs $(find -name \*.sh -type f -executable)
 
@@ -356,7 +363,13 @@ stdenv.mkDerivation {
         src/runtime/src/mono/CMakeLists.txt \
         --replace-fail '/usr/lib/libicucore.dylib' '${darwin.ICU}/lib/libicucore.dylib'
     ''
-  );
+  )
+  + lib.optionalString (lib.versionAtLeast version "11") ''
+    # matching the trailing space here to avoid breaking the shebang
+    substituteInPlace \
+      src/msbuild/eng/build.sh \
+      --replace-fail '/bin/bash ' 'bash '
+  '';
 
   prepFlags = [
     "--no-artifacts"
@@ -417,6 +430,10 @@ stdenv.mkDerivation {
     # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
     # caused by separateDebugInfo
     NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "11") {
+    # error : supplying the --target arm64-apple-macos14.0 != arm64-apple-darwin argument to a nix-wrapped compiler may not work correctly
+    NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
   };
 
   buildFlags = [
