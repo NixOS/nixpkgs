@@ -2,15 +2,19 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "testkube";
   version = "2.12.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "kubeshop";
     repo = "testkube";
-    rev = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-5nKlOpSkr5YkocbfSZ/Zx19X3QSucSZV2UoNUAi09dI=";
   };
 
@@ -24,6 +28,14 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "cmd/kubectl-testkube" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Kubernetes-native framework for test definition and execution";
