@@ -742,6 +742,7 @@ in
     mirrored-boots = runTest ./grub/mirrored-boots.nix;
   };
   gs1200-exporter = runTest ./gs1200-exporter.nix;
+  gtk-icon-cache = runTest ./gtk-icon-cache.nix;
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
