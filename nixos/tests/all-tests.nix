@@ -1407,6 +1407,7 @@ in
   ] ./podman/tls-ghostunnel.nix { };
   polaris = runTest ./polaris.nix;
   pomerium = handleTestOn [ "x86_64-linux" ] ./pomerium.nix { };
+  portless = runTest ./portless.nix;
   portmaster = runTest ./portmaster.nix;
   portunus = runTest ./portunus.nix;
   porxie = runTest ./porxie.nix;
