@@ -7,6 +7,7 @@
   expat,
   flex,
   libevent,
+  bashNonInteractive,
   libsodium,
   protobufc,
   hiredis,
@@ -93,11 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
     nettle
     expat
     libevent
+    bashNonInteractive
   ]
   ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals withDoH [ libnghttp2 ]
   ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -231,6 +235,8 @@ stdenv.mkDerivation (finalAttrs: {
       nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Validating, recursive, and caching DNS resolver";
