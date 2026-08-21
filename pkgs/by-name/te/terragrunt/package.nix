@@ -37,8 +37,8 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+    "-w"
     "-X github.com/gruntwork-io/terragrunt/internal/version.Version=v${finalAttrs.version}"
-    "-extldflags '-static'"
   ];
 
   nativeInstallCheckInputs = [
