@@ -19954,6 +19954,8 @@ self: super: with self; {
 
   stream-inflate = callPackage ../development/python-modules/stream-inflate { };
 
+  stream-unzip = callPackage ../development/python-modules/stream-unzip { };
+
   streamcontroller-plugin-tools =
     callPackage ../development/python-modules/streamcontroller-plugin-tools
       { };
