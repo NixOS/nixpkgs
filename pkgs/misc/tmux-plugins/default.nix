@@ -227,25 +227,25 @@ in
     };
   };
 
-  dracula = mkTmuxPlugin rec {
+  dracula = mkTmuxPlugin (finalAttrs: {
     pluginName = "dracula";
     version = "3.3.1";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-UFK0PJFgGIBdpjuSn3stAJ7z73FgEj0yK6F+ETRQ5f4=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
       downloadPage = "https://github.com/dracula/tmux";
       description = "Feature packed Dracula theme for tmux";
-      changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/dracula/tmux/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ethancedwards8 ];
     };
-  };
+  });
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
