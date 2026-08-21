@@ -1165,11 +1165,6 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
-  void01n = {
-  name = "void01";
-  github = "void01n";
-  githubId = 253173115;
-};
   albertchae = {
     github = "albertchae";
     githubId = 217050;
@@ -30410,6 +30405,11 @@
     githubId = 412749;
     name = "Volker Diels-Grabsch";
     keys = [ { fingerprint = "A7E6 9C4F 69DC 5D6C FC84  EE34 A29F BD51 5F89 90AF"; } ];
+  };
+  void01n = {
+    github = "void01n";
+    githubId = 253173115;
+    name = "void01";
   };
   voidless = {
     email = "julius.schmitt@yahoo.de";
