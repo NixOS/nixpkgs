@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.12.2";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-i3xyiiPkcOOM/4BUuQh0vsEGOorBX97qTJkCYhSxQ4I=";
+    hash = "sha256-80Jq+26l+VKZX2fR5a/08hfpLA8RLCqFmZALK+U4SPQ=";
   };
 
   patches = [
