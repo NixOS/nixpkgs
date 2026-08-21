@@ -44,6 +44,7 @@
   R,
   openmp ? null,
   testers,
+  pkgsCross,
 }:
 
 let
@@ -81,7 +82,9 @@ let
     aarch64-linux = {
       BINARY = 64;
       TARGET = setTarget "ARMV8";
-      DYNAMIC_ARCH = setDynamicArch true;
+      # DYNAMIC_ARCH includes ARMV9SME which references sgemm_kernel_sve_v2x4.S,
+      # a file missing when cross-compiling.
+      DYNAMIC_ARCH = setDynamicArch (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
       USE_OPENMP = true;
     };
 
@@ -332,6 +335,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       moduleNames = [ "OpenBLAS" ];
     };
+    aarch64-multiplatform = pkgsCross.aarch64-multiplatform.openblas;
   };
 
   meta = {
