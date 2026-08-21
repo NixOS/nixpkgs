@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/xyproto/tinyxxd";
     description = "Drop-in replacement and standalone version of the hex dump utility that comes with ViM";
-    license = [
-      lib.licenses.mit # or
+    license = lib.licenses.OR [
+      lib.licenses.x11
       lib.licenses.gpl2Only
     ];
     mainProgram = "tinyxxd";
