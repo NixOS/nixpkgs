@@ -20,6 +20,8 @@ buildPythonPackage (finalAttrs: {
   version = "8.0.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncpraw";
