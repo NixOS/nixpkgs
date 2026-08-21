@@ -9,6 +9,9 @@ buildGoModule (finalAttrs: {
   pname = "terragrunt";
   version = "1.1.3";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "terragrunt";
