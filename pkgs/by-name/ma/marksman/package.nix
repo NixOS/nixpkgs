@@ -26,6 +26,8 @@ buildDotnetModule (finalAttrs: {
   dotnetBuildFlags = [ "-p:VersionString=${finalAttrs.version}" ];
 
   __darwinAllowLocalNetworking = true;
+  # vstest.console process failed to connect to testhost process after 90 seconds
+  sandboxProfile = ''(allow network* (remote ip "*:*"))'';
 
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";
