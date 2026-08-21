@@ -3,6 +3,7 @@
   lib,
   luajit_openresty,
   mkNginxPlugin,
+  nixosTests,
 }:
 
 mkNginxPlugin (finalAttrs: {
@@ -26,6 +27,10 @@ mkNginxPlugin (finalAttrs: {
   '';
 
   allowMemoryWriteExecute = true;
+
+  passthru.tests = {
+    inherit (nixosTests) nginx-lua;
+  };
 
   meta = {
     description = "Embed the Power of Lua";
