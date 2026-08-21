@@ -8,14 +8,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-pages";
-  version = "0.9.0";
+  version = "0.9.1";
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "git-pages";
     repo = "git-pages";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yuOiA8TmLV5RQ7rmhH0Ac/6gN1t6wgyUkvMOJqEMV4U=";
+    hash = "sha256-4yQ3RRJbOfMaqjJJ6CRRN7TuaYY8ScLXxMZPd4tWPwk=";
   };
 
   subPackages = [ "." ];
