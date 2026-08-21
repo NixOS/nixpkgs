@@ -283,6 +283,12 @@ lib.mapAttrs mkLicense (
       fullName = "BSD 3-Clause Tso variant";
     };
 
+    bsdAskToEndorse = {
+      #spdxId = "BSD-ask-to-endorse"; # Accepted to SPDX waiting on next SPDX release
+      fullName = "BSD - ask to endorse";
+      url = "https://github.com/sudo-project/sudo/blob/c1307ea9ff340ce0538779f8e456501461fc44b7/plugins/sudoers/redblack.c#L24-L43";
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
       fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
       url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
