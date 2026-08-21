@@ -20,7 +20,7 @@
   atomicwrites,
   cachetools,
   peewee,
-  python-olm,
+  vodozemac,
 
   # tests
   aioresponses,
@@ -40,7 +40,7 @@
   weechatScripts,
   zulip,
 
-  withOlm ? false,
+  withVodozemac ? false,
 }:
 
 buildPythonPackage rec {
@@ -72,13 +72,13 @@ buildPythonPackage rec {
     pycryptodome
     unpaddedbase64
   ]
-  ++ lib.optionals withOlm optional-dependencies.e2e;
+  ++ lib.optionals withVodozemac optional-dependencies.e2e;
 
   optional-dependencies = {
     e2e = [
       atomicwrites
       cachetools
-      python-olm
+      vodozemac
       peewee
     ];
   };
@@ -101,7 +101,7 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  disabledTestPaths = lib.optionals (!withOlm) [
+  disabledTestPaths = lib.optionals (!withVodozemac) [
     "tests/encryption_test.py"
     "tests/key_export_test.py"
     "tests/memory_store_test.py"
@@ -119,7 +119,7 @@ buildPythonPackage rec {
     "test_upload_retry"
     "test_upload_text_file_object"
   ]
-  ++ lib.optionals (!withOlm) [
+  ++ lib.optionals (!withVodozemac) [
     "test_client_account_sharing"
     "test_client_key_query"
     "test_client_login"
