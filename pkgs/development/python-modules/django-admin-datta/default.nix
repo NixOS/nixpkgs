@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   django,
+  setuptools,
   fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "django-admin-datta";
   version = "1.0.19";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-65fUrV4FIbuVvNX93rgOCMjz4CoozMHEEVpzJqtbhKY=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   # no tests
   doCheck = false;
