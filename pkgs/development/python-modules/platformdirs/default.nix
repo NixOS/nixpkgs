@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.10.0";
+  version = "4.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "platformdirs";
     tag = version;
-    hash = "sha256-Sx5ln2mF2FkChP3UKu+GmOIIV8DNoJyYgsNiVDkVqQE=";
+    hash = "sha256-T98Ep64tBazYs2JtgsHtmzfVwU+dJC30xzrieVve3DI=";
   };
 
   build-system = [
