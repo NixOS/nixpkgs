@@ -1,7 +1,8 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
+  clang,
   gnat,
   gnatcoll-core,
   gprbuild,
@@ -99,7 +100,7 @@ let
       or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "gnatprove";
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 
@@ -117,7 +118,8 @@ stdenv.mkDerivation {
     ocaml
     findlib
     menhir
-  ]);
+  ])
+  ++ lib.optional stdenvNoCC.targetPlatform.isDarwin clang;
 
   buildInputs = [
     gnatcoll-core
