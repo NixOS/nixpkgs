@@ -49,7 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/knik0/faac";
     pkgConfigModules = [ "faac" ];
     mainProgram = "faac";
-    license = lib.licenses.unfreeRedistributable;
+    license = with lib.licenses; [
+      # faac itself
+      lgpl21Plus
+      # frontend/getopt.h
+      isc
+      # frontend/getopt.c
+      bsd2
+      publicDomain
+    ];
     maintainers = with lib.maintainers; [ tmarkus ];
     platforms = lib.platforms.all;
   };
