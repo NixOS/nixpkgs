@@ -41,6 +41,7 @@ let
           mainProgram = cmd;
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
+          inherit (provider.meta) license;
         };
         inherit (provider) version pname;
         passthru = {
@@ -75,6 +76,9 @@ let
     runCommand pkgs.less.name
       {
         inherit (pkgs.less) version pname;
+        meta = {
+          inherit (pkgs.less.meta) license;
+        };
       }
       ''
         mkdir -p $out/bin
@@ -268,6 +272,9 @@ let
     pname: paths:
     buildEnv {
       inherit paths pname version;
+      meta = {
+        license = lib.licenses.AND (lib.unique (lib.map (x: x.meta.license) paths));
+      };
     };
 
   # Compatibility derivations

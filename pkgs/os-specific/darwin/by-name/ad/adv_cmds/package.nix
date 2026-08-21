@@ -97,7 +97,7 @@ mkAppleDerivation {
 
   meta = {
     description = "Advanced commands package for Darwin";
-    license = [
+    license = lib.licenses.AND [
       lib.licenses.apsl10
       lib.licenses.apsl20
     ];
