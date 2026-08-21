@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fetch";
-  version = "2.1.0";
+  version = "2.3.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "areofyl";
     repo = "fetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ixx7XJcY4ktcN/lUfjvFljvHIEO2ktOebeGgL0ulHg=";
+    hash = "sha256-YEHvV07d02SzYO+lGT0Q+NkVoQNqxapBZfh44NOf/cw=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       samuelskovbakke
     ];
     mainProgram = "fetch";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
