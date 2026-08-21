@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plaid-python";
-  version = "42.0.0";
+  version = "43.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "plaid_python";
     inherit (finalAttrs) version;
-    hash = "sha256-3+AMimjYDU9BEKOgOp3IsEcPjGPazgZQ93kDLerM90k=";
+    hash = "sha256-zcoKgWHeOYD75J/oCBUE9jvdoZCTkVd20fsG0g6oLHo=";
   };
 
   build-system = [ setuptools ];

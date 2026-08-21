@@ -51,8 +51,8 @@ buildPythonPackage (finalAttrs: {
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-JC35nJCCeik33xxESYPUB2Fz+YNtwLwdIN+GlgFE81o=";
-        aarch64-linux = "sha256-Z+xZFefklHddXcDXPR4zy3Ske2prsQie73tRfk6HPjM=";
+        x86_64-linux = "sha256-/dnXJAjhf3ojvfombpyQE2YgpyTfWEYp81BnIuKy9DQ=";
+        aarch64-linux = "sha256-QAIdRVvZRSJwTjIdMOitomp8Cm75XEp1QqvaATiinRw=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -90,7 +90,9 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "jax_plugins" ];
 
-  inherit cudaLibPath;
+  passthru = {
+    inherit cudaLibPath;
+  };
 
   meta = {
     description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
@@ -98,7 +100,11 @@ buildPythonPackage (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.linux;
+    # Keep in sync with `src` above
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");

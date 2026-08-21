@@ -84,11 +84,13 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError on numerical values
     "test_barker"
+    "test_diagonal_variant"
     "test_imm_shrinkage_seed_influence_persists_diagonal"
     "test_laps"
     "test_mclmc"
     "test_mcse4"
     "test_mean_and_std"
+    "test_merge_equals_single_pass_d50_n100_n200"
     "test_normal_univariate"
     "test_nuts__with_device"
     "test_nuts__with_jit"

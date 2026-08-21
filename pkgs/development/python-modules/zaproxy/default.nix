@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   poetry-core,
   pyhamcrest,
   pytestCheckHook,
-  requests,
   requests-mock,
+  requests,
   six,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "python-owasp-zap-v2-4";
+  pname = "zaproxy";
   version = "0.6.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zaproxy";
@@ -37,9 +40,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "zapv2" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Python library to access the OWASP ZAP API";
+    description = "ZAP Python API";
     homepage = "https://github.com/zaproxy/zap-api-python";
+    changelog = "https://github.com/zaproxy/zap-api-python/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

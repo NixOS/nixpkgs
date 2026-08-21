@@ -109,8 +109,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ];
         buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
-        LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-        BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.release_version}/include";
+        env = {
+          LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+          BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.release_version}/include";
+        };
 
         # Skip the normal build — we only want the test binaries.
         buildPhase = ''

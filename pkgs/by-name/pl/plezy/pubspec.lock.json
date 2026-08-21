@@ -118,12 +118,12 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "021e2075260e324b7440a5c81b57bf0242d35020",
-        "resolved-ref": "021e2075260e324b7440a5c81b57bf0242d35020",
+        "ref": "12ef3ff758709e3ceab8eccd6d43e0dea1c68ca1",
+        "resolved-ref": "12ef3ff758709e3ceab8eccd6d43e0dea1c68ca1",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
-      "version": "9.5.5"
+      "version": "9.5.6"
     },
     "boolean_selector": {
       "dependency": "transitive",

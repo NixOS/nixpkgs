@@ -16,6 +16,7 @@
   pyyaml,
   rich,
   tensorstore,
+  treescope,
   typing-extensions,
 
   # tests
@@ -27,7 +28,7 @@
   pytest-xdist,
   sphinx,
   tensorflow,
-  treescope,
+  torch,
 
   writeScript,
   tomlq,
@@ -35,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.8";
+  version = "0.12.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0I5RwA1ORlWtSawOZhgsZMBQSOusyxD0WnIoPgZdxZw=";
+    hash = "sha256-Zh5PE9pq+loJCIW5EPvtWTco/ouIK3TzJ0o3Ydthz00=";
   };
 
   build-system = [
@@ -75,6 +76,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     sphinx
     tensorflow
+    torch
   ];
 
   disabledTestPaths = [

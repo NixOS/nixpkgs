@@ -1345,12 +1345,22 @@ mapAliases {
   libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
   LibreArp = throw "'LibreArp' has been renamed to/replaced by 'librearp'"; # Converted to throw 2025-10-27
   LibreArp-lv2 = throw "'LibreArp-lv2' has been renamed to/replaced by 'librearp-lv2'"; # Converted to throw 2025-10-27
+  ####
+  # LibreOffice related aliases
+  # Cannot order them usefully due to editorconfig
+  libreoffice-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
   libreoffice-qt6 = libreoffice-qt; # Added 2025-08-30
   libreoffice-qt6-fresh = libreoffice-qt-fresh; # Added 2025-08-30
   libreoffice-qt6-fresh-unwrapped = libreoffice-qt-fresh.unwrapped; # Added 2025-08-30
   libreoffice-qt6-still = libreoffice-qt-still; # Added 2025-08-30
   libreoffice-qt6-still-unwrapped = libreoffice-qt-still.unwrapped; # Added 2025-08-30
   libreoffice-qt6-unwrapped = libreoffice-qt.unwrapped; # Added 2025-08-30
+  libreoffice-qt-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-fresh-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
+  libreoffice-qt-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-still-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
+  libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
+  ###
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27
   librtlsdr = throw "'librtlsdr' has been renamed to/replaced by 'rtl-sdr'"; # Converted to throw 2025-10-27
@@ -2523,6 +2533,7 @@ mapAliases {
   vcstool = throw "'vcstool' has been removed, as it has been unmaintained upstream since January 2022. Please switch to 'vcs2l'"; # Added 2026-03-13
   vdhcoapp = throw "VDH >= 10 doesn't require a companion app and the repo has been archived."; # Added 2026-01-26
   vdirsyncerStable = throw "'vdirsyncerStable' has been renamed to/replaced by 'vdirsyncer'"; # Converted to throw 2025-10-27
+  venera = throw "'venera' has been removed as it is unmaintained upstream"; # Added 2026-08-20
   venta = throw "'venta' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   ventoy-bin = throw "'ventoy-bin' has been renamed to/replaced by 'ventoy'"; # Converted to throw 2025-10-27
   ventoy-bin-full = throw "'ventoy-bin-full' has been renamed to/replaced by 'ventoy-full'"; # Converted to throw 2025-10-27

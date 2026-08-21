@@ -2,22 +2,24 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-relay";
-  version = "0.5.6";
+  version = "0.5.8";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MetaFARS";
     repo = "codex-relay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JjrtQev2lujweV3dNiPC5ZV+LTPHX4BjWASfrI4/zy8=";
+    hash = "sha256-cdBzuurqJGT4EzgZbq4deXZKiJoOjCg+S1efnpk0/wU=";
   };
 
-  cargoHash = "sha256-Ihdm2GhUhxlZw61w01Nakod4ZIAdHeBv2rCCrMQrC7I=";
+  cargoHash = "sha256-ak4yEKEf94NPvOlcoT97/X53sKu6+euwfWfbs52Tef0=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

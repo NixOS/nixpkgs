@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lookup-license";
-  version = "0.1.30";
+  version = "0.1.31";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "hesa";
     repo = "lookup-license";
     tag = finalAttrs.version;
-    hash = "sha256-zFDqh62bjYkO3Duze3suS8LlrlzuqQes7ZaH+9G+yQ4=";
+    hash = "sha256-0Etl+5j1CZdqGJZywXx4V6kKZheSucAyXkmy0PBgArI=";
   };
 
   build-system = [

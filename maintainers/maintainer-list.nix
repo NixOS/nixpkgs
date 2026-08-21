@@ -32154,6 +32154,11 @@
     githubId = 39456023;
     name = "Mike Yim";
   };
+  zeusec = {
+    name = "Cole";
+    github = "zeusec";
+    githubId = 65095161;
+  };
   zevisert = {
     email = "dev@zevisert.ca";
     github = "zevisert";
