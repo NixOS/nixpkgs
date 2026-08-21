@@ -17,9 +17,11 @@ let
     field:
     with builtins;
     let
-      matches = match ''^[^#\r\n]*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+      lines = lib.splitString "\n" (readFile firmwareConfig);
+      matchLine = line: match ''${field}="([a-zA-Z0-9_]+)".*'' line;
+      matched = lib.findFirst (line: matchLine line != null) null lines;
     in
-    if matches != null then head matches else null;
+    if matched != null then head (matchLine matched) else null;
   matchPlatform = getConfigField "CONFIG_BOARD_DIRECTORY";
   matchBoard = getConfigField "CONFIG_MCU";
   matchAvrdudeProtocol = getConfigField "CONFIG_AVRDUDE_PROTOCOL";
