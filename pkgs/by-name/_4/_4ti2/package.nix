@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/{groebner/script.template.in,zsolve/{graver,hilbert}.template} \
       --replace-fail 'SCRIPT=$(realpath $(which "$0"))' \
                      'SCRIPT=$(realpath $(${lib.getExe which} "$0"))'
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # configure.ac tries to compile and execute a specific test file here
+    substituteInPlace configure.ac \
+      --replace-fail "CHECK_TRAPV" ""
   '';
 
   nativeBuildInputs = [
@@ -38,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   installFlags = [ "install-exec" ];
 

@@ -32,6 +32,10 @@ buildDotnetModule rec {
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
 
+  dotnetFlags = [
+    "-p:TargetFrameworks=net10.0"
+  ];
+
   executables = [ "naps2" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
