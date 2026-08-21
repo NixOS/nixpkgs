@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   pkgsBuildBuild,
+  libiconv,
+  stdenv,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jbz";
@@ -16,6 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-U+P2LlhmXwaZy2a2eigrg545HTuV1T01jZfUOEUQ5+w=";
+
+  depsBuildBuild = lib.optionals stdenv.buildPlatform.isDarwin [
+    pkgsBuildBuild.stdenv.cc
+    libiconv
+  ];
 
   passthru.runtimeDeps = with pkgsBuildBuild; [
     bacon
