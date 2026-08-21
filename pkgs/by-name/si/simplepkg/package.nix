@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "void01n";
     repo = "simple-pkg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eYQ7szXFhI8azEz86OL3OjkLbdHtZgADRuZ1A+Gu6/E="; # nix build will report the correct value on first attempt
+    hash = "sha256-eYQ7szXFhI8azEz86OL3OjkLbdHtZgADRuZ1A+Gu6/E=";
   };
 
   dontBuild = true;
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Declarative-feeling pkg manager for NixOS packages.nix";
-    homepage = "https://github.com/void01n/simplepkg";
+    homepage = "https://github.com/void01n/simple-pkg";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "pkg";
