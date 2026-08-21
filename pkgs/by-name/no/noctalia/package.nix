@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd noctalia \
       --bash <($out/bin/noctalia completions bash) \
       --fish <($out/bin/noctalia completions fish) \
