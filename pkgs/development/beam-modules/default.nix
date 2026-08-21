@@ -3,29 +3,24 @@
   lib,
   pkgs,
   erlang,
+  generateSplicesForMkScope,
+  makeScopeWithSplicing',
+  # Where this package set lives in `pkgs`, so that cross compilation can find
+  # its build platform counterpart.
+  splicePath,
 }:
 
-let
-  inherit (lib) makeExtensible;
-
-  # FIXME: add support for overrideScope
-  callPackageWithScope =
-    scope: drv: args:
-    lib.callPackageWith scope drv args;
-  callPackagesWithScope =
-    scope: drv: args:
-    lib.callPackagesWith scope drv args;
-  mkScope = scope: pkgs // scope;
-
-  packages =
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope splicePath;
+  # This is the set itself, splicing it would recurse.
+  keep = self: { inherit (self) beamPackages; };
+  f =
     self:
     let
-      defaultScope = mkScope self;
-      callPackage = drv: args: callPackageWithScope defaultScope drv args;
-      callPackages = drv: args: callPackagesWithScope defaultScope drv args;
+      inherit (self) callPackage;
     in
-    rec {
-      inherit callPackage erlang;
+    {
+      inherit erlang;
       beamPackages = self;
 
       inherit (callPackage ../tools/build-managers/rebar3 { }) rebar3 rebar3WithPlugins;
@@ -50,47 +45,41 @@ let
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
-      elixir = elixir_1_18;
+      elixir = self.elixir_1_18;
 
       elixir_1_20 = callPackage ../interpreters/elixir/1.20.nix {
-        inherit erlang;
         debugInfo = true;
       };
 
       elixir_1_19 = callPackage ../interpreters/elixir/1.19.nix {
-        inherit erlang;
         debugInfo = true;
       };
 
       elixir_1_18 = callPackage ../interpreters/elixir/1.18.nix {
-        inherit erlang;
         debugInfo = true;
       };
 
       elixir_1_17 = callPackage ../interpreters/elixir/1.17.nix {
-        inherit erlang;
         debugInfo = true;
       };
 
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-      ex_doc = callPackage ./ex_doc {
-        inherit fetchMixDeps mixRelease;
-      };
+      ex_doc = callPackage ./ex_doc { };
 
-      elixir-ls = callPackage ./elixir-ls { inherit elixir; };
+      elixir-ls = callPackage ./elixir-ls { };
       expert = callPackage ./expert { };
 
-      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 fetchHex; };
+      lfe = callPackage ../interpreters/lfe { };
 
-      livebook = callPackage ./livebook { inherit beamPackages; };
+      livebook = callPackage ./livebook { };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
       hex = callPackage ./hex { };
 
-      inherit (callPackages ./hooks { })
+      inherit (pkgs.callPackages ./hooks { })
         beamCopySourceHook
         beamModuleInstallHook
         mixBuildDirHook
@@ -104,5 +93,5 @@ let
     // lib.optionalAttrs config.allowAliases {
       webdriver = throw "'beamPackages.webdriver' has been removed."; # added 2026-07-29
     };
-in
-makeExtensible packages
+
+}

@@ -68,10 +68,6 @@ lib.extendMkDerivation {
       # This is how Mix finds dependencies.
       mixNixDeps ? { },
 
-      elixir ? inputs.elixir,
-      erlang ? inputs.erlang,
-      hex ? inputs.hex.override { inherit elixir; },
-
       # Remove releases/COOKIE
       #
       # People have different views on the nature of cookies. Some believe that they are
@@ -95,6 +91,8 @@ lib.extendMkDerivation {
 
       ...
     }@attrs:
+    assert lib.assertMsg (!(attrs ? elixir || attrs ? erlang || attrs ? hex))
+      "mixRelease no longer takes `elixir`, `erlang` or `hex`. Build with the package set that has the versions you need, e.g. `beam27Packages.mixRelease`, or derive one with `beamPackages.overrideScope (final: prev: { elixir = prev.elixir_1_18; })`.";
     assert mixNixDeps != { } -> mixFodDeps == null;
     assert stripDebug -> !enableDebugInfo;
     assert escriptBinName != null -> mixReleaseName == "";

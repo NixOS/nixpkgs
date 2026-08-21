@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ansifilter";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitLab {
     owner = "saalen";
     repo = "ansifilter";
     tag = finalAttrs.version;
-    hash = "sha256-jCgucC5mHkDwVtTKP92RBStxpouQCR7PHWkDt0y+9BM=";
+    hash = "sha256-mWqpHfTzVMCHPnDFZ26rQusEWKxaMjQxl8xwDyiLBrc=";
   };
 
   nativeBuildInputs = [
