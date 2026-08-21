@@ -131,6 +131,12 @@
     "sha256": "0g98qgl1svf6jcybbqih466hp2w0ckjgbgwz6cl6ljr6fghk68k8",
     "version": "2.0.2"
   },
+  "polls-for-activitypub": {
+    "path": "polls-for-activitypub/tags/1.0.11",
+    "rev": "3631874",
+    "sha256": "0s45a8zj94jrgvingw6k4sdmsdkqqq9xvl2x1hcbhi4qik5syfjw",
+    "version": "1.0.11"
+  },
   "simple-login-captcha": {
     "path": "simple-login-captcha/tags/1.3.6",
     "rev": "3549724",
