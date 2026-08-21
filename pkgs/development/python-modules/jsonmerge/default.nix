@@ -4,20 +4,23 @@
   fetchPypi,
   jsonschema,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonmerge";
   version = "1.9.2";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-xDdX4BgLDhm3rkwTCtQqB8xYDDGRL2H0gj6Ory+jlKM=";
   };
 
-  propagatedBuildInputs = [ jsonschema ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jsonschema ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
