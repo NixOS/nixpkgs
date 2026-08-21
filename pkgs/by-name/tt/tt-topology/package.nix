@@ -49,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     "networkx"
     "matplotlib"
     "setuptools"
+    "pyluwen"
   ];
 
   # Tests are broken
