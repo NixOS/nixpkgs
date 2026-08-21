@@ -37,14 +37,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202605";
+  version = "202608";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-sUqLocdX7lxN2pEdn84Cjh8pOzYqIeKqO144XhwKA30=";
+    hash = "sha256-LRq5SGAcqMl9PlSaV/Q2qE1HLMXHghozwgZP4A3FCts=";
   };
 
   src = applyPatches {
