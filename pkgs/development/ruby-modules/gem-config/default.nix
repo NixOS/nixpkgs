@@ -1045,6 +1045,17 @@ in
     buildFlags = [ "--with-ssh" ];
   };
 
+  rbtrace = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      tar -xzf ext/src/msgpack-1.1.0.tar.gz -C ext/src
+    '';
+    preConfigure = ''
+      tar -czf ext/src/msgpack-1.1.0.tar.gz -C ext/src msgpack-1.1.0
+      rm -r ext/src/msgpack-1.1.0
+    '';
+  };
+
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
