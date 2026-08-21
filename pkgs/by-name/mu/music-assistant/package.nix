@@ -191,6 +191,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
     ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
       "acoustid_lookup"
+      "apple_music"
       "audible"
       "dlna"
       "fastmcp_server"
@@ -224,7 +225,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # "OSError: [Errno 19] No such device"
     "tests/core/test_genres.py"
     # provider is missing dependencies
-    "tests/providers/apple_music"
     "tests/providers/bandcamp"
     "tests/providers/hue_entertainment"
     "tests/providers/kion_music"

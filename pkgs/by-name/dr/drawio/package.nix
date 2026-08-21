@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "31.1.8";
+  version = "31.3.1";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tVGBZ+zMl/co0l5oOp78GJG0kexgaiPx7f03WaNHxoY=";
+    hash = "sha256-7Wtmh6K9qLkSUjiZI2/+Z+AoD0oHJKq6nlO7kHUcj9s=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-Yh8j7KDzsWpGIpYM/NuikPoNDiodJZZUTNqFOThmOXQ=";
+    hash = "sha256-mG2FsdxXC+VTRHLgAsx9h2qCyrkSway8W/D4Eipp+go=";
   };
 
   nativeBuildInputs = [
