@@ -513,8 +513,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.10.0";
-          hash = "sha256-rz3Ehq/2AewE5ADYHVk8pHICSWO58i8v+nBwzkFkGCY=";
+          version = "0.10.1";
+          hash = "sha256-jQn7DJ3LKnuWDtoTu0FhDXMZSUwasz8lwJ6O9K06B3M=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
