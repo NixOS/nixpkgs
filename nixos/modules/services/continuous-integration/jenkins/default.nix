@@ -258,7 +258,7 @@ in
         StateDirectoryMode = "750";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
-        RuntimeDirectoryMode = "750";
+        RuntimeDirectoryMode = "700";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
