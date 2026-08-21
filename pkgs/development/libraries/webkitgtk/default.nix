@@ -246,6 +246,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       "-DENABLE_JOURNALD_LOG=OFF"
     ];
 
+  env = lib.optionalAttrs clangStdenv.hostPlatform.isAarch32 {
+    NIX_CFLAGS_COMPILE = "-fno-integrated-as";
+    NIX_LDFLAGS = "-latomic";
+  };
+
   postPatch = ''
     patchShebangs .
   '';
