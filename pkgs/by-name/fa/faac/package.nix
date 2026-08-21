@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     homepage = "https://github.com/knik0/faac";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
     platforms = lib.platforms.all;
   };
 })
