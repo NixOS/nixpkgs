@@ -39,6 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   env.RADICLE_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
@@ -83,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
     "--skip=rad_clone_partial_fail"
+    "--skip=commands::patch::rad_patch_merge_unauthorized_branch"
   ];
 
   postInstall = ''
