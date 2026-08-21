@@ -211,9 +211,9 @@ def run_prompt(config: SecretsConfig, prompt: SecretsPrompt, out: Path):
             env=env,
             check=True,
         )
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         raise SecretsError(
-            f"Error running prompt '{prompt.name}' via the '{backend.name}' backend:\n{e.stderr}"
+            f"Error running prompt '{prompt.name}' via the '{backend.name}' backend"
         )
 
 
