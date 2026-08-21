@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/areofyl/fetch";
     changelog = "https://github.com/areofyl/fetch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ghastrum ];
+    maintainers = with lib.maintainers; [
+      ghastrum
+      samuelskovbakke
+    ];
     mainProgram = "fetch";
     platforms = lib.platforms.linux;
   };
