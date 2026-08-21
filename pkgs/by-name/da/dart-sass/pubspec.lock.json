@@ -4,31 +4,31 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "1b0e6a07425a3e460666e88bf1c949ccc7bb0116ad562ce94a1eca60fe820725",
+        "sha256": "9a3386eea899815698dd55995277cf7cb8572ee52b399a6edfb7ae2b50e5fc19",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "103.0.0"
+      "version": "105.0.0"
     },
     "analyzer": {
       "dependency": "direct dev",
       "description": {
         "name": "analyzer",
-        "sha256": "61c04d0c1bfed555c681ea079519933f071a5a026578ff73c4ff0df2d3462e5e",
+        "sha256": "62993bed6eadbe9596c5c20d5c167e7bc563c5fe266657a04ddeb93bdb84f4c9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "13.3.0"
+      "version": "14.1.0"
     },
     "archive": {
       "dependency": "direct dev",
       "description": {
         "name": "archive",
-        "sha256": "a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff",
+        "sha256": "be169cf6ac481e052c4538715d88841d567150dfe1df38aaec76461a4e7b39f2",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.0.9"
+      "version": "4.1.0"
     },
     "args": {
       "dependency": "direct main",
@@ -194,11 +194,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "dartdoc",
-        "sha256": "deb9e1d80cd0fd66139c5690315a5004150fd5c85a16d97459360531aa9e3702",
+        "sha256": "97647aabda3197d6c88e04b080b0b364c8ccc8fd118760334dba8dccdec0a804",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.0.8"
+      "version": "9.0.9"
     },
     "ffi": {
       "dependency": "transitive",
@@ -604,11 +604,11 @@
       "dependency": "direct main",
       "description": {
         "name": "source_maps",
-        "sha256": "190222579a448b03896e0ca6eca5998fa810fda630c1d65e2f78b3f638f54812",
+        "sha256": "14c2945847669b44089bb1222f66873d7ff7103c58911917f2a63c5a62327898",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.10.13"
+      "version": "0.10.14"
     },
     "source_span": {
       "dependency": "direct main",
@@ -744,11 +744,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vm_service",
-        "sha256": "0016aef94fc66495ac78af5859181e3f3bf2026bd8eecc72b9565601e19ab360",
+        "sha256": "5f37239c4851efcef929cea7824e76df7f2f0970aef85d66bbc430afa40e72f0",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "15.2.0"
+      "version": "15.3.0"
     },
     "watcher": {
       "dependency": "direct main",
@@ -822,6 +822,6 @@
     }
   },
   "sdks": {
-    "dart": ">=3.11.0 <4.0.0"
+    "dart": ">=3.13.0 <4.0.0"
   }
 }
