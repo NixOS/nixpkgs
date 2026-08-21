@@ -936,12 +936,8 @@ let
             callPackage ../development/ocaml-modules/janestreet/janePackage_0_16.nix { }
           else if lib.versionOlder "4.10.2" ocaml.version then
             callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { }
-          else if lib.versionOlder "4.08" ocaml.version then
-            callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix { }
-          else if lib.versionOlder "4.07" ocaml.version then
-            callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix { }
           else
-            null;
+            callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix { };
 
         janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
@@ -981,7 +977,7 @@ let
                 zstd
                 ;
             }
-          else if lib.versionOlder "4.08" ocaml.version then
+          else
             import ../development/ocaml-modules/janestreet/0.14.nix {
               inherit self;
               inherit (pkgs)
@@ -990,16 +986,6 @@ let
                 openssl
                 zstd
                 ;
-            }
-          else if lib.versionOlder "4.07" ocaml.version then
-            import ../development/ocaml-modules/janestreet/0.12.nix {
-              self = self // {
-                ppxlib = ppxlib.override { version = "0.8.1"; };
-              };
-              inherit (pkgs) openssl;
-            }
-          else
-            import ../development/ocaml-modules/janestreet {
             }
         );
 
