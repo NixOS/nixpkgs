@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   perl,
   cmake,
   ninja,
@@ -27,7 +26,6 @@
   yaml-cpp,
   nlohmann_json,
   openssl,
-  llvmPackages,
   gtest,
   ctestCheckHook,
   mpiCheckPhaseHook,
@@ -54,38 +52,20 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.11.0";
+  version = "2.12.1";
   pname = "adios2";
 
   src = fetchFromGitHub {
     owner = "ornladios";
     repo = "adios2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yHPI///17poiCEb7Luu5qfqxTWm9Nh+o9r57mZT26U0=";
+    hash = "sha256-3jMvVYYO93/Pu7RW2x5mzTRMrZ3oC3IwGrUz2tSqJxQ=";
   };
 
   postPatch = ''
     chmod +x cmake/install/post/adios2-config.pre.sh.in
     patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
   '';
-
-  # TODO: remove these patches when updating to > v2.11.x, which will already include these commits
-  patches = [
-    # use upstream GoogleTest.cmake
-    # see https://github.com/ornladios/ADIOS2/issues/4659
-    (fetchpatch2 {
-      name = "googletest-cmake-fix.patch";
-      url = "https://github.com/ornladios/ADIOS2/commit/20aab0f99d38dc4437b086edf6b44ecf4100ed76.patch?full_index=1";
-      hash = "sha256-CZD3QUATX0JI75Oip0LNwirWIwgQakWuCHs1fIjwzj0=";
-    })
-    # fix double import cmake conflict
-    # see https://github.com/ornladios/ADIOS2/issues/4760
-    (fetchpatch2 {
-      name = "cmake-target-guard-fix.patch";
-      url = "https://github.com/ornladios/ADIOS2/commit/23fd08a10b52a971150f93f99d341b83b8096e3d.patch?full_index=1";
-      hash = "sha256-+29a9JgiCv2kBz0uUT8Kn/Tf3KDD1JNPdzeb/DruTBo=";
-    })
-  ];
 
   nativeBuildInputs = [
     perl
@@ -96,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.python
-    python3Packages.pybind11
+    python3Packages.nanobind
     python3Packages.pythonImportsCheckHook
   ];
 
@@ -145,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # declare thirdparty dependencies explicitly
     (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
+    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_PERFSTUBS" false)
     (lib.cmakeBool "ADIOS2_USE_Blosc2" true)
     (lib.cmakeBool "ADIOS2_USE_BZip2" true)
     (lib.cmakeBool "ADIOS2_USE_ZFP" (lib.meta.availableOn stdenv.hostPlatform zfp))
@@ -189,7 +170,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
-  ];
+  ]
+  ++ lib.optional pythonSupport (
+    lib.cmakeFeature "nanobind_DIR" "${python3Packages.nanobind}/${python3Packages.python.sitePackages}/nanobind/cmake"
+  );
 
   # python binding libraries should be linked against installed libraries
   preInstall = lib.optionalString pythonSupport ''
