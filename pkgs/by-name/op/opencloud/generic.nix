@@ -32,6 +32,11 @@
 }:
 
 let
+  maintainers = with lib.maintainers; [
+    christoph-heiss
+    k900
+    deadbaed
+  ];
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
@@ -91,11 +96,8 @@ let
       homepage = "https://github.com/opencloud-eu/web";
       changelog = "https://github.com/opencloud-eu/web/blob/${finalAttrs.src.tag}/CHANGELOG.md";
       license = lib.licenses.agpl3Only;
-      maintainers = with lib.maintainers; [
-        christoph-heiss
-        k900
-      ];
       platforms = lib.platforms.all;
+      inherit maintainers;
     };
   });
 
@@ -141,11 +143,8 @@ let
       homepage = "https://github.com/opencloud-eu/opencloud";
       changelog = "https://github.com/opencloud-eu/opencloud/blob/${finalAttrs.src.tag}/CHANGELOG.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [
-        christoph-heiss
-        k900
-      ];
       platforms = lib.platforms.all;
+      inherit maintainers;
     };
   });
 in
@@ -243,10 +242,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/opencloud-eu/opencloud";
     changelog = "https://github.com/opencloud-eu/opencloud/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      christoph-heiss
-      k900
-    ];
     mainProgram = "opencloud";
+    inherit maintainers;
   };
 })
