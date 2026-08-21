@@ -10,29 +10,21 @@ in
 {
   options = {
     services.cpupower-gui = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        example = true;
-        description = ''
-          Enables dbus/systemd service needed by cpupower-gui.
-          These services are responsible for retrieving and modifying cpu power
-          saving settings.
-        '';
-      };
+      enable = lib.mkEnableOption "cpupower-gui, along with the D-Bus and systemd services it uses to retrieve and modify CPU power saving settings";
+      package = lib.mkPackageOption pkgs "cpupower-gui" { };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.cpupower-gui ];
-    services.dbus.packages = [ pkgs.cpupower-gui ];
+    environment.systemPackages = [ cfg.package ];
+    services.dbus.packages = [ cfg.package ];
     systemd.user = {
       services.cpupower-gui-user = {
         description = "Apply cpupower-gui config at user login";
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui config";
+          ExecStart = "${lib.getExe cfg.package} config";
         };
       };
     };
@@ -42,7 +34,7 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui config";
+          ExecStart = "${lib.getExe cfg.package} config";
         };
       };
       cpupower-gui-helper = {
@@ -51,7 +43,7 @@ in
         serviceConfig = {
           Type = "dbus";
           BusName = "org.rnd2.cpupower_gui.helper";
-          ExecStart = "${pkgs.cpupower-gui}/lib/cpupower-gui/cpupower-gui-helper";
+          ExecStart = "${cfg.package}/lib/cpupower-gui/cpupower-gui-helper";
         };
       };
     };
