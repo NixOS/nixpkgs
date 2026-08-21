@@ -694,8 +694,8 @@
       "eclairevoyant": 848000
     },
     "members": {
-      "Eveeifyeve": 88671402,
-      "daylinmorgan": 47667941
+      "daylinmorgan": 47667941,
+      "eveeifyeve": 88671402
     },
     "name": "nim"
   },
@@ -788,10 +788,11 @@
     "description": "Maintain Pantheon desktop environment and platform",
     "id": 4786995,
     "maintainers": {
+      "bobby285271": 20080233,
       "davidak": 91113
     },
     "members": {
-      "bobby285271": 20080233
+      "amz-x": 18249234
     },
     "name": "Pantheon"
   },
@@ -895,7 +896,6 @@
       "0x4A6F": 9675338
     },
     "members": {
-      "DarkKirb": 23011243,
       "dramforever": 2818072,
       "fgaz": 8182846,
       "jonhermansen": 660911
