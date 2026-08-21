@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 
   glslang,
   imath,
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-cross
     vulkan-memory-allocator
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flexible GLSL and HLSL shader editor and IDE";
