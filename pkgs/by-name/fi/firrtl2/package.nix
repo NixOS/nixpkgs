@@ -10,7 +10,11 @@
 stdenv.mkDerivation rec {
   pname = "firrtl2";
   version = "6.0.0";
-  scalaVersion = "2.13"; # pin, for determinism
+  scalaVersion = "2.13";
+
+  # Required by CI
+  strictDeps = true;
+  __structuredAttrs = true;
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
