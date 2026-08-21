@@ -24,7 +24,7 @@ in
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe cfg.package} config";
+          ExecStart = "${lib.getExe cfg.package} config --apply";
         };
       };
     };
@@ -34,7 +34,7 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe cfg.package} config";
+          ExecStart = "${lib.getExe cfg.package} config --apply";
         };
       };
       cpupower-gui-helper = {
