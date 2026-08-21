@@ -491,6 +491,8 @@ mapAliases {
   Pweave = throw "'Pweave' has been renamed to/replaced by 'pweave'"; # Converted to throw 2025-10-29
   py-deprecate = throw "'py-deprecate' has been renamed to/replaced by 'pydeprecate'"; # Converted to throw 2026-06-19
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
+  py-key-value-shared = throw "'py-key-value-shared' has been integrated into 'py-key-value-aio'; use 'py-key-value-aio' instead"; # Added 2026-08-17
+  py-key-value-shared-test = throw "'py-key-value-shared-test' has been integrated into 'py-key-value-aio'; use 'py-key-value-aio' instead"; # Added 2026-08-17
   py-multiaddr = multiaddr; # added 2026-06-27
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
