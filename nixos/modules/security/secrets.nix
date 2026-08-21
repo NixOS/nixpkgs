@@ -250,7 +250,7 @@ let
       options = {
         name = lib.mkOption {
           description = "The prompt's name.";
-          type = str;
+          type = safeName "prompt";
           default = name;
         };
 
