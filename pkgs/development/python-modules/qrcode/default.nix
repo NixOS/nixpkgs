@@ -14,19 +14,20 @@
   # tests
   mock,
   pytestCheckHook,
-  qrcode,
-  testers,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qrcode";
   version = "8.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "lincolnloop";
     repo = "python-qrcode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qLIYUFnBJQGidnfC0bQAkO/aUmT94uXFMeMhnUgUnfQ=";
   };
 
@@ -44,27 +45,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
+    versionCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = qrcode;
-      command = "qr --version";
-    };
-  };
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_change" ] ++ [
-    # Attempts to open a file which doesn't exist in sandbox
-    "test_piped"
-  ];
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
     description = "Python QR Code image generator";
     mainProgram = "qr";
     homepage = "https://github.com/lincolnloop/python-qrcode";
-    changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ attila ];
   };
-}
+})

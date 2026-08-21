@@ -18,6 +18,7 @@
   buildPackages,
   callPackage,
   libGL,
+  libnotify,
   clang_20,
   jq,
   glib,
@@ -74,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnotify
   ];
 
   nativeBuildInputs = [
@@ -193,7 +197,13 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            libnotify
+          ]
+        }" \
+        --prefix PATH : "${lib.makeBinPath [ libnotify ]}" \
         --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \

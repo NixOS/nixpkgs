@@ -34,37 +34,36 @@ let
       abi = dist;
     };
 
-  # upstream does not distribute jax-cuda12-plugin 0.4.38 binaries for aarch64-linux
   srcs = {
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-Mf/iRdDi/Rz07lclT/xMiFBbuOf1639rOjfWkdc2ZQo=";
+      hash = "sha256-8BVPvyNrsiMab8pSBN0eQ6wMHPDeOgAg//kQPlP7hXI=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-PpXLnerCmI4VImxtiSfnK//IQVBdI2Ix5IQ6ixZnnyU=";
+      hash = "sha256-8qOC5dv2YzB0C/TbOQPGEuhLJN4JkTx5U+0kA8KWtoY=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-tvcG1sEP6b+v4DNMXVLkDm6Z80PCTY508EWsZ7f3rOI=";
+      hash = "sha256-2O/FH9SZiimQxGfmPDhs/ckYfH0QWCXFxKt0Pn1SLRE=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-7xA7NTZHlXCMSkOAN22Nc/w9SHNWpwN/zyDKtzX7WaY=";
+      hash = "sha256-6KjWb0PQCzXAQwNmsRfBthKDdk8NENOWWr/jn4coSG8=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-S2sGD+c//eIG5iwmNweWGMNMK0t0vlywNxsipDqQfEo=";
+      hash = "sha256-a7jxBoIVF+NEiKUyDkX13vSkYo8qJUr6bix+7DVBm74=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-L43Mb/NIMxWCUbUrcRo7XHN4XsNkdxKUvDgnqq6nVFA=";
+      hash = "sha256-PKEZswHZqTvLg3XGk3z3lJL/WVHKXLuLRvfjSvQtz9M=";
     };
   };
 in
@@ -120,7 +119,11 @@ buildPythonPackage {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.linux;
+    # Keep in sync with `srcs` above
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
