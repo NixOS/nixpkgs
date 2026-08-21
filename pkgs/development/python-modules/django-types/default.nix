@@ -2,22 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   types-psycopg2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-types";
-  version = "0.22.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_types";
-    inherit version;
-    hash = "sha256-TOzJ7uhG5/8qOYvsnf5lQ+du+5IqeljF1gZLyw5qPcU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-r5A96Lnuljt1lEWaeiDLjqqrF2risyROyqCJ4MVwsNE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ types-psycopg2 ];
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})
