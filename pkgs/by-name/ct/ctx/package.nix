@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  env.ARCH = stdenv.hostPlatform.parsed.cpu.arch;
+  env.ARCH = stdenv.hostPlatform.parsed.cpu.arch or stdenv.hostPlatform.parsed.cpu.name;
 
   configureScript = "./configure.sh";
   configureFlags = lib.optional enableFb "--enable-fb";
