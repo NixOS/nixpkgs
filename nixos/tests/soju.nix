@@ -15,7 +15,7 @@ let
 in
 {
   name = "soju";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ h7x4 ];
 
   containers = {
     client =
