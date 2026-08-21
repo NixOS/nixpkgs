@@ -72,7 +72,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             )
                         except subprocess.CalledProcessError as e:
                             raise SecretsError(
-                                f"Error getting '{entry}/{file.name}': {e.stderr}"
+                                f"Error getting '{dep_name}/{file.name}': {e.stderr}"
                             )
 
                 try:
