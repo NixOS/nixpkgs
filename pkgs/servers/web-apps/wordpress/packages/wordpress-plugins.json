@@ -1,5 +1,6 @@
 {
-  "add-widget-after-content": "gpl3Plus"
+  "activitypub": "mit"
+, "add-widget-after-content": "gpl3Plus"
 , "akismet": "gpl2Plus"
 , "antispam-bee": "gpl2Plus"
 , "async-javascript": "gpl2Plus"

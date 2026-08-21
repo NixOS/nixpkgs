@@ -1,4 +1,10 @@
 {
+  "activitypub": {
+    "path": "activitypub/tags/9.2.2",
+    "rev": "3642412",
+    "sha256": "1cq02p9fmz8mb0r7vrd7aak1xc4pxmnnmja1dw9471nbv9k68y51",
+    "version": "9.2.2"
+  },
   "add-widget-after-content": {
     "path": "add-widget-after-content/tags/2.5.4",
     "rev": "3548285",
