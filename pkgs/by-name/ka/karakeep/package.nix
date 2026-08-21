@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  nodejs,
+  nodejs_22,
   node-gyp,
   gnutar,
   inter,
@@ -41,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    nodejs
+    # nodejs 22 avoids a worker crash on 24.19+ while waiting for a proper fix to https://github.com/karakeep-app/karakeep/issues/2989
+    # should be safe to revert after seeing forward movement at https://github.com/karakeep-app/karakeep/blob/main/docker/Dockerfile#L13
+    nodejs_22
     node-gyp
     pnpmConfigHook
     pnpm_11
@@ -67,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Based on matrix-appservice-discord
     pushd node_modules/better-sqlite3
-    npm run build-release --offline "--nodedir=${srcOnly nodejs}"
-    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
+    npm run build-release --offline "--nodedir=${srcOnly nodejs_22}"
+    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs_22}" {} \;
     popd
 
     export CI=true
@@ -124,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
         --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
         --subst-var-by VERSION "${finalAttrs.version}" \
-        --subst-var-by NODEJS "${nodejs}"
+        --subst-var-by NODEJS "${nodejs_22}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
