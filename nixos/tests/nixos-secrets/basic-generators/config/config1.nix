@@ -6,12 +6,11 @@
   ];
 
   secrets = {
-    prompts.example.description = "Your name";
+    store.example = {
+      prompts.example.description = "Your name";
 
-    generators.example = {
-      prompts = [ "example" ];
       files.example = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-example" ''
           #!/bin/sh
@@ -20,10 +19,10 @@
         '';
     };
 
-    generators.derived = {
+    store.derived = {
       dependencies = [ "example" ];
       files.derived = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh

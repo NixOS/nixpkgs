@@ -8,31 +8,32 @@
   ];
 
   secrets = {
-    defaultGeneratorBackend = "plain";
-    defaultPromptBackend = "simple";
+    backends.defaults.store = "plain";
+    backends.defaults.prompt = "simple";
 
-    age.publicKeys = [
+    settings.age.publicKeys = [
       "age13ar5t7vvsssmckjhjtngy3p5y0v4k896ecjrxveql9ysu8gxhe9sdar3k3" # Host
       "age195x33zrqzppjfnj2rjjlq3z8s64r5zlwe6rcywm9zu6agf449pmqdslyat" # Target
     ];
 
     # NOTE: do *not* do this with real keys!!! This will copy the keys to the
     # world-readable Nix store, which is most probably not what you want!
-    age.identity.host = toString ../common/key-host.txt;
-    age.identity.target = toString ../common/key-target.txt;
+    settings.age.identity.host = toString ../common/key-host.txt;
+    settings.age.identity.target = toString ../common/key-target.txt;
 
-    age.ssh.target = "root@lapetus.overlay.moonythm.dev";
-    age.ssh.identity = "/home/moon/.ssh/id_ed25519";
+    settings.age.ssh.target = "root@lapetus.overlay.moonythm.dev";
+    settings.age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
-    # This prompt will default to the "simple" backend we chose above.
-    prompts.example.label = "Your name";
-    prompts.example.description = "the person to address the greeting to";
-    prompts.example.type = "multiline";
+    store.example = {
+      # This prompt will default to the "simple" backend we chose above.
+      prompts.example = {
+        label = "Your name";
+        description = "the person to address the greeting to";
+        type = "multiline";
+      };
 
-    generators.example = {
-      prompts = [ "example" ];
       files.example.deploy = false;
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-example" ''
           #!/bin/sh
@@ -41,11 +42,11 @@
         '';
     };
 
-    generators.derived = {
+    store.derived = {
       backend = "age";
       dependencies = [ "example" ];
       files.derived = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh
@@ -59,10 +60,10 @@
         '';
     };
 
-    generators.derivedPlain = {
+    store.derivedPlain = {
       dependencies = [ "derived" ];
       files.derived = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-derived-plain" ''
           #!/bin/sh

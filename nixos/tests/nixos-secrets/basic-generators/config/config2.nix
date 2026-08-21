@@ -6,13 +6,11 @@
   ];
 
   secrets = {
-    prompts.example.description = "Your name";
-
-    generators."different attribute name" = {
+    store."different attribute name" = {
       name = "example"; # This should be used instead!
-      prompts = [ "example" ];
+      prompts.example.description = "Your name";
       files.example = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-example" ''
           #!/bin/sh
@@ -21,10 +19,10 @@
         '';
     };
 
-    generators.derived = {
+    store.derived = {
       dependencies = [ "example" ];
       files.derived2 = { };
-      script =
+      generate =
         pkgs:
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh

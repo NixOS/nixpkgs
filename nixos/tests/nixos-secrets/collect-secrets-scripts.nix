@@ -22,9 +22,9 @@ let
       x.get
       x.list
       x.set
-    ]) evaluated.generatorBackends)
-    (lib.mapAttrsToList (_: x: x.script) evaluated.promptBackends)
-    (lib.mapAttrsToList (_: x: x.script) evaluated.generators)
+    ]) evaluated.backends.store)
+    (lib.mapAttrsToList (_: x: x.ask) evaluated.backends.prompt)
+    (lib.mapAttrsToList (_: x: x.generate) evaluated.store)
   ];
 in
 pkgs.closureInfo {

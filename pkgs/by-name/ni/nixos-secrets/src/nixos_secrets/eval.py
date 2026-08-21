@@ -11,16 +11,31 @@ jsonify_path = Path(__file__).parent / "nix" / "jsonify.nix"
 with open(jsonify_path) as f:
     jsonify_source = f.read()
 
+schema_path = Path(__file__).parent / "secrets-config.schema.json"
+
 
 def evaluate_config(args: SecretsArgs) -> SecretsConfig:
-    return SecretsConfig.from_jsom(evaluate_config_raw(args))
+    json_str = evaluate_config_raw(args)
+
+    try:
+        subprocess.run(
+            ["jv", schema_path, "-"],
+            input=json_str,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        raise SecretsError(f"Config validation error:\n{e.stdout}")
+
+    return SecretsConfig.from_jsom(json.loads(json_str))
 
 
 def evaluate_config_raw(args: SecretsArgs) -> Any:
     if args.json is not None:
         try:
             with open(args.json) as f:
-                return json.loads(f.read())
+                return f.read()
         except json.decoder.JSONDecodeError as e:
             raise SecretsError(f"Error parsing JSON: {e}")
     elif args.flake is not None:
@@ -61,7 +76,7 @@ def evaluate_config_raw(args: SecretsArgs) -> Any:
             check=True,
         )
 
-        return json.loads(result.stdout)
+        return result.stdout
     except subprocess.CalledProcessError as e:
         raise SecretsError(f"Error evaluating nix expression:\n{e.stderr}")
 

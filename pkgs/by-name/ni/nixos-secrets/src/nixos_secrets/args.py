@@ -59,4 +59,13 @@ class SecretsArgs:
         if args.attr and not args.file:
             raise SecretsError("--attr is only supported for --file")
 
+        setGenerators = set(args.set.keys())
+        forcedGenerators = set(args.generators)
+
+        if overlappingGenerators := setGenerators.intersection(forcedGenerators):
+            overlappingList = ", ".join(sorted(overlappingGenerators))
+            raise SecretsError(
+                f"A generator cannot be passed to both --generate and --set, yet the following have been: {overlappingList}"
+            )
+
         return args
