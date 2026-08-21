@@ -4,7 +4,6 @@
   balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
@@ -12,15 +11,7 @@
   xcbuild,
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_24;
-  };
-  node-gyp' = node-gyp.override {
-    nodejs = nodejs_24;
-  };
-in
-buildNpmPackage' (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "balena-cli";
   version = "25.1.6";
 
@@ -36,7 +27,7 @@ buildNpmPackage' (finalAttrs: {
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    node-gyp'
+    node-gyp
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
