@@ -13,6 +13,7 @@
   libappindicator,
   libhandy,
   meson,
+  ninja,
   pkg-config,
   wrapGAppsHook3,
 }:
@@ -45,6 +46,9 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils # needed for update-desktop-database
@@ -53,24 +57,20 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection # need for gtk namespace to be available
     hicolor-icon-theme # needed for postinstall script
     meson
-    python3Packages.ninja # TODO: maybe swap out for the non-python package
+    ninja
     pkg-config
     wrapGAppsHook3
-    python3Packages.dbus-python
-    libappindicator
-    python3Packages.pygobject3
-    python3Packages.pyxdg
   ];
 
   buildInputs = [
     glib
     gtk3
+    libappindicator
     libhandy
   ];
 
   propagatedBuildInputs = [
     python3Packages.dbus-python
-    libappindicator
     python3Packages.pygobject3
     python3Packages.pyxdg
   ];
@@ -83,13 +83,14 @@ python3Packages.buildPythonApplication rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  strictDeps = false;
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
+    wrapPythonProgramsIn $out/lib "$out"
   '';
 
   meta = {
