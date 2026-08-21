@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.7.4";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
     tag = "v${version}";
-    hash = "sha256-T+t9zEOUZ/5yBG1M4sok+jXh9qiIeL1Rq8Dj7ppa3uk=";
+    hash = "sha256-h7esGUAhznJEktELNHNRBxUKi9nB6pwJKjehTz+q3Zo=";
   };
 
-  cargoHash = "sha256-dmmwklL+KTSgJzWPcKUmILA3fpZe4lW1Xq4plTtHf/o=";
+  cargoHash = "sha256-AKzLAXzZw/Vi7UOJhrvuCaD9ES8YG5Ooa3+VkkPPEyQ=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
