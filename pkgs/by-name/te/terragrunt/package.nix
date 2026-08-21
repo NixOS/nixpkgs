@@ -130,9 +130,9 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    homepage = "https://terragrunt.gruntwork.io";
+    homepage = "https://terragrunt.com/";
     changelog = "https://github.com/gruntwork-io/terragrunt/releases/tag/v${finalAttrs.version}";
-    description = "Thin wrapper for Terraform that supports locking for Terraform state and enforces best practices";
+    description = "Terragrunt is a flexible orchestration tool that allows Infrastructure as Code written in OpenTofu/Terraform to scale";
     mainProgram = "terragrunt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
