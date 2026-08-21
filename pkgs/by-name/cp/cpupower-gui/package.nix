@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   appstream-glib,
   gettext,
   glib,
@@ -41,6 +42,12 @@ python3Packages.buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/vagnum08/cpupower-gui/commit/22ea668aa4ecf848149ea4c150aa840a25dc6ff8.patch";
       sha256 = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
+    })
+    # Fixes Python 3.14 compatibility
+    (fetchpatch2 {
+      url = "https://github.com/vagnum08/cpupower-gui/commit/08b076b731a5106e9e72bf02dceb7ed96649ea98.patch";
+      includes = [ "cpupower_gui/cpupower-gui.in" ];
+      hash = "sha256-XjlnK5dOd0fBut5lARjyNuaHEzircTUHfGpwA4xjjHM=";
     })
   ];
 
