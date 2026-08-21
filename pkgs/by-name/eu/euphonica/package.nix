@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.99.6-beta";
+  version = "0.99.6-beta-1";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uAyoiHgpzcgpjEe0ugUe39kisjFJR136ZKXuOLKCH7E=";
+    hash = "sha256-R036fNNQGFg9lg+628MfyW0qo8tRIjA2vmZB9f4xtKE=";
     fetchSubmodules = true;
   };
 
