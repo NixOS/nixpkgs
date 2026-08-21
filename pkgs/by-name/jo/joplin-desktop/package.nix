@@ -71,10 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libnotify
   ];
 
