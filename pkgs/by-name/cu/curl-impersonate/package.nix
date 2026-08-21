@@ -12,6 +12,7 @@
   automake,
   libtool,
   unzip,
+  fixDarwinDylibNames,
   nixosTests,
 }:
 stdenv.mkDerivation rec {
@@ -47,6 +48,14 @@ stdenv.mkDerivation rec {
     automake
     libtool
     unzip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Rewrite the dylib's install name to its absolute store path.
+    # Without this it keeps upstream's "@rpath/libcurl-impersonate.4.dylib",
+    # and every consumer linking it (e.g. python3Packages.curl-cffi's
+    # extension module, and through it yt-dlp) records an @rpath reference
+    # with no LC_RPATH set, failing at dlopen with "no LC_RPATH's found".
+    fixDarwinDylibNames
   ];
 
   # Upstream CMake build wants its own specific versions of
