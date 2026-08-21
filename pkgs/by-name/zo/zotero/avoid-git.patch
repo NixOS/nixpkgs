@@ -26,3 +26,17 @@ index 67a02a3ad2..2127f680df 100644
  	
  	if (!('reader' in signatures) || signatures['reader'].hash !== hash) {
  		const targetDir = path.join(__dirname, '..', 'build', 'resource', 'reader');
+diff --git a/js-build/document-worker.js b/js-build/document-worker.js
+index 52f81d2d8..8899b1644 100644
+--- a/js-build/document-worker.js
++++ b/js-build/document-worker.js
+@@ -16,8 +16,7 @@ async function getDocumentWorker(signatures) {
+ 	const modulePath = path.join(__dirname, '..', 'document-worker');
+ 	const targetDir = path.join(__dirname, '..', 'build', 'resource', 'document-worker');
+ 
+-	const { stdout } = await exec('git rev-parse HEAD', { cwd: modulePath });
+-	const hash = stdout.trim();
++	const hash = '';
+ 
+ 	if (!('document-worker' in signatures)
+ 			|| signatures['document-worker'].hash !== hash
