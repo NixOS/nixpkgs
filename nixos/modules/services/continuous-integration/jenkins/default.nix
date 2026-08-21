@@ -266,6 +266,7 @@ in
         MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateIPC = true;
         PrivateMounts = true;
         PrivatePIDs = true;
         PrivateTmp = true;
