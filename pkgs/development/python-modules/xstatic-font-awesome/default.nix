@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/python-xstatic/font-awesome";
+    homepage = "https://github.com/xstatic-py/xstatic-font-awesome";
     description = "Font Awesome packaged for python";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ aither64 ];
