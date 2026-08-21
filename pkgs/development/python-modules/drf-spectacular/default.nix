@@ -75,6 +75,8 @@ buildPythonPackage rec {
   ++ django-allauth.optional-dependencies.socialaccount;
 
   disabledTestPaths = [
+    # django-oauth-toolkit 3.4.1 added a new error that the example application has
+    "tests/test_command.py::test_command_check"
     # django-rest-knox is not packaged
     "tests/contrib/test_knox_auth_token.py"
     # Outdated test artifact
