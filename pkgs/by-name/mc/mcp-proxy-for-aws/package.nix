@@ -4,15 +4,11 @@
   python3Packages,
 }:
 
-let
-  pname = "mcp-proxy-for-aws";
-  version = "1.6.4";
-in
-
 python3Packages.buildPythonApplication (finalAttrs: {
-  inherit pname version;
   __structuredAttrs = true;
 
+  pname = "mcp-proxy-for-aws";
+  version = "1.6.4";
   pyproject = true;
   build-system = [ python3Packages.hatchling ];
   disabled = python3Packages.pythonOlder "3.10";
