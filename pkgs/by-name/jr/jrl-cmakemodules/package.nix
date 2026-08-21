@@ -16,7 +16,10 @@
 
   # tests
   catch2_3,
+  cppad,
+  gmp,
   matio,
+  mpfr,
   python3Packages,
   simde,
   suitesparse,
@@ -32,13 +35,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jrl-cmakemodules";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jrl-umi3218";
     repo = "jrl-cmakemodules";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ty6PSQfIQK9jE9gaop2Rc+4uT0dG42A90+yU3pViLI0=";
+    hash = "sha256-PjEE/JIb6gegW5fqKiFgN0th8Fi58Pe0u5qrdIz2Rm8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -52,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     catch2_3
+    cppad
+    gmp
     matio
+    mpfr
     python3Packages.boost
     python3Packages.nanobind
     python3Packages.numpy
@@ -78,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "DOXYGEN_HTML_FORMULA_FORMAT" "svg")
       (lib.cmakeFeature "DOXYGEN_HTML_OUTPUT" "doxygen-html")
       (lib.cmakeBool "DOXYGEN_USE_MATHJAX" false)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_CPPAD" true)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_CPPADCG" false) # wait for #390728
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_GMP" true)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_MPFR" true)
     ];
   };
 
