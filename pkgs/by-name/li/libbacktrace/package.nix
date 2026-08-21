@@ -77,6 +77,17 @@ stdenv.mkDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
+  # A (PE/COFF) DLL has to resolve every symbol at link time, and
+  # libtool declines to build one at all unless told unresolved symbols
+  # are not allowed. We don't have any unresolved symbols so we can pass
+  # this flag.
+  #
+  # We only want this affecting the build. It could mess up configure
+  # scripts if we defined it for the entire derivation.
+  #
+  # TODO use `lib.optionalString` at the cost of some rebuilds.
+  makeFlags = if enableShared && stdenv.hostPlatform.isPE then "LDFLAGS=-no-undefined" else null;
+
   doCheck = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl;
 
   passthru = {
