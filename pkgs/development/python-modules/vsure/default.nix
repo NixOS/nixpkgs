@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vsure";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xygPdwWzYQfA/O2MDTMGustcpcxIUbsTQruUDt205dE=";
+    hash = "sha256-bYJpdSrTidyJ8rCFxGd2BxbPT5D1N9rGLXslQO/vKk8=";
   };
 
   build-system = [ setuptools ];
