@@ -27393,12 +27393,6 @@
     name = "Steven Allen";
     keys = [ { fingerprint = "327B 20CE 21EA 68CF A774  8675 7C92 3221 5899 410C"; } ];
   };
-  steeleduncan = {
-    email = "steeleduncan@hotmail.com";
-    github = "steeleduncan";
-    githubId = 866573;
-    name = "Duncan Steele";
-  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";
