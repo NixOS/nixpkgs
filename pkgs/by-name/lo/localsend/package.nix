@@ -15,7 +15,7 @@
 
 let
   pname = "localsend";
-  version = "1.17.0";
+  version = "1.18.1";
 
   linux = flutter329.buildFlutterApplication rec {
     inherit pname version;
@@ -24,7 +24,7 @@ let
       owner = "localsend";
       repo = "localsend";
       tag = "v${version}";
-      hash = "sha256-1xMzlIcGEJ58laSM48bCKMxzHQ36eUHD5Mac0O1dnXk=";
+      hash = "sha256-uxMfO39U0cC7Svf8QL4WUJJowuwmTjChrZ4VOWcgb4E=";
     };
 
     sourceRoot = "${src.name}/app";
