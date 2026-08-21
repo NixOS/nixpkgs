@@ -1,13 +1,18 @@
 {
   lib,
+  stdenv,
 
   buildGoModule,
   fetchFromGitHub,
+
+  installShellFiles,
 
   gitMinimal,
   gitSetupHook,
   opentofu,
   writableTmpDirAsHomeHook,
+
+  buildPackages,
 
   versionCheckHook,
 }:
@@ -28,6 +33,10 @@ buildGoModule (finalAttrs: {
   proxyVendor = true;
 
   vendorHash = "sha256-eqoT9On/nGwJIbWug4RQVmibbsqbTRa5MzOoFXgGmxc=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   excludedPackages = [
     # utility for identifying flakey tests
@@ -94,6 +103,29 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  postInstall =
+    let
+      cmd = finalAttrs.meta.mainProgram;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/${cmd}"
+        else
+          lib.getExe buildPackages.terragrunt;
+    in
+    ''
+      # terragrunt will only directly install completions
+      # completion install looks for expected file paths for a shell or it wont do an install
+      # provide the fish dir it looks for
+      mkdir -p ./completion/fish
+      export COMPLETION_DIR="$PWD/completion"
+
+      # go's os/user.Current which looks in /etc/passwd with no $HOME override
+      XDG_CONFIG_HOME="$COMPLETION_DIR" ${exe} --install-autocomplete
+      installShellCompletion --cmd ${cmd} \
+        --fish "$COMPLETION_DIR/fish/completions/${cmd}.fish"
+    '';
+
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
