@@ -9,17 +9,14 @@ let
     };
     osd0 = {
       name = "0";
-      key = "AQBCEJNa3s8nHRAANvdsr93KqzBznuIWm2gOGg==";
       uuid = "55ba2294-3e24-478f-bee0-9dca4c231dd9";
     };
     osd1 = {
       name = "1";
-      key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
       uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
     osd2 = {
       name = "2";
-      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
       uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
     };
   };
@@ -114,13 +111,18 @@ let
         "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
         "sudo -u ceph ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
         "sudo -u ceph ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
-        "monmaptool --create --add ${cfg.monA.name} ${cfg.monA.ip} --fsid ${cfg.clusterId} /tmp/monmap",
+        # Create the monmap with both a msgr2 (v2) and a legacy (v1) address.
+        # Using plain `--add` yields a v1-only monmap, which leaves the cluster
+        # in HEALTH_WARN with MON_MSGR2_NOT_ENABLED. Running `ceph mon
+        # enable-msgr2` afterwards is not enough: it rewrites the monmap (a
+        # subsequent `ceph mon dump` does show the v2 address), but the health
+        # check keeps reporting the mon as v1-only indefinitely.
+        "monmaptool --create --addv ${cfg.monA.name} '[v2:${cfg.monA.ip}:3300,v1:${cfg.monA.ip}:6789]' --fsid ${cfg.clusterId} /tmp/monmap",
         "sudo -u ceph ceph-mon --mkfs -i ${cfg.monA.name} --monmap /tmp/monmap --keyring /tmp/ceph.mon.keyring",
         "sudo -u ceph touch /var/lib/ceph/mon/ceph-${cfg.monA.name}/done",
         "systemctl start ceph-mon-${cfg.monA.name}",
     )
     monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
-    monA.succeed("ceph mon enable-msgr2")
     monA.succeed("ceph config set mon auth_allow_insecure_global_id_reclaim false")
 
     # Can't check ceph status until a mon is up
@@ -147,13 +149,23 @@ let
         "mount /dev/vdc /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
         "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
         "mount /dev/vdd /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --gen-key",
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --gen-key",
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --gen-key",
     )
+
+    # Register the OSDs with the generated keys read back from their keyrings.
+    for osd_name, osd_uuid in [
+        ("${cfg.osd0.name}", "${cfg.osd0.uuid}"),
+        ("${cfg.osd1.name}", "${cfg.osd1.uuid}"),
+        ("${cfg.osd2.name}", "${cfg.osd2.uuid}"),
+    ]:
+        key = monA.succeed(
+            f"ceph-authtool --print-key /var/lib/ceph/osd/ceph-{osd_name}/keyring --name osd.{osd_name}"
+        ).strip()
+        monA.succeed(
+            f"echo '{{\"cephx_secret\": \"{key}\"}}' | ceph osd new {osd_uuid} -i -"
+        )
 
     # Initialize the OSDs with regular filestore
     monA.succeed(
