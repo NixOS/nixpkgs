@@ -7,10 +7,10 @@
   ffmpeg-headless,
   yt-dlp,
   makeDesktopItem,
-  electron_41,
+  electron_43,
 }:
 let
-  electron = electron_41;
+  electron = electron_43;
 in
 buildNpmPackage rec {
   pname = "ytDownloader";
