@@ -1958,6 +1958,12 @@
     githubId = 14838767;
     name = "Jacopo Scannella";
   };
+  antoineco = {
+    email = "hello@acotten.com";
+    github = "antoineco";
+    githubId = 3299086;
+    name = "Antoine Cotten";
+  };
   anton-4 = {
     name = "Anton";
     github = "Anton-4";
