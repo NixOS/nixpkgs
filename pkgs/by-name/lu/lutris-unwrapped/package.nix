@@ -24,7 +24,7 @@
   xrandr,
   pciutils,
   psmisc,
-  mesa-demos,
+  mesa-utils,
   vulkan-tools,
   pulseaudio,
   p7zip,
@@ -47,7 +47,7 @@ let
     xrandr
     pciutils
     psmisc
-    mesa-demos
+    mesa-utils
     vulkan-tools
     pulseaudio
     p7zip
