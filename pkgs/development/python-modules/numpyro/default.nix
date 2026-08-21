@@ -41,6 +41,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4NA1m2N0AZy3ausAZc6+PPw175joGC7WwfZr0Ri0uK8=";
   };
 
+  patches = [
+    # Account for jax 0.11 hoisting tracing-time constants into `jaxpr.invars`
+    ./jax-0.11-provenance-consts.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

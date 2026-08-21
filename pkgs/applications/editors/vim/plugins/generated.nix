@@ -262,6 +262,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  link-vim = buildVimPlugin {
+    pname = "link.vim";
+    version = "2.0.3";
+    src = fetchFromGitHub {
+      owner = "qadzek";
+      repo = "link.vim";
+      tag = "v2.0.3";
+      hash = "sha256-YjKFDv9QyuWDfWiKP6EvjSRbkz/K6e/Neq76ckghKh0=";
+    };
+    meta.homepage = "https://github.com/qadzek/link.vim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   LuaSnip-snippets-nvim = buildVimPlugin {
     pname = "LuaSnip-snippets.nvim";
     version = "0-unstable-2022-03-17";
