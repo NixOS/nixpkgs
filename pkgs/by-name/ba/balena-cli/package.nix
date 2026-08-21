@@ -20,14 +20,14 @@ let
     nodejs = nodejs_24;
   };
 in
-buildNpmPackage' rec {
+buildNpmPackage' (finalAttrs: {
   pname = "balena-cli";
   version = "25.1.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
   };
 
@@ -72,11 +72,11 @@ buildNpmPackage' rec {
       and the balena SDK, and can also be directly imported in Node.js applications.
     '';
     homepage = "https://github.com/balena-io/balena-cli";
-    changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/balena-io/balena-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
     ];
     mainProgram = "balena";
   };
-}
+})
