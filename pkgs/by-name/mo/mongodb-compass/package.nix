@@ -121,13 +121,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    dpkg
-    wrapGAppsHook3
-    patchelf
-  ];
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      wrapGAppsHook3
+      patchelf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
   dontUnpack = stdenv.hostPlatform.isLinux;
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -158,7 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
     done
 
-    wrapGAppsHook $out/bin/mongodb-compass
+    gappsWrapperArgsHook
+    wrapGApp "$out/bin/mongodb-compass"
   '';
 
   installPhase = ''
