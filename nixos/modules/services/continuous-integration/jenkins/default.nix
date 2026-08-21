@@ -291,6 +291,10 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        SocketBindAllow = [
+          "tcp:${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
         SystemCallArchitectures = "native";
         UMask = 27;
       };
