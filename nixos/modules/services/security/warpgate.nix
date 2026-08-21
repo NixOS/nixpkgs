@@ -45,6 +45,17 @@ in
         default = null;
       };
 
+      databaseEncryptionKeysFile = mkOption {
+        description = ''
+          Path to file containing encryption key(s) to encrypt target credentials stored in database.
+          Should be a env-like file: `WARPGATE_ENCRYPTION_KEY=$(openssl rand -base64 32)`.
+          If you are rotating key, move the old key to `WARPGATE_ENCRYPTION_KEY_OLD`.
+          See [Encrypting credentials at rest](https://warpgate.null.page/encryption/).
+        '';
+        type = nullOr str;
+        default = null;
+      };
+
       settings = mkOption {
         description = "Warpgate configuration.";
         type = submodule {
@@ -523,36 +534,45 @@ in
         any
         map
         head
+        optional
         reverseList
         ;
-      inherit (lib.strings) splitString toIntBase10;
+      inherit (lib.strings)
+        optionalString
+        splitString
+        toIntBase10
+        ;
 
-      preStartScript = pkgs.writers.writeBash "warpgate-init" ''
-        CFGFILE=/var/lib/warpgate/config.yaml
+      renderedYamlConfig = yaml.generate "warpgate-config" cfg.settings;
+
+      startupScript = pkgs.writeShellScript "warpgate-run" ''
+        CFGFILE=$STATE_DIRECTORY/config.yaml
         if [ ! -O $CFGFILE ] || [ ! -s $CFGFILE ]; then
           INITPWD=$(tr -dc 'A-Za-z0-9!?%=' </dev/urandom 2>/dev/null | head -c 16)
           ${lib.getExe cfg.package} \
             --config $CFGFILE unattended-setup \
-            --data-path /var/lib/warpgate \
+            --data-path $STATE_DIRECTORY \
             --http-port 8888 \
             --admin-password $INITPWD
         fi
-        ${
-          if cfg.databaseUrlFile != null then
-            ''
-              sed -e '/^database_url: null/d' ${yaml.generate "warpgate-config" cfg.settings} > $CFGFILE
-              cat /run/credentials/warpgate.service/databaseUrl >> $CFGFILE
-            ''
-          else
-            "cp --no-preserve=ownership ${yaml.generate "warpgate-config" cfg.settings} $CFGFILE"
-        }
+        cp --no-preserve=ownership ${renderedYamlConfig} $CFGFILE
+        ${optionalString (cfg.databaseUrlFile != null) ''
+          sed -e '/^database_url: null/d' ${renderedYamlConfig} > $CFGFILE
+          cat $CREDENTIALS_DIRECTORY/databaseUrl >> $CFGFILE
+        ''}
+        ${optionalString (cfg.databaseEncryptionKeysFile != null) ''
+          set -a
+          source $CREDENTIALS_DIRECTORY/dbEncryptionKeys
+          set +a
+        ''}
+        ${lib.getExe cfg.package} --config $CFGFILE run
       '';
       bindOnPrivilegedPorts = any (x: toIntBase10 x < 1025) (
         map (x: head (reverseList (splitString ":" x))) (
           [ cfg.settings.http.listen ]
-          ++ lib.optional cfg.settings.ssh.enable cfg.settings.ssh.listen
-          ++ lib.optional cfg.settings.mysql.enable cfg.settings.mysql.listen
-          ++ lib.optional cfg.settings.postgres.enable cfg.settings.postgres.listen
+          ++ optional cfg.settings.ssh.enable cfg.settings.ssh.listen
+          ++ optional cfg.settings.mysql.enable cfg.settings.mysql.listen
+          ++ optional cfg.settings.postgres.enable cfg.settings.postgres.listen
         )
       );
     in
@@ -581,14 +601,16 @@ in
       systemd.services.warpgate = {
         description = "Warpgate smart bastion";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         startLimitBurst = 5;
         serviceConfig = {
-          LoadCredential = "${
-            if cfg.databaseUrlFile != null then "databaseUrl:${cfg.databaseUrlFile}" else ""
-          }";
-          ExecStartPre = preStartScript;
-          ExecStart = "${lib.getExe cfg.package} --config /var/lib/warpgate/config.yaml run";
+          LoadCredential =
+            optional (cfg.databaseUrlFile != null) "databaseUrl:${cfg.databaseUrlFile}"
+            ++ optional (
+              cfg.databaseEncryptionKeysFile != null
+            ) "dbEncryptionKeys:${cfg.databaseEncryptionKeysFile}";
+          ExecStart = startupScript;
           DynamicUser = true;
           RestartSec = 3;
           Restart = "on-failure";

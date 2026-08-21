@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   name = "warpgate";
 
@@ -9,13 +10,28 @@
     };
 
     machine2 = {
-      environment.etc."warpgate-db-url".text = "database_url: sqlite:/var/lib/warpgate/db/";
+      environment.etc."warpgate-db-url".text =
+        "database_url: postgresql://warpgate:warpgate@localhost:5432/warpgate";
+      environment.etc."warpgate-db-enc".text =
+        "WARPGATE_ENCRYPTION_KEY=QVJBTkRPTTMyQ0hBUkFDVEVSU0VOQ1JZUFRJT05LRVk=";
       services.warpgate = {
         enable = true;
         databaseUrlFile = "/etc/warpgate-db-url";
+        databaseEncryptionKeysFile = "/etc/warpgate-db-enc";
         settings = {
           database_url = null;
         };
+      };
+      services.postgresql = {
+        enable = true;
+        initialScript = pkgs.writeText "psql-init" ''
+          CREATE ROLE warpgate WITH LOGIN PASSWORD 'warpgate';
+          CREATE DATABASE warpgate WITH OWNER warpgate;
+        '';
+      };
+      systemd.services.warpgate = {
+        after = [ "postgresql.target" ];
+        requires = [ "postgresql.target" ];
       };
     };
 
