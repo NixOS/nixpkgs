@@ -52,7 +52,10 @@ buildGoModule (finalAttrs: {
 
   meta = {
     mainProgram = "usque";
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with lib.maintainers; [
+      xddxdd
+      xyenon
+    ];
     description = "Open-source reimplementation of the Cloudflare WARP client's MASQUE protocol";
     homepage = "https://github.com/Diniboy1123/usque";
     license = lib.licenses.mit;
