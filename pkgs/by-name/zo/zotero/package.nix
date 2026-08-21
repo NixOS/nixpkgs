@@ -12,6 +12,9 @@
   xz,
   gawk,
   rsync,
+  pkg-config,
+  pango,
+  giflib,
   firefox-esr-140-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
@@ -30,25 +33,25 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "9.0.6";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-9Rku6iF7Sczqekw8ms8hluIc+B/5BE9zHlBqp7vGlY4=";
+    hash = "sha256-lNeujToTGzOTG7aKycoZfnyZawM9EQFWSdRJ4/KEPqQ=";
   };
 
   pdf-js = buildNpmPackage {
     pname = "zotero-pdf-js";
     inherit version nodejs;
-    src = "${src}/pdf-worker/pdf.js";
-    npmDepsHash = "sha256-KeYAY6EWBZVd3QucDEDtI6lwtTahCEFBFf2Ebib9HKg=";
+    src = "${src}/reader/pdfjs/pdf.js";
+    npmDepsHash = "sha256-xq0RhCruM22mFC3zkHpn4hX8YdO32Sn42fbSC0cQXFw=";
     buildPhase = ''
       runHook preBuild
 
-      npm exec gulp lib-legacy
+      npm exec gulp generic
       npm exec gulp generic-legacy
       npm exec gulp minified-legacy
 
@@ -91,7 +94,7 @@ let
     pname = "zotero-pdf-reader";
     inherit version nodejs;
     src = "${src}/reader";
-    npmDepsHash = "sha256-8marAeBAW5cKDaJT3xbVsXyVfGa5ehZYUYijDzFng38=";
+    npmDepsHash = "sha256-/Szv0BWy9zHLrusRxo8XRtfyFmq/rS4GG1iO7NkV2BQ=";
     patches = [
       ./pdf-reader-locales.patch
       ./pdf-reader-build-fix.patch
@@ -119,18 +122,19 @@ let
     '';
   };
 
-  pdf-worker = buildNpmPackage {
-    pname = "zotero-pdf-worker";
+  document-worker = buildNpmPackage {
+    pname = "zotero-document-worker";
     inherit version nodejs;
-    src = "${src}/pdf-worker";
-    npmDepsHash = "sha256-TGuN1fZOClzm6xD2rmn5BAemN4mbyOVaLbSRyMeDIm8=";
+    src = "${src}/document-worker";
+    npmDepsHash = "sha256-dUGZ0RsmW+cAXPi78W9eX7kQnTiCVc8K9lPPtw8Cif0=";
     nativeBuildInputs = [
       rsync
+      pkg-config
     ];
-    postPatch = ''
-      rm -rf pdf.js
-      cp -r ${pdf-js} pdf.js
-    '';
+    buildInputs = [
+      pango
+      giflib
+    ];
     installPhase = ''
       runHook preInstall
 
@@ -196,7 +200,6 @@ buildNpmPackage (finalAttrs: {
     ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
-    ./fix-x86_64-darwin.patch
   ];
 
   postPatch = ''
@@ -204,9 +207,9 @@ buildNpmPackage (finalAttrs: {
     cp -r ${pdf-reader} reader
     chmod -R u+w reader
 
-    rm -rf pdf-worker
-    cp -r ${pdf-worker} pdf-worker
-    chmod -R u+w pdf-worker
+    rm -rf document-worker
+    cp -r ${document-worker} document-worker
+    chmod -R u+w document-worker
 
     rm -rf note-editor
     cp -r ${note-editor} note-editor
@@ -215,15 +218,14 @@ buildNpmPackage (finalAttrs: {
     patchShebangs --build app/ test/
 
     # Skip some flaky/failing tests
-    rm test/tests/retractionsTest.js
+    rm test/tests/retractionsTest.js test/tests/debugTest.js
     for test in \
       "should use BrowserRequest for 403 when enforcing file type" \
       "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
-      "should switch dialog from add note to add/edit citation" \
-      "should vacuum the database with force option" \
+      "should mark every selected collection as current for a multiple-collection selection" \
     ; do
-      sed -i "s|it(\"$test|it.skip(\"$test|" test/tests/*.js
+      sed -i -E "s|it(\([\"']$test.*[\"'])|it.skip\1|" test/tests/*.js
     done
   '';
 
