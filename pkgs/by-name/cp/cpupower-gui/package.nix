@@ -4,12 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   appstream-glib,
-  desktop-file-utils,
   gettext,
   glib,
   gobject-introspection,
   gtk3,
-  hicolor-icon-theme,
   libappindicator,
   libhandy,
   meson,
@@ -51,11 +49,9 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     appstream-glib
-    desktop-file-utils # needed for update-desktop-database
     gettext
     glib # needed for glib-compile-schemas
     gobject-introspection # need for gtk namespace to be available
-    hicolor-icon-theme # needed for postinstall script
     meson
     ninja
     pkg-config
@@ -79,8 +75,15 @@ python3Packages.buildPythonApplication rec {
     "-Dsystemddir=${placeholder "out"}/lib/systemd"
   ];
 
-  preConfigure = ''
-    patchShebangs build-aux/meson/postinstall.py
+  # Drop the post-install script; NixOS updates desktop database and icon cache itself
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "meson.add_install_script('build-aux/meson/postinstall.py')" ""
+  '';
+
+  # glib's setup hook only relocates the schemas, it does not compile them
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
   dontWrapGApps = true;
