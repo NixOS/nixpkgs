@@ -19,7 +19,10 @@ in
     services.opencloud = {
       enable = lib.mkEnableOption "OpenCloud";
 
-      package = lib.mkPackageOption pkgs "opencloud" { };
+      # NOTE: for exsiting users of the "opencloud" package on nixos-unstable this would make them downgrade, which is not what they want.
+      # I did this to reflect what is done on another web service with similar release cadence, forgejo.
+      # Is there a way of having this behavior only for new users?
+      package = lib.mkPackageOption pkgs "opencloud-production" { };
       webPackage = lib.mkPackageOption pkgs [ "opencloud" "web" ] { };
       idpWebPackage = lib.mkPackageOption pkgs [ "opencloud" "idp-web" ] { };
 
