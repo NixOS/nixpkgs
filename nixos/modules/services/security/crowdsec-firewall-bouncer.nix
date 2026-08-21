@@ -349,6 +349,10 @@ in
               DynamicUser = true;
               RuntimeDirectory = runtime-dir-name;
 
+              Restart = "always";
+              RestartSec = 1;
+              RestartSteps = 20;
+              RestartMaxDelaySec = 120;
               LockPersonality = true;
               PrivateDevices = true;
               ProcSubset = "pid";
