@@ -26,4 +26,10 @@ sed -i 's/tag = "r[0-9]\+\(\.[0-9]\+\)\?";/tag = "'"$latestTag"'";/g' "$ROOT/pac
 
 # the only thing preventing us simply using `nix-update-script` is the weird
 # tagging practice of upstream
-nix-update --version skip keyguard --subpackage sshAgent
+nix-update --version skip keyguard \
+    --subpackage crypto \
+    --subpackage gpgAgent \
+    --subpackage io \
+    --subpackage libNative \
+    --subpackage sshAgent \
+;

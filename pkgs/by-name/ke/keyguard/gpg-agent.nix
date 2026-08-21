@@ -8,12 +8,12 @@
 }:
 
 rustPlatform.buildRustPackage {
-  pname = "keyguard-ssh-agent";
+  pname = "keyguard-gpg-agent";
   inherit src version;
 
-  sourceRoot = "${src.name}/desktopSshAgent/src";
+  sourceRoot = "${src.name}/desktopGpgAgent/src";
 
-  cargoHash = "sha256-dsrDouDQuPwobnecdHYfXBhAhRK0ckmyoVgWB4ZezGY=";
+  cargoHash = "sha256-HGx+5xkL6auib3gtyd6EQQXIAZCDLY0bhnBpeVppKPI=";
 
   nativeBuildInputs = [ protobuf ];
 

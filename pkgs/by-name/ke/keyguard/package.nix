@@ -21,18 +21,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.14.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260616";
-    hash = "sha256-JoAvn7gO9xYo6n638qfWCTvNb8FDnq2pILo3bm3T7hI=";
+    tag = "r20260819.2";
+    hash = "sha256-NdFkJGXKGohHrBiv9BsHy6Hyu1QP6z4fnFZwCEM6FBU=";
   };
 
   postPatch = ''
     substituteInPlace desktopApp/build.gradle.kts \
       --replace-fail 'dependsOn(prepareBundledAppResources)' ""
+
+    # okhttp takes its version from a BOM, which the Kotlin Multiplatform metadata
+    # configurations resolved by `nixDownloadDeps` cannot see, so pin it here
+    substituteInPlace gradle/libs.versions.toml \
+      --replace-fail \
+        'squareup-okhttp = { module = "com.squareup.okhttp3:okhttp" }' \
+        'squareup-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }'
   '';
 
   preBuild = ''
@@ -84,9 +91,26 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
+
+    # fail if Compose changes the app resources path expected below
+    grep -Fqx \
+      'java-options=-Dcompose.application.resources.dir=$APPDIR/resources' \
+      $out/lib/app/Keyguard.cfg
+
     install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
+
+    # `prepareBundledAppResources` is patched out, so stage these under the
+    # names the app expects
     install -D --mode=0755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
       $out/lib/app/resources/keyguard-ssh-agent
+    install -D --mode=0755 ${finalAttrs.passthru.gpgAgent}/bin/keyguard-gpg-agent \
+      $out/lib/app/resources/keyguard-gpg-agent
+    install -D --mode=0755 ${finalAttrs.passthru.libNative}/lib/libkeyguard.so \
+      $out/lib/app/resources/keyguard-lib
+    install -D --mode=0755 ${finalAttrs.passthru.crypto}/lib/libkeyguard_crypto_jni.so \
+      $out/lib/app/resources/libkeyguard_crypto_jni.so
+    install -D --mode=0755 ${finalAttrs.passthru.io}/lib/libkeyguard_io_jni.so \
+      $out/lib/app/resources/libkeyguard_io_jni.so
 
     install -Dm444 -t $out/share/applications/ desktopApp/flatpak/*.desktop
     install -Dm444 desktopApp/flatpak/icon.svg $out/share/icons/hicolor/scalable/apps/com.artemchep.keyguard.svg
@@ -96,6 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    crypto = callPackage ./crypto.nix { inherit (finalAttrs) src version; };
+    gpgAgent = callPackage ./gpg-agent.nix { inherit (finalAttrs) src version; };
+    io = callPackage ./io.nix { inherit (finalAttrs) src version; };
+    libNative = callPackage ./lib-native.nix { inherit (finalAttrs) src version; };
     sshAgent = callPackage ./ssh-agent.nix { inherit (finalAttrs) src version; };
     updateScript = ./update.sh;
   };
@@ -108,8 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ ilkecan ];
     sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryBytecode
+      fromSource # Keyguard and bundled helpers
+      binaryBytecode # mitm cache
+      binaryNativeCode # JNA and SQLite JDBC natives
     ];
     platforms = lib.platforms.linux;
   };
