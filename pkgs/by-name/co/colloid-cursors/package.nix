@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "colloid-cursors";
-  version = "2025-07-19";
+  version = "2026-08-10";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "Colloid-icon-theme";
     tag = finalAttrs.version;
-    hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+    hash = "sha256-JNnTcHIvRf9Ymox2POjatY2gYvkPD6+nd/cN48tC6X4=";
   };
 
   installPhase = ''
