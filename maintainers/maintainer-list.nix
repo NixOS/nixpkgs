@@ -25472,6 +25472,12 @@
     githubId = 107703;
     name = "Samuel Rivas";
   };
+  samuelskovbakke = {
+    email = "samuel@skovbakke.dk";
+    github = "samuelskovbakke";
+    githubId = 25748723;
+    name = "Samuel Skovbakke";
+  };
   samueltardieu = {
     email = "nixpkgs@sam.rfc1149.net";
     github = "samueltardieu";
