@@ -16,6 +16,7 @@
   libglvnd,
   libxinerama,
   libxrandr,
+  stripJavaArchivesHook,
   writeText,
 }:
 
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     gradle_9
     jetbrains.jdk-no-jcef-21
+    stripJavaArchivesHook
   ];
 
   buildInputs = [
