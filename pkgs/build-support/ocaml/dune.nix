@@ -18,6 +18,7 @@ lib.extendMkDerivation {
     {
       pname,
       version,
+      dunePackages ? [ pname ],
       nativeBuildInputs ? [ ],
       enableParallelBuilding ? true,
       ...
@@ -58,14 +59,14 @@ lib.extendMkDerivation {
         buildPhase =
           args.buildPhase or ''
             runHook preBuild
-            dune build -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+            dune build -p ${lib.concatStringsSep "," dunePackages} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
             runHook postBuild
           '';
 
         installPhase =
           args.installPhase or ''
             runHook preInstall
-            dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname} \
+            dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${lib.concatStringsSep " " dunePackages} \
              ${
                if lib.versionAtLeast Dune.version "2.9" then
                  "--docdir $out/share/doc --mandir $out/share/man"
@@ -78,7 +79,7 @@ lib.extendMkDerivation {
         checkPhase =
           args.checkPhase or ''
             runHook preCheck
-            dune runtest -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+            dune runtest -p ${lib.concatStringsSep "," dunePackages} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
             runHook postCheck
           '';
 
