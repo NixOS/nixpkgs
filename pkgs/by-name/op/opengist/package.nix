@@ -6,8 +6,9 @@
   fetchFromGitHub,
   moreutils,
   jq,
-  git,
+  gitMinimal,
   writableTmpDirAsHomeHook,
+  makeWrapper,
 }:
 
 buildGoModule (finalAttrs: {
@@ -48,8 +49,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/thomiceli/opengist/internal/config.OpengistVersion=v${finalAttrs.version}"
   ];
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   nativeCheckInputs = [
-    git
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
 
@@ -67,6 +72,15 @@ buildGoModule (finalAttrs: {
     mkdir -p public/.vite
     cp ${finalAttrs.frontend}/public/.vite/manifest.json public/.vite/manifest.json
     cp -R ${finalAttrs.frontend}/public/assets public/
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/opengist \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gitMinimal
+        ]
+      }
   '';
 
   passthru = {
