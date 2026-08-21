@@ -5,7 +5,7 @@
   nixosTests,
   fetchPypi,
   python3,
-  ffmpeg_4-full,
+  ffmpeg-full,
   szurubooru,
 }:
 
@@ -61,7 +61,7 @@ python.pkgs.buildPythonApplication {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg_4-full ]}"
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}"
   ];
 
   postInstall = ''
