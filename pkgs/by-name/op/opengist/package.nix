@@ -9,6 +9,7 @@
   gitMinimal,
   writableTmpDirAsHomeHook,
   makeWrapper,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -86,6 +87,7 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit (finalAttrs) frontend;
     updateScript = ./update.sh;
+    tests = nixosTests.opengist;
   };
 
   meta = {
