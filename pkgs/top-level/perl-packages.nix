@@ -15871,20 +15871,23 @@ with self;
 
   HashSharedMem = buildPerlModule {
     pname = "Hash-SharedMem";
-    version = "0.005";
+    version = "0.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
-      hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
+      url = "mirror://cpan/authors/id/K/KS/KSTAR/Hash-SharedMem-0.006.tar.gz";
+      hash = "sha256-6gA2LUokkXUFYvJFHK61l0eDXZxWcthGPNlhwz7jh2E=";
     };
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-mno-outline-atomics";
     buildInputs = [ ScalarString ];
+    # Project uses ExtUtils::MakeMaker, can use default `make` targets
+    buildPhase = null;
+    checkPhase = null;
+    installPhase = null;
     meta = {
       description = "Efficient shared mutable hash";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HashSharedMem.x86_64-darwin
     };
   };
 

@@ -27,10 +27,10 @@ index 3be1113..f5437cc 100644
 +
  #endif /* _WG_COMPAT_H */
 diff --git a/device.c b/device.c
-index c8f4312..4e7848e 100644
+index c8f4312..011e718 100644
 --- a/device.c
 +++ b/device.c
-@@ -379,12 +379,12 @@ static int wg_newlink(struct net_device *dev,
+@@ -379,7 +379,7 @@ static int wg_newlink(struct net_device *dev,
  #endif
  
  	wg->handshake_receive_wq = alloc_workqueue("wg-kex-%s",
@@ -39,11 +39,14 @@ index c8f4312..4e7848e 100644
  	if (!wg->handshake_receive_wq)
  		goto err_free_tstats;
  
- 	wg->handshake_send_wq = alloc_workqueue("wg-kex-%s",
--			WQ_UNBOUND | WQ_FREEZABLE, 0, dev->name);
-+			WQ_UNBOUND | WQ_FREEZABLE | WQ_PERCPU, 0, dev->name);
- 	if (!wg->handshake_send_wq)
+@@ -389,7 +389,7 @@ static int wg_newlink(struct net_device *dev,
  		goto err_destroy_handshake_receive;
+ 
+ 	wg->packet_crypt_wq = alloc_workqueue("wg-crypt-%s",
+-			WQ_CPU_INTENSIVE | WQ_MEM_RECLAIM, 0, dev->name);
++			WQ_CPU_INTENSIVE | WQ_MEM_RECLAIM | WQ_PERCPU, 0, dev->name);
+ 	if (!wg->packet_crypt_wq)
+ 		goto err_destroy_handshake_send;
  
 diff --git a/netlink.c b/netlink.c
 index b1da877..28f1efa 100644

@@ -63,7 +63,11 @@ writeShellApplication {
   text =
     # generic USB script for most things with serial and bootloader (see MCU_TYPES in scripts/flash_usb.py)
     if flashDevice != null then
-      if (builtins.elem matchBoard flashUsbSupportedBoards) && matchPlatform != null then
+      if
+        matchBoard != null
+        && lib.any (prefix: lib.hasPrefix prefix matchBoard) flashUsbSupportedBoards
+        && matchPlatform != null
+      then
         ''
           ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice} ${klipper-firmware}/klipper.bin "$@"
         ''
