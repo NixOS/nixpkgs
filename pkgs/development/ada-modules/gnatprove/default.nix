@@ -149,6 +149,8 @@ stdenv.mkDerivation {
     # gnat2why/gnat_src points to the GNAT sources
     tar xf ${gnat.cc.src} --wildcards 'gcc-*/gcc/ada'
     mv gcc-*/gcc/ada gnat2why/gnat_src
+
+    mv src/common/aarch64-darwin src/common/arm64-darwin
   '';
 
   configurePhase = ''
