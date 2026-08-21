@@ -127,6 +127,11 @@ in
 
       };
     };
+
+    # So users can use the `passless client` command
+    users.users = lib.genAttrs cfg.users (_: {
+      packages = [ cfg.package ];
+    });
   };
 
   meta.maintainers = with lib.maintainers; [ erictapen ];
