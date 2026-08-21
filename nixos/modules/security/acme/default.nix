@@ -471,6 +471,9 @@ let
           // {
             Group = data.group;
 
+            # Retry on failure rather than leaving the self-signed fallback for a day
+            Restart = "on-failure";
+
             # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
             # This avoids eating them all up if something is misconfigured upon the first try.
             RestartSec = 15 * 60;
