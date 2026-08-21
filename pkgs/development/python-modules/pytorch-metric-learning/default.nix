@@ -19,6 +19,7 @@
   tensorboard,
 
   # tests
+  pytest-xdist,
   pytestCheckHook,
   torchvision,
   writableTmpDirAsHomeHook,
@@ -69,6 +70,7 @@ buildPythonPackage rec {
 
   # package only requires `unittest`, but use `pytest` to exclude tests
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     torchvision
     writableTmpDirAsHomeHook
