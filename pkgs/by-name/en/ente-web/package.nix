@@ -24,7 +24,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.59";
+  version = "1.3.61";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -35,7 +35,7 @@ buildNpmPackage (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-M2JFNfozDU6AeHpPul6rLtwxjc//CdxTLjl4vWojv8w=";
+    hash = "sha256-ZLcjrauIdQdLCbMafYVpJVhc13DE7XBOt5awiQmnBnk=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -47,11 +47,11 @@ buildNpmPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-66MZPxwXkvna3IfDGH6vPJ5CxTaYl1AJ/7qGYKHt1Mg=";
+    hash = "sha256-NMqkShAHqCcx25rlmWyvoZf/BqeIgzwWZT4Pzhajfr0=";
   };
   cargoRoot = "../rust";
 
-  npmDepsHash = "sha256-+ygPdfrgVGephAtef7VhRrLGLtTb503BlaJbiIzfEl8=";
+  npmDepsHash = "sha256-7kE2tT7/vfJIoAbg3up+Uao2+fmP6ccr+bYNFXxU174=";
 
   nativeBuildInputs = [
     binaryen
