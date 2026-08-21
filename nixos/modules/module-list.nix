@@ -1184,6 +1184,7 @@
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/clatd.nix
+  ./services/networking/cliproxyapi.nix
   ./services/networking/cloudflare-ddns.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflare-warp.nix
