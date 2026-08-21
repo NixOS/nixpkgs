@@ -18,16 +18,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+t8NNPaNlGXeDylEeBupOe5fbI1BD7JKDzdCRxRu52c=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [
     meson
     ninja
   ];
 
   mesonFlags = [
-    "-Db_lto=false" # plugin needed to handle lto object
+    (lib.mesonBool "b_lto" false) # plugin needed to handle lto object
   ];
-
-  enableParallelBuilding = true;
 
   passthru = {
     updateScript = nix-update-script { };
