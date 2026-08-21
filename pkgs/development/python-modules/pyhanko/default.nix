@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pyprojectVersionPatchHook,
@@ -14,7 +13,6 @@
   cryptography,
   lxml,
   pyhanko-certvalidator,
-  pyyaml,
   requests,
   tzlocal,
 
@@ -69,7 +67,6 @@ buildPythonPackage (finalAttrs: {
     cryptography
     lxml
     pyhanko-certvalidator
-    pyyaml
     requests
     tzlocal
   ];
