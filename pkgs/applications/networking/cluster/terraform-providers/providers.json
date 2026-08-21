@@ -724,11 +724,11 @@
     "vendorHash": "sha256-s9tdthUzIdisP0XB9V+HGlWgZCXnOodz9Atu/XyDKf4="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-TiupRu1Aj750do194qYyWlJJAaT1cwyy/oc3WyqtJdM=",
+    "hash": "sha256-pnFGM0zUCZ/47zmOblKHtRYuS+QxBSN6vnhAdYAiQaY=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.96.1",
+    "rev": "v1.97.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
