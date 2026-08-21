@@ -7,7 +7,6 @@
   python3,
   udev,
   udevCheckHook,
-  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,15 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VoMr5Lxy6u/BA/9t65/S8AW41YU0FLp6eftYUVdoMjY=";
   };
 
-  buildInputs = [
-    udev
-    systemd
-  ];
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    python3
     udevCheckHook
+
+    # used at *build* time only
+    python3
+    udev
   ];
 
   doInstallCheck = true;
