@@ -32,8 +32,10 @@
       ps: with ps; [
         alexapy
       ];
-    apple_music = ps: [
-    ]; # missing pywidevine
+    apple_music =
+      ps: with ps; [
+        pywidevine
+      ];
     ard_audiothek =
       ps: with ps; [
         gql
