@@ -225,7 +225,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit web idp-web;
-    tests = { inherit (nixosTests) opencloud; }; # TODO: parametrize
+    tests = if production then nixosTests.opencloud-production else nixosTests.opencloud;
     updateScript = nix-update-script {
       extraArgs = nixUpdateExtraArgs ++ [
         "--version-regex"
