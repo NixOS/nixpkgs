@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "changie";
-  version = "1.25.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fWPN3oEhJEosb47QUPpi9KtXzTORFVWq/W241L+tnyQ=";
+    hash = "sha256-E0nOrXgP8iT8kkwzAbVBmRJHCOK6cSbS/S8Rur3iFGg=";
   };
 
   vendorHash = "sha256-+N/h5kNEiSFe1fnzuk/oqf8g0eND4SgHCN/HM9oOgoE=";

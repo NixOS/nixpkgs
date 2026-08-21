@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "automatic-timezoned";
-  version = "2.0.153";
+  version = "2.0.156";
 
   src = fetchFromGitHub {
     owner = "maxbrunet";
     repo = "automatic-timezoned";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ViFJGgy7lNRravJwI6GjrXnjs5iH/e8whvHmrDUdE+c=";
+    sha256 = "sha256-s/VUlcMxveeYN9PUg7fWd9HFGbwkcYeN3s4nKhehYhY=";
   };
 
-  cargoHash = "sha256-QQ1UkcegBEVWYAmjuPpW3FOXUOfKLzZR6UCyj6kXZS8=";
+  cargoHash = "sha256-PcdNomx0ZwdmPWORbIayeFLWbyrmWdl9EO2P7GC25B4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
