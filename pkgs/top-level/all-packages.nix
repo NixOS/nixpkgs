@@ -4322,9 +4322,10 @@ with pkgs;
 
   dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
 
-  beam = callPackage ./beam-packages.nix { };
+  beam = callPackage ./beam-packages.nix { scopeName = "beam"; };
   beam_minimal = callPackage ./beam-packages.nix {
     beam = beam_minimal;
+    scopeName = "beam_minimal";
     systemdSupport = false;
     wxSupport = false;
   };
