@@ -44,7 +44,7 @@ ocamlPackages.buildDunePackage {
     lambdasoup
     lwt_ppx
     mirage-crypto-rng
-    ocaml_sqlite3
+    sqlite3
     optint
     safepass
     timedesc
