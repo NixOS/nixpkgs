@@ -15,18 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
-  postPatch = 
+  postPatch = ''
     substituteInPlace Makefile --replace-fail "g++" "${stdenv.cc}/bin/g++"
-  ;
+  '';
 
-  installPhase = 
+  installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     install -Dm755 sfetch $out/bin/sfetch
     install -Dm755 scat $out/bin/scat
     install -Dm755 sls $out/bin/sls
     runHook postInstall
-  ;
+  '';
 
   meta = {
     description = "Shell utilities: sfetch, scat, sls";
@@ -37,4 +37,3 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
   };
 });
-
