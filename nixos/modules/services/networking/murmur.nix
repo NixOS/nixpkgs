@@ -402,6 +402,10 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         RestrictRealtime = true;
+        SocketBindAllow = [
+          "${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
         UMask = 27;
