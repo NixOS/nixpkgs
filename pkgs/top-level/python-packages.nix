@@ -22273,6 +22273,8 @@ self: super: with self; {
 
   vulkan = callPackage ../development/python-modules/vulkan { };
 
+  vulners = callPackage ../development/python-modules/vulners { };
+
   vultr = callPackage ../development/python-modules/vultr { };
 
   vulture = callPackage ../development/python-modules/vulture { };
