@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   stdenv,
   fetchFromGitHub,
   meson,
@@ -34,12 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      # tag is "faac-2.1", but specified meson project version is "2.1.0"
+      versionCheck = false;
+    };
   };
 
   meta = {
     changelog = "https://github.com/knik0/faac/releases/tag/${finalAttrs.src.tag}";
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     homepage = "https://github.com/knik0/faac";
+    pkgConfigModules = [ "faac" ];
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ tmarkus ];
     platforms = lib.platforms.all;
