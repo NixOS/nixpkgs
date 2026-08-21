@@ -18,6 +18,9 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
+
+    # The helper authorises every request against PolicyKit; the package ships action and rule files
+    security.polkit.enable = true;
     systemd.user = {
       services.cpupower-gui-user = {
         description = "Apply cpupower-gui config at user login";
