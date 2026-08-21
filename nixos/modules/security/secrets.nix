@@ -7,9 +7,9 @@ let
   # Note that we often default options of type `safeName` to Nix attribute
   # names. For example,
   # ```
-  # secrets.generators."foo bar" = {}
+  # secrets.store."foo bar" = {}
   # ```
-  # will implicitly set `secrets.generators."foo bar".name = "foo bar"`. This is
+  # will implicitly set `secrets.store."foo bar".name = "foo bar"`. This is
   # bad, because the error will get a confusing error coming from the wrong
   # place. In the future, it might be worth creating a modified version of
   # `attrsOf` that does not have this issue, although the added complexity is
@@ -42,7 +42,7 @@ let
       default = null;
     };
 
-  generatorBackendModule = submodule (
+  storeBackendModule = submodule (
     { name, ... }:
     {
       options = {
@@ -76,20 +76,20 @@ let
 
         list = nullableDeferredPackage ''
           A script that lists all files managed by this backend. Should output
-          space-separated or newline-separated pairs of: generator_name
+          space-separated or newline-separated pairs of: secret_name
           file_name.
 
           If the backend supports multiple hosts, then this command should only
           list the secrets owned by the current host. In particular, files
           included in this command's output will be deleted by the
-          collect-garbage command, unless they appear in the user's generator
+          collect-garbage command, unless they appear in the user's secret
           configuration.
 
           This script must not perform side effects.
         '';
 
         fixup = nullableDeferredPackage ''
-          This script will be run on every invocation of the CLI's generator
+          This script will be run on every invocation of the CLI's "generate"
           command. Given $1=file_list in the same format used by `list`, the
           script performs any necessary updates to the secrets' files (e.g.
           rekeying encrypted secrets). This script can perform side effects,
@@ -117,11 +117,11 @@ let
           default = { };
           description = ''
             A module to be imported in every
-            secrets.generators.<name>.files.<name> submodule. Used by backends to
+            secrets.store.<name>.files.<name> submodule. Used by backends to
             define the `path` attribute. The module will have the following
             additional arguments passed to it:
-            - `generator`, containing the generator the file belongs to
-            - `backend`, containing the backend associated with said generator
+            - `secret`, containing the secret the file belongs to
+            - `backend`, containing the backend associated with said secret
           '';
         };
       };
@@ -134,14 +134,14 @@ let
       imports = [ backend.fileModule ];
       options = {
         name = lib.mkOption {
-          description = "name of the generated file";
+          description = "name of the file";
           type = safeName "file";
           default = name;
           defaultText = "Name of the file";
         };
 
         path = lib.mkOption {
-          description = "Path to the generated file; usually set by the backend";
+          description = "Path to the file; usually set by the backend";
           type = path;
         };
 
@@ -156,43 +156,49 @@ let
       };
     };
 
-  generatorModule = submodule (
+  secretModule = submodule (
     { name, config, ... }:
     let
-      backend = cfg.generatorBackends.${config.backend};
+      backend = cfg.backends.store.${config.backend};
     in
     {
       options = {
         name = lib.mkOption {
           description = ''
-            The name of the generator.
-            This name will be used to refer to the generator in other generators.
+            The name of the secret. This name will be used to refer to the
+            the secrets from other generators.
           '';
-          type = safeName "generator";
+          type = safeName "secret";
           default = name;
-          defaultText = "Name of the generator";
+          defaultText = "Attribute name of the secret";
+        };
+
+        backend = lib.mkOption {
+          type = str;
+          description = "The backend responsible for handling this secret.";
+          default = cfg.backends.defaults.store;
         };
 
         prompts = lib.mkOption {
           description = ''
-            A list of prompts this generator will have at its disposal.
+            A set of prompts the generator will have at its disposal.
           '';
-          type = listOf str;
-          default = [ ];
+          default = { };
+          type = attrsOf promptModule;
         };
 
         dependencies = lib.mkOption {
           description = ''
-            A list of other generators this generator should be able to read the
+            A list of other secrets this generator should be able to read the
             output(s) of.
           '';
-          type = listOf (safeName "generator");
+          type = listOf (safeName "secret");
           default = [ ];
         };
 
         files = lib.mkOption {
           description = ''
-            A set of files to generate. The generator 'script' is expected to
+            A set of files to store. The generator 'script' is expected to
             produce exactly these files under $out.
           '';
           default = { };
@@ -200,12 +206,12 @@ let
             modules = [ fileModule ];
             specialArgs = {
               inherit backend;
-              generator = config;
+              secret = config;
             };
           });
         };
 
-        script = deferredPackage ''
+        generate = nullableDeferredPackage ''
           The script to run to generate the files. The script will be run with
           the following environment variables:
             - $in: The directory containing the output values of all declared
@@ -215,12 +221,6 @@ let
           The script should produce the files specified in the 'files' attribute
           under $out.
         '';
-
-        backend = lib.mkOption {
-          type = str;
-          description = "The backend responsible for handling this secret.";
-          default = cfg.defaultGeneratorBackend;
-        };
       };
     }
   );
@@ -235,7 +235,7 @@ let
           default = name;
         };
 
-        script = deferredPackage ''
+        ask = deferredPackage ''
           Given $1=prompt_type, $2=prompt_label, and optionally
           $3=prompt_description, the script runs the prompt by the user, then
           saves respective value to $out.
@@ -249,7 +249,7 @@ let
     {
       options = {
         name = lib.mkOption {
-          description = "The name generators can use to refer to this prompt.";
+          description = "The prompt's name.";
           type = str;
           default = name;
         };
@@ -288,7 +288,7 @@ let
         backend = lib.mkOption {
           type = str;
           description = "The backend responsible for handling this prompt.";
-          default = cfg.defaultPromptBackend;
+          default = cfg.backends.defaults.prompt;
         };
       };
     }
@@ -296,33 +296,34 @@ let
 in
 {
   options.secrets = {
-    generatorBackends = lib.mkOption {
+    store = lib.mkOption {
       description = ''
-        A set of backends that handle storing and retrieving generated files.
-      '';
-      default = { };
-      type = attrsOf generatorBackendModule;
-    };
-
-    generators = lib.mkOption {
-      description = ''
-        A set of generators that are each expected to produce a set of files
+        A set of secrets that are each expected to store a set of files
         under a directory. Generators can produce files using a script,
         possibly referencing values produced by other generators and user
-        input.
+        input. The secrets can also be manually imported from external files
+        using the CLI.
       '';
       default = { };
-      type = attrsOf generatorModule;
+      type = attrsOf secretModule;
     };
 
-    defaultGeneratorBackend = lib.mkOption {
+    backends.store = lib.mkOption {
       description = ''
-        The default backend to use for generators that do not specify one.
+        A set of backends that handle storing and retrieving secret files.
+      '';
+      default = { };
+      type = attrsOf storeBackendModule;
+    };
+
+    backends.defaults.store = lib.mkOption {
+      description = ''
+        The default backend to use for secrets that do not specify one.
       '';
       type = str;
     };
 
-    promptBackends = lib.mkOption {
+    backends.prompt = lib.mkOption {
       description = ''
         A set of backends that handle retrieving user inputs.
       '';
@@ -330,16 +331,7 @@ in
       type = attrsOf promptBackendModule;
     };
 
-    prompts = lib.mkOption {
-      description = ''
-        A set of prompts the user can use to provide manual input to the
-        generator backends.
-      '';
-      default = { };
-      type = attrsOf promptModule;
-    };
-
-    defaultPromptBackend = lib.mkOption {
+    backends.defaults.prompt = lib.mkOption {
       description = ''
         The default backend to use for prompts that do not specify one.
       '';

@@ -106,26 +106,14 @@ else
   {
     _type = "secrets-configuration";
 
-    promptBackends = lib.mapAttrs' (_: backend: {
+    backends.prompt = lib.mapAttrs' (_: backend: {
       inherit (backend) name;
       value = {
-        script = evalDeferredPackage backend.script;
+        ask = evalDeferredPackage backend.ask;
       };
-    }) cfg.promptBackends;
+    }) cfg.backends.prompt;
 
-    prompts = lib.mapAttrs' (_: prompt: {
-      inherit (prompt) name;
-      value = {
-        inherit (prompt)
-          label
-          description
-          type
-          backend
-          ;
-      };
-    }) cfg.prompts;
-
-    generatorBackends = lib.mapAttrs' (_: backend: {
+    backends.store = lib.mapAttrs' (_: backend: {
       inherit (backend) name;
       value = {
         get = evalDeferredPackage backend.get;
@@ -137,19 +125,30 @@ else
         deploy.local = evalDeferredPackage backend.deploy.local;
         deploy.remote = evalDeferredPackage backend.deploy.remote;
       };
-    }) cfg.generatorBackends;
+    }) cfg.backends.store;
 
-    generators = lib.mapAttrs' (_: generator: {
-      inherit (generator) name;
+    store = lib.mapAttrs' (_: secret: {
+      inherit (secret) name;
       value = {
-        inherit (generator) prompts dependencies backend;
-        script = evalDeferredPackage generator.script;
+        inherit (secret) dependencies backend;
+        generate = evalDeferredPackage secret.generate;
         files = lib.mapAttrs' (_: file: {
           inherit (file) name;
           value = {
             inherit (file) deploy;
           };
-        }) generator.files;
+        }) secret.files;
+        prompts = lib.mapAttrs' (_: prompt: {
+          inherit (prompt) name;
+          value = {
+            inherit (prompt)
+              label
+              description
+              type
+              backend
+              ;
+          };
+        }) secret.prompts;
       };
-    }) cfg.generators;
+    }) cfg.store;
   }

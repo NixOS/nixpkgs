@@ -4,19 +4,19 @@
   ...
 }:
 let
-  cfg = config.secrets.age;
+  cfg = config.secrets.settings.age;
 
   # This data will get encoded as JSON, and passed to every invocation of the
   # backend's CLI.
   ageNixConfig = {
-    generators = lib.pipe config.secrets.generators [
-      (lib.filterAttrs (_: generator: generator.backend == "age"))
+    generators = lib.pipe config.secrets.store [
+      (lib.filterAttrs (_: secrets: secrets.backend == "age"))
       (lib.mapAttrs' (
-        _: generator: {
-          inherit (generator) name;
+        _: secret: {
+          inherit (secret) name;
           value = {
-            inherit (generator.age) publicKeys;
-            identity = { inherit (generator.age.identity) target host; };
+            inherit (secret.age) publicKeys;
+            identity = { inherit (secret.age.identity) target host; };
           };
         }
       ))
@@ -55,7 +55,7 @@ let
     );
 in
 {
-  options.secrets.age = {
+  options.secrets.settings.age = {
     package = lib.mkOption {
       type = lib.types.functionTo lib.types.pathInStore;
       default = pkgs: pkgs.age;
@@ -120,7 +120,7 @@ in
     };
   };
 
-  options.secrets.generators = lib.mkOption {
+  options.secrets.store = lib.mkOption {
     type = lib.types.attrsOf (
       lib.types.submodule {
         options.age = {
@@ -151,7 +151,7 @@ in
     );
   };
 
-  config.secrets.generatorBackends.age = {
+  config.secrets.backends.store.age = {
     get = pkgs: ageScript pkgs "get";
     set = pkgs: ageScript pkgs "set";
     exists = pkgs: ageScript pkgs "exists";
@@ -174,9 +174,9 @@ in
     );
 
     fileModule =
-      { generator, name, ... }:
+      { secret, name, ... }:
       {
-        path = "${cfg.targetDirectory}/${generator.name}/${name}";
+        path = "${cfg.targetDirectory}/${secret.name}/${name}";
       };
   };
 

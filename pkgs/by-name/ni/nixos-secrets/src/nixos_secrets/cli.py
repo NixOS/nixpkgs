@@ -79,7 +79,7 @@ def main() -> None:
     common_args(gen_parser)
     gen_parser.add_argument(
         "-g",
-        "--generator",
+        "--generate",
         dest="generators",
         metavar="<generator>",
         type=str,
