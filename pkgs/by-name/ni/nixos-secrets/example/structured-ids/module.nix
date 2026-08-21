@@ -3,13 +3,13 @@ let
   hashId = id: toString (builtins.hashString "md5" (builtins.toJSON id));
 in
 {
-  options.secrets.idHasher = lib.mkOption {
+  options.secrets.settings.id.hasher = lib.mkOption {
     type = lib.types.functionTo lib.types.str;
     default = hashId;
     readOnly = true;
   };
 
-  options.secrets.generators = lib.mkOption {
+  options.secrets.store = lib.mkOption {
     type = lib.types.attrsOf (
       lib.types.submodule (
         { config, ... }:

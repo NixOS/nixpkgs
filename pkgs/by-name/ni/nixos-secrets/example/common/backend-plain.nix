@@ -1,6 +1,6 @@
 { lib, config, ... }:
 let
-  cfg = config.secrets.plain;
+  cfg = config.secrets.settings.plain;
 
   mkScript =
     name: text: pkgs:
@@ -12,7 +12,7 @@ let
     );
 in
 {
-  options.secrets.plain = {
+  options.secrets.settings.plain = {
     hostDirectory = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-plain/host/${config.networking.hostName}";
@@ -32,69 +32,67 @@ in
     };
   };
 
-  config.secrets = {
-    generatorBackends.plain = {
-      get = mkScript "get" ''
-        out=''${out:?} # Make shellcheck happy
-        cat ${cfg.hostDirectory}/generators/"$1"/files/"$2" > "$out"
+  config.secrets.backends.store.plain = {
+    get = mkScript "get" ''
+      out=''${out:?} # Make shellcheck happy
+      cat ${cfg.hostDirectory}/generators/"$1"/files/"$2" > "$out"
+    '';
+    set = mkScript "set" ''
+      in=''${in:?} # Make shellcheck happy
+      mkdir -p ${cfg.hostDirectory}/generators/"$1"/files/
+      cat "$in" > ${cfg.hostDirectory}/generators/"$1"/files/"$2"
+    '';
+    exists = mkScript "exists" ''
+      if [[ ! -f ${cfg.hostDirectory}/generators/"$1"/files/"$2" ]]; then
+        exit 42
+      fi
+    '';
+
+    delete = mkScript "delete" ''
+      rm -rf ${cfg.hostDirectory}/generators/"$1"/files/"$2"
+    '';
+
+    # This example showcases that scripts can be written in any language
+    list =
+      pkgs:
+      pkgs.writers.writePython3 "list" { } ''
+        from pathlib import Path
+        base = Path("${cfg.hostDirectory}/generators")
+        if base.exists():
+            for generator in base.iterdir():
+                for file in (generator / "files").iterdir():
+                    print(f"{generator.name} {file.name}")
       '';
-      set = mkScript "set" ''
-        in=''${in:?} # Make shellcheck happy
-        mkdir -p ${cfg.hostDirectory}/generators/"$1"/files/
-        cat "$in" > ${cfg.hostDirectory}/generators/"$1"/files/"$2"
-      '';
-      exists = mkScript "exists" ''
-        if [[ ! -f ${cfg.hostDirectory}/generators/"$1"/files/"$2" ]]; then
-          exit 42
-        fi
-      '';
 
-      delete = mkScript "delete" ''
-        rm -rf ${cfg.hostDirectory}/generators/"$1"/files/"$2"
-      '';
+    deploy.local = mkScript "deploy-local" ''
+      # NOTE: this script will not parse the input file list (my bash-fu is
+      # not strong enough...). It will instead push all the secrets to the
+      # target machine :p
 
-      # This example showcases that scripts can be written in any language
-      list =
-        pkgs:
-        pkgs.writers.writePython3 "list" { } ''
-          from pathlib import Path
-          base = Path("${cfg.hostDirectory}/generators")
-          if base.exists():
-              for generator in base.iterdir():
-                  for file in (generator / "files").iterdir():
-                      print(f"{generator.name} {file.name}")
-        '';
+      if [[ ! -d "$1" ]]; then
+        echo "System root not found" 1>&2
+        exit 1
+      fi
 
-      deploy.local = mkScript "deploy-local" ''
-        # NOTE: this script will not parse the input file list (my bash-fu is
-        # not strong enough...). It will instead push all the secrets to the
-        # target machine :p
-
-        if [[ ! -d "$1" ]]; then
-          echo "System root not found" 1>&2
-          exit 1
-        fi
-
-        if [[ -d "${cfg.hostDirectory}/generators" ]]; then
-          for generator in "${cfg.hostDirectory}/generators"/*; do
-            [[ -d "$generator" ]] || continue
-            files="$generator/files"
-            [[ -d "$files" ]] || continue
-            for file in "$files"/*; do
-              [[ -e "$file" ]] || continue
-              dir="$1/${cfg.targetDirectory}/$(basename "$generator")"
-              mkdir -p "$dir"
-              cp "$file" "$dir/$(basename "$file")"
-            done
+      if [[ -d "${cfg.hostDirectory}/generators" ]]; then
+        for generator in "${cfg.hostDirectory}/generators"/*; do
+          [[ -d "$generator" ]] || continue
+          files="$generator/files"
+          [[ -d "$files" ]] || continue
+          for file in "$files"/*; do
+            [[ -e "$file" ]] || continue
+            dir="$1/${cfg.targetDirectory}/$(basename "$generator")"
+            mkdir -p "$dir"
+            cp "$file" "$dir/$(basename "$file")"
           done
-        fi
-      '';
+        done
+      fi
+    '';
 
-      fileModule =
-        { generator, name, ... }:
-        {
-          path = "${cfg.targetDirectory}/${generator.name}/${name}";
-        };
-    };
+    fileModule =
+      { generator, name, ... }:
+      {
+        path = "${cfg.targetDirectory}/${generator.name}/${name}";
+      };
   };
 }

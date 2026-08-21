@@ -6,8 +6,8 @@ from typing import List, Set
 from pathlib import Path
 from .config import (
     SecretsConfig,
-    SecretsGeneratorBackend,
-    SecretsGenerator,
+    SecretsStoreBackend,
+    SecretsSecret,
     SecretsFile,
     SecretsPrompt,
 )
@@ -32,8 +32,8 @@ def build_binary(path: Path) -> Path:
 
 def file_exists(
     args: SecretsArgs,
-    backend: SecretsGeneratorBackend,
-    generator: SecretsGenerator,
+    backend: SecretsStoreBackend,
+    generator: SecretsSecret,
     file: SecretsFile,
 ) -> bool:
     binary = build_binary(backend.exists)
@@ -58,11 +58,11 @@ def file_exists(
 def get_secret(
     args: SecretsArgs,
     config: SecretsConfig,
-    generator: SecretsGenerator,
+    generator: SecretsSecret,
     file: SecretsFile,
     out: Path,
 ):
-    backend = config.generatorBackends[generator.backend]
+    backend = config.storeBackends[generator.backend]
     if backend.get is None:
         raise SecretsError(
             f"Backend '{backend.name}' has no 'get' script, yet the generator ''{generator.name}' requires one"
@@ -88,11 +88,11 @@ def get_secret(
 def set_secret(
     args: SecretsArgs,
     config: SecretsConfig,
-    generator: SecretsGenerator,
+    generator: SecretsSecret,
     file: SecretsFile,
     at: Path,
 ):
-    backend = config.generatorBackends[generator.backend]
+    backend = config.storeBackends[generator.backend]
     binary = build_binary(backend.set)
     try:
         env = os.environ.copy()
@@ -116,7 +116,7 @@ def set_secret(
 def delete_secret(
     args: SecretsArgs,
     config: SecretsConfig,
-    backend: SecretsGeneratorBackend,
+    backend: SecretsStoreBackend,
     gen_name: str,
     file_name: str,
 ):
@@ -135,7 +135,7 @@ def delete_secret(
 
 
 def list_secrets(
-    config: SecretsConfig, backend: SecretsGeneratorBackend
+    config: SecretsConfig, backend: SecretsStoreBackend
 ) -> Set[tuple[str, str]]:
     binary = build_binary(backend.list)
     try:
@@ -169,7 +169,7 @@ def list_secrets(
 def deploy_secrets(
     args: SecretsArgs,
     config: SecretsConfig,
-    backend: SecretsGeneratorBackend,
+    backend: SecretsStoreBackend,
     files: List[tuple[str, str]],
 ):
     inputLines = []
@@ -199,7 +199,7 @@ def deploy_secrets(
 
 def run_prompt(config: SecretsConfig, prompt: SecretsPrompt, out: Path):
     backend = config.promptBackends[prompt.backend]
-    binary = build_binary(backend.script)
+    binary = build_binary(backend.ask)
     try:
         env = os.environ.copy()
         env["out"] = out
@@ -257,7 +257,7 @@ def rebuild_order(
                 break
         else:
             for file in generator.files.values():
-                backend = config.generatorBackends[generator.backend]
+                backend = config.storeBackends[generator.backend]
                 if not file_exists(args, backend, generator, file):
                     print(f"- '{item}' (file '{file.name}' is missing)")
                     order.append(item)
@@ -272,7 +272,7 @@ def fixup_all(args: SecretsArgs, config: SecretsConfig):
     print("Running fixup scripts:")
 
     errors = []
-    for backend in config.generatorBackends.values():
+    for backend in config.storeBackends.values():
         files = config.files_for_backend(backend)
 
         if not backend.fixup:

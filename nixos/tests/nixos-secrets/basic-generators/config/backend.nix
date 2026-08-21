@@ -13,16 +13,16 @@ let
 in
 {
   secrets = {
-    defaultPromptBackend = "example";
+    backends.defaults.prompt = "simple";
 
     # Non-interactive backend
-    promptBackends.example.script = mkBackendScript "prompt" ''
+    backends.prompt.simple.ask = mkBackendScript "prompt" ''
       out=''${out:?} # Make shellcheck happy
       echo -n "placeholder" > "$out"
     '';
 
-    defaultGeneratorBackend = "example";
-    generatorBackends.example = {
+    backends.defaults.store = "plain";
+    backends.store.plain = {
       get = mkBackendScript "get" ''
         out=''${out:?} # Make shellcheck happy
         cat ${rootHost}/generators/"$1"/files/"$2" > "$out"
@@ -84,9 +84,9 @@ in
       '';
 
       fileModule =
-        { generator, name, ... }:
+        { secret, name, ... }:
         {
-          path = "${rootTarget}/${generator.name}/${name}";
+          path = "${rootTarget}/${secret.name}/${name}";
         };
     };
   };

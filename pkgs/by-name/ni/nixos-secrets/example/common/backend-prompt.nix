@@ -9,28 +9,26 @@ let
     );
 in
 {
-  secrets = {
-    promptBackends.simple.script = mkScript "prompt" ''
-      out=''${out:?} # Make shellcheck happy
+  secrets.backends.prompt.simple.ask = mkScript "prompt" ''
+    out=''${out:?} # Make shellcheck happy
 
-      prompt="$2"
-      if [[ ! -z "$3" ]]; then
-        prompt="$prompt ($3)"
-      fi
+    prompt="$2"
+    if [[ ! -z "$3" ]]; then
+      prompt="$prompt ($3)"
+    fi
 
-      if [[ "$1" == "line" ]]; then
-        read -rp "$prompt: " text
-        echo -n "$text" > "$out"
-      elif [[ "$1" == "hidden" ]]; then
-        read -srp "$prompt: " text
-        echo ""
-        echo -n "$text" > "$out"
-      elif [[ "$1" == "multiline" ]]; then
-        echo "<$prompt>" > "$out"
-        $EDITOR "$out"
-      else
-        exit 1
-      fi
-    '';
-  };
+    if [[ "$1" == "line" ]]; then
+      read -rp "$prompt: " text
+      echo -n "$text" > "$out"
+    elif [[ "$1" == "hidden" ]]; then
+      read -srp "$prompt: " text
+      echo ""
+      echo -n "$text" > "$out"
+    elif [[ "$1" == "multiline" ]]; then
+      echo "<$prompt>" > "$out"
+      $EDITOR "$out"
+    else
+      exit 1
+    fi
+  '';
 }

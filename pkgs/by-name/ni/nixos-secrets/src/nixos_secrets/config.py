@@ -11,10 +11,10 @@ safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]+$")
 @dataclass
 class SecretsPromptBackend:
     name: str
-    script: str
+    ask: str
 
     def from_jsom(name: str, json: Any) -> Self:
-        return SecretsPromptBackend(name=name, script=json["script"])
+        return SecretsPromptBackend(name=name, ask=json["ask"])
 
 
 @dataclass
@@ -36,7 +36,7 @@ class SecretsPrompt:
 
 
 @dataclass
-class SecretsGeneratorBackend:
+class SecretsStoreBackend:
     name: str
     get: Optional[str]
     set: str
@@ -48,7 +48,7 @@ class SecretsGeneratorBackend:
     deployLocal: Optional[str]
 
     def from_jsom(name: str, json: Any) -> Self:
-        return SecretsGeneratorBackend(
+        return SecretsStoreBackend(
             name=name,
             get=json["get"],
             set=json["set"],
@@ -76,70 +76,77 @@ class SecretsFile:
 
 
 @dataclass
-class SecretsGenerator:
+class SecretsSecret:
     name: str
     backend: str
-    script: str
+    generate: Optional[str]
     dependencies: List[str]
-    prompts: List[str]
+    prompts: Mapping[str, SecretsPrompt]
     files: Mapping[str, SecretsFile]
 
     def from_jsom(name: str, json: Any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
-                f"Generator '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
+                f"Secret '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
             )
 
-        result = SecretsGenerator(
+        result = SecretsSecret(
             name=name,
             backend=json["backend"],
-            script=json["script"],
+            generate=json["generate"],
             dependencies=json["dependencies"],
-            prompts=json["prompts"],
+            prompts={},
             files={},
         )
 
+        for k, v in json["prompts"].items():
+            result.prompts[k] = SecretsPrompt.from_jsom(k, v)
+
         for k, v in json["files"].items():
             result.files[k] = SecretsFile.from_jsom(k, v)
+
+        if result.generate is None and result.dependencies:
+            raise SecretsError(
+                f"Secret '{name}' has associated dependencies without a corresponding generator script"
+            )
+
+        if result.generate is None and result.prompts:
+            raise SecretsError(
+                f"Secret '{name}' has associated prompts without a corresponding generator script"
+            )
 
         return result
 
 
 @dataclass
 class SecretsConfig:
-    prompts: Mapping[str, SecretsPrompt]
+    generators: Mapping[str, SecretsSecret]
+    storeBackends: Mapping[str, SecretsStoreBackend]
     promptBackends: Mapping[str, SecretsPromptBackend]
 
-    generators: Mapping[str, SecretsGenerator]
-    generatorBackends: Mapping[str, SecretsGeneratorBackend]
-
     def from_jsom(json: Any) -> Self:
-        result = SecretsConfig({}, {}, {}, {})
+        result = SecretsConfig(generators={}, storeBackends={}, promptBackends={})
 
-        for k, v in json["prompts"].items():
-            result.prompts[k] = SecretsPrompt.from_jsom(k, v)
-
-        for k, v in json["promptBackends"].items():
+        for k, v in json["backends"]["prompt"].items():
             result.promptBackends[k] = SecretsPromptBackend.from_jsom(k, v)
 
-        for k, v in json["generators"].items():
-            result.generators[k] = SecretsGenerator.from_jsom(k, v)
+        for k, v in json["backends"]["store"].items():
+            result.storeBackends[k] = SecretsStoreBackend.from_jsom(k, v)
 
-        for k, v in json["generatorBackends"].items():
-            result.generatorBackends[k] = SecretsGeneratorBackend.from_jsom(k, v)
+        for k, v in json["store"].items():
+            result.generators[k] = SecretsSecret.from_jsom(k, v)
 
-        referencedPrompts: Set[str] = set()
         referencedGenerators: Set[str] = set()
-        referencedGeneratorBackends: Set[str] = set()
+        referencedStoreBackends: Set[str] = set()
         referencedPromptBackends: Set[str] = set()
 
         for name, gen in result.generators.items():
             referencedGenerators.update(gen.dependencies)
-            referencedPrompts.update(gen.prompts)
-            referencedGeneratorBackends.add(gen.backend)
+            referencedStoreBackends.add(gen.backend)
 
-        for name, prompt in result.prompts.items():
-            referencedPromptBackends.add(prompt.backend)
+        for secret in result.generators.values():
+            for name, prompt in secret.prompts.items():
+                referencedPromptBackends.add(prompt.backend)
 
         if missingPromptBackends := referencedPromptBackends - set(
             result.promptBackends.keys()
@@ -149,16 +156,10 @@ class SecretsConfig:
                 f"The following prompt backends are referenced but not defined: {missingList}"
             )
 
-        if missingPrompts := referencedPrompts - set(result.prompts.keys()):
-            missingList = ", ".join(sorted(missingPrompts))
-            raise SecretsError(
-                f"The following prompts are referenced but not defined: {missingList}"
-            )
-
-        if missingGeneratorBackends := referencedGeneratorBackends - set(
-            result.generatorBackends.keys()
+        if missingStoreBackends := referencedStoreBackends - set(
+            result.storeBackends.keys()
         ):
-            missingList = ", ".join(sorted(missingGeneratorBackends))
+            missingList = ", ".join(sorted(missingStoreBackends))
             raise SecretsError(
                 f"The following generator backends are referenced but not defined: {missingList}"
             )
@@ -173,7 +174,7 @@ class SecretsConfig:
 
     def files_for_backend(
         self: Self,
-        backend: SecretsGeneratorBackend,
+        backend: SecretsStoreBackend,
         deployed_only: bool = False,
     ) -> List[tuple[str, str]]:
         files = []

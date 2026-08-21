@@ -7,9 +7,9 @@ from .exec import deploy_secrets
 def deploy(args: SecretsArgs, config: SecretsConfig):
     generate_secrets(args, config)
 
-    print(f"Running deploy scripts for {len(config.generatorBackends)} backends:")
+    print(f"Running deploy scripts for {len(config.storeBackends)} backends:")
 
-    for backend in config.generatorBackends.values():
+    for backend in config.storeBackends.values():
         files = config.files_for_backend(backend, deployed_only=True)
 
         if not files:

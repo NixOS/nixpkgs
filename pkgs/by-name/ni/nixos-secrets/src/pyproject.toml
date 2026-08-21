@@ -6,4 +6,4 @@ version = "0.1.0"
 nixos-secrets = "nixos_secrets.cli:main"
 
 [tool.setuptools.package-data]
-nixos_secrets = ["nix/*"]
+nixos_secrets = ["nix/*", "secrets-config.schema.json"]
