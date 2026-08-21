@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
+  # to be updated and removed when https://github.com/CSSLab/maia3/pull/10 is merged
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"python-chess"' '"chess"'
