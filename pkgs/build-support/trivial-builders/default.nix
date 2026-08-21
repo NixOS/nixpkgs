@@ -1071,7 +1071,22 @@ rec {
           "installPhase"
         ];
 
-        installPhase = "cp -R ./ $out";
+        # Unpack and patch inside $out so the tree is materialised once, not copied out afterwards.
+        preUnpack = ''
+          mkdir -p "$out/.applyPatches-unpack"
+          cd "$out/.applyPatches-unpack"
+        ''
+        + args.preUnpack or "";
+
+        installPhase = ''
+          shopt -s dotglob nullglob
+          entries=( "$PWD"/* )
+          cd "$out"
+          if (( ''${#entries[@]} )); then
+            mv -- "''${entries[@]}" "$out/"
+          fi
+          rm -rf -- "$out/.applyPatches-unpack"
+        '';
 
         # passthru the git and hash info for nix-update, as well
         # as all the src's passthru attrs.
