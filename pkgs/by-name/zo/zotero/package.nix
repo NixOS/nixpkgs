@@ -24,27 +24,31 @@
   makeBinaryWrapper,
   doCheck ? false,
   zotero,
+  pkg-config,
+  pixman,
+  cairo,
+  pango,
 }:
 let
   # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "9.0.6";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-9Rku6iF7Sczqekw8ms8hluIc+B/5BE9zHlBqp7vGlY4=";
+    hash = "sha256-lNeujToTGzOTG7aKycoZfnyZawM9EQFWSdRJ4/KEPqQ=";
   };
 
   pdf-js = buildNpmPackage {
     pname = "zotero-pdf-js";
     inherit version nodejs;
-    src = "${src}/pdf-worker/pdf.js";
-    npmDepsHash = "sha256-KeYAY6EWBZVd3QucDEDtI6lwtTahCEFBFf2Ebib9HKg=";
+    src = "${src}/document-worker/pdf.js";
+    npmDepsHash = "sha256-xq0RhCruM22mFC3zkHpn4hX8YdO32Sn42fbSC0cQXFw=";
     buildPhase = ''
       runHook preBuild
 
@@ -91,7 +95,7 @@ let
     pname = "zotero-pdf-reader";
     inherit version nodejs;
     src = "${src}/reader";
-    npmDepsHash = "sha256-8marAeBAW5cKDaJT3xbVsXyVfGa5ehZYUYijDzFng38=";
+    npmDepsHash = "sha256-/Szv0BWy9zHLrusRxo8XRtfyFmq/rS4GG1iO7NkV2BQ=";
     patches = [
       ./pdf-reader-locales.patch
       ./pdf-reader-build-fix.patch
@@ -122,10 +126,16 @@ let
   pdf-worker = buildNpmPackage {
     pname = "zotero-pdf-worker";
     inherit version nodejs;
-    src = "${src}/pdf-worker";
-    npmDepsHash = "sha256-TGuN1fZOClzm6xD2rmn5BAemN4mbyOVaLbSRyMeDIm8=";
+    src = "${src}/document-worker";
+    npmDepsHash = "sha256-dUGZ0RsmW+cAXPi78W9eX7kQnTiCVc8K9lPPtw8Cif0=";
     nativeBuildInputs = [
       rsync
+      pkg-config
+    ];
+    buildInputs = [
+      pixman
+      cairo
+      pango
     ];
     postPatch = ''
       rm -rf pdf.js
@@ -204,9 +214,9 @@ buildNpmPackage (finalAttrs: {
     cp -r ${pdf-reader} reader
     chmod -R u+w reader
 
-    rm -rf pdf-worker
-    cp -r ${pdf-worker} pdf-worker
-    chmod -R u+w pdf-worker
+    rm -rf document-worker
+    cp -r ${pdf-worker} document-worker
+    chmod -R u+w document-worker
 
     rm -rf note-editor
     cp -r ${note-editor} note-editor
