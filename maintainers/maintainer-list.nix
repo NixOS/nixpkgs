@@ -10870,6 +10870,11 @@
     github = "GZGavinZhao";
     githubId = 74938940;
   };
+  h-yuqi = {
+    name = "Yuqi Huang";
+    github = "h-yuqi";
+    githubId = 62862318;
+  };
   h3cth0r = {
     name = "Hector Miranda";
     email = "hector.miranda@tec.mx";
