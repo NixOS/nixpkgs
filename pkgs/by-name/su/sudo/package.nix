@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     license =
       with lib.licenses;
       AND [
-        sudo
+        isc
         bsdAskToEndorse
         bsd2
         bsd3

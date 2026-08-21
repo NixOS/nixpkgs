@@ -1481,12 +1481,6 @@ lib.mapAttrs mkLicense (
       fullName = "MIT-STK License";
     };
 
-    sudo = {
-      shortName = "sudo";
-      fullName = "Sudo License (ISC-style)";
-      url = "https://www.sudo.ws/about/license/";
-    };
-
     sustainableUse = {
       spdxId = "SUL-1.0";
       fullName = "Sustainable Use License";
