@@ -15,7 +15,7 @@
   libuuid,
   keyutils,
   lvm2,
-  systemd,
+  systemdMinimal,
   coreutils,
   python3,
   buildPackages,
@@ -32,7 +32,7 @@
 
 let
   statdPath = lib.makeBinPath [
-    systemd
+    systemdMinimal
     util-linux
     coreutils
   ];
