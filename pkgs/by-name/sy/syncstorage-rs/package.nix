@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # almost all tests need a DB to test against
   doCheck = false;
 
-  passthru.updateScript = lib.mkIf (dbBackend == "mysql") nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     firefox-syncserver =
