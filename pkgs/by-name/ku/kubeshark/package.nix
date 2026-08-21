@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubeshark";
-  version = "53.3.0";
+  version = "53.4.0";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YKR0P/4X134NTPuXeh1Ha781wav7daAxp+xJWCmgkIw=";
+    hash = "sha256-ijAiPJ8Bn6zZ8VK94vbjlRKSHDaVC7Ki5UNX+4EhXC4=";
   };
 
-  vendorHash = "sha256-4s1gxJo2w5BibZ9CJP7Jl9Z8Zzo8WpBokBnRN+zp8b4=";
+  vendorHash = "sha256-mJfjiVyKVGB410ned2E13i35mAN0XrPNERUa+MAzF58=";
 
   ldflags =
     let
