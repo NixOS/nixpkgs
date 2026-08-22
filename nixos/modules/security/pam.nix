@@ -921,13 +921,19 @@ let
                     } # ${rule.name} (order ${toString rule.order})"
                   )
                   (
-                    sort (
-                      a: b:
-                      if a.order != b.order then
-                        a.order < b.order
-                      else
-                        throw "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"
-                    ) (filter (rule: rule.enable) (attrValues cfg.rules.${type}))
+                    sort
+                      (
+                        a: b:
+                        if a.order != b.order then
+                          a.order < b.order
+                        else
+                          throw "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"
+                      )
+                      (
+                        filter (rule: rule.enable) (
+                          attrValues (config.security.pam.globalRules.${type} // cfg.rules.${type}) # Global rules can be overriden by defining rule with same name
+                        )
+                      )
                   )
               );
           in
@@ -1935,6 +1941,31 @@ in
         whose limits can be changed via {option}`systemd.settings.Manager`
         instead.
       '';
+    };
+
+    security.pam.globalRules = lib.mkOption {
+      # This option is experimental and subject to breaking changes without notice.
+      visible = false;
+
+      description = ''
+        PAM rules for all services.
+
+        These rules will be used by all services. If a service defines a rule with the same name,
+        the global rule will be overriden.
+
+        ::: {.warning}
+        This option and its suboptions are experimental and subject to breaking changes without notice.
+
+        If you use this option in your system configuration, you will need to manually monitor this module for any changes. Otherwise, failure to adjust your configuration properly could lead to you being locked out of your system, or worse, your system could be left wide open to attackers.
+
+        If you share configuration examples that use this option, you MUST include this warning so that users are informed.
+
+        You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
+        :::
+      '';
+      type = lib.types.submodule {
+        options = lib.genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeOption;
+      };
     };
 
     security.pam.services = lib.mkOption {
