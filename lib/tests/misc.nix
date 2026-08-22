@@ -4819,6 +4819,7 @@ runTests {
             !lib.elem name [
               "callPackage"
               "newScope"
+              "prevScope"
               "overrideScope"
               "packages"
             ]
