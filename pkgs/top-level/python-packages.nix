@@ -20113,6 +20113,8 @@ self: super: with self; {
 
   superqt = callPackage ../development/python-modules/superqt { };
 
+  supertonic = callPackage ../development/python-modules/supertonic { };
+
   supervise-api = callPackage ../development/python-modules/supervise-api { };
 
   supervision = callPackage ../development/python-modules/supervision { };
