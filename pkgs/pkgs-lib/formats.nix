@@ -162,7 +162,9 @@ optionalAttrs allowAliases aliases
   yaml = yaml_1_1;
 
   yaml_1_1 =
-    { }:
+    {
+      tags ? false,
+    }:
     {
       generate =
         name: value:
@@ -176,7 +178,7 @@ optionalAttrs allowAliases aliases
               __structuredAttrs = true;
             }
             ''
-              remarshal --from json --to yaml-1.1 ${
+              remarshal --from json --to yaml-1.1${lib.optionalString tags " --yaml-tags"} ${
                 # attributes with null values are omitted from the JSON with structured attrs
                 # yaml_1_1Null test keeps this in check
                 if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
@@ -189,7 +191,9 @@ optionalAttrs allowAliases aliases
     };
 
   yaml_1_2 =
-    { }:
+    {
+      tags ? false,
+    }:
     {
       generate =
         name: value:
@@ -203,7 +207,7 @@ optionalAttrs allowAliases aliases
               __structuredAttrs = true;
             }
             ''
-              json2yaml ${
+              json2yaml${lib.optionalString tags " --yaml-tags"} ${
                 # attributes with null values are omitted from the JSON with structured attrs
                 # yaml_1_2Null test keeps this in check
                 if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
