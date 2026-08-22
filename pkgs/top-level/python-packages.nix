@@ -5533,6 +5533,10 @@ self: super: with self; {
     routerFeatures = true;
   };
 
+  entroly = callPackage ../development/python-modules/entroly { };
+
+  entroly-core = callPackage ../development/python-modules/entroly-core { };
+
   entry-points-txt = callPackage ../development/python-modules/entry-points-txt { };
 
   entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
