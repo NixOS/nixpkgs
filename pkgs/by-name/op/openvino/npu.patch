@@ -1,0 +1,26 @@
+--- a/src/plugins/intel_npu/cmake/download_compiler_libs.cmake
++++ b/src/plugins/intel_npu/cmake/download_compiler_libs.cmake
+@@ -133,14 +133,20 @@
+         set(PLUGIN_COMPILER_VM_RT_RENAMED_LIB "${PLUGIN_COMPILER_LIB_DESTINATION}/${PLUGIN_COMPILER_VM_RT_RENAMED_LIB_NAME}")
+         file(COPY "${PLUGIN_COMPILER_LIB}" DESTINATION "${PLUGIN_COMPILER_LIB_DESTINATION}")
+         file(COPY "${PLUGIN_COMPILER_LOADER_LIB}" DESTINATION "${PLUGIN_COMPILER_LIB_DESTINATION}")
+-        configure_file("${PLUGIN_COMPILER_VM_RT_LIB}" "${PLUGIN_COMPILER_VM_RT_RENAMED_LIB}" COPYONLY)
++        if(EXISTS "${PLUGIN_COMPILER_VM_RT_LIB}")
++            configure_file("${PLUGIN_COMPILER_VM_RT_LIB}" "${PLUGIN_COMPILER_VM_RT_RENAMED_LIB}" COPYONLY)
++        endif()
+         message(STATUS "Copying prebuilt Plugin compiler library ${PLUGIN_COMPILER_LIB} to ${PLUGIN_COMPILER_LIB_DESTINATION}")
+         message(STATUS "Copying prebuilt Plugin compiler loader library ${PLUGIN_COMPILER_LOADER_LIB} to ${PLUGIN_COMPILER_LIB_DESTINATION}")
+-        message(STATUS "Copying prebuilt Plugin compiler VM runtime library ${PLUGIN_COMPILER_VM_RT_LIB} to ${PLUGIN_COMPILER_VM_RT_RENAMED_LIB}")
++        if(EXISTS "${PLUGIN_COMPILER_VM_RT_LIB}")
++            message(STATUS "Copying prebuilt Plugin compiler VM runtime library ${PLUGIN_COMPILER_VM_RT_LIB} to ${PLUGIN_COMPILER_VM_RT_RENAMED_LIB}")
++        endif()
+ 
+         install(FILES ${PLUGIN_COMPILER_LIB} DESTINATION ${OV_CPACK_PLUGINSDIR} COMPONENT ${NPU_PLUGIN_COMPONENT})
+         install(FILES ${PLUGIN_COMPILER_LOADER_LIB} DESTINATION ${OV_CPACK_PLUGINSDIR} COMPONENT ${NPU_PLUGIN_COMPONENT})
+-        install(FILES ${PLUGIN_COMPILER_VM_RT_RENAMED_LIB} DESTINATION ${OV_CPACK_PLUGINSDIR} COMPONENT ${NPU_PLUGIN_COMPONENT})
++        if(EXISTS "${PLUGIN_COMPILER_VM_RT_RENAMED_LIB}")
++            install(FILES ${PLUGIN_COMPILER_VM_RT_RENAMED_LIB} DESTINATION ${OV_CPACK_PLUGINSDIR} COMPONENT ${NPU_PLUGIN_COMPONENT})
++        endif()
+ 
+         if(WIN32)
+             set(PLUGIN_COMPILER_PDB "${PLUGIN_COMPILER_PDB_PATH}/${PLUGIN_COMPILER_PDB_NAME}")

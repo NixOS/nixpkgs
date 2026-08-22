@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
+  npuSupport ? true,
 
   # build
   scons,
@@ -27,6 +29,7 @@
   pugixml,
   snappy,
   onetbb,
+  zstd,
   cudaPackages,
 }:
 
@@ -51,11 +54,14 @@ let
     ]
   );
 
-in
+  npuCompiler = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/npu_compiler/npu_compiler_vcl_ubuntu_24_04-8_2_0-9802763.tar.gz";
+    hash = "sha256-xfK2be5sQkzS2N1Qz5lYbSEABwMSG7/F7ZkRr1YiHkk=";
+  };
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "openvino";
-  version = "2026.3.0";
+  openvino = stdenv.mkDerivation (finalAttrs: {
+    pname = "openvino";
+    version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
@@ -92,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
     ./cmake-install-paths.patch
+  ] ++ lib.optionals npuSupport [
+    ./npu.patch
   ];
 
   dontUseSconsCheck = true;
@@ -129,7 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     # features
     (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_INTEL_GPU" true)
-    (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_NPU" (npuSupport && stdenv.hostPlatform.isx86_64))
+    (cmakeBool "ENABLE_INTEL_NPU_COMPILER" (npuSupport && stdenv.hostPlatform.isx86_64))
+
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -160,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     snappy
     onetbb
+    zstd
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -167,9 +178,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  appendRunpaths = lib.optionals npuSupport [
+    "${lib.getLib level-zero}/lib"
+  ];
+
   postInstall = ''
     mkdir -p $python/lib
     mv $lib/lib/python* $python/lib/
+  ''
+  + lib.optionalString npuSupport ''
+    mkdir -p $lib/lib/openvino
+    tar -xzf ${npuCompiler} --strip-components=0 -C $TMPDIR
+    cp $TMPDIR/lib/libopenvino_intel_npu_compiler*.so $lib/lib/openvino/
+    cp $TMPDIR/lib/libnpu_interpreter_runtime.so $lib/lib/openvino/libopenvino_intel_npu_vm_runtime.so
   '';
 
   postFixup = ''
@@ -193,4 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
-})
+});
+in 
+openvino
