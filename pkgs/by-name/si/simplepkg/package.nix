@@ -37,7 +37,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp ${pkgWrapper}/bin/pkg $out/bin/pkg
     chmod +x $out/bin/pkg
-    wrapProgram $out/bin/pkg --prefix PATH : ${lib.makeBinPath [ fish nix git sqlite ]}
+    wrapProgram $out/bin/pkg --prefix PATH : ${
+      lib.makeBinPath [
+        fish
+        nix
+        git
+        sqlite
+      ]
+    }
 
     runHook postInstall
   '';
