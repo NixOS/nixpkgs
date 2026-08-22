@@ -461,9 +461,22 @@ in
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
         ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port}";
-        RuntimeDirectory = "redmine";
+        RuntimeDirectory = [
+          "redmine"
+          "redmine/rootdir"
+          "redmine/files"
+        ];
         RuntimeDirectoryMode = "0700";
         AmbientCapabilities = "";
+        BindPaths = [
+          cfg.stateDir
+          "/run/redmine/files:/run/redmine"
+        ];
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+          "/etc/resolv.conf"
+        ];
         CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -496,6 +509,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RootDirectory = "/run/redmine/rootdir";
         SocketBindAllow = [
           "tcp:${toString cfg.port}"
         ];
