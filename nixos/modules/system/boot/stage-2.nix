@@ -4,11 +4,8 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
-
+  inherit (lib) types mkOption literalExpression;
   useHostResolvConf = config.networking.resolvconf.enable && config.networking.useHostResolvConf;
 
   bootStage2 = pkgs.replaceVarsWith {

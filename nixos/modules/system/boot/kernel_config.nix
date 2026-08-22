@@ -1,7 +1,18 @@
 { lib, config, ... }:
-
-with lib;
 let
+  inherit (lib)
+    all
+    concatStrings
+    elem
+    getValues
+    literalExpression
+    mapAttrsToList
+    mkOption
+    optionalString
+    stringToCharacters
+    substring
+    types
+    ;
   mergeFalseByDefault =
     locs: defs:
     if defs == [ ] then
@@ -51,7 +62,6 @@ let
   };
 
   mkValue =
-    with lib;
     val:
     let
       isNumber =
@@ -130,11 +140,12 @@ in
     settings = mkOption {
       type = types.attrsOf kernelItem;
       example = literalExpression ''
-        with lib.kernel; {
-               "9P_NET" = yes;
-               USB = option yes;
-               MMC_BLOCK_MINORS = freeform "32";
-             }'';
+        {
+          "9P_NET" = yes;
+          USB = option yes;
+          MMC_BLOCK_MINORS = lib.kernel.freeform "32";
+        }
+      '';
       description = ''
         Structured kernel configuration.
       '';
