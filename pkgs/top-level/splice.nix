@@ -61,6 +61,8 @@ let
         # on to splice them together.
         if lib.isDerivation defaultValue then
           augmentedValue // lib.genAttrs outputNames (out: outputSplice.${out})
+        else if defaultValue ? __functor then
+          augmentedValue // spliceReal value'
         else if lib.isAttrs defaultValue then
           spliceReal value'
         else
@@ -121,7 +123,10 @@ in
 
   callPackages = lib.callPackagesWith pkgsForCall;
 
-  newScope = extra: lib.callPackageWith (pkgsForCall // extra);
+  # `newScope = extra: ...` but as a callable set that could be spliced
+  newScope = {
+    __functor = _: extra: lib.callPackageWith (pkgsForCall // extra);
+  };
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 
