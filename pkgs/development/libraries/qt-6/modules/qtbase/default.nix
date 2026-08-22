@@ -377,6 +377,8 @@ stdenv.mkDerivation {
     inherit qtPluginPrefix qtQmlPrefix;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.qt.io/";
     description = "Cross-platform application framework for C++";

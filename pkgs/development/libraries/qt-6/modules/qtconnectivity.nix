@@ -6,12 +6,11 @@
   qtdeclarative,
   bluez,
   pcsclite,
-  pkg-config,
+  pkgsBuildBuild,
 }:
 
 qtModule {
   pname = "qtconnectivity";
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pcsclite
     bluez
@@ -19,5 +18,9 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
+  ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
   ];
 }

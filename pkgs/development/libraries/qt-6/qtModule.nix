@@ -5,6 +5,7 @@
   cmake,
   ninja,
   perl,
+  pkg-config,
   moveBuildTree,
   srcs,
   patches ? [ ],
@@ -31,11 +32,14 @@ stdenv.mkDerivation (
         cmake
         ninja
         perl
+        pkg-config
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
     propagatedBuildInputs =
       (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
+
+    strictDeps = true;
 
     cmakeFlags = [
       # be more verbose
@@ -63,6 +67,8 @@ stdenv.mkDerivation (
     separateDebugInfo = args.separateDebugInfo or true;
 
     dontWrapQtApps = args.dontWrapQtApps or true;
+
+    __structuredAttrs = true;
   }
 )
 // {

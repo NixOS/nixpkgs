@@ -5,6 +5,7 @@
   qtdeclarative,
   qtmultimedia,
   assimp,
+  pkgsBuildBuild,
 }:
 
 qtModule {
@@ -27,5 +28,8 @@ qtModule {
   cmakeFlags = [
     (lib.cmakeBool "FEATURE_qt3d_system_assimp" true) # use nix assimp
     (lib.cmakeBool "TEST_assimp" true) # required for internal cmake asserts
+    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
 }

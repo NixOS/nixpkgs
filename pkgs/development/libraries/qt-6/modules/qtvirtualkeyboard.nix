@@ -2,9 +2,10 @@
   qtModule,
   qtbase,
   qtdeclarative,
+  qtmultimedia,
   qtsvg,
   hunspell,
-  pkg-config,
+  pkgsBuildBuild,
 }:
 
 qtModule {
@@ -12,8 +13,12 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
+    qtmultimedia
     qtsvg
     hunspell
   ];
-  nativeBuildInputs = [ pkg-config ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+  ];
 }

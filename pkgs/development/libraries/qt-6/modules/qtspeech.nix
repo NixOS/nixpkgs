@@ -4,15 +4,14 @@
   stdenv,
   qtbase,
   qtmultimedia,
-  pkg-config,
   flite,
   alsa-lib,
   speechd-minimal,
+  pkgsBuildBuild,
 }:
 
 qtModule {
   pname = "qtspeech";
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     flite
     alsa-lib
@@ -21,5 +20,10 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtmultimedia
+  ];
+
+  cmakeFlags = [
+    "-DQt6QuickTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools"
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
 }
