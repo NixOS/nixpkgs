@@ -4376,6 +4376,8 @@ self: super: with self; {
 
   dill = callPackage ../development/python-modules/dill { };
 
+  dimi = callPackage ../development/python-modules/dimi { };
+
   dinghy = callPackage ../development/python-modules/dinghy { };
 
   dingz = callPackage ../development/python-modules/dingz { };
@@ -18631,6 +18633,10 @@ self: super: with self; {
 
   scrap-engine = callPackage ../development/python-modules/scrap-engine { };
 
+  scrapli = callPackage ../development/python-modules/scrapli { };
+
+  scrapli-netconf = callPackage ../development/python-modules/scrapli-netconf { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
@@ -23014,6 +23020,8 @@ self: super: with self; {
   ziamath = callPackage ../development/python-modules/ziamath { };
 
   zict = callPackage ../development/python-modules/zict { };
+
+  ziglang = callPackage ../development/python-modules/ziglang { };
 
   ziggo-mediabox-xl = callPackage ../development/python-modules/ziggo-mediabox-xl { };
 
