@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdcss";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libdvdcss";
     tag = finalAttrs.version;
-    hash = "sha256-xQWfAfxqsaLZN0HMozsqY5mSIO9KvZ5RAb4bj/f6WWo=";
+    hash = "sha256-DVIdVIchE6NqKBfYkOsQY62TO5bOwL8q2EFRBmHI1Js=";
   };
 
   nativeBuildInputs = [
