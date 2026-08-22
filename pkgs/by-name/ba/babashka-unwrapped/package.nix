@@ -19,6 +19,7 @@ buildGraalvmNativeImage (finalAttrs: {
 
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
+    "-H:+SharedArenaSupport"
     "--no-fallback"
     "--native-image-info"
     "--enable-preview"
