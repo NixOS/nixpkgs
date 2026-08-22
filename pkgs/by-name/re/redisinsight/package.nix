@@ -13,13 +13,13 @@
   pkg-config,
   yarnConfigHook,
 
-  electron_41,
+  electron_43,
   libsecret,
   sqlite,
 }:
 
 let
-  electron = electron_41;
+  electron = electron_43;
   nodejs = nodejs-slim_24;
 in
 stdenv.mkDerivation (finalAttrs: {
