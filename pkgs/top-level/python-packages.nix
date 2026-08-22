@@ -20649,6 +20649,8 @@ self: super: with self; {
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
+  tikv-client = callPackage ../development/python-modules/tikv-client { };
+
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
 
   tilelang = callPackage ../development/python-modules/tilelang { };
