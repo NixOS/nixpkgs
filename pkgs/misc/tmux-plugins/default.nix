@@ -507,7 +507,7 @@ in
 
   logging = mkTmuxPlugin {
     pluginName = "logging";
-    version = "unstable-2019-04-19";
+    version = "2.1.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-logging";
