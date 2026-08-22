@@ -462,7 +462,7 @@ in
         WorkingDirectory = "${cfg.package}/share/redmine";
         ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port}";
         RuntimeDirectory = "redmine";
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0700";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
