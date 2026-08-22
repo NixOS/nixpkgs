@@ -9,7 +9,7 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
-  official_extensions_version = "unstable-2025-12-26";
+  official_extensions_rev_date = "2025-12-26";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
@@ -41,7 +41,7 @@ let
       demo = buildFreshRssExtension {
         FreshRssExtUniqueId = "Demo";
         pname = "demo";
-        version = "unstable-2023-12-22";
+        version = "0.1-unstable-2023-12-22";
         src = fetchFromGitHub {
           owner = "FreshRSS";
           repo = "xExtension-Demo";
@@ -96,7 +96,7 @@ let
       title-wrap = buildFreshRssExtension {
         FreshRssExtUniqueId = "TitleWrap";
         pname = "title-wrap";
-        version = official_extensions_version;
+        version = "0.3.1-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-TitleWrap";
         meta = {
@@ -110,7 +110,7 @@ let
       unsafe-auto-login = buildFreshRssExtension {
         FreshRssExtUniqueId = "UnsafeAutologin";
         pname = "unsafe-auto-login";
-        version = official_extensions_version;
+        version = "1.0.0-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-UnsafeAutologin";
         meta = {
@@ -124,7 +124,7 @@ let
       youtube = buildFreshRssExtension {
         FreshRssExtUniqueId = "YouTube";
         pname = "youtube";
-        version = official_extensions_version;
+        version = "1.1.0-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-YouTube";
         meta = {
