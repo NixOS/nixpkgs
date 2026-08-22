@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raygui";
-  version = "4.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raygui";
     tag = finalAttrs.version;
-    hash = "sha256-1qnChZYsb0e5LnPhvs6a/R5Ammgj2HWFNe9625sBRo8=";
+    hash = "sha256-jcSfKCKgmDA26cMHXUjI9+SCG+Ui+B8z4C8UUd6paWs=";
   };
 
   dontBuild = true;
