@@ -158,6 +158,58 @@ in
 
 runTests {
 
+  # DEBUG
+
+  testRunTest =
+    let
+      test-cases = {
+        foo-false = {
+          expr = 2;
+          expected = 3;
+        };
+        foo-true = {
+          expr = 1;
+          expected = 1;
+        };
+        test-bar-false = {
+          expr = 2;
+          expected = 3;
+        };
+        test-bar-true = {
+          expr = 1;
+          expected = 1;
+        };
+      };
+      test-cases-without-prefixed = lib.filterAttrs (n: v: lib.hasPrefix "foo-" n) test-cases;
+      toResult =
+        testCases:
+        lib.attrValues (
+          lib.mapAttrs (testName: testCase: {
+            name = testName;
+            inherit (testCase) expected;
+            result = testCase.expr;
+          }) testCases
+        );
+    in
+    {
+      expr = {
+        empty = runTests { };
+        testlist-unspecified-without-prefixed = runTests test-cases-without-prefixed;
+        testlist-unspecified-with-prefixed = runTests test-cases;
+        testlist-empty-without-prefixed = runTests (test-cases-without-prefixed // { tests = [ ]; });
+        testlist-empty-with-prefixed = runTests (test-cases // { tests = [ ]; });
+        testlist-nonempty = runTests (test-cases // { tests = lib.attrNames test-cases-without-prefixed; });
+      };
+      expected = {
+        empty = [ ];
+        testlist-unspecified-without-prefixed = [ ];
+        testlist-unspecified-with-prefixed = toResult { inherit (test-cases) test-bar-false; };
+        testlist-empty-without-prefixed = [ ];
+        testlist-empty-with-prefixed = toResult { inherit (test-cases) test-bar-false; };
+        testlist-nonempty = toResult { inherit (test-cases) foo-false; };
+      };
+    };
+
   # CUSTOMIZATION
 
   testFunctionArgsMakeOverridable = {
