@@ -69,5 +69,17 @@
     # not be world-readable.
     machine.succeed("grep -q 'flarum-db-password' /var/lib/flarum/config.php")
     machine.succeed("[ $(stat -c %a /var/lib/flarum/config.php) = 600 ]")
+
+    # `flarum install` must not rerun on later activations, or it errors out
+    # since the database already exists.
+    machine.succeed(
+        "echo 'create table nixos_test_marker (id int); insert into nixos_test_marker values (1);' "
+        + "| sudo -u flarum mysql -u flarum flarum"
+    )
+    machine.succeed("systemctl restart flarum-install.service")
+    machine.succeed(
+        "echo 'select id from nixos_test_marker;' | sudo -u flarum mysql -u flarum flarum -N | grep -q 1"
+    )
+    machine.succeed("[ -f /var/lib/flarum/.flarum-installed ]")
   '';
 }
