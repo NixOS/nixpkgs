@@ -1,0 +1,14 @@
+diff --git a/scripts/build/flags.ts b/scripts/build/flags.ts
+--- a/scripts/build/flags.ts
++++ b/scripts/build/flags.ts
+@@ -1067,8 +1067,8 @@ export const linkerFlags: BuildFlag[] = [
+     // holds a single 8-byte JSC::SourceProfiler hook and is only meaningful
+     // as a dyld-shared-cache page-grouping hint, which executables don't use.
+     flag: "-Wl,-rename_segment,__DATA_DIRTY,__DATA",
+-    when: c => c.darwin && c.crossTarget !== undefined,
+-    desc: "macOS cross-link: keep __BUN as the last content segment so `bun build --compile` can grow it",
++    when: c => c.darwin,
++    desc: "macOS: keep __BUN as the last content segment so `bun build --compile` can grow it",
+   },
+   {
+     // Identical-code folding, on top of -dead_strip: dead_strip removes
