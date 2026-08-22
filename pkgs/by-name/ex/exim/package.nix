@@ -205,6 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
       helsinki-Jo
       tv
     ];
-    changelog = "https://github.com/Exim/exim/blob/exim-${finalAttrs.version}/doc/doc-txt/ChangeLog";
+    changelog = "https://code.exim.org/exim/exim/releases/tag/exim-${finalAttrs.version}";
   };
 })
