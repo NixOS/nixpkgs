@@ -18,7 +18,7 @@ let
     with builtins;
     let
       lines = lib.splitString "\n" (readFile firmwareConfig);
-      matchLine = line: match ''${field}="([a-zA-Z0-9_]+)".*'' line;
+      matchLine = line: match ''${field}="([a-zA-Z0-9_]+)".*'' (lib.trim line);
       matched = lib.findFirst (line: matchLine line != null) null lines;
     in
     if matched != null then head (matchLine matched) else null;
