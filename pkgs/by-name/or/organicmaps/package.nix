@@ -29,21 +29,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2026.05.27-11";
+  version = "2026.07.23-6";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-zLNQk9CCCk3linmAyAT5qsS5GhrOrlSVOdDf5koBwrc=";
+    hash = "sha256-eAuR7xtB3d2ZMiD6lxwVjx6rHl8YiXcrMY9Yze5Maiw=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Needs the very old protobuf 3.3, so we use the vendored one
-    # https://github.com/organicmaps/organicmaps/pull/6310
-    ./force-vendored-protobuf.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -84,6 +78,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev utf8cpp}/include/utf8cpp";
+
+  # The build system tries to install the vendored libblake3,
+  # but it fails because it can't find the .pc file.
+  # We create a dummy one and clean up everything afterwards.
+  preInstall = ''
+    touch libblake3.pc
+  '';
+  postInstall = ''
+    # Only contains static libblake3 stuff
+    rm -r $out/lib
+  '';
 
   passthru = {
     updateScript = nix-update-script {
