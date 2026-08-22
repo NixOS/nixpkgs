@@ -143,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
