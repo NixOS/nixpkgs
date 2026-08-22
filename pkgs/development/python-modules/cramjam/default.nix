@@ -16,6 +16,7 @@ buildPythonPackage (finalAttrs: {
   pname = "cramjam";
   version = "2.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
