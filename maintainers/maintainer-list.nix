@@ -22271,6 +22271,11 @@
     githubId = 943430;
     name = "David Hagege";
   };
+  pcc = {
+    name = "Peter Collingbourne";
+    github = "pcc";
+    githubId = 425024;
+  };
   pdg137 = {
     name = "Paul Grayson";
     github = "pdg137";

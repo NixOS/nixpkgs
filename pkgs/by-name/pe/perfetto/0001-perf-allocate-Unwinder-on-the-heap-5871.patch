@@ -1,0 +1,31 @@
+From d9d1729cd5720115bd4e155df906032447f24c0b Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <peter@pcc.me.uk>
+Date: Fri, 15 May 2026 06:24:51 -0700
+Subject: [PATCH] perf: allocate Unwinder on the heap (#5871)
+
+The size of the Unwinder object exceeds musl's per-thread stack size of
+128KiB, leading to a crash. Fix it by allocating the object on the heap.
+---
+ src/profiling/perf/unwinding.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/profiling/perf/unwinding.h b/src/profiling/perf/unwinding.h
+index 727a772f79..50b4107711 100644
+--- a/src/profiling/perf/unwinding.h
++++ b/src/profiling/perf/unwinding.h
+@@ -316,9 +316,10 @@ class UnwinderHandle {
+                                         Unwinder*)> initializer,
+                      Unwinder::Delegate* delegate) {
+     base::MaybeLockFreeTaskRunner task_runner;
+-    Unwinder unwinder(delegate, &task_runner);
++    // Can't use make_unique because ctor is private.
++    std::unique_ptr<Unwinder> unwinder(new Unwinder(delegate, &task_runner));
+     task_runner.PostTask(
+-        std::bind(std::move(initializer), &task_runner, &unwinder));
++        std::bind(std::move(initializer), &task_runner, unwinder.get()));
+     task_runner.Run();
+   }
+ 
+-- 
+2.54.0
+

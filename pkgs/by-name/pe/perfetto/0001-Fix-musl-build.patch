@@ -1,0 +1,63 @@
+From 2276748d353a8bf0b2f6fe9f07eedad8dd6e1739 Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <peter@pcc.me.uk>
+Date: Fri, 15 May 2026 23:48:47 -0700
+Subject: [PATCH] Fix musl build
+
+Upgrade libbase and logging to versions that support musl, and force
+include a polyfill for TEMP_FAILURE_RETRY when building libunwindstack.
+---
+ buildtools/BUILD.gn      | 13 +++++++++++--
+ tools/install-build-deps |  4 ++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/buildtools/BUILD.gn b/buildtools/BUILD.gn
+index a5e504df05..f441d92df8 100644
+--- a/buildtools/BUILD.gn
++++ b/buildtools/BUILD.gn
+@@ -1974,7 +1974,6 @@ source_set("libunwindstack") {
+   ]
+   if (!is_android) {
+     sources += [
+-      "android-libbase/liblog_symbols.cpp",
+       "android-libbase/logging.cpp",
+       "android-libbase/threads.cpp",
+       "android-logging/liblog/logger_write.cpp",
+@@ -1994,7 +1993,17 @@ source_set("libunwindstack") {
+     "//gn/standalone:extra_warnings",
+     "//gn/standalone:visibility_hidden",
+   ]
+-  cflags = [ "-DFAKE_LOG_DEVICE=1" ]
++  cflags = [
++    "-DFAKE_LOG_DEVICE=1",
++
++    # android-unwinding/libunwindstack/Memory.cpp uses the macro
++    # TEMP_FAILURE_RETRY which is only defined in bionic and glibc.
++    # To fix the musl build, force include libbase's polyfill header.
++    # Android's musl build succeeds because of a separate polyfill:
++    # https://cs.android.com/android/platform/superproject/+/android-latest-release:external/musl/android/include/unistd.h;bpv=1
++    "-include",
++    "android-base/macros.h",
++  ]
+   if (!is_win) {
+     cflags += [
+       "-Wno-deprecated-declarations",
+diff --git a/tools/install-build-deps b/tools/install-build-deps
+index d2525465f1..df9b2cb930 100755
+--- a/tools/install-build-deps
++++ b/tools/install-build-deps
+@@ -282,10 +282,10 @@ BUILD_DEPS_HOST = [
+         '4b59ea8471e89d01300481a92de3230b79b6d7c7', 'all', 'all'),
+     Dependency('buildtools/android-logging',
+                'https://android.googlesource.com/platform/system/logging.git',
+-               '7b36b566c9113fc703d68f76e8f40c0c2432481c', 'all', 'all'),
++               'da4d6df49d1d6c971be508dcde18e8b00bb74581', 'all', 'all'),
+     Dependency('buildtools/android-libbase',
+                'https://android.googlesource.com/platform/system/libbase.git',
+-               '78f1c2f83e625bdf66d55b48bdb3a301c20d2fb3', 'all', 'all'),
++               '18c2bd4f3607cb300bb96e543df91dfdda6a9655', 'all', 'all'),
+     Dependency(
+         'buildtools/android-libprocinfo',
+         'https://android.googlesource.com/platform/system/libprocinfo.git',
+-- 
+2.54.0
+
