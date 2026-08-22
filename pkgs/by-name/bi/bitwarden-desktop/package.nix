@@ -5,7 +5,7 @@
   copyDesktopItems,
   dart-sass,
   darwin,
-  electron_41,
+  electron_43,
   fetchFromGitHub,
   gnome-keyring,
   jq,
@@ -18,11 +18,12 @@
   rustPlatform,
   stdenv,
   xcbuild,
+  fetchpatch2,
 }:
 
 let
   icon = "bitwarden";
-  electron = electron_41;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
@@ -38,7 +39,11 @@ buildNpmPackage (finalAttrs: {
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
-
+    (fetchpatch2 {
+      name = "electron-version-update-43.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/bitwarden/clients/pull/20844.patch?full_index=1";
+      hash = "sha256-mVez3W6ZBoJNBFgMHvj1wgP9b5aLRRIaGY8rO7D0qPQ=";
+    })
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
     ./set-exe-path.patch
     # ensure that the desktop proxy is correctly located in libexec
@@ -74,7 +79,7 @@ buildNpmPackage (finalAttrs: {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
+  npmDepsHash = "sha256-0pza+3DlTq3OyFFqSVN/ICy4lAwfUJ4re0xPXZY3Ma4=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
