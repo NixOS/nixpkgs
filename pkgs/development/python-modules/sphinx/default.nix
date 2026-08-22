@@ -60,6 +60,9 @@ buildPythonPackage rec {
     hash = "sha256-PgqjCeyHOhWtZjyzSZyvsPT0Q7yRyNDiW3x1fQq0K+8=";
   };
 
+  # https://github.com/sphinx-doc/sphinx/pull/14611
+  patches = [ ./pygments-2.21.0-compat.patch ];
+
   build-system = [ flit-core ];
 
   dependencies = [
