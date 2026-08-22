@@ -2450,6 +2450,7 @@ mapAliases {
   timemachine = throw "'timemachine' has been removed as it depended on the deprecated GTK 2 engine"; # Added 2026-08-13
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
   tinyxml2 = throw "The 'tinyxml2' alias has been removed, use 'tinyxml' for https://sourceforge.net/projects/tinyxml/ or 'tinyxml-2' for https://github.com/leethomason/tinyxml2"; # Added 2025-10-11
+  tk-8_5 = throw "'tk-8_5' has been removed, as Tk 8.5 is end-of-life and nothing needed it any more"; # Added 2026-08-22
   tkcvs = throw "'tkcvs' has been renamed to/replaced by 'tkrev'"; # Converted to throw 2025-10-27
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = throw "'tkimg' has been renamed to/replaced by 'tclPackages.tkimg'"; # Converted to throw 2025-10-27

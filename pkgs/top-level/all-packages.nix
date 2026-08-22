@@ -6696,7 +6696,6 @@ with pkgs;
 
   tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
-  tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
   tpm2-tss = callPackage ../development/libraries/tpm2-tss {
     autoreconfHook = buildPackages.autoreconfHook269;
