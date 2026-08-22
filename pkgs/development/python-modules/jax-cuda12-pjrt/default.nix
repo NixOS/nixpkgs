@@ -14,6 +14,18 @@
 let
   inherit (jaxlib) version;
 
+  platforms = {
+    x86_64-linux = {
+      name = "manylinux_2_27_x86_64";
+      hash = "sha256-/dnXJAjhf3ojvfombpyQE2YgpyTfWEYp81BnIuKy9DQ=";
+    };
+    aarch64-linux = {
+      name = "manylinux_2_27_aarch64";
+      hash = "sha256-QAIdRVvZRSJwTjIdMOitomp8Cm75XEp1QqvaATiinRw=";
+    };
+  };
+  currentPlatform = platforms.${stdenv.hostPlatform.system};
+
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
     [
@@ -43,18 +55,8 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    platform =
-      {
-        x86_64-linux = "manylinux_2_27_x86_64";
-        aarch64-linux = "manylinux_2_27_aarch64";
-      }
-      .${stdenv.hostPlatform.system};
-    hash =
-      {
-        x86_64-linux = "sha256-/dnXJAjhf3ojvfombpyQE2YgpyTfWEYp81BnIuKy9DQ=";
-        aarch64-linux = "sha256-QAIdRVvZRSJwTjIdMOitomp8Cm75XEp1QqvaATiinRw=";
-      }
-      .${stdenv.hostPlatform.system};
+    platform = currentPlatform.name;
+    inherit (currentPlatform) hash;
   };
 
   nativeBuildInputs = [
@@ -100,11 +102,7 @@ buildPythonPackage (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    # Keep in sync with `src` above
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.attrNames platforms;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
