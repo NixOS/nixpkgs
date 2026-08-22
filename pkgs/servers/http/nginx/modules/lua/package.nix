@@ -3,10 +3,13 @@
   lib,
   luajit_openresty,
   mkNginxPlugin,
+  nixosTests,
 }:
 
 mkNginxPlugin (finalAttrs: {
   pname = "lua";
+  # The version needs to fit to lua-resty-core.
+  # Adapt both.
   version = "0.10.31";
 
   src = fetchFromGitHub {
@@ -22,6 +25,10 @@ mkNginxPlugin (finalAttrs: {
     export LUAJIT_LIB="${luajit_openresty}/lib"
     export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nginx-lua;
+  };
 
   meta = {
     description = "Embed the Power of Lua";

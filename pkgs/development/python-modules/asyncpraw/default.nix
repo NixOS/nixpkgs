@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncpraw";
-  version = "8.0.2";
+  version = "8.0.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "praw-dev";
     repo = "asyncpraw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gc50zlsYp+5ooocfbfC4BhrJs4yOmOdOl9/T+ut4MMw=";
+    hash = "sha256-a09JI5fR/bln+t7trs8p3Vse6kj96sZqYN8wEbfzA14=";
   };
 
   pythonRelaxDeps = [
