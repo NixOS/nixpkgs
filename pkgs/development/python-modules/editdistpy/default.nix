@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "editdistpy";
-  version = "0.1.6";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "editdistpy";
     tag = "v${version}";
-    hash = "sha256-bUdwhMFDIhHuIlcqIZt6mSh8xwW/2igw0QiWGvQBLC8=";
+    hash = "sha256-lJ370X8JWzJWJzZc2mPZkWOWONDRwm/pGKAL2vGpBLw=";
   };
 
   build-system = [
