@@ -20950,8 +20950,10 @@ self: super: with self; {
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   tracerite = callPackage ../development/python-modules/tracerite { };
-
+  
   trackers = callPackage ../development/python-modules/trackers { };
+  
+  trackio = callPackage ../development/python-modules/trackio { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
