@@ -13,6 +13,7 @@ in
 
   imports = [
     ./digital-ocean-config.nix
+    ../image/config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -36,9 +37,10 @@ in
       description = ''
         A path to a configuration file which will be placed at
         `/etc/nixos/configuration.nix` and be used when switching
-        to a new configuration. If set to `null`, a default
-        configuration is used that imports
-        `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
+        to a new configuration. Prefer setting
+        `virtualisation.configFile` for image-builder-agnostic
+        configurations. If set to `null`, `virtualisation.configFile`
+        is used.
       '';
     };
 
@@ -73,6 +75,11 @@ in
           .${cfg.compressionMethod}
         )
       ];
+      virtualisation.configFile = mkMerge [
+        (mkDefault config.virtualisation.digitalOcean.defaultConfigFile)
+        (mkIf (cfg.configFile != null) cfg.configFile)
+      ];
+
       system.nixos.tags = [ "digital-ocean" ];
       system.build.image = config.system.build.digitalOceanImage;
       system.build.digitalOceanImage = import ../../lib/make-disk-image.nix {
@@ -97,11 +104,7 @@ in
           ''
             ${compress} $diskImage
           '';
-        configFile =
-          if cfg.configFile == null then
-            config.virtualisation.digitalOcean.defaultConfigFile
-          else
-            cfg.configFile;
+        inherit (config.virtualisation) configFile;
       };
 
     };
