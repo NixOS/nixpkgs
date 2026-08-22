@@ -52,11 +52,6 @@ buildPythonPackage rec {
     rich
   ];
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath "${curl-impersonate}/lib" \
-      $out/${python.sitePackages}/curl_cffi/_wrapper.abi3.so
-  '';
-
   pythonImportsCheck = [ "curl_cffi" ];
 
   nativeCheckInputs = [

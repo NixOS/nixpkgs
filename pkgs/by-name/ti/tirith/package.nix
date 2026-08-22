@@ -8,15 +8,15 @@
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
-  version = "0.3.1";
+  version = "0.3.3";
   src = fetchFromGitHub {
     owner = "sheeki03";
     repo = "tirith";
     tag = "v${final.version}";
-    hash = "sha256-RdStW5ubqypdmFqNk9DHtUp5jHnZdXiWW/lAlSaBb3c=";
+    hash = "sha256-kU/HeCW4QNS1Ica69YZkdSgL3gsbDOJVGTyINZOnHUQ=";
   };
 
-  cargoHash = "sha256-/V2vv02x0zSsJCcJMSttG9eekRZMK7KTk6m2VYePFa8=";
+  cargoHash = "sha256-r13gquMmfJhR5N8Vu3/R+3SWUyVWyJFE6fiJbqbE5n4=";
 
   cargoBuildFlags = [
     "-p"
@@ -30,8 +30,18 @@ rustPlatform.buildRustPackage (final: {
 
   checkFlags = [
     # requires a fully functional shell environment, generating init scripts needs a patch under nix to work at build time
+    "--skip=bash_capability_cache_steers_default_mode"
+    "--skip=bash_enter_degradation_is_visible_not_silent"
+    "--skip=cli::clipboard::tests::copy_path_does_not_consult_sidecar"
+    "--skip=clipboard_watch_exits_when_stdout_pipe_closed"
     "--skip=init_bash_output"
+    "--skip=init_prompt_status_emits_marker_wrapped_snippet_zsh"
+    "--skip=init_prompt_status_is_idempotent_when_run_twice"
+    "--skip=init_prompt_status_supports_bash_and_fish_and_powershell"
+    "--skip=init_without_prompt_status_does_not_emit_snippet"
     "--skip=init_zsh_output"
+    # fails with: no such file or directory
+    "--skip=cli::checkpoint::tests::restore_checkpoint_nonzero_on_partial_failure"
   ];
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

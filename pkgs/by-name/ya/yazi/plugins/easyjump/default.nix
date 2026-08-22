@@ -6,13 +6,13 @@
 
 mkYaziPlugin {
   pname = "easyjump.yazi";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "mikavilpas";
     repo = "easyjump.yazi";
-    rev = "7c4056ec691c4da9c16dc98802366782e5e012a5";
-    hash = "sha256-uJRxk7kF0qn6WSP/2WhNnQK3kvsaUJfAozOGweSXiDA=";
+    tag = "v3.0.0";
+    hash = "sha256-ecrBur2bTV805WR5JS8xx01Fn/Y6JLwuZJK8Xvl2kgc=";
   };
 
   sourceRoot = "source/easyjump.yazi";

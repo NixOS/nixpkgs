@@ -9,8 +9,7 @@
   dbus,
   gdk-pixbuf,
   glib,
-  gtk4,
-  libadwaita,
+  cosmic-icons,
   pango,
   just,
   sqlite,
@@ -48,8 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     gdk-pixbuf
     glib
-    gtk4
-    libadwaita
     pango
     sqlite
     libxkbcommon
@@ -67,8 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-/dj2LBNcYcewt3Rhz82lZuoyCzaa/QC49CxfKoGfF6w=";
 
-  env.INSTALL_PREFIX = placeholder "out";
-
   # Requires headphones
   doCheck = false;
 
@@ -83,6 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   installPhase = ''
     just install ${placeholder "out"}
+  '';
+
+  # fix missing icons
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${cosmic-icons}/share")
   '';
 
   passthru.updateScript = nix-update-script { };

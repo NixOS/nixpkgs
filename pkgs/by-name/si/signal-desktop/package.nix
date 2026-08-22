@@ -45,13 +45,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.21.0";
+  version = "8.24.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-RuGq8ygiZewKqtKQattlqU0pcMMlgdFOJAhmN4J/8Tw=";
+    hash = "sha256-z5Z0ujG2AQvmrrdmJxOAnhi56ISSlGoI4kdMcZMpZzY=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -81,7 +81,7 @@ let
         ;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
+      hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
     };
 
     strictDeps = true;
@@ -185,13 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-1n+u0mcZJwjkdKmNY6KE6tk6/UPYuya5WqLrKRJimGw=";
+    hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1785418091;
+    SOURCE_DATE_EPOCH = 1787172744;
   };
 
   preBuild = ''
