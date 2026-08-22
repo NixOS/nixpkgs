@@ -7821,6 +7821,7 @@ self: super: with self; {
     huaweicloudsdkaad
     huaweicloudsdkagentarts
     huaweicloudsdkagentidentity
+    huaweicloudsdkaidatalakejobserver
     huaweicloudsdkantiddos
     huaweicloudsdkaom
     huaweicloudsdkaos
