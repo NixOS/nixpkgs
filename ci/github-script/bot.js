@@ -7,6 +7,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const { classify } = require('../supportedBranches.js')
   const { handleMerge } = require('./merge.js')
   const { handleReviewers } = require('./reviewers.js')
+  const { PR_SIZE_LABELS, classifyPullRequestSize } = require('./pr-size.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -284,6 +285,13 @@ module.exports = async ({ github, context, core, dry }) => {
     const merge_commit_sha_valid =
       Date.now() - new Date(pull_request.created_at) > 3 * 60 * 1000
 
+    const sizeLabel = classifyPullRequestSize({
+      additions: pull_request.additions,
+      deletions: pull_request.deletions,
+      changedFiles: pull_request.changed_files,
+    })
+    log('size', sizeLabel)
+
     const prLabels = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
       // Those have an intermediate state while the test merge commit is created.
@@ -299,6 +307,9 @@ module.exports = async ({ github, context, core, dry }) => {
       '2.status: merge conflict':
         merge_commit_sha_valid && !pull_request.merge_commit_sha,
       '2.status: merge-bot eligible': merge_bot_eligible,
+      ...Object.fromEntries(
+        PR_SIZE_LABELS.map((label) => [label, label === sizeLabel]),
+      ),
       '12.approvals: 1': approvals.size === 1,
       '12.approvals: 2': approvals.size === 2,
       '12.approvals: 3+': approvals.size >= 3,
