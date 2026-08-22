@@ -12,6 +12,7 @@
   ffmpeg,
   flac,
   yt-dlp,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,6 +27,13 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-KYjP6qEINdSlcDSEMKxMwDfXzuQPAQSe4oZh+o4PrFs=";
+
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   nativeBuildInputs = [
     pkg-config
