@@ -4884,6 +4884,18 @@ with pkgs;
     in
     if linker == "lld" then
       llvmPackages.bintools-unwrapped
+    else if linker == "wasm-component-ld" then
+      symlinkJoin {
+        name = "wasi-bintools-unwrapped";
+        paths = [
+          llvmPackages.bintools-unwrapped
+          (runCommand "target-prefix-wasm-component-ld" {} ''
+            mkdir -p $out/bin
+            # For the time being, wasip2 is exclusively a cross target
+            ln -s ${lib.getExe wasm-component-ld} $out/bin/${stdenv.targetPlatform.config}-wasm-component-ld
+          '')
+        ];
+      }
     else if linker == "cctools" then
       darwin.binutils-unwrapped
     else if linker == "bfd" then
