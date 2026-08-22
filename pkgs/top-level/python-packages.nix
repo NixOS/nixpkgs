@@ -7012,6 +7012,10 @@ self: super: with self; {
 
   google-cloud-os-config = callPackage ../development/python-modules/google-cloud-os-config { };
 
+  google-cloud-privilegedaccessmanager =
+    callPackage ../development/python-modules/google-cloud-privilegedaccessmanager
+      { };
+
   google-cloud-pubsub = callPackage ../development/python-modules/google-cloud-pubsub { };
 
   google-cloud-redis = callPackage ../development/python-modules/google-cloud-redis { };
