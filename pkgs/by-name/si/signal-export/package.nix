@@ -3,6 +3,7 @@
   python3,
   fetchPypi,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -29,6 +30,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pycryptodome
     sqlcipher3-wheels
   ];
+
+  nativeCheckInputs = [
+    python3.pkgs.pytestCheckHook
+    # tests/test_overwrite.py asserts that Path.home() exists
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "sigexport" ];
 
   passthru.updateScript = nix-update-script { };
 
