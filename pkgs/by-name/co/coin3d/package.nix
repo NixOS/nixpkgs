@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
     mainProgram = "coin-config";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mornepousse ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
