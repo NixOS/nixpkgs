@@ -84,9 +84,10 @@ in
     };
   };
 
+  config.virtualisation.configFile = lib.mkDefault defaultConfigFile;
+
   # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
-  config.virtualisation.configFile = lib.mkDefault defaultConfigFile;
   config.virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
