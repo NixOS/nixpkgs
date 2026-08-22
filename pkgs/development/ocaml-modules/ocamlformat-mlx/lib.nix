@@ -24,13 +24,13 @@
 }:
 buildDunePackage (finalAttrs: {
   pname = "ocamlformat-mlx-lib";
-  version = "0.28.1.2";
+  version = "0.29.0.1";
 
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "ocamlformat-mlx";
     tag = finalAttrs.version;
-    hash = "sha256-IxX8FD7v9evHFTCnTJBtnUMUUTWI34zIifpciuJCuhs=";
+    hash = "sha256-rU2gBGdJwJF/xgu40S2BzYwA+FgZ4EN4sw3AuWDeFVQ=";
   };
 
   propagatedBuildInputs = [
