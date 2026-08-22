@@ -1912,6 +1912,7 @@ in
     inherit pkgs runTest;
     inherit (pkgs) lib;
   };
+  windscribe = runTest ./windscribe.nix;
   wine = handleTest ./wine.nix { };
   wireguard = import ./wireguard {
     inherit pkgs runTest;
