@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.9";
+  version = "2.1.0a2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
     tag = version;
-    hash = "sha256-DiALGrJP4vLWygzZprjYCFM+TYtMS7NVM3+MTyjzcs0=";
+    hash = "sha256-kMsBjZei2NpIc5axaS+Aj5hCqTZWWFVC03hWMzW1x6o=";
   };
 
   nativeBuildInputs = [
