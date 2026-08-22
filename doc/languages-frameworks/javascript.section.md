@@ -251,6 +251,9 @@ It accepts an argument with the following attributes:
 `packageLock` (Attrset; optional)
 : Parsed contents of `package-lock.json`, as returned by `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
 
+`importNpmLockArgs` (Attrset; optional)
+: Extra arguments passed to `importNpmLock`
+
 `derivationArgs` (`mkDerivation` attrset; optional)
 : Arguments passed to `stdenv.mkDerivation`
 
