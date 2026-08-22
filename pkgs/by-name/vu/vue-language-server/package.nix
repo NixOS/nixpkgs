@@ -62,9 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules packages/language-server/node_modules -xtype l -delete
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml node_modules/.pnpm-workspace-state-v1.json
   '';
 
   installPhase = ''
