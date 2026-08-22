@@ -6355,6 +6355,12 @@
     name = "Dan Nixon";
     matrix = "@dannixon:matrix.org";
   };
+  DannyDannyDanny = {
+    email = "dth@taiga.ai";
+    github = "DannyDannyDanny";
+    githubId = 16453674;
+    name = "Daniel Thoren";
+  };
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
