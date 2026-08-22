@@ -2,8 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
-  fetchpatch2,
-  makeWrapper,
+  makeBinaryWrapper,
 
   nixosTests,
   alsa-lib,
@@ -71,13 +70,13 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-Z3UwxK+0D3RXKTM0ybYG4U42bInjF05KlMXzxN4UcNg=";
+    hash = "sha256-n2q4qmbknkT6kb6I5aeu6tU6EzSIfdrV+ptzQvhUJ/Q=";
 
     postCheckout = ''
       git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
@@ -105,15 +104,6 @@ clangStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  patches = [
-    # https://github.com/shadps4-emu/shadPS4/pull/4786
-    (fetchpatch2 {
-      name = "use-system-zarchive.patch";
-      url = "https://github.com/shadps4-emu/shadPS4/commit/71c48b43570ac8df545d3d96261b0ec7fa37c808.patch?full_index=1";
-      hash = "sha256-MQiw+DGi/85nTSAVrNw2GmwhbBD7/Xy3lCIDMg1HxxU=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \
       --replace-fail @APP_VERSION@ ${finalAttrs.version} \
@@ -129,7 +119,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [

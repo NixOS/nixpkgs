@@ -165,13 +165,14 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.32";
+      # The version needs to fit to nginxModules.lua
+      version = "0.1.34rc3";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
+        sha256 = "sha256-+rtbaHEqKSvaba+zZwRUnUsdu3Jndi8OVGUtFC55Fts=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];

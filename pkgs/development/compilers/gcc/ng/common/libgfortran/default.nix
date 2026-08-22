@@ -37,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (getVersionFile "libgfortran/force-regular-dirs.patch")
-
     # From the posting to gcc-patches, which covers every component that links
     # libbacktrace. Take only this component's non-generated files: the
     # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
@@ -53,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       hash = "sha256-QB+Wto9V1XXYhUhUSeP7Mxoj/iZQdMOT+7aSWyHjXX0=";
     })
+
+    # Applied after `system-libbacktrace.patch` above: both rewrite the same
+    # region of `libgfortran/Makefile.am`, and this one is ours to rebase --
+    # the other is the version posted upstream, kept as posted.
+    (getVersionFile "libgfortran/force-regular-dirs.patch")
   ];
 
   autoreconfFlags = "--install --force --verbose . libgfortran";

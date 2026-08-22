@@ -13,8 +13,36 @@
   libgcc,
   libbacktrace,
 }:
+let
+  # A full libstdc++ needs a libc to link against. Without one, build the
+  # freestanding subset instead: the libsupc++ headers, which are what a libc
+  # that is itself partly C++ needs in order to compile. No library comes out
+  # of that stage and none is wanted -- it exists only so the C++ parts of a
+  # libc have `<new>` and friends to include.
+  hosted = stdenv.cc.libc != null && !(stdenv.cc.libc.headersOnly or false);
+
+  cxxForLibstdcxxFlags = [
+    "-shared-libgcc"
+    "-nostdinc++"
+  ]
+  # libstdc++ ships headers named after C headers (`stdlib.h`, `math.h`, ...)
+  # which shadow the C library's in C++. They forward by re-exporting from
+  # `<cstdlib>` and friends, and most of what they re-export -- `malloc` and
+  # `free` among it -- sits behind `#if _GLIBCXX_HOSTED`. So in a freestanding
+  # build any header that reaches for plain `<stdlib.h>` gets one with no
+  # `malloc` in it. gcc's own `mm_malloc.h` does exactly that, and on this
+  # target it is unavoidable: `unwind.h` pulls in `<windows.h>` for SEH, which
+  # reaches the x86 intrinsics headers.
+  #
+  # This macro is libstdc++'s own way of saying "forward to the real C header",
+  # which is what its sources want while it is being built.
+  # The C driver flags libstdc++ is built with. `-shared-libgcc` puts back the
+  # linkage `g++` would have chosen and `-nostdinc++` keeps any installed C++
+  # headers out; see the `RAW_CXX_FOR_TARGET` note at `preConfigure`.
+  ++ lib.optionals (!hosted) [ "-D_GLIBCXX_INCLUDE_NEXT_C_HEADERS" ];
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libstdcxx";
+  pname = "libstdcxx" + lib.optionalString (!hosted) "-no-libc";
   inherit version;
 
   src = runCommand "libstdcxx-src-${version}" { src = monorepoSrc; } (
@@ -109,7 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ libbacktrace ];
+  # We don't need `std::backtrace` in the bootstrap pre-libc libstdc++
+  buildInputs = lib.optional hosted libbacktrace;
 
   nativeBuildInputs = [
     autoreconfHook269
@@ -143,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   # keeps any already-installed C++ headers out of a build whose whole
   # purpose is to produce them.
   + ''
-    cxxForLibstdcxx="$CC -shared-libgcc -nostdinc++"
+    cxxForLibstdcxx="$CC ${lib.escapeShellArgs cxxForLibstdcxxFlags}"
 
   ''
   # Put libgcc's `gthr-default.h` where libstdc++ expects to find it.
@@ -173,6 +202,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     export CXX="$cxxForLibstdcxx"
     echo "libstdcxx: building with CXX=$CXX"
+  ''
+  # `--enable-static` is not enough on its own here, which is why this is
+  # done to the output rather than the input. configure agrees with us --
+  # `config.log` records `enable_static=yes` -- but libtool's Windows
+  # handling reassigns that variable while working out what a DLL-based
+  # target can build, and `build_old_libs` is substituted from the value it
+  # lands on. With shared libraries off as well, the generated script ends
+  # up refusing both kinds and `make` stops at "not configured to build any
+  # kind of library". Put the one answer back that this build needs.
+  + lib.optionalString (!hosted) ''
+    enableStaticInLibtool() {
+      local lt
+      for lt in $(find "$buildRoot" -type f -name libtool); do
+        sed -i 's/^build_old_libs=no$/build_old_libs=yes/' "$lt"
+      done
+    }
+    postConfigureHooks+=(enableStaticInLibtool)
   '';
 
   configurePlatforms = [
@@ -189,6 +235,8 @@ stdenv.mkDerivation (finalAttrs: {
     "cross_compiling=true"
     "--disable-multilib"
 
+    (lib.enableFeature hosted "libstdcxx-backtrace")
+    # This is safely ignored when we disable the above
     "--with-system-libbacktrace"
 
     # `gnu` is the glibc locale model: `config/locale/gnu/ctype_members.cc`
@@ -202,6 +250,50 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-vtable-verify"
     "--enable-libstdcxx-visibility"
     "--with-default-libstdcxx-abi=new"
+  ]
+  ++ lib.optionals (!hosted) [
+    "--disable-hosted-libstdcxx"
+
+    # We can only statically link when we don't yet have a libc. Might
+    # have been able to autodetect but better to be explicit.
+    "--enable-static"
+    "--disable-shared"
+
+    # Answer the C library's capabilities from a table instead of
+    # probing for them: every probe is a link test, and there is nothing
+    # here to link against. It selects an `os_include_dir` and hardcodes
+    # a batch of `HAVE_*`.
+    #
+    # `build` != `host` already sets `GLIBCXX_IS_NATIVE=false` which is
+    # supposed to be sufficient for this, at least if I am reading
+    # https://github.com/gcc-mirror/gcc/blob/4db0e8df15bef836558857c291c323add11d035c/libstdc%2B%2B-v3/configure.ac#L310-L342
+    # correctly.
+    #
+    # However, it isn't in fact sufficient, and we will get
+    # post-GCC_NO_EXECUTABLES would-link configure errors. This newlib
+    # flag actually does do the job. While nothing here uses newlib, the
+    # table is close enough -- none of it reaches the libsupc++ headers,
+    # which are all this stage installs.
+    "--with-newlib"
+
+    # Disabling backgtrace (as we do above) does not stop its `fcntl`
+    # and `getexecname` probes, which run before anything consults the
+    # flag, and which link, causing more post-GCC_NO_EXECUTABLES
+    # would-link configure errors.
+    #
+    # `--with-target-subdir` stops those probes, for a reason its name
+    # does not suggest. Upstream tests it only for emptiness -- never as
+    # a path -- and uses it to mean "I am an in-tree GCC target
+    # library", which it takes as "I cannot link", answering from a
+    # `case "${host}"` table instead of probing. It says so at the
+    # `dl_iterate_phdr` check just above: "When built as a GCC target
+    # library, we can't do a link test." So `.` here is not a directory
+    # we use; it is that claim.
+    #
+    # The table's answers happen to be the true ones for this host:
+    # `fcntl` yes (only mingw is excluded) and `getexecname` no (only
+    # solaris2).
+    "--with-target-subdir=."
   ];
 
   hardeningDisable = [
@@ -209,11 +301,14 @@ stdenv.mkDerivation (finalAttrs: {
     "fortify"
   ];
 
+  # Not just tidiness: the manifest names paths under the header directory, so
+  # leaving it in `lib` makes `out` refer to `dev` and the outputs cycle.
   postInstall = ''
     moveToOutput lib/libstdc++.modules.json "$dev"
   '';
 
-  doCheck = true;
+  # Nothing to run the testsuite against before there is a libc.
+  doCheck = hosted;
 
   passthru = {
     isGNU = true;
@@ -222,5 +317,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = gcc_meta // {
     homepage = "https://gcc.gnu.org/onlinedocs/libstdc++";
     description = "GNU C++ Library";
+    # The freestanding, pre-libc build exists for exactly one reason:
+    # Cygwin's libc is partly C++ and so needs C++ headers before it
+    # exists itself. Elsewhere it is unneeded, and we don't care whether
+    # it builds or not at this time. (And it appears to not build at
+    # this time). Marking broken rather because in principle it ought to
+    # work.
+    broken = !hosted && !stdenv.hostPlatform.isCygwin;
   };
 })

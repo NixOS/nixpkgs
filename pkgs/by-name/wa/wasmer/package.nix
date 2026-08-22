@@ -61,7 +61,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmer";
-  version = "7.2.1";
+  version = "7.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -70,13 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wasmerio";
     repo = "wasmer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RHMJebw12fGHOxGS1lOI2XDrJCkjCMbhiCTu3Kwcuno=";
+    hash = "sha256-9QAMeROq9b4LnvZiNJjMWTY7Su54zovasHsruSG7bAA=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-TzOI5gK0kpF3o3R5zeWMaMmr5C2TSoulNXMaQGNcWfM=";
+    hash = "sha256-XzyukUuwPC15JpfvFMg13oT7Uwg56urM94vDFfEd15s=";
   };
 
   nativeBuildInputs = [
