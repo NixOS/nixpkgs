@@ -112,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     (mesonOption "systemdsystemunitdir" (
       if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
     ))
+    (mesonOption "systemdsystemgeneratordir" (
+      if withSystemd then "${placeholder "out"}/lib/systemd/system-generators" else "no"
+    ))
     # to enable link-local connections
     (mesonOption "udev_dir" "${placeholder "out"}/lib/udev")
     (mesonOption "dbus_conf_dir" "${placeholder "out"}/share/dbus-1/system.d")
