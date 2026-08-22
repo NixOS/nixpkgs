@@ -14,5 +14,5 @@ runCommand "check-meta-pkg-config-modules-for-${package.name}"
     dependsOn = testers.hasPkgConfigModules { inherit package; };
   }
   ''
-    echo "found all of ${toString package.meta.pkgConfigModules}" > "$out"
+    echo "# found all of ${toString package.meta.pkgConfigModules}" > "$out"
   ''
