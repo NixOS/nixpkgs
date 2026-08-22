@@ -67,6 +67,7 @@ in
       systemd.services.ovsdb = {
         description = "Open_vSwitch Database Server";
         wantedBy = [ "multi-user.target" ];
+        wants = [ "ovs-delete-transient-ports.service" ];
         path = [ cfg.package ];
         restartTriggers = [
           db
@@ -113,6 +114,19 @@ in
         postStart = ''
           ${cfg.package}/bin/ovs-vsctl --timeout 3 --retry --no-wait init
         '';
+      };
+
+      systemd.services.ovs-delete-transient-ports = {
+        description = "Open vSwitch Delete Transient Ports";
+        after = [ "ovsdb.service" ];
+        before = [ "ovs-vswitchd.service" ];
+        path = [ cfg.package ];
+        unitConfig.AssertPathExists = "${runDir}/db.sock";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${cfg.package}/share/openvswitch/scripts/ovs-ctl delete-transient-ports";
+        };
       };
 
       systemd.services.ovs-vswitchd = {
