@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlantis";
-  version = "0.47.0";
+  version = "0.47.1";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WHU8n82GyDmKcjIQbwphCi4qjBN/8j+zxC9/Jqd2sCs=";
+    hash = "sha256-GNHu6nZijSd+kluqWTYrmUZubGmicXQdzChXnJbXCyw=";
   };
 
   ldflags = [

@@ -724,11 +724,11 @@
     "vendorHash": "sha256-s9tdthUzIdisP0XB9V+HGlWgZCXnOodz9Atu/XyDKf4="
   },
   "huaweicloud_huaweicloud": {
-    "hash": "sha256-TiupRu1Aj750do194qYyWlJJAaT1cwyy/oc3WyqtJdM=",
+    "hash": "sha256-pnFGM0zUCZ/47zmOblKHtRYuS+QxBSN6vnhAdYAiQaY=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.96.1",
+    "rev": "v1.97.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1310,13 +1310,13 @@
     "vendorHash": "sha256-ZuH+uIv+iRQgUooyXsryICItSRglk1AGGWMVb+o1ILs="
   },
   "temporalio_temporalcloud": {
-    "hash": "sha256-7xj+/RzXtMXN9IWjua0+cAH5zyMMCIqlOzvFqNsAFHk=",
+    "hash": "sha256-crsCSIh2Xc7b6X+CxhC7fpp/3FCYEMKAbmq0QTszg0E=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.6.0",
+    "rev": "v1.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QvtirfTfnvy7CBNUng07OZnbXLHJAyRlf1I9Mur44N4="
+    "vendorHash": "sha256-kWwfjiWDm/voT95oxyNtCltRzeBJYR3gJo1USV0j/Uo="
   },
   "tencentcloudstack_tencentcloud": {
     "hash": "sha256-Dd8ZmNw24LEK5NAtQO9qPMm5i2DANLSQ1iVMSqgMago=",

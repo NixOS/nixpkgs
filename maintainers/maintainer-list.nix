@@ -4885,6 +4885,12 @@
     githubId = 543423;
     name = "Alex Wied";
   };
+  ceridwen15 = {
+    email = "me@cdwn.gay";
+    github = "NonsensicalNickname";
+    githubId = 118519066;
+    name = "Ceridwen Weaving";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
@@ -10429,6 +10435,12 @@
     email = "xpnfr@bouncy.email";
     github = "gkleen";
     githubId = 20089782;
+  };
+  gl1tchxd = {
+    name = "Felix Buchsteiner";
+    github = "gl1tchxd-git";
+    githubId = 92686452;
+    email = "contact@gl1tchxd.at";
   };
   gleber = {
     email = "gleber.p@gmail.com";
@@ -19138,6 +19150,12 @@
     githubId = 104795;
     name = "Marek Mahut";
   };
+  mmclinton = {
+    email = "nixpkg.concur071@simplelogin.com";
+    github = "mmclinton";
+    githubId = 96266047;
+    name = "Miller Clinton";
+  };
   mmesch = {
     github = "MMesch";
     githubId = 2597803;
@@ -19459,6 +19477,12 @@
     github = "MrMebelMan";
     githubId = 15896005;
     name = "Vladyslav Burzakovskyy";
+  };
+  mroboff = {
+    email = "mark.roboff@bluecircuit.ai";
+    github = "mroboff";
+    githubId = 81203001;
+    name = "Mark Roboff";
   };
   mrsmoer = {
     email = "mrsmoer@protonmail.com";
@@ -27398,6 +27422,12 @@
     github = "Steell";
     githubId = 1699155;
     name = "Steve Elliott";
+  };
+  stefanboca = {
+    email = "stefan.r.boca@gmail.com";
+    github = "stefanboca";
+    githubId = 45266795;
+    name = "Stefan Boca";
   };
   stefanfehrenbach = {
     email = "stefan.fehrenbach@gmail.com";

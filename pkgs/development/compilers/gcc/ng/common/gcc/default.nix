@@ -37,9 +37,11 @@
   libbacktrace,
   autoreconfHook269,
   bintools,
-  # Build the shared runtime libraries, and so have the driver's specs emit
-  # `-lgcc_s`. Derived the way the monolithic build derives it.
-  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries,
+  enableShared ? stdenv.hostPlatform.hasSharedLibraries,
+  # Whether the driver's specs emit `-lgcc_s`. Derived as the monolithic build
+  # derives it, Cygwin excluded: there they would also emit `-lgcc_eh`, which no
+  # stage of this package set produces.
+  enableTargetShared ? stdenv.targetPlatform.hasSharedLibraries && !stdenv.targetPlatform.isCygwin,
 }:
 let
   inherit (stdenv) targetPlatform hostPlatform;
@@ -87,6 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
       name = "find_a_program-search-with-machine-prefix.patch";
       url = "https://github.com/gcc-mirror/gcc/commit/a514707ffd7d58b140686036c2dece43ecb7d33c.diff";
       hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
+    })
+
+    # Make --disable-fixinclude compatible with Cygwin
+    (fetchpatch {
+      name = "mingw-drop-obsolete-STMP_FIXINC-override.patch";
+      url = "https://github.com/gcc-mirror/gcc/commit/7fb73dd7bb8aabab1416f0b28e6df45131a8e8ab.diff";
+      hash = "sha256-FmFJISfXt+/TCRcd4rYfwacBiTqu+/OKw0VvLh46Hz0=";
     })
 
     # Not upstream yet; a follow-up to the series above (drop the `/raw` to
@@ -293,10 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-install-libiberty"
     "--disable-multilib"
     "--disable-nls"
-    # Derived rather than forced off: the driver's specs only emit `-lgcc_s`
-    # for a target that has shared libraries, so hardcoding this leaves every
-    # throwing C++ program unlinkable even though `libgcc_s.so` is built and
-    # findable. Same predicate the monolithic build uses.
+    (lib.enableFeature enableShared "host-shared")
     (lib.enableFeature enableTargetShared "shared")
     "--enable-default-pie"
     "--enable-languages=${
@@ -330,15 +336,24 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-zlib"
     "--with-system-libbacktrace"
     "--without-included-gettext"
+
+    # No host platform headers are exposed to gcc, whatever the relationship
+    # between build, host and target. cc-wrapper supplies the target libc
+    # (`-idirafter <libc.dev>/include` and the corresponding `-B`/`-L` flags),
+    # as in the LLVM package set, where `clang` likewise carries no libc
+    # reference (`--without-headers` above). Naming one here --
+    # `--with-sysroot`, `--with-native-system-header-dir` -- would make every
+    # libc change rebuild the compiler, precisely the coupling this split
+    # package set exists to remove.
+    #
+    # So `fixincludes` has nothing to do either: it exists to copy the headers
+    # gcc found and rewrite the ones it knows to be broken. Left on, it falls
+    # back to `/usr/include` and stops the build outright when that is missing.
+    # `limits.h` and `syslimits.h` come from a separate prerequisite and are
+    # unaffected.
+    "--disable-fixincludes"
+
     "--enable-linker-build-id"
-    # Deliberately *no* `--with-sysroot` / `--with-native-system-header-dir`
-    # pointing at the target libc. Baking a libc store path into the compiler
-    # makes every libc change rebuild the compiler, which is precisely the
-    # coupling this split package set exists to remove. cc-wrapper already
-    # supplies the target libc (`-idirafter <libc.dev>/include` and the
-    # corresponding `-B`/`-L` flags), so the compiler proper does not need to
-    # know about it -- exactly as in the LLVM package set, where `clang`
-    # likewise carries no libc reference (`--without-headers` above).
   ]
   ++ lib.optionals enablePlugin [
     "--enable-plugin"
