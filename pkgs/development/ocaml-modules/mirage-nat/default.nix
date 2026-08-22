@@ -14,13 +14,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mirage-nat";
-  version = "3.0.2";
+  version = "3.1.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-nat/releases/download/v${finalAttrs.version}/mirage-nat-${finalAttrs.version}.tbz";
-    hash = "sha256-Z1g3qb26x/S6asYv6roTW77r41SHy7OGN7MoZJ/E8Is=";
+    hash = "sha256-u1jSVMdV9bfcfbetN+zwRUWlMSgcpjEBvJlAyDZCrvA=";
   };
 
   propagatedBuildInputs = [
