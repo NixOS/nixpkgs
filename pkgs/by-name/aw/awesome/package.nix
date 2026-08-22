@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
     # arguments every restart
     mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
     makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --set-default GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${luaEnv}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${luaEnv}/share/lua/${lua.luaversion}' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
