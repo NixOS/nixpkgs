@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchpatch2,
   cython,
   isPyPy,
   ninja,
@@ -24,6 +25,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/fonts-team/libskia/-/raw/6574ca599eab076a9cd5b8667f81aef0f67b3eeb/debian/patches/loong-build";
+      stripLen = 1;
+      extraPrefix = "src/cpp/skia-builder/skia/";
+      hash = "sha256-pKbWDYfZKUTv9ADdCl5sVPFfWiUCUmS8MXSw3eZhqMI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
