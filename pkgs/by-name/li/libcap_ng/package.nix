@@ -58,6 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
+    # cap_audit is deliberately not enabled here.
+    # First, it'd create a cyclic dependency on audit, which we want to avoid.
+    # Second, it requires a vmlinux.h for utils/cap-audit/cap_audit.bpf.c
+    # The vmlinux.h header can either be generated from the running kernel of the build system
+    # (which does not work on cross with a non-linux build machine, and is never reproducible),
+    # or it can be supplied to configure by path (necessitating a dependency on a specific linux kernel).
+    # A compromise could be introducing a cap_audit package as part of linuxPackages set,
+    # but the cost on CI would not be insignificant due to that being built once per kernel.
+    # All current options are bad in their own way, so this stays disabled until we have a proper
+    # solution for vmlinux.h to not rebuild the world, or provably a user requiring this.
+    # "--enable-cap-audit"
+    # "--with-vmlinux-h=provided"
+    # "--with-vmlinux-h-path="
+
     (lib.withFeature withPython "python")
     "--with-capability_header='${linuxHeaders}/include/linux/capability.h'" # required to link bindings
   ];
