@@ -107,7 +107,10 @@ in
       fsType = "vfat";
     };
 
-    virtualisation.configFile = lib.mkDefault defaultConfigFile;
+    virtualisation.configFile = lib.mkMerge [
+      (lib.mkDefault defaultConfigFile)
+      (lib.mkIf (cfg.configFile != null) cfg.configFile)
+    ];
 
     system.nixos.tags = [ "google-compute" ];
     image.extension = "raw.tar.gz";
@@ -134,10 +137,9 @@ in
         popd
       '';
       format = "raw";
-      configFile = if cfg.configFile == null then config.virtualisation.configFile else cfg.configFile;
       inherit (cfg) contents;
       partitionTableType = if cfg.efi then "efi" else "legacy";
-      inherit (config.virtualisation) diskSize;
+      inherit (config.virtualisation) configFile diskSize;
       memSize = cfg.buildMemSize;
       inherit config lib pkgs;
     };
