@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   installShellFiles,
   nixosTests,
@@ -56,6 +57,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   doCheck = false;
+
+  patches = [
+    # fixes for systemd socket activation - remove next release
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/403df4a91c8ad8f235a3cb9e17d0cc4d29c2dafd.patch";
+      hash = "sha256-HI/9qaB+TMbRu/2NPwV+kVcYK03YNnzcD+iaBOlM20w=";
+      # causes merge conflicts
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   preInstall = ''
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/

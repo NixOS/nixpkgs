@@ -3,26 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   fastcore,
+  fastspec,
   packaging,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ghapi";
-  version = "1.0.15";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "ghapi";
     tag = finalAttrs.version;
-    hash = "sha256-H1DuoESnGtU3nsKzW3Zj0RdGNXj1bBGpt6W3mprpVeg=";
+    hash = "sha256-o54xFz7AgTGbsI7OSjXx3d/Prv8OPKPBRNSpK6kCrIY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     fastcore
+    fastspec
     packaging
   ];
 
