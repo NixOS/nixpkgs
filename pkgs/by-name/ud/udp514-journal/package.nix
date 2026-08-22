@@ -4,7 +4,8 @@
   fetchFromGitHub,
   systemdLibs,
   pkg-config,
-  discount
+  discount,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  passthru.tests.nixos = nixosTests.udp514-journal;
 
   meta = with lib; {
     description = "Forward syslog from network (udp/514) to journal";
