@@ -21,7 +21,7 @@ On NixOS, you need to explicitly enable `ibus` with given engines before customi
 
 ## Using custom hunspell dictionaries {#sec-ibus-typing-booster-customize-hunspell}
 
-The IBus engine is based on `hunspell` to support completion in many languages. By default, the dictionaries `de-de`, `en-us`, `fr-moderne` `es-es`, `it-it`, `sv-se` and `sv-fi` are in use. To add another dictionary, the package can be overridden like this:
+The IBus engine is based on `hunspell` to support completion in many languages. By default, the dictionaries `de-de`, `en-us`, `fr-classique`, `es-es`, `it-it`, `sv-se` and `sv-fi` are in use. To add another dictionary, the package can be overridden like this:
 
 ```nix
 ibus-engines.typing-booster.override {

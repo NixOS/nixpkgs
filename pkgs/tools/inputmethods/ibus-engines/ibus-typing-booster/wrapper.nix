@@ -9,7 +9,7 @@
     "en-gb-ise"
     "en-us"
     "es-es"
-    "fr-moderne"
+    "fr-classique"
     "it-it"
     "sv-se"
     "sv-fi"

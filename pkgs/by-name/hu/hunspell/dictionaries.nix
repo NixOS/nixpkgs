@@ -1,6 +1,7 @@
 # hunspell dictionaries
 
 {
+  config,
   lib,
   stdenv,
   fetchurl,
@@ -146,7 +147,7 @@ let
       '';
     };
 
-  mkDictFromDicollecte =
+  mkDictFromGrammalecte =
     {
       shortName,
       shortDescription,
@@ -156,17 +157,17 @@ let
     }:
     mkDict rec {
       inherit dictFileName;
-      version = "5.3";
-      pname = "hunspell-dict-${shortName}-dicollecte";
+      version = "7.7";
+      pname = "hunspell-dict-${shortName}-grammalecte";
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
-        url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-        sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
+        url = "https://www.grammalecte.net/dic/hunspell-french-dictionaries-v${version}.zip";
+        sha256 = "sha256-RDFNmS+UtGWMMahu8jUXJKQwZ1MbCvNkP5G/AiDu5hY=";
       };
       meta = {
         inherit longDescription;
-        description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "https://www.dicollecte.org/home.php?prj=fr";
+        description = "Hunspell dictionary for ${shortDescription} from Grammalecte";
+        homepage = "https://www.grammalecte.net";
         license = lib.licenses.mpl20;
         maintainers = with lib.maintainers; [ renzo ];
         platforms = lib.platforms.all;
@@ -628,7 +629,7 @@ rec {
 
   # FRENCH
 
-  fr-any = mkDictFromDicollecte {
+  fr-any = mkDictFromGrammalecte {
     shortName = "fr-any";
     dictFileName = "fr-toutesvariantes";
     shortDescription = "French (any variant)";
@@ -638,30 +639,17 @@ rec {
     '';
   };
 
-  fr-classique = mkDictFromDicollecte {
+  fr-classique = mkDictFromGrammalecte {
     shortName = "fr-classique";
     dictFileName = "fr-classique";
     shortDescription = "French (classic)";
     longDescription = ''
-      Ce dictionnaire est une extension du dictionnaire «Moderne» et propose
-      en sus des graphies alternatives, parfois encore très usitées, parfois
-      tombées en désuétude.
+      Ce dictionnaire propose l’orthographe usuelle du français, avec en sus
+      quelques graphies nouvelles rectifiant les incohérences passées.
     '';
   };
 
-  fr-moderne = mkDictFromDicollecte {
-    shortName = "fr-moderne";
-    dictFileName = "fr-moderne";
-    shortDescription = "French (modern)";
-    longDescription = ''
-      Ce dictionnaire propose une sélection des graphies classiques et
-      réformées, suivant la lente évolution de l’orthographe actuelle. Ce
-      dictionnaire contient les graphies les moins polémiques de la réforme.
-    '';
-    isDefault = true;
-  };
-
-  fr-reforme1990 = mkDictFromDicollecte {
+  fr-reforme1990 = mkDictFromGrammalecte {
     shortName = "fr-reforme1990";
     dictFileName = "fr-reforme1990";
     shortDescription = "French (1990 reform)";
