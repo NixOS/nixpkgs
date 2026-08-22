@@ -15,12 +15,13 @@ let
   relayOptions = [
     "--keys=${dataDirectory}"
     "--listen=${cfg.listenAddress}:${toString cfg.port}"
-    "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
     "--provided-by=${escapeShellArg cfg.providedBy}"
   ]
+  ++ optional (cfg.statusPort != null) "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
   ++ optional (cfg.pools != null) "--pools=${escapeShellArg (concatStringsSep "," cfg.pools)}"
   ++ optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
   ++ optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
+  ++ optional (cfg.tokenFile != null) "--token=$(cat ${cfg.tokenFile})"
   ++ cfg.extraOptions;
 in
 {
@@ -57,7 +58,7 @@ in
     };
 
     statusPort = mkOption {
-      type = types.port;
+      type = types.nullOr types.port;
       default = 22070;
       description = ''
         Port to listen on for serving the relay status API. This port should be
@@ -94,6 +95,14 @@ in
       default = null;
       description = ''
         Per session bandwidth rate limit in bytes per second.
+      '';
+    };
+
+    tokenFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Token to restrict access to the relay. Disables joining any pools.
       '';
     };
 
