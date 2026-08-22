@@ -14329,6 +14329,11 @@
     githubId = 5124422;
     name = "Julien Urraca";
   };
+  juskashi = {
+    github = "Juskashi";
+    githubId = 305914940;
+    name = "Juskashi";
+  };
   justanotherariel = {
     email = "ariel@ebersberger.io";
     github = "justanotherariel";
