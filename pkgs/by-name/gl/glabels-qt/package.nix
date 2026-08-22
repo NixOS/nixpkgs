@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   qt6,
+  qrencode,
 }:
 
 stdenv.mkDerivation {
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
     cmake
     qt6.wrapQtAppsHook
     qt6.qttools
+    qrencode
   ];
 
   meta = {
