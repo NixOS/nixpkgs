@@ -2,7 +2,6 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
-  libGL,
   libxkbcommon,
   makeBinaryWrapper,
   pkg-config,
@@ -14,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vellum";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "greyxp1";
     repo = "vellum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uWGaCeENwaqg2+wbtfgpDAjxIsJbgUcMnvSPauwjcBI=";
+    hash = "sha256-tIPQ0uFnklgb39i0bS0Rz1jXJlVF6dz5jxMMxSyH+aA=";
   };
 
-  cargoHash = "sha256-quZW6jkGzvRHNgkJQS4entJyXeYftBOV89hKaFfQCDw=";
+  cargoHash = "sha256-uycCEO07mrucAxbgsePcUjy0qyRSDJQqGftHZ6ujWMg=";
 
   __structuredAttrs = true;
 
@@ -45,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/vellum \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libGL
           vulkan-loader
           wayland
         ]
