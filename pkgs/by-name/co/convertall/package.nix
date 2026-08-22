@@ -50,6 +50,10 @@ flutter341.buildFlutterApplication rec {
     maintainers = with lib.maintainers; [
       Luflosi
     ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }
