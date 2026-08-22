@@ -81,6 +81,9 @@ let
 
     enableParallelBuilding = true;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     meta = {
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
