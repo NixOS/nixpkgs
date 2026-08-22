@@ -357,6 +357,12 @@
     name = "Sophie Tauchert";
     keys = [ { fingerprint = "7B59 F09E 0FE5 BC34 F032  1FB4 5270 1DE5 F5F5 1125"; } ];
   };
+  _9bingyin = {
+    email = "realbingyin@outlook.com";
+    github = "9bingyin";
+    githubId = 37502927;
+    name = "Bingyin";
+  };
   _9glenda = {
     email = "plan9git@proton.me";
     matrix = "@9front:matrix.org";
