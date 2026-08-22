@@ -18,6 +18,11 @@
       settings the builder default would emit (such as `ec2.efi` or
       `networking.hostId` for ZFS-based EC2 images); otherwise the resulting
       machine may fail to rebuild or boot after `nixos-rebuild`.
+
+      ::: {.warning}
+      The configuration file is copied into the world-readable Nix store;
+      do not include secrets in it.
+      :::
     '';
   };
 }
