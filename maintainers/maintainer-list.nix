@@ -10846,6 +10846,11 @@
     githubId = 4753752;
     name = "guttermonk";
   };
+  guy-marc-aprin = {
+    github = "AGuyMarc";
+    githubId = 281480315;
+    name = "Guy-Marc Aprin";
+  };
   guylamar2006 = {
     name = "guylamar2006";
     github = "guylamar2006";
