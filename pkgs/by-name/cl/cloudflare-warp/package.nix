@@ -3,18 +3,19 @@
   lib,
   autoPatchelfHook,
   versionCheckHook,
-  copyDesktopItems,
   desktop-file-utils,
   dbus,
   dpkg,
   fetchurl,
   gtk3,
+  libayatana-appindicator,
   libpcap,
-  makeDesktopItem,
   makeWrapper,
   nftables,
   nss,
   openssl,
+  tpm2-tss,
+  webkitgtk_4_1,
   writeShellApplication,
   curl,
   jq,
@@ -26,19 +27,21 @@
 }:
 
 let
-  version = "2026.3.846.0";
+  version = "2026.7.1343.0";
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_amd64.deb";
-      hash = "sha256-1SKTK0QW+3CcqBLqHbIsPny/6ekyjZe9qRcjYOMnR58=";
+      name = "cloudflare-warp_${version}_amd64.deb";
+      url = "https://downloads.cloudflareclient.com/v1/download/noble-intel/version/${version}";
+      hash = "sha256-C0u01lhECaHPBDHPIc+yOlDYyHepwCBzJxEaHAV7EF4=";
     };
     aarch64-linux = fetchurl {
-      url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}_arm64.deb";
-      hash = "sha256-0zYsyZbX8qq/P+GHW4UHSTy2OsDa4fJAVjHcRbpHtSc=";
+      name = "cloudflare-warp_${version}_arm64.deb";
+      url = "https://downloads.cloudflareclient.com/v1/download/noble-arm/version/${version}";
+      hash = "sha256-NT9VUPzTn7dTKyCn+0v81ekN9EKhzeojR2P096amQTQ=";
     };
     aarch64-darwin = fetchurl {
       url = "https://downloads.cloudflareclient.com/v1/download/macos/version/${version}";
-      hash = "sha256-cDmoM0nIYYQyurJeeiVSX0IWJdIY0pVLmjIae5mEXI4=";
+      hash = "sha256-tmUwWC8ejsE2bNhFkMBr5SzCnXLOux+wh3nZ9BBDKd4=";
     };
   };
 in
@@ -64,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ]
   ++ lib.optionals (!headless && stdenv.hostPlatform.isLinux) [
-    copyDesktopItems
     desktop-file-utils
   ];
 
@@ -74,31 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
       libpcap
       openssl
       nss
+      tpm2-tss
       (lib.getLib stdenv.cc.cc)
     ]
     ++ lib.optionals (!headless) [
       gtk3
+      libayatana-appindicator
+      webkitgtk_4_1
     ]
   );
 
-  desktopItems = lib.optionals (!headless) [
-    (makeDesktopItem {
-      name = "com.cloudflare.WarpCli";
-      desktopName = "Cloudflare Zero Trust Team Enrollment";
-      categories = [
-        "Utility"
-        "Security"
-        "ConsoleOnly"
-      ];
-      noDisplay = true;
-      mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
-      exec = "warp-cli --accept-tos registration token %u";
-      startupNotify = false;
-      terminal = true;
-    })
-  ];
-
   autoPatchelfIgnoreMissingDeps = [
+    "libjvm.so"
     "libpcap.so.0.8"
   ];
 
@@ -137,6 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
         mv lib/systemd/system $out/lib/systemd/
         substituteInPlace $out/lib/systemd/system/warp-svc.service \
           --replace-fail "ExecStart=" "ExecStart=$out"
+        substituteInPlace $out/share/applications/com.cloudflare.WarpTaskbar.desktop \
+                          $out/share/applications/com.cloudflare.warp.desktop \
+          --replace-fail "Exec=" "Exec=$out"
         ${lib.optionalString (!headless) ''
           substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
             --replace-fail "ExecStart=" "ExecStart=$out" \
@@ -155,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
           rm -r $out/etc
           rm -r $out/share/applications
           rm -r $out/share/icons
-          rm -r $out/share/warp
+          rm -r $out/lib/warp
         ''}
 
         runHook postInstall
@@ -165,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
     ${lib.optionalString (!headless) ''
       wrapProgram $out/bin/warp-cli --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
+      wrapProgram $out/bin/warp-taskbar --prefix LD_LIBRARY_PATH : $out/lib/warp/lib
     ''}
   '';
 
