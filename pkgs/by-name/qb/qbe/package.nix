@@ -6,11 +6,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbe";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchzip {
     url = "https://c9x.me/compile/release/qbe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UgtJnZF/YtD54OBy9HzGRAEHx5tC9Wo2YcUidGwrv+s=";
+    hash = "sha256-IzHO5GT81G7xwoDVhkvQlDwdQGm1ijpJ+dl+IH1P/1s=";
   };
 
   makeFlags = [
