@@ -854,7 +854,7 @@ let
       );
 
       # Convert an option tree decl to a submodule option decl
-      optionTreeToOption =
+      optionTreeToSubmoduleOption =
         decl:
         if isOption decl.options then
           decl
@@ -868,6 +868,21 @@ let
                 # value that means "whatever the user has declared elsewhere".
                 # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
                 shorthandOnlyDefinesConfig = null;
+              };
+            };
+          };
+
+      # Convert an option tree decl to a deferred module option decl
+      optionTreeToDeferredModuleOption =
+        decl:
+        if isOption decl.options then
+          decl
+        else
+          decl
+          // {
+            options = mkOption {
+              type = types.deferredModuleWith {
+                staticModules = [ { options = decl.options; } ];
               };
             };
           };
@@ -894,8 +909,6 @@ let
             unmatchedDefns = [ ];
           }
         else if optionDecls != [ ] then
-          if
-            all (x: x.options.type.name or null == "submodule") optionDecls
           # Raw options can only be merged into submodules. Merging into
           # attrsets might be nice, but ambiguous. Suppose we have
           # attrset as a `attrsOf submodule`. User declares option
@@ -905,9 +918,17 @@ let
           #  c. reject and require "<name>" as a reminder that it behaves like (b).
           #  d. magically combine (a) and (c).
           # All of the above are merely syntax sugar though.
-          then
+          if all (x: x.options.type.name or null == "submodule") optionDecls then
             let
-              opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
+              opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToSubmoduleOption decls));
+            in
+            {
+              matchedOptions = evalOptionValue loc opt defns';
+              unmatchedDefns = [ ];
+            }
+          else if all (x: x.options.type.name or null == "deferredModule") optionDecls then
+            let
+              opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToDeferredModuleOption decls));
             in
             {
               matchedOptions = evalOptionValue loc opt defns';

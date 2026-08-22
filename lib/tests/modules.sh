@@ -282,6 +282,7 @@ checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
 checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
 checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
 
+# Submodule deep options
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
 checkConfigOutput '^42$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix ./declare-bare-submodule-deep-option.nix ./define-bare-submodule-values.nix
@@ -475,6 +476,14 @@ checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
 # errors from the default module are reported with accurate location
 checkConfigError 'In `the-file-that-contains-the-bad-config.nix, via option default'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
 checkConfigError '.*lib/tests/modules/deferred-module-error.nix, via option deferred [(]:anon-1:anon-1:anon-1[)] does not look like a module.' config.result ./deferred-module-error.nix
+# deep options
+checkConfigOutput '^"merged-default"$' config.final.merged ./declare-deferred-module.nix ./declare-deferred-module-merged-option.nix
+checkConfigOutput '^"nested-default"$' config.final.nested ./declare-deferred-module.nix ./declare-deferred-module-nested-option.nix
+checkConfigOutput '^"deep-default"$' config.final.deep ./declare-deferred-module.nix ./declare-deferred-module-deep-option.nix
+checkConfigOutput '^"merged"$' config.final.merged ./declare-deferred-module.nix ./declare-deferred-module-merged-option.nix ./declare-deferred-module-nested-option.nix ./declare-deferred-module-deep-option.nix ./define-deferred-module-values.nix
+checkConfigOutput '^"nested"$' config.final.nested ./declare-deferred-module.nix ./declare-deferred-module-merged-option.nix ./declare-deferred-module-nested-option.nix ./declare-deferred-module-deep-option.nix ./define-deferred-module-values.nix
+checkConfigOutput '^"deep"$' config.final.deep ./declare-deferred-module.nix ./declare-deferred-module-merged-option.nix ./declare-deferred-module-nested-option.nix ./declare-deferred-module-deep-option.nix ./define-deferred-module-values.nix
+checkConfigError 'The option .deep. in .*/declare-deferred-module-deep-option.nix. is already declared in .*/declare-deferred-module-deep-option-duplicate.nix' config.final.deep ./declare-deferred-module.nix ./declare-deferred-module-deep-option.nix  ./declare-deferred-module-deep-option-duplicate.nix
 
 # Check the file location information is propagated into submodules
 checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
