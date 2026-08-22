@@ -380,6 +380,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
+        PrivatePIDs = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
