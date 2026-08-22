@@ -5005,10 +5005,6 @@ with pkgs;
     ];
   };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   credstash = with python3Packages; toPythonApplication credstash;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
