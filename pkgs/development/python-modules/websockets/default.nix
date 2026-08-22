@@ -3,8 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
   pyprojectVersionPatchHook,
+  pytestCheckHook,
   pythonAtLeast,
   setuptools,
   werkzeug,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
     werkzeug
   ];
 
