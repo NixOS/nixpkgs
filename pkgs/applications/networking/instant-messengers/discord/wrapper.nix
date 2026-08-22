@@ -140,7 +140,10 @@ let
     inherit disableBreakingUpdates stageModules;
     # Exposed so reviewers can inspect which distro modules are pinned
     inherit source moduleVersions;
-    updateScript = ./update.py;
+    updateScript = {
+      command = ./update.py;
+      supportedFeatures = [ "commit" ];
+    };
 
     unwrappedDiscord = finalUnwrapped;
 
