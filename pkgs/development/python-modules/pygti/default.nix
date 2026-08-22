@@ -6,8 +6,9 @@
   hatch-vcs,
   aiohttp,
   pydantic,
-  pytz,
-  voluptuous,
+  aioresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,12 +31,13 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     pydantic
-    pytz
-    voluptuous
   ];
 
-  # no tests implemented
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pygti.auth"
