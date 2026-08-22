@@ -282,7 +282,7 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
 
-`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
+`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false, *`apply`* ? `lib.id` }
 
 :   Like `types.submodule`, but more flexible and with better defaults.
     It has parameters
@@ -321,6 +321,17 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         With this option enabled, defining a non-`config` section
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
+
+    -   *`apply`* A function applied to the merged value.
+        Allows applying final transformations to the merge result.
+
+        For example, one could remove internal sub-options from the final value:
+        ```nix
+        value: removeAttrs value [
+          "warnings"
+          "assertions"
+        ]
+        ```
 
 `types.deferredModule`
 

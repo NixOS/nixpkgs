@@ -1393,6 +1393,7 @@ rec {
       modules,
       specialArgs ? { },
       shorthandOnlyDefinesConfig ? false,
+      apply ? lib.id,
       description ? null,
       class ? null,
     }@attrs:
@@ -1481,7 +1482,7 @@ rec {
           in
           {
             headError = checkDefsForError check loc defs;
-            value = configuration.config;
+            value = apply configuration.config;
             valueMeta = { inherit configuration; };
           };
       };
