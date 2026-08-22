@@ -1,0 +1,8 @@
+{
+  "name": "libdatachannel-build-deps",
+  "private": true,
+  "dependencies": {
+    "cmake-js": "8.0.0",
+    "node-addon-api": "8.9.0"
+  }
+}
