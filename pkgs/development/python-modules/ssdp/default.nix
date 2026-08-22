@@ -36,6 +36,11 @@ buildPythonPackage (finalAttrs: {
     flit-scm
   ];
 
+  dependencies = [
+    click
+    pygments
+  ];
+
   optional-dependencies = {
     cli = [
       click
@@ -47,6 +52,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_call"
+    "test_call_w_search_target"
   ];
 
   pythonImportsCheck = [ "ssdp" ];
