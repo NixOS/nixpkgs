@@ -2,45 +2,52 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  certifi,
-  python-dateutil,
-  six,
-  urllib3,
+  httpx,
+  poetry-core,
+  pydantic,
+  pydantic-core,
+  pytest-asyncio,
   pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "brevo-python";
-  version = "1.2.0";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getbrevo";
     repo = "brevo-python";
     tag = "v${version}";
-    hash = "sha256-VYj1r69pgKgNCXzxRqvwlj5w+y3IIu21bsZJAe/7zf8=";
+    hash = "sha256-L6zRPoiqSNDli0dfBG/wRscRhTBZYXO8nVxyHzq9v70=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
-    certifi
-    python-dateutil
-    six
-    urllib3
+    httpx
+    pydantic
+    pydantic-core
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  patches = [
+    # `conftest.py` tries to run `docker` to run `wiremock`
+    ./conftest-dont-docker-compose.patch
   ];
 
   disabledTestPaths = [
-    # broken import; https://github.com/getbrevo/brevo-python/issues/2
-    "test/test_configuration.py"
+    # tests requiring `wiremock`
+    "tests/wire/"
   ];
 
-  pythonImportsCheck = [ "brevo_python" ];
+  pythonImportsCheck = [ "brevo" ];
 
   meta = {
     description = "Fully-featured Python API client to interact with Brevo";

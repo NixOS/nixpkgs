@@ -1,0 +1,19 @@
+diff --git i/tests/conftest.py w/tests/conftest.py
+index bfee144..f2e9ed5 100644
+--- i/tests/conftest.py
++++ w/tests/conftest.py
+@@ -94,8 +94,6 @@ def pytest_configure(config: pytest.Config) -> None:
+         # Workers never manage the container lifecycle.
+         return
+ 
+-    _start_wiremock()
+-
+ 
+ def pytest_unconfigure(config: pytest.Config) -> None:
+     """
+@@ -108,5 +106,3 @@ def pytest_unconfigure(config: pytest.Config) -> None:
+     if _is_xdist_worker(config):
+         # Workers never manage the container lifecycle.
+         return
+-
+-    _stop_wiremock()
