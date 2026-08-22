@@ -19121,6 +19121,8 @@ self: super: with self; {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
+  slidge = callPackage ../development/python-modules/slidge { };
+
   slip10 = callPackage ../development/python-modules/slip10 { };
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
@@ -20642,6 +20644,8 @@ self: super: with self; {
   throttler = callPackage ../development/python-modules/throttler { };
 
   thttp = callPackage ../development/python-modules/thttp { };
+
+  thumbhash = callPackage ../development/python-modules/thumbhash { };
 
   tianshou = callPackage ../development/python-modules/tianshou { };
 
