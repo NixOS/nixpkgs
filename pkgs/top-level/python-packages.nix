@@ -7253,6 +7253,8 @@ self: super: with self; {
 
   greenplanet-energy-api = callPackage ../development/python-modules/greenplanet-energy-api { };
 
+  greenstalk = callPackage ../development/python-modules/greenstalk { };
+
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
   grep-ast = callPackage ../development/python-modules/grep-ast { };
