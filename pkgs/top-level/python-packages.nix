@@ -5949,6 +5949,8 @@ self: super: with self; {
 
   fasttransform = callPackage ../development/python-modules/fasttransform { };
 
+  fasttransport = callPackage ../development/python-modules/fasttransport { };
+
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
