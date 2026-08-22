@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "multimethod";
-  version = "2.0.2";
+  version = "2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coady";
     repo = "multimethod";
     tag = "v${version}";
-    hash = "sha256-0En3NdLLmS/4bw0I3z9xxKa85tECi1rjmpZyxYuZk3w=";
+    hash = "sha256-tv+j1E8/Z0ohbfWWc1hz2W7haUYprQ8DaU6oJSllEcc=";
   };
 
   nativeBuildInputs = [ setuptools ];
