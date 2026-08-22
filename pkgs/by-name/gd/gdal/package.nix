@@ -324,7 +324,24 @@ stdenv.mkDerivation (finalAttrs: {
     popd # autotest
   '';
 
-  passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+  passthru.tests = callPackage ./tests.nix {
+    gdal = finalAttrs.finalPackage;
+    inherit
+      useArmadillo
+      useArrow
+      useHDF
+      useJava
+      useLibAvif
+      useLibHEIF
+      useLibJXL
+      useMysql
+      useNetCDF
+      usePoppler
+      usePostgres
+      useTiledb
+      ;
+
+  };
 
   __darwinAllowLocalNetworking = true;
 
