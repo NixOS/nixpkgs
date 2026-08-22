@@ -140,6 +140,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
@@ -983,6 +986,9 @@
   ],
   "treefmt": [
     "index.html#treefmt"
+  ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
   ],
   "typst": [
     "index.html#typst",
