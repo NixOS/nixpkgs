@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
   meta = {
     description = "Declarative-feeling pkg manager for NixOS packages.nix";
-    homepage = "https://github.com/void01n/simple-pkg";\;
+    homepage = "https://github.com/void01n/simple-pkg";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "pkg";
