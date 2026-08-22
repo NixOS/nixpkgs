@@ -14,7 +14,7 @@
   libmilter,
   pcre2,
   libmspack,
-  systemd,
+  systemdLibs,
   json_c,
   check,
   rustc,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     check
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional stdenv.hostPlatform.isLinux systemdLibs;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
