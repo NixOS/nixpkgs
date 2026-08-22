@@ -1,0 +1,29 @@
+diff --git a/vscode-lean4/src/extension.ts b/vscode-lean4/src/extension.ts
+index bb4d3909..2ba7369d 100644
+--- a/vscode-lean4/src/extension.ts
++++ b/vscode-lean4/src/extension.ts
+@@ -16,7 +16,7 @@ import { LeanTaskGutter } from './taskgutter'
+ import { LeanClientProvider } from './utils/clientProvider'
+ import { depInstallationLocations, DepInstaller } from './utils/depInstaller'
+ import { ElanCommandProvider } from './utils/elanCommands'
+-import { addToProcessEnvPATH } from './utils/envPath'
++import { addToProcessEnvPATH, PATH, setProcessEnvPATH } from './utils/envPath'
+ import { combine, onEventWhile, withoutReentrancy } from './utils/events'
+ import { ExtUri, extUriToCwdUri, FileUri, toExtUri } from './utils/exturi'
+ import { FullInstaller } from './utils/fullInstaller'
+@@ -118,6 +118,15 @@ async function copyModuleName(uri: Uri | undefined) {
+ 
+ function addElanPathToPATH() {
+     addToProcessEnvPATH(path.join(os.homedir(), '.elan', 'bin'))
++    // Fall back to the Elan that was built into this extension, so that Lean
++    // works out of the box without the extension having to offer to download
++    // and install Elan itself. This is appended rather than prepended so that
++    // any Lean toolchain that is already on the PATH stays in charge.
++    const builtinElanBin = '@elan@/bin'
++    const currentPATH = PATH.ofProcessEnv()
++    if (!currentPATH.includes(builtinElanBin)) {
++        setProcessEnvPATH(currentPATH.join(new PATH([builtinElanBin])))
++    }
+ }
+ 
+ /**
