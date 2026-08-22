@@ -58,13 +58,13 @@ let
       };
       kvm = mkOption {
         type = types.bool;
-        default = isLinux;
+        default = isLinux && builtins.length (lib.attrNames nodes) > 0;
         defaultText = lib.literalMD "`true` if built to run on Linux.";
         description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
       };
       apple-virt = mkOption {
         type = types.bool;
-        default = isDarwin;
+        default = isDarwin && builtins.length (lib.attrNames nodes) > 0;
         defaultText = lib.literalMD "`true` if built to run on Darwin.";
         description = "Whether Apple virtualization functionality is required for running this test.";
       };
