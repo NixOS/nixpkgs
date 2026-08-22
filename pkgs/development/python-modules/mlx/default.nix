@@ -2,8 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
+  common-updater-scripts,
+  curl,
   fetchFromGitHub,
+  nix,
+  nix-update,
   nanobind,
+  perl,
+  writeShellApplication,
 
   # build-system
   cmake,
@@ -31,7 +37,6 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
-    # Tag from https://github.com/ml-explore/mlx/blob/v0.31.1/mlx/io/CMakeLists.txt#L14
     rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
     hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
@@ -68,9 +73,6 @@ buildPythonPackage (finalAttrs: {
   postUnpack = ''
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
-
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   env = {
     PYPI_RELEASE = 1;
@@ -146,24 +148,40 @@ buildPythonPackage (finalAttrs: {
 
   # Additional testing by executing the example Python scripts supplied with mlx
   # using the version of the library we've built.
-  passthru.tests = {
-    mlxTest =
-      runCommand "run-mlx-examples"
-        {
-          buildInputs = [ mlx ];
-          nativeBuildInputs = [ python ];
-        }
-        ''
-          cp ${finalAttrs.src}/examples/python/logistic_regression.py .
-          ${python.interpreter} logistic_regression.py
-          rm logistic_regression.py
+  passthru = {
+    inherit gguf-tools;
 
-          cp ${finalAttrs.src}/examples/python/linear_regression.py .
-          ${python.interpreter} linear_regression.py
-          rm linear_regression.py
+    tests = {
+      mlxTest =
+        runCommand "run-mlx-examples"
+          {
+            buildInputs = [ mlx ];
+            nativeBuildInputs = [ python ];
+          }
+          ''
+            cp ${finalAttrs.src}/examples/python/logistic_regression.py .
+            ${python.interpreter} logistic_regression.py
+            rm logistic_regression.py
 
-          touch $out
-        '';
+            cp ${finalAttrs.src}/examples/python/linear_regression.py .
+            ${python.interpreter} linear_regression.py
+            rm linear_regression.py
+
+            touch $out
+          '';
+    };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "mlx-update";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        nix
+        nix-update
+        perl
+      ];
+      text = builtins.readFile ./update.sh;
+    });
   };
 
   meta = {
