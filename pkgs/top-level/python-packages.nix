@@ -16762,6 +16762,8 @@ self: super: with self; {
 
   python-code-minimap = callPackage ../development/python-modules/python-code-minimap { };
 
+  python-codegen = callPackage ../development/python-modules/python-codegen { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-coinmarketcap = callPackage ../development/python-modules/python-coinmarketcap { };
