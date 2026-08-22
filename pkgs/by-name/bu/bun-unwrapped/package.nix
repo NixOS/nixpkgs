@@ -216,6 +216,10 @@ stdenv.mkDerivation {
 
     # Build only the WebKit libraries linked into Bun from the pinned source.
     ./build-webkit-from-source.patch
+
+    # Keep the standalone graph segment last when linking natively on Darwin.
+    # https://github.com/oven-sh/bun/issues/40107
+    ./fix-darwin-standalone-segment-order.patch
   ];
 
   # Bun 1.4.0 accepts only LLVM 21.1.x. Recheck this pin when updating Bun.
