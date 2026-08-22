@@ -1,9 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pyprojectVersionPatchHook,
+  stdenv,
 
   # build-system
   setuptools,
@@ -13,7 +13,6 @@
   cryptography,
   lxml,
   pyhanko-certvalidator,
-  pyyaml,
   requests,
   tzlocal,
 
@@ -39,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.35.2";
+  version = "0.36.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CY+YgUu8za5c0t2OKStKvCN9X8hVXT2sN42KSDiyMX8=";
+    hash = "sha256-Dv1Pz4ri574vh50ter9TbFSvQ+0Mbbifw8kjjv04qs8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -68,7 +67,6 @@ buildPythonPackage (finalAttrs: {
     cryptography
     lxml
     pyhanko-certvalidator
-    pyyaml
     requests
     tzlocal
   ];
@@ -172,5 +170,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
+    # OSError: One or more parameters passed to a function were not valid.
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
