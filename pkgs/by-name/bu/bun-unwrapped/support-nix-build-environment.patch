@@ -1,0 +1,102 @@
+diff --git a/scripts/build/codegen.ts b/scripts/build/codegen.ts
+index 7aa6c22..8a72591 100644
+--- a/scripts/build/codegen.ts
++++ b/scripts/build/codegen.ts
+@@ -150,7 +150,7 @@ export function registerCodegenRules(n: Ninja, cfg: Config): void {
+   n.rule("bun_install", {
+     command: hostWin
+       ? `cmd /c "cd /d $dir && ${bun} install --frozen-lockfile && ${touch} $stamp"`
+-      : `cd $dir && ${bun} install --frozen-lockfile && ${touch} $stamp`,
++      : `touch $stamp`,
+     description: "install $dir",
+     restat: true,
+     // bun install can be memory-hungry and grabs a lockfile; serialize.
+diff --git a/scripts/build/config.ts b/scripts/build/config.ts
+index 5a20204..01dd8ed 100644
+--- a/scripts/build/config.ts
++++ b/scripts/build/config.ts
+@@ -529,6 +529,8 @@ export function detectHost(): Host {
+  * so it must be requested explicitly via --abi=android.
+  */
+ export function detectLinuxAbi(): Abi {
++  const nixAbi = process.env.BUN_NIX_ABI;
++  if (nixAbi === "musl" || nixAbi === "gnu") return nixAbi;
+   return existsSync("/etc/alpine-release") ? "musl" : "gnu";
+ }
+
+diff --git a/scripts/build/flags.ts b/scripts/build/flags.ts
+index 184aa86..da96824 100644
+--- a/scripts/build/flags.ts
++++ b/scripts/build/flags.ts
+@@ -300,12 +300,12 @@ export const globalFlags: Flag[] = [
+   {
+     // Nix LLVM doesn't support zstd — but we target standard distros.
+     // Nix users can override via profile if needed.
+-    flag: ["-g3", "-gz=zstd"],
++    flag: ["-g3", "-gz=zlib"],
+     when: c => c.unix && c.debug,
+-    desc: "Full debug info, zstd-compressed",
++    desc: "Full debug info, zlib-compressed",
+   },
+   {
+-    flag: ["-g", "-gz=zstd"],
++    flag: ["-g", "-gz=zlib"],
+     when: c => c.unix && c.release && !c.lto,
+     desc: "Full debug info (types and variables) where no LTO link has to carry it: local release, asan, the non-LTO CI lanes",
+   },
+@@ -1085,14 +1085,6 @@ export const linkerFlags: Flag[] = [
+     when: c => c.darwin && c.crossTarget !== undefined && c.release,
+     desc: "macOS cross-link: fold identical address-insignificant functions",
+   },
+-  {
+-    // -ld_new selects Apple's new linker — only meaningful (and only
+-    // understood) when Apple's ld driver does the link. ld64.lld (the
+-    // cross-link path) parses it as `-l d_new` and fails.
+-    flag: "-Wl,-ld_new",
+-    when: c => c.darwin && c.crossTarget === undefined,
+-    desc: "Use new Apple linker (native darwin links only)",
+-  },
+   {
+     // Cross-link from a non-darwin host: same pattern as Android/FreeBSD —
+     // target triple + explicit linker. -isysroot is added by the deployment-
+@@ -1767,6 +1759,11 @@ export function computeFlags(cfg: Config): ComputedFlags {
+     stripflags.push(...resolveFlagValue(f.flag, cfg));
+   }
+
++  const nixRpath = process.env.BUN_NIX_RPATH;
++  if (nixRpath) {
++    ldflags.push("-Wl,--disable-new-dtags", "-Wl,-rpath," + nixRpath);
++  }
++
+   return { cflags, cxxflags, defines: defs, ldflags, stripflags };
+ }
+
+diff --git a/scripts/build/rust.ts b/scripts/build/rust.ts
+index 5b7872b..2308113 100644
+--- a/scripts/build/rust.ts
++++ b/scripts/build/rust.ts
+@@ -414,14 +414,9 @@ export function cargoBuildInvocation(cfg: Config): CargoInvocation {
+     profile.name,
+     "--locked",
+   ];
+-  if (tier3 || cfg.release || cfg.asan) {
++  if (tier3 || cfg.asan) {
+     // Rebuild std from source (cargoBuildStdArg) because:
+     // tier3:   no prebuilt `rust-std` exists.
+-    // release: prebuilt std is native code built for generic x86-64 with no
+-    //          `.llvm_addrsig`. Rebuilding with our RUSTFLAGS gets it
+-    //          `-Ctarget-cpu=` (AVX2/BMI in core::str / hashbrown), and under
+-    //          `cfg.lto` it becomes bitcode that joins the cross-language LTO
+-    //          unit + safe ICF instead of being an opaque blob in the link.
+     // asan:    prebuilt std is uninstrumented; rebuilding applies
+     //          `-Zsanitizer=address` so OOB/UAF inside Vec/String/HashMap are
+     //          visible instead of stopping at the std boundary.
+@@ -438,7 +433,7 @@ export function cargoBuildInvocation(cfg: Config): CargoInvocation {
+
+   // ─── rustflags ───
+   // CARGO_ENCODED_RUSTFLAGS: U+001F-separated so multi-arg flags survive.
+-  const rustflags: string[] = [];
++  const rustflags: string[] = ["-Aunknown-lints"];
+   // Match the C/C++ side's `-fno-pic` / `-Wl,-no-pie` (flags.ts:929,1001) on
+   // the targets where bun links as a position-dependent ET_EXEC. With the
+   // default `pic`, every Rust `&'static [T]` / `&'static str` / vtable is a
