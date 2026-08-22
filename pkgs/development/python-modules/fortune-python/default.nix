@@ -8,7 +8,7 @@ let
   version = "1.1.2";
 in
 buildPythonPackage {
-  pname = "fortune";
+  pname = "fortune-python";
   inherit version;
   pyproject = true;
 
