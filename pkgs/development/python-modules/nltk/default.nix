@@ -24,22 +24,26 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nltk";
-  version = "3.10.0";
+  version = "3.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nltk";
     repo = "nltk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1iflqb3cOyaviW3IostFCuJtZ9KBZI0n9dfKfqqbcO0=";
+    hash = "sha256-PaMW9QNV+++Gz+OoG7m2VFn6L3vkG/Mg9ZLx9KlN19U=";
   };
 
   postPatch = ''
-    # In the nix store we trust
+    # NLTK's immutable-root model does not include the Nix store. Trust it for
+    # data roots and read-only symlinks produced by nltk-data-dir.
     substituteInPlace nltk/pathsec.py \
       --replace-fail 'if not (target == scoped_root or target.is_relative_to(scoped_root)):' \
                      'if not (target == scoped_root or target.is_relative_to(scoped_root) or target.is_relative_to("/nix/store")):' \
-      --replace-fail ' "/usr/share/nltk_data", ' ' "/usr/share/nltk_data", "/nix/store", '
+      --replace-fail 'candidate_locs = ["~/nltk_data", "/usr/share/nltk_data"]' \
+                     'candidate_locs = ["~/nltk_data", "/usr/share/nltk_data", "/nix/store"]' \
+      --replace-fail 'if ENFORCE and os.name == "posix":' \
+                     'if ENFORCE and os.name == "posix" and not (_is_readonly_mode(mode) and Path(os.path.abspath(raw_path)).is_relative_to("/nix/store")):'
   '';
 
   build-system = [ setuptools ];
