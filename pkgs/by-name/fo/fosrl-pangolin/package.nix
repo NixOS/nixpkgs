@@ -36,7 +36,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.21.0";
+  version = "1.21.1";
 
   __structuredAttrs = true;
   enableParallelBuilding = true;
@@ -45,12 +45,12 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-LR4UO2xrTLKmemDVsJWtEQoV2bDy6U2ahxTtA+SDymI=";
+    hash = "sha256-zfXHev0bN3KVkoiSQ+2WQCgmcCtWi3dib6EiaYmthTo=";
   };
 
   nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-EBectG1zNdUb30SlhAzy9rCwF/mYHAV4HZTRbk2CbDY=";
+  npmDepsHash = "sha256-9wPn2nSD9VxMyHywrG52WrChsrJ/ctnKGlMZZEymP6A=";
 
   nativeBuildInputs = [
     esbuild
@@ -64,11 +64,11 @@ buildNpmPackage (finalAttrs: {
 
   # upstream inconsistently updates this
   # so leaving this here in case it's needed
-  postPatch = ''
-    substituteInPlace server/lib/consts.ts --replace-fail \
-      'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
-      'export const APP_VERSION = "${finalAttrs.version}";'
-  '';
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}

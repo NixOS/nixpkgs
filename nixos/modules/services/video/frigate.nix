@@ -787,6 +787,7 @@ in
 
         # Caches
         PrivateTmp = true;
+        TemporaryFileSystem = "/dev/shm:mode=1777,nosuid,nodev";
         CacheDirectory = [
           "frigate"
           # https://github.com/blakeblackshear/frigate/discussions/18129
