@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.7";
+  version = "2.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inkcut";
     repo = "inkcut";
     tag = "v${version}";
-    hash = "sha256-inB3yR4ykepN5rYzyPlXW/J/HuSxGs6EDhshpa7n7o8=";
+    hash = "sha256-1HKojkXjM+Q2UGXKhEoQTXXGkaHbhBsljJuFBmwjmsc=";
   };
 
   postPatch = ''
