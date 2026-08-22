@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmind";
-  version = "26.01.03145-202510170359";
+  version = "26.04.01341-202607130201";
 
   src = fetchurl {
     url = "https://dl3.xmind.app/Xmind-for-Linux-amd64bit-${finalAttrs.version}.deb";
-    hash = "sha256-h7qxDf219+t8oAk8IABs7MyasNd3K/PAM6a79kyaLdw=";
+    hash = "sha256-XffBDt2BY2+Np+Zw0C2SxWL5rCSvX7pjFiE8nSkQK5Q=";
   };
 
   nativeBuildInputs = [
