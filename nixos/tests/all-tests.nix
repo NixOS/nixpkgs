@@ -823,6 +823,7 @@ in
   ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
   image-contents = handleTest ./image-contents.nix { };
+  imapgoose = runTest ./imapgoose.nix;
   immich = runTest ./web-apps/immich.nix;
   immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
