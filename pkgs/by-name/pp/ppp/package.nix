@@ -2,7 +2,6 @@
   autoreconfHook,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   libpcap,
   libxcrypt,
@@ -16,24 +15,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.2";
+  version = "2.5.3";
   pname = "ppp";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = "ppp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NV8U0F8IhHXn0YuVbfFr992ATQZaXA16bb5hBIwm9Gs=";
+    hash = "sha256-dl0mjiCFpeJwJC7UmJc0vx6K0FOrN4ORTIXEKG5Ykrg=";
   };
-
-  patches = [
-    # Fix build with gcc15
-    # https://github.com/ppp-project/ppp/pull/548
-    (fetchpatch {
-      url = "https://github.com/ppp-project/ppp/commit/05361692ee7d6260ce5c04c9fa0e5a1aa7565323.patch";
-      hash = "sha256-ybuWyA1t9IJ1Sg06a0b0tin4qssr0qzmenfGoA1X0BE=";
-    })
-  ];
 
   configureFlags = [
     "--localstatedir=/var"
