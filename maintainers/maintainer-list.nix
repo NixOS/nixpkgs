@@ -8545,6 +8545,11 @@
     name = "Alexandre Iooss";
     keys = [ { fingerprint = "2D37 1AD2 7E2B BC77 97E1  B759 6C79 278F 3FCD CC02"; } ];
   };
+  erenari = {
+    github = "ErenAri";
+    githubId = 67584761;
+    name = "Eren Arı";
+  };
   ereslibre = {
     email = "ereslibre@ereslibre.es";
     matrix = "@ereslibre:matrix.org";
