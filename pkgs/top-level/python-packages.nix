@@ -10535,6 +10535,10 @@ self: super: with self; {
 
   mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
 
+  mcap = callPackage ../development/python-modules/mcap { };
+
+  mcap-ros2-support = callPackage ../development/python-modules/mcap-ros2-support { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
@@ -18270,6 +18274,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rosbag-resurrector = callPackage ../development/python-modules/rosbag-resurrector { };
 
   rosbags = callPackage ../development/python-modules/rosbags { };
 
