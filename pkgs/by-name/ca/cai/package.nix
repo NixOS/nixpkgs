@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cai";
-  version = "1.1.5-unstable-2026-06-05";
+  version = "0.5.9";
   pyproject = true;
 
   __structuredAttrs = true;
