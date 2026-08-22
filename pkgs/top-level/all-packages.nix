@@ -9824,9 +9824,6 @@ with pkgs;
 
   freeciv_gtk = freeciv;
 
-  # used as base package for iortcw forks
-  iortcw_sp = callPackage ../by-name/io/iortcw/sp.nix { };
-
   katagoWithCuda = katago.override {
     backend = "cuda";
   };
