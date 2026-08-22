@@ -2,8 +2,8 @@
   channel,
   pname,
   version,
-  url,
-  sha256Hash,
+  sources,
+  meta,
 }:
 
 {
@@ -83,14 +83,15 @@
 
 let
   filename = "android-studio-${version}-linux.tar.gz";
+  source = sources.${stdenv.hostPlatform.system};
 
   androidStudio = stdenv.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version;
 
     src = fetchurl {
-      url = url;
-      sha256 = sha256Hash;
+      inherit (source) url;
+      sha256 = source.sha256Hash;
     };
 
     nativeBuildInputs = [
@@ -305,52 +306,7 @@ let
               "${channel}"
             ];
           };
-        meta = {
-          description = "Official IDE for Android (${channel} channel)";
-          longDescription = ''
-            Android Studio is the official IDE for Android app development, based on
-            IntelliJ IDEA.
-          '';
-          homepage =
-            if channel == "stable" then
-              "https://developer.android.com/studio/index.html"
-            else
-              "https://developer.android.com/studio/preview/index.html";
-          license = with lib.licenses; [
-            asl20
-            unfree
-          ]; # The code is under Apache-2.0, but:
-          # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
-          # "Android Studio includes proprietary code subject to separate license,
-          # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
-          # IDEA Community Edition (www.jetbrains.com/idea)."
-          # Also: For actual development the Android SDK is required and the Google
-          # binaries are also distributed as proprietary software (unlike the
-          # source-code itself).
-          platforms = [ "x86_64-linux" ];
-          maintainers =
-            rec {
-              stable = with lib.maintainers; [
-                alapshin
-              ];
-              beta = stable;
-              canary = stable;
-              dev = stable;
-            }
-            ."${channel}";
-          teams =
-            rec {
-              stable = with lib.teams; [
-                android
-              ];
-              beta = stable;
-              canary = stable;
-              dev = stable;
-            }
-            ."${channel}";
-          mainProgram = pname;
-          sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-        };
+        inherit meta;
       }
       ''
         mkdir -p $out/{bin,share/pixmaps}
