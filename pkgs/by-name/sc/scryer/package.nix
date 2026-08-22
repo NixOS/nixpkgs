@@ -6,6 +6,7 @@
   nodejs,
   nix-update-script,
   nasm,
+  cacert,
 }:
 let
   pname = "scryer";
@@ -42,9 +43,24 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ nasm ];
 
-  preConfigure = ''
-    export SCRYER_EMBED_UI_DIR=${webui}
-  '';
+  nativeCheckInputs = [ cacert ];
+
+  # Upstream's own CI runs its test suite on the plain `dev` profile rather
+  # than `release`, which compiles far faster and needs no LTO.
+  checkType = "debug";
+
+  checkFlags = [
+    # The embedded Sigstore TUF trust root has a hardcoded expiry date that
+    # has passed, so this fails regardless of the sandbox/environment.
+    "--skip=plugins::catalog::tests::sigstore_trust_root_rekor_keys_parse_as_der"
+    # Expects chmod/chown of a freshly created file to fully apply a setgid
+    # mask, which the build sandbox's permission model doesn't allow.
+    "--skip=workflow::file_importer::tests::enabled_permissions_apply_file_mask_and_created_folder_mask"
+    # Hardcodes /usr/bin/env, which doesn't exist on NixOS/Nix (no FHS paths).
+    "--skip=process_host::tests::execute_strips_dynamic_linker_env_and_forces_clean_path"
+  ];
+
+  env.SCRYER_EMBED_UI_DIR = webui;
 
   passthru = {
     inherit webui;
