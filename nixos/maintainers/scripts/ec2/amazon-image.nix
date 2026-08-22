@@ -31,7 +31,7 @@ in
 {
   imports = [
     ../../../modules/virtualisation/amazon-image.nix
-    ../../../modules/virtualisation/config-file-option.nix
+    ../../../modules/image/config-file-option.nix
     ../../../modules/virtualisation/disk-size-option.nix
     ../../../modules/image/file-options.nix
     (lib.mkRenamedOptionModuleWith {

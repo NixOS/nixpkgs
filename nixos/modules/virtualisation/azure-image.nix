@@ -12,7 +12,7 @@ in
 {
   imports = [
     ./azure-common.nix
-    ./config-file-option.nix
+    ../image/config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {

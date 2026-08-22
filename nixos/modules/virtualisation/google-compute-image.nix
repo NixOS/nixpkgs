@@ -21,7 +21,7 @@ in
 
   imports = [
     ./google-compute-config.nix
-    ./config-file-option.nix
+    ../image/config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
