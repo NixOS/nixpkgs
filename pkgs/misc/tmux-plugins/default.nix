@@ -1275,7 +1275,7 @@ in
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2025-07-15";
+    version = "1.0";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
