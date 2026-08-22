@@ -1090,6 +1090,10 @@ runBuildTests {
       auto-optimise-store = true;
       cores = 0;
       store = "auto";
+      substituters = [
+        "https://alpha.example"
+        "https://beta.example"
+      ];
     };
     # note that null type is hard to test here,
     # as it involves a trailing space our formatter will remove here
@@ -1100,6 +1104,7 @@ runBuildTests {
       auto-optimise-store = true
       cores = 0
       store = auto
+      substituters = https://alpha.example https://beta.example
 
       ignore-try = false
     '';
