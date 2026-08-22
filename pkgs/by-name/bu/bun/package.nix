@@ -1,127 +1,53 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  unzip,
-  installShellFiles,
-  makeWrapper,
-  openssl,
-  writeShellScript,
-  curl,
-  jq,
-  common-updater-scripts,
-  cctools,
-  darwin,
-  rcodesign,
+  stdenv,
+  symlinkJoin,
+  makeBinaryWrapper,
+  bun-unwrapped,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "1.3.13";
+let
+  unwrapped = bun-unwrapped;
+in
+symlinkJoin {
   pname = "bun";
+  inherit (unwrapped) version; # nixpkgs-update: no auto update
 
-  src =
-    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-
-  sourceRoot =
-    {
-      aarch64-darwin = "bun-darwin-aarch64";
-    }
-    .${stdenvNoCC.hostPlatform.system} or null;
-
+  __structuredAttrs = true;
   strictDeps = true;
-  nativeBuildInputs = [
-    unzip
-    installShellFiles
-    makeWrapper
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = [ openssl ];
 
-  dontConfigure = true;
-  dontBuild = true;
+  paths = [ unwrapped ];
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ];
 
-    install -Dm 755 ./bun $out/bin/bun
-    ln -s $out/bin/bun $out/bin/bunx
+  postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/bun" \
+      --prefix C_INCLUDE_PATH : "${lib.getDev stdenv.cc.libc}/include" \
+      --prefix LIBRARY_PATH : "${lib.getLib stdenv.cc.libc}/lib"
 
-    runHook postInstall
+    rm "$out/bin/bunx"
+    ln -s bun "$out/bin/bunx"
   '';
 
-  postPhases = [ "postPatchelf" ];
-  postPatchelf =
-    lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/bin/bun \
-        -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
-      '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/bin/bun
-    ''
-    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
-      installShellCompletion --cmd bun \
-        --bash <(SHELL="bash" $out/bin/bun completions) \
-        --zsh <(SHELL="zsh" $out/bin/bun completions) \
-        --fish <(SHELL="fish" $out/bin/bun completions)
-    '';
+  passthru = (removeAttrs unwrapped.passthru [ "updateScript" ]) // {
+    inherit unwrapped;
+  };
 
-  passthru = {
-    sources = {
-      "aarch64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
-        hash = "sha256-VGfj9l26Umuf6pjwzOBO+vwMY+Fpcz7Ce4dqOtMtoZA=";
-      };
-      "aarch64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
-        hash = "sha256-cLrkGzkIsKEg4eWMXIrzDnSvrjuNEbDT/djnh937SyI=";
-      };
-      "x86_64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64-baseline.zip";
-        hash = "sha256-nYokKSpwaAkCBdqsCloiP19pc29Sh+N7+I07QDHtx1A=";
-      };
-    };
-    updateScript = writeShellScript "update-bun" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          jq
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/oven-sh/bun/releases/latest | jq '.tag_name | ltrimstr("bun-v")' --raw-output)
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
-    '';
-  };
   meta = {
-    homepage = "https://bun.sh";
-    changelog = "https://bun.sh/blog/bun-v${finalAttrs.version}";
-    description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    longDescription = ''
-      All in one fast & easy-to-use tool. Instead of 1,000 node_modules for development, you only need bun.
-    '';
-    license = with lib.licenses; [
-      mit # bun core
-      lgpl21Only # javascriptcore and webkit
-    ];
-    mainProgram = "bun";
-    maintainers = with lib.maintainers; [
-      DAlperin
-      jk
-      thilobillerbeck
-      cdmistman
-      diogomdp
-    ];
-    platforms = builtins.attrNames finalAttrs.passthru.sources;
-    # Broken for Musl at 2024-01-13, tracking issue:
-    # https://github.com/NixOS/nixpkgs/issues/280716
-    broken = stdenvNoCC.hostPlatform.isMusl;
+    inherit (unwrapped.meta)
+      changelog
+      description
+      homepage
+      license
+      mainProgram
+      maintainers
+      platforms
+      ;
+
+    # The wrapper is cheap to build locally and should not be a Hydra job.
+    hydraPlatforms = [ ];
+
+    # Prefer the wrapper when both packages are installed in the same profile.
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
-})
+}
