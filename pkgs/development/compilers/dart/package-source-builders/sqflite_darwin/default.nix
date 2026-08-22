@@ -28,8 +28,7 @@ else
     # absolute store path, which is fine inside a Nix environment).  The
     # podspec is left untouched (CocoaPods users still get the real sqlite3
     # pod); the library is declared in the nixpkgs-vendored-libraries.txt
-    # sidecar instead, which macos-build.py reads.  Installing a dylib only
-    # makes sense on darwin
+    # sidecar instead, which macos-build.py reads.
     postPatch =
       let
         include_dir = "darwin/sqflite_darwin/Sources/sqflite_darwin/include";

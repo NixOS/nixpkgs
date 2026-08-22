@@ -94,5 +94,9 @@ flutter338.buildFlutterApplication rec {
       heyimnova
     ];
     mainProgram = "flet";
+    # The client only builds against the Linux embedder (its own
+    # targetFlutterPlatform defaults to "linux"); without this, evaluators on
+    # other hosts offer a derivation that can never build.
+    platforms = lib.platforms.linux;
   };
 }
