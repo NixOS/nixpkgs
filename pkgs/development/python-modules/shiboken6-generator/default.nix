@@ -4,7 +4,9 @@
   llvmPackages,
   python,
   cmake,
+  ninja,
   stdenv,
+  buildPackages,
 }:
 
 let
@@ -28,8 +30,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python.pkgs.ninja
-    (python.withPackages (ps: [
+    ninja
+    (buildPackages.python3.withPackages (ps: [
       ps.packaging
       ps.setuptools
     ]))
@@ -41,6 +43,8 @@ stdenv'.mkDerivation (finalAttrs: {
     python.pkgs.qt6.qtbase
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-Dis_pyside6_superproject_build=1"
   ];
@@ -50,9 +54,11 @@ stdenv'.mkDerivation (finalAttrs: {
   postInstall = ''
     cd ../../..
     chmod +w .
-    python3 setup.py egg_info --build-type=shiboken6-generator
+    python3 setup.py egg_info --build-type=shiboken6-generator --qtpaths=${lib.getExe' buildPackages.python3.pkgs.qt6.qtbase "qtpaths"}
     cp -r shiboken6_generator.egg-info $out/${python.sitePackages}/
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Generator for the pyside6 Qt bindings - tools";
