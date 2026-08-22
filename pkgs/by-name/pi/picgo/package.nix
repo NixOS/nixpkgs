@@ -6,7 +6,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_41,
+  electron_42,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -15,16 +15,17 @@
 }:
 let
   pnpm = pnpm_10;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uxgrtuxcIlwCuz3X2hL0ZSpq8hMA4JxQD8ibNFw+35g=";
+    hash = "sha256-wT9CfPchNbD2CzSVA9kZAYsstpc2mvgqAl305rmrUdo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ELECTRON_FORCE_IS_PACKAGED makes PicGo use its production resource path,
     # but with the nixpkgs Electron wrapper process.resourcesPath points to Electron
     # itself, so point PicGo at the installed public assets
-    makeWrapper ${lib.getExe electron_41} $out/bin/picgo \
+    makeWrapper ${lib.getExe electron} $out/bin/picgo \
       --add-flags "--class=picgo" \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
       --set NODE_ENV production \
