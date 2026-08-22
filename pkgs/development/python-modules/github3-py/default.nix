@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "github3-py";
-  version = "4.0.1-unstable-2026-04-22";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
