@@ -7804,6 +7804,12 @@
     email = "email@dvdznf.xyz";
     matrix = "@dvdznf:gitter.im";
   };
+  dvershinin = {
+    email = "ciapnz@gmail.com";
+    github = "dvershinin";
+    githubId = 250071;
+    name = "Danila Vershinin";
+  };
   dvn0 = {
     email = "devan@informatics.coop";
     keys = [ { fingerprint = "E0F4 87C6 6298 7353 A7D0 E997 8203 BD5C 41D8 29DF"; } ];
