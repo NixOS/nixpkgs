@@ -25850,6 +25850,12 @@
     githubId = 540360;
     name = "Sean Murphy";
   };
+  seanybaggins = {
+    name = "Sean Link";
+    github = "seanybaggins";
+    githubId = 18423154;
+    email = "nixpkgsemail.undecided494@passmail.net";
+  };
   SeanZicari = {
     email = "sean.zicari@gmail.com";
     github = "SeanZicari";
