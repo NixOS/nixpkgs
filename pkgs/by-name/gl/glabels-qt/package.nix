@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "glabels-qt";
-  version = "unstable-2025-12-03";
+  version = "3.99-unstable-2025-12-03";
 
   src = fetchFromGitHub {
     owner = "j-evins";
