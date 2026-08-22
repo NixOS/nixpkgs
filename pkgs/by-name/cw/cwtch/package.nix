@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "libcwtch";
-  version = "0.2.1";
+  version = "1-hybrid";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/autobindings.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Il4jADldw/tnRRiecCUrddKEvJ8WHvyT4s4zxSXqrnM=";
+    hash = "sha256-TNl2QMiLVulhdU3U9P6+RD9UMQXmJxSbv1KELZOWkaQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-2Bs4cBQ+z5fqEvQ3xu31EngzdUZzZIl0sFsSjD60n2A=";
+  vendorHash = "sha256-O0KiZW5b1nMKqi5cCO/0N94/OYjSZH8+pZW1BPh7BRc=";
 
   postPatch = ''
     substituteInPlace Makefile \
