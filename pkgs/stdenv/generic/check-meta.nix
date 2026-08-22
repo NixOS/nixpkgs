@@ -263,6 +263,33 @@ let
         ];
       }
   '';
+  remediate_list_or_predicate =
+    listAttr: predicateAttr: pkg:
+    let
+      pkgName = getName pkg;
+      # split the blocked package's name into individual words so we can
+      # make a good "match against prefix" example in the error message
+      attrsWords = lib.splitStringBy (
+        prev: curr:
+        elem curr [
+          "-"
+          "_"
+          " "
+        ]
+      ) false pkgName;
+    in
+    ''
+
+      Alternatively, you can specify a list of individual packages to allow:
+        { nixpkgs.config.${listAttr} = [ "${pkgName}" ]; }
+
+      To get more control, you can configure a predicate to allow specific packages:
+        { nixpkgs.config.${predicateAttr} = pkg:
+            lib.hasPrefix "${lib.head attrsWords}" (lib.getName pkg)
+        }
+
+      Note: Setting `${predicateAttr}` will overwrite any changes to `${listAttr}`.
+    '';
 
   # flakeNote will be printed in the remediation messages below.
   flakeNote = "
@@ -473,7 +500,9 @@ let
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
-        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
+        remediation = remediate_allowlist "Unfree" (
+          remediate_list_or_predicate "allowUnfreePackages" "allowUnfreePredicate" attrs
+        );
       }
     else if nonEmptyBlocklist && hasBlocklistedLicense attrs then
       {
