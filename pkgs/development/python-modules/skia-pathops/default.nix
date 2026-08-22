@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+  patches = [
     (fetchpatch2 {
       url = "https://salsa.debian.org/fonts-team/libskia/-/raw/6574ca599eab076a9cd5b8667f81aef0f67b3eeb/debian/patches/loong-build";
       stripLen = 1;
