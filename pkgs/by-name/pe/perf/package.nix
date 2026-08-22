@@ -34,8 +34,15 @@
   libcap,
   withPython ? true,
   buildPackages,
+  runCommandCC,
 }:
 let
+  binutilsWithZstd = binutils-unwrapped.override {
+    zstdSupport = true;
+    # the bootstrap-built binutils cannot resolve new inputs itself
+    inherit pkg-config zstd;
+  };
+
   d3-flame-graph-templates = stdenv.mkDerivation rec {
     pname = "d3-flame-graph-templates";
     version = "4.1.3";
@@ -159,11 +166,20 @@ stdenv.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath (
           [
-            binutils-unwrapped
+            binutilsWithZstd
           ]
           ++ lib.optional withPython python3
         )
       }
+  '';
+
+  passthru.tests.zstd-debug-sections = runCommandCC "perf-zstd-debug-sections" { } ''
+    echo 'int main(void) { return 0; }' > test.c
+    $CC -g -o test test.c
+    ${binutilsWithZstd}/bin/objcopy --compress-debug-sections=zstd test
+    main_addr=$(${binutilsWithZstd}/bin/nm test | awk '$3 == "main" { print $1 }')
+    ${binutilsWithZstd}/bin/addr2line -e test "$main_addr" | grep -q test.c
+    touch $out
   '';
 
   meta = {

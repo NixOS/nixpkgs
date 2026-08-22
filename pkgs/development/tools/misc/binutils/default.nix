@@ -14,8 +14,10 @@ in
   lib,
   noSysDirs,
   perl,
+  pkg-config,
   runCommand,
   zlib,
+  zstd,
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
@@ -24,6 +26,8 @@ in
   enableShared ? (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isCygwin),
   # WARN: Enabling all targets increases output size to a multiple.
   withAllTargets ? false,
+  # Off by default: the stdenv bootstrap rebuilds binutils and cannot build zstd.
+  zstdSupport ? false,
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -146,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     perl
   ]
+  ++ lib.optionals zstdSupport [ pkg-config ]
   ++ lib.optionals buildPlatform.isDarwin [
     autoconf269
     automake
@@ -156,7 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     gettext
-  ];
+  ]
+  ++ lib.optionals zstdSupport [ zstd ];
 
   inherit noSysDirs;
 
@@ -251,6 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
     "--enable-plugins"
   ]
+  ++ lib.optionals zstdSupport [ "--with-zstd" ]
   ++ (
     if enableShared then
       [
