@@ -10,26 +10,27 @@
   sqlite,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  jq,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H1512vayE35bLxlFpWExT6u/z3rMKsrv6gs5un9IPaA=";
+    hash = "sha256-6WAF826aftGuZjSHM/upWYmmVVjMS+vS+Kg4NetvjJc=";
   };
 
-  cargoHash = "sha256-zLj2ItDp8tbldBvFNxlrcoqcE0J5Ce19NDlV+lCu/BY=";
+  cargoHash = "sha256-Pycl0MMyxWtfcssoFhvDT4UQJuVVBDNzN536eBFlND4=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-SKltlDJm39ZzVaEt1bbnoiXy+wlbq+fC3bO4mW5V15o=";
+    hash = "sha256-0CsPPy5a/jTr8nImwvTwStTgHm9wZbFBwCZVHKPZCvE=";
   };
   npmRoot = "web";
 
@@ -62,16 +63,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     popd
   '';
 
+  # the release-workflow architecture tests shell out to scripts/release/*.sh
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     gitMinimal
+    jq
   ];
 
   # wiremock tests require socket binding, which is denied in the darwin sandbox
   checkFlags = [
-    "--skip=commands::update::tests::download_binary_preserves_missing_checksum_fallback"
-    "--skip=commands::update::tests::download_binary_rejects_checksum_mismatch_without_writing"
-    "--skip=commands::update::tests::download_binary_verifies_checksum_before_writing"
+    "--skip=commands::update::tests::download_release_preserves_missing_checksum_fallback"
+    "--skip=commands::update::tests::download_release_rejects_checksum_mismatch_without_writing"
+    "--skip=commands::update::tests::download_release_verifies_checksum_before_writing"
     "--skip=tests::exchange_pairing_code_posts_code_and_returns_token"
     "--skip=tests::fetch_pairing_code_reads_gateway_pair_code_response"
     "--skip=tests::gateway_addr_in_use_message_skips_occupied_restart_hint_port"
