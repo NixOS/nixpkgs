@@ -1,34 +1,39 @@
 {
   lib,
   stdenv,
+  cmake,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qbs";
 
-  version = "1.24.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "qbs";
     repo = "qbs";
-    rev = "v${version}";
-    sha256 = "sha256-nL7UZh29Oecu3RvXYg5xsin2IvPWpApleLH37sEdSAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5kxAom6c2w3U2h45zrMa8mhICkm1ZoUWlMOW9wM+DHU=";
   };
-
-  nativeBuildInputs = [ libsForQt5.qmake ];
 
   dontWrapQtApps = true;
 
-  qmakeFlags = [
-    "QBS_INSTALL_PREFIX=$(out)"
-    "qbs.pro"
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'COMPONENTS Concurrent Core Gui Network Widgets Xml' \
+                     'COMPONENTS Concurrent Core CorePrivate Gui Network Widgets Xml'
+  '';
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtscript
+    qt6.qtbase
+    qt6.qt5compat
+    qt6.qtdeclarative
+    qt6.qttools
+    qt6.qtsvg
   ];
 
   meta = {
@@ -38,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
