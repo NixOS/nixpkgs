@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    CFLAGS = "-mfpmath=sse -msse2";
+    CXXFLAGS = "-mfpmath=sse -msse2";
+  };
+
   cmakeFlags = [ "-DQT_VERSION=6" ];
 
   doCheck = true;
