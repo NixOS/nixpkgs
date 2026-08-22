@@ -58,6 +58,9 @@ let
       };
       commit_date = "2023-01-05";
       patches = [
+        # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
+        ./0002-mute-aarch64-warnings.patch
+
         # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
         ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
       ];
