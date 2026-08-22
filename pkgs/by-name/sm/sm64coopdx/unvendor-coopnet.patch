@@ -1,0 +1,42 @@
+diff --git i/Makefile w/Makefile
+index 66b02100f..5e07f484e 100644
+--- i/Makefile
++++ w/Makefile
+@@ -968,33 +968,10 @@ endif
+ # CoopNet
+ COOPNET_LIBS :=
+ ifeq ($(COOPNET),1)
+-  ifeq ($(WINDOWS_BUILD),1)
+-    ifeq ($(TARGET_BITS), 32)
+-      LDFLAGS += -Llib/coopnet/win32 -l:libcoopnet.a -l:libjuice.a -lbcrypt -liphlpapi
+-    else
+-      LDFLAGS += -Llib/coopnet/win64 -l:libcoopnet.a -l:libjuice.a -lbcrypt -liphlpapi
+-    endif
+-  else ifeq ($(OSX_BUILD),1)
+-    ifeq ($(shell uname -m),arm64)
+-      LDFLAGS += -Wl,-rpath,@loader_path -L./lib/coopnet/mac_arm/ -l coopnet
+-      COOPNET_LIBS += ./lib/coopnet/mac_arm/libcoopnet.dylib
+-      COOPNET_LIBS += ./lib/coopnet/mac_arm/libjuice.1.6.2.dylib
+-    else
+-      LDFLAGS += -Wl,-rpath,@loader_path -L./lib/coopnet/mac_intel/ -l coopnet
+-      COOPNET_LIBS += ./lib/coopnet/mac_intel/libcoopnet.dylib
+-      COOPNET_LIBS += ./lib/coopnet/mac_intel/libjuice.1.6.2.dylib
+-    endif
+-  else ifeq ($(TARGET_RPI),1)
+-    ifneq (,$(findstring aarch64,$(machine)))
+-      LDFLAGS += -Llib/coopnet/linux -l:libcoopnet-arm64.a -l:libjuice-arm64.a
+-    else
+-      LDFLAGS += -Llib/coopnet/linux -l:libcoopnet-arm.a -l:libjuice-arm.a
+-    endif
+-  else ifeq ($(TARGET_RK3588),1)
+-    LDFLAGS += -Llib/coopnet/linux -l:libcoopnet-arm64.a -l:libjuice.a
+-  else
+-    LDFLAGS += -Llib/coopnet/linux -l:libcoopnet.a -l:libjuice.a
+-  endif
++  LDFLAGS += $(shell pkg-config --libs coopnet)
++  COOPNET_CFLAGS := $(shell pkg-config --cflags coopnet)
++  CC_CHECK_CFLAGS += $(COOPNET_CFLAGS)
++  CFLAGS += $(COOPNET_CFLAGS)
+ endif
+ 
+ # Network/Discord (ugh, needs cleanup)
