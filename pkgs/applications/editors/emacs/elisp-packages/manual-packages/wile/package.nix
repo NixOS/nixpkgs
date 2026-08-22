@@ -15,6 +15,8 @@ melpaBuild {
     hash = "sha256-dLyOvijabSMFuOJiWGbMhAZiKXpppUWi5nKS7Q9ry+I=";
   };
 
+  files = "(\"*.el\" (:exclude \"bile.el\"))";
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
