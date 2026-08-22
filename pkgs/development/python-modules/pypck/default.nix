@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypck";
-  version = "0.9.13";
+  version = "0.9.15a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = finalAttrs.version;
-    hash = "sha256-b8uTY4UtyhKN7JDvu/wC1jXAN/oKs2cJ6sSRBC22vS0=";
+    hash = "sha256-ep/D0MWHnmoorCYhWxlyd/iEBiSIrWL4aEPPn4uRgDI=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
