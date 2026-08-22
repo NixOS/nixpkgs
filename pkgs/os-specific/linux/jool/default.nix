@@ -19,10 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = sourceAttrs.src;
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "6.18.0") [
+  patches = lib.optionals (lib.versionAtLeast kernel.version "7.2") [
+    # https://github.com/NICMx/Jool/pull/456
     (fetchpatch {
-      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/3.23-stable/community/jool-modules-lts/kernel-6.18.patch";
-      hash = "sha256-EtV95YaOzPU3e/8NQvUtAH/RWiV16djeKrnvSgYybCQ=";
+      url = "https://github.com/NICMx/Jool/commit/47a8c7426f08e50505e69eef7ff607a04fbab52e.diff";
+      hash = "sha256-EcfBwFKOSFQOBWl8s5Pa2/RJg9lH1ziGzvV4ap2505M=";
     })
   ];
 
