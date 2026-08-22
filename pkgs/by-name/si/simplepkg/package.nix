@@ -17,6 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-eYQ7szXFhI8azEz86OL3OjkLbdHtZgADRuZ1A+Gu6/E=";
   };
+  strictDeps = true;
+  __structuredAttrs = true;
   dontBuild = true;
   dontConfigure = true;
   nativeBuildInputs = [ makeWrapper ];
@@ -27,10 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp pkg-import.fish $out/share/fish/vendor_functions.d/
 
     mkdir -p $out/bin
-    cat > $out/bin/pkg <<'EOF'
+    cat > $out/bin/pkg <<'INNEREOF'
 #!/usr/bin/env bash
 exec fish -c 'pkg $argv' -- "$@"
-EOF
+INNEREOF
     chmod +x $out/bin/pkg
     wrapProgram $out/bin/pkg --prefix PATH : ${lib.makeBinPath [ fish ]}
 
