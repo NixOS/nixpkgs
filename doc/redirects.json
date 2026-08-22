@@ -1386,6 +1386,9 @@
   "var-stdenv-dontPruneLibtoolFiles": [
     "index.html#var-stdenv-dontPruneLibtoolFiles"
   ],
+  "prune-libtool-files.sh": [
+    "index.html#prune-libtool-files.sh"
+  ],
   "var-stdenv-forceShare": [
     "index.html#var-stdenv-forceShare"
   ],

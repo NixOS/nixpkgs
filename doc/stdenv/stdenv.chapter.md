@@ -1480,6 +1480,16 @@ The check for reflexivity is direct and does not account for transitivity, so th
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
+### `prune-libtool-files.sh` {#prune-libtool-files.sh}
+
+This hook removes stale library dependency paths from libtool `.la` files for shared libraries.
+Shared libraries already record the libraries they need.
+`.la` files can also list dependencies in `dependency_libs`, but those paths can be incomplete or point to the wrong package output.
+For example, a path can point to a `dev` output with headers instead of the output that contains the library.
+The hook clears `dependency_libs` so later libtool commands do not use those stale paths.
+It runs during the fixup phase, the cleanup step after install, for every package by default.
+Set [`dontPruneLibtoolFiles`](#var-stdenv-dontPruneLibtoolFiles) to a non-empty value to disable it.
+
 ### `add-bin-to-path.sh` {#add-bin-to-path.sh}
 
 This setup hook checks if the `bin/` directory exists in the `$out` output path
