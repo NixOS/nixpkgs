@@ -2,7 +2,7 @@ runCommand: subversion: repository:
 import (
   runCommand "head-revision"
     {
-      buildInputs = [ subversion ];
+      nativeBuildInputs = [ subversion ];
       dummy = builtins.currentTime;
     }
     ''
