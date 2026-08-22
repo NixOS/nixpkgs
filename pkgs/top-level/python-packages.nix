@@ -43,6 +43,14 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  abx-dl = callPackage ../development/python-modules/abx-dl { };
+
+  abx-plugins = callPackage ../development/python-modules/abx-plugins { };
+
+  abxbus = callPackage ../development/python-modules/abxbus { };
+
+  abxpkg = callPackage ../development/python-modules/abxpkg { };
+
   accelerate = callPackage ../development/python-modules/accelerate { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
@@ -2189,6 +2197,8 @@ self: super: with self; {
 
   base2048 = callPackage ../development/python-modules/base2048 { };
 
+  base32-crockford = callPackage ../development/python-modules/base32-crockford { };
+
   base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
@@ -2760,6 +2770,8 @@ self: super: with self; {
 
   bwapy = callPackage ../development/python-modules/bwapy { };
 
+  bx-django-utils = callPackage ../development/python-modules/bx-django-utils { };
+
   bx-py-utils = callPackage ../development/python-modules/bx-py-utils { };
 
   bx-python = callPackage ../development/python-modules/bx-python { };
@@ -3171,6 +3183,8 @@ self: super: with self; {
   clevercsv = callPackage ../development/python-modules/clevercsv { };
 
   clf = callPackage ../development/python-modules/clf { };
+
+  cli-base-utilities = callPackage ../development/python-modules/cli-base-utilities { };
 
   cli-helpers = callPackage ../development/python-modules/cli-helpers { };
 
@@ -3979,6 +3993,10 @@ self: super: with self; {
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
+  darker = callPackage ../development/python-modules/darker { };
+
+  darkgraylib = callPackage ../development/python-modules/darkgraylib { };
+
   dartsim = toPythonModule (
     pkgs.dartsim.override {
       pythonSupport = true;
@@ -4521,6 +4539,8 @@ self: super: with self; {
   # LTS with mainsteam support
   django = self.django_5;
 
+  django-admin-data-views = callPackage ../development/python-modules/django-admin-data-views { };
+
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
@@ -4572,6 +4592,8 @@ self: super: with self; {
   django-celery-email = callPackage ../development/python-modules/django-celery-email { };
 
   django-celery-results = callPackage ../development/python-modules/django-celery-results { };
+
+  django-charid-field = callPackage ../development/python-modules/django-charid-field { };
 
   django-choices-field = callPackage ../development/python-modules/django-choices-field { };
 
@@ -4675,6 +4697,10 @@ self: super: with self; {
 
   django-htmx = callPackage ../development/python-modules/django-htmx { };
 
+  django-huey = callPackage ../development/python-modules/django-huey { };
+
+  django-huey-monitor = callPackage ../development/python-modules/django-huey-monitor { };
+
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
   django-ical = callPackage ../development/python-modules/django-ical { };
@@ -4692,6 +4718,8 @@ self: super: with self; {
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
+
+  django-jsonform = callPackage ../development/python-modules/django-jsonform { };
 
   django-lasuite = callPackage ../development/python-modules/django-lasuite { };
 
@@ -4747,11 +4775,15 @@ self: super: with self; {
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
+  django-object-actions = callPackage ../development/python-modules/django-object-actions { };
+
   django-organizations = callPackage ../development/python-modules/django-organizations { };
 
   django-otp = callPackage ../development/python-modules/django-otp { };
 
   django-otp-webauthn = callPackage ../development/python-modules/django-otp-webauthn { };
+
+  django-override-storage = callPackage ../development/python-modules/django-override-storage { };
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
@@ -4837,7 +4869,11 @@ self: super: with self; {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  django-settings-holder = callPackage ../development/python-modules/django-settings-holder { };
+
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
+
+  django-signal-webhooks = callPackage ../development/python-modules/django-signal-webhooks { };
 
   django-silk = callPackage ../development/python-modules/django-silk { };
 
@@ -4884,6 +4920,8 @@ self: super: with self; {
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
   django-tinymce = callPackage ../development/python-modules/django-tinymce { };
+
+  django-tools = callPackage ../development/python-modules/django-tools { };
 
   django-tree-queries = callPackage ../development/python-modules/django-tree-queries { };
 
@@ -7236,6 +7274,8 @@ self: super: with self; {
 
   graspologic-native = callPackage ../development/python-modules/graspologic-native { };
 
+  graylint = callPackage ../development/python-modules/graylint { };
+
   great-expectations = callPackage ../development/python-modules/great-expectations { };
 
   great-tables = callPackage ../development/python-modules/great-tables { };
@@ -8622,6 +8662,8 @@ self: super: with self; {
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
+
+  jambo = callPackage ../development/python-modules/jambo { };
 
   jamo = callPackage ../development/python-modules/jamo { };
 
@@ -10366,6 +10408,10 @@ self: super: with self; {
   mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
 
   mammoth = callPackage ../development/python-modules/mammoth { };
+
+  manage-django-project = callPackage ../development/python-modules/manage-django-project { };
+
+  manageprojects = callPackage ../development/python-modules/manageprojects { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
@@ -16528,6 +16574,8 @@ self: super: with self; {
 
   pytest-jupyter = callPackage ../development/python-modules/pytest-jupyter { };
 
+  pytest-kwparametrize = callPackage ../development/python-modules/pytest-kwparametrize { };
+
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
   pytest-lazy-fixtures = callPackage ../development/python-modules/pytest-lazy-fixtures { };
@@ -19348,6 +19396,8 @@ self: super: with self; {
 
   somweb = callPackage ../development/python-modules/somweb { };
 
+  sonic-client = callPackage ../development/python-modules/sonic-client { };
+
   sonos-websocket = callPackage ../development/python-modules/sonos-websocket { };
 
   sopel = callPackage ../development/python-modules/sopel { };
@@ -21283,6 +21333,8 @@ self: super: with self; {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
+  typeid-python = callPackage ../development/python-modules/typeid-python { };
+
   typepy = callPackage ../development/python-modules/typepy { };
 
   typer = callPackage ../development/python-modules/typer { };
@@ -21856,6 +21908,8 @@ self: super: with self; {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
+  ulid-py = callPackage ../development/python-modules/ulid-py { };
+
   ulid-transform = callPackage ../development/python-modules/ulid-transform { };
 
   ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
@@ -22074,6 +22128,8 @@ self: super: with self; {
   uuid-utils = callPackage ../development/python-modules/uuid-utils { };
 
   uuid6 = callPackage ../development/python-modules/uuid6 { };
+
+  uuid7 = callPackage ../development/python-modules/uuid7 { };
 
   uv = callPackage ../development/python-modules/uv { inherit (pkgs) uv; };
 
