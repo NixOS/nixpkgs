@@ -17035,6 +17035,12 @@
       }
     ];
   };
+  lunitur = {
+    email = "karlo.puselj@gmail.com";
+    github = "Lunitur";
+    githubId = 8092435;
+    name = "Karlo Pušelj";
+  };
   lunkentuss = {
     email = "peter.hansson17@gmail.com";
     matrix = "@lunkentuss:matrix.org";
