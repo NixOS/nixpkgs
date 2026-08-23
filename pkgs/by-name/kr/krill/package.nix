@@ -2,23 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
   openssl,
   pkg-config,
   stdenv,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
-  version = "0.15.0";
+  version = "0.16.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "krill";
-    rev = "v${version}";
-    hash = "sha256-aYZZuEh9RpxGcZllc7usFrLXV8MD1SGrtnbZI7i1h8I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j3O+8uEE0kYdNvnhTUWt0idN/hLzuDmp62DUjcdyACo=";
   };
 
-  cargoHash = "sha256-WJqJkcAUJhPy0jbGit/nXmJPCU7dK8I8w3JCmTdzhhA=";
+  cargoHash = "sha256-Cgj2Ooo4W0GeNrLuFcFiDn7dxKpYRyFgGK0Bvs7PDnM=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -29,7 +33,14 @@ rustPlatform.buildRustPackage rec {
   # disable failing tests on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.tests = { inherit (nixosTests) krill; };
+
   meta = {
+    mainProgram = "krillc";
     description = "RPKI Certificate Authority and Publication Server written in Rust";
     longDescription = ''
       Krill is a free, open source RPKI Certificate Authority that lets you run
@@ -38,8 +49,12 @@ rustPlatform.buildRustPackage rec {
       Authorisations (ROAs) on your own servers or with a third party.
     '';
     homepage = "https://github.com/NLnetLabs/krill";
-    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
+    changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ steamwalker ];
+    maintainers = with lib.maintainers; [
+      steamwalker
+      stepbrobd
+    ];
+    teams = [ lib.teams.ngi ];
   };
-}
+})

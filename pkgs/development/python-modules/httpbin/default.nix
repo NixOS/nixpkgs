@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "httpbin";
   version = "0.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

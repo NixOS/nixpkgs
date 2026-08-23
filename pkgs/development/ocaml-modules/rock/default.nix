@@ -9,14 +9,14 @@
   sexplib0,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "rock";
   version = "0.20.0";
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/rgrinberg/opium/releases/download/${version}/opium-${version}.tbz";
+    url = "https://github.com/rgrinberg/opium/releases/download/${finalAttrs.version}/opium-${finalAttrs.version}.tbz";
     hash = "sha256-MmuRhm3pC69TX4t9Sy/yPjnZUuVzwEs8E/EFS1n/L7Y=";
   };
 
@@ -35,4 +35,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

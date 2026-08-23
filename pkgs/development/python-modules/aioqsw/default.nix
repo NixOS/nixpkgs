@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aioqsw";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "aioqsw";
     tag = version;
-    hash = "sha256-SIdEM5YxPnCM6wEJTL19t07Xb89wDAwHzKnz0dKC0tw=";
+    hash = "sha256-2v3PhhlVeQs/jMnOzji/aKeWD7pWfqXVf4iBOgXD7kc=";
   };
 
   build-system = [ setuptools ];

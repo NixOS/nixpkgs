@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ttls";
-  version = "1.10.0";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jschlyter";
     repo = "ttls";
     tag = "v${version}";
-    hash = "sha256-ETqjL7pl/FekzMusBtq8jMr72/j7Dy/zadcObSNaKqU=";
+    hash = "sha256-RmfaDVpficgeQVy+mdlUhM8foUUyW/Z17IZmteYpFmo=";
   };
 
   build-system = [

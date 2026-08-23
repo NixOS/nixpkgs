@@ -4,28 +4,27 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "2.2.0";
+  version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     tag = "v${version}";
-    hash = "sha256-AFEygSSHr7YJK4Yx4dvBVGR3wBswAeUNrC/7NndzfBg=";
+    hash = "sha256-GzsTAm5D0DVQ7OHfsCwn7Jdv1K1rEhz3KGuERRlTEmI=";
   };
 
   postPatch = ''
@@ -33,12 +32,22 @@ buildPythonPackage rec {
       --replace '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "aiohttp"
+    "mashumaro"
+  ];
+
+  dependencies = [
     aiohttp
+    mashumaro
     yarl
   ];
+
+  optional-dependencies = {
+    cli = [ typer ];
+  };
 
   nativeCheckInputs = [
     aresponses
@@ -47,7 +56,8 @@ buildPythonPackage rec {
     pytest-freezer
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "easyenergy" ];
 
@@ -71,6 +81,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/klaasnicolaas/python-easyenergy";
     changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    mainProgram = "easyenergy";
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -3,10 +3,9 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
   siobrultech-protocols,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   version = "5.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";
@@ -24,7 +21,19 @@ buildPythonPackage rec {
     hash = "sha256-7EDuQ+wECcTzxkEufMpg3WSzosWeiwfxcVIVtQi+0BI=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    cat >> pyproject.toml << EOF
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
+  '';
+
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "siobrultech-protocols"
+  ];
 
   dependencies = [
     aiohttp

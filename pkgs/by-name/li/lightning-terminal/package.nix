@@ -23,12 +23,12 @@
 
 buildGoModule rec {
   pname = "lightning-terminal";
-  version = "0.15.2-alpha";
+  version = "0.17.0-alpha";
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lightning-terminal";
     tag = "v${version}";
-    hash = "sha256-rk6jnhlWVewVo2MVizjokY0GOuhXjchpGUfs8JBj6LI=";
+    hash = "sha256-TjvQaKT2+n08efm+hRImmyFkvoyl0hfyw3dgtm6S/gk=";
     leaveDotGit = true;
     # Populate values that require us to use git.
     postFetch = ''
@@ -41,7 +41,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-EA/ejOKcWxl7BQkpXLONJjhftx3/tkUnOHdzcIDlugo=";
+  vendorHash = "sha256-VaXYBl6upod1fI86C7SzWD0Er2T81dZzaaBoFWTEoJc=";
 
   buildInputs = [ lightning-app ];
   postUnpack = ''
@@ -122,7 +122,7 @@ buildGoModule rec {
         fi
       '';
 
-  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --argstr commit true
+  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --arg commit true
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (gitUpdater {
       rev-prefix = "v";
@@ -171,7 +171,7 @@ buildGoModule rec {
     version = "0.0.1";
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
-      hash = "sha256-FYRWyZxTPo4YwN5AiXsuubZoCVRcOeCrsUU/+ON4gx4=";
+      hash = "sha256-EJwrnsIBwLKDI3mF54EjLvaKu1PYKKLXed9SKKwUZNA=";
     };
 
     # Remove this command from package.json. It requires Git and it is not

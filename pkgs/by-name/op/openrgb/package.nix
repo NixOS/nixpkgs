@@ -1,35 +1,38 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromCodeberg,
   libusb1,
   hidapi,
   pkg-config,
   coreutils,
+  makeBinaryWrapper,
   mbedtls,
   symlinkJoin,
-  kdePackages,
+  qt6Packages,
+  autoAddDriverRunpath,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
-  version = "0.9";
+  version = "1.0rc3";
 
-  src = fetchFromGitLab {
-    owner = "CalcProgrammer1";
+  src = fetchFromCodeberg {
+    owner = "OpenRGB";
     repo = "OpenRGB";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+    tag = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-x7B3Ht9+JM+w/3qL5Ku08r05BBLrbuO5JBqP4fnJ0nc=";
   };
 
   patches = [
-    ./qlist-include.patch
+    ./system-plugins-env.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
+    autoAddDriverRunpath
   ]
-  ++ (with kdePackages; [
+  ++ (with qt6Packages; [
     qmake
     wrapQtAppsHook
   ]);
@@ -39,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     mbedtls
   ]
-  ++ (with kdePackages; [
+  ++ (with qt6Packages; [
     qtbase
     qttools
     qtwayland
@@ -48,7 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
-      --replace-fail /bin/chmod "${coreutils}/bin/chmod"
+      --replace-fail '/usr/bin/env chmod' ${lib.getExe' coreutils "chmod"}
+  '';
+
+  postInstall = ''
+    substituteInPlace "$out/lib/systemd/system/openrgb.service" \
+      --replace-fail /usr/bin/openrgb "$out/bin/openrgb"
   '';
 
   doInstallCheck = true;
@@ -57,44 +65,53 @@ stdenv.mkDerivation (finalAttrs: {
 
     HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
 
+    if grep -R /usr/bin/env "$out/lib/udev/rules.d"; then
+      echo "Error: udev rules must not reference /usr/bin/env"
+      exit 1
+    fi
+
     runHook postInstallCheck
   '';
 
   qmakeFlags = [
-    "QT_TOOL.lrelease.binary=${lib.getDev kdePackages.qttools}/bin/lrelease"
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6Packages.qttools}/bin/lrelease"
   ];
 
   passthru.withPlugins =
     plugins:
-    let
-      pluginsDir = symlinkJoin {
-        name = "openrgb-plugins";
-        paths = plugins;
-        # Remove all library version symlinks except one,
-        # or they will result in duplicates in the UI.
-        # We leave the one pointing to the actual library, usually the most
-        # qualified one (eg. libOpenRGBHardwareSyncPlugin.so.1.0.0).
-        postBuild = ''
-          for f in $out/lib/*; do
-            if [ "$(dirname $(readlink "$f"))" == "." ]; then
-              rm "$f"
-            fi
-          done
-        '';
-      };
-    in
-    finalAttrs.finalPackage.overrideAttrs (old: {
-      qmakeFlags = old.qmakeFlags or [ ] ++ [
-        # Welcome to Escape Hell, we have backslashes
-        ''DEFINES+=OPENRGB_EXTRA_PLUGIN_DIRECTORY=\\\""${
-          lib.escape [ "\\" "\"" " " ] (toString pluginsDir)
-        }/lib\\\""''
-      ];
-    });
+    symlinkJoin {
+      inherit (finalAttrs) version meta;
+      pname = finalAttrs.pname + "-with-plugins";
+      nativeBuildInputs = [ makeBinaryWrapper ];
+      paths = [ finalAttrs.finalPackage ] ++ plugins;
+      postBuild = ''
+        wrapProgram "$out/bin/openrgb" \
+          --set OPENRGB_SYSTEM_PLUGIN_DIRECTORY "$out/lib/openrgb/plugins"
+
+        # Update systemd service to use wrapped package
+        service_file="$out/lib/systemd/system/openrgb.service"
+        substitute "$service_file" openrgb.service \
+          --replace-fail ${finalAttrs.finalPackage} "$out"
+        mv --force openrgb.service "$service_file"
+
+        # Check for unhandled references to the base package
+        if grep \
+            --dereference-recursive \
+            --binary-files=without-match \
+            --fixed-strings \
+             ${finalAttrs.finalPackage} \
+             "$out"
+        then
+          echo "ERROR: unexpected reference to base package"
+          exit 1
+        fi
+      '';
+    };
 
   meta = {
     description = "Open source RGB lighting control";
-    homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
+    changelog = "https://codeberg.org/OpenRGB/OpenRGB/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://openrgb.org";
     maintainers = with lib.maintainers; [ johnrtitor ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

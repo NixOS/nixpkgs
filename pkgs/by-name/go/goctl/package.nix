@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goctl";
-  version = "1.9.3";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "zeromicro";
     repo = "go-zero";
-    tag = "v${version}";
-    hash = "sha256-Q5fRu7EKCPlO6yxEe/GWs4zam7MnomYJn9u0BZqDMy4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-he/c3l8+LptW09wMR6qvQ03686dguKB3n9o4ja85nK8=";
   };
 
-  vendorHash = "sha256-wAQF2twQSKD8rxBchU/L4o8Z5noGK/ITAelUAHMj5gg=";
+  vendorHash = "sha256-i2dOY/incZ4JdYui8PZvN8eWdNHbHi3a38Zkqy8+lRM=";
 
   modRoot = "tools/goctl";
   subPackages = [ "." ];
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cococolanosugar ];
     mainProgram = "goctl";
   };
-}
+})

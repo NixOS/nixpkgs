@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   # build inputs
   starlette,
   brotli,
@@ -12,24 +12,23 @@
   mypy,
   brotlipy,
 }:
-let
+buildPythonPackage (finalAttrs: {
   pname = "brotli-asgi";
-  version = "1.5.0";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  version = "1.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fullonic";
     repo = "brotli-asgi";
-    rev = "v${version}";
-    hash = "sha256-jOow5xrRvuBdg/dVEzAUgs1SxNLZqEItyW9OcvniTSY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cF7A3mnkQmvtc9DgHiwqYEQQ6QagjoBGTmcBzUm6vvs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     starlette
     brotli
   ];
@@ -49,4 +48,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

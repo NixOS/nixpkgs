@@ -6,22 +6,19 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.11.0";
+  version = "4.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_keyvault_keys";
     inherit version;
-    hash = "sha256-8lexkXosOoiYPj9WdaZBlEnrJiMYiI1bUeHLO+15d5o=";
+    hash = "sha256-kMqjp7LI9rU8JH7BFc8cHa1/EHzDqp81r/SDi7zn5WI=";
   };
 
   build-system = [ setuptools ];

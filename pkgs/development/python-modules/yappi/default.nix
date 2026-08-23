@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gevent,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "yappi";
   version = "1.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sumerc";

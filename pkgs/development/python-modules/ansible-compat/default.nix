@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "25.12.0";
+  version = "26.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-nn0NKX6rqNKrSZd+p/oq/LmESAgvTkSOA08wq1xLY2I=";
+    hash = "sha256-QTn1W+XxiK5ZCkUfYJZrI/mk0gFduTWClIH3ztHcerg=";
   };
 
   build-system = [

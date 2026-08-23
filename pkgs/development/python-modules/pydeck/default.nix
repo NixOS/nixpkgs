@@ -9,7 +9,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   traitlets,
   wheel,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pydeck";
-  version = "0.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.9.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-90R1rmN5UdY/LuWDJnV/jU+c2fKkV89ClQcVAD4stgU=";
+    hash = "sha256-wQ2QNegerWOFJkysjRlAJHH2hmoVyh998UAPUhQrz4c=";
   };
 
   # upstream has an invalid pyproject.toml

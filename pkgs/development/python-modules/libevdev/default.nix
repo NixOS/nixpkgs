@@ -1,22 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   replaceVars,
   pkgs,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "libevdev";
-  version = "0.12";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "0.13.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AulSYy7GwknLucZvb6AAEupEiwZgbHfNE5EzvC/kawg=";
+    hash = "sha256-3DNpzRQBdnueyxEXzWtz+rqQOOO9nhaVpxCp6dlBXo0=";
   };
 
   patches = [
@@ -24,6 +23,8 @@ buildPythonPackage rec {
       libevdev = lib.getLib pkgs.libevdev;
     })
   ];
+
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

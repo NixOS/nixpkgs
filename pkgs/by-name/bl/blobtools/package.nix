@@ -16,6 +16,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "CC=g++" "CC=c++"
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm555 {blobpack,blobunpack} -t $out/bin
@@ -24,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/AndroidRoot/BlobTools";
-    description = "Tools for modifiying ASUS Transformer firmware";
+    description = "Tools for modifying ASUS Transformer firmware";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "blobpack";

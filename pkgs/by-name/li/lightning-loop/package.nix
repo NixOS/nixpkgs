@@ -5,18 +5,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lightning-loop";
-  version = "0.31.5-beta";
+  version = "0.33.2-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
-    rev = "v${version}";
-    hash = "sha256-pmZturc7b3wd+qgSQPNzeY0LoMTF82dqUgOe8NfPeZw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NdwXEm5sj+Y5CPT9y658B6NTbM7heco5gLotyjBdg9c=";
   };
 
-  vendorHash = "sha256-X/+yi04FkN8hauqeFytagIdfigb6EGTvv8tVrlm7MGw=";
+  vendorHash = "sha256-2/T/rt1Q86tyzNOiweuDLEAUiSoYTRf/RiERV6MBmZg=";
 
   subPackages = [
     "cmd/loop"
@@ -45,4 +45,4 @@ buildGoModule rec {
       starius
     ];
   };
-}
+})

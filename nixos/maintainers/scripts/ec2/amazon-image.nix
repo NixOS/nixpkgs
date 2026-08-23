@@ -11,7 +11,6 @@ let
     mkOption
     optionalString
     types
-    versionAtLeast
     ;
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
@@ -45,16 +44,6 @@ in
       ];
     })
   ];
-
-  # Amazon recommends setting this to the highest possible value for a good EBS
-  # experience, which prior to 4.15 was 255.
-  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
-  config.boot.kernelParams =
-    let
-      timeout =
-        if versionAtLeast config.boot.kernelPackages.kernel.version "4.15" then "4294967295" else "255";
-    in
-    [ "nvme_core.io_timeout=${timeout}" ];
 
   options.amazonImage = {
     contents = mkOption {

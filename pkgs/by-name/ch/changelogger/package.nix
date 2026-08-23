@@ -6,25 +6,31 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "changelogger";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "changelogger";
-    rev = "v${version}";
-    sha256 = "sha256-XDiO8r1HpdsfBKzFLnsWdxte2EqL1blPH21137fNm5M=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-Glup2Y3sGO2hNKFeZXOrffHct2F4Ebn9+f6yOy3pekY=";
   };
 
-  vendorHash = "sha256-E6J+0tZriskBnXdhQOQA240c3z+laXM5honoREjHPfM=";
+  vendorHash = "sha256-f6ojMri3m3pwLXbLnNbS/Xl2lqo0eEHLGbbT5KR1Clc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/MarkusFreitag/changelogger/cmd.BuildVersion=${version}"
+    "-X github.com/MarkusFreitag/changelogger/cmd.BuildVersion=${finalAttrs.version}"
     "-X github.com/MarkusFreitag/changelogger/cmd.BuildDate=1970-01-01T00:00:00"
   ];
+
+  preCheck = ''
+    # Test needs gitconfig
+    substituteInPlace pkg/gitconfig/gitconfig_test.go \
+      --replace-fail "TestGetGitAuthor" "SkipGetGitAuthor"
+  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,11 +42,11 @@ buildGoModule rec {
   '';
 
   meta = {
+    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Tool to manage your changelog file in Markdown";
     homepage = "https://github.com/MarkusFreitag/changelogger";
-    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
     mainProgram = "changelogger";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

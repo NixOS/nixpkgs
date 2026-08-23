@@ -18,18 +18,18 @@
   wmctrl,
   xvfb-run,
   librsvg,
-  libX11,
+  libx11,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ulauncher";
   version = "5.15.7";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
+    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${finalAttrs.version}/ulauncher_${finalAttrs.version}.tar.gz";
     hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
@@ -123,7 +123,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
      "''${gappsWrapperArgs[@]}"
      --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
-     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libX11 ]}"
+     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libx11 ]}"
      --prefix WEBKIT_DISABLE_COMPOSITING_MODE : "1"
     )
   '';
@@ -152,4 +152,4 @@ python3Packages.buildPythonApplication rec {
       aaronjanse
     ];
   };
-}
+})

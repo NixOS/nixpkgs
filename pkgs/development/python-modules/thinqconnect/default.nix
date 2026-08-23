@@ -10,15 +10,20 @@
 
 buildPythonPackage rec {
   pname = "thinqconnect";
-  version = "1.0.9";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thinq-connect";
     repo = "pythinqconnect";
     tag = version;
-    hash = "sha256-O7jH6zpwNTZM9b7XRkNNVG2tjWsOD+GvOcDrcPkmugs=";
+    hash = "sha256-0efPQ0fvBLi+Bp+JbBMRJPYFqRKBVpPQFyQ9rvHpEnY=";
   };
+
+  patches = [
+    # https://github.com/thinq-connect/pythinqconnect/pull/48
+    ./csr-generation-fix.patch
+  ];
 
   build-system = [ setuptools ];
 

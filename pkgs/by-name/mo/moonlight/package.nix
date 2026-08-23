@@ -4,7 +4,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_22,
+  nodejs,
   fetchFromGitHub,
   nix-update-script,
   discord,
@@ -13,31 +13,30 @@
   discord-development,
 }:
 let
-  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.33";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lQpl6ecQfQ7KzEIytH3k4hLtvq+KkTL+3IR2ZukdZWM=";
+    hash = "sha256-HJjRdQl164eneEQFHC5V28jyWjqAh9LJZRpntTxR/Ro=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs
     pnpmConfigHook
-    pnpm'
+    pnpm
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm';
-
-    fetcherVersion = 2;
-    hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-g1wlpbUlGwE3Chrry89gJX2+3+jY/jyXYwiAWAfoHlA=";
   };
 
   env = {
@@ -87,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
       ilys
-      FlameFlag
+      _4evy
+      isabelroses
     ];
   };
 })

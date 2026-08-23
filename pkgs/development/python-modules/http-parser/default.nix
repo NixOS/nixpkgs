@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "http-parser";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benoitc";

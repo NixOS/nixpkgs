@@ -153,6 +153,9 @@ in
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
   fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
+  fetchFromHuggingFace = recurseIntoAttrs (
+    callPackages ../build-support/fetchhuggingface/tests.nix { }
+  );
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
@@ -170,7 +173,11 @@ in
 
   php = recurseIntoAttrs (callPackages ./php { });
 
+  pnpm = recurseIntoAttrs (callPackages ./pnpm { });
+
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
+
+  lake = callPackage ../build-support/lake/test { };
 
   pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
@@ -183,9 +190,16 @@ in
 
   nixosOptionsDoc = recurseIntoAttrs (callPackage ../../nixos/lib/make-options-doc/tests.nix { });
 
+  buildenv = callPackage ./buildenv.nix { };
+
   overriding = callPackage ./overriding.nix { };
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
+
+  # TODO: Temporarily disabled recursion so we can see the performance comparison in the PR,
+  # which only runs if there's exactly the same packages before and after, and this would add packages
+  #problems = recurseIntoAttrs (callPackage ./problems { });
+  problems = callPackage ./problems { };
 
   cuda = callPackage ./cuda { };
 
@@ -221,11 +235,17 @@ in
     };
   };
 
+  lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+
   pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
+  auto-patchelf-structured-log = callPackage ./auto-patchelf-structured-log { };
+
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
 
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
@@ -236,6 +256,16 @@ in
       }
     ) pkgs.arrayUtilities
   );
+
+  # Accumulate all passthru.tests from qt5 into a single attribute set.
+  qt5 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt5.wrapQtAppsHook.passthru.tests;
+  };
+
+  # Accumulate all passthru.tests from qt6 into a single attribute set.
+  qt6 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt6.wrapQtAppsHook.passthru.tests;
+  };
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
@@ -252,4 +282,8 @@ in
   prefer-remote-fetch = recurseIntoAttrs (
     callPackages ../build-support/prefer-remote-fetch/tests.nix { }
   );
+
+  home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
+
+  openscad = recurseIntoAttrs (callPackage ../build-support/openscad/tests { });
 }

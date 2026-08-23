@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dotenv,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "keboola";
     repo = "sapi-python-client";
     tag = version;
-    hash = "sha256-FlafM42CVlYtJGFToLIjg0RKhwJ0/oVvGd3T8PNwhOI=";
+    hash = "sha256-i+SI5F48C90Af04boedEk72obctHp9PJIv8m0ewpGR0=";
   };
 
   postPatch = ''

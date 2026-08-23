@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "csa";
+  pname = "csa";
   version = "1.26-unstable-2024-03-22";
 
   src = fetchFromGitHub {

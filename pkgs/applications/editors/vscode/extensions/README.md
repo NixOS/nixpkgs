@@ -7,9 +7,9 @@
 
 * When adding a new extension, place its definition in a `default.nix` file in a directory with the extension's ID (e.g. `publisher.extension-name/default.nix`) and refer to it in `./default.nix`, e.g. `publisher.extension-name = callPackage ./publisher.extension-name { };`.
 
-* Currently `nixfmt-rfc-style` formatter is being used to format the VSCode extensions.
+* Use `nix-shell --run treefmt` to format the VSCode extensions.
 
-* Respect `alphabetical order` whenever adding extensions. On disorder, please, kindly open a PR re-establishing the order.
+* Respect `alphabetical order` whenever adding extensions. If out of order, please kindly open a PR re-establishing the order.
 
 * Avoid [unnecessary](https://nix.dev/guides/best-practices.html#with-scopes) use of `with`, particularly `nested with`.
 
@@ -27,7 +27,7 @@
       - maintainers are listed in alphabetical order.
   - verify `license` in upstream.
 
-* On commit messages:
+* Commit messages:
   - Naming convention for:
     - Adding a new extension:
 

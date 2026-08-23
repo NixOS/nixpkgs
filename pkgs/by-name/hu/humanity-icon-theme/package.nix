@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.6.16";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.tar.xz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/humanity-icon-theme_${version}.tar.xz";
     sha256 = "sha256-AyHl4zMyFE2/5Cui3Y/SB1yEUuyafDdybFPrafo4Ki0=";
   };
 

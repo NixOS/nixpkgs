@@ -9,17 +9,19 @@
   perl,
 
   python3,
+  bash,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bashdb";
-  version = "5.2-1.1.2-unstable-2025-06-07";
+  version = "5.2-1.2.0";
 
   src = fetchFromGitHub {
     owner = "Trepan-Debuggers";
     repo = "bashdb";
-    rev = "7d0f9751e04fa54f48f0ab4be32ecb8030a4315d";
-    sha256 = "sha256-fwxmlFC66Lv+zD632s9a44I9IEQ/82caKnQ44pdVes4=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-cbrBRP/NT3pUwT9KPpS3DxzrDhY2PGmLO/l+jKAbI68=";
   };
 
   patches = [
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
   buildInputs = [
     # used at runtime by term-highlight.py
     (python3.withPackages (ps: [ ps.pygments ]))
+    bash
   ];
 
   configureFlags = [
@@ -42,6 +45,8 @@ stdenv.mkDerivation {
     # for now point to self
     "--with-dbg-main=${placeholder "out"}/share/bashdb/bashdb-main.inc"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://bashdb.sourceforge.net/";
@@ -55,6 +60,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       jk
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
-}
+})

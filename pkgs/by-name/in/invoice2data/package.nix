@@ -9,15 +9,15 @@
   tesseract5,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "invoice2data";
   version = "0.4.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "invoice-x";
     repo = "invoice2data";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
   };
 
@@ -69,4 +69,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

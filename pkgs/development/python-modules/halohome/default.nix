@@ -5,7 +5,6 @@
   buildPythonPackage,
   csrmesh,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "halohome";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nayaverdier";

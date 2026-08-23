@@ -8,6 +8,7 @@
   libz,
   bzip2,
   xz,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,8 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ];
 
-  # CMake 2.8.7 is deprecated and is no longer supported by CMake > 4
-  # https://github.com/NixOS/nixpkgs/issues/445447
+  patches = [
+    ./fix-cstdint.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail \
       "cmake_minimum_required (VERSION 2.8.7 FATAL_ERROR)" \
@@ -51,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 ../bin/gappa $out/bin/gappa
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - missing /libz.1.dylib in sandbox
 
   meta = {
     homepage = "https://github.com/lczech/gappa";

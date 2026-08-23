@@ -7,14 +7,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "7.1.5";
   pname = "multitail";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "multitail";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c9NlQLgHngNBbADZ6/legWFaKHJAQR/LZIfh8bJoc4Y=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     mainProgram = "multitail";
   };
-}
+})

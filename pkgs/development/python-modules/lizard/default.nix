@@ -2,28 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   mock,
   jinja2,
   pygments, # for Erlang support
   pathspec, # for .gitignore support
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lizard";
-  version = "1.17.31";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "1.24.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terryyin";
     repo = "lizard";
-    rev = version;
-    hash = "sha256-8lu4EknyAI+gn7GOSo13RRHNogpZdgxJ9fTvy7NyIsM=";
+    tag = finalAttrs.version;
+    hash = "sha256-npxnl9QrsAMLgrSDGsmWTb17VLwJ9sYCi9dhROCblhg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jinja2
     pygments
     pathspec
@@ -42,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lizard" ];
 
   meta = {
-    changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/terryyin/lizard/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
     mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";
@@ -50,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

@@ -6,10 +6,14 @@
   libxkbcommon,
   libGL,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeWrapper,
   displayServer ? "x11",
   nixosTests,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "displayServer" displayServer [
@@ -20,18 +24,17 @@ assert lib.assertOneOf "displayServer" displayServer [
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringboard" + lib.optionalString (displayServer == "wayland") "-wayland";
 
-  # release version needs nightly, so we use a custom tree, see:
-  # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
-  version = "0.13.2-unstable-2025-12-19";
+  version = "0.17.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "08a2a2a77fa38240dfc6a33adabb3a473ce6bcfd";
-    hash = "sha256-iG/pk6xizCv2sUqTA44nb4AnbaOuDsIONuUfJuOWnc8=";
+    tag = finalAttrs.version;
+    hash = "sha256-qLYQeZTrtUUn4JSzK3SX687xV4FO6h7GshVdQi8Qkbk=";
   };
 
-  cargoHash = "sha256-LuWUf37X/Z0xCbAQmaMY8lle7gGZWoz2bgYhe/uRonU=";
+  cargoHash = "sha256-T65TxIes0171uDxDE72SnFeRVAgw5FR2z6yTcmH3Z6k=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,10 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
   ]
   ++ lib.optionals (displayServer == "x11") [
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
+    libxcursor
+    libxrandr
+    libxi
+    libx11
   ]
   ++ lib.optionals (displayServer == "wayland") [
     wayland
@@ -97,11 +100,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sed -i "s|Icon=ringboard|Icon=$out/share/icons/hicolor/1024x1024/ringboard.jpeg|g" $out/share/applications/ringboard-egui.desktop
   '';
 
-  passthru.tests.nixos = nixosTests.ringboard;
+  passthru = {
+    tests.nixos = nixosTests.ringboard;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fast, efficient, and composable clipboard manager for Linux";
     homepage = "https://github.com/SUPERCILEX/clipboard-history";
+    changelog = "https://github.com/SUPERCILEX/clipboard-history/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.magnetophon ];

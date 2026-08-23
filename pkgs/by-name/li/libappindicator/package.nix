@@ -6,31 +6,22 @@
   autoreconfHook,
   glib,
   dbus-glib,
-  gtkVersion ? "3",
-  gtk2,
-  libindicator-gtk2,
-  libdbusmenu-gtk2,
   gtk3,
-  libindicator-gtk3,
+  libindicator,
   libdbusmenu-gtk3,
   gtk-doc,
   vala,
   gobject-introspection,
   monoSupport ? false,
   mono,
-  gtk-sharp-2_0,
   gtk-sharp-3_0,
   testers,
 }:
 
-let
-  throwBadGtkVersion = throw "unknown GTK version ${gtkVersion}";
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname =
     let
-      postfix = if monoSupport then "sharp" else "gtk${gtkVersion}";
+      postfix = if monoSupport then "sharp" else "gtk3";
     in
     "libappindicator-${postfix}";
   version = "12.10.1+20.10.20200706.1";
@@ -54,35 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
   ];
 
-  propagatedBuildInputs =
-    {
-      "2" = [
-        gtk2
-        libdbusmenu-gtk2
-      ];
-      "3" = [
-        gtk3
-        libdbusmenu-gtk3
-      ];
-    }
-    .${gtkVersion} or throwBadGtkVersion;
+  propagatedBuildInputs = [
+    gtk3
+    libdbusmenu-gtk3
+  ];
 
   buildInputs = [
     glib
     dbus-glib
-    {
-      "2" = libindicator-gtk2;
-      "3" = libindicator-gtk3;
-    }
-    .${gtkVersion} or throwBadGtkVersion
+    libindicator
   ]
   ++ lib.optionals monoSupport [
     mono
-    {
-      "2" = gtk-sharp-2_0;
-      "3" = gtk-sharp-3_0;
-    }
-    .${gtkVersion} or throwBadGtkVersion
+    gtk-sharp-3_0
   ];
 
   preAutoreconf = ''
@@ -93,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-gtk=${gtkVersion}"
+    "--with-gtk=3"
   ];
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
@@ -112,12 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
       lgpl3
     ];
-    pkgConfigModules =
-      {
-        "2" = [ "appindicator-0.1" ];
-        "3" = [ "appindicator3-0.1" ];
-      }
-      .${gtkVersion} or throwBadGtkVersion;
+    pkgConfigModules = [ "appindicator3-0.1" ];
+
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
     # TODO: Resolve the issues with the Mono bindings.

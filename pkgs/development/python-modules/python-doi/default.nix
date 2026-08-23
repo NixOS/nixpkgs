@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Python library to work with Document Object Identifiers (doi)";
     homepage = "https://github.com/papis/python-doi";
     maintainers = with lib.maintainers; [ teto ];
+    license = lib.licenses.gpl3Plus;
   };
 }

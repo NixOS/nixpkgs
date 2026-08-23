@@ -8,15 +8,12 @@
   pkg-config,
   pkgs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "html5-parser";
   version = "0.4.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";

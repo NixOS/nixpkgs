@@ -1,7 +1,7 @@
 {
   lib,
   pkg-config,
-  libappindicator-gtk3,
+  libappindicator,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -32,9 +32,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
-    libappindicator-gtk3
+    libappindicator
   ];
-  buildInputs = [ libappindicator-gtk3 ];
+  buildInputs = [ libappindicator ];
 
   doCheck = false; # Display required
 

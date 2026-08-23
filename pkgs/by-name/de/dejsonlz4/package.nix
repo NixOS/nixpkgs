@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dejsonlz4";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "avih";
     repo = "dejsonlz4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0ggs69qamaama5mid07mhp95m1x42wljdb953lrwfr7p8p6f8czh";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "dejsonlz4";
   };
-}
+})

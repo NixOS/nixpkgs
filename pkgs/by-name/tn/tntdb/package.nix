@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tntdb";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "maekitalo";
     repo = "tntdb";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-ciqHv077sXnvCx+TJjdY1uPrlCP7/s972koXjGLgWhU=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

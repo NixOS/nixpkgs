@@ -7,7 +7,7 @@
   aubio,
   boost,
   cmake,
-  ffmpeg_7,
+  ffmpeg,
   fmt,
   gettext,
   glew,
@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
       extraPrefix = "ced-src/";
       hash = "sha256-23VD/4X4BOtcX5k+koSlRMowlbo2jAXbp3XKTXP7VrM=";
     })
+    (fetchpatch {
+      name = "performous-ffmpeg_8.patch";
+      url = "https://github.com/performous/performous/commit/783befe576051458da7ea0d915d2b4cb986eaf86.patch";
+      excludes = [ "osx-utils/macos-bundler.py" ];
+      hash = "sha256-Srkjr8BI98N8Ws853goonvjOrEyWvzjHAIhypgEydns=";
+    })
   ];
 
   prePatch = ''
@@ -72,6 +78,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace data/CMakeLists.txt \
       --replace "/usr" "$out"
+    substituteInPlace {game,testing}/CMakeLists.txt \
+      --replace-fail "system locale" "locale"
   '';
 
   nativeBuildInputs = [
@@ -84,7 +92,7 @@ stdenv.mkDerivation rec {
     SDL2
     aubio
     boost
-    ffmpeg_7
+    ffmpeg
     fmt
     glew
     glibmm

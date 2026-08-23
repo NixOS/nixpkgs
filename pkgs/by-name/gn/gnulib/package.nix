@@ -34,6 +34,11 @@ stdenv.mkDerivation {
   # do not change headers to not update all vendored build files
   dontFixup = true;
 
+  passthru.patches = {
+    memcpy-fix = ./memcpy-fix.patch;
+    memcpy-fix-backport-250512 = ./memcpy-fix-backport-250512.patch;
+  };
+
   meta = {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   inherit version patches;
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
+    url = "https://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
     inherit sha256;
   };
 
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   # tests fail when building in parallel
   enableParallelBuilding = false;
+
+  preConfigure = ''
+    export PERL=${perl.interpreter}
+  '';
 
   postInstall = ''
     for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
@@ -43,6 +47,8 @@ stdenv.mkDerivation rec {
     find tests -type f -name 'run-test' \
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';
+
+  strictDeps = true;
 
   meta = {
     description = "Tools to manipulate patch files";

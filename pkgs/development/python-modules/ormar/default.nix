@@ -10,7 +10,6 @@
   fastapi,
   fetchFromGitHub,
   httpx,
-  importlib-metadata,
   mysqlclient,
   nest-asyncio,
   orjson,
@@ -20,23 +19,19 @@
   pymysql,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.20.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.21.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collerek";
     repo = "ormar";
     tag = version;
-    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
+    hash = "sha256-DjqjHvRmlFyOQt1FlqZ9iT1zy25FdizRrXfKwMy2uI0=";
   };
 
   pythonRelaxDeps = [
@@ -55,10 +50,6 @@ buildPythonPackage rec {
     pydantic
     sqlalchemy
     psycopg2
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
   ];
 
   optional-dependencies = {

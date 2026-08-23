@@ -15,14 +15,14 @@
   lvm2, # lvs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.84";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "os-prober";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-91UTiwg4qIi+aCzAto7tCd5WZFjI15XxR1/hZQ0fUa4=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.linux;
   };
-}
+})

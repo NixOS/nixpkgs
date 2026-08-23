@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghbackup";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "qvl";
     repo = "ghbackup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3LSe805VrbUGjqjnhTJD2KBVZ4rq+4Z3l4d0I1MrBMA=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   vendorHash = null;
 
   postFixup = ''
-    wrapProgram $out/bin/${meta.mainProgram} \
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     mainProgram = "ghbackup";
     maintainers = with lib.maintainers; [ lenny ];
   };
-}
+})

@@ -15,15 +15,15 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpris-scrobbler";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "mariusor";
     repo = "mpris-scrobbler";
-    rev = "v${version}";
-    sha256 = "sha256-Ro2Eop4CGvcT1hiCYxxmECFp5oefmAnBT9twnVfpsvY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-iXyqVktwvxFqK+1GyEOUTra5Jb2ex5b4eOm1eeYKYf4=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dversion=${version}"
+    "-Dversion=${finalAttrs.version}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mpris-scrobbler";
   };
-}
+})

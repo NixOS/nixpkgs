@@ -4,15 +4,15 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vsh";
-  version = "0.14.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
-    rev = "v${version}";
-    sha256 = "sha256-rYltOLDmrRc3KsxR5MmpZqf+loAs1KEdPndpnhqkBDM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-5mQ2FlNUyvp0acdYicuVgdjkEeLxaINtZAoCwf2njzA=";
   };
 
   # vendor directory is part of repository
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.vshVersion=v${version}"
+    "-X main.vshVersion=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fishi0x01 ];
     mainProgram = "vsh";
   };
-}
+})

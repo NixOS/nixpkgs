@@ -8,15 +8,15 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-workflows";
-  version = "2.11.6";
+  version = "2.23.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_workflows";
-    inherit version;
-    hash = "sha256-SxIdrqG8g4H75cMEViwrTHzYfYbPaOJ8xAZKJ4/i+II=";
+    inherit (finalAttrs) version;
+    hash = "sha256-bXkay+EZR8fpywLIhjVuKcK01m+Xxlk/5+s9KI6Fs1E=";
   };
 
   postPatch = ''
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

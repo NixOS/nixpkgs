@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "libais";
   version = "0.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

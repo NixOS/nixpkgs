@@ -42,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   # provide correct pcre2-config for cross
   env.PCRE_CONFIG = lib.getExe' (lib.getDev pcre2) "pcre2-config";
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
   meta = {
     mainProgram = "ccze";
     description = "Fast, modular log colorizer";

@@ -26,14 +26,14 @@ let
     python3
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "souffle";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "souffle-lang";
     repo = "souffle";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Umfeb1pGAeK5K3QDRD/labC6IJLsPPJ73ycsAV4yPNM=";
   };
 
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out/bin/souffle-compile.py" \
-        --replace "-IPLACEHOLDER_FOR_INCLUDES_THAT_ARE_SET_BY_NIXPKGS" \
-                  "-I${ncurses.dev}/include -I${zlib.dev}/include -I${sqlite.dev}/include -I${libffi.dev}/include -I$out/include"
+        --replace-fail "-IPLACEHOLDER_FOR_INCLUDES_THAT_ARE_SET_BY_NIXPKGS" \
+                  "-I${lib.getDev ncurses}/include -I${lib.getDev zlib}/include -I${lib.getDev sqlite}/include -I${lib.getDev libffi}/include -I$out/include"
   '';
 
   outputs = [ "out" ];
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.upl;
   };
-}
+})

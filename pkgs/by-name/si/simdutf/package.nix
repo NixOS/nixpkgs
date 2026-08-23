@@ -4,31 +4,42 @@
   fetchFromGitHub,
   cmake,
   libiconv,
+  nix-update-script,
+  testers,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "7.7.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/sz1GVMkHPlUkQxhbMGpoEg6byFH9WNMjEo6hjGRhE8=";
+    hash = "sha256-psMMF26+nTwdbtPfFFE3fXkatrh9Bp9qMsrdI/FmrDg=";
   };
 
-  # Fix build on darwin
-  postPatch = ''
-    substituteInPlace tools/CMakeLists.txt --replace "-Wl,--gc-sections" ""
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
 
   buildInputs = [
     libiconv
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";
@@ -38,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [ wineee ];
-    mainProgram = "simdutf";
+    pkgConfigModules = [ "simdutf" ];
     platforms = lib.platforms.all;
   };
 })

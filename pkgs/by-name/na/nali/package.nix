@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nali";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5AI8TAKYFqjgLVKob9imrf7yVmXmAPq/zHh1bDfC5r0=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zu1k/nali/internal/constant.Version=${version}"
+    "-X github.com/zu1k/nali/internal/constant.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "nali";
   };
-}
+})

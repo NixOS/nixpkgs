@@ -5,14 +5,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whsniff";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "homewsn";
     repo = "whsniff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "000l5vk9c0332m35lndk8892ivdr445lgg25hmq1lajn24cash5w";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
-}
+})

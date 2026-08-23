@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dupe-krill";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "dupe-krill";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Udj5Uc1P/c/wiF42m/qPrTtSvMpNsXjqP0LR08zslNI=";
   };
 
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast file deduplicator";
     homepage = "https://github.com/kornelski/dupe-krill";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
     mainProgram = "dupe-krill";
   };
-}
+})

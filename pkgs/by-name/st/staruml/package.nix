@@ -8,7 +8,18 @@
   gtk3,
   glib,
   systemd,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   nss,
   nspr,
   atk,
@@ -29,12 +40,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.0.0";
+  version = "7.1.0";
   pname = "staruml";
 
   src = fetchurl {
     url = "https://files.staruml.io/releases-v7/StarUML_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-z25qeE2G9F010IE1WFxwIifYqowjB4dpUDgRg38RtQc=";
+    hash = "sha256-5jJD5Nh+fw82PEdYb63nprdmcg8gr3KFN+intX5Yxl4=";
   };
 
   nativeBuildInputs = [
@@ -75,17 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           glib
           gtk3
-          xorg.libXdamage
-          xorg.libX11
-          xorg.libxcb
-          xorg.libXcomposite
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXi
-          xorg.libXrender
-          xorg.libXtst
-          xorg.libxshmfence
+          libxdamage
+          libx11
+          libxcb
+          libxcomposite
+          libxcursor
+          libxext
+          libxfixes
+          libxi
+          libxrender
+          libxtst
+          libxshmfence
           libxkbcommon
           nss
           nspr
@@ -95,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
           gdk-pixbuf
           pango
           cairo
-          xorg.libXrandr
+          libxrandr
           expat
           libdrm
           libgbm

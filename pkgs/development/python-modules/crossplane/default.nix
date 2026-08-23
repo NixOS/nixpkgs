@@ -3,22 +3,23 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crossplane";
   version = "0.5.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "crossplane";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

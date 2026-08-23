@@ -15,14 +15,14 @@
 let
   self = buildPythonPackage rec {
     pname = "fastapi-cli";
-    version = "0.0.8";
+    version = "0.0.24";
     pyproject = true;
 
     src = fetchFromGitHub {
-      owner = "tiangolo";
+      owner = "fastapi";
       repo = "fastapi-cli";
       tag = version;
-      hash = "sha256-7SYsIgRSFZgtIHBC5Ic9Nlh+LtGJDz0Xx1yxMarAuYY=";
+      hash = "sha256-LEo8to1mspauTMCQ5Zf6znG0ALqF5XtauPar5bqN6/Q=";
     };
 
     build-system = [ pdm-backend ];
@@ -36,6 +36,11 @@ let
 
     optional-dependencies = {
       standard = [
+        uvicorn
+        # FIXME package fastapi-cloud-cli
+      ]
+      ++ uvicorn.optional-dependencies.standard;
+      standard-no-fastapi-cloud-cli = [
         uvicorn
       ]
       ++ uvicorn.optional-dependencies.standard;
@@ -58,8 +63,8 @@ let
 
     meta = {
       description = "Run and manage FastAPI apps from the command line with FastAPI CLI";
-      homepage = "https://github.com/tiangolo/fastapi-cli";
-      changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${src.tag}";
+      homepage = "https://github.com/fastapi/fastapi-cli";
+      changelog = "https://github.com/fastapi/fastapi-cli/releases/tag/${src.tag}";
       mainProgram = "fastapi";
       license = lib.licenses.mit;
       maintainers = [ ];

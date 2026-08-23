@@ -4,7 +4,6 @@
   buildPythonPackage,
   publicsuffix2,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 buildPythonPackage rec {
   pname = "urlpy";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.9") [
+  disabledTests = [
     # Fails with "AssertionError: assert 'unknown' == ''"
     "test_unknown_protocol"
   ];

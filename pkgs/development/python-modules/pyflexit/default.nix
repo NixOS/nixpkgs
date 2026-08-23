@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyflexit";
   version = "0.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Sabesto";
@@ -27,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Flexit A/C units";
     homepage = "https://github.com/Sabesto/pyflexit";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

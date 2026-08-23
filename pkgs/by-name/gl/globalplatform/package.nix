@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "globalplatform";
-  version = "2.4.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "kaoh";
     repo = "globalplatform";
     tag = finalAttrs.version;
-    sha256 = "sha256-ikhncinibeQjcpYstduYhWS/bvwRah6+wrWF9kutSOI=";
+    sha256 = "sha256-ZnPu94q4wye9uH8A7N13Q5kt9M5sJjTEHpeveVUpLzc=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     cmocka
   ];
-
-  preCheck = ''
-    cp "$src/gpshell/helloworld.cap" globalplatform/src
-    cp "$src/globalplatform/src/rsa_pub_key_test.pem" globalplatform/src
-  '';
 
   # libglobalplatform.so uses dlopen() to load specified connection plugins at runtime.
   # Currently, libgppcscconnectionplugin.so is the only plugin included.

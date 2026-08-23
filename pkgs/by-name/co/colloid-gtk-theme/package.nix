@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gtk-engine-murrine,
   jdupes,
   sassc,
   themeVariants ? [ ], # default: blue
@@ -56,13 +55,13 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
   stdenvNoCC.mkDerivation
   (finalAttrs: {
     inherit pname;
-    version = "2025-07-31";
+    version = "2026-08-08";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-gtk-theme";
       tag = finalAttrs.version;
-      hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
+      hash = "sha256-2FNX5S4xN86ljj1GxHRuloP31b/QLkTCmle90NkpcpA=";
     };
 
     nativeBuildInputs = [
@@ -70,12 +69,10 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       sassc
     ];
 
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
-    ];
-
     postPatch = ''
       patchShebangs install.sh
+
+      sed -i '/"$THEME_DIR\/gtk-2.0/d' install.sh
     '';
 
     installPhase = ''
@@ -98,6 +95,9 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       homepage = "https://github.com/vinceliuice/Colloid-gtk-theme";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.romildo ];
+      maintainers = [
+        lib.maintainers.chvp
+        lib.maintainers.romildo
+      ];
     };
   })

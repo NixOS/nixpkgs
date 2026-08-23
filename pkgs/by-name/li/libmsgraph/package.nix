@@ -7,7 +7,7 @@
   meson,
   ninja,
   pkg-config,
-  uhttpmock_1_0,
+  uhttpmock,
   libxml2,
   glib,
   gnome-online-accounts,
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsgraph";
-  version = "0.3.3";
+  version = "0.3.4";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/msgraph/${lib.versions.majorMinor finalAttrs.version}/msgraph-${finalAttrs.version}.tar.xz";
-    hash = "sha256-N9fhLyqZBJCuohGE8LJ+C5Feu05QlvTWYyxiBRwFQBI=";
+    hash = "sha256-BzHs5rArMu7/u72Y79x3vAPd0gZR7q46Q0Pwh5sE1sc=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    uhttpmock_1_0
+    uhttpmock
     libxml2
   ];
 

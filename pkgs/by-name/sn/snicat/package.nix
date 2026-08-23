@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snicat";
   version = "0.0.1-unstable-2024-09-05";
 
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -34,4 +34,4 @@ buildGoModule rec {
     mainProgram = "sc";
     maintainers = with lib.maintainers; [ felixalbrigtsen ];
   };
-}
+})

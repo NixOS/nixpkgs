@@ -7,7 +7,7 @@
   boehmgc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chase";
   version = "0.5.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     boehmgc
   ];
   src = fetchurl {
-    url = "mirror://debian/pool/main/c/chase/chase_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/c/chase/chase_${finalAttrs.version}.orig.tar.gz";
     sha256 = "68d95c2d4dc45553b75790fcea4413b7204a2618dff148116ca9bdb0310d737f";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "chase";
   };
-}
+})

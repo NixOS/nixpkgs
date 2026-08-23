@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.14";
+  version = "0.6.24";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UUNIS8r/695maQ2j2+Wj2L5qy55Wfs/MNhKJnwC6GI=";
+    hash = "sha256-X0j5cWAIMdpLSUSDAUx7oSJ42xvRLL1PY8JK9i4wGhA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-IWgP4VEyEBNsxALKGMpk8WZCIc76qcEu5K+kYqsdYkQ=";
+    hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
   };
 
   patches = [
@@ -41,14 +41,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-heSUEW7r9Lt26Fu68Jo/7BHW6Qmp8GrRSavukCS+ySk=";
+  cargoHash = "sha256-dwGJKLO+3i5FUgv+Huu1ZD/hFg/KdyWofApwkIDFD1I=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  checkFlags = [
+    # test fails to find correct function
+    "--skip=utils::string_utils::safe_truncate"
+  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -78,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.txt";
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
     license = lib.licenses.gpl3Only;

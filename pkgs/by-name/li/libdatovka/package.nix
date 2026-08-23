@@ -14,12 +14,12 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdatovka";
   version = "0.7.2";
 
   src = fetchurl {
-    url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${version}/libdatovka-v${version}.tar.gz";
+    url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${finalAttrs.version}/libdatovka-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pct+COy7ibyNtwB8l/vDnEHBUEihlo5OaoXWXVRJBrQ=";
   };
 
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
+    description = "Client library for accessing SOAP services of Czech government-provided Databox information system";
     homepage = "https://gitlab.nic.cz/datovka/libdatovka";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.ovlach ];
     platforms = lib.platforms.linux;
   };
-}
+})

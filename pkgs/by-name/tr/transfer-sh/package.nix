@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "transfer-sh";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dutchcoders";
     repo = "transfer.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V8E6RwzxKB6KeGPer5074e7y6XHn3ZD24PQMwTxw5lQ=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
       pinpox
     ];
   };
-}
+})

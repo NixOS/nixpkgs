@@ -3,7 +3,7 @@ GEM
   specs:
     prometheus_exporter (2.2.0)
       webrick
-    webrick (1.9.1)
+    webrick (1.9.2)
 
 PLATFORMS
   ruby
@@ -12,4 +12,4 @@ DEPENDENCIES
   prometheus_exporter (= 2.2.0)
 
 BUNDLED WITH
-   2.5.22
+   2.7.2

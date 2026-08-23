@@ -6,18 +6,18 @@
   libz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bazel";
-  version = "0.8.0";
+  version = "0.17.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-FS1WFlK0YNq1QCi3S3f5tMN+Bdcfx2dxhDKRLXLcios=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-KWcxZxzDbiBfBpr37M6HoqHMCYXq6sTVxU9KR3PIiJc=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libz;
 
-  cargoHash = "sha256-E/yF42Vx9tv8Ik1j23El3+fI19ZGzq6nikVMATY7m3E=";
+  cargoHash = "sha256-wNsGggyKL6CyldPsNADwGKm3HGfxQwjCCOdgzWcAx4g=";
 
   # `test_data` is explicitly excluded from the package published to crates.io, so tests cannot be run
   doCheck = false;
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rickvanprim ];
   };
-}
+})

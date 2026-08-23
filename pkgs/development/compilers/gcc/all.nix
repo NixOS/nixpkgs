@@ -9,10 +9,13 @@
   isl_0_20,
   noSysDirs,
   wrapCC,
-}@args:
+}:
 
 let
   versions = import ./versions.nix;
+  buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+  buildIsTarget = lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform;
+  hostIsTarget = lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform;
   gccForMajorMinorVersion =
     majorMinorVersion:
     let
@@ -24,18 +27,13 @@ let
           callPackage ./default.nix {
             inherit noSysDirs;
             inherit majorMinorVersion;
+            _systemInfo = {
+              inherit buildIsHost hostIsTarget;
+            };
             reproducibleBuild = true;
             profiledCompiler = false;
-            libcCross =
-              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then
-                targetPackages.libc or pkgs.libc
-              else
-                null;
-            threadsCross =
-              if !lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform then
-                targetPackages.threads or pkgs.threads
-              else
-                { };
+            libcCross = if !buildIsTarget then targetPackages.libc or pkgs.libc else null;
+            threadsCross = if !buildIsTarget then targetPackages.threads or pkgs.threads else { };
             isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
             # do not allow version skew when cross-building gcc
             #
@@ -56,13 +54,7 @@ let
             # Let's fix both problems by requiring the same compiler version for
             # cross-case.
             stdenv =
-              if
-                (
-                  (!lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform)
-                  || (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform)
-                )
-                && stdenv.cc.isGNU
-              then
+              if (!buildIsTarget || !hostIsTarget) && stdenv.cc.isGNU then
                 overrideCC stdenv buildPackages."gcc${majorVersion}"
               else
                 stdenv;

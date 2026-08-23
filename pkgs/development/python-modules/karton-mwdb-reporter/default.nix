@@ -4,15 +4,12 @@
   fetchFromGitHub,
   karton-core,
   mwdblib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-mwdb-reporter";
   version = "1.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     mainProgram = "karton-mwdb-reporter";
     homepage = "https://github.com/CERT-Polska/karton-mwdb-reporter";
     changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

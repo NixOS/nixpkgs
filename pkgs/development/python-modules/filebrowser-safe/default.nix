@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "filebrowser-safe";
   version = "1.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "filebrowser_safe";
@@ -32,7 +29,7 @@ buildPythonPackage rec {
       dependency for the Mezzanine CMS for Django.
     '';
     homepage = "https://github.com/stephenmcd/filebrowser-safe";
-    downloadPage = "https://pypi.python.org/pypi/filebrowser_safe/";
+    downloadPage = "https://pypi.org/project/filebrowser_safe/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.unix;

@@ -8,7 +8,6 @@
   orjson,
   pyarrow,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "elasticsearch";
   version = "8.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,24 +7,17 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-jsonpath";
-  version = "2.0.1";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jg-rp";
     repo = "python-jsonpath";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    preFetch = ''
-      # can't clone using ssh
-      # https://github.com/jg-rp/python-jsonpath/pull/122
-      export GIT_CONFIG_COUNT=1
-      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
-      export GIT_CONFIG_VALUE_0=git@github.com:
-    '';
-    hash = "sha256-DiXBIo/I36rrn+RCQda+khfViCnzHwiGzK2X9ACF3io=";
+    hash = "sha256-7kXDGm+pV0daeMEGW/hVb/U69svLFgZfZKklVgV+EJ4=";
   };
 
   build-system = [ hatchling ];
@@ -41,13 +34,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ optional-dependencies.strict;
+  ++ finalAttrs.passthru.optional-dependencies.strict;
 
   meta = {
-    changelog = "https://github.com/jg-rp/python-jsonpath/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jg-rp/python-jsonpath/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Flexible JSONPath engine for Python with JSON Pointer and JSON Patch";
     homepage = "https://github.com/jg-rp/python-jsonpath";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

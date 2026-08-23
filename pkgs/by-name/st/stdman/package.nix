@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stdman";
   version = "2024.07.05";
 
   src = fetchFromGitHub {
     owner = "jeaye";
     repo = "stdman";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/yJqKwJHonnBkP6/yQQJT3yPyYO6/nFAf4XFrgl3L0A=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.twey ];
   };
-}
+})

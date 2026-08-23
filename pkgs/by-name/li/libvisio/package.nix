@@ -16,9 +16,9 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvisio";
-  version = "0.1.8";
+  version = "0.1.11";
 
   outputs = [
     "out"
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
-    hash = "sha256-tAmP+/TcuecSE/oKzdvZKPJ77TDbLYAjSBOxXVPQQFs=";
+    url = "https://dev-www.libreoffice.org/src/libvisio/libvisio-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Km79QLbZ28tw+6O+UxEjZogrqXtXFR3zaY36R4yNjdM=";
   };
 
   strictDeps = true;
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

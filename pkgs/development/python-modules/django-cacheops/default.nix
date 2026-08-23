@@ -13,7 +13,6 @@
   dill,
   jinja2,
   before-after,
-  pythonOlder,
   net-tools,
   pkgs,
   setuptools,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "django-cacheops";
   version = "7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_cacheops";
@@ -57,7 +54,7 @@ buildPythonPackage rec {
     redisTestHook
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = {
     description = "Slick ORM cache with automatic granular event-driven invalidation for Django";

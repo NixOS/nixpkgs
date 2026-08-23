@@ -5,7 +5,6 @@
   mock,
   pykerberos,
   pytestCheckHook,
-  pythonOlder,
   requests-credssp,
   requests-ntlm,
   requests,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pywinrm";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -54,7 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/diyan/pywinrm/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      elasticdog
       kamadorueda
     ];
   };

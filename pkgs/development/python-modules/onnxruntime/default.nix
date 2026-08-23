@@ -6,10 +6,11 @@
   autoPatchelfHook,
 
   # buildInputs
-  oneDNN,
+  onednn,
   re2,
 
   # dependencies
+  openvino,
   coloredlogs,
   numpy,
   packaging,
@@ -38,6 +39,10 @@ buildPythonPackage {
     chmod +w dist
   '';
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-z,noexecstack";
+  };
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
@@ -49,7 +54,7 @@ buildPythonPackage {
 
   # Libraries are not linked correctly.
   buildInputs = [
-    oneDNN
+    onednn
     re2
     onnxruntime.protobuf
 
@@ -72,6 +77,7 @@ buildPythonPackage {
     ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
   );
 
   dependencies = [
@@ -79,6 +85,17 @@ buildPythonPackage {
     numpy
     packaging
   ];
+
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # While this problem has existed for a while, it started occurring at import time since the update
+  # of onnxruntime to 1.23.1 (https://github.com/NixOS/nixpkgs/pull/450587)
+  pythonImportsCheck =
+    lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64))
+      [
+        "onnxruntime"
+      ];
 
   meta = onnxruntime.meta;
 }

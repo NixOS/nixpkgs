@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-power-manager";
-  version = "4.20.0";
+  version = "4.20.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-power-manager";
     tag = "xfce4-power-manager-${finalAttrs.version}";
-    hash = "sha256-qKUdrr+giLzNemhT3EQsOKTSiIx50NakmK14Ak7ZOCE=";
+    hash = "sha256-0Pgk5N+Cr75RwOp2dbYB8OOEzmXDVUHzoqFbaUF/Z0k=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
   # using /run/current-system/sw/bin instead of nix store path prevents polkit permission errors on
   # rebuild.  See https://github.com/NixOS/nixpkgs/issues/77485
   postPatch = ''
-    substituteInPlace src/org.xfce.power.policy.in.in --replace-fail "@sbindir@" "/run/current-system/sw/bin"
     substituteInPlace common/xfpm-brightness-polkit.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
     substituteInPlace src/xfpm-suspend.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
   '';
 
-  configureFlags = [ "--enable-maintainer-mode" ];
+  configureFlags = [
+    "--enable-maintainer-mode"
+    "--sbindir=\${out}/bin"
+  ];
+
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {

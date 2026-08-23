@@ -10,18 +10,19 @@
   updatecli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "updatecli";
-  version = "0.111.0";
+  version = "0.120.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
-    rev = "v${version}";
-    hash = "sha256-ohsb8gObY25c5kkUaDWAd2VKfOUQ6/xwjPPyCeqxuRA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KVGvOCdxgTK9chZU8TwemrQUlkvOdvWIzBG0dSY/VpU=";
   };
 
-  vendorHash = "sha256-Io4+4CE+Rb7XD7Q/JSbzXcG7nXXXSNFE8OCCLlqt8Ek=";
+  proxyVendor = true;
+  vendorHash = "sha256-iZf6nB6arDEWDANq3Gp72kfFQi5QKGymHLKFJcnT+98=";
 
   # tests require network access
   doCheck = false;
@@ -33,7 +34,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/updatecli/updatecli/pkg/core/version.BuildTime=unknown"
     ''-X "github.com/updatecli/updatecli/pkg/core/version.GoVersion=go version go${lib.getVersion go}"''
-    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${version}"
+    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -62,7 +63,7 @@ buildGoModule rec {
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
-    changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
+    changelog = "https://github.com/updatecli/updatecli/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     mainProgram = "updatecli";
     maintainers = with lib.maintainers; [
@@ -70,4 +71,4 @@ buildGoModule rec {
       lpostula
     ];
   };
-}
+})

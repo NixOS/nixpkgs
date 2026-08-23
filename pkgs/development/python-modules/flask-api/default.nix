@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "flask-api";
   version = "3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "flask-api";

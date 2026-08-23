@@ -4,26 +4,23 @@
   colorama,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   regex,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.13.1";
+  version = "5.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     tag = "v${version}";
-    hash = "sha256-iZtYqPvQxXl6SFG2An7dN3KxaxCTvAiAkeeuXUhLuF0=";
+    hash = "sha256-YFNoA81J8x4OO7lLUjeN/NzQfCTEeosaWZg9UKy8C50=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     colorama

@@ -8,7 +8,7 @@
   installShellFiles,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vdu_controls";
   version = "2.4.3";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "digitaltrails";
     repo = "vdu_controls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aapODSWPB98I/ieUTXIO7nrd11VY9SmFpsVR1ketsZU=";
   };
 
@@ -76,4 +76,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "vdu_controls";
   };
-}
+})

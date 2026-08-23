@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   alsa-utils,
@@ -14,14 +13,13 @@
   pytest,
   dbus,
   coreutils,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.43";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms7m";
@@ -46,6 +44,10 @@ buildPythonPackage rec {
     ];
 
   nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  build-system = [
     poetry-core
   ];
 

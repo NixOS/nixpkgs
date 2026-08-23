@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ugrep";
-  version = "7.5.0";
+  version = "7.8.4";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "ugrep";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y++cW+N6KPm+/g4pqvPeTfiuR6IRiSMONJ0tJ4+5ym0=";
+    hash = "sha256-wmAr4ITw5g8//+4HIdDVPG4Qcm3ErXNf5uoW2IVu6tE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -105,23 +105,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    with lib;
-    {
-      description = "Ultra fast grep with interactive query UI";
-      homepage = "https://github.com/Genivia/ugrep";
-      changelog = "https://github.com/Genivia/ugrep/releases/tag/v${finalAttrs.version}";
-      maintainers = with lib.maintainers; [
-        numkem
-        mikaelfangel
-      ];
-      license = lib.licenses.bsd3;
-      platforms = lib.platforms.all;
-      mainProgram = "ug";
-    }
-    # Needed to ensure that the grep replacements take precedence over
-    # `gnugrep` when installed. Lower priority values win.
-    // lib.optionalAttrs createGrepReplacementLinks {
-      priority = (gnugrep.meta.priority or meta.defaultPriority) - 1;
-    };
+  meta = {
+    description = "Ultra fast grep with interactive query UI";
+    homepage = "https://github.com/Genivia/ugrep";
+    changelog = "https://github.com/Genivia/ugrep/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      numkem
+      mikaelfangel
+    ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    mainProgram = "ug";
+  }
+  # Needed to ensure that the grep replacements take precedence over
+  # `gnugrep` when installed. Lower priority values win.
+  // lib.optionalAttrs createGrepReplacementLinks {
+    priority = (gnugrep.meta.priority or lib.meta.defaultPriority) - 1;
+  };
 })

@@ -4,20 +4,27 @@
   cython,
   fetchPypi,
   jdk,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyjnius";
   version = "1.7.0";
-  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-n4FwhISwqE6tPrC6hOU6xXnkxDyhDHRvmJip891Q9U0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython~=3.1.2" "Cython"
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     jdk
@@ -29,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access Java classes as Python classes using the Java Native Interface (JNI)";
     homepage = "https://github.com/kivy/pyjnius";
-    changelog = "https://github.com/kivy/pyjnius/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kivy/pyjnius/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})

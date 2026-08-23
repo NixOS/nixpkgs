@@ -35,21 +35,21 @@ let
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
 in
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.111.2-prerelease";
+  vsVersion = "2.148.23-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
-    rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-oP+mKOvsbc+/NnqJvounE75BlE6UJTIAnmYTBNQlMFA=";
+    rev = "VSCode-CSharp-${finalAttrs.vsVersion}";
+    hash = "sha256-d3RqQihalcCxTbCJZXZUf2ABZ483UhBWFzpiXwCcAuA=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.3.0-2.25604.5";
+  version = "5.11.0-1.26380.4";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -73,7 +73,7 @@ buildDotnetModule (finalAttrs: rec {
   dotnetFlags = [
     "-p:TargetRid=${rid}"
     # we don't want to build the binary
-    # and useAppHost is not enough, need to explicilty set to false
+    # and useAppHost is not enough, need to explicitly set to false
     "-p:UseAppHost=false"
     # avoid platform-specific crossgen packages
     "-p:PublishReadyToRun=false"
@@ -136,19 +136,25 @@ buildDotnetModule (finalAttrs: rec {
               ];
               meta.timeout = 60;
             }
+            # run a LSP handshake rather than matching startup logs -
+            # those go through a StreamWriter that upstream never flushes
             ''
               HOME=$TMPDIR
               expect <<"EOF"
-                spawn ${meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
-                expect_before timeout {
-                  send_error "timeout!\n"
-                  exit 1
+                set timeout 60
+                set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
+
+                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
+                fconfigure $chan -translation binary -buffering none
+                spawn -open $chan
+                match_max 100000
+
+                send -- "Content-Length: [string length $req]\r\n\r\n$req"
+                expect {
+                  -ex {"id":1,"result"} { }
+                  timeout { send_error "\ntimeout!\n"; exit 1 }
+                  eof { send_error "\nserver exited!\n"; exit 1 }
                 }
-                expect "Language server initialized"
-                send \x04
-                expect eof
-                catch wait result
-                exit [lindex $result 3]
               EOF
               touch $out
             '';
@@ -167,7 +173,7 @@ buildDotnetModule (finalAttrs: rec {
   meta = {
     homepage = "https://github.com/dotnet/vscode-csharp";
     description = "Language server behind C# Dev Kit for Visual Studio Code";
-    changelog = "https://github.com/dotnet/vscode-csharp/releases/tag/v${vsVersion}";
+    changelog = "https://github.com/dotnet/vscode-csharp/releases/tag/v${finalAttrs.vsVersion}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "Microsoft.CodeAnalysis.LanguageServer";

@@ -6,16 +6,16 @@
 
 buildGoModule {
   pname = "storrent";
-  version = "0-unstable-2023-01-14";
+  version = "0-unstable-2026-01-08";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "storrent";
-    rev = "86270ee777a19a521f8898a179485e0347f90ce0";
-    hash = "sha256-JYNtuyk4hhe1jZgY/5Bz91Ropdw/U7n1VKHYkdUjZ0I=";
+    rev = "7d7d956c3b7bc1c51a2a4ed5b6925d717fc280ff";
+    hash = "sha256-yAWKz85EqIJis+K4qP+5aOnx2YrhRx0+LPAAEawUUsU=";
   };
 
-  vendorHash = "sha256-iPKZPXsa6ya29N/u9QYd5LAm42+FtHZLGStRDxsAxe4=";
+  vendorHash = "sha256-/m+U4UsofU0vOFMh+omRzn/DWqr3ghgIl+a4v1foGjY=";
 
   ldflags = [
     "-s"

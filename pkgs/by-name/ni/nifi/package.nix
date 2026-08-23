@@ -7,12 +7,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nifi";
   version = "1.28.1";
 
   src = fetchzip {
-    url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
+    url = "mirror://apache/nifi/${finalAttrs.version}/nifi-${finalAttrs.version}-bin.zip";
     hash = "sha256-YFQIV2/B+8/fBmrWPs7Q3FkqaIxBqNBP0BIkIm4M7Zo=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

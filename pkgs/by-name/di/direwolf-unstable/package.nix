@@ -12,31 +12,14 @@
   inherit hamlibSupport gpsdSupport extraScripts;
 }).overrideAttrs
   (oldAttrs: {
-    version = "1.8.1-unstable-2025-12-28";
+    version = "1.8.1-unstable-2026-08-10";
 
     src = fetchFromGitHub {
       owner = "wb2osz";
       repo = "direwolf";
-      rev = "01c31145716fd57e2e53844718bdc769dcce16dd";
-      hash = "sha256-OxNhSrxshbdCCNkwnYzz/1NNYwNJYAQiQ7iaXw3x7kc=";
+      rev = "a821a0e4ffc2eb3ce94aafe1a9131aac7053042f";
+      hash = "sha256-aFrKFErFVXoXX5bqNQj1rkwlaS67rIPGa7MNf8Wtal4=";
     };
-
-    # drop upstreamed cmake-4 patch
-    patches = [ ];
-
-    postPatch =
-      builtins.replaceStrings
-        [
-          "decode_aprs.c"
-          "tocalls.txt"
-          "--replace-fail /etc/udev/rules.d/"
-        ]
-        [
-          "deviceid.c"
-          "tocalls.yaml"
-          "--replace-fail /usr/lib/udev/rules.d/ $out/lib/udev/rules.d/ --replace-fail /etc/udev/rules.d/"
-        ]
-        oldAttrs.postPatch;
 
     dontVersionCheck = true;
 

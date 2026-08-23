@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lexbor";
-  version = "2.6.0-unstable-2025-11-24";
+  version = "3.0.0-unstable-2026-07-15";
 
   src = fetchFromGitHub {
     owner = "lexbor";
     repo = "lexbor";
-    rev = "7d726f1bed2f489e79751496c584304e6859ee1b";
-    hash = "sha256-vLP/YJWu1Z2kiT0sFLcMPjzMJHJe457oyPTIsxafTfc=";
+    rev = "de1d07a7765aad37090cc36f7fac3bb59e21467d";
+    hash = "sha256-e8NcTvLCbyCLeGdmmZBM4fmTirWYrQ/46nNqAjAnDzM=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/lexbor/lexbor";
     changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     mainProgram = "lexbor";
     platforms = lib.platforms.all;
   };

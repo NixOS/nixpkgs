@@ -22,16 +22,16 @@
   ghostscript,
 }:
 
-python3Packages.buildPythonApplication rec {
-  version = "6.0.6";
+python3Packages.buildPythonApplication (finalAttrs: {
+  version = "6.0.8";
   pname = "gramps";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
-    tag = "v${version}";
-    hash = "sha256-+sWO+c7haKXH42JVT6Zpz70cHdGC/TPgBUMSD+0+/JI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Kq+QyhghBmUzl+ooCYSl2yNMvrBDnQS6Zg3nBI1jbRo=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ python3Packages.buildPythonApplication rec {
       pinpox
       tomasajt
     ];
-    changelog = "https://github.com/gramps-project/gramps/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/gramps-project/gramps/blob/${finalAttrs.src.rev}/ChangeLog";
     longDescription = ''
       Every person has their own story but they are also part of a collective
       family history. Gramps gives you the ability to record the many details of
@@ -123,4 +123,4 @@ python3Packages.buildPythonApplication rec {
     '';
     license = lib.licenses.gpl2Plus;
   };
-}
+})

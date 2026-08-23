@@ -5,7 +5,6 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "proxy-db";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Nekmo";

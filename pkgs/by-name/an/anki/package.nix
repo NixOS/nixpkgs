@@ -5,7 +5,6 @@
   writableTmpDirAsHomeHook,
   cargo,
   fetchFromGitHub,
-  fetchurl,
   installShellFiles,
   lame,
   mpv-unwrapped,
@@ -26,25 +25,80 @@
   yarn-berry_4,
   runCommand,
 
+  wrapGAppsHook3,
+
   swift,
 
   mesa,
+  imagemagick,
 }:
 
 let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.09.2";
-  rev = "3890e12c9e48c028c3f12aa58cb64bd9f8895e30";
+  version = "26.08";
+  rev = "666c2c64d4a1772c03948f5b667438da63ddaa76";
 
-  srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
-  cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
-  yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
-  pythonDeps = map (meta: {
-    url = meta.url;
-    path = toString (fetchurl meta);
-  }) (lib.importJSON ./uv-deps.json);
+  srcHash = "sha256-0sqtKiMqw7MLXVFSCT1sKX/VO7q5BY63pJP5OnCE2zo=";
+  cargoHash = "sha256-LQ5uD86ZOKXy9vGbTqPBi3Q57PZEjwQkbHR94QAIVMg=";
+  yarnHash = "sha256-bOgiZImraPXR/gVk9MB3o9GScMGvLvdhc9mLAaCA4IE=";
+  pythonDeps =
+    with python3Packages;
+    [
+      # anki (pylib) runtime deps
+      decorator
+      distro
+      markdown
+      orjson
+      protobuf
+      requests
+      typing-extensions
+
+      # aqt runtime deps
+      beautifulsoup4
+      flask
+      jsonschema
+      pyqt6
+      pyqt6-sip
+      pyqt6-webengine
+      send2trash
+      truststore
+      waitress
+
+      # build-system deps (needed by uv for editable installs)
+      editables
+      hatchling
+      pathspec
+      pluggy
+      setuptools
+      trove-classifiers
+
+      # transitive deps
+      asgiref
+      attrs
+      blinker
+      certifi
+      charset-normalizer
+      click
+      idna
+      itsdangerous
+      jinja2
+      jsonschema-specifications
+      markupsafe
+      packaging
+      pip
+      pysocks
+      referencing
+      rpds-py
+      soupsieve
+      urllib3
+      werkzeug
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      anki-audio
+      anki-mac-helper
+    ];
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -73,34 +127,16 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  uvWheels = runCommand "uv-wheels" {
-    # otherwise, it's too long of a string
-    passAsFile = [ "installCommand" ];
-    installCommand = ''
-      #!${stdenv.shell}
-      mkdir -p $out
-      # note: uv.lock doesn't contain build deps?? https://github.com/astral-sh/uv/issues/5190
-      # link them in manually
-      ln -vsf ${python3Packages.setuptools.dist}/*.whl $out
-      ln -vsf ${python3Packages.editables.dist}/*.whl $out
-      # we also force nixpkgs pyqt6 stuff because that needs to match the
-      # nixpkgs qt6 version, otherwise we get linker errors
-      ln -vsf ${python3Packages.pyqt6.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-webengine.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-sip.dist}/*.whl $out
+  uvWheels = runCommand "uv-wheels" { } (
     ''
-    + (lib.strings.concatStringsSep "\n" (
-      map (dep: ''
-        if ! [[ "${baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
-          ln -vsf ${dep.path} "$out/${baseNameOf dep.url}"
-        fi
-      '') pythonDeps
-    ));
-  } "bash $installCommandPath";
+      mkdir -p $out
+    ''
+    + (lib.strings.concatMapStringsSep "\n" (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps)
+  );
 in
 
-python3Packages.buildPythonApplication rec {
-  format = "other";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pyproject = false;
   inherit pname version;
 
   outputs = [
@@ -118,14 +154,17 @@ python3Packages.buildPythonApplication rec {
     ./patches/skip-formatting-python-code.patch
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ankitects/anki/blob/main/package.json#L99
+    ./patches/yarn-4.14-support.patch
   ];
 
   inherit cargoDeps;
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit missingHashes;
-    yarnLock = "${src}/yarn.lock";
+    inherit (finalAttrs) src missingHashes patches;
     hash = yarnHash;
   };
 
@@ -136,22 +175,29 @@ python3Packages.buildPythonApplication rec {
     jq
     ninja
     nodejs
+    python3Packages.mypy-protobuf
     qt6.wrapQtAppsHook
     rsync
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
+    imagemagick
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift
+  # Needed for when Qt uses a system's GTK file picker.
+  ++ lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3;
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtmultimedia
     qt6.qtsvg
+    qt6.qtwebengine
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   nativeCheckInputs = with python3Packages; [
     pytest
+    pytest-mock
     mock
     astroid
   ];
@@ -168,6 +214,7 @@ python3Packages.buildPythonApplication rec {
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
+  dontWrapGApps = stdenv.hostPlatform.isLinux;
 
   env = {
     # Activate optimizations
@@ -196,26 +243,27 @@ python3Packages.buildPythonApplication rec {
     echo ${python3.version} > .python-version
 
     # Setup the python environment.
-    # We have 'UV_FIND_LINKS' set, so packages generally should just get picked
-    # up, so install everything anki wants.
-    # Note, for pyqt stuff, our versions may not match (see the comment above
-    # uvWheels), so we don't install those.
+    # We use nixpkgs python packages (via UV_FIND_LINKS), whose versions may
+    # differ from the uv.lock pins. Strip version constraints so uv accepts
+    # whatever version is available.
+    strip_versions() { sed 's/==[0-9][^ ;]*//g'; }
     mkdir -p ./out/pyenv
-    uv export > requirements.txt
+    uv export --no-dev | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
-    uv export --project qt --extra qt --extra audio \
-      --no-emit-package "pyqt6" \
+    # pyqt6-qt6 and pyqt6-webengine-qt6 are C++ Qt runtimes provided by the
+    # system, not Python packages, so exclude them from resolution.
+    uv export --project qt --no-dev --extra qt --extra audio \
       --no-emit-package "pyqt6-qt6" \
-      --no-emit-package "pyqt6-webengine" \
       --no-emit-package "pyqt6-webengine-qt6" \
-      --no-emit-package "pyqt6-sip" \
-      > requirements.txt
+      | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
-    uv export --project pylib > requirements.txt
+    uv export --project pylib --no-dev | strip_versions > requirements.txt
     uv pip install --prefix ./out/pyenv -r requirements.txt
 
-    # anki's build tooling expects python in there too
+    # anki's build tooling expects python and protoc-gen-mypy in pyenv
+    mkdir -p ./out/pyenv/bin
     ln -sf $PYTHON_BINARY ./out/pyenv/bin/python
+    ln -sf ${lib.getExe python3Packages.mypy-protobuf} ./out/pyenv/bin/protoc-gen-mypy
 
     mv node_modules out
 
@@ -230,6 +278,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
+  # TODO: switch to pytestCheckHook. see also https://github.com/attoknot/nixpkgs/tree/anki-pytestCheckHook
   checkPhase =
     let
       disabledTestsString =
@@ -243,15 +292,18 @@ python3Packages.buildPythonApplication rec {
             (lib.concatStringsSep " and ")
             lib.escapeShellArg
           ];
+      # qt/tests/test_installer.py is for the installer.
+      # those tests use the package `briefcase` which isn't on nixpkgs yet
+      # and isn't included in this derivation, so they fail
 
     in
     ''
       runHook preCheck
       export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
-      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
+      ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
-      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+      ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
+        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString} --ignore qt/tests/test_installer.py
       runHook postCheck
     '';
 
@@ -266,17 +318,23 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/438598
     mv $lib/bin $out/bin
 
-    install -D -t $out/share/applications qt/launcher/lin/anki.desktop
+    ankilinux='qt/installer/linux-template/{{ cookiecutter.format }}/{{ cookiecutter.app_name }}'
+
+    install -D -t $out/share/applications "$ankilinux"/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
-    install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
-    installManPage qt/launcher/lin/anki.1
+    install -D -t $out/share/mime/packages "$ankilinux"/anki.xml
+
+    mkdir -p $out/share/icons/hicolor/{32x32,128x128}/apps
+    magick "$ankilinux"/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
+    magick "$ankilinux"/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
+    installManPage "$ankilinux"/anki.1
 
     runHook postInstall
   '';
 
   preFixup = ''
     makeWrapperArgs+=(
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''"''${gappsWrapperArgs[@]}"''}
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
       --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
@@ -304,6 +362,7 @@ python3Packages.buildPythonApplication rec {
       or even practicing guitar chords!
     '';
     homepage = "https://apps.ankiweb.net";
+    changelog = "https://github.com/ankitects/anki/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [
@@ -312,4 +371,4 @@ python3Packages.buildPythonApplication rec {
       oxij
     ];
   };
-}
+})

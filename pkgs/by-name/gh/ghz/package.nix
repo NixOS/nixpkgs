@@ -6,14 +6,14 @@
   ghz,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghz";
   version = "0.121.0";
 
   src = fetchFromGitHub {
     owner = "bojand";
     repo = "ghz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hfHhsargP/odmpbfO24aDXr5m9VeDNOYyi1n9ji2trU=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -45,4 +45,4 @@ buildGoModule rec {
     homepage = "https://ghz.sh";
     license = lib.licenses.asl20;
   };
-}
+})

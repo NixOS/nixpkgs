@@ -12,7 +12,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel octave-kernel.definition'
 
 # Jupyter notebook:
-# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.octave = octave-kernel.definition; }'
+# nix shell --impure --expr 'with import <nixpkgs> {}; [ (jupyter.override { definitions.octave = octave-kernel.definition; }) ]' -c jupyter-notebook
 
 let
   kernel = callPackage ./kernel.nix {
@@ -51,13 +51,14 @@ rec {
 
       src = octave.src;
 
-      buildInputs = [ imagemagick ];
+      nativeBuildInputs = [ imagemagick ];
+      strictDeps = true;
 
       dontConfigure = true;
       dontInstall = true;
 
       buildPhase = ''
-        convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
+        magick ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
       '';
     };
 

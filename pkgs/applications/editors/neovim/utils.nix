@@ -6,12 +6,8 @@
   config,
   vimUtils,
   vimPlugins,
-  nodejs,
   neovim-unwrapped,
-  bundlerEnv,
-  ruby,
   lua,
-  python3Packages,
   wrapNeovimUnstable,
 }:
 let
@@ -60,7 +56,7 @@ let
     };
 
   /**
-    * Builds a vim package (see ':h packages') with additionnal info:
+    * Builds a vim package (see ':h packages') with additional info:
     - the user lua configuration (specified by user)
     - the advised and advised by nixpkgs in passthru.initLua)
     - runtime dependencies (specified in plugins' "runtimeDeps")
@@ -68,58 +64,65 @@ let
   */
   makeVimPackageInfo =
     # a list of neovim plugin derivations, for instance
-    #  plugins = [
-    # { plugin=vimPlugins.far-vim; config = "let g:far#source='rg'"; optional = false; }
-    # vimPlugins.vim-fugitive
-    # ]
+    #  [
+    #     {
+    #       plugin   = vimPlugins.grug-far-nvim;
+    #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+    #       optional = false;
+    #     }
+    #     {
+    #       plugin = vimPlugins.far-vim;
+    #       type   = "lua";
+    #       config = "vim.g['far#source'] = 'rg'";
+    #     }
+    #     vimPlugins.vim-fugitive
+    #  ]
     plugins:
 
     let
-      pluginsNormalized = normalizePlugins plugins;
+      neovimConfig =
+        structuredConfigure:
+        let
+          module = import ./plugin-submodule.nix;
+          # Generate init.vim configuration
+          cfg = (
+            lib.evalModules {
+              modules = [
+                module
+                structuredConfigure
+              ];
+            }
+          );
+        in
+        cfg.config;
+
+      checked_cfg = neovimConfig {
+        inherit plugins;
+        _file = "pkgs/applications/editors/neovim/plugin-submodule.nix";
+      };
+
+      pluginsNormalized = checked_cfg.plugins;
 
       vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
 
-      userPluginLua = lib.foldl (
-        acc: p: if p.config != null then acc ++ [ p.config ] else acc
-      ) [ ] pluginsNormalized;
-
-      pluginAdvisedLua =
-        let
-          op =
-            acc: normalizedPlugin:
-            acc
-            ++ lib.optional (
-              normalizedPlugin.plugin.passthru ? initLua
-            ) normalizedPlugin.plugin.passthru.initLua;
-        in
-        lib.foldl' op [ ] pluginsNormalized;
-
-      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
-
-      requiredPlugins = vimUtils.requiredPluginsForPackage vimPackage;
-      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
     in
     {
-      # plugins' python dependencies
-      inherit pluginPython3Packages;
 
-      # lua config set by the user along with the plugin
-      inherit userPluginLua;
-
-      # recommanded configuration set in vim plugins ".passthru.initLua"
-      inherit pluginAdvisedLua;
+      # viml config set by the user along with the plugin
+      inherit (checked_cfg)
+        userPluginViml # redefine via userPluginConfigs
+        runtimeDeps
+        pluginAdvisedLua
+        pluginPython3Packages
+        luaDependencies
+        userPluginConfigs
+        ;
 
       # A Vim "package", see ':h packages'
       # You most likely want to use vimPackage as follows:
       #     packpathDirs.myNeovimPackages = vimPackage;
       #     finalPackdir = neovimUtils.packDir packpathDirs;
       inherit vimPackage;
-
-      runtimeDeps =
-        let
-          op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
-        in
-        lib.foldl' op [ ] pluginsNormalized;
 
     };
 
@@ -131,8 +134,8 @@ let
     arguments (["-u" writeText "init.vim" GENERATEDRC)]).
     This makes it possible to write the config anywhere: on a per-project basis
     .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-    anymore, $MYVIMRC wont be set etc
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc won't be loaded
+    anymore, $MYVIMRC won't be set etc
   */
   makeNeovimConfig =
     {
@@ -145,45 +148,38 @@ let
     let
       luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
     in
-    attrs
-    // {
-      neovimRcContent = customRC;
-      luaRcContent =
-        if attrs ? luaRcContent then
-          lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
-        else
-          customLuaRC;
-      wrapperArgs = lib.optionals (luaEnv != null) [
-        "--prefix"
-        "LUA_PATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
-        "--prefix"
-        "LUA_CPATH"
-        ";"
-        (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
-      ];
-    };
+    lib.warn
+      "neovimUtils.makeNeovimConfig is deprecated. Use wrapNeovim or wrapNeovimUnstable directly."
+      (
+        attrs
+        // {
+          neovimRcContent = customRC;
+          luaRcContent =
+            if attrs ? luaRcContent then
+              lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
+            else
+              customLuaRC;
+          wrapperArgs = lib.optionals (luaEnv != null) [
+            "--prefix"
+            "LUA_PATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+            "--prefix"
+            "LUA_CPATH"
+            ";"
+            (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+          ];
+        }
+      );
 
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper =
     neovim:
     {
       extraMakeWrapperArgs ? "",
-      # the function you would have passed to python.withPackages
-      extraPythonPackages ? (_: [ ]),
-      # the function you would have passed to python.withPackages
-      withPython3 ? true,
-      extraPython3Packages ? (_: [ ]),
-      # the function you would have passed to lua.withPackages
-      extraLuaPackages ? (_: [ ]),
-      withNodeJs ? false,
-      withRuby ? false,
-      vimAlias ? false,
-      viAlias ? false,
       configure ? { },
-      extraName ? "",
-    }:
+      ...
+    }@attrs:
     let
 
       # we convert from the old configure.format to
@@ -204,27 +200,18 @@ let
           optional = true;
         }) opt);
 
-      res = makeNeovimConfig {
-        inherit withPython3;
-        inherit extraPython3Packages;
-        inherit extraLuaPackages;
-        inherit
-          withNodeJs
-          withRuby
-          viAlias
-          vimAlias
-          ;
-        customRC = configure.customRC or "";
-        customLuaRC = configure.customLuaRC or "";
-        inherit plugins;
-        inherit extraName;
-      };
     in
     wrapNeovimUnstable neovim (
-      res
+      attrs
       // {
-        wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-        wrapRc = (configure != { });
+        neovimRcContent = configure.customRC or "";
+        luaRcContent = configure.customLuaRC or "";
+        inherit plugins;
+
+        wrapperArgs = lib.escapeShellArgs (attrs.wrapperArgs or [ ]) + " " + extraMakeWrapperArgs;
+
+        wrapRc = configure != { };
+        legacyWrapper = true;
       }
     );
 
@@ -239,9 +226,9 @@ let
   */
   generateProviderRc =
     {
-      withPython3 ? true,
+      withPython3 ? false,
       withNodeJs ? false,
-      withRuby ? true,
+      withRuby ? false,
       # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
       withPerl ? false,
 
@@ -277,6 +264,30 @@ let
     inherit lua;
   };
 
+  toGrammarName = lib.flip lib.pipe [
+    lib.getName
+
+    # added in buildGrammar
+    (lib.removeSuffix "-grammar")
+
+    # grammars from tree-sitter.builtGrammars
+    (lib.removePrefix "tree-sitter-")
+    (lib.replaceStrings [ "-" ] [ "_" ])
+  ];
+
+  nvimGrammars = lib.mapAttrsToList (
+    name: value:
+    value.origGrammar
+      or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+  ) vimPlugins.nvim-treesitter.grammarPlugins;
+
+  isNvimGrammar = x: builtins.elem x nvimGrammars;
+
+  toNvimTreesitterGrammar = makeSetupHook {
+    name = "to-nvim-treesitter-grammar";
+    meta.license = lib.licenses.mit;
+  } ./to-nvim-treesitter-grammar.sh;
+
   grammarToPlugin =
     grammar:
     # If the grammar has already been processed by this function, return it as-is.
@@ -286,32 +297,13 @@ let
       grammar
     else
       let
-        name = lib.pipe grammar [
-          lib.getName
-
-          # added in buildGrammar
-          (lib.removeSuffix "-grammar")
-
-          # grammars from tree-sitter.builtGrammars
-          (lib.removePrefix "tree-sitter-")
-          (lib.replaceStrings [ "-" ] [ "_" ])
-        ];
-
-        nvimGrammars = lib.mapAttrsToList (
-          name: value:
-          value.origGrammar
-            or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-        ) vimPlugins.nvim-treesitter.grammarPlugins;
-        isNvimGrammar = x: builtins.elem x nvimGrammars;
-
-        toNvimTreesitterGrammar = makeSetupHook {
-          name = "to-nvim-treesitter-grammar";
-        } ./to-nvim-treesitter-grammar.sh;
+        name = toGrammarName grammar;
       in
 
       (toVimPlugin (
-        stdenv.mkDerivation {
-          name = "nvim-treesitter-grammar-${name}";
+        stdenv.mkDerivation (finalAttrs: {
+          pname = "nvim-treesitter-grammar-${name}";
+          inherit (grammar) version;
 
           origGrammar = grammar;
           grammarName = name;
@@ -339,13 +331,15 @@ let
 
           nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-          passthru = grammar.passthru or { };
+          passthru = grammar.passthru or { } // {
+            isTreesitterGrammar = true;
+          };
 
           meta = {
             platforms = lib.platforms.all;
           }
           // grammar.meta;
-        }
+        })
       ));
 
   /*

@@ -11,15 +11,15 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btfs";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
-    rev = "v${version}";
-    sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-g8ta5T17iKTpdR0wMQe1LU78LTIxwECmf86o4IlVF00=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
   };
-}
+})

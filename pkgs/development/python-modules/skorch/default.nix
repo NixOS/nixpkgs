@@ -1,41 +1,41 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   numpy,
+  pandas,
   scikit-learn,
   scipy,
-  setuptools,
   tabulate,
   torch,
   tqdm,
+
+  # tests
   flaky,
-  llvmPackages,
-  pandas,
+  openssl,
   pytest-cov-stub,
   pytestCheckHook,
   safetensors,
   transformers,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skorch";
-  version = "1.1.0";
+  version = "1.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skorch-dev";
     repo = "skorch";
-    tag = "v${version}";
-    sha256 = "sha256-f0g/kn3HhvYfGDgLpA7gAnYocJrYqHUq680KrGuoPCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-il3S5cfW47tKvMQGr/BfbEjMEMVzBF4gSrQhR1uKxks=";
   };
-
-  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
-  # https://github.com/skorch-dev/skorch/issues/1080
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 
@@ -51,13 +51,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
+    openssl
     pytest-cov-stub
     pytestCheckHook
     safetensors
     transformers
   ];
-
-  checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run
@@ -81,6 +80,7 @@ buildPythonPackage rec {
     "skorch/tests/test_dataset.py"
     "skorch/tests/test_hf.py"
     "skorch/tests/llm/test_llm_classifier.py"
+
     # These tests fail when running in parallel for all platforms with:
     # "RuntimeError: The server socket has failed to listen on any local
     # network address because they use the same hardcoded port."
@@ -96,10 +96,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # Most tests fail with:
-      # Fatal Python error: Segmentation fault
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
-}
+})

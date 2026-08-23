@@ -6,15 +6,15 @@
   fts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fpart";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
-    rev = "fpart-${version}";
-    sha256 = "sha256-BQGSKDSuK2iB0o2v8I+XOwhYtU/0QtMevt4pgIfRhNQ=";
+    rev = "fpart-${finalAttrs.version}";
+    sha256 = "sha256-S+paRGjqALohSkm3kpbsiYiYZyC4WWL3ccTMX0FGhEg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

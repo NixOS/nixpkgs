@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apngopt";
   version = "1.4";
 
   src = fetchzip {
-    url = "mirror://sourceforge/apng/apngopt-${version}-src.zip";
+    url = "mirror://sourceforge/apng/apngopt-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-MAqth5Yt7+SabY6iEgSFcaBmuHvA0ZkNdXSgvhKao1Y=";
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

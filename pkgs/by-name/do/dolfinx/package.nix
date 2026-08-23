@@ -25,14 +25,14 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.10.0.post5";
+  version = "0.11.0.post0";
   pname = "dolfinx";
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "dolfinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CK7YEtJtrx/Mto72RHT4Qjg5StO28Et+FeCYxk5T+8s=";
+    hash = "sha256-brmU6AA7lN4TyHjHcg4mHUIj/OvJ16pfspEN95M4oOE=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,6 @@
   pyelftools,
   python-gnupg,
   python-u2flib-host,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   websocket-client,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "ledgerblue";
   version = "0.1.55";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

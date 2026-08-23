@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.6.1";
+  version = "2.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     tag = "v${version}";
-    hash = "sha256-qqe/h633uEbJPpdsuCzZKW86Z6BQUmPdCju1vg7OLXc=";
+    hash = "sha256-smpdmmut4wYekVew13KZXluI71lSUdZriPejUumkLNU=";
   };
 
   outputs = [

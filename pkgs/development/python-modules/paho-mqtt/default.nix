@@ -1,11 +1,12 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
+  openssl,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -21,8 +22,6 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
@@ -30,12 +29,27 @@ buildPythonPackage rec {
     hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "generate-ssl-certs-in-a-test-fixture.patch";
+      url = "https://github.com/eclipse-paho/paho.mqtt.python/pull/931.diff";
+      hash = "sha256-A7rWwpR4PnCi77F1VqsQKHBxHNrdeHgmVM6BGMeUpjs=";
+    })
+    # backports an upstream fix for flaky tests as repoted here:
+    # https://github.com/NixOS/nixpkgs/issues/542586
+    # the fix has already landed in master of paho-mqtt:
+    # https://github.com/eclipse-paho/paho.mqtt.python/pull/934
+    ./fix-flaky-tests-backport-934.patch
+  ];
+
   build-system = [
     hatchling
   ];
 
   nativeCheckInputs = [
+    openssl
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -48,6 +62,21 @@ buildPythonPackage rec {
     # paho.mqtt not in top-level dir to get caught by this
     export PYTHONPATH=".:$PYTHONPATH"
   '';
+
+  disabledTests = [
+    # Fails during teardown
+    # RuntimeError: Client 01-zero-length-clientid.py exited with code None, expected 0
+    "test_01_zero_length_clientid"
+  ];
+
+  disabledTestPaths = [
+    # Expired key material
+    # https://github.com/eclipse-paho/paho.mqtt.python/pull/854
+    "tests/lib/test_08_ssl_connect_alpn.py"
+    "tests/lib/test_08_ssl_connect_cert_auth.py"
+    "tests/lib/test_08_ssl_connect_cert_auth_pw.py"
+    "tests/lib/test_08_ssl_connect_no_auth.py"
+  ];
 
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";

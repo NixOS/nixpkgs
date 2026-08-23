@@ -5,15 +5,15 @@
   cmake,
   gfortran,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calceph";
-  version = "4.0.5";
+  version = "5.0.0";
   src = fetchFromGitLab {
     domain = "gitlab.obspm.fr";
     owner = "imcce_calceph";
     repo = "calceph";
-    tag = "calceph_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-V4Hh3FItBv3zYerNqNPeRJ5Afj3QTfdG3Ps5xeiDASg=";
+    tag = "calceph_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-bSgHRVPo0M8SIlw5uqZ0nyt5cVyg3WmxcHistV1FugY=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.imcce.fr/inpop/calceph/";
-    changelog = "https://gitlab.obspm.fr/imcce_calceph/calceph/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.obspm.fr/imcce_calceph/calceph/-/blob/${finalAttrs.src.rev}/NEWS";
     description = "C library for interacting with binary planetary ephemeris files, such INPOPxx, JPL DExxx and SPICE";
     license = with lib.licenses; [
       cecill21
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kiranshila ];
     platforms = lib.platforms.all;
   };
-}
+})

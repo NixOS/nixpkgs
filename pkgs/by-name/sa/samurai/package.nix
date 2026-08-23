@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samurai";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "michaelforney";
     repo = "samurai";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     mainProgram = "samu";
     platforms = lib.platforms.all;
   };
-}
+})

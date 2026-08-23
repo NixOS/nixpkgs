@@ -3,45 +3,62 @@
   stdenv,
   boost,
   bzip2,
+  catch2_3,
   cereal,
   cmake,
   curl,
   fetchFromGitHub,
+  htslib,
   icu,
   jemalloc,
+  libdeflate,
   libgff,
   libiconv,
   libstaden-read,
-  pkg-config,
+  mimalloc,
   onetbb,
+  openssl,
+  pkg-config,
+  python3,
   xz,
-  zlib,
+  zlib-ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "salmon";
-  version = "1.10.3";
+  version = "1.12.1";
 
+  # SALMON_PUFFERFISH_GIT_TAG defined in cmake/SalmonDependencies.cmake
   pufferFishSrc = fetchFromGitHub {
     owner = "COMBINE-lab";
     repo = "pufferfish";
-    rev = "salmon-v${finalAttrs.version}";
-    hash = "sha256-g4pfNuc620WQ7UDv8PQHVbbTVt78aGVqcHHMszmBIkA=";
+    fetchSubmodules = true;
+    rev = "1c788594cef77f0558b183281f32152e0ed22ba9";
+    hash = "sha256-N9KYmFsl90eY8R1wH1Jbi3nnNld6YVGeQjqoxYxPqtE=";
+  };
+
+  # SALMON_FQFEEDER_GIT_TAG defined in cmake/SalmonDependencies.cmake
+  FQFeederSrc = fetchFromGitHub {
+    owner = "rob-p";
+    repo = "FQFeeder";
+    rev = "f5b08d1002351c192b69048ac9f6cf4c7c116265";
+    hash = "sha256-csRKUdNlEKKHNIvKRRTt79+27LBmnsJpswzBnWtA/XU=";
   };
 
   src = fetchFromGitHub {
     owner = "COMBINE-lab";
     repo = "salmon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HGcDqu0XzgrU3erHavigXCoj3VKk82ixMLY10Kk9MW4=";
+    hash = "sha256-ggFPp6sHPcR4Wq/B0AaMVf0LZVIz+QcvKMNrTfnAY4w=";
   };
 
-  patches = [
-    # Use pufferfish source fetched by nix
-    ./fetch-pufferfish.patch
-  ];
+  patches = [ ./fix_pufferfish.patch ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    substituteInPlace CMakeLists.txt --replace-fail "CMP0167 OLD" "CMP0167 NEW"
+  '';
 
   buildInputs = [
     (boost.override {
@@ -49,21 +66,39 @@ stdenv.mkDerivation (finalAttrs: {
       enabledStatic = true;
     })
     bzip2
+    catch2_3
     cereal
     curl
+    htslib
     icu
     jemalloc
+    libdeflate
     libgff
     libstaden-read
+    mimalloc
     onetbb
+    openssl
     xz
-    zlib
+    zlib-ng
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
+  ];
+
+  cmakeFlags = [
+    "-DSALMON_PUFFERFISH_SOURCE_DIR=${finalAttrs.pufferFishSrc}"
+    "-DSALMON_FQFEEDER_SOURCE_DIR=${finalAttrs.FQFeederSrc}"
+    "-DSALMON_FETCH_MISSING_DEPS=OFF"
+  ];
+
+  # These are needed to please htslib
+  env.NIX_LDFLAGS = toString [
+    "-lcrypto"
+    "-ldeflate"
   ];
 
   strictDeps = true;
@@ -86,6 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/COMBINE-lab/salmon/releases/tag/" + "v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.kupac ];
+    maintainers = [ ];
   };
 })

@@ -29,7 +29,7 @@ in
       after = [ "network.target" ];
 
       environment = {
-        PORT = builtins.toString cfg.port;
+        PORT = toString cfg.port;
       };
 
       serviceConfig = {

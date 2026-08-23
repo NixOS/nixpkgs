@@ -1,0 +1,23 @@
+diff --git a/notdeft-xapian.el b/notdeft-xapian.el
+index e71ef3e..5fad501 100644
+--- a/notdeft-xapian.el
++++ b/notdeft-xapian.el
+@@ -13,17 +13,7 @@
+ 
+ ;;; Code:
+ 
+-(defcustom notdeft-xapian-program
+-  (let ((dir (expand-file-name
+-              "xapian"
+-               (file-name-directory
+-	        (locate-library "notdeft-xapian.el")))))
+-    (when (and dir (file-directory-p dir))
+-      (cl-some (lambda (cand)
+-                 (let ((exe (expand-file-name cand dir)))
+-                   (when (file-executable-p exe)
+-                     exe)))
+-               '("notdeft-xapian" "notdeft-xapian.exe"))))
++(defcustom notdeft-xapian-program "@notdeft-xapian@"
+   "Xapian backend's executable program path.
+ Specified as an absolute path. Must be set appropriately for the
+ `notdeft-xapian' feature to be usable, on which much of NotDeft

@@ -7,7 +7,6 @@
   nvidia-ml-py,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "gpustat";
   version = "1.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

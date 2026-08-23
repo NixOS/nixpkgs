@@ -2,29 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitea,
+  gitMinimal,
   installShellFiles,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tea";
-  version = "0.11.1";
+  version = "0.15.1";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
-    rev = "v${version}";
-    sha256 = "sha256-bphXaE5qPNzqn+PlzESZadpwbS6KryJEnL7hH/CBoTI=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-b0Tzw9feSv/7lp67dzBoNV1l97t/AanUOo910Na6RQo=";
   };
 
-  vendorHash = "sha256-Y9YDwfubT+RR1v6BTFD+A8GP2ArQaIIoMJmak+Vcx88=";
+  vendorHash = "sha256-tnA14lDGvEdUnOM1/f4d40PBYY7nXkUOTFzxzvzgJvY=";
 
   ldflags = [
-    "-X code.gitea.io/tea/cmd.Version=${version}"
+    "-s"
+    "-w"
+    "-X gitea.dev/tea/modules/version.Version=${finalAttrs.version}"
+    "-X gitea.dev/tea/modules/version.Tags=nixpkgs"
+    "-X gitea.dev/tea/modules/version.SDK=1.2.0"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tea \
@@ -41,6 +54,7 @@ buildGoModule rec {
   meta = {
     description = "Gitea official CLI client";
     homepage = "https://gitea.com/gitea/tea";
+    changelog = "https://gitea.com/gitea/tea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       j4m3s
@@ -48,4 +62,4 @@ buildGoModule rec {
     ];
     mainProgram = "tea";
   };
-}
+})

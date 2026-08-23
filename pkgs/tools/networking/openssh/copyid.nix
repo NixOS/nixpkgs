@@ -6,6 +6,8 @@
 
 runCommand "ssh-copy-id-${openssh.version}"
   {
+    pname = "ssh-copy-id";
+    inherit (openssh) version;
     outputs = [
       "out"
       "man"

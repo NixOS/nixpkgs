@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-indicator";
   version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-indicator";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-OsguZ+jl274uPSCTFHq/ZwUE3yHR7MlUPHCpfmn1F7A=";
   };
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Ayatana Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-indicator";
-    changelog = "https://github.com/AyatanaIndicators/libayatana-indicator/blob/${version}/ChangeLog";
+    changelog = "https://github.com/AyatanaIndicators/libayatana-indicator/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.nickhu ];
     platforms = lib.platforms.linux;
   };
-}
+})

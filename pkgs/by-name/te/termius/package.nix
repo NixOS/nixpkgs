@@ -1,6 +1,6 @@
 {
   autoPatchelfHook,
-  squashfsTools,
+  squashfs-tools,
   alsa-lib,
   fetchurl,
   makeDesktopItem,
@@ -17,8 +17,8 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.32.2";
-  revision = "240";
+  version = "9.43.1";
+  revision = "268";
 
   src = fetchurl {
     # find the latest version with
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-TPfQ413zbnuKAhflLZPvLeVdrqdUEi+I/inWAs8SJ1j8rYW1TrHDyMB8S/HpWboRWXmUhPHulNXfGpHKUu453Q==";
+    hash = "sha512-9XYNlynJqbBL1Vvf3nvNQiHUyCDV9zVcQamOkwjw5i5d/ILlkoirchfG2x7gnpbA0bkd76S6hgIyRMdbEbLD7Q==";
   };
 
   desktopItem = makeDesktopItem {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [
     autoPatchelfHook
-    squashfsTools
+    squashfs-tools
     makeWrapper
     wrapGAppsHook3
   ];
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps"
+    mkdir -p $out/share/applications
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
-    cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
+    install -Dm644 meta/gui/icon.png $out/share/icons/termius-app.png
 
     runHook postInstall
   '';

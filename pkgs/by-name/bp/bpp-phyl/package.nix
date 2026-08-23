@@ -6,7 +6,7 @@
   bpp-seq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpp-phyl";
 
   inherit (bpp-core) version postPatch;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BioPP";
     repo = "bpp-phyl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "192zks6wyk903n06c2lbsscdhkjnfwms8p7jblsmk3lvjhdipb20";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bpp-phyl";
     changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
   };
-}
+})

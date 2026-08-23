@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "SX1302 Hardware Abstraction Layer and Tools (packet forwarder...)";
+    homepage = "https://github.com/brocaar/sx1302_hal";
     license = [
       lib.licenses.bsd3
       lib.licenses.mit

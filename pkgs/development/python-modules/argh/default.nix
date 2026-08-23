@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "argh";
   version = "0.31.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   patches = [
     # python3.14 introduced a breaking change which caused a test to fail. A
-    # fix has been commited upstream in a pull request by the author, but has
+    # fix has been committed upstream in a pull request by the author, but has
     # since been kept unmerged
     # https://github.com/neithere/argh/pull/240
     ./pr240-699568ad-06-01-2025-test_integration.patch

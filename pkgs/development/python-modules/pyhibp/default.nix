@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhibp";
   version = "4.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     group = "kitsunix";
     owner = "pyHIBP";
     repo = "pyHIBP";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2LJA989hpG5X6o+zCTSU0RRd0Z4zd29RAtp/jBW8Clo=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

@@ -8,7 +8,6 @@
   pkg-config,
   openssl,
   publicsuffix-list,
-  pythonOlder,
   libiconv,
   pytestCheckHook,
   toml,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "adblock";
   version = "0.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   # Pypi only has binary releases
   src = fetchFromGitHub {
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
+  env.PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
   nativeCheckInputs = [
     pytestCheckHook

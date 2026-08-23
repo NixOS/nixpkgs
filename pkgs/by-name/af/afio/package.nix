@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.5.2";
   pname = "afio";
 
   src = fetchFromGitHub {
     owner = "kholtman";
     repo = "afio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     mainProgram = "afio";
   };
-}
+})

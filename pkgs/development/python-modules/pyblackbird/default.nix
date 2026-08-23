@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyserial,
   pyserial-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyblackbird";
   version = "0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koolsb";
@@ -35,7 +32,7 @@ buildPythonPackage rec {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
     changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

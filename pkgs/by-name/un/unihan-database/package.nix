@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unihan-database";
   version = "17.0.0";
 
   src = fetchurl {
-    url = "https://www.unicode.org/Public/${version}/ucd/Unihan.zip";
+    url = "https://www.unicode.org/Public/${finalAttrs.version}/ucd/Unihan.zip";
     hash = "sha256-96SLK1Raz6p3stYHrih0dATOArrv7hY5bF0teo7zS14=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Unicode Han Database";
     homepage = "https://www.unicode.org/";
-    license = lib.licenses.unicode-dfs-2016;
+    license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
   };
-}
+})

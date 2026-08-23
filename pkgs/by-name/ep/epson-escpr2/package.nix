@@ -53,7 +53,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       ma9e
       ma27
-      shawn8901
     ];
     platforms = lib.platforms.linux;
   };

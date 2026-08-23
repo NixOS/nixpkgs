@@ -11,14 +11,14 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openpgp-ca";
   version = "0.14.0";
 
   src = fetchFromGitLab {
     owner = "openpgp-ca";
     repo = "openpgp-ca";
-    rev = "openpgp-ca/v${version}";
+    rev = "openpgp-ca/v${finalAttrs.version}";
     hash = "sha256-71SApct2yQV3ueWDlZv7ScK1s0nWWS57cPCvoMutlLA=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "oca";
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyfakefs,
   tzlocal,
@@ -15,15 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gcsa";
-  version = "2.6.0";
+  version = "2.7.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kuzmoyev";
     repo = "google-calendar-simple-api";
     rev = "v${version}";
-    hash = "sha256-I4IKuG9/4/JrEQ7PD1BwGFmCa1q3GOe4srHmpwt1OUU=";
+    hash = "sha256-lDmdV1F/EFtZEhq4ufH9nPvzNZ9msUGNZcmWiVTTTWc=";
   };
 
   propagatedBuildInputs = [

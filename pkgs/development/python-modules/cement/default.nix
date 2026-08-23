@@ -4,6 +4,7 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
+  fetchpatch,
   jinja2,
   mock,
   pdm-backend,
@@ -11,7 +12,6 @@
   pystache,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   redis,
   requests,
@@ -24,14 +24,22 @@ buildPythonPackage rec {
   version = "3.0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "datafolklabs";
     repo = "cement";
     tag = version;
     hash = "sha256-hZ9kKQmMomjy5nnHKQ2RWB+6vIID8XMn3qutg0wCBq8=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/datafolklabs/cement/pull/759
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/datafolklabs/cement/commit/8b038170d82be7dbd283d72b9c5db3cceec7163b.patch";
+      includes = [ "tests/*" ];
+      hash = "sha256-GUHAYp2oxHo1vo1gWnOyCAaNyBBIQM1ixC1p+Yc+Fsc=";
+    })
+  ];
 
   build-system = [ pdm-backend ];
 

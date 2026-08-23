@@ -13,9 +13,9 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gom";
-  version = "0.5.5";
+  version = "0.5.6";
 
   outputs = [
     "out"
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gom/${lib.versions.majorMinor version}/gom-${version}.tar.xz";
-    sha256 = "rWHwWvIxenqxdx/PqBaYn7ujsYlX0uC13t6e9F8JtTQ=";
+    url = "mirror://gnome/sources/gom/${lib.versions.majorMinor finalAttrs.version}/gom-${finalAttrs.version}.tar.xz";
+    sha256 = "TXpeJoaYyOfkBgPjbp46K3YTOTHOG2N8ETYwFJG1TMM=";
   };
 
   patches = [
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };
-}
+})

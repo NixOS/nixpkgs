@@ -5,7 +5,6 @@
   freezegun,
   mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "duo-client";
   version = "5.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "duosecurity";

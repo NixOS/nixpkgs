@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "proxify";
   version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "proxify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CctbeKMf4+E+Fh/0hWLwHdTTsAavkiJ2ziMumY/+oF8=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
       domain name) into other tools by simply setting the upstream proxy to proxify.
     '';
     homepage = "https://github.com/projectdiscovery/proxify";
-    changelog = "https://github.com/projectdiscovery/proxify/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/proxify/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

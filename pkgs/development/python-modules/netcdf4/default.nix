@@ -12,8 +12,8 @@
   netcdf,
   numpy,
   oldest-supported-numpy,
+  pytest,
   python,
-  pythonOlder,
   setuptools-scm,
   stdenv,
   wheel,
@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "1.7.2";
+  version = "1.7.4";
   suffix = lib.optionalString (lib.match ''.*\.post[0-9]+'' version == null) "rel";
   tag = "v${version}${suffix}";
 in
@@ -30,13 +30,13 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.8";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "Unidata";
     repo = "netcdf4-python";
     inherit tag;
-    hash = "sha256-orwCHKOSam+2eRY/yAduFYWREOkJlWIJGIZPZwQZ/RI=";
+    hash = "sha256-b91Y6RnZ8JpaRBLwJqQ/I3a2rGGl9jv9tyGiI67Zbp4=";
   };
 
   build-system = [
@@ -58,6 +58,10 @@ buildPythonPackage {
     libjpeg
     netcdf
     zlib
+  ];
+
+  nativeCheckInputs = [
+    pytest
   ];
 
   checkPhase = ''

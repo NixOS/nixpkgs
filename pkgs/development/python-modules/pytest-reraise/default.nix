@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bjoluc";
-    repo = pname;
+    repo = "pytest-reraise";
     tag = "v${version}";
     hash = "sha256-mgNKoZ+2sinArTZhSwhLxzBTb4QfiT1LWBs7w5MHXWA=";
   };

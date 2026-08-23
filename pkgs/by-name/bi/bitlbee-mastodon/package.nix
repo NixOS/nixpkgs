@@ -7,15 +7,20 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitlbee-mastodon";
   version = "1.4.5";
 
   src = fetchgit {
     url = "https://alexschroeder.ch/cgit/bitlbee-mastodon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
   };
+
+  patches = [
+    # gcc-15 build fix: https://github.com/kensanata/bitlbee-mastodon/pull/61
+    ./gcc-15.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -35,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jpotier ];
     platforms = lib.platforms.linux;
   };
-}
+})

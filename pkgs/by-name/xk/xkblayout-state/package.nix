@@ -2,21 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xkblayout-state";
   version = "1b";
 
   src = fetchFromGitHub {
     owner = "nonpop";
     repo = "xkblayout-state";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-diorqwDEBdzcBteKvhRisQaY3bx5seaOaWSaPwBkWDo=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xkblayout-state";
   };
-}
+})

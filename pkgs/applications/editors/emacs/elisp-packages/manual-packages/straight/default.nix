@@ -8,13 +8,13 @@
 
 melpaBuild {
   pname = "straight";
-  version = "0-unstable-2025-01-30";
+  version = "0-unstable-2025-11-21";
 
   src = fetchFromGitHub {
     owner = "radian-software";
     repo = "straight.el";
-    rev = "44a866f28f3ded6bcd8bc79ddc73b8b5044de835";
-    hash = "sha256-riKagjhCn5NyTerw1WqGOn37TZNfmhPb7DS49TXw1CA=";
+    rev = "4b6289f42a4da0c1bae694ba918b43c72daf0330";
+    hash = "sha256-FlGo+Nl6n+xSwQSIrMHJa7tu+MjLG2Ldxf7poJCz4Nc=";
   };
 
   nativeBuildInputs = [ git ];

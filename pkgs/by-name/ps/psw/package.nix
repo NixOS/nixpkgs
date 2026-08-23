@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "psw";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "Wulfsta";
     repo = "psw";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Rf6vpVgenTzb42/aGqItuxUodl61eNyUPlry7rgLPbI=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ wulfsta ];
   };
-}
+})

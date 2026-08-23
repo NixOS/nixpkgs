@@ -11,21 +11,23 @@
   pytestCheckHook,
   python-dateutil,
   python-gnupg,
-  pythonOlder,
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "limnoria";
-  version = "2025.11.2";
+  version = "2026.3.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cvlp1cfsdN8lv8hFvaHV6vtWEJ0CJUBmN1yCgxrhMi8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-hg4NYKyUMu4jDv9i3gdejbz0w/v0ptswzO7TUSXP3+4=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version" 'version="${finalAttrs.version}"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -37,15 +39,9 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ pytz ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "version=version" 'version="${version}"'
-  '';
 
   checkPhase = ''
     runHook preCheck
@@ -65,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

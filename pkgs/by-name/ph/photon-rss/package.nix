@@ -2,7 +2,7 @@
   buildGoModule,
   fetchFromSourcehut,
   lib,
-  xorg,
+  libx11,
 }:
 
 buildGoModule {
@@ -16,7 +16,7 @@ buildGoModule {
     sha256 = "sha256-2RSGLWfthcChd5YhDSBfLSch6wuTUv1Sh1f7flgzQwc=";
   };
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   proxyVendor = true;
 

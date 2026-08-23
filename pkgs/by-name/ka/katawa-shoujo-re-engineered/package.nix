@@ -1,24 +1,23 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitea,
+  fetchFromCodeberg,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  renpy,
+  renpyMinimal,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "katawa-shoujo-re-engineered";
-  version = "2.0.3";
+  version = "2.0.4";
 
-  src = fetchFromGitea {
+  src = fetchFromCodeberg {
     # GitHub mirror at fleetingheart/ksre
-    domain = "codeberg.org";
     owner = "fhs";
     repo = "katawa-shoujo-re-engineered";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M2TWc5dl7lkwM/oisM6xtJwb3Dw9i6qUadBHGdEO2bs=";
+    hash = "sha256-L8KYGV2sYXqjCppzlO40jzpusN85eOwR+muGK0SiXeA=";
   };
 
   desktopItems = [
@@ -26,26 +25,41 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "katawa-shoujo-re-engineered";
       desktopName = "Katawa Shoujo: Re-Engineered";
       type = "Application";
-      icon = finalAttrs.meta.mainProgram;
+      icon = "katawa-shoujo-re-engineered";
       categories = [ "Game" ];
-      exec = finalAttrs.meta.mainProgram;
+      exec = "katawa-shoujo-re-engineered";
     })
   ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    renpyMinimal
   ];
 
-  dontBuild = true;
+  postPatch = ''
+    substituteInPlace game/config.rpy --replace-fail 0.0.0-localbuild ${finalAttrs.version}
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    renpy . compile
+    rm -r game/saves
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe' renpy "renpy"} $out/bin/${finalAttrs.meta.mainProgram} \
-      --add-flags ${finalAttrs.src} --add-flags run
-    install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/${finalAttrs.meta.mainProgram}.png
+    phome=$out/share/kataswa-shoujo-re-engineered
+    mkdir -p $phome
+    cp -r game $phome
+    find $phome -type f -name "*.rpy" -delete
+    makeWrapper ${lib.getExe renpyMinimal} $out/bin/katawa-shoujo-re-engineered \
+      --add-flags $phome --add-flags run
+    install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/katawa-shoujo-re-engineered.png
 
     runHook postInstall
   '';
@@ -65,7 +79,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       quantenzitrone
       rapiteanu
+      ulysseszhan
     ];
-    platforms = renpy.meta.platforms;
+    platforms = renpyMinimal.meta.platforms;
   };
 })

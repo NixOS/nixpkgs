@@ -9,14 +9,14 @@
   gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-dive";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-dive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";
-    changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/gitext-rs/git-dive/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-dive";
   };
-}
+})

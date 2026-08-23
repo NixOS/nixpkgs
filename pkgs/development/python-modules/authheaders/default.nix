@@ -7,7 +7,6 @@
   fetchFromGitHub,
   publicsuffix2,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "authheaders";
   version = "0.16.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ValiMail";

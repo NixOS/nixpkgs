@@ -2,10 +2,16 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "literata";
   version = "3.103";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchzip {
     url = "https://github.com/googlefonts/literata/releases/download/${finalAttrs.version}/${finalAttrs.version}.zip";
@@ -13,14 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    find . -name "*.ttf" -exec cp {} "$out/share/fonts/truetype/" \;
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Serif typeface designed for ebooks and optimized for reading";

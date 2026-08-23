@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncompress";
   version = "5.0";
 
   src = fetchFromGitHub {
     owner = "vapier";
     repo = "ncompress";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     description = "Fast, simple LZW file compressor";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -16,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komac";
-  version = "2.14.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BZzEt/aqAogWAWXEyVPY77hZp3VE1FUyg2uAjQuwxEE=";
+    hash = "sha256-joPF92qeK+L+JfPcILbfQQXXOL11hiPDt4JNXouPCK0=";
   };
 
-  cargoHash = "sha256-KrMGZvgMtkfeF4dHUJzxtSqB0nea5ru4sLgnjAoQkYk=";
+  cargoHash = "sha256-bmesjvXX++Kn47E+KpHKYF/lpIcNXtVzH4s/AMHDmhc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       HeitorAugustoLN
+      dvdznf
     ];
     mainProgram = "komac";
   };

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NGT";
-  version = "2.5.0";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
-    owner = "yahoojapan";
+    owner = "NGT-labs";
     repo = "NGT";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2cCuVeg7y3butTIAQaYIgx+DPqIFEA2qqVe3exAoAY8=";
+    sha256 = "sha256-E09LxLDX/amwNlt0TgMS1sB4VjdK6iPIadCPP6Pq2Vc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,11 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     openblas
   ];
 
-  NIX_ENFORCE_NO_NATIVE = !enableAVX;
-  __AVX2__ = if enableAVX then 1 else 0;
+  env = {
+    NIX_ENFORCE_NO_NATIVE = !enableAVX;
+    __AVX2__ = if enableAVX then 1 else 0;
+  };
 
   meta = {
-    homepage = "https://github.com/yahoojapan/NGT";
+    homepage = "https://github.com/NGT-labs/NGT";
     description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;

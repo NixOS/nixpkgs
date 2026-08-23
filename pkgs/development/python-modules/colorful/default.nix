@@ -2,16 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "colorful";
   version = "0.5.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timofurrer";
@@ -23,6 +21,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "colorful" ];
+
+  passthru.updateScript = gitUpdater {
+    # Drop the "v" tag prefix before version comparison.
+    rev-prefix = "v";
+    # Skip PEP 440 pre-release tags.
+    ignoredVersions = "(a|b|rc)[0-9]+$";
+  };
 
   meta = {
     description = "Library for terminal string styling";

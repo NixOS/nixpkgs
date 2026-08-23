@@ -4,15 +4,12 @@
   fetchPypi,
   pillow,
   poppler-utils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pdf2image";
   version = "1.17.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,22 +1,47 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.3";
+  version = "2.9.13";
+  builtins = [
+    "builtin"
+    "coverartarchive"
+    "fanarttv"
+    "itunes_artwork"
+    "local_audio"
+    "loudness_analysis"
+    "lrclib"
+    "musicbrainz"
+    "sendspin"
+    "sync_group"
+    "theaudiodb"
+    "universal_player"
+    "wikipedia"
+  ];
   providers = {
-    airplay = ps: [
-    ];
+    acoustid_lookup =
+      ps: with ps; [
+        pyacoustid
+      ];
+    airplay =
+      ps: with ps; [
+        srptools
+      ];
     airplay_receiver = ps: [
     ];
     alexa =
       ps: with ps; [
         alexapy
       ];
-    apple_music = ps: [
-    ]; # missing pywidevine
+    apple_music =
+      ps: with ps; [
+        pywidevine
+      ];
     ard_audiothek =
       ps: with ps; [
         gql
       ];
+    ariacast_receiver = ps: [
+    ];
     audible =
       ps: with ps; [
         audible
@@ -24,6 +49,10 @@
     audiobookshelf =
       ps: with ps; [
         aioaudiobookshelf
+      ];
+    bandcamp =
+      ps: with ps; [
+        bandcamp-async-api
       ];
     bbc_sounds =
       ps: with ps; [
@@ -39,6 +68,10 @@
       ps: with ps; [
         pychromecast
       ];
+    coverartarchive = ps: [
+    ];
+    dashie_kiosk = ps: [
+    ];
     deezer =
       ps: with ps; [
         deezer-python-async
@@ -49,10 +82,19 @@
     dlna =
       ps: with ps; [
         async-upnp-client
+        defusedxml
       ];
+    emby = ps: [
+    ];
     fanarttv = ps: [
     ];
+    fastmcp_server =
+      ps: with ps; [
+        fastmcp
+      ];
     filesystem_local = ps: [
+    ];
+    filesystem_nfs = ps: [
     ];
     filesystem_smb = ps: [
     ];
@@ -70,9 +112,17 @@
       ];
     hass_players = ps: [
     ];
+    heos =
+      ps: with ps; [
+        pyheos
+      ];
+    hue_entertainment = ps: [
+    ]; # missing hue-entertainment
     ibroadcast = ps: [
     ]; # missing ibroadcastaio
     internet_archive = ps: [
+    ];
+    itunes_artwork = ps: [
     ];
     itunes_podcasts = ps: [
     ];
@@ -80,6 +130,10 @@
       ps: with ps; [
         aiojellyfin
       ];
+    kion_music = ps: [
+    ]; # missing yandex-music
+    lastfm_recommendations = ps: [
+    ];
     lastfm_scrobble =
       ps: with ps; [
         pylast
@@ -88,22 +142,50 @@
       ps: with ps; [
         liblistenbrainz
       ];
+    local_audio =
+      ps: with ps; [
+        sounddevice
+      ];
+    loudness_analysis = ps: [
+    ];
     lrclib = ps: [
     ];
+    mpd =
+      ps: with ps; [
+        python-mpd2
+      ];
+    msx_bridge =
+      ps: with ps; [
+        pydantic
+      ];
     musicbrainz = ps: [
     ];
     musiccast =
       ps: with ps; [
         aiomusiccast
       ];
-    nicovideo = ps: [
-    ]; # missing niconico.py-ma
+    musicme = ps: [
+    ];
+    neteasecloudmusic = ps: [
+    ];
+    nicovideo =
+      ps: with ps; [
+        pydantic
+      ]; # missing niconico.py-ma
+    nts = ps: [
+    ];
     nugs = ps: [
     ];
     opensubsonic =
       ps: with ps; [
         py-opensonic
       ];
+    orf_radiothek = ps: [
+    ];
+    pandora = ps: [
+    ];
+    party = ps: [
+    ];
     phishin = ps: [
     ];
     plex =
@@ -120,6 +202,8 @@
     ];
     qobuz = ps: [
     ];
+    qqmusic = ps: [
+    ]; # missing qqmusic-api-python
     radiobrowser =
       ps: with ps; [
         radios
@@ -131,17 +215,47 @@
         async-upnp-client
         rokuecp
       ];
+    samsung_wam = ps: [
+    ]; # missing pywam
     sendspin =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         aiosendspin
-      ];
+        av
+      ]
+      ++ aiosendspin.optional-dependencies.server;
     siriusxm = ps: [
     ]; # missing sxm
+    smart_fades =
+      ps: with ps; [
+        beat-this
+        nnaudio
+        threadpoolctl
+      ];
+    smart_playlist = ps: [
+    ];
     snapcast =
       ps: with ps; [
         bidict
         snapcast
         websocket-client
+      ];
+    somafm = ps: [
+    ];
+    sonic_analysis =
+      ps: with ps; [
+        huggingface-hub
+        pyyaml
+        threadpoolctl
+        torchlibrosa
+        transformers
+      ];
+    sonic_similarity =
+      ps: with ps; [
+        huggingface-hub
+        transformers
+        usearch
       ];
     sonos =
       ps: with ps; [
@@ -152,8 +266,10 @@
         defusedxml
         soco
       ];
-    soundcloud = ps: [
-    ]; # missing soundcloudpy
+    soundcloud =
+      ps: with ps; [
+        soundcloudpy
+      ];
     spotify =
       ps: with ps; [
         pkce
@@ -165,6 +281,8 @@
         aioslimproto
       ];
     subsonic_scrobble = ps: [
+    ];
+    sync_group = ps: [
     ];
     test = ps: [
     ];
@@ -178,7 +296,27 @@
     ];
     universal_group = ps: [
     ];
-    vban_receiver = ps: [
+    universal_player = ps: [
+    ];
+    vban_receiver =
+      ps: with ps; [
+        aiovban
+      ];
+    webdav = ps: [
+    ];
+    wiim =
+      ps: with ps; [
+        wiim
+      ];
+    wikipedia = ps: [
+    ];
+    yandex_music = ps: [
+    ]; # missing yandex-music, ya-passport-auth
+    yandex_smarthome = ps: [
+    ]; # missing ya-passport-auth
+    yandex_ynison = ps: [
+    ]; # missing ya-passport-auth
+    yousee = ps: [
     ];
     ytmusic =
       ps: with ps; [
@@ -187,5 +325,8 @@
         yt-dlp
         ytmusicapi
       ]; # missing deno
+    zvuk_music = ps: [
+    ];
+    # missing zvuk-music
   };
 }

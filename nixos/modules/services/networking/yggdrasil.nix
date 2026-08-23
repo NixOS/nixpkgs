@@ -13,7 +13,6 @@ let
     bool
     listOf
     str
-    attrs
     submodule
     ;
   cfg = config.services.yggdrasil;
@@ -34,26 +33,17 @@ let
     else
       null;
 
-  # Build base configuration with systemd credential path override
   baseSettings =
     cfg.settings
-    // (
-      if effectiveKeyPath != null then
-        {
-          PrivateKeyPath = "/private-key";
-        }
-      else
-        { }
-    );
+    // lib.optionalAttrs (effectiveKeyPath != null) {
+      PrivateKeyPath = "/run/credentials/yggdrasil.service/private-key";
+    };
 
   # Remove null values that yggdrasil doesn't expect
   cleanSettings = lib.filterAttrs (n: v: v != null) baseSettings;
 
   # Generate configuration file from user settings
-  configFile = pkgs.writeTextFile {
-    name = "yggdrasil.conf";
-    text = builtins.toJSON cleanSettings;
-  };
+  configFile = pkgs.writers.writeJSON "yggdrasil.conf" cleanSettings;
 in
 {
   imports = [
@@ -69,7 +59,7 @@ in
 
       settings = mkOption {
         type = submodule {
-          freeformType = attrs;
+          freeformType = (pkgs.formats.json { }).type;
           options = {
             PrivateKeyPath = mkOption {
               type = nullOr path;
@@ -331,7 +321,6 @@ in
           StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional (effectiveKeyPath != null) "%d/private-key:/private-key";
           LoadCredential = lib.optional (effectiveKeyPath != null) "private-key:${effectiveKeyPath}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";

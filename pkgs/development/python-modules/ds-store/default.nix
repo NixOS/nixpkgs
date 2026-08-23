@@ -4,27 +4,29 @@
   fetchFromGitHub,
   mac-alias,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ds-store";
-  version = "1.3.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = "ds_store";
     tag = "v${version}";
-    hash = "sha256-45lmkE61uXVCBUMyVVzowTJoALY1m9JI68s7Yb0vCks=";
+    hash = "sha256-UqBZ6w9y+eOQ+OdhXJReT4GwaxEbrGFvmUQMrNyBdjU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==80.9.0" "setuptools"
+  '';
 
-  propagatedBuildInputs = [ mac-alias ];
+  build-system = [ setuptools ];
+
+  dependencies = [ mac-alias ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

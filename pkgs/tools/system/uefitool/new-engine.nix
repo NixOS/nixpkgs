@@ -2,30 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtbase,
+  qt6,
+  wrapGAppsHook3,
   cmake,
-  wrapQtAppsHook,
   zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uefitool";
-  version = "A72";
+  version = "A75";
 
   src = fetchFromGitHub {
-    hash = "sha256-sVosxqUUvkZwJIY9FZ9N6xoDyBpSgTLFUmD4B9ymTHs=";
     owner = "LongSoft";
     repo = "uefitool";
     tag = finalAttrs.version;
+    hash = "sha256-nBlU5zrDiMig5T+XvhlrV73ILHRkU1/aOeG0NgELxoU=";
   };
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qt6.qtbase ];
+
   nativeBuildInputs = [
     cmake
     zip
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
+
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./bundle-destination.patch ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "UEFI firmware image viewer and editor";

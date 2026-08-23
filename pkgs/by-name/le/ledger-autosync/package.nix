@@ -7,7 +7,7 @@
   hledger,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ledger-autosync";
   version = "1.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bbFjDdxYr85OPjdvY3JYtCe/8Epwi+8JN60PKVKbqe0=";
   };
 
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/egh/ledger-autosync";
-    changelog = "https://github.com/egh/ledger-autosync/releases/tag/v${version}";
+    changelog = "https://github.com/egh/ledger-autosync/releases/tag/v${finalAttrs.version}";
     description = "OFX/CSV autosync for ledger and hledger";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eamsden ];
   };
-}
+})

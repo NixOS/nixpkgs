@@ -5,20 +5,20 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "google-alloydb-auth-proxy";
-  version = "1.13.9";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "alloydb-auth-proxy";
-    tag = "v${version}";
-    hash = "sha256-VCfK2EcFerIxqaAEY9KnfPLqwOJaz6CVRbTQGzTM6SY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uxBuAZZcMBNqFZ8c4plE/j2yWcWkNgIv9tnMrG/nOJc=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-sC+bAlzb+Pcj0+NQDaUeyjr6I+fv7cQ3+JHJKKtmiT4=";
+  vendorHash = "sha256-s6Rz3GWwX+S4ZGvQkCkl15gUJ2nXeYxSG7eluApRH2g=";
 
   checkFlags = [
     "-short"
@@ -34,9 +34,9 @@ buildGoModule rec {
       See the Connecting Overview page for more information on connecting to an AlloyDB instance, or the About the proxy page for details on how the AlloyDB Auth Proxy works.
     '';
     homepage = "https://github.com/GoogleCloudPlatform/alloydb-auth-proxy";
-    changelog = "https://github.com/GoogleCloudPlatform/alloydb-auth-proxy/releases/tag/v${version}";
+    changelog = "https://github.com/GoogleCloudPlatform/alloydb-auth-proxy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ShawnToubeau ];
     mainProgram = "alloydb-auth-proxy";
   };
-}
+})

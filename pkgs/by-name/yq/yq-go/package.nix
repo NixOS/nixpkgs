@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.50.1";
+  version = "4.53.3";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0KVO643y3ZnXpq/0Cv3LOAf1oOOMfVEnqOs4gPG2lso=";
+    hash = "sha256-e4/Tu40Fe2DKzP7+ZLqkWty+VJ5eWGyKAwH0U07gQeg=";
   };
 
-  vendorHash = "sha256-U6T8gcHIb/Kr2xh2eB+aj0bdoqHUO887SYWqT9nrXBQ=";
+  vendorHash = "sha256-B+FGknoNYfWXT8nx0teSCdT9i18VJMv8L1dv1w8gcF8=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://mikefarah.gitbook.io/yq/";
     changelog = "https://github.com/mikefarah/yq/raw/${finalAttrs.src.tag}/release_notes.txt";
     mainProgram = "yq";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lewo
       prince213

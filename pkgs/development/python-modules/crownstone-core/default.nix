@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyaes,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-core";
   version = "3.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crownstone";
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module with shared classes, util functions and definition of Crownstone";
     homepage = "https://github.com/crownstone/crownstone-lib-python-core";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

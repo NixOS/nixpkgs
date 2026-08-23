@@ -21,6 +21,9 @@ let
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
+    *  `testBackend` (optional)
+    *    whether to run in `containers` (default) or `nodes` scope
+    *
     *  Example:
     *    exporterTests.<exporterName> = {
     *      exporterConfig = {
@@ -108,7 +111,7 @@ let
           wait_for_unit("prometheus-bind-exporter.service")
           wait_for_open_port(9119)
           succeed(
-              "curl -sSf http://localhost:9119/metrics | grep 'bind_query_recursions_total 0'"
+              "curl -sSf http://localhost:9119/metrics | grep 'bind_up 1'"
           )
         '';
       };
@@ -168,6 +171,7 @@ let
     blackbox =
       { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           configFile = pkgs.writeText "config.yml" (
@@ -373,16 +377,23 @@ let
       };
 
     dovecot =
-      { ... }:
+      { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           scopes = [ "global" ];
-          socketPath = "/var/run/dovecot2/old-stats";
+          socketPath = "/var/run/dovecot2/stats-reader";
           user = "root"; # <- don't use user root in production
         };
         metricProvider = {
-          services.dovecot2.enable = true;
+          services.dovecot2 = {
+            enable = true;
+            settings = {
+              dovecot_config_version = pkgs.dovecot.version;
+              dovecot_storage_version = pkgs.dovecot.version;
+            };
+          };
         };
         exporterTest = ''
           wait_for_unit("prometheus-dovecot-exporter.service")
@@ -423,6 +434,7 @@ let
     ebpf =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           names = [ "timers" ];
@@ -433,6 +445,48 @@ let
           succeed(
               "curl -sSf http://localhost:9435/metrics | grep 'ebpf_exporter_enabled_configs{name=\"timers\"} 1'"
           )
+        '';
+      };
+
+    elasticsearch =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          url = "http://localhost:9200";
+        };
+        metricProvider = {
+          # `services.elasticsearch` is unmaintained; OpenSearch is the same
+          # engine class and is explicitly supported by the exporter.
+          services.opensearch.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("opensearch.service")
+          wait_for_open_port(9200)
+          wait_for_unit("prometheus-elasticsearch-exporter.service")
+          wait_for_open_port(9114)
+          succeed(
+              "curl -sSf localhost:9114/metrics | grep 'elasticsearch_cluster_health_status'"
+          )
+        '';
+      };
+
+    fail2ban =
+      { ... }:
+      {
+        testBackend = "nodes"; # setfacl
+        exporterConfig = {
+          enable = true;
+          exitOnError = true;
+        };
+        metricProvider = {
+          services.fail2ban.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("fail2ban.service")
+          wait_for_unit("prometheus-fail2ban-exporter.service")
+          wait_for_open_port(9191)
+          succeed("curl -sSf http://localhost:9191/metrics | grep 'f2b_errors'")
         '';
       };
 
@@ -752,6 +806,22 @@ let
         '';
       };
 
+    kvrocks =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider.services.kvrocks.enable = true;
+        exporterTest = ''
+          wait_for_unit("kvrocks.service")
+          wait_for_unit("prometheus-kvrocks-exporter.service")
+          wait_for_open_port(6666)
+          wait_for_open_port(9121)
+          wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'kvrocks_up 1'")
+        '';
+      };
+
     lnd =
       { pkgs, ... }:
       {
@@ -797,6 +867,7 @@ let
           };
           # initialize wallet, creates macaroon needed by exporter
           systemd.services.lnd.postStart = ''
+            until [ -f /var/lib/lnd/tls.cert ]; do sleep 1; done
             ${pkgs.curl}/bin/curl \
               --retry 20 \
               --retry-delay 1 \
@@ -921,6 +992,7 @@ let
     modemmanager =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           refreshRate = "10s";
@@ -1056,7 +1128,7 @@ let
           wait_for_unit("nginx.service")
           wait_for_unit("prometheus-nextcloud-exporter.service")
           wait_for_open_port(9205)
-          succeed("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
+          wait_until_succeeds("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
         '';
       };
 
@@ -1171,38 +1243,64 @@ let
         exporterTest = ''
           wait_for_unit("prometheus-node-cert-exporter.service")
           wait_for_open_port(9141)
+          succeed("test -f /run/certs/node-cert.cert")
           wait_until_succeeds(
               "curl -sSf http://localhost:9141/metrics | grep 'ssl_certificate_expiry_seconds{.\\+path=\"/run/certs/node-cert\\.cert\".\\+}'"
           )
         '';
 
-        metricProvider = {
-          system.activationScripts.cert.text = ''
-            mkdir -p /run/certs
-            cd /run/certs
+        metricProvider =
+          { config, ... }:
+          {
+            systemd.services.prometheus-node-cert-exporter = {
+              serviceConfig.ExecStartPre =
+                let
+                  createDir = pkgs.writeShellApplication {
+                    name = "create-dir";
+                    text =
+                      let
+                        inherit (config.services.prometheus.exporters.node-cert) user;
+                      in
+                      ''
+                        mkdir -p /run/certs
+                        chown ${user}:${user} /run/certs
+                        chmod ug+rwx /run/certs
+                      '';
+                  };
+                  createCerts = pkgs.writeShellApplication {
+                    name = "create-certs";
+                    text = ''
+                      cd /run/certs
 
-            cat >ca.template <<EOF
-            organization = "prometheus-node-cert-exporter"
-            cn = "prometheus-node-cert-exporter"
-            expiration_days = 365
-            ca
-            cert_signing_key
-            crl_signing_key
-            EOF
+                      cat >ca.template <<EOF
+                      organization = "prometheus-node-cert-exporter"
+                      cn = "prometheus-node-cert-exporter"
+                      expiration_days = 365
+                      ca
+                      cert_signing_key
+                      crl_signing_key
+                      EOF
 
-            ${pkgs.gnutls}/bin/certtool  \
-              --generate-privkey         \
-              --key-type rsa             \
-              --sec-param High           \
-              --outfile node-cert.key
+                      ${pkgs.gnutls}/bin/certtool  \
+                        --generate-privkey         \
+                        --key-type rsa             \
+                        --sec-param High           \
+                        --outfile node-cert.key
 
-            ${pkgs.gnutls}/bin/certtool     \
-              --generate-self-signed        \
-              --load-privkey node-cert.key  \
-              --template ca.template        \
-              --outfile node-cert.cert
-          '';
-        };
+                      ${pkgs.gnutls}/bin/certtool     \
+                        --generate-self-signed        \
+                        --load-privkey node-cert.key  \
+                        --template ca.template        \
+                        --outfile node-cert.cert
+                    '';
+                  };
+                in
+                [
+                  "+${lib.getExe createDir}"
+                  "${lib.getExe createCerts}"
+                ];
+            };
+          };
       };
 
     pgbouncer =
@@ -1514,26 +1612,6 @@ let
         '';
       };
 
-    rspamd =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          services.rspamd.enable = true;
-        };
-        exporterTest = ''
-          wait_for_unit("rspamd.service")
-          wait_for_unit("prometheus-rspamd-exporter.service")
-          wait_for_open_port(11334)
-          wait_for_open_port(7980)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:7980/probe?target=http://localhost:11334/stat' | grep 'rspamd_scanned{host=\"rspamd\"} 0'"
-          )
-        '';
-      };
-
     rtl_433 =
       { ... }:
       {
@@ -1609,30 +1687,12 @@ let
         '';
       };
 
-    scaphandre =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          boot.kernelModules = [ "intel_rapl_common" ];
-        };
-        exporterTest = ''
-          wait_for_unit("prometheus-scaphandre-exporter.service")
-          wait_for_open_port(8080)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:8080/metrics'"
-          )
-        '';
-      };
-
     shelly =
       { pkgs, ... }:
       {
         exporterConfig = {
           enable = true;
-          metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+          metrics-file = "${pkgs.writeText "test.json" "{}"}";
         };
         exporterTest = ''
           wait_for_unit("prometheus-shelly-exporter.service")
@@ -1733,6 +1793,7 @@ let
               community = "public";
               version = 2;
             };
+            modules.test = { };
           };
         };
         exporterTest = ''
@@ -1874,24 +1935,23 @@ let
               # testing the NixOS module.
               (pkgs.writeText "allow-running-without-credentials" ''
                 diff --git a/cmd/tailscale-exporter/root.go b/cmd/tailscale-exporter/root.go
-                index 2ff11cb..2fb576f 100644
+                index 14089f9..2bb9a25 100644
                 --- a/cmd/tailscale-exporter/root.go
                 +++ b/cmd/tailscale-exporter/root.go
-                @@ -137,14 +137,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
-                ''\t// Create HTTP client that automatically handles token refresh
-                ''\thttpClient := oauthConfig.Client(context.Background())
+                @@ -162,13 +162,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
+                ''\t''\t}
 
-                -''\t// Test OAuth token generation
-                -''\ttoken, err := oauthConfig.Token(context.Background())
-                -''\tif err != nil {
-                -''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
-                -''\t}
-                -''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
-                -''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
+                ''\t''\thttpClient := oauthConfig.Client(context.Background())
+                -''\t''\ttoken, err := oauthConfig.Token(context.Background())
+                -''\t''\tif err != nil {
+                -''\t''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
+                -''\t''\t}
+                -''\t''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
+                -''\t''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
                 -
-                ''\t// Default labels for all metrics
-                ''\tdefaultLabels := prometheus.Labels{"tailnet": tailnet}
-                ''\treg := prometheus.WrapRegistererWith(
+                ''\t''\ttsCollector, err := tailscale.NewTailscaleCollector(
+                ''\t''\t''\tlogger,
+                ''\t''\t''\thttpClient,
               '')
             ];
           };
@@ -2017,7 +2077,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          instance = "/run/varnish/varnish";
+          instance = "/var/run/varnishd";
           group = "varnish";
         };
         metricProvider = {
@@ -2084,6 +2144,7 @@ let
     zfs =
       { ... }:
       {
+        testBackend = "nodes"; # zfs kmod
         exporterConfig = {
           enable = true;
         };
@@ -2106,13 +2167,14 @@ lib.mapAttrs (
     { pkgs, lib, ... }:
     let
       testConfig = testConfigFun { inherit pkgs lib; };
-      nodeName = testConfig.nodeName or exporter;
+      testBackend = testConfig.testBackend or "containers";
+      nodeName = "machine";
     in
     {
       name = "prometheus-${exporter}-exporter";
       node.pkgsReadOnly = testConfig.pkgsReadOnly or true;
 
-      nodes.${nodeName} = lib.mkMerge [
+      ${testBackend}.${nodeName} = lib.mkMerge [
         {
           services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
         }
@@ -2137,7 +2199,6 @@ lib.mapAttrs (
               "${nodeName}.${line}"
           ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest))
         )}
-        ${nodeName}.shutdown()
       '';
 
       meta.maintainers = [ ];

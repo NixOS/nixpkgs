@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -8,43 +9,33 @@
   ical,
   mashumaro,
   orjson,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   python-dateutil,
+  pyprojectVersionPatchHook,
   syrupy,
   time-machine,
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "2.7.2";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    tag = "v${version}";
-    hash = "sha256-fRfcdE76BJE7GHobZU7mYmmtnN4gBxNd5KofdE0Sm0Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Glgh4MIbr1kZUvUzJ43G1sKTCZRGlBknEOBKY4q3iE=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  build-system = [ hatchling ];
 
-  build-system = [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -57,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     freezegun
     pytest-asyncio
@@ -78,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
-    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
+    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

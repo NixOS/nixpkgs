@@ -34,11 +34,11 @@ let
       pillow
       lz4
       jinja2
-      libclang
+      clang
     ]
   );
 
-  # paches are needed to fix build with CMake 4
+  # patches are needed to fix build with CMake 4
   yaml-cppSrc = applyPatches {
     inherit (yaml-cpp) src;
     patches = yaml-cpp.patches or [ ];
@@ -47,14 +47,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.11.3";
+  version = "2.11.5";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vlJsfebTWhdh6HDpUEA1QJJSVGMlcL49XFwIx4A9zHs=";
+    hash = "sha256-M0NiHvYZD1Qw2VYRV+TKMI0qTfF5MBdTxsBZRMMrnnk=";
   };
 
   nativeBuildInputs = [
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Yes, this is really how upstream expects packaging to look like ¯\_(ツ)_/¯.
     # https://github.com/EdgeTX/edgetx/wiki/Build-Instructions-under-Ubuntu-20.04#building-companion-simulator-and-radio-simulator-libraries
-    for plugin in "$''\{targetsToBuild[@]''\}"
+    for plugin in "''${targetsToBuild[@]}"
     do
       # Variable modified by `get_target_build_options` from build-common.sh.
       local BUILD_OPTIONS=""
@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
-      elitak
       lopsided98
       wucke13
       xokdvium

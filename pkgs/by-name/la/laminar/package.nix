@@ -25,7 +25,7 @@ let
     hash = "sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "laminar";
   version = "1.3";
   outputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ohwgiles";
     repo = "laminar";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-eo5WzvmjBEe0LAfZdQ/U0XepEE2kdWKKiyE4HOi3RXk=";
   };
   patches = [ ./patches/no-network.patch ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     zlib
     rapidjson
   ];
-  cmakeFlags = [ "-DLAMINAR_VERSION=${version}" ];
+  cmakeFlags = [ "-DLAMINAR_VERSION=${finalAttrs.version}" ];
 
   preBuild = ''
     mkdir -p js css
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
       maralorn
     ];
   };
-}
+})

@@ -15,7 +15,7 @@
   # run time dependencies
   iceauth,
   smproxy,
-  twm,
+  tab-window-manager,
   xterm,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           iceauth
           smproxy
-          twm
+          tab-window-manager
           xterm
         ]
       }

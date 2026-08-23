@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nmapthon2";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cblopez";
@@ -29,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to automate nmap";
     homepage = "https://github.com/cblopez/nmapthon2";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

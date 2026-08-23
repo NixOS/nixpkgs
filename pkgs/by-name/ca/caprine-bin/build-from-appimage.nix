@@ -1,7 +1,7 @@
 {
   fetchurl,
   appimageTools,
-  xorg,
+  lndir,
   pname,
   version,
   sha256,
@@ -14,7 +14,7 @@ let
     name = "Caprine-${version}.AppImage";
     inherit sha256;
   };
-  extracted = appimageTools.extractType2 { inherit pname version src; };
+  extracted = appimageTools.extract { inherit pname version src; };
 in
 (appimageTools.wrapType2 {
   inherit pname version src;
@@ -29,7 +29,7 @@ in
 
   extraInstallCommands = ''
     mkdir -p $out/share
-    "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
+    "${lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
     mkdir $out/share/applications
     cp ${extracted}/caprine.desktop $out/share/applications/

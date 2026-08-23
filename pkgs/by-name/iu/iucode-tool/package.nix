@@ -7,14 +7,14 @@
   argp-standalone,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iucode-tool";
   version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "iucode-tool";
     repo = "iucode-tool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ajDpywgyerbvgern0b8T4jJUWisMzwrhwKO1g7iOtBE=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

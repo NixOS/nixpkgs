@@ -4,22 +4,19 @@
   classify-imports,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.16.0";
+  version = "3.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "reorder_python_imports";
     tag = "v${version}";
-    hash = "sha256-fncrrmksYS+8pz9qVucf4ktxxVvnrKEzIeM5kPrh0PQ=";
+    hash = "sha256-xOHBIjdyrd1R2Iavkvsgk7wVE66YEYdbz29BEyFGtp8=";
   };
 
   build-system = [ setuptools ];

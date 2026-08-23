@@ -9,6 +9,9 @@ buildGoModule (finalAttrs: {
 
   version = "2.8.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "9elements";
     repo = "converged-security-suite";

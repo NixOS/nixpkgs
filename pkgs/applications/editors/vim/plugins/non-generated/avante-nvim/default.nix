@@ -9,15 +9,15 @@
   vimPlugins,
   vimUtils,
   makeWrapper,
-  pkgs,
+  perl,
 }:
 let
-  version = "0.0.27-unstable-2025-12-30";
+  version = "0.1.2";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "7a9fbbd4ddc9affc6a33bff644b1af7c0f908e74";
-    hash = "sha256-YpNNd9x6GFeWLxaShL6+g1Z29wUM/aJKZQ24/twXvAU=";
+    tag = "v${version}";
+    hash = "sha256-x7OhVz4rWj2x1UsUm8iqkB5PQVAELvAYJ0yo2beU9TY=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -28,7 +28,7 @@ let
     nativeBuildInputs = [
       pkg-config
       makeWrapper
-      pkgs.perl
+      perl
     ];
 
     buildInputs = [
@@ -66,16 +66,16 @@ vimUtils.buildVimPlugin {
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
-      mkdir -p $out/build
-      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
+      # place dynamic shared libraries directly into lua/ for native C-module discovery
+      mkdir -p $out/lua
+      cp ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/lua/avante_repo_map${ext}
+      cp ${avante-nvim-lib}/lib/libavante_templates${ext} $out/lua/avante_templates${ext}
+      cp ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/lua/avante_tokenizers${ext}
+      cp ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/lua/avante_html2md${ext}
     '';
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.avante-nvim.avante-nvim-lib";
     };
 
@@ -88,7 +88,6 @@ vimUtils.buildVimPlugin {
     "avante.providers.azure"
     "avante.providers.copilot"
     "avante.providers.gemini"
-    "avante.providers.ollama"
     "avante.providers.vertex"
     "avante.providers.vertex_claude"
   ];

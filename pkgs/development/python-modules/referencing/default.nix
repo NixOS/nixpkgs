@@ -6,9 +6,7 @@
   hatch-vcs,
   hatchling,
   jsonschema,
-  pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   rpds-py,
   typing-extensions,
 }:
@@ -16,17 +14,15 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.36.2";
+    version = "0.37.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";
       repo = "referencing";
       tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-VwViFiquacwJlELNDp01DRbtYQHOY4qXS2CjD7YmS6g=";
+      hash = "sha256-4e06rzvIOyWAgkpzAisc4uUK8pWshDZiQ6qpvJCq3GY=";
     };
 
     build-system = [
@@ -42,7 +38,6 @@ let
 
     nativeCheckInputs = [
       jsonschema
-      pytest-subtests
       pytestCheckHook
     ];
 

@@ -11,7 +11,7 @@
   xdpyinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaxg";
   version = "0-unstable-2018-05-03";
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Yet Another X Grabber script";
     longDescription = ''
       Capture and record your screen with callbacks. Wraps maim, slop, ffmpeg,
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "yaxg";
   };
-}
+})

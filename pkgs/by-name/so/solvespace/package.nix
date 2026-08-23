@@ -24,23 +24,29 @@
   libthai,
   libxkbcommon,
   pangomm,
-  pcre,
+  pcre2,
   util-linuxMinimal, # provides libmount
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solvespace";
   version = "3.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solvespace";
     repo = "solvespace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+ZSAC7wDOaN51RjbSAqaQOp10JzxSME3g0ln4VdkwcA=";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -68,11 +74,11 @@ stdenv.mkDerivation rec {
     libthai
     libxkbcommon
     pangomm
-    pcre
+    pcre2
     util-linuxMinimal
-    xorg.libpthreadstubs
-    xorg.libXdmcp
-    xorg.libXtst
+    libpthread-stubs
+    libxdmcp
+    libxtst
     zlib
   ];
 
@@ -102,6 +108,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.edef ];
     platforms = lib.platforms.linux;
     homepage = "https://solvespace.com";
-    changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/solvespace/solvespace/raw/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

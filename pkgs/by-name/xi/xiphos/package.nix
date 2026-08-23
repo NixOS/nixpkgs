@@ -2,15 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  appstream-glib,
+  appstream,
   biblesync,
   cmake,
-  dbus-glib,
   desktop-file-utils,
   docbook2x,
   docbook_xml_dtd_412,
   glib,
-  gtkhtml,
   icu,
   intltool,
   itstool,
@@ -18,6 +16,7 @@
   libxslt,
   minizip,
   pkg-config,
+  speechd-minimal,
   sword,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -27,23 +26,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xiphos";
-  version = "4.3.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
     tag = finalAttrs.version;
-    hash = "sha256-HTndBWfze8tV4G9npLYB7SkgpJNQcQBZqHKjxhZU6JY=";
+    hash = "sha256-csbhlYSn/TFxZV/pGHgJT4Hnqa26BZQUKD/CBHhxi/U=";
   };
 
-  patches = [
-    # Fix D-Bus build
-    # https://github.com/crosswire/xiphos/pull/1103
-    ./0001-Add-dbus-glib-dependency-to-main.patch
-  ];
-
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream
     cmake
     desktop-file-utils # for desktop-file-validate
     docbook2x
@@ -59,19 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     biblesync
-    dbus-glib
     glib
-    gtkhtml
     icu
     libuuid
     minizip
+    speechd-minimal
     sword
     webkitgtk_4_1
   ];
 
   cmakeFlags = [
-    # WebKit-based editor does not build.
-    "-DGTKHTML=ON"
+    "-DGTKTVEDITOR=ON"
   ];
 
   preConfigure = ''

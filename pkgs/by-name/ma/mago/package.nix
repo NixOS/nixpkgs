@@ -1,7 +1,9 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   openssl,
   versionCheckHook,
@@ -9,25 +11,36 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mago";
-  version = "1.0.0-beta.14";
+  version = "1.47.1";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
     tag = finalAttrs.version;
-    hash = "sha256-UKoq4RkFcLS47DZHPY/MhrRuLQoWYLoOzO2BeeJZoQw=";
+    hash = "sha256-retxjVwNholuQK/kMoPVk8dXqJo01DYf8io0DLttqtA=";
+    forceFetchGit = true; # Does not download all files otherwise
   };
 
-  cargoHash = "sha256-/THZFU3lJbgJGA4lxWt6fyiHqIgQ539vj57iKoQfXZo=";
+  cargoHash = "sha256-GF2wTEfJk5KM6h2Ef5a6JuQe5bYCUO23NtIzRWj76GE=";
 
   env = {
     # Get openssl-sys to use pkg-config
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [ openssl ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mago \
+      --bash <("$out/bin/mago" generate-completions bash) \
+      --zsh <("$out/bin/mago" generate-completions zsh) \
+      --fish <("$out/bin/mago" generate-completions fish)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -37,7 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Toolchain for PHP that aims to provide a set of tools to help developers write better code";
     homepage = "https://github.com/carthage-software/mago";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [
+      atomicptr
+      hythera
+      patka
+    ];
     mainProgram = "mago";
   };
 })

@@ -31,6 +31,9 @@ buildGoModule {
     description = "Allows users to use a GitOps flow for managing Tailscale ACLs";
     license = lib.licenses.bsd3;
     mainProgram = "gitops-pusher";
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 }

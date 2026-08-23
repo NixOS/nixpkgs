@@ -12,8 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   # See pkgs/by-name/bl/blackmagic-desktop-video/package.nix for more.
   inherit (blackmagic-desktop-video) src version;
 
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = placeholder "out";
+  env = {
+    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    INSTALL_MOD_PATH = placeholder "out";
+  };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libpthreadstubs,
+  libpthread-stubs,
   qtbase,
   qtwebsockets,
   wrapQtAppsHook,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebsockets
-    libpthreadstubs
+    libpthread-stubs
   ];
 
   meta = {

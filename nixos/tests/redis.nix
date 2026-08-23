@@ -19,10 +19,7 @@ let
     }:
     makeTest {
       inherit name;
-      meta.maintainers = [
-        lib.maintainers.flokli
-      ]
-      ++ lib.teams.helsinki-systems.members;
+      meta.maintainers = lib.teams.redis.members;
 
       nodes = {
         machine =

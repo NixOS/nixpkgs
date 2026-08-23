@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "17.0.0";
+  version = "17.0.2";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "gucharmap";
     rev = finalAttrs.version;
-    hash = "sha256-BYplW+gVTgWdXYW+h2g4xwxmFSl+WoygZfw8dug4qkw=";
+    hash = "sha256-LjXn8cFLqVZmLub0FRscyjg93u6g1EXsv3w0L4iiyqE=";
   };
 
   strictDeps = true;

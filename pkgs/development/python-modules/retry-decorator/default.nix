@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "retry-decorator";
   version = "1.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pnpnpn";
@@ -28,6 +25,6 @@ buildPythonPackage rec {
     description = "Decorator for retrying when exceptions occur";
     homepage = "https://github.com/pnpnpn/retry-decorator";
     changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 }

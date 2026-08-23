@@ -35,16 +35,17 @@
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual";
-  version = "6.11.0";
+  version = "8.2.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
-    tag = "v${version}";
-    hash = "sha256-xfGxI8Q9a11mD+1Ha+wnJn0HMxAzzhUIeeu1sk5cW+w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4T+/eD0adPugDP7TCDoDaOe0OrEFskCUadLVEixmTwo=";
   };
 
   build-system = [ poetry-core ];
@@ -116,8 +117,8 @@ buildPythonPackage rec {
   meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Textualize/textual/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
   };
-}
+})

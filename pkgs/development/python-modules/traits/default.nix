@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "traits";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Explicitly typed attributes for Python";
-    homepage = "https://pypi.python.org/pypi/traits";
+    homepage = "https://pypi.org/project/traits/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };

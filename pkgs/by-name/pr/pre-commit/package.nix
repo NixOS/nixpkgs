@@ -24,7 +24,7 @@
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
   version = "4.5.1";
   pyproject = true;
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3E/haU7TzTr+Qj3KadC7BYwuECZPa2Q+NvG5e4SSKSA=";
   };
 
@@ -239,7 +239,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    changelog = "https://github.com/pre-commit/pre-commit/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pre-commit/pre-commit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       borisbabic
@@ -247,4 +247,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "pre-commit";
   };
-}
+})

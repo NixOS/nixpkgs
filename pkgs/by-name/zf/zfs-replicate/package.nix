@@ -6,16 +6,17 @@
   lz4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zfs_replicate";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alunduil";
     repo = "zfs-replicate";
-    tag = "v${version}";
-    hash = "sha256-VajMSoFZ4SQXpuF1Lo6S9IhxvspCfUwpNw5zg16uA3M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7UoFx2XtadsQqavR5BTwbylaDksWSRxy5o+2hCOzfBw=";
   };
 
   # For compression to work, both local and remote systems must have lz4 installed.
@@ -42,8 +43,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  doCheck = true;
-
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Expected SystemExit or FileNotFoundError
     "zfs_test/replicate_test/cli_test/main_test.py"
@@ -52,9 +51,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "ZFS Snapshot Replication";
     homepage = "https://github.com/alunduil/zfs-replicate";
-    changelog = "https://github.com/alunduil/zfs-replicate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/alunduil/zfs-replicate/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "zfs-replicate";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ alunduil ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cargo-tauri,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   pkg-config,
@@ -15,37 +15,45 @@
   libsoup_3,
   libayatana-appindicator,
   gtk3,
+  gst_all_1,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.5.9";
+  version = "1.6.28";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jrGDgK/Z9oLSvtFfC+uIs0vj4Nku4Sp/bdR1MX/SK2E=";
+    hash = "sha256-TbkdfIPn/i+ocgJ0r7i6CJi+rr9eE8QK1798piuSJio=";
   };
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
   '';
 
-  patches = [ ./0001-disable-telemetry.patch ];
+  patches = [
+    ./0001-disable-telemetry.patch
+  ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-ncoxliXnLxWEXL1Z7ixOULI/uYkxmfLiDWu1tDSRsrM=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-TAghp3rBySgNpzZ8ruG9jBO0BLcR3QhWK2XJ9C7VcuA=";
   };
 
-  cargoHash = "sha256-0IgQK0jMVN6u5i4lBKK8njbMyRQCLguTdDcSBnFnyso=";
+  cargoHash = "sha256-UH1JP2HBQ5RetdJRpWlIXU7Oui+Zm4uTxQqMDVAlFo4=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -53,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook3
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [
@@ -63,6 +71,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     libayatana-appindicator
     webkitgtk_4_1
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ];
 
   cargoRoot = "src-tauri";
@@ -72,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Warframe Market listings and transactions manager";
-    mainProgram = "quantframe";
+    mainProgram = "Quantframe";
     homepage = "https://quantframe.app/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

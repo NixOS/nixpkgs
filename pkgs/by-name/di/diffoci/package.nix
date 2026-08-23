@@ -7,23 +7,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "diffoci";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "diffoci";
-    rev = "v${version}";
-    hash = "sha256-RBMgcTUdPO12rFUY82JkubXfaGjfB4oR+UqKwumFWs0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rOgnFqjA78JhW3oo3tHDsIjz8GzwK6Og7BqOTEj5fn4=";
   };
 
-  vendorHash = "sha256-NqYGehd+RcspQt5gQl9XH85Ds0dw+MU8W7xH/uzNjqU=";
+  vendorHash = "sha256-IQrPFZPL6KOnU75tT/YWUGN1oasCOTLzVG2ZllgWhJE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/reproducible-containers/diffoci/cmd/diffoci/version.Version=v${version}"
+    "-X=github.com/reproducible-containers/diffoci/cmd/diffoci/version.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -50,4 +50,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jk ];
     mainProgram = "diffoci";
   };
-}
+})

@@ -207,6 +207,14 @@ have a predefined type and string generator already declared under
       you will want to either use an alternative validator
       or set `doCheck = false` in the format options.
 
+`pkgs.formats.hcl1` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with HCL1 JSON-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result). The output
+    is JSON formatted according to HCL1's canonical representation,
+    where nested attribute sets are wrapped in arrays.
+
 `pkgs.formats.libconfig` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>` }
 
 :  A function taking an attribute set with values
@@ -283,10 +291,17 @@ have a predefined type and string generator already declared under
     and returning a set with JSON-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
-`pkgs.formats.yaml` { }
+`pkgs.formats.yaml` { *`tags`* ? false }
 
-:   A function taking an empty attribute set (for future extensibility)
-    and returning a set with YAML-specific attributes `type` and
+:   A function taking an attribute set with values
+
+    `tags`
+
+    :   A boolean for controlling whether YAML tags can be generated.
+        If set, attribute sets with a single key that starts with a "!"
+        will be interpreted as a YAML tag.
+
+    It returns a set with YAML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
 `pkgs.formats.ini` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
@@ -313,6 +328,14 @@ have a predefined type and string generator already declared under
     `listToValue`).
 
     The attribute `lib.type.atom` contains the used INI atom.
+
+`pkgs.formats.configobj` { }
+
+:   A function taking an attribute set with values
+
+    It returns a set with [ConfigObj](https://pypi.org/project/configobj/)-specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+    The type of the input is an attribute mapping supporting both atoms and nested attribute sets (sections/subsections), as supported by ConfigObj.
+    The renderer is based on Python's `configobj` module.
 
 `pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
 
@@ -379,7 +402,7 @@ have a predefined type and string generator already declared under
 
     `mkRaw pythonCode`
 
-    :   Outputs the given string as raw Python code
+    :   Outputs the given string as raw Python code. Note that the final result will be stripped of any comments.
 
     `_imports`
 
@@ -545,7 +568,7 @@ in
       default = { };
       description = ''
         Configuration for foo, see
-        <link xlink:href="https://example.com/docs/foo"/>
+        <https://example.com/docs/foo/>
         for supported settings.
       '';
     };
@@ -620,7 +643,7 @@ up in the manual.
     default = { };
     description = ''
       Configuration for Foo, see
-      <link xlink:href="https://example.com/docs/foo"/>
+      <https://example.com/docs/foo>
       for supported values.
     '';
   };

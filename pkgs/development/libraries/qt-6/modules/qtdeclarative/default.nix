@@ -37,23 +37,25 @@ qtModule {
     # add version specific QML import path
     ./use-versioned-import-path.patch
 
-    # fix common Plasma crasher
-    # FIXME: remove in 6.10.2
+    # revert codesigning change on Darwin that doesn't work with our signing tools
     (fetchpatch {
-      url = "https://github.com/qt/qtdeclarative/commit/9c6b2b78e9076f1c2676aa0c41573db9ca480654.diff";
-      hash = "sha256-KMFurA9Q84qwuyBraU3ZdoFWs8uO3uoUcinfcfh/ps8=";
+      url = "https://github.com/qt/qtdeclarative/commit/a7084abd9778b955d80e7419e82f6f7b92f7978d.diff";
+      hash = "sha256-ESy35OlmsvI4yFQ/rFT8oelOUBCwCmlcbQJvwcTrCig=";
+      revert = true;
     })
 
-    # https://qt-project.atlassian.net/browse/QTBUG-137440
+    # backport fix recommended by KDE
     (fetchpatch {
-      name = "rb-dialogs-link-labsfolderlistmodel-into-quickdialogs2quickimpl.patch";
-      url = "https://github.com/qt/qtdeclarative/commit/4047fa8c6017d8e214e6ec3ddbed622fd34058e4.patch";
-      hash = "sha256-0a7a1AI8N35rqLY4M3aSruXXPBqz9hX2yT65r/xzfhc=";
+      url = "https://github.com/qt/qtdeclarative/commit/8a2c82be6ad90e3f2a0760d8bab1e3a8cdb2473a.diff";
+      hash = "sha256-3KbyoQPAiRyCwGnwwYV3y0yz2i6UAJcX70EPsXV0ZZM=";
     })
+
+    # backport required at least for [musescore][1], and perhaps many other
+    # applications.
+    # [1]: https://github.com/musescore/MuseScore/issues/33015
     (fetchpatch {
-      name = "rb-quickcontrols-fix-controls-styles-linkage.patch";
-      url = "https://github.com/qt/qtdeclarative/commit/aa805ed54d55479360e0e95964dcc09a858aeb28.patch";
-      hash = "sha256-EDdsXRokHPQ5jflaVucOZP3WSopMjrAM39WZD1Hk/5I=";
+      url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.diff";
+      hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
     })
   ];
 

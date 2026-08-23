@@ -16,19 +16,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moocore";
-  version = "0.1.10";
+  version = "0.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "multi-objective";
     repo = "moocore";
-    tag = "v${version}";
-    hash = "sha256-ByWQpd2QuagctTeoO5BIyYiI2bSlEPzNht4ciWCCJtM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R4CqhvmaMyCKJnF+SfD2HSv5tnsCIC6CMmLTaMBJZIw=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [
     cffi
@@ -59,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

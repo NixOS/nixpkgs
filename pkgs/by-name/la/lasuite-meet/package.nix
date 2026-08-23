@@ -1,36 +1,55 @@
 {
+  callPackage,
   lib,
-  python3,
   fetchFromGitHub,
   nixosTests,
+  python3,
 }:
 let
-  python = python3.override {
-    self = python3;
-    packageOverrides = (self: super: { django = super.django_5_2; });
-  };
-in
-
-python.pkgs.buildPythonApplication rec {
-  pname = "lasuite-meet";
-  version = "1.1.0";
-  pyproject = true;
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-wa0KhS/UeFbw9fJVuFLIPtsLaC5+7Euaew8n6p2jC5Q=";
+    hash = "sha256-WiyVSqkyKDXYYPvzcA/fHcxQJrUThNGfNu+z/KcHK3g=";
   };
 
-  sourceRoot = "source/src/backend";
+  meta = {
+    homepage = "https://github.com/suitenumerique/meet";
+    changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soyouzpanda ];
+    platforms = lib.platforms.linux;
+  };
+
+  mail = callPackage ./mail.nix { inherit src version meta; };
+  frontend = callPackage ./frontend.nix { inherit src version meta; };
+  outlook = callPackage ./addon-outlook.nix { inherit src version meta; };
+
+  python = python3.override {
+    self = python3;
+    packageOverrides = (self: super: { django = super.django_5; });
+  };
+in
+python.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "lasuite-meet";
+  pyproject = true;
+  inherit version src;
+
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.16,<0.12.0" "uv_build"
+  '';
+
+  build-system = with python.pkgs; [ uv-build ];
 
   dependencies =
     with python.pkgs;
@@ -40,13 +59,16 @@ python.pkgs.buildPythonApplication rec {
       brevo-python
       brotli
       celery
+      dj-database-url
       django
       django-configurations
       django-cors-headers
       django-countries
       django-extensions
+      django-filter
       django-lasuite
       django-parler
+      django-pydantic-field
       django-redis
       django-storages
       django-timezone-field
@@ -63,10 +85,14 @@ python.pkgs.buildPythonApplication rec {
       markdown
       mozilla-django-oidc
       nested-multipart-parser
+      phonenumbers
+      posthog
       psycopg
+      pydantic
       pyjwt
       pyopenssl
       python-frontmatter
+      python-magic
       redis
       requests
       sentry-sdk
@@ -85,7 +111,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       mkdir -p $out/{bin,share}
@@ -100,19 +126,23 @@ python.pkgs.buildPythonApplication rec {
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
+
+      mkdir -p $out/${python.sitePackages}/core/templates
+      ln -sv ${finalAttrs.passthru.mail}/ $out/${python.sitePackages}/core/templates/mail
     '';
 
-  passthru.tests = {
-    login-and-create-room = nixosTests.lasuite-meet;
+  passthru = {
+    inherit mail frontend;
+    addons = {
+      inherit outlook;
+    };
+    tests = {
+      login-and-create-room = nixosTests.lasuite-meet;
+    };
   };
 
-  meta = {
+  meta = meta // {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
-    homepage = "https://github.com/suitenumerique/meet";
-    changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
     mainProgram = "meet";
-    platforms = lib.platforms.all;
   };
-}
+})

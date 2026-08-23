@@ -3,14 +3,17 @@
   cairo,
   cmake,
   cups,
-  fetchurl,
   fetchpatch,
+  fetchurl,
   fontconfig,
   freetype,
   graphicsmagick,
+  gsettings-desktop-schemas,
+  gtk3,
   harfbuzzFull,
   hunspell,
   lcms2,
+  lib,
   libcdr,
   libfreehand,
   libjpeg,
@@ -27,29 +30,21 @@
   libzmf,
   pixman,
   pkg-config,
-  podofo_0_10,
+  podofo,
   poppler,
   poppler_data,
   python3,
-  lib,
-  stdenv,
   qt6,
+  stdenv,
 }:
-
-let
-  pythonEnv = python3.withPackages (ps: [
-    ps.pillow
-    ps.tkinter
-  ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+lnWIh/3z/qTcjV5l+hlcBYuHhiRNza3F2/RD0jCQ/Y=";
+    hash = "sha256-iC7lXKRJfALE4F8wrMaJ6h9IXC6AI8nrKT9RwsW+Bq0=";
   };
 
   nativeBuildInputs = [
@@ -82,10 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libzmf
     pixman
-    podofo_0_10
+    podofo
     poppler
     poppler_data
-    pythonEnv
+    (python3.withPackages (
+      ps: with ps; [
+        pillow
+        tkinter
+      ]
+    ))
     qt6.qt5compat
     qt6.qtbase
     qt6.qtdeclarative
@@ -99,42 +99,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_qt_6.9.0.patch?h=scribus-unstable";
-      hash = "sha256-hzd9XpoVVqbwvZ40QPGBqqWkIFXug/tSojf/Ikc4nn4=";
+      name = "fix-build-with-poppler-26.05.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/14a287fc1db2a44abfe1743260554447b31b4adf.patch";
+      hash = "sha256-bhxnyL5zWVCjkfkW67CPykLW/uqDP+n3djnRKGMyhjw=";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_poppler_25.02.0.patch?h=scribus-unstable";
-      hash = "sha256-t9xJA6KGMGAdUFyjI8OlTNilewyMr1FFM7vjHOM15Xg=";
+      # required for the next patch to apply cleanly
+      url = "https://github.com/scribusproject/scribus/commit/3aed8aa40d01d1affd2b55b107b48878d4b06eab.patch";
+      includes = [ "scribus/plugins/import/pdf/importpdf.cpp" ];
+      hash = "sha256-tiGXGW8CnG0Tj5YaimngelvNvO3CCSa5eXc3bSKJD54=";
     })
     (fetchpatch {
-      name = "fix-build-poppler-25.06.0.patch";
-      url = "https://github.com/scribusproject/scribus/commit/8dcf8d777bd85a0741c455961f2de382e3ed47ec.patch";
-      hash = "sha256-JBHCgvEJnYrUdtLnFSXTfr1FFin4uUNUnddYwfRbn7k=";
-    })
-    (fetchpatch {
-      name = "fix-build-poppler-25.07.0.patch";
-      url = "https://github.com/scribusproject/scribus/commit/ff6c6abfa8683028e548a269dee6a859b6f63335.patch";
-      hash = "sha256-N4jve5feehsX5H0RXdxR4ableKL+c/rTyqCwkEf37Dk=";
-    })
-    (fetchpatch {
-      name = "fix-qt6.10-build.patch";
-      url = "https://github.com/scribusproject/scribus/commit/13fc4f874354511e05bf91a48703b57b4c489715.patch";
-      hash = "sha256-+pbQ77SaTh04QX55wmS6WeuZf3IGe5nq3pmrhk68tb8=";
-    })
-    (fetchpatch {
-      name = "fix-build-poppler-25.09.0.patch";
-      url = "https://github.com/scribusproject/scribus/commit/f0cfe30019a514bdaf38b78590451e2c5b9b5420.patch";
-      hash = "sha256-ONQ3BzGhouO+0zqYUObuJC3NUCFi1PWq6qoRvuSZJws=";
-    })
-    (fetchpatch {
-      name = "fix-build-poppler-25.10.0.patch";
-      url = "https://github.com/scribusproject/scribus/commit/3c1fc34fae1aa26fceb65b6bdf631a7f00b03c3c.patch";
-      hash = "sha256-xTwzbT3h4+5hb6Y/sNmzkfDN2LJGOLP1v/WBVsmZXkk=";
+      name = "fix-build-with-poppler-26.06.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/2b9405a00a96a09e0183190ddc9f83d44963d4e0.patch";
+      hash = "sha256-4v+Ba+JODwNg4YLmwpFeBfIxk1j+RcZdtznPFeQ+H+w=";
     })
   ];
 
+  postPatch = ''
+    # revert non-whitespace changes made by the second patch, i.e.,
+    # https://github.com/scribusproject/scribus/commit/3aed8aa40d01d1affd2b55b107b48878d4b06eab
+    substituteInPlace scribus/plugins/import/pdf/importpdf.cpp \
+      --replace-fail 'QSizeF()' '"Custom"'
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
+  '';
+
   meta = {
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     description = "Desktop Publishing (DTP) and Layout program";
     mainProgram = "scribus";
     homepage = "https://www.scribus.net";

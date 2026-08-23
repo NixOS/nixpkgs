@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.3";
+  version = "5.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "traitlets";
     tag = "v${version}";
-    hash = "sha256-lWtgzXW1ffzl1jkFaq99X0dU8agulUMHaghsYKX+8Dk=";
+    hash = "sha256-c4OZSC2MrX6Jx8x49lOzlkgwpwz+/2l+GGVCzpO/P+8=";
   };
 
   build-system = [ hatchling ];
@@ -36,8 +36,6 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/ipython/traitlets/issues/902
     "test_complete_custom_completers"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/ipython/traitlets/issues/925
     "test_complete_simple_app"
     "test_complete_subcommands_subapp1"

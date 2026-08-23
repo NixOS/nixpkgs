@@ -795,11 +795,32 @@ in
                             - {var}`"wpa2-sha256"`: WPA2-Personal using HMAC-SHA256 (IEEE 802.11i/RSN). Passwords are set
                               using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
                             - {var}`"wpa3-sae-transition"`: Use WPA3-Personal (SAE) if possible, otherwise fallback
-                              to WPA2-SHA256. Only use if necessary and switch to the newer WPA3-SAE when possible.
+                              to WPA2-Personal. Only use if necessary and switch to the newer WPA3-SAE when possible.
                               You will have to specify both {option}`wpaPassword` and {option}`saePasswords` (or one of their alternatives).
                             - {var}`"wpa3-sae"`: Use WPA3-Personal (SAE). This is currently the recommended way to
                               setup a secured WiFi AP (as of March 2023) and therefore the default. Passwords are set
                               using either {option}`saePasswords` or {option}`saePasswordsFile`.
+                          '';
+                        };
+
+                        transitionDisable = mkOption {
+                          default = false;
+                          example = true;
+                          type = types.bool;
+                          description = ''
+                            Enable the WPA3-Personal Transition Disable indication. After a successful
+                            WPA3 association, compatible stations will disable WPA2-Personal for this
+                            network profile, protecting subsequent associations against downgrade attacks.
+                            Legacy stations can still connect using WPA2 in transition mode.
+
+                            This option is supported in `"wpa3-sae"` and `"wpa3-sae-transition"` modes.
+
+                            ::: {.warning}
+                            Enable this only when every BSS in the network using this SSID supports
+                            WPA3-Personal. The indication applies to a station's entire network profile
+                            and can prevent it from connecting to WPA2-only BSSs. Therefore, the WPA3 spec
+                            requires this to be disabled by default.
+                            :::
                           '';
                         };
 
@@ -1047,7 +1068,6 @@ in
 
                           # IEEE 802.11i (authentication) related configuration
                           # Encrypt management frames to protect against deauthentication and similar attacks
-                          ieee80211w = mkDefault 1;
                           sae_require_mfp = mkDefault 1;
 
                           # Only allow WPA by default and disable insecure WEP
@@ -1076,25 +1096,30 @@ in
                           wpa_key_mgmt = "SAE";
                           # Derive PWE using both hunting-and-pecking loop and hash-to-element
                           sae_pwe = 2;
-                          # Prevent downgrade attacks by indicating to clients that they should
-                          # disable any transition modes from now on.
-                          transition_disable = "0x01";
+                          # Per WPA3 spec, MFP is required.
+                          ieee80211w = 2;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                           wpa = 2;
-                          wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+                          wpa_key_mgmt = "WPA-PSK WPA-PSK-SHA256 SAE";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK-SHA256";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode != "none") {
                           wpa_pairwise = pairwiseCiphers;
                           rsn_pairwise = pairwiseCiphers;
+                        }
+                        // optionalAttrs bssCfg.authentication.transitionDisable {
+                          transition_disable = "0x01";
                         }
                         // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                           wpa_passphrase = bssCfg.authentication.wpaPassword;
@@ -1363,13 +1388,13 @@ in
           # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
           {
             assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
-            message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
+            message = "hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.";
           }
           {
             assertion =
               (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
               -> radioCfg.channel != 0;
-            message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
+            message = "hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd";
           }
         ]
         # BSS warnings
@@ -1391,42 +1416,51 @@ in
               }
               {
                 assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
-                message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
+                message = "hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.";
               }
               {
                 assertion = countWpaPasswordDefinitions <= 1;
-                message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)";
               }
               {
                 assertion =
                   auth.wpaPassword != null
                   -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
-                message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
+                message = "hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).";
               }
               {
                 assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
-                message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)";
+              }
+              {
+                assertion =
+                  auth.transitionDisable
+                  -> builtins.elem auth.mode [
+                    "wpa3-sae"
+                    "wpa3-sae-transition"
+                  ];
+                message = "hostapd radio ${radio} bss ${bss}: transitionDisable requires WPA3-SAE or WPA3-SAE transition mode";
               }
               {
                 assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option";
               }
               {
                 assertion =
                   auth.mode == "wpa3-sae-transition"
                   -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option";
               }
               {
                 assertion =
                   (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option";
               }
             ]
             ++ optionals (auth.saePasswords != [ ]) (
               imap1 (i: entry: {
                 assertion = (entry.password == null) != (entry.passwordFile == null);
-                message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
+                message = "hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`";
               }) auth.saePasswords
             )
           ) radioCfg.networks

@@ -7,25 +7,25 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lf";
-  version = "40";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
-    tag = "r${version}";
-    hash = "sha256-NPbv64ezcuGn6n6qQOCBLeofS08uX9ZWpSXTVpmQr+A=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-WxXbvj17c1yq4Xkj2BE9nENNBMW677aeFq4TYyCt9yE=";
   };
 
-  vendorHash = "sha256-ybcwACun2GrANW47Nny60l8M+L9TZHzD95+qxVJKHpA=";
+  vendorHash = "sha256-VSQf04uyQ49oENlxmGIIrukq5kmHgr8lwmQnJt/50Fo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.gVersion=r${version}"
+    "-X main.gVersion=r${finalAttrs.version}"
   ];
 
   # Force the use of the pure-go implementation of the os/user library.
@@ -51,9 +51,9 @@ buildGoModule rec {
       are handled by external tools.
     '';
     homepage = "https://godoc.org/github.com/gokcehan/lf";
-    changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
+    changelog = "https://github.com/gokcehan/lf/releases/tag/r${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "lf";
   };
-}
+})

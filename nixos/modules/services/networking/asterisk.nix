@@ -78,7 +78,7 @@ in
         '';
         description = ''
           Extra configuration options appended to the default
-          `asterisk.conf` file.
+          {file}`asterisk.conf` file.
         '';
       };
 
@@ -134,7 +134,7 @@ in
           Sets the content of config files (typically ending with
           `.conf`) in the Asterisk configuration directory.
 
-          Note that if you want to change `asterisk.conf`, it
+          Note that if you want to change {file}`asterisk.conf`, it
           is preferable to use the {option}`services.asterisk.extraConfig`
           option over this option. If `"asterisk.conf"` is
           specified with the {option}`confFiles` option (not recommended),

@@ -14,6 +14,7 @@
   postgresqlTestExtension,
   postgresqlTestHook,
   sphinx,
+  stdenv,
   which,
   zlib,
 }:
@@ -49,7 +50,7 @@ postgresqlBuildExtension (finalAttrs: {
     zlib
   ];
 
-  doCheck = !(postgresqlTestHook.meta.broken);
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   checkInputs = [
     cunit
@@ -66,6 +67,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   configureFlags = [
     (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+    "CFLAGS=-std=gnu17"
   ];
 
   postInstall = ''

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "critcmp";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "critcmp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cf78R9siH0RFbx+vXTs71VblpsQokL6Uo32N3X4lV2I=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

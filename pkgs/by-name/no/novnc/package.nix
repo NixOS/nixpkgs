@@ -6,15 +6,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "novnc";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "noVNC";
-    rev = "v${version}";
-    sha256 = "sha256-VYG0p70ZvRzK9IeA+5J95FqF+zWgj/8EcxnVOk+YL9o=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vObaEjP8ZgA4a4bEYbSBsSTl6CfYa/B7qmghM+iVDnQ=";
   };
 
   patches =
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 utils/novnc_proxy "$out/bin/novnc"
     install -dm755 "$out/share/webapps/novnc/"
-    cp -a app core po vendor vnc.html karma.conf.js package.json vnc_lite.html "$out/share/webapps/novnc/"
+    cp -a app core po vendor vnc.html karma.conf.cjs package.json vnc_lite.html "$out/share/webapps/novnc/"
 
     runHook postInstall
   '';
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ neverbehave ];
     mainProgram = "novnc";
   };
-}
+})

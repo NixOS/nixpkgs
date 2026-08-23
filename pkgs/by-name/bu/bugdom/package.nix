@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bugdom";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = "bugdom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
         install -Dm755 {.,$out/bin}/Bugdom
         wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
         install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
-        install -Dm644 $src/packaging/io.jor.bugdom.png $out/share/pixmaps/io.jor.bugdom.png
+        install -Dm644 $src/packaging/io.jor.bugdom.png -t $out/share/icons/hicolor/512x512/apps
       ''
   )
   + ''
@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/Bugdom";
-    license = with lib.licenses; [ cc-by-sa-40 ];
+    license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [ lux ];
     mainProgram = "Bugdom";
     platforms = lib.platforms.unix;
   };
-}
+})

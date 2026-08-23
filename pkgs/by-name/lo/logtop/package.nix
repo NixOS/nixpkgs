@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logtop";
   version = "0.7";
 
   src = fetchFromGitHub {
-    rev = "logtop-${version}";
+    rev = "logtop-${finalAttrs.version}";
     owner = "JulienPalard";
     repo = "logtop";
     sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.starcraft66 ];
     mainProgram = "logtop";
   };
-}
+})

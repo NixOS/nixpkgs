@@ -8,7 +8,6 @@
   pytest-vcr,
   pytestCheckHook,
   python-box,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "restfly";
   version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stevemcgrath";

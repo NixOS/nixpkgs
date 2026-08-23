@@ -7,17 +7,16 @@
   glib,
   libbsd,
   check,
-  pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rcon";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "n0la";
     repo = "rcon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
     glib
     libbsd
     check
-    pcre
   ];
 
   postPatch = ''
@@ -43,9 +41,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/n0la/rcon";
     description = "Source RCON client for command line";
-    maintainers = with lib.maintainers; [ f4814n ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.bsd2;
     mainProgram = "rcon";
   };
-}
+})

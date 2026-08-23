@@ -4,23 +4,23 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  utilmacros,
-  libX11,
-  libXaw,
-  libXmu,
-  libXt,
+  util-macros,
+  libx11,
+  libxaw,
+  libxmu,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xedit";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xorg/app";
     repo = "xedit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-0vP+aR8QBXAqbULOLEs7QXsehk18BJ405qoelrcepwE=";
+    sha256 = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
   };
 
   # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    utilmacros
+    util-macros
   ];
   buildInputs = [
-    libX11
-    libXaw
-    libXmu
-    libXt
+    libx11
+    libxaw
+    libxmu
+    libxt
   ];
 
   configureFlags = [
@@ -50,8 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple graphical text editor using Athena Widgets (Xaw)";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ shamilton ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

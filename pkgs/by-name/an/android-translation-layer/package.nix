@@ -5,7 +5,6 @@
   meson,
   openjdk17,
   lib,
-  glib,
   pkg-config,
   wayland-protocols,
   wayland,
@@ -23,31 +22,27 @@
   bionic-translation,
   alsa-lib,
   makeWrapper,
-  replaceVars,
   nixosTests,
   bintools,
 }:
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-09-14";
+  version = "0-unstable-2026-07-30";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "9de91586994af5078decda17db92ce50c5673951";
-    hash = "sha256-iRjP++WzLsV7oDGNdF3m9JJJS7zLrG5W46U3h39H5uk=";
+    rev = "cf2c759fa93330f45df6107dcf8984cf49b29c64";
+    hash = "sha256-+TTntAnE/5j/FhGcdXRui3/p/sfkc83CKNdBf9Yage0=";
   };
 
   patches = [
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
-    # Patch custon Dex install dir
+    # Patch custom Dex install dir
     ./configure-dex-install-dir.patch
-
-    # Patch atl to load microg apk from custom path
-    ./configure-microg-path.patch
   ];
 
   postPatch = ''
@@ -82,10 +77,6 @@ stdenv.mkDerivation {
     webkitgtk_6_0
   ];
 
-  postInstall = ''
-    install -D $src/com.google.android.gms.apk $out/share/com.google.android.gms.apk
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
       --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
@@ -94,8 +85,7 @@ stdenv.mkDerivation {
           art-standalone # dex2oat
           bintools # addr2line
         ]
-      } \
-      --set MICROG_APK_PATH "$out/share/com.google.android.gms.apk"
+      }
   '';
 
   passthru.tests = {

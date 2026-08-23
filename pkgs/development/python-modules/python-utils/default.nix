@@ -6,7 +6,6 @@
   loguru,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-utils";
   version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "WoLpH";

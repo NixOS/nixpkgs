@@ -9,14 +9,14 @@
   enable-tools ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpiod";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
-    tag = "v${version}";
-    hash = "sha256-MePv6LsK+8zCxG8l4vyiiZPSVqv9F4H4KQB0gHjm0YM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PtkJZ9p6r6S47RjiCRv4cVmlY4BHdB6FCMJ+M/IPnw0=";
   };
 
   nativeBuildInputs = [
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "distlib";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Low-level components of distutils2/packaging";
     homepage = "https://distlib.readthedocs.io";
     license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 }

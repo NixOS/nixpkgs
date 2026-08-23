@@ -14,12 +14,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pstoedit";
   version = "4.02";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pstoedit/pstoedit-${version}.tar.gz";
+    url = "mirror://sourceforge/pstoedit/pstoedit-${finalAttrs.version}.tar.gz";
     hash = "sha256-VYi0MtLGsq2YKLRJFepYE/+aOjMSpB+g3kw43ayd9y8=";
   };
 
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     description = "Translates PostScript and PDF graphics into other vector formats";
     homepage = "https://sourceforge.net/projects/pstoedit/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pstoedit";
   };
-}
+})

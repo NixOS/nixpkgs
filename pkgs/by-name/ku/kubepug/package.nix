@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubepug";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "kubepug";
     repo = "kubepug";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VNxaYQy81U0JWd6KS0jCvMexpyWL4v1cKpjxLRkxBLE=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=${finalAttrs.version}"
   ];
 
   meta = {
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mausch ];
   };
-}
+})

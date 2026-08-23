@@ -20,7 +20,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dialect";
   version = "2.6.1";
   pyproject = false; # built with meson
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dialect-app";
     repo = "dialect";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-Gy5KlcY22ykoWUzVk6w46SLndOmEQxMCcvo1ClMq0LM=";
   };
@@ -88,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "dialect";
   };
-}
+})

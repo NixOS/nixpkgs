@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -63,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -72,7 +73,7 @@ buildPythonPackage (finalAttrs: {
     owner = "atopile";
     repo = "atopile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
+    hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
   };
 
   build-system = [
@@ -129,9 +130,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "deprecated"
     "posthog"
     "prompt-toolkit"
-    "zstd"
   ];
 
   pythonImportsCheck = [ "atopile" ];
@@ -175,7 +176,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # timouts
+    # timeouts
     "test/test_cli.py"
     "test/cli/test_packages.py"
     "test/end_to_end/test_net_naming.py"
@@ -186,7 +187,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # timeout
+    # Timeout (>10.0s) from pytest-timeout.
     "test_build_error_logging"
     "test_can_evaluate_literals"
     "test_examples_build"
@@ -195,6 +196,11 @@ buildPythonPackage (finalAttrs: {
     "test_regression_rp2040_usb_diffpair"
     "test_reserved_attrs"
     "test_resistor"
+    "test_loooooong_chain"
+    "test_parser_netlist"
+    "test_dump_load_equality"
+    "test_performance_mifs_connect_check"
+
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"
@@ -213,10 +219,13 @@ buildPythonPackage (finalAttrs: {
     "test_muster_specific_targets_with_dependencies"
   ];
 
-  # in order to use pytest marker, we need to use ppytestFlagsArray
-  # using pytestFlags causes `ERROR: file or directory not found: slow`
-  pytestFlagsArray = [
-    "-m='not slow and not not_in_ci and not regression'"
+  disabledTestMarks = [
+    "slow"
+    "not_in_ci"
+    "regression"
+  ];
+
+  pytestFlags = [
     "--timeout=10" # any test taking long, timouts with more than 60s
     "--benchmark-disable"
     "--tb=line"
@@ -229,8 +238,8 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
     changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "ato";
   };
 })

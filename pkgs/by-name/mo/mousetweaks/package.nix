@@ -8,7 +8,10 @@
   gnome,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxfixes,
+  libxcursor,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/mousetweaks/${lib.versions.majorMinor version}/mousetweaks-${version}.tar.xz";
     sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
   };
 
@@ -29,10 +32,10 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXfixes
-    xorg.libXcursor
+    libx11
+    libxtst
+    libxfixes
+    libxcursor
   ];
 
   passthru = {

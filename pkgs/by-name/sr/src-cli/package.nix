@@ -3,23 +3,22 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
-  xorg,
   testers,
   src-cli,
 }:
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "6.11.0";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-uJAiNBrZmaDV7Etr3xAkDHXs7H9YZYLsyTcnaHGVJfI=";
+    hash = "sha256-a6F4r5pVJvkQUyUpmqwjyQKfU3KAx9S61+0hnodqlHk=";
   };
 
-  vendorHash = "sha256-H8xJtlAWkk7AcZBYR/xggs/Ut0cnHC49XiScEcdlkMc=";
+  vendorHash = "sha256-+phJFHid2ytXeLrvGMGTXplDAcN9YEDhRrO9ax/d8R8=";
 
   subPackages = [
     "cmd/src"
@@ -45,6 +44,7 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       keegancsmith
+      burmudar
     ];
     mainProgram = "src";
   };

@@ -10,26 +10,35 @@
   openssl,
   zlib,
   pkg-config,
-  python310,
+  python3,
   re2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bulk_extractor";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "bulk_extractor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jj/amXESFBu/ZaiIRlDKmtWTBVQ2TEvOM2jBYP3y1L8=";
+    hash = "sha256-Ed+KUImSMVVZEKLKl90YkGruwD8xtevgyozCj44bHic=";
     fetchSubmodules = true;
   };
+
+  # Fix gcc15 build failures due to missing <cstdint>
+  # Tracking: https://github.com/NixOS/nixpkgs/issues/475479
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/exif_entry.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
+  '';
 
   enableParallelBuilding = true;
   nativeBuildInputs = [
     pkg-config
-    python310
+    python3
     autoreconfHook
   ];
   buildInputs = [
@@ -48,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     aclocal -I m4
   '';
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
-  '';
-
   meta = {
     description = "Digital forensics tool for extracting information from file systems";
     longDescription = ''
@@ -65,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/simsong/bulk_extractor";
     downloadPage = "http://downloads.digitalcorpora.org/downloads/bulk_extractor/";
     changelog = "https://github.com/simsong/bulk_extractor/blob/${finalAttrs.src.rev}/ChangeLog";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix ++ windows;
     license = with lib.licenses; [
       mit

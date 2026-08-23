@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   flit-core,
   gevent,
   mock,
@@ -14,7 +15,7 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kantoku";
   version = "0.18.3";
   pyproject = true;
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "kantoku";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pI79B7TDZwL4Jz5e7PDPIf8iIGiwCOKFI2jReUt8UNg=";
   };
 
@@ -52,6 +53,13 @@ buildPythonPackage rec {
     # Assertion error when test_socketstats hits a permission error
     "test_resource_watcher_max_mem"
     "test_resource_watcher_max_mem_abs"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_help_invalid_command"
+    "test_venv"
+    "test_venv_site_packages"
+    # Times out
+    "test_handler"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -59,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "A Process & Socket Manager built with zmq";
     homepage = "https://github.com/bentoml/kantoku";
-    changelog = "https://github.com/bentoml/kantoku/releases/tag/${version}";
+    changelog = "https://github.com/bentoml/kantoku/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "distro";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

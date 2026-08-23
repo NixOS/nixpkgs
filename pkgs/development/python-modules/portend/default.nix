@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   setuptools-scm,
   tempora,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "portend";
   version = "3.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qp1Aqx+eFL231AH0IhDfNdAXybl5kbrrGFaM7fuMZIk=";
   };
 
@@ -40,4 +37,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/portend";
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -38,11 +38,12 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   replaceVars,
   openssl,
   ostree-full,
+  testers,
 }:
 
 let
@@ -54,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2025.2";
+  version = "2026.2";
 
   outputs = [
     "out"
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
+    hash = "sha256-ooHy22MfNyHs1Lnid5oer1bi0D8sxHYpqfARfxIBaoM=";
   };
 
   patches = [
@@ -123,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;
@@ -170,6 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
       inherit ostree-full;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -179,5 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    pkgConfigModules = [ "ostree-1" ];
   };
 })

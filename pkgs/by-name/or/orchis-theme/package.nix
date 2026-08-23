@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gtk3,
   gnome-themes-extra,
-  gtk-engine-murrine,
   sassc,
   border-radius ? null, # Suggested: 2 < value < 16
   tweaks ? [ ], # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
@@ -38,13 +37,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-04-25";
+    version = "2026-07-07";
 
     src = fetchFromGitHub {
       repo = "Orchis-theme";
       owner = "vinceliuice";
       rev = version;
-      hash = "sha256-+2/CsgJ+rdDpCp+r5B/zys3PtFgtnu+ohTEUOtJNd1Y=";
+      hash = "sha256-oX6+tPe0nGsl+OzFZCpbKvE00Z/xvP+NoHY7QZ9YAo0=";
     };
 
     nativeBuildInputs = [
@@ -53,8 +52,6 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
     ];
 
     buildInputs = [ gnome-themes-extra ];
-
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
     preInstall = ''
       mkdir -p $out/share/themes
@@ -77,6 +74,6 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
       homepage = "https://github.com/vinceliuice/Orchis-theme";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.linux;
-      maintainers = [ lib.maintainers.fufexan ];
+      maintainers = [ lib.maintainers.ncfavier ];
     };
   }

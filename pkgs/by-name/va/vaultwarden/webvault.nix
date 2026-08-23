@@ -1,7 +1,6 @@
 {
   lib,
   buildNpmPackage,
-  nodejs_22,
   fetchFromGitHub,
   nixosTests,
   python3,
@@ -11,19 +10,17 @@
 
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  version = "2025.12.1.0";
-
-  # doesn't build with newer versions
-  nodejs = nodejs_22;
+  version = "2026.7.0+0";
 
   src = fetchFromGitHub {
     owner = "vaultwarden";
     repo = "vw_web_builds";
     tag = "v${version}";
-    hash = "sha256-s2PTB6ABN2qubwAjqWvO9jXndQxIHlI3qoTFBCRw8iU=";
+    hash = "sha256-yX6Lf+7q9ptVAlx0q0Z55GnKhvAIjYvvvKR1ZZroWeo=";
   };
 
-  npmDepsHash = "sha256-tM+jAhM+/QB+o6wNJJMSZ/HTcWnPR0DyYItdhlVVyc4=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-WRxlvkgWboO0ukUHgjC5CrfgfwnmUfDXI4r5dx9CKww=";
 
   nativeBuildInputs = [
     python3
@@ -68,8 +65,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Integrates the web vault into vaultwarden";
-    homepage = "https://github.com/dani-garcia/bw_web_builds";
-    changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${lib.concatStringsSep "." (lib.take 3 (lib.versions.splitVersion version))}";
+    homepage = "https://github.com/vaultwarden/vw_web_builds";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     inherit (vaultwarden.meta) maintainers;

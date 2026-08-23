@@ -9,15 +9,12 @@
   pytestCheckHook,
   python-slugify,
   python-status,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
   version = "1.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "allisson";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple REST client for Python";
     homepage = "https://github.com/allisson/python-simple-rest-client";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

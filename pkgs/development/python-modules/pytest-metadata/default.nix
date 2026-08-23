@@ -6,19 +6,16 @@
   hatchling,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-metadata";
   version = "3.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_metadata";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-0qKbA1X7wD8WiqltQf+IsaO0SjsCrL5JGAHJigSAF8g=";
   };
 
@@ -37,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ mpoquet ];
   };
-}
+})

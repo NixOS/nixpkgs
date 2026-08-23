@@ -12,7 +12,7 @@
   libmatroska,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmatroska";
   version = "1.7.1";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Matroska-Org";
     repo = "libmatroska";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-hfu3Q1lIyMlWFWUM2Pu70Hie0rlQmua7Kq8kSIWnfHE=";
   };
 
@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library to parse Matroska files";
     homepage = "https://matroska.org/";
-    changelog = "https://github.com/Matroska-Org/libmatroska/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/Matroska-Org/libmatroska/blob/${finalAttrs.src.rev}/NEWS.md";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ getchoo ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "libmatroska" ];
   };
-}
+})

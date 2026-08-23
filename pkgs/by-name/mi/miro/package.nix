@@ -2,46 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  libcosmicAppHook,
   pkg-config,
   fontconfig,
-  wayland,
-  libxkbcommon,
-  libglvnd,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miro";
-  version = "0.7.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "vincent-uden";
     repo = "miro";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2RyBjWeb94bxiZ7hy//654YP1bc6bl13slNxRwrhtyk=";
+    hash = "sha256-aCXPaUir4sd27S9CEdPbgaas2mstAxONcIWmZMpX6a8=";
   };
 
-  cargoHash = "sha256-wRlze8VZ9I4O/eycWvlNPUsa/ucBeZ8SWtD9eJ+Uxvs=";
+  cargoHash = "sha256-/XlkdtZNx05WgdlHZ2WWUrjadiAUJz6x25jSKiO/H34=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    libcosmicAppHook
     pkg-config
   ];
 
   buildInputs = [
-    wayland
     fontconfig
-    libxkbcommon
-    libglvnd
-  ];
-
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
   ];
 
   doInstallCheck = true;

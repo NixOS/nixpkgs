@@ -7,18 +7,18 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "encrypted-dns-server";
-  version = "0.9.18";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "encrypted-dns-server";
-    tag = version;
-    hash = "sha256-YM9ow1j5G6AN91/YLnRy+jOlpQPBxZa+chNZNPGUfhs=";
+    tag = finalAttrs.version;
+    hash = "sha256-WdKAQISl82ii/C9pILd7HWEE2qtdZpMF32/pRc7lPpk=";
   };
 
-  cargoHash = "sha256-cHARkL8gbNBlmjbJaHJ8w268KcXTJr2PvCF+I6+K0s8=";
+  cargoHash = "sha256-JZRKcvlxciU5MXGLBIXuZeU6tjxKaRaUn3xARN+5JtM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/encrypted-dns";
 
   meta = {
-    changelog = "https://github.com/DNSCrypt/encrypted-dns-server/releases/tag/${version}";
+    changelog = "https://github.com/DNSCrypt/encrypted-dns-server/releases/tag/${finalAttrs.version}";
     description = "Easy to install, high-performance, zero maintenance proxy to run an encrypted DNS server";
     homepage = "https://github.com/DNSCrypt/encrypted-dns-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paepcke ];
     mainProgram = "encrypted-dns";
   };
-}
+})

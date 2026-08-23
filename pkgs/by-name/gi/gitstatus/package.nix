@@ -7,18 +7,19 @@
   zsh,
   zlib,
   runtimeShell,
+  nix-update-script,
 }:
 let
   romkatv_libgit2 = callPackage ./romkatv_libgit2.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitstatus";
   version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
@@ -120,6 +121,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit romkatv_libgit2;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -133,11 +135,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/romkatv/gitstatus";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      mmlb
-      SuperSandro2000
+    maintainers = [
+      lib.maintainers.mmlb
+      lib.maintainers.SuperSandro2000
     ];
     platforms = lib.platforms.all;
     mainProgram = "gitstatusd";
   };
-}
+})

@@ -8,12 +8,12 @@
   libGL,
   glfw2,
   glew,
-  libX11,
+  libx11,
   xorgproto,
-  libXi,
-  libXmu,
+  libxi,
+  libxmu,
   fetchpatch,
-  libXrandr,
+  libxrandr,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     libGL
     glfw2
     glew
-    libX11
+    libx11
     xorgproto
-    libXi
-    libXmu
-    libXrandr
+    libxi
+    libxmu
+    libxrandr
   ];
 
   postInstall = ''

@@ -18,7 +18,7 @@
   # : license
   license ? lib.licenses.isc,
   # : string
-  owner ? "~flexibeast",
+  owner ? "~humm",
   # : string
   rev ? "v${version}",
 }:

@@ -11,16 +11,30 @@
   libxml2,
   pkg-config,
   which,
-  xorg,
+  xkeyboard-config,
+  libxtst,
+  libxrandr,
+  libxpm,
+  libxinerama,
+  libxfont_2,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcomposite,
+  font-util,
+  xkbcomp,
+  pixman,
+  imake,
+  gccmakedep,
   libtirpc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nx-libs";
   version = "3.5.99.26";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
@@ -38,31 +52,33 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     which
-    xorg.gccmakedep
-    xorg.imake
+    gccmakedep
+    imake
   ];
   buildInputs = [
     libjpeg_turbo
     libpng
     libxml2
-    xorg.fontutil
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfont2
-    xorg.libXinerama
-    xorg.libXpm
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.pixman
-    xorg.xkbcomp
-    xorg.xkeyboardconfig
+    font-util
+    libxcomposite
+    libxdamage
+    libxdmcp
+    libxext
+    libxfont_2
+    libxinerama
+    libxpm
+    libxrandr
+    libxtst
+    pixman
+    xkbcomp
+    xkeyboard-config
     libtirpc
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = toString [ "-ltirpc" ];
+  };
 
   postPatch = ''
     patchShebangs .
@@ -76,7 +92,7 @@ stdenv.mkDerivation rec {
     substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
-  PREFIX = ""; # Don't install to $out/usr/local
+  env.PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
     # See:
@@ -92,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

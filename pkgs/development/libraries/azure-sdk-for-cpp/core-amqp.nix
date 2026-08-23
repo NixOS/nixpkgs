@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-core-amqp_1.0.0-beta.11";
     hash = "sha256-MQsz5Dmv1BwfUaN1VXMC3hPdMHihlgOBaukp5wgTNJc=";
   };
-  sourceRoot = "source/sdk/core/azure-core-amqp";
+  sourceRoot = "${finalAttrs.src.name}/sdk/core/azure-core-amqp";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

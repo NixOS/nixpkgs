@@ -22,14 +22,23 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mdx";
-  version = "2.5.1";
-
-  minimalOCamlVersion = "4.08";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${finalAttrs.version}/mdx-${finalAttrs.version}.tbz";
-    hash = "sha256-3YKYDdERpIBv+akdnS7Xwmrvsdp9zL0V5zw6j2boY/U=";
+    hash = "sha256-yEjCxoDGJmLcSgX1WOXGwY7Sqre7ZQjB1JEJ1uqRo88=";
   };
+
+  env =
+    # Fix build with gcc15
+    lib.optionalAttrs
+      (
+        lib.versionAtLeast ocaml.version "4.10" && lib.versionOlder ocaml.version "4.14"
+        || lib.versions.majorMinor ocaml.version == "5.0"
+      )
+      {
+        NIX_CFLAGS_COMPILE = "-std=gnu11";
+      };
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [

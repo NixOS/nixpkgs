@@ -20,9 +20,6 @@ buildDunePackage {
   pname = "ocamlformat-rpc-lib";
   inherit src version;
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     csexp
     sexplib0

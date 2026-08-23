@@ -6,12 +6,12 @@
   libressl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notemap";
   version = "1.3";
 
   src = fetchzip {
-    url = "https://git.causal.agency/notemap/snapshot/notemap-${version}.tar.gz";
+    url = "https://git.causal.agency/notemap/snapshot/notemap-${finalAttrs.version}.tar.gz";
     sha256 = "0s9c1xx0iggyzclqw3294bjv7qgvd5l5zgbryks4hvfibr73r6ps";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     homepage = "https://git.causal.agency/notemap/about/";
     platforms = lib.platforms.unix;
   };
-}
+})

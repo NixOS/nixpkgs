@@ -4,12 +4,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "common-licenses";
   version = "13";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/b/base-files/base-files_${version}.tar.xz";
+    url = "http://deb.debian.org/debian/pool/main/b/base-files/base-files_${finalAttrs.version}.tar.xz";
     hash = "sha256-Q5FTvfKWSBE1ywuAH+RnZdyD+LmRSgJ11qFiM53hL1Y=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mkg20001 ];
   };
-}
+})

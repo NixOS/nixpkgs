@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitlbee-discord";
   version = "0.4.3";
 
   src = fetchFromGitHub {
-    tag = version;
+    tag = finalAttrs.version;
     owner = "sm00th";
     repo = "bitlbee-discord";
     sha256 = "00qgdvrp7hv02n0ns685igp810zxmv3adsama8601122al6x041n";
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lassulus ];
     platforms = lib.platforms.linux;
   };
-}
+})

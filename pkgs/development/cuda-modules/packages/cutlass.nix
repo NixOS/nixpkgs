@@ -46,13 +46,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "cutlass";
-  version = "3.9.2";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
+    hash = "sha256-pXRmZ/60ENcLKxnvnMhTumetWV4e9nGNwJmT8EE0RQ8=";
   };
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a
@@ -97,7 +97,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # '_CUDA_INSTALL_PATH = "${getBin cuda_nvcc}"'
     + ''
       nixLog "patching python bindings to make cuda_install_path fail"
-      substituteInPlace ./python/cutlass/__init__.py \
+      substituteInPlace ./python/cutlass_cppgen/__init__.py \
         --replace-fail \
           'def cuda_install_path():' \
       '
@@ -106,15 +106,15 @@ backendStdenv.mkDerivation (finalAttrs: {
       '
     ''
     # Patch the python bindings to use environment variables set by Nixpkgs.
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L80
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L81
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L317
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L319
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L344
-    # https://github.com/NVIDIA/cutlass/blob/e94e888df3551224738bfa505787b515eae8352f/python/cutlass/backend/compiler.py#L360
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L83
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L84
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L320
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L322
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L347
+    # https://github.com/NVIDIA/cutlass/blob/2e602843e75100d0e03934efb386b3e1e35d7907/python/cutlass_cppgen/backend/compiler.py#L363
     + ''
       nixLog "patching python bindings to use environment variables"
-      substituteInPlace ./python/cutlass/backend/compiler.py \
+      substituteInPlace ./python/cutlass_cppgen/backend/compiler.py \
         --replace-fail \
           'self.include_paths = include_paths' \
           'self.include_paths = include_paths + [root + "/include" for root in os.getenv("CUDAToolkit_ROOT").split(";")]' \
@@ -152,8 +152,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "CUTLASS_ENABLE_EXAMPLES" false)
 
     # Tests.
-    (cmakeBool "CUTLASS_ENABLE_TESTS" finalAttrs.doCheck)
-    (cmakeBool "CUTLASS_ENABLE_GTEST_UNIT_TESTS" finalAttrs.doCheck)
+    (cmakeBool "CUTLASS_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (cmakeBool "CUTLASS_ENABLE_GTEST_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (cmakeBool "CUTLASS_USE_SYSTEM_GOOGLETEST" true)
 
     # NOTE: Both CUDNN and CUBLAS can be used by the examples and the profiler. Since they are large dependencies, they
@@ -189,12 +189,12 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Because the test cases immediately create and try to run the binaries, we don't have an opportunity
   # to patch them with autoAddDriverRunpath. To get around this, we add the driver runpath to the environment.
   # TODO: This would break Jetson when using cuda_compat, as it must come first.
-  preCheck = optionalString finalAttrs.doCheck ''
+  preCheck = optionalString finalAttrs.finalPackage.doCheck ''
     export LD_LIBRARY_PATH="$(readlink -mnv "${addDriverRunpath.driverLink}/lib")"
   '';
 
   # This is *not* a derivation you want to build on a small machine.
-  requiredSystemFeatures = optionals finalAttrs.doCheck [
+  requiredSystemFeatures = optionals finalAttrs.finalPackage.doCheck [
     "big-parallel"
     "cuda"
   ];
@@ -220,7 +220,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "CUDA Templates for Linear Algebra Subroutines";
     homepage = "https://github.com/NVIDIA/cutlass";
-    license = licenses.asl20;
+    license = licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

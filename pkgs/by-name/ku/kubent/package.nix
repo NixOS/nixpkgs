@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubent";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "doitintl";
     repo = "kube-no-trouble";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7bn7DxbZ/Nqob7ZEWRy1UVg97FiJN5JWEgpH1CDz6jQ=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/kubent" ];
@@ -30,14 +30,14 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kubent;
     command = "kubent --version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Easily check your cluster for use of deprecated APIs";
-    changelog = "https://github.com/doitintl/kube-no-trouble/releases/tag/${version}";
+    changelog = "https://github.com/doitintl/kube-no-trouble/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/doitintl/kube-no-trouble";
     license = lib.licenses.mit;
     mainProgram = "kubent";
   };
-}
+})

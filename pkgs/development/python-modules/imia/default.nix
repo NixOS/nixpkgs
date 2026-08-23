@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "imia";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +33,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/alex-oleshkevich/imia/releases/tag/v${version}";
     homepage = "https://github.com/alex-oleshkevich/imia";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

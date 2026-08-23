@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "unfurl";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
     repo = "unfurl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7aLe5d8ku5llfJ2xh8fT56vqj12/CJ1ez3Vte2PF8KQ=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

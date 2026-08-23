@@ -4,7 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   writeShellScript,
-  steam-run-free,
+  steam,
   fetchpatch2,
   winetricks,
   yad,
@@ -12,24 +12,35 @@
   extraCompatPaths ? "",
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  steam-run =
+    (steam.override {
+      extraLibraries =
+        p: with p; [
+          # Fixes installing vcrun2022
+          # https://github.com/Matoking/protontricks/issues/461
+          freetype
+        ];
+    }).run-free;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
-  version = "1.13.1";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
-    tag = version;
-    hash = "sha256-YJUNp+8n1LPlD7lCAy6AMNxToloPBn8ZaRfREiwS9ls=";
+    tag = finalAttrs.version;
+    hash = "sha256-pTBpzSBGFUmol3Osb78yhyZup2DogLpNaBg/kF0dVGI=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
     (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run-free;
+      steamRun = lib.getExe steam-run;
       bash = writeShellScript "steam-run-bash" ''
-        exec ${lib.getExe steam-run-free} bash "$@"
+        exec ${lib.getExe steam-run} bash "$@"
       '';
     })
 
@@ -75,7 +86,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
-    changelog = "https://github.com/Matoking/protontricks/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Matoking/protontricks/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
@@ -83,4 +94,4 @@ python3Packages.buildPythonApplication rec {
       "i686-linux"
     ];
   };
-}
+})

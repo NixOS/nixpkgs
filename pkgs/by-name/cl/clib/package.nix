@@ -5,12 +5,12 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.8.7";
   pname = "clib";
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = finalAttrs.version;
     owner = "clibs";
     repo = "clib";
     sha256 = "sha256-uL8prMk2DrYLjCmZW8DdbCg5FJ5uksT3vIATyOW2ZzY=";
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jb55 ];
     platforms = lib.platforms.all;
   };
-}
+})

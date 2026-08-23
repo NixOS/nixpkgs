@@ -7,7 +7,6 @@
   idna,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uritools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "urlextract";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

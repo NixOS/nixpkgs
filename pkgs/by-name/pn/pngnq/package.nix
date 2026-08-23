@@ -7,12 +7,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngnq";
   version = "1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pngnq/pngnq-${version}.tar.gz";
+    url = "mirror://sourceforge/pngnq/pngnq-${finalAttrs.version}.tar.gz";
     sha256 = "1qmnnl846agg55i7h4vmrn11lgb8kg6gvs8byqz34bdkjh5gwiy1";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})

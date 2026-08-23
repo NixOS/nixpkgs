@@ -5,7 +5,7 @@
   stdlib-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bitstring";
   version = "4.1.1";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "xguerin";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bitstring";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eO7/S9PoMybZPnQQ+q9qbqKpYO4Foc9OjW4uiwwNds8=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.maurer ];
   };
-}
+})

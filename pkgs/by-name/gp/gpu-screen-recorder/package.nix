@@ -7,7 +7,7 @@
   ninja,
   addDriverRunpath,
   pkg-config,
-  libXcomposite,
+  libxcomposite,
   libpulseaudio,
   dbus,
   ffmpeg,
@@ -18,23 +18,29 @@
   libdrm,
   libva,
   libglvnd,
-  libXdamage,
-  libXi,
-  libXrandr,
-  libXfixes,
+  libxdamage,
+  libxi,
+  libxrandr,
+  libxfixes,
+  libjpeg_turbo,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "5.11.2";
+  version = "6.0.1";
 
   src = fetchgit {
-    url = "https://repo.dec05eba.com/${pname}";
-    tag = version;
-    hash = "sha256-9hmuaqa6HQogL4OwDOID/kL4ZYaDDKJeFrEtrDS9ZYg=";
+    url = "https://repo.dec05eba.com/gpu-screen-recorder";
+    tag = finalAttrs.version;
+    hash = "sha256-mq+I90JaVsYZgPFLHRO/Qebv5p3XQZ6VaNbvHJBfXbQ=";
   };
+
+  postPatch = ''
+    substituteInPlace src/capture/v4l2.c src/image_writer.c \
+      --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXcomposite
+    libxcomposite
     libpulseaudio
     dbus
     ffmpeg
@@ -54,10 +60,10 @@ stdenv.mkDerivation rec {
     vulkan-headers
     libdrm
     libva
-    libXdamage
-    libXi
-    libXrandr
-    libXfixes
+    libxdamage
+    libxi
+    libxrandr
+    libxfixes
   ];
 
   mesonFlags = [
@@ -68,6 +74,8 @@ stdenv.mkDerivation rec {
     # Handle by the module
     (lib.mesonBool "capabilities" false)
     (lib.mesonBool "nvidia_suspend_fix" false)
+    # Disable upstream static ffmpeg build
+    (lib.mesonBool "ffmpeg_static" false)
   ];
 
   postInstall = ''
@@ -82,6 +90,8 @@ stdenv.mkDerivation rec {
       }" \
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
+    substituteInPlace $out/lib/systemd/user/gpu-screen-recorder.service \
+      --replace-fail "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -95,6 +105,6 @@ stdenv.mkDerivation rec {
       babbaj
       js6pak
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
-}
+})

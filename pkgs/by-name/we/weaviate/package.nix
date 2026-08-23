@@ -2,20 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "weaviate";
-  version = "1.33.2";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
-    rev = "v${version}";
-    hash = "sha256-+QchAvIBJcbrwveeGHXFC+96oD5Uy/+lqMV/vxRPzbk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Nc6QAMjZF24KiYcS9W1AMgusUXHn96KqNV/RC2N4Glc=";
   };
 
-  vendorHash = "sha256-KiDU9fw/4vIhI0XbEzUfw+HhopJniVeGhFVJBbLkixU=";
+  vendorHash = "sha256-31yzL0fx2dhYiSdcKvHBe8UeFENSzFxsB/RQAMM/1e4=";
 
   subPackages = [ "cmd/weaviate-server" ];
 
@@ -29,10 +30,12 @@ buildGoModule rec {
     ln -s $out/bin/weaviate-server $out/bin/weaviate
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "ML-first vector search engine";
-    homepage = "https://github.com/semi-technologies/weaviate";
+    homepage = "https://github.com/weaviate/weaviate";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
-}
+})

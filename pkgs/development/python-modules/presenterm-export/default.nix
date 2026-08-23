@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   ansi2html,
   libtmux,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = true;
-
-  disabled = pythonOlder "3.9";
 
   build-system = [
     setuptools

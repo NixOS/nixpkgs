@@ -35,15 +35,15 @@
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.1";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
-    rev = version;
-    hash = "sha256-+T89KxGTGycN1pnXBxJY15ViRvwJbM2adZVUTTSG3VQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-wycQmScxuSlo6Ln6piSBF7kmzvi6FnTm/ES/Ds+/h8I=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,12 @@ stdenv.mkDerivation rec {
     djvulibre
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/xreader.thumbnailer \
+      --replace-fail "TryExec=xreader-thumbnailer" "TryExec=$out/bin/xreader-thumbnailer" \
+      --replace-fail "Exec=xreader-thumbnailer" "Exec=$out/bin/xreader-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
@@ -93,4 +99,4 @@ document formats like PDF and Postscript";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "5.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "5.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joerick";
     repo = "pyinstrument";
     tag = "v${version}";
-    hash = "sha256-omQLUVgHbyz6YzLQ/7zU0f1R5xFU7EVGnwXohcuuP+o=";
+    hash = "sha256-eq1nclGpaBOW52UCzUeZHsq6GwMdkT2IU8RhnnuKirM=";
   };
 
   nativeBuildInputs = [

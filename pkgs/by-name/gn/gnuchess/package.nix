@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnuchess";
   version = "6.3.0";
 
   src = fetchurl {
-    url = "mirror://gnu/chess/gnuchess-${version}.tar.gz";
+    url = "mirror://gnu/chess/gnuchess-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Cze+wgmMKtaVt0Q+XXlE3G3IKE+NAfzDC9uU3QM8ojo=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

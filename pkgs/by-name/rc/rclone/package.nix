@@ -8,16 +8,15 @@
   versionCheckHook,
   makeWrapper,
   enableCmount ? true,
-  fuse,
   fuse3,
   macfuse-stubs,
   librclone,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rclone";
-  version = "1.72.1";
+  version = "1.75.0";
 
   outputs = [
     "out"
@@ -27,11 +26,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone";
-    tag = "v${version}";
-    hash = "sha256-CyMGcyFkYbKYvv2pc2M1K6ikAI0tPO/Tc1DEf0O/Fsw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Al3jB+R8U68TuIfDQ+q9V/OjIed176csajwiSljwZU=";
   };
 
-  vendorHash = "sha256-tNeL43WGWeX88vXJwQzxubUPIyejl3PPHXLc8oNeno4=";
+  vendorHash = "sha256-jjbDyZwHCx9oeFuMVMY5sJeRNlCUyU9quO/aqzxeJnU=";
 
   subPackages = [ "." ];
 
@@ -41,20 +40,23 @@ buildGoModule rec {
   ];
 
   buildInputs = lib.optional enableCmount (
-    if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse
+    # cgofuse uses the fuse2 header locations on darwin
+    if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3
   );
 
-  tags = lib.optionals enableCmount [ "cmount" ];
+  tags =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
+    ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rclone/rclone/fs.Version=${src.tag}"
+    "-X github.com/rclone/rclone/fs.Version=${finalAttrs.src.tag}"
   ];
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
-        --replace-fail '"libfuse.so.2"' '"${lib.getLib fuse}/lib/libfuse.so.2"'
+        --replace-fail "fuse.h" "fuse3/fuse.h"
   '';
 
   postInstall =
@@ -89,7 +91,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
 
   passthru = {
@@ -102,11 +104,11 @@ buildGoModule rec {
   meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
-    changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
+    changelog = "https://github.com/rclone/rclone/blob/v${finalAttrs.version}/docs/content/changelog.md";
     license = lib.licenses.mit;
     mainProgram = "rclone";
     maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };
-}
+})

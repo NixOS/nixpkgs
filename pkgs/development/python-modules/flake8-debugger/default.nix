@@ -5,15 +5,12 @@
   flake8,
   pycodestyle,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
   version = "4.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

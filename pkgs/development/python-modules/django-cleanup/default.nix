@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "django-cleanup";
   version = "9.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "django_cleanup";
@@ -31,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/un1t/django-cleanup";
     changelog = "https://github.com/un1t/django-cleanup/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

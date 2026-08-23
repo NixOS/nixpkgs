@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sway-scratch";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "aokellermann";
     repo = "sway-scratch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1N/33XtkEWamgQYNDyZgSSaaGD+2HtbseEpQgrAz3CU=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sway-scratch";
     platforms = lib.platforms.linux;
   };
-}
+})

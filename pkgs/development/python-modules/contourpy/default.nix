@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   # build
   meson,
@@ -11,6 +10,7 @@
   ninja,
   nukeReferences,
   pybind11,
+  pkg-config,
 
   # propagates
   numpy,
@@ -32,9 +32,7 @@ let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
     version = "1.3.3";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";
@@ -53,6 +51,10 @@ let
       meson
       ninja
       nukeReferences
+      pkg-config
+    ];
+
+    buildInputs = [
       pybind11
     ];
 

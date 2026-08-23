@@ -1,13 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   aiohttp,
   async-timeout,
   yarl,
   aresponses,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -15,8 +15,6 @@
 buildPythonPackage rec {
   pname = "here-transit";
   version = "1.2.1";
-
-  disabled = pythonOlder "3.10";
 
   pyproject = true;
 
@@ -30,6 +28,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

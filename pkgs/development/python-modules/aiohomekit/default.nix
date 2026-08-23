@@ -13,25 +13,21 @@
   fetchFromGitHub,
   orjson,
   poetry-core,
-  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.20";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
+    hash = "sha256-ptfL6MPnjAtKqYbsILzE6u+wkse3/Js4ZME4So3tVmU=";
   };
 
   build-system = [ poetry-core ];
@@ -51,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-aiohttp
     pytestCheckHook
   ];
 

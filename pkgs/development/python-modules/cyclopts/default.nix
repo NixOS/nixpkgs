@@ -1,36 +1,44 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
+  bash,
+  fish,
   hatch-vcs,
   hatchling,
   markdown,
   mkdocs,
+  pexpect,
   pydantic,
   pymdown-extensions,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
-  rich-rst,
   rich,
+  rich-rst,
   sphinx,
   syrupy,
   trio,
+  zsh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.4.1";
+  version = "4.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    tag = "v${version}";
-    hash = "sha256-kp/mnqa2difEA3s1jtXF1fDluQhLCJ4f6rFRruRbE9k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5MJWwtQr63cTJ9Pkp369W2jnFsydarvz8T7A+eGtGwc=";
   };
+
+  pythonRelaxDeps = [ "rich-rst" ];
 
   build-system = [
     hatchling
@@ -47,7 +55,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
-    docs = [ sphinx ];
     mkdocs = [
       mkdocs
       markdown
@@ -56,32 +63,41 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pexpect
     pydantic
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     syrupy
+
+    # integrations
+    sphinx
+    bash
+    fish
+    zsh
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Test requires bash
-    "test_positional_not_treated_as_command"
     # Building docs
     "build_succeeds"
-  ];
-
-  disabledTestPaths = [
-    # Tests requires sphinx
-    "tests/test_sphinx_ext.py"
+    # timeouts under heavy concurrency
+    "test_behavior[zsh-root-subcommands]"
+    "test_behavior[zsh-subcommand-prefix]"
+    "test_path_completion_action"
+    "test_requires_equals_eq_form_value_completion"
   ];
 
   meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
-    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
+    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      PerchunPak
+    ];
   };
-}
+})

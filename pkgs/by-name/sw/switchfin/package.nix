@@ -15,15 +15,15 @@
   tweeny,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "switchfin";
-  version = "0.8.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
-    rev = version;
-    hash = "sha256-D41joed/ZjZLSNjQC9WVWrPOi8v/RHopf0MQrbmGyeg=";
+    rev = finalAttrs.version;
+    hash = "sha256-khfcFRRccWPYvxETgQC52BlLySKnhgSUdF4hv/8znEM=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     mpv
     SDL2
     tinyxml-2
-    tweeny
   ];
 
   cmakeFlags = [
@@ -55,16 +54,18 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_SDL2=ON"
     "-DUSE_SYSTEM_TINYXML2=ON"
-    "-DUSE_SYSTEM_TWEENY=ON"
+    # Should be enabled in the next release, see:
+    # https://github.com/dragonflylee/switchfin/issues/242
+    "-DUSE_SYSTEM_TWEENY=OFF"
   ];
 
   meta = {
     description = "Third-party native Jellyfin client for PC/PS4/PSVita/Nintendo Switch";
     homepage = "https://github.com/dragonflylee/switchfin";
-    changelog = "https://github.com/dragonflylee/switchfin/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dragonflylee/switchfin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.k900 ];
     mainProgram = "Switchfin";
     platforms = lib.platforms.all;
   };
-}
+})

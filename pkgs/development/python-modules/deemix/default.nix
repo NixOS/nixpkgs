@@ -8,15 +8,12 @@
   mutagen,
   requests,
   deezer-py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "deemix";
   version = "3.6.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

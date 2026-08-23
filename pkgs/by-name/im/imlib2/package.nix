@@ -32,7 +32,8 @@
   openbox,
   fluxbox,
   enlightenment,
-  xorg,
+  libxft,
+  libxext,
   testers,
 
   gitUpdater,
@@ -43,11 +44,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.12.5";
+  version = "1.12.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+iMV8oN5tDCm5mBbQoSwe+BqPvQi1PXhybskcUxM9t0=";
+    hash = "sha256-JQ+XUvadxSLlKagaqpOVcF9/wxL/JFPl3lmsK6HyhY8=";
   };
 
   buildInputs = [
@@ -60,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     libid3tag
   ]
   ++ optionals x11Support [
-    xorg.libXft
-    xorg.libXext
+    libxft
+    libxext
   ]
   ++ optional heifSupport libheif
   ++ optional svgSupport librsvg

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "rendercv-fonts";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rendercv";
@@ -26,7 +23,7 @@ buildPythonPackage rec {
   # pythonRelaxDeps seems not taking effect for the build-system dependencies
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'hatchling==1.26.3' 'hatchling' \
+      --replace-fail 'hatchling==1.26.3' 'hatchling'
   '';
 
   nativeCheckInputs = [

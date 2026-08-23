@@ -7,17 +7,18 @@
   replaceVars,
   file,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-magic";
   version = "0.4.27";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahupp";
     repo = "python-magic";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
   };
 
@@ -38,7 +39,12 @@ buildPythonPackage rec {
       url = "https://github.com/ahupp/python-magic/commit/3d2405ca80cd39b2a91decd26af81dcf181390a4.patch";
       hash = "sha256-HRsnO9MGfMD9BkJdC4SrEFQ1OZEaXpwakXFLoaCPK94=";
     })
+
+    # Fix test failures due to modified output in file 5.47
+    ./fix-parquet-test.patch
   ];
+
+  build-system = [ setuptools ];
 
   preCheck = ''
     export LC_ALL=en_US.UTF-8
@@ -56,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cntr";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-4HBOUx9086nn3hRBLA4zuH0Dq+qDZHgo3DivmiEMh3w=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cntr";
   };
-}
+})

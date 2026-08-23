@@ -7,18 +7,19 @@
   stdenv,
   withSixel ? false,
   libsixel,
-  xorg,
+  libxrandr,
+  libx11,
   withSki ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "menyoki";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "menyoki";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
   };
 
@@ -28,13 +29,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     lib.optional withSixel libsixel
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        libX11
-        libXrandr
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libx11
+      libxrandr
+    ];
 
   buildNoDefaultFeatures = !withSki;
   buildFeatures = lib.optional withSixel "sixel";
@@ -52,9 +50,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Screen{shot,cast} and perform ImageOps on the command line";
     homepage = "https://menyoki.cli.rs/";
-    changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/menyoki/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "menyoki";
   };
-}
+})

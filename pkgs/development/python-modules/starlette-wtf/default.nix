@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "starlette-wtf";
   version = "0.4.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "muicss";
@@ -40,9 +40,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple tool for integrating Starlette and WTForms";
-    changelog = "https://github.com/muicss/starlette-wtf/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/amorey/starlette-wtf/releases/tag/${version}";
     homepage = "https://github.com/muicss/starlette-wtf";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

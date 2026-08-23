@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mastodon-archive";
   version = "1.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kensanata";
-    repo = "mastodon-backup";
-    rev = "v${version}";
+    repo = "mastodon-archive";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yz17ddcA0U9fq1aDlPmD3OkNL6Epzdp9C7L+31yNLBc=";
   };
 
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ julm ];
   };
-}
+})

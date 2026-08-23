@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   xorgproto,
-  libXtst,
-  libXi,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxtst,
+  libxi,
+  libxext,
+  libxinerama,
+  libxrandr,
   glib,
   cairo,
   xdotool,
@@ -31,13 +31,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     xorgproto
-    libXtst
-    libXi
-    libXext
-    libXinerama
-    libXrandr
+    libxtst
+    libxi
+    libxext
+    libxinerama
+    libxrandr
     glib
     cairo
     xdotool

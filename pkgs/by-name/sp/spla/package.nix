@@ -26,14 +26,17 @@ assert builtins.elem gpuBackend [
   "rocm"
 ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spla";
   version = "1.6.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "spla";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fNH1IOKV1Re8G7GH9Xfn3itR80eonTbEGKQRRD16/2k=";
   };
 
@@ -50,13 +53,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gfortran
-  ];
+    mpi
+  ]
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     blas
-    mpi
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+  ]
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
@@ -85,4 +92,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

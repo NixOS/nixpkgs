@@ -5,7 +5,6 @@
   django,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-autocomplete-light";
   version = "3.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yourlabs";

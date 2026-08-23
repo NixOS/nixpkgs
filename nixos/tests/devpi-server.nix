@@ -34,8 +34,8 @@ in
   testScript = ''
     start_all()
     devpi.wait_for_unit("devpi-server.service")
-    devpi.wait_for_open_port(${builtins.toString server-port})
+    devpi.wait_for_open_port(${toString server-port})
 
-    client1.succeed("devpi getjson http://devpi:${builtins.toString server-port}")
+    client1.succeed("devpi getjson http://devpi:${toString server-port}")
   '';
 }

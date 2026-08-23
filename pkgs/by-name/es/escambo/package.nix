@@ -13,7 +13,7 @@
   gtksourceview5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "escambo";
   version = "0.1.2";
   pyproject = false; # built with meson
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "escambo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jMlix8nlCaVLZEhqzb6LRNrD3DUZMTIjqrRKo6nFbQA=";
   };
 
@@ -59,4 +59,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

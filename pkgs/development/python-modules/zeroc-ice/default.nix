@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.10.1";
+  version = "3.8.0.post1";
   pyproject = true;
 
   # Upstream PR: https://github.com/zeroc-ice/ice/pull/2910
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zeroc_ice";
     inherit version;
-    hash = "sha256-sGOq/aNg33EfdpRVKbtUFXbyZr5B5dWi3Xf10yDBhmQ=";
+    hash = "sha256-SwR/4BSH/8+cYWVKA7aE3bnFOL52fWzynFehZr5VC9c=";
   };
 
   build-system = [ setuptools ];

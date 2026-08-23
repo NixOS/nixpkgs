@@ -2,7 +2,7 @@
   lib,
   nix-update-script,
   buildNpmPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nodejs_22,
   kwin,
   kpackage,
@@ -12,15 +12,14 @@ buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
   version = "0.9.9.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "anametologin";
     repo = "Krohnkite";
     rev = finalAttrs.version;
     hash = "sha256-gulKg23BeWL270B2omRYJIuAHIsKu1cBVpimgButM9I=";
   };
 
-  npmDepsHash = "sha256-Q/D6s0wOPSEziE1dBXgTakjhXCGvzhvLVS7zXcZlPCI=";
+  npmDepsHash = "sha256-6+meI602VKIzqunTOwNRLZOO7/LscjNm545icc2WN0c=";
 
   dontWrapQtApps = true;
 
@@ -31,10 +30,6 @@ buildNpmPackage (finalAttrs: {
     zip
     kwin
   ];
-
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
 
   npmBuildScript = "tsc";
 

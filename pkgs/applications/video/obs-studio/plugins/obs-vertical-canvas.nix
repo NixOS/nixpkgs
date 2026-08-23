@@ -10,17 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vertical-canvas";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
     rev = version;
-    sha256 = "sha256-tvoNdv0HkGch8FZCiK7S4BR7iWOqLvTj0blFxyyUjQE=";
+    sha256 = "sha256-cWiC4e+ZojTuNAaNwuBQ1pPlchdiuTsVhWMHvcyxx2A=";
   };
-
-  # Remove after https://github.com/Aitum/obs-vertical-canvas/pull/26 is released :)
-  patches = [ ./obs-vertical-canvas.diff ];
 
   nativeBuildInputs = [ cmake ];
 

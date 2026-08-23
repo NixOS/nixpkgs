@@ -10,7 +10,7 @@ let
   vanillaVersion = "7.6.q";
   patchLevel = "36";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcp-wrappers";
   version = "${vanillaVersion}-${patchLevel}";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "md";
     repo = "tcp-wrappers";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     hash = "sha256-SPJmhtgysChnxlta5l1huRq66YcEmHvx1Xs4k7iznTg=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.tcpWrappers;
     platforms = lib.platforms.linux;
   };
-}
+})

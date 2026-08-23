@@ -126,7 +126,7 @@ let
       stash_boxes = mkOption {
         type = types.listOf stashBoxType;
         default = [ ];
-        description = ''Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames'';
+        description = "Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames";
         example = literalExpression ''
           {
             stash_boxes = [

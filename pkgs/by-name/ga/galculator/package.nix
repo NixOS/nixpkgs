@@ -2,6 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
+  fetchDebianPatch,
   fetchpatch2,
   flex,
   gtk3,
@@ -30,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-qVJHcfJTtl0hK8pzSp6MjhYAh1NbIIWr3rBDodIYBvk=";
     })
     ./gettext-0.25.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      patch = "0002-Declare-function-parameters-as-required-by-C23.patch";
+      debianRevision = "2.1";
+      hash = "sha256-kwRYYNOo3Z2SjFQzR6Mo+qBgW3LQfhxdE6mMpLGoE44=";
+    })
   ];
 
   nativeBuildInputs = [

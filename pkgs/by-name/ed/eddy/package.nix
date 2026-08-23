@@ -6,7 +6,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eddy";
   version = "3.7.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obdasystems";
     repo = "eddy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
   };
 
@@ -46,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ koslambrou ];
   };
-}
+})

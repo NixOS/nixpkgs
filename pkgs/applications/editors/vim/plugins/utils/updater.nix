@@ -3,20 +3,23 @@
   buildPythonApplication,
   makeWrapper,
   nix,
+  nix-prefetch-github,
   nix-prefetch-git,
   nurl,
+  luajit,
   python3Packages,
-  vimPluginsUpdater,
-  writeShellScript,
 
   # optional
   neovim-unwrapped,
 }:
+let
+  luaWithPackages = luajit.withPackages (ps: [ ps.json ]);
+in
 buildPythonApplication {
   pname = "vim-plugins-updater";
   version = "0.1";
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     makeWrapper
@@ -24,7 +27,6 @@ buildPythonApplication {
   ];
 
   pythonPath = [
-    python3Packages.requests
     python3Packages.nixpkgs-plugin-update
   ];
 
@@ -39,21 +41,18 @@ buildPythonApplication {
     makeWrapperArgs+=( --prefix PATH : "${
       lib.makeBinPath [
         nix
+        nix-prefetch-github
         nix-prefetch-git
         neovim-unwrapped
         nurl
+        luaWithPackages
       ]
-    }" --prefix PYTHONPATH : "${./.}" )
+    }" --prefix PYTHONPATH : "${lib.sources.sourceByGlobs ./. [ "**/*.py" ]}" )
     wrapPythonPrograms
   '';
 
   shellHook = ''
     export PYTHONPATH=pkgs/applications/editors/vim/plugins:$PYTHONPATH
-  '';
-
-  passthru.updateScript = writeShellScript "updateScript" ''
-    # don't saturate the update bot connection
-    ${lib.getExe vimPluginsUpdater} --proc 2 update
   '';
 
   meta.mainProgram = "vim-plugins-updater";

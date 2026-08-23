@@ -8,7 +8,7 @@
   mandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "efivar";
   version = "39";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "efivar";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-s/1k5a3n33iLmSpKQT5u08xoj8ypjf2Vzln88OBrqf0=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/388309
     broken = stdenv.hostPlatform.is32bit;
   };
-}
+})

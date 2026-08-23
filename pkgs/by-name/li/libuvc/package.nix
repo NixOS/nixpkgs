@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "libuvc";
-  version = "unstable-2020-11-29";
+  version = "0.0.7-unstable-2024-03-05";
 
   src = fetchFromGitHub {
     owner = "libuvc";
     repo = "libuvc";
-    rev = "5cddef71b17d41f7e98875a840c50d9704c3d2b2";
-    sha256 = "0kranb0x1k5qad8rwxnn1w9963sbfj2cfzdgpfmlivb04544m2j7";
+    rev = "047920bcdfb1dac42424c90de5cc77dfc9fba04d";
+    hash = "sha256-Ds4N9ezdO44eBszushQVvK0SUVDwxGkUty386VGqbT0=";
   };
 
   # Upstream doesn't yet support CMake 4, remove once fixed

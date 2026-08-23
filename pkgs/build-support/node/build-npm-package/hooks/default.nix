@@ -31,10 +31,12 @@
       nodeVersion = nodejs.version;
       nodeVersionMajor = lib.versions.major nodejs.version;
     };
+    meta.license = lib.licenses.mit;
   } ./npm-config-hook.sh;
 
   npmBuildHook = makeSetupHook {
     name = "npm-build-hook";
+    meta.license = lib.licenses.mit;
   } ./npm-build-hook.sh;
 
   npmInstallHook = makeSetupHook {
@@ -50,5 +52,6 @@
     substitutions = {
       jq = "${jq}/bin/jq";
     };
+    meta.license = lib.licenses.mit;
   } ./npm-install-hook.sh;
 }

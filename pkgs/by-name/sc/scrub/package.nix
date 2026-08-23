@@ -7,14 +7,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scrub";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "chaos";
     repo = "scrub";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ndcri2ddzqlsxvy1b607ajyd4dxpiagzx331yyi7hf3ijph129f";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "scrub";
   };
-}
+})

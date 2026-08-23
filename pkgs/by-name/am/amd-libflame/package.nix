@@ -13,15 +13,15 @@
   withAMDOpt ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amd-libflame";
-  version = "5.1";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
-    tag = version;
-    hash = "sha256-9Z0e6RCJfqQlq3oT4fBu8rwPH1OWEKQ52rVDa0Y0rJU=";
+    tag = finalAttrs.version;
+    hash = "sha256-Zl9qw8pb2z7+SKJujHg3/NVt0m2gdmFE6cVXS7wGzAI=";
   };
 
   postPatch = ''
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

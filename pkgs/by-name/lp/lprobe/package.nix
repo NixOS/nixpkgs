@@ -5,18 +5,18 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lprobe";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "fivexl";
     repo = "lprobe";
-    tag = "v${version}";
-    hash = "sha256-Cb6jzL/BAhfwvGENLFfphATDz0EjFFT7qeHFiZCrvBk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JDZgjtXfWte4+rTNv4o7pKc4SnqLZkmh3NvEd5X4yGM=";
   };
 
-  vendorHash = "sha256-wQrbRch+5srZfQgEz7aacfbUXJfHeDCz52pPrgDFaNg=";
+  vendorHash = "sha256-r5qKJ3Pd99yyBf4Eugz21UXO8IamutomdEy3aCor+sI=";
 
   buildInputs = [
     libpcap
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cageyv ];
     mainProgram = "lprobe";
   };
-}
+})

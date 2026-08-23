@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asymworks";
     repo = "pyairnow";
     tag = "v${version}";
-    hash = "sha256-BGTtDMq5SnYrk1qT6OkGa1tkxYH5umbMC5Udmffyf+g=";
+    hash = "sha256-g2WuknWP7FKhjM+mCJ92gsfXO2NrAkBbFOExoztudnA=";
   };
 
   build-system = [ poetry-core ];

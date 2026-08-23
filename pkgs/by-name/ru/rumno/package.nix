@@ -11,21 +11,22 @@
   atk,
   pango,
   harfbuzz,
+  gtk-layer-shell,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumno";
-  version = "0-unstable-2025-08-13";
+  version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "ivanmalison";
     repo = "rumno";
-    rev = "a70bf6f05976b07ae5fdced2ab80d2b9e684fb92";
-    hash = "sha256-reJIYlTR6fI42EcYGwb5BmEPVtls+s1+mFd7/34oXBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vR6+dNq0sdVtzdBL6GTzqAhl0fE6ulF6UCqIH1fSte4=";
   };
 
-  cargoHash = "sha256-z9nGePcVc+RPSMPb7CAPOfUMoVlP1MKo57aVFkd1DmE=";
+  cargoHash = "sha256-1FyDMdOO7m6y2oX/+VH5LxBwimz7fXM59eOeiffBnOI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage {
     atk
     pango
     harfbuzz
+    gtk-layer-shell
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -52,4 +54,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "rumno";
     platforms = lib.platforms.linux;
   };
-}
+})

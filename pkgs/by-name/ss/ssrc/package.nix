@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssrc";
   version = "1.33";
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
       without audible degradation.
     '';
 
-    version = version;
+    version = finalAttrs.version;
     homepage = "https://shibatch.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

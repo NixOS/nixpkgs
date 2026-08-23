@@ -10,14 +10,14 @@
   browserpass,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "browserpass";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "browserpass";
     repo = "browserpass-native";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
     sed -i -e 's/INSTALL =.*/INSTALL = install/' Makefile
   '';
 
-  DESTDIR = placeholder "out";
+  env.DESTDIR = placeholder "out";
 
   postConfigure = ''
     make configure
@@ -75,4 +75,4 @@ buildGoModule rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ rvolosatovs ];
   };
-}
+})

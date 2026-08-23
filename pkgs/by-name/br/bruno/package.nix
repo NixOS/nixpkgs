@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.15.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-REK3rJ+Svf6bLIfLwizlLa3rIBgnhQHbhzTTe8VPoc4=";
+    hash = "sha256-M4oNx3nSe8hSAtZMVyXIW0qQIQkaOeQgpPsfjmmJ30E=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,13 +36,13 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
+  npmDepsHash = "sha256-Jrlpztg1JxuPaLD4O9elOaU1eFH3dmr6oWwi4Ch9Zv8=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
@@ -77,6 +77,10 @@ buildNpmPackage rec {
     # fix version reported in sidebar and about page
     ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
     ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
+
+    # disable remote image download to prevent network calls to comply with build sandboxing
+    substituteInPlace packages/bruno-app/plugins/remote-images/loader.cjs \
+      --replace-fail 'const urls = findRemoteImageUrls(source, domains);' 'const urls = [];'
   '';
 
   postConfigure = ''
@@ -84,7 +88,7 @@ buildNpmPackage rec {
     patchShebangs packages/*/node_modules
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
@@ -102,6 +106,7 @@ buildNpmPackage rec {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-schema-types
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
@@ -167,6 +172,11 @@ buildNpmPackage rec {
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+            --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                stdenv.cc.cc.lib
+              ]
+            } \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 
@@ -190,9 +200,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       gepbird
       kashw2
-      lucasew
       mattpolzin
-      redyf
       water-sucks
       starsep
     ];

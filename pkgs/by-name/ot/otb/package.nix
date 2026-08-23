@@ -98,6 +98,17 @@ let
     postPatch = ''
       substituteInPlace Modules/ThirdParty/KWSys/src/KWSys/CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+      # fix build with GCC 15
+      substituteInPlace Modules/ThirdParty/GoogleTest/src/itkgoogletest/googletest/src/gtest-death-test.cc \
+        --replace-fail \
+          '#include <utility>' \
+          '#include <utility>
+          #include <cstdint>'
+      substituteInPlace Modules/Core/Common/include/itkFloatingPointExceptions.h \
+        --replace-fail \
+          '#include "itkSingletonMacro.h"' \
+          '#include "itkSingletonMacro.h"
+          #include <cstdint>'
     '';
 
     # fix the CMake config files for ITK which contains double slashes

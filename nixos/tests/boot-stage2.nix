@@ -54,6 +54,9 @@
 
       boot = {
         initrd = {
+          # TODO: Switch to systemd initrd
+          systemd.enable = false;
+
           # Format the upper Nix store.
           postDeviceCommands = ''
             ${pkgs.e2fsprogs}/bin/mkfs.ext4 /dev/vdb

@@ -13,9 +13,9 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
-  pcre,
+  pcre2,
   python3,
   SDL2,
   sqlite,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.7.0";
+  version = "10.8.7";
 
   src = fetchFromGitHub {
     owner = "TaterClient";
     repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-9d4vKrWuDW2E1PXs4yRAyR6zNPfYEclW8RfHNnpkpyc=";
+    hash = "sha256-jGi0eRKeYVGWes4AAzasKjdSqoYrEalxVHR/dYEzSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libnotify
-    pcre
+    pcre2
     sqlite
     freetype
     libGLU
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-tools
     glew
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   strictDeps = true;
 
@@ -100,10 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
+  env = {
+    # It is also to avoid to the client being banned on some Teeworlds servers.
+    #
+    # The hash below has been generated with the command line below.
+    # git rev-parse --short=32 HEAD
+    #
+    # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
+    DDNET_GIT_SHORTREV_HASH = "4e4269396b97d06879c11ae3b9696c3d";
+  };
+
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/TaterClient/TClient/blob/V10.7.0/CMakeLists.txt#L3207
+  # See https://github.com/TaterClient/TClient/blob/V10.8.6/CMakeLists.txt#L3260
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

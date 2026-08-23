@@ -9,12 +9,11 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-docs";
-    rev = "ff5d738a9f9d85847e6fc226f8324ad9cf466007";
-    sha256 = "sha256-p5QYM6jbsqe9a3UouHdVimSxZeBvsoM/hb0UQ7iV1IM=";
+    rev = "0796384551e3f9d328c57e88577098be05d816c7";
+    sha256 = "sha256-lZ8BlFaQcd9H+bom2igbJl4Ty7qmqtpbOpGbqIF8nEo=";
   };
   meta = {
     homepage = "https://github.com/discourse/discourse-docs";
-    maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
     description = "Find and filter knowledge base topics";
   };

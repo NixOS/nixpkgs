@@ -7,23 +7,20 @@
   pip,
   pyelftools,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.59.0";
+  version = "1.61.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     tag = "v${version}";
-    hash = "sha256-US8NHNEvYlYJMurXjvlySIdKIgKjAwIws8PmnPF0J6Q=";
+    hash = "sha256-NdVZrc6996dlV0jSWuZH/dLQdJnXO+BQb8hk3G0oXmw=";
   };
 
   postPatch = ''

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-protos";
-  version = "1.0.413";
+  version = "1.0.455";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "proto-python-public";
     tag = "v${version}";
-    hash = "sha256-WY8q06FyZliwdbIcLZPzpEpdxG6AeK+6EQU4bm8e4EE=";
+    hash = "sha256-o0H5sGXVxiZgc9Vdwgd5IUlzqHRqSuYbkwI/R9M8uY8=";
   };
 
   build-system = [

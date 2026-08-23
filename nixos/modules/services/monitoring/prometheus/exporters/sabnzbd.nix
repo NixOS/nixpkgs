@@ -48,7 +48,7 @@ in
       }) servers.apiKeyFile;
     in
     {
-      serviceConfig.LoadCredential = builtins.map ({ name, path }: "${name}:${path}") credentials;
+      serviceConfig.LoadCredential = map ({ name, path }: "${name}:${path}") credentials;
 
       environment = {
         METRICS_PORT = toString cfg.port;
@@ -59,7 +59,7 @@ in
       script =
         let
           apiKeys = lib.concatStringsSep "," (
-            builtins.map (cred: "$(< $CREDENTIALS_DIRECTORY/${cred.name})") credentials
+            map (cred: "$(< $CREDENTIALS_DIRECTORY/${cred.name})") credentials
           );
         in
         ''

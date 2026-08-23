@@ -135,8 +135,8 @@ in
     { nodes, ... }:
     let
       inherit (nodes) server;
-      portStrHTTP = builtins.toString server.services.h2o.defaultHTTPListenPort;
-      portStrTLS = builtins.toString server.services.h2o.defaultTLSListenPort;
+      portStrHTTP = toString server.services.h2o.defaultHTTPListenPort;
+      portStrTLS = toString server.services.h2o.defaultTLSListenPort;
     in
     # python
     ''

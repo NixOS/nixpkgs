@@ -24,7 +24,7 @@
 
   # Arguments to include external libraries
   enableLibSM ? true,
-  xorg,
+  libsm,
   enableGnuTLS ? true,
   gnutls,
   enableEnchant ? enableSpellcheck,
@@ -179,7 +179,7 @@ let
     {
       flags = [ "libsm" ];
       enabled = enableLibSM;
-      deps = [ xorg.libSM ];
+      deps = [ libsm ];
     }
     {
       flags = [ "litehtml_viewer-plugin" ];
@@ -273,13 +273,13 @@ let
     }
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "claws-mail";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchurl {
-    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-2K3yEMdnq1glLfxas8aeYD1//bcoGh4zQNLYYGL0aKY=";
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${finalAttrs.version}.tar.xz";
+    hash = "sha256-A+BUnV8PzXpZgEGGUkEF0F67XlNNQqS4apqQ9ynKJVs=";
   };
 
   outputs = [
@@ -295,14 +295,14 @@ stdenv.mkDerivation rec {
     # autotools check tries to dlopen libpython as a requirement for the python plugin
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python3}/lib
     # generate version without .git
-    [ -e version ] || echo "echo ${version}" > version
+    [ -e version ] || echo "echo ${finalAttrs.version}" > version
   '';
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd([./get-git-version])' '${version}'
+      --replace-fail 'm4_esyscmd([./get-git-version])' '${finalAttrs.version}'
     substituteInPlace src/procmime.c \
-        --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
+      --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
   nativeBuildInputs = [
@@ -351,8 +351,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       fpletz
-      oxzi
       ajs124
     ];
   };
-}
+})

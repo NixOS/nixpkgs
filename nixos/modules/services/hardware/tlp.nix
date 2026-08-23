@@ -172,6 +172,12 @@ in
         # won't fail due to the save dir not existing.
         serviceConfig.StateDirectory = "tlp";
       };
+
+      services.tlp-pd = lib.mkIf cfg.pd.enable {
+        # have to define again because [Install] in included file not honored
+        # https://github.com/NixOS/nixpkgs/issues/81138
+        wantedBy = [ "graphical.target" ];
+      };
     };
   };
 }

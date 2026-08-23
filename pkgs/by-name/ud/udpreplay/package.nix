@@ -6,7 +6,7 @@
   fetchpatch,
   lib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "updreplay";
   version = "1.1.0";
   nativeBuildInputs = [ cmake ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rigtorp";
     repo = "udpreplay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kF9a3pjQbFKf25NKyK7uSq0AAO6JK7QeChLhm9Z3wEA=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "udpreplay";
   };
-}
+})

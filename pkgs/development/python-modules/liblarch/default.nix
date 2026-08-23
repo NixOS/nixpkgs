@@ -6,7 +6,6 @@
   xvfb-run,
   gobject-introspection,
   gtk3,
-  pythonOlder,
   pytest,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "liblarch";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";

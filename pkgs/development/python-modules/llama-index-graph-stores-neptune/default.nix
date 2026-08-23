@@ -5,20 +5,17 @@
   fetchPypi,
   hatchling,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neptune";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_neptune";
     inherit version;
-    hash = "sha256-plwDD8NBcYqedEoCeYqEZn1kDQZjDpg94jRZJBPjdU8=";
+    hash = "sha256-6lWkWHjo9KTZK+N6kc4kHv6kJuAqQKaidTaPEHQ9tQQ=";
   };
 
   build-system = [ hatchling ];

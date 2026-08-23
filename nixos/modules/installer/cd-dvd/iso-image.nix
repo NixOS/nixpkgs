@@ -174,7 +174,7 @@ let
 
   baseIsolinuxCfg = ''
     SERIAL 0 115200
-    TIMEOUT ${builtins.toString syslinuxTimeout}
+    TIMEOUT ${toString syslinuxTimeout}
     UI vesamenu.c32
     MENU BACKGROUND /isolinux/background.png
 
@@ -787,15 +787,17 @@ in
       options = [ "mode=0755" ];
     };
 
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1
-    # init script.
+    # With systemd stage 1, the ISO is identified by its volume label.
+    # With the scripted stage 1, /dev/root is a symlink to the actual
+    # root device specified on the kernel command line, created by the
+    # stage 1 init script.
     "/iso" = lib.mkImageMediaOverride {
       device =
         if config.boot.initrd.systemd.enable then
           "/dev/disk/by-label/${config.isoImage.volumeID}"
         else
           "/dev/root";
+      fsType = "iso9660";
       neededForBoot = true;
       noCheck = true;
     };
@@ -1054,16 +1056,33 @@ in
       }
     );
 
-    boot.postBootCommands = ''
-      # After booting, register the contents of the Nix store on the
-      # CD in the Nix database in the tmpfs.
-      ${config.nix.package.out}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    systemd.services.register-nix-paths = {
+      description = "Register Nix Store Paths";
+      unitConfig.DefaultDependencies = false;
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "nix-daemon.socket"
+        "nix-daemon.service"
+      ];
+      after = [ "local-fs.target" ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        # After booting, register the contents of the Nix store on the
+        # CD in the Nix database in the tmpfs.
+        ${lib.getExe' config.nix.package.out "nix-store"} --load-db < /nix/store/nix-path-registration
 
-      # nixos-rebuild also requires a "system" profile and an
-      # /etc/NIXOS tag.
-      touch /etc/NIXOS
-      ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-    '';
+        # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
+        touch /etc/NIXOS
+        ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/system --set /run/current-system
+      '';
+    };
 
     # Add vfat support to the initrd to enable people to copy the
     # contents of the CD to a bootable USB stick.

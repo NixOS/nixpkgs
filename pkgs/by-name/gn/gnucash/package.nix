@@ -15,7 +15,7 @@
   gwenhywfar,
   icu,
   libdbi,
-  libdbiDrivers,
+  libdbi-drivers,
   libofx,
   libsecret,
   libxml2,
@@ -37,12 +37,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.14";
+  version = "5.16";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-DG/SAhTahqmgRDNZ97YtmivU7YAv1oCFPaS3V6NxrJE=";
+    hash = "sha256-u5tsZ+u2o+Btn/T04EF6l77wFZ0mkSvpsOdaMpAf1JM=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     # https://github.com/Gnucash/gnucash/commit/e680a87a66b8ec17132f186e222cbc94ad52b3d0
-    GNC_DBD_DIR = "${libdbiDrivers}/lib/dbd";
+    GNC_DBD_DIR = "${libdbi-drivers}/lib/dbd";
 
     # this needs to be an environment variable and not a cmake flag to suppress
     # guile warning
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     gwenhywfar
     icu
     libdbi
-    libdbiDrivers
+    libdbi-drivers
     libofx
     libsecret
     libxml2
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     find . -name '._*' -type f -delete
 
     substituteInPlace bindings/python/__init__.py \
-      --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
+      --subst-var-by gnc_dbd_dir "${libdbi-drivers}/lib/dbd" \
       --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
   '';
 
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "Gnucash";
         repo = "gnucash-docs";
         tag = finalAttrs.version;
-        hash = "sha256-KaUkpqBSQnrWR/ynZC6DuUUnbCURxwFBVg+f4HVwy3Q=";
+        hash = "sha256-KC2POdwKma2CWpom3kN4X4MAItJFeWHl4SIV7sb+KCo=";
       };
 
       nativeBuildInputs = [ cmake ];
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       # documentation
       --prefix XDG_DATA_DIRS : ${finalAttrs.passthru.docs}/share
       # db drivers location
-      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
+      --set GNC_DBD_DIR ${libdbi-drivers}/lib/dbd
       # gsettings schema location on Nix
       --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"}
     )

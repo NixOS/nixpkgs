@@ -12,15 +12,15 @@
   usrsctp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdatachannel";
-  version = "0.23.2";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libdatachannel";
-    rev = "v${version}";
-    hash = "sha256-76rlnO0wr7xQAGCc0GmpHQldzHKnZ8NZWpHmrE70h/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rYksY3AJb5LFSGg/yr+cNFYQIRChPocDXeA8xaMCtzQ=";
   };
 
   outputs = [
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C/C++ WebRTC network library featuring Data Channels, Media Transport, and WebSockets";
     homepage = "https://libdatachannel.org/";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ erdnaxe ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

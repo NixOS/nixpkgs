@@ -26,7 +26,7 @@ let
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
 
@@ -36,7 +36,7 @@ let
 
     # keep in sync with upstream shipped version
     # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
-    rev = "refs/tags/5.1.0";
+    tag = "5.1.0";
     hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in

@@ -6,20 +6,20 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  gtk3,
-  libayatana-appindicator,
-  libX11,
-  libXcursor,
-  libXxf86vm,
+  wails3,
+  imagemagick,
+  fetchPnpmDeps,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_11,
   versionCheckHook,
   netbird-management,
+  netbird-proxy,
   netbird-relay,
   netbird-signal,
   netbird-ui,
   netbird-upload,
   componentName ? "client",
-  needsUpdateScript ? componentName == "client",
 }:
 let
   /*
@@ -63,33 +63,83 @@ let
       binaryName = "netbird-relay";
       license = lib.licenses.agpl3Only;
     };
+    proxy = {
+      module = "proxy/cmd/proxy";
+      binaryName = "netbird-proxy";
+      license = lib.licenses.agpl3Only;
+    };
+    combined = {
+      module = "combined";
+      binaryName = "netbird-server";
+      license = lib.licenses.agpl3Only;
+    };
   };
   component = availableComponents.${componentName};
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.61.0";
+  version = "0.77.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hMg7KrD6vkpEEMQButhoVE8crEODUU01Pz+ifdQ10C4=";
+    hash = "sha256-uGyo2J/3berl6yBCs+Qy0mXKMZNRM8o6gclBeiDxon8=";
   };
 
-  vendorHash = "sha256-b3Wl9jsAdYC91JM/kDo4yIF05hqbivtrcn1aRuZzP3s=";
+  overrideModAttrs = final: prev: {
+    # override output name so that we don't download the same modules every time
+    # for every component of the monorepo
+    name = "netbird-${finalAttrs.version}-go-modules";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
+    # don't call pnpm when building modules
+    dontPnpmConfigure = true;
+    preBuild = null;
+  };
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && componentName == "ui") [
-    gtk3
-    libayatana-appindicator
-    libX11
-    libXcursor
-    libXxf86vm
+  proxyVendor = true;
+  vendorHash = "sha256-IGCfMhcrZqHye83zcJuDf1Hyv7X4rKybxWOiyxGuYtY=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals (componentName == "ui") [
+    nodejs
+    pnpmConfigHook
+    pnpm_11
+    wails3
+    # to convert the icons
+    imagemagick
   ];
 
+  pnpmRoot = "client/ui/frontend";
+
+  pnpmDeps = fetchPnpmDeps {
+    pname = "netbird";
+    inherit (finalAttrs)
+      version
+      src
+      ;
+
+    sourceRoot = "${finalAttrs.src.name}/client/ui/frontend";
+
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-T4E4GJgsoMZnLokJRuDm1L43OrYF99PLF4x/4HRIB4E=";
+  };
+
+  preBuild = lib.optionalString (componentName == "ui") ''
+    pushd client/ui/frontend
+    pnpm run bindings
+    pnpm build
+    popd
+  '';
+
   subPackages = [ component.module ];
+
+  tags = [ "production" ];
 
   ldflags = [
     "-s"
@@ -105,7 +155,7 @@ buildGoModule (finalAttrs: {
     # make it compatible with systemd's RuntimeDirectory
     substituteInPlace client/cmd/root.go \
       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
-    substituteInPlace client/ui/client_ui.go \
+    substituteInPlace client/ui/grpc.go \
       --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
@@ -127,11 +177,16 @@ buildGoModule (finalAttrs: {
         ''
     # assemble & adjust netbird.desktop files for the GUI
     + lib.optionalString (stdenv.hostPlatform.isLinux && componentName == "ui") ''
-      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"
-      install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
+      install -Dm644 $src/client/ui/build/linux/netbird.desktop $out/share/applications/netbird.desktop
+
+      for RES in 16 24 32 48 64 128 256 512 1024
+      do
+        mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
+        convert $src/client/ui/build/appicon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/netbird.png
+      done
 
       substituteInPlace $out/share/applications/netbird.desktop \
-        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/${component.binaryName}"
+        --replace-fail "/usr/bin/netbird-ui" "${component.binaryName}"
     '';
 
   nativeInstallCheckInputs = lib.lists.optionals (component ? versionCheckProgramArg) [
@@ -150,10 +205,9 @@ buildGoModule (finalAttrs: {
         netbird-signal
         netbird-ui
         netbird-upload
+        netbird-proxy
         ;
     };
-  }
-  // lib.attrsets.optionalAttrs needsUpdateScript {
     updateScript = nix-update-script { };
   };
 

@@ -6,11 +6,10 @@
   python3,
   llvmPackages,
   enablePython ? false,
-  python ? python3,
 }:
 
 let
-  pyEnv = python.withPackages (
+  pyEnv = python3.withPackages (
     p: with p; [
       numpy
       scipy
@@ -21,17 +20,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taco";
-  version = "unstable-2022-08-02";
+  version = "0-unstable-2025-04-14";
 
   src = fetchFromGitHub {
     owner = "tensor-compiler";
     repo = "taco";
-    rev = "2b8ece4c230a5f0f0a74bc6f48e28edfb6c1c95e";
+    rev = "0e79acb56cb5f3d1785179536256e206790b2a9e";
     fetchSubmodules = true;
-    hash = "sha256-PnBocyRLiLALuVS3Gkt/yJeslCMKyK4zdsBI8BFaTSg=";
+    hash = "sha256-mdT6ZLxtJ7fqyjRqdWf6+RltvMy7YDr9AEnJtnaDmTw=";
   };
 
-  src-new-pybind11 = python.pkgs.pybind11.src;
+  src-new-pybind11 = python3.pkgs.pybind11.src;
 
   postPatch = ''
     rm -rf python_bindings/pybind11/*
@@ -45,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace apps/tensor_times_vector/CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 2.8.12)" \
       "cmake_minimum_required(VERSION 3.5)"
+
+    # Newer pybind11 typing wrappers require a single concrete lambda return type.
+    substituteInPlace python_bindings/src/pytaco.cpp --replace-fail \
+      'm.def("get_parallel_schedule", [](){' \
+      'm.def("get_parallel_schedule", []() -> py::tuple {'
   '';
 
   # Remove test cases from cmake build as they violate modern C++ expectations
@@ -62,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enablePython "-DPYTHON=ON";
 
   postInstall = lib.strings.optionalString enablePython ''
-    mkdir -p $out/${python.sitePackages}
-    cp -r lib/pytaco $out/${python.sitePackages}/.
+    mkdir -p $out/${python3.sitePackages}
+    cp -r lib/pytaco $out/${python3.sitePackages}/.
   '';
 
   # The standard CMake test suite fails a single test of the CLI interface.

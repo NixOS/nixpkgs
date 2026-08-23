@@ -8,22 +8,22 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doppler";
-  version = "3.75.1";
+  version = "3.76.4";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
-    rev = version;
-    hash = "sha256-YyhDvBgdcy3CtVpQj60XQ0aqE2zT1LV9QXQJiJvlaic=";
+    rev = finalAttrs.version;
+    hash = "sha256-GkM4pSmMIjoyOMPmtb4GoSrZdz69kL1s1r+krRhedR8=";
   };
 
-  vendorHash = "sha256-tSRtgkDPvDlEfwuNhahvs3Pvt4h7QAJrJtb1XQXGaFM=";
+  vendorHash = "sha256-rDpr4qWhMWXEhgZrmoW5tzPZif3KAv3gDtJNtXzbVq0=";
 
   ldflags = [
     "-s -w"
-    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}"
+    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,7 +42,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = doppler;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -52,4 +52,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     description = "Prettier extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-prettier";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

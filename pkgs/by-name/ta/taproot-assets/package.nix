@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "taproot-assets";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
-    rev = "v${version}";
-    hash = "sha256-z4lNeVmy0AEDM8ivdfXfXqi/V1LIDHV2KtS5/19+Jlk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UFb/QOSlAVqnhK0fJmdIqythxBwFGZY1/ODTdh/hS5c=";
   };
 
-  vendorHash = "sha256-p75eZoM6tSayrxcKTCoXR8Jlc3y2UyzfPCtRJmDy9ew=";
+  vendorHash = "sha256-Vvy2kXBhlMDJvSNF18X8B9CVf/GxaU2cDvChWN2aBuY=";
 
   subPackages = [
     "cmd/tapcli"
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

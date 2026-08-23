@@ -6,7 +6,7 @@
   sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "textql";
   version = "unstable-2021-07-06";
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   vendorHash = "sha256-/DFtZA3Tml+RYTuv1YEUnC37jChTjrC01+zRO7Tj58A=";
 
   postInstall = ''
-    install -Dm644 -t $out/share/man/man1 ${src}/man/textql.1
+    install -Dm644 -t $out/share/man/man1 ${finalAttrs.src}/man/textql.1
   '';
 
   # needed for tests
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

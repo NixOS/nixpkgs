@@ -2,50 +2,71 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_43,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
   makeWrapper,
+  cacert,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_11;
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.14.1";
+  version = "7.3.3";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nZoWqfocEg33C22CfVIkayUWkkZ29A8FcAEXx+tJGUU=";
+    hash = "sha256-Kr4+U6UD/cfbAzIZ8GrPgxGmV8ktENxd9o2/x3C4v+c=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
     copyDesktopItems
     imagemagick
     makeWrapper
+    cacert
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-LnYwUXwGm/2yx7QrMcPu32oPtRJKnuqysecwwH25QIg=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-Uxta96e9t0jOfsgR82fMuzc1V5KC0t1n2TJ90qv73wg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace config/electron-builder.js \
+    substituteInPlace electron-builder.js \
       --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
       --replace-fail "'scripts/afterSign.js'" "null"
+
+    # With a nixpkgs electron wrapper, app.isPackaged always returns false,
+    # so isDevMode() is always true. This causes the config.ts getter for
+    # indexHtml to return VITE_DEV_SERVER_URL (which is empty) instead of the
+    # packaged file:// URL, resulting in a blank white window.
+    # Patch isDevMode() to false so the file:// path is always used.
+    substituteInPlace src/main/config.ts \
+      --replace-fail "isDevMode()" "false"
+
+    # Disable auto-updater; updates are handled via nixpkgs.
+    substituteInPlace src/main/updater.ts \
+      --replace-fail "if (!this.menubar.app.isPackaged)" "if (true)"
   '';
 
   buildPhase = ''
@@ -57,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
-        --config config/electron-builder.js \
+        --config electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \

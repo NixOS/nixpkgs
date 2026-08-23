@@ -1,25 +1,25 @@
 {
   lib,
   aiohttp,
-  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
   poetry-core,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "incomfort-client";
-  version = "0.6.10";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
-    tag = "v${version}";
-    hash = "sha256-+RSKmWVNLiI/NzfbM/xu+/sCNYvkZ2l/AE5TwnF4RCc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OxrsRoP3HLHEE2YVLUEXA+VlYNoAJR+1Uph11M/Zv68=";
   };
 
   build-system = [ poetry-core ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
-    aioresponses
+    pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to poll Intergas boilers via a Lan2RF gateway";
     homepage = "https://github.com/zxdavb/incomfort-client";
-    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

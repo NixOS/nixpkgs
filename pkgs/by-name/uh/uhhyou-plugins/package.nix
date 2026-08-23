@@ -9,14 +9,14 @@
   fontconfig,
   freetype,
   libxcb,
-  xcbutil,
-  xorg,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
   libxkbcommon,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   pango,
   gtkmm3,
   sqlite,
@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhhyou-plugins";
-  version = "0.69.0";
+  version = "0.70.0";
   src = fetchFromGitHub {
     owner = "ryukau";
     repo = "VSTPlugins";
     rev = "UhhyouPlugins${finalAttrs.version}";
-    hash = "sha256-s1HQD7ZWmqD1yux/IKG8oUt7UA0TrAuPEsVSOXFcIE4=";
+    hash = "sha256-NkNP7kmOBLcXBA65PEwC0I/NIGzZm8wnAvDM74Cfsws=";
     fetchSubmodules = true;
   };
 
@@ -44,14 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     libxcb
-    xcbutil
-    xorg.xcbutilcursor
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     pango
     gtkmm3
     sqlite

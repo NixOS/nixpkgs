@@ -7,14 +7,14 @@
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashgbx";
   version = "4.4";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-C5RljQB6km5yYvFRj/s5AZfMIuMmaqsHnn9BhYWAP4o=";
   };
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
       name = "flashgbx";
       desktopName = "FlashGBX UI";
       icon = "flashgbx";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       comment = "UI for reading and writing Game Boy and Game Boy Advance cartridges";
       categories = [ "Utility" ];
     })
@@ -63,4 +63,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "flashgbx";
     maintainers = with lib.maintainers; [ grahamnorris ];
   };
-}
+})

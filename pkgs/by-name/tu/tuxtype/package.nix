@@ -14,14 +14,14 @@
   t4kcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.3";
   pname = "tuxtype";
 
   src = fetchFromGitHub {
     owner = "tux4kids";
     repo = "tuxtype";
-    rev = "upstream/${version}";
+    rev = "upstream/${finalAttrs.version}";
     sha256 = "1i33rhi9gpzfml4hd73s18h6p2s8zcr26va2vwf2pqqd9fhdwpsg";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

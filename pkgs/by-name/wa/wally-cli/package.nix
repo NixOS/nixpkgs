@@ -6,7 +6,7 @@
   libusb1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wally-cli";
   version = "2.0.1";
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zsa";
     repo = "wally-cli";
-    rev = "${version}-linux";
+    rev = "${finalAttrs.version}-linux";
     sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
       r-burns
     ];
   };
-}
+})

@@ -14,9 +14,9 @@
   garcon,
   glib,
   gtk3,
-  libX11,
-  libXScrnSaver,
-  libXrandr,
+  libx11,
+  libxscrnsaver,
+  libxrandr,
   libwnck,
   libxfce4ui,
   libxfce4util,
@@ -35,14 +35,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-screensaver";
-  version = "4.20.1";
+  version = "4.20.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "xfce4-screensaver";
     tag = "xfce4-screensaver-${finalAttrs.version}";
-    hash = "sha256-FdO6fZTKBPjncjBBe2rK5DSfVLHTRFpo9NtgZ5nFgRU=";
+    hash = "sha256-zNA43ZrREZB5D0fNa+mmvtA9tDPxIMVpQsHzx/r+hzk=";
   };
 
   strictDeps = true;
@@ -64,9 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     garcon
     glib
     gtk3
-    libX11
-    libXScrnSaver
-    libXrandr
+    libx11
+    libxscrnsaver
+    libxrandr
     libwnck
     libxfce4ui
     libxfce4util

@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.18";
   pname = "mdp";
 
   src = fetchFromGitHub {
     owner = "visit1985";
     repo = "mdp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-7ltqnvNzdr+sJiiiCQpp25dzhOrcUCOAgMTt1RIgVTw=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "mdp";
   };
-}
+})

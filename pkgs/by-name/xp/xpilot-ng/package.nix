@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libSM,
-  libXext,
+  libx11,
+  libsm,
+  libxext,
   SDL,
   libGLU,
   libGL,
@@ -12,7 +12,7 @@
   SDL_ttf,
   SDL_image,
   zlib,
-  libXxf86misc,
+  libxxf86misc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpilot-ng";
@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8ocJPHV6cSMgAPIQ7kpO3szJ6K8IF9W+QwhOhK69Rwk=";
   };
   buildInputs = [
-    libX11
-    libSM
-    libXext
+    libx11
+    libsm
+    libxext
     SDL
     SDL_ttf
     SDL_image
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     expat
     zlib
-    libXxf86misc
+    libxxf86misc
   ];
 
   patches = [

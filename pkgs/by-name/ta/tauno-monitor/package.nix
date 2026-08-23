@@ -10,17 +10,20 @@
   gobject-introspection,
   wrapGAppsHook4,
   libadwaita,
+  nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauno-monitor";
-  version = "0.2.17";
+  version = "0.2.20";
   pyproject = false;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "taunoe";
     repo = "tauno-monitor";
-    tag = "v${version}";
-    hash = "sha256-klYL9A2E7MsgzX9Aj0nrmaKWjvzI3giZVZVvFot16XU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rtFnWK1K4S866lgR/lGaTB+REqDExKsEFePX8cwai5E=";
   };
 
   nativeBuildInputs = [
@@ -44,14 +47,19 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple serial port monitor";
     homepage = "https://github.com/taunoe/tauno-monitor";
-    changelog = "https://github.com/taunoe/tauno-monitor/releases/tag/${src.tag}";
+    changelog = "https://github.com/taunoe/tauno-monitor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "tauno-monitor";
+    platforms = lib.platforms.linux;
   };
-}
+})

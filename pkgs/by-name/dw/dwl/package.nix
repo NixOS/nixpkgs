@@ -1,8 +1,8 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
-  libX11,
+  libx11,
   libinput,
   libxcb,
   libxkbcommon,
@@ -14,9 +14,9 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots,
+  wlroots_0_19,
   writeText,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
   # Boolean flags
   enableXWayland ? true,
@@ -39,14 +39,13 @@
 assert withCustomConfigH -> (configH != null);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
-  version = "0.7";
+  version = "0.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dwl";
     repo = "dwl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7SoCITrbMrlfL4Z4hVyPpjB9RrrjLXHP9C5t1DVXBBA=";
+    hash = "sha256-J76L5ZOCYgfcY08wH5cSLG+UdgDrv50lQyEnJNqDkXI=";
   };
 
   nativeBuildInputs = [
@@ -62,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
   ]
   ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
+    libx11
+    libxcb-wm
     xwayland
   ];
 

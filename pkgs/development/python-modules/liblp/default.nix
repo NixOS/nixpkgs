@@ -28,7 +28,6 @@ buildPythonPackage rec {
     description = "Android logical partitions library ported from C++ to Python";
     homepage = "https://github.com/sebaubuntu-python/liblp";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "lpunpack";
   };

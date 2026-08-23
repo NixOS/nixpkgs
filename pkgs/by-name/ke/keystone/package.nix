@@ -8,14 +8,14 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keystone";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "keystone-engine";
     repo = "keystone";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "020d1l1aqb82g36l8lyfn2j8c660mm6sh1nl4haiykwgdl9xnxfa";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     mainProgram = "kstool";
     platforms = lib.platforms.unix;
   };
-}
+})

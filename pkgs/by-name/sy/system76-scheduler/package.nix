@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2.0.2";
+  version = "2.0.2-unstable-2026-07-22";
 in
 rustPlatform.buildRustPackage {
   pname = "system76-scheduler";
@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-scheduler";
-    rev = version;
-    hash = "sha256-5GiHmu++YRCewDHm/qxKmQwDIAZwlW5Eya/fDriVSdA=";
+    rev = "8651bbf74bcfc8a46443b30199b380e12defa97e";
+    hash = "sha256-V8NGJzlWvhnd5LPCjOfaB/eIXGFJDZWYhQYov1RDxkw=";
   };
 
-  cargoHash = "sha256-o2Ma9WNmBz+18SSMBPXYK4BXzHFLQwa3JWhq4S7jSBg=";
+  cargoHash = "sha256-+heUUihZaETojlyrl+nul3/KuXG88WxRzNXVgsVvaFA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
     pipewire
   ];
 
-  EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
+  env.EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
 
   # tests don't build
   doCheck = false;

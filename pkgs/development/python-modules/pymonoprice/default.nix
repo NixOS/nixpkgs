@@ -2,29 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio-fast,
   pytestCheckHook,
+  serialx,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pymonoprice";
-  version = "0.5";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etsinko";
     repo = "pymonoprice";
-    tag = version;
-    hash = "sha256-kyFOWG/Jvn+h9ludzd2Zul9/lkwPxReH76nnDIGD+fM=";
+    tag = "v${version}";
+    hash = "sha256-UwP2R3gpu2gNgIEzyA9QSvPx40HfPALXFwHy4aJS6XA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
-    pyserial
-    pyserial-asyncio-fast
+    serialx
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

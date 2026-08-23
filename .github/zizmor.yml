@@ -10,3 +10,5 @@
 rules:
   dangerous-triggers:
     disable: true
+  secrets-outside-env:
+    disable: true

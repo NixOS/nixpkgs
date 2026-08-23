@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   pytestCheckHook,
   iso8601,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "beanhub-extract";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     description = "Simple library for extracting all kind of bank account transaction export files, mostly for beanhub-import to ingest and generate transactions";
     homepage = "https://github.com/LaunchPlatform/beanhub-extract/";
     changelog = "https://github.com/LaunchPlatform/beanhub-extract/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
 }

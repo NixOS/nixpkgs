@@ -2,11 +2,6 @@
 { pkgs, ... }:
 {
   name = "docker";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      offline
-    ];
-  };
 
   nodes = {
     docker =

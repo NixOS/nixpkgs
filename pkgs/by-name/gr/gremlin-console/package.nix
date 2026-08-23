@@ -8,12 +8,12 @@
 let
   openjdk = openjdk11;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gremlin-console";
-  version = "3.8.0";
+  version = "3.8.1";
   src = fetchzip {
-    url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
-    sha256 = "sha256-vTv2a3+Ezd87ph4BnRaypPuUz0/s8DFcHVsKaURucTY=";
+    url = "https://downloads.apache.org/tinkerpop/${finalAttrs.version}/apache-tinkerpop-gremlin-console-${finalAttrs.version}-bin.zip";
+    sha256 = "sha256-43coWvunyzOrFKzkUx5hUHiiXynkaCiV1WVkJvIgwd0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "gremlin-console";
   };
-}
+})

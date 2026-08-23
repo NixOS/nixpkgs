@@ -1,26 +1,34 @@
 {
   lib,
   buildPythonPackage,
+  ddt,
+  docutils,
+  elasticsearch,
   fetchPypi,
   netaddr,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   oslo-concurrency,
   oslo-config,
   oslo-serialization,
   oslo-utils,
   prettytable,
+  pymongo,
+  redis,
   requests,
   setuptools,
+  stestrCheckHook,
   webob,
 }:
 
 buildPythonPackage rec {
   pname = "osprofiler";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d6jaKyO7X5BIBUvVzMRdCshFdMqKiO8SC4+sbohk4kw=";
+    hash = "sha256-bgjffu9q/A0tAngT1A5DyyKPDrPrNEHWFJXCgA6/oyA=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +44,16 @@ buildPythonPackage rec {
     webob
   ];
 
-  # NOTE(vinetos): OSProfiler depends on jeager-client which use opentracing
-  # Opentracing and jeager-client are archived since 2022.
-  # As this package is made only to support old OpenStack clients and bindings,
-  # We do not really care
-  doCheck = false;
+  nativeCheckInputs = [
+    ddt
+    docutils
+    elasticsearch
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
+    pymongo
+    redis
+    stestrCheckHook
+  ];
 
   pythonImportsCheck = [ "osprofiler" ];
 

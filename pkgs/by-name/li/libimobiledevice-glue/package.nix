@@ -8,19 +8,19 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libimobiledevice-glue";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libimobiledevice-glue";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cUcJARbZV9Yaqd9TP3NVmF9p8Pjz88a3GmAh4c4sEHo=";
   };
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   nativeBuildInputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

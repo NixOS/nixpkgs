@@ -64,8 +64,8 @@ let
             dialog,
             "NixOS Info",
             ("These add-ons are managed by NixOS.<br>"
-             "See <a href='https://github.com/NixOS/nixpkgs/tree/master/pkgs/games/anki/with-addons.nix'>"
-             "github.com/NixOS/nixpkgs/tree/master/pkgs/games/anki/with-addons.nix</a>")
+             "See <a href='https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/an/anki/with-addons.nix'>"
+             "github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/an/anki/with-addons.nix</a>")
           )
 
         def addon_tried_to_write_config(module: str, conf: dict) -> None:
@@ -73,8 +73,8 @@ let
             QMessageBox.Icon.Warning,
             "NixOS Info",
             (f"The add-on module: \"{module}\" tried to update its config.<br>"
-              "See <a href='https://github.com/NixOS/nixpkgs/tree/master/pkgs/games/anki/with-addons.nix'>"
-              "github.com/NixOS/nixpkgs/tree/master/pkgs/games/anki/with-addons.nix</a>"
+              "See <a href='https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/an/anki/with-addons.nix'>"
+              "github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/an/anki/with-addons.nix</a>"
               " for how to configure add-ons managed by NixOS.")
           )
           message_box.setDetailedText(json.dumps(conf))

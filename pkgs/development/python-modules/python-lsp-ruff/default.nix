@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   ruff,
@@ -10,22 +9,22 @@
   cattrs,
   lsprotocol,
   python-lsp-server,
-  tomli,
 
   # checks
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-lsp-ruff";
-  version = "2.3.0";
+  version = "2.3.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-ruff";
-    tag = "v${version}";
-    hash = "sha256-jtfDdZ68AroXlmR+AIVk/b3WpZk78BCtT8TUh4ELZZI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KRA/yDZaDtxNV8X9nOGfE+H1EyNYtRwNzsRmIqJASmU=";
   };
 
   postPatch =
@@ -65,16 +64,15 @@ buildPythonPackage rec {
     cattrs
     lsprotocol
     python-lsp-server
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/python-lsp/python-lsp-ruff";
     description = "Ruff linting plugin for pylsp";
-    changelog = "https://github.com/python-lsp/python-lsp-ruff/releases/tag/v${version}";
+    changelog = "https://github.com/python-lsp/python-lsp-ruff/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ linsui ];
   };
-}
+})

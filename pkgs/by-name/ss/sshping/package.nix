@@ -5,14 +5,14 @@
   libssh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sshping";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "spook";
     repo = "sshping";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0p1fvpgrsy44yvj44xp9k9nf6z1fh0sqcjvy75pcb9f5icgms815";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jqueiroz ];
     mainProgram = "sshping";
   };
-}
+})

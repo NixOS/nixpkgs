@@ -17,7 +17,6 @@ buildPythonPackage rec {
   meta = {
     description = "PackBits encoder/decoder for Python";
     homepage = "https://github.com/psd-tools/packbits";
-    license = [ lib.licenses.mit ];
-    maintainers = with lib.maintainers; [ grahamc ];
+    license = lib.licenses.mit;
   };
 }

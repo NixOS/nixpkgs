@@ -6,7 +6,6 @@
   fetchPypi,
   isodate,
   msrest,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-eventgrid";
   version = "10.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_eventgrid";

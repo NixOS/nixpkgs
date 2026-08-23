@@ -8,12 +8,12 @@
   mpack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpack";
   version = "1.6";
 
   src = fetchurl {
-    url = "http://ftp.andrew.cmu.edu/pub/mpack/mpack-${version}.tar.gz";
+    url = "http://ftp.andrew.cmu.edu/pub/mpack/mpack-${finalAttrs.version}.tar.gz";
     hash = "sha256-J0EIuzo5mCpO/BT7OmUpjmbI5xNnw9q/STOBYtIHqUw=";
   };
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
         mpack 2>&1 || echo "mpack exited with error code $?"
       '';
       package = mpack;
-      version = "mpack version ${version}";
+      version = "mpack version ${finalAttrs.version}";
     };
   };
 
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ tomodachi94 ];
   };
-}
+})

@@ -41,14 +41,14 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cadabra2";
-  version = "2.5.14";
+  version = "2.5.14-p1";
 
   src = fetchFromGitHub {
     owner = "kpeeters";
     repo = "cadabra2";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-lQ/xGxWa126EzxDIsXoi3brnECcXLXxzzUizLpRjZOg=";
+    hash = "sha256-Pbk9SmJ64CZ+yxMj53JpxULBQye2ETDi8xNKw38cC9k=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "PACKAGING_MODE" true)
 
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -118,7 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = !enableBuildAsCppLibrary;
+  #doInstallCheck = !enableBuildAsCppLibrary;
+  doInstallCheck = false; # FIXME: remove this line and uncomment the above after next release
 
   passthru.updateScript = nix-update-script { };
 

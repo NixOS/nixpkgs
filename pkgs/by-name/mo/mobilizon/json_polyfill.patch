@@ -1,0 +1,25 @@
+diff --git a/mix.exs b/mix.exs
+index 82fd7bf11..31d40fd26 100644
+--- a/mix.exs
++++ b/mix.exs
+@@ -246,8 +246,7 @@ defmodule Mobilizon.Mixfile do
+       {:haversine, "~> 0.1.0"},
+       {:ecto_dev_logger, "~> 0.7"},
+       {:castore, "~> 1.0"},
+-      {:credo_code_climate, "~> 0.1.0", only: [:dev, :test]},
+-      {:json_polyfill, "~> 0.2"}
++      {:credo_code_climate, "~> 0.1.0", only: [:dev, :test]}
+     ] ++ oauth_deps()
+   end
+
+--- a/mix.lock
++++ b/mix.lock
+@@ -82,7 +82,6 @@
+   "ip_reserved": {:hex, :ip_reserved, "0.1.1", "e5112d71f1abf05207f82fd9597d369a5fde1e0b6d1bbe77c02a99bb26ecdc33", [:mix], [{:inet_cidr, "~> 1.0.0", [hex: :inet_cidr, repo: "hexpm", optional: false]}], "hexpm", "55fcd2b6e211caef09ea3f54ef37d43030bec486325d12fe865ab5ed8140a4fe"},
+   "jason": {:hex, :jason, "1.4.5", "2e3a008590b0b8d7388c20293e9dcc9cf3e5d642fd2a114e4cbbb52e595d940a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0 or ~> 3.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "b0c823996102bcd0239b3c2444eb00409b72f6a140c1950bc8b457d836b30684"},
+   "jose": {:hex, :jose, "1.11.12", "06e62b467b61d3726cbc19e9b5489f7549c37993de846dfb3ee8259f9ed208b3", [:mix, :rebar3], [], "hexpm", "31e92b653e9210b696765cdd885437457de1add2a9011d92f8cf63e4641bab7b"},
+-  "json_polyfill": {:hex, :json_polyfill, "0.2.2", "789016c5b87a043f12196c840480264e630b1955e2e28f124cd38df7b0a95b25", [:rebar3], [], "hexpm", "33cb73ade53df5967375817e64e8af3c6ba35524b2f8b31eb94c265291e724d9"},
+   "jumper": {:hex, :jumper, "1.0.2", "68cdcd84472a00ac596b4e6459a41b3062d4427cbd4f1e8c8793c5b54f1406a7", [:mix], [], "hexpm", "9b7782409021e01ab3c08270e26f36eb62976a38c1aa64b2eaf6348422f165e1"},
+   "junit_formatter": {:hex, :junit_formatter, "3.4.0", "d0e8db6c34dab6d3c4154c3b46b21540db1109ae709d6cf99ba7e7a2ce4b1ac2", [:mix], [], "hexpm", "bb36e2ae83f1ced6ab931c4ce51dd3dbef1ef61bb4932412e173b0cfa259dacd"},
+   "linkify": {:hex, :linkify, "0.5.3", "5f8143d8f61f5ff08d3aeeff47ef6509492b4948d8f08007fbf66e4d2246a7f2", [:mix], [], "hexpm", "3ef35a1377d47c25506e07c1c005ea9d38d700699d92ee92825f024434258177"},
+

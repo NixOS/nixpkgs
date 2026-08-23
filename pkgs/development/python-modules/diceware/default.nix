@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -12,12 +12,24 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Set prog in ArgumentParser explicitly to fix test failure with Python 3.14
+      # https://github.com/ulif/diceware/issues/122
+      url = "https://github.com/ulif/diceware/commit/77d98606748df7755f36ebbb3bd838b1cdd80c61.patch";
+      includes = [ "diceware/__init__.py" ];
+      hunks = [
+        2
+        3
+      ];
+      hash = "sha256-yXGotV/tq7/vCYhY+1OZgCW3r6/SXTTvsHIU/jywbHc=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

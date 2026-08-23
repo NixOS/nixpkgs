@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wllvm";
   version = "1.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
   };
 
@@ -25,4 +25,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.all;
   };
-}
+})

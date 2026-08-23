@@ -13,7 +13,7 @@ let
   python = python312;
 
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "waagent";
   version = "2.15.0.1";
   pyproject = true;
@@ -21,7 +21,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P+jxn0W8LaTxDcvKlWjCK1Z9X1l/jf1s41bO9N34N0Q=";
   };
   patches = [
@@ -90,7 +90,7 @@ python.pkgs.buildPythonApplication rec {
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
     maintainers = with lib.maintainers; [ codgician ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
-}
+})

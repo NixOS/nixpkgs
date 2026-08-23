@@ -6,10 +6,10 @@
   gpm,
   libffi,
   libGL,
-  libX11,
-  libXext,
-  libXpm,
-  libXrandr,
+  libx11,
+  libxext,
+  libxpm,
+  libxrandr,
   ncurses,
 }:
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gpm
     libGL
-    libX11
-    libXext
-    libXpm
-    libXrandr
+    libx11
+    libxext
+    libxpm
+    libxrandr
   ];
 
   enableParallelBuilding = true;

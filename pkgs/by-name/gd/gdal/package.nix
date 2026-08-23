@@ -68,7 +68,7 @@
   pkg-config,
   poppler,
   proj,
-  python3,
+  python3Packages,
   qhull,
   rav1e,
   sqlite,
@@ -79,17 +79,17 @@
   xz,
   zlib,
   zstd,
+  buildPackages,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.12.1";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vs9qun9Z8o4KPxWjKOV9Lp/GgAsYW7gseYv4G7+liso=";
+    hash = "sha256-sHMfAAZ4LrHXXh1g3Q9WsAqt8DHRkSdBlb3kZSy+vX0=";
   };
 
   nativeBuildInputs = [
@@ -98,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
-    python3.pkgs.setuptools
-    python3.pkgs.wrapPython
+    python3Packages.setuptools
+    python3Packages.wrapPython
     swig
   ]
   ++ lib.optionals useJava [
@@ -113,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
-      lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      # mysql puts libraries into top-level `lib` (but has pkgconfig),
+      # mariadb puts them into a subdirectory (but has no pkgconfig)
+      lib.optionalString (libmysqlclient.pname != "mysql-client") "mysql/"
     }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
   ++ lib.optionals finalAttrs.doInstallCheck [
@@ -132,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This is not strictly needed as the Java bindings wouldn't build anyway if
     # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   buildInputs =
@@ -202,8 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
       libwebp
       zlib
       zstd
-      python3
-      python3.pkgs.numpy
+      python3Packages.python
+      python3Packages.numpy
     ]
     ++ tileDbDeps
     ++ libAvifDeps
@@ -219,9 +224,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ darwinDeps
     ++ nonDarwinDeps;
 
-  pythonPath = [ python3.pkgs.numpy ];
+  pythonPath = [ python3Packages.numpy ];
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
   ''
   + lib.optionalString useJava ''
     cd $out/lib
@@ -238,14 +243,14 @@ stdenv.mkDerivation (finalAttrs: {
     pushd autotest
 
     export HOME=$(mktemp -d)
-    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+    export PYTHONPATH="$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
     # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
     export CI=1
   '';
-  nativeInstallCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-benchmark
     pytest-env
@@ -257,9 +262,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
+    "gcore/basic_test.py::test_hint_http"
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
+    "gdrivers/hdf5multidim.py::test_hdf5_multimdim_eos_grid_dimension_list"
     "gdrivers/wms.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 on macOS
+    "gcore/hdf4multidim.py"
   ];
   disabledTests = [
     # tests that attempt to make network requests
@@ -303,6 +314,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!usePoppler) [
     "test_pdf_jpx_compression"
+  ]
+  ++ lib.optionals (!useNetCDF) [
+    # writes the Zarr tile-presence cache (.gmac) via the netCDF driver, which
+    # is absent in the minimal build
+    "test_zarr_read_simple_sharding"
   ];
   postCheck = ''
     popd # autotest
@@ -318,7 +334,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gdal.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       dotlambda
     ];
     teams = [ lib.teams.geospatial ];

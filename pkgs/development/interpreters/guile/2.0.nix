@@ -90,14 +90,6 @@ builder rec {
     })
   ];
 
-  # Explicitly link against libgcc_s, to work around the infamous
-  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-
-  # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl
-  ) "-lgcc_s";
-
   configureFlags = [
     "--with-libreadline-prefix"
   ]
@@ -118,6 +110,12 @@ builder rec {
 
   env = {
     NIX_CFLAGS_COMPILE = "-std=gnu17";
+  }
+  // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) {
+    # Explicitly link against libgcc_s, to work around the infamous
+    # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+    # don't have "libgcc_s.so.1" on darwin
+    LDFLAGS = "-lgcc_s";
   };
 
   postInstall = ''

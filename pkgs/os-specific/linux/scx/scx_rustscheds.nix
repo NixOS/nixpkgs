@@ -11,38 +11,33 @@
   libseccomp,
   nix-update-script,
   nixosTests,
-  fetchpatch,
+  openssl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.0.19";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bOldw2Sob5aANmVzw6VwCgJ4+VzEsohKUxOxntow7VY=";
+    hash = "sha256-LK0go5blWgCtDpS5xm9BQc7C2NvbfrW+Jp66ImIThxA=";
   };
 
-  cargoHash = "sha256-ik05X+5jIdxtXYhN6fb1URW8TKKzgFuevi5+Wm2j15Y=";
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/sched-ext/scx/pull/3127.patch";
-      hash = "sha256-HpGJR3eBZKE+VsqGivjJp1n7JIORhZUxG87AsP1WWi0=";
-    })
-  ];
+  cargoHash = "sha256-vEsbpor52DEUpYO5OubFPMzRltO5kUXjqAoO/9hsKXc=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     protobuf
   ];
+
   buildInputs = [
     elfutils
     zlib
     zstd
     libseccomp
+    openssl
   ];
 
   env = {
@@ -53,26 +48,61 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "-C link-args=-lz"
       "-C link-args=-lzstd"
     ];
+    EXPECTED_SCHEDULERS = lib.concatStringsSep " " finalAttrs.passthru.schedulers;
   };
 
   hardeningDisable = [
     "zerocallusedregs"
   ];
 
-  doCheck = true;
-  checkFlags = [
-    "--skip=compat::tests::test_ksym_exists"
-    "--skip=compat::tests::test_read_enum"
-    "--skip=compat::tests::test_struct_has_field"
-    "--skip=cpumask"
-    "--skip=topology"
-    "--skip=proc_data::tests::test_thread_operations"
-    "--skip=json::tests::test_with_resources"
-    "--skip=json::tests::test_with_dir"
-  ];
+  # most of the tests rely on system CPU topology info,
+  # which is not available in the sandbox
+  doCheck = false;
+
+  # we don't need these
+  postInstall = ''
+    rm $out/bin/{scx_arena_selftests,vmlinux_docify,xtask}
+  '';
+
+  __structuredAttrs = true;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd $out/bin
+    found=(scx_*)
+    if [[ "''${found[@]}" != "''${EXPECTED_SCHEDULERS[@]}" ]]; then
+      echo "List of available schedulers changed, expected: ''${EXPECTED_SCHEDULERS[@]}, found: ''${found[@]}"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
 
   passthru.tests.basic = nixosTests.scx;
   passthru.updateScript = nix-update-script { };
+  passthru.schedulers = [
+    "scx_beerland"
+    "scx_bpfland"
+    "scx_cake"
+    "scx_chaos"
+    "scx_characterize"
+    "scx_cosmos"
+    "scx_flash"
+    "scx_flow"
+    "scx_forge"
+    "scx_lavd"
+    "scx_layered"
+    "scx_mitosis"
+    "scx_mlfq"
+    "scx_p2dq"
+    "scx_pandemonium"
+    "scx_rlfifo"
+    "scx_rustland"
+    "scx_rusty"
+    "scx_tickless"
+  ];
 
   meta = {
     description = "Sched-ext Rust userspace schedulers";
@@ -90,7 +120,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/sched-ext/scx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
     maintainers = with lib.maintainers; [
       johnrtitor
       Gliczy

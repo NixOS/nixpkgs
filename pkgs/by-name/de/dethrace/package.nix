@@ -7,15 +7,15 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dethrace";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "dethrace-labs";
     repo = "dethrace";
-    tag = "v${version}";
-    hash = "sha256-+C3NyRLmvXrkZuhLGwIIHFWjXLMpt3srLZCVrxRUlkA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SGQGErlmsJEhjdvZa2YPJWwNFuZR4RL81W7meilw8t0=";
     fetchSubmodules = true;
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ astro ];
     mainProgram = "dethrace";
   };
-}
+})

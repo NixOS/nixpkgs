@@ -6,12 +6,12 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xml2";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20160427221603/http://download.ofb.net/gale/xml2-${version}.tar.gz";
+    url = "https://web.archive.org/web/20160427221603/http://download.ofb.net/gale/xml2-${finalAttrs.version}.tar.gz";
     sha256 = "01cps980m99y99cnmvydihga9zh3pvdsqag2fi1n6k2x7rfkl873";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

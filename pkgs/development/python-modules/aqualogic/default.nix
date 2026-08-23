@@ -5,22 +5,25 @@
   fetchFromGitHub,
   pyserial,
   pytestCheckHook,
+  setuptools,
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aqualogic";
-  version = "3.4";
-  format = "setuptools";
+  version = "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swilson";
     repo = "aqualogic";
-    rev = version;
-    hash = "sha256-hBg02Wypd+MyqM2SUD53djhm5OMP2QAmsp8Stf+UT2c=";
+    tag = finalAttrs.version;
+    hash = "sha256-2dydjbbWYqtj7SKRJ3fpugFLOYXEDRDL9wyMV1ClHws=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     pyserial
     websockets
@@ -37,7 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with Hayward/Goldline AquaLogic/ProLogic pool controllers";
     homepage = "https://github.com/swilson/aqualogic";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/swilson/aqualogic/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

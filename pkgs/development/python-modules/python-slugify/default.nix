@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   text-unidecode,
   unidecode,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-slugify";
   version = "8.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "un33k";

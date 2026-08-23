@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "asap";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchzip {
     url = "mirror://sourceforge/project/asap/asap/${finalAttrs.version}/asap-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T4uTcaS8qIqUptggxJwZNSI/kN2NxNI+2ZUgncveb3E=";
+    hash = "sha256-lk43jknsPndQ3KIvTgJBYYG2hhVaUrq5CGyuH0qXHeo=";
   };
 
   outputs = [

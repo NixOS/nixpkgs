@@ -19,7 +19,7 @@
   libayatana-appindicator,
   webkitgtk_4_1,
   wrapGAppsHook3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -27,12 +27,12 @@
   copyDesktopItems,
 }:
 let
-  version = "1.5.1";
+  version = "1.5.2";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gui-client-${version}";
-    hash = "sha256-KozSy44Opx6cukA0QTXeMpI3fP49iyabFzPLIJckOZ4=";
+    hash = "sha256-Ew6oLVL7u9RtidHNsz29lzH9WPxKNneEoVACuLdP7yo=";
   };
 
   frontend = stdenvNoCC.mkDerivation rec {
@@ -41,10 +41,10 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit pname version;
-      pnpm = pnpm_9;
+      pnpm = pnpm_10;
       src = "${src}/rust/gui-client";
-      fetcherVersion = 1;
-      hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
+      fetcherVersion = 4;
+      hash = "sha256-770+06rpf/P9hOFLgEWc0/BKjIxHyCWB2E3tqdEskAA=";
     };
     pnpmRoot = "rust/gui-client";
 
@@ -52,7 +52,7 @@ let
 
     nativeBuildInputs = [
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
       nodejs
     ];
 
@@ -79,10 +79,10 @@ rustPlatform.buildRustPackage rec {
   pname = "firezone-gui-client";
   inherit version src;
 
-  cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
+  cargoHash = "sha256-LHHaklGIMuDuZwikXiQzLPbmkUbPyYR04UBQTBxq2ps=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -135,8 +135,6 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Otherwise blank screen, see https://github.com/tauri-apps/tauri/issues/9304
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --prefix PATH ":" ${
         lib.makeBinPath [
           zenity

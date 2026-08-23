@@ -14,7 +14,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jinja2-cli";
   version = "0.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mattrobenolt";
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     [
       jinja2
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   pythonImportsCheck = [ "jinja2cli" ];
 

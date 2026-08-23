@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   appimageTools,
   undmg,
@@ -12,39 +11,29 @@
 
 let
   inherit (stdenv) hostPlatform;
-  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
-  sources = {
-    x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/20adc1003928b0f1b99305dbaf845656ff81f5d4/linux/x64/Cursor-2.2.44-x86_64.AppImage";
-      hash = "sha256-hit0L6vE893jPq4QQqteT6T08hghX5hE/NZLUWTqqvY=";
-    };
-    aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/20adc1003928b0f1b99305dbaf845656ff81f5d4/linux/arm64/Cursor-2.2.44-aarch64.AppImage";
-      hash = "sha256-D2pcfwzRED/TYGABCo83YI4g77tu3xgvqjOo8XsteSA=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/20adc1003928b0f1b99305dbaf845656ff81f5d4/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-/BD2PMcP20/SDGPCsnkv3PQW7u0FEXuORfDeG/KV0MQ=";
-    };
-    aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/20adc1003928b0f1b99305dbaf845656ff81f5d4/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-qehVIZipBbWOYbf6Zo3GBStS8dp+c4EtgDTGAQz1mzE=";
-    };
-  };
+  sourcesJson = lib.importJSON ./sources.json;
+  sources = lib.mapAttrs (
+    _: info:
+    fetchurl {
+      inherit (info) url hash;
+    }
+  ) sourcesJson.sources;
 
   source = sources.${hostPlatform.system};
 in
-(callPackage vscode-generic rec {
-  inherit useVSCodeRipgrep;
-  commandLineArgs = finalCommandLineArgs;
+(buildVscode rec {
+  inherit commandLineArgs useVSCodeRipgrep;
+  inherit (sourcesJson) version;
+  # Cursor reports vscode >= 1.122 but still ships @vscode/ripgrep.
+  # Capping the build-time vscodeVersion avoids modifying the notarized app bundle on Darwin.
+  vscodeVersion =
+    if lib.versionAtLeast sourcesJson.vscodeVersion "1.122.0" then
+      "1.121.0"
+    else
+      sourcesJson.vscodeVersion;
 
-  version = "2.2.44";
   pname = "cursor";
-
-  # You can find the current VSCode version in the About dialog:
-  # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.105.1";
 
   executableName = "cursor";
   longName = "Cursor";
@@ -61,6 +50,9 @@ in
     else
       source;
 
+  # for unpacking the DMG
+  extraNativeBuildInputs = lib.optionals hostPlatform.isDarwin [ undmg ];
+
   sourceRoot =
     if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
@@ -73,7 +65,7 @@ in
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  # Cursor has no wrapper script.
+  # Cursor ships a launcher script that resolves its own VSCODE_PATH.
   patchVSCodePath = false;
 
   meta = {
@@ -81,10 +73,11 @@ in
     homepage = "https://cursor.com";
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
       prince213
+      qweered
     ];
     platforms = [
       "aarch64-linux"
@@ -95,10 +88,22 @@ in
   };
 }).overrideAttrs
   (oldAttrs: {
-    nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
 
-    passthru = (oldAttrs.passthru or { }) // {
-      inherit sources;
-    };
+    preFixup =
+      (oldAttrs.preFixup or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        sed -i '/^Keywords=/a MimeType=application/x-cursor-workspace;' \
+          $out/share/applications/cursor.desktop
+      '';
+    postInstall =
+      (oldAttrs.postInstall or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        install -Dm644 ../mime/packages/cursor-workspace.xml -t $out/share/mime/packages
+        rm -f $out/lib/cursor/resources/appimageupdatetool.AppImage
+      '';
   })

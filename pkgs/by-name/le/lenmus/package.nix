@@ -13,7 +13,7 @@
   libpng,
   pngpp,
   zlib,
-  wxGTK32,
+  wxwidgets_3_2,
   wxsqlite3,
   fluidsynth,
   fontconfig,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     pngpp
     zlib
-    wxGTK32
+    wxwidgets_3_2
     wxsqlite3
     fluidsynth
     fontconfig

@@ -10,27 +10,25 @@
   molecule,
   packaging,
   pluggy,
-  pythonOlder,
   rich,
   setuptools,
   setuptools-scm,
   testers,
   wcmatch,
   withPlugins ? true,
+  writableTmpDirAsHomeHook,
   molecule-plugins,
   yamllint,
 }:
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "25.12.0";
+  version = "26.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sia/G+Z84PowxyaqsiYGP5RD5WHX49BI9V37LuUa29Y=";
+    hash = "sha256-GHDF9UQkA9d7WVPTRDgiZaUh60lIiFJgwMrAhKo97AI=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +62,7 @@ buildPythonPackage rec {
     }).overrideAttrs
       (old: {
         # workaround the error: Permission denied: '/homeless-shelter'
-        HOME = "$(mktemp -d)";
+        nativeBuildInputs = old.nativeBuildInputs ++ [ writableTmpDirAsHomeHook ];
       });
 
   meta = {

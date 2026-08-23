@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.19.0";
   pname = "tini";
 
   src = fetchFromGitHub {
     owner = "krallin";
     repo = "tini";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
   };
 
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/krallin/tini/commit/071c715e376e9ee0ac1a196fe8c38bcb61ad385c.patch";
       hash = "sha256-idnYcVuhCXQuhFSqcrNjbCLhR4HNlv8QonrtBqEbo3A=";
+    })
+    (fetchpatch {
+      url = "https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395.patch";
+      hash = "sha256-i6xcf+qpjD+7ZQY3ueiDaxO4+UA2LutLCZLNmT+ji1s=";
     })
   ];
 
@@ -42,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "tini";
   };
-}
+})

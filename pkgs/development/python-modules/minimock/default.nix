@@ -2,16 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "minimock";
   version = "1.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lowks";
@@ -19,6 +16,11 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-Ut3iKc7Sr28uGgWCV3K3CS+gBta2icvbUPMjjo4fflU=";
   };
+
+  postPatch = ''
+    substituteInPlace minimock.py \
+      --replace-fail "__version__ = '1.2.10.dev0'" "__version__ = '${version}'"
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -29,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Minimalistic mocking library";
-    homepage = "https://pypi.python.org/pypi/MiniMock";
+    homepage = "https://pypi.org/project/MiniMock/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

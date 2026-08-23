@@ -16,16 +16,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ocsp-server";
-  version = "0.6.1";
+  version = "0.7.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DorianCoding";
     repo = "OCSP-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7JYefylOs+Chqejt+hpB1AD4FTdbIhfKS1He4xAFMLo=";
+    hash = "sha256-Ut8z1mlPCJQjxw9hesle30OH/LDhGtZgmCyqTJ8ZzIo=";
   };
 
-  cargoHash = "sha256-2wtQO6Mp4rkeklpCDKFRre5WGao7dQd+Mmma80QRo00=";
+  cargoHash = "sha256-cWmabU49p8Fl5xwZ8FQvlg9rySriYav5Zo/bwIdGgX4=";
 
   checkFlags = [
     # Requires database access

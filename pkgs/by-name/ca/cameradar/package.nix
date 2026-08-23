@@ -6,18 +6,18 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cameradar";
-  version = "5.0.4";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = "cameradar";
-    tag = "v${version}";
-    hash = "sha256-nfqgBUgcLjPLdn8hs1q0FLDBHbloeMKETDrv3a5SZq0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t6xB5llBouAJqhrRDXlvyeplsq3wUKnOBbNj/TSbP0I=";
   };
 
-  vendorHash = "sha256-AIi57DWMvAKl0PhuwHO/0cHoDKk5e0bJsqHYBka4NiU=";
+  vendorHash = "sha256-f5N0Vu0cy9Eoxhp487unP8sVwuFRGEi5GFTQmkdoDxI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,8 +28,8 @@ buildGoModule rec {
   meta = {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
-    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/${src.tag}";
+    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

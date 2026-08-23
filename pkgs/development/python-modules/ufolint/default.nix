@@ -4,14 +4,14 @@
   fetchFromGitHub,
   commandlines,
   fonttools,
-  fs,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ufolint";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
@@ -21,11 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-sv8WbnDd2LFHkwNsB9FO04OlLhemdzwjq0tC9+Fd6/M=";
   };
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
     commandlines
-    fs
     fonttools
-  ];
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeBuildInputs = [ pytestCheckHook ];
 

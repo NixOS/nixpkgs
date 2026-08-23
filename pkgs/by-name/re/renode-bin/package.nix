@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchurl {
     url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-oNlTz5LBggPkjKM4TJO2UDKQdt2Ga7rBTdgyGjN8/zA=";
+    hash = "sha256-YmKcqjMe1L1Ot6vhPuLkg0+8qnDeSS2zll+vpO3FaU8=";
   };
 
   nativeBuildInputs = [

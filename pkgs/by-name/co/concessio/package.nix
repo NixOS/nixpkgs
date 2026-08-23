@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   desktop-file-utils,
   fetchFromGitHub,
   gjs,
@@ -17,18 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "concessio";
-  version = "0.1.10";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ronniedroid";
     repo = "concessio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GDiwpErxz6GiYajcRBOnX0RO1jeaSmpLLxqEsB3nJLA=";
+    hash = "sha256-jFmGl5g54cZ9yDbcm+yi/o3htLYHMffQJL74AH271TM=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gjs
     glib # For `glib-compile-schema`

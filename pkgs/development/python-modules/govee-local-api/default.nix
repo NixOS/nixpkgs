@@ -4,21 +4,18 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
-    hash = "sha256-kAzV9zchgxB2CmdWOa1vRuhRDSE0qTon9sVvmo9AeB0=";
+    hash = "sha256-BLM1lZ/2ZUpwP8/OpgcMdwjryEcmTBKYCeMm0FoCG8A=";
   };
 
   postPatch = ''

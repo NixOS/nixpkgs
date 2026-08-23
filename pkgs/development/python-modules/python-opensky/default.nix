@@ -6,10 +6,10 @@
   fetchFromGitHub,
   poetry-core,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-opensky";
@@ -29,13 +27,15 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
     substituteInPlace src/python_opensky/opensky.py \
       --replace ".joinpath(uri)" "/ uri"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -22,13 +22,16 @@
 # mxnet is not maintained, and other projects are migrating away from it.
 # https://github.com/apache/mxnet/issues/21206
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mxnet";
   version = "1.9.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    name = "apache-mxnet-src-${version}-incubating.tar.gz";
-    url = "mirror://apache/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    name = "apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
+    url = "mirror://apache/incubator/mxnet/${finalAttrs.version}/apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
 
@@ -50,6 +53,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     perl
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -61,7 +67,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
   ++ lib.optionals cudaSupport [
     # needed for OpenCV cmake module
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
@@ -96,4 +102,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
-}
+})

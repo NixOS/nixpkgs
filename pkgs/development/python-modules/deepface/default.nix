@@ -13,7 +13,7 @@
   pandas,
   pillow,
   requests,
-  retinaface,
+  retina-face,
   setuptools,
   tensorflow,
   tqdm,
@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.96";
+  version = "0.0.100";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-UusTzMZl7ITKFbMTZI457Y2K9knO2U1n9LurJZhUJ0A=";
+    hash = "sha256-DfymSylAlw2cordGYZTHPbi3AzMg18y9VPDPeZ81c6A=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pandas
     pillow
     requests
-    retinaface
+    retina-face
     tensorflow
     tqdm
   ];

@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication {
   '';
   postInstall = ''
     # Icons
-    install -Dm 644 "zenmapCore/data/pixmaps/zenmap.png" -t "$out/share/pixmaps/"
+    install -Dm 644 "zenmapCore/data/pixmaps/zenmap.png" -t "$out/share/icons/hicolor/256x256/apps"
     # Desktop-files for application
     install -Dm 644 "install_scripts/unix/zenmap.desktop" -t "$out/share/applications/"
     install -Dm 644 "install_scripts/unix/zenmap-root.desktop" -t "$out/share/applications/"
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
   '';
 
   meta = nmap.meta // {
-    description = "Offical nmap Security Scanner GUI";
+    description = "Official nmap Security Scanner GUI";
     homepage = "https://nmap.org/zenmap/";
     maintainers = with lib.maintainers; [
       dvaerum

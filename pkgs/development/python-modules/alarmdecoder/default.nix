@@ -7,7 +7,6 @@
   pyopenssl,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   pyusb,
   setuptools-scm,
 }:

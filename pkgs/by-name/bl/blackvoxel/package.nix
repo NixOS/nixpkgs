@@ -4,8 +4,8 @@
   fetchFromGitHub,
   makeDesktopItem,
   imagemagick,
-  glew110,
-  SDL_compat,
+  glew_1_10,
+  sdl12-compat,
   nix-update-script,
 }:
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ imagemagick ];
 
   buildInputs = [
-    glew110
-    SDL_compat
+    glew_1_10
+    sdl12-compat
   ];
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 blackvoxel.png $out/share/icons/hicolor/1024x1024/apps/blackvoxel.png
+    install -Dm644 blackvoxel.png $out/share/icons/blackvoxel.png
   '';
 
   desktopItems = [

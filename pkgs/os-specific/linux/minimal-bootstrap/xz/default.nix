@@ -14,11 +14,11 @@
 }:
 let
   pname = "xz";
-  version = "5.4.3";
+  version = "5.8.3";
 
   src = fetchurl {
     url = "https://tukaani.org/xz/xz-${version}.tar.gz";
-    hash = "sha256-HDguC8Lk4K9YOYqQPdYv/35RAXHS3keh6+BtFSjpt+k=";
+    hash = "sha256-PToblzryGBFPT4ibuqL0wDfequDI6BXuw4HD1Ua5dKA=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -71,7 +71,8 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-shared \
-      --disable-assembler
+      --disable-assembler \
+      --disable-dependency-tracking
 
     # Build
     make -j $NIX_BUILD_CORES

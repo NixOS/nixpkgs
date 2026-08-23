@@ -6,15 +6,15 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "await";
-  version = "2.4.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
-    tag = version;
-    hash = "sha256-MpdP4OJvxjF8zbKQ1YGVrtcC8RKxDNHDA90tWvLDQbU=";
+    tag = finalAttrs.version;
+    hash = "sha256-dtFwlGFjuaUdbggcFviLTnv2zBY6ktK8BASiz4XUeoE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   meta = {
-    changelog = "https://github.com/slavaGanzin/await/releases/tag/${version}";
+    changelog = "https://github.com/slavaGanzin/await/releases/tag/${finalAttrs.version}";
     description = "Small binary that runs a list of commands in parallel and awaits termination";
     homepage = "https://github.com/slavaGanzin/await";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "await";
   };
-}
+})

@@ -2,6 +2,7 @@
   aiohttp,
   bleak,
   bleak-retry-connector,
+  bluetooth-adapters,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-regex-commit,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     aiohttp
     bleak
     bleak-retry-connector
+    bluetooth-adapters
   ];
 
   pythonImportsCheck = [ "pynecil" ];

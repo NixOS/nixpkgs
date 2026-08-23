@@ -7,7 +7,6 @@
   maven,
   writeShellApplication,
   curl,
-  pcre,
   common-updater-scripts,
   jq,
   gnused,
@@ -26,13 +25,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "lemminx";
-  version = "0.31.0";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-lemminx";
     repo = "lemminx";
     tag = version;
-    hash = "sha256-a+9RN1265fsmYAUMuUTxA+VqJv7xPlzuc8HqoZwmR4M=";
+    hash = "sha256-nV+IXeGEnJ7q2GEH9LKiy8ABePHSIt8GFPj/sZzv71E=";
     # Lemminx reads this git information at runtime from a git.properties
     # file on the classpath
     leaveDotGit = true;
@@ -48,7 +47,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-0KnaXr5Mmwm0pV4o5bAX0MWKl6f/cvlO6cyV9UcgXeo=";
+  mvnHash = "sha256-IJBmztfNco5UF0BwfeU5QHwvr50bXsrZFOSIPoGBijA=";
 
   # Disable gitcommitid plugin which needs a .git folder which we don't have.
   # Disable failing tests which either need internet access or are flaky.
@@ -93,7 +92,6 @@ maven.buildMavenPackage rec {
         name = "update-${pname}";
         runtimeInputs = [
           curl
-          pcre
           common-updater-scripts
           jq
           gnused
@@ -126,7 +124,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "XML Language Server";
     mainProgram = "lemminx";
-    homepage = "https://github.com/eclipse/lemminx";
+    homepage = "https://github.com/eclipse-lemminx/lemminx";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ tricktron ];
   };

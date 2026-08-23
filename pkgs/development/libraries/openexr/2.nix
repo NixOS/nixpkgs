@@ -6,6 +6,7 @@
   ilmbase,
   fetchpatch,
   cmake,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +62,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
   nativeBuildInputs = [ cmake ];
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
   propagatedBuildInputs = [
     ilmbase
     zlib
@@ -70,11 +74,30 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1281
   doCheck = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isi686;
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/AcademySoftwareFoundation/openexr/issues/222
+    "OpenEXR.IlmImf"
+  ];
+
   meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    insecure = true;
+    knownVulnerabilities = [
+      "CVE-2021-3598: ImfDeepScanLineInputFile Out-of-Bounds Read"
+      "CVE-2021-3605: rleUncompress Out-of-Bounds Read"
+      "CVE-2021-3933: Integer Overflow Vulnerability in File Processing on 32-bit Systems"
+      "CVE-2021-23169: copyIntoFrameBuffer Heap Buffer Overflow Leading to Arbitrary Code Execution"
+      "CVE-2021-23215: DwaCompressor Integer Overflow Leads to Heap Buffer Overflow"
+      "CVE-2021-26260: DwaCompressor Integer Overflow Leading to Heap Buffer Overflow"
+      "CVE-2021-26945: Integer Overflow Leading to Heap Buffer Overflow"
+      "CVE-2023-5841: Heap Overflow in Scanline Deep Data Parsing"
+      "CVE-2024-31047: convert Function Denial of Service"
+      "CVE-2025-12495: EXR File Parsing Heap-based Buffer Overflow Remote Code Execution"
+      "CVE-2025-12839: EXR File Parsing Heap-based Buffer Overflow Remote Code Execution"
+      "CVE-2025-12840: EXR File Parsing Heap-based Buffer Overflow Remote Code Execution"
+      "CVE-2026-27622: CompositeDeepScanLine integer-overflow leads to heap OOB write"
+    ];
   };
 }

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lightning-pool";
   version = "0.6.4-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "pool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lSc/zOZ5VpmaZ7jrlGvSaczrgOtAMS9tDUxcMoFdBmQ=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ proofofkeags ];
   };
-}
+})

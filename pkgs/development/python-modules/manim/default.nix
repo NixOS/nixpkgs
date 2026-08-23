@@ -5,7 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # buildInputs
   cairo,
@@ -42,6 +42,7 @@
   # optional-dependencies
   jupyterlab,
   notebook,
+  typst,
 
   # tests
   ffmpeg,
@@ -185,26 +186,39 @@ let
     ]
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
+  version = "0.21.0";
   pyproject = true;
-  version = "0.19.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
   };
-
-  build-system = [
-    hatchling
-  ];
 
   patches = [ ./pytest-report-header.patch ];
 
+  postPatch =
+    # nixpkgs still ships uv-build < 0.12.1
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          "uv_build>=0.12.1,<0.13.0" \
+          "uv_build"
+    '';
+
+  build-system = [
+    uv-build
+  ];
+
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
     av
     beautifulsoup4
@@ -243,6 +257,9 @@ buildPythonPackage rec {
     ];
     # TODO package dearpygui
     # gui = [ dearpygui ];
+    typst = [
+      typst
+    ];
   };
 
   makeWrapperArgs = [
@@ -261,17 +278,16 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+    typst
     versionCheckHook
   ];
 
-  # about 55 of ~600 tests failing mostly due to demand for display
+  # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];
 
   meta = {
-    # https://github.com/ManimCommunity/manim/pull/4037
-    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -280,9 +296,12 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      ivyfanchiang
+    ];
   };
-}
+})

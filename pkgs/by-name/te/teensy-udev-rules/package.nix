@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "udev rules for the Teensy microcontrollers";
     longDescription = ''
       udev rules that give non-root users permission to communicate with the
-      Teensy family of microcontrolers.
+      Teensy family of microcontrollers.
 
       ModemManager (part of NetworkManager) can interfere with USB Serial
       devices, which includes the Teensy.  See comments in the .rules file (or

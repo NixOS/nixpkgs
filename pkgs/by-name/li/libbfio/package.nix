@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix ++ windows;
   };
 })

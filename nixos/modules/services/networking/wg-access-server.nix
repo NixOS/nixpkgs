@@ -109,18 +109,9 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      script = ''
-        # merge secrets into main config
-        yq eval-all "select(fileIndex == 0) * select(fileIndex == 1)" ${configFile} $CREDENTIALS_DIRECTORY/SECRETS_FILE \
-          > "$STATE_DIRECTORY/config.yml"
-
-        ${lib.getExe cfg.package} serve --config "$STATE_DIRECTORY/config.yml"
-      '';
 
       path = with pkgs; [
         iptables
-        # needed by startup script
-        yq-go
       ];
 
       serviceConfig =
@@ -137,6 +128,14 @@ in
           LoadCredential = [
             "SECRETS_FILE:${cfg.secretsFile}"
           ];
+
+          # merge secrets into main config
+          ExecStartPre = [
+            "${lib.getExe' pkgs.coreutils "install"} '${configFile}' \"\${STATE_DIRECTORY}\"/config.yml"
+            "${lib.getExe pkgs.yq-go} eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' \"\${STATE_DIRECTORY}\"/config.yml --inplace \"\${CREDENTIALS_DIRECTORY}\"/SECRETS_FILE"
+          ];
+
+          ExecStart = "${lib.getExe cfg.package} serve --config \"\${STATE_DIRECTORY}\"/config.yml";
 
           # Hardening
           DynamicUser = true;

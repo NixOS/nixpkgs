@@ -58,8 +58,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postInstall = ''
-    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
+    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin" --set-default LANG "C.UTF-8"
   '';
 
   enableParallelBuilding = true;

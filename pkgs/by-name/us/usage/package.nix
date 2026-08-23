@@ -5,22 +5,24 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  nodejs,
+  bashInteractive,
   usage,
   testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.8.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/yDypNQdw6YS1M8YtwjdFyG8Lfh3wKkvVWyH2b/G65o=";
+    hash = "sha256-UbZ1KCTgFTwzZWxxwaQcoR1B7uHdP0OxJUKBvanIvbQ=";
   };
 
-  cargoHash = "sha256-3tSMgTVmoiME/wWE8uHZEjnfeS8Hqbm0DeUaWNgN944=";
+  cargoHash = "sha256-4NZdBvURBpfaaPAjtCmpDV99OE4/6HTZf5mmHcQ5NNU=";
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \
@@ -29,10 +31,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkFlags = [
-    # tries to build usage-cli itself
-    "--skip=test_bash_completion_integration"
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+    bashInteractive
   ];
+
+  # The bash completion tests drive `complete -D`, a builtin that bash only
+  # compiles in when readline support is enabled. The plain `bash` used in the
+  # build sandbox is built with `--disable-readline`, so the tests honor the
+  # USAGE_SHELL_BASH env var to run under a readline-enabled bash instead.
+  preCheck = ''
+    export USAGE_SHELL_BASH="${bashInteractive}/bin/bash"
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \

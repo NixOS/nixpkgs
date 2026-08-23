@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.17";
   pname = "litmus";
 
   src = fetchFromGitHub {
     owner = "notroj";
     repo = "litmus";
-    tag = version;
+    tag = finalAttrs.version;
     # Required for neon m4 macros, bundled neon not used
     fetchSubmodules = true;
     hash = "sha256-JsFyZeaUTDCFZtlG8kyycTE14i4U4R6lTTVWLPjKGPU=";
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.lorenz ];
     mainProgram = "litmus";
   };
-}
+})

@@ -13,16 +13,20 @@
     specialisation = {
       beerland.configuration.services.scx.scheduler = "scx_beerland";
       bpfland.configuration.services.scx.scheduler = "scx_bpfland";
+      cake.configuration.services.scx.scheduler = "scx_cake";
+      chaos.configuration.services.scx.scheduler = "scx_chaos";
       cosmos.configuration.services.scx.scheduler = "scx_cosmos";
       flash.configuration.services.scx.scheduler = "scx_flash";
-      flatcg.configuration.services.scx.scheduler = "scx_flatcg";
+      flow.configuration.services.scx.scheduler = "scx_flow";
+      forge.configuration.services.scx.scheduler = "scx_forge";
       lavd.configuration.services.scx.scheduler = "scx_lavd";
-      nest.configuration.services.scx.scheduler = "scx_nest";
+      mlfq.configuration.services.scx.scheduler = "scx_mlfq";
       p2dq.configuration.services.scx.scheduler = "scx_p2dq";
+      pandemonium.configuration.services.scx.scheduler = "scx_pandemonium";
       rlfifo.configuration.services.scx.scheduler = "scx_rlfifo";
       rustland.configuration.services.scx.scheduler = "scx_rustland";
       rusty.configuration.services.scx.scheduler = "scx_rusty";
-      simple.configuration.services.scx.scheduler = "scx_simple";
+      tickless.configuration.services.scx.scheduler = "scx_tickless";
     };
   };
 
@@ -30,16 +34,20 @@
     specialisation = [
       "beerland",
       "bpfland",
+      "cake",
+      "chaos",
       "cosmos",
       "flash",
-      "flatcg",
+      "flow",
+      "forge",
       "lavd",
-      "nest",
+      "mlfq",
       "p2dq",
+      "pandemonium",
       "rlfifo",
       "rustland",
       "rusty",
-      "simple"
+      "tickless",
     ]
 
     def activate_specialisation(name: str):

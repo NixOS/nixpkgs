@@ -11,15 +11,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sslh";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
     repo = "sslh";
-    rev = "v${version}";
-    hash = "sha256-qGOOqEe9wlR3pXmYEwMQTxuMcNLLX2i/39AIAb6I4jU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wHolBYn9pmCYEA6FkYkE1PJtlH0MZJkSVz+tSj3cS60=";
   };
 
   postPatch = "patchShebangs *.sh";
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -5,16 +5,13 @@
   beautifulsoup4,
   requests,
   click,
-  pythonOlder,
   poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "deep-translator";
   version = "1.11.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "deep_translator";

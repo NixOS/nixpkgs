@@ -15,6 +15,7 @@
   cryptography,
   noiseprotocol,
   protobuf,
+  tzdata,
   tzlocal,
   zeroconf,
 
@@ -24,24 +25,33 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "43.10.1";
+  version = "45.6.1"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    tag = "v${version}";
-    hash = "sha256-UzeCXjWqcwEuoZY9YotbIGfvoSsJpGLMLErdF1Ld5AI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pjpc3lHORiFID5spq8x0cH1JUdee8CJHUDxdP9pC3RA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=82.0.1" setuptools \
+      --replace-fail "Cython>=3.2.6" Cython
+  '';
 
   build-system = [
     setuptools
     cython
   ];
 
-  pythonRelaxDeps = [ "cryptography" ];
+  pythonRelaxDeps = [
+    "aiohappyeyeballs"
+    "cryptography"
+  ];
 
   dependencies = [
     aiohappyeyeballs
@@ -50,6 +60,7 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzdata
     tzlocal
     zeroconf
   ];
@@ -61,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   # Lack of network sandboxing leads to conflicting listeners when testing
-  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  # this package e.g. in nixpkgs-review on the two supported python package sets.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
@@ -76,11 +87,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       hexa
     ];
   };
-}
+})

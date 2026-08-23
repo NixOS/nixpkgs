@@ -3,21 +3,18 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
-  pythonOlder,
   pbr,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "5.4.1";
+  version = "5.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MTW1rlD+EoFu8pG6/0IKy3J/zTVhBuPpy/qeWYXNb0s=";
+    hash = "sha256-q70K96OKi7sdat6i41sXYJzwBOqsMj6IqNiWNkDdKzw=";
   };
 
   build-system = [

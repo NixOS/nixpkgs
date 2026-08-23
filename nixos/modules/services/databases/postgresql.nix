@@ -52,7 +52,7 @@ let
     else if isString value then
       "'${lib.replaceStrings [ "'" ] [ "''" ] value}'"
     else
-      builtins.toString value;
+      toString value;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (
@@ -83,7 +83,7 @@ let
       else if builtins.isString v then
         "${directive} '${v}'"
       else
-        "${directive} ${builtins.toString v}"
+        "${directive} ${toString v}"
     ) user.ensureClauses;
 
   generateAlterRoleSQL =
@@ -204,7 +204,9 @@ in
         type = types.package;
         example = literalExpression "pkgs.postgresql_15";
         defaultText = literalExpression ''
-          if versionAtLeast config.system.stateVersion "25.11" then
+          if versionAtLeast config.system.stateVersion "26.11" then
+            pkgs.postgresql_18
+          else if versionAtLeast config.system.stateVersion "25.11" then
             pkgs.postgresql_17
           else if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
@@ -570,7 +572,7 @@ in
         description = ''
           PostgreSQL configuration. Refer to
           <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
-          for an overview of `postgresql.conf`.
+          for an overview of {file}`postgresql.conf`.
 
           ::: {.note}
           String values will automatically be enclosed in single quotes. Single quotes will be
@@ -657,7 +659,9 @@ in
           '';
         base =
           # XXX Don't forget to keep `defaultText` of `services.postgresql.package` up to date!
-          if versionAtLeast config.system.stateVersion "25.11" then
+          if versionAtLeast config.system.stateVersion "26.11" then
+            pkgs.postgresql_18
+          else if versionAtLeast config.system.stateVersion "25.11" then
             pkgs.postgresql_17
           else if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
@@ -704,9 +708,6 @@ in
         "@system-service" = true;
         "~@privileged" = true;
         "~@resources" = true;
-      })
-      (mkIf (any extensionInstalled [ "plv8" ]) {
-        "@pkey" = true;
       })
       (mkIf (any extensionInstalled [ "citus" ]) {
         "getpriority" = true;
@@ -807,9 +808,7 @@ in
           PrivateTmp = true;
           ProtectHome = true;
           ProtectSystem = "strict";
-          MemoryDenyWriteExecute = lib.mkDefault (
-            cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ])
-          );
+          MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off");
           NoNewPrivileges = true;
           LockPersonality = true;
           PrivateDevices = true;
@@ -882,7 +881,7 @@ in
       };
 
       path = [ cfg.finalPackage ];
-      environment.PGPORT = builtins.toString cfg.settings.port;
+      environment.PGPORT = toString cfg.settings.port;
 
       # Wait for PostgreSQL to be ready to accept connections.
       script = ''

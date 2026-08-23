@@ -12,12 +12,12 @@
   libnotify,
   libsecret,
   pangomm,
-  xorg,
+  libxscrnsaver,
   libpulseaudio,
   librsvg,
   libzip,
   openssl,
-  libappindicator-gtk3,
+  libappindicator,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     libnotify
     libsecret
     pangomm
-    xorg.libXScrnSaver
+    libxscrnsaver
     libpulseaudio
     librsvg
     libzip
     openssl
-    libappindicator-gtk3
+    libappindicator
   ];
 
   dontUnpack = true;

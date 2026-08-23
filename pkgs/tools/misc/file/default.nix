@@ -16,34 +16,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.45";
+  version = "5.48";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
+    hash = "sha256-7RRlaIOyOjZLQFfAVZXZMlLam8Rz0wEGUZUZ0NoUEoM=";
   };
+
+  # Work around too strict landlock hardening
+  # https://bugs.astron.com/view.php?id=785
+  postPatch = ''
+    substituteInPlace src/landlock.c --replace-fail \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+  '';
 
   outputs = [
     "out"
     "dev"
     "man"
-  ];
-
-  patches = [
-    # Upstream patch to fix 32-bit tests.
-    #
-    # It is included in 5.46+, but we are not updating to it or a later version until:
-    #
-    # https://bugs.astron.com/view.php?id=622
-    # https://bugs.astron.com/view.php?id=638
-    #
-    # are resolved. See also description of the 1st bug here:
-    #
-    # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
-    ./32-bit-time_t.patch
   ];
 
   strictDeps = true;
@@ -63,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://darwinsys.com/file";

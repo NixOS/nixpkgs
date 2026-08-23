@@ -38,7 +38,7 @@ let
   ]
   ++ lib.optionals (withGtk != null) [ mainExecutable ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cameractrls";
   version = "0.6.10";
   pyproject = false;
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "soyersoyer";
     repo = "cameractrls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WtFwi7X2RvOqx8sYLhzurm6DYbwbVOswYJfb17aORF0=";
   };
 
@@ -130,4 +130,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

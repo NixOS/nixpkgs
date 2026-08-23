@@ -4,7 +4,6 @@
   fetchPypi,
   oauthlib,
   pyjwt,
-  pythonOlder,
   requests,
   requests-oauthlib,
   six,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "mwoauth";
   version = "0.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

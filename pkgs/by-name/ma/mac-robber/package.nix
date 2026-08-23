@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Digital investigation tool that collects data from allocated files in a mounted file system";
     mainProgram = "mac-robber";
     homepage = "https://www.sleuthkit.org/mac-robber/";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
   };

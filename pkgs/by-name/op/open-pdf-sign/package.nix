@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
     sed -i '/dirtyQualifier/d' ./pom.xml
   '';
 
-  mvnHash = "sha256-5DgCjqKPc/y4vDX8pl4Qnm1KsCOpCdUVNiihpvcCzBU=";
+  mvnHash = "sha256-2+6OU1CysNfGnESvAUbqK9RvRDlgIiWGuGC9sHza39c=";
 
   # Disable test requires the network, we also set the version
   mvnParameters = lib.escapeShellArgs [

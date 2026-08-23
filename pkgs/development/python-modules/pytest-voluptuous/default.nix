@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pytest-voluptuous";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "F-Secure";

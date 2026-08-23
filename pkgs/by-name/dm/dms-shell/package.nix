@@ -19,6 +19,8 @@ buildGoModule (
       kirigami.unwrapped
       sonnet
       qtmultimedia
+      qtimageformats
+      kimageformats
     ];
 
     qmlImportPath = lib.concatStringsSep ":" (map (o: "${o}/${qt6.qtbase.qtQmlPrefix}") qmlPkgs);
@@ -26,18 +28,18 @@ buildGoModule (
   in
   {
     pname = "dms-shell";
-    version = "1.0.3";
+    version = "1.5.3";
 
     src = fetchFromGitHub {
       owner = "AvengeMedia";
       repo = "DankMaterialShell";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-IT21E2XX83IlO6/dW0YmUdY2JW//+ZBHLqpKPGd6tx8=";
+      hash = "sha256-aTNuC9NDBnYAeEtFsleeUwmGX3AZlKOutbl+LQRPkmQ=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";
 
-    vendorHash = "sha256-2PCqiW4frxME8IlmwWH5ktznhd/G1bah5Ae4dp0HPTQ=";
+    vendorHash = "sha256-nvxFHQhOfBGl3h51fgYDb39K0NCj+H8mAEyKr1qOwJQ=";
 
     ldflags = [
       "-s"

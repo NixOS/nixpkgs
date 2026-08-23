@@ -8,13 +8,15 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
+  graphviz,
   gts,
   hdf5,
   libGLU,
   libredwg,
   libspnav,
-  libXmu,
+  libxmu,
   medfile,
+  mpi,
   ninja,
   ode,
   opencascade-occt,
@@ -30,6 +32,10 @@
   nix-update-script,
   gmsh,
   which,
+  gtk3,
+  gsettings-desktop-schemas,
+  versionCheckHook,
+  writeShellScript,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -48,6 +54,7 @@ let
     scipy
     shiboken6
     vtk
+    networkx # for sheetmetal plugin
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
@@ -55,13 +62,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.2";
+    version = "1.1.3";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       tag = finalAttrs.version;
-      hash = "sha256-J//O/ABMFa3TFYwR0wc8d1UTA5iSFnEP2thOjuCN+uE=";
+      hash = "sha256-RP68rd19wX4gDD5PuRQ1J4Z9Qmp5HpEg6sC94RRMEdI=";
       fetchSubmodules = true;
     };
 
@@ -81,9 +88,10 @@ freecad-utils.makeCustomizable (
       gts
       hdf5
       libGLU
-      libXmu
+      libxmu
       libspnav
       medfile
+      mpi
       ode
       xercesc
       yaml-cpp
@@ -100,40 +108,33 @@ freecad-utils.makeCustomizable (
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-      ./0002-FreeCad-OndselSolver-pkgconfig.patch
-
-      # https://github.com/FreeCAD/FreeCAD/pull/21710
-      ./0003-FreeCad-fix-font-load-crash.patch
       (fetchpatch {
-        url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
-        hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
-      })
-      # Inform Coin to use EGL when on Wayland
-      # https://github.com/FreeCAD/FreeCAD/pull/21917
-      (fetchpatch {
-        url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
-        hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
+        # https://github.com/FreeCAD/FreeCAD/pull/30899
+        # fix COIN3D_MICRO_VERSION regex for coin 4.0.10
+        url = "https://github.com/FreeCAD/FreeCAD/commit/e3e56059865849c6b1c85161f69183ad872414e3.patch";
+        hash = "sha256-qe0wn7DwvQT/pmrSCa44+orMetztpw8DZ+NhDJEYAMw=";
       })
     ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
-        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+        --replace-fail 'self.gmsh_bin = ""' 'self.gmsh_bin = "${lib.getExe gmsh}"'
     '';
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_DRAWING=ON"
-      "-DBUILD_FLAT_MESH:BOOL=ON"
-      "-DINSTALL_TO_SITEPACKAGES=OFF"
-      "-DFREECAD_USE_PYBIND11=ON"
-      "-DBUILD_QT5=OFF"
-      "-DBUILD_QT6=ON"
+      (lib.cmakeBool "BUILD_DRAWING" true)
+      (lib.cmakeBool "BUILD_FLAT_MESH" true)
+      (lib.cmakeBool "INSTALL_TO_SITEPACKAGES" false)
+      (lib.cmakeBool "FREECAD_USE_PYBIND11" true)
+      (lib.cmakeBool "BUILD_QT5" false)
+      (lib.cmakeBool "BUILD_QT6" true)
     ];
 
     qtWrapperArgs =
       let
         binPath = lib.makeBinPath [
+          graphviz
           libredwg
           which # for locating tools
         ];
@@ -142,6 +143,7 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
 
     postFixup = ''
@@ -160,6 +162,31 @@ freecad-utils.makeCustomizable (
         ];
       };
     };
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
+
+    versionCheckProgram = writeShellScript "version-check.sh" ''
+      # As of 2026-07-26, the way FreeCAD handles `--version` is awful.
+      # - The main program, `freecad`, opens a GUI prompt for `--version`,
+      # unless `--console` is also given.
+      # - Even with `--version --console`, `freecad` crashes if there is no
+      # display server, so we need to use `freecadcmd` instead, which is a
+      # separate binary, for unknown reasons.
+      # - `freecadcmd --version` crashes if it cannot create a directory under
+      # `$HOME/.local/share/FreeCAD/`
+      #   Adding `--safe-mode` appears to fix this, but `versionCheckProgramArg`
+      #  only allows for a single argument (as a list gets concaternated),
+      #  so we need this script.
+
+      # The path to `freecadcmd` gets passed in via $1, to allow the `out`
+      # placeholder to function properly
+      exec "$1" --version --safe-mode
+    '';
+    versionCheckProgramArg = "${placeholder "out"}/bin/freecadcmd";
+
+    # 6.9k object files, cuts down build time from 2-3 hours to 15 minutes
+    requiredSystemFeatures = [ "big-parallel" ];
 
     meta = {
       homepage = "https://www.freecad.org";
@@ -184,8 +211,10 @@ freecad-utils.makeCustomizable (
       maintainers = with lib.maintainers; [
         srounce
         grimmauld
+        acuteaangle
       ];
       platforms = lib.platforms.linux;
+      mainProgram = "freecad";
     };
   })
 )

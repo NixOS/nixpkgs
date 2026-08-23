@@ -26,15 +26,15 @@
 assert blas.isILP64 == lapack.isILP64;
 assert blas.isILP64 == scalapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elpa";
-  version = "2025.06.001";
+  version = "2026.02.002";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
-    url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-/usf6hq0qGcLjTJAdl7wragoBi737JtzXuy6KEhRXJQ=";
+    url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${finalAttrs.version}/elpa-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-AuPFn+xTzY62akzBX6T78ZDPllQiciP7itVXE+lCeTI=";
   };
 
   patches = [
@@ -116,9 +116,6 @@ stdenv.mkDerivation rec {
   preCheck = ''
     #patchShebangs ./
 
-    # Run dual threaded
-    export OMP_NUM_THREADS=2
-
     # Reduce test problem sizes
     export TEST_FLAGS="1500 50 16"
   '';
@@ -130,4 +127,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

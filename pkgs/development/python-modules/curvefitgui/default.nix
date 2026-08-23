@@ -6,7 +6,7 @@
   # build-system
   setuptools,
 
-  # depedencies
+  # dependencies
   numpy,
   scipy,
   pyqt5,

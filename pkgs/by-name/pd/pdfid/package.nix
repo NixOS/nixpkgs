@@ -6,14 +6,14 @@
   makeBinaryWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdfid";
   version = "0.2.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdfid_v${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-GxQOwIwCVaKEruFO+kxXciOiFcXtBO0vvCwb6683lGU=";
     stripRoot = false;
@@ -36,9 +36,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Scan a file to look for certain PDF keywords";
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
-    license = with lib.licenses; [ free ];
+    license = lib.licenses.free;
     mainProgram = "pdfid";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

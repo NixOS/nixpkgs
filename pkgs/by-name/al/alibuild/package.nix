@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alibuild";
-  version = "1.17.31";
+  version = "1.17.42";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-agAWJaaaHGN2oQaaIkMNEeU712bkWXEPH3jP8oH5Qjs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-QFNyb6lmTGOaAj4qyDo/mTW7J6LHfALnjo+b0WTllDQ=";
   };
 
   build-system = with python3Packages; [
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ktf ];
   };
-}
+})

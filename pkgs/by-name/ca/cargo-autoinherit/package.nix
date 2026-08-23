@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-autoinherit";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "cargo-autoinherit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A4Ooqt/Cb8yyc4Y9DKZuFEVUux1ot+IVkPsSDylM6G4=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "cargo-autoinherit";
   };
-}
+})

@@ -11,15 +11,12 @@
   pyyaml,
   sqlalchemy,
   tabulate,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;

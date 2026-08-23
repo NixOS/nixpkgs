@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pynintendoauth";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pynintendoauth";
     tag = version;
-    hash = "sha256-1GCeFaHHdU98ar6QLwyBI7Smzlj5XvyqPhC7Ev8uvmE=";
+    hash = "sha256-g3uE+QrYottgNETHgRmtXaw+qWpG1c40GqCFRgRLDbQ=";
   };
 
   postPatch = ''

@@ -37,7 +37,7 @@ buildNpmPackage rec {
   ];
 
   # workaround for https://github.com/webpack/webpack/issues/14532
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall =
     let
@@ -73,6 +73,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Resource manager for TV tuners";
+    homepage = "https://github.com/Chinachu/Mirakurun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
   };

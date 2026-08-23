@@ -19,15 +19,15 @@ buildDotnetModule rec {
   version = "24.10.6";
 
   src = fetchFromGitHub {
-    owner = "EventStore";
-    repo = "EventStore";
+    owner = "kurrent-io";
+    repo = "KurrentDB";
     tag = "v${version}";
     hash = "sha256-8/sagvMyJ1/onGMuJ28QLWI5M8dBDWyGOcZKUv3PJsQ=";
     leaveDotGit = true;
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
-  MINVERVERSIONOVERRIDE = version;
+  env.MINVERVERSIONOVERRIDE = version;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -82,7 +82,6 @@ buildDotnetModule rec {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     inherit mainProgram;
   };

@@ -6,15 +6,15 @@
   sqlite,
   libmysqlclient,
   libpq,
-  unixODBC,
+  unixodbc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppdb";
   version = "0.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cppcms/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/cppcms/cppdb-${finalAttrs.version}.tar.bz2";
     sha256 = "0blr1casmxickic84dxzfmn3lm7wrsl4aa2abvpq93rdfddfy3nn";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sqlite
     libmysqlclient
     libpq
-    unixODBC
+    unixodbc
   ];
 
   cmakeFlags = [ "--no-warn-unused-cli" ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

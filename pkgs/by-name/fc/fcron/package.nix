@@ -14,13 +14,13 @@
   editorProgram ? if lib.meta.availableOn stdenv.hostPlatform vim then "${vim}/bin/vi" else null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcron";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
+    url = "http://fcron.free.fr/archives/fcron-${finalAttrs.version}.src.tar.gz";
+    sha256 = "sha256-dXF+ORbLzvvN5Y57/VFRUNdfdjI4Wy22vdL7wkKJ7NU=";
   };
 
   buildInputs = [ perl ];
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
+})

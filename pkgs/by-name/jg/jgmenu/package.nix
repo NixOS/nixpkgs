@@ -9,7 +9,8 @@
   libxfce4util,
   libxml2,
   menu-cache,
-  xorg,
+  libxrandr,
+  libxinerama,
   makeWrapper,
   enableXfcePanelApplet ? false,
   xfce4-panel,
@@ -17,15 +18,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jgmenu";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
-    owner = "johanmalm";
+    owner = "jgmenu";
     repo = "jgmenu";
-    rev = "v${version}";
-    sha256 = "sha256-vuSpiZZYe0l5va9dHM54gaoI9x8qXH1gJORUS5489jQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1Vwzm7DVMwtSZW7GDWEMVPHi09orXlFiKR6XMJ337Dg=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +40,8 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
     menu-cache
-    xorg.libXinerama
-    xorg.libXrandr
+    libxinerama
+    libxrandr
     python3Packages.python
   ]
   ++ lib.optionals enableXfcePanelApplet [
@@ -65,10 +66,10 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    homepage = "https://github.com/johanmalm/jgmenu";
+    homepage = "https://github.com/jgmenu/jgmenu";
     description = "Small X11 menu intended to be used with openbox and tint2";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

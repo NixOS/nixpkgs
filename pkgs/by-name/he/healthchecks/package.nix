@@ -9,20 +9,20 @@ let
   py = python3.override {
     self = py;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_6;
     };
   };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "3.11.2";
-  format = "other";
+  version = "4.3";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-EHXxb5T5+WFvhBZQ6d6abSzpBEUBz6F1ftqMWECmdpg=";
+    sha256 = "sha256-8S7hIUFSr88jNEwGM4mSQAv+EdH/ynT9MvATabmtp5s=";
   };
 
   propagatedBuildInputs = with py.pkgs; [

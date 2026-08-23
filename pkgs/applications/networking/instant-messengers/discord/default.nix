@@ -1,6 +1,5 @@
 {
   callPackage,
-  fetchurl,
   lib,
   stdenv,
   discord,
@@ -36,7 +35,7 @@ let
         self = discord-development;
       };
     };
-    x86_64-darwin = {
+    aarch64-darwin = {
       discord = rec {
         branch = "stable";
         binaryName = desktopName;
@@ -63,7 +62,6 @@ let
       };
     };
 
-    aarch64-darwin = x86_64-darwin;
     default = x86_64-linux; # Used for unsupported platforms, so we can return *something* there.
   };
 
@@ -75,19 +73,18 @@ let
     mainProgram = "discord";
     maintainers = with lib.maintainers; [
       artturin
-      FlameFlag
+      _4evy
       infinidoge
       jopejoe1
       Scrumplex
+      sophiebsw
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-  package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
   sources = lib.importJSON ./sources.json;
 in
@@ -98,16 +95,10 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
     source = sources."${platformName}-${args.branch}";
   in
-  callPackage package (
+  callPackage ./wrapper.nix (
     args
     // {
-      inherit pname;
-      inherit (source) version;
-
-      src = fetchurl {
-        inherit (source) url hash;
-      };
-
+      inherit pname source;
       meta = meta // {
         mainProgram = args.binaryName;
       };

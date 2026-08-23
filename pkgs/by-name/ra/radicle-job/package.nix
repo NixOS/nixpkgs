@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-job";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromRadicle {
-    seed = "iris.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
     tag = "releases/v${finalAttrs.version}";
-    hash = "sha256-EGNs0IOJSp5SMJ3tdGCxIAN6hvVFwWWUmXoB914jw3k=";
+    hash = "sha256-RZDItJq42yewct1kYnDLpr6Oun0AmHK9jMoQDORHkWc=";
   };
 
-  cargoHash = "sha256-+DD2cGfxN0rmFhCazEuRiv3JfLXIC4FjaYHmugCmk+g=";
+  cargoHash = "sha256-kXgJEEvEAJTV9lok3f26WkEPHFHFopdqxSii49xwK+A=";
 
   nativeCheckInputs = [
     radicle-node
@@ -32,13 +32,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Create, update, and query Radicle Job Collaborative Objects";
-    homepage = "https://app.radicle.xyz/nodes/iris.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
-    changelog = "https://app.radicle.xyz/nodes/iris.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M/tree/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ defelo ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad-job";
   };
 })

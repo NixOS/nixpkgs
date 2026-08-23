@@ -6,6 +6,7 @@
   cmake,
   python3,
   gfortran,
+  boost,
   blas,
   lapack,
   dbcsr,
@@ -26,7 +27,7 @@
   pkg-config,
   plumed,
   zlib,
-  hdf5-fortran,
+  hdf5-fortran-mpi,
   sirius,
   libvdwxc,
   spla,
@@ -129,15 +130,18 @@ let
   });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
-  version = "2025.2";
+  version = "2026.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    rev = "v${version}";
-    hash = "sha256-vfl5rCoFeGtYuZ7LcsVsESjKxFbN5IYDvBSzOqsd64w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ojG00n6KiaDW9vLgw/sIrhS8ceyh1mmlxgacw8KfMnA=";
     fetchSubmodules = true;
   };
 
@@ -157,10 +161,14 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     gfortran
+    mpi
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
+    boost
     fftw
     gsl
     libint
@@ -175,7 +183,7 @@ stdenv.mkDerivation rec {
     dbcsr
     plumed
     zlib
-    hdf5-fortran
+    hdf5-fortran-mpi
     spla
     spfft
     libvdwxc
@@ -191,6 +199,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
+    cudaPackages.libcufft
     cudaPackages.libcublas
     cudaPackages.cuda_nvrtc
   ]
@@ -207,9 +216,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tools exts/dbcsr/tools/build_utils exts/dbcsr/.cp2k
-    substituteInPlace exts/build_dbcsr/Makefile \
-      --replace '/usr/bin/env python3' '${python3}/bin/python' \
-      --replace 'SHELL = /bin/sh' 'SHELL = bash'
   '';
 
   cmakeFlags = [
@@ -284,4 +290,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sheepforce ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

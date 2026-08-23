@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autojump";
   version = "22.5.3";
 
   src = fetchFromGitHub {
     owner = "wting";
     repo = "autojump";
-    rev = "release-v${version}";
+    rev = "release-v${finalAttrs.version}";
     sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
       yurrriq
     ];
   };
-}
+})

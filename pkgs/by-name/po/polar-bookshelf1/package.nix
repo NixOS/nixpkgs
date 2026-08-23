@@ -18,17 +18,17 @@
   glibc,
   gsettings-desktop-schemas,
   gtk3,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libnghttp2,
   libudev0-shim,
   libxcb,
@@ -40,12 +40,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polar-bookshelf1";
   version = "1.100.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/polar-bookshelf.mirror/v${version}/polar-bookshelf-${version}-amd64.deb";
+    url = "mirror://sourceforge/polar-bookshelf.mirror/v${finalAttrs.version}/polar-bookshelf-${finalAttrs.version}-amd64.deb";
     hash = "sha256-TeegAq3x8LZ01KEPIlP4lTGC0a9ilnf1xX/Dqci1wEQ=";
   };
 
@@ -62,17 +62,17 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libxcb
     nspr
     nss
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" )
     # Correct desktop file `Exec`
     substituteInPlace $out/share/applications/polar-bookshelf.desktop \
       --replace "/opt/Polar Bookshelf/polar-bookshelf" "$out/bin/polar-bookshelf"
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

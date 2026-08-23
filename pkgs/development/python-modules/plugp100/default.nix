@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   certifi,
   scapy,
   urllib3,
@@ -15,26 +16,30 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugp100";
-  version = "5.1.5";
-  format = "setuptools";
+  version = "6.0.0.dev2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
-    tag = version;
-    sha256 = "sha256-bPjgyScHxiUke/M5S6BOw7df7wbNuSy5ouVIK5guWxw=";
+    tag = lib.replaceStrings [ ".dev" ] [ "-dev." ] finalAttrs.version;
+    hash = "sha256-wYt51HwoRJzuJ+YW+mmB6ZosJGEz7DcRGfkFGQZ0DJE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    aiohttp
     certifi
+    cryptography
     jsons
     requests
-    aiohttp
-    semantic-version
-    cryptography
     scapy
+    semantic-version
     urllib3
   ];
 
@@ -47,7 +52,7 @@ buildPythonPackage rec {
     "tests/integration/"
     "tests/unit/hub_child/"
     "tests/unit/test_plug_strip.py"
-    "tests/unit/test_hub.py "
+    "tests/unit/test_hub.py"
     "tests/unit/test_klap_protocol.py"
   ];
 
@@ -57,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pyle ];
   };
-}
+})

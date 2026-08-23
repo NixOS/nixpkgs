@@ -14,14 +14,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdigidoc";
   version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "DigiDoc4-Client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sp+qlWtsMZHyoG0OVKbhalgak5KIx7C7Rpp0PbKVxK8=";
     fetchSubmodules = true;
   };
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
       mmahut
     ];
   };
-}
+})

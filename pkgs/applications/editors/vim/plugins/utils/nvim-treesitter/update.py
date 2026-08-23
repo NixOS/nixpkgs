@@ -8,19 +8,13 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-import requests
-
 log = logging.getLogger("vim-updater")
 
-NURR_JSON_URL = (
-    "https://raw.githubusercontent.com/lumen-oss/nurr/main/tree-sitter-parsers.json"
-)
-NVIM_TREESITTER_QUERIES_URL = (
-    "https://api.github.com/repos/nvim-treesitter/nvim-treesitter/contents/runtime/queries"
-)
+NVIM_TREESITTER_PARSERS_PATH = "lua/nvim-treesitter/parsers.lua"
+NVIM_TREESITTER_QUERIES_PATH = "runtime/queries"
 
 
-def generate_grammar(lang, parser_info):
+def generate_grammar(lang, parser_info, parsers_map):
     """Generate grammar for a language based on the parser info"""
     if "install_info" not in parser_info:
         log.warning(f"Parser {lang} does not have install_info, skipping")
@@ -36,9 +30,7 @@ def generate_grammar(lang, parser_info):
       version = "0.0.0+rev={rev[:7]}";
       src = """
 
-    generated += subprocess.check_output(
-        ["nurl", url, rev, "--indent=6"], text=True
-    )
+    generated += subprocess.check_output(["nurl", url, rev, "--indent=6"], text=True)
     generated += ";"
 
     location = install_info.get("location", "")
@@ -50,6 +42,23 @@ def generate_grammar(lang, parser_info):
         generated += """
       generate = true;"""
 
+    # Add requires field - only include parsers
+    requires = parser_info.get("requires", [])
+    if requires:
+        # Filter to only include parser dependencies (those with install_info)
+        parser_requires = [
+            req
+            for req in requires
+            if req in parsers_map and "install_info" in parsers_map[req]
+        ]
+        if parser_requires:
+            generated += """
+      passthru.requires = [
+"""
+            for req in parser_requires:
+                generated += f'        "{req}"\n'
+            generated += "      ];"
+
     generated += f"""
       meta.homepage = "{url}";
     }};
@@ -58,71 +67,74 @@ def generate_grammar(lang, parser_info):
     return generated
 
 
-def generate_query(lang):
+def generate_query(lang: str, parser_info: dict | None, queries_set: set[str]):
     """Generate query derivation for a language"""
-    return f"""    {lang} = buildQueries {{
-      language = "{lang}";
-    }};
+    generated = f"""    {lang} = buildQueries {{
+      language = "{lang}";"""
+
+    # Add requires field for queries - include everything that has queries
+    if parser_info and "requires" in parser_info:
+        requires = parser_info["requires"]
+        # Filter to only include langs that have queries
+        query_requires = [req for req in requires if queries_set and req in queries_set]
+        if query_requires:
+            generated += """
+      requires = [
 """
+            for req in query_requires:
+                generated += f'        "{req}"\n'
+            generated += "      ];"
+
+    generated += """
+    };
+"""
+    return generated
 
 
-def fetch_nurr_parsers():
-    """Fetch the parser information from nurr repository"""
-    log.info("Fetching parser data from %s", NURR_JSON_URL)
+def fetch_pinned_parsers(plugin_path):
+    """Fetch the parser information from vimPlugins.nvim-treesitter"""
+    parsers_path = plugin_path / NVIM_TREESITTER_PARSERS_PATH
+    log.info("Obtaining parser data from %s", parsers_path)
 
-    headers = {}
-    github_token = os.environ.get("GITHUB_TOKEN")
-    if github_token:
-        log.info("Using GITHUB_TOKEN for authentication")
-        headers["Authorization"] = f"token {github_token}"
-    else:
-        log.warning("No GITHUB_TOKEN found. GitHub API requests may be rate-limited.")
+    lua_script = f"""\
+local data = dofile"{parsers_path}"
+local json = require"json".encode(data)
+io.write(json)
+"""
+    lua_output = subprocess.check_output(
+        ["luajit", "-"],
+        text=True,
+        input=lua_script,
+    )
+    data = json.loads(lua_output)
 
-    response = requests.get(NURR_JSON_URL, headers=headers, timeout=30)
-    response.raise_for_status()
-    data = response.json()
-
-    try:
-        parsers = data["parsers"]
-    except KeyError:
-        raise ValueError(
-            "Unexpected response from NURR:\n" + json.dumps(data, indent=2)
-        )
-    log.info(f"Successfully fetched {len(parsers)} parsers")
-    return parsers
+    log.info(f"Successfully fetched {len(data)} parsers")
+    return data
 
 
-def fetch_available_queries():
-    """Fetch list of languages that have queries in nvim-treesitter repo"""
-    log.info("Fetching available queries from %s", NVIM_TREESITTER_QUERIES_URL)
+def fetch_available_queries(plugin_path):
+    """Fetch list of languages that have queries in vimPlugins.nvim-treesitter"""
+    queries_path = plugin_path / NVIM_TREESITTER_QUERIES_PATH
+    log.info("Obtaining available queries from %s", queries_path)
 
-    headers = {}
-    github_token = os.environ.get("GITHUB_TOKEN")
-    if github_token:
-        headers["Authorization"] = f"token {github_token}"
-
-    response = requests.get(NVIM_TREESITTER_QUERIES_URL, headers=headers, timeout=30)
-    response.raise_for_status()
-    data = response.json()
-
-    # We assume items with type="dir" in the queries/ folder are language names
-    languages = sorted([item["name"] for item in data if item["type"] == "dir"])
+    # We assume directories in the queries/ folder are named after languages
+    languages = sorted([p.name for p in queries_path.iterdir() if p.is_dir()])
     log.info(f"Found {len(languages)} languages with queries")
     return languages
 
 
-def process_parser_info(parser_info):
+def process_parser_info(parser, parsers):
     """Process a single parser info entry and generate grammar for it"""
-    return generate_grammar(parser_info["lang"], parser_info)
+    return generate_grammar(parser, parsers[parser], parsers)
 
 
-def update_grammars():
-    """Update grammar definitions using nurr's parser information"""
-    parsers_info = fetch_nurr_parsers()
-    queries_list = fetch_available_queries()
+def update_grammars(plugin_path):
+    """Update grammar definitions using nvim-treesitter's pinned parsers"""
+    parsers = fetch_pinned_parsers(plugin_path)
+    queries_list = fetch_available_queries(plugin_path)
 
     generated_file = """# generated by pkgs/applications/editors/vim/plugins/utils/nvim-treesitter/update.py
-# Using parser data from https://github.com/nvim-neorocks/nurr/blob/main/tree-sitter-parsers.json
+# Using parser data from ${vimPlugins.nvim-treesitter}/lua/nvim-treesitter/parsers.lua
 
 {
   buildGrammar,
@@ -141,7 +153,9 @@ def update_grammars():
 
     # Process parsers in parallel for better performance
     with ThreadPoolExecutor(max_workers=5) as executor:
-        for generated in executor.map(process_parser_info, parsers_info):
+        for generated in executor.map(
+            lambda p: process_parser_info(p, parsers), sorted(parsers.keys())
+        ):
             generated_file += generated
 
     generated_file += """  };
@@ -149,9 +163,13 @@ def update_grammars():
   queries = {
 """
 
-    # Process queries
+    # Convert queries list to a set for fast lookup
+    queries_set = set(queries_list)
+
+    # Process queries - include parser info if available for requires field
     for lang in queries_list:
-        generated_file += generate_query(lang)
+        parser_info = parsers.get(lang)
+        generated_file += generate_query(lang, parser_info, queries_set)
 
     generated_file += "  };\n}\n"
     return generated_file
@@ -160,7 +178,8 @@ def update_grammars():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-    generated = update_grammars()
+    plugin_path = Path(os.environ["NVIM_TREESITTER"])
+    generated = update_grammars(plugin_path)
     output_path = Path(__file__).parent.parent.parent / "nvim-treesitter/generated.nix"
     log.info("Writing output to %s", output_path)
     with open(output_path, "w") as f:

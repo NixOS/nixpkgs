@@ -11,17 +11,16 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
   trio,
 
   # tests
-  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   trustme,
@@ -33,29 +32,23 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.12.0";
+  version = "4.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-zFVvAK06HG40numRihLHBMKCI3d1wQvmEKk+EaBFVVU=";
+    hash = "sha256-MEU0c8/NI1vlyNtBsg/hGLv6DR619ZqoZzNY1eJLEWM=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
     idna
-    sniffio
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
   optional-dependencies = {
@@ -63,11 +56,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    blockbuster
     exceptiongroup
     hypothesis
     psutil
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     trustme
@@ -98,12 +91,11 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+    "test_dynamic_async_fixture_access_does_not_hang"
+    # 5 second timeout expires on weak hardware
+    "test_keyboard_interrupt_does_not_resume_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
 
     # These tests become flaky under heavy load
     "test_asyncio_run_sync_called"
@@ -111,6 +103,13 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+
+    # fails to monkeypatch __file__.__main__
+    "test_entrypoint_main_module"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
 
     # AssertionError: assert 'wheel' == 'nixbld'
     "test_group"

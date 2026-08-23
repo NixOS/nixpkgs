@@ -15,7 +15,6 @@ let
     filter
     getVersion
     mkIf
-    mkMerge
     mkOption
     optional
     optionalString

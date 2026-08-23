@@ -9,15 +9,12 @@
   pytest-sugar,
   pymysql,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
   version = "1.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "penguinolog";
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
     changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ivan-tkatchev ];
+    maintainers = [ ];
   };
 }

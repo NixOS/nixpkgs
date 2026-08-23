@@ -5,20 +5,20 @@
   autoreconfHook,
   pkg-config,
   libmediainfo,
-  wxGTK32,
+  wxwidgets_3_2,
   desktop-file-utils,
-  libSM,
+  libsm,
   imagemagick,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediainfo-gui";
-  version = "25.07";
+  version = "26.05";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${finalAttrs.version}/mediainfo_${finalAttrs.version}.tar.xz";
-    hash = "sha256-UI6sHKCX9Byz/DliWs6wZS/KsArNDy68vR3GgAk26X0=";
+    hash = "sha256-+FIJP5BQAi1plgbuq7OLJNpVI9AhL6tk3E5NPka1beE=";
   };
 
   nativeBuildInputs = [
@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmediainfo
-    wxGTK32
+    wxwidgets_3_2
     desktop-file-utils
-    libSM
+    libsm
     imagemagick
   ];
 

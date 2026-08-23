@@ -8,14 +8,14 @@
   gptman,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gptman";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "rust-disk-partition-management";
     repo = "gptman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ebV61EilGggix6JSN/MW4Ka0itkSpvikLDSO005TTYY=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ akshgpt7 ];
     mainProgram = "gptman";
   };
-}
+})

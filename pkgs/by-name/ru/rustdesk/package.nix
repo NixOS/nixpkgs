@@ -16,7 +16,7 @@
   libgit2,
   libpulseaudio,
   libsodium,
-  libXtst,
+  libxtst,
   libvpx,
   libyuv,
   libopus,
@@ -38,17 +38,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.4";
+  version = "1.4.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
+    hash = "sha256-AnwdIO4TveC48uMioBCvH60xun24ckK420ONSEB9lQI=";
   };
 
-  cargoHash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+  cargoHash = "sha256-HPvvsTcjSErGfdNwsHgWhs930Fe0hmK1g5J/ngtlkKM=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -93,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     libpulseaudio
     libsodium
-    libXtst
+    libxtst
     libvpx
     libyuv
     libopus
@@ -110,6 +111,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     xdotool
   ];
+
+  postPatch = ''
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+  '';
 
   # Add static ui resources and libsciter to same folder as binary so that it
   # can find them.

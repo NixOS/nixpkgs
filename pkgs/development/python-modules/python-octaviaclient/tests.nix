@@ -7,7 +7,7 @@
   doc8,
   docutils,
   pygments,
-  subunit,
+  python-subunit,
   oslotest,
   stestr,
   testscenarios,
@@ -16,7 +16,7 @@
 buildPythonPackage {
   pname = "python-octaviaclient-tests";
   inherit (python-octaviaclient) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;
@@ -29,7 +29,7 @@ buildPythonPackage {
     doc8
     docutils
     pygments
-    subunit
+    python-subunit
     oslotest
     stestr
     testscenarios

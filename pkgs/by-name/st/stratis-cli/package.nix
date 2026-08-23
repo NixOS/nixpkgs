@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "stratis-cli";
   version = "3.8.3";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "stratis-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wkFInG/sbHxyi5UIjIANxsTd9BrIHuyAfYG4DvqLsmU=";
   };
 
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "stratis";
   };
-}
+})

@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  replaceVars,
+  addDriverRunpath,
   callPackage,
   python313Packages,
   fetchFromGitHub,
@@ -9,26 +11,26 @@
   sqlite-vec,
   frigate,
   nixosTests,
-  fetchpatch,
+  go2rtc,
 }:
 
 let
-  version = "0.16.3";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-gbEUmo28vjYsfIlHSBaLTUh9kK5rM17hkfKBQ9KhiBU=";
+    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python313Packages.python.override {
-    packageOverrides = self: super: {
+  python3Packages = python313Packages.overrideScope (
+    self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
         src = fetchFromGitHub {
@@ -38,14 +40,13 @@ let
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
       });
-      onnxruntime = super.onnxruntime.override (old: {
-        onnxruntime = old.onnxruntime.override (old: {
-          withFullProtobuf = true;
-        });
-      });
-    };
-  };
-  python3Packages = python.pkgs;
+
+      huggingface-hub = super.huggingface-hub_0;
+      transformers = super.transformers_4;
+    }
+  );
+
+  inherit (python3Packages) python;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -77,18 +78,33 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
-  format = "other";
+  pyproject = false;
 
   inherit src;
 
   patches = [
-    ./constants.patch
-    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
-    (fetchpatch {
-      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
-      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
-    })
+    # Always lookup ffmpeg from config setting
     ./ffmpeg.patch
+
+    # Adjust libteflon.so location
+    (replaceVars ./libteflon-driverlink-path.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
+
+    # Use ai-edge-litert as tensorflow interpreter
+    # https://github.com/blakeblackshear/frigate/pull/21876
+    ./ai-edge-litert.patch
+
+    # Disable failing optimization in onnxruntime
+    # https://github.com/microsoft/onnxruntime/issues/26717
+    ./onnxruntime-compat.patch
+
+    # Fix excessive trailing whitespaces in process commandlines
+    # https://github.com/blakeblackshear/frigate/pull/22089
+    ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resolution in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''
@@ -96,7 +112,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace \
       frigate/app.py \
-      frigate/test/test_{http,storage}.py \
+      frigate/test/test_storage.py \
       frigate/test/http_api/base_http_test.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
@@ -107,7 +123,13 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "/config" "/var/lib/frigate" \
       --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
+    substituteInPlace \
+      frigate/comms/config_updater.py \
+      frigate/comms/embeddings_updater.py \
+      frigate/comms/inter_process.py \
+      frigate/comms/object_detector_signaler.py \
+      frigate/comms/zmq_proxy.py \
+      frigate/detectors/plugins/zmq_ipc.py \
       --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
 
     substituteInPlace frigate/db/sqlitevecq.py \
@@ -129,24 +151,28 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
 
   dependencies = with python3Packages; [
-    # docker/main/requirements.txt
-    scikit-build
     # docker/main/requirements-wheel.txt
+    # TODO: degirum (no source repo, binary wheels only)
+    ai-edge-litert
     aiofiles
     aiohttp
     appdirs
     argcomplete
-    contextlib2
     click
+    contextlib2
+    cryptography
     distlib
     fastapi
+    faster-whisper
     filelock
+    google-genai
     importlib-metadata
     importlib-resources
-    google-generativeai
     joserfc
-    levenshtein
+    keras # via tensorflow.keras
+    librosa
     markupsafe
+    memray
     netaddr
     netifaces
     norfair
@@ -172,15 +198,18 @@ python3Packages.buildPythonApplication rec {
     py-vapid
     pywebpush
     pyzmq
+    rapidfuzz
     requests
     ruamel-yaml
     scipy
     setproctitle
     shapely
+    sherpa-onnx
     slowapi
+    soundfile
     starlette
     starlette-context
-    tensorflow-bin
+    tensorflow
     titlecase
     transformers
     tzlocal
@@ -214,9 +243,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
-
   preCheck = ''
     # Unavailable in the build sandbox
     substituteInPlace frigate/const.py \
@@ -227,6 +253,11 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Test needs network access
     "test_plus_labelmap"
+    # Expects go2rtc on :1984
+    "test_admin_can_access_any_stream"
+    "test_restricted_role_can_access_allowed_camera"
+    "test_stream_alias_allowed_for_owning_camera"
+    "test_unconfigured_role_can_access_any_stream"
   ];
 
   passthru = {

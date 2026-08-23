@@ -11,7 +11,6 @@
   name = "vault-postgresql";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      lnl7
       roberth
     ];
   };

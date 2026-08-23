@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   SDL2,
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
   ];
 
   makeFlags = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     description = "High performance X11 animated wallpaper setter";
     homepage = "https://github.com/glouw/paperview";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "paperview";
   };

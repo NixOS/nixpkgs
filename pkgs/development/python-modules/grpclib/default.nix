@@ -10,7 +10,6 @@
   multidict,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "grpclib";
   version = "0.4.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vmagamedov";
@@ -53,6 +50,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/vmagamedov/grpclib";
     changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

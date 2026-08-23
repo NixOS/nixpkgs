@@ -1,17 +1,15 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   isPyPy,
-  pythonAtLeast,
 
   setuptools,
 
   cmake,
   ninja,
 
-  llvm_20,
+  llvm_22,
   libxml2,
 
   # tests
@@ -21,21 +19,21 @@
 }:
 
 let
-  llvm = llvm_20;
+  llvm = llvm_22;
 in
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.45.0";
+  version = "0.48.0";
   pyproject = true;
 
-  disabled = isPyPy || pythonAtLeast "3.14";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-xONYpDGsx6lhbAjAqwFx5Vo3PxeFsblhZxkxTSjMWOE=";
+    hash = "sha256-qFly3Thx0jkCHy6r8+VWuGROUj910oHBEQFMZlAX1aw=";
   };
 
   build-system = [ setuptools ];

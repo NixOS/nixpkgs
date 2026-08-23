@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keedump";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "ynuwenhof";
     repo = "keedump";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V7wQZoUnISELuzjSUz+CJ77XJvlnGBK2n4U4pKlk+xI=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "PoC KeePass master password dumper";
     homepage = "https://github.com/ynuwenhof/keedump";
-    changelog = "https://github.com/ynuwenhof/keedump/releases/tag/v${version}";
+    changelog = "https://github.com/ynuwenhof/keedump/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "keedump";
   };
-}
+})

@@ -10,7 +10,7 @@
   libsecret,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gtimelog";
   version = "0.12.0";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gtimelog";
     repo = "gtimelog";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NlKAgAnZWodXF4eybcNOSxexjhegRgQEWoAPd+KWzsw=";
   };
 
@@ -76,6 +76,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://gtimelog.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
-}
+})

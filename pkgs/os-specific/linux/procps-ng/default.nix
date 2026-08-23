@@ -23,13 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "procps";
-  version = "4.0.4";
+  version = "4.0.6";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
+    hash = "sha256-Z76m+8OkKlNaAjDJ6JHl3ftNnTlCLUZWWimQ0azhUhY=";
   };
+
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ]
+  ++ lib.optionals (!watchOnly) [
+    "doc"
+  ];
 
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
@@ -40,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "usrbin_execdir=$(out)/bin" ] ++ lib.optionals watchOnly [ "src/watch" ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
   configureFlags = [
@@ -47,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-watch8bit"
   ]
   ++ lib.optionals withSystemd [ "--with-systemd" ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ "--disable-pidwait" ] # Requires (Linux-only) `pidfd_open`
   ++ lib.optionals stdenv.hostPlatform.isMusl [ "--disable-w" ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
@@ -74,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 })

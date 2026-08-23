@@ -10,7 +10,7 @@ _handleCmdOutput(){
       done
     fi
 
-    versionOutput="$(env \
+    versionOutput="$(@envCommand@ \
         --chdir=/ \
         --argv0="$(basename "${command[0]}")" \
         "${envArgs[@]}" \

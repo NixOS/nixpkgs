@@ -12,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "pyanglianwater";
-  version = "2.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pyanglianwater";
     tag = version;
-    hash = "sha256-GfFRqQb1RXh6a7giy7eJWp4nAJzDtpQkWFfEfe9jxfY=";
+    hash = "sha256-RvfRl5BrZ88uBHuvUdLfuqC5URFOUp8zYI7jYngtpbg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyanglianwater/_version.py \
+      --replace-fail '__version__ = "0.0.0"' '__version__ = "${version}"'
+  '';
 
   build-system = [ setuptools ];
 

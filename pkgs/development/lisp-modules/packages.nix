@@ -122,6 +122,13 @@ let
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
+
       lessp = build-asdf-system {
         pname = "lessp";
         version = "0.2-f8a9e4664";
@@ -214,6 +221,9 @@ let
           "slynk/indentation"
           "slynk/retro"
         ];
+        meta = {
+          homepage = "https://github.com/joaotavora/sly";
+        };
       };
 
       cephes = build-with-compile-into-pwd {
@@ -239,7 +249,7 @@ let
         pname = "clx-truetype";
         version = "20160825-git";
         src = pkgs.fetchzip {
-          url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+          url = "https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
           sha256 = "079hyp92cjkdfn6bhkxsrwnibiqbz4y4af6nl31lzw6nm91j5j37";
         };
         lispLibs = with self; [
@@ -308,8 +318,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "bohonghuang";
           repo = "cl-gtk4";
-          rev = "ff60e3495cdbba5c09d0bb8aa49f3184cc060c8e";
-          hash = "sha256-06cyPf+5z+GE3YvZEJ67kC281nkwRz/hoaykTISsni0=";
+          rev = "b3e69daf2f96e69881b053046bbe8544a54e087f";
+          hash = "sha256-9bRxxc3LtDR7gE0jorsrguRYaIq2InVOys27W7Im050=";
         };
         lispLibs = with self; [
           cl-gobject-introspection-wrapper
@@ -324,6 +334,9 @@ let
         nativeLibs = [
           pkgs.gtk4
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_adw = build-asdf-system {
@@ -340,6 +353,9 @@ let
         nativeLibs = [
           pkgs.libadwaita
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_webkit = build-asdf-system {
@@ -356,6 +372,47 @@ let
         nativeLibs = [
           pkgs.webkitgtk_6_0
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
+      cl-gtk4_dot_sourceview = build-asdf-system {
+        pname = "cl-gtk4.sourceview";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+          cl-gtk4
+        ];
+        nativeBuildInputs = [
+          pkgs.gtksourceview5
+        ];
+        nativeLibs = [
+          pkgs.gtksourceview5
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
+      cl-gdk4 = build-asdf-system {
+        pname = "cl-gdk4";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+        ];
+        nativeBuildInputs = [
+          pkgs.gobject-introspection
+          pkgs.gtk4
+        ];
+        nativeLibs = [
+          pkgs.gtk4
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-avro = build-asdf-system {
@@ -382,13 +439,15 @@ let
           time-interval
           trivial-extensible-sequences
         ];
+        meta = {
+          homepage = "https://github.com/SahilKang/cl-avro";
+        };
       };
 
       frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
         systems = [
           "frugal-uuid"
           "frugal-uuid/non-frugal"
-          "frugal-uuid/benchmark"
           "frugal-uuid/test"
         ];
         lispLibs =
@@ -427,6 +486,9 @@ let
           mcclim
           mcclim-layouts
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
       kons-9 = build-asdf-system {
@@ -459,6 +521,9 @@ let
           shasht
           org_dot_melusina_dot_confidence
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
       nsb-cga = super.nsb-cga.overrideLispAttrs (old: {
@@ -472,7 +537,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 
@@ -522,7 +587,10 @@ let
           runHook postInstall
         '';
 
-        meta.mainProgram = "qlot";
+        meta = {
+          mainProgram = "qlot";
+          homepage = "https://github.com/fukamachi/qlot";
+        };
       };
 
       fset = super.fset.overrideLispAttrs (old: {
@@ -533,7 +601,7 @@ let
         meta = {
           description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
-          license = pkgs.lib.licenses.llgpl21;
+          license = with pkgs.lib.licenses; WITH lgpl21Only llgplPreamble;
         };
       });
 
@@ -557,6 +625,21 @@ let
         };
       });
 
+      cffi-c2ffi = self.cffi.overrideLispAttrs (old: {
+        systems = old.systems ++ [
+          "cffi/c2ffi"
+          "cffi/c2ffi-generator"
+        ];
+        lispLibs = old.lispLibs ++ [
+          self.cl-ppcre
+          self.cl-json
+        ];
+        postPatch = (old.postPatch or "") + ''
+          echo '(unless (ignore-errors (c2ffi-executable-available?))
+              (setf *c2ffi-executable* "${pkgs.lib.getExe pkgs.c2ffi}"))' \
+          >> src/c2ffi/c2ffi.lisp
+        '';
+      });
     }
     // optionalAttrs pkgs.config.allowAliases {
       cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";

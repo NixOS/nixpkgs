@@ -1,73 +1,64 @@
 {
   lib,
   fetchFromGitHub,
-  fetchzip,
+  fetchpatch2,
   rustPlatform,
-  eyed3,
+  cacert,
+  writableTmpDirAsHomeHook,
   flac,
-  imagemagick,
-  intermodal,
   lame,
   makeBinaryWrapper,
-  sox,
-  writableTmpDirAsHomeHook,
+  sox_ng,
 }:
 let
   runtimeDeps = [
-    eyed3
     flac
-    intermodal
-    imagemagick
     lame
-    sox
+    sox_ng
   ];
-
-  testSampleContent = fetchzip {
-    url = "https://archive.org/download/tennyson-discography_/Tennyson%20-%20With%20You%20-%20Lay-by.zip";
-    hash = "sha256-/MgnOgn+OSPPg9wkJ32hq+1MXDdW+Qo9MqLtZMLQYBY=";
-    stripRoot = false;
-  };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caesura";
-  version = "0.26.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "RogueOneEcho";
     repo = "caesura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-atB7IrG9KchFOc1EXChlsqlrZs7mQ9tiXmdw1SptLI0=";
+    hash = "sha256-+REt+MKImO7fnYWJ32P6mKzulGJTnxc+9ednVF5aCJU=";
   };
 
-  cargoHash = "sha256-Iz/RYmuCc5XuyktYIN/zDrbyPpRU2eps0yqExPu+5J8=";
+  patches = [
+    (fetchpatch2 {
+      name = "normalize-sox-dependent-full-spectrogram-widths.patch";
+      url = "https://github.com/RogueOneEcho/caesura/commit/3af818ae35a3e18f444c889d9d3b88294f4f110f.patch?full_index=1";
+      hash = "sha256-znAbk6hFVj198BUUwwDo76SWei0cKINeXzlYEFvTwHA=";
+    })
+  ];
+
+  cargoHash = "sha256-0+vZma8AC44XqVHzmJT/roV7sy8w6DYhujRK9N91J5c=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ];
+  nativeCheckInputs = [
+    cacert
+    writableTmpDirAsHomeHook
+  ]
+  ++ runtimeDeps;
+
+  env = {
+    CAESURA_NIX = "1";
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   postPatch = ''
-    substituteInPlace Cargo.toml \
+    substituteInPlace Cargo.toml crates/*/Cargo.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
-  checkFlags = [
-    # Those test need internet access for its `Source` (i.e: tracker)
-    "--skip=commands::spectrogram::tests::spectrogram_command_tests::spectrogram_command"
-    "--skip=commands::transcode::tests::transcode_command_tests::transcode_command"
-    "--skip=utils::source::tests::source_provider_tests::source_provider"
-  ];
-
   preCheck = ''
-    # From samples/download-sample
-    mkdir samples/content/
-    ln -s ${finalAttrs.passthru.testSampleContent} "samples/content/Tennyson - With You (2014) [Digital] "'{'"16-44.1 Bandcamp"'}'" (FLAC)"
-    # Adapted from .github/workflows/on-push.yml
-    tee config.yml <<EOF
-    announce_url: https://flacsfor.me/YOUR_ANNOUNCE_KEY/announce
-    api_key: YOUR_API_KEY
-    content:
-    - samples/content
-    source: $(mktemp -d)
+    cat > config.yml <<EOF
     verbosity: trace
     EOF
   '';
@@ -78,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    inherit runtimeDeps testSampleContent;
+    inherit runtimeDeps;
   };
 
   meta = {

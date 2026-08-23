@@ -7,13 +7,13 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xpad-noone";
   version = "0-unstable-2024-01-10";
 
   src = fetchFromGitHub {
     owner = "medusalix";
-    repo = finalAttr.pname;
+    repo = finalAttrs.pname;
     tag = "c3d1610";
     hash = "sha256-jDRyvbU9GsnM1ARTuwnoD7ZXlfBxne13UpSKRo7HHSY=";
   };

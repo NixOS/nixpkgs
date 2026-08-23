@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "awacs";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mdU88KH1bxsJROG70tS2FYvRSrlHlBK9GKxR4gg1OFw=";
+    hash = "sha256-eRmxXir9X08+YEVE+Bxa+OuasPokgcUoc1SJWGeRJ58=";
   };
 
   build-system = [

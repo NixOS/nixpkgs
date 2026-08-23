@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   makeWrapper,
   autoPatchelfHook,
   c-ares,
@@ -14,8 +14,7 @@
   libvpx,
   libxslt,
   libnotify,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
+  libappindicator,
   libxkbcommon,
   libGL,
   wrapGAppsHook3,
@@ -30,7 +29,17 @@
   gdk-pixbuf,
   pango,
   cairo,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   ffmpeg,
   http-parser,
   nss,
@@ -48,8 +57,7 @@ let
     libvpx
     libxslt
     libnotify
-    libappindicator-gtk2
-    libappindicator-gtk3
+    libappindicator
     libxkbcommon
     libGL
     atk
@@ -62,17 +70,17 @@ let
     gdk-pixbuf
     pango
     cairo
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXrandr
+    libxcb
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrender
+    libxtst
+    libxrandr
     ffmpeg
     http-parser
     nss
@@ -84,16 +92,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hey-mail";
-  version = "1.2.17";
-  rev = "28";
+  version = "1.3.6";
+  rev = "33";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/lfWUNpR7PrPGsDfuxIhVxbj0wZHoH7bK_${finalAttrs.rev}.snap";
-    hash = "sha512-X4iJ8r0VFHD+dtFkyABUEFeoI3CSpmT70JjgJGsW7nqzCLriF4eekdHKJgySusnLW250RlEVtEO5wKMW+2bqCQ==";
+    hash = "sha512-UVutihbA/CDPefCqiJtSbHSWDZj5yHGAEpVO9kd/a72DEszcUid7Xg5HzDQYifDEXyP//AfLFP1rAa058K2SNg==";
   };
 
   nativeBuildInputs = [
-    squashfsTools
+    squashfs-tools
     makeWrapper
     autoPatchelfHook
     wrapGAppsHook3

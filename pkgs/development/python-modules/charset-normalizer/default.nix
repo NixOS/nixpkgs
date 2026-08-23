@@ -1,35 +1,44 @@
 {
   lib,
+  stdenv,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
+  ast-serialize,
   mypy,
   pytestCheckHook,
   requests,
   setuptools,
-  setuptools-scm,
+  withMypyc ? !isPyPy && !stdenv.hostPlatform.isStatic,
 }:
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.4.3";
+  version = "3.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "charset_normalizer";
     tag = version;
-    hash = "sha256-ZEHxBErjjvofqe3rkkgiEuEJcoluwo+2nZrLfrsHn5Q=";
+    hash = "sha256-YOskF90ach/qEwnMeYDEEO2H4DOoz/LZApXDRU9mvnM=";
   };
+
+  postPatch = ''
+    substituteInPlace _mypyc_hook/backend.py \
+      --replace-fail "mypy>=1.4.1,<2.2" "mypy"
+  '';
 
   build-system = [
     setuptools
-    setuptools-scm
   ]
-  ++ lib.optional (!isPyPy) mypy;
+  ++ lib.optionals withMypyc [
+    ast-serialize
+    mypy
+  ];
 
-  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString (!isPyPy) "1";
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString withMypyc "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

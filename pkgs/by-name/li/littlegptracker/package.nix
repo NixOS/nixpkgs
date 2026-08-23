@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djdiskmachine";
     repo = "littlegptracker";
     tag = finalAttrs.version;
-    hash = "sha256-SidrFsqAn0JQqthEoYA9H0RdF6jeCeP2Pe+UpAbbL48=";
+    hash = "sha256-j6r2iFJ3YJ3XOHwn/ENQmpZyIdMAdrWXd+EO3EWIBCw=";
   };
 
   nativeBuildInputs = [

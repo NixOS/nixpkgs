@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubergrunt";
-  version = "0.18.5";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
-    rev = "v${version}";
-    sha256 = "sha256-aze/Cq5hFTRRGE1F3LLcZpWPTjpBlc2RHVkoBiP4RaU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-cLy+KpnDCGw1YpKrx5SCYh1eUjehAHTzAL9Y+a43+KM=";
   };
 
   vendorHash = "sha256-CNvYn/d26V0fqmPh2BbkzMgv3jWwWpGtOqowrND+igk=";
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

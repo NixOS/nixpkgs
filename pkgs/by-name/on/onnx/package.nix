@@ -1,12 +1,18 @@
 {
-  cmake,
-  fetchFromGitHub,
-  gtest,
   lib,
-  ninja,
-  protobuf,
-  python3Packages,
   stdenv,
+  python3Packages,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+
+  # buildInputs
+  protobuf,
+
+  # checkInputs
+  gtest,
 }:
 let
   inherit (lib)
@@ -27,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oWbrBx1jWznzeT2N+VrFH8LIqdzY/aXH5N0kb/vbg2M=";
+    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
   };
 
   outputs = [
@@ -50,18 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     setuptools
   ];
 
-  # NOTE: Darwin requires a static build, so this patch is unnecessary on that platform.
-  prePatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    nixLog "patching $PWD/CMakeLists.txt to fix symbol visibility"
-    substituteInPlace "$PWD/CMakeLists.txt" \
-      --replace-fail \
-        'set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-        '# set_target_properties(onnx_object PROPERTIES CXX_VISIBILITY_PRESET hidden)' \
-      --replace-fail \
-        'set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)' \
-        '# set_target_properties(onnx_object PROPERTIES VISIBILITY_INLINES_HIDDEN ON)'
-  '';
-
   # NOTE: python3Packages.protobuf does not propagate a dependency on protobuf's dev output, so we must bring it in
   # for the CMake files.
   buildInputs = [
@@ -77,11 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     # NOTE: Darwin requires a static build; otherwise, tests fail in the Python package.
     BUILD_SHARED_LIBS = if stdenv.hostPlatform.isDarwin then "0" else "1";
     ONNX_BUILD_PYTHON = "1";
-    ONNX_BUILD_TESTS = if finalAttrs.doCheck then "1" else "0";
-    # ONNX_ML is enabled by default, so we must explicitly disable it.
+    ONNX_BUILD_TESTS = if finalAttrs.finalPackage.doCheck then "1" else "0";
+    # ONNX_ML is enabled by default.
     # See: https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/CMakeLists.txt#L66-L73
-    # NOTE: If this is `true`, onnx-tensorrt fails to build due to missing protobuf files.
-    ONNX_ML = "0";
+    ONNX_ML = "1";
     ONNX_NAMESPACE = "onnx";
     ONNX_USE_PROTOBUF_SHARED_LIBS = "1";
 
@@ -94,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
-  # Leave the CMake bulid directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
+  # Leave the CMake build directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
   # them up, do the python build from the top-level, then resume the C++ build.
   preBuild = ''
     pushd ..

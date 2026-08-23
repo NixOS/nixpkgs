@@ -41,27 +41,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions =
-      let
-        rules = cfg.settings.route.rules or [ ];
-      in
-      [
-        {
-          assertion = !lib.any (r: r ? source_geoip || r ? geoip) rules;
-          message = ''
-            Deprecated option `services.sing-box.settings.route.rules.*.{source_geoip,geoip}` is set.
-            See https://sing-box.sagernet.org/migration/#migrate-geoip-to-rule-sets for migration instructions.
-          '';
-        }
-        {
-          assertion = !lib.any (r: r ? geosite) rules;
-          message = ''
-            Deprecated option `services.sing-box.settings.route.rules.*.geosite` is set.
-            See https://sing-box.sagernet.org/migration/#migrate-geosite-to-rule-sets for migration instructions.
-          '';
-        }
-      ];
-
     # for polkit rules
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
@@ -71,6 +50,7 @@ in
       serviceConfig = {
         User = "sing-box";
         Group = "sing-box";
+        ConfigurationDirectory = "sing-box";
         StateDirectory = "sing-box";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "sing-box";
@@ -83,12 +63,18 @@ in
               chown --reference=/run/sing-box /run/sing-box/config.json
             '';
           in
-          "+${script}";
-        ExecStart = [
-          ""
-          "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
-        ];
+          lib.mkIf (cfg.settings != { }) "+${script}";
+        ExecStart =
+          let
+            configDir = if cfg.settings != { } then "RUNTIME_DIRECTORY" else "CONFIGURATION_DIRECTORY";
+          in
+          [
+            ""
+            "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${${configDir}} run"
+          ];
       };
+      # After= is specified by upstream
+      requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
     };
 

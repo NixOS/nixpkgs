@@ -3,36 +3,22 @@
   stdenvNoCC,
   fetchurl,
   _7zz,
+  installShellFiles,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.0.4-19887";
-  sourceData = {
-    aarch64-darwin = {
-      arch = "arm64";
-      hash = "sha256-uog0B1Dro5lkSMDWr+FOvmeH/ue3NoNNvIUR/+FZENs=";
-    };
-    x86_64-darwin = {
-      arch = "amd64";
-      hash = "sha256-lLj4BlSG01CMYCVBWuASjxCjrczv7mbC1iXM0WgWHtw=";
-    };
-  };
-  sources = lib.mapAttrs (
-    system:
-    { arch, hash }:
-    fetchurl {
-      url = "https://cdn-updates.orbstack.dev/${arch}/OrbStack_v${
-        lib.replaceString "-" "_" version
-      }_${arch}.dmg";
-      inherit hash;
-    }
-  ) sourceData;
+  version = "2.2.3-20963";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbstack";
   inherit version;
 
-  src = finalAttrs.passthru.sources.${system} or (throw "unsupported system ${system}");
+  src = fetchurl {
+    url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${
+      lib.replaceString "-" "_" version
+    }_arm64.dmg";
+    hash = "sha256-fKd4aPOg19n1ez+YYVqtMMxZ0jzIS7/xP3iEbfC0k9Q=";
+  };
 
   # -snld prevents "ERROR: Dangerous symbolic link path was ignored"
   # -xr'!*:com.apple.*' prevents macOS extended attributes (e.g. macl or
@@ -41,7 +27,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # These bogus files corrupt the .app bundle and prevent it from launching.
   unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
 
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [
+    _7zz
+    installShellFiles
+  ];
 
   sourceRoot = ".";
 
@@ -59,8 +48,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    installShellCompletion --bash "$out"/Applications/OrbStack.app/Contents/Resources/completions/bash/{docker,kubectl,orbctl}.bash
+    installShellCompletion --zsh "$out"/Applications/OrbStack.app/Contents/Resources/completions/zsh/{_docker,_kubectl,_orb,_orbctl}
+    installShellCompletion --fish "$out"/Applications/OrbStack.app/Contents/Resources/completions/fish/{docker,kubectl,orbctl}.fish
+  '';
+
   passthru = {
-    inherit sources;
     updateScript = ./update.sh;
   };
 

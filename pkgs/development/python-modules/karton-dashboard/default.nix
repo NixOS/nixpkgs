@@ -7,21 +7,18 @@
   mistune,
   networkx,
   prometheus-client,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-dashboard";
     tag = "v${version}";
-    hash = "sha256-VzBC7IATF8QBtTXMv4vmorAzBlImEsayjenQ2Uz5jIo=";
+    hash = "sha256-DYfL//i1gJ0ci7jVPtrMKC8j+i5/L8rvmbs8zz6Eq2M=";
   };
 
   pythonRelaxDeps = [
@@ -47,7 +44,7 @@ buildPythonPackage rec {
     mainProgram = "karton-dashboard";
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
     changelog = "https://github.com/CERT-Polska/karton-dashboard/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

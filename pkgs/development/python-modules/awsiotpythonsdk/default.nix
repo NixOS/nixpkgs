@@ -2,23 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awsiotpythonsdk";
-  version = "1.5.5";
+  version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-mgf2hb7dWOGzaHnOQDz7GJeQV3Pa0X56X8nC15Tq0dY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AppoO/9OZxcGUUivbV++pr0QfDLrteSO3cRMj8Gvmk8=";
   };
+
+  postPatch = ''
+    substituteInPlace AWSIoTPythonSDK/__init__.py \
+      --replace-fail '__version__ = "1.5.4"' '__version__ = "${finalAttrs.version}"'
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -30,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK for connecting to AWS IoT";
     homepage = "https://github.com/aws/aws-iot-device-sdk-python";
-    changelog = "https://github.com/aws/aws-iot-device-sdk-python/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/aws/aws-iot-device-sdk-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

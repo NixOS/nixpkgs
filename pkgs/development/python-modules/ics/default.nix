@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-flakes,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tatsu,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "ics";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ics-py";
@@ -50,6 +47,8 @@ buildPythonPackage rec {
     "test_many_lines"
     # AssertionError: 'Europe/Berlin' not found in "tzfile('Atlantic/Jan_Mayen')"
     "test_timezone_not_dropped"
+    # tatsu PEG parser hits recursion limit on the bundled gehol/BA1.ics fixture
+    "test_gehol"
   ];
 
   pythonImportsCheck = [ "ics" ];

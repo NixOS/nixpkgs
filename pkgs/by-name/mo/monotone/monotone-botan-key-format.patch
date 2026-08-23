@@ -1,0 +1,12 @@
+Botan2 has switched the parameter order in encryption descriptions
+--- monotone-upstream/src/botan_glue.hh	2026-08-05 16:03:52.756485699 +0200
++++ monotone-upstream/src/botan_glue.hh	2026-08-05 16:05:29.735127399 +0200
+@@ -38,7 +38,7 @@
+ // In Botan revision d8021f3e (back when it still used monotone) the name
+ // of SHA-1 changed to SHA-160.
+ const static char * PBE_PKCS5_KEY_FORMAT =
+-  "PBE-PKCS5v20(SHA-160,TripleDES/CBC)";
++  "PBE-PKCS5v20(TripleDES/CBC,SHA-1)";
+ 
+ 
+ typedef Botan::secure_vector<Botan::byte> secure_byte_vector;

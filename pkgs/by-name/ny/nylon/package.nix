@@ -15,11 +15,11 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nylon";
   version = "1.21";
   src = fetchurl {
-    url = "https://monkey.org/~marius/nylon/nylon-${version}.tar.gz";
+    url = "https://monkey.org/~marius/nylon/nylon-${finalAttrs.version}.tar.gz";
     sha256 = "34c132b005c025c1a5079aae9210855c80f50dc51dde719298e1113ad73408a4";
   };
 
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent ];
 
+  # K&R-style function pointer declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "http://monkey.org/~marius/nylon";
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
@@ -37,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "nylon";
   };
-}
+})

@@ -10,19 +10,19 @@
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  mate,
+  mate-desktop,
   xapp,
   xdg-desktop-portal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-xapp";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5gJmWj15jUVGhCf8jOl/eXHVisFdegbbx6pqz6btNTM=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas # org.gnome.system.location
-    mate.mate-desktop # org.mate.background
+    mate-desktop # org.mate.background
     xapp # org.x.apps.portal
     xdg-desktop-portal
   ];
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
   };
-}
+})

@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "Lash-L";
   domain = "roborock_custom_map";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "RoborockCustomMap";
     tag = version;
-    hash = "sha256-jXkKjjof1/JeT0KDKIC4sX+P7JwWOzajbFOhlq772L8=";
+    hash = "sha256-zAKGlhil6UE9Wlz3KhUg2XFIGblj/2jGtxVXP/+ryvw=";
   };
 
   meta = {

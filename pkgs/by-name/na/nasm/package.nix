@@ -2,18 +2,29 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   perl,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nasm";
-  version = "3.01";
+  version = "3.02";
 
   src = fetchurl {
-    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/${finalAttrs.version}/nasm-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hzNuulO0rP6RdCSrXVANKwBU2fUUjTXCJzzPLPtxLw0=";
   };
+
+  patches = [
+    # Backport the fix for https://github.com/netwide-assembler/nasm/issues/203
+    # buffer overflow.
+    (fetchpatch {
+      name = "output-oob-fix.patch";
+      url = "https://github.com/netwide-assembler/nasm/commit/8890d723d0aa9ed1a790e2ce1c55eee8dfa0cf94.patch";
+      hash = "sha256-m03+bhKTgKlqeRLGZIy6GO5BTPIJ3r398VQrtN4waaw=";
+    })
+  ];
 
   nativeBuildInputs = [ perl ];
 
@@ -46,4 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nasm";
     license = lib.licenses.bsd2;
   };
-}
+})

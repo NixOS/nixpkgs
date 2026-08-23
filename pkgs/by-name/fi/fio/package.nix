@@ -2,49 +2,54 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   makeWrapper,
   libaio,
   pkg-config,
+  cunit,
   python3,
   zlib,
   withGnuplot ? false,
   gnuplot,
-  withLibnbd ? true,
+  withLibnbd ? stdenv.hostPlatform.isLinux,
   libnbd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fio";
-  version = "3.41";
+  version = "3.42";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
-    rev = "fio-${version}";
-    sha256 = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
+    tag = "fio-${finalAttrs.version}";
+    hash = "sha256-v2A2mY0Lvoje632761urfR7h1KHVcGnVDaKOMjexqis=";
   };
 
-  patches = [
-    # https://github.com/axboe/fio/pull/2029
-    (fetchpatch {
-      url = "https://github.com/axboe/fio/commit/ccce76d2850d6e52da3d7986c950af068fbfe0fd.patch";
-      hash = "sha256-0jN3q1vTiU6YkdXrcTAOzqRqgu8sW8AWO4KkANi0XKo=";
-    })
-  ];
-
   buildInputs = [
+    cunit
     python3
     zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio
   ++ lib.optional withLibnbd libnbd;
 
+  patches = [
+    # https://github.com/axboe/fio/pull/2097
+    (fetchpatch2 {
+      url = "https://github.com/axboe/fio/commit/a84eece62edd46c1f4c8047f1052ac6181fc8b3e.patch?full_index=1";
+      hash = "sha256-ik/PMlNEJa2mIOIWn4utSNfLG/iV7sjN+XmyOkEX83Q=";
+    })
+  ];
+
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.
   configurePlatforms = [ ];
 
-  configureFlags = lib.optional withLibnbd "--enable-libnbd";
+  configureFlags = [
+    "--disable-native"
+  ]
+  ++ lib.optional withLibnbd "--enable-libnbd";
 
   dontAddStaticConfigureFlags = true;
 
@@ -59,10 +64,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
-      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
-    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+    substituteInPlace tools/plot/fio2gnuplot \
+      --replace-fail /usr/share/fio $out/share/fio
   '';
 
   pythonPath = [ python3.pkgs.six ];
@@ -72,13 +75,24 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ''${pythonPath[*]}"
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./unittests/unittest
+
+    runHook postCheck
   '';
 
   meta = {
+    changelog = "https://github.com/axboe/fio/releases/tag/${finalAttrs.src.tag}";
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -38,7 +38,7 @@
   ncurses,
   libnsl,
   libxcrypt-legacy,
-  nix-update-script,
+  gitUpdater,
   makeBinaryWrapper,
 }:
 
@@ -113,20 +113,20 @@ let
         mpl20
       ];
       maintainers = with lib.maintainers; [ siraben ];
-      platforms = with lib.platforms; unix ++ windows;
+      platforms = [ "x86_64-linux" ];
       mainProgram = "pike";
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "9.0.11";
+  version = "8.0.2042";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+IWYF2FvL395/+Aat4yGioxUi6vIhNjzLMPV7EvPtw=";
+    hash = "sha256-N/hwbH8hhG9v/PJKwvGgS/ttS4TRJeeV2zAcRNDVL4k=";
   };
 
   nativeBuildInputs = [
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { allowedVersions = "^8\\..*"; };
 
   meta = {
     description = "Pike programming language";
@@ -208,7 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20
     ];
     maintainers = with lib.maintainers; [ siraben ];
-    platforms = with lib.platforms; unix ++ windows;
+    # Bootstrap binary is only available for x86_64-linux
+    platforms = [ "x86_64-linux" ];
     mainProgram = "pike";
   };
 })

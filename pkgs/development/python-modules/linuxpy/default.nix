@@ -5,20 +5,17 @@
   pytestCheckHook,
   setuptools,
   ward,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "linuxpy";
-  version = "0.21.0";
+  version = "0.24.0";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-13TWyTM1FvyAPNUQ4o3yTQHh7ezxysVMiEl+eLDkHGo=";
+    sha256 = "sha256-K0RDTSjUklfoWaSDAmeiWqS1Gx0in5X3nQJa5/Gl0w4=";
   };
 
   pythonImportsCheck = [ "linuxpy" ];

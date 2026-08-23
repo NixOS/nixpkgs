@@ -37,13 +37,13 @@
 let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exim";
-  version = "4.99.1";
+  version = "4.100";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-6ulnvUml+HmTO4xuyIwwR1ocZkYjITXzfwW1XbxONEc=";
+    url = "https://ftp.exim.org/pub/exim/exim4/exim-${finalAttrs.version}.tar.xz";
+    hash = "sha256-W9Cj41Pb/NXIF0OIuCQxamHuJFXZBS6i8Id97pOdM7M=";
   };
 
   enableParallelBuilding = true;
@@ -200,8 +200,11 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "exim";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tv ];
-    teams = [ lib.teams.helsinki-systems ];
-    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+      tv
+    ];
+    changelog = "https://code.exim.org/exim/exim/releases/tag/exim-${finalAttrs.version}";
   };
-}
+})

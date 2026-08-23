@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codespelunker";
-  version = "1.4.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "cs";
-    rev = "v${version}";
-    hash = "sha256-FZf3aRozpXWTRDrNDRxb1dGBXiLVEYOUd8a/hqzThps=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cPaAuZJ/Flea4BZ2LTprE5BFtHqgVCuF+2VLShgkCrQ=";
   };
 
   vendorHash = null;
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cs";
   };
-}
+})

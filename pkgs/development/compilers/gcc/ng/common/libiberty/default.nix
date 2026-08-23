@@ -11,26 +11,31 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libiberty";
   inherit version;
 
-  src = runCommand "libiberty-src-${version}" { src = monorepoSrc; } ''
-    runPhase unpackPhase
+  src = runCommand "libiberty-src-${version}" { src = monorepoSrc; } (
+    ''
+      runPhase unpackPhase
 
-    mkdir -p "$out/gcc"
-    cp gcc/BASE-VER "$out/gcc"
-    cp gcc/DATESTAMP "$out/gcc"
+      mkdir -p "$out/gcc"
+      cp gcc/BASE-VER "$out/gcc"
+      cp gcc/DATESTAMP "$out/gcc"
 
-    cp -r include "$out"
-    cp -r libiberty "$out"
+      cp -r include "$out"
+      cp -r libiberty "$out"
 
-    cp config.guess "$out"
-    cp config.rpath "$out"
-    cp config.sub "$out"
-    cp config-ml.in "$out"
-    cp ltmain.sh "$out"
-    cp install-sh "$out"
-    cp mkinstalldirs "$out"
+      cp config.guess "$out"
+      cp config.rpath "$out"
+      cp config.sub "$out"
+      cp config-ml.in "$out"
+      cp ltmain.sh "$out"
+      cp install-sh "$out"
+      cp mkinstalldirs "$out"
 
-    [[ -f MD5SUMS ]]; cp MD5SUMS "$out"
-  '';
+    ''
+    # `MD5SUMS` exists only in release tarballs, not in a VCS checkout.
+    + ''
+      if [[ -f MD5SUMS ]]; then cp MD5SUMS "$out"; fi
+    ''
+  );
 
   outputs = [
     "out"

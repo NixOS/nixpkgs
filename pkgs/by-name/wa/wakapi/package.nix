@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.17.0";
+  version = "2.17.6";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,24 +16,41 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-aQh1Jn718sk/Wvsjk9xFJ5NBSmsF6OOYtj22g6kwY8k=";
+    hash = "sha256-fKCfjLh/nf6rRqxdGPWfEY9EDh+5sXSKkvzgq7D4ocE=";
   };
 
-  vendorHash = "sha256-wlpTC050EYEjA5fteaGOGVKonMNOr7Ym2uoGUj0fw/M=";
+  vendorHash = "sha256-eyldhpDU5fT7tHdsQZ4qUrPlu1QSYaXX8FgksvAXiOw=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
 
   # Fix up reported version
-  postPatch = ''echo ${version} > version.txt'';
+  postPatch = "echo ${version} > version.txt";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  # Skip tests that require network access
-  checkFlags = [ "-skip=TestLoginHandlerTestSuite" ];
+  # <https://github.com/muety/wakapi/blob/8c9442b348e4280b388e1073d805058a951ae78e/.github/workflows/release.yml#L60>
+  env.GOEXPERIMENT = "greenteagc,jsonv2";
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Skip tests that require network access
+        "TestLoginHandlerTestSuite"
+        "TestLoadOidcProviders"
+        "TestUser_MinDataAge"
+        "TestPublicNetUrl"
+        "TestConfigTestSuite"
+        "TestWakatimeRelayMiddlewareTestSuite"
+        "TestServeHTTP_SkipNonPost"
+        "TestWakatimeUtils"
+        "TestWakatimeImporterTestSuite/TestCheckUrl"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     nixos = nixosTests.wakapi;

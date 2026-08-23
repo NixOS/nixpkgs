@@ -9,7 +9,7 @@
   lilv,
   curl,
   elfutils,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     curl
     elfutils
-    xorg.libX11
+    libx11
   ];
 
   mesonFlags = [

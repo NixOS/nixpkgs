@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pom";
   version = "0.1.0-unstable-2024-05-17";
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -28,9 +28,8 @@ buildGoModule rec {
     homepage = "https://github.com/maaslalani/pom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      maaslalani
       redyf
     ];
     mainProgram = "pom";
   };
-}
+})

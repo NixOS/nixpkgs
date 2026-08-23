@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bearssl";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://www.bearssl.org/bearssl-${version}.tar.gz";
+    url = "https://www.bearssl.org/bearssl-${finalAttrs.version}.tar.gz";
     sha256 = "057zhgy9w4y8z2996r0pq5k2k39lpvmmvz4df8db8qa9f6hvn1b7";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 
-}
+})

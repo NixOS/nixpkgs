@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-twitch-client";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tsifrer";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     description = "Python wrapper for the Twitch API";
     homepage = "https://github.com/tsifrer/python-twitch-client";
     changelog = "https://github.com/tsifrer/python-twitch-client/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -11,6 +11,7 @@ in
       {
         services.prefect = {
           enable = true;
+          baseUrl = "http://127.0.0.1";
         };
       };
   };
@@ -18,7 +19,7 @@ in
   testScript = ''
     machine.start()
     machine.wait_for_unit("prefect-server.service")
-    machine.wait_for_open_port("${mainPort}")
+    machine.wait_for_open_port(${mainPort})
   '';
 
   meta = with lib.maintainers; {

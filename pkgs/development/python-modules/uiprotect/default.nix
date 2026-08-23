@@ -9,8 +9,8 @@
   # dependencies
   aiofiles,
   aiohttp,
-  aioshutil,
-  async-timeout,
+  aiozoneinfo,
+  av,
   convertertools,
   dateparser,
   orjson,
@@ -37,30 +37,36 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "7.33.3";
+  version = "15.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    tag = "v${version}";
-    hash = "sha256-sVWgomaCrfZSlJpoLfYLkZXgJE0dw8ki8+VTbhkoDaE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QWgZsgeMmfi1hRqFeWyKyexPJhYeFOOyJHkhChcYqRU=";
   };
 
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
-    "aiofiles"
+    "orjson"
+    "packaging"
+    "platformdirs"
+    "propcache"
     "pydantic"
+    "pyjwt"
+    "rich"
+    "typer"
   ];
 
   dependencies = [
     aiofiles
     aiohttp
-    aioshutil
-    async-timeout
+    aiozoneinfo
+    av
     convertertools
     dateparser
     orjson
@@ -95,8 +101,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uiprotect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

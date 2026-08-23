@@ -2,17 +2,18 @@
   lib,
   python3Packages,
   fetchPypi,
+  fetchgit,
   patatt,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.14.3";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MaSSe437tcl+38lWnNo7Zze7/YQwiB6MxIoLCIztYUc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-uBXyrtIohxjP4qFMdkIaALxPCRjqMrRd0WRcmZ/dpp0=";
   };
 
   # tests make dns requests and fails
@@ -28,7 +29,17 @@ python3Packages.buildPythonApplication rec {
     dkimpy
     patatt
     git-filter-repo
+    textual
   ];
+
+  passthru = {
+    src-misc = fetchgit {
+      url = "https://git.kernel.org/pub/scm/utils/b4/b4.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-NjYL3RKQpjDkU98qbXyl/cvLTJYVAfIowm8E2Rg8AgI=";
+      fetchSubmodules = false;
+    };
+  };
 
   meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
@@ -41,4 +52,4 @@ python3Packages.buildPythonApplication rec {
       mfrw
     ];
   };
-}
+})

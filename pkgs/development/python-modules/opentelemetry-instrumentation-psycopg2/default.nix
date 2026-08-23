@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   hatchling,
   opentelemetry-api,
@@ -14,8 +13,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-psycopg2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-psycopg2";
 

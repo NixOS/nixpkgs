@@ -32,12 +32,12 @@
     };
 
     inhibitors = lib.mkOption {
-      type = lib.types.listOf lib.types.pathInStore;
-      default = [ ];
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
       description = ''
-        List of derivations that will prevent switching into a configuration when
+        Attribute set of strings that will prevent switching into a configuration when
         they change.
-        This can be manually overridden on the command line if required.
+        The switch can be manually forced on the command line if required.
       '';
     };
   };
@@ -58,7 +58,11 @@
             --set DISTRO_ID ${lib.escapeShellArg config.system.nixos.distroId} \
             --set INSTALL_BOOTLOADER ${lib.escapeShellArg config.system.build.installBootLoader} \
             --set PRE_SWITCH_CHECK ${lib.escapeShellArg config.system.preSwitchChecksScript} \
-            --set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive \
+            ${
+              lib.optionalString (
+                config.i18n.glibcLocales != null
+              ) "--set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive"
+            } \
             --set SYSTEMD ${config.systemd.package}
         )
       '';
@@ -67,70 +71,68 @@
         ln -s ${config.system.build.inhibitSwitch} $out/switch-inhibitors
       '';
 
-      build.inhibitSwitch = pkgs.writeTextFile {
-        name = "switch-inhibitors";
-        text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.switch.inhibitors;
-      };
+      build.inhibitSwitch = pkgs.writers.writeJSON "switch-inhibitors" config.system.switch.inhibitors;
 
       preSwitchChecks.switchInhibitors =
         let
-          realpath = lib.getExe' pkgs.coreutils "realpath";
-          sha256sum = lib.getExe' pkgs.coreutils "sha256sum";
-          diff = lib.getExe' pkgs.diffutils "diff";
+          jq = lib.getExe pkgs.jq;
+          empty = pkgs.writeText "empty-inhibitors" "{}";
         in
         # bash
         ''
           incoming="''${1-}"
           action="''${2-}"
 
-          if [ "$action" == "boot" ]; then
-            echo "Not checking switch inhibitors (action = $action)"
-            exit
-          fi
+          case "$action" in
+            boot|dry-activate)
+              echo "Not checking switch inhibitors (action = $action)"
+              exit
+              ;;
+          esac
 
           echo -n "Checking switch inhibitors..."
 
-          booted_inhibitors="$(${realpath} /run/booted-system)/switch-inhibitors"
-          booted_inhibitors_sha="$(
-            if [ -f "$booted_inhibitors" ]; then
-              ${sha256sum} - < "$booted_inhibitors"
-            else
-              echo 'none'
-            fi
-          )"
-
-          if [ "$booted_inhibitors_sha" == "none" ]; then
-            echo
-            echo "The previous configuration did not specify switch inhibitors, nothing to check."
-            exit
+          current_inhibitors="/run/current-system/switch-inhibitors"
+          if [ ! -f "$current_inhibitors" ]; then
+            current_inhibitors="${empty}"
           fi
 
-          new_inhibitors="$(${realpath} "$incoming")/switch-inhibitors"
-          new_inhibitors_sha="$(
-            if [ -f "$new_inhibitors" ]; then
-              ${sha256sum} - < "$new_inhibitors"
-            else
-              echo 'none'
-            fi
-          )"
-
-          if [ "$new_inhibitors_sha" == "none" ]; then
-            echo
-            echo "The new configuration does not specify switch inhibitors, nothing to check."
-            exit
+          new_inhibitors="$incoming/switch-inhibitors"
+          if [ ! -f "$new_inhibitors" ]; then
+            new_inhibitors="${empty}"
           fi
 
-          if [ "$new_inhibitors_sha" != "$booted_inhibitors_sha" ]; then
+          diff="$(
+            ${jq} \
+              --raw-output \
+              --null-input \
+              --rawfile current "$current_inhibitors" \
+              --rawfile newgen "$new_inhibitors" \
+            '
+              ($current | fromjson) as $old |
+              ($newgen | fromjson) as $new |
+              $old |
+              to_entries |
+              map(
+                select(.key | in ($new)) |
+                select(.value != $new.[.key]) |
+                [ .key, ":", .value, "->", $new.[.key] ] | join(" ")
+              ) |
+              join("\n")
+            ' \
+          )"
+
+          if [ -n "$diff" ]; then
             echo
-            echo "Found diff in switch inhibitors:"
+            echo "There are changes to critical components of the system:"
             echo
-            ${diff} --color "$booted_inhibitors" "$new_inhibitors"
+            echo "$diff"
             echo
-            echo "The new configuration contains changes to packages that were"
-            echo "listed as switch inhibitors."
+            echo "Switching into this system is not recommended."
+            echo "You probably want to run 'nixos-rebuild boot' and reboot your system instead."
             echo
             echo "If you really want to switch into this configuration directly, then"
-            echo "you can set NIXOS_NO_CHECK=1 to ignore these pre-switch checks."
+            echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
             echo
             echo "WARNING: doing so might cause the switch to fail or your system to become unstable."
             echo
@@ -140,5 +142,16 @@
           fi
         '';
     };
+
+    security =
+      let
+        extraConfig = ''
+          Defaults env_keep+=NIXOS_NO_CHECK
+        '';
+      in
+      {
+        sudo = { inherit extraConfig; };
+        sudo-rs = { inherit extraConfig; };
+      };
   };
 }

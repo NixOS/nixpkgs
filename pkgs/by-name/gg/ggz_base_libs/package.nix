@@ -8,14 +8,20 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ggz-base-libs";
   version = "0.99.5";
 
   src = fetchurl {
-    url = "http://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/ggz-base-libs-snapshot-${version}.tar.gz";
-    sha256 = "1cw1vg0fbj36zyggnzidx9cbjwfc1yr4zqmsipxnvns7xa2awbdk";
+    url = "https://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/ggz-base-libs-snapshot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-sy2uhOpH2237jbriT7IPzHG5WOotfvue/2bI5cDbgbM=";
   };
+
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail "/usr/local/ssl/include" "${openssl.dev}/include" \
+      --replace-fail "/usr/local/ssl/lib" "${lib.getLib openssl}/lib"
+  '';
 
   nativeBuildInputs = [ intltool ];
   buildInputs = [
@@ -24,11 +30,11 @@ stdenv.mkDerivation rec {
     libgcrypt
   ];
 
-  patchPhase = ''
-    substituteInPlace configure \
-      --replace "/usr/local/ssl/include" "${openssl.dev}/include" \
-      --replace "/usr/local/ssl/lib" "${lib.getLib openssl}/lib"
-  '';
+  # gcc 15 errors on incompatible-pointer-types (ggz_tls_openssl.c OPENSSL_sk_* casts) and implicit-function-declaration (configure C99 VLA probe).
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=implicit-function-declaration"
+  ];
 
   configureFlags = [
     "--with-tls"
@@ -44,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     downloadPage = "http://www.ggzgamingzone.org/releases/";
   };
-}
+})

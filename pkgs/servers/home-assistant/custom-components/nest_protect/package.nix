@@ -6,13 +6,13 @@
 buildHomeAssistantComponent rec {
   owner = "iMicknl";
   domain = "nest_protect";
-  version = "0.4.2b0";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-nest-protect";
     tag = "v${version}";
-    hash = "sha256-CQVAvx7iRCRHw8YXDmsWaF6fhddx3OfSLjq218+ob6I=";
+    hash = "sha256-WpQKpYVtmyqLWqhyDsImWvpfWagVWe50zG0RsmeU/8Q=";
   };
 
   # AttributeError: 'async_generator' object has no attribute 'data'

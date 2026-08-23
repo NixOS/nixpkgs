@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   useVariableFont ? true,
 }:
 
@@ -16,15 +17,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   # only extract the variable font because everything else is a duplicate
-  installPhase = ''
-    runHook preInstall
+  preInstall = "cd ${lib.optionalString useVariableFont "variable_"}ttf";
 
-    install -Dm644 -t $out/share/fonts/truetype ${
-      if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"
-    }
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/tonsky/FiraCode";

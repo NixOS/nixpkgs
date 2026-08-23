@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
     url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
-    sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
+    hash = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
-  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # same error as https://github.com/pocoproject/poco/issues/4586
     substituteInPlace zlib/zutil.h \
       --replace-fail '#if defined(MACOS) || defined(TARGET_OS_MAC)' '#if defined(MACOS)'
@@ -79,26 +79,30 @@ stdenv.mkDerivation (finalAttrs: {
     "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
   ];
 
-  CCFLAGS =
-    # The file contrib/optimizations/slide_hash_neon.h is missing from the
-    # upstream distribution. It comes from the Android/Chromium sources.
-    lib.optionals stdenv.hostPlatform.isAarch64 [ "-I${androidZlibContrib}" ];
+  env = {
+    CCFLAGS = toString (
+      # The file contrib/optimizations/slide_hash_neon.h is missing from the
+      # upstream distribution. It comes from the Android/Chromium sources.
+      lib.optionals stdenv.hostPlatform.isAarch64 [ "-I${androidZlibContrib}" ]
+    );
 
-  "C++FLAGS" =
-    # Avoid a compilation error that only occurs for 4-byte longs.
-    lib.optionals stdenv.hostPlatform.isi686 [ "-Wno-narrowing" ]
-    # See the "Header dependency changes" section of
-    # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
-    # information on why we need to include these.
-    ++
-      lib.optionals
-        (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
-        [
-          "-include"
-          "limits"
-          "-include"
-          "thread"
-        ];
+    "C++FLAGS" = toString (
+      # Avoid a compilation error that only occurs for 4-byte longs.
+      lib.optionals stdenv.hostPlatform.isi686 [ "-Wno-narrowing" ]
+      # See the "Header dependency changes" section of
+      # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
+      # information on why we need to include these.
+      ++
+        lib.optionals
+          (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
+          [
+            "-include"
+            "limits"
+            "-include"
+            "thread"
+          ]
+    );
+  };
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export MACOSX_SDK=$SDKROOT

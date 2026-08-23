@@ -9,7 +9,6 @@
   networkx,
   numpy,
   pandas,
-  pythonOlder,
   rasterio,
   requests,
   rtree,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "2.0.7";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
     tag = "v${version}";
-    hash = "sha256-XIvwLUvpl+AgrtR9mOkRXhxLc8mtSPk3+5779i/F+2s=";
+    hash = "sha256-PX4Vhf3R9UGKMYp636+tJ5NV/oURd3Zzxfvj7LLCaPM=";
   };
 
   build-system = [ uv-build ];

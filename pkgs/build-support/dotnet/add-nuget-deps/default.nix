@@ -96,7 +96,7 @@ attrs
 
           defaultDepsFile =
             # Wire in the depsFile such that running the script with no args
-            # runs it agains the correct deps file by default.
+            # runs it against the correct deps file by default.
             # Note that toString is necessary here as it results in the path at
             # eval time (i.e. to the file in your local Nixpkgs checkout) rather
             # than the Nix store path of the path after it's been imported.

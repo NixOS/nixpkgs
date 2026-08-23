@@ -6,14 +6,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cache";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "matthiaskrgr";
     repo = "cargo-cache";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

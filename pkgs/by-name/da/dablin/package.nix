@@ -8,17 +8,16 @@
   SDL2,
   gtkmm3,
   faad2,
-  pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dablin";
   version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dx+KPPFCx78HtNvEb00URX/eu49Wtj7fksPjDtpkk5Q=";
   };
 
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
     mpg123
     SDL2
     gtkmm3
-    pcre
   ];
 
   meta = {
@@ -45,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

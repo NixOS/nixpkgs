@@ -11,22 +11,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "hugo";
-  version = "0.154.2";
+  version = "0.165.0";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DVNuVhybpi9LOSciCftEVzWdMYsnQKREKFlalB4QMX8=";
+    hash = "sha256-xxBBvhNp/4IUtIPfiFaZhCnXPhnHZ0NP4R/gda9a6Ic=";
   };
 
-  vendorHash = "sha256-7hI2FblqJQYhoWX2K+J+/HIY8CzQ+tBZmForS6gEnoE=";
+  vendorHash = "sha256-k9e8lthkDzewLHRSZmiAQxsatOKUFrlNOJ4FnAb2uqk=";
 
   checkFlags =
     let
       skippedTestPrefixes = [
-        # Workaround for "failed to load modules"
+        # Workaround for integration tests that reach out to the public
+        # internet. Alternative option is to prefetch but it was decided
+        # to continue to use ignores.
+        # ref: https://github.com/NixOS/nixpkgs/pull/501960
         "TestCommands/mod"
+        "TestCommands/hugo__static_issue14507"
         # Server tests are flaky, at least in x86_64-darwin. See #368072
         # We can try testing again after updating the `httpget` helper
         # ref: https://github.com/gohugoio/hugo/blob/v0.140.1/main_test.go#L220-L233
@@ -83,6 +87,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       Frostman
       savtrip
+      miniharinn
     ];
   };
 })

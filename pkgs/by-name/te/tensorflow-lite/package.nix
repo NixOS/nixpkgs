@@ -32,7 +32,7 @@ let
       or (throw "unsupported host system ${hostPlatform.system} with build system ${buildPlatform.system}");
 in
 buildBazelPackage rec {
-  name = "tensorflow-lite";
+  pname = "tensorflow-lite";
   version = "2.13.0";
 
   src = fetchFromGitHub {
@@ -88,7 +88,7 @@ buildBazelPackage rec {
 
   fetchAttrs.sha256 = bazelDepsSha256;
 
-  PYTHON_BIN_PATH = pythonEnv.interpreter;
+  env.PYTHON_BIN_PATH = pythonEnv.interpreter;
 
   dontAddBazelOpts = true;
   removeRulesCC = false;

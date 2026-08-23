@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   webcolors,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "flux-led";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
@@ -36,6 +33,8 @@ buildPythonPackage rec {
     webcolors
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
@@ -49,7 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
     mainProgram = "flux_led";
   };
 }

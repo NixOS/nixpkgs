@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -12,33 +11,25 @@
   shaderc,
   lcms2,
   libGL,
-  libX11,
+  libx11,
   libunwind,
   libdovi,
-  xxHash,
+  xxhash,
   fast-float,
   vulkanSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplacebo";
-  version = "7.351.0";
+  version = "7.360.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
-    rev = "v${version}";
-    hash = "sha256-ccoEFpp6tOFdrfMyE0JNKKMAdN4Q95tP7j7vzUj+lSQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h8uMWRe4SysbKNLWdGYxAwj2k7yh4sO62/Ca30mRT3g=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "python-compat.patch";
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/12509c0f1ee8c22ae163017f0a5e7b8a9d983a17.patch";
-      hash = "sha256-RrlFu0xgLB05IVrzL2EViTPuATYXraM1KZMxnZCvgrk=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -52,10 +43,10 @@ stdenv.mkDerivation rec {
     shaderc
     lcms2
     libGL
-    libX11
+    libx11
     libunwind
     libdovi
-    xxHash
+    xxhash
     vulkan-headers
   ]
   ++ lib.optionals vulkanSupport [
@@ -90,9 +81,9 @@ stdenv.mkDerivation rec {
       MoltenVK).
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
-    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
+    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ProxyVT ];
     platforms = lib.platforms.all;
   };
-}
+})

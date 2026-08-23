@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   replaceVars,
   colorama,
   contourpy,
@@ -45,14 +44,12 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.7.3";
+  version = "3.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cKian3l7ED1e5q0V+3lErdoRXPDamW7Qt1z7phyxLys=";
+    hash = "sha256-jn3KzCHVOQVYG1QyitJwWVT3LymX+Z/DMsHejaU6o8w=";
   };
 
   patches = [

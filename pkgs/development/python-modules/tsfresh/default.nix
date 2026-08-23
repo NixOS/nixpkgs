@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
-  pythonOlder,
   requests,
   numpy,
   pandas,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pname = "tsfresh";
   version = "0.21.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blue-yonder";

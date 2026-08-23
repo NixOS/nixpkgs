@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchgit,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xssstate";
@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXScrnSaver
+    libx11
+    libxscrnsaver
   ];
 
   makeFlags = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    homepage = "https://git.suckless.org/xssstate/file/README.html";
     description = "Simple tool to retrieve the X screensaver state";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];

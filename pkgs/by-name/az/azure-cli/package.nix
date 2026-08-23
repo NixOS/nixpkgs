@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.81.0";
+  version = "2.89.1";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-Z8luIR1G9rLlt9GSOsCIAU87JZ9uolv2kHaDz6xlKYU=";
+    hash = "sha256-05P5z7qzdj5++yu0HELQbp3lnslfNgzRHkU5Sw/pwfw=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -187,10 +187,12 @@ py.pkgs.toPythonApplication (
         azure-mgmt-compute
         azure-mgmt-containerinstance
         azure-mgmt-containerregistry
+        azure-mgmt-containerregistrytasks
         azure-mgmt-containerservice
         azure-mgmt-cosmosdb
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
+        azure-mgmt-domainregistration
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
         azure-mgmt-extendedlocation
@@ -238,8 +240,11 @@ py.pkgs.toPythonApplication (
         azure-mgmt-trafficmanager
         azure-mgmt-web
         azure-monitor-query
-        azure-multiapi-storage
         azure-storage-common
+        azure-storage-blob
+        azure-storage-file-datalake
+        azure-storage-file-share
+        azure-storage-queue
         azure-synapse-accesscontrol
         azure-synapse-artifacts
         azure-synapse-managedprivateendpoints
@@ -480,7 +485,6 @@ py.pkgs.toPythonApplication (
       license = lib.licenses.mit;
       mainProgram = "az";
       maintainers = with lib.maintainers; [ katexochen ];
-      teams = [ lib.teams.stridtech ];
       platforms = lib.platforms.all;
     };
   }

@@ -11,19 +11,19 @@
   intltool,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXt,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxft,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxt,
+  libxxf86vm,
   libxml2,
   makeWrapper,
   pam,
   perlPackages,
-  xorg,
+  appres,
   pkg-config,
   systemd,
   forceInstallAllHacks ? true,
@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.13";
+  version = "6.15";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pzFI3SFifP8udRMcjgwbCV8zTGiyLgnzbTfMJ5YRZ7c=";
+    hash = "sha256-0uaH5WJj+/2Pyh+5zHyTMf1PCWq1fT90glZf4BLDYtM=";
   };
 
   outputs = [
@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libGL
     libGLU
-    libX11
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXrandr
-    libXt
-    libXxf86vm
+    libx11
+    libxext
+    libxft
+    libxi
+    libxinerama
+    libxrandr
+    libxt
+    libxxf86vm
     libxml2
     pam
     perlPackages.LWPProtocolHttps
@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix installation paths for GTK resources.
     sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
       -i driver/Makefile.in po/Makefile.in.in
+    # Fix installation path for PAM.
+    sed -e 's%PAM_ROOT	= /etc%PAM_ROOT	= @sysconfdir@%' -i driver/Makefile.in
   '';
 
   configureFlags = [
@@ -110,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeBinPath [
             coreutils
             perlPackages.perl
-            xorg.appres
+            appres
           ]
         }" \
         --prefix PERL5LIB ':' $PERL5LIB

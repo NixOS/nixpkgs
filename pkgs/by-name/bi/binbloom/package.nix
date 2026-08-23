@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "binbloom";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "binbloom";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ox4o9RPtqMsme//8dVatNUo+mA/6dM9eI/T5lsuSAus=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ erdnaxe ];
     platforms = lib.platforms.linux;
   };
-}
+})

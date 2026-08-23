@@ -40,14 +40,14 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "7.1";
+    version = "7.2.2";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
+      hash = "sha256-8uyOfu7wUAWRcG03RVXwzrEYgiBo51+jsyvgfdIYT2w=";
     };
 
-    format = "other";
+    pyproject = false;
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
@@ -56,7 +56,7 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
-          hash = "sha256-REMgZ1TiVTDbvT8TCd4EeHfYT/xMJfC4E6weLJFT6Rw=";
+          hash = "sha256-OGsHK3Bh47V4n+7HYpVp/jymCz1QY45rkWlAW0Hob7g=";
           sourceRoot = "mercurial-${version}/rust";
         }
       else
@@ -180,12 +180,6 @@ let
                 ""
               }
           done
-
-          # https://bz.mercurial-scm.org/show_bug.cgi?id=6887
-          # Adding setuptools to the python path is not enough for the distutils
-          # module to be found, so we patch usage directly:
-          substituteInPlace tests/hghave.py \
-            --replace-fail "distutils" "setuptools._distutils"
         '';
 
         # This runs Mercurial _a lot_ of times.

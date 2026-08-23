@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosimports";
   version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "rinchsan";
     repo = "gosimports";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xM1CGW8UB+VHN+2Rm6cF/1bOBVDeUG+6kxUxUcvP7FM=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ maolonglong ];
     mainProgram = "gosimports";
   };
-}
+})

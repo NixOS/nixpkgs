@@ -6,7 +6,7 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zxpy";
   version = "1.6.4";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "tusharsadhwani";
     repo = "zxpy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/VITHN517lPUmhLYgJHBYYvvlJdGg2Hhnwk47Mp9uc0=";
   };
 
@@ -37,9 +37,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Shell scripts made simple";
     homepage = "https://github.com/tusharsadhwani/zxpy";
-    changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${version}";
+    changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "zxpy";
   };
-}
+})

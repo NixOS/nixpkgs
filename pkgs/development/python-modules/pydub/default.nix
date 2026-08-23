@@ -4,9 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg-full,
+  ffmpeg,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   replaceVars,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiaaro";
@@ -34,9 +31,9 @@ buildPythonPackage rec {
     })
     # Fix paths to ffmpeg, ffplay and ffprobe
     (replaceVars ./ffmpeg-fix-path.patch {
-      ffmpeg = lib.getExe ffmpeg-full;
-      ffplay = lib.getExe' ffmpeg-full "ffplay";
-      ffprobe = lib.getExe' ffmpeg-full "ffprobe";
+      ffmpeg = lib.getExe ffmpeg;
+      ffplay = lib.getExe' ffmpeg "ffplay";
+      ffprobe = lib.getExe' ffmpeg "ffprobe";
     })
   ];
 

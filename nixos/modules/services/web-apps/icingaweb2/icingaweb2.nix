@@ -17,7 +17,10 @@ let
   };
 in
 {
-  meta.maintainers = teams.helsinki-systems.members;
+  meta.maintainers = with lib.maintainers; [
+    das_j
+    helsinki-Jo
+  ];
 
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";
@@ -197,8 +200,8 @@ in
           date.timezone = "${cfg.timezone}"
         '';
         settings = mapAttrs (name: mkDefault) {
-          "listen.owner" = "nginx";
-          "listen.group" = "nginx";
+          "listen.owner" = config.services.nginx.user;
+          "listen.group" = config.services.nginx.group;
           "listen.mode" = "0600";
           "pm" = "dynamic";
           "pm.max_children" = 75;

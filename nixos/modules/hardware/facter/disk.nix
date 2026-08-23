@@ -22,7 +22,7 @@ in
     '';
   };
 
-  config = lib.mkIf (config.hardware.facter.reportPath != null) {
+  config = lib.mkIf config.hardware.facter.enable {
     boot.initrd.availableKernelModules = config.hardware.facter.detected.boot.disk.kernelModules;
   };
 }

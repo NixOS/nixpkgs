@@ -13,7 +13,7 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "varia";
   version = "2025.10.14-1";
   pyproject = false;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Spx9boNNeOXGr82uVKSpHCbimflKKjbjur+aKsNZFhY=";
   };
 
@@ -70,4 +70,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication {
   pname = "zeyple";
   version = "unstable-2021-04-10";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "infertux";
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication {
       --replace-fail 'from configparser import SafeConfigParser' 'from configparser import ConfigParser as SafeConfigParser'
   '';
 
-  propagatedBuildInputs = [ python3Packages.gpgme ];
+  propagatedBuildInputs = [ python3Packages.gpg ];
   installPhase = ''
     runHook preInstall
 

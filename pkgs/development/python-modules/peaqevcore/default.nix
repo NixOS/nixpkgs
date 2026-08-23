@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "peaqevcore";
   version = "19.11.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,7 +31,7 @@ buildPythonPackage rec {
     description = "Library for interacting with Peaqev car charging";
     homepage = "https://github.com/elden1337/peaqev-core";
     changelog = "https://github.com/elden1337/peaqev-core/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,15 +4,16 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amf-headers";
-  version = "1.4.36";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
-    tag = "v${version}";
-    sha256 = "sha256-0PgWEq+329/EhI0/CgPsCkJ4CiTsFe56w2O+AcjVUdc=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-ardO9GojOIQUnuSa2fGOCfFHI5PJYBsffCpNCh2dyRw=";
+    sparseCheckout = [ "amf/public/include" ];
   };
 
   installPhase = ''
@@ -27,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ devusb ];
     platforms = lib.platforms.unix;
   };
-}
+})

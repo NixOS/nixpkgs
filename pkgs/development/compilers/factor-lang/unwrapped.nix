@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   makeWrapper,
   curl,
   git,
@@ -14,6 +13,10 @@
   src,
 }:
 
+let
+  inherit (lib) optionalString versionOlder;
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "factor-lang";
 
@@ -45,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace extra/terminfo/terminfo.factor \
       --replace-fail '/usr/share/terminfo' '${ncurses.out}/share/terminfo'
-
+  ''
+  + optionalString (versionOlder finalAttrs.version "0.101") ''
     # update default paths in fuel-listener.el for fuel mode
     substituteInPlace misc/fuel/fuel-listener.el \
       --replace-fail '(defcustom fuel-factor-root-dir nil' "(defcustom fuel-factor-root-dir \"$out/lib/factor\""
@@ -74,12 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/lib/factor $out/share/emacs/site-lisp
+    mkdir -p $out/lib/factor
     cp -r factor factor.image libfactor.a libfactor-ffi-test.so \
-        boot.*.image LICENSE.txt README.md basis core extra misc \
+        boot.unix-*.image LICENSE.txt README.md basis core extra misc \
         $out/lib/factor
-
+  ''
+  + optionalString (versionOlder finalAttrs.version "0.101") ''
     # install fuel mode for emacs
+    mkdir -p $out/share/emacs/site-lisp
     ln -r -s $out/lib/factor/misc/fuel/*.el $out/share/emacs/site-lisp
     runHook postInstall
   '';
@@ -102,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      vrthra
       spacefrogg
     ];
     platforms = [ "x86_64-linux" ];

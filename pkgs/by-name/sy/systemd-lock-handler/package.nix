@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "systemd-lock-handler";
   version = "2.4.2";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "systemd-lock-handler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sTVAabwWtyvHuDp/+8FKNbfej1x/egoa9z1jLIMJuBg=";
   };
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ liff ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,7 +6,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "evillimiter";
   version = "1.5.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bitbrute";
     repo = "evillimiter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h6BReZcDW2UYaYYVQVgV0T91/+CsGuZf+J+boUhjCtA=";
   };
 
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evillimiter";
   };
-}
+})

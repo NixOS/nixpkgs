@@ -7,13 +7,13 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icmake";
   version = "9.03.01";
 
   src = fetchFromGitLab {
     sha256 = "05r0a69w0hv2qhjpb2bxd0lmp2vv5r2d4iggg6ly4miam0i318jy";
-    rev = version;
+    rev = finalAttrs.version;
     repo = "icmake";
     owner = "fbb-git";
   };
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})

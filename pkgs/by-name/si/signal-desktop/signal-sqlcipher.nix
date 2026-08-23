@@ -1,67 +1,75 @@
 {
   stdenv,
+  pnpm,
   lib,
   fetchFromGitHub,
-  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
   rustPlatform,
   cargo,
   dump_syms,
   python3,
+  xcodebuild,
+  cctools,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "2.4.4";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-70kObW6jYzaquMrj20VMTQg/rDWqIu8o2/m7S3mUZB8=";
+    hash = "sha256-pqb/MhDZxkQDUgs/eP+cRL8b3dfN8VLJo+H8Td9mWoc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
-    fetcherVersion = 1;
-    hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
+    fetcherVersion = 4;
+    hash = "sha256-avvXNPfN5YVqwCOU2RX8dos3LTlre1t/4COKb4zHkh4=";
   };
 
   cargoRoot = "deps/extension";
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "sqlcipher-signal-exentsion";
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NtJPwRvjU1WsOxgb2vpokes9eL4DkEcbDaEmML7zsqQ=";
+    hash = "sha256-ChIzjkjIl663lNnOd5oLM1mc5CpLBZS/l82ikyXe/Ac=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     rustPlatform.cargoSetupHook
     cargo
     dump_syms
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcodebuild
+    cctools.libtool
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
-    pnpm run build
 
-    runHook postBuild
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
   '';
+
+  pnpmBuildScript = "build";
 
   installPhase = ''
     runHook preInstall
 
+    mkdir $out
     cp -r dist $out
     cp -r prebuilds $out
+    cp package.json $out
 
     runHook postInstall
   '';
@@ -75,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       # deps/sqlcipher
       bsd3
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

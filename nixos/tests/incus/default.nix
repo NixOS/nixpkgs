@@ -45,6 +45,15 @@ in
     };
   };
 
+  channel = incusRunTest {
+    name = "channel";
+
+    instances.c1 = {
+      type = "container";
+      copyChannel = true;
+    };
+  };
+
   # used in lxc tests to verify container functionality
   container = incusRunTest {
     name = "container";

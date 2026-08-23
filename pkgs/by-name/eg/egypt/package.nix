@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchurl {
     sha256 = "0r0wj6v8z9fzlh9pb5617kyjdf92ppmlbzajaarrq729bbb6ln5m";
-    url = "https://www.gson.org/egypt/download/${pname}-${version}.tar.gz";
+    url = "https://www.gson.org/egypt/download/egypt-${version}.tar.gz";
   };
 
   outputs = [ "out" ];

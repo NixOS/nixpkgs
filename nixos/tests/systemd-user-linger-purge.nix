@@ -15,7 +15,7 @@ rec {
 
   testScript =
     let
-      uidStrings = builtins.mapAttrs (k: v: builtins.toString v.uid) nodes.machine.users.users;
+      uidStrings = builtins.mapAttrs (k: v: toString v.uid) nodes.machine.users.users;
     in
     ''
       machine.fail("test -e /var/lib/systemd/linger/bob")

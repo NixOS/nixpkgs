@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "prefixed";
   version = "0.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,7 +23,7 @@ buildPythonPackage rec {
     description = "Prefixed alternative numeric library";
     homepage = "https://github.com/Rockhopper-Technologies/prefixed";
     changelog = "https://github.com/Rockhopper-Technologies/prefixed/releases/tag/${version}";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

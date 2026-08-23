@@ -3,14 +3,14 @@
   lib,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parinfer-rust-emacs";
   version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "justinbarclay";
     repo = "parinfer-rust-emacs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JYKFfbfpkvBRxYUDw2d6DD1mO27OKzdquSOhBk0lXr0=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ brsvh ];
   };
-}
+})

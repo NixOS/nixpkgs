@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-local-agent";
-  version = "1.6.0";
+  version = "1.6.3";
   pyproject = false;
   withDistOutput = false;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ProtonVPN";
     repo = "local-agent-rs";
     rev = version;
-    hash = "sha256-rk3wi6q0UDuwh5yhLBqdLYsJxVqhlI+Yc7HZsiAU1Y8=";
+    hash = "sha256-y2FEfICwWa/GgaKkq8CR+lVDYIsk0HsuKuGUsUQZAFo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-jjSkPgGp3Yvypnlrt9pV1F/K3o2doNteQs1rwr5fhnM=";
+    hash = "sha256-y8I806dbC7n3eMFyrzGJokfVDwEGFdC7NgzSA0G8hkQ=";
   };
 
   sourceRoot = "${src.name}/python-proton-vpn-local-agent";
@@ -70,7 +70,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       anthonyroussel
-      sebtm
       rapiteanu
     ];
   };

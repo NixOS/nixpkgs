@@ -5,16 +5,13 @@
   fetchFromGitHub,
   fsspec,
   oss2,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ossfs";
   version = "2025.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";

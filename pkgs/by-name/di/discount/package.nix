@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.0.1.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "3.0.1.3";
   pname = "discount";
 
   src = fetchFromGitHub {
     owner = "Orc";
     repo = "discount";
-    rev = "v${version}";
-    hash = "sha256-QZmbc3imBlQmFgTjtepEx2HqsfW93yqqUy0LN5WWKwM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-b3cC/dWfhkuYSPGmuJIiAcvEdN5KAMjPYeit1lr546o=";
   };
 
   patches = [ ./fix-configure-path.patch ];
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "markdown";
     platforms = lib.platforms.unix;
   };
-}
+})

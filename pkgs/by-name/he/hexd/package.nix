@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexd";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "FireyFly";
     repo = "hexd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-b/dROBQVPEiMBTcu4MTi6Lf6ChkFZqZrJ1V0j54rrFY=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "hexd";
   };
-}
+})

@@ -3,19 +3,16 @@
   buildPythonPackage,
   fetchPypi,
   gobject-introspection,
-  goocanvas2,
+  goocanvas_2,
   gtk3,
   pkg-config,
   pygobject3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "goocalendar";
   version = "0.8.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "GooCalendar";
@@ -32,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     gtk3
-    goocanvas2
+    goocanvas_2
   ];
 
   # No upstream tests available

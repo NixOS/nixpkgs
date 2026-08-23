@@ -4,23 +4,20 @@
   fetchFromGitHub,
   httpx,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tedder";
     repo = "requests-aws4auth";
     tag = "v${version}";
-    hash = "sha256-tRo38fdWqZmutGhWv8Hks+oFaLv770RlAHYgS3S6xJA=";
+    hash = "sha256-GIbv4/a1ZdcIOemanzDiueLcKg8pUVeIFSAfErIr0HI=";
   };
 
   build-system = [ setuptools ];

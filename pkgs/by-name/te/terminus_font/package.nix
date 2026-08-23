@@ -4,7 +4,7 @@
   fetchurl,
   python3,
   bdftopcf,
-  xorg,
+  mkfontscale,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     python3
     bdftopcf
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   strictDeps = true;
@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://terminus-font.sourceforge.net/";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ azey7f ];
+    maintainers = with lib.maintainers; [ maevii ];
   };
 })

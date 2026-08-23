@@ -1,49 +1,40 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  markdownlint-cli2,
-  nodejs,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nix-update-script,
   runCommand,
-  zstd,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "markdownlint-cli2";
-  version = "0.18.1";
+  version = "0.23.2";
 
-  # upstream is not interested in including package-lock.json in the source
-  # https://github.com/DavidAnson/markdownlint-cli2/issues/198#issuecomment-1690529976
-  # see also https://github.com/DavidAnson/markdownlint-cli2/issues/186
-  # so use the tarball from the archlinux mirror
-  src = fetchurl {
-    url = "https://us.mirrors.cicku.me/archlinux/extra/os/x86_64/markdownlint-cli2-${finalAttrs.version}-1-any.pkg.tar.zst";
-    hash = "sha256-M7qmhRDJGm2MhgS2oMfRrkLAst1Ye/rPCwP78UBbyyY=";
+  src = fetchFromGitHub {
+    owner = "DavidAnson";
+    repo = "markdownlint-cli2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nWKkQdzwm+jLoZYs25USsdbRwXj++aS1tif2ro4FsBI=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    zstd
-  ];
+  npmDepsHash = "sha256-cUwSR+B1MA6wciAemCxevT1VrtSEGzPUpBKzZzMul2E=";
 
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    cp -r lib share $out
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/markdownlint-cli2" \
-      --add-flags "$out/lib/node_modules/markdownlint-cli2/markdownlint-cli2-bin.mjs"
-
-    runHook postInstall
+  postPatch = ''
+    rm -f .npmrc
+    ln -s ${./package-lock.json} package-lock.json
   '';
 
-  passthru.tests = {
-    smoke = runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ markdownlint-cli2 ]; } ''
-      markdownlint-cli2 ${markdownlint-cli2}/share/doc/markdownlint-cli2/README.md > $out
-    '';
+  dontNpmBuild = true;
+
+  passthru = {
+    tests = {
+      smoke = runCommand "markdownlint-cli2-test" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+        markdownlint-cli2 ${finalAttrs.finalPackage}/lib/node_modules/markdownlint-cli2/CHANGELOG.md > $out
+      '';
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--generate-lockfile" ];
+    };
   };
 
   meta = {
@@ -51,7 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      natsukium
+    ];
     mainProgram = "markdownlint-cli2";
   };
 })

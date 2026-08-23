@@ -72,6 +72,13 @@ in
   );
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.services.nextcloud.config.dbtype != "sqlite";
+        message = "notify_push only supports Nextcloud's with either a Postgres or MariaDB database, not sqlite.";
+      }
+    ];
+
     systemd.services = {
       nextcloud-notify_push = {
         description = "Push daemon for Nextcloud clients";

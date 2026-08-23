@@ -5,8 +5,6 @@
 
   pytestCheckHook,
 
-  pythonOlder,
-
   setuptools,
   setuptools-scm,
   wheel,
@@ -20,8 +18,6 @@ buildPythonPackage rec {
   pname = "typing-validation";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hashberg-io";

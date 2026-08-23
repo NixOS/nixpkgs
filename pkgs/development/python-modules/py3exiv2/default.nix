@@ -5,15 +5,12 @@
   buildPythonPackage,
   exiv2,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py3exiv2";
   version = "0.12.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

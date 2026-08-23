@@ -10,43 +10,38 @@
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
-python3Packages.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.5.1";
+  version = "2.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    tag = "v${version}";
-    hash = "sha256-hy72GgugzNRXqxlN0MAWrjfSUY1FZv2O5aa2494hInY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3GpchONAU+FAFh82E1vZ2tXqo536qpQaVbECyjnH6K4=";
   };
-
-  pythonRelaxDeps = [
-    "click"
-    "numpy"
-    "pyarrow"
-    "questionary"
-    "rich-click"
-    "textual"
-    "tree-sitter"
-    "tree-sitter-sql"
-  ];
 
   build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
+  pythonRelaxDeps = [
+    "click"
+    "questionary"
+    "tomlkit"
+  ];
   dependencies =
     with python3Packages;
     [
       click
       duckdb
-      importlib-metadata
-      numpy
-      packaging
+      pandas
       platformdirs
       pyarrow
+      pyperclip
       questionary
       rich-click
       sqlfmt
@@ -54,7 +49,7 @@ python3Packages.buildPythonApplication rec {
       textual-fastdatatable
       textual-textarea
       tomlkit
-      tree-sitter-sql
+      wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
@@ -71,7 +66,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeCheckInputs = with python3Packages; [
+    flaky
     pytest-asyncio
+    pytest-textual-snapshot
+    pytest-xdist
     pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -81,10 +79,6 @@ python3Packages.buildPythonApplication rec {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
-
-    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
-    # AssertionError
-    "test_bad_adapter_opt"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
@@ -99,10 +93,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
   };
-}
+})

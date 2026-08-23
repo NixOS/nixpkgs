@@ -4,21 +4,18 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   yajl,
 }:
 
 buildPythonPackage rec {
   pname = "ijson";
-  version = "3.4.0.post0";
+  version = "3.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mqAtxwuyRWcKbKf7pze5kq7rSJU2CYBiL35Wjb8j5B4=";
+    hash = "sha256-r0C9GoX1XbC4swcVyFh2Ewa9ktVZAUhjb3XDMJ5udr0=";
   };
 
   build-system = [ setuptools ];

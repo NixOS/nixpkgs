@@ -4,10 +4,10 @@
   fetchFromGitHub,
   bundlerEnv,
   nixosTests,
-  ruby_3_4,
+  ruby_4_0,
   pdfium-binaries,
+  leptonica,
   makeWrapper,
-  bundler,
   fetchYarnDeps,
   yarn,
   yarnConfigHook,
@@ -16,23 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.2.0";
-
-  bundler = bundler.override { ruby = ruby_3_4; };
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-QKGIcLdyIeYcHXA3TRv7PS9V2mok3Y8UOuqCdnCpNfM=";
+    hash = "sha256-yWy5mRrNHMZPimIPIVKyCXQDw5JlEhdgNZjOQ7mq8mY=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
 
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
-    ruby = ruby_3_4;
-    inherit (finalAttrs) bundler;
+    ruby = ruby_4_0;
     gemdir = ./.;
   };
 
@@ -46,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-WypnmgUbt+qlJivg1oWX6dabD/1o0H6c3ODcv+S5Ptw=";
+      hash = "sha256-62nI/QUzlpI1VyZ6PWPz2kSp4S2GUIQDaf4jUwzyj24=";
     };
 
     nativeBuildInputs = [
@@ -86,14 +83,16 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  RAILS_ENV = "production";
-  BUNDLE_WITHOUT = "development:test";
+  env = {
+    RAILS_ENV = "production";
+    BUNDLE_WITHOUT = "development:test";
+  };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/public/packs
-    cp -r ${finalAttrs.src}/* $out
+    cp -r ./* $out
     cp -r ${finalAttrs.docusealWeb}/* $out/public/packs
 
     bundle exec bootsnap precompile --gemfile app/ lib/
@@ -109,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/rails \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium-binaries ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          pdfium-binaries
+          leptonica
+        ]
+      }"
   '';
 
   passthru = {

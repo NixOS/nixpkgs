@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsondiff";
   version = "2.2.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xlwings";
     repo = "jsondiff";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0EnI7f5t7Ftl/8UcsRdA4iVQ78mxvPucCJjFJ8TMwww=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ZoomerAnalytics/jsondiff";
     license = lib.licenses.mit;
   };
-}
+})

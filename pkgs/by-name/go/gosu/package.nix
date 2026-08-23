@@ -6,14 +6,14 @@
   gosu,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosu";
   version = "1.19";
 
   src = fetchFromGitHub {
     owner = "tianon";
     repo = "gosu";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Kl7roHOoKVPhWX4TWXP65brxV+bVBOAyphmWVpAQ15E=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

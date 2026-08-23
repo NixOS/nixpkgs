@@ -442,7 +442,7 @@ in
             cf=/etc/foundationdb/fdb.cluster
             desc=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
             rand=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c8)
-            echo ''${desc}:''${rand}@${initialIpAddr}:${builtins.toString cfg.listenPortStart} > $cf
+            echo ''${desc}:''${rand}@${initialIpAddr}:${toString cfg.listenPortStart} > $cf
             chmod 0664 $cf
             touch "${cfg.dataDir}/.first_startup"
         fi

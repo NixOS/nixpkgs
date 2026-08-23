@@ -1,15 +1,17 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
+  glib-networking,
   nodejs,
   pkg-config,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  wrapGAppsHook3,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -18,26 +20,28 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.15.1";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
+    hash = "sha256-MXcn9s+FAuOnPpiDBO8fnqzE74wg6noZRxQtpIXr1Sw=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vollate ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    patches = [ ./frontend-runtime-path.patch ];
 
     nativeBuildInputs = [
       nodejs
@@ -53,8 +57,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_10;
-      fetcherVersion = 2;
-      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
+      fetcherVersion = 3;
+      hash = "sha256-NB5Tn9cTCUctRiEMnjphs30P04v6V0eo52k2MUsvd1U=";
     };
 
     buildPhase = ''
@@ -80,27 +84,25 @@ let
   });
 in
 
-buildGoModule {
+buildGo126Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
+  vendorHash = "sha256-cApwC//nM+5yJwrTDbjb/0+hcs9Bd10MM7L/lPxq8Og=";
 
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
     pkg-config
     wails
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist

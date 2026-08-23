@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   typing-extensions,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-servicebus";
   version = "7.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_servicebus";

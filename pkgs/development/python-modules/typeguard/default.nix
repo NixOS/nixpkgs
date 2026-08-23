@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
   typing-extensions,
-  importlib-metadata,
   mypy,
   sphinxHook,
   sphinx-autodoc-typehints,
@@ -17,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.4.4";
+  version = "4.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-On/S3/twXU0O+u1DBqcEyJud7oULaI8GCosWFaeeX3Q=";
+    hash = "sha256-WhbcrCNQIDkpnJfIlBZRvDPX6ozEsvfWu7G1KPbupCM=";
   };
 
   outputs = [
@@ -43,8 +39,7 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   env.LC_ALL = "en_US.utf-8";
 

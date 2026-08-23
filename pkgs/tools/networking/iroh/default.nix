@@ -1,5 +1,6 @@
 {
   lib,
+  lld,
   fetchFromGitHub,
   rustPlatform,
 }:
@@ -11,21 +12,25 @@ let
     }:
     rustPlatform.buildRustPackage rec {
       pname = name;
-      version = "0.95.1";
+      version = "1.0.3";
 
       src = fetchFromGitHub {
         owner = "n0-computer";
         repo = "iroh";
         rev = "v${version}";
-        hash = "sha256-YxifH/mH6x6b8J5xyG+/f18o9ngmiLVKvRaDgIv3ok8=";
+        hash = "sha256-qZft++kZytCC49WK3uqpsdI4Ko3YdBFEws31kZ7SM2Q=";
       };
 
-      cargoHash = "sha256-MdJpGCLf90fTjbJKHCrLLZbLyb4gmQn4SsF5iCqNVVI=";
+      cargoHash = "sha256-8u3vkP0wCNzLaT6Bb1wnBzl7c1req8NsAhj2zbT6EtE=";
 
       buildFeatures = cargoFeatures;
       cargoBuildFlags = [
         "--bin"
         name
+      ];
+
+      nativeBuildInputs = [
+        lld
       ];
 
       # Some tests require network access which is not available in nix build sandbox.
@@ -40,7 +45,6 @@ let
         ];
         maintainers = with lib.maintainers; [
           andreashgk
-          cameronfyfe
         ];
         mainProgram = name;
       };

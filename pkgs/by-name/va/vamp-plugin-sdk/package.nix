@@ -9,14 +9,14 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vamp-plugin-sdk";
   version = "2.10";
 
   src = fetchFromGitHub {
     owner = "vamp-plugins";
     repo = "vamp-plugin-sdk";
-    rev = "vamp-plugin-sdk-v${version}";
+    rev = "vamp-plugin-sdk-v${finalAttrs.version}";
     hash = "sha256-5jNA6WmeIOVjkEMZXB5ijxyfJT88alVndBif6dnUFdI=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,21 +9,21 @@
   lz4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "coroot";
-  version = "1.17.6";
+  version = "1.24.5";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot";
-    rev = "v${version}";
-    hash = "sha256-MeHRWrRGvp5oOSiMXtXNMZtKA6Q2577ty47HOxtBGJk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FueDATEkS9P4ySeq4vP3f1QjdIdo175deb80KLOQk6Q=";
   };
 
-  vendorHash = "sha256-DCdrE8UYkuUN+rUuxVSGbAnAeLivZ2Xp8xjM+56ZF+A=";
+  vendorHash = "sha256-P7EXBRG6OYIwaoObqpKBK2n0f6QYphr+DRNLbfysotA=";
   npmDeps = fetchNpmDeps {
-    src = "${src}/front";
-    hash = "sha256-6a8eOPgAdpZpdXmrHVw/twfikjjWHSy/BdYdlyRQkjc=";
+    src = "${finalAttrs.src}/front";
+    hash = "sha256-5N4dmtKdZgwulqxFHYKhnHOYAg0gnb/rzVVcmzjYFUg=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,9 @@ buildGoModule rec {
     npm --prefix="$npmRoot" run build-prod
   '';
 
+  # required for tests
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Open-source APM & Observability tool";
     homepage = "https://coroot.com";
@@ -50,4 +53,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ errnoh ];
     mainProgram = "coroot";
   };
-}
+})

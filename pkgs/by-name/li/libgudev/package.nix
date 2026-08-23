@@ -74,6 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
+  # https://gitlab.gnome.org/GNOME/libgudev/-/issues/10
+  preCheck = ''
+    mesonCheckFlagsArray=( $(meson test --list | grep -v libgudev:test-gudevdevice) )
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libgudev";

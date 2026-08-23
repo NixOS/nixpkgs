@@ -2,37 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytest-timeout,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   bashInteractive,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.7.2";
+  version = "1.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "tqdm";
     repo = "shtab";
-    tag = "v${version}";
-    hash = "sha256-ngTAST+6lBek0PHvULmlJZAHVU49YN5+XAu5KEk6cIM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+9M0IfiD5CJcg4AHqCfq1UON/E63etwzvx7Gc82H0PE=";
   };
-
-  patches = [
-    # Fix bash error on optional nargs="?" (iterative/shtab#184)
-    (fetchpatch2 {
-      url = "https://github.com/iterative/shtab/commit/a04ddf92896f7e206c9b19d48dcc532765364c59.patch?full_index=1";
-      hash = "sha256-H4v81xQLI9Y9R5OyDPJevCLh4gIUaiJKHVEU/eWdNbA=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -49,11 +37,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shtab" ];
 
   meta = {
-    description = "Module for shell tab completion of Python CLI applications";
+    description = "Automagic shell tab completion for Python CLI applications";
     mainProgram = "shtab";
-    homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/${src.tag}";
+    homepage = "https://tqdm.github.io/shtab/";
+    changelog = "https://github.com/tqdm/shtab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

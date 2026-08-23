@@ -8,30 +8,31 @@
   pkg-config,
   openssl,
   libiconv,
-  dbBackend ? "sqlite",
+  dbBackend ? "sqlite_system",
   libmysqlclient,
   libpq,
+  sqlite,
 }:
 
 let
   webvault = callPackage ./webvault.nix { };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.35.1";
+  version = "1.37.2";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
-    tag = version;
-    hash = "sha256-Lp3BDObJItscI1ifx8kFScSCaOajQMycYgGfpjVTL8I=";
+    tag = finalAttrs.version;
+    hash = "sha256-ugCkpeDVK3qPYSvL78N3mzu2bYTFlZP2AQeIgsrIYO8=";
   };
 
-  cargoHash = "sha256-XqZOy84L6Spzd1NZf4CzZsdhDhrYNoQGToad4giFJR8=";
+  cargoHash = "sha256-EtdBMCp5aAKsKVM7PwsvJLyW661XdqduhBgk3msYioQ=";
 
   # used for "Server Installed" version in admin panel
-  env.VW_VERSION = version;
+  env.VW_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -41,7 +42,8 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient
-  ++ lib.optional (dbBackend == "postgresql") libpq;
+  ++ lib.optional (dbBackend == "postgresql") libpq
+  ++ lib.optional (dbBackend == "sqlite_system") sqlite;
 
   buildFeatures = dbBackend;
 
@@ -54,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       dotlambda
@@ -62,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "vaultwarden";
   };
-}
+})

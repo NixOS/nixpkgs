@@ -3,23 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhik";
-  version = "0.3.4";
+  version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyHik";
-    tag = version;
-    hash = "sha256-/0cmEhjiojj7ovEUICun+naR4iVnrsJk+6/4+tTXEQA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3q1dCu/VY+4WnsLOZk+O2NLW2Ibun7IuNtXEHJ0GEms=";
   };
 
   build-system = [
@@ -47,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

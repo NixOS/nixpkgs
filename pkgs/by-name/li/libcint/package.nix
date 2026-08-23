@@ -8,14 +8,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcint";
   version = "6.1.3";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k9luTarszZAqh33SzPMM3BYj01HT7cfTipt44nSC+2A=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

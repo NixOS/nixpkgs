@@ -26,7 +26,6 @@ bundlerApp {
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [
       nyanloutre
-      manveru
     ];
     platforms = lib.platforms.unix;
   };

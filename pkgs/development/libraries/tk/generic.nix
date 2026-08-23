@@ -4,7 +4,7 @@
   src,
   pkg-config,
   tcl,
-  libXft,
+  libxft,
   zip,
   zlib,
   patches ? [ ],
@@ -80,7 +80,7 @@ tcl.mkTclDerivation {
   ];
 
   propagatedBuildInputs = [
-    libXft
+    libxft
   ];
 
   enableParallelBuilding = true;

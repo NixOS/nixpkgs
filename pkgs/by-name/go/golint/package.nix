@@ -6,7 +6,9 @@
 
 buildGoModule {
   pname = "golint";
-  version = "unstable-2020-12-08";
+  version = "0-unstable-2020-12-08";
+
+  __structuredAttrs = true;
 
   # we must allow references to the original `go` package, as golint uses
   # compiler go/build package to load the packages it's linting.
@@ -15,7 +17,7 @@ buildGoModule {
   src = fetchgit {
     url = "https://go.googlesource.com/lint";
     rev = "83fdc39ff7b56453e3793356bcff3070b9b96445";
-    sha256 = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
+    hash = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
   };
 
   vendorHash = "sha256-dPadFoymYu2Uw2AXZfbaBfxsN8IWMuK1TrcknHco3Bo=";

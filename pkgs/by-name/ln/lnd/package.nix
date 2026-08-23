@@ -21,23 +21,25 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lnd";
-  version = "0.19.3-beta";
+  version = "0.21.2-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
-    rev = "v${version}";
-    hash = "sha256-j37tLwVmAI18N0Xb3epACKRpJbs60HamZOlKDxWngFA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8HSKntW0cLkJi4You8gJgXaUoQoevl2zY+mji3fprJI=";
   };
 
-  vendorHash = "sha256-Ah5jOknXSoWEOnn0UKRuuwqT+E4eAkCg1h4qzW0rSHM=";
+  vendorHash = "sha256-YdrgmzTbxrsW/smmxFBiHQ1jB+cxNgNxPAsrPPS61AU=";
 
   subPackages = [
     "cmd/lncli"
     "cmd/lnd"
   ];
+
+  env.CGO_ENABLED = 0;
 
   inherit tags;
 
@@ -51,4 +53,4 @@ buildGoModule rec {
       prusnak
     ];
   };
-}
+})

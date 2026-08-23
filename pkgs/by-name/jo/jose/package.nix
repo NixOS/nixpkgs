@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jose";
   version = "14";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "jose";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rMNPJaCtVpbwIkMQzBNpmRct6S/NelTwjmsuB0RP6R8=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

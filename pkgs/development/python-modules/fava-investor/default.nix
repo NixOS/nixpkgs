@@ -45,6 +45,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # First differing element 1:
+    # '-----------------  --------  ------------'
+    # '-------------  --------  ------------'
+    #
+    #   ['asset_type    amount    percentage',
+    # -  '-----------------  --------  ------------',
+    # ?                ----
+    #
+    # +  '-------------  --------  ------------',
+    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_multicurrency"
+    "fava_investor/modules/assetalloc_class/test_asset_allocation.py::TestScriptCheck::test_tree_empty_parent"
+  ];
+
   pythonImportsCheck = [ "fava_investor" ];
 
   meta = {

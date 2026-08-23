@@ -14,7 +14,7 @@
   libinput,
   libxkbcommon,
   vulkan-headers,
-  xcbutilwm,
+  libxcb-wm,
   gtkmm3,
   withFiltersPlugin ? true,
   withFocusRequestPlugin ? true,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libxkbcommon
     vulkan-headers
-    xcbutilwm
+    libxcb-wm
     gtkmm3
   ];
 

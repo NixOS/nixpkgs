@@ -10,14 +10,14 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdm";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "nicm";
     repo = "fdm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Gqpz+N1ELU5jQpPJAG9s8J9UHWOJNhkT+s7+xuQazd0=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/nicm/fdm/releases";
     license = lib.licenses.isc;
   };
-}
+})

@@ -6,16 +6,16 @@
   git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidyaml";
-  version = "0.10.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "biojppm";
     repo = "rapidyaml";
     fetchSubmodules = true;
-    tag = "v${version}";
-    hash = "sha256-r19PBS35mvAK2RoZGXaw6UU9EuEXVoUK6BV6cJnPyUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GTEgdCxqPs/Xos9pLDa0Zn/3heLBi17bhiNHfChTxQk=";
   };
 
   nativeBuildInputs = [
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

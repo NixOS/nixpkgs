@@ -6,18 +6,18 @@
   plan9port,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "edwood";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rjkroege";
     repo = "edwood";
-    rev = "v${version}";
-    hash = "sha256-jKDwNq/iMFqVpPq14kZa+T5fES54f4BAujXUwGlbiTE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aPJpp4D5Ej2JLCwx0PiHDd7xrfYtX8bMWUWqJ1l9DqI=";
   };
 
-  vendorHash = "sha256-M7fa46BERNRHbCsAiGqt4GHVVTyrW6iIb6gRc4UuZxA=";
+  vendorHash = "sha256-4UcbGdE2/pzCnBGa6JSX+w4LW7nIGQpA2gq+PSWrwBs=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,7 +46,7 @@ buildGoModule rec {
       mit
       bsd3
     ];
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "edwood";
   };
-}
+})

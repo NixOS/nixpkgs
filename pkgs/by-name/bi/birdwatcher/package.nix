@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "birdwatcher";
   version = "2.2.5";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "birdwatcher";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TTU5TYWD/KSh/orDdQnNrQJ/G7z5suBu7psF9V6AAIw=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "birdwatcher";
   };
-}
+})

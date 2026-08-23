@@ -1,6 +1,6 @@
 {
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   lib,
   nixosTests,
@@ -14,8 +14,7 @@ buildGoModule (finalAttrs: {
   pname = "soju";
   version = "0.10.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "emersion";
     repo = "soju";
     tag = "v${finalAttrs.version}";

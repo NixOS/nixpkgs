@@ -4,27 +4,27 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
-  testers,
-  nodejs,
+  nodejs_22,
   node-gyp,
   gnutar,
   inter,
   python3,
   srcOnly,
   removeReferencesTo,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.29.3";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-/rEVeNxLgqeoxJTyzArZAGzAbJjfOjHuG+zpOnf40Mk=";
   };
 
   patches = [
@@ -41,10 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    nodejs
+    # nodejs 22 avoids a worker crash on 24.19+ while waiting for a proper fix to https://github.com/karakeep-app/karakeep/issues/2989
+    # should be safe to revert after seeing forward movement at https://github.com/karakeep-app/karakeep/blob/main/docker/Dockerfile#L13
+    nodejs_22
     node-gyp
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildInputs = [
@@ -52,28 +54,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version;
-    pnpm = pnpm_9;
-
-    # We need to pass the patched source code, so pnpm sees the patched version
-    src = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-patched-source";
-      inherit (finalAttrs) src patches;
-      installPhase = ''
-        cp -pr --reflink=auto -- . $out
-      '';
-    };
-
-    fetcherVersion = 3;
-    hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-0ExBj87CbzgTis9/Z0J2d82051SXlEOgwXO+jAWxCi4=";
   };
   buildPhase = ''
     runHook preBuild
 
     # Based on matrix-appservice-discord
     pushd node_modules/better-sqlite3
-    npm run build-release --offline "--nodedir=${srcOnly nodejs}"
-    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs}" {} \;
+    npm run build-release --offline "--nodedir=${srcOnly nodejs_22}"
+    find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${srcOnly nodejs_22}" {} \;
     popd
 
     export CI=true
@@ -94,6 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    # provide a environment variable to override the cache directory
+    # https://github.com/vercel/next.js/discussions/58864
+    patch -p1 -i ${./patches/cache-from-env-not-nix-store.patch}
   '';
 
   installPhase = ''
@@ -123,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
         --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
         --subst-var-by VERSION "${finalAttrs.version}" \
-        --subst-var-by NODEJS "${nodejs}"
+        --subst-var-by NODEJS "${nodejs_22}"
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
@@ -143,21 +146,22 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     tests = {
       inherit (nixosTests) karakeep;
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # remove hardcoded version if upstream syncs general version with cli
-        # version
-        version = "0.27.1";
-      };
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];

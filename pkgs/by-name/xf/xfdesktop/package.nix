@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfdesktop";
-  version = "4.20.1";
+  version = "4.20.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfdesktop";
     tag = "xfdesktop-${finalAttrs.version}";
-    hash = "sha256-QBzsHXEdTGj8PlgB+L/TJjxAVksKqf+9KrRN3YaBf44=";
+    hash = "sha256-LOsfRB4QVb/r2+uHJf4KvRP9akihbhXq82uSp8I7zlI=";
   };
 
   nativeBuildInputs = [

@@ -7,7 +7,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   jpype1,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "tabula-py";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chezou";

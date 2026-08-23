@@ -12,12 +12,12 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ravedude";
   version = "0.2.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ar2oQx7dKKfzkM3FMcJXiPHxNa0KcMRht38q+NgowfU=";
   };
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = ravedude;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ravedude";
   };
-}
+})

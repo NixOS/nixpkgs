@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flirt";
   version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "flirt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L7BiNA/cG7e1GX9sOxwwLS5+2/Tpb1PeA/2rPz8ALf8=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "flirt";
   };
-}
+})

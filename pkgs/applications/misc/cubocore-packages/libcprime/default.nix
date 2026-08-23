@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   meta = {
-    description = "Library for bookmarking, saving recent activites, managing settings of C-Suite";
+    description = "Library for bookmarking, saving recent activities, managing settings of C-Suite";
     homepage = "https://gitlab.com/cubocore/libcprime";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];

@@ -18,7 +18,6 @@
   patsy,
   plotnine,
   pytestCheckHook,
-  pythonOlder,
   rlax,
   scikit-image,
   scipy,
@@ -33,8 +32,6 @@ let
     pname = "bsuite";
     version = "0.3.5";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;

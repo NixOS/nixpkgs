@@ -4,17 +4,17 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goa";
-  version = "3.23.4";
+  version = "3.29.1";
 
   src = fetchFromGitHub {
     owner = "goadesign";
     repo = "goa";
-    rev = "v${version}";
-    hash = "sha256-7+hOXJU2a39ytn08FlR/YAhOnAmVL5JxdcvF1AlOxHk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UgjqcQe1piJDlQJeQjsFSEeX8pNnIw81tsR5+Wmlesk=";
   };
-  vendorHash = "sha256-VSjiEgkjLMFRThNI4G7O91wpF8CYaIVYOrtE49S/o3w=";
+  vendorHash = "sha256-JfpBv49AO/YJ9Scz22IgxhwF+EUnS4brGtbmpMB+B/Y=";
 
   subPackages = [ "cmd/goa" ];
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rushmorem ];
   };
-}
+})

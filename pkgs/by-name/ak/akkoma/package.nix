@@ -9,25 +9,25 @@
 }:
 
 let
-  beamPackages = beam_minimal.packages.erlang_26.extend (
-    self: super: {
-      elixir = self.elixir_1_16;
-      rebar3 = self.rebar3WithPlugins {
-        plugins = with self; [ pc ];
+  beamPackages = beam_minimal.packages.erlang_27.overrideScope (
+    final: prev: {
+      elixir = final.elixir_1_17;
+      rebar3 = final.rebar3WithPlugins {
+        plugins = with final; [ pc ];
       };
     }
   );
 in
-beamPackages.mixRelease rec {
+beamPackages.mixRelease (finalAttrs: {
   pname = "akkoma";
-  version = "3.17.0";
+  version = "3.19.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
-    tag = "v${version}";
-    hash = "sha256-RXKqeaS+cvOGQNMU/g2lbAk/V1JbkU2XXqITqv1U/wU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ASLnsmuWpfQKwpNNLUgI32Gdn/j+jUW5IBLlT8RUmcE=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -36,20 +36,10 @@ beamPackages.mixRelease rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ file ];
 
-  patches = [
-    # See <https://akkoma.dev/AkkomaGang/akkoma/pulls/854>
-    # Akkoma uses the deprecated “convert” command instead of “magick”, which
-    # results in the logs being spammed with warning messages. Upstream is
-    # reluctant to change this, to ensure compatibility with Debian stable,
-    # which does not yet provide ImageMagick 7.
-    # Remove this patch once merged upstream.
-    ./akkoma-imagemagick.patch
-  ];
-
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
-    hash = "sha256-DqSeMjom9UjgGjjfJomWCr7jQhXEkqVrDCvW3+pDtcQ=";
+    pname = "mix-deps-akkoma";
+    inherit (finalAttrs) src version;
+    hash = "sha256-O9A7XuQSSczGMcLMc6Fk0eh7PkjQ6sYJKSwdqoEPJJI=";
 
     postInstall = ''
       substituteInPlace "$out/http_signatures/mix.exs" \
@@ -88,7 +78,7 @@ beamPackages.mixRelease rec {
       inherit akkoma akkoma-confined;
     };
 
-    inherit mixFodDeps;
+    inherit (finalAttrs) mixFodDeps;
 
     # Used to make sure the service uses the same version of elixir as
     # the package
@@ -100,9 +90,9 @@ beamPackages.mixRelease rec {
   meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
-    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${version}";
+    changelog = "https://akkoma.dev/AkkomaGang/akkoma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mvs ];
     platforms = lib.platforms.unix;
   };
-}
+})

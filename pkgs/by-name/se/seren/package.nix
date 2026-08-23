@@ -9,7 +9,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seren";
   version = "0.0.21";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://holdenc.altervista.org/seren/downloads/${pname}-${version}.tar.gz";
+    url = "http://holdenc.altervista.org/seren/downloads/seren-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-adI365McrJkvTexvnWjMzpHcJkLY3S/uWfE8u4yuqho=";
   };
 
@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       matthewcroughan
-      nixinator
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

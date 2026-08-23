@@ -18,18 +18,21 @@
 
 buildPythonPackage rec {
   pname = "sphinx-prompt";
-  version = "1.10.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
     tag = version;
-    hash = "sha256-JKCTn2YkdyGLvchMT9C61PxjYxuQFzt3SjCE9JvgtVc=";
+    hash = "sha256-ut1g4Clq8mVUYwCe0XMt4GIXUJ4Hy7k8DjWbR7GJ8Bg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+    # create the old sphinx-prompt directory for compatibility
+    # https://github.com/sbrunner/sphinx-prompt/issues/612
+    cp -r sphinx{_,-}prompt
   '';
 
   build-system = [

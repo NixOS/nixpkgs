@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vb9k+KjiGodVngza0R18LjfPTlsqFbzqXZqefm6KHj0=";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   doCheck = true;
 
   installPhase = ''

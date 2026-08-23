@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
-  pnpm_10,
+  nodejs_24,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -13,16 +13,25 @@
   nixosTests,
   nix-update-script,
   yq-go,
+  cctools,
 }:
+
+let
+  nodejs = nodejs_24;
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "42.57.1";
+  version = "44.37.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-IMUnOk4D0CDKgrkM9geyaj80Pir6pORlWUPW2UIoKOM=";
+    hash = "sha256-HYPUINYdoqYnsgKfx2QPEqUyOXupBfxNCu6Agu7MOuU=";
   };
 
   postPatch = ''
@@ -34,17 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools # contains libtool, required by better-sqlite3
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-WTShVxWhdAPbITBaSw6BrqSwSJ9pc2imB+ovjhTT6qY=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-eIrIUhzL2lCkZ0hFfPq8v7Ppvn5KhIXupibe1Hr+Cbo=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -54,23 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     # relax nodejs version
     yq '.engines.node = "${nodejs.version}"' -i package.json
+  ''
+  # pnpm install gets run with --ignore-scripts so we need to manually build native dependencies (e.g. re2)
+  # Keep https://github.com/renovatebot/renovate/blob/main/pnpm-workspace.yaml#L9 in mind when updating,
+  # new native dependencies could bloat up binary size.
+  + ''
+    pnpm rebuild
+    rm -rf node_modules/.pnpm/re2*/node_modules/re2/build/Release/{obj.target,.deps} \
+      node_modules/.pnpm/re2*/node_modules/re2/vendor
 
     pnpm build
-    find -name 'node_modules' -type d -exec rm -rf {} \; || true
-    pnpm install --offline --prod --ignore-scripts
-  ''
-  # The optional dependency re2 is not built by pnpm and needs to be built manually.
-  # If re2 is not built, you will get an annoying warning when you run renovate.
-  + ''
-    pushd node_modules/.pnpm/re2*/node_modules/re2
-
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-    npm run rebuild
-
-    popd
+    pnpm prune --prod --ignore-scripts
 
     runHook postBuild
   '';

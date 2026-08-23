@@ -29,6 +29,8 @@ in
 {
   outputs = [
     "out"
+  ]
+  ++ lib.optionals (hasFeature "man-pages") [
     "man"
   ];
   src =

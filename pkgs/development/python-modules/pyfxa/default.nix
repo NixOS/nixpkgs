@@ -9,7 +9,6 @@
   pybrowserid,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   hatchling,
@@ -18,14 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3zxXWzFOjWcnX8hAQpRzGlzTmnXjZjn9jF+MdsHuGkw=";
+    hash = "sha256-gq/OfpKjw6BSbGKTXbRa2crxleJJoj0BN4Ful1npWlw=";
   };
 
   build-system = [ hatchling ];

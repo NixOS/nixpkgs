@@ -8,18 +8,19 @@
   pytest-asyncio,
   pytestCheckHook,
   pytz,
+  victron-mqtt,
 }:
 
 buildPythonPackage rec {
   pname = "victron-vrm";
-  version = "0.1.8";
+  version = "0.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KSoft-Si";
     repo = "vrm-client";
     tag = "v${version}";
-    hash = "sha256-NxkMUwiFD8C7Nrtd7cjoFvdkbAOJkIIt+TPtkous8Nc=";
+    hash = "sha256-In4yL5e6DZkP/8JeM1FhoMuhsqQ6uZE3fFLyfnLzgZQ=";
   };
 
   build-system = [ hatchling ];
@@ -28,7 +29,10 @@ buildPythonPackage rec {
     aiohttp
     pydantic
     pytz
+    victron-mqtt
   ];
+
+  pythonRelaxDeps = [ "victron-mqtt" ];
 
   pythonImportsCheck = [ "victron_vrm" ];
 

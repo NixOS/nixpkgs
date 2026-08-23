@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5xYfQRm7U7sEQiJEfjaLznoXUxHsxnLmIEA/OxTkjFg=";
 
+  # Only build the starpls language server, not the xtask build helper, which
+  # would otherwise leak into $out/bin.
+  cargoBuildFlags = [ "-p starpls" ];
+
   nativeBuildInputs = [
     protobuf
   ];

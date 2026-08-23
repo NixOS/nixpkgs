@@ -3,9 +3,7 @@
   stdenv,
   fetchPypi,
   python,
-  numpy_1,
   pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   writeTextFile,
 
@@ -15,11 +13,12 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
   lapack,
+
+  checkPhaseThreadLimitHook,
 
   # Reverse dependency
   sage,
@@ -34,37 +33,14 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-let
-  cfg = writeTextFile {
-    name = "site.cfg";
-    text = lib.generators.toINI { } {
-      ${blas.implementation} = {
-        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
-        library_dirs = "${blas}/lib:${lapack}/lib";
-        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
-        libraries = "lapack,lapacke,blas,cblas";
-      };
-      lapack = {
-        include_dirs = "${lib.getDev lapack}/include";
-        library_dirs = "${lapack}/lib";
-        runtime_library_dirs = "${lapack}/lib";
-      };
-      blas = {
-        include_dirs = "${lib.getDev blas}/include";
-        library_dirs = "${blas}/lib";
-        runtime_library_dirs = "${blas}/lib";
-      };
-    };
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy";
   version = "1.26.4";
   pyproject = true;
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "tar.gz";
     hash = "sha256-KgKrqe0S5KxOs+qUIcQgMBoMZGDZgw10qd+H76SRIBA=";
   };
@@ -104,7 +80,6 @@ buildPythonPackage rec {
     meson-python
     pkg-config
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
@@ -120,11 +95,10 @@ buildPythonPackage rec {
   # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
   preBuild = ''
-    ln -s ${cfg} site.cfg
+    ln -s ${finalAttrs.passthru.cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
@@ -135,6 +109,10 @@ buildPythonPackage rec {
     hypothesis
     setuptools
     typing-extensions
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''
@@ -181,8 +159,29 @@ buildPythonPackage rec {
     # just for backwards compatibility
     blas = blas.provider;
     blasImplementation = blas.implementation;
-    inherit cfg;
-    coreIncludeDir = "${numpy_1}/${python.sitePackages}/numpy/core/include";
+    buildConfig = {
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        runtime_library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+        runtime_library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+        runtime_library_dirs = "${blas}/lib";
+      };
+    };
+    cfg = writeTextFile {
+      name = "site.cfg";
+      text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
+    };
+    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/core/include";
     tests = {
       inherit sage;
     };
@@ -193,10 +192,10 @@ buildPythonPackage rec {
   env.NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/v${finalAttrs.version}";
     description = "Scientific tools for Python";
     mainProgram = "f2py";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
   };
-}
+})

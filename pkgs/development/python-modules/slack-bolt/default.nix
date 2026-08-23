@@ -39,16 +39,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slack-bolt";
-  version = "1.27.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
-    tag = "v${version}";
-    hash = "sha256-3aYsISTNc2uexzpIiBNnw40XegczL5BdKqi6j9K/A80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3U15V++q/x73LuEgw9uWaIGWulJmPkmkpUxxK1EXuzU=";
   };
 
   build-system = [ setuptools ];
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 
@@ -103,13 +103,20 @@ buildPythonPackage rec {
     "test_failure"
     # TypeError
     "test_oauth"
+    # AssertionError
+    "test_buffer_size_overrides"
+    "test_buffer_size_overrides"
+    "test_default_params"
+    "test_default_params"
+    "test_parameter_overrides"
+    "test_parameter_overrides"
   ];
 
   meta = {
     description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
-    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

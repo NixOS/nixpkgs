@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   xorgproto,
-  libX11,
+  libx11,
   writeScript,
   testers,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
   ];
 
   passthru = {

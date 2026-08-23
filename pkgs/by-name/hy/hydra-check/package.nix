@@ -12,18 +12,18 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-check";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "hydra-check";
-    tag = "v${version}";
-    hash = "sha256-TdMZC/EE52UiJ+gYQZHV4/ReRzMOdCGH+n7pg1vpCCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5nZnY/EA5SF3KNZbsvNGn77cOgEZsBpxBJwiREyF/fE=";
   };
 
-  cargoHash = "sha256-G9M+1OWp2jlDeSDFagH/YOCdxGQbcru1KFyKEUcMe7g=";
+  cargoHash = "sha256-DN2LSYCR9QL1090C6dt21EOq9aUtZkAvxh4B6KYXPAU=";
 
   nativeBuildInputs = [
     pkg-config

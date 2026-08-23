@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "altdns";
   version = "1.0.2-unstable-2021-09-09";
   pyproject = true;
@@ -18,11 +18,11 @@ python3.pkgs.buildPythonApplication {
 
   pythonRemoveDeps = [ "argparse" ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     dnspython
     termcolor
     tldextract

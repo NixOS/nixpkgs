@@ -8,15 +8,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcouchbase";
-  version = "3.3.18";
+  version = "3.3.19";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
-    rev = version;
-    sha256 = "sha256-+6RrApyml/FPv8pRjmwY1yuZIX1YXNKqdeNjP1y4cbU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-DE1hSHgxaRH1Kh0dQFlxBkGGp0jmwZdaExxyZnv+abo=";
   };
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

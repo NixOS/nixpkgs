@@ -4,10 +4,9 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
-  setuptools,
+  setuptools_80,
   urllib3,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   version = "1.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "krismolendyke";
     repo = "tank-utility";
@@ -25,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     urllib3
   ];

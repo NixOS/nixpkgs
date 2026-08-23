@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-secdump";
-  version = "0.5.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "jfjallid";
     repo = "go-secdump";
-    tag = version;
-    hash = "sha256-v/IqOjohlGs6MQX2BevboysqW6Lzz0NupDH6sb1TG7Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-ogBBG6wEiYNY6ngOwVHYYiIUHNXKNISNrL1qvkBAjRs=";
   };
 
-  vendorHash = "sha256-H9oFvnyigjwEs24XGGH5mtDMMCo846y0nFIlsrbvLMk=";
+  vendorHash = "sha256-bzvWdB/poT7mRCNIZU8ioRickwKExZl0ZtDrKi1T12o=";
 
   ldflags = [
     "-s"
@@ -25,10 +25,10 @@ buildGoModule rec {
   meta = {
     description = "Tool to remotely dump secrets from the Windows registry";
     homepage = "https://github.com/jfjallid/go-secdump";
-    changelog = "https://github.com/jfjallid/go-secdump/releases/tag/${version}";
+    changelog = "https://github.com/jfjallid/go-secdump/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "go-secdump";
     platforms = lib.platforms.linux;
   };
-}
+})

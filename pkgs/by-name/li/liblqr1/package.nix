@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblqr-1";
-  version = "0.4.2";
+  version = "0.4.3";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "carlobaldassi";
     repo = "liblqr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rgVX+hEGRfWY1FvwDBLy5nLPOyh2JE4+lB0KOmahuYI=";
+    hash = "sha256-RN58r9AUceziWfZBqyAjjPXrdfilR6cxn3FzQxiQEdE=";
   };
 
   # Fix build with gcc15

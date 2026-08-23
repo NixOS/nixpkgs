@@ -4,19 +4,19 @@
   factorio-utils,
   fetchurl,
   libGL,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libxkbcommon,
   makeDesktopItem,
   makeWrapper,
-  releaseType,
+  releaseType ? "alpha",
   stdenv,
   wayland,
 
@@ -139,7 +139,12 @@ let
                 "token@token"
               ];
             })
-            (_: {
+            (prevAttrs: {
+              impureEnvVars = prevAttrs.impureEnvVars or [ ] ++ [
+                "NIX_FACTORIO_USERNAME"
+                "NIX_FACTORIO_TOKEN"
+              ];
+
               # This preHook hides the credentials from /proc
               preHook =
                 if username != "" && token != "" then
@@ -149,8 +154,12 @@ let
                   ''
                 else
                   ''
-                    # Deliberately failing since username/token was not provided, so we can't fetch.
-                    exit 1
+                    if [[ -z "''${NIX_FACTORIO_USERNAME}" || -z "''${NIX_FACTORIO_TOKEN}" ]]; then
+                      # Deliberately failing since username/token was not provided, so we can't fetch.
+                      exit 1
+                    fi
+                    echo -n "$NIX_FACTORIO_USERNAME" >username
+                    echo -n "$NIX_FACTORIO_TOKEN"    >token
                   '';
               failureHook = ''
                 cat <<EOF
@@ -224,7 +233,6 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [
         Baughn
-        elitak
         priegger
         lukegb
       ];
@@ -243,14 +251,14 @@ let
       libPath = lib.makeLibraryPath [
         alsa-lib
         libGL
-        libICE
-        libSM
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXinerama
-        libXrandr
+        libice
+        libsm
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxinerama
+        libxrandr
         libpulseaudio
         libxkbcommon
         wayland

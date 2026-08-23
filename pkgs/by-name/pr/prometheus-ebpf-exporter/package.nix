@@ -38,7 +38,7 @@ buildGoModule.override { stdenv = clangStdenv; } (finalAttrs: {
     libz
   ];
 
-  CGO_LDFLAGS = "-l bpf";
+  env.CGO_LDFLAGS = "-l bpf";
 
   hardeningDisable = [ "zerocallusedregs" ];
 

@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cm256cc";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "cm256cc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sAbc8yieGolV8lowiwFBVsd1HNYl1oxJwIw1kc3iI3U=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl3;
   };
-}
+})

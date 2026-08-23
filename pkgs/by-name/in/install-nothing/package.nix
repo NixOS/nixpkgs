@@ -8,20 +8,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "install-nothing";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "buyukakyuz";
     repo = "install-nothing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Raz6TJ7MqOi4bQE6nN7JJVCVlGZ9v7OZRfaeL+UMx2A=";
+    hash = "sha256-ULTB17wNa8IaQbeK0EeQOsSwtMn2PdLOmfrd0fiVeCM=";
   };
 
-  cargoHash = "sha256-jNjAzMrRUT3MdD7OMfCB0+dKRGPQsT9kBIweTOhJCOc=";
+  cargoHash = "sha256-iERbRcbFG2RbsTxyvwwgl92trbNo6DjJu9UK75Co15c=";
 
-  doInstallCheck = true;
+  doInstallCheck = false; # https://github.com/buyukakyuz/install-nothing/issues/20
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

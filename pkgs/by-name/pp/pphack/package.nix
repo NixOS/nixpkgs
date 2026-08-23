@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pphack";
-  version = "0.1.0";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "pphack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SWMY+t8NzbUqAeLsqia5KAXXOjoMRMZVVa8YdTLcG5A=";
+    hash = "sha256-bXasbIiJGBNsrEWNy/q33UnrjwC1mUV1BO2S8qkrWHo=";
   };
 
-  vendorHash = "sha256-smJp3GDo1KOrEjEJnxtyrlHmb/L70QqhDWjCZ4U1qJs=";
+  vendorHash = "sha256-RZJXl2GC9vJq5Ui9hlyKEkiq9HeMQeJIvsH6tOUp4Sg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-flamegraph";
-  version = "0.6.10";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "flamegraph-rs";
     repo = "flamegraph";
-    rev = "v${version}";
-    sha256 = "sha256-WBJS+0RzFg8dgmxYuHOguJROPONdlkIfllpeCKxaSHY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-tjphY9qZaKkqrbwm8lszyyIBpaKZx644LudBq81qngU=";
   };
 
-  cargoHash = "sha256-nDZHkF3RvKdrXhfD0NGRL/xjCxIP2zRe4w1LVxHkdi8=";
+  cargoHash = "sha256-mSItpfrGRFL9L3Rlqsvx+FdYyJL8rcWWS8Abyixto7c=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

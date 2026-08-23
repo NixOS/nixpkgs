@@ -6,7 +6,7 @@
   cmake,
   help2man,
   gzip,
-  libXt,
+  libxt,
   openusd,
   onetbb,
   vtk,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.3.0";
+  version = "3.5.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-nZXz5FiGAcDqTi5hlSH7rq2QazhqYg1IoNDog35dygA=";
+    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
     fetchLFS = true;
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     python3Packages.pybind11
   ]
   ++ lib.optionals withUsd [
-    libXt
+    libxt
     openusd
     onetbb
   ];
@@ -84,9 +84,17 @@ stdenv.mkDerivation rec {
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
 
+  postInstall = ''
+    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
+      substituteInPlace $thumbnailer \
+        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
+    done
+  '';
+
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://f3d-app.github.io/f3d";
+    homepage = "https://f3d.app";
     changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

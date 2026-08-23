@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hasura";
-  version = "2.48.6";
+  version = "2.50.0";
 
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphql-engine";
-    rev = "v${version}";
-    sha256 = "sha256-99HxAjqZQ4GtUR4F7EbVNKT7BI9AHm0uj54XgZZC2Lc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-LnkX3JrpEM/MmLmENqrOJ2tAZ1EVxFfFO3GNqBNJF+w=";
   };
   modRoot = "./cli";
 
   subPackages = [ "cmd/hasura" ];
 
-  vendorHash = "sha256-riPCH7H1arKP2se2H52R69fL+DyKXK1i/ne5apoS/5w=";
+  vendorHash = "sha256-vFYcomypn+3JFK7OnSqaH8CR+R4SjMpzQiFo7xLxkUQ=";
 
   doCheck = false;
 
   ldflags = [
-    "-X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}"
+    "-X github.com/hasura/graphql-engine/cli/version.BuildVersion=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -43,4 +43,4 @@ buildGoModule rec {
     description = "Hasura GraphQL Engine CLI";
     mainProgram = "hasura";
   };
-}
+})

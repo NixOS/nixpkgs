@@ -19,14 +19,14 @@
 }:
 buildPythonPackage rec {
   pname = "llm-perplexity";
-  version = "2025.12.0";
+  version = "2026.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hex";
     repo = "llm-perplexity";
     tag = version;
-    hash = "sha256-jPSYwhEGph/1C9n/fv1nZurY4Inu/XNHYSE1r86N1Kw=";
+    hash = "sha256-fZrIKIAGXaMwBq2njtqSUcgRHIbr0ajjx6mECoguFm0=";
   };
 
   build-system = [ setuptools ];

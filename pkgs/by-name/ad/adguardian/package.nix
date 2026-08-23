@@ -4,18 +4,19 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adguardian";
-  version = "1.6.0";
+  version = "1.7.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Lissy93";
     repo = "AdGuardian-Term";
-    tag = version;
-    hash = "sha256-WxrSmCwLnXXs5g/hN3xWE66P5n0RD/L9MJpf5N2iNtY=";
+    tag = finalAttrs.version;
+    hash = "sha256-GXGABTBX4Cot558ML0quD8GDU3RWj0BoZ8Ib/SbuWmg=";
   };
 
-  cargoHash = "sha256-yPDysaslL/7N60eZ/hqZl5ZXIsof/pvlgHYfW1mIWtI=";
+  cargoHash = "sha256-JJDMrRJVs67EMcGTK75tdU+FhdkiF3RswrZ0fOWrG/U=";
 
   meta = {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
@@ -24,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

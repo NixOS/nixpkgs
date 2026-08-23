@@ -7,14 +7,14 @@
   gawk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "theme-sh";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "lemnos";
     repo = "theme.sh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zDw8WGBzO4/HRCgN7yoUxT49ibTz+QkRa5WpBQbl1nI=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "theme.sh";
   };
-}
+})

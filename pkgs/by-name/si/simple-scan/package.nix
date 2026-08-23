@@ -24,13 +24,13 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-scan";
-  version = "49.1";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-mujUFR7K+VhF65+ZtDbVecg48s8Cdj+6O8A3gCUb4zQ=";
+    url = "mirror://gnome/sources/simple-scan/${lib.versions.major finalAttrs.version}/simple-scan-${finalAttrs.version}.tar.xz";
+    hash = "sha256-zDK1Ya4icYLTGpRGZjLjEXI3VuOskFOMPH4qLJqqSgk=";
   };
 
   nativeBuildInputs = [
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
-    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

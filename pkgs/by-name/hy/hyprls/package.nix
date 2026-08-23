@@ -4,18 +4,18 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyprls";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprls";
-    rev = "v${version}";
-    hash = "sha256-oKI5+SolS9fsgPcP8tTK8YVsnkC5YQSKO3dwMDlMwYo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w9tUGArzHFy7JurhE9IGfVBTRQi8CCAPfjtT1Q7IX4U=";
   };
 
-  vendorHash = "sha256-1oarMEG7kHxCPAg4oPTSJRjnrF0QmXShVQpTUnN9fFQ=";
+  vendorHash = "sha256-thlILlWil618GJzPWkp4u7jmmuexmFtKqnAiZnokP0c=";
 
   checkFlags = [
     # Not yet implemented
@@ -27,9 +27,10 @@ buildGoModule rec {
   meta = {
     description = "LSP server for Hyprland's configuration language";
     homepage = "https://gwen.works/hyprls";
-    changelog = "https://github.com/hyprland-community/hyprls/releases/tag/v${version}";
+    changelog = "https://github.com/hyprland-community/hyprls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprls";
   };
-}
+})

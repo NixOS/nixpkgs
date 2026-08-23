@@ -16,15 +16,15 @@ let
   inherit (stdenv.hostPlatform) isLinux;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdmr";
-  version = "0.13.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
-    rev = "v${version}";
-    hash = "sha256-aSnp4bC9tl9qIQ65RLMiPAEJg49S/U39TnSmLJ9Tcpc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RFGjL31o+aiy7O7UgZWjGSMBqG97b5BtwVr6HQD3Ioo=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     libusb1
     libxslt
     kdePackages.qtlocation
+    kdePackages.qtmultimedia
     kdePackages.qtserialport
     kdePackages.qttools
     kdePackages.qtbase
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
-    cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
+    cp ${finalAttrs.src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
 
   doInstallCheck = true;
@@ -83,4 +84,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

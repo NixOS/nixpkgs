@@ -3,9 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   flit-core,
-  async-timeout,
   dbus,
   pytest,
   pytest-trio,
@@ -35,9 +33,6 @@ buildPythonPackage rec {
     pytest-asyncio
     testpath
     trio
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   checkPhase = ''

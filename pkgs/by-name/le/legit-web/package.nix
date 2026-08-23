@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "legit";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
     mkdir -p $out/lib/legit/templates
     mkdir -p $out/lib/legit/static
 
-    cp -r $src/templates/* $out/lib/legit/templates
-    cp -r $src/static/* $out/lib/legit/static
+    cp -r templates/* $out/lib/legit/templates
+    cp -r static/* $out/lib/legit/static
   '';
 
   passthru.tests = { inherit (nixosTests) legit; };
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.ratsclub ];
     mainProgram = "legit";
   };
-}
+})

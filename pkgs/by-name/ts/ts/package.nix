@@ -5,9 +5,9 @@
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ts";
-  version = "1.0.3";
+  version = "1.0.4";
 
   installPhase = ''make install "PREFIX=$out"'';
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "https://viric.name/~viric/soft/ts/ts-${version}.tar.gz";
-    sha256 = "sha256-+oMzEVQ9xTW2DLerg8ZKte4xEo26qqE93jQZhOVCtCg=";
+    url = "https://viric.name/~viric/soft/ts/ts-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-sas9tS3KNq82mReLjQ6TajAQf41chql0FjxYCCOwF5A=";
   };
 
   meta = {
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "ts";
   };
-}
+})

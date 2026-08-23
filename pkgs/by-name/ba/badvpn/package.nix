@@ -11,14 +11,14 @@
   debug ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "badvpn";
   version = "1.999.130";
 
   src = fetchFromGitHub {
     owner = "ambrop72";
     repo = "badvpn";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
 
@@ -45,8 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Set of network-related (mostly VPN-related) tools";
+    homepage = "https://github.com/ambrop72/badvpn";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -27,10 +27,14 @@
   libogg,
   libopus,
   libvorbis,
-  libX11,
+  libx11,
   opusfile,
   sdl_gamecontrollerdb,
   makeDesktopItem,
+  darwin,
+  glew,
+  libicns,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -61,6 +65,13 @@ let
     repo = "libgfxd";
     rev = "008f73dca8ebc9151b205959b17773a19c5bd0da";
     hash = "sha256-AmHAa3/cQdh7KAMFOtz5TQpcM6FqO9SppmDpKPTjTt8=";
+  };
+
+  monocypher = fetchFromGitHub {
+    owner = "LoupVaillant";
+    repo = "Monocypher";
+    rev = "0d85f98c9d9b0227e42cf795cb527dff372b40a4";
+    hash = "sha256-RrM8Ep/CM7U5Q4+4FAHfBknb6b0upohoiqy4f7eMye0=";
   };
 
   prism = fetchFromGitHub {
@@ -103,18 +114,24 @@ let
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
   };
 
+  metalcpp = fetchFromGitHub {
+    owner = "briaguya-ai";
+    repo = "single-header-metal-cpp";
+    tag = "macOS13_iOS16";
+    hash = "sha256-CSYIpmq478bla2xoPL/cGYKIWAeiORxyFFZr0+ixd7I";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "3.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-EC8o5FIP/eXa+0LZt0C8EWHzKVAniv9SIXkZdbibcxg=";
+    hash = "sha256-lx5+i/S+deWB6iYTTrUOffQfB6qnUvDZrU80NWyqb2Y=";
     fetchSubmodules = true;
-    fetchTags = true;
     deepClone = true;
     postFetch = ''
       cd $out
@@ -126,37 +143,50 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    ./darwin-fixes.patch
     # remove fetching stb as we will patch our own
     ./dont-fetch-stb.patch
   ];
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     imagemagick
-    lsb-release
     makeWrapper
     ninja
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+    lsb-release
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    fixDarwinDylibNames
+    libicns
   ];
 
   buildInputs = [
     bzip2
-    libGL
     libogg
     (lib.getDev libopus)
     libpng
-    libpulseaudio
     libvorbis
-    libX11
     libzip
     nlohmann_json
     (lib.getDev opusfile)
     SDL2
     spdlog
     tinyxml-2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libpulseaudio
+    libx11
     zenity
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    glew
   ];
 
   cmakeFlags = [
@@ -165,14 +195,22 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DR_LIBS" "${dr_libs}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONOCYPHER" "${monocypher}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
     (lib.cmakeFeature "OPUS_INCLUDE_DIR" "${lib.getDev libopus}/include/opus")
     (lib.cmakeFeature "OPUSFILE_INCLUDE_DIR" "${lib.getDev opusfile}/include/opus")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPDLOG" "${spdlog}")
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int -Wno-elaborated-enum-base";
+
   strictDeps = true;
+  __structuredAttrs = true;
 
   dontAddPrefix = true;
 
@@ -208,24 +246,51 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../OTRExporter/2ship.o2r mm/
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
-    install -Dm644 ../mm/linux/2s2hIcon.png $out/share/pixmaps/2s2h.png
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p $out/bin
+      ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
+      install -Dm644 ../mm/linux/2s2hIcon.png $out/share/icons/hicolor/512x512/apps/2s2h.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Recreate the macOS bundle (without using cpack)
+      # We mirror the structure of the bundle distributed by the project
 
-    install -Dm644 -t $out/share/licenses/2ship2harkinian ../LICENSE
-    install -Dm644 -t $out/share/licenses/2ship2harkinian/OTRExporter ../OTRExporter/LICENSE
-    install -Dm644 -t $out/share/licenses/2ship2harkinian/ZAPDTR ../ZAPDTR/LICENSE
-    install -Dm644 -t $out/share/licenses/2ship2harkinian/libgfxd ${libgfxd}/LICENSE
-    install -Dm644 -t $out/share/licenses/2ship2harkinian/libultraship ../libultraship/LICENSE
-    install -Dm644 -t $out/share/licenses/2ship2harkinian/thread_pool ${thread_pool}/LICENSE.txt
-  '';
+      mkdir -p $out/Applications/2s2h.app/Contents
+      cp $src/mm/macosx/Info.plist.in $out/Applications/2s2h.app/Contents/Info.plist
+      substituteInPlace $out/Applications/2s2h.app/Contents/Info.plist \
+        --replace-fail "@CMAKE_PROJECT_VERSION@" "${finalAttrs.version}"
 
-  postFixup = ''
+      mv $out/MacOS $out/Applications/2s2h.app/Contents/MacOS
+
+      # "2s2h" contains all resources that are in "Resources" in the official bundle.
+      # We move them to the right place and symlink them back to $out/2s2h,
+      # as that's where the game expects them.
+      mv $out/Resources $out/Applications/2s2h.app/Contents/Resources
+      mv $out/2s2h/* $out/Applications/2s2h.app/Contents/Resources
+      rm -rf $out/2s2h
+      ln -s $out/Applications/2s2h.app/Contents/Resources $out/2s2h
+
+      # Copy icons
+      cp -r ../build/macosx/2s2h.icns $out/Applications/2s2h.app/Contents/Resources/2s2h.icns
+
+      # Codesign (ad-hoc)
+      codesign -f -s - $out/Applications/2s2h.app/Contents/MacOS/2s2h
+    ''
+    + ''
+      install -Dm644 -t $out/share/licenses/2ship2harkinian ../LICENSE
+      install -Dm644 -t $out/share/licenses/2ship2harkinian/OTRExporter ../OTRExporter/LICENSE
+      install -Dm644 -t $out/share/licenses/2ship2harkinian/ZAPDTR ../ZAPDTR/LICENSE
+      install -Dm644 -t $out/share/licenses/2ship2harkinian/libgfxd ${libgfxd}/LICENSE
+      install -Dm644 -t $out/share/licenses/2ship2harkinian/libultraship ../libultraship/LICENSE
+      install -Dm644 -t $out/share/licenses/2ship2harkinian/thread_pool ${thread_pool}/LICENSE.txt
+    '';
+
+  fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/2s2h/2s2h.elf --prefix PATH ":" ${lib.makeBinPath [ zenity ]}
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "2s2h";
       icon = "2s2h";
@@ -241,8 +306,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/HarbourMasters/2ship2harkinian";
     description = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ qubitnano ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      qubitnano
+      matteopacini
+    ];
     license = with lib.licenses; [
       # OTRExporter, ZAPDTR, libultraship, libgfxd, thread_pool
       mit

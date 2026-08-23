@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "140201";
 
   src = fetchurl {
-    url = "http://pogostick.net/~pnh/ntpasswd/chntpw-source-${version}.zip";
+    url = "https://pogostick.net/~pnh/ntpasswd/chntpw-source-${version}.zip";
     sha256 = "1k1cxsj0221dpsqi5yibq2hr7n8xywnicl8yyaicn91y8h2hkqln";
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://pogostick.net/~pnh/ntpasswd/";
     description = "Utility to reset the password of any user that has a valid local account on a Windows system";
-    maintainers = with lib.maintainers; [ deepfire ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };

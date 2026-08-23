@@ -2,14 +2,19 @@
   lib,
   stdenv,
   makeWrapper,
+  runCommandLocal,
+  buildFactorApplication,
+  buildFactorVocab,
   buildEnv,
+  copyDesktopItems,
+  makeDesktopItem,
   factor-unwrapped,
   cairo,
   freealut,
   gdk-pixbuf,
   glib,
-  gnome2,
   gtk2-x11,
+  gtkglext,
   libGL,
   libGLU,
   librsvg,
@@ -35,7 +40,13 @@
   doInstallCheck ? true,
 }:
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    versionOlder
+    versionAtLeast
+    ;
   # missing from lib/strings
   escapeNixString = s: lib.escape [ "$" ] (builtins.toJSON s);
   toFactorArgs = x: lib.concatStringsSep " " (map escapeNixString x);
@@ -59,8 +70,8 @@ let
       freealut
       gdk-pixbuf
       glib
-      gnome2.gtkglext
       gtk2-x11
+      gtkglext
       libGL
       libGLU
       pango
@@ -82,34 +93,62 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "${factor-unwrapped.pname}-env";
   inherit (factor-unwrapped) version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
   buildInputs = optional guiSupport gdk-pixbuf;
 
   dontUnpack = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Factor";
+      desktopName = "Factor";
+      comment = "A practical stack language";
+      exec = "factor";
+      icon = "factor";
+      categories = [
+        "Development"
+        "IDE"
+      ];
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
   ''
-  + optionalString guiSupport ''
-    # Set Gdk pixbuf loaders file to the one from the build dependencies here
-    unset GDK_PIXBUF_MODULE_FILE
-    # Defined in gdk-pixbuf setup hook
-    findGdkPixbufLoaders "${librsvg}"
-    makeWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
-  ''
+  + optionalString guiSupport (
+    ''
+      # Set Gdk pixbuf loaders file to the one from the build dependencies here
+      unset GDK_PIXBUF_MODULE_FILE
+      # Defined in gdk-pixbuf setup hook
+      findGdkPixbufLoaders "${librsvg}"
+      makeWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
+    ''
+    + optionalString (versionAtLeast finalAttrs.version "0.101") ''
+      mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
+      cp ${factor-unwrapped}/lib/factor/misc/icons/icon.svg $out/share/icons/hicolor/scalable/apps/factor.svg
+      cp ${factor-unwrapped}/lib/factor/misc/icons/icon.ico $out/share/icons/hicolor/scalable/apps/factor.ico
+      for i in 16 32 48 64 128 256 512; do
+          mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
+          cp ${factor-unwrapped}/lib/factor/misc/icons/icon_''${i}x''${i}.png $out/share/icons/hicolor/''${i}x''${i}/apps/factor.png
+      done
+    ''
+  )
   + ''
     makeWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}
       --prefix PATH : ${lib.makeBinPath bins})
-    mkdir -p "$out/bin" "$out/share"
+    mkdir -p "$out/bin"
     cp -r "${factor-unwrapped}/lib" "$out/"
-    cp -r "${factor-unwrapped}/share/emacs" "$out/share/"
-    chmod -R u+w "$out/lib" "$out/share"
+    chmod -R u+w "$out/lib"
+    rm -rf "$out/lib/factor/misc"
     (
         cd ${vocabTree}
         for f in "lib/factor/"* ; do
             rm -r "$out/$f"
-            ln -s "${vocabTree}/$f" "$out/$f"
+            cp -rL "${vocabTree}/$f" "$out/$f"
         done
     )
 
@@ -136,9 +175,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Emacs fuel expects the image being named `factor.image` in the factor base dir
     ln -rs $out/lib/factor/.factor-wrapped.image $out/lib/factor/factor.image
 
+  ''
+  + optionalString (versionOlder finalAttrs.version "0.101") ''
+    mkdir -p "$out/share/emacs/site-lisp"
+    cp -r "${factor-unwrapped}/lib/factor/misc/fuel/"*.el "$out/share/emacs/site-lisp"
+    chmod -R u+wr "$out/share/emacs"
     # Update default paths in fuel-listener.el to new output
     sed -E -i -e 's#(\(defcustom fuel-factor-root-dir ").*(")#'"\1$out/lib/factor\2#" \
         "$out/share/emacs/site-lisp/fuel-listener.el"
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -175,7 +221,18 @@ stdenv.mkDerivation (finalAttrs: {
       runtimeLibs
       binPackages
       extraVocabs
+      vocabTree
       ;
+    tests = {
+      hello-world = import ./test/hello-world {
+        inherit
+          lib
+          runCommandLocal
+          buildFactorApplication
+          buildFactorVocab
+          ;
+      };
+    };
   };
 
   meta = factor-unwrapped.meta // {

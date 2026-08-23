@@ -13,14 +13,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmtp";
   version = "1.1.22";
 
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
-    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     sha256 = "sha256-hIH6W8qQ6DB4ST7SlFz6CCnLsEGOWgmUb9HoHMNA3wY=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

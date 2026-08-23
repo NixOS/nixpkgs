@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imath";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "imath";
-    rev = "v${version}";
-    hash = "sha256-O8IpP2MQ7egDbHIiL5TNBygmQCiS6Q/0VSe0LypsM/g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uLGH2kMo5S6iT2gS1091qKkCAxQ/iuQ8xx9507k6SzY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ paperdigits ];
     platforms = lib.platforms.all;
   };
-}
+})

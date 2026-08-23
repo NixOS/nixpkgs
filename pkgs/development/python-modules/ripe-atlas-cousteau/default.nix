@@ -5,7 +5,6 @@
   jsonschema,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   typing-extensions,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
@@ -49,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-cousteau";
     changelog = "https://github.com/RIPE-NCC/ripe-atlas-cousteau/blob/v${version}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

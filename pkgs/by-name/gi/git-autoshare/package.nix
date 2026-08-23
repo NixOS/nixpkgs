@@ -4,7 +4,7 @@
   lib,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-autoshare";
   version = "1.0.0b6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "git-autoshare";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-F8wcAayIR6MH8e0cQSwFJn/AVSLG3tVil80APjcFG/0=";
   };
 
@@ -31,10 +31,10 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "git_autoshare" ];
 
   meta = {
-    changelog = "https://github.com/acsone/git-autoshare/releases/tag/${version}";
+    changelog = "https://github.com/acsone/git-autoshare/releases/tag/${finalAttrs.version}";
     description = "Git clone wrapper that automatically uses --reference to save disk space and download time";
     homepage = "https://github.com/acsone/git-autoshare";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

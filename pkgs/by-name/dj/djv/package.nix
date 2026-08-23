@@ -19,7 +19,7 @@
   nativefiledialog-extended,
   nlohmann_json,
   opencolorio,
-  openexr,
+  openexr_2,
   openssl,
   opentimelineio,
   plutovg,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.1.1";
 
   src = fetchFromGitHub {
-    owner = "darbyjohnston";
+    owner = "grizzlypeak3d";
     repo = "djv";
     tag = finalAttrs.version;
     hash = "sha256-/SakJ23mi/dz8eUt2UtcgfLtFZiCHy1ME+jWdNS8+Fw=";
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     nativefiledialog-extended
     nlohmann_json
     opencolorio
-    openexr
+    openexr_2
     openssl
     opentimelineio
     plutovg

@@ -33,29 +33,22 @@
   zenity,
   libnotify,
   wrapGAppsHook3,
-  fetchpatch,
   doxygen,
   nix-update-script,
+  openexr,
+  cfitsio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.5";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
-    rev = "v${version}";
-    hash = "sha256-k2FXj2ZKZzB5XpCcWzEv7Q1ozATfU3221XKcOFdWOGU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6g1aBeQUy9+WMlikAqvlb0NcCT7h0qgBRSsCOdRiZ/E=";
   };
-
-  patches = [
-    # Remove changelog from menu
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/geeqie/-/raw/debian/master/debian/patches/Remove-changelog-from-menu-item.patch";
-      hash = "sha256-0awKKTLg/gUZhmwluVbHCOqssog9SneFOaUtG89q0go=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -91,6 +84,8 @@ stdenv.mkDerivation rec {
     gspell
     libtiff
     libwebp
+    openexr
+    cfitsio
   ];
 
   postInstall = ''
@@ -179,6 +174,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.geeqie.org/";
+    changelog = "https://github.com/BestImageViewer/geeqie/blob/${finalAttrs.src.tag}/NEWS";
 
     maintainers = with lib.maintainers; [
       pSub
@@ -186,4 +182,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
-}
+})

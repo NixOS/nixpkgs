@@ -3,23 +3,20 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "heatzypy";
-  version = "2.5.7";
+  version = "2.5.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Cyr-ius";
     repo = "heatzypy";
-    tag = version;
-    hash = "sha256-MPieUg5p8j1OTWDwV/IY3dKz8bKcPrRy9tK2iKleEoM=";
+    tag = finalAttrs.version;
+    hash = "sha256-6vdzxQGNQSMCFYA/nQ2T72RUWmBRvb9v0YcxVbjtG94=";
   };
 
   build-system = [
@@ -37,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Heatzy devices";
     homepage = "https://github.com/Cyr-ius/heatzypy";
-    changelog = "https://github.com/cyr-ius/heatzypy/releases/tag/${version}";
+    changelog = "https://github.com/cyr-ius/heatzypy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

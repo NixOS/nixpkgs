@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   jalali-core,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jdatetime";
-  version = "5.2.0";
+  version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yB1YmHF7grYJo84qc/i40yMLDHV+XA3p1rGs/cIk9VE=";
+    hash = "sha256-5YEtfr9MZgmlVCMMwH3vyJ2cETQkNQ/i1bftfcUNMJc=";
   };
 
   build-system = [ setuptools ];

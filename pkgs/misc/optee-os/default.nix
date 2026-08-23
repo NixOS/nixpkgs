@@ -2,18 +2,19 @@
   dtc,
   fetchFromGitHub,
   lib,
+  nukeReferences,
   pkgsBuildBuild,
   stdenv,
 }:
 
 let
-  defaultVersion = "4.6.0";
+  defaultVersion = "4.7.0";
 
   defaultSrc = fetchFromGitHub {
     owner = "OP-TEE";
     repo = "optee_os";
     rev = defaultVersion;
-    hash = "sha256-4z706DNfZE+CAPOa362CNSFhAN1KaNyKcI9C7+MRccs=";
+    hash = "sha256-kvp3GDBZtKlephyW+oxHmXnqvCe1jL+PN1i/MCw6SX0=";
   };
 
   buildOptee = lib.makeOverridable (
@@ -54,6 +55,7 @@ let
         ];
 
         strictDeps = true;
+        __structuredAttrs = true;
 
         enableParallelBuilding = true;
 
@@ -61,6 +63,7 @@ let
 
         nativeBuildInputs = [
           dtc
+          nukeReferences
           (pkgsBuildBuild.python3.withPackages (
             p: with p; [
               pyelftools
@@ -89,21 +92,33 @@ let
 
           mkdir -p $out
           cp out/core/{tee.elf,tee-pageable_v2.bin,tee.bin,tee-header_v2.bin,tee-pager_v2.bin,tee-raw.bin} $out
+          nuke-refs $out/*
+
           cp -r out/export-${taTarget} $devkit
 
           runHook postInstall
         '';
 
-        meta =
+        # The conventional build system for OPTEE trusted applications accepts
+        # a TA_DEV_KIT_DIR parameter, which expects all artifacts (headers and
+        # libraries) to exist in that directory. We populate a "devkit" Nix
+        # output for this purpose, but we must also tell the multiple-output
+        # setup hook to not move our artifacts after we populate this
+        # directory.
+        outputDev = "devkit";
+        outputLib = "devkit";
 
-          {
-            description = "Trusted Execution Environment for ARM";
-            homepage = "https://github.com/OP-TEE/optee_os";
-            changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
-            license = lib.licenses.bsd2;
-            maintainers = [ lib.maintainers.jmbaur ];
-          }
-          // extraMeta;
+        meta = {
+          description = "Trusted Execution Environment for ARM";
+          homepage = "https://github.com/OP-TEE/optee_os";
+          changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
+          license = lib.licenses.bsd2;
+          maintainers = [
+            lib.maintainers.jmbaur
+            lib.maintainers.tomfitzhenry
+          ];
+        }
+        // extraMeta;
       }
       // removeAttrs args [ "extraMeta" ]
     )
@@ -121,6 +136,24 @@ in
   opteeQemuAarch64 = buildOptee {
     platform = "vexpress";
     extraMakeFlags = [ "PLATFORM_FLAVOR=qemu_armv8a" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeAllwinnerA64 = buildOptee {
+    platform = "sunxi";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=sun50i_a64" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeRockchipRK3399 = buildOptee {
+    platform = "rockchip";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=rk3399" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeRockchipRK3588 = buildOptee {
+    platform = "rockchip";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=rk3588" ];
     extraMeta.platforms = [ "aarch64-linux" ];
   };
 }

@@ -9,14 +9,14 @@
   libgit2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-dephell";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mimoo";
     repo = "cargo-dephell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 
@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
+    broken = stdenv.hostPlatform.isLinux;
   };
-}
+})

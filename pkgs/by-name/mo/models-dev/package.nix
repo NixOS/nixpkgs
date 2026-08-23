@@ -2,84 +2,82 @@
   lib,
   stdenvNoCC,
   bun,
-  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 let
+  node_modules =
+    finalAttrs:
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
+
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
+
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
+
+      dontConfigure = true;
+
+      buildPhase = ''
+        runHook preBuild
+
+        bun install \
+          --cpu="*" \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+        runHook postInstall
+      '';
+
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
+
+      outputHash = "sha256-aL2kNCYF6Y4QnEvlpQ9U5Qe+K8a1J2X7BvJqE+BnRcY=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2026-01-04";
+  version = "sdk-v0.0.5-unstable-2026-08-13";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "65b43b44c1aefb37483a03f1859f10f6718b7b31";
-    hash = "sha256-yh1OeKZ1JBR6Z1+ebCvdssjy2bBGgo1KNQFmVkycM7E=";
+    rev = "7ac862dc68caf19a58214dc9b0e6463ed641aeb0";
+    hash = "sha256-bPsBe/qIBRsKijdxqpYMSMG4sjXCkCOCe0IzIvSDo+g=";
   };
-
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-       bun install \
-         --filter=./packages/web \
-         --force \
-         --frozen-lockfile \
-         --ignore-scripts \
-         --no-progress \
-         --production
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R ${finalAttrs.passthru.node_modules}/. .
 
     runHook postConfigure
   '';
@@ -89,6 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -102,17 +101,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
+    node_modules = node_modules finalAttrs;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
   };
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/anomalyco/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

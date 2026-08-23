@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picard-tools";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchurl {
-    url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
-    sha256 = "sha256-52EowoOIn8WDyd6jOjt0SJdMBn0QLJ41vhUmQtTV+QE=";
+    url = "https://github.com/broadinstitute/picard/releases/download/${finalAttrs.version}/picard.jar";
+    sha256 = "sha256-t9l4YcOlS6WkIfWjF/ODgvlVgDhi0w70rKK83FSUNjE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "picard";
     platforms = lib.platforms.all;
   };
-}
+})

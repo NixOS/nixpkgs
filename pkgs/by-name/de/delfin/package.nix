@@ -4,7 +4,7 @@
   appstream,
   cargo,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gitUpdater,
   gtk4,
   libadwaita,
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   pname = "delfin";
   version = "0.4.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";

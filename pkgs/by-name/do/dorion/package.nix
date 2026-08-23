@@ -1,10 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   cmake,
   ninja,
+  makeBinaryWrapper,
   wrapGAppsHook4,
   glib-networking,
   gst_all_1,
@@ -14,82 +15,83 @@
   openssl,
   pkg-config,
   yq-go,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
+  pipewire,
+  apple-sdk_15,
+  darwin,
+  shelter,
+  nix-update-script,
 }:
 
 let
   webkitgtk_4_1' = webkitgtk_4_1.override {
     enableExperimental = true;
   };
-
-  shelter = fetchurl {
-    url = "https://raw.githubusercontent.com/uwu/shelter-builds/1b35b8802a85809742af99f454bb941f56f759a3/shelter.js";
-    hash = "sha256-g4xe4Wj8OSaA/btlv2O8aawi+Bx8qttL95mnINOrTgg=";
-    meta = {
-      homepage = "https://github.com/uwu/shelter";
-      sourceProvenance = [ lib.sourceTypes.binaryBytecode ]; # actually, minified JS
-      license = lib.licenses.cc0;
-    };
-  };
 in
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.11.0";
+  version = "6.12.2";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-be21MAAVfxouO1relcqLLbB9W8w5iDRe0Yr6snSKyq0=";
+    hash = "sha256-aPYQOec4D0I4N/6nmSwodXsh3pvcHnlD37fUIw5kMjo=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-9zH0Coiyoz6NK2go2XVL5xYaCrXzrOMKaK+3pDXqrGs=";
+  cargoHash = "sha256-3FS8w9K3Wx7KbT7iy+0pAMdmreZnL+ZFMSAnwesnS7Y=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-SO/9GkjNP+7IEeULCyWAp32RYIxyzgmbc8YZiTCTjF8=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-WzJD2Brg7+cx7TXRpEg2c1QSY0uo0Ppulj3ytdl0A4I=";
   };
 
-  # CMake (webkit extension)
+  # CMake (webkit extension, Linux only)
   cmakeDir = ".";
   cmakeBuildDir = "src-tauri/extension_webkit";
   dontUseCmakeConfigure = true;
   dontUseNinjaBuild = true;
   dontUseNinjaCheck = true;
   dontUseNinjaInstall = true;
-  # cmake's supposed to set this automatically
-  # ... but the detection is based on the presence of ninja build hook
   cmakeFlags = [
     "-GNinja"
   ];
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     cargo-tauri.hook
     nodejs
     pkg-config
-    wrapGAppsHook4
     yq-go
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
     desktop-file-utils
     cmake
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1'
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
@@ -97,14 +99,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib-networking
     libsysprof-capture
     libayatana-appindicator
+    pipewire
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
   ];
 
   postPatch = ''
     # remove updater
     rm -rf updater
-
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
     # disable pre-build script and disable auto-updater
     yq -iPo=json '
@@ -112,36 +115,50 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ' src-tauri/tauri.conf.json
 
     # link shelter injection
-    ln -s ${shelter} src-tauri/injection/shelter.js
+    ln -s ${shelter}/shelter.js src-tauri/injection/shelter.js
 
     # link html/frontend data
-    ln -s $(pwd)/src src-tauri/html
+    ln -s "$(pwd)/src" src-tauri/html
+  ''
+  # disable Tauri's built-in codesigning
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    yq -iPo=json '
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   configurePhase = ''
     runHook preConfigure
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     cmakeConfigurePhase
+  ''
+  + ''
     pnpmConfigHook
-
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    ninjaBuildPhase
-    cd ../..
-    tauriBuildHook
-  '';
+  buildPhase =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      ninjaBuildPhase
+      cd ../..
+    ''
+    + ''
+      tauriBuildHook
+    '';
 
   postInstall = ''
-    # Set up the resource directories
-    mkdir -p $out/lib/Dorion
-    ln -s $out/lib/Dorion $out/lib/dorion
-    rm -rf $out/lib/Dorion/injection
-    cp -r src-tauri/injection $out/lib/Dorion
-    cp -r src $out/lib/Dorion
-
-    # Modify the desktop file
+    mkdir -p "$out/lib/Dorion"
+    ln -s "$out/lib/Dorion" "$out/lib/dorion"
+    rm -rf "$out/lib/Dorion/injection"
+    cp -r src-tauri/injection "$out/lib/Dorion"
+    cp -r src "$out/lib/Dorion"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     desktop-file-edit \
       --set-comment "Tiny alternative Discord client" \
       --set-key="Exec" --set-value="Dorion %U" \
@@ -152,7 +169,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set-key="Keywords" --set-value="dorion;discord;vencord;chat;im;vc;ds;dc;dsc;tauri;" \
       --set-key="Terminal" --set-value="false" \
       --set-key="MimeType" --set-value="x-scheme-handler/discord" \
-      $out/share/applications/Dorion.desktop
+      "$out/share/applications/Dorion.desktop"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeBinaryWrapper "$out/Applications/Dorion.app/Contents/MacOS/Dorion" "$out/bin/Dorion"
   '';
 
   # error: failed to run custom build command for `Dorion v6.5.3 (/build/source/src-tauri)`
@@ -160,8 +180,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   env = {
+    # pnpm 10 prompts before purging node_modules in non-interactive builds.
+    CI = "true";
     TAURI_RESOURCE_DIR = "${placeholder "out"}/lib";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://spikehd.github.io/projects/dorion/";
@@ -172,10 +196,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      gpl3Only
-      cc0 # Shelter
-    ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "Dorion";
     maintainers = with lib.maintainers; [
       nyabinary
@@ -183,9 +204,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       griffi-gh
       getchoo
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     sourceProvenance = [
-      lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
     ];
   };

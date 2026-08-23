@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   openldap,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "slapd";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Pypi tarball doesn't include tests/
   src = fetchFromGitHub {

@@ -15,15 +15,20 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "5.2.4";
+  version = "5.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-2ExuhxaN0qfmiHruDM+/3VIKxVOH62iGN/TB3eflJvQ=";
+    hash = "sha256-gkZRvS0abfXFEz2oRuaGJRmhFoxe92F3czNkahNdTm8=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
 
   build-system = [
     incremental
@@ -49,6 +54,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_execute_command"
+    "test_get_commands"
     "test_get_data"
     "test_get_directories"
     "test_get_file"

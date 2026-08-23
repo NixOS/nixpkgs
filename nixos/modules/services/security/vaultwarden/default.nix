@@ -173,6 +173,7 @@ in
     domain = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
+      example = "bitwarden.example.com";
       description = "The domain under which VaultWarden will be reachable.";
     };
 
@@ -323,7 +324,7 @@ in
       services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
         description = "Backup vaultwarden";
         environment = {
-          DATA_FOLDER = dataDir;
+          DATA_FOLDER = configEnv.DATA_FOLDER;
           BACKUP_FOLDER = cfg.backupDir;
         };
         path = [ pkgs.sqlite ];

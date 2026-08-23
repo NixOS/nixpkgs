@@ -16,6 +16,7 @@ let
       ];
       hardware.graphics.enable = true;
       virtualisation.memorySize = 384;
+      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
       environment = {
         systemPackages = [ pkgs.armagetronad ];
         variables.XAUTHORITY = "/home/${user}/.Xauthority";

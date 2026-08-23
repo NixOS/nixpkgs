@@ -48,6 +48,11 @@ stdenv.mkDerivation {
       })
     ];
 
+  postPatch = ''
+    substituteInPlace src/td.c \
+      --replace-fail 'static void show_usage();' 'static void show_usage(int exit_code);'
+  '';
+
   meta = {
     description = "Sample implementation of the ARIB STD-B25 standard";
     homepage = "https://code.videolan.org/videolan/aribb25";

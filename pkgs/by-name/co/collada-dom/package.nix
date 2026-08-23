@@ -4,14 +4,19 @@
   fetchFromGitHub,
   cmake,
   boost,
+  bzip2,
   libxml2,
   minizip,
+  pkg-config,
+  pcre-cpp,
   readline,
+  uriparser,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collada-dom";
-  version = "2.5.2";
+  version = "2.5.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,21 +25,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Gepetto";
     repo = "collada-dom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-53Gf6OLwrflZcrWKPuNPS0k+jlj5yTzCkI/QYQFta48=";
+    hash = "sha256-6V1Ew1YWybgqt0dikNdXwK+4D1odgVN/7NvaikjRqE4=";
   };
 
   postInstall = ''
     ln -s $out/include/*/* $out/include
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
+    bzip2
     libxml2
     minizip
+    pcre-cpp
     readline
+    uriparser
+    zlib
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "OPT_COMPILE_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
 
   meta = {
     description = "API that provides a C++ object representation of a COLLADA XML instance document";

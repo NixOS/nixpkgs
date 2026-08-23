@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "loot";
     repo = "libloot";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-l8AdqJ0lZH4rBcf4WV3ju+sIHYam6USXCXTqyRPzgeo=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.6.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-video-effects/${lib.versions.majorMinor version}/gnome-video-effects-${version}.tar.xz";
     sha256 = "166utGs/WoMvsuDZC0K/jGFgICylKsmt0Xr84ZLjyKg=";
   };
 

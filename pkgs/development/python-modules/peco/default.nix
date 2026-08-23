@@ -5,15 +5,12 @@
   fetchPypi,
   poetry-core,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "peco";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     description = "Library for interacting with the PECO outage map";
     homepage = "https://github.com/IceBotYT/peco-outage-api";
     changelog = "https://github.com/IceBotYT/peco-outage-api/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

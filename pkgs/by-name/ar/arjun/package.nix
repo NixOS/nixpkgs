@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "arjun";
   version = "2.2.7-unstable-2025-02-20";
   pyproject = true;
@@ -32,9 +32,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "HTTP parameter discovery suite";
     homepage = "https://github.com/s0md3v/Arjun";
-    changelog = "https://github.com/s0md3v/Arjun/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/s0md3v/Arjun/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "arjun";
   };
-}
+})

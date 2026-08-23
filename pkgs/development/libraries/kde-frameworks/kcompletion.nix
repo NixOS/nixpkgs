@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kconfig,
   kwidgetsaddons,
@@ -9,7 +10,10 @@
 
 mkDerivation {
   pname = "kcompletion";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     kconfig
     kwidgetsaddons

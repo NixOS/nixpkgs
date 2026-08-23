@@ -2,7 +2,6 @@
   mkKdeDerivation,
   pkg-config,
   libksysguard,
-  networkmanager-qt,
   lm_sensors,
   libnl,
 }:
@@ -15,7 +14,6 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    networkmanager-qt
     lm_sensors
     libnl
   ];

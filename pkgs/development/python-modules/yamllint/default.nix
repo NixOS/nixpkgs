@@ -6,7 +6,6 @@
   setuptools,
   pathspec,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "yamllint";
   version = "1.37.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/adrienverge/yamllint";
     changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mikefaille ];
+    maintainers = [ ];
     mainProgram = "yamllint";
   };
 }

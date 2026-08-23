@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   pname = "glpk";
 
   src = fetchurl {
-    url = "mirror://gnu/glpk/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/glpk/glpk-${version}.tar.gz";
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 

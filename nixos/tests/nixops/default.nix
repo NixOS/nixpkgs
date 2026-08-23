@@ -57,7 +57,7 @@ let
       };
 
       testScript =
-        { nodes }:
+        { nodes, ... }:
         let
           deployerSetup = pkgs.writeScript "deployerSetup" ''
             #!${pkgs.runtimeShell}

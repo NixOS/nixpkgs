@@ -6,20 +6,23 @@
   openssl,
   curl,
   sqlite,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-index";
-  version = "0.1.9";
+  version = "0.1.11";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-index";
-    rev = "v${version}";
-    hash = "sha256-kOVmgST/D3zNOcGVu1ReuPuVrUx41iRK4rs59lqYX74=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yl/acohrgP0C5w4eozNcWcpCGhmMMjFbzgHsKwXKw00=";
   };
 
-  cargoHash = "sha256-0yrTPrxN/4TOALqpQ5GW7LXKisc8msx3DvEpg8uO+IQ=";
+  cargoHash = "sha256-EJbNptLskphe+xfI8oQ0DVUx6y4dO52eeuPiG6FSQbI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -37,14 +40,18 @@ rustPlatform.buildRustPackage rec {
     install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Files database for nixpkgs";
     homepage = "https://github.com/nix-community/nix-index";
-    changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/nix-community/nix-index/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bennofs
       ncfavier
     ];
+    mainProgram = "nix-index";
   };
-}
+})

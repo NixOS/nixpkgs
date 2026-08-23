@@ -5,6 +5,7 @@
   base,
   bytestring,
   cmdargs,
+  containers,
   directory,
   fetchzip,
   file-embed,
@@ -23,15 +24,16 @@
 }:
 mkDerivation {
   pname = "nixfmt";
-  version = "1.1.0";
+  version = "1.4.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/v1.1.0.tar.gz";
-    sha256 = "19sydkdw1579qmvzx0zq06s23bm6m6l9wp1kvsfhxawk8pkz2pc2";
+    url = "https://github.com/nixos/nixfmt/archive/v1.4.0.tar.gz";
+    sha256 = "123mc70ly0glvm8nm4a52fz4xa1619gf1g5k2m45cazb1d6di6z7";
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     base
+    containers
     megaparsec
     mtl
     parser-combinators
@@ -56,6 +58,6 @@ mkDerivation {
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";
   description = "Official formatter for Nix code";
-  license = lib.licenses.mpl20;
+  license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
   mainProgram = "nixfmt";
 }

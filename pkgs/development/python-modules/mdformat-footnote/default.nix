@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-footnote";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat-footnote";
     tag = "v${version}";
-    hash = "sha256-QiekcxKfJGWog8rfSL6VIDHdo7rpw8ftl/dDJpVpdUg=";
+    hash = "sha256-KPxPDKG3aC5zLdrJRL3kzFMpLJ0Yk5UZXW4CamC1/NQ=";
   };
 
   build-system = [ flit-core ];

@@ -28,7 +28,7 @@ in
         '';
         example = lib.literalExpression ''
           {
-            name = "dadada's repos";
+            name = "user's repos";
             log_format = "text";
             ssh = {
               listen_addr = ":23231";
@@ -45,11 +45,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      # The config file has to be inside the state dir
-      "L+ ${stateDir}/config.yaml - - - - ${configFile}"
-    ];
-
     systemd.services.soft-serve = {
       description = "Soft Serve git server";
       documentation = [ docUrl ];
@@ -58,18 +53,19 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment.SOFT_SERVE_DATA_PATH = stateDir;
-
-      restartTriggers = [ configFile ];
+      environment.SOFT_SERVE_CONFIG_LOCATION = configFile;
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         Restart = "always";
         ExecStart = "${lib.getExe cfg.package} serve";
+
+        # Hooks must be executable, but DynamicUser mounts /var/lib/private as noexec
+        ExecPaths = "${stateDir}/repos";
+
         StateDirectory = "soft-serve";
         WorkingDirectory = stateDir;
-        RuntimeDirectory = "soft-serve";
-        RuntimeDirectoryMode = "0750";
         ProcSubset = "pid";
         ProtectProc = "invisible";
         UMask = "0027";
@@ -92,7 +88,6 @@ in
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
-        RemoveIPC = true;
         PrivateMounts = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [

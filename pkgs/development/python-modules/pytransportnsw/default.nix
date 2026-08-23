@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pytransportnsw";
   version = "0.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PyTransportNSW";
@@ -29,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/Dav0815/TransportNSW";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

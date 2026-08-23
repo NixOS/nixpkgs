@@ -6,21 +6,21 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yanic";
   version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6jGuqqUr9DJyPYAVBBHc5qtfJIbvjGndT2Y+RSLMzhY=";
   };
 
   vendorHash = "sha256-TcmkPBHxpmTgXNW8gPkzMpjPGCQu/HrZqAu9jDpPEjo=";
 
   ldflags = [
-    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${version}"
+    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -37,9 +37,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
-    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
+    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ herbetom ];
     mainProgram = "yanic";
   };
-}
+})

@@ -14,26 +14,23 @@
   pytest-xdist,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
-  tomli,
   tomlkit,
   typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "4.0.2";
+  version = "4.0.6-unstable-2026-07-14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    tag = "v${version}";
-    hash = "sha256-DzS5ORhFWmA+eEhGDdpXdHLgWTfw198S7pQueBk44Cw=";
+    rev = "5f7e4013c004324f11eac6f310d932f505272e28";
+    hash = "sha256-fdOA/ofrEMfzlbVbN6f5LE9nGC7QlggBU/SKW70iaC8=";
   };
 
   build-system = [ setuptools ];
@@ -45,9 +42,7 @@ buildPythonPackage rec {
     mccabe
     platformdirs
     tomlkit
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     gitpython
@@ -58,6 +53,7 @@ buildPythonPackage rec {
     pytest7CheckHook
     requests
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [
@@ -68,10 +64,6 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
     "-v"
   ];
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
 
   disabledTestPaths = [
     "tests/benchmark"
@@ -109,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
-    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
+    # changelog = "https://github.com/pylint-dev/pylint/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -123,4 +115,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pylint";
   };
-}
+})

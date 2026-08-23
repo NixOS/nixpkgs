@@ -20,11 +20,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "foxglove-studio";
-  version = "2.39.2";
+  version = "2.56.0";
 
   src = fetchurl {
     url = "https://get.foxglove.dev/desktop/v${finalAttrs.version}/foxglove-studio-${finalAttrs.version}-linux-amd64.deb";
-    hash = "sha256-m4C61w69pntlgcuIW3bAJ/bNwrd0rU6lTpFyuWsvFxQ=";
+    hash = "sha256-s9wuCwkq9SRJu7iqpM2ribOOTF5oS42rVUNQXlNWzUU=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = ''patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 $out/opt/Foxglove/foxglove-studio'';
+  preFixup = "patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 $out/opt/Foxglove/foxglove-studio";
 
   passthru.updateScript = ./update.sh;
 

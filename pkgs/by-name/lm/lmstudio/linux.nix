@@ -14,7 +14,7 @@
 let
   src = fetchurl { inherit url hash; };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit
@@ -51,9 +51,6 @@ appimageTools.wrapType2 {
     # lms cli tool
     install -m 755 ${appimageContents}/resources/app/.webpack/lms $out/bin/
 
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-    --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:$out/lib:${
-      lib.makeLibraryPath [ (lib.getLib stdenv.cc.cc) ]
-    }" $out/bin/lms
+    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/bin/lms
   '';
 }

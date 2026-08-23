@@ -3,7 +3,6 @@
   buildPythonPackage,
   docopt,
   fetchFromGitHub,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "epion";
   version = "0.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devenzo-com";

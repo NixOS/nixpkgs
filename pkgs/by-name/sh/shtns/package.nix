@@ -5,13 +5,13 @@
   fftw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shtns";
   version = "3.5.1";
 
   src = fetchgit {
     url = "https://bitbucket.org/nschaeff/shtns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ajrplhv7a2dvb3cn3n638281w0bzdcydvvwbg64awbjg622mdpd";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "elgato";
   version = "5.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -31,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
+      --replace "0.0.0" "${version}"
   '';
 
   build-system = [ poetry-core ];

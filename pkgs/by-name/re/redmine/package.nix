@@ -1,19 +1,26 @@
 {
+  defaultGemConfig,
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchpatch,
   bundlerEnv,
-  ruby_3_3,
+  ruby_4_0,
   makeWrapper,
   nixosTests,
+  openssl,
+  rustc,
+  cargo,
+  rustPlatform,
+  buildRubyGem,
 }:
 
 let
-  version = "6.0.7";
+  version = "7.0.0";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    ruby = ruby_4_0;
     gemdir = ./.;
     groups = [
       "development"
@@ -23,16 +30,59 @@ let
       "minimagick"
       "test"
     ];
+    gemConfig = defaultGemConfig // {
+      trilogy = attrs: {
+        buildInputs = [ openssl ];
+      };
+      commonmarker = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-Xw0VWl3qZLvNNmRFHuWkltC1XfoIaHJKWM8Po4FSmoQ=";
+        };
+        dontBuild = false;
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iCRWCgdnPce1nxygv5182FTGxMl9D+VVpdvrozK43+g=";
+    hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update_rails_8_1_3_1.pach";
+      url = "https://github.com/redmine/redmine/commit/cbb2c341ca54baae28ba2dafc0573102c5d1099c.patch";
+      hash = "sha256-cAWUN1MB9DXNKwVxvZcStKXehRxTXTE9hjVrvkA98vk=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -40,10 +90,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rubyEnv.wrappedRuby
     rubyEnv.bundler
   ];
-
-  # taken from https://www.redmine.org/issues/33784
-  # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-  patches = [ ./0001-python3.patch ];
 
   buildPhase = ''
     mv config config.dist

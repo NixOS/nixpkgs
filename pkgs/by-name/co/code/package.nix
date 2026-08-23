@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code";
-  version = "0.6.5";
+  version = "0.6.171";
 
   src = fetchFromGitHub {
     owner = "just-every";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X+YwTXla6EePXLhMgokiZkgkm9P/rkl2+2XC27tqAEk=";
+    hash = "sha256-cMqfmo1HtCyB9tNpGLXa80Gwt00enVzTS3MeEQ/J5VA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/code-rs";
 
-  cargoHash = "sha256-oNrBwI0klqQtGTMhPzVvOqMqvdexEVkZpLD6ssXqQX8=";
+  cargoHash = "sha256-PRiXU6ZPruHpIBNEg9FmYPOWuMpMal7W8ChfTBgXztQ=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     pkg-config
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  CODE_VERSION = finalAttrs.version;
+  env.CODE_VERSION = finalAttrs.version;
 
   cargoBuildFlags = [
     "--bin"

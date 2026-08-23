@@ -6,7 +6,6 @@
   ldap3,
   pyasn1,
   pycryptodome,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ms-active-directory";
   version = "1.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "zorn96";

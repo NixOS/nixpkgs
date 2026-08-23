@@ -2,6 +2,8 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  pkg-config,
+  meson-python,
   cython,
 
   # Reverse dependency
@@ -10,14 +12,21 @@
 
 buildPythonPackage rec {
   pname = "memory-allocator";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "0.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    hash = "sha256-1gkhawMDGWfitFqASxL/kClXj07AGf3kLPau1soJ7+Q=";
+    hash = "sha256-Z108kQGduYyXRB3nPVxkiCHlroE/P1TNCYY9R0tI/iY=";
   };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  build-system = [
+    meson-python
+    cython
+  ];
 
   propagatedBuildInputs = [ cython ];
 

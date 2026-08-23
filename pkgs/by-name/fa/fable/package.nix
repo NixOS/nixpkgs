@@ -1,14 +1,18 @@
 {
   buildDotnetGlobalTool,
+  dotnetCorePackages,
   lib,
   testers,
 }:
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.28.0";
+  version = "5.13.0";
 
-  nugetHash = "sha256-t5Kex6sVe1B/xErMfDav+WGEjeZjndRNQA2r0FvL92g=";
+  nugetHash = "sha256-5Ann8sD07LhtRkW0fpm4P90cjVfujyeb8LW4ffZ/EBI=";
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -23,7 +27,7 @@ buildDotnetGlobalTool (finalAttrs: {
     homepage = "https://github.com/fable-compiler/fable";
     changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       anpin
       mdarocha

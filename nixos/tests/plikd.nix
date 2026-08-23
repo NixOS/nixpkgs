@@ -7,8 +7,6 @@
 
   nodes.machine =
     { pkgs, ... }:
-    let
-    in
     {
       services.plikd.enable = true;
       environment.systemPackages = [ pkgs.plik ];

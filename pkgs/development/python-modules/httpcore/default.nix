@@ -11,7 +11,6 @@
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   socksio,
   trio,
   # for passthru.tests
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "httpcore";
   version = "1.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";

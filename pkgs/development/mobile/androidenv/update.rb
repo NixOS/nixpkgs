@@ -158,7 +158,7 @@ def package_revision package
   when 'sys-img:sysImgDetailsType'
     codename = text type_details.at_css('> codename')
     api_level = text type_details.at_css('> api-level')
-    id = text type_details.at_css('> tag > id')
+    _, _, id, _ = package['path'].split(';')
     abi = text type_details.at_css('> abi')
 
     revision = ''
@@ -342,7 +342,7 @@ def parse_package_xml doc
   [licenses, packages, extras]
 end
 
-def parse_image_xml doc
+def parse_image_xml loc, doc
   licenses = get_licenses doc
   images = {}
 
@@ -357,7 +357,7 @@ def parse_image_xml doc
     obsolete &&= package['obsolete']
     type_details = to_json_collector package.at_css('> type-details')
     revision_details = to_json_collector package.at_css('> revision')
-    archives = package_archives(package) {|url| image_url url, components[-2]}
+    archives = package_archives(package) {|url| image_url url, loc}
     dependencies_xml = package.at_css('> dependencies')
     dependencies = to_json_collector dependencies_xml if dependencies_xml
 
@@ -442,7 +442,7 @@ def parse_addon_xml doc
   [licenses, addons, extras]
 end
 
-# Make the clean diff by always sorting the result before puting it in the stdout.
+# Make the clean diff by always sorting the result before putting it in the stdout.
 def sort_recursively value
   if value.is_a?(Hash)
     Hash[
@@ -503,7 +503,8 @@ opts[:packages].each do |filename|
 end
 
 opts[:images].each do |filename|
-  licenses, images = parse_image_xml(Nokogiri::XML(get(filename)) { |conf| conf.noblanks })
+  loc = URI.parse(filename).host
+  licenses, images = parse_image_xml(loc, Nokogiri::XML(get(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['images'], images
 end

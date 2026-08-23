@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
   xxhash,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pybloom-live";
   version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pybloom_live";

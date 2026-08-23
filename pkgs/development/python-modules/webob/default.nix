@@ -5,7 +5,6 @@
   setuptools,
   legacy-cgi,
   pytestCheckHook,
-  pythonOlder,
 
   # for passthru.tests
   pyramid,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "webob";
-  version = "1.8.9";
+  version = "1.8.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "webob";
     tag = version;
-    hash = "sha256-axJQwlybuqBS6RgI2z9pbw58vHF9aC9AxCg13CIKCLs=";
+    hash = "sha256-r3fURb+Je/XevpeMGb/XEF2xjj1q172P4pTAbGkeloY=";
   };
 
   build-system = [ setuptools ];

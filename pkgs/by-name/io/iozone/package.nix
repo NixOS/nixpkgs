@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   version = "3.507";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
+    url = "https://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
     hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
   };
 
   license = fetchurl {
-    url = "http://www.iozone.org/docs/Iozone_License.txt";
+    url = "https://www.iozone.org/docs/Iozone_License.txt";
     hash = "sha256-O/8yztxKBI/UKs6vwv9mq16Rn3cf/UHpSxdVnAPVCYw=";
   };
 
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [

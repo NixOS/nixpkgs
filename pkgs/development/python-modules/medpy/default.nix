@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   unittestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "medpy";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "loli";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "power-calibrate";
   version = "0.01.37";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "power-calibrate";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-DZ6rXbhaSNy3TEX+lwv3tyKQ7BXOZ9ycrff/7pF60j0=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

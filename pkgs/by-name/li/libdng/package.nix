@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2Kwz5K37I3HnnKePyY4nKYwnGHP09vr6IThiuKd3EfQ=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -39,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   meta = {
     changelog = "https://gitlab.com/megapixels-org/libdng/-/tags/${finalAttrs.src.tag}";

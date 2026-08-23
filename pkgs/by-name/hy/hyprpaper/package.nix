@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   hyprwayland-scanner,
@@ -27,27 +27,27 @@
   libwebp,
   libxdmcp,
   pango,
-  pcre,
   pcre2,
   wayland,
   wayland-protocols,
   util-linux,
+  versionCheckHook,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RDeDDRgmMnmEKJalIovpXKu9urHuCvH8tHP4RsplyXs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/4eWbt5XtOHzw3C9U0XPtoy8io03GxrEBd9znWMacbY=";
   };
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.tag}"'
   '';
 
   nativeBuildInputs = [
@@ -79,12 +79,17 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxdmcp
     pango
-    pcre
     pcre2
     wayland
     wayland-protocols
     util-linux
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;
@@ -92,7 +97,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = gcc15Stdenv.hostPlatform.isDarwin;
+    broken = gcc16Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

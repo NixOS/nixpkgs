@@ -2,20 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cobs";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-291eMhEdcnhvg9DCaSFdzWrGKbGsGWLGh4Ih87LKmNo=";
   };
+
+  build-system = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cmcqueen/cobs-python/";
     license = lib.licenses.mit;
-    teams = [ lib.teams.ororatech ];
+    maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

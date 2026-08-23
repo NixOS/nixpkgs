@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index 7d735b8..c3ea73a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,7 +68,9 @@ OBJECTS_BIN += $(patsubst %.cpp,$(BUILDDIR)/%.o,$(filter %.cpp,$(SOURCES_BIN)))
+ 
+ LIBRARY	= $(CODECS)/$(HOST)/$(PLATFORM)/libcodecs.a $(MDNS)/$(HOST)/$(PLATFORM)/libmdns.a
+ 
+-ifneq ($(STATIC),)
++ifeq ($(STATIC),)
++LDFLAGS += -lcrypto
++else
+ LIBRARY	+= $(OPENSSL)/libopenssl.a
+ DEFINES += -DSSL_STATIC_LIB
+ endif

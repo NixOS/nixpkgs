@@ -19,17 +19,17 @@
   glib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "refine";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "TheEvilSkeleton";
     repo = "Refine";
-    tag = version;
-    hash = "sha256-0FxnohwqAu7UW1e0kBNk8rFv2q736qlmFFhce2BNLdQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-5rHct0GXsdjeG+wXxtDKXWBTCphhOCojuR2ExXrZyWA=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/TheEvilSkeleton/Refine";
     mainProgram = "refine";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

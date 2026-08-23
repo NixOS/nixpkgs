@@ -2,20 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "railroad-diagrams";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qRMyuskAyzw2czH6m2mfCJe8+GtyZPZUWGdd9DDQTOM=";
   };
+
+  build-system = [ setuptools ];
 
   # This is a dependency of pyparsing, which is a dependency of pytest
   doCheck = false;
@@ -28,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.cc0;
     maintainers = [ ];
   };
-}
+})

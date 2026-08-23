@@ -72,5 +72,6 @@ stdenv.mkDerivation {
 
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.vcunat ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nettle_project" version;
   };
 }

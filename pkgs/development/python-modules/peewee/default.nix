@@ -8,25 +8,22 @@
   python,
   sqlite,
   withMysql ? false,
-  mysql-connector,
+  mysql-connector-python,
   withPostgres ? false,
   psycopg2,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.18.3";
+  version = "3.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "peewee";
     tag = version;
-    hash = "sha256-gMoU6YQMlEfL6onRAA/8v/08Je2jeLoZ3zw+2n1fmw4=";
+    hash = "sha256-EO8gS5fMZ1GgJV2YMjy15XQGZa72fZF7dgG7RZUE9dA=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +37,7 @@ buildPythonPackage rec {
     apsw
   ]
   ++ lib.optionals withPostgres [ psycopg2 ]
-  ++ lib.optionals withMysql [ mysql-connector ];
+  ++ lib.optionals withMysql [ mysql-connector-python ];
 
   nativeCheckInputs = [ flask ];
 

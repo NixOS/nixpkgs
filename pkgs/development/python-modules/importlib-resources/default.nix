@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -22,16 +21,18 @@
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.5.2";
+  version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-GF+Hre9bzCiESdmPtPugfOp4vANkVd1ExfxKL+eP7Sw=";
+    hash = "sha256-ByLUxiEkicUw8qFFo0wKejtHIbyWoV+tpZMOKgt2Bwg=";
   };
+
+  postPatch = ''
+    sed -i '/coherent.licensed/d' pyproject.toml
+  '';
 
   build-system = [
     setuptools

@@ -3,6 +3,7 @@
   buildPythonPackage,
   cliff,
   fetchFromGitHub,
+  fetchpatch,
   keystoneauth1,
   openstackdocstheme,
   openstacksdk,
@@ -26,15 +27,23 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
     tag = version;
-    hash = "sha256-8tB1QPaxdLdti96gOzaXuqLftmTJVM0bosJiKs+0CFs=";
+    hash = "sha256-FNfee7d8gTcsTdv7lxqDbniUiKQvUXHRSkAlNOCn/k4=";
   };
+
+  patches = [
+    # Fix unit test failure caused by osprofiler 4.4.0
+    (fetchpatch {
+      url = "https://github.com/openstack/python-mistralclient/commit/4cee2bb25a4d15e7dd1802f3e7e75520177446db.patch";
+      hash = "sha256-H8JSvPFcHZJsnIWpV0WPvkqyvmg8SBbpsUzqcZeFBwA=";
+    })
+  ];
 
   env.PBR_VERSION = version;
 
@@ -83,7 +92,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "OpenStack Mistral Command-line Client";
-    homepage = "https://opendev.org/openstack/python-mistralclient/";
+    homepage = "https://github.com/openstack/python-mistralclient";
     license = lib.licenses.asl20;
     mainProgram = "mistral";
     teams = [ lib.teams.openstack ];

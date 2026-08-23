@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-bEJySiVVy77vSF/M5f3WGxjeay/36vU8oBbmkpDCFrI=";
   };
 
+  patches = [ ./python3.14-compat.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [ pyserial ];

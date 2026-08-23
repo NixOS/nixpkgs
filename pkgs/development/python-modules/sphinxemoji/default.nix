@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sphinxemoji";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"

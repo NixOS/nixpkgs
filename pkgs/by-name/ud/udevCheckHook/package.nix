@@ -21,5 +21,6 @@ makeSetupHook {
   meta = {
     description = "Check validity of udev rules in outputs";
     maintainers = with lib.maintainers; [ grimmauld ];
+    license = lib.licenses.mit;
   };
 } ./hook.sh

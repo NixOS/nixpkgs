@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "inter";
   version = "4.1";
@@ -14,14 +14,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-5vdKKvHAeZi6igrfpbOdhZlDX2/5+UvzlnCQV6DdqoQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp Inter.ttc InterVariable*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
+  nativeBuildInputs = [ installFonts ];
+  postPatch = ''
+    rm extras/ -rf
   '';
+
+  dontInstallWebfonts = true;
 
   meta = {
     homepage = "https://rsms.me/inter/";

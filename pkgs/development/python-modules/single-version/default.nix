@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "single-version";
   version = "1.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";

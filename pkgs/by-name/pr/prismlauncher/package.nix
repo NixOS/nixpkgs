@@ -6,19 +6,20 @@
   glfw3-minecraft,
   jdk17,
   jdk21,
+  jdk25,
   jdk8,
   kdePackages,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libdecor,
   libjack2,
   libpulseaudio,
   libusb1,
-  mesa-demos,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
   openal,
   pciutils,
   pipewire,
@@ -27,6 +28,8 @@
   symlinkJoin,
   udev,
   vulkan-loader,
+  wayland,
+  wrapGAppsHook3,
   xrandr,
 
   additionalLibs ? [ ],
@@ -34,6 +37,7 @@
   controllerSupport ? stdenv.hostPlatform.isLinux,
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
   jdks ? [
+    jdk25
     jdk21
     jdk17
     jdk8
@@ -51,7 +55,7 @@ assert lib.assertMsg (
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
-  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
+  prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID; };
 in
 
 symlinkJoin {
@@ -60,18 +64,23 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    kdePackages.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     kdePackages.qtbase
     kdePackages.qtimageformats
     kdePackages.qtsvg
   ]
-  ++ lib.optional (
-    lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
-  ) kdePackages.qtwayland;
+  ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
+    # Required for org.gtk.Settings.FileChooser
+    gappsWrapperArgsHook
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
     wrapQtAppsHook
   '';
 
@@ -91,11 +100,13 @@ symlinkJoin {
 
         ## glfw
         libGL
-        libX11
-        libXcursor
-        libXext
-        libXrandr
-        libXxf86vm
+        libx11
+        libxcursor
+        libxext
+        libxrandr
+        libxxf86vm
+        wayland
+        libdecor
 
         udev # oshi
 
@@ -107,14 +118,16 @@ symlinkJoin {
       ++ additionalLibs;
 
       runtimePrograms = [
-        mesa-demos
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ]
       ++ additionalPrograms;
 
     in
-    [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
+    [
+      "--set NIX_LAUNCHER_WRAPPER ${placeholder "out"}/bin/prismlauncher"
+      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"

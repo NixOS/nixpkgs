@@ -12,14 +12,12 @@ let
     all
     isDerivation
     getBin
-    assertMsg
     ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
   inherit (builtins)
     isString
     match
     typeOf
-    elemAt
     ;
 
 in
@@ -38,6 +36,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    addMetaAttrs :: AttrSet -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -66,6 +70,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    dontDistribute :: Derivation -> Derivation
+    ```
   */
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
@@ -85,6 +95,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setName :: String -> Derivation -> Derivation
+    ```
   */
   setName = name: drv: drv // { inherit name; };
 
@@ -100,6 +116,12 @@ rec {
     `drv`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    updateName :: (String -> String) -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -122,6 +144,12 @@ rec {
     `suffix`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    appendToName :: String -> Derivation -> Derivation
+    ```
   */
   appendToName =
     suffix:
@@ -145,6 +173,12 @@ rec {
     `set`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mapDerivationAttrset :: (Derivation -> a) -> AttrSet -> AttrSet
+    ```
   */
   mapDerivationAttrset =
     f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
@@ -164,6 +198,12 @@ rec {
 
     `drv`
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setPrio :: Int -> Derivation -> Derivation
+    ```
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
@@ -176,6 +216,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrio :: Derivation -> Derivation
+    ```
   */
   lowPrio = setPrio 10;
 
@@ -187,6 +233,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
 
@@ -199,6 +251,12 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrio :: Derivation -> Derivation
+    ```
   */
   hiPrio = setPrio (-10);
 
@@ -210,6 +268,12 @@ rec {
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
 
@@ -302,7 +366,7 @@ rec {
   availableOn =
     platform: pkg:
     ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
-    && all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
+    && ((!pkg ? meta.badPlatforms) || !(any (platformMatch platform) pkg.meta.badPlatforms));
 
   /**
     Mapping of SPDX ID to the attributes in lib.licenses.
@@ -338,7 +402,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxId :: str -> AttrSet
+    getLicenseFromSpdxId :: String -> {
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    }
     ```
 
     # Examples
@@ -360,8 +432,9 @@ rec {
   getLicenseFromSpdxId =
     licstr:
     getLicenseFromSpdxIdOr licstr (
-      lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}" {
+      lib.warn "getLicenseFromSpdxId: No license with the given SPDX ID found: ${licstr}" {
         shortName = licstr;
+        spdxId = licstr;
       }
     );
 
@@ -383,7 +456,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    getLicenseFromSpdxIdOr :: String -> a -> ({
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    } | a)
     ```
 
     # Examples
@@ -425,7 +506,7 @@ rec {
     # Type
 
     ```
-    getExe :: package -> string
+    getExe :: Derivation -> StorePath
     ```
 
     # Examples
@@ -471,7 +552,7 @@ rec {
     # Type
 
     ```
-    getExe' :: derivation -> string -> string
+    getExe' :: Derivation -> String -> StorePath
     ```
 
     # Examples
@@ -489,12 +570,15 @@ rec {
   */
   getExe' =
     x: y:
-    assert assertMsg (isDerivation x)
-      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
-    assert assertMsg (isString y)
-      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
-    assert assertMsg (match ".*/.*" y == null)
-      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    assert
+      isDerivation x
+      || throw "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert
+      isString y
+      || throw "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert
+      match ".*/.*" y == null
+      || throw "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
     "${getBin x}/bin/${y}";
 
   /**
@@ -513,7 +597,7 @@ rec {
     # Type
 
     ```
-    cpeFullVersionWithVendor :: string -> string -> AttrSet
+    cpeFullVersionWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
     ```
 
     # Examples
@@ -550,132 +634,4 @@ rec {
     update = "*";
   };
 
-  /**
-    Alternate version of [`lib.meta.cpePatchVersionInUpdateWithVendor`](#function-library-lib.meta.cpePatchVersionInUpdateWithVendor).
-    If `cpePatchVersionInUpdateWithVendor` succeeds, returns an attribute set with `success` set to `true` and `value` set to the result.
-    Otherwise, `success` is set to `false` and `error` is set to the string representation of the error.
-
-    # Inputs
-
-    `vendor`
-
-    : package's vendor
-
-    `version`
-
-    : package's version
-
-    # Type
-
-    ```
-    tryCPEPatchVersionInUpdateWithVendor :: string -> string -> AttrSet
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.meta.tryCPEPatchVersionInUpdateWithVendor` usage example
-
-    ```nix
-    lib.meta.tryCPEPatchVersionInUpdateWithVendor "gnu" "1.2.3"
-    => {
-      success = true;
-      value = {
-        vendor = "gnu";
-        version = "1.2";
-        update = "3";
-      };
-    }
-    ```
-
-    :::
-    :::{.example}
-    ## `lib.meta.cpePatchVersionInUpdateWithVendor` error example
-
-    ```nix
-    lib.meta.tryCPEPatchVersionInUpdateWithVendor "gnu" "5.3p0"
-    => {
-      success = false;
-      error = "version 5.3p0 doesn't match regex `([0-9]+\\.[0-9]+)\\.([0-9]+)`";
-    }
-    ```
-
-    :::
-  */
-  tryCPEPatchVersionInUpdateWithVendor =
-    vendor: version:
-    let
-      regex = "([0-9]+\\.[0-9]+)\\.([0-9]+)";
-      # we have to call toString here in case version is an attrset with __toString attribute
-      versionMatch = builtins.match regex (toString version);
-    in
-    if versionMatch == null then
-      {
-        success = false;
-        error = "version ${version} doesn't match regex `${regex}`";
-      }
-    else
-      {
-        success = true;
-        value = {
-          inherit vendor;
-          version = elemAt versionMatch 0;
-          update = elemAt versionMatch 1;
-        };
-      };
-
-  /**
-    Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` to the result. When `version` matches `X.Y.Z` where all parts are numerical, sets `version` and `update` fields to `X.Y` and `Z`. Throws an error if the version doesn't match the expected template.
-
-    # Inputs
-
-    `vendor`
-
-    : package's vendor
-
-    `version`
-
-    : package's version
-
-    # Type
-
-    ```
-    cpePatchVersionInUpdateWithVendor :: string -> string -> AttrSet
-    ```
-
-    # Examples
-    :::{.example}
-    ## `lib.meta.cpePatchVersionInUpdateWithVendor` usage example
-
-    ```nix
-    lib.meta.cpePatchVersionInUpdateWithVendor "gnu" "1.2.3"
-    => {
-      vendor = "gnu";
-      version = "1.2";
-      update = "3";
-    }
-    ```
-
-    :::
-    :::{.example}
-    ## `lib.meta.cpePatchVersionInUpdateWithVendor` usage in derivations
-
-    ```nix
-    mkDerivation rec {
-      version = "1.2.3";
-      # ...
-      meta = {
-        # ...
-        identifiers.cpeParts = lib.meta.cpePatchVersionInUpdateWithVendor "gnu" version;
-      };
-    }
-    ```
-
-    :::
-  */
-  cpePatchVersionInUpdateWithVendor =
-    vendor: version:
-    let
-      result = tryCPEPatchVersionInUpdateWithVendor vendor version;
-    in
-    if result.success then result.value else throw result.error;
 }

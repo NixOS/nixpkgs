@@ -7,8 +7,8 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "nixos-firewall-tool";
-
+  pname = "nixos-firewall-tool";
+  version = lib.trivial.release;
   src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
   strictDeps = true;

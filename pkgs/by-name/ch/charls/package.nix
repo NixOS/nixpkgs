@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "charls";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "team-charls";
     repo = "charls";
-    tag = version;
-    hash = "sha256-c1wrk6JLcAH7TFPwjARlggaKXrAsLWyUQF/3WHlqoqg=";
+    tag = finalAttrs.version;
+    hash = "sha256-0NfTQfGw89SksrLRX81moj6uFrh1I67JMeT16Wcus1c=";
   };
 
   postPatch = ''
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

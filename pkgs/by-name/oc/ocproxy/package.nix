@@ -7,14 +7,14 @@
   libevent,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.60";
   pname = "ocproxy";
 
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = "ocproxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "03323nnhb4y9nzwva04mq7xg03dvdrgp689g89f69jqc261skcqx";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.joko ];
     platforms = lib.platforms.unix;
   };
-}
+})

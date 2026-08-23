@@ -7,14 +7,14 @@
   mynewt-newtmgr,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mynewt-newtmgr";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newtmgr";
-    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
+    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}_tag";
     sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

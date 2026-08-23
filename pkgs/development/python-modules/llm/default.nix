@@ -4,10 +4,8 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   replaceVars,
   setuptools,
   click-default-group,
@@ -84,6 +82,7 @@ let
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
@@ -165,32 +164,28 @@ let
       '') withPluginsArgNames
     )
   );
-
-  llm = buildPythonPackage rec {
+  llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.28";
+    version = "0.31.1";
     pyproject = true;
+    __structuredAttrs = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      tag = version;
-      hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
+      tag = finalAttrs.version;
+      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
     };
 
     patches = [
       ./001-disable-install-uninstall-commands.patch
-    ]
-    # See https://github.com/NixOS/nixpkgs/issues/476258 and https://github.com/simonw/llm/pull/1334
-    # TODO: Remove when sqlite 3.52.x is released.
-    ++ lib.optionals (sqlite.version == "3.51.1") [
-      (fetchpatch {
-        url = "https://github.com/simonw/llm/commit/6e24b883c3e3c4ddd2ec9006714d0a9ec17b59da.patch";
-        hash = "sha256-4AKQdZCr6qxuWnjWoSW6I44hPL5e7tnvREx2Ns0WwNc=";
+      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
+      ./do-not-commit-inside-content_hash-embeddings.patch
+      (fetchpatch2 {
+        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
+        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
       })
     ];
 
@@ -250,13 +245,6 @@ let
       # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
       # https://github.com/simonw/llm/issues/1293
       "test_embed_multi_files_encoding"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.14") [
-      # Index out of range
-      # https://github.com/simonw/llm/issues/1335
-      "test_logs_fragments"
-      "test_expand_fragment_json"
-      "test_expand_fragment_markdown"
     ];
 
     pythonImportsCheck = [ "llm" ];
@@ -269,13 +257,13 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       mainProgram = "llm";
       maintainers = with lib.maintainers; [
@@ -284,6 +272,6 @@ let
         philiptaron
       ];
     };
-  };
+  });
 in
 llm

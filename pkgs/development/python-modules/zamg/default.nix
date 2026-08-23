@@ -9,21 +9,18 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.3.6";
+  version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";
     tag = "v${version}";
-    hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
+    hash = "sha256-kWdSXaD7+c7UrlRP47DjKbmVTHqWUveDowIDFSK3Plk=";
   };
 
   pythonRelaxDeps = [ "async-timeout" ];

@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchzip,
-  jdk,
+  jdk25,
   makeWrapper,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "micronaut";
-  version = "4.10.0";
+  version = "5.1.1";
 
   src = fetchzip {
-    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-FYky14Lnl5B+zLgulFJdRdaDIQi+FhoUjce+LKYaMKE=";
+    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${finalAttrs.version}/micronaut-cli-${finalAttrs.version}.zip";
+    hash = "sha256-hLjvf9BBpcSME/Ed1OEm5rDv9Q47gOiGGmUMAtZIYng=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     rm bin/mn.bat
     cp -r . $out
     wrapProgram $out/bin/mn \
-      --prefix JAVA_HOME : ${jdk}
+      --prefix JAVA_HOME : ${jdk25}
     installShellCompletion --bash --name mn.bash bin/mn_completion
     runHook postInstall
   '';
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "mn";
   };
-}
+})

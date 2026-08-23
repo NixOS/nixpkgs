@@ -2,18 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   typing-extensions,
   uri-template,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "json-home-client";
   version = "1.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plinss";
@@ -26,7 +24,9 @@ buildPythonPackage rec {
     sed -i -e 's/0.0.0/${version}/' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependenceis = [
     typing-extensions
     uri-template
   ];
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "json_home_client" ];
 
   meta = {
+    broken = lib.versionAtLeast setuptools.version "82";
     description = "Client class for calling http+json APIs in Python";
     homepage = "https://github.com/plinss/json_home_client";
     license = lib.licenses.mit;

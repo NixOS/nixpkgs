@@ -6,7 +6,6 @@
   http-sfv,
   requests,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "requests-http-signature";
   version = "0.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyauth";
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

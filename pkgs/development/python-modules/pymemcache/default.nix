@@ -7,7 +7,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-memcached,
-  pythonOlder,
   setuptools,
   zstd,
   stdenv,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pymemcache";
   version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pinterest";
@@ -51,7 +48,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/pinterest/pymemcache/blob/${src.rev}/ChangeLog.rst";
     description = "Python memcached client";
     homepage = "https://pymemcache.readthedocs.io/";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

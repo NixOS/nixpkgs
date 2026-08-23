@@ -136,7 +136,7 @@ A set of functions that build a predefined set of minimal Linux distributions im
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 
 * `size` (optional, defaults to `4096`). The size of the image, in MiB.
-* `extraPackages` (optional). A list names of additional packages from the distribution that should be included in the image.
+* `extraPackages` (optional). A list of names of additional packages from the distribution that should be included in the image.
 
 ### Examples {#vm-tools-diskImageFuns-examples}
 

@@ -5,13 +5,12 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   jre_minimal,
   pydevd,
   pytest-mock,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   replaceVars,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
@@ -47,7 +44,7 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   nativeBuildInputs = [ jre_minimal ];
 

@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "steck";
   version = "0.8.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = "steck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Spops8ERQ7TgFYH7n+c4hKdIQfjjujKaGhmhfAszgQ=";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "steck";
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

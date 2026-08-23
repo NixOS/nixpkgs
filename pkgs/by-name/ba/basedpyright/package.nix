@@ -18,16 +18,16 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.36.2";
+  version = "1.39.8";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-fi1TGvlH6h9MHymCn0INc1lIqTyMnHEhxXJuAiYmkpo=";
+    hash = "sha256-8S83CTd/td7USKxfCI0cXd2gPBMivi4QMRQwVgxhs6w=";
   };
 
-  npmDepsHash = "sha256-VHQOmRWirZYnoxk/JzGwFFV5QEIyHGg/isDvf/f7uro=";
+  npmDepsHash = "sha256-humpJB+fv3+PITcPCz3uY2jNANb3P7sXy0lFP8Eg58I=";
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -40,7 +40,7 @@ buildNpmPackage rec {
     docify
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 
@@ -49,6 +49,8 @@ buildNpmPackage rec {
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
     # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
     find -L $out -type l -print -delete
+    # Remove native module build artifacts that reference nodejs source
+    rm -rf "$out/lib/node_modules/pyright-root/node_modules/keytar/build"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

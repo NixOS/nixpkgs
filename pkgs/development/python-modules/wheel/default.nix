@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.46.1";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "wheel";
     tag = version;
-    hash = "sha256-iyGfGr3pLVZSEIHetjsPbIIXkuXrmIPiSqqOw31l9Qw=";
+    hash = "sha256-/5OxFySesdsFsuUbhdhcgFPsry8RSy5ZshG0TWGncVY=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
       It should be noted that wheel is not intended to be used as a library,
       and as such there is no stable, public API.
     '';
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

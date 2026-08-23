@@ -59,7 +59,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       fpletz
       tadfisher
     ];

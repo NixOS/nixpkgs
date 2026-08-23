@@ -10,14 +10,14 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boolector";
   version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "boolector";
     repo = "boolector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CKhaPaWUB6Fz0LfnCl81LVmTebCWzTvZLKeC0KH3by4=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

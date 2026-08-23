@@ -2,40 +2,56 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  gzip,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
-  gzip,
   gitMinimal,
-  deno,
+  python3,
   nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.67";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OA5foQEAs01bAi78c6tEaLKaQHcRhRVtNkwpOjbPgEQ=";
+    hash = "sha256-jL8msC8YTmrD/FHcGHbyuBGqnZmYkYr+pZb3HKYrvQw=";
   };
 
-  cargoHash = "sha256-/sJ956ZqtI1xV0JW3RwRd0b5pYW2W/vQhb9ApF61eF0=";
+  cargoHash = "sha256-hWFGKvob0DuIX2rP20Iq15nTSTpUBxLURiVwI5LNBII=";
 
-  passthru.updateScript = nix-update-script { };
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
-    pkg-config
     gzip
+    makeBinaryWrapper
+    pkg-config
   ];
 
   nativeCheckInputs = [
+    python3
     gitMinimal
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
   ];
+
+  preBuild = ''
+    mkdir -p $out/share/fresh-editor/plugins/
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags "--no-upgrade-check" \
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
+    rm -rf $out/bin/fresh.dSYM
+  '';
 
   # Tests create a local http server to check update functionality
   __darwinAllowLocalNetworking = true;
@@ -43,22 +59,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Due to issues with incorrect import paths with the actual app, I have disabled the checks below. Need to report upstream.
   checkFlags = [
     "--skip=e2e::"
+    "--skip=services::plugins::embedded::tests::test_extract_plugins"
   ];
   cargoTestFlags = [
     "--lib"
     "--bins"
   ];
 
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = deno.librusty_v8;
-  preBuild = ''
-    mkdir -p $out/share/fresh-editor/plugins/
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = ''
-    rm -rf $out/bin/fresh.dSYM
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal-based text editor with LSP support and TypeScript plugins";
@@ -68,12 +79,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
+      randoneering
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode # librusty_v8.a
     ];
   };
 })

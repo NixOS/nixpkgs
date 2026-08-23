@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   mecab,
   setuptools-scm,
   requests,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   pname = "unidic";
   version = "1.1.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "polm";
@@ -56,6 +54,6 @@ buildPythonPackage rec {
     description = "Contemporary Written Japanese dictionary";
     homepage = "https://github.com/polm/unidic-py";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ laurent-f1z1 ];
+    maintainers = [ ];
   };
 }

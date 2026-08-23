@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
   ];
 
-  NIX_LDFLAGS = lib.strings.concatStringsSep " " [
+  env.NIX_LDFLAGS = toString [
     "-L${lib.getLib zlib}"
     "-lz"
     "-L${lib.getLib gtest}"

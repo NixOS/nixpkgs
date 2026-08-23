@@ -12,8 +12,8 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$version" ]]; then
 fi
 
 pushd "$(mktemp -d)"
-curl -s "https://raw.githubusercontent.com/vicinaehq/vicinae/v${version}/typescript/api/package-lock.json" -o api-package-lock.json
-curl -s "https://raw.githubusercontent.com/vicinaehq/vicinae/v${version}/typescript/extension-manager/package-lock.json" -o extension-manager-package-lock.json
+curl -s "https://raw.githubusercontent.com/vicinaehq/vicinae/v${version}/src/typescript/api/package-lock.json" -o api-package-lock.json
+curl -s "https://raw.githubusercontent.com/vicinaehq/vicinae/v${version}/src/typescript/extension-manager/package-lock.json" -o extension-manager-package-lock.json
 newApiDepsHash=$(prefetch-npm-deps api-package-lock.json)
 newExtensionManagerDepsHash=$(prefetch-npm-deps extension-manager-package-lock.json)
 popd

@@ -8,36 +8,32 @@
   gnumake,
   installShellFiles,
   testers,
-  kubebuilder,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubebuilder";
-  version = "4.10.1";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
-    rev = "v${version}";
-    hash = "sha256-GAHuaUVtdLvyWNeOxu46+IOw2Mf42z3yUjZNiyeE1xs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iTC5HY4E54YG+isSgW2515Kz83+khzANAml78z8EG88=";
   };
 
-  vendorHash = "sha256-NsD2yt73+uRitegezTWwBhF0iMCQ8XhDf6WM/j7kT0o=";
+  vendorHash = "sha256-7rXunagWkUWGL5v+xkmyLELwrIEuRVGPk4SK8/lotio=";
 
   subPackages = [
-    "cmd"
+    "internal/cli/cmd"
     "."
   ];
 
   allowGoReference = true;
 
-  ldflags = [
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.kubeBuilderVersion=v${version}"
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.goos=${go.GOOS}"
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.goarch=${go.GOARCH}"
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.gitCommit=unknown"
-    "-X sigs.k8s.io/kubebuilder/v4/cmd.buildDate=unknown"
-  ];
+  postPatch = ''
+    substituteInPlace internal/cli/version/version.go \
+      --replace-fail "return main.Version" 'return "v${finalAttrs.version}"'
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -62,17 +58,19 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    command = "${kubebuilder}/bin/kubebuilder version";
-    package = kubebuilder;
-    version = "v${version}";
+    command = "${finalAttrs.finalPackage}/bin/kubebuilder version";
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "SDK for building Kubernetes APIs using CRDs";
     mainProgram = "kubebuilder";
     homepage = "https://github.com/kubernetes-sigs/kubebuilder";
-    changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cmars ];
+    maintainers = with lib.maintainers; [
+      hythera
+    ];
   };
-}
+})

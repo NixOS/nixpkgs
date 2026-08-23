@@ -14,6 +14,7 @@
   # tests
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
+  langgraph-sdk,
   postgresql,
   postgresqlTestHook,
   psycopg,
@@ -29,25 +30,27 @@
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "1.0.5";
+  version = "1.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "prebuilt==${version}";
-    hash = "sha256-Vytt5c1GZyQAILs09Z40n80XDoSKXyAb+cFwjK5JySY=";
+    tag = "prebuilt==${finalAttrs.version}";
+    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
   };
 
-  sourceRoot = "${src.name}/libs/prebuilt";
+  sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
 
   build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   skipPythonImportsCheck = true; # This will be packaged with langgraph
@@ -72,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
+    export PYTHONPATH=${finalAttrs.src}/libs/langgraph:$PYTHONPATH
   '';
 
   pytestFlags = [
@@ -94,14 +97,15 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "prebuilt==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

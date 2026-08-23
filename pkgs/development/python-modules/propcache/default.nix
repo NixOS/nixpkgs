@@ -8,23 +8,19 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "propcache";
-  version = "0.4.1";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "propcache";
     tag = "v${version}";
-    hash = "sha256-7HQUOggbFC7kWcXqatLeCTNJqo0fW9FRCy8UkYL6wvM=";
+    hash = "sha256-vn6FSdWEMk6c8Cu1mHyhZyH8ZlFK0kgYK8T7GKLHHwc=";
   };
 
   postPatch = ''
@@ -36,9 +32,6 @@ buildPythonPackage rec {
     cython
     expandvars
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   nativeCheckInputs = [

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "openring";
   version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "openring";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "openring";
   };
-}
+})

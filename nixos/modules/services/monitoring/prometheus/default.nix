@@ -66,7 +66,7 @@ let
     rule_files = optionals (!(cfg.enableAgentMode)) (
       map (promtoolCheck "check rules" "rules") (
         cfg.ruleFiles
-        ++ [
+        ++ optionals (builtins.length cfg.rules > 0) [
           (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
         ]
       )
@@ -92,12 +92,12 @@ let
     cfg.extraFlags
     ++ [
       "--config.file=${if cfg.enableReload then "/etc/prometheus/prometheus.yaml" else prometheusYml}"
-      "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
+      "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
     ]
     ++ (
       if (cfg.enableAgentMode) then
         [
-          "--enable-feature=agent"
+          "--agent"
         ]
       else
         [

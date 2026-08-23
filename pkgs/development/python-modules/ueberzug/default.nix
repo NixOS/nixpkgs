@@ -4,25 +4,25 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  libX11,
-  libXext,
-  libXres,
+  libx11,
+  libxext,
+  libxres,
   meson-python,
   meson,
   pillow,
   pkg-config,
   psutil,
-  xlib,
+  python-xlib,
 }:
 
 buildPythonPackage rec {
   pname = "ueberzug";
-  version = "18.3.1";
+  version = "18.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Lk4E5YwEq2mUnYbIWDhzz9/CCwfXMJ11/TtJ44ugOk=";
+    hash = "sha256-CRDgXsCYzZX2o+0Spigjlo6B/5wVLDaZAe6TDQJ7L3Q=";
   };
 
   build-system = [
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXres
-    libXext
+    libx11
+    libxres
+    libxext
   ];
 
   dependencies = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     docopt
     pillow
     psutil
-    xlib
+    python-xlib
   ];
 
   doCheck = false;

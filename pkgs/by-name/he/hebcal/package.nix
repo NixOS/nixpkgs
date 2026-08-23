@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "hebcal";
-  version = "5.9.4";
+  version = "5.15.0";
 
   src = fetchFromGitHub {
     owner = "hebcal";
     repo = "hebcal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6SyK5BKVMGcqEFy3tbPBPqmZYp9/DD8A3VUNpAsihEM=";
+    hash = "sha256-tLusgxpTXgmaWystWjp5aexKxmvjnCkNEN3+XjaGYTc=";
   };
 
   vendorHash = null;

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
   version = "2.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
@@ -34,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carpedm20/emoji/";
     changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
   };
 }

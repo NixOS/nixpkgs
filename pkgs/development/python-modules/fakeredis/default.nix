@@ -2,33 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
+  redisTestHook,
+
+  hatchling,
   hypothesis,
   jsonpath-ng,
   lupa,
-  hatchling,
+  numpy,
   pyprobables,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
   redis,
-  redisTestHook,
   sortedcontainers,
   valkey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.32.0";
+  version = "2.36.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "dsoftwareinc";
+    owner = "cunla";
     repo = "fakeredis-py";
-    tag = "v${version}";
-    hash = "sha256-esouWM32qe4iO5AcRC0HuUF+lwEDHnyXoknwqsZhr+o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vOQBezPsgcjSUigCiW7Q+VueUTtQm3Y7hhB0mTstwKM=";
   };
 
   build-system = [ hatchling ];
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
-    valkey
   ];
 
   optional-dependencies = {
@@ -45,14 +43,20 @@ buildPythonPackage rec {
     bf = [ pyprobables ];
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
+    valkey = [ valkey ];
+    vectorset = [
+      jsonpath-ng
+      numpy
+    ];
   };
 
   nativeCheckInputs = [
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
     redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
@@ -60,16 +64,8 @@ buildPythonPackage rec {
   disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    "test_init_args" # AttributeError: module 'fakeredis' has no attribute 'FakeValkey'
-    "test_async_init_kwargs" # AttributeError: module 'fakeredis' has no attribute 'FakeAsyncValkey'"
-
-    # KeyError: 'tot-mem'
-    "test_acl_log_auth_exist"
-    "test_acl_log_invalid_channel"
-    "test_acl_log_invalid_key"
-    "test_client_id"
-    "test_client_info"
-    "test_client_list"
+    # redis.exceptions.ResponseError: unknown command 'evalsha'
+    "test_async_lock"
   ];
 
   preCheck = ''
@@ -78,9 +74,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fake implementation of Redis API";
-    homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    homepage = "https://github.com/cunla/fakeredis-py";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

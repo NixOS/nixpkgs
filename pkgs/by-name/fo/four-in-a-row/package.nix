@@ -18,12 +18,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "four-in-a-row";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/four-in-a-row-${version}.tar.xz";
+    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor finalAttrs.version}/four-in-a-row-${finalAttrs.version}.tar.xz";
     hash = "sha256-IdJ2m4BBFNHPDzN0Jv2IGB7O/WCSz1YmN+s31xYwUYI=";
   };
 
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/four-in-a-row";
-    changelog = "https://gitlab.gnome.org/GNOME/four-in-a-row/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/four-in-a-row/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Make lines of the same color to win";
     mainProgram = "four-in-a-row";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

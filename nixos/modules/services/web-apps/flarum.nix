@@ -10,16 +10,25 @@ with lib;
 let
   cfg = config.services.flarum;
 
+  # Only placeholders reach the world-readable Nix store; the install
+  # script substitutes the real secrets at runtime.
+  dbConfig =
+    cfg.database
+    // optionalAttrs (cfg.databasePasswordFile != null) {
+      password = "@databasePassword@";
+    };
+
   flarumInstallConfig = pkgs.writeText "config.json" (
     builtins.toJSON {
       debug = false;
       offline = false;
 
       baseUrl = cfg.baseUrl;
-      databaseConfiguration = cfg.database;
+      databaseConfiguration = dbConfig;
       adminUser = {
         username = cfg.adminUser;
-        password = cfg.initialAdminPassword;
+        password =
+          if cfg.initialAdminPasswordFile != null then "@adminPassword@" else cfg.initialAdminPassword;
         email = cfg.adminEmail;
       };
       settings = {
@@ -27,6 +36,25 @@ let
       };
     }
   );
+
+  phpFormat = pkgs.formats.php { };
+
+  configPhpFile = phpFormat.generate "flarum-config.php" {
+    debug = false;
+    database = dbConfig;
+    url = cfg.baseUrl;
+    paths = {
+      api = "api";
+      admin = "admin";
+    };
+    headers = {
+      poweredByHeader = true;
+      referrerPolicy = "same-origin";
+    };
+    queue = {
+      driver = "sync";
+    };
+  };
 in
 {
   options.services.flarum = {
@@ -69,7 +97,26 @@ in
     initialAdminPassword = mkOption {
       type = types.str;
       default = "flarum";
-      description = "Initial password for the adminUser";
+      description = ''
+        Initial password for the adminUser.
+
+        WARNING: This is stored world-readable in the Nix store.
+        Use {option}`initialAdminPasswordFile` instead.
+      '';
+    };
+
+    initialAdminPasswordFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/flarum-admin-password";
+      description = ''
+        File containing the initial password for adminUser.
+        Must be readable by the flarum user.
+        Takes precedence over {option}`initialAdminPassword`.
+
+        The password must not contain `"` or `\` characters, as it is
+        substituted into a JSON installation config verbatim.
+      '';
     };
 
     user = mkOption {
@@ -98,7 +145,12 @@ in
           bool
           int
         ]);
-      description = "MySQL database parameters";
+      description = ''
+        MySQL database parameters.
+
+        WARNING: A `password` set here is stored world-readable in the
+        Nix store. Use {option}`databasePasswordFile` instead.
+      '';
       default = {
         # the database driver; i.e. MySQL; MariaDB...
         driver = "mysql";
@@ -116,6 +168,20 @@ in
         port = 3306;
         strict = false;
       };
+    };
+
+    databasePasswordFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/flarum-db-password";
+      description = ''
+        File containing the database password.
+        Must be readable by the flarum user.
+        Takes precedence over `database.password`.
+
+        The password must not contain `"` or `\` characters, as it is
+        substituted into a JSON installation config verbatim.
+      '';
     };
 
     createDatabaseLocally = mkOption {
@@ -210,6 +276,8 @@ in
         Type = "oneshot";
         User = cfg.user;
         Group = cfg.group;
+        # The secret-filled install config is staged in /tmp
+        PrivateTmp = true;
       };
       path = [ config.services.phpfpm.phpPackage ];
       script = ''
@@ -221,15 +289,31 @@ in
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
       ''
       + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-        if [ ! -f config.php ]; then
-          php flarum install --file=${flarumInstallConfig}
+        if [ ! -f .flarum-installed ]; then
+          if [ ! -f config.php ]; then
+            install -m 0600 ${flarumInstallConfig} /tmp/flarum-install.json
+            ${optionalString (cfg.initialAdminPasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@adminPassword@' \
+                ${escapeShellArg cfg.initialAdminPasswordFile} /tmp/flarum-install.json
+            ''}
+            ${optionalString (cfg.databasePasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+                ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
+            ''}
+            php flarum install --file=/tmp/flarum-install.json
+          fi
+          touch .flarum-installed
         fi
       ''
       + ''
-        if [ -f config.php ]; then
-          php flarum migrate
-          php flarum cache:clear
-        fi
+        install -m 0600 ${configPhpFile} config.php
+        ${optionalString (cfg.databasePasswordFile != null) ''
+          ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+            ${escapeShellArg cfg.databasePasswordFile} config.php
+        ''}
+
+        php flarum migrate
+        php flarum cache:clear
       '';
     };
   };

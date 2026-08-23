@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyserial,
   sockio,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "serialio";
   version = "2.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
@@ -34,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for concurrency agnostic serial communication";
     homepage = "https://github.com/tiagocoutinho/serialio";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

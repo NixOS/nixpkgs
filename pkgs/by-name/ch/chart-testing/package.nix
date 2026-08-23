@@ -12,14 +12,14 @@
   yamllint,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chart-testing";
   version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "chart-testing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wdUUo19bFf3ov+Rd+JV6CtbH9TWGC73lWRrNLOfNGR8=";
   };
 
@@ -33,8 +33,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/helm/chart-testing/v3/ct/cmd.Version=${version}"
-    "-X github.com/helm/chart-testing/v3/ct/cmd.GitCommit=${src.rev}"
+    "-X github.com/helm/chart-testing/v3/ct/cmd.Version=${finalAttrs.version}"
+    "-X github.com/helm/chart-testing/v3/ct/cmd.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/helm/chart-testing/v3/ct/cmd.BuildDate=19700101-00:00:00"
   ];
 
@@ -71,4 +71,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ atkinschang ];
     mainProgram = "ct";
   };
-}
+})

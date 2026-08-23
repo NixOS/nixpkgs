@@ -57,6 +57,7 @@ in
           ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
         };
+        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       };
 
       tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {

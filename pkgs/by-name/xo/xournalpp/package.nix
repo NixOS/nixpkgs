@@ -11,7 +11,6 @@
 
   adwaita-icon-theme,
   alsa-lib,
-  binutils,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -20,7 +19,6 @@
   libsndfile,
   libxml2,
   libzip,
-  pcre,
   poppler,
   portaudio,
   qpdf,
@@ -31,15 +29,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.1";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
-    rev = "v${version}";
-    hash = "sha256-yPuApAmhopMWKROUUsok9rULDVtqXC6WIfm2GEevQkw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CvuHgZ824jLF/L0/PAnbT4RXFLV+Uh2RJ30DA4PEEbE=";
   };
 
   nativeBuildInputs = [
@@ -50,28 +48,29 @@ stdenv.mkDerivation rec {
     help2man
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ [
-      glib
-      gsettings-desktop-schemas
-      gtk3
-      gtksourceview4
-      librsvg
-      libsndfile
-      libxml2
-      libzip
-      pcre
-      poppler
-      portaudio
-      qpdf
-      zlib
-    ]
-    ++ lib.optional withLua lua5_3;
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+    gtk3
+    gtksourceview4
+    librsvg
+    libsndfile
+    libxml2
+    libzip
+    poppler
+    portaudio
+    qpdf
+    zlib
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional withLua lua5_3;
 
   buildFlags = [ "translations" ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $out/share/thumbnailers/com.github.xournalpp.xournalpp.thumbnailer \
+      --replace-fail "Exec=xournalpp-thumbnailer" "Exec=$out/bin/xournalpp-thumbnailer"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -84,10 +83,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
     homepage = "https://xournalpp.github.io/";
-    changelog = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/xournalpp/xournalpp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [
+      iedame
+      sikmir
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "xournalpp";
   };
-}
+})

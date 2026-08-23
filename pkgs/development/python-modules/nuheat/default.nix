@@ -5,7 +5,6 @@
   mock,
   parameterized,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "nuheat";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "broox";

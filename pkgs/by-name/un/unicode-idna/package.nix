@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Unicode IDNA compatible processing data";
     homepage = "http://www.unicode.org/reports/tr46/";
-    license = lib.licenses.unicode-dfs-2016;
+    license = lib.licenses.unicode-30;
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
   };

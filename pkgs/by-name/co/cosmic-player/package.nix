@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
+# Portions of this code are adapted from nixos-cosmic
+# https://github.com/lilyinstarlight/nixos-cosmic
 {
   lib,
   stdenv,
@@ -18,17 +22,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
-  version = "1.0.1";
+  version = "1.6.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-player";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-wBR8KvARINQ3XO/gs5POj32cVj5Eoa3IuWyAmxajMmY=";
+    hash = "sha256-OqfebgO4X2/5fyK/Z68t+4NAbfOZ4gENsUe01dAXGg8=";
   };
 
-  cargoHash = "sha256-Z0+6jtvJ3z/ptcqrbvSuXgjH2liASNJwBIKiHbrVBT8=";
+  cargoHash = "sha256-CuGCbOPERv12INmZsc83OSdqt9w4ACj7Va5kOk8YyNY=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     just
@@ -36,9 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libcosmicAppHook
     rustPlatform.bindgenHook
   ];
-
-  # Largely based on lilyinstarlight's work linked below
-  # https://github.com/lilyinstarlight/nixos-cosmic/blob/main/pkgs/cosmic-player/package.nix
 
   buildInputs = [
     alsa-lib
@@ -64,8 +70,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postInstall = ''
+  preFixup = ''
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+
+    substituteInPlace $out/share/thumbnailers/com.system76.CosmicPlayer.thumbnailer \
+      --replace-fail "TryExec=cosmic-player" "TryExec=$out/bin/cosmic-player" \
+      --replace-fail "Exec=cosmic-player" "Exec=$out/bin/cosmic-player"
   '';
 
   passthru = {

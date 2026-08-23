@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  runtimeShell,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -53,6 +54,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  fixupPhase = ''
+    runHook preFixup
+    if [[ -z "''${dontPatchShebangs-}" ]]; then
+      substituteInPlace $out/config.guess \
+        --replace-fail '#! /bin/sh' '#!${runtimeShell}'
+      substituteInPlace $out/config.sub \
+        --replace-fail '#! /bin/sh' '#!${runtimeShell}'
+    fi
+    runHook postFixup
+  '';
+
+  strictDeps = true;
+
   meta = {
     description = "Attempt to guess a canonical system name";
     homepage = "https://savannah.gnu.org/projects/config";
@@ -64,7 +78,6 @@ stdenv.mkDerivation {
     #   the same distribution terms that you use for the rest of that
     #   program.
     maintainers = with lib.maintainers; [
-      dezgeg
       emilytrau
     ];
     platforms = lib.platforms.all;

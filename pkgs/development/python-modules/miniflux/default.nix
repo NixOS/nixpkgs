@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "miniflux";
-  version = "1.1.4";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "python-client";
     tag = version;
-    hash = "sha256-SCam8WiQH0cOUcqMMvhNDaNPGs7hi1RP4x4eoa5WIa4=";
+    hash = "sha256-xzQozsf6FURdf5HI6U8/26jbFmVYWDqXFt77iZ7pqP8=";
   };
   build-system = [ setuptools ];
 

@@ -4,12 +4,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbacl";
   version = "1.14";
 
   src = fetchurl {
-    url = "https://www.lbreyer.com/gpl/dbacl-${version}.tar.gz";
+    url = "https://www.lbreyer.com/gpl/dbacl-${finalAttrs.version}.tar.gz";
     sha256 = "0224g6x71hyvy7jikfxmgcwww1r5lvk0jx36cva319cb9nmrbrq7";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
-}
+})

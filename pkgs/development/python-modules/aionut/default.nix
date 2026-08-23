@@ -5,16 +5,13 @@
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+  pytest9_0CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aionut";
   version = "4.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bdraco";
@@ -28,7 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cov-stub
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pythonImportsCheck = [ "aionut" ];

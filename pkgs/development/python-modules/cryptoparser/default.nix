@@ -7,25 +7,22 @@
   fetchFromGitLab,
   fetchpatch2,
   pyfakefs,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  unittestCheckHook,
+  pytestCheckHook,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptoparser";
-  version = "1.0.2";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptoparser";
-    tag = "v${version}";
-    hash = "sha256-CsG4hfA3pfE7FwxNfaUTLMS8RV0tv1czoHdIlolUX34=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HlsjenwXFDOA1uK+sn1oDHWxbzxIDriWS6pcZycEsis=";
   };
 
   patches = [
@@ -51,7 +48,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyfakefs
-    unittestCheckHook
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # pytest incorrectly collects abstract base classes
+    "TestCasesBasesHttpHeader"
   ];
 
   postInstall = ''
@@ -60,12 +62,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptoparser" ];
 
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
   meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
-    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kranzes ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})

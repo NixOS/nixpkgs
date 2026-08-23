@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pcodedmp";
   version = "1.2.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bontchev";
@@ -34,7 +31,7 @@ buildPythonPackage rec {
     description = "Python VBA p-code disassembler";
     mainProgram = "pcodedmp";
     homepage = "https://github.com/bontchev/pcodedmp";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

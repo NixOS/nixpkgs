@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "events";
   version = "0.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyeve";
@@ -27,7 +24,7 @@ buildPythonPackage rec {
   enabledTestPaths = [ "events/tests/tests.py" ];
 
   meta = {
-    description = "Bringing the elegance of C# EventHanlder to Python";
+    description = "Bringing the elegance of C# EventHandler to Python";
     homepage = "https://events.readthedocs.org";
     changelog = "https://github.com/pyeve/events/blob/v0.5/CHANGES";
     license = lib.licenses.bsd3;

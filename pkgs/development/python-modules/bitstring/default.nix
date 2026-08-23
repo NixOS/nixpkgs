@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   bitarray,
   setuptools,
   pytest-benchmark,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bitstring";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";

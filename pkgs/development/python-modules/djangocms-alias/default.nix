@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   django-parler,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "djangocms-alias";
-  version = "3.0.2";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "djangocms-alias";
     tag = version;
-    hash = "sha256-70Gs+Ys26ypq5RXkPTxxMDFz/OCBvvAVnSIUQ3P1OV8=";
+    hash = "sha256-mZvOM27wmcHdem3GfnBZpzx+1hwrX3IeEr8K8M5LrrU=";
   };
 
   build-system = [ setuptools ];

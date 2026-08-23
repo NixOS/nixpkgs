@@ -34,14 +34,14 @@
   libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwebp";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7i4fGBTsTjAkBzCjVqXqX4n22j6dLgF/0mz4ajNA45U=";
   };
 
@@ -100,7 +100,10 @@ stdenv.mkDerivation rec {
     homepage = "https://developers.google.com/speed/webp/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ajs124 ];
+    maintainers = with lib.maintainers; [
+      ajs124
+      savtrip
+    ];
     pkgConfigModules = [
       # configure_pkg_config() calls for these are unconditional
       "libwebp"
@@ -112,4 +115,4 @@ stdenv.mkDerivation rec {
       "libwebpmux"
     ];
   };
-}
+})

@@ -12,14 +12,14 @@ assert lzmaSupport -> xz != null;
 let
   mkWith = flag: name: if flag then "--with-${name}" else "--without-${name}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdelta";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
-    rev = "v${version}";
-    repo = "xdelta-devel";
+    rev = "v${finalAttrs.version}";
+    repo = "xdelta-gpl";
     owner = "jmacd";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xdelta3";
     platforms = lib.platforms.unix;
   };
-}
+})

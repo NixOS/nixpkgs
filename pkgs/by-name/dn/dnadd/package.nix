@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnadd";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "JoeLancaster";
     repo = "dnadd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vzbgz8y9gj4lszsx4iczfbrj373sl4wi43j7rp46zfcbw323d4r";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ joelancaster ];
   };
-}
+})

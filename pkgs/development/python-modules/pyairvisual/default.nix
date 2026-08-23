@@ -12,15 +12,12 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyairvisual";
   version = "2023.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -61,7 +58,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with AirVisual";
     homepage = "https://github.com/bachya/pyairvisual";
     changelog = "https://github.com/bachya/pyairvisual/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

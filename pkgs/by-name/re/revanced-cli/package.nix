@@ -6,13 +6,13 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "revanced-cli";
-  version = "5.0.1";
+  version = "6.0.0";
 
   src = fetchurl {
-    url = "https://github.com/revanced/revanced-cli/releases/download/v${version}/revanced-cli-${version}-all.jar";
-    hash = "sha256-tq+DSWAPVupR2W1Jqk0vKI4ox5zWSTSbpwyLcs4EXa8=";
+    url = "https://github.com/revanced/revanced-cli/releases/download/v${finalAttrs.version}/revanced-cli-${finalAttrs.version}-all.jar";
+    hash = "sha256-wlVJvBfVnS65T6X4bmDpt3oCdyyoj3BQ+PEnb5I6mVg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jopejoe1 ];
     mainProgram = "revanced-cli";
   };
-}
+})

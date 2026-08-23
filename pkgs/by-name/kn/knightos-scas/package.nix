@@ -12,14 +12,14 @@ let
   isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scas";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "scas";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JGQE+orVDKKJsTt8sIjPX+3yhpZkujISroQ6g19+MzU=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
   };
-}
+})

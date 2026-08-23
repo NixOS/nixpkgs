@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cairo,
   meson,
   ninja,
@@ -28,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.5";
+  version = "1.28.5";
 
   outputs = [
     "out"
@@ -37,28 +36,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Y9Rqjv+ooiXiWkZLp1OKzoU/4NwecDZrJ8IIE15UAc4=";
+    hash = "sha256-dFkEXbMdbkRgC8vgEdySV1AmiHDnuQ9+ego69KIcCeU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
-      patches
       cargoRoot
       ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-gU+SBvxwmrGiyeKXF3SA2ohIHNTS4ZBC+elB0u1QKRE=";
+    hash = "sha256-5VYzDwAMyVN2HR/sS8rCwTR7UW/tt60AS7wZMjx+w74=";
   };
 
-  patches = [
-    # dots-viewer: sort static files
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9208
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/b3099f78775eab1ac19a9e163c0386e01e74b768.patch";
-      stripLen = 2;
-      hash = "sha256-QRHqbZ6slYcwGl+o9Oi4jV+ANMorCED4cQV5qDS74eg=";
-    })
-  ];
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   depsBuildBuild = [
     pkg-config
@@ -95,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    # dots-viewer requires nix 0.23.2, which is too old to build on loongarch64
+    (lib.mesonEnable "dots_viewer" (!stdenv.hostPlatform.isLoongArch64))
   ];
 
   cargoRoot = "dots-viewer";
@@ -102,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript =
       let
-        updateSource = directoryListingUpdater { };
+        updateSource = directoryListingUpdater { odd-unstable = true; };
 
         updateLockfile = {
           command = [
@@ -127,11 +122,15 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

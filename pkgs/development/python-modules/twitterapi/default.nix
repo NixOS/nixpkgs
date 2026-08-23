@@ -4,15 +4,12 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "twitterapi";
   version = "2.8.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geduldig";
@@ -35,7 +32,7 @@ buildPythonPackage rec {
     description = "Python wrapper for Twitter's REST and Streaming APIs";
     homepage = "https://github.com/geduldig/TwitterAPI";
     changelog = "https://github.com/geduldig/TwitterAPI/blob/v${version}/CHANGE.log";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

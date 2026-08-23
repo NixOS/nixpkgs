@@ -3,35 +3,41 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  supabase-cli,
+  versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "supabase-cli";
-  version = "2.67.1";
+  version = "2.111.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-IRgDCLAClF7Wwmhf1Ba6ulpyDZW3DSZSGj+oIptXImw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uZXSlrzNtX7pdT4ppWKQ8rddiD6TPMTi9nBUWtUH5mM=";
   };
 
-  vendorHash = "sha256-CRUt2wjPCzIQ2/RDXvwJ5xW3KTJNYf/7Kzkhh4Z9NfI=";
+  # Supabase is in the process of porting the CLI to TS, for now we continue with the Go cli.
+  sourceRoot = "${finalAttrs.src.name}/apps/cli-go";
+
+  vendorHash = "sha256-CkDH+8SsReL8+XtCPW0M2Ohd2HJJgOLzCU0TdZhTqmI=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/supabase/cli/internal/utils.Version=${version}"
+    "-X=github.com/supabase/cli/internal/utils.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
-  doCheck = false; # tests are trying to connect to localhost
-
   nativeBuildInputs = [ installShellFiles ];
+
+  doCheck = false; # Root Go package does not have any tests.
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     mv $out/bin/{cli,supabase}
@@ -42,15 +48,10 @@ buildGoModule rec {
       --zsh <($out/bin/supabase completion zsh)
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = supabase-cli;
-    };
-    updateScript = nix-update-script {
-      # Fetch versions from GitHub releases to detect pre-releases and
-      # avoid updating to them.
-      extraArgs = [ "--use-github-releases" ];
-    };
+  passthru.updateScript = nix-update-script {
+    # Fetch versions from GitHub releases to detect pre-releases and
+    # avoid updating to them.
+    extraArgs = [ "--use-github-releases" ];
   };
 
   meta = {
@@ -60,7 +61,8 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       gerschtli
       kashw2
+      yuannan
     ];
     mainProgram = "supabase";
   };
-}
+})

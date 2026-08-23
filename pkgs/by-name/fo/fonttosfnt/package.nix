@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fonttosfnt";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "fonttosfnt";
     tag = "fonttosfnt-${finalAttrs.version}";
-    hash = "sha256-DPPouSLsPurJ7fscxraF9HEYENbuCvZcxZ44bBY7ytU=";
+    hash = "sha256-W516e6ChCyvyjW4AT5DKzg12s+up0fO5UMDedAcO68o=";
   };
 
   strictDeps = true;

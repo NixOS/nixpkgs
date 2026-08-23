@@ -15,7 +15,7 @@ bundlerApp {
     description = "GitLab's issues and merge requests triage, automated";
     homepage = "https://gitlab.com/gitlab-org/ruby/gems/gitlab-triage";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ xanderio ];
     mainProgram = "gitlab-triage";
   };
 }

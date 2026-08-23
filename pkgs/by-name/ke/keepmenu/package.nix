@@ -8,16 +8,16 @@
   xvfb-run,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "keepmenu";
-  version = "1.4.2";
-  format = "pyproject";
+  version = "1.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "keepmenu";
-    rev = version;
-    hash = "sha256-Kzt2RqyYvOWnbkflwTHzlnpUaruVQvdGys57DDpH9o8=";
+    rev = finalAttrs.version;
+    hash = "sha256-MUtwQ9V5PcczR2mISMs8EcFGkDAPmuYSvNW+COC4Bhw=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ elliot ];
     platforms = lib.platforms.linux;
   };
-}
+})

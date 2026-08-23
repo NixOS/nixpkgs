@@ -6,12 +6,12 @@
   withoutInitTools ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withoutInitTools then "sysvtools" else "sysvinit";
   version = "3.04";
 
   src = fetchurl {
-    url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
+    url = "mirror://savannah/sysvinit/sysvinit-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-KmIf5uRSi8kTCLdIZ92q6733dT8COVwMW66Be9K346U=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

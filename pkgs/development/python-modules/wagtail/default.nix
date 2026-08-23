@@ -1,7 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # frontend
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
 
   # build-system
   setuptools,
@@ -12,13 +17,13 @@
   django,
   django-filter,
   django-modelcluster,
-  django-modelsearch,
   django-taggit,
   django-tasks,
   django-treebeard,
   djangorestframework,
   draftjs-exporter,
   laces,
+  modelsearch,
   openpyxl,
   permissionedforms,
   pillow,
@@ -30,24 +35,46 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+let
+  # updating django-treebeard regularly requires changes in code
+  django-treebeard' = django-treebeard.overridePythonAttrs (old: {
+    version = "5.3.1";
+    src = old.src.override {
+      hash = "sha256-s2s/cN1daeST9YxvjwJSH4mbT/gg5/J3n4F6g+S15Rc=";
+    };
+  });
+in
+buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.2.1";
+  version = "7.4.2";
   pyproject = true;
 
-  # The GitHub source requires some assets to be compiled, which in turn
-  # requires fixing the upstream package lock. We need to use the PyPI release
-  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OIu0LEgYwIGk3fNub0Upv7xU7SYqkbZbDl+VFHbyz3Q=";
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = "wagtail";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6IttzQnASWMDq4fgyrpJj3KrQvO4zMq+0dLTfm8bLzs=";
   };
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
+  ];
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-Z2VOMqsNIBybJpfYxAq2dkmS2vwd8Yuhu7MCFyqNxdI=";
+  };
+
+  preBuild = ''
+    # upstream only provides a hook for sdists, not wheels
+    # https://github.com/wagtail/wagtail/blob/v7.3/setup.py#L22
+    npm run build
+  '';
 
   build-system = [
     setuptools
   ];
-
-  pythonRelaxDeps = [ "django-tasks" ];
 
   dependencies = [
     anyascii
@@ -55,13 +82,13 @@ buildPythonPackage rec {
     django
     django-filter
     django-modelcluster
-    django-modelsearch
     django-taggit
     django-tasks
-    django-treebeard
+    django-treebeard'
     djangorestframework
     draftjs-exporter
     laces
+    modelsearch
     openpyxl
     permissionedforms
     pillow
@@ -83,8 +110,8 @@ buildPythonPackage rec {
     description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
-    changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wagtail/wagtail/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

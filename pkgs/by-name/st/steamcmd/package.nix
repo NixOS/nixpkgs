@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   steam-run,
   coreutils,
@@ -14,22 +14,19 @@ let
         "https://web.archive.org/web/20240521141411/https://steamcdn-a.akamaihd.net/client/installer/steamcmd_${platform}.tar.gz";
     in
     {
-      x86_64-darwin = fetchurl {
-        url = url "osx";
-        hash = "sha256-jswXyJiOWsrcx45jHEhJD3YVDy36ps+Ne0tnsJe9dTs=";
-      };
       x86_64-linux = fetchurl {
         url = url "linux";
         hash = "sha256-zr8ARr/QjPRdprwJSuR6o56/QVXl7eQTc7V5uPEHHnw=";
       };
     };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 
   src =
-    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    srcs.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   # The source tarball does not have a single top-level directory.
   preUnpack = ''
@@ -49,7 +46,9 @@ stdenv.mkDerivation {
       --subst-var out \
       --subst-var-by coreutils ${coreutils} \
       --subst-var-by steamRoot '${steamRoot}' \
-      --subst-var-by steamRun ${if stdenv.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"}
+      --subst-var-by steamRun ${
+        if stdenvNoCC.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"
+      }
     chmod 0755 $out/bin/steamcmd
   '';
 
@@ -59,7 +58,6 @@ stdenv.mkDerivation {
     mainProgram = "steamcmd";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ tadfisher ];

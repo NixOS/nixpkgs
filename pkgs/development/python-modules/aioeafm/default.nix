@@ -7,15 +7,12 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioeafm";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
@@ -50,7 +47,7 @@ buildPythonPackage rec {
     description = "Python client for access the Real Time flood monitoring API";
     homepage = "https://github.com/Jc2k/aioeafm";
     changelog = "https://github.com/Jc2k/aioeafm/releases/tag/${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

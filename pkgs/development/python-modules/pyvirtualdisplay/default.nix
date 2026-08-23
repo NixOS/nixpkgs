@@ -4,7 +4,11 @@
   buildPythonPackage,
   fetchPypi,
   replaceVars,
-  xorg,
+  xorg-server,
+  xvfb,
+  xmessage,
+  xdpyinfo,
+  xauth,
 
   # build-system
   setuptools,
@@ -17,7 +21,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  vncdo,
+  vncdotool,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +37,8 @@ buildPythonPackage rec {
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./paths.patch {
-      xauth = lib.getExe xorg.xauth;
-      xdpyinfo = lib.getExe xorg.xdpyinfo;
+      xauth = lib.getExe xauth;
+      xdpyinfo = lib.getExe xdpyinfo;
     })
   ];
 
@@ -49,10 +53,10 @@ buildPythonPackage rec {
     psutil
     pytest-timeout
     pytestCheckHook
-    (vncdo.overridePythonAttrs { doCheck = false; })
-    xorg.xorgserver
-    xorg.xmessage
-    xorg.xvfb
+    (vncdotool.overridePythonAttrs { doCheck = false; })
+    xorg-server
+    xmessage
+    xvfb
   ];
 
   pytestFlags = [ "-v" ];

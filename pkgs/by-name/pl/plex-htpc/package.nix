@@ -16,11 +16,22 @@
   makeShellWrapper,
   minizip,
   nss,
-  squashfsTools,
+  squashfs-tools,
   stdenv,
   writeShellScript,
   xkeyboard_config,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxshmfence,
 }:
 let
   pname = "plex-htpc";
@@ -51,7 +62,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       makeShellWrapper
-      squashfsTools
+      squashfs-tools
     ];
 
     buildInputs = [
@@ -65,18 +76,18 @@ let
       minizip
       nss
       stdenv.cc.cc
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxshmfence
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xrandr
+      libxcomposite
+      libxdamage
+      libxinerama
+      libxrandr
+      libxrender
+      libxtst
+      libxshmfence
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xrandr
     ];
 
     strictDeps = true;

@@ -11,7 +11,6 @@
   pyjwt,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   requests,
   requests-futures,
   requests-mock,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "jira";
   version = "3.10.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";

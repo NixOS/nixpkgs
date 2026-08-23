@@ -6,22 +6,22 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubecm";
-  version = "0.34.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
-    rev = "v${version}";
-    hash = "sha256-UPjo21tbPCC+l6aWrTcYZEJ9a1k8/kJ7anBHWZSkYwI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5wTxVzpvwD6jx6Cfa0ChIi8wQCrnqzZM2jvwGpQdq50=";
   };
 
-  vendorHash = "sha256-P+CkGgMCDpW/PaGFljj+WRxfeieuTFax6xvNq6p8lHw=";
+  vendorHash = "sha256-TyJpFN8JEWpzCHKUX3iYUHhTOOAp5I1YEzhUkWPXx8A=";
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sunny0826/kubecm/version.Version=${version}"
+    "-X github.com/sunny0826/kubecm/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -45,4 +45,4 @@ buildGoModule rec {
     ];
     mainProgram = "kubecm";
   };
-}
+})

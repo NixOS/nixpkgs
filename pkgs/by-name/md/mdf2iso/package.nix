@@ -4,7 +4,7 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mdf2iso";
   version = "0.3.1";
 
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small utility that converts MDF images to ISO format";
-    homepage = src.url;
+    homepage = finalAttrs.src.url;
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.oxij ];
     mainProgram = "mdf2iso";
   };
-}
+})

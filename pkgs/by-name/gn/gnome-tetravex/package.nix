@@ -17,12 +17,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-tetravex";
   version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/gnome-tetravex-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor finalAttrs.version}/gnome-tetravex-${finalAttrs.version}.tar.xz";
     hash = "sha256-g4SawGTUVuHdRrbiAcaGFSYkw9HsS5mTWYWkmqeRcss=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

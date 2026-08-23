@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "vt-py";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     description = "Python client library for VirusTotal";
     homepage = "https://virustotal.github.io/vt-py/";
     changelog = "https://github.com/VirusTotal/vt-py/releases/tag//${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

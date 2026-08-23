@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  test-output-filename = "snapshot.jpeg";
+in
 {
   name = "ustreamer-vmtest";
   nodes = {
@@ -43,13 +46,35 @@
           formats/2/height = 480
           formats/2/fps = 20/1, 15/2
         '';
+
+        test-stream-name = "test_stream.jpeg";
+
+        test-ustreamer-python =
+          pkgs.writers.writePython3Bin "test-ustreamer-python"
+            {
+              libraries = [ pkgs.python3Packages.ustreamer ];
+            }
+            ''
+              import ustreamer
+
+              with ustreamer.Memsink("${test-stream-name}") as sink:
+                  frame = sink.wait_frame()
+              with open("${test-output-filename}", "wb") as file:
+                  file.write(frame["data"])
+            '';
       in
       {
         services.ustreamer = {
           enable = true;
           device = "/dev/video9";
-          extraArgs = [ "--device-timeout=8" ];
+          extraArgs = [
+            "--device-timeout=8"
+            "--sink=${test-stream-name}"
+          ];
         };
+        environment.systemPackages = [
+          test-ustreamer-python
+        ];
         networking.firewall.allowedTCPPorts = [ 8080 ];
 
         boot.extraModulePackages = [ config.boot.kernelPackages.akvcam ];
@@ -68,5 +93,8 @@
 
     client.wait_for_unit("multi-user.target")
     client.succeed("curl http://camera:8080")
+
+    camera.succeed("test-ustreamer-python")
+    camera.wait_for_file('${test-output-filename}')
   '';
 }

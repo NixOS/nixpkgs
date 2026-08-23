@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # UTF-8 locale for translation generation
     LANG = "C.UTF8";
-    # accomodate #include <qt6/poppler-qt6.h>…
+    # accommodate #include <qt6/poppler-qt6.h>…
     NIX_CFLAGS_COMPILE = "-I${qt6Packages.poppler.dev}/include/poppler";
   };
 

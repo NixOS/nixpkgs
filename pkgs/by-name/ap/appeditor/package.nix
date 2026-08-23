@@ -16,14 +16,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appeditor";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-A0YasHw5osGrgUPiUPuRBnv1MR/Pth6jVHGEx/klOGY=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.donadigo.appeditor";
   };
-}
+})

@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     six
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
     pytest-django

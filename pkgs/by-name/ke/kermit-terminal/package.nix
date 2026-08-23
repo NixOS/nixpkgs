@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   gtk3,
-  pcre,
   pkg-config,
   vte,
   nixosTests,
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    pcre
     vte
   ];
 

@@ -2,6 +2,7 @@
   cmake,
   doctest,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   replaceVars,
   stdenv,
@@ -9,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskflow";
-  version = "3.11.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "taskflow";
     repo = "taskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GIP/69JlygdmryRA4uiyXM3FZZ0wkvP3DceYGkn4+QY=";
+    hash = "sha256-IxorLV5qQ8veFiwRka8k5oMR51KTUn10MbCIYNVToLk=";
   };
 
   patches = [

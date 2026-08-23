@@ -4,14 +4,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bunyan-rs";
   version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "LukeMathWalker";
     repo = "bunyan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dqhZIwxWBMXS2RgE8YynYrESVyAOIJ9ujAKcp2tDhvA=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ netcrns ];
     mainProgram = "bunyan";
   };
-}
+})

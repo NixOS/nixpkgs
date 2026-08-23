@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usrsctp";
   version = "0.9.5.0";
 
   src = fetchFromGitHub {
     owner = "sctplab";
     repo = "usrsctp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "10ndzkip8blgkw572n3dicl6mgjaa7kygwn3vls80liq92vf1sa9";
   };
 
@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # GCC 16's unused variable analysis is more advanced, leading to a build
+  # failure since usrsctp builds with -Werror.
+  # https://github.com/sctplab/usrsctp/pull/744
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=unused-but-set-variable") ];
+
   # https://github.com/sctplab/usrsctp/issues/662
   postPatch = ''
     substituteInPlace usrsctplib/CMakeLists.txt \
@@ -52,4 +57,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

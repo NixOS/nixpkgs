@@ -9,7 +9,6 @@
   libiconv,
   libxml2,
   openssl,
-  pcre,
   pcre2,
   zlib,
   jabberSupport ? true,
@@ -17,7 +16,7 @@
   ldapSupport ? true,
   openldap,
   odbcSupport ? true,
-  unixODBC,
+  unixodbc,
   snmpSupport ? true,
   net-snmp,
   sshSupport ? true,
@@ -61,10 +60,10 @@ import ./versions.nix (
       libiconv
       libxml2
       openssl
-      (if lib.versionAtLeast version "7.4" then pcre2 else pcre)
+      pcre2
       zlib
     ]
-    ++ optional odbcSupport unixODBC
+    ++ optional odbcSupport unixodbc
     ++ optional jabberSupport iksemel
     ++ optional ldapSupport openldap
     ++ optional snmpSupport net-snmp
@@ -79,7 +78,7 @@ import ./versions.nix (
       "--with-iconv"
       "--with-libcurl"
       "--with-libevent"
-      "--with-libpcre"
+      "--with-libpcre2"
       "--with-libxml2"
       "--with-openssl=${openssl.dev}"
       "--with-zlib=${zlib}"
@@ -115,6 +114,9 @@ import ./versions.nix (
     + optionalString postgresqlSupport ''
       mkdir -p $out/share/zabbix/database/postgresql
       cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
+
+      mkdir -p $out/share/zabbix/database/postgresql/timescaledb
+      cp -prvd database/postgresql/timescaledb/schema.sql $out/share/zabbix/database/postgresql/timescaledb/schema.sql
     '';
 
     meta = {

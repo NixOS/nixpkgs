@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "crossfire-gridarta";
+  pname = "crossfire-gridarta";
   version = "2025-04";
 
   src = fetchgit {
@@ -48,6 +48,6 @@ stdenv.mkDerivation {
     homepage = "http://crossfire.real-time.com/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ToxicFrog ];
+    maintainers = [ ];
   };
 }

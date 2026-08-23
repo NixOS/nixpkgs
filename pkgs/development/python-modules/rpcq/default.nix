@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-rapidjson,
-  pythonOlder,
   pyzmq,
   ruamel-yaml,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "rpcq";
   version = "3.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rigetti";

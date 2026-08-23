@@ -6,19 +6,19 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ihp-new";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "digitallyinduced";
     repo = "ihp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DmaIr9kF+TG24wVNPVufxC74TYMCLziLYS9hCZHBDTc=";
   };
 
   dontConfigure = true;
-  sourceRoot = "${src.name}/ProjectGenerator";
+  sourceRoot = "${finalAttrs.src.name}/ProjectGenerator";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mpscholten ];
     platforms = lib.platforms.unix;
   };
-}
+})

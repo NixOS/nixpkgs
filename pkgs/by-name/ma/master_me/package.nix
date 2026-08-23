@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   pkg-config,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "master_me";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "trummerschlunk";
     repo = "master_me";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-eesMXxRcCgzhSQ+WUqM00EuKYhFxysjH+RWKHKGYzUM=";
   };
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
   ];
 
   enableParallelBuilding = true;
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "master_me";
   };
-}
+})

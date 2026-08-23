@@ -6,11 +6,11 @@
 let
   inherit (llvmPackages) clang-unwrapped;
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "analyze-build";
   inherit (clang-unwrapped) version;
 
-  format = "other";
+  pyproject = false;
 
   src = clang-unwrapped + "/bin";
 
@@ -34,13 +34,13 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "run Clang static analyzer against a project with compilation database";
-    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${version}/clang/tools/scan-build-py/";
+    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${finalAttrs.version}/clang/tools/scan-build-py/";
     mainProgram = "scan-build";
     license = with lib.licenses; [
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
     platforms = lib.intersectLists python3.meta.platforms clang-unwrapped.meta.platforms;
   };
-}
+})

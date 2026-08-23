@@ -3,32 +3,29 @@
   stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
-  gtk-engine-murrine,
 }:
 
 let
   themeName = "Dracula";
-  version = "4.0.0-unstable-2025-12-26";
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
-  inherit version;
+  version = "4.0.0-unstable-2026-03-01";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "d4163a5e6e598053567038c53777bf7682ecd17f";
-    hash = "sha256-FalI8DvTCVzCHlZFh9j+CD0WMtELd174JaUWvuBHRRY=";
+    rev = "1188c8eabdfc33c42738862b91caf7fab884c767";
+    hash = "sha256-Z3dMgkk5SvpCWjxdm8hd5FBeEvq0uCJuj3zC5boQEdk=";
   };
-
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes/${themeName}
-    cp -a {assets,cinnamon,gnome-shell,gtk-2.0,gtk-3.0,gtk-3.20,gtk-4.0,index.theme,metacity-1,unity,xfwm4} $out/share/themes/${themeName}
+    cp -a {assets,cinnamon,gnome-shell,gtk-3.0,gtk-3.20,gtk-4.0,index.theme,metacity-1,unity,xfwm4} $out/share/themes/${themeName}
 
     cp -a kde/{color-schemes,plasma} $out/share/
     cp -a kde/kvantum $out/share/Kvantum

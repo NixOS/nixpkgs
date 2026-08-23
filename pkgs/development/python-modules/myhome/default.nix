@@ -6,16 +6,13 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "myhome";
   version = "0.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speijnik";

@@ -4,7 +4,6 @@
   stdenv,
   buildPythonPackage,
   fetchurl,
-  fetchPypi,
   python,
   pythonOlder,
   pythonAtLeast,
@@ -20,8 +19,7 @@
   numpy,
   protobuf,
   pillow,
-  decorator,
-  astor,
+  networkx,
   opt-einsum,
   rdma-core,
   safetensors,
@@ -33,37 +31,30 @@ let
   sources = import ./sources.nix;
   version = sources.version;
   format = "wheel";
-  pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  hash =
-    if cudaSupport then
-      sources."${stdenv.hostPlatform.system}"."gpu"."cu${
-        lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
-      }"."${pyShortVersion}"
-    else
-      sources."${stdenv.hostPlatform.system}"."cpu"."${pyShortVersion}"
-        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  platform = sources."${stdenv.hostPlatform.system}".platform;
-  src =
-    if cudaSupport then
-      (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu${
-          lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
-        }/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
-        inherit hash;
-      })
-    else
-      (fetchPypi {
-        inherit
-          version
-          format
-          hash
-          platform
-          ;
-        pname = "paddlepaddle";
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-      });
+  pyShortVersion = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
+
+  supportedCudaVersions = lib.concatStringsSep ", " (builtins.attrNames systemSources.gpu);
+  throwCuda = throw "Unsupported CUDA version: ${cudaVersion}. Supported versions: ${supportedCudaVersions}";
+  platformSources =
+    if cudaSupport then systemSources.gpu.${cudaVersion} or throwCuda else systemSources.cpu;
+
+  throwPython = throw "Unsupported python version: ${pyShortVersion}";
+  hash = platformSources.${pyShortVersion} or throwPython;
+
+  platform = sources.${stdenv.hostPlatform.system}.platform;
+
+  src = fetchurl {
+    url = "https://paddle-whl.bj.bcebos.com/stable/${
+      if cudaSupport then cudaVersion else "cpu"
+    }/${pname}/${
+      lib.replaceStrings [ "-" ] [ "_" ] pname
+    }-${version}-${pyShortVersion}-${pyShortVersion}-${platform}.whl";
+    inherit hash;
+  };
 in
 buildPythonPackage {
   inherit
@@ -82,15 +73,37 @@ buildPythonPackage {
 
   buildInputs = lib.optionals cudaSupport [ rdma-core ];
 
+  pythonRelaxDeps = [
+    "opt_einsum"
+  ];
+
+  pythonRemoveDeps = lib.optionals cudaSupport [
+    "cuda-python"
+    "nvidia-cublas-cu12"
+    "nvidia-cuda-cccl-cu12"
+    "nvidia-cuda-cupti-cu12"
+    "nvidia-cuda-nvrtc-cu12"
+    "nvidia-cuda-runtime-cu12"
+    "nvidia-cudnn-cu12"
+    "nvidia-cufile-cu12"
+    "nvidia-cufft-cu12"
+    "nvidia-curand-cu12"
+    "nvidia-cusolver-cu12"
+    "nvidia-cusparse-cu12"
+    "nvidia-cusparselt-cu12"
+    "nvidia-nccl-cu12"
+    "nvidia-nvjitlink-cu12"
+    "nvidia-nvtx-cu12"
+  ];
+
   dependencies = [
     setuptools
     httpx
     numpy
     protobuf
     pillow
-    decorator
-    astor
     opt-einsum
+    networkx
     safetensors
     typing-extensions
   ];

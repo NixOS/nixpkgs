@@ -7,7 +7,6 @@
 
 bundlerEnv {
   pname = "cfn-nag";
-  version = "0.8.10";
 
   inherit ruby;
   gemdir = ./.;
@@ -20,7 +19,6 @@ bundlerEnv {
     mainProgram = "cfn_nag";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      momeemt
       mathstlouis
     ];
     platforms = lib.platforms.unix;

@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  gnome-icon-theme,
   mint-x-icons,
   hicolor-icon-theme,
 }:
@@ -22,7 +21,6 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    gnome-icon-theme
     mint-x-icons
     hicolor-icon-theme
   ];

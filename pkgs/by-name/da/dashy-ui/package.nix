@@ -9,27 +9,29 @@
   fixup-yarn-lock,
   prefetch-yarn-deps,
   nixosTests,
-  nodejs_20,
-  nodejs-slim_20,
-  remarshal_0_17,
+  nodejs_24,
+  nodejs-slim_24,
+  remarshal,
+  nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.1.1-unstable-2025-09-12";
+  version = "4.5.10";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
-    rev = "e70ade555fdccf4e723a90f8a2d46fcf83645c4f";
-    hash = "sha256-edsGHc6Hi306aq+TA2g5FL/ZYNfExbcgHS5PWF9O0+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-oHTe2vilrtvApLQ7x8L+upTgkhz2TsXsbA8KcvsZg64=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-r36w3Cz/V7E/xPYYpvfQsdk2QXfCVDYE9OxiFNyKP2s=";
+    hash = "sha256-43z3gn58eb7Dh9QXLDoeAJAViCQX+8IeSN4xx+hYfPI=";
   };
 
-  passthru.tests = {
-    dashy = nixosTests.dashy;
+  passthru = {
+    tests.dashy = nixosTests.dashy;
+    updateScript = nix-update-script { };
   };
 
   # - If no settings are passed, use the default config provided by upstream
@@ -38,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   # the way the client parses things
   # - Instead, we use `remarshal` to convert it to yaml
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
-  preBuild = lib.optional (settings != { }) ''
+  preBuild = lib.optionalString (settings != { }) ''
     echo "Writing settings override..."
     json2yaml '${builtins.toFile "conf.json" (builtins.toJSON settings)}' user-data/conf.yml
     yarn validate-config --offline
@@ -54,19 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
     # but they've been overridden for the sake of consistency/in case future updates to dashy/node would cause issues with differing major versions
     (yarnConfigHook.override {
       fixup-yarn-lock = fixup-yarn-lock.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       prefetch-yarn-deps = prefetch-yarn-deps.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       yarn = yarn.override {
-        nodejs = nodejs_20;
+        nodejs = nodejs_24;
       };
     })
     yarnBuildHook
-    nodejs_20
+    nodejs_24
     # For yaml conversion
-    remarshal_0_17
+    remarshal
   ];
   doDist = false;
   meta = {

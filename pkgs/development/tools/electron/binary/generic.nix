@@ -24,7 +24,14 @@
   gdk-pixbuf,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   pango,
   systemd,
   pciutils,
@@ -46,7 +53,6 @@ let
     mainProgram = "electron";
     teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
@@ -54,7 +60,7 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = lib.optional (lib.versionOlder version "37.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "41.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -76,7 +82,6 @@ let
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -101,14 +106,14 @@ let
     gtk4
     nss
     nspr
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxkbfile
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxkbfile
     pango
     pciutils
     stdenv.cc.cc
@@ -180,6 +185,9 @@ let
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = finalAttrs: {

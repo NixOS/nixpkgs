@@ -4,15 +4,12 @@
   fetchPypi,
   rtl-sdr,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
   version = "0.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
 
   postPatch = ''
-    sed "s|driver_files =.*|driver_files = ['${rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
+    sed "s|driver_files =.*|driver_files = ['${lib.getLib rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
   '';
 
   # No tests that can be used.

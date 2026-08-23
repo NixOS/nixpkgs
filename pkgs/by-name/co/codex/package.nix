@@ -1,9 +1,23 @@
 {
   lib,
   stdenv,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  bubblewrap,
+  clang,
+  cmake,
+  gitMinimal,
+  libcap,
+  libclang,
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
+  librusty_v8_src_binding ? callPackage ./librusty_v8_src_binding.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8SrcBinding;
+  },
+  lld,
   makeBinaryWrapper,
   nix-update-script,
   pkg-config,
@@ -11,29 +25,85 @@
   ripgrep,
   versionCheckHook,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  _experimental-update-script-combinators,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.77.0";
+  version = "0.149.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-05zjzCrVhPLvrqx9UA2dPOjP8mQFUTWBCrmq/iaR3hg=";
+    hash = "sha256-SMVTW/CcGz4xxyeFe3KUf3Ns6jp+2SRMTvtA2o2+y7Q=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-bxy8YaUxsud3Gg09ebJyo0WNFvt76dcQTQ50B+xSbJU=";
+  cargoHash = "sha256-K58PL588Hhk75FyXgU6b8IEAco8FIz8oGd1S0WgOjyQ=";
+
+  __structuredAttrs = true;
+
+  # Match upstream's release build for the codex binary, plus its
+  # codex-code-mode-host runtime companion for out-of-process V8 execution.
+  cargoBuildFlags = [
+    "--package"
+    "codex-cli"
+    "--package"
+    "codex-code-mode-host"
+  ];
+  cargoCheckFlags = [
+    "--package"
+    "codex-cli"
+    "--package"
+    "codex-code-mode-host"
+  ];
+
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'lto = "thin"' "" \
+      --replace-fail 'codegen-units = 4' ""
+  '';
 
   nativeBuildInputs = [
+    clang
+    cmake
+    gitMinimal
     installShellFiles
     makeBinaryWrapper
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libclang
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+  ];
+
+  # NOTE: set LIBCLANG_PATH so bindgen can locate libclang, and adjust
+  # warning-as-error flags to avoid known false positives (GCC's
+  # stringop-overflow in BoringSSL's a_bitstr.cc) while keeping Clang's
+  # character-conversion warning-as-error disabled.
+  env = {
+    LIBCLANG_PATH = "${lib.getLib libclang}/lib";
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals stdenv.cc.isGNU [
+        "-Wno-error=stringop-overflow"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "-Wno-error=character-conversion"
+      ]
+    );
+    RUSTY_V8_ARCHIVE = librusty_v8;
+    RUSTY_V8_SRC_BINDING_PATH = librusty_v8_src_binding;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' lld "ld64.lld"}";
+  };
 
   # NOTE: part of the test suite requires access to networking, local shells,
   # apple system configuration, etc. since this is a very fast moving target
@@ -51,20 +121,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/codex --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
+    wrapProgram $out/bin/codex --prefix PATH : ${
+      lib.makeBinPath ([ ripgrep ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ])
+    }
   '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru = {
-    updateScript = nix-update-script {
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         "^rust-v(\\d+\\.\\d+\\.\\d+)$"
       ];
-    };
-  };
+    })
+    ./update-librusty.sh
+  ];
 
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
@@ -73,8 +147,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "codex";
     maintainers = with lib.maintainers; [
-      malo
       delafthi
+      jeafleohj
+      malo
     ];
     platforms = lib.platforms.unix;
   };

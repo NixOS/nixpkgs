@@ -5,14 +5,18 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtommath";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/libtom/libtommath/releases/download/v${version}/ltm-${version}.tar.xz";
+    url = "https://github.com/libtom/libtommath/releases/download/v${finalAttrs.version}/ltm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-KWJy2TQ1mRMI63NgdgDANLVYgHoH6CnnURQuZcz6nQg=";
   };
+
+  patches = [
+    ./force_mp_set_double.patch
+  ];
 
   postPatch = ''
     substituteInPlace makefile.shared \
@@ -42,4 +46,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

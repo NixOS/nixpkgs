@@ -12,6 +12,7 @@
   poetry-core,
   pydantic-settings,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   redis,
@@ -19,26 +20,23 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastapi-mail";
-  version = "1.5.8";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    tag = version;
-    hash = "sha256-xxArFytTJKLTlBjR3T+c1OTpK3vSgIrpRJqQEcFs4J4=";
+    tag = finalAttrs.version;
+    hash = "sha256-7Of7PSfY5lFbuxqBM5IyCnOa1CwbOijruSSrRylz3S8=";
   };
 
-  pythonRelaxDeps = [
-    "aiosmtplib"
-    "cryptography"
-    "email-validator"
-    "pydantic"
-  ];
+  pythonRelaxDeps = [ "cryptography" ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiosmtplib
@@ -46,6 +44,7 @@ buildPythonPackage rec {
     cryptography
     email-validator
     fakeredis
+    httpx
     jinja2
     pydantic
     pydantic-settings
@@ -54,7 +53,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    httpx = [ httpx ];
     redis = [ redis ];
   };
 
@@ -75,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
-    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${src.tag}";
+    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

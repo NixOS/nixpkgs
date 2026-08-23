@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.32.0";
+  version = "5.37.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E//6rO3LsGLLNrPFVi/R3njkhOI1GnM9mGI/AIcVG/Q=";
+    hash = "sha256-V5Icy4A6hpvNErxroxnzeUNtBHLxeT8QJPpEGmLvWmM=";
   };
 
-  vendorHash = "sha256-xtw7CKpXEvjpfDQ9x0coLmfTQPy+NiWfrKL8l5vFS9o=";
+  vendorHash = "sha256-M7KqrXMkiQnmoN3yYGSIyQkwC5b0+e8yJQ5d8WmFtZY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,6 +47,7 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
         "TestAnalyzePathWithIgnoring"
+        "TestTopDirFollowSymlink"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -62,7 +63,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/dundee/gdu";
     changelog = "https://github.com/dundee/gdu/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       zowoq

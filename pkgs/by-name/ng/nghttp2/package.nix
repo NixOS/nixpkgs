@@ -22,7 +22,6 @@
   jemalloc,
   enablePython ? false,
   python3,
-  ncurses,
 
   # Unit tests ; we have to set TZDIR, which is a GNUism.
   enableTests ? stdenv.hostPlatform.isGnu,
@@ -45,11 +44,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.67.1";
+  version = "1.69.0";
 
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    hash = "sha256-37cg1CQ6eVBYn6JjI3i+te6a1ELpS3lLO44soowdfio=";
+    hash = "sha256-PxhfWxw+d4heuc8/LE2ksan3OiS/WVe4KRg60Tf4Lcg=";
   };
 
   outputs = [
@@ -133,7 +132,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

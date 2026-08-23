@@ -21,15 +21,15 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abaddon";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
-    tag = "v${version}";
-    hash = "sha256-48lR1rIWMwLaTv+nIdqmQ3mHOayrC1P5OQuUb+URYh0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fSNXMbyYmUOA4x911/an02fhhhWe6a4xlLVb2DIqIOE=";
     fetchSubmodules = true;
   };
 
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
       desktopName = "Abaddon";
-      genericName = meta.description;
-      startupWMClass = pname;
+      genericName = finalAttrs.meta.description;
+      startupWMClass = finalAttrs.pname;
       categories = [
         "Network"
         "InstantMessaging"
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     mainProgram = "abaddon";
     homepage = "https://github.com/uowuo/abaddon";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.linux;
   };
-}
+})

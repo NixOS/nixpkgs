@@ -34,11 +34,107 @@ assert (enableCrypt -> (libxcrypt != null));
 let
   crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   commonPatches = [
+    # Do not look in /usr etc. for dependencies.
     ./no-sys-dirs.patch
+
+    ./CVE-2026-8376.patch
   ]
+
+  # Fix build on Solaris on x86_64
+  # See also:
+  # * perl tracker: https://github.com/Perl/perl5/issues/9669
+  # * netbsd tracker: https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=44999
   ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+
+  # Don't pass -no-cpp-precomp, even if it is "supported"
+  #
+  # cpp-precomp is a relic from NeXT days, when there was a separate
+  # cpp preprocessor that produced "precompiled header files" (hence
+  # cpp-precomp) - binary files containing information from .h files, that
+  # sped up the compilation slightly.
+  #
+  # However, cpp-precomp was semi-broken and didn't accept a lot of valid
+  # code, so there was a way to disable it (-no-cpp-precomp).
+  #
+  # This flag seems to have lost all relevance back in 2002 or so, when
+  # cpp-precomp stopped being used; gcc dropped it completely in 4.8 (and
+  # now errors out if you pass it), but for some reason clang still accepts
+  # it (but it's a no-op). This means that if you compile perl with clang,
+  # it will think that this flag is still supported, and it can cause issues
+  # if you compile c code from perl:
+  # https://trac.macports.org/ticket/38913
+  #
+  # More info about -no-cpp-precomp: https://www.mistys-internet.website/blog/blog/2013/10/19/no-cpp-precomp-the-compiler-flag-that-time-forgot
+  #
+  # See also: https://github.com/NixOS/nixpkgs/pull/1160
   ++ lib.optional stdenv.hostPlatform.isDarwin ./cpp-precomp.patch
+
+  # Miniperl is a "bootstrap" perl which doesn't support dynamic loading, among other things.
+  # It is used to build modules for the "final" perl.
+  #
+  # This patch enables more modules to be loaded with miniperl (mostly by
+  # removing dynamically loaded libraries and using perl builtins instead),
+  # which is needed during cross-compilation because the bootstrapping process
+  # has more stages than the default build and doesn't get to the main perl
+  # binary as early.
+  #
+  # Some more details: https://arsv.github.io/perl-cross/modules.html
   ++ lib.optional crossCompiling ./cross.patch;
+
+  # Inject fixed CPAN releases for bundled dual-life distributions until the
+  # next perl maintenance release includes them.
+  vendoredPerlDistributions = [
+    {
+      # CVE-2026-7010
+      path = "cpan/HTTP-Tiny";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/H/HA/HAARG/HTTP-Tiny-0.094.tar.gz";
+        hash = "sha256-poQemfwbVdFd6VlHzL17dnvsxRxxAhl/qPBE333cB0M=";
+      };
+    }
+    {
+      # CVE-2026-3381, CVE-2026-4176
+      path = "cpan/Compress-Raw-Zlib";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.222.tar.gz";
+        hash = "sha256-Hf19URplVifIGBXTDTurwo+luIRV/wP4sECZ3LUShrg=";
+      };
+    }
+    {
+      # Runtime dependency of IO-Compress 2.220.
+      path = "cpan/Compress-Raw-Bzip2";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.218.tar.gz";
+        hash = "sha256-iRU+ai69pSNJSTsHT6S3VJ/x+QU952E8GKXgXFtBX6g=";
+      };
+    }
+    {
+      # CVE-2026-48962, CVE-2026-48961, CVE-2026-48959
+      path = "cpan/IO-Compress";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.220.tar.gz";
+        hash = "sha256-nZbqKR8sVO82fHOWuFfZO6GsHEsvG84T7Yo+Xz7rtic=";
+      };
+    }
+    {
+      # CVE-2026-42496, CVE-2026-42497, CVE-2026-9538
+      path = "cpan/Archive-Tar";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.12.tar.gz";
+        hash = "sha256-ARTvObZfSfiWgoOrR3Gdfoj5jXNg/jZJvjMcf1PVgyw=";
+      };
+    }
+  ];
+
+  replaceVendoredPerlDistributions = lib.concatMapStringsSep "\n" (d: ''
+    rm -rf ${d.path}
+    mkdir -p ${d.path}
+
+    tar --strip-components=1 -C ${d.path} -xf ${d.src}
+
+    # Remove executable bits to make t/porting/exec-bit.t happy.
+    find ${d.path} -type f -exec chmod a-x {} +
+  '') vendoredPerlDistributions;
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
@@ -46,7 +142,8 @@ let
 in
 
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     inherit version;
     pname = "perl";
 
@@ -96,10 +193,10 @@ stdenv.mkDerivation (
               --replace "/bin/pwd" "$(type -P pwd)"
           ''
       )
-      +
-      # Perl's build system uses the src variable, and its value may end up in
-      # the output in some cases (when cross-compiling)
-      ''
+      + replaceVendoredPerlDistributions
+      + ''
+        # Perl's build system uses the src variable, and its value may end up in
+        # the output in some cases (when cross-compiling).
         unset src
       '';
 
@@ -257,9 +354,16 @@ stdenv.mkDerivation (
         perlOnHostForHost = override pkgsHostHost.${perlAttr};
         perlOnTargetForTarget =
           if lib.hasAttr perlAttr pkgsTargetTarget then (override pkgsTargetTarget.${perlAttr}) else { };
-      };
 
-    doCheck = false; # some tests fail, expensive
+        tests.withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+          preCheck = ''
+            # Weird test failure, can't even understand what it's about
+            # Disable the test for now
+            sed -i '/ext\/Pod-Html\/t\/htmldir3.*/d' MANIFEST
+          '';
+          doCheck = true;
+        });
+      };
 
     # TODO: it seems like absolute paths to some coreutils is required.
     postInstall = ''
@@ -312,10 +416,14 @@ stdenv.mkDerivation (
       description = "Standard implementation of the Perl 5 programming language";
       license = lib.licenses.artistic1;
       maintainers = [ ];
-      teams = [ lib.teams.perl ];
+      teams = [
+        lib.teams.perl
+        lib.teams.security-review
+      ];
       platforms = lib.platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
       mainProgram = "perl";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "perl" finalAttrs.version;
     };
   }
   // lib.optionalAttrs crossCompiling rec {

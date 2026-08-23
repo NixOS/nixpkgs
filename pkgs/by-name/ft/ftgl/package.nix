@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ftgl";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "frankheckenbach";
     repo = "ftgl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

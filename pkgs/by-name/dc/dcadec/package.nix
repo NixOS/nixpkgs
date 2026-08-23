@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcadec";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "foo86";
     repo = "dcadec";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     sha256 = "07nd0ajizrp1w02bsyfcv18431r8m8rq8gjfmz9wmckpg7cxj2hs";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
   };
-}
+})

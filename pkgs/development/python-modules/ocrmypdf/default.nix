@@ -3,6 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
+  fpdf2,
   ghostscript_headless,
   hatch-vcs,
   hatchling,
@@ -16,32 +17,35 @@
   pillow,
   pluggy,
   pngquant,
+  pydantic,
+  pypdfium2,
   pytest-xdist,
   pytestCheckHook,
   rich,
   reportlab,
   replaceVars,
   tesseract,
+  uharfbuzz,
   unpaper,
   installShellFiles,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ocrmypdf";
-  version = "16.13.0";
+  version = "17.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-xxVtncIQ72echi0VogfgqwfB8IA7JEKVUV2lmL1coeU=";
+    hash = "sha256-eKDJE9QNV2e6mYQ1JkbpGJbSnwLZmBrt74LLLNS0LVw=";
   };
 
   patches = [
@@ -64,6 +68,7 @@ buildPythonPackage rec {
 
   dependencies = [
     deprecation
+    fpdf2
     img2pdf
     packaging
     pdfminer-six
@@ -71,7 +76,10 @@ buildPythonPackage rec {
     pikepdf
     pillow
     pluggy
+    pydantic
+    pypdfium2
     rich
+    uharfbuzz
   ];
 
   nativeCheckInputs = [
@@ -99,7 +107,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.tag}/docs/release_notes.md";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${finalAttrs.src.tag}/docs/releasenotes/version17.md";
     mainProgram = "ocrmypdf";
   };
-}
+})

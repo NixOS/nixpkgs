@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1173";
 
   src = fetchurl {
-    url = "https://cbftp.eu/${pname}-r${version}.tar.gz";
+    url = "https://cbftp.eu/cbftp-r${version}.tar.gz";
     hash = "sha256-DE6fnLzWsx6Skz2LRJAaijjIqrYFB8/HPp45P5CcEc8=";
   };
 

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   maturin,
-  pythonOlder,
   rustPlatform,
   rustc,
   cargo,
@@ -18,15 +17,13 @@
 }:
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.13.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_rust";
     inherit version;
-    hash = "sha256-2UqT8Ml3UcFwFFZfB73DJL7kXTls0buoPY56+SuUXww=";
+    hash = "sha256-8q/PS67uaJkQzknPqKrU4IzOcvQXRJvMMokbhmT9xyY=";
   };
 
   build-system = [
@@ -62,7 +59,6 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pyo3 = maturin.tests.pyo3.override {
-      format = "setuptools";
       buildAndTestSubdir = null;
 
       nativeBuildInputs = [

@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "pytlv";
   version = "0.71";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

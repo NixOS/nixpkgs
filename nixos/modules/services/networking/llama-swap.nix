@@ -81,14 +81,14 @@ in
           healthCheckTimeout = 60;
           models = {
             "some-model" = {
-              cmd = "''\${llama-server} --port ''\${PORT} -m /var/lib/llama-cpp/models/some-model.gguf -ngl 0 --no-webui";
+              cmd = "''${llama-server} --port ''${PORT} -m /var/lib/llama-cpp/models/some-model.gguf -ngl 0 --no-webui";
               aliases = [
                 "the-best"
               ];
             };
             "other-model" = {
               proxy = "http://127.0.0.1:5555";
-              cmd = "$\{llama-server\} --port 5555 -m /var/lib/llama-cpp/models/other-model.gguf -ngl 0 -c 4096 -np 4 --no-webui";
+              cmd = "''${llama-server} --port 5555 -m /var/lib/llama-cpp/models/other-model.gguf -ngl 0 -c 4096 -np 4 --no-webui";
               concurrencyLimit = 4;
             };
           };
@@ -113,6 +113,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      environment = rec {
+        XDG_CACHE_HOME = "/var/cache/${config.systemd.services.llama-swap.serviceConfig.CacheDirectory}";
+        LLAMA_CACHE = "${XDG_CACHE_HOME}/huggingface/hub";
+      };
+
       serviceConfig = {
         Type = "exec";
         ExecStart = "${lib.getExe cfg.package} ${
@@ -129,6 +134,8 @@ in
         }";
         Restart = "on-failure";
         RestartSec = 3;
+
+        CacheDirectory = "llama-swap";
 
         # for GPU acceleration
         PrivateDevices = false;
@@ -166,7 +173,6 @@ in
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";
         ProtectHostname = true;
-        ProcSubset = "pid";
         WorkingDirectory = "/tmp";
       };
     };

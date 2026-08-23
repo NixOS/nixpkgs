@@ -9,14 +9,14 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "envchain";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sorah";
     repo = "envchain";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QUy38kJzMbYOyT86as4/yq2ctcszSnB8a3eVWxgd4Fo=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "envchain";
   };
-}
+})

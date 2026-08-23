@@ -27,7 +27,10 @@ lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
       (pkgs.nixos {
         system.nixos = dummyVersioning;
         boot.loader.grub.enable = false;
-        fileSystems."/".device = "/dev/null";
+        fileSystems."/" = {
+          device = "/dev/null";
+          fsType = "none";
+        };
         system.stateVersion = lib.trivial.release;
       }).toplevel;
   }

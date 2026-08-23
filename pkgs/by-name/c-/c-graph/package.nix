@@ -7,12 +7,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "c-graph";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/c-graph/c-graph-${version}.tar.gz";
+    url = "mirror://gnu/c-graph/c-graph-${finalAttrs.version}.tar.gz";
     hash = "sha256-LSZ948nXXY3pXltR2hHnql6YEpHumjTvbtz4/qUIRCQ=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "c-graph";
   };
-}
+})

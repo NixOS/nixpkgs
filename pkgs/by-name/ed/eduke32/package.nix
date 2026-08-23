@@ -14,7 +14,7 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  xorg,
+  libx11,
   graphicsmagick,
   unstableGitUpdater,
 }:
@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2025-10-17";
+  version = "0-unstable-2026-08-07";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "227c11dee0abaa57bbc22b06f0002e064efa7191";
-    hash = "sha256-bWty/eOq5dWltNREo9ba68pWDpBxOIfjJK1EtZ27l1U=";
+    rev = "ec5824db81817866f70da326d3811bb0f52b3517";
+    hash = "sha256-My0U18snVk18JdV4X9ADebpq0t70k7BaHq5q9Cj4XkE=";
     deepClone = true;
     leaveDotGit = true;
     postFetch = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    xorg.libX11
+    libx11
   ];
 
   nativeBuildInputs = [
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Enhanced port of Duke Nukem 3D for various platforms";
     homepage = "https://eduke32.com";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       qubitnano
     ];

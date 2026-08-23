@@ -7,15 +7,12 @@
   pytz,
   requests,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geojson-client";
   version = "0.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
@@ -39,7 +36,7 @@ buildPythonPackage rec {
     description = "Python module for convenient access to GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-geojson-client";
     changelog = "https://github.com/exxamalte/python-geojson-client/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

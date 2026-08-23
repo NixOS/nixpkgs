@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-bug";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "git-bug";
     repo = "git-bug";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iLYhVv6QMZStuNtxvvIylFSVb1zLfC58NU2QJChFfug=";
   };
 
@@ -46,13 +46,14 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/git-bug/git-bug/commands.GitCommit=v${version}"
-    "-X github.com/git-bug/git-bug/commands.GitLastTag=${version}"
-    "-X github.com/git-bug/git-bug/commands.GitExactTag=${version}"
+    "-X github.com/git-bug/git-bug/commands.GitCommit=v${finalAttrs.version}"
+    "-X github.com/git-bug/git-bug/commands.GitLastTag=${finalAttrs.version}"
+    "-X github.com/git-bug/git-bug/commands.GitExactTag=${finalAttrs.version}"
   ];
 
   postInstall = ''
     installShellCompletion \
+      --cmd git-bug \
       --bash misc/completion/bash/git-bug \
       --zsh misc/completion/zsh/git-bug \
       --fish misc/completion/fish/git-bug
@@ -67,8 +68,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       royneary
       DeeUnderscore
-      sudoforge
     ];
     mainProgram = "git-bug";
   };
-}
+})

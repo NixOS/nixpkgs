@@ -28,7 +28,6 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       alexshpilkin
       womfoo
-      grahamc
     ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];

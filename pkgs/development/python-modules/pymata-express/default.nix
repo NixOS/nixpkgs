@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymata-express";
   version = "1.21";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrYsLab";
@@ -34,7 +32,7 @@ buildPythonPackage rec {
       hardware remotely over a serial link.
     '';
     homepage = "https://mryslab.github.io/pymata-express/";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

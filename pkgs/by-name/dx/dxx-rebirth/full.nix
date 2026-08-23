@@ -11,7 +11,8 @@ let
   generic =
     ver: assets:
     stdenv.mkDerivation {
-      name = "d${toString ver}x-rebirth-full-${assets.version}";
+      pname = "d${toString ver}x-rebirth-full";
+      inherit (assets) version;
 
       nativeBuildInputs = [ makeWrapper ];
 

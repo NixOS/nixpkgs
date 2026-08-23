@@ -1,7 +1,7 @@
 {
   stdenv,
   coreutils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   git,
   lib,
   makeWrapper,
@@ -12,14 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitolite";
-  version = "3.6.14";
+  version = "3.6.15";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "sitaramc";
     repo = "gitolite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BwpqvjpHzoypV91W/QReAgiNrmpxZ0IE3W/bpCVO1GE=";
+    hash = "sha256-TgpSP7s1iFbI2F9bZ0fEwYvl+qXggC9NjDUXejV+uJ0=";
   };
 
   buildInputs = [

@@ -3,33 +3,54 @@
   stdenv,
   fetchurl,
   unzip,
-  bintools,
   versionCheckHook,
   runCommand,
   cctools,
   darwin,
-  sources ? import ./sources.nix { inherit fetchurl; },
-  version ? sources.versionUsed,
 }:
 
-assert sources != null && (builtins.isAttrs sources);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dart";
-  inherit version;
-
-  nativeBuildInputs = [ unzip ];
+  version = "3.13.0";
 
   src =
-    sources."${version}-${stdenv.hostPlatform.system}"
-      or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
+        x86_64-linux = "linux-x64";
+        aarch64-linux = "linux-arm64";
+        aarch64-darwin = "macos-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-h5Alc/rNisrKx+4f5z+o0GaOBgZQFgaOLtbFyZxrHuA=";
+        aarch64-linux = "sha256-IBQaBlMyeTm7IMS4eyMSJr66ESjYqa7bswy1rxonkNQ=";
+        aarch64-darwin = "sha256-GBLWAq7Qqc9ygck/UUoeGuz2DcNFxDN9uk/yj6jTmMo=";
+      };
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/dart-archive/channels/${
+        if lib.strings.hasSuffix ".beta" finalAttrs.version then "beta" else "stable"
+      }/release/${finalAttrs.version}/sdk/dartsdk-${system}-release.zip";
+      inherit hash;
+    };
+
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
 
+    rm LICENSE README revision
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
+    find $out/bin -type f -executable | while read f; do
+      if patchelf --print-interpreter "$f" >/dev/null 2>&1; then
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+                 --set-rpath "${lib.makeLibraryPath [ (lib.getLib stdenv.cc.cc) ]}" "$f"
+      fi
+    done
   ''
   + ''
     runHook postInstall
@@ -90,10 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
+    teams = [ lib.teams.flutter ];
   };
 })

@@ -46,5 +46,6 @@ mkTclDerivation rec {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    broken = tcl.isTcl9;
   };
 }

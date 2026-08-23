@@ -13,15 +13,16 @@
   i3ipc-glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xfce4-i3-workspaces-plugin";
-  version = "1.4.2";
+  version = "1.4.2-unstable-2025-05-28";
 
   src = fetchFromGitHub {
     owner = "denesb";
     repo = "xfce4-i3-workspaces-plugin";
-    rev = version;
-    sha256 = "sha256-CKpofupoJhe5IORJgij6gOGotB+dGkUDtTUdon8/JdE=";
+    # Fix build with GCC 15.
+    rev = "d7c2d978e736a5e07f96142a31fac3bb7d0806b4";
+    hash = "sha256-9xr9uoXjriVmFmotsaM/wVAaJA/k5Dl/SWsPo4skV2E=";
   };
 
   nativeBuildInputs = [

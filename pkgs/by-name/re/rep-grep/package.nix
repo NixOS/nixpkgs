@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rep-grep";
-  version = "0-unstable-2024-02-06";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "robenkleene";
     repo = "rep-grep";
-    rev = "10510d47e392cb9d30a861c69f702fd194b3fa88";
-    hash = "sha256-/dH+mNtNHaYFndVhoqmz4Sc3HeemoQt1HGD98mb9Qhw=";
+    tag = finalAttrs.version;
+    hash = "sha256-GJXpzqc9reFFyZWPsaiohFsPj3PseijSLn6Td8Ouidk=";
   };
 
-  cargoHash = "sha256-t4tfQaFq4EV4ZWeU+IestSFiSAIeVQslTZhLbpKVoO4=";
+  cargoHash = "sha256-ugQxJsu/U7O3S8SQwhGGDAdEIDesW7JbwFBkNYRe13w=";
 
   meta = {
     description = "Command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ philiptaron ];
     mainProgram = "rep";
   };
-}
+})

@@ -29,8 +29,9 @@ let
       in
       {
         name = "pulseaudio${lib.optionalString fullVersion "Full"}${lib.optionalString systemWide "-systemWide"}";
-        meta = with pkgs.lib.maintainers; {
-          maintainers = [ synthetica ] ++ pkgs.pulseaudio.meta.maintainers;
+        meta = {
+          maintainers = pkgs.pulseaudio.meta.maintainers;
+          broken = pkgs.stdenv.hostPlatform.isAarch64;
         };
 
         nodes.machine =

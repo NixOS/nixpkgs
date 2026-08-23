@@ -13,14 +13,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alpine";
-  version = "2.26";
+  version = "2.29.99";
 
   src = fetchgit {
     url = "https://repo.or.cz/alpine.git";
-    tag = "v${version}";
-    hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h/6HSqEmMZAjVtDJ+9MqM1WYBalthl0mfsC1/f4OmOw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     homepage = "https://alpineapp.email/";
   };
-}
+})

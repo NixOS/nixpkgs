@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python3-application";
-  version = "3.0.9";
+  version = "3.0.11";
   pyproject = true;
 
   disabled = !isPy3k;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = "python3-application";
     rev = "release-${version}";
-    hash = "sha256-79Uu9zaBIuuc+1O5Y7Vp4Qg2/aOrwvmdi5G/4AvL+T4=";
+    hash = "sha256-qJhs59dZUHjvLVswLIqNRBOdF+11jk73n8iRHUVcOeg=";
   };
 
   build-system = [ setuptools ];

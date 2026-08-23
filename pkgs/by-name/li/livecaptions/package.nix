@@ -13,7 +13,7 @@
   onnxruntime,
   libadwaita,
   libpulseaudio,
-  xorg,
+  libx11,
 }:
 let
   aprilAsr = fetchFromGitHub {
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     onnxruntime
     libadwaita
     libpulseaudio
-    xorg.libX11
+    libx11
   ];
 
   postUnpack = ''

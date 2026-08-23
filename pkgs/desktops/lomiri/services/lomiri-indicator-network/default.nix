@@ -12,11 +12,11 @@
   doxygen,
   gettext,
   glib,
-  gmenuharness,
+  gmenuharness ? null, # not ported to Qt6 yet
   gtest,
   intltool,
   libsecret,
-  libqofono,
+  libqofono ? null, # not ported to Qt6 yet
   libqtdbusmock,
   libqtdbustest,
   lomiri-api,
@@ -25,26 +25,31 @@
   ofono,
   pkg-config,
   python3,
-  qtdeclarative,
   qtbase,
+  qtdeclarative,
   qttools,
   validatePkgConfig,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     tag = finalAttrs.version;
-    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
+    hash = "sha256-BbG48sWlpcaSC0HTDcY+zbzi1O983FzzJ7B1oSlJrGg=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals (!withQt6) [
     "doc"
   ];
 
@@ -59,26 +64,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    doxygen
     gettext
-    intltool
     pkg-config
     qtdeclarative
-    qttools # qdoc
     validatePkgConfig
+  ]
+  ++ lib.optionals (!withQt6) [
+    doxygen
+    intltool
+    qttools # qdoc
   ];
 
   buildInputs = [
     cmake-extras
+    lomiri-api
+    qtbase
+  ]
+  ++ lib.optionals withQt6 [
+    qtdeclarative
+  ]
+  ++ lib.optionals (!withQt6) [
     dbus
     glib
     libqofono
     libsecret
-    lomiri-api
     lomiri-url-dispatcher
     networkmanager
     ofono
-    qtbase
   ];
 
   nativeCheckInputs = [ (python3.withPackages (ps: with ps; [ python-dbusmock ])) ];
@@ -93,33 +105,45 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    (lib.cmakeBool "BUILD_DOC" (!withQt6))
+    # Indicator is not ported to Qt6 yet
+    (lib.cmakeBool "BUILD_LIBCONNECTIVITY_ONLY" withQt6)
+    (lib.cmakeBool "ENABLE_COVERAGE" false)
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
-    (lib.cmakeBool "BUILD_DOC" true)
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
+    (lib.cmakeBool "GSETTINGS_COMPILE" (!withQt6))
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" (!withQt6))
+    (lib.cmakeBool "USE_SYSTEMD" (!withQt6))
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Indicator is not ported to Qt6 yet, tests only cover indicator
+    && !withQt6;
 
   # Multiple tests spin up & speak to D-Bus, avoid cross-talk causing failures
   enableParallelChecking = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (!withQt6) ''
     substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
       --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}'
   '';
 
   passthru = {
-    ayatana-indicators = {
-      lomiri-indicator-network = [ "lomiri" ];
-    };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    }
+    // lib.optionalAttrs (!withQt6) {
       startup = nixosTests.ayatana-indicators;
       lomiri = nixosTests.lomiri.desktop-ayatana-indicator-network;
     };
     updateScript = gitUpdater { };
+  }
+  // lib.optionalAttrs (!withQt6) {
+    ayatana-indicators = {
+      lomiri-indicator-network = [ "lomiri" ];
+    };
   };
 
   meta = {
@@ -131,6 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    pkgConfigModules = [ "lomiri-connectivity-qt1" ];
+    pkgConfigModules = [ "lomiri-connectivity-qt${if withQt6 then "6" else "1"}" ];
   };
 })

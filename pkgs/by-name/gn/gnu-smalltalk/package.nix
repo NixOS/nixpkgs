@@ -11,7 +11,6 @@
   readline,
   gmp,
   gnutls,
-  gtk2,
   cairo,
   SDL,
   sqlite,
@@ -50,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = "-std=gnu99";
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
@@ -62,14 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     gmp
     gnutls
-    gtk2
     cairo
     SDL
     sqlite
   ]
   ++ lib.optional emacsSupport emacs;
 
-  configureFlags = lib.optional (!emacsSupport) "--without-emacs";
+  configureFlags = [ "--enable-gtk=no" ] ++ lib.optionals (!emacsSupport) [ "--without-emacs" ];
 
   hardeningDisable = [ "format" ];
 
@@ -93,6 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2
     ];
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sauricat ];
   };
 })

@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+  # Not systemdLibs: journal reading silently returns no entries against it
+  # (see https://github.com/NixOS/nixpkgs/issues/546650).
   buildInputs = [ systemd ];
 
   nativeCheckInputs = [

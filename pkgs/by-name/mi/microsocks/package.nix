@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microsocks";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "rofl0r";
     repo = "microsocks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5NR2gtm+uMkjmkV/dv3DzSedfNvYpHZgFHVSrybl0Tk=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/rofl0r/microsocks/releases/tag/v${version}";
+    changelog = "https://github.com/rofl0r/microsocks/releases/tag/v${finalAttrs.version}";
     description = "Tiny, portable SOCKS5 server with very moderate resource usage";
     homepage = "https://github.com/rofl0r/microsocks";
     license = lib.licenses.mit;
     mainProgram = "microsocks";
     maintainers = with lib.maintainers; [ ramblurr ];
   };
-}
+})

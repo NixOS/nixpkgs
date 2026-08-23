@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DALLOWS_ONESHOT_TIMERS_WITH_TIMEOUT_ZERO=YES"
   ];
 
+  # fortify causes redefinition errors in the interposer
+  hardeningDisable = lib.optional stdenv.hostPlatform.isFreeBSD "fortify";
+
   # https://github.com/jiixyj/epoll-shim/issues/41
   # https://github.com/jiixyj/epoll-shim/pull/34
   doCheck = !stdenv.hostPlatform.isDarwin;

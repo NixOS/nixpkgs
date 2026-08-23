@@ -69,7 +69,7 @@ buildBazelPackage {
       rm -rv "$bazelOut"/external/host_platform
     '';
 
-    hash = "sha256-nFPGhZWvzzBOSeIa35XQbK6dHgJJSYum/5X8eAA0uCY=";
+    hash = "sha256-ZjrXMQwxlaU5YGZtBZ+D2XBQHnOk+zV+a9cmkf3U5NU=";
   };
 
   preConfigure = ''

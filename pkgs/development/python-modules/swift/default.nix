@@ -22,14 +22,14 @@
   xattr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swift";
-  version = "2.36.0";
+  version = "2.37.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3qtd++4Xm6B9TPfKvx85s71/Hz8qFrhN+XR9TuvfHXw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-d5Jol5iCY8o+Ix+xrviufMLOh3T0UN2bVa+GrsA8D6k=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -83,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

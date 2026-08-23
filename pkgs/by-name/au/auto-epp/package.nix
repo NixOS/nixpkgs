@@ -4,14 +4,14 @@
   fetchFromGitHub,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "auto-epp";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jothi-prasath";
     repo = "auto-epp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7sI8K+7ZAdzBN/XOzYQQZ1f9t+fFo6fcXYzX6abNyQ8=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lamarios ];
   };
-}
+})

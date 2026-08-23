@@ -9,6 +9,8 @@
   pkg-config,
   wayland,
   wayland-protocols,
+  libei,
+  libevdev,
   libfakekey,
 }:
 mkKdeDerivation {
@@ -32,6 +34,8 @@ mkKdeDerivation {
     qtmultimedia
     wayland
     wayland-protocols
+    libei
+    libevdev
     libfakekey
   ];
 

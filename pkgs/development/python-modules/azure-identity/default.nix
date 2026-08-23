@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-core,
   cryptography,
   msal,
@@ -13,15 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.23.1";
+  version = "1.25.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_identity";
     inherit version;
-    hash = "sha256-Imwe+YKp+NXc9uD57TXq7ypNlx592GMX6bnVLnCgNeQ=";
+    hash = "sha256-qyPA1jAV9QtjDvbGzzlecmL0Oc4G5dB6ZOh0xyT42eY=";
   };
 
   build-system = [ setuptools ];

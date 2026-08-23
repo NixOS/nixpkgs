@@ -13,12 +13,12 @@
   nix-update,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mailcap";
   version = "2.1.54";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/mailcap/mailcap-${version}.tar.xz";
+    url = "https://releases.pagure.org/mailcap/mailcap-${finalAttrs.version}.tar.xz";
     hash = "sha256-mkAyIC/A0rCFj0GxZzianP5SrCTsKC5kebkHZTGd4RM=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Helper application and MIME type associations for file types";
     homepage = "https://pagure.io/mailcap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

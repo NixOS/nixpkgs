@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.6.4";
   pname = "fanctl";
 
   src = fetchFromGitLab {
     owner = "mcoffin";
     repo = "fanctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XmawybmqRJ9Lj6ii8TZBFwqdQZVp0pOLN4xiSLkU/bw=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ icewind1991 ];
     platforms = lib.platforms.linux;
   };
-}
+})

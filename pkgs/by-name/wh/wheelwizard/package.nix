@@ -4,7 +4,6 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  makeDesktopItem,
   makeWrapper,
   avalonia,
   # Runtime dependencies
@@ -12,21 +11,21 @@
   # passthru
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "wheelwizard";
-  version = "2.3.3";
+  version = "2.4.11";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
-    tag = "${version}";
-    hash = "sha256-DuEI6bmvNP6wRuZX9Do0FGDsu80ldy0SCefBk6gqT9s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Dex2PDgwnxKguf0jtC1T0+jm7bA7jDfvspwkiqJgUg";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
   '';
 
-  projectFile = "WheelWizard.sln";
+  projectFile = "WheelWizard";
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
@@ -50,12 +49,14 @@ buildDotnetModule rec {
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
+      --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
 
-    install -D $desktopItem/share/applications/* -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard-url-handler.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.png $out/share/icons/hicolor/256x256/apps/io.github.TeamWheelWizard.WheelWizard.png
 
     runHook postInstall
   '';
@@ -63,14 +64,6 @@ buildDotnetModule rec {
   postFixup = ''
     rm $out/bin/*.{so,dylib}
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "wheelwizard";
-    exec = "WheelWizard";
-    comment = "WheelWizard, Retro Rewind Launcher";
-    desktopName = "Wheel Wizard";
-    categories = [ "Game" ];
-  };
 
   passthru.updateScript = nix-update-script { };
 
@@ -82,4 +75,4 @@ buildDotnetModule rec {
     mainProgram = "WheelWizard";
     maintainers = with lib.maintainers; [ DerHalbGrieche ];
   };
-}
+})

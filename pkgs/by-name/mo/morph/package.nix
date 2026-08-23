@@ -6,14 +6,14 @@
   openssh,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "morph";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IqWtVklzSq334cGgLx/13l329g391oDW50MZWyO6l08=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.assetRoot=${placeholder "lib"}"
   ];
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     ];
     mainProgram = "morph";
   };
-}
+})

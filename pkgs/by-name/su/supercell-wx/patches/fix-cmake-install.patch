@@ -1,18 +1,18 @@
 diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
-index 648b6578..4833b9c2 100644
+index ed40e428..8743b2ab 100644
 --- a/scwx-qt/scwx-qt.cmake
 +++ b/scwx-qt/scwx-qt.cmake
-@@ -776,6 +776,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+@@ -859,6 +859,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
                                       Boost::timer
                                       Boost::atomic
                                       QMapLibre::Core
 +                                     QMapLibre::Widgets
+                                      OpenGL::GLU
                                       $<$<CXX_COMPILER_ID:MSVC>:opengl32>
                                       $<$<CXX_COMPILER_ID:MSVC>:SetupAPI>
-                                      Fontconfig::Fontconfig
-@@ -793,18 +794,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
- target_link_libraries(supercell-wx PRIVATE scwx-qt
-                                            wxdata)
+@@ -891,18 +892,7 @@ if (WIN32)
+                        COMMENT "Running windeployqt for supercell-wx...")
+ endif()
  
 -if (LINUX)
 -    # Set DT_RUNPATH for Linux targets
@@ -29,7 +29,7 @@ index 648b6578..4833b9c2 100644
          RUNTIME
            COMPONENT supercell-wx
          BUNDLE
-@@ -819,24 +809,6 @@ install(TARGETS supercell-wx
+@@ -917,24 +907,6 @@ install(TARGETS supercell-wx
            COMPONENT supercell-wx
            OPTIONAL)
  

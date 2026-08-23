@@ -23,24 +23,28 @@
   libGL,
   vulkan-loader,
   curlWithGnuTls,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
   lib,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   systemd,
   pciutils,
 }:
 let
-  xorgDeps = with xorg; [
-    libXdamage
-    libXext
-    libXfixes
-    libXcomposite
-    libXrandr
+  xorgDeps = [
+    libxdamage
+    libxext
+    libxfixes
+    libxcomposite
+    libxrandr
   ];
 
   deps = [
-    libgcc.lib
+    libgcc
     glib
     nss
     nspr
@@ -84,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     (lib.getLib systemd)
     libnotify
-    libappindicator-gtk3
+    libappindicator
     pulseaudio
     pciutils
   ];

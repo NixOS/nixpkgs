@@ -7,14 +7,14 @@
   cups,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brlaser";
   version = "6.2.8";
 
   src = fetchFromGitHub {
     owner = "Owl-Maintain";
     repo = "brlaser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fE3mKGrYPvLl66gVJJJPc3P3rBJk695SP7+3exE5exw=";
   };
 
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
       See the homepage for a full list.
     '';
     homepage = "https://github.com/Owl-Maintain/brlaser";
-    changelog = "https://github.com/Owl-Maintain/brlaser/releases/tag/v${version}";
+    changelog = "https://github.com/Owl-Maintain/brlaser/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

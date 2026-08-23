@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromGitHub,
   systemd,
   coreutils,
   gnugrep,
@@ -15,19 +15,20 @@
   wayland,
   glibc,
   udevCheckHook,
+  gettext,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.2.0";
+  version = "6.4.0";
 
-  src = fetchFromGitLab {
-    owner = "asus-linux";
+  src = fetchFromGitHub {
+    owner = "OpenGamingCollective";
     repo = "asusctl";
-    tag = version;
-    hash = "sha256-frQbfCdK7bD6IAUa+MAOaRLhMrbdFRdHocQ0Z1tzsqE=";
+    tag = finalAttrs.version;
+    hash = "sha256-qLdOdZaQm3t7LhvoCCo/FwZo4O7Z9aP1KPPlERgZX00=";
   };
 
-  cargoHash = "sha256-Z3JFp/qH3mD3Hy/kqSONOZ+syulgr+t0ZzFRvNN+Ayg=";
+  cargoHash = "sha256-sAJ4el6URZXHD2NWiWpJSBf8Qeq2v/y+F9KpMCc8BbE=";
 
   postPatch = ''
     files="
@@ -49,21 +50,19 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
-    substituteInPlace data/asusd-user.service \
-      --replace-fail /usr/bin/asusd-user $out/bin/asusd-user \
-      --replace-fail /usr/bin/sleep ${lib.getExe' coreutils "sleep"}
+
+    substituteInPlace data/asus-shutdown.service \
+      --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
 
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
-
-    substituteInPlace /build/asusctl-${version}-vendor/sg-0.4.0/build.rs \
-      --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     udevCheckHook
+    gettext
   ];
 
   buildInputs = [
@@ -77,14 +76,18 @@ rustPlatform.buildRustPackage rec {
     wayland
   ];
 
-  # force linking to all the dlopen()ed dependencies
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lfontconfig"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  env = {
+    # force linking to all the dlopen()ed dependencies
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lfontconfig"
+        "-lwayland-client"
+        "-Wl,--pop-state"
+      ]
+    );
+  };
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
@@ -99,13 +102,14 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
-    homepage = "https://gitlab.com/asus-linux/asusctl";
+    homepage = "https://github.com/OpenGamingCollective/asusctl";
     license = lib.licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       k900
       aacebedo
       yuannan
+      luytan
     ];
   };
-}
+})

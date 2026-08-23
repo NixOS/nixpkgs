@@ -8,22 +8,22 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "psitransfer";
-  version = "2.3.1";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I5+SgPR53zdgTwHd4tdSoPr1y1iQ/JHH0KXqexgkGVE=";
+    hash = "sha256-A26Mse69+ChyqUKhx5TlIdZYVC5e5bOPQ4DX8eVKcHw=";
   };
 
-  npmDepsHash = "sha256-BZpd/fsuV77uj2bGZcqBpIuOq3YlUw2bxovOfu8b9iE=";
+  npmDepsHash = "sha256-IgPqX6nxxTWA6gLr2NP42vnGS+e98mWUWBIMSsIriRY=";
 
   app = buildNpmPackage {
     pname = "psitransfer-app";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-zEGYv6TaHzgPCB3mHP2UMh8VkFqSBdrLuP5KjuEU0p8=";
+    npmDepsHash = "sha256-PpUO1u7TcH8ZcTekLcGOn07EnCHqUlbEMS/YzMLSMAs=";
 
     postPatch = ''
       # https://github.com/psi-4ward/psitransfer/pull/284
@@ -55,7 +55,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/psi-4ward/psitransfer";
     changelog = "https://github.com/psi-4ward/psitransfer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ hyshka ];
+    maintainers = [ ];
     mainProgram = "psitransfer";
   };
 })

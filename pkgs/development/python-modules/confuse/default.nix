@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  flit-core,
+  poetry-core,
 
   # dependencies
   pyyaml,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -16,24 +16,23 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "2.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-TVx0cBXv/fIuli/xrFXBAmwJ1rQr5xJL1Q67FaDr4ow=";
+    hash = "sha256-lux4tYf3QC4pd1VnSzpw70wwUD4ovsOqanq3IGhTBOU=";
   };
 
   build-system = [
-    flit-core
+    poetry-core
   ];
 
   dependencies = [
     pyyaml
+    typing-extensions
   ];
 
   nativeCheckInputs = [

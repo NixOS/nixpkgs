@@ -6,13 +6,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libevdev";
-  version = "1.13.4";
+  version = "1.13.6";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-8Aq41CrYuQUpb6tn4TuHHxpCSDkzFRZkIQD4KtiBJ80=";
+    url = "https://www.freedesktop.org/software/libevdev/libevdev-${finalAttrs.version}.tar.xz";
+    hash = "sha256-c/IV7MvYIz9BRzesBryiaH5nxEuX0tdXYJGqlxhVERA=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Wrapper library for evdev devices";
     homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

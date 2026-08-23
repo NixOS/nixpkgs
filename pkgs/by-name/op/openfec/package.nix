@@ -6,12 +6,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfec";
   version = "1.4.2.12";
 
   src = fetchzip {
-    url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
+    url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     hash = "sha256-KOP3LqCZHdEgm+XhzBdNxnJipGC4gpvA57T7mIeSyaE=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,12 +8,12 @@
   ncurses ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samtools";
   version = "1.22.1";
 
   src = fetchurl {
-    url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/samtools/samtools/releases/download/${finalAttrs.version}/samtools-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Aqpc0LpS4GwggAVOBZ19d6iF3+lxfDHNid/npAR+2g4=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     htslib
   ];
 
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="-lz -lbz2 -llzma"
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
       unode
     ];
   };
-}
+})

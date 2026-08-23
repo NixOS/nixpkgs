@@ -2,6 +2,7 @@
 /*
 #!nix-shell -i node -p nodejs
 */
+// @ts-nocheck
 
 const typeConfig = {
   master: ['development', 'primary'],
@@ -44,7 +45,7 @@ function classify(branch) {
   }
 }
 
-module.exports = { classify }
+module.exports = { classify, split }
 
 // If called directly via CLI, runs the following tests:
 if (!module.parent) {

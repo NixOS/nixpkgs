@@ -3,22 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "nocaselist";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+3MG9aPgRVNOc3q37L7uA5ul6br7xbXyMfYW1+khG2U=";
+    hash = "sha256-sGs9b+wavAXGB6qOgTWZOIcnoI4YwiNDHXRpz26wwGo=";
   };
 
   build-system = [
@@ -26,7 +24,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ six ];
+  dependencies = [
+    six
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

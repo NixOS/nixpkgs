@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   rdma-core,
   openssl,
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -24,15 +25,15 @@
   enableDPA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
+  version = "4.36.0-1";
 
-  # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.34.0-1";
-
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-MOFfbrjwnWXVskFCF2pgjf1Z8nkZV0l+CLfGWzxmmIg=";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat
@@ -74,29 +76,27 @@ stdenv.mkDerivation rec {
   #
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
-  prePatch = [
-    ''
-      patchShebangs eval_git_sha.sh
-      substituteInPlace configure.ac \
-          --replace "build_cpu" "host_cpu"
-      substituteInPlace common/compatibility.h \
-          --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
-      substituteInPlace configure.ac \
-          --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
-    ''
-    (lib.optionals (!onlyFirmwareUpdater) ''
-      substituteInPlace common/python_wrapper.sh \
-        --replace \
-        'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-        'export PATH=$PATH:${
-          lib.makeBinPath [
-            (placeholder "out")
-            pciutils
-            busybox
-          ]
-        }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-    '')
-  ];
+  prePatch = ''
+    patchShebangs eval_git_sha.sh
+    substituteInPlace configure.ac \
+        --replace "build_cpu" "host_cpu"
+    substituteInPlace common/compatibility.h \
+        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+    substituteInPlace configure.ac \
+        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+  ''
+  + lib.optionalString (!onlyFirmwareUpdater) ''
+    substituteInPlace common/python_wrapper.sh \
+      --replace \
+      'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
+      'export PATH=$PATH:${
+        lib.makeBinPath [
+          (placeholder "out")
+          pciutils
+          busybox
+        ]
+      }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+  '';
 
   configureFlags = [
     "--enable-xml2"
@@ -130,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thillux ];
     platforms = lib.platforms.linux;
   };
-}
+})

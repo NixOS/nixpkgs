@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline";
-  version = "0.8.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Parchive";
     repo = "par2cmdline";
-    rev = "v${version}";
-    sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-TEWfkjyjqG5cRsVkckIoIo/+/LwhwH1GVivX6Dpvpxw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       any kind of file.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = lib.platforms.all;
   };
-}
+})

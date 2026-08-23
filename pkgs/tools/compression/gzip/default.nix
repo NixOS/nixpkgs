@@ -5,6 +5,10 @@
   makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
+  # Tests
+  gzip,
+  less,
+  perl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -20,6 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
+
+  patches = [
+    ./CVE-2026-41991.patch
+    ./CVE-2026-41992.patch
+  ];
 
   outputs = [
     "out"
@@ -44,6 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLESS_PROG=zless"
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) {
+    NIX_CFLAGS_LINK = "-no-pie";
+  };
+
+  nativeCheckInputs = [
+    less
+    perl
+  ];
+  doCheck = false;
+
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
   # internal cross-references, just add $out/bin to PATH at the top of
@@ -65,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gzip \
       --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
+
+  passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
 
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";

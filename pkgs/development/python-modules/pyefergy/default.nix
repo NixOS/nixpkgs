@@ -6,7 +6,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   iso4217,
-  pythonOlder,
   pytz,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyefergy";
   version = "22.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tkdrob";
@@ -49,7 +46,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tkdrob/pyefergy/releases/tag/v${version}";
     description = "Python API library for Efergy energy meters";
     homepage = "https://github.com/tkdrob/pyefergy";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

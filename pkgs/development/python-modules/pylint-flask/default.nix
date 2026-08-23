@@ -5,7 +5,6 @@
   fetchPypi,
   pylint,
   pylint-plugin-utils,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pylint-flask";
   version = "0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

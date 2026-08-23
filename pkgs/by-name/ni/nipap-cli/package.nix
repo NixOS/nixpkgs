@@ -7,12 +7,12 @@
 let
   python3Packages = python312Packages;
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nipap-cli";
   inherit (python3Packages.nipap) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/nipap-cli";
+  sourceRoot = "${finalAttrs.src.name}/nipap-cli";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -29,9 +29,6 @@ python3Packages.buildPythonApplication rec {
     pynipap
   ];
 
-  checkInputs = with python3Packages; [
-    pythonImportsCheckHook
-  ];
   pythonImportsCheck = [
     "nipap_cli.nipap_cli"
   ];
@@ -45,7 +42,7 @@ python3Packages.buildPythonApplication rec {
       challenging classical IP address management (IPAM) systems in many areas.
     '';
     homepage = "https://github.com/SpriteLink/NIPAP";
-    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${version}";
+    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lukegb
@@ -53,4 +50,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "nipap";
   };
-}
+})

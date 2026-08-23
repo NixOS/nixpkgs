@@ -1,21 +1,22 @@
 {
   lib,
   fetchFromGitHub,
-  flutter338,
+  flutter344,
   makeDesktopItem,
   copyDesktopItems,
   alsa-lib,
   mpv-unwrapped,
   libplacebo,
   libappindicator,
+  webkitgtk_4_1,
 }:
 
 let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
-  version = "1.1.5.1";
+  version = "2.1.0";
 in
-flutter338.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "piliplus";
   inherit version;
 
@@ -37,6 +38,7 @@ flutter338.buildFlutterApplication {
     mpv-unwrapped
     libplacebo
     libappindicator
+    webkitgtk_4_1
   ];
 
   # See lib/scripts/build.sh.

@@ -10,7 +10,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ripes";
   # Pulling unstable version as latest stable does not build against gcc-13.
   version = "2.2.6-unstable-2024-04-04";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     install -D Ripes $out/bin/Ripes
   ''
   + ''
-    cp -r ${src}/appdir/usr/share $out/share
+    cp -r ${finalAttrs.src}/appdir/usr/share $out/share
     runHook postInstall
   '';
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     mainProgram = "Ripes";
     maintainers = with lib.maintainers; [ wineee ];
   };
-}
+})

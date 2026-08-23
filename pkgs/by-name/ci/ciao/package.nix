@@ -4,15 +4,21 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ciao";
   version = "1.25.0-m1";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jsHz50+R/bs19ees3kKYalYk72ET9eSAAUY7QogI0go=";
   };
+
+  postPatch = ''
+    # hotfix https://github.com/ciao-lang/ciao/issues/122
+    substituteInPlace builder/sh_src/build_car.sh \
+      --replace-fail 'ln -s "$i" "$b"' 'ln -sr "$i" "$b"'
+  '';
 
   configurePhase = ''
     ./ciao-boot.sh configure --instype=global --prefix=$prefix
@@ -34,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/ciao.x86_64-darwin
   };
-}
+})

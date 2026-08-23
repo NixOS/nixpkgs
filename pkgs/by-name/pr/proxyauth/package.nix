@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromForgejo,
   rustPlatform,
   pkg-config,
   openssl,
@@ -13,10 +13,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxyauth";
   version = "0.8.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromForgejo {
+    domain = "git.proxyauth.app";
     owner = "ProxyAuth";
     repo = "ProxyAuth";
-    tag = finalAttrs.version;
+    rev = "13b353e4a8b34fc1736c834cfcaa9afe06e8abf8";
+    # Tags were not replicated from GitHub to git.proxyauth.app
     hash = "sha256-cVjD91tBCGyslLsYUSP1Gy7KuMQZDVxQXU7fQkWeWyM=";
   };
 
@@ -31,6 +33,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nettle
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -42,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Proxy Authentication Token - Fast authentication gateway for backend APIs";
-    homepage = "https://github.com/ProxyAuth/ProxyAuth";
+    homepage = "https://git.proxyauth.app/ProxyAuth/ProxyAuth";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;

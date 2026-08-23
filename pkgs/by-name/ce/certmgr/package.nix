@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certmgr";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "certmgr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MgNPU06bv31tdfUnigcmct8UTVztNLXcmTg3H/J7mic=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
       srhb
     ];
   };
-}
+})

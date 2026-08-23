@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plog";
   version = "1.1.11";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "SergiusTheBest";
     repo = "plog";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/H7qNL6aPjmFYk0X1sx4CCSZWrAMQgPo8I9X/P50ln0=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
       erdnaxe
     ];
   };
-}
+})

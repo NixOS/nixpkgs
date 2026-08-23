@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scap-security-guide";
-  version = "0.1.78";
+  version = "0.1.81";
 
   src = fetchFromGitHub {
     owner = "ComplianceAsCode";
     repo = "content";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4A/nM2aJcmWMxvK8/3isyDn/wPS9V+1CHO6Pfy+0FTc=";
+    hash = "sha256-7avUwROLJeuS2FY3WIbtYL2tyh4DRMVwL7XL4D1gJGo=";
   };
 
   postPatch = ''
@@ -78,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Security automation content in SCAP, Bash, Ansible, and other formats";
     homepage = "https://github.com/ComplianceAsCode/content";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    maintainers = with lib.maintainers; [
+      robsliwi
+      tochiaha
+    ];
     platforms = lib.platforms.all;
   };
 })

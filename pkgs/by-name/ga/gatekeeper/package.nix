@@ -6,25 +6,25 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gatekeeper";
-  version = "3.21.0";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
-    tag = "v${version}";
-    hash = "sha256-lnnV5JhaBH2hZFSWUJPewmPpOmBFvUZwrbY/NSbap48=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3aXyXIiwx6pSvYQ4YY4lnuk+0oRG2S6TxrSJNmLRM9c=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-zhkPJc23cux0NCp81Iv2QSczbdD6banqS0qQt9FBELY=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   ldflags = [
-    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${version}"
+    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/gator" ];
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

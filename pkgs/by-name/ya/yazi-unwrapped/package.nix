@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yazi";
-  version = "26.1.4";
+  version = "26.8.15";
 
   srcs = builtins.attrValues finalAttrs.passthru.srcs;
 
   sourceRoot = finalAttrs.passthru.srcs.code_src.name;
 
-  cargoHash = "sha256-P1ijZsY1AYosWVyxdmDX1SN6KZsrlUqJ9cNfyVWV6mI=";
+  cargoHash = "sha256-YV986OaXk7+0jw0DnD/ydKJTmO0pOGjkVyq6OR3nTOE=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2026-1-4";
+  env.VERGEN_BUILD_DATE = "2026-08-15";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -29,6 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash    ./yazi-boot/completions/yazi.bash \
       --fish    ./yazi-boot/completions/yazi.fish \
       --zsh     ./yazi-boot/completions/_yazi
+
+    installShellCompletion --cmd ya \
+      --nushell ./yazi-cli/completions/ya.nu \
+      --bash    ./yazi-cli/completions/ya.bash \
+      --fish    ./yazi-cli/completions/ya.fish \
+      --zsh     ./yazi-cli/completions/_ya
 
     installManPage ../${finalAttrs.passthru.srcs.man_src.name}/yazi{.1,-config.5}
 
@@ -42,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "sxyazi";
       repo = "yazi";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dNDwlMM+k20c2Lnm+hqUvzu5l3Ip9GeP+nnj4WlDVdw=";
+      hash = "sha256-/BD8rpnje3sIQjQe6fSYJY8u9ypJmUPrX9rNnDS86Ns=";
     };
 
     man_src = fetchFromGitHub {
@@ -57,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
+    changelog = "https://github.com/sxyazi/yazi/blob/${finalAttrs.passthru.srcs.code_src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       eljamm

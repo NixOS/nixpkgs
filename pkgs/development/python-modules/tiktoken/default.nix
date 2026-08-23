@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   rustPlatform,
   cargo,
   rustc,
@@ -33,8 +32,6 @@ buildPythonPackage {
     postPatch
     ;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     setuptools

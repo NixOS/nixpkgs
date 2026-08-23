@@ -11,7 +11,8 @@
 buildPythonPackage {
   pname = "nixpkgs-plugin-update";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = ./nixpkgs-plugin-update;
 
@@ -31,6 +32,9 @@ buildPythonPackage {
     ruff check
     mypy
   '';
+
+  # NOTE: Causes "Could not find a url in the derivations src attribute" crash in maintainer scripts
+  passthru.updateScript = null;
 
   meta = {
     description = "Library for updating plugin collections in Nixpkgs";

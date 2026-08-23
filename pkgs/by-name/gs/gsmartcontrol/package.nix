@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   smartmontools,
+  adwaita-icon-theme,
   cmake,
   gtkmm3,
+  makeWrapper,
   pkg-config,
-  wrapGAppsHook3,
-  pcre-cpp,
-  adwaita-icon-theme,
+  # xterm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eLzwFZ1PYqijFTxos9Osf7A2v4C8toM+TGV4/bU82NE=";
   };
 
+  patches = [
+    ./nixos-update-drivedb-message.patch
+  ];
+
   postPatch = ''
     substituteInPlace data/gsmartcontrol.in.desktop \
       --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@/" ""
@@ -30,21 +34,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
+    makeWrapper
   ];
 
   buildInputs = [
     gtkmm3
-    pcre-cpp
     adwaita-icon-theme
   ];
 
   enableParallelBuilding = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ smartmontools ]}"
-    )
+  postFixup = ''
+    wrapProgram $out/bin/gsmartcontrol \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          smartmontools
+          # xterm # For `update-smart-drivedb`, which does not make sense in NixOS as it tries to overwrite /usr/share/smartmontools/drivedb.h
+        ]
+      }
   '';
 
   meta = {

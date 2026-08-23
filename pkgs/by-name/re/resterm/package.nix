@@ -8,18 +8,38 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "0.15.0";
+  version = "0.49.4";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ip/0QKMK+/wbc9O3yTP2AEUgV2DJN92LmCq47YFYrhk=";
+    hash = "sha256-4hLhmQ2ks1g9eF+wKKLc8/6g07IHisgwYMBhGr4DjbE=";
   };
 
-  vendorHash = "sha256-E/Y4kW5xy7YamUP5bxFmDCAK6RqiqGN7DpEPG1MaCHc=";
+  vendorHash = "sha256-K6edyYLkVQwEZBAfRwgckUJI8dmo/ZxFRjEkExtyLxY=";
+
+  # modernc.org/libc (via modernc.org/sqlite) tries to read /etc/protocols
+  modPostBuild = ''
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
 
   subPackages = [ "cmd/resterm" ];
+
+  # Skip tests that require network access or socket binding
+  checkFlags = [
+    "-skip"
+    "^(${
+      lib.concatStringsSep "|" [
+        "TestServeMocksStartsAndStopsWithContext"
+        "TestServeMocksRequiresTLSPair"
+        "TestServeMocksValidatesJournalLimitsAsUsageErrors"
+        "TestMockControlCommandsResetClearAndVerify"
+        "TestCLIUpdaterCheckDev"
+      ]
+    })$"
+  ];
 
   ldflags = [
     "-s"

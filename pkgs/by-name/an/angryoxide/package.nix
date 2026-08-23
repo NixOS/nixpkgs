@@ -19,13 +19,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angryoxide";
-  version = "0.8.32";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Ragnt";
     repo = "AngryOxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sla5lvyqZho9JE4QVS9r0fx5+DVlU90c8OSfO4/f0B4=";
+    hash = "sha256-OMNpAp+SmwFlNFlsL3DVgUYja+4o26B7AbR8JMz/4JA=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${libwifi} libs/libwifi
   '';
 
-  cargoHash = "sha256-mry4l0a7DZOWkrChU40OVRCBjKwI39cyZtvEBA5tro0=";
+  cargoHash = "sha256-dktJEcX4IbhwDyfptA6PZaAcvF6RRC+jWTspnHaof4s=";
 
   nativeBuildInputs = [
     pkg-config

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "manifestoo";
   version = "1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

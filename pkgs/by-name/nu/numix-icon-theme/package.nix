@@ -4,10 +4,9 @@
   fetchFromGitHub,
   gtk3,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gitUpdater,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -27,12 +26,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    libsForQt5.breeze-icons
-    gnome-icon-theme
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall

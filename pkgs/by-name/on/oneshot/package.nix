@@ -6,14 +6,14 @@
   oneshot,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oneshot";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "forestnode-io";
     repo = "oneshot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eEVjdFHZyk2bSVqrMJIsgZvvLoDOira8zTzX9oDNtHM=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X github.com/forestnode-io/oneshot/v2/pkg/version.Version=${version}"
+    "-X github.com/forestnode-io/oneshot/v2/pkg/version.Version=${finalAttrs.version}"
     "-X github.com/forestnode-io/oneshot/v2/pkg/version.APIVersion=v1.0.0"
   ];
 
@@ -53,4 +53,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ milibopp ];
     mainProgram = "oneshot";
   };
-}
+})

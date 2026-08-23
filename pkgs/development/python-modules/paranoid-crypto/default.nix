@@ -9,7 +9,6 @@
   protobuf,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage {
   pname = "paranoid-crypto";
   version = "unstable-20220819";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -63,7 +60,7 @@ buildPythonPackage {
   meta = {
     description = "Library contains checks for well known weaknesses on cryptographic artifacts";
     homepage = "https://github.com/google/paranoid_crypto";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

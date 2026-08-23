@@ -4,15 +4,12 @@
   fetchPypi,
   samba,
   pkg-config,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysmbc";
   version = "1.0.25.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

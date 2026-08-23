@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   cython,
   poetry-core,
@@ -17,16 +16,14 @@
 let
   self = buildPythonPackage {
     pname = "pylibjpeg-libjpeg";
-    version = "2.3.0";
+    version = "2.4.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pydicom";
       repo = "pylibjpeg-libjpeg";
       tag = "v${self.version}";
-      hash = "sha256-P01pofPLTOa5ynsCkLnxiMzVfCg4tbT+/CcpPTeSViw=";
+      hash = "sha256-e25xCw3KUrZmWSDUQI507n7kybuK0R+xPbJWzzEhZtQ=";
     };
 
     postPatch = ''

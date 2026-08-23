@@ -23,16 +23,17 @@
   pango,
   udev,
   xdg-utils,
-  xorg,
+  libx11,
+  libxcb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "publii";
-  version = "0.47.3";
+  version = "0.47.9";
 
   src = fetchurl {
-    url = "https://getpublii.com/download/Publii-${version}.deb";
-    hash = "sha256-1LzjnN0gmzE4JJdgTOUQ3n/BATg+B5Lfi0yR94TU+XE=";
+    url = "https://getpublii.com/download/Publii-${finalAttrs.version}.deb";
+    hash = "sha256-bYlmnA8F3vGY1wGwUn/Ziv9v8KgmQ3WwUbvy4f1NaFI=";
   };
 
   dontConfigure = true;
@@ -62,8 +63,8 @@ stdenv.mkDerivation rec {
     musl
     nss
     pango
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
   ];
 
   unpackPhase = ''
@@ -100,12 +101,9 @@ stdenv.mkDerivation rec {
       quickly and easily; perfect for anyone who wants a fast, secure website in a flash.
     '';
     homepage = "https://getpublii.com";
-    changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      urandom
-      sebtm
+    maintainers = [
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

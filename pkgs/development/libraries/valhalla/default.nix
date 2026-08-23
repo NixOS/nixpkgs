@@ -24,21 +24,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valhalla";
-  version = "3.5.1";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "valhalla";
     repo = "valhalla";
     tag = finalAttrs.version;
-    hash = "sha256-v/EwoJA1j8PuF9jOsmxQL6i+MT0rXbyLUE4HvBHUWDo=";
+    hash = "sha256-Q+h1k26UPiZEVhtonjipUS6gGIUZHM16pYgCxq/Zav0=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace src/bindings/python/CMakeLists.txt \
       --replace-fail "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "rapidjson_include_dir rapidjson" "rapidjson_include_dir RapidJSON"
   '';
 
   nativeBuildInputs = [
@@ -51,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_SINGLE_FILES_WERROR" false)
     (lib.cmakeBool "PREFER_EXTERNAL_DEPS" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # On darwin Valhalla only looks at the Homebrew paths
+    (lib.cmakeFeature "SQLITE3_INCLUDE_DIR" "${lib.getDev sqlite}/include")
+    (lib.cmakeFeature "SQLITE3_LIBRARY" "${lib.getLib sqlite}/lib/libsqlite3.dylib")
   ];
 
   buildInputs = [
@@ -79,12 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/valhalla/valhalla/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/valhalla/valhalla/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Thra11 ];
     pkgConfigModules = [ "libvalhalla" ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

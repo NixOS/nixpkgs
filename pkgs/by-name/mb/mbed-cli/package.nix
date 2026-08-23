@@ -8,13 +8,13 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "mbed-cli";
   version = "1.10.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-X+hNVM8fsy0VFTqFr1pPKWRimacBenTcY4y+PBJpvlI=";
   };
 
@@ -37,4 +37,4 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

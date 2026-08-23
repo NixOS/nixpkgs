@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # timming sensitive
+    # timing sensitive
     "test_dummy_verify"
     "test_encrypt_cost_timing"
   ];

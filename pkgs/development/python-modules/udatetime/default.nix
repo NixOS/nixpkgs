@@ -1,21 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "udatetime";
   version = "0.0.17";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sQvFVwaZpDinLitaZOdr2MKO4779FvIJOHpVB/oLgwE=";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "freach";
+    repo = "udatetime";
+    tag = finalAttrs.version;
+    hash = "sha256-1TGLdw8yq+FmdfKin2e9SKJTA1TDNmLXmKRWcq0qTnw=";
   };
 
-  # tests not included on pypi
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # shadows the installed package holding the compiled extension
+  preCheck = ''
+    rm -r udatetime
+  '';
 
   pythonImportsCheck = [ "udatetime" ];
 
@@ -26,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -31,15 +31,15 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.18.0";
+  version = "4.20.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
-    hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
+    tag = finalAttrs.version;
+    hash = "sha256-UafTyfK+pmW2wyAQnvHov9KIorf1HSc6haskfv7auHs=";
   };
 
   outputs = [
@@ -77,9 +77,6 @@ stdenv.mkDerivation rec {
     # Would have to be done as part of the NixOS modules,
     # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
-    # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
-    # Can be removed after the next release
-    ./disable-xaprintf-test.patch
   ];
 
   postPatch = ''
@@ -103,6 +100,7 @@ stdenv.mkDerivation rec {
     "--with-group-name-max-length=32"
     "--with-bcrypt"
     "--with-yescrypt"
+    "--disable-logind" # needs systemd, which causes infinite recursion
     (lib.withFeature withLibbsd "libbsd")
   ]
   ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
@@ -133,12 +131,36 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shadow-maint/shadow";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "shadow_project" finalAttrs.version;
   };
 
   passthru = {
     shellPath = "/bin/nologin";
-    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
+    # Package the upstream system test framework for use in nixosTests
+    testFramework = stdenv.mkDerivation {
+      name = "shadow-test-framework";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/tests/system";
+      installPhase = ''
+        cp -r . $out/
+      '';
+      dontBuild = true;
+      postPatch = ''
+        # Replace the gshadow existence check in the test framework with a more NixOS-friendly one, since NixOS does not have /etc/gshadow as a regular file
+        substituteInPlace framework/hosts/shadow.py \
+          --replace-fail 'getent gshadow > /dev/null 2>&1' 'test -f /etc/gshadow'
+
+        # Remove the backup entry for gshadow, since it's not being used in the tests running on NixOS
+        sed -i '/{"origin": "\/etc\/gshadow", "backup": "gshadow"}/d' framework/hosts/shadow.py
+
+        # Replace the Debian-specific check in the useradd test with a NixOS-specific one
+        substituteInPlace tests/test_useradd.py \
+          --replace-fail 'if "Debian" in shadow.host.distro_name:' 'if "NixOS" in shadow.host.distro_name:'
+      '';
+    };
   };
-}
+})

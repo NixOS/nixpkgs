@@ -5,21 +5,18 @@
   llama-index-core,
   hatchling,
   pyowm,
-  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-weather";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_weather";
     inherit version;
-    hash = "sha256-fprFX75y50RzJA4SlMfgAeXOO88QbY9UT17Y8oIwdUk=";
+    hash = "sha256-bqvt09YSRD8BQfZjwnMlsO5oSscjh+piQXbUUZGeXbs=";
   };
 
   build-system = [ hatchling ];

@@ -9,15 +9,12 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "govee-led-wez";
   version = "0.0.15";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wez";
@@ -46,7 +43,7 @@ buildPythonPackage {
   meta = {
     description = "Control Govee Lights from Python";
     homepage = "https://github.com/wez/govee-py";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

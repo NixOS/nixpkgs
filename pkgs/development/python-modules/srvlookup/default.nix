@@ -4,15 +4,12 @@
   dnspython,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "srvlookup";
   version = "3.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gmr";
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper for dnspython to return SRV records for a given host, protocol, and domain name";
     homepage = "https://github.com/gmr/srvlookup";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmlb ];
   };
 }

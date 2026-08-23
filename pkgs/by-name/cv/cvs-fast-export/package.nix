@@ -15,12 +15,12 @@
   rsync,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvs-fast-export";
   version = "1.63";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
+    url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-YZF2QebWbvn/N9pLpccudZsFHzocJp/3M0Gx9p7fQ5Y=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     homepage = "http://www.catb.org/esr/cvs-fast-export/";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -10,14 +10,14 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tntnet";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "maekitalo";
     repo = "tntnet";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-ujVPOreCGCFlYHa19yCIiZ0ed+p0jnS14DHDwKYvtc0=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

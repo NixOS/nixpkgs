@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   xbitmaps,
-  libX11,
+  libx11,
   imake,
   gccmakedep,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xbitmaps
-    libX11
+    libx11
   ];
 
   nativeBuildInputs = [

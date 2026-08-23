@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   greenlet,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "requests-futures";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ross";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     description = "Asynchronous Python HTTP Requests for Humans using Futures";
     homepage = "https://github.com/ross/requests-futures";
     changelog = "https://github.com/ross/requests-futures/blob/${src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ applePrincess ];
   };
 }

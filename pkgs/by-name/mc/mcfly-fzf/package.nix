@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcfly-fzf";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "bnprks";
     repo = "mcfly-fzf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZdsbkN+/NLA0vor6/eEdAI7V5m5GEi+phcJQ89Jp4fk=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.simonhammes ];
     mainProgram = "mcfly-fzf";
   };
-}
+})

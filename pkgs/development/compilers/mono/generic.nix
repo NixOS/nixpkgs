@@ -7,7 +7,7 @@
   gettext,
   perl,
   libgdiplus,
-  libX11,
+  libx11,
   ncurses,
   zlib,
   bash,
@@ -48,15 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gettext
     libgdiplus
-    libX11
+    libx11
     ncurses
     zlib
     bash
   ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
+    "--x-includes=${libx11.dev}/include"
+    "--x-libraries=${libx11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ];
 
@@ -75,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
   '';
 
-  # Fix mono DLLMap so it can find libX11 to run winforms apps
+  # Fix mono DLLMap so it can find libx11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
   # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
+    sed -i -e "s@libX11.so.6@${libx11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with

@@ -12,14 +12,12 @@
   intltool,
   ipset,
   iptables,
-  kdePackages,
   kmod,
   libnotify,
   librsvg,
   libxml2,
   libxslt,
   networkmanager,
-  networkmanagerapplet,
   pkg-config,
   python3,
   qt6,
@@ -43,15 +41,18 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.4.0";
+  version = "2.5.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${version}";
-    sha256 = "sha256-P48qdgvcF3BQZ5h+HaylHb70ECa2bmEvYiAi9CeH0qs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fwVRGA8IBwxVc7keo8Yv9qMwv1+PwC6IViD04mQQcug=";
   };
 
   patches = [
@@ -60,22 +61,17 @@ stdenv.mkDerivation rec {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
-  ];
+  ]
+  ++ lib.optional withGui ./nm-connection-editor.patch;
 
   postPatch = ''
     substituteInPlace config/xmlschema/check.sh \
       --replace-fail /usr/bin/ ""
 
-    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
-      config/firewall-{applet,config}.desktop.in; do
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in}; do
         substituteInPlace $file \
           --replace-fail /usr "$out"
     done
-  ''
-  + lib.optionalString withGui ''
-    substituteInPlace src/firewall-applet.in \
-      --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
-      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
@@ -84,6 +80,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook-xsl-nons
     glib
+    gobject-introspection
     intltool
     libxml2
     libxslt
@@ -98,7 +95,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gobject-introspection
     ipset
     iptables
     kmod
@@ -136,6 +132,9 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString (!withGui) ''
     rm $out/bin/firewall-{applet,config}
+    rm $out/etc/xdg/autostart/firewall-applet.desktop
+    rm $out/share/applications/firewall-config.desktop
+    rm $out/share/metainfo/org.firewalld.firewall-config.metainfo.xml
   '';
 
   dontWrapGApps = true;
@@ -155,8 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    firewalld = nixosTests.firewalld;
-    firewall-firewalld = nixosTests.firewall-firewalld;
+    inherit (nixosTests) firewalld firewall-firewalld;
   };
 
   meta = {
@@ -167,4 +165,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prince213 ];
     platforms = lib.platforms.linux;
   };
-}
+})

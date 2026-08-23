@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
   version = "0-unstable-2021-02-08";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sommer";

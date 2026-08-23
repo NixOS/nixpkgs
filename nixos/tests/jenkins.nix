@@ -118,7 +118,7 @@
           master.wait_until_succeeds("test -f ${jenkinsHome}/jobs/folder-1/jobs/job-2/config.xml")
 
           # Verify that jenkins also sees the jobs.
-          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
+          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -http -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
           jobs = [x.strip() for x in out.splitlines()]
           # Seeing jobs inside folders requires the Folders plugin
           # (https://plugins.jenkins.io/cloudbees-folder/), which we don't have
@@ -135,7 +135,7 @@
           master.wait_until_fails("test -f ${jenkinsHome}/jobs/folder-1/jobs/job-2/config.xml")
 
           # Verify that jenkins also sees the jobs as removed.
-          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
+          out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -http -s ${jenkinsUrl} -auth admin:$(cat ${jenkinsHome}/secrets/initialAdminPassword) list-jobs")
           jobs = [x.strip() for x in out.splitlines()]
           assert jobs == [], f"jobs != []: {jobs}"
     '';

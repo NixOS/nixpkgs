@@ -5,7 +5,6 @@
   sphinx,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
   beautifulsoup4,
   flit-core,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sphinxext-opengraph";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";

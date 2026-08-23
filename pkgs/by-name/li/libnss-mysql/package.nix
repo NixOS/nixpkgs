@@ -8,15 +8,15 @@
   libmysqlclient,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnss-mysql";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "saknopper";
     repo = "libnss-mysql";
-    rev = "v${version}";
-    sha256 = "1fhsswa3h2nkhjkyjxxqnj07rlx6bmfvd8j521snimx2jba8h0d6";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/oeUe94NfOzKrHhiIEW0cMXP5pAqPHulRO82JwPrv5I=";
   };
 
   nativeBuildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ netali ];
   };
-}
+})

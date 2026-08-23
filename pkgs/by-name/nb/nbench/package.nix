@@ -4,21 +4,22 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nbench-byte";
   version = "2.2.3";
 
   src = fetchurl {
-    url = "http://www.math.utah.edu/~mayer/linux/nbench-byte-${version}.tar.gz";
+    url = "https://www.math.utah.edu/~mayer/linux/nbench-byte-${finalAttrs.version}.tar.gz";
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 
   prePatch = ''
-    substituteInPlace nbench1.h --replace '"NNET.DAT"' "\"$out/NNET.DAT\""
-    substituteInPlace sysspec.h --replace "malloc.h" "stdlib.h"
+    substituteInPlace nbench1.h --replace-fail '"NNET.DAT"' "\"$out/NNET.DAT\"" \
+      --replace-fail 'static void adjust_mid_wts();' 'static void adjust_mid_wts(int);'
+    substituteInPlace sysspec.h --replace-fail "malloc.h" "stdlib.h"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace "-static" ""
+    substituteInPlace Makefile --replace-fail "-static" ""
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
@@ -40,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "nbench";
   };
-}
+})

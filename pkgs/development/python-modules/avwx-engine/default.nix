@@ -17,16 +17,16 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "avwx-engine";
-  version = "1.9.7";
+  version = "1.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
-    tag = version;
-    hash = "sha256-j+WT0v1h+dOGW90u+LIVQ0xIE4YzsWRo2E0mGOZUU1A=";
+    tag = finalAttrs.version;
+    hash = "sha256-RJOXMbbBdcuWvNcQUGq5VHCpdWOVQoBjruQ96m1f1gc=";
   };
 
   build-system = [ hatchling ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "avwx" ];
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Aviation Weather parsing engine";
     homepage = "https://github.com/avwx-rest/avwx-engine";
-    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

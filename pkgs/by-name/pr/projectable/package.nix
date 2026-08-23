@@ -6,16 +6,18 @@
   libgit2,
   openssl,
   zlib,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "projectable";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "dzfrias";
     repo = "projectable";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-GM/dPmLnv1/Qj6QhBxPu5kO/SDnbY7Ntupf1FGkmrUY=";
   };
 
@@ -36,12 +38,17 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "TUI file manager built for projects";
     homepage = "https://github.com/dzfrias/projectable";
-    changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
+    changelog = "https://github.com/dzfrias/projectable/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "prj";
   };
-}
+})

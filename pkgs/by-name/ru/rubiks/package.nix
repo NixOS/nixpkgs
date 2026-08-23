@@ -7,12 +7,12 @@
   dos2unix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rubiks";
   version = "20070912";
 
   src = fetchurl {
-    url = "mirror://sageupstream/rubiks/rubiks-${version}.tar.bz2";
+    url = "mirror://sageupstream/rubiks/rubiks-${finalAttrs.version}.tar.bz2";
     sha256 = "0zdmkb0j1kyspdpsszzb2k3279xij79jkx0dxd9f3ix1yyyg3yfq";
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       There are several programs for working with Rubik's cubes, by three
       different people. Look inside the directories under /src to see
-      specific info and licensing. In summary the three contributers are:
+      specific info and licensing. In summary the three contributors are:
 
 
       Michael Reid (GPL) http://www.math.ucf.edu/~reid/Rubik/optimal_solver.html
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

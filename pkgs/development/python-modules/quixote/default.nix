@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quixote";
-  version = "3.7";
+  version = "3.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F4u50xz6sNwBIzgEglVnwKTKxguE6f1m9Y2DAUEJsGQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-+7RMcIG4J8CwyqY37BCaQNJlXgHTAYCda64IAMEdRjQ=";
   };
 
   build-system = [ setuptools ];
@@ -36,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

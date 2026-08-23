@@ -5,21 +5,21 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-graft";
   version = "0.2.19";
 
   src = fetchFromGitHub {
-    owner = "mzz2017";
+    owner = "daeuniverse";
     repo = "gg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DXW0NtFYvcCX4CgMs5/5HPaO9f9eFtw401wmJdCbHPU=";
   };
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-X github.com/mzz2017/gg/cmd.Version=${version}"
+    "-X github.com/mzz2017/gg/cmd.Version=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -37,8 +37,8 @@ buildGoModule rec {
 
   meta = {
     description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
-    changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
-    homepage = "https://github.com/mzz2017/gg";
+    changelog = "https://github.com/daeuniverse/gg/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://github.com/daeuniverse/gg";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       xyenon
@@ -47,4 +47,4 @@ buildGoModule rec {
     mainProgram = "gg";
     platforms = lib.platforms.linux;
   };
-}
+})

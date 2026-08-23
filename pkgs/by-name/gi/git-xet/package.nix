@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-xet";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "xet-core";
     tag = "git-xet-v${finalAttrs.version}";
-    hash = "sha256-XnCp9Dt4isFsT124ZVA/ID5y9l4bCSBQRrqrIPpv5Ow=";
+    hash = "sha256-PmAJg7R5IBvDUsQGyDWzUz4bAFsR5ET1pOncpBGiHl4=";
   };
 
-  cargoHash = "sha256-0xUik5zHO4T2PjFXrA0XHuy2892piE5Kiw2pcpa7xdY=";
+  cargoHash = "sha256-2f2lLSYcvllIKvyMlT5hphhkb0QY70wdTvncC1Lf4NI=";
 
   nativeBuildInputs = [
     pkg-config

@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
 
   certifi,
@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "3.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
@@ -35,6 +33,15 @@ buildPythonPackage rec {
     (replaceVars ./001.proj.patch {
       proj = proj;
       projdev = proj.dev;
+    })
+    # PROJ 9.8.0 compatibility
+    (fetchpatch2 {
+      url = "https://github.com/pyproj4/pyproj/pull/1557.diff?full_index=1";
+      hash = "sha256-3iK/JaQEgyQvPjybJF/ATxOy3fFl7q6aa9tdfsrhajM=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/pyproj4/pyproj/pull/1560.diff?full_index=1";
+      hash = "sha256-fr+lvDeVFDagc9aHzaQhyZtWK2sy5kR7iImJsuxW8Z4=";
     })
   ];
 
@@ -75,9 +82,10 @@ buildPythonPackage rec {
     "test_sync__source_id__list"
     "test_sync_download"
     "test_transformer_group__download_grids"
-    # https://github.com/pyproj4/pyproj/issues/1553
-    "test_datum_horizontal"
-    "test_sub_crs"
+    # https://github.com/pyproj4/pyproj/issues/1588
+    "test_coordinate_operation__from_string"
+    "test_transformer_from_pipeline__input_types"
+    "test_transformer_from_pipeline__wkt_json"
   ];
 
   pythonImportsCheck = [

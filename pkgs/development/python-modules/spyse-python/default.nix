@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   limiter,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "spyse-python";
   version = "2.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spyse-com";
@@ -62,7 +59,7 @@ buildPythonPackage rec {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
     changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

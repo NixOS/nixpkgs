@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   regex,
   csvw,
@@ -13,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "segments";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "cldf";
     repo = "segments";
     rev = "v${version}";
-    sha256 = "sha256-5VgjaWeinXimpoCBhKBvVOmvcCIWrOqYMQegVDGJAKo=";
+    sha256 = "sha256-XhJH87Bb9wGNPpPymRjgPYLv2zr4hGAyIAbTMk0uCU0=";
   };
 
   nativeBuildInputs = [ setuptools ];

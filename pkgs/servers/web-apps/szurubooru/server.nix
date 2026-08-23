@@ -22,16 +22,7 @@ let
         doCheck = false;
       });
 
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.23";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          sha256 = "sha256-b8ozZyV4Zm9lfBMVUsTviXnBYG5JT3jNUZl0LfsmkYs=";
-        };
-
-        doCheck = false;
-      });
+      sqlalchemy = self.sqlalchemy_1_4;
     })
   ];
 

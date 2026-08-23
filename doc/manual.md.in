@@ -1,4 +1,4 @@
-# Nixpkgs Reference Manual {#nixpkgs-manual}
+# Nixpkgs Manual {#nixpkgs-manual}
 ## Version @MANUAL_VERSION@
 
 ```{=include=} chapters
@@ -6,6 +6,7 @@ preface.chapter.md
 ```
 
 ```{=include=} parts
+getting-started/getting-started.part.md
 using-nixpkgs.md
 lib.md
 stdenv.md
@@ -15,6 +16,10 @@ modules/index.md
 development.md
 contributing.md
 interoperability.md
+```
+
+```{=include=} chapters
+languages-frameworks/index.md
 ```
 
 ```{=include=} appendix html:into-file=//release-notes.html

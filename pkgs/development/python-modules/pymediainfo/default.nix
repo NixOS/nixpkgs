@@ -6,15 +6,12 @@
   libmediainfo,
   pdm-backend,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymediainfo";
   version = "7.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

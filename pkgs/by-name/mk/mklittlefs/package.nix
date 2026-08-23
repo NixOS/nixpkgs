@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool to build and unpack littlefs images";
     homepage = "https://github.com/earlephilhower/mklittlefs";
-    changelog = "https://github.com/earlephilhower/mklittlefs/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/earlephilhower/mklittlefs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "mklittlefs";

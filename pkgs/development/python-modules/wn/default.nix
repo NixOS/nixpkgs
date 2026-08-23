@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   pytest-benchmark,
-  pythonOlder,
   hatchling,
   httpx,
   tomli,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "wn";
   version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

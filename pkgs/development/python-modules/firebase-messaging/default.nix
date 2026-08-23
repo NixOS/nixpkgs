@@ -14,7 +14,6 @@
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   sphinx,
   sphinx-autodoc-typehints,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "firebase-messaging";
   version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sdb9696";

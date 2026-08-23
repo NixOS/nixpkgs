@@ -7,21 +7,20 @@
   pkgs,
   pyahocorasick,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
   setuptools,
   unidiff,
   writableTmpDirAsHomeHook,
+  withGibberish ? true,
+  withWordList ? true,
 }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";
@@ -34,11 +33,20 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    gibberish-detector
     pyyaml
-    pyahocorasick
     requests
-  ];
+  ]
+  ++ lib.optionals withGibberish optional-dependencies.gibberish
+  ++ lib.optionals withWordList optional-dependencies.word_list;
+
+  optional-dependencies = {
+    gibberish = [
+      gibberish-detector
+    ];
+    word_list = [
+      pyahocorasick
+    ];
+  };
 
   nativeCheckInputs = [
     mock
@@ -54,11 +62,8 @@ buildPythonPackage rec {
     "test_basic"
     "test_handles_each_path_separately"
     "test_handles_multiple_directories"
-    "test_load_and_output"
     "test_make_decisions"
-    "test_restores_line_numbers"
     "test_saves_to_baseline"
-    "test_scan_all_files"
     "test_start_halfway"
   ];
 

@@ -4,15 +4,12 @@
   buildPythonPackage,
   python,
   graphviz,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gprof2dot";
   version = "2025.04.14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";

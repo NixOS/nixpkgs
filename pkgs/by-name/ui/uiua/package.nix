@@ -15,7 +15,10 @@
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   windowSupport ? false,
 
   runCommand,
@@ -32,7 +35,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
-  inherit (versionInfo) version cargoHash;
+  inherit (versionInfo) version cargoHash patches;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
@@ -62,10 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ];
     in
     lib.optionalString (runtimeDependencies != [ ] && stdenv.hostPlatform.isLinux) ''

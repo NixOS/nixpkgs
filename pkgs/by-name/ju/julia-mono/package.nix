@@ -2,26 +2,20 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "JuliaMono-ttf";
-  version = "0.061";
+  version = "0.63.2";
 
   src = fetchzip {
-    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
+    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
     stripRoot = false;
-    hash = "sha256-3DSjrTipIwP6HJF+flGCY9ArhWMJv6piBiiExRP6c7I=";
+    hash = "sha256-trXylRLUUXW7x1bEKGQ/KtjlSlpHe0k6+9oIdeNuDQk=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Monospaced font for scientific and technical computing";

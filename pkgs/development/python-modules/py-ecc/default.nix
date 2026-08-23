@@ -7,7 +7,6 @@
   eth-utils,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   pydantic,
 }:
@@ -16,7 +15,6 @@ buildPythonPackage rec {
   pname = "py-ecc";
   version = "8.0.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "py_ecc" ];
 
   meta = {
-    changelog = "https://github.com/ethereum/py_ecc/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/ethereum/py_ecc/blob/${src.rev}/docs/release_notes.rst";
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = lib.licenses.mit;

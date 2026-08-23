@@ -17,13 +17,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btrbk";
-  version = "0.32.6";
+  version = "0.32.7";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
-    sha256 = "AuKsZHyRhGMgLL5ge7lVV6T3/SNwaRJDM8VNpbK7t2s=";
+    url = "https://digint.ch/download/btrbk/releases/btrbk-${finalAttrs.version}.tar.xz";
+    sha256 = "f1PPVaAHVwyd5aHE+UbKc3L61eBXyLHJ16/CF2zDLNM=";
   };
 
   nativeBuildInputs = [
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ asymmetric ];
     mainProgram = "btrbk";
   };
-}
+})

@@ -2,25 +2,21 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto-flex";
   version = "3.200";
 
   src = fetchzip {
-    url = "https://github.com/googlefonts/roboto-flex/releases/download/${version}/roboto-flex-fonts.zip";
-    stripRoot = false;
+    url = "https://github.com/googlefonts/roboto-flex/releases/download/${finalAttrs.version}/roboto-flex-fonts.zip";
     hash = "sha256-p8BvE4f6zQLygl49hzYTXXVQFZEJjrlfUvjNW+miar4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  sourceRoot = "${finalAttrs.src.name}/roboto-flex-fonts/fonts";
 
-    install -Dm644 roboto-flex-fonts/fonts/variable/*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/googlefonts/roboto-flex";
@@ -29,4 +25,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

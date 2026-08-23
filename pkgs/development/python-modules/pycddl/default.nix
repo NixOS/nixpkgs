@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchPypi,
   buildPythonPackage,
   rustPlatform,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pycddl";
   version = "0.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,6 +40,8 @@ buildPythonPackage rec {
     inherit pname version src;
     hash = "sha256-cEpvkSqe/wRCxEajmM148jbo6a346x2t81pMRpKEJyE=";
   };
+
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
 
   nativeCheckInputs = [
     hypothesis

@@ -20,7 +20,7 @@ let
     inherit pname version src;
   };
   # we only use this to extract the icon
-  appimage-contents = appimageTools.extractType2 {
+  appimage-contents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -36,12 +36,14 @@ let
 
 in
 symlinkJoin {
-  inherit name;
+  inherit version;
+  pname = "patchwork";
+
   paths = [ binary ];
 
   postBuild = ''
-    mkdir -p $out/share/pixmaps/ $out/share/applications
-    cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
+    mkdir -p $out/share/applications
+    install -D ${appimage-contents}/ssb-patchwork.png -t $out/share/icons/hicolor/512x512/apps
     cp ${desktopItem}/share/applications/* $out/share/applications/
   '';
 

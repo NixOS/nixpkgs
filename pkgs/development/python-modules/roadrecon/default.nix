@@ -15,17 +15,22 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roadrecon";
-  version = "1.7.2";
+  version = "2.0.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fvfwgUqVr74JdL3dteX0UXbALva3vWQWEpotk8QQAiI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-wzr0J6tGhsZdjTDeIeSzCRTquiw4iZ8FxqFEl1fC2iU=";
   };
 
-  pythonRelaxDeps = [ "flask" ];
+  pythonRelaxDeps = [
+    "marshmallow"
+    "flask"
+  ];
 
   build-system = [ setuptools ];
 
@@ -53,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

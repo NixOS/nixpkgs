@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aA/ivRap+aDd2wi6KWXam9eP/21lOn6OWTeZ4i/S9Bs=";
   };
 
+  postPatch = ''
+    substituteInPlace cbmbasic.c \
+      --replace-fail "typedef unsigned char bool;" ""
+  '';
+
   installPhase = ''
     runHook preInstall
 

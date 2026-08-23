@@ -5,7 +5,7 @@
     maintainers = [ fgaz ];
   };
 
-  machine =
+  nodes.machine =
     { config, pkgs, ... }:
     {
       imports = [
@@ -13,6 +13,12 @@
       ];
 
       services.xserver.enable = true;
+      boot.kernelModules = [ "snd-dummy" ];
+      services.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      services.pipewire.enable = false;
       environment.systemPackages = [ pkgs.sfxr-qt ];
     };
 

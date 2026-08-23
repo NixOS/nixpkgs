@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   lark,
   poetry-core,
   pytestCheckHook,
@@ -11,9 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "beancount-parser";
   version = "1.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
@@ -34,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     description = "Standalone Lark based Beancount syntax parser";
     homepage = "https://github.com/LaunchPlatform/beancount-parser/";
     changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
 })

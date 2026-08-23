@@ -10,18 +10,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "thanos";
-  version = "0.40.1";
+  version = "0.42.4";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    tag = "v${version}";
-    hash = "sha256-g0xvtBwPoX906xHdyOEUfudio/9MZhkzdBp5FcATRsM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aqYKctocTdg6i0wMee6fJhRC3wcv9u07zyGj1NzNg98=";
   };
 
-  vendorHash = "sha256-ukKoiA7UhqDdMvAWYL5BGf6+FSPSkcRR/Scj5o/MMKc=";
+  vendorHash = "sha256-YKiFfXA93/L3LRCYUbuwpOIhbeqw6fXNSK+Fb8Gltn0=";
 
   subPackages = "cmd/thanos";
 
@@ -36,7 +36,7 @@ buildGoModule rec {
       t = "github.com/prometheus/common/version";
     in
     [
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -65,7 +65,7 @@ buildGoModule rec {
   meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
-    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
+    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "thanos";
     maintainers = with lib.maintainers; [
@@ -73,4 +73,4 @@ buildGoModule rec {
       anthonyroussel
     ];
   };
-}
+})

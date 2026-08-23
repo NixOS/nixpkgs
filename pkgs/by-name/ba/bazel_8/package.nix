@@ -31,7 +31,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "8.4.2",
+  version ? "8.7.0",
 }:
 
 let
@@ -45,7 +45,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-5oNYKHPaDkpunl6oC104Rh1wAEMWfLfvCFdGHlXZn4o=";
+    hash = "sha256-bm+gkkrAVepJWZddDEV1+jX4jRdD+tZ1TH2YG9adIyk=";
     stripRoot = false;
   };
 
@@ -77,6 +77,7 @@ let
     #        ],
     #     )
     [
+      bash # see https://github.com/NixOS/nixpkgs/pull/489519
       coreutils
       diffutils
       file
@@ -87,6 +88,7 @@ let
       gnused
       gnutar
       gzip
+      python3 # see https://github.com/NixOS/nixpkgs/pull/489519
       unzip
       which
       zip
@@ -127,7 +129,7 @@ stdenv.mkDerivation rec {
     # guarantee that it will always run in any nix context.
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-    # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+    # NIX_BUILD_TOP env var to conditionally disable sleep features inside the
     # sandbox.
     #
     # If you want to investigate the sandbox profile path,
@@ -204,6 +206,11 @@ stdenv.mkDerivation rec {
     # and we need to do a silly patch
     (replaceVars ./patches/usr_bin_env.patch {
       usrBinEnv = "${coreutils}/bin/env";
+    })
+
+    # Bazel tries to run "/bin/true" to test if linux-sandbox works.
+    (replaceVars ./patches/linux_sandbox.patch {
+      binTrue = "${coreutils}/bin/true";
     })
 
     # Provide default JRE for Bazel process by setting --server_javabase=

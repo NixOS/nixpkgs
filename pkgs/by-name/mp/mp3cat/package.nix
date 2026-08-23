@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mp3cat";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "tomclegg";
     repo = "mp3cat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0n6hjg2wgd06m561zc3ib5w2m3pwpf74njv2b2w4sqqh5md2ymfr";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "mp3cat";
   };
-}
+})

@@ -10,19 +10,23 @@
   ngspice,
   tcl,
   tk,
-  xorg,
+  libxt,
+  libxpm,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
 stdenv.mkDerivation {
-  version = "3.10.37";
+  version = "3.10.42";
   pname = "xcircuit";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "XCircuit";
-    rev = "0056213308c92bec909e8469a0fa1515b72fc3d2";
-    sha256 = "sha256-LXU5VEkLF1aKYz9ynI1qQjJUwt/zKFMPYj153OgJOOI=";
+    rev = "8a0429250abbd2b70c4d3fbfe2e2c20b4c43be81";
+    sha256 = "sha256-ijJYppWuEYcb2RLVsvGHu+7YRp027MNDDcqxSKLHORU=";
   };
 
   nativeBuildInputs = [
@@ -38,19 +42,14 @@ stdenv.mkDerivation {
     "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
-  patches = [
-    # fix compilation with GCC 14
-    ./declare-missing-prototype.patch
-  ];
-
-  buildInputs = with xorg; [
+  buildInputs = [
     cairo
     ghostscript
-    libSM
-    libXt
-    libICE
-    libX11
-    libXpm
+    libsm
+    libxt
+    libice
+    libx11
+    libxpm
     tcl
     tk
     zlib

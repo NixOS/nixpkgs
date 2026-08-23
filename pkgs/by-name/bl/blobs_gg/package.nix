@@ -10,10 +10,10 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "blobs.gg";
-  version = "unstable-2019-07-24";
+  version = "0-unstable-2019-07-24";
 
   src = fetchurl {
-    url = "https://git.pleroma.social/pleroma/emoji-index/-/raw/${rev}/packs/blobs_gg.zip";
+    url = "https://git.pleroma.social/pleroma/emoji-index/raw/commit/${rev}/packs/blobs_gg.zip";
     hash = "sha256-OhLzoYFnjVs1hKYglUEbDWCjNRGBNZENh5kg+K3lpX8=";
   };
 

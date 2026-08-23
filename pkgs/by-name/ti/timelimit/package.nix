@@ -5,30 +5,35 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timelimit";
-  version = "1.9.2";
+  version = "1.9.5";
 
   src = fetchFromGitLab {
     owner = "timelimit";
     repo = "timelimit";
-    rev = "release/${version}";
-    hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
+    rev = "release/${finalAttrs.version}";
+    hash = "sha256-nsjLRRIsDv4QJq73nCjd0r4zQbyaQsriPz/gDWu4K18=";
   };
 
   nativeCheckInputs = [ perl ];
   doCheck = true;
 
   installFlags = [ "PREFIX=$(out)" ];
-  INSTALL_PROGRAM = "install -m755";
-  INSTALL_DATA = "install -m644";
+
+  env = {
+    INSTALL_PROGRAM = "install -m755";
+    INSTALL_DATA = "install -m644";
+  };
 
   meta = {
     description = "Execute a command and terminates the spawned process after a given time with a given signal";
     homepage = "https://devel.ringlet.net/sysutils/timelimit/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "timelimit";
   };
-}
+})

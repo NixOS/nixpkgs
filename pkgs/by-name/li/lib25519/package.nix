@@ -5,16 +5,21 @@
   fetchzip,
   testers,
   valgrind,
+  valgrindSupport ?
+    lib.meta.availableOn stdenv.hostPlatform valgrind && !(valgrind.meta.broken or false),
   librandombytes,
   libcpucycles,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
-  version = "20241004";
+  version = "20260614";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
-    hash = "sha256-gKLMk+yZ/nDlwohZiCFurSZwHExX3Ge2W1O0JoGQf8M=";
+    hash = "sha256-k6hVfUckgrRGVmvbt5SW3Vg1woscGzPBpOYnfYx5t44=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
@@ -22,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs configure
     patchShebangs scripts-build
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    find . -name '*.S' -type f -exec \
+      sed -i '/^\.section\t\.note\.GNU-stack,"",@progbits/d' {} +
   '';
 
   # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
@@ -29,23 +38,33 @@ stdenv.mkDerivation (finalAttrs: {
   # Pass the hostPlatform string
   configurePhase = ''
     runHook preConfigure
-    ./configure --host=${stdenv.buildPlatform.system} --prefix=$out
+    ./configure --host=${stdenv.buildPlatform.system} --prefix=$out ${
+      lib.optionalString (!valgrindSupport) "--no-valgrind"
+    }
     runHook postConfigure
   '';
 
   nativeBuildInputs = [
-    python3
+    (python3.withPackages (ps: [ ps.capstone ]))
+  ]
+  ++ lib.optionals valgrindSupport [
     valgrind
   ];
   buildInputs = [
     librandombytes
     libcpucycles
+  ]
+  ++ lib.optionals valgrindSupport [
+    valgrind
   ];
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/lib25519.1.dylib" "$out/lib/lib25519.1.dylib"
     for f in $out/bin/*; do
-      install_name_tool -change "lib25519.1.dylib" "$out/lib/lib25519.1.dylib" "$f"
+      # Skip python script, fails on aarch64-darwin otherwise
+      if [[ "$f" != "$out/bin/lib25519-fulltest" ]]; then
+        install_name_tool -change "lib25519.1.dylib" "$out/lib/lib25519.1.dylib" "$f"
+      fi
     done
   '';
 
@@ -67,17 +86,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://randombytes.cr.yp.to/";
-    description = "Simple API for applications generating fresh randomness";
-    changelog = "https://randombytes.cr.yp.to/download.html";
-    license = with lib.licenses; [
-      # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
-      publicDomain
-      cc0
-      bsd0
-      mit
-      mit0
-    ];
+    homepage = "https://lib25519.cr.yp.to";
+    description = "Microlibrary for X25519/Ed25519 cryptography";
+    changelog = "https://lib25519.cr.yp.to/download.html";
+    license =
+      # Upstream specifies the public domain licenses with the terms here https://lib25519.cr.yp.to/license.html
+      lib.licenses.OR [
+        lib.licenses.publicDomain
+        lib.licenses.cc0
+        lib.licenses.bsd0
+        lib.licenses.mit
+        lib.licenses.mit0
+      ];
     maintainers = with lib.maintainers; [
       kiike
       imadnyc

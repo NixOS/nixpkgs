@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "qlipper";
-  version = "5.1.2-unstable-2025-10-29";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "pvanek";

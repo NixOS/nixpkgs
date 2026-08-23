@@ -9,7 +9,6 @@
   packaging,
   psutil,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests-cache,
   requests-toolbelt,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "e3-core";
   version = "22.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
@@ -50,7 +47,7 @@ buildPythonPackage rec {
     stevedore
     tqdm
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
     # These are required only on Linux. Darwin has its own set of requirements
     psutil

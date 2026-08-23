@@ -3,15 +3,15 @@
   buildPythonPackage,
   fetchPypi,
   bce-python-sdk,
-  click,
-  prettytable,
-  psutil,
   requests,
   tqdm,
+  psutil,
+  click,
+  prettytable,
 }:
 
 let
-  version = "0.3.8";
+  version = "0.3.9";
 
   format = "wheel";
 in
@@ -25,16 +25,18 @@ buildPythonPackage {
     inherit version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-v8lq9yQ6wu4zAwFISapAKHF8zlr6Yir4z+Oh1E0ZQdY=";
+    hash = "sha256-QWIdBS3belhkNDinylQfWO8KuUoqzf/wpx24G/aNwCc=";
   };
 
   dependencies = [
     bce-python-sdk
-    click
-    prettytable
-    psutil
     requests
     tqdm
+    # Implicit dependency for file_download.py
+    psutil
+    # `aistudio` binary dependencies
+    click
+    prettytable
   ];
 
   pythonImportsCheck = [ "aistudio_sdk" ];

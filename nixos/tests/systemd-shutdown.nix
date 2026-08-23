@@ -11,8 +11,6 @@ in
   name = "systemd-shutdown";
   meta.maintainers = with lib.maintainers; [ das_j ];
 
-  _module.args.systemdStage1 = lib.mkDefault false;
-
   nodes.machine = {
     imports = [ ../modules/profiles/minimal.nix ];
     systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source =

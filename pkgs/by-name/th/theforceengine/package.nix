@@ -4,7 +4,7 @@
   fetchFromGitHub,
   SDL2,
   SDL2_image,
-  libX11,
+  libx11,
   rtaudio,
   rtmidi,
   glew,
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.22.420";
 
   src = fetchFromGitHub {
-    owner = "luciusDXL";
+    owner = "TheForceEngine";
     repo = "TheForceEngine";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8JhaCIJgyaikoDLesshKiIhOO6OFis0xBYDq4vio4F4=";
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_image
-    libX11
+    libx11
     rtaudio
     rtmidi
     glew

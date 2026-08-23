@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools-scm,
   more-itertools,
   pytestCheckHook,
@@ -11,9 +10,7 @@
 buildPythonPackage rec {
   pname = "jaraco-classes";
   version = "3.4.0";
-  format = "pyproject";
-
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";

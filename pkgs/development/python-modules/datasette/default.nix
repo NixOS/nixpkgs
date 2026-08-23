@@ -27,21 +27,18 @@
   asgiref,
   setuptools,
   trustme,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.65.1";
+  version = "0.65.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     tag = version;
-    hash = "sha256-kVtldBuDy19DmyxEQLtAjs1qiNIjaT8+rnHlFfGNHec=";
+    hash = "sha256-9ZMQ9xpWalkM4Ymoc/IA0ct+0r8ht1TxW5qPlVMFspE=";
   };
 
   postPatch = ''
@@ -118,7 +115,7 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     mainProgram = "datasette";
     homepage = "https://datasette.io/";
-    changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
+    changelog = "https://github.com/simonw/datasette/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

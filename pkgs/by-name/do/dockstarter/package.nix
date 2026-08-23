@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "dockstarter";
-  version = "unstable-2022-10-26";
+  version = "0-unstable-2022-10-26";
 
   src = fetchFromGitHub {
     owner = "ghostwriters";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     description = "Make it quick and easy to get up and running with Docker";
     homepage = "https://dockstarter.com";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "ds";
   };
 }

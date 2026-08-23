@@ -124,7 +124,7 @@ in
                   builtins.stringLength name <= 12
                 ) "Modeline name must be 12 characters or less" ''Modeline "${name}" ${value}''
               ))
-              (builtins.map (line: "${line}\n"))
+              (map (line: "${line}\n"))
               (lib.strings.concatStringsSep "")
             ];
           };

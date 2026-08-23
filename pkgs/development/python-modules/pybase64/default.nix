@@ -10,17 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mayeut";
     repo = "pybase64";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VSCMBKyDgNjwRUvT29z3KdN/dReqbmaaNeWomnyFJFg=";
+    hash = "sha256-7cUgvY/RLpkl6EfDCnki299m+KD2EpDLwIt4ut1hs38=";
   };
 
   build-system = [ setuptools ];

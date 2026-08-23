@@ -7,14 +7,14 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "supergfxctl";
   version = "5.2.7";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d3jN4i4oHRFDgr5f6y42gahrCfXBPB61T72x6IeiskM=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.k900 ];
   };
-}
+})

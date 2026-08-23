@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rotonda";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "rotonda";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7SVhxUpQq1CCDYNc0xza/2ixjKF8kHBSobt4S+azLQU=";
+    hash = "sha256-FsSrIkUJPotyFL2qWTYU9/a/aY1VletE8FFxqUxCvKg=";
   };
 
-  cargoHash = "sha256-4wldyvg0VOFTlM0FN/BSsyDNp5HbRumw4Lv4VEJlPfI=";
+  cargoHash = "sha256-Iuxm1Y+k00uvDedHucBRZkBGyEKoMM4feI4mvf3tzHM=";
 
   checkFlags = [
     # Broken in sandbox:

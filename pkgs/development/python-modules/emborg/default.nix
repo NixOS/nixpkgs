@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   borgbackup,
   appdirs,
   arrow,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.42";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.43";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
     tag = "v${version}";
-    hash = "sha256-/xinm/Jz4JVmm0jioLAhkbBueZCM0ehgt4gsgE7hX6I=";
+    hash = "sha256-b/nzAkWFOGPqr/cMX38WIQaOz7n+9d6gtMIgtFAd+yY=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -53,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   # this disables testing fuse mounts
-  MISSING_DEPENDENCIES = "fuse";
+  env.MISSING_DEPENDENCIES = "fuse";
 
   postPatch = ''
     patchShebangs .

@@ -9,11 +9,15 @@
   python3,
   symlinkJoin,
   lib,
-  xorg,
+  libxi,
+  libxext,
+  libx11,
+  libxcb,
   wayland,
   pciutils,
   libGL,
   apple-sdk_15,
+  fixDarwinDylibNames,
   xcbuild,
 }:
 let
@@ -23,6 +27,7 @@ let
   triplet = lib.getAttr arch {
     "x86_64" = "x86_64-unknown-linux-gnu";
     "aarch64" = "aarch64-unknown-linux-gnu";
+    "riscv64" = "riscv64-unknown-linux-gnu";
   };
 
   clang = symlinkJoin {
@@ -32,7 +37,7 @@ let
       llvmPackages.clang
     ];
     postBuild =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/darwin
           ln -s $out/resource-root/lib/darwin/libclang_rt.osx.a \
@@ -64,22 +69,23 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     llvmPackages.bintools
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
     xcbuild
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       glib
-      xorg.libxcb.dev
-      xorg.libX11.dev
-      xorg.libXext.dev
-      xorg.libXi
+      libxcb.dev
+      libx11.dev
+      libxext.dev
+      libxi
       wayland.dev
       pciutils
       libGL
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
     ];
 
@@ -95,7 +101,13 @@ stdenv.mkDerivation (finalAttrs: {
     # On darwin during linking:
     # clang++: error: argument unused during compilation: '-stdlib=libc++'
     "treat_warnings_as_errors=false"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Force clang on riscv64 because default gcc toolchain is unavailable.
+    "is_clang=true"
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   patches = [
     # https://issues.chromium.org/issues/432275627
@@ -143,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/pkgconfig
 
-    cat > $out/lib/pkgconfig/angle.pc <<EOF
+    cat > $out/lib/pkgconfig/angle.pc <<'EOF'
     prefix=${placeholder "out"}
     exec_prefix=''${prefix}
     libdir=''${prefix}/lib
@@ -170,6 +182,13 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool \
+        -change ./libGLESv2.dylib \
+        $out/lib/libGLESv2.dylib \
+        $out/lib/libGLESv1_CM.dylib
   '';
 
   meta = {

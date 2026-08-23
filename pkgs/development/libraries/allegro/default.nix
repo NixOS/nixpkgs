@@ -3,21 +3,21 @@
   stdenv,
   fetchurl,
   texinfo,
-  libXext,
+  libxext,
   xorgproto,
-  libX11,
-  libXpm,
-  libXt,
-  libXcursor,
+  libx11,
+  libxpm,
+  libxt,
+  libxcursor,
   alsa-lib,
   cmake,
   pkg-config,
   zlib,
   libpng,
   libvorbis,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   openal,
   libGLU,
   libGL,
@@ -43,19 +43,19 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     texinfo
-    libXext
+    libxext
     xorgproto
-    libX11
-    libXpm
-    libXt
-    libXcursor
+    libx11
+    libxpm
+    libxt
+    libxcursor
     alsa-lib
     zlib
     libpng
     libvorbis
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
+    libxxf86dga
+    libxxf86misc
+    libxxf86vm
     openal
     libGLU
     libGL

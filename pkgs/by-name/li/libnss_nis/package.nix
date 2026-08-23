@@ -9,7 +9,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnss_nis";
   version = "3.4";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "libnss_nis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FWAyf4soSUpNrYzSefNWthEMfQEopfYX9pMDf1rNK6c=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ BarrOff ];
     platforms = lib.platforms.linux;
   };
-}
+})

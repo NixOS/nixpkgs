@@ -7,14 +7,13 @@
   cmake,
   pkg-config,
   doxygen,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
   libGLU,
   libGL,
   glib,
   libxml2,
-  pcre,
   zlib,
   boost,
   jpegSupport ? true,
@@ -48,7 +47,7 @@
   vncSupport ? false,
   libvncserver,
   lasSupport ? false,
-  libLAS,
+  liblas,
   luaSupport ? false,
   lua,
   sdlSupport ? false,
@@ -60,14 +59,14 @@
   fltk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";
   version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "OpenSceneGraph-${version}";
+    rev = "OpenSceneGraph-${finalAttrs.version}";
     sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
@@ -79,9 +78,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]
@@ -99,7 +98,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
       collada-dom
-      pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
@@ -108,7 +106,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional svgSupport librsvg
     ++ lib.optional pdfSupport poppler
     ++ lib.optional vncSupport libvncserver
-    ++ lib.optional lasSupport libLAS
+    ++ lib.optional lasSupport liblas
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
@@ -159,4 +157,4 @@ stdenv.mkDerivation rec {
       wxWindowsException31
     ];
   };
-}
+})

@@ -3,15 +3,17 @@
   stdenvNoCC,
   fetchzip,
   nix-update-script,
+  plemoljp-hs,
+  plemoljp-nf,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plemoljp";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchzip {
     url = "https://github.com/yuru7/PlemolJP/releases/download/v${finalAttrs.version}/PlemolJP_v${finalAttrs.version}.zip";
-    hash = "sha256-R4zC1pnM72FVqBQ5d03z8vyVccsM163BE15m2hdEnSA=";
+    hash = "sha256-X4DUAU7uicWtm8o3L9HmfU9By1YMnnjVrVU0iyw273A=";
   };
 
   installPhase = ''
@@ -26,8 +28,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit plemoljp-hs plemoljp-nf;
+
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+      extraArgs = [
+        "--version-regex=^v([0-9.]+)$"
+        "--subpackage"
+        "plemoljp-hs"
+        "--subpackage"
+        "plemoljp-nf"
+      ];
     };
   };
 

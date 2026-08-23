@@ -3,12 +3,12 @@
   rustPlatform,
   fetchCrate,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfonts";
   version = "1.3.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rgdqQzJyb1/bYB3S1MD/53vdQ+GaxOvGHuPE6dxMRB0=";
   };
 
@@ -21,4 +21,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ leifhelm ];
     mainProgram = "cfonts";
   };
-}
+})

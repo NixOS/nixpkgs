@@ -5,13 +5,13 @@
 }:
 buildFishPlugin rec {
   pname = "fifc";
-  version = "0.1.1";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "gazorby";
     repo = "fifc";
     rev = "v${version}";
-    hash = "sha256-p5E4Mx6j8hcM1bDbeftikyhfHxQ+qPDanuM1wNqGm6E=";
+    hash = "sha256-huBcOdjiRztGyqcMX4vnrr8lLjtWBcCYvBLXr1JNNQs=";
   };
 
   meta = {

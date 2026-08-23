@@ -6,15 +6,12 @@
   azure-common,
   azure-mgmt-core,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "azure_mgmt_applicationinsights";

@@ -12,14 +12,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opustags";
   version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0lo+4VMYXGwXUuRxU1xZRxzlUQ4o4n/CDHXDM27FK44=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     mainProgram = "opustags";
   };
-}
+})

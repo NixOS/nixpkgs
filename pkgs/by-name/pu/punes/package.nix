@@ -6,11 +6,11 @@
   gitUpdater,
   cmake,
   pkg-config,
-  ffmpeg,
+  ffmpeg_8,
   libGLU,
   alsa-lib,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   sndio,
   libsForQt5,
   qt6Packages,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
     libGLU
   ]
   ++ (with qtPackages; [
@@ -83,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   ])
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
-    libXrandr
+    libx11
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isBSD [
     sndio

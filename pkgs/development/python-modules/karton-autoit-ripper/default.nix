@@ -6,7 +6,6 @@
   setuptools,
   karton-core,
   malduck,
-  pythonOlder,
   regex,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "karton-autoit-ripper";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -49,7 +46,7 @@ buildPythonPackage rec {
     mainProgram = "karton-autoit-ripper";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
     changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

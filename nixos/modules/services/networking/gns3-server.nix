@@ -31,7 +31,7 @@ in
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "gns3";
-          description = ''Username used to access the GNS3 Server.'';
+          description = "Username used to access the GNS3 Server.";
         };
 
         passwordFile = lib.mkOption {
@@ -68,7 +68,7 @@ in
         file = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = "/var/log/gns3/server.log";
-          description = ''Path of the file GNS3 Server should log to.'';
+          description = "Path of the file GNS3 Server should log to.";
         };
 
         debug = lib.mkEnableOption "debug logging";
@@ -96,17 +96,17 @@ in
       };
 
       dynamips = {
-        enable = lib.mkEnableOption ''Dynamips support'';
+        enable = lib.mkEnableOption "Dynamips support";
         package = lib.mkPackageOption pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption ''uBridge support'';
+        enable = lib.mkEnableOption "uBridge support";
         package = lib.mkPackageOption pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption ''VPCS support'';
+        enable = lib.mkEnableOption "VPCS support";
         package = lib.mkPackageOption pkgs "vpcs" { };
       };
     };

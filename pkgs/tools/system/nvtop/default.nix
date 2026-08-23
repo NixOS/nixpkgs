@@ -11,6 +11,9 @@ let
     "panfrost"
     "panthor"
     "v3d"
+    "rockchip"
+    "metax"
+    "enflame"
   ];
   # these GPU families are partially supported upstream, they are also tricky to build in nixpkgs
   # volunteers with specific hardware needed to build and test these package variants

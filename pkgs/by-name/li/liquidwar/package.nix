@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   xorgproto,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   gmp,
   libjpeg,
   libpng,
@@ -30,18 +30,18 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquidwar6";
   version = "0.6.3902";
 
   src = fetchurl {
-    url = "mirror://gnu/liquidwar6/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/liquidwar6/liquidwar6-${finalAttrs.version}.tar.gz";
     sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     gmp
     guile_2_0
     libjpeg
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     csound
-    libXrender
+    libxrender
     libcaca
     cunit
     libtool
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

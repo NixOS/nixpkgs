@@ -122,7 +122,8 @@ in
 
 stdenvNoCC.mkDerivation (
   {
-    name = baseNameOf (toString src);
+    name =
+      if (attrs ? pname && attrs ? version) then "${attrs.pname}-${attrs.version}" else baseNameOf src;
   }
   // optionalAttrs
   // forcedAttrs

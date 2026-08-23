@@ -6,26 +6,26 @@
   fetchFromGitHub,
   fetchNpmDeps,
   mono,
-  nodejs_20,
+  nodejs_24,
   slskd,
   testers,
   nix-update-script,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_24;
   # https://github.com/NixOS/nixpkgs/blob/d88947e91716390bdbefccdf16f7bebcc41436eb/pkgs/build-support/node/build-npm-package/default.nix#L62
   npmHooks = buildPackages.npmHooks.override { inherit nodejs; };
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.24.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     tag = version;
-    hash = "sha256-rgD+akew2hs2nfz+X0pfVQbxeOdznFoWaUX3vX0G9uE=";
+    hash = "sha256-9Ynji8x2JfwbLDtp/U7pmTmLACXc7XZO8CD7s4oOXbg=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,14 @@ buildDotnetModule rec {
     name = "${pname}-${version}-npm-deps";
     inherit src;
     sourceRoot = "${src.name}/${npmRoot}";
-    hash = "sha256-VFWePzmE/mVd3wJuRSF+SeFR+0cgDfEScRbpZzDOKIw=";
+    hash = "sha256-HagCY1xxW0dC5OGpySi3spf3jSLS6+GfTkrzLBMiy+I=";
   };
 
   projectFile = "slskd.sln";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   testProjectFile = "tests/slskd.Tests.Unit/slskd.Tests.Unit.csproj";
   doCheck = true;

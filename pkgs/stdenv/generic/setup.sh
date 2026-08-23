@@ -29,10 +29,15 @@ if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
 
-    for outputName in "${!outputs[@]}"; do
-        # ex: out=/nix/store/...
-        export "$outputName=${outputs[$outputName]}"
-    done
+    _exportOutputsByName() {
+        local outputName
+        for outputName in "${!outputs[@]}"; do
+            # ex: out=/nix/store/...
+            export "$outputName=${outputs[$outputName]}"
+        done
+    }
+
+    _exportOutputsByName
 else
     __structuredAttrs=
     : "${outputs:=out}"
@@ -1455,7 +1460,16 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        prependToVar configureFlags "${prefixKey:---prefix=}$prefix"
+        # For __structuredAttrs: if prefixKey ends in a space,
+        # we need to add the prefixKey and the prefix as separate entries,
+        # and since we prepend, we do it in reverse order.
+        local -r prefixKeyOrDefault="${prefixKey:---prefix=}"
+        if [ "${prefixKeyOrDefault: -1}" = " " ]; then
+            prependToVar configureFlags "$prefix"
+            prependToVar configureFlags "${prefixKeyOrDefault::-1}"
+        else
+            prependToVar configureFlags "$prefixKeyOrDefault$prefix"
+        fi
     fi
 
     if [[ -f "$configureScript" ]]; then

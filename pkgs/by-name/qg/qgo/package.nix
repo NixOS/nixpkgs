@@ -17,7 +17,7 @@ stdenv.mkDerivation {
       IGS-compatible servers (including some special tweaks for WING and LGS,
       also NNGS was reported to work) and locally against gnugo (or other
       GTP-compliant engines). It also has rudimentary support for editing SGF
-      files and parital support for CyberORO/WBaduk, Tygem, Tom, and eWeiqi
+      files and partial support for CyberORO/WBaduk, Tygem, Tom, and eWeiqi
       (developers of these backends are currently inactive, everybody is welcome
       to take them over).
 

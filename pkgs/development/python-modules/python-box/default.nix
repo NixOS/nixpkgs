@@ -5,12 +5,10 @@
   fetchFromGitHub,
   msgpack,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   ruamel-yaml,
   setuptools,
   toml,
-  tomli,
   tomli-w,
 }:
 
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   pname = "python-box";
   version = "7.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
@@ -42,7 +38,7 @@ buildPythonPackage rec {
     yaml = [ ruamel-yaml ];
     ruamel-yaml = [ ruamel-yaml ];
     PyYAML = [ pyyaml ];
-    tomli = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    tomli = [ tomli-w ];
     toml = [ toml ];
     msgpack = [ msgpack ];
   };
@@ -60,7 +56,7 @@ buildPythonPackage rec {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
     changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

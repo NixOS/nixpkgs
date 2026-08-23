@@ -39,18 +39,19 @@
   # filters
   openturns,
   openslide,
+  onnxruntime,
 
   # io modules
   cgns,
   adios2,
-  libLAS,
+  liblas,
   gdal,
   pdal,
   alembic,
   imath,
   openvdb,
   c-blosc,
-  unixODBC,
+  unixodbc,
   libpq,
   libmysqlclient,
   ffmpeg,
@@ -65,6 +66,7 @@
   hdf5,
   netcdf,
   opencascade-occt,
+  openusd,
 
   # threading
   onetbb,
@@ -74,10 +76,10 @@
   viskores,
   freetype,
   fontconfig,
-  libX11,
-  libXfixes,
-  libXrender,
-  libXcursor,
+  libx11,
+  libxfixes,
+  libxrender,
+  libxcursor,
   gl2ps,
   libGL,
   qt6,
@@ -111,6 +113,11 @@ let
     adios2 = self.callPackage adios2.override { };
     cgns = self.callPackage cgns.override { };
     viskores = self.callPackage viskores.override { };
+    gdal = self.callPackage gdal.override { useMinimalFeatures = true; };
+    pdal = self.callPackage pdal.override { };
+    # vtk fail to configure with openusd with materialX support
+    # see https://github.com/AcademySoftwareFoundation/MaterialX/pull/2752
+    openusd = openusd.override { withMaterialX = false; };
   });
   vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
 in
@@ -136,13 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
   ) python3Packages.pythonImportsCheckHook;
 
   buildInputs = [
-    libLAS
-    gdal
-    pdal
+    liblas
     alembic
     imath
     c-blosc
-    unixODBC
+    unixodbc
     libpq
     libmysqlclient
     ffmpeg
@@ -152,13 +157,18 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libGL
     openvdb
+    vtkPackages.gdal
+    vtkPackages.pdal
+  ]
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "9.6.0") [
+    vtkPackages.openusd
+    onnxruntime
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXfixes
-    libXrender
-    libXcursor
+    libxfixes
+    libxrender
+    libxcursor
   ]
-  ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -167,7 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     boost
     verdict
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "9.6.0") [
     double-conversion
+  ]
+  ++ [
     freetype
     lz4
     xz
@@ -201,10 +215,14 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     gl2ps
   ]
-  # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
+  ++ lib.optionals ((lib.versionAtLeast finalAttrs.version "9.6.0") && stdenv.hostPlatform.isLinux) [
+    libxcursor
+  ]
+  ++ lib.optionals withQt6 [ qt6.qttools ]
+  # create meta package providing dist-info for python3Packages.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
       inherit (finalAttrs) pname version meta;
@@ -212,7 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
         with python3Packages;
         [
           numpy
-          wslink
           matplotlib
         ]
         ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
@@ -305,7 +322,6 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
 
         nativeBuildInputs = lib.optionals withQt6 [
-          qt6.qttools
           qt6.wrapQtAppsHook
         ];
       };

@@ -5,6 +5,7 @@
   writeShellScriptBin,
   fetchurl,
   vscode,
+  buildPackages,
   unzip,
   makeSetupHook,
   writeScript,
@@ -15,8 +16,9 @@ let
   unpackVsixSetupHook = makeSetupHook {
     name = "unpack-vsix-setup-hook";
     substitutions = {
-      unzip = "${unzip}/bin/unzip";
+      unzip = "${buildPackages.unzip}/bin/unzip";
     };
+    meta.license = lib.licenses.mit;
   } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
@@ -70,6 +72,9 @@ let
 
         # This cannot be removed, it is used by some extensions.
         installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
+
+        strictDeps = true;
+        __structuredAttrs = true;
 
         nativeBuildInputs = [ unpackVsixSetupHook ] ++ nativeBuildInputs;
 

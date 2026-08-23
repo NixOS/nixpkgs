@@ -11,7 +11,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tenacity,
   wrapt,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "teslajsonpy";
   version = "3.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
@@ -54,7 +51,7 @@ buildPythonPackage rec {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
     changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

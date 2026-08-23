@@ -2,21 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   terminaltexteffects,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textualeffects";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hnCTIdSc16v0ftUTeCEwF05vXYXqFplqfDhwnDZGxGM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-5C84ZdvcgVgxroFZycOdHdB4my3qK8b4wVxD4kd+XfE=";
   };
 
   build-system = [ hatchling ];
@@ -31,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Visual effects for Textual, a TerminalTextEffects wrapper";
     homepage = "https://github.com/ggozad/textualeffects";
-    changelog = "https://github.com/ggozad/textualeffects/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/ggozad/textualeffects/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gaelj ];
   };
-}
+})

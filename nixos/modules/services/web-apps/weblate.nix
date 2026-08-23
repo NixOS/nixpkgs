@@ -9,6 +9,7 @@ let
   cfg = config.services.weblate;
 
   dataDir = "/var/lib/weblate";
+  cacheDir = "${dataDir}/cache";
   settingsDir = "${dataDir}/settings";
 
   finalPackage = cfg.package.overridePythonAttrs (old: {
@@ -96,7 +97,7 @@ let
   + lib.optionalString cfg.smtp.enable ''
     EMAIL_HOST = "${cfg.smtp.host}"
     EMAIL_USE_TLS = True
-    EMAIL_PORT = ${builtins.toString cfg.smtp.port}
+    EMAIL_PORT = ${toString cfg.smtp.port}
     SERVER_EMAIL = "${cfg.smtp.from}"
     DEFAULT_FROM_EMAIL = "${cfg.smtp.from}"
   ''
@@ -130,8 +131,12 @@ let
     inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
+  # Packages needed at runtime
   weblatePath = with pkgs; [
     gitSVN
+    subversion
+    gettext
+    fontconfig
     borgbackup
 
     #optional
@@ -141,6 +146,7 @@ let
     mercurial
     openssh
   ];
+
 in
 {
 
@@ -242,7 +248,6 @@ in
         locations = {
           "= /favicon.ico".alias = "${finalPackage}/${python.sitePackages}/weblate/static/favicon.ico";
           "/static/".alias = "${finalPackage.static}/";
-          "/media/".alias = "/var/lib/weblate/media/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };
       };
@@ -358,6 +363,18 @@ in
       ];
       inherit environment;
       path = weblatePath;
+      # Weblate generates SSH wrappers with some preset options that use the
+      # absolute paths of the ssh and scp binaries internally.
+      # As the wrapper is only regenerated when the generator itself is changed,
+      # this absolute nix store path becomes unusable once ssh is updated and
+      # the path is garbage collected.
+      # As generating the wrappers is a quick operation, simply deleting the
+      # wrapper directory before service start ensures they are up to date.
+      preStart = ''
+        if [ -d "${cacheDir}/ssh" ]; then
+          rm -r "${cacheDir}/ssh"
+        fi
+      '';
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "all";

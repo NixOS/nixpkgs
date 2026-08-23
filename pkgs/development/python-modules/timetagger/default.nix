@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "timetagger";
-  version = "26.1.1";
+  version = "26.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BGu+L3bUBGYj18D4qUemUMEs2tk0wLu8DvO9h/7FiJo=";
+    hash = "sha256-X82Ai6E844deRGs6KcJATEid3X6IlDq4+LCEU4lc4hM=";
   };
 
   build-system = [ setuptools ];

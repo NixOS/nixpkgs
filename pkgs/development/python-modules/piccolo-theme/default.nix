@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sphinx,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "piccolo-theme";
   version = "0.24.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "piccolo_theme";

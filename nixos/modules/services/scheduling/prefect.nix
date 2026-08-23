@@ -174,7 +174,7 @@ in
           ProtectControlGroups = true;
           MemoryAccounting = true;
 
-          ExecStart = "${pkgs.prefect}/bin/prefect server start --host ${cfg.host} --port ${toString cfg.port}";
+          ExecStart = "${lib.getExe cfg.package} server start --host ${cfg.host} --port ${toString cfg.port}";
           Restart = "always";
           WorkingDirectory = cfg.dataDir;
         };
@@ -216,7 +216,7 @@ in
           ProtectControlGroups = true;
           MemoryAccounting = true;
           ExecStart = ''
-            ${pkgs.prefect}/bin/prefect worker start \
+            ${lib.getExe cfg.package} worker start \
               --pool ${poolName} \
               --type process \
               --install-policy ${poolCfg.installPolicy}

@@ -20,12 +20,12 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dconf-editor";
   version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
+    url = "mirror://gnome/sources/dconf-editor/${lib.versions.major finalAttrs.version}/dconf-editor-${finalAttrs.version}.tar.xz";
     hash = "sha256-kKjM+t9R3/MeACgyT7mjWLLSbFroYaccfb+fTdm905k=";
   };
 
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
     description = "GSettings editor for GNOME";
     mainProgram = "dconf-editor";
     homepage = "https://apps.gnome.org/DconfEditor/";
-    changelog = "https://gitlab.gnome.org/GNOME/dconf-editor/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/dconf-editor/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

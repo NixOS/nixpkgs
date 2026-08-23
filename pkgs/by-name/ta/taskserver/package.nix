@@ -9,12 +9,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskserver";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://www.taskwarrior.org/download/taskd-${version}.tar.gz";
+    url = "http://www.taskwarrior.org/download/taskd-${finalAttrs.version}.tar.gz";
     sha256 = "1d110q9vw8g5syzihxymik7hd27z1592wkpz55kya6lphzk8i13v";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
       makefu
     ];
   };
-}
+})

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "prometheus-async";
-  version = "25.1.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "prometheus-async";
     rev = version;
-    hash = "sha256-e/BVxATpafxddq26Rt7XTiK4ajY+saUApXbmTG0/I6I=";
+    hash = "sha256-wQ1RdJyD/M6VO1/6DSr9Pzd5FpB4zgNE/mIa7FH5gtk=";
   };
 
   build-system = [

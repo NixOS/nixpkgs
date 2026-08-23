@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "quadprog";
   version = "0.1.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "quadprog";

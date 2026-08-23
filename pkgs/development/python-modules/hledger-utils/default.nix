@@ -20,12 +20,12 @@ buildPythonPackage rec {
   pname = "hledger-utils";
   version = "1.14.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "hledger-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qu4nUcAGTACmLhwc7fkLxITOyFnUHv85qMhtViFumVs=";
   };
 

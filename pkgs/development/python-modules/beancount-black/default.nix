@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   beancount-parser,
   click,
   poetry-core,
@@ -13,8 +12,7 @@ buildPythonPackage (finalAttrs: {
   pname = "beancount-black";
   version = "1.0.5";
 
-  disabled = pythonOlder "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
@@ -38,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     description = "Opinioned code formatter for Beancount";
     mainProgram = "bean-black";
     homepage = "https://github.com/LaunchPlatform/beancount-black/";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
 })

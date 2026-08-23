@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptodev-linux";
-  version = "1.14";
+  version = "1.14-unstable-2025-11-04";
 
   src = fetchFromGitHub {
     owner = "cryptodev-linux";
     repo = "cryptodev-linux";
-    rev = "cryptodev-linux-${finalAttrs.version}";
-    hash = "sha256-N7fGOMEWrb/gm1MDiJgq2QyTOni6n9w2H52baXmRA1g=";
+    rev = "08644db02d43478f802755903212f5ee506af73b";
+    hash = "sha256-tYTiyysofO23ApXQbnJF5muTTLv1kKu/nLggGv3ntr4=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

@@ -30,27 +30,20 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.5";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
+    hash = "sha256-wGaRx+IEqsvs7ygCDgh1H4di662SQhjmpB9LMP/YGKM=";
   };
-
-  postPatch = ''
-    # https://github.com/python-openapi/openapi-core/issues/1009
-    substituteInPlace tests/unit/extensions/test_factories.py \
-      --replace-fail 'assert test_model_class.__dataclass_fields__["name"].type == str(Any)' \
-                     'assert str(test_model_class.__dataclass_fields__["name"].type) == str(Any)'
-  '';
 
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
-    "werkzeug"
+    "jsonschema-path"
   ];
 
   dependencies = [
@@ -92,9 +85,20 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Requires secrets and additional configuration
     "tests/integration/contrib/django/"
+  ];
+
+  disabledTests = [
+    # https://github.com/p1c2u/jsonschema-path/pull/262 broke comparison of `SchemaPath`s
+    "test_returns_default_server"
   ];
 
   pythonImportsCheck = [

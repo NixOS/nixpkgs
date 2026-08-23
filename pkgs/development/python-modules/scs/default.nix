@@ -20,7 +20,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scs";
   inherit (pkgs.scs) version;
   pyproject = true;
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ZxbQ1WbavDKKYBmGB2W0zMVCH/WZIk8bFJ5TmC+QqYc=";
+    hash = "sha256-ZB1A6613ZgwGsZ97MpK9c1vUfNe+0RkUULtzQxGKd88=";
   };
 
   postPatch = ''
@@ -66,8 +66,8 @@ buildPythonPackage rec {
     '';
     inherit (pkgs.scs.meta) homepage;
     downloadPage = "https://github.com/bodono/scs-python";
-    changelog = "https://github.com/bodono/scs-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/bodono/scs-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

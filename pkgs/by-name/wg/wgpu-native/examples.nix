@@ -8,7 +8,8 @@
   wgpu-native,
   glfw,
   wayland,
-  xorg,
+  libxrandr,
+  libx11,
   vulkan-loader,
 
   version,
@@ -41,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
-    xorg.libXrandr
+    libx11
+    libxrandr
   ];
 
   runtimeInputs = lib.optionals stdenv.hostPlatform.isLinux [

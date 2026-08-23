@@ -39,6 +39,11 @@ update() {
   if (( use_last_commit )); then
     local repo_info="$(github_api "/repos/$owner/$repo/commits?per_page=1" | jq ".[0]")"
     local new_rev="$(echo "$repo_info" | jq -r .sha)"
+    local old_rev="$(nixpkgs_attr "$1.src.rev")"
+    if [[ "$new_rev" == "$old_rev" ]]; then
+      echo "Already up to date (rev $new_rev)" >&2
+      return
+    fi
     local date="$(echo "$repo_info" | jq -r .commit.author.date)"
     date="$(date -u -d "$date" +%Y-%m-%d)"
     local new_version="${old_version%%-unstable*}-unstable-$(date -u -d "$date" +%Y-%m-%d)"

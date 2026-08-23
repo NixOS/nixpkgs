@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exercism";
   version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vYbOagP3RwqD2+x0Mvve66Xm88jeRVzHU7nsN432j6k=";
   };
 
@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Go based command line tool for exercism.io";
     license = lib.licenses.mit;
     maintainers = [
@@ -44,4 +44,4 @@ buildGoModule rec {
     ];
     mainProgram = "exercism";
   };
-}
+})

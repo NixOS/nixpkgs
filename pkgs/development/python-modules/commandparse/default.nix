@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "commandparse";
   version = "1.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to parse command based CLI application";
     homepage = "https://github.com/flgy/commandparse";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fab ];
   };
 }

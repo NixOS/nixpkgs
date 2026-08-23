@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xauth";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xauth-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6TGBQUZK17TcD4VkpYDw0g+XfIWjiMxA1admIGFRxpA=";
+    hash = "sha256-pAAOL0QfrOv1aQJr7ezCO6JizGknvlIHCr4AAmJc++A=";
   };
 
   strictDeps = true;
@@ -51,7 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xauth";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xauth";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
   };
 })

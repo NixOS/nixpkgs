@@ -5,12 +5,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subread";
   version = "2.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/subread/subread-${version}/subread-${version}-source.tar.gz";
+    url = "mirror://sourceforge/subread/subread-${finalAttrs.version}/subread-${finalAttrs.version}-source.tar.gz";
     sha256 = "sha256-Y5LXxmgxzddn5YJRiSp5pRtvq47QupZxrV6F/xqwHqo=";
   };
 
@@ -40,10 +40,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     homepage = "https://subread.sourceforge.net/";
   };
 
-}
+})

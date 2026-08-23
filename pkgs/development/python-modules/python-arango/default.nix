@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 
   # build-system
@@ -32,16 +31,14 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.2.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "8.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-WzoQ3pwFDbPoXjHPdX03S9MAnNJTwe6MqXhq0g/pAs0=";
+    hash = "sha256-4nDMu0n6O0C9QMPDXCA2TkN56zqajn8qQqB6ma+JvAA=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # ArangoDB has been removed from Nixpkgs due to lack of maintenace,
+  # ArangoDB has been removed from Nixpkgs due to lack of maintenance,
   # so we cannot run the tests at present.
   #
   # Before that, the issue was:

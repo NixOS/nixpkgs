@@ -5,26 +5,22 @@
   fetchFromGitHub,
   fetchpatch2,
   cython_0,
-  zfs,
+  zfs_2_3,
 }:
 
 buildPythonPackage rec {
   pname = "py-libzfs";
-  version = "24.04.0";
+  version = "25.10.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-libzfs";
     rev = "TS-${version}";
-    hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
+    hash = "sha256-kme5qUG0Nsya8HxU/oMHP1AidoMMOob/EON8sZMzKKI=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/truenas/py-libzfs/commit/b5ffe1f1d6097df6e2f5cc6dd3c968872ec60804.patch";
-      hash = "sha256-6r5hQ/o7c4vq4Tfh0l1WbeK3AuPvi+1wzkwkIn1qEes=";
-    })
     # Upstream has open PR. Debian uses the patch.
     # https://github.com/truenas/py-libzfs/pull/277
     (fetchpatch2 {
@@ -34,14 +30,14 @@ buildPythonPackage rec {
   ];
 
   build-system = [ cython_0 ];
-  buildInputs = [ zfs ];
+  buildInputs = [ zfs_2_3 ];
 
   # Passing CFLAGS in configureFlags does not work, see https://github.com/truenas/py-libzfs/issues/107
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace configure \
       --replace-fail \
         'CFLAGS="-DCYTHON_FALLTHROUGH"' \
-        'CFLAGS="-DCYTHON_FALLTHROUGH -I${zfs.dev}/include/libzfs -I${zfs.dev}/include/libspl"' \
+        'CFLAGS="-DCYTHON_FALLTHROUGH -I${zfs_2_3.dev}/include/libzfs -I${zfs_2_3.dev}/include/libspl"' \
       --replace-fail 'zof=false' 'zof=true'
   '';
 

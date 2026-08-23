@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # requires rustup and rustfmt
-    "--skip tests::sourcegen::generate_node_kinds"
+    "--skip=tests::sourcegen::generate_node_kinds"
   ];
 
   passthru.updateScript = nix-update-script { };

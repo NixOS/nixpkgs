@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     description = "Haxe language server extension for coc.nvim";
     homepage = "https://github.com/vantreeseba/coc-haxe";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
