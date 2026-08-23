@@ -1,14 +1,11 @@
-{ ... }:
 {
   name = "immich-nixos";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       # These tests need a little more juice
       virtualisation = {
-        cores = 2;
-        memorySize = 4096;
         diskSize = 4096;
       };
 
