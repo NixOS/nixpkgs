@@ -1,12 +1,17 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  runTest,
+  lib,
+  ...
+}:
 
-with pkgs.lib;
+with lib;
 
 let
   makeKafkaTest =
     name:
     { kafkaPackage }:
-    (import ../make-test-python.nix {
+    (runTest {
       inherit name;
 
       nodes = {
