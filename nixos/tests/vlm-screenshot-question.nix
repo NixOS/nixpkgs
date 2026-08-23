@@ -60,7 +60,7 @@ let
         vlm_start = time.time()
         result = subprocess.run(
             [
-                "${lib.getExe llama-cpp}",
+                "${lib.getExe' llama-cpp "llama-cli"}",
                 "--single-turn", "--no-display-prompt", "--log-verbosity", "0", "--jinja",
                 "--simple-io",  # disables the spinner whose backspace chars would corrupt captured output
                 "--reasoning", "off", "--temp", "0",
