@@ -2578,6 +2578,15 @@ assertNoAdditions {
     };
   });
 
+  mesone-nvim = super.mesone-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-dap
+      telescope-nvim
+      fidget-nvim
+    ];
+  };
+
   mini-nvim = super.mini-nvim.overrideAttrs {
     # reduce closure size
     postInstall = ''

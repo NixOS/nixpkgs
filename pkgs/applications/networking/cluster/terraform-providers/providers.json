@@ -1175,13 +1175,13 @@
     "vendorHash": "sha256-22bOJyR+ERVu8eTX3iT838q6mxViGt5Fd6MVFB49JZY="
   },
   "sap_btp": {
-    "hash": "sha256-fRg83kdeHizOi8riLFU0NKWmeQSAbG0xJUtkdMcvWp0=",
+    "hash": "sha256-unoAcEYCPNldK1AeAjJVJ57YGEXiFIiKUW27zLv3mb8=",
     "homepage": "https://registry.terraform.io/providers/SAP/btp",
     "owner": "SAP",
     "repo": "terraform-provider-btp",
-    "rev": "v1.25.0",
+    "rev": "v1.26.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-axcwlLXe3HMgpGxWc6YAS/rF0Esy5/Sk4BRmMlKD6Yg="
+    "vendorHash": "sha256-89ibvtps4hWcJ18G1LV09RjdeWhrUHLvhfgbuNE1cMI="
   },
   "scaleway_scaleway": {
     "hash": "sha256-78OOJDZmJWln3zS4KQHGU2nm5HjGLJxZ2MKAMLmeVEY=",

@@ -2305,6 +2305,14 @@
       "kxmlgui",
       "libkdegames"
     ],
+    "kgamma": [
+      "extra-cmake-modules",
+      "kcmutils",
+      "kconfig",
+      "kconfigwidgets",
+      "kdoctools",
+      "ki18n"
+    ],
     "kgeography": [
       "extra-cmake-modules",
       "kconfigwidgets",
@@ -6437,6 +6445,23 @@
       "mauikit",
       "mauikit-accounts",
       "mauikit-filebrowsing"
+    ],
+    "wacomtablet": [
+      "extra-cmake-modules",
+      "kcmutils",
+      "kconfig",
+      "kcoreaddons",
+      "kdbusaddons",
+      "kdoctools",
+      "kglobalaccel",
+      "ki18n",
+      "kio",
+      "knotifications",
+      "kwidgetsaddons",
+      "kwindowsystem",
+      "kxmlgui",
+      "libplasma",
+      "plasma5support"
     ],
     "washipad": [
       "extra-cmake-modules",
