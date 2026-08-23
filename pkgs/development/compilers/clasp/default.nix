@@ -1,29 +1,37 @@
 {
   lib,
-  llvmPackages_18,
+  llvmPackages_22,
   fetchzip,
+  ninja,
   sbcl,
   pkg-config,
-  fmt_9,
+  writableTmpDirAsHomeHook,
+  boost,
+  fmt,
   gmpxx,
   libelf,
-  boost,
-  libunwind,
-  ninja,
 }:
 
 let
-  inherit (llvmPackages_18) stdenv llvm libclang;
+  inherit (llvmPackages_22)
+    stdenv
+    llvm
+    libclang
+    libunwind
+    ;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clasp";
-  version = "2.7.0";
+  version = "3.0.1";
 
   src = fetchzip {
-    url = "https://github.com/clasp-developers/clasp/releases/download/${version}/clasp-${version}.tar.gz";
-    hash = "sha256-IoEwsMvY/bbb6K6git+7zRGP0DIJDROt69FBQuzApRk=";
+    url = "https://github.com/clasp-developers/clasp/releases/download/${finalAttrs.version}/clasp-${finalAttrs.version}.tar.gz";
+    hash = "sha256-C6FwbLz/kjBcuI3225TczWaInkbQ3chtDhWCYh+a/2E=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     ./remove-unused-command-line-argument.patch
@@ -35,16 +43,21 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    sbcl
-    pkg-config
-    fmt_9
-    gmpxx
-    libelf
-    boost
-    libunwind
+    llvm.dev
     ninja
-    llvm
+    pkg-config
+    sbcl
+    writableTmpDirAsHomeHook
+  ];
+
+  buildInputs = [
+    boost
+    fmt
+    gmpxx
     libclang
+    libelf
+    libunwind
+    llvm
   ];
 
   ninjaFlags = [
@@ -53,13 +66,13 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
     export SOURCE_DATE_EPOCH=1
-    export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
     sbcl --script koga \
       --skip-sync \
-      --build-mode=bytecode-faso \
       --cc=$NIX_CC/bin/cc \
       --cxx=$NIX_CC/bin/c++ \
+      --jobs=$NIX_BUILD_CORES \
       --reproducible-build \
       --package-path=/ \
       --bin-path=$out/bin \
@@ -67,6 +80,7 @@ stdenv.mkDerivation rec {
       --dylib-path=$out/lib \
       --share-path=$out/share \
       --pkgconfig-path=$out/lib/pkgconfig
+    runHook postConfigure
   '';
 
   postInstall = ''
@@ -84,4 +98,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/clasp-developers/clasp";
     mainProgram = "clasp";
   };
-}
+})

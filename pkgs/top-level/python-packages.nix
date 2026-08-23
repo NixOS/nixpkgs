@@ -116,6 +116,8 @@ self: super: with self; {
 
   adlfs = callPackage ../development/python-modules/adlfs { };
 
+  adsbcot = callPackage ../development/python-modules/adsbcot { };
+
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   aeidon = callPackage ../development/python-modules/aeidon { };
@@ -620,6 +622,8 @@ self: super: with self; {
 
   aiozoneinfo = callPackage ../development/python-modules/aiozoneinfo { };
 
+  aircot = callPackage ../development/python-modules/aircot { };
+
   airgradient = callPackage ../development/python-modules/airgradient { };
 
   airium = callPackage ../development/python-modules/airium { };
@@ -639,6 +643,8 @@ self: super: with self; {
   airtouch4pyapi = callPackage ../development/python-modules/airtouch4pyapi { };
 
   airtouch5py = callPackage ../development/python-modules/airtouch5py { };
+
+  aiscot = callPackage ../development/python-modules/aiscot { };
 
   aistore = callPackage ../development/python-modules/aistore { };
 
@@ -7821,6 +7827,7 @@ self: super: with self; {
     huaweicloudsdkaad
     huaweicloudsdkagentarts
     huaweicloudsdkagentidentity
+    huaweicloudsdkaidatalakejobserver
     huaweicloudsdkantiddos
     huaweicloudsdkaom
     huaweicloudsdkaos
@@ -16354,6 +16361,8 @@ self: super: with self; {
   pytablewriter = callPackage ../development/python-modules/pytablewriter { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
+
+  pytak = callPackage ../development/python-modules/pytak { };
 
   pytango = callPackage ../development/python-modules/pytango { };
 
