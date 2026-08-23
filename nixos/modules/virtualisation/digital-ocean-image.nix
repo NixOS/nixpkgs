@@ -75,6 +75,10 @@ in
           .${cfg.compressionMethod}
         )
       ];
+      warnings =
+        optional (cfg.configFile != null)
+          "The option `virtualisation.digitalOceanImage.configFile` is deprecated, use `virtualisation.configFile` instead.";
+
       virtualisation.configFile = mkMerge [
         (mkDefault config.virtualisation.digitalOcean.defaultConfigFile)
         (mkIf (cfg.configFile != null) cfg.configFile)

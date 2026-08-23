@@ -59,6 +59,10 @@ in
   };
 
   config = {
+    warnings =
+      optional (cfg.configFile != null)
+        "The option `virtualisation.linodeImage.configFile` is deprecated, use `virtualisation.configFile` instead.";
+
     virtualisation.configFile = mkMerge [
       (mkDefault defaultConfigFile)
       (mkIf (cfg.configFile != null) cfg.configFile)

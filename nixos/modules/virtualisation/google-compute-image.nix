@@ -107,6 +107,10 @@ in
       fsType = "vfat";
     };
 
+    warnings =
+      optional (cfg.configFile != null)
+        "The option `virtualisation.googleComputeImage.configFile` is deprecated, use `virtualisation.configFile` instead.";
+
     virtualisation.configFile = lib.mkMerge [
       (lib.mkDefault defaultConfigFile)
       (lib.mkIf (cfg.configFile != null) cfg.configFile)
