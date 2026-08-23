@@ -88,15 +88,15 @@ let
     };
   };
   betaVersion = {
-    version = "2026.1.3.6"; # "Android Studio Quail 3 | 2026.1.3 RC 2"
+    version = "2026.1.4.5"; # "Android Studio Quail 4 | 2026.1.4 RC 1"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-Mgwy+Cbx5yBCHWUEcvMfAsC1zMk3j7A5fWtMrVJgmAk=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.3.6/android-studio-quail3-rc2-linux.tar.gz";
+        sha256Hash = "sha256-of6o6bn3hpc5OyHJbm005GFeW2K1q3STQU4vzPRhB0w=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.4.5/android-studio-quail4-rc1-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-5SJmTQRweFeAJsZWv0vHgK+ZtSHu0gp+al8iDGEAg+E=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.1.3.6/android-studio-quail3-rc2-mac_arm.dmg";
+        sha256Hash = "sha256-FvtsU6FHFz/khKSWzBudNzgt4qVkdlS2kXIqGCcAncg=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.1.4.5/android-studio-quail4-rc1-mac_arm.dmg";
       };
     };
   };
