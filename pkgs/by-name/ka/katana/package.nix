@@ -2,11 +2,16 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "katana";
   version = "1.7.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -19,9 +24,18 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/katana" ];
 
-  ldflags = [
-    "-s"
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Next-generation crawling and spidering framework";
