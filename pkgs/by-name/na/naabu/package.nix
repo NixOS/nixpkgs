@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "naabu";
   version = "2.6.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
