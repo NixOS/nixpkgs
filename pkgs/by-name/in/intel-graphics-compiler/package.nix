@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     # The build system only applies patches when the sources are in a Git repository.
     git -C llvm-project init
     git -C llvm-project add .
-    git -C llvm-project -c user.name=nixbld -c user.email= commit -m stub
+    git -C llvm-project -c user.name=nixbld -c user.email= commit -m stub >/dev/null
 
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
