@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "tlsx";
   version = "1.3.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "tlsx";
