@@ -84,6 +84,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # does not work on ZFS with normalization
+    "tests/test_opener.py::test_open_garbled_filename"
+  ];
+
   pythonImportsCheck = [
     "pypdfium2"
   ];
