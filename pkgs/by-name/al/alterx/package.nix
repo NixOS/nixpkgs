@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,7 +21,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-13ODJNo6xbQkubaGJT3svFbOLbdsHluTCp1Gom+jYeU=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   ldflags = [ "-s" ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
