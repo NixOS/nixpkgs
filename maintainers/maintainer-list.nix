@@ -262,7 +262,6 @@
     email = "git@evy.pink";
     github = "4evy";
     githubId = 57304299;
-    matrix = "@donteatoreo:matrix.org";
   };
   _4r7if3x = {
     email = "the.artifex@proton.me";
