@@ -221,6 +221,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       xddxdd
       yuannan
     ];
+    teams = [ lib.teams.cuda ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
