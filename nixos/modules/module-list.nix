@@ -358,6 +358,7 @@
   ./programs/vivid.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
+  ./programs/wayland/caelestia-shell.nix
   ./programs/wayland/dms-shell.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
