@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ (with python3Packages; [
     setuptools
-    (matrix-nio.override { withOlm = true; })
+    (matrix-nio.override { withVodozemac = true; })
     python-magic
     markdown
     pillow

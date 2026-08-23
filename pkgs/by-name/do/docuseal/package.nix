@@ -6,6 +6,7 @@
   nixosTests,
   ruby_4_0,
   pdfium-binaries,
+  leptonica,
   makeWrapper,
   fetchYarnDeps,
   yarn,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.5.3";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-9fDEj9gOBZrn4dNWf+QRCZs3gUv3Mx/YZLRx55ShS7E=";
+    hash = "sha256-yWy5mRrNHMZPimIPIVKyCXQDw5JlEhdgNZjOQ7mq8mY=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
@@ -107,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/rails \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium-binaries ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          pdfium-binaries
+          leptonica
+        ]
+      }"
   '';
 
   passthru = {
