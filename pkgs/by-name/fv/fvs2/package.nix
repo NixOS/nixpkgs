@@ -14,16 +14,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "fvs2";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "fvs-lab";
     repo = "fvs2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lJZd9QbvjArYMSXG6qHcaxaAe5UOPpko/TXD2L8yxDA=";
+    hash = "sha256-j/jUz/WGOy7qtGDfARtVf1Tv1thk434eRVbq3ePC7RQ=";
   };
 
-  vendorHash = "sha256-FUst0ccxpZS3NjvthQQE7CVlULWPhXj8KA2cOoksLGI=";
+  vendorHash = "sha256-gzI8mKGJWRJqUkscOU3wXTscZO+9i6MLKCoyMLkymUY=";
 
   # Needed for build time tests
   nativeBuildInputs = [ git ];
