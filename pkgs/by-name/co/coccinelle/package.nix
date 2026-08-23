@@ -2,18 +2,21 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  ocamlPackages,
+  ocaml-ng,
   pkg-config,
   autoreconfHook,
 }:
 
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coccinelle";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     repo = "coccinelle";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     owner = "coccinelle";
     hash = "sha256-ZNWuloXhAXWNNoVWLOuDbC3e6KNL7nzM2346tB04qXA=";
   };
@@ -34,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     # Ensure dependencies from Nixpkgs are picked up.

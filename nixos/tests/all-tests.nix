@@ -1529,6 +1529,7 @@ in
   rnsd = runTest ./networking/rnsd.nix;
   robustirc-bridge = runTest ./robustirc-bridge.nix;
   romm = runTest ./romm.nix;
+  rosec = runTest ./rosec.nix;
   rosenpass = runTest ./rosenpass.nix;
   roundcube = runTest ./roundcube.nix;
   routinator = handleTest ./routinator.nix { };

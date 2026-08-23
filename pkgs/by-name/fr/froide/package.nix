@@ -21,6 +21,15 @@ let
     packageOverrides = self: super: {
       django_5 = super.django_5.override { withGdal = true; };
       django = super.django_5;
+
+      django-oauth-toolkit = super.django-oauth-toolkit.overrideAttrs (old: {
+        version = "3.3.0";
+
+        src = old.src.override {
+          hash = "sha256-eRQzAFUvSgoDiP7LW/+hMrNxHuXVxY+wc/E3VU/zeXo=";
+        };
+      });
+
       # custom python module part of froide
       dogtail = super.buildPythonPackage {
         pname = "dogtail";

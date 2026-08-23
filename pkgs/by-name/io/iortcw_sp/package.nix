@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3F8JAEuPydufXqeOGwYCX0M8pEVRyFZAu2TUFxZ+vDw=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # Constexpr is a reserved keyword since C++11 that can't be overwritten. Replacing constexpr with
   # const_expr is necessary in this case for the build to function.
   postPatch = ''
