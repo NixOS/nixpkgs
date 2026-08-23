@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/ojucBo+UOr5WFahVMSz7xJ84dzenwuotZk+5QqODls=";
+    hash = "sha256-ViwNE+8fmYbAMPFd8yiWXDLbaenkgri9PBe92M0Se5U=";
   };
 
-  vendorHash = "sha256-PU2EbYei6X/fmA/POaFI6flAZYb2WcBA10E9+rS651U=";
+  vendorHash = "sha256-dAFci7GXe1fPPABIG1dngEyGqC5TKa90fyQPYSbJJrk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,6 +41,8 @@ buildGoModule (finalAttrs: {
         "TestUnTarDirMTime" # xattr.list: operation not supported
         "TestUnTarIntoReadOnlyDir" # xattr.list: operation not supported
         "TestUnTarNoSamePermissionsOverReadOnlyTree" # xattr.list: operation not supported
+        "TestUnTarReadOnlyDir" # xattr.list: operation not supported
+        "TestUnTarReadOnlyDirNoSamePermissions" # xattr.list: operation not supported
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
