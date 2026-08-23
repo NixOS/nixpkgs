@@ -1,5 +1,6 @@
 {
   lib,
+  buildEnv,
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -15,12 +16,20 @@
 
   cublasSupport ? config.cudaSupport,
 
+  rocmSupport ? config.rocmSupport,
+  rocmPackages ? { },
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets or [ ],
+
   vulkanSupport ? false,
   vulkan-loader,
   shaderc,
   metalSupport ? false,
   nix-update-script,
 }:
+
+assert lib.assertMsg (!(cublasSupport && rocmSupport)) ''
+  koboldcpp: CUDA (cublasSupport) and ROCm (rocmSupport) are mutually exclusive
+'';
 
 let
   version = "1.119";
@@ -40,12 +49,42 @@ let
     in
     "${cudaMaxCapability}0";
 
-  libraryPathWrapperArgs = lib.optionals (cublasSupport && stdenv.hostPlatform.isLinux) [
-    "--prefix"
-    "LD_LIBRARY_PATH"
-    ":"
-    (lib.makeLibraryPath [ addDriverRunpath.driverLink ])
+  libraryPathWrapperArgs =
+    lib.optionals (cublasSupport && stdenv.hostPlatform.isLinux) [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ addDriverRunpath.driverLink ])
+    ]
+    ++ lib.optionals (rocmSupport && stdenv.hostPlatform.isLinux) [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${rocmPath}/lib"
+      "--set-default"
+      "HIP_PATH"
+      "${rocmPath}"
+      "--set-default"
+      "ROCM_PATH"
+      "${rocmPath}"
+    ];
+
+  # 1.119's Makefile expects a single ROCM_PATH that provides hipconfig,
+  # hipcc, amdhip64, hipblas, and rocblas. clr ships hipconfig plus the
+  # HIP/LLVM compiler, but hipconfig is wrapped with ROCM_PATH=clr so
+  # `hipconfig -C` never emits hipblas/rocblas/hipblas-common include
+  # flags
+  rocmBuildInputs = with rocmPackages; [
+    clr
+    hipblas
+    hipblas-common
+    rocblas
   ];
+
+  rocmPath = buildEnv {
+    name = "rocm-path";
+    paths = rocmBuildInputs;
+  };
 
   runtimePath = [ tk ];
 
@@ -67,13 +106,20 @@ let
     "koboldcpp_noavx2"
   ]
   ++ lib.optionals cublasSupport [ "koboldcpp_cublas" ]
+  ++ lib.optionals rocmSupport [ "koboldcpp_hipblas" ]
   ++ lib.optionals vulkanSupport [ "koboldcpp_vulkan" ]
   ++ lib.optionals (vulkanSupport && stdenv.hostPlatform.isx86) [
     "koboldcpp_vulkan_failsafe"
     "koboldcpp_vulkan_noavx2"
   ];
 
-  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv =
+    if cublasSupport then
+      cudaPackages.backendStdenv
+    else if rocmSupport then
+      rocmPackages.stdenv
+    else
+      stdenv;
 
   metalFailsafe = stdenv.mkDerivation {
     pname = "koboldcpp-macos-failsafe";
@@ -105,6 +151,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
+  patches = [ ./ggml-fix-gfx9-apu-detection.patch ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -115,6 +163,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
     cudaPackages.cuda_nvcc
   ]
+  ++ lib.optionals rocmSupport [ rocmPackages.clr ]
   ++ lib.optionals vulkanSupport [ shaderc ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
@@ -128,16 +177,23 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_cudart
     cudaPackages.cccl
   ]
+  ++ lib.optionals rocmSupport rocmBuildInputs
   ++ lib.optionals vulkanSupport [
     vulkan-loader
   ];
 
   pythonPath = finalAttrs.pythonInputs;
 
-  env = lib.optionalAttrs vulkanSupport {
-    # 1.119's vulkan-shaders-gen recipe prefers bundled glslc-linux when this is set
-    LLAMA_USE_BUNDLED_GLSLC = "";
-  };
+  env =
+    lib.optionalAttrs rocmSupport {
+      # Keep this as an environment variable so the Makefile can append
+      # its required HIP defines and hipconfig flags
+      HIPFLAGS = "-I${rocmPath}/include";
+    }
+    // lib.optionalAttrs vulkanSupport {
+      # 1.119's vulkan-shaders-gen recipe prefers bundled glslc-linux when this is set
+      LLAMA_USE_BUNDLED_GLSLC = "";
+    };
 
   makeFlags = [
     "LLAMA_PORTABLE=1"
@@ -147,6 +203,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "CUBLAS_FLAGS=-DGGML_USE_CUDA"
     "CUBLASLD_FLAGS=-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs -lcuda -lcublas -lcudart -lcublasLt -lpthread -ldl -lrt"
     "NVCCFLAGS=--forward-unknown-to-host-compiler -use_fast_math -extended-lambda -Wno-deprecated-gpu-targets -DKCPP_LIMIT_CUDA_MAX_ARCH=${cudaMaxArch} ${cudaPackages.flags.gencodeString}"
+  ]
+  ++ lib.optionals rocmSupport [
+    "LLAMA_HIPBLAS=1"
+    "ROCM_PATH=${rocmPath}"
+    "HCC=${rocmPath}/bin/hipcc"
+    "HCXX=${rocmPath}/bin/hipcc"
+    "GPU_TARGETS=${builtins.concatStringsSep " " rocmGpuTargets}"
   ]
   ++ lib.optionals vulkanSupport [
     "LLAMA_VULKAN=1"
@@ -184,6 +247,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ${lib.escapeShellArgs makeWrapperArgs}
   '';
 
+  requiredSystemFeatures = lib.optionals rocmSupport [ "big-parallel" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -202,7 +267,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       _4evy
     ];
     platforms = if metalSupport then lib.platforms.darwin else lib.platforms.unix;
-    badPlatforms = lib.optionals cublasSupport lib.platforms.darwin;
+    badPlatforms = lib.optionals (cublasSupport || rocmSupport) lib.platforms.darwin;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })
