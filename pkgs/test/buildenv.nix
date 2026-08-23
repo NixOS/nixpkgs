@@ -337,6 +337,27 @@ let
     };
   };
 
+  tests-strictDeps = {
+    testStrictDepsExplicitlyFalse = {
+      expr =
+        (buildEnv {
+          name = "test-env";
+          paths = [ ];
+        }).strictDeps;
+      expected = true;
+    };
+
+    testStrictDepsCantBeOverriddenViaDerivationArgs = {
+      expr =
+        (buildEnv {
+          name = "test-env";
+          paths = [ ];
+          derivationArgs.strictDeps = false;
+        }).strictDeps;
+      expected = true;
+    };
+  };
+
   tests =
     tests-name
     // tests-passthru-paths
@@ -344,11 +365,13 @@ let
     // tests-overrideAttrs
     // tests-passthru-merging
     // tests-derivationArgs
-    // tests-structuredAttrs;
+    // tests-structuredAttrs
+    // tests-strictDeps;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
+  strictDeps = true;
   name = "test-buildenv";
   passthru = {
     inherit tests buildTests;
