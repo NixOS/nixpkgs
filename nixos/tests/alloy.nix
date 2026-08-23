@@ -1,7 +1,7 @@
 { lib, ... }:
 
 let
-  nodes = {
+  containers = {
     machine = {
       services.alloy = {
         enable = true;
@@ -20,7 +20,7 @@ in
     ];
   };
 
-  inherit nodes;
+  inherit containers;
 
   testScript = ''
     start_all()
