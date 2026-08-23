@@ -1,20 +1,14 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  pexpect,
-  pillow,
-  cryptography,
-  pytestCheckHook,
-  pyvirtualdisplay,
-  setuptools,
-  twisted,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "vncdotool";
   version = "1.3.0";
   pyproject = true;
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -24,15 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-CXxuaAi/B7NiGp1dhhe7iBw0qOdPfsKg7zMMwavGCW8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     pillow
     cryptography
     twisted
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pexpect
     pytestCheckHook
     pyvirtualdisplay
