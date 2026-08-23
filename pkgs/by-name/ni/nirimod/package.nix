@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "nirimod";
-  version = "0-unstable-2026-07-27";
+  version = "0-unstable-2026-08-02";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -21,8 +21,8 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "srinivasr";
     repo = "nirimod";
-    rev = "fb62bb30a060cb37868231846810c98bc1eb22d4";
-    hash = "sha256-h4p5Nn7xFTJ+aHw2FALwMygDM5l0GXakvEwRxadx87k=";
+    rev = "7a449c8451bd171d3c1d4281afc61f9d9f3ed86d";
+    hash = "sha256-taHvAqDjemBHzFYCXjAVD2xZbIdsQxcXXlPq6Ebbio4=";
   };
 
   build-system = [ python3Packages.hatchling ];
