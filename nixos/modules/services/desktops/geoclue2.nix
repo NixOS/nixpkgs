@@ -141,6 +141,35 @@ in
         '';
       };
 
+      enableIP = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable IP source.
+        '';
+      };
+
+      ipMethod = lib.mkOption {
+        type = lib.types.enum [
+          "ichnaea"
+          "gmaps"
+          "reallyfreegeoip"
+        ];
+        default = "ichnaea";
+        description = ''
+          Method (backend) to use for IP location.
+        '';
+      };
+
+      ipAccuracy = lib.mkOption {
+        type = lib.types.nullOr lib.types.float;
+        default = 30000.0;
+        description = ''
+          Value with which to hardcode as, or override, the accuracy in the
+          GeoIP service response.
+        '';
+      };
+
       enableStatic = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -277,6 +306,7 @@ in
       enableModemGPS = lib.mkIf cfg.enableStatic false;
       enableNmea = lib.mkIf cfg.enableStatic false;
       enableWifi = lib.mkIf cfg.enableStatic false;
+      enableIP = lib.mkIf cfg.enableStatic false;
       staticLatitude = lib.mkDefault config.location.latitude;
       staticLongitude = lib.mkDefault config.location.longitude;
     };
@@ -352,6 +382,14 @@ in
           submit-data = lib.boolToString cfg.submitData;
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
+        };
+        ip = {
+          enable = cfg.enableIP;
+        }
+        // lib.optionalAttrs cfg.enableIP {
+          method = cfg.ipMethod;
+          url = cfg.geoProviderUrl;
+          accuracy = lib.mkIf (cfg.ipAccuracy != null) cfg.ipAccuracy;
         };
         static-source = {
           enable = cfg.enableStatic;
