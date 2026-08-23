@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Append lines from stdin to a file if they don't already exist in the file";
