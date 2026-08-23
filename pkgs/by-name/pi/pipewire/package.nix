@@ -297,6 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
+      aanderse
       k900
       qweered
     ];
