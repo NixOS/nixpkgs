@@ -2,22 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "9.3.0";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplistix";
     repo = "sybil";
     tag = version;
-    hash = "sha256-rr6zVY1yJVL/s/Wg5S4pSljj9Zq+jo7CZ6TZvtPpxow=";
+    hash = "sha256-wRJ43CzatyP5VuCZSF+6Eh1kGmdNhbzDPoBHbV/96oo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   # Circular dependency with testfixtures
   doCheck = false;
