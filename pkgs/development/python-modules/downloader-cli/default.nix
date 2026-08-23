@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "downloader-cli";
-  version = "0.3.4";
+  version = "2019.11.15";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = "downloader-cli";
     tag = version;
-    hash = "sha256-E2K3n9qCQofm4gXu1l7/0iMoJsniuzhsBUplr4aZ39s=";
+    hash = "sha256-2dH033mhV0WI84n9vcXYX1hBckKj3I+N/4TG3x/WoVE=";
   };
 
   propagatedBuildInputs = [ urllib3 ];
