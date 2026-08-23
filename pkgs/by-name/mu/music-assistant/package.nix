@@ -236,14 +236,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/zvuk_music"
     # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
     "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
-  ];
-
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK
-    "test_beat_detection"
-    "test_extended_analysis_fields"
-    "test_finalize_returns_audio_analysis_data"
-    "test_finalize_returns_none_on_early_exit"
+    "tests/providers/smart_fades/test_provider.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
