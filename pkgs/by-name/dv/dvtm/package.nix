@@ -3,6 +3,9 @@
   stdenv,
   fetchurl,
   ncurses,
+  # if you prefer a custom config, write the config.h in dvtm.config.h
+  # and enable
+  # customConfig = builtins.readFile ./dvtm.config.h;
   customConfig ? null,
 }:
 
