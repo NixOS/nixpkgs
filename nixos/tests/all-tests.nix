@@ -813,7 +813,10 @@ in
   homer = handleTest ./homer { };
   honk = runTest ./honk.nix;
   hoogle = runTest ./hoogle.nix;
-  hostname = handleTest ./hostname.nix { };
+  hostname = import ./hostname.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   hound = runTest ./hound.nix;
   hub = runTest ./git/hub.nix;
   hydra = runTest ./hydra;
