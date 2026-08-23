@@ -347,6 +347,9 @@ rec {
       "true"
     else if x == false then
       "false"
+    else if builtins.isPath x then
+      # preserve string context; toString on a path drops it
+      "${x}"
     else
       toString x;
 
