@@ -11720,6 +11720,12 @@
     github = "I-Al-Istannen";
     githubId = 20284688;
   };
+  i-love-lean = {
+    name = "i-love-lean";
+    github = "i-love-lean";
+    githubId = 170473930;
+    email = "nixpkgs@unnamed.website";
+  };
   i01011001 = {
     email = "yugen.m7@gmail.com";
     github = "i01011001";
