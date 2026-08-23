@@ -21,7 +21,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "13.0.6";
+  version = "13.0.7";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Sl6t26Z2XRmF3WcGEeE6IsAq+VPAdkV5s/DFKiBl/FI=";
+    hash = "sha256-Akb3ZhfYqwaXnhB6o+gbGfibflBYRDMUNvXQzwGXab0=";
   };
 
   patches = [
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-kQE2mwuyKbSnt04KslHE2QmRZeWKzfKyRjjunMD1kvU=";
+    hash = "sha256-0rmQGRgu22Yxm3Vlr2YKrGjU1xxePadByH/HGqubSVM=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
