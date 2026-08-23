@@ -1954,6 +1954,18 @@
   "module-security-acme-reload-dependencies": [
     "index.html#module-security-acme-reload-dependencies"
   ],
+  "module-programs-caelestia-shell": [
+    "index.html#module-programs-caelestia-shell"
+  ],
+  "module-programs-caelestia-shell-basic-usage": [
+    "index.html#module-programs-caelestia-shell-basic-usage"
+  ],
+  "module-programs-caelestia-shell-starting": [
+    "index.html#module-programs-caelestia-shell-starting"
+  ],
+  "module-programs-caelestia-shell-theming": [
+    "index.html#module-programs-caelestia-shell-theming"
+  ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
   ],
