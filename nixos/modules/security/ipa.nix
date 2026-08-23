@@ -121,8 +121,12 @@ in
         interface = lib.mkOption {
           type = lib.types.str;
           example = "eth0";
-          default = "*";
-          description = "Network interface to perform hostname updates through.";
+          default = "!docker0, !podman0, !veth*, *";
+          description = ''
+            Network interface or list of interfaces whose IP addresses should be
+            used for dynamic DNS updates. See `man sssd-ipa` for a full
+            explanation of the dyndns_iface option.
+          '';
         };
       };
 
