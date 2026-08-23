@@ -10,6 +10,7 @@
   makeBinaryWrapper,
   nix-update-script,
   versionCheckHook,
+  runCommand,
 }:
 
 let
@@ -60,7 +61,22 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests = {
+      mathml =
+        runCommand "simple-mathml-output-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "1+2" | katex -F mathml --output test.html
+            grep -q "<semantics><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow>" test.html
+            touch $out
+          '';
+    };
+  };
 
   meta = {
     changelog = "https://github.com/KaTeX/KaTeX/releases/tag/v${finalAttrs.version}";
