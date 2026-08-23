@@ -8,14 +8,14 @@
 python3Packages.buildPythonApplication rec {
   __structuredAttrs = true;
   pname = "graphify";
-  version = "0.9.42";
+  version = "0.9.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Graphify-Labs";
     repo = "graphify";
     tag = "v${version}";
-    hash = "sha256-QXdjA+xSgh6I+A2snvlaigHG2FQJWoFWIYQJfCmshGQ=";
+    hash = "sha256-gcQ8isXZQu/VQkK74vAaOKnbNdsxiez+TSZdRUxEMiA=";
   };
 
   build-system = [
