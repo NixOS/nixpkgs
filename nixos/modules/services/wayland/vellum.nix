@@ -71,6 +71,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ poz ];
+    maintainers = with lib.maintainers; [
+      greyxp1
+      poz
+    ];
   };
 }
