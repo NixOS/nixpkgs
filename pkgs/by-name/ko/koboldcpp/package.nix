@@ -29,6 +29,7 @@
   vulkan-tools,
   metalSupport ? false,
   nix-update-script,
+  versionCheckHook,
   xdg-utils,
   xterm,
 }:
@@ -169,6 +170,22 @@ let
   };
 
   builtLibraries = if metalSupport then lib.remove "koboldcpp_failsafe" libraries else libraries;
+
+  allBackendLibraries = [
+    "koboldcpp_default"
+    "koboldcpp_failsafe"
+    "koboldcpp_noavx2"
+    "koboldcpp_cublas"
+    "koboldcpp_hipblas"
+    "koboldcpp_vulkan"
+    "koboldcpp_vulkan_failsafe"
+    "koboldcpp_vulkan_noavx2"
+  ];
+
+  # libcuda is supplied by the host driver and is unavailable in the
+  # build sandbox. Every other installed backend can be load-tested
+  # hermetically
+  loadableLibraries = lib.remove "koboldcpp_cublas" libraries;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
@@ -299,6 +316,48 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/libexec/koboldcpp" "''${pythonPath[*]}"
     ln -s ../libexec/koboldcpp/koboldcpp "$out/bin/koboldcpp"
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = effectiveStdenv.buildPlatform.canExecute effectiveStdenv.hostPlatform;
+  versionCheckProgramArg = "--version";
+
+  postInstallCheck = ''
+    # Exercise CLI parsing separately from the resource checks
+    helpOutput="$("$out/bin/koboldcpp" --help)"
+    echo "$helpOutput" | grep -F -- '--usecuda'
+    echo "$helpOutput" | grep -F -- '--usevulkan'
+    echo "$helpOutput" | grep -F -- '--gpulayers'
+
+    # Check packaged runtime resources and the standalone JSON converter
+    installDir="$out/libexec/koboldcpp"
+    test -f "$installDir/json_to_gbnf.py"
+    test -f "$installDir/embd_res/lcpp.gz.embd"
+    test -f "$installDir/kcpp_adapters/AutoGuess.json"
+    PYTHONPATH="$installDir" ${python3Packages.python.interpreter} -c \
+      'from json_to_gbnf import SchemaConverter'
+
+    # Verify every selected backend was installed
+    ${lib.concatMapStringsSep "\n" (name: ''
+      test -f "$installDir/${name}.so"
+    '') libraries}
+
+    # Load every backend whose driver dependencies are available in the sandbox
+    ${lib.concatMapStringsSep "\n" (name: ''
+      ${python3Packages.python.interpreter} -c \
+        'import ctypes, sys; ctypes.CDLL(sys.argv[1])' \
+        "$installDir/${name}.so"
+    '') loadableLibraries}
+
+    # Reject backend libraries that the selected variant should not contain
+    ${lib.concatMapStringsSep "\n" (name: ''
+      test ! -e "$installDir/${name}.so"
+    '') (lib.subtractLists libraries allBackendLibraries)}
+
+    ${lib.optionalString metalSupport ''
+      # Metal builds should install the single merged shader source used at runtime
+      test -f "$installDir/ggml-metal-merged.metal"
+    ''}
   '';
 
   requiredSystemFeatures = lib.optionals rocmSupport [ "big-parallel" ];
