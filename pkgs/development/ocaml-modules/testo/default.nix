@@ -8,11 +8,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "testo";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/mjambon/testo/releases/download/${finalAttrs.version}/testo-${finalAttrs.version}.tbz";
-    hash = "sha256-cPm+FSS1fCj3PCyEk37p93lHjpH6NZ3GNkKJjdExaXs=";
+    hash = "sha256-95Gdn5+kVxxbGtYn36jAXk15+GVHRaa+szO5W0WWEbE=";
   };
 
   propagatedBuildInputs = [
