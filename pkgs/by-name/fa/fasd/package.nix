@@ -4,23 +4,24 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fasd";
-  version = "unstable-2016-08-11";
+  version = "2.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "clvv";
+    owner = "whjvenyl";
     repo = "fasd";
-    rev = "90b531a5daaa545c74c7d98974b54cbdb92659fc";
-    sha256 = "0i22qmhq3indpvwbxz7c472rdyp8grag55x7iyjz8gmyn8gxjc11";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XLlS+EsjTCI5oTdHuIwiNEXiEgaO6lLgA25bm55sve0=";
   };
 
-  installPhase = ''
-    PREFIX=$out make install
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    homepage = "https://github.com/clvv/fasd";
+    homepage = "https://github.com/whjvenyl/fasd";
     description = "Quick command-line access to files and directories for POSIX shells";
     license = lib.licenses.mit;
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bcc32 ];
     mainProgram = "fasd";
   };
-}
+})
