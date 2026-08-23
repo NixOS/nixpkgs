@@ -124,12 +124,16 @@ rec {
       name,
       constituents,
       meta ? { },
+      # Interpret string constituents as fnmatch patterns matched
+      # against all job names of the jobset.
+      globConstituents ? false,
     }:
     pkgs.runCommand name
       {
         inherit constituents meta;
         preferLocalBuild = true;
         _hydraAggregate = true;
+        _hydraGlobConstituents = globConstituents;
       }
       ''
         mkdir -p $out/nix-support
