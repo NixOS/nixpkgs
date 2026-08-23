@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "alterx";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "alterx";
@@ -16,6 +18,8 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-13ODJNo6xbQkubaGJT3svFbOLbdsHluTCp1Gom+jYeU=";
+
+  ldflags = [ "-s" ];
 
   meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
