@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-G4DNr69FKiLI3vrEX3AMPn3DdWzPbxA7t2vw3bJtW94=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   checkFlags = [
     # Skip tests that require network access
     "--skip=scanner::tests::test_scanner_1000_80_443"
@@ -26,6 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=scanner::tests::test_scanner_port_80"
     "--skip=terminal::print::tests::test_terminal_monochrome_false"
   ];
+
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
