@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "katana";
   version = "1.7.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "katana";
