@@ -6749,6 +6749,12 @@
     github = "MadelineBaggins";
     githubId = 57464835;
   };
+  declarative-dale = {
+    name = "Dale Morgan";
+    email = "uptapped@protonmail.ch";
+    github = "declarative-dale";
+    githubId = 52590374;
+  };
   deeengan = {
     github = "deeengan";
     githubId = 87693324;
