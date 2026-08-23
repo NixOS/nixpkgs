@@ -77,14 +77,14 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-oU7qWOsY2TtVE+Gp2DhSXffm9OghTHcNhzDwwAovwZI=";
+      outputHash = "sha256-WqEZQCVl4oQFVbrhlWVaBW+JiSqjSK+LILPkDV9Avds=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.18";
+  version = "1.18.21";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rDVcv8j9KghTDwooPYriTloOMgTyVutud7xKLG2mTmk=";
+    hash = "sha256-WKG/lts+wzDjYJ5pOZ0X4Kb0rJ1TzYQzQgjyQBY+bxs=";
   };
 
   postPatch =

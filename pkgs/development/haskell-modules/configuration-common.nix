@@ -3420,13 +3420,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.11.1";
+    version = "1.12.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      tag = "v${version}";
-      hash = "sha256-TuvKVBX60mqyMT6OB5JqVEh1YIWtFMR/igLCaCdC9tw=";
+      rev = "e3609f93799354c50e4126d6423ede6dd317e2f2";
+      hash = "sha256-AOhHyBEk8LOiAU9tgmNJPJAKKUVDQFzTNSLe62FPxpY=";
     };
   in
   {
@@ -3445,6 +3445,7 @@ with haskellLib;
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
+          hnix-store-nar = self.hnix-store-nar;
         }
       )
     ];

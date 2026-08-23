@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs_24,
-  electron_41,
+  electron_42,
   makeWrapper,
   fetchFromGitHub,
   buildNpmPackage,
@@ -13,7 +13,7 @@
 }:
 let
   node = nodejs_24;
-  electron = electron_41;
+  electron = electron_42;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {

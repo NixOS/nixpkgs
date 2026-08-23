@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tzlocal
       pyhanko
       pyhanko-certvalidator
+      pyyaml
       click
       platformdirs
     ]

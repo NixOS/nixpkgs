@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
+  nix-update-script,
 }:
 
 let
@@ -64,6 +65,8 @@ buildGoModule {
     "-X github.com/gtsteffaniak/filebrowser/backend/version.CommitSHA=testingCommit"
     "-X github.com/gtsteffaniak/filebrowser/backend/version.Version=testing"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Access and manage your files from the web";

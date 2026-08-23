@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildVscode,
+  fd,
   fetchurl,
   nixosTests,
   commandLineArgs ? "",
@@ -12,7 +13,7 @@ let
     (lib.importJSON ./info.json)."${stdenv.hostPlatform.system}"
       or (throw "windsurf: unsupported system ${stdenv.hostPlatform.system}");
 in
-buildVscode {
+(buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
 
   inherit (info) version vscodeVersion;
@@ -56,4 +57,27 @@ buildVscode {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    # Run patchelf manually *before* restoring the staticaly linked binaries
+    dontAutoPatchelf = stdenv.hostPlatform.isLinux;
+
+    runtimeDependencies =
+      (oldAttrs.runtimeDependencies or [ ])
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        fd
+      ];
+
+    # devin-desktop ships statically-linked relocatable binaries;`patchelf --set-rpath` corrupts the self-relocation bootstrap,
+    # causing SIGSEGV. Since the autoPatchElfHook fires after postFixup, we need to disable it and patch before we replace the files.
+    postFixup =
+      (oldAttrs.postFixup or "")
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
+        autoPatchelf -- "$out"
+        echo "Restoring static binaries"
+        cp ./resources/app/extensions/windsurf/devin/bin/devin "$out/lib/devin-desktop/resources/app/extensions/windsurf/devin/bin/devin"
+        cp ./resources/app/extensions/windsurf/bin/language_server_linux_x64 "$out/lib/devin-desktop/resources/app/extensions/windsurf/bin/language_server_linux_x64"
+
+        ln -sf "${lib.getExe fd}" "$out/lib/devin-desktop/resources/app/extensions/windsurf/bin/fd"
+      '';
+  })

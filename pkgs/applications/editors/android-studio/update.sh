@@ -1,10 +1,14 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p jq nix-prefetch-scripts
+#! nix-shell -I nixpkgs=./. -i bash -p jq
 
 set -euo pipefail
 
 DEFAULT_NIX="$(realpath "./pkgs/applications/editors/android-studio/default.nix")"
 RELEASES_JSON="$(curl --silent -L https://jb.gg/android-studio-releases-list.json)"
+PLATFORMS=(
+    "x86_64-linux|-linux.tar.gz"
+    "aarch64-darwin|-mac_arm.dmg"
+)
 
 # Available channels: Release/Patch (stable), Beta, Canary
 getLatest() {
@@ -15,7 +19,8 @@ getLatest() {
         "beta") local select='.channel == "Beta" or .channel == "RC"' ;;
         *) local select=".channel == \"${channel^}\"" ;;
     esac
-    local result="$(echo "$RELEASES_JSON" \
+    local result
+    result="$(echo "$RELEASES_JSON" \
         | jq -r ".content.item[] | select(${select}) | [.version, (${attribute})] | join(\" \")" \
         | sort --version-sort \
         | cut -d' ' -f 2- \
@@ -31,31 +36,52 @@ getLatest() {
 
 updateChannel() {
     local channel="$1"
-    local latestVersion="$(getLatest ".version" "$channel")"
+    local latestVersion
+    latestVersion="$(getLatest ".version" "$channel")"
 
-    local localVersion="$(nix --extra-experimental-features nix-command eval --raw --file . androidStudioPackages."${channel}".version)"
+    local localVersion
+    localVersion="$(nix --extra-experimental-features nix-command eval --raw --file . androidStudioPackages."${channel}".version)"
     if [[ "${latestVersion}" == "${localVersion}" ]]; then
         echo "$channel is already up to date at $latestVersion"
         return 0
     fi
     echo "updating $channel from $localVersion to $latestVersion"
 
-    local latestUrl="$(getLatest "[.download[] | select(.link | endswith(\"-linux.tar.gz\"))][0].link" "$channel")"
-    local latestHash="$(getLatest "[.download[] | select(.link | endswith(\"-linux.tar.gz\"))][0].checksum" "$channel")"
+    local platformSpec
+    local replacements=()
+    for platformSpec in "${PLATFORMS[@]}"; do
+        local system="${platformSpec%%|*}"
+        local suffix="${platformSpec#*|}"
+        local latestUrl
+        latestUrl="$(getLatest "[.download[] | select(.link | endswith(\"${suffix}\"))][0].link" "$channel")"
+        local latestHash
+        latestHash="$(getLatest "[.download[] | select(.link | endswith(\"${suffix}\"))][0].checksum" "$channel")"
 
-    if [[ "$latestUrl" != https://edgedl.me.gvt1.com/android/studio/* ]]; then
-        echo "URL '$latestUrl' had an unexpected value, maybe the server changed?" >&2
-        exit 1
-    fi
+        if [[ "$latestUrl" != https://edgedl.me.gvt1.com/android/studio/* ]]; then
+            echo "URL '$latestUrl' had an unexpected value, maybe the server changed?" >&2
+            exit 1
+        fi
 
-    local latestSri="$(nix --extra-experimental-features nix-command hash convert --from base16 --hash-algo sha256 "$latestHash")"
-    local localUrl="$(nix --extra-experimental-features nix-command eval --json --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.urls | jq -r '.[0]')"
-    local localHash="$(nix --extra-experimental-features nix-command eval --raw --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.outputHash)"
-    sed -i "s~${localHash}~${latestSri}~g" "${DEFAULT_NIX}"
+        local latestSri
+        latestSri="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$latestHash")"
+        local localUrl
+        localUrl="$(nix --extra-experimental-features nix-command eval --system "$system" --json --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.urls | jq -r '.[0]')"
+        local localHash
+        localHash="$(nix --extra-experimental-features nix-command eval --system "$system" --raw --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.outputHash)"
+        replacements+=("${localHash}|${latestSri}")
+        replacements+=("${localUrl}|${latestUrl}")
+    done
+
+    local replacement
+    for replacement in "${replacements[@]}"; do
+        local oldValue="${replacement%%|*}"
+        local newValue="${replacement#*|}"
+        sed -i "s~${oldValue}~${newValue}~g" "${DEFAULT_NIX}"
+    done
 
     # Match the formatting of default.nix: `version = "2021.3.1.14"; # "Android Studio Dolphin (2021.3.1) Beta 5"`
-    local versionString="${latestVersion}\"; # \"$(getLatest ".name" "${channel}")\""
-    sed -i "s~${localUrl}~${latestUrl}~g" "${DEFAULT_NIX}"
+    local versionString
+    versionString="${latestVersion}\"; # \"$(getLatest ".name" "${channel}")\""
     sed -i "s~${localVersion}.*~${versionString}~g" "${DEFAULT_NIX}"
     echo "updated ${channel} to ${latestVersion}" >&2
 }

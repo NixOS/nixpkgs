@@ -16,8 +16,8 @@ let
 in
 stdenv.mkDerivation {
   pname = "smlnj-llvm";
-  inherit src version;
-  sourceRoot = "${src.name}/runtime/llvm21";
+  inherit version;
+  src = "${src}/runtime/llvm21";
   strictDeps = true;
   __structuredAttrs = true;
 
