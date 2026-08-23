@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bulk_extractor";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "bulk_extractor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jj/amXESFBu/ZaiIRlDKmtWTBVQ2TEvOM2jBYP3y1L8=";
+    hash = "sha256-Ed+KUImSMVVZEKLKl90YkGruwD8xtevgyozCj44bHic=";
     fetchSubmodules = true;
   };
 

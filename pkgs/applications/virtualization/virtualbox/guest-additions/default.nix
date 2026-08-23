@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.14";
+  virtualboxVersion = "7.2.16";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "384f293184c52fd51bc941c17d753b4019446f53a6b07c828adfb3e61fe0a500";
+  virtualboxSha256 = "50356ccdaefe8f03537600ec31898b506e3a85ce79b94f26fb6cc1920c9e18eb";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -95,6 +95,11 @@ stdenv.mkDerivation {
     kmod
   ]
   ++ kernel.moduleBuildDependencies;
+
+  # https://github.com/VirtualBox/virtualbox/issues/812
+  postPatch = ''
+    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c --replace-fail "RTLNX_VER_MIN(6,19,0)" "RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,12,103, 6,12,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999) || RTLNX_VER_MIN(6,19,0)"
+  '';
 
   buildPhase = ''
     runHook preBuild
