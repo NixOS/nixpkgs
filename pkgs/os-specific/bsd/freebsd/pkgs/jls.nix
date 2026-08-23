@@ -11,5 +11,4 @@ mkDerivation {
     libxo
   ];
   meta.mainProgram = "jls";
-  meta.platforms = lib.platforms.freebsd;
 }
