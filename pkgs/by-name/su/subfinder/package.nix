@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "subfinder";
   version = "2.15.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
