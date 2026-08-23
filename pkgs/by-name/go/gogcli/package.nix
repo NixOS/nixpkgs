@@ -1,19 +1,19 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   testers,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gogcli";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7XfjpAzUHH1VUJzgllKa/4GvQZhTCX8TePTXRB+oJRE=";
+    hash = "sha256-UQa9Z7zv2IuH7GL1udNee2F+uB2BAZA5a0/2XtFcBWg=";
   };
 
   vendorHash = "sha256-+Nbuwok3dY/82gUDKeGgrC0F1ZqXSW8IpV6Q1yzIPvo=";
