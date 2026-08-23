@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Glossy Matrix collaboration client for the web";
+    description = "Matrix client for the web";
     homepage = "https://element.io/";
     changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     teams = [ lib.teams.matrix ];
