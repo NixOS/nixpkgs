@@ -68,7 +68,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lovesegfault
       stepbrobd
       _4evy
-      jakecleary
     ];
     platforms = [
       "aarch64-darwin"
