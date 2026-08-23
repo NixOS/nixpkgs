@@ -20,10 +20,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/cloudlist/" ];
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -32,7 +29,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
-    changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudlist";
