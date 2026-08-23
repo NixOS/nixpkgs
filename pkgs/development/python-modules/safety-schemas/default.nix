@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "safety-schemas";
-  version = "0.0.19";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchPypi {
     pname = "safety_schemas";
     inherit version;
-    hash = "sha256-R4HwbUhSpPKLlo+OxmqagnxbAtJXBUIQoMIILIy3qo0=";
+    hash = "sha256-D9FHrnxlyLucCGEo9VHuhPrzEUALYQmmTkyiQSCw5WM=";
   };
 
   postPatch = ''
