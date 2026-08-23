@@ -1,5 +1,5 @@
---- a/pubspec.yaml
-+++ b/pubspec.yaml
+--- a/pubspec.yaml	2026-08-23 13:41:28.153662785 +0400
++++ b/pubspec.yaml	2026-08-23 13:55:08.531434356 +0400
 @@ -12,7 +12,7 @@
    android_system_font:
      git:
@@ -9,7 +9,7 @@
    app_links: ^7.0.0
    archive: ^4.0.9
    async: ^2.13.0
-@@ -50,7 +50,7 @@
+@@ -49,7 +49,7 @@
    flutter_typeahead: ## Custom fork from flutter_typeahead since the package is not maintain well.
      git:
        url: https://github.com/famedly/flutter_typeahead.git
@@ -17,18 +17,29 @@
 +      ref: 3e209e67aa6e780cba61ced06cf49d2babbbcaa4
    flutter_vodozemac: ^0.5.0
    flutter_web_auth_2: ^5.0.1
-   flutter_webrtc: 1.4.0
-@@ -70,10 +70,9 @@
+   flutter_webrtc: 1.6.0
+@@ -69,10 +69,10 @@
    linkify: ^5.0.0
    material: ^1.0.1
    matrix:
 -    path: ../matrix-dart-sdk
--    #git:
--    #  url: https://github.com/ExteraApp/matrix-dart-sdk.git
+-    # git:
+-    #  url: https://source.extera.xyz/Extera/matrix-dart-sdk.git
 -    #  ref: main
++    #path: ../matrix-dart-sdk
 +    git:
-+      url: https://github.com/ExteraApp/matrix-dart-sdk.git
-+      ref: 1bb1be699f8315215968ee5235faa3b9112fa85b
++      url: https://source.extera.xyz/Extera/matrix-dart-sdk.git
++      ref: 06c87bcdbd3e2e47ff7da8bbccb0db926da3d3f1
    mime: ^2.0.0
    native_imaging: ^0.4.0
    opus_caf_converter_dart: ^1.0.1
+@@ -136,7 +136,8 @@
+ hooks:
+   user_defines:
+     sqlite3:
+-      source: sqlcipher
++      source: system
++      name_linux: sqlcipher
+ 
+ flutter_native_splash:
+   color: "#ffffff"
