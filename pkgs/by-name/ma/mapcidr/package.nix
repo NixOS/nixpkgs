@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -37,6 +38,8 @@ buildGoModule (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Small utility program to perform multiple operations for a given subnet/CIDR ranges";
