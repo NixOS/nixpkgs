@@ -1,0 +1,36 @@
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 0d0dcc4..ee17ee4 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -182,6 +182,10 @@ ccflags-y += -UDEBUG -U_DEBUG -DNDEBUG
+ #
+ 
+ src ?= .
++ifneq (,$(findstring /nix/store,$(src)))
++ src := $(shell pwd)
++endif
++
+ include $(src)/nvidia-modules-common.mk
+ 
+ #
+@@ -213,3 +217,7 @@ else
+ endif
+ 
+ module: $(NV_MODULE_TARGET_DEPS)
++
++modules_install: module
++	mkdir -p $(MODLIB)/misc; \
++	cp $(MODULE_OBJECT) $(MODLIB)/misc/
+diff --git a/kernel/nvidia-modules-common.mk b/kernel/nvidia-modules-common.mk
+index c38cb61..ac5c43b 100644
+--- a/kernel/nvidia-modules-common.mk
++++ b/kernel/nvidia-modules-common.mk
+@@ -21,7 +21,7 @@ module module-sign module-install package-install clean print-module-filename \
+ conftest-compile-test
+ 
+ all: install
+-install: package-install
++install: module
+ 
+ #
+ # The precompiled kernel module build process requires a separation of the

@@ -188,39 +188,39 @@ rec {
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.157";
-    sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
-    sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
-    settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
-    persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+      version = "390.157";
+      sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
+      sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
+      settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
+      persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
 
-    patches = map (patch: "${aurPatches}/${patch}") [
-      "kernel-4.16+-memory-encryption.patch"
-      "kernel-6.2.patch"
-      "kernel-6.3.patch"
-      "kernel-6.4.patch"
-      "kernel-6.5.patch"
-      "kernel-6.6.patch"
-      "kernel-6.8.patch"
-      "gcc-14.patch"
-      "kernel-6.10.patch"
-      "kernel-6.12.patch"
-      "kernel-6.13.patch"
-      "kernel-6.14.patch"
-      "gcc-15.patch"
-      "kernel-6.15.patch"
-      "kernel-6.17.patch"
-    ];
-    broken = kernel.kernelAtLeast "6.18";
+      patches = map (patch: "${aurPatches}/${patch}") [
+        "kernel-4.16+-memory-encryption.patch"
+        "kernel-6.2.patch"
+        "kernel-6.3.patch"
+        "kernel-6.4.patch"
+        "kernel-6.5.patch"
+        "kernel-6.6.patch"
+        "kernel-6.8.patch"
+        "gcc-14.patch"
+        "kernel-6.10.patch"
+        "kernel-6.12.patch"
+        "kernel-6.13.patch"
+        "kernel-6.14.patch"
+        "gcc-15.patch"
+        "kernel-6.15.patch"
+        "kernel-6.17.patch"
+      ];
+      broken = kernel.kernelAtLeast "6.18";
 
-    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
-    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
-    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
-    postInstall = ''
-      mv $out/lib/tls/* $out/lib
-      rmdir $out/lib/tls
-    '';
-  };
+      # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+      # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+      # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+      postInstall = ''
+        mv $out/lib/tls/* $out/lib
+        rmdir $out/lib/tls
+      '';
+    };
 
   legacy_340 =
     let
@@ -228,8 +228,8 @@ rec {
       aurPatches = fetchFromGitHub {
         owner = "archlinux-jerry";
         repo = "nvidia-340xx";
-        rev = "7616dfed253aa93ca7d2e05caf6f7f332c439c90";
-        hash = "sha256-1qlYc17aEbLD4W8XXn1qKryBk2ltT6cVIv5zAs0jXZo=";
+        rev = "09154c494dbaa6368bf85c24d1d07956a4bf789a";
+        hash = "sha256-O6UaPV03c0XcN5F5yIGXDb0fBfhtAIzuj/PbKeSMjmg=";
       };
       patchset = [
         "0001-kernel-5.7.patch"
@@ -247,6 +247,10 @@ rec {
         "0013-kernel-6.3.patch"
         "0014-kernel-6.5.patch"
         "0015-kernel-6.6.patch"
+        "0016-kernel-6.8.patch"
+        "0017-gcc-14.patch"
+        "0018-gcc-15.patch"
+        "0019-kernel-6.15.patch"
       ];
     in
     generic {
@@ -257,8 +261,10 @@ rec {
       persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
       useGLVND = false;
 
-      broken = kernel.kernelAtLeast "6.7";
-      patches = map (patch: "${aurPatches}/${patch}") patchset;
+      broken = kernel.kernelAtLeast "6.19";
+      patches = map (patch: "${aurPatches}/${patch}") patchset ++ [
+        ./legacy340-for-nix-kernel-modules.patch
+      ];
 
       # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
       # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
