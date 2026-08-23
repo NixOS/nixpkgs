@@ -1626,6 +1626,7 @@
   ./services/torrent/flexget.nix
   ./services/torrent/flood.nix
   ./services/torrent/magnetico.nix
+  ./services/system/notify-updates.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/qbittorrent.nix
