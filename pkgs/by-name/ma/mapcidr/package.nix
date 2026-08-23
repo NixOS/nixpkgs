@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,6 +28,15 @@ buildGoModule (finalAttrs: {
   ];
 
   ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Small utility program to perform multiple operations for a given subnet/CIDR ranges";
