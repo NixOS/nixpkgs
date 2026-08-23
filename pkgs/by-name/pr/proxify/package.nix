@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,7 +21,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-7bOnLv2IJ9tysvZm33wBeMHvdSBDg1ii/QXv2n1wqxw=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   ldflags = [ "-s" ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Proxy tool for HTTP/HTTPS traffic capture";
