@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "131";
+  version = "132";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-7x4I34sWNJIz0X7orJtjU4BQ1CLbIFtkUTqdy5MrxX0=";
+    hash = "sha256-di/M4QidDwa1doomy79yfN7chCng9VcDB2KgmaEunDc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     if [ -n "$doCheck" ]; then
-      sed -i '/gtest/d' third_party/CMakeLists.txt
+      sed -i -E '/g(test|mock)/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
       # scripts/test/finalize.py checks `'64' in input_path` to enable the
