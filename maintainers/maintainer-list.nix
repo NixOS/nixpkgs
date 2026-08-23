@@ -873,6 +873,12 @@
     githubId = 1141462;
     name = "Vladyslav Pekker";
   };
+  agnab = {
+    name = "AGNAB";
+    github = "AGNAB712";
+    githubId = 133778639;
+    email = "agnab712@gmail.com";
+  };
   agustinmista = {
     email = "agustin@mista.me";
     github = "agustinmista";
