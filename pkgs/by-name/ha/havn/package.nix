@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
   versionCheckHook,
 }:
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
