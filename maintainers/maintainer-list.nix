@@ -259,7 +259,7 @@
   };
   _4evy = {
     name = "4evy";
-    email = "git@ps1.sh";
+    email = "git@evy.pink";
     github = "4evy";
     githubId = 57304299;
     matrix = "@donteatoreo:matrix.org";
