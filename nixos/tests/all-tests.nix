@@ -694,7 +694,10 @@ in
   ghostunnel = runTest ./ghostunnel.nix;
   ghostunnel-modular = runTest ./ghostunnel-modular.nix;
   gitdaemon = runTest ./gitdaemon.nix;
-  gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
+  gitea = import ./gitea.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   github-runner = runTest ./github-runner.nix;
   gitlab = import ./gitlab {
     inherit runTest;
