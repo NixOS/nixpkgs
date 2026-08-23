@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "anewer";
     homepage = "https://github.com/ysf/anewer";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
 })
