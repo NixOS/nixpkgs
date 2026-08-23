@@ -431,6 +431,11 @@ stdenv.mkDerivation (finalAttrs: {
       }
       // lib.optionalAttrs canCrossTest {
         cross = pkgsCross.aarch64-multiplatform.pdfium;
+      }
+      // lib.optionalAttrs canRunTests {
+        integration = pkgsBuildHost.callPackage ./tests {
+          pdfium = finalAttrs.finalPackage;
+        };
       };
   };
 
