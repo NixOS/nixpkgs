@@ -22,10 +22,7 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
