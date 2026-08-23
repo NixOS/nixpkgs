@@ -25,10 +25,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/naabu/" ];
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
 
   doInstallCheck = true;
 
@@ -43,7 +40,7 @@ buildGoModule (finalAttrs: {
       all ports that return a reply.
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
-    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "naabu";
