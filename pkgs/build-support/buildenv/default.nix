@@ -144,7 +144,7 @@ lib.makeOverridable (
         allowSubstitutes = derivationArgs.allowSubstitutes or false;
 
         buildCommand = ''
-          ${buildPackages.perl}/bin/perl -w ${builder}
+          ${buildPackages.perl.interpreter} -w ${builder}
           eval "$postBuild"
         '';
 
