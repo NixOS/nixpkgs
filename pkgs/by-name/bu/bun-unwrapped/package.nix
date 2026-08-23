@@ -40,35 +40,21 @@
 }:
 
 let
-  version = "1.4.0";
-  revision = "34cbb9a40b4bd1bd767d134a7065e66c2432a676";
+  sources = lib.importJSON ./sources.json;
+  inherit (sources)
+    bootstrapAssets
+    nodeModulesHashes
+    revision
+    version
+    ;
+
   isLinux = stdenv.hostPlatform.isLinux;
   isDarwin = stdenv.hostPlatform.isDarwin;
   isMusl = stdenv.hostPlatform.isMusl;
   platformKey = stdenv.hostPlatform.system + lib.optionalString isMusl "-musl";
-  webkitSource = import ./webkit.nix { inherit fetchgit; };
-
-  bootstrapAssets = {
-    "aarch64-darwin" = {
-      name = "bun-darwin-aarch64";
-      hash = "sha256-xmnpf2Fk4cluBwF0jbmN+ndJKQjL2DlMdVcTSnNd44E=";
-    };
-    "aarch64-linux" = {
-      name = "bun-linux-aarch64";
-      hash = "sha256-SxozLuhhmD65O8/m93D/+U4+MbLDiL2uo8jtNeWO7Q4=";
-    };
-    "aarch64-linux-musl" = {
-      name = "bun-linux-aarch64-musl";
-      hash = "sha256-V2MAzjP/Fv/NRVvxeMLwlfnfhFxsw9AoS6HJbKDoBHM=";
-    };
-    "x86_64-linux" = {
-      name = "bun-linux-x64-baseline";
-      hash = "sha256-GE+0WV8NQBohfPfHjBvEMLqDMU2reouUgFurv3+nCX8=";
-    };
-    "x86_64-linux-musl" = {
-      name = "bun-linux-x64-musl-baseline";
-      hash = "sha256-YYxLwflLAjN+4hAAPAt8Bm8RVIqM3FEJ3xDbBD3EfKI=";
-    };
+  webkitSource = import ./webkit.nix {
+    inherit fetchgit;
+    inherit (sources) webkit;
   };
 
   bootstrapAsset =
@@ -77,11 +63,6 @@ let
   # bun install selects native packages such as esbuild for the host platform.
   # Linux installs keep both glibc and musl variants, so the hash only differs
   # by system and CPU architecture.
-  nodeModulesHashes = {
-    "aarch64-darwin" = "sha256-v9ytVeJXM/WD2haOZARyacH/SoHRMYGngkbaLbTv0Ec=";
-    "aarch64-linux" = "sha256-6GuDQhc6OUMj2+ARxDkOYvpnLl9XgEVwhsphLwl+oKw=";
-    "x86_64-linux" = "sha256-BhtxdGlzP6J/3R0NlGe107dPrEHz9EcEzzGOe1rqOy8=";
-  };
   nodeModulesHash =
     nodeModulesHashes.${stdenv.hostPlatform.system}
       or (throw "Unsupported Bun node_modules platform: ${stdenv.hostPlatform.system}");
@@ -98,10 +79,17 @@ let
     owner = "oven-sh";
     repo = "bun";
     rev = revision;
-    hash = "sha256-2QSQwXhJDb7HQy/WuYgyWOzyS+Ic1V4VgmIE+xlcaL0=";
+    hash = sources.sourceHash;
   };
 
-  downloads = import ./sources.nix { inherit fetchurl; };
+  # Bun's cache consumes the original archives, not unpacked GitHub sources.
+  downloads = map (
+    download:
+    fetchurl {
+      inherit (download) url hash;
+      name = "bun-${download.name}.tar.gz";
+    }
+  ) sources.downloads;
 
   # Bun stores prefetched archives under the first 32 characters of SHA-256(url).
   cacheKey = download: builtins.substring 0 32 (builtins.hashString "sha256" download.url);
@@ -200,7 +188,7 @@ let
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "bun-cargo-deps";
     inherit version src;
-    hash = "sha256-76wxJIJpq2sqDaE9+IH/oBwvt+iXCgG/g8BxEXhx0Hk=";
+    hash = sources.cargoHash;
   };
 in
 stdenv.mkDerivation {
@@ -222,7 +210,7 @@ stdenv.mkDerivation {
     ./fix-darwin-standalone-segment-order.patch
   ];
 
-  # Bun 1.4.0 accepts only LLVM 21.1.x. Recheck this pin when updating Bun.
+  # Recheck this pin when Bun changes its required LLVM version.
   nativeBuildInputs = [
     bootstrap
     installShellFiles
@@ -361,6 +349,7 @@ stdenv.mkDerivation {
   postFixup = fixDarwinBinary "$out/bin/bun";
 
   doInstallCheck = true;
+  __darwinAllowLocalNetworking = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -406,22 +395,15 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    inherit
-      bootstrap
-      nodeModules
-      buildPrefetch
-      cargoDeps
-      ;
-    inherit webkitSource;
-    webkitRevision = webkitSource.rev;
-    updateScript = ./update.py;
-  };
+  passthru.updateScript = ./update.py;
 
   meta = {
     homepage = "https://bun.sh";
     changelog = "https://bun.sh/blog/bun-v${version}";
-    description = "JavaScript runtime, bundler, transpiler, and package manager";
+    description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
+    longDescription = ''
+      All in one fast & easy-to-use tool. Instead of 1,000 node_modules for development, you only need bun.
+    '';
     license = with lib.licenses; [
       mit # Bun core
       lgpl21Only # JavaScriptCore and WebKit

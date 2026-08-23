@@ -29,7 +29,7 @@ symlinkJoin {
     ln -s bun "$out/bin/bunx"
   '';
 
-  passthru = (removeAttrs unwrapped.passthru [ "updateScript" ]) // {
+  passthru = {
     inherit unwrapped;
   };
 
@@ -39,6 +39,7 @@ symlinkJoin {
       description
       homepage
       license
+      longDescription
       mainProgram
       maintainers
       platforms
