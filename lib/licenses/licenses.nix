@@ -715,6 +715,11 @@ lib.mapAttrs mkLicense (
       url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
     };
 
+    gccException20 = {
+      spdxId = "GCC-exception-2.0";
+      fullName = "GCC Runtime Library exception 2.0";
+    };
+
     gccException31 = {
       spdxId = "GCC-exception-3.1";
       fullName = "GCC Runtime Library exception 3.1";
