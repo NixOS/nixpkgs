@@ -20948,6 +20948,12 @@
     githubId = 41154684;
     name = "nokazn";
   };
+  nolight132 = {
+    email = "contact@nolight.dev";
+    github = "nolight132";
+    githubId = 71591964;
+    name = "Pavel Olizko";
+  };
   nolith = {
     github = "nolith";
     githubId = 78752;
