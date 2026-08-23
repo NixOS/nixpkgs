@@ -13,6 +13,8 @@
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "argotlunar";
   version = "unstable-2026-08-16";
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation {
     repo = "argotlunar";
     rev = "2440c12f02826bd6e563f7287a232997bc1f0313";
     hash = "sha256-pyZV7fzwISAWZzs5A3L2nDJBjoDi1WXongRFCs9F4hg=";
-   };
+  };
 
   strictDeps = true;
 
@@ -54,7 +56,7 @@ stdenv.mkDerivation {
     install -Dm755 build/*.so -t "$out/lib/vst"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Argotlunar VST granulizer with modern fixes";
     homepage = "https://github.com/mourednik/argotlunar";
     license = lib.licenses.gpl2;
