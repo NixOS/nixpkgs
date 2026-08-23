@@ -211,7 +211,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
-  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+  # The z3 version isabelle uses is only built for x86_64
+  # even though it can work on apple-silicon with rosetta, leave this up to the user
+  doCheck = stdenv.hostPlatform.isx86_64;
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
