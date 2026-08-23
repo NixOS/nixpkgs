@@ -3,7 +3,6 @@
   newScope,
   config,
 }:
-
 lib.makeScope newScope (
   self:
   with self;
@@ -66,6 +65,8 @@ lib.makeScope newScope (
     humantime-fish = callPackage ./humantime-fish.nix { };
 
     hydro = callPackage ./hydro.nix { };
+
+    kubectl-aliases = callPackage ./kubectl-aliases.nix { };
 
     macos = callPackage ./macos.nix { };
 
