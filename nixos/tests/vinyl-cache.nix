@@ -1,10 +1,11 @@
 {
-  pkgs,
+  config,
   package,
   lib,
   ...
 }:
 let
+  pkgs = config.node.pkgs;
   testPath = pkgs.hello;
 in
 {

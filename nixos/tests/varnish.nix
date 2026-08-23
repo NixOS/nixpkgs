@@ -1,5 +1,7 @@
-{ pkgs, package, ... }:
+{ config, package, ... }:
 let
+  pkgs = config.node.pkgs;
+
   testPath = pkgs.hello;
 
   # Same stateDir logic as in nixos/modules/services/web-servers/varnish/default.nix
