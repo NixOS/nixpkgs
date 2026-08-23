@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -31,6 +32,15 @@ buildPythonPackage (finalAttrs: {
     tag = "rel_${lib.replaceString "." "_" finalAttrs.version}";
     hash = "sha256-vVjCn1UaxflEiWp1GRra1aU7GUVGDvIgRXt5E4+lESU=";
   };
+
+  patches = [
+    # https://github.com/sqlalchemy/mako/issues/440
+    (fetchpatch2 {
+      name = "pygments-2.21.0-compat.patch";
+      url = "https://github.com/sqlalchemy/mako/commit/411b4ac6cf054e61a8fb44c236990fda1e41ade4.patch?full_index=1";
+      hash = "sha256-dQk3Qmi42rwX6ZTYXycict21ZcRJC4dPQaSTg8Vjzug=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
