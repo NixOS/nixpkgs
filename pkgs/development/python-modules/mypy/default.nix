@@ -6,6 +6,7 @@
   gitUpdater,
   pythonAtLeast,
   isPyPy,
+  fetchpatch,
 
   # build-system
   pathspec,
@@ -48,6 +49,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-sm/pxQGxH5XuPH7B8i3fpp30KaFU9aSp6BT67UcDPvU=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    # If Python.h isn't included first, a const redefinition error now occurs otherwise.
+    (fetchpatch {
+      url = "https://github.com/python/mypy/commit/46acbe85c0e1703ebf2e6d4c699772edcdcf4652.patch";
+      hash = "sha256-KslHiKqinvvXZoxvCnZXOhCm7i8577PbSdNGudCsjZE=";
+    })
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
