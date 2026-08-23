@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -34,6 +35,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = "-version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for configurable targeted scanning";
