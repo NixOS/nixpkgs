@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [
+      lib.maintainers.PerchunPak
       lib.maintainers.oddlama
       lib.maintainers.patrickdag
       lib.maintainers.yash-garg
