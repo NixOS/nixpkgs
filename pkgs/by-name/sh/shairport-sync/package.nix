@@ -56,13 +56,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-nPf4DDK5fRU+jrWqWIqf3ZHSXZFmGNJ29Zp3Nff+NKE=";
+    hash = "sha256-hwm1B4Q85hF61hzv579L+VTEfE4gvEhsGvh9Xq7XCNE=";
   };
 
   nativeBuildInputs = [

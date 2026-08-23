@@ -200,7 +200,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/TwilitRealm/dusklight/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     mainProgram = "dusklight";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ liberodark ];
   };
 })
