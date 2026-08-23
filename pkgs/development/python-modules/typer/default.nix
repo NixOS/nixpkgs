@@ -38,6 +38,8 @@ buildPythonPackage rec {
     for f in $(find tests -type f -print); do
       # replace `sys.executable -m coverage run` with `sys.executable`
       sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+      # Click 8.4.0 changed the output format
+      sed -i -E 's/"No such option: ([^"]*)"/"No such option '"'"'\1'"'"'"/g' "$f"
     done
   '';
 
@@ -67,6 +69,11 @@ buildPythonPackage rec {
     # fails also on Linux
     "test_show_completion"
     "test_install_completion"
+    # Click 8.4.0 now provides typo suggestions, so disabling the pre-existing
+    # typer option doesn't actually disable typo suggestions.
+    # The click format is sufficiently similar to typer's that it causes this
+    # test to fail.
+    "test_typo_suggestion_disabled"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "test_install_completion"
