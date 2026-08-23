@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-about";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     tag = finalAttrs.version;
-    hash = "sha256-0iY/kZmPYoMAQVU+Z/GWom7IgllYwUM34A80dgFYnXs=";
+    hash = "sha256-WtFiY9SsUw063d7+WuPaVdmsOSInd/ElPemY8/oZ1nM=";
   };
 
-  cargoHash = "sha256-Hp2PRwPpSUKdExOvF2szb8W5+juPv2HfK7cPBm1rm5Q=";
+  cargoHash = "sha256-wd7c8daUHqnmp830KwiGoTwMcwAbhyl3ZP6Psi092kg=";
 
   buildFeatures = [ "cli" ];
 
