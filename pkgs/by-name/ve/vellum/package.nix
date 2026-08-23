@@ -64,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         isc
         mit
       ];
-    maintainers = with lib.maintainers; [ poz ];
+    maintainers = with lib.maintainers; [
+      greyxp1
+      poz
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vellum";
   };
