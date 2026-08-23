@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "mapcidr";
   version = "1.1.97";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "mapcidr";
@@ -18,9 +20,12 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-4gzxKmnl8MOPcdzkwhReZ/cfbjfICY9kxousveoHYR0=";
 
   modRoot = ".";
+
   subPackages = [
     "cmd/mapcidr"
   ];
+
+  ldflags = [ "-s" ];
 
   meta = {
     description = "Small utility program to perform multiple operations for a given subnet/CIDR ranges";
@@ -29,7 +34,7 @@ buildGoModule (finalAttrs: {
       operations, it can be used both as a library and as independent CLI tool.
     '';
     homepage = "https://github.com/projectdiscovery/mapcidr";
-    changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hanemile ];
     mainProgram = "mapcidr";
