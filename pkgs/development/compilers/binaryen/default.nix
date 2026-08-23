@@ -20,8 +20,8 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "de54fd27ecf3e68dfd16b6199c548df77b6a2cc1";
-    hash = "sha256-vjAGE1MnBi7hqfkQ+PVCdTno8muorAgSiDylnAHqKK4=";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
   };
 in
 stdenv.mkDerivation rec {
