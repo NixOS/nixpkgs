@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tecoc";
-  version = "0-unstable-2023-06-21";
+  version = "0-unstable-2026-08-21";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";
     repo = "TECOC";
-    rev = "b4a96395a18c7e64ccaef0e25fdde3b7ef33ac4b";
-    hash = "sha256-KTOGsTtxJh2sneU2VoDNUHcL3m8zt+3rBZTDvK1n02A=";
+    rev = "c18a5ea95591994d36535d603e098836c6b86b7a";
+    hash = "sha256-oseX2benqPEIxT5DDkNYmfIeTQMtEwuKx5g91BXDAK8=";
   };
 
   patches = [
