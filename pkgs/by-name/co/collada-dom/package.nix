@@ -8,7 +8,6 @@
   libxml2,
   minizip,
   pkg-config,
-  pcre-cpp,
   readline,
   uriparser,
   zlib,
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     libxml2
     minizip
-    pcre-cpp
     readline
     uriparser
     zlib
