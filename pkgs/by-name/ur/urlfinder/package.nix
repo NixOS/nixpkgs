@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,7 +21,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-9sIBj1K4N+HTd0OWnhP8+T1pPG9un8+FlpbPFwsV8P8=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   ldflags = [ "-s" ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Tool for passively gathering URLs without active scanning";
