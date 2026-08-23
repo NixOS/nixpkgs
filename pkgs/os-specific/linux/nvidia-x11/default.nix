@@ -144,11 +144,12 @@ rec {
   # Last one supporting Kepler architecture
   legacy_470 =
     let
-      # Source corresponding to https://aur.archlinux.org/packages/nvidia-470xx-dkms
-      aurPatches = fetchgit {
-        url = "https://aur.archlinux.org/nvidia-470xx-utils.git";
-        rev = "7abbeeb510742be09e1eb806c14bab2833a25783";
-        hash = "sha256-hRBws0o4DWI5fvZRn0OwitXRSR9HCkRkgnvnkiZI6Ko=";
+      # Updated variant of AUR nvidia-470xx-dkms patches
+      aurPatches = fetchFromGitHub {
+        owner = "joanbm";
+        repo = "nvidia-470xx-linux-mainline";
+        rev = "b68e153b018bb0b5cd4cbd72cb66c84e3b7d18e9";
+        hash = "sha256-iXq5+UO1+Kk2C6wzodXqVeSjKKYV0c4AGtc00UYfeik=";
       };
     in
     generic {
@@ -158,13 +159,13 @@ rec {
       settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
       persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
 
-      patches = map (patch: "${aurPatches}/${patch}") [
+      patches = map (patch: "${aurPatches}/patches/${patch}") [
         "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
         "0002-Fix-conftest-to-use-a-short-wchar_t.patch"
         "0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
-        "nvidia-470xx-fix-gcc-15.patch"
         "kernel-6.10.patch"
         "kernel-6.12.patch"
+        "nvidia-470xx-fix-gcc-15.patch"
         "nvidia-470xx-fix-linux-6.13.patch"
         "nvidia-470xx-fix-linux-6.14.patch"
         "nvidia-470xx-fix-linux-6.15.patch"
@@ -172,6 +173,10 @@ rec {
         "nvidia-470xx-fix-linux-6.19-part1.patch"
         "nvidia-470xx-fix-linux-6.19-part2.patch"
         "nvidia-470xx-fix-linux-7.0.patch"
+        "nvidia-470xx-fix-linux-7.2-part1.patch"
+        "nvidia-470xx-fix-linux-7.2-part2.patch"
+        "nvidia-470xx-fix-linux-7.2-part3.patch"
+        "nvidia-470xx-fix-linux-7.3.patch"
       ];
       patchFlags = [
         "-p1"
