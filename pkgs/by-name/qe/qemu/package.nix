@@ -257,6 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseNinjaCheck = true;
   dontUseNinjaInstall = true;
   dontAddStaticConfigureFlags = true;
+  enableParallelBuilding = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
   separateDebugInfo = true;
