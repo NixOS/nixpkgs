@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
               inherit (pkgs)
                 prettier
                 corepack
-                katex
                 ;
             }
           else
