@@ -1,0 +1,293 @@
+From c7c18ad81c00b88d01ed7e76614c385ecd83c053 Mon Sep 17 00:00:00 2001
+From: James Addison <jay@jp-hosting.net>
+Date: Mon, 17 Aug 2026 11:45:32 +0100
+Subject: [PATCH 1/3] Tests: reduce HTML escaping to allow tests to pass
+
+TODO: determine why this is necessary; what has changed about
+the HTML escaping recently that requires this?
+---
+ tests/test_builders/test_build_html_code.py | 2 +-
+ tests/test_extensions/test_ext_viewcode.py  | 2 +-
+ tests/test_highlighting.py                  | 6 +++---
+ tests/test_intl/test_intl.py                | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/tests/test_builders/test_build_html_code.py b/tests/test_builders/test_build_html_code.py
+index 24a87c07734..83a19e35828 100644
+--- a/tests/test_builders/test_build_html_code.py
++++ b/tests/test_builders/test_build_html_code.py
+@@ -57,7 +57,7 @@ def test_html_code_role(app: SphinxTestApp) -> None:
+         '<span class="o">+</span> '
+         '<span class="kc">None</span> '
+         '<span class="o">+</span> '
+-        '<span class="s2">&quot;abc&quot;</span>'
++        '<span class="s2">"abc"</span>'
+         '<span class="p">):</span> '
+         '<span class="k">pass</span>'
+     )
+diff --git a/tests/test_extensions/test_ext_viewcode.py b/tests/test_extensions/test_ext_viewcode.py
+index 03493dda4ff..626e518154e 100644
+--- a/tests/test_extensions/test_ext_viewcode.py
++++ b/tests/test_extensions/test_ext_viewcode.py
+@@ -51,7 +51,7 @@ def check_viewcode_output(app: SphinxTestApp) -> str:
+     assert f'<span>class</span>{sp}<span>Class1</span><span>:</span>\n' in result
+     assert (
+         '<span>    </span>'
+-        '<span>&quot;&quot;&quot;this is Class1&quot;&quot;&quot;</span></div>\n'
++        '<span>"""this is Class1"""</span></div>\n'
+     ) in result
+ 
+     return result
+diff --git a/tests/test_highlighting.py b/tests/test_highlighting.py
+index 41dd8395f90..ac021562e7f 100644
+--- a/tests/test_highlighting.py
++++ b/tests/test_highlighting.py
+@@ -93,7 +93,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     ret = bridge.highlight_block('print "Hello sphinx world"', 'default')
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span> '
+-        '<span class="s2">&quot;Hello sphinx world&quot;</span>\n</pre></div>\n'
++        '<span class="s2">"Hello sphinx world"</span>\n</pre></div>\n'
+     )
+ 
+     # default: fallbacks to none if highlighting failed
+@@ -107,7 +107,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span>'
+         '<span class="p">(</span>'
+-        '<span class="s2">&quot;Hello sphinx world&quot;</span>'
++        '<span class="s2">"Hello sphinx world"</span>'
+         '<span class="p">)</span>\n</pre></div>\n'
+     )
+ 
+@@ -116,7 +116,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span>'
+         '<span class="p">(</span>'
+-        '<span class="s2">&quot;Hello sphinx world&quot;</span>'
++        '<span class="s2">"Hello sphinx world"</span>'
+         '<span class="p">)</span>\n</pre></div>\n'
+     )
+ 
+diff --git a/tests/test_intl/test_intl.py b/tests/test_intl/test_intl.py
+index c823a6a3b44..ad77e113783 100644
+--- a/tests/test_intl/test_intl.py
++++ b/tests/test_intl/test_intl.py
+@@ -1647,7 +1647,7 @@ def test_additional_targets_should_not_be_translated(app: SphinxTestApp) -> None
+     assert_count(expected_expr, result, 2)
+ 
+     # ruby code block should not be translated but be highlighted
+-    expected_expr = """<span class="s1">&#39;result&#39;</span>"""
++    expected_expr = """<span class="s1">'result'</span>"""
+     assert_count(expected_expr, result, 1)
+ 
+     # C code block without lang should not be translated and *ruby* highlighted
+@@ -1738,7 +1738,7 @@ def test_additional_targets_should_be_translated(app: SphinxTestApp) -> None:
+     assert_count(expected_expr, result, 1)
+ 
+     # literalinclude should be translated
+-    expected_expr = '<span class="s2">&quot;HTTPS://SPHINX-DOC.ORG&quot;</span>'
++    expected_expr = '<span class="s2">"HTTPS://SPHINX-DOC.ORG"</span>'
+     assert_count(expected_expr, result, 1)
+ 
+     # title should be translated
+@@ -1746,7 +1746,7 @@ def test_additional_targets_should_be_translated(app: SphinxTestApp) -> None:
+     assert_count(expected_expr, result, 2)
+ 
+     # ruby code block should be translated and be highlighted
+-    expected_expr = """<span class="s1">&#39;RESULT&#39;</span>"""
++    expected_expr = """<span class="s1">'RESULT'</span>"""
+     assert_count(expected_expr, result, 1)
+ 
+     # C code block without lang should be translated and *ruby* highlighted
+
+From 0739a4e0f5b1d5ad0a9efd20a942328aed0e59f2 Mon Sep 17 00:00:00 2001
+From: James Addison <jay@jp-hosting.net>
+Date: Mon, 17 Aug 2026 11:54:27 +0100
+Subject: [PATCH 2/3] Tests: codestyle: formatting simplification hinted by
+ `ruff`
+
+---
+ tests/test_extensions/test_ext_viewcode.py | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/tests/test_extensions/test_ext_viewcode.py b/tests/test_extensions/test_ext_viewcode.py
+index 626e518154e..ebe813064b2 100644
+--- a/tests/test_extensions/test_ext_viewcode.py
++++ b/tests/test_extensions/test_ext_viewcode.py
+@@ -49,10 +49,7 @@ def check_viewcode_output(app: SphinxTestApp) -> str:
+     ) in result
+     assert '<span>@decorator</span>\n' in result
+     assert f'<span>class</span>{sp}<span>Class1</span><span>:</span>\n' in result
+-    assert (
+-        '<span>    </span>'
+-        '<span>"""this is Class1"""</span></div>\n'
+-    ) in result
++    assert '<span>    </span><span>"""this is Class1"""</span></div>\n' in result
+ 
+     return result
+ 
+
+From bb316161fa2c6cd20f20e3a9ac3e64c9bd4abf74 Mon Sep 17 00:00:00 2001
+From: James Addison <jay@jp-hosting.net>
+Date: Mon, 17 Aug 2026 12:26:32 +0100
+Subject: [PATCH 3/3] Tests: compatibility for `pygments` v2.21.0
+ change-in-behaviour
+
+---
+ tests/test_builders/test_build_html_code.py |  7 ++++++-
+ tests/test_extensions/test_ext_viewcode.py  |  7 ++++++-
+ tests/test_highlighting.py                  | 11 ++++++++---
+ tests/test_intl/test_intl.py                | 18 +++++++++++++++---
+ 4 files changed, 35 insertions(+), 8 deletions(-)
+
+diff --git a/tests/test_builders/test_build_html_code.py b/tests/test_builders/test_build_html_code.py
+index 83a19e35828..19ec291569e 100644
+--- a/tests/test_builders/test_build_html_code.py
++++ b/tests/test_builders/test_build_html_code.py
+@@ -45,6 +45,11 @@ def test_html_code_role(app: SphinxTestApp) -> None:
+     else:
+         sp = ' '
+ 
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 21):
++        abc = '"abc"'
++    else:
++        abc = '&quot;abc&quot;'
++
+     app.build()
+     content = (app.outdir / 'index.html').read_text(encoding='utf8')
+ 
+@@ -57,7 +62,7 @@ def test_html_code_role(app: SphinxTestApp) -> None:
+         '<span class="o">+</span> '
+         '<span class="kc">None</span> '
+         '<span class="o">+</span> '
+-        '<span class="s2">"abc"</span>'
++        f'<span class="s2">{abc}</span>'
+         '<span class="p">):</span> '
+         '<span class="k">pass</span>'
+     )
+diff --git a/tests/test_extensions/test_ext_viewcode.py b/tests/test_extensions/test_ext_viewcode.py
+index ebe813064b2..efb358d5250 100644
+--- a/tests/test_extensions/test_ext_viewcode.py
++++ b/tests/test_extensions/test_ext_viewcode.py
+@@ -20,6 +20,11 @@ def check_viewcode_output(app: SphinxTestApp) -> str:
+     else:
+         sp = ' '
+ 
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 21):
++        ds = '"""this is Class1"""'
++    else:
++        ds = '&quot;&quot;&quot;this is Class1&quot;&quot;&quot;'
++
+     warnings = re.sub(r'\\+', '/', app.warning.getvalue())
+     assert re.findall(
+         r"index.rst:\d+: WARNING: Object named 'func1' not found in include "
+@@ -49,7 +54,7 @@ def check_viewcode_output(app: SphinxTestApp) -> str:
+     ) in result
+     assert '<span>@decorator</span>\n' in result
+     assert f'<span>class</span>{sp}<span>Class1</span><span>:</span>\n' in result
+-    assert '<span>    </span><span>"""this is Class1"""</span></div>\n' in result
++    assert f'<span>    </span><span>{ds}</span></div>\n' in result
+ 
+     return result
+ 
+diff --git a/tests/test_highlighting.py b/tests/test_highlighting.py
+index ac021562e7f..1fe1f59347f 100644
+--- a/tests/test_highlighting.py
++++ b/tests/test_highlighting.py
+@@ -26,6 +26,11 @@
+ 
+     Formatter.__class_getitem__ = classmethod(lambda cls, name: cls)  # type: ignore[attr-defined]
+ 
++if tuple(map(int, pygments.__version__.split('.')[:2])) < (2, 21):
++    hsw = '&quot;Hello sphinx world&quot;'
++else:
++    hsw = '"Hello sphinx world"'
++
+ 
+ class MyLexer(RegexLexer):
+     name = 'testlexer'
+@@ -93,7 +98,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     ret = bridge.highlight_block('print "Hello sphinx world"', 'default')
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span> '
+-        '<span class="s2">"Hello sphinx world"</span>\n</pre></div>\n'
++        f'<span class="s2">{hsw}</span>\n</pre></div>\n'
+     )
+ 
+     # default: fallbacks to none if highlighting failed
+@@ -107,7 +112,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span>'
+         '<span class="p">(</span>'
+-        '<span class="s2">"Hello sphinx world"</span>'
++        f'<span class="s2">{hsw}</span>'
+         '<span class="p">)</span>\n</pre></div>\n'
+     )
+ 
+@@ -116,7 +121,7 @@ def test_default_highlight(logger: mock.Mock) -> None:
+     assert ret == (
+         '<div class="highlight"><pre><span></span><span class="nb">print</span>'
+         '<span class="p">(</span>'
+-        '<span class="s2">"Hello sphinx world"</span>'
++        f'<span class="s2">{hsw}</span>'
+         '<span class="p">)</span>\n</pre></div>\n'
+     )
+ 
+diff --git a/tests/test_intl/test_intl.py b/tests/test_intl/test_intl.py
+index ad77e113783..db0598e7e56 100644
+--- a/tests/test_intl/test_intl.py
++++ b/tests/test_intl/test_intl.py
+@@ -1638,6 +1638,11 @@ def test_additional_targets_should_not_be_translated(app: SphinxTestApp) -> None
+     else:
+         sp = ' '
+ 
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 21):
++        res = "'result'"
++    else:
++        res = '&#39;result&#39;'
++
+     app.build()
+     # [literalblock.txt]
+     result = (app.outdir / 'literalblock.html').read_text(encoding='utf8')
+@@ -1647,7 +1652,7 @@ def test_additional_targets_should_not_be_translated(app: SphinxTestApp) -> None
+     assert_count(expected_expr, result, 2)
+ 
+     # ruby code block should not be translated but be highlighted
+-    expected_expr = """<span class="s1">'result'</span>"""
++    expected_expr = f"""<span class="s1">{res}</span>"""
+     assert_count(expected_expr, result, 1)
+ 
+     # C code block without lang should not be translated and *ruby* highlighted
+@@ -1726,6 +1731,13 @@ def test_additional_targets_should_be_translated(app: SphinxTestApp) -> None:
+     else:
+         sp = ' '
+ 
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 21):
++        home = '"HTTPS://SPHINX-DOC.ORG"'
++        res = "'RESULT'"
++    else:
++        home = '&quot;HTTPS://SPHINX-DOC.ORG&quot;'
++        res = '&#39;RESULT&#39;'
++
+     app.build()
+     # [literalblock.txt]
+     result = (app.outdir / 'literalblock.html').read_text(encoding='utf8')
+@@ -1738,7 +1750,7 @@ def test_additional_targets_should_be_translated(app: SphinxTestApp) -> None:
+     assert_count(expected_expr, result, 1)
+ 
+     # literalinclude should be translated
+-    expected_expr = '<span class="s2">"HTTPS://SPHINX-DOC.ORG"</span>'
++    expected_expr = f'<span class="s2">{home}</span>'
+     assert_count(expected_expr, result, 1)
+ 
+     # title should be translated
+@@ -1746,7 +1758,7 @@ def test_additional_targets_should_be_translated(app: SphinxTestApp) -> None:
+     assert_count(expected_expr, result, 2)
+ 
+     # ruby code block should be translated and be highlighted
+-    expected_expr = """<span class="s1">'RESULT'</span>"""
++    expected_expr = f"""<span class="s1">{res}</span>"""
+     assert_count(expected_expr, result, 1)
+ 
+     # C code block without lang should be translated and *ruby* highlighted
