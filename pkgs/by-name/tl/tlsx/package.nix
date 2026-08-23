@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -32,6 +33,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TLS grabber focused on TLS based data collection";
