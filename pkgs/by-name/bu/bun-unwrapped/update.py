@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p nix-prefetch-git nixfmt python3
-"""Update Bun and all fixed build inputs used by the source package."""
+#!nix-shell -i python3 -p nix-prefetch-git python3
+"""Update Bun's pinned sources and fixed-output hashes."""
 
 from __future__ import annotations
 
@@ -8,23 +8,24 @@ import argparse
 import json
 import os
 import re
+import shlex
 import subprocess
-import sys
 import tempfile
+from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TypedDict, cast
 
-PACKAGE_DIRECTORY = Path(__file__).resolve().parent
-ROOT = PACKAGE_DIRECTORY.parents[3]
-PACKAGE = PACKAGE_DIRECTORY / "package.nix"
-SOURCES = PACKAGE_DIRECTORY / "sources.nix"
-WEBKIT = PACKAGE_DIRECTORY / "webkit.nix"
+PACKAGE_DIR = Path(__file__).resolve().parent
+NIXPKGS_ROOT = PACKAGE_DIR.parents[3]
+SOURCES_FILE = PACKAGE_DIR / "sources.json"
+
 BUN_REPOSITORY = "https://github.com/oven-sh/bun.git"
 WEBKIT_REPOSITORY = "https://github.com/oven-sh/WebKit.git"
 FAKE_HASH = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
-BOOTSTRAP_ASSETS = {
+BOOTSTRAP_ASSETS: dict[str, str] = {
     "aarch64-darwin": "bun-darwin-aarch64",
     "aarch64-linux": "bun-linux-aarch64",
     "aarch64-linux-musl": "bun-linux-aarch64-musl",
@@ -32,60 +33,101 @@ BOOTSTRAP_ASSETS = {
     "x86_64-linux-musl": "bun-linux-x64-musl-baseline",
 }
 
-# Bun keeps both glibc and musl optional dependencies for Linux targets.
-NODE_MODULE_TARGETS = {
+# Linux installs keep both glibc and musl optional packages.
+NODE_MODULE_TARGETS: dict[str, tuple[str, str]] = {
     "aarch64-darwin": ("darwin", "arm64"),
     "aarch64-linux": ("linux", "arm64"),
     "x86_64-linux": ("linux", "x64"),
 }
+NODE_MODULE_DIRS = (".", "packages/bun-error", "src/node-fallbacks")
+
+
+class BootstrapPin(TypedDict):
+    name: str
+    hash: str
+
+
+class DownloadPin(TypedDict):
+    name: str
+    url: str
+    hash: str
+
+
+class WebKitPin(TypedDict):
+    rev: str
+    hash: str
+    sparseCheckout: list[str]
+
+
+class Sources(TypedDict):
+    version: str
+    revision: str
+    sourceHash: str
+    cargoHash: str
+    bootstrapAssets: dict[str, BootstrapPin]
+    nodeModulesHashes: dict[str, str]
+    downloads: list[DownloadPin]
+    webkit: WebKitPin
+
+
+class Arguments(argparse.Namespace):
+    version: str | None = None
+    force: bool = False
 
 
 @dataclass(frozen=True, slots=True)
-class Download:
+class Archive:
     name: str
     url: str
-    hash: str = ""
+
+
+def print_command(arguments: list[str]) -> None:
+    print("+", shlex.join(arguments), flush=True)
 
 
 def run(
     arguments: list[str],
     *,
-    cwd: Path = ROOT,
-    env: dict[str, str] | None = None,
-    check: bool = True,
-) -> subprocess.CompletedProcess[str]:
-    print("+", " ".join(arguments), flush=True)
-    result = subprocess.run(
-        arguments,
-        cwd=cwd,
-        env=env,
-        check=False,
-        text=True,
-        capture_output=True,
-    )
-    if check and result.returncode != 0:
-        print(result.stdout, end="")
-        print(result.stderr, end="", file=sys.stderr)
-        result.check_returncode()
-    return result
+    cwd: Path = NIXPKGS_ROOT,
+    env: Mapping[str, str] | None = None,
+) -> None:
+    print_command(arguments)
+    _ = subprocess.run(arguments, cwd=cwd, env=env, check=True)
 
 
-def replace_once(text: str, pattern: str, replacement: str, *, flags: int = 0) -> str:
-    updated, count = re.subn(pattern, replacement, text, count=1, flags=flags)
-    if count != 1:
-        raise RuntimeError(f"Expected one match for {pattern!r}, found {count}")
-    return updated
+def output(
+    arguments: list[str],
+    *,
+    cwd: Path = NIXPKGS_ROOT,
+    env: Mapping[str, str] | None = None,
+) -> str:
+    print_command(arguments)
+    return subprocess.check_output(arguments, cwd=cwd, env=env, text=True).strip()
 
 
-def current_version() -> str:
-    match = re.search(r'^  version = "([^"]+)";$', PACKAGE.read_text(), re.MULTILINE)
+def json_output(arguments: list[str]) -> dict[str, object]:
+    return cast(dict[str, object], json.loads(output(arguments)))
+
+
+def capture(
+    pattern: str,
+    text: str,
+    source: str | Path,
+    *,
+    flags: int = 0,
+) -> str:
+    match = re.search(pattern, text, flags)
     if match is None:
-        raise RuntimeError("Cannot find the current Bun version")
+        raise RuntimeError(f"Cannot parse {source}")
     return match.group(1)
 
 
-def release_tags() -> dict[str, str]:
-    result = run(
+def load_sources() -> Sources:
+    return cast(Sources, json.loads(SOURCES_FILE.read_text()))
+
+
+def stable_releases() -> dict[str, str]:
+    lines = output(
         [
             "git",
             "ls-remote",
@@ -94,23 +136,24 @@ def release_tags() -> dict[str, str]:
             BUN_REPOSITORY,
             "refs/tags/bun-v*",
         ]
-    )
-    tags: dict[str, str] = {}
-    for line in result.stdout.splitlines():
+    ).splitlines()
+
+    releases: dict[str, str] = {}
+    for line in lines:
         revision, reference = line.split("\t", 1)
         match = re.fullmatch(r"refs/tags/bun-v(\d+\.\d+\.\d+)", reference)
         if match is not None:
-            tags[match.group(1)] = revision
-    if not tags:
-        raise RuntimeError("No stable Bun release tags found")
-    return tags
+            releases[match.group(1)] = revision
+    if not releases:
+        raise RuntimeError("No stable Bun releases found")
+    return releases
 
 
 def version_key(version: str) -> tuple[int, int, int]:
-    match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", version)
-    if match is None:
+    parts = version.split(".")
+    if len(parts) != 3:
         raise ValueError(f"Unsupported Bun version: {version}")
-    return tuple(map(int, match.groups()))
+    return int(parts[0]), int(parts[1]), int(parts[2])
 
 
 def prefetch_file(url: str, *, unpack: bool = False) -> tuple[str, Path]:
@@ -118,170 +161,154 @@ def prefetch_file(url: str, *, unpack: bool = False) -> tuple[str, Path]:
     if unpack:
         arguments.append("--unpack")
     arguments.append(url)
-    payload = json.loads(run(arguments).stdout)
-    return payload["hash"], Path(payload["storePath"])
+
+    payload = json_output(arguments)
+    hash_value = payload.get("hash")
+    store_path = payload.get("storePath")
+    if not isinstance(hash_value, str) or not isinstance(store_path, str):
+        raise TypeError(f"Invalid prefetch result for {url}")
+    return hash_value, Path(store_path)
 
 
-def prefetch_download(download: Download) -> Download:
-    hash_value, _ = prefetch_file(download.url)
-    return Download(download.name, download.url, hash_value)
+def prefetch_hashes(archives: list[Archive]) -> dict[Archive, str]:
+    def prefetch(archive: Archive) -> tuple[Archive, str]:
+        hash_value, _ = prefetch_file(archive.url)
+        return archive, hash_value
 
-
-def prefetch_downloads(downloads: list[Download]) -> list[Download]:
     with ThreadPoolExecutor(max_workers=4) as executor:
-        results = list(executor.map(prefetch_download, downloads))
-    hashes = {download.name: download for download in results}
-    return [hashes[download.name] for download in downloads]
+        return dict(executor.map(prefetch, archives))
 
 
 def resolve_constant(text: str, expression: str, source: Path) -> str:
     expression = expression.strip()
     if expression.startswith('"'):
-        return json.loads(expression)
-    match = re.search(
-        rf"(?:export\s+)?const\s+{re.escape(expression)}(?:\s*:[^=]+)?\s*=\s*\"([^\"]+)\"",
+        value = cast(object, json.loads(expression))
+        if isinstance(value, str):
+            return value
+        raise RuntimeError(f"Expected a string in {source}: {expression}")
+
+    return capture(
+        rf'(?:export\s+)?const\s+{re.escape(expression)}(?:\s*:[^=]+)?\s*=\s*"([^"]+)"',
         text,
+        source,
     )
-    if match is None:
-        raise RuntimeError(f"Cannot resolve {expression} in {source}")
-    return match.group(1)
 
 
 def validate_llvm_version(source: Path) -> None:
-    tools = (source / "scripts" / "build" / "tools.ts").read_text()
-    match = re.search(r'export const LLVM_VERSION = "([^"]+)";', tools)
-    if match is None:
-        raise RuntimeError("Cannot find Bun's required LLVM version")
-    if not match.group(1).startswith("21.1."):
+    tools_path = source / "scripts/build/tools.ts"
+    version = capture(
+        r'export const LLVM_VERSION = "([^"]+)";',
+        tools_path.read_text(),
+        tools_path,
+    )
+    if not version.startswith("21.1."):
         raise RuntimeError(
-            f"The new Bun source requires LLVM {match.group(1)}; "
-            "update llvmPackages_21 before updating the package"
+            f"Bun requires LLVM {version}; update llvmPackages_21 before updating"
         )
 
 
-def source_downloads(source: Path) -> list[Download]:
-    dependency_directory = source / "scripts" / "build" / "deps"
-    dependencies: dict[str, Download] = {}
+def source_archives(source: Path) -> list[Archive]:
+    directory = source / "scripts/build/deps"
+    archives_by_symbol: dict[str, Archive] = {}
 
-    for path in dependency_directory.glob("*.ts"):
+    for path in sorted(directory.glob("*.ts")):
         text = path.read_text()
         if 'kind: "github-archive"' not in text:
             continue
-        if re.search(r"enabled:\s*cfg\s*=>\s*cfg\.windows\b", text):
+        if re.search(r"enabled:\s*cfg\s*=>\s*cfg\.windows\b", text) is not None:
             continue
 
-        symbol = re.search(r"export const (\w+): Dependency", text)
-        name = re.search(r'name:\s*"([^"]+)"', text)
-        repository = re.search(r'repo:\s*"([^"]+)"', text)
-        commit = re.search(r"commit:\s*([^,\n]+)", text)
-        if None in {symbol, name, repository, commit}:
-            raise RuntimeError(f"Cannot parse GitHub dependency in {path}")
-
-        revision = resolve_constant(text, commit.group(1), path)
-        dependencies[symbol.group(1)] = Download(
-            name.group(1),
-            f"https://github.com/{repository.group(1)}/archive/{revision}.tar.gz",
+        symbol = capture(r"export const (\w+): Dependency", text, path)
+        name = capture(r'name:\s*"([^"]+)"', text, path)
+        repository = capture(r'repo:\s*"([^"]+)"', text, path)
+        commit = capture(r"commit:\s*([^,\n]+)", text, path)
+        revision = resolve_constant(text, commit, path)
+        archives_by_symbol[symbol] = Archive(
+            name,
+            f"https://github.com/{repository}/archive/{revision}.tar.gz",
         )
 
-    index = (dependency_directory / "index.ts").read_text()
-    block = re.search(
+    index_path = directory / "index.ts"
+    all_deps = capture(
         r"export const allDeps:[^=]+?=\s*\[(.*?)\];",
-        index,
-        re.DOTALL,
+        index_path.read_text(),
+        index_path,
+        flags=re.DOTALL,
     )
-    if block is None:
-        raise RuntimeError("Cannot parse scripts/build/deps/index.ts")
-    without_comments = re.sub(r"//.*", "", block.group(1))
-    order = re.findall(r"^\s*(\w+)\s*,", without_comments, re.MULTILINE)
-    downloads = [dependencies[symbol] for symbol in order if symbol in dependencies]
+    order = [
+        match.group(1)
+        for match in re.finditer(
+            r"^\s*(\w+)\s*,",
+            re.sub(r"//.*", "", all_deps),
+            re.MULTILINE,
+        )
+    ]
+    archives = [
+        archives_by_symbol[name] for name in order if name in archives_by_symbol
+    ]
 
-    node_headers = (dependency_directory / "nodejs-headers.ts").read_text()
-    node_version = resolve_constant(
-        node_headers, "NODEJS_VERSION", dependency_directory
-    )
-    downloads.append(
-        Download(
+    node_headers_path = directory / "nodejs-headers.ts"
+    node_headers = node_headers_path.read_text()
+    node_version = resolve_constant(node_headers, "NODEJS_VERSION", node_headers_path)
+    archives.append(
+        Archive(
             "nodejs-headers",
             f"https://nodejs.org/dist/v{node_version}/node-v{node_version}-headers.tar.gz",
         )
     )
-    return downloads
+    return archives
 
 
-def render_sources(downloads: list[Download]) -> str:
-    entries = []
-    for download in downloads:
-        entries.append(
-            f'''  (download "{download.name}"
-    "{download.url}"
-    "{download.hash}"
-  )'''
-        )
-    return (
-        """{ fetchurl }:
+def pin_downloads(
+    archives: list[Archive], hashes: dict[Archive, str]
+) -> list[DownloadPin]:
+    return [
+        {"name": archive.name, "url": archive.url, "hash": hashes[archive]}
+        for archive in archives
+    ]
 
-# Bun's URL-keyed cache consumes the original archives. fetchFromGitHub would
-# unpack them, so keep these inputs as separate fetchurl derivations.
-let
-  download =
-    name: url: hash:
-    fetchurl {
-      inherit url hash;
-      name = "bun-${name}.tar.gz";
-    };
-in
-[
-"""
-        + "\n".join(entries)
-        + "\n]\n"
+
+def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
+    webkit_path = source / "scripts/build/deps/webkit.ts"
+    revision = capture(
+        r'export const WEBKIT_VERSION = "([^"]+)";',
+        webkit_path.read_text(),
+        webkit_path,
     )
+    if revision == current["rev"] and not force:
+        return current
 
-
-def webkit_values(source: Path, *, force: bool) -> tuple[str, str]:
-    source_text = (source / "scripts" / "build" / "deps" / "webkit.ts").read_text()
-    revision_match = re.search(r'export const WEBKIT_VERSION = "([^"]+)";', source_text)
-    if revision_match is None:
-        raise RuntimeError("Cannot find WEBKIT_VERSION")
-    revision = revision_match.group(1)
-
-    webkit_text = WEBKIT.read_text()
-    current_revision = re.search(r'^  rev = "([^"]+)";$', webkit_text, re.MULTILINE)
-    current_hash = re.search(r'^  hash = "([^"]+)";$', webkit_text, re.MULTILINE)
-    if current_revision is None or current_hash is None:
-        raise RuntimeError("Cannot parse webkit.nix")
-    if revision == current_revision.group(1) and not force:
-        return revision, current_hash.group(1)
-
-    sparse_block = re.search(r"sparseCheckout\s*=\s*\[(.*?)\];", webkit_text, re.DOTALL)
-    if sparse_block is None:
-        raise RuntimeError("Cannot parse WebKit sparse checkout paths")
-    sparse_paths = re.findall(r'"([^"]+)"', sparse_block.group(1))
-    payload = json.loads(
-        run(
-            [
-                "nix-prefetch-git",
-                "--quiet",
-                "--url",
-                WEBKIT_REPOSITORY,
-                "--rev",
-                revision,
-                "--name",
-                "bun-webkit-source",
-                "--sparse-checkout",
-                "\n".join(sparse_paths),
-            ]
-        ).stdout
+    payload = json_output(
+        [
+            "nix-prefetch-git",
+            "--quiet",
+            "--url",
+            WEBKIT_REPOSITORY,
+            "--rev",
+            revision,
+            "--name",
+            "bun-webkit-source",
+            "--sparse-checkout",
+            "\n".join(current["sparseCheckout"]),
+        ]
     )
-    hash_value = payload.get("hash") or payload.get("sha256")
+    hash_value = payload.get("hash")
     if not isinstance(hash_value, str):
-        raise TypeError("nix-prefetch-git returned no hash")
-    return revision, hash_value
+        hash_value = payload.get("sha256")
+    if not isinstance(hash_value, str):
+        raise TypeError("nix-prefetch-git returned no WebKit hash")
+
+    return {
+        "rev": revision,
+        "hash": hash_value,
+        "sparseCheckout": current["sparseCheckout"],
+    }
 
 
 def cargo_hash(version: str, source: Path) -> str:
     expression = f"""
 let
-  pkgs = import (builtins.toPath {json.dumps(str(ROOT))}) {{
+  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{
     system = "x86_64-linux";
   }};
 in
@@ -292,23 +319,27 @@ pkgs.rustPlatform.fetchCargoVendor {{
   hash = {json.dumps(FAKE_HASH)};
 }}
 """
-    result = run(
-        ["nix", "build", "--impure", "--no-link", "--expr", expression],
+    arguments = ["nix", "build", "--impure", "--no-link", "--expr", expression]
+    print_command(arguments)
+    result = subprocess.run(
+        arguments,
+        cwd=NIXPKGS_ROOT,
         check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
     )
-    output = result.stdout + result.stderr
-    match = re.search(r"got:\s+(sha256-[A-Za-z0-9+/=]+)", output)
+    match = re.search(r"got:\s+(sha256-[A-Za-z0-9+/=]+)", result.stdout)
     if match is None:
-        raise RuntimeError(f"Cannot determine Cargo vendor hash:\n{output}")
+        raise RuntimeError(f"Cannot determine Cargo vendor hash:\n{result.stdout}")
     return match.group(1)
 
 
-def bootstrap_path(version: str, asset_hash: str) -> Path:
-    asset = BOOTSTRAP_ASSETS["x86_64-linux"]
-    url = f"https://github.com/oven-sh/bun/releases/download/bun-v{version}/{asset}.zip"
+def bootstrap_path(version: str, asset: BootstrapPin) -> Path:
+    url = f"https://github.com/oven-sh/bun/releases/download/bun-v{version}/{asset['name']}.zip"
     expression = f"""
 let
-  pkgs = import (builtins.toPath {json.dumps(str(ROOT))}) {{
+  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{
     system = "x86_64-linux";
   }};
 in
@@ -317,9 +348,9 @@ pkgs.stdenvNoCC.mkDerivation {{
   version = {json.dumps(version)};
   src = pkgs.fetchurl {{
     url = {json.dumps(url)};
-    hash = {json.dumps(asset_hash)};
+    hash = {json.dumps(asset["hash"])};
   }};
-  sourceRoot = {json.dumps(asset)};
+  sourceRoot = {json.dumps(asset["name"])};
   nativeBuildInputs = [ pkgs.unzip pkgs.autoPatchelfHook ];
   buildInputs = [ pkgs.openssl pkgs.stdenv.cc.cc.lib ];
   installPhase = ''
@@ -327,44 +358,47 @@ pkgs.stdenvNoCC.mkDerivation {{
   '';
 }}
 """
-    result = run(
-        [
-            "nix",
-            "build",
-            "--impure",
-            "--no-link",
-            "--print-out-paths",
-            "--expr",
-            expression,
-        ]
+    return Path(
+        output(
+            [
+                "nix",
+                "build",
+                "--impure",
+                "--no-link",
+                "--print-out-paths",
+                "--expr",
+                expression,
+            ]
+        )
     )
-    return Path(result.stdout.strip())
 
 
 def node_modules_hashes(source: Path, bootstrap: Path) -> dict[str, str]:
     hashes: dict[str, str] = {}
-    with tempfile.TemporaryDirectory(prefix="bun-update-node-modules-") as temp:
-        temporary = Path(temp)
 
+    with tempfile.TemporaryDirectory(prefix="bun-update-") as temporary_dir:
+        temporary = Path(temporary_dir)
         for platform, (operating_system, cpu) in NODE_MODULE_TARGETS.items():
-            cache = temporary / f"cache-{platform}"
-            cache.mkdir()
             package_source = temporary / platform
             run(["cp", "-R", "--reflink=auto", str(source), str(package_source)])
             run(["chmod", "-R", "u+w", str(package_source)])
 
+            home = temporary / f"home-{platform}"
+            cache = temporary / f"cache-{platform}"
+            home.mkdir()
+            cache.mkdir()
             environment = os.environ.copy()
             environment.update(
                 {
                     "BUN_INSTALL_CACHE_DIR": str(cache),
-                    "HOME": str(temporary / f"home-{platform}"),
+                    "HOME": str(home),
                 }
             )
-            Path(environment["HOME"]).mkdir()
-            for directory in (".", "packages/bun-error", "src/node-fallbacks"):
+
+            for directory in NODE_MODULE_DIRS:
                 run(
                     [
-                        str(bootstrap / "bin" / "bun"),
+                        str(bootstrap / "bin/bun"),
                         "install",
                         "--frozen-lockfile",
                         f"--os={operating_system}",
@@ -374,8 +408,8 @@ def node_modules_hashes(source: Path, bootstrap: Path) -> dict[str, str]:
                     env=environment,
                 )
 
-            output = temporary / f"output-{platform}"
-            output.mkdir()
+            result = temporary / f"node-modules-{platform}"
+            result.mkdir()
             run(
                 [
                     "cp",
@@ -384,153 +418,97 @@ def node_modules_hashes(source: Path, bootstrap: Path) -> dict[str, str]:
                     "node_modules",
                     "packages/bun-error/node_modules",
                     "src/node-fallbacks/node_modules",
-                    str(output),
+                    str(result),
                 ],
                 cwd=package_source,
             )
-            hashes[platform] = run(["nix", "hash", "path", str(output)]).stdout.strip()
+            hashes[platform] = output(["nix", "hash", "path", str(result)])
+
     return hashes
 
 
-def update_package(
-    version: str,
-    revision: str,
-    source_hash: str,
-    bootstrap_hashes: dict[str, str],
-    node_hashes: dict[str, str],
-    vendor_hash: str,
-) -> None:
-    text = PACKAGE.read_text()
-    text = replace_once(
-        text,
-        r'^  version = "[^"]+";$',
-        f'  version = "{version}";',
-        flags=re.MULTILINE,
-    )
-    text = replace_once(
-        text,
-        r'^  revision = "[^"]+";$',
-        f'  revision = "{revision}";',
-        flags=re.MULTILINE,
-    )
-    text = replace_once(
-        text,
-        r'(src\s*=\s*fetchFromGitHub\s*\{.*?\bhash\s*=\s*")[^"]+',
-        rf"\g<1>{source_hash}",
-        flags=re.DOTALL,
-    )
-    for platform, hash_value in bootstrap_hashes.items():
-        text = replace_once(
-            text,
-            rf'("{re.escape(platform)}"\s*=\s*\{{.*?\bhash\s*=\s*")[^"]+',
-            rf"\g<1>{hash_value}",
-            flags=re.DOTALL,
-        )
-    for platform, hash_value in node_hashes.items():
-        text = replace_once(
-            text,
-            rf'("{re.escape(platform)}"\s*=\s*")[^"]+(";)',
-            rf"\g<1>{hash_value}\g<2>",
-        )
-    text = replace_once(
-        text,
-        r'(cargoDeps\s*=\s*rustPlatform\.fetchCargoVendor\s*\{.*?\bhash\s*=\s*")[^"]+',
-        rf"\g<1>{vendor_hash}",
-        flags=re.DOTALL,
-    )
-    text = replace_once(
-        text,
-        r"# Bun [^\n]+ accepts only LLVM 21\.1\.x\.",
-        f"# Bun {version} accepts only LLVM 21.1.x.",
-    )
-    PACKAGE.write_text(text)
+def save_sources(sources: Sources) -> None:
+    content = json.dumps(sources, indent=2) + "\n"
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            dir=SOURCES_FILE.parent,
+            prefix=f".{SOURCES_FILE.name}.",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            _ = temporary.write(content)
+        _ = temporary_path.replace(SOURCES_FILE)
+    except Exception:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+        raise
 
 
-def update_webkit(revision: str, hash_value: str) -> None:
-    text = WEBKIT.read_text()
-    text = replace_once(
-        text,
-        r'^  rev = "[^"]+";$',
-        f'  rev = "{revision}";',
-        flags=re.MULTILINE,
+def parse_arguments() -> Arguments:
+    parser = argparse.ArgumentParser()
+    _ = parser.add_argument("--version", help="Update to this stable Bun version")
+    _ = parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Regenerate hashes when the version is unchanged",
     )
-    text = replace_once(
-        text,
-        r'^  hash = "[^"]+";$',
-        f'  hash = "{hash_value}";',
-        flags=re.MULTILINE,
-    )
-    WEBKIT.write_text(text)
+    return parser.parse_args(namespace=Arguments())
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--version", help="Update to this stable Bun version")
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Regenerate hashes even when the requested version is current",
-    )
-    arguments = parser.parse_args()
+    arguments = parse_arguments()
+    current = load_sources()
+    releases = stable_releases()
+    version = arguments.version or max(releases, key=version_key)
 
-    current = current_version()
-    tags = release_tags()
-    target = arguments.version or max(tags, key=version_key)
-    if target not in tags:
-        raise RuntimeError(f"Bun release bun-v{target} does not exist")
-    if target == current and not arguments.force:
-        print(f"Bun {current} is already up to date")
+    revision = releases.get(version)
+    if revision is None:
+        raise RuntimeError(f"Bun release bun-v{version} does not exist")
+    if version == current["version"] and not arguments.force:
+        print(f"Bun {version} is already up to date")
         return
 
     source_hash, source = prefetch_file(
-        f"https://github.com/oven-sh/bun/archive/{tags[target]}.tar.gz",
+        f"https://github.com/oven-sh/bun/archive/{revision}.tar.gz",
         unpack=True,
     )
     validate_llvm_version(source)
-    downloads = prefetch_downloads(source_downloads(source))
 
-    bootstrap_downloads = [
-        Download(
+    downloads = source_archives(source)
+    bootstrap_downloads = {
+        platform: Archive(
             platform,
-            f"https://github.com/oven-sh/bun/releases/download/bun-v{target}/{asset}.zip",
+            f"https://github.com/oven-sh/bun/releases/download/bun-v{version}/{name}.zip",
         )
-        for platform, asset in BOOTSTRAP_ASSETS.items()
-    ]
-    bootstrap_hashes = {
-        download.name: download.hash
-        for download in prefetch_downloads(bootstrap_downloads)
+        for platform, name in BOOTSTRAP_ASSETS.items()
     }
+    hashes = prefetch_hashes(downloads + list(bootstrap_downloads.values()))
 
-    webkit_revision, webkit_hash = webkit_values(source, force=arguments.force)
+    bootstrap_assets: dict[str, BootstrapPin] = {}
+    for platform, name in BOOTSTRAP_ASSETS.items():
+        bootstrap_assets[platform] = {
+            "name": name,
+            "hash": hashes[bootstrap_downloads[platform]],
+        }
 
-    current_vendor_hash = re.search(
-        r'cargoDeps\s*=\s*rustPlatform\.fetchCargoVendor\s*\{.*?\bhash\s*=\s*"([^"]+)"',
-        PACKAGE.read_text(),
-        re.DOTALL,
-    )
-    if current_vendor_hash is None:
-        raise RuntimeError("Cannot find the current Cargo vendor hash")
-    vendor_hash = (
-        current_vendor_hash.group(1)
-        if target == current and not arguments.force
-        else cargo_hash(target, source)
-    )
+    webkit = pin_webkit(source, current["webkit"], force=arguments.force)
+    cargo = cargo_hash(version, source)
+    bootstrap = bootstrap_path(version, bootstrap_assets["x86_64-linux"])
 
-    bootstrap = bootstrap_path(target, bootstrap_hashes["x86_64-linux"])
-    node_hashes = node_modules_hashes(source, bootstrap)
-
-    update_package(
-        target,
-        tags[target],
-        source_hash,
-        bootstrap_hashes,
-        node_hashes,
-        vendor_hash,
-    )
-    SOURCES.write_text(render_sources(downloads))
-    update_webkit(webkit_revision, webkit_hash)
-
-    run(["nixfmt", str(PACKAGE), str(SOURCES), str(WEBKIT)])
+    updated: Sources = {
+        "version": version,
+        "revision": revision,
+        "sourceHash": source_hash,
+        "cargoHash": cargo,
+        "bootstrapAssets": bootstrap_assets,
+        "nodeModulesHashes": node_modules_hashes(source, bootstrap),
+        "downloads": pin_downloads(downloads, hashes),
+        "webkit": webkit,
+    }
+    save_sources(updated)
+    print(f"Updated {SOURCES_FILE.relative_to(NIXPKGS_ROOT)}")
 
 
 if __name__ == "__main__":
