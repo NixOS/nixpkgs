@@ -54,7 +54,8 @@ let
             "Start your output with [output-start]."
             f" {question}"
             " Explain what you see, and your judgment."
-            " Then answer that question with exactly YES or NO, followed by [output-end]."
+            " On the final line, output exactly YES or NO."
+            " Then immediately output [output-end] with nothing else after it."
         )
 
         vlm_start = time.time()
