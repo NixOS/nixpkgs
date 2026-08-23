@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aioeagle";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioeagle";
     tag = version;
-    hash = "sha256-ZO5uODCGebggItsEVKtis0uwU67dmSxc7DHzzkBZ9oQ=";
+    hash = "sha256-MJTq8mWdn+QvLhagPwmdXVcGnDB8Y+2ivBFV6h9vnDU=";
   };
 
   build-system = [ setuptools ];
