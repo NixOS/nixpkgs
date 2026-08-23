@@ -1,6 +1,5 @@
 {
   pkgs,
-  stdenv,
   withDoc ? false,
   requireSageTests ? true,
   extraPythonPackages ? ps: [ ],
@@ -131,6 +130,10 @@ let
       rpy2
       sphinx
       pillow
+      # sage.misc.cython compiles code at runtime using setuptools and
+      # distutils (the latter provided by setuptools' shim on python >= 3.12).
+      # Not declared upstream: https://github.com/sagemath/sage/issues/33065
+      setuptools
     ]
     ++ extraPythonPackages python3.pkgs;
 

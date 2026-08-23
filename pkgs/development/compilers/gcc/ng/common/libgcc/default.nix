@@ -21,18 +21,29 @@
   # The following are arguments rather than a `let` bindings only so
   # that it is in scope for the default definition above.
 
-  # Whether a shared libgcc can be built at all here, derived the way the
-  # monolithic build derives it rather than forced off.
+  # Whether to build a shared libgcc.
   #
-  # Shared needs something to link against. Normally that is the libc, on any
-  # format -- PE/COFF included -- which is why every stage after the bootstrap
-  # builds it. ELF additionally allows it *before* the libc exists, because a
-  # shared object may keep undefined symbols; `libgcc_s.so` comes out with an
-  # empty `DT_NEEDED`, which is why the monolithic build ships one even from
-  # its nolibc stage. A PE/COFF DLL must resolve everything at link time, so
-  # there the bootstrap yields only `libgcc.a` -- all it is used for anyway.
+  # In addition to being the default, this is also the *maximal* condition --
+  # by default we enable shared wherever possible, and enabling shared in more
+  # cases should not work. That is why this is also used in the assert below.
   __defaultEnableShared ?
-    stdenv.hostPlatform.hasSharedLibraries && (__haveLinkableLibc || stdenv.hostPlatform.isElf),
+    # Of course if the platform as a whole doesn't support shared libraries, we
+    # cannot either.
+    stdenv.hostPlatform.hasSharedLibraries
+    # libstdc++ and libgomp choke if we try to build a shared libgcc, because
+    # the shared libgcc has fewer symbols, with the unwinder and the emulated-
+    # TLS support in `libgcc_eh.a` instead, which those libraries don't link.
+    #
+    # We could perhaps patch those libraries to link `libgcc_eh.a` too as
+    # needed, but it didn't feel worth the fight at this time.
+    && !stdenv.hostPlatform.isCygwin
+    # Shared needs something to link against. Normally that is the libc, on any
+    # format -- PE/COFF included -- which is why every stage after the bootstrap
+    # builds it. ELF additionally allows it *before* the libc exists, because a
+    # shared object may keep undefined symbols; `libgcc_s.so` comes out with an
+    # empty `DT_NEEDED`. A PE/COFF DLL must resolve everything at link time, so
+    # there the bootstrap yields only `libgcc.a` -- all it is used for anyway.
+    && (__haveLinkableLibc || stdenv.hostPlatform.isElf),
 
   # Whether the compiler has a libc that can actually be linked against, as
   # opposed to nothing at all or a headers-only stand-in.
@@ -54,13 +65,23 @@ let
   # there rather than guess — and pass it on in `passthru` so that `libstdcxx`,
   # which has to agree, reads the same answer instead of probing for its own.
   #
-  # This is what makes the bootstrap build single-threaded without being told
-  # to be: a headers-only package declares no `threadModel`, and a real libc
-  # does. That build exists only to get the libc built and is thrown away
-  # afterwards, so there is nothing to be gained from threading it, and plenty
-  # to go wrong: `gthr-posix.h` includes `<pthread.h>` unconditionally, which
-  # at that point is either absent or a stand-in for a libc that does not exist
-  # yet.
+  # A headers-only package declares no `threadModel`, and a real libc does.
+  # That build exists only to get the libc built and is thrown away afterwards,
+  # so there is nothing to be gained from threading it, and plenty to go wrong:
+  # `gthr-posix.h` includes `<pthread.h>` unconditionally, which at that point
+  # is either absent or a stand-in for a libc that does not exist yet.
+  #
+  # If, in the future, we ever wish to use the headers-only build to avoid
+  # building those other libraries twice (other distros sometimes do this), we
+  # would declare the threading model unconditonally, and then there would be
+  # more cyclic symbol-level dependencies between them and us.
+  #
+  # libgcc (and libstdc++) read this attribute rather than probing the
+  # compiler, which in a split package set is configured separately from the
+  # runtimes and so can disagree. Only if we switched `cc-wrapper` to give GCC
+  # "spec files" (more powerful than CLI flags) would be be able to get the
+  # compiler `-v` flag correct with respect to the libraries it happend to be
+  # wrapped with.
   threadModel = if libc == null then "single" else libc.threadModel or "single";
 in
 
@@ -349,6 +370,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
+
+    # State this rather than leave it to be inferred (see below): configure
+    # works it out from `host != target` alone, so a native build of the
+    # pre-libc stage would come out `false` and compile every file against a
+    # libc that is not there yet. A value given here wins, since configure only
+    # defaults it, with `: ${inhibit_libc=false}`.
+    "inhibit_libc=${if libc == null then "true" else "false"}"
   ]
   # `gcc/configure` sets `inhibit_libc=true` when host != target and
   # `$target_header_dir/stdio.h` does not exist. `inhibit_libc` makes

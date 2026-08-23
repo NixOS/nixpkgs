@@ -74,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.9.1";
+  version = "0.9.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5W/CBFw28xBC7GnbpQ9jxRAdxXBtTdsD3X/YNR6z6iI=";
+    hash = "sha256-T7CKIQOCvJXAdYpwLzQ7oFs/xu30OIuxqa8GpYWLK9U=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           ""
     '';
 
-  cargoHash = "sha256-VivnZNtIjnu1JOKaE7nEIse8300oB9oqGP0aly+9/OQ=";
+  cargoHash = "sha256-7Vp9nNvVbC8McJwQuiIMJWGfU42xtr6rL1/H8WJ1wkQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -227,6 +227,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=callbacks_outlive_manager_executor_tempdir"
     "--skip=sandboxed_session_can_execute_python"
     "--skip=sandboxed_session_default_policy_can_execute_python"
+
+    # Upstream's v0.9.2 bump updated the version example in the generated CLI reference page
+    # but not in the clap doc comment it is generated from, so this golden test fails at the tag.
+    "--skip=docgen::cli_reference_matches_committed"
 
     # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
     "--skip=network_none_blocks_socket"

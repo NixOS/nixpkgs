@@ -206,7 +206,7 @@ makeScopeWithSplicing' {
       # Stage 2: libgcc available, libc not yet — what compiling a libc needs.
       # `binutilsNoLibc` is what keeps the libc out, so nothing here refers to
       # a libc derivation and the cycle stays broken.
-      gccWithLibgcc = wrapCCWith {
+      gccWithLibgccNoCxx = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutilsNoLibc;
@@ -217,6 +217,33 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc-no-libc}/lib"
         ];
       };
+
+      # Freestanding libstdc++ not depending on any libc
+      libstdcxx-no-libc = callPackage ./libstdcxx {
+        stdenv = overrideCC stdenv buildGccPackages.gccWithLibgccNoCxx;
+        # The set's plain `libgcc` is the finished one, which is built after
+        # the libc; only the bootstrap libgcc exists this early.
+        libgcc = gccPackages.libgcc-no-libc;
+      };
+
+      gccWithLibgcc =
+        # Cygwin's libc is in partly C++ and needs C++ headers to build.
+        if stdenv.targetPlatform.isCygwin then
+          wrapCCWith {
+            cc = gccPackages.gcc-unwrapped;
+            libcxx = targetGccPackages.libstdcxx-no-libc;
+            bintools = binutilsNoLibc;
+            extraPackages = [
+              targetGccPackages.libgcc-no-libc
+            ];
+            nixSupport.cc-cflags = [
+              "-B${targetGccPackages.libgcc-no-libc}/lib"
+              # See above for why `libcxx = ...` is not enough.
+              "-B${targetGccPackages.libstdcxx-no-libc}/lib"
+            ];
+          }
+        else
+          gccPackages.gccWithLibgccNoCxx;
 
       # Stage 3: real libc, bootstrap libgcc still. The finished libgcc is what
       # this is about to build.

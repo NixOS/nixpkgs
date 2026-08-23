@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   colorama,
-  fetchFromGitHub,
   griffelib,
   hatchling,
   pdm-backend,
@@ -11,15 +10,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "griffecli";
-  version = "2.2.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mkdocstrings";
-    repo = "griffe";
-    tag = finalAttrs.version;
-    hash = "sha256-RiQRc83o0gZ2jjBjUvmwFQY1Q/kAyF4u2ajBPXrkhzM=";
-  };
+  inherit (griffelib) version src;
 
   sourceRoot = "${finalAttrs.src.name}/packages/griffecli";
 

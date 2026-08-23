@@ -240,6 +240,46 @@ runBuildTests {
     '';
   };
 
+  yaml_1_1Tags = shouldPass {
+    format = formats.yaml_1_1 { tags = true; };
+    input = {
+      tag1 = {
+        "!mytag" = {
+          k1 = "v1";
+        };
+      };
+      tag2 = {
+        "!anothertag" = true;
+      };
+    };
+    expected = ''
+      %YAML 1.1
+      ---
+      tag1: !mytag
+        k1: v1
+      tag2: !anothertag true
+    '';
+  };
+
+  yaml_1_2Tags = shouldPass {
+    format = formats.yaml_1_2 { tags = true; };
+    input = {
+      tag1 = {
+        "!mytag" = {
+          k1 = "v1";
+        };
+      };
+      tag2 = {
+        "!anothertag" = true;
+      };
+    };
+    expected = ''
+      tag1: !mytag
+        k1: v1
+      tag2: !anothertag true
+    '';
+  };
+
   iniAtoms = shouldPass {
     format = formats.ini { };
     input = {

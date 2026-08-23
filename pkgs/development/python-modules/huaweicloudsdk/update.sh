@@ -44,7 +44,8 @@ mapfile -t services < <(
   find "$repo_root" -maxdepth 1 -mindepth 1 -type d -name 'huaweicloud-sdk-*' \
     -printf '%f\n' \
   | sed 's/^huaweicloud-sdk-//' \
-  | sort
+  | sort \
+  | grep -vE '^(all|codecheck|core)$'
 )
 
 if [ "${#services[@]}" -eq 0 ]; then

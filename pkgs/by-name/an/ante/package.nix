@@ -5,7 +5,7 @@
   zlib,
   libffi,
   libxml2,
-  llvmPackages_18,
+  llvmPackages_21,
   ncurses,
   darwin,
   rustPlatform,
@@ -13,20 +13,20 @@
 
 rustPlatform.buildRustPackage {
   pname = "ante";
-  version = "0-unstable-2025-07-12";
+  version = "0-unstable-2026-08-11";
   src = fetchFromGitHub {
     owner = "jfecher";
     repo = "ante";
-    rev = "e1f68f00937ae39badcc42a48c0078b608f294bf";
+    rev = "626094eaa9e94654b0511194a0ecccfd962116cc";
     fetchSubmodules = true;
-    hash = "sha256-mbjV7S705bSseA/P31jiJiktpUEQ8hS+M4kcs2AM1/Y=";
+    hash = "sha256-cDeSp78WMzzlZIcdHkr+mns3iQtCyIh8aP3qaRAAax0=";
   };
 
-  cargoHash = "sha256-cRF1JFqWpGGQO3fIGcatVY1pp65CvNeM/6LFYDJxdpM=";
+  cargoHash = "sha256-b2vGeOLGCmKkhTbDLrtzEcISvE5IGymqECkk57seXSE=";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ llvmPackages_18.llvm ];
+  nativeBuildInputs = [ llvmPackages_21.llvm ];
   buildInputs = [
     zlib
     libffi
@@ -34,23 +34,21 @@ rustPlatform.buildRustPackage {
     ncurses
   ];
 
-  postPatch = ''
-    substituteInPlace tests/golden_tests.rs --replace-fail \
-      'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/release"
-
-    substituteInPlace src/util/mod.rs \
-      --replace-fail '"gcc"' '"${lib.getExe llvmPackages_18.clang}"'
-  '';
   preBuild =
     let
-      major = lib.versions.major llvmPackages_18.llvm.version;
-      minor = lib.versions.minor llvmPackages_18.llvm.version;
+      major = lib.versions.major llvmPackages_21.llvm.version;
+      minor = lib.versions.minor llvmPackages_21.llvm.version;
       llvm-sys-ver = "${major}${builtins.substring 0 1 minor}";
     in
     ''
       # On some architectures llvm-sys is not using the package listed inside nativeBuildInputs
-      export LLVM_SYS_${llvm-sys-ver}_PREFIX=${llvmPackages_18.llvm.dev}
-      export ANTE_STDLIB_DIR=$out/lib
+      export LLVM_SYS_${llvm-sys-ver}_PREFIX=${llvmPackages_21.llvm.dev}
+
+      export ANTE_MINICORO_PATH=$out/lib/aminicoro/minicoro.c
+      mkdir -p $out/lib/aminicoro
+      cp -r $src/aminicoro/* $out/lib/aminicoro
+
+      export ANTE_STDLIB_DIR=$out/lib/stdlib
       mkdir -p $ANTE_STDLIB_DIR
       cp -r $src/stdlib/* $ANTE_STDLIB_DIR
     '';

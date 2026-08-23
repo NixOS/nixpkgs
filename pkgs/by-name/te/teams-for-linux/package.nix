@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_41,
+  electron_42,
   libicns,
   makeDesktopItem,
   makeWrapper,
@@ -15,7 +15,7 @@
 }:
 
 let
-  electron = electron_41;
+  electron = electron_42;
 in
 buildNpmPackage rec {
   pname = "teams-for-linux";

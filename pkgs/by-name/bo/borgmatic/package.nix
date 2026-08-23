@@ -15,7 +15,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "borgmatic";
-  version = "2.1.6";
+  version = "2.1.7";
   pyproject = true;
 
   strictDeps = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Mgx8PnGfTa5j6+53RVntPHa5EDJAY2NQC3fvmyRj24Y=";
+    hash = "sha256-qsB8564wCWBemsxn7vIBmntdabzK1j7agP8ZK2nzdc8=";
   };
 
   passthru.updateScript = nix-update-script { };

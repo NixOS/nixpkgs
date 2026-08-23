@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     (debianPatch "dlang_v2" "1isnvbl3bjnpyphji8k3fl0yd1z4869h0lai143vpwgj6518lpg4")
     (debianPatch "gdc-8" "1md0zwmv50jnak5g9d93bglv9v4z41blinjii6kv3vmgjnajapzj")
     (debianPatch "gcc12" "sha256-3ZFsI2Q4zCT591qCOu2iT2edE52DfO2pUySnMMBhNIQ=")
+
+    # ldc 1.42.0 gains stricter checking of ambiguous "else" clauses for if
+    # statements, so we add braces in order to disambiguate.
+    ./ldc-1.42.0-dangling-else.patch
   ];
 
   postPatch = ''

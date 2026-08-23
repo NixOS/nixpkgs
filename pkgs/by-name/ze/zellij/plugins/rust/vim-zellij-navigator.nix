@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  libiconv,
+  pkgsBuildBuild,
+  stdenv,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vim-zellij-navigator";
@@ -15,6 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-AbfgDhQEbm5qULw2HHxG5EMCYdML4VhHxJaAqP2g3u0=";
+
+  depsBuildBuild = lib.optionals stdenv.buildPlatform.isDarwin [
+    pkgsBuildBuild.stdenv.cc
+    libiconv
+  ];
 
   meta = {
     description = "Seamless navigation between Zellij panes and Vim splits";

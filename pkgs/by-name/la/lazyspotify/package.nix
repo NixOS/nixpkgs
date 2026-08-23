@@ -43,5 +43,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       eConnah
     ];
+    broken = true;
   };
 })
