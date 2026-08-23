@@ -121,6 +121,8 @@ in
           then
             # No bindist, "borrowing" the GHC from Debian
             bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isRiscV64 then
+            bb.packages.ghc966DebianBinary
           else
             bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
@@ -135,6 +137,8 @@ in
             && pkgs.stdenv.hostPlatform.isAbiElfv1
           then
             # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isRiscV64 then
             bb.packages.ghc966DebianBinary
           else if stdenv.buildPlatform.isi686 then
             bb.packages.ghc948
@@ -152,6 +156,8 @@ in
             && pkgs.stdenv.hostPlatform.isAbiElfv1
           then
             # No bindist, "borrowing" the GHC from Debian
+            bb.packages.ghc966DebianBinary
+          else if stdenv.buildPlatform.isRiscV64 then
             bb.packages.ghc966DebianBinary
           else if stdenv.buildPlatform.isi686 then
             bb.packages.ghc967
