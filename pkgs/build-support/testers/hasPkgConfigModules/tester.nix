@@ -56,7 +56,7 @@ runCommand testName
           } pkg-config module $moduleName exists at version $moduleVersion != $version (drv version)"
           ((versionMismatch+=1))
         fi
-        printf '%s\t%s\n' "$moduleName" "$version" >> "$out"
+        printf '# %s\t%s\n' "$moduleName" "$version" >> "$out"
       else
         echo "❌ pkg-config module $moduleName was not found"
         ((notFound+=1))
