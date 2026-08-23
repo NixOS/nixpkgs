@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "lib50";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   # latest GitHub release is several years old. Pypi is up to date.
   src = fetchPypi {
     pname = "lib50";
     inherit version;
-    hash = "sha256-p+g7rMxrpfMVmeWfzy9wh//dhF0L5H922dkqyqlWolM=";
+    hash = "sha256-0An1J09FajPj6PPCmfegdi1qVi0SrNytBEZX1hL+8jY=";
   };
 
   build-system = [ setuptools ];
