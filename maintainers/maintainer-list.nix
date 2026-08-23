@@ -2024,6 +2024,11 @@
     githubId = 29845794;
     name = "Duncan Russell";
   };
+  anotherhadi = {
+    github = "anotherhadi";
+    githubId = 112569860;
+    name = "Hadi";
+  };
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
