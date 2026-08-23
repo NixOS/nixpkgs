@@ -74,7 +74,7 @@ let
     mainProgram = "discord";
     maintainers = with lib.maintainers; [
       artturin
-      FlameFlag
+      _4evy
       infinidoge
       jopejoe1
       Scrumplex

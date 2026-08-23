@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://raycast.app/";
     license = lib.licenses.unfree;
     mainProgram = "raycast-beta";
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [ _4evy ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

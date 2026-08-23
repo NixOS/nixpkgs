@@ -306,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rectangleapp.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       Intuinewin
       wegank
     ];

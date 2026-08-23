@@ -171,7 +171,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt-dlp";
     maintainers = with lib.maintainers; [
       SuperSandro2000
-      FlameFlag
+      _4evy
     ];
   };
 }
