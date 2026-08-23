@@ -8,13 +8,13 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyisbn";
   version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qPOS8G/ZUqH23mvhSKcs93s8UfpXIxIc0cIgGvRjpbM=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for working with 10- and 13-digit ISBNs";
     homepage = "https://github.com/JNRowe/pyisbn";
-    changelog = "https://github.com/JNRowe/pyisbn/releases/tag/v${version}";
+    changelog = "https://github.com/JNRowe/pyisbn/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})
