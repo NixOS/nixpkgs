@@ -12387,6 +12387,8 @@ self: super: with self; {
 
   oic = callPackage ../development/python-modules/oic { };
 
+  oidc-provider-mock = callPackage ../development/python-modules/oidc-provider-mock { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
