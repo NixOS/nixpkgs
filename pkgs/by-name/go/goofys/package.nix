@@ -3,27 +3,32 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule {
   pname = "goofys";
-  version = "unstable-2022-04-21";
+  version = "0.24.0-unstable-2022-04-21";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kahing";
     repo = "goofys";
     # Same as v0.24.0 but migrated to Go modules
     rev = "829d8e5ce20faa3f9f6f054077a14325e00e9249";
-    sha256 = "sha256-6yVMNSwwPZlADXuPBDRlgoz4Stuz2pgv6r6+y2/C8XY=";
+    hash = "sha256-6yVMNSwwPZlADXuPBDRlgoz4Stuz2pgv6r6+y2/C8XY=";
   };
 
-  vendorHash = "sha256-shFld293pdmVcnu3p0NoBmPGLJddZd4O/gJ8klgdlQ8=";
+  vendorHash = "sha256-2N8MshBo9+2q8K00eTW5So6d8ZNRzOfQkEKmxR428gI=";
 
-  subPackages = [ "." ];
+  # Tests require networking
+  doCheck = false;
 
-  # Tests are using networking
-  postPatch = ''
-    rm internal/*_test.go
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  preVersionCheck = ''
+    export version=0.24.0
   '';
 
   meta = {
