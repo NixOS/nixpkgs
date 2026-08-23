@@ -94,7 +94,16 @@ let
       # global settings
       ${lib.concatStringsSep "\n" (
         lib.flatten (
-          lib.mapAttrsToList cgitrcEntry ({ virtual-root = cfg.nginx.location; } // cfg.settings)
+          lib.mapAttrsToList cgitrcEntry (
+            {
+              virtual-root = cfg.nginx.location;
+              css = "${stripLocation cfg}/cgit.css";
+              favicon = "${stripLocation cfg}/favicon.ico";
+              js = "${stripLocation cfg}/cgit.js";
+              logo = "${stripLocation cfg}/cgit.png";
+            }
+            // cfg.settings
+          )
         )
       )}
       ${lib.optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
@@ -300,12 +309,27 @@ in
       lib.mapAttrsToList (name: cfg: {
         ${cfg.nginx.virtualHost} = {
           locations =
-            (genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
-              fileName:
-              lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
-              }
-            ))
+            # alias cgit's default assets
+            lib.mapAttrs'
+              (
+                option: fileName:
+                lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
+                  alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
+                }
+              )
+              (
+                lib.filterAttrs (option: fileName: !cfg.settings ? ${option}) {
+                  css = "cgit.css";
+                  favicon = "favicon.ico";
+                  js = "cgit.js";
+                  logo = "cgit.png";
+                }
+              )
+            # robots.txt
+            // lib.optionalAttrs (cfg.nginx.location == "/") {
+              "= /robots.txt".alias = lib.mkDefault "${cfg.package}/cgit/robots.txt";
+            }
+            # Git HTTP backend
             // lib.optionalAttrs cfg.gitHttpBackend.enable {
               "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
                 fastcgiParams = rec {
@@ -319,6 +343,7 @@ in
                 extraConfig = mkFastcgiPass name cfg;
               };
             }
+            # cgit
             // {
               "${stripLocation cfg}/" = {
                 fastcgiParams = {
