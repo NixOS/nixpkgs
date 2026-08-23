@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -18,15 +19,7 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 -t $out/share/fonts/opentype fonts/otf/*.otf
-    install -Dm444 -t $out/share/fonts/truetype fonts/ttf/*.ttf
-    install -Dm444 -t $out/share/fonts/variable fonts/variable/*.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Digital revival of the Brygada serif typeface";
