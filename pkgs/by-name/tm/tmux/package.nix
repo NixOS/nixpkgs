@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
   version = "3.7c";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "man"
