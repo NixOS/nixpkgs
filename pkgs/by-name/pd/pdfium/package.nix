@@ -436,6 +436,9 @@ stdenv.mkDerivation (finalAttrs: {
         integration = pkgsBuildHost.callPackage ./tests {
           pdfium = finalAttrs.finalPackage;
         };
+        pypdfium2 = pkgsBuildHost.python3Packages.pypdfium2.override {
+          pdfium = finalAttrs.finalPackage;
+        };
       };
   };
 
