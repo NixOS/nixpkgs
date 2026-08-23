@@ -16,10 +16,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-9agV8Y6Vk7CFacm8o6sPJXW23OP+5Ze7kK38QHLmOiU=";
   };
 
+  cargoHash = "sha256-u662PZWoIWdMEfUXiViKu+vs2fagCSZ12P2RYXSx2K4=";
+
+  __structuredAttrs = true;
   buildInputs = [ alsa-lib ];
   nativeBuildInputs = [ pkgconf ];
-
-  cargoHash = "sha256-u662PZWoIWdMEfUXiViKu+vs2fagCSZ12P2RYXSx2K4=";
 
   meta = {
     description = "A native SDR client for many radios, written in Rust, with native and web remote UI";
