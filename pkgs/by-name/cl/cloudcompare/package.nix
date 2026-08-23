@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   makeDesktopItem,
   copyDesktopItems,
   cmake,
@@ -15,39 +14,35 @@
   laszip,
   mpfr,
   pcl,
-  libsForQt5,
+  qt6Packages,
   nixosTests,
   onetbb,
   xercesc,
   wrapGAppsHook3,
+  pkg-config,
+  libusb1,
+  hidapi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
-  version = "2.13.2";
+  version = "2.13.2-unstable-2026-08-21";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
+    rev = "be1fdb0fd05ec42d6922d7f18b22aab71c168ad6";
+    hash = "sha256-dlB3d6AE8R5SjjVUHvYv3D4FjlOnEHHLoDexejwUp6U=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # https://github.com/CloudCompare/CloudCompare/pull/2208
-    (fetchpatch2 {
-      url = "https://github.com/CloudCompare/CloudCompare/commit/8e1c0562a7c19fd26ccd0c23bb05fb7c36980e0c.patch?full_index=1";
-      hash = "sha256-DARxLiRjcBJEo63o92ujjxBU42Y8CY2c7px8Y9UD5A4=";
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
-    eigen # header-only
-    wrapGAppsHook3
     copyDesktopItems
-    libsForQt5.wrapQtAppsHook
+    eigen # header-only
+    pkg-config
+    qt6Packages.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -57,12 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     gdal
     gmp
     laszip
+    libusb1
     mpfr
-    pcl
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
-    libsForQt5.qttools
     onetbb
+    pcl
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qttools
     xercesc
   ];
 
@@ -123,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
   preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    qtWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ hidapi ]}
+    )
   '';
 
   desktopItems = [
