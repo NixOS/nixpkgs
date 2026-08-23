@@ -9900,6 +9900,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mesone-nvim = buildVimPlugin {
+    pname = "mesone.nvim";
+    version = "0-unstable-2026-05-05";
+    src = fetchFromGitHub {
+      owner = "marc0x71";
+      repo = "mesone.nvim";
+      rev = "82e46ba8ec2d4eb2ae251b5f4c9d74d81f580ca3";
+      hash = "sha256-F/BVo6anyOiOuStYsWiXRdYrVtq5eVCrZk+shsCSfvg=";
+    };
+    meta.homepage = "https://github.com/marc0x71/mesone.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   messenger-nvim = buildVimPlugin {
     pname = "messenger.nvim";
     version = "0-unstable-2024-07-18";
