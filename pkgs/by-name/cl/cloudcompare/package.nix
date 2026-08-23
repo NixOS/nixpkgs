@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
   version = "2.13.2-unstable-2026-08-21";
 
+  scriptDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
