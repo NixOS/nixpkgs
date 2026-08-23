@@ -927,6 +927,7 @@ stdenv.mkDerivation (
 
       inherit llvmPackages;
       inherit enableShared;
+      inherit enableProfiledLibs;
       inherit hasHaddock;
 
       # Expose hadrian used for bootstrapping, for debugging purposes
