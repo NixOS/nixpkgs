@@ -20,6 +20,24 @@ in
       default = null;
       description = "Portal to discover targets on";
     };
+
+    discoverType = mkOption {
+      description = ''
+        Target discovery type.
+        Change this if you want to discover your targes via an iSNS server
+        or use the targets provided via firmware settings.
+        See {manpage}`iscsiadm(8)`.
+      '';
+      default = "sendtargets";
+      example = "sendtargets";
+      type = enum [
+        "st"
+        "sendtargets"
+        "isns"
+        "fw"
+      ];
+    };
+
     name = mkOption {
       type = str;
       description = "Name of this iscsi initiator";
@@ -81,7 +99,7 @@ in
       wantedBy = [ "remote-fs.target" ];
       serviceConfig.ExecStartPre =
         mkIf (cfg.discoverPortal != null)
-          "${cfg.package}/bin/iscsiadm --mode discoverydb --type sendtargets --portal ${escapeShellArg cfg.discoverPortal} --discover";
+          "${cfg.package}/bin/iscsiadm --mode discoverydb --type ${cfg.discoverType} --portal ${escapeShellArg cfg.discoverPortal} --discover";
     };
 
     environment.systemPackages = [ cfg.package ];
