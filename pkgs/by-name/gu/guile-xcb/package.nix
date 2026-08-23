@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "guile-xcb";
-  version = "unstable-2017-05-29";
+  version = "1.3-unstable-2017-05-28";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwitmer";
@@ -21,11 +24,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    guile_2_2
     pkg-config
+    texinfo
   ];
   buildInputs = [
     guile_2_2
-    texinfo
   ];
 
   configureFlags = [
