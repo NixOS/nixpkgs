@@ -17,7 +17,7 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-security";
   version = "8.4";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.security";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BIde2p1jxru2QGp+2/AHNep4jQRYz+bLP+oNJTKV4EA=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Zope Security Framework";
     homepage = "https://github.com/zopefoundation/zope.security";
-    changelog = "https://github.com/zopefoundation/zope.security/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.security/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})
