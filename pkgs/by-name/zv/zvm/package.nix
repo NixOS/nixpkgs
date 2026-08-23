@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "zvm";
   version = "0.8.27";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
@@ -23,6 +25,10 @@ buildGoModule (finalAttrs: {
     substituteInPlace cli/meta/version.go \
       --replace-fail 'VERSION = "v0.8.25"' 'VERSION = "v${finalAttrs.version}"'
   '';
+
+  ldflags = [
+    "-s"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
