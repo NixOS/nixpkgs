@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,10 +21,19 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-bSpMYQvrlR9T06dYF8gaTZmMAp6Gnb2cfsYCUes7i2s=";
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
   ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Tool to gather network ranges using ASN information";
