@@ -11,13 +11,13 @@ let
   jdk = jdk17;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.6.1";
+  version = "5.7.0";
   pname = "keystore-explorer";
   src = fetchzip {
     url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${finalAttrs.version}/kse-${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
-    sha256 = "sha256-yhYQpeBoicILYEXpW+oqDdF+KieDbNmTFpxL+aA8vTw=";
+    sha256 = "sha256-yYekrnutgy2KFmQDRAU2BUrj6XqmsE9i9AhnAB/U2ko=";
   };
 
   # glib is necessary so file dialogs don't hang.
