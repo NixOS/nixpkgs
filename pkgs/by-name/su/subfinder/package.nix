@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.15.0";
+  version = "2.16.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "subfinder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J/sSTpVfEDJQldbyVEPQ0I+j2JfGXaRKIV8Lli/Lsh0=";
+    hash = "sha256-eBRi33UbaK5vLvt/ag7g0aN4v5rAS6aeNq1cgfr9qsc=";
   };
 
-  vendorHash = "sha256-WGOP7gQnHeqUzdF7oBHhHuNINeoMVaGKoQpSLTVq8ho=";
+  vendorHash = "sha256-VAnRGCiqmqEilWGuMtHTQg3hh38inPXJW3ImZrIE1+Y=";
 
   patches = [
     # Disable automatic version check
