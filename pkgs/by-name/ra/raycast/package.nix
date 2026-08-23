@@ -10,14 +10,17 @@
   undmg,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "raycast";
-  version = "1.104.24";
+  version = "2.0.5.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     name = "Raycast.dmg";
-    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
-    hash = "sha256-kn9bZYSeASKj23NYiWX76OIRXCTonAbUCATyYhPdGgo=";
+    url = "https://x-r2.raycast-releases.com/Raycast_2.0.5.0_7ecbc62a97_arm64.dmg";
+    hash = "sha256-8/EJVGTfTVqN+4U9vT84TLpo137RWnD2YtFTtYK7tH0=";
   };
 
   dontPatch = true;
@@ -32,8 +35,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/Raycast.app
-    cp -R . $out/Applications/Raycast.app
+    mkdir -p "$out/Applications/Raycast.app"
+    cp -R . "$out/Applications/Raycast.app"
+    mkdir -p "$out/bin"
+    ln -s "$out/Applications/Raycast.app/Contents/MacOS/Raycast" "$out/bin/raycast"
 
     runHook postInstall
   '';
@@ -64,6 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
     license = lib.licenses.unfree;
+    mainProgram = "raycast";
     maintainers = with lib.maintainers; [
       lovesegfault
       stepbrobd
@@ -75,4 +81,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}
