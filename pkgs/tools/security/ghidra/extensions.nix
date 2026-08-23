@@ -35,6 +35,8 @@ lib.makeScope newScope (self: {
 
   ret-sync = self.callPackage ./extensions/ret-sync { };
 
+  reva = self.callPackage ./extensions/reva { };
+
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
   wasm = self.callPackage ./extensions/wasm { inherit ghidra; };
