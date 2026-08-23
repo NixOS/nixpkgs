@@ -1,28 +1,25 @@
 {
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. {
-    inherit system;
-    config = { };
-  },
+  pkgs,
+  lib,
+  runTest,
 }:
 
 let
-  inherit (pkgs.lib)
+  inherit (lib)
     concatMapStrings
     listToAttrs
     optionals
     optionalString
     ;
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
 
   hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
   hello64 = "${pkgs.pkgsCross.mingwW64.hello}/bin/hello.exe";
 
   makeWineTest = packageSet: exes: variant: rec {
     name = "${packageSet}-${variant}";
-    value = makeTest {
+    value = runTest {
       inherit name;
-      meta = with pkgs.lib.maintainers; {
+      meta = with lib.maintainers; {
         maintainers = [ chkno ];
       };
 
@@ -74,6 +71,6 @@ listToAttrs (
       ])
       # This wayland combination times out after spending many hours.
       # https://hydra.nixos.org/job/nixos/trunk-combined/nixos.tests.wine.wineWowPackages-wayland.x86_64-linux
-      (pkgs.lib.remove "wayland" variants)
+      (lib.remove "wayland" variants)
   )
 )
