@@ -1,0 +1,41 @@
+{
+    "type": "application",
+    "source-directories": [
+        "src"
+    ],
+    "elm-version": "0.19.1",
+    "dependencies": {
+        "direct": {
+            "elm/core": "1.0.5",
+            "elm/json": "1.1.4",
+            "elm/project-metadata-utils": "1.0.2",
+            "jfmengels/elm-review": "2.16.6",
+            "jfmengels/elm-review-code-style": "1.2.0",
+            "jfmengels/elm-review-common": "1.3.5",
+            "jfmengels/elm-review-debug": "1.0.8",
+            "jfmengels/elm-review-documentation": "2.0.4",
+            "jfmengels/elm-review-simplify": "2.1.15",
+            "jfmengels/elm-review-unused": "1.2.6",
+            "stil4m/elm-syntax": "7.3.9"
+        },
+        "indirect": {
+            "elm/bytes": "1.0.8",
+            "elm/html": "1.0.1",
+            "elm/parser": "1.1.0",
+            "elm/random": "1.0.0",
+            "elm/regex": "1.0.0",
+            "elm/time": "1.0.0",
+            "elm/virtual-dom": "1.0.5",
+            "elm-explorations/test": "2.2.1",
+            "pzp1997/assoc-list": "1.0.0",
+            "rtfeldman/elm-hex": "1.0.0",
+            "stil4m/structured-writer": "1.0.3"
+        }
+    },
+    "test-dependencies": {
+        "direct": {
+            "elm-explorations/test": "2.2.1"
+        },
+        "indirect": {}
+    }
+}
