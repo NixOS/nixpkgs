@@ -235,6 +235,10 @@ in
       ]
       "The corresponding package was removed from nixpkgs, as it depended on qt5 webengine. A replacements based on tauri exist upstream, but requires non-trivial maintainance in nixpkgs to update."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "go-neb"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule
       [
         "services"
