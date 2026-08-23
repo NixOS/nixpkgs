@@ -175,6 +175,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/oh-my-pi
     cp -R packages python node_modules $out/lib/oh-my-pi/
+    chmod -R u+w $out/lib/oh-my-pi
+
+    # Prune foreign binaries to eliminate dead code and prevent autoPatchelf issues
+    find $out/lib/oh-my-pi/node_modules -type d \( -name '*musl*' -o -name '*sunos*' -o -name '*win32*' \) -exec rm -rf {} +
+    find $out/lib/oh-my-pi/node_modules -type f -name '*.exe' -delete
 
     makeWrapper "${lib.getExe bun}" "$out/bin/omp" \
       --add-flags "$out/lib/oh-my-pi/packages/coding-agent/dist/cli.js" \
