@@ -6,7 +6,9 @@
 
 buildGoModule {
   pname = "go-bindata-assetfs";
-  version = "unstable-2022-04-12";
+  version = "1.0.1-unstable-2022-04-12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elazarl";
