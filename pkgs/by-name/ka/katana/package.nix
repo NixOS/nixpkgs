@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,9 +21,16 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/katana" ];
 
-  ldflags = [
-    "-s"
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Next-generation crawling and spidering framework";
