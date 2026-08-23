@@ -5,7 +5,6 @@
   writeShellApplication,
   cacert,
   curl,
-  jq,
   openssl,
   undmg,
 }:
@@ -48,19 +47,20 @@ stdenvNoCC.mkDerivation {
     runtimeInputs = [
       cacert
       curl
-      jq
       openssl
     ];
     text = ''
-      url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
-      version=$(echo "$url" | jq -r '.version')
-
-      arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
-      arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
+      download_url="https://x.raycast-releases.com/download?platform=macos&architecture=arm64"
+      url=$(curl --fail --silent --show-error --head --output /dev/null --write-out '%{redirect_url}' "$download_url")
+      filename="''${url##*/}"
+      version="''${filename#Raycast_}"
+      version="''${version%%_*}"
+      hash="sha256-$(curl --fail --silent --show-error --location "$url" | openssl dgst -sha256 -binary | openssl base64)"
 
       sed -i -E \
-        -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
-        -e '/src = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
+        -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
+        -e 's|url = "https://x-r2\.raycast-releases\.com/Raycast_[^"]*_arm64\.dmg";|url = "'"$url"'";|' \
+        -e 's|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$hash"'";|' \
         ./pkgs/by-name/ra/raycast/package.nix
     '';
   });
