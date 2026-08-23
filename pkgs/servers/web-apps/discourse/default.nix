@@ -59,8 +59,8 @@ let
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
-    rev = "v${version}";
-    sha256 = "sha256-sGygaOCygtDVjg8uBGdDVaRouUKib8aAukaBAY8aQ9w=";
+    tag = "v${version}";
+    hash = "sha256-sGygaOCygtDVjg8uBGdDVaRouUKib8aAukaBAY8aQ9w=";
   };
 
   pnpm = pnpm_10;
@@ -589,7 +589,10 @@ let
     };
     meta = {
       homepage = "https://www.discourse.org/";
-      platforms = lib.platforms.linux;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       maintainers = with lib.maintainers; [
         leona
         talyz
