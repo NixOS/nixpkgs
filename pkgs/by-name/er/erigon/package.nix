@@ -44,9 +44,9 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      # avoid testing‐releases
+      # avoid testing‐releases; erigon tags are v-prefixed
       "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)$"
+      "^v?(\\d+\\.\\d+\\.\\d+)$"
     ];
   };
 
