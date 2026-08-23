@@ -9,6 +9,7 @@
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -55,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
