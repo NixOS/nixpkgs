@@ -7,7 +7,7 @@
     ryand56
   ];
 
-  nodes.machine =
+  containers.machine =
     { config, pkgs, ... }:
     {
       environment.etc."anubis-botPolicy.json".text = lib.generators.toJSON { } {
