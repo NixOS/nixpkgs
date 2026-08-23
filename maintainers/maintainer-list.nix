@@ -16439,6 +16439,12 @@
     githubId = 725613;
     name = "Linus Arver";
   };
+  linusemr618 = {
+    email = "emmerichlinus@gmail.com";
+    github = "linusemr618";
+    githubId = 96724651;
+    name = "Linus Emmerich";
+  };
   linuxissuper = {
     email = "m+nix@linuxistcool.de";
     matrix = "@m:linuxistcool.de";
