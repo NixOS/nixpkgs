@@ -1,12 +1,9 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-
-  lib ? pkgs.lib,
+  pkgs,
+  lib,
+  runTest,
 }:
 let
-  makeTest = import ./make-test-python.nix;
   mkTestName =
     pkg: "${pkg.pname}_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor pkg.version)}";
   redisPackages = {
@@ -17,7 +14,7 @@ let
       package,
       name ? mkTestName package,
     }:
-    makeTest {
+    runTest {
       inherit name;
       meta.maintainers = lib.teams.redis.members;
 

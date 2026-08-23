@@ -1501,7 +1501,10 @@ in
   readeck = runTest ./readeck.nix;
   realm = runTest ./realm.nix;
   rebuilderd = runTest ./rebuilderd.nix;
-  redis = handleTest ./redis.nix { };
+  redis = import ./redis.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   redlib = runTest ./redlib.nix;
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   refind = runTest ./refind.nix;
