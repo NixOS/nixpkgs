@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-deprecated";
-  version = "1.3.1.20260520";
+  version = "1.3.1.20260728";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_deprecated";
     inherit (finalAttrs) version;
-    hash = "sha256-TQ2eVSFDLZzogWn7i3k7RdcNjozBp+zVpEZau/g8mrQ=";
+    hash = "sha256-yrg2/c9rV9Pid+YtnXbYpMVWomOf0OkMtVX6DoMA0WQ=";
   };
 
   postPatch = ''

@@ -2,42 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  flit-core,
+  freezegun,
   hatchling,
-
-  # dependencies
+  pytestCheckHook,
   requests,
   securesystemslib,
-
-  # tests
-  ed25519,
-  freezegun,
-  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "tuf";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "python-tuf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CPbZOpUYi7MWKLMj7kwTsmEkxLCf4wU7IOCcbzMkPlU=";
+    hash = "sha256-pn1M3e3Vzu2CYp/3KXkreaHunr+Nblph0QBWAkTmrIE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.27.0" "hatchling"
+      --replace-fail "hatchling==1.29.0" "hatchling"
   '';
 
-  build-system = [
-    flit-core
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     requests
@@ -49,7 +38,6 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    ed25519
     freezegun
     pytestCheckHook
   ];

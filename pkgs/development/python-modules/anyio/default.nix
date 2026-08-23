@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -41,6 +42,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-MEU0c8/NI1vlyNtBsg/hGLv6DR619ZqoZzNY1eJLEWM=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-anyio-Fixed-timeout-in-test_keyboard_interrupt_does_not_resume_test.patch";
+      url = "https://github.com/agronholm/anyio/commit/61af6c65c4f047fe5f2d71ca0d4983537a18950c.patch";
+      hash = "sha256-xSyoq7B4u9ygc/fZGDyF5uHhZud8IQ84Yb+/C1oL8WM=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 
@@ -92,8 +101,6 @@ buildPythonPackage rec {
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
     "test_dynamic_async_fixture_access_does_not_hang"
-    # 5 second timeout expires on weak hardware
-    "test_keyboard_interrupt_does_not_resume_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
 

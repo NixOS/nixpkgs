@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "7.1.4";
+  version = "7.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
     tag = "v${version}";
-    hash = "sha256-zgIUNzDVQMBjaaEitD3ACVd8ZXCeXu3MBTEapzH5sSY=";
+    hash = "sha256-RDZs6It9QkkzZnrXoH3s67TIVfkLsEodAfqqykv4cOc=";
   };
 
   build-system = [

@@ -12,6 +12,7 @@
   tomlkit,
 
   # tests
+  gitMinimal,
   gitpython,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    gitMinimal
     gitpython
     pytestCheckHook
     writableTmpDirAsHomeHook

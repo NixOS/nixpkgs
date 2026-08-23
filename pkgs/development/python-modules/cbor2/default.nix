@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cbor2";
-  version = "6.1.3";
+  version = "6.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "cbor2";
     tag = finalAttrs.version;
-    hash = "sha256-DAhMoWZ820bfa7u+Mu+uqQ+ci+ibxQGwP70t4eOCHg8=";
+    hash = "sha256-3NrqJFDuVfOJcqD1EJJYzhkAkyduhIAaph6PiyM6m3k=";
   };
 
   cargoRoot = "rust";
