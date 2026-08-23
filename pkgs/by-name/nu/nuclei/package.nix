@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "nuclei";
   version = "3.11.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei";
