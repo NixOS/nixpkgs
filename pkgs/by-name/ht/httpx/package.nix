@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "httpx";
   version = "1.10.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
