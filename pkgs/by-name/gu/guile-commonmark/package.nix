@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "guile-commonmark";
-  version = "unstable-2020-04-30";
+  version = "0.1.2-unstable-2020-04-30";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OrangeShark";
@@ -21,6 +24,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
     texinfo # for makeinfo
   ];
