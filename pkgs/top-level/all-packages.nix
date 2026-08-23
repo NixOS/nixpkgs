@@ -6434,6 +6434,7 @@ with pkgs;
 
   inherit
     ({
+      protobuf_36 = callPackage ../development/libraries/protobuf/36.nix { };
       protobuf_35 = callPackage ../development/libraries/protobuf/35.nix { };
       protobuf_34 = callPackage ../development/libraries/protobuf/34.nix { };
       protobuf_33 = callPackage ../development/libraries/protobuf/33.nix { };
@@ -6453,6 +6454,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_36
     protobuf_35
     protobuf_34
     protobuf_33
