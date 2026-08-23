@@ -258,9 +258,9 @@
     name = "Eske Nielsen";
   };
   _4evy = {
-    name = "_4evy";
+    name = "4evy";
     email = "git@ps1.sh";
-    github = "_4evy";
+    github = "4evy";
     githubId = 57304299;
     matrix = "@donteatoreo:matrix.org";
   };
