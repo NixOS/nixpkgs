@@ -1,6 +1,9 @@
 {
   lib,
   buildEnv,
+  cacert,
+  cloudflared,
+  curl,
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -23,8 +26,11 @@
   vulkanSupport ? false,
   vulkan-loader,
   shaderc,
+  vulkan-tools,
   metalSupport ? false,
   nix-update-script,
+  xdg-utils,
+  xterm,
 }:
 
 assert lib.assertMsg (!(cublasSupport && rocmSupport)) ''
@@ -86,15 +92,35 @@ let
     paths = rocmBuildInputs;
   };
 
-  runtimePath = [ tk ];
+  runtimePath = [
+    cloudflared
+    curl
+    tk
+  ]
+  ++ lib.optionals rocmSupport [ rocmPackages.clr ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-tools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xdg-utils
+    xterm
+  ];
 
   makeWrapperArgs = [
     "--prefix"
     "PATH"
     ":"
     (lib.makeBinPath runtimePath)
+    "--set-default"
+    "SSL_CERT_FILE"
+    "${cacert}/etc/ssl/certs/ca-bundle.crt"
   ]
-  ++ libraryPathWrapperArgs;
+  ++ libraryPathWrapperArgs
+  ++ lib.optionals metalSupport [
+    "--set-default"
+    "GGML_METAL_PATH_RESOURCES"
+    "${placeholder "out"}/libexec/koboldcpp"
+  ];
 
   libraries = [
     "koboldcpp_default"
@@ -150,9 +176,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+  patches = [
+    ./nixos-runtime-paths.patch
+    ./ggml-fix-gfx9-apu-detection.patch
+  ];
 
-  patches = [ ./ggml-fix-gfx9-apu-detection.patch ];
-
+  postPatch = lib.concatStringsSep "\n" [
+    ''
+      substituteInPlace koboldcpp.py \
+        --replace-fail '@shell@' '${effectiveStdenv.shell}'
+    ''
+    # Prefer nixpkgs shaderc's glslc; 1.119 otherwise picks the bundled binary
+    ''
+      rm -f glslc-linux
+    ''
+  ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -166,7 +204,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals rocmSupport [ rocmPackages.clr ]
   ++ lib.optionals vulkanSupport [ shaderc ];
 
-  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues {
+    inherit (python3Packages)
+      customtkinter
+      darkdetect
+      jinja2
+      psutil
+      tkinter
+      ;
+  };
 
   buildInputs = [
     tk
@@ -183,6 +229,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   pythonPath = finalAttrs.pythonInputs;
+
+  inherit makeWrapperArgs;
 
   env =
     lib.optionalAttrs rocmSupport {
@@ -219,32 +267,38 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildFlags = builtLibraries;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase = lib.concatStringsSep "\n" [
+    ''
+      runHook preInstall
 
-    mkdir -p "$out/bin"
+      installDir="$out/libexec/koboldcpp"
+      mkdir -p "$installDir" "$out/bin"
 
-    install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
-    install -Dm755 ${lib.escapeShellArgs (map (library: "${library}.so") builtLibraries)} "$out/bin"
-    cp -r embd_res "$out/bin"
+      install -Dm755 koboldcpp.py "$installDir/koboldcpp"
+      install -Dm644 json_to_gbnf.py "$installDir/json_to_gbnf.py"
+      install -Dm755 ${lib.escapeShellArgs (map (library: "${library}.so") builtLibraries)} "$installDir"
+      cp -r --no-preserve=mode embd_res "$installDir"
+      cp -r --no-preserve=mode kcpp_adapters "$installDir"
+    ''
 
-    ${lib.optionalString metalSupport ''
-      install -Dm755 ${metalFailsafe}/lib/koboldcpp_failsafe.so "$out/bin"
-      install -Dm644 *.metal "$out/bin"
-    ''}
+    (lib.optionalString metalSupport ''
+      install -Dm755 ${metalFailsafe}/lib/koboldcpp_failsafe.so "$installDir"
+      install -Dm644 *.metal "$installDir"
+    '')
 
-    ${lib.optionalString (!koboldLiteSupport) ''
-      rm "$out/bin/embd_res/kcpp_docs.embd"
-      rm "$out/bin/embd_res/klite.embd"
-    ''}
+    (lib.optionalString (!koboldLiteSupport) ''
+      rm "$installDir/embd_res/kcpp_docs.embd"
+      rm "$installDir/embd_res/klite.embd"
+    '')
 
-    runHook postInstall
-  '';
+    ''
+      runHook postInstall
+    ''
+  ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
-    makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      ${lib.escapeShellArgs makeWrapperArgs}
+    wrapPythonProgramsIn "$out/libexec/koboldcpp" "''${pythonPath[*]}"
+    ln -s ../libexec/koboldcpp/koboldcpp "$out/bin/koboldcpp"
   '';
 
   requiredSystemFeatures = lib.optionals rocmSupport [ "big-parallel" ];
@@ -266,8 +320,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       maxstrid
       _4evy
     ];
-    platforms = if metalSupport then lib.platforms.darwin else lib.platforms.unix;
-    badPlatforms = lib.optionals (cublasSupport || rocmSupport) lib.platforms.darwin;
+    platforms =
+      if cublasSupport || rocmSupport then
+        lib.platforms.linux
+      else if metalSupport then
+        lib.platforms.darwin
+      else
+        lib.platforms.unix;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })
