@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "adns";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     urls = [
       "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${finalAttrs.version}.tar.gz"
       "mirror://gnu/adns/adns-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-cTizeJt1Br1oP0UdT32FMHepGAO3s12G7GZ/D5zUAc0=";
+    hash = "sha256-0PYrYCi7omdqHo+GMYHZKyFVEEo+c0GK6UwxZpWFP8k=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
