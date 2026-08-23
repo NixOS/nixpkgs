@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";
 
+  # Drop -static from pkgsStatic for the check phase, patchelf stays static
+  # Test suite uses shared library fixtures
+  # FIXME: rebuild avoidance, swap to optionalString in staging
+  preCheck = lib.optionalDrvAttr stdenv.hostPlatform.isStatic ''
+    export NIX_CFLAGS_LINK="''${NIX_CFLAGS_LINK//-static/}"
+  '';
+
   meta = {
     homepage = "https://github.com/NixOS/patchelf";
     license = lib.licenses.gpl3Plus;
