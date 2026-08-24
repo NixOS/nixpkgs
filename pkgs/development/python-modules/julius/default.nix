@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "julius";
-  version = "0.2.7";
+  version = "0.2.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PA9fUwbX1gFvzJUZaydMrm8H4slZbu0xTk52QVVPuwg=";
+    hash = "sha256-1pHmUSAJMK/+pPbIScJulf7IRghyga49GndX6skCU9U=";
   };
 
   propagatedBuildInputs = [ torch ];
