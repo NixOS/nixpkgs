@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
   ]
-   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "boto3" ];
 
