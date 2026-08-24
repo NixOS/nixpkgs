@@ -12,12 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvex";
-  version = "9.2.154";
+  version = "9.3.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+    hash = "sha256-/xPuw/o1jw4V5t2WkxYUS+9/QK4NBW3GYpeZG+4Wfzw=";
   };
 
   build-system = [ setuptools ];
