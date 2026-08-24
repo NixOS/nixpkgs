@@ -109,8 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; WITH gpl2Only gccException20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 })
