@@ -6,12 +6,13 @@
   jre,
   version,
   hash,
+  url,
   udev,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papermc";
-  inherit version hash;
+  inherit version hash url;
 
   src =
     let
@@ -20,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       buildNum = builtins.elemAt version-split 1;
     in
     fetchurl {
-      url = "https://api.papermc.io/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
+      url = url;
       inherit (finalAttrs) hash;
     };
 

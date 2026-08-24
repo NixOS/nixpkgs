@@ -96,12 +96,12 @@ class VersionManager:
                 print(e)
                 return
 
-            url = response.json()["downloads"]["server:default"]["url"]
-            version.hash = self.download_and_generate_sha256_hash(url)
+            version.url = response.json()["downloads"]["server:default"]["url"]
+            version.hash = self.download_and_generate_sha256_hash(version.url)
 
     def versions_to_json(self):
         return json.dumps(
-            {version.name: {'hash': version.hash, 'version': version.full_name}
+                {version.name: {'hash': version.hash, 'version': version.full_name, "url": version.url}
                 for version in self.versions},
             indent=4
         )

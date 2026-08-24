@@ -1,114 +1,142 @@
 {
     "26.2": {
         "hash": "sha256-F+7nOLwPa3R2Rr5BmWcsTvyyCE79fikexSVKRdWuby4=",
-        "version": "26.2-116"
+        "version": "26.2-116",
+        "url": "https://fill-data.papermc.io/v1/objects/17eee738bc0f6b747646be4199672c4efcb2084efd7e291ec5254a45d5ae6f2e/paper-26.2-116.jar"
     },
     "26.1.2": {
         "hash": "sha256-HXCx2rnPSm3mFSCaU286RaIYYkAlPEKCE84hiKuV5fc=",
-        "version": "26.1.2-74"
+        "version": "26.1.2-74",
+        "url": "https://fill-data.papermc.io/v1/objects/1d70b1dab9cf4a6de615209a536f3a45a2186240253c428213ce2188ab95e5f7/paper-26.1.2-74.jar"
     },
     "26.1.1": {
         "hash": "sha256-Q9CO1Sx69On3J2kSJQGlwV+Zx6zgxCij7vBA/T9v28U=",
-        "version": "26.1.1-29"
+        "version": "26.1.1-29",
+        "url": "https://fill-data.papermc.io/v1/objects/43d08ed52c7af4e9f72769122501a5c15f99c7ace0c428a3eef040fd3f6fdbc5/paper-26.1.1-29.jar"
     },
     "1.21.11": {
         "hash": "sha256-X/70Ze7rXyo8I6JEGdl8Ua/X27SSP/Qt+aP1i7ocz7o=",
-        "version": "1.21.11-132"
+        "version": "1.21.11-132",
+        "url": "https://fill-data.papermc.io/v1/objects/5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba/paper-1.21.11-132.jar"
     },
     "1.21.10": {
         "hash": "sha256-FYcD91om+ELqZWs9xtdb89HsF2uXosNjhNC4Czhxr1M=",
-        "version": "1.21.10-130"
+        "version": "1.21.10-130",
+        "url": "https://fill-data.papermc.io/v1/objects/158703f75a26f842ea656b3dc6d75bf3d1ec176b97a2c36384d0b80b3871af53/paper-1.21.10-130.jar"
     },
     "1.21.9": {
         "hash": "sha256-rsAC53x1ZuSUlP3wVDC5YHj/0ddDDmUtTzOP75UeehA=",
-        "version": "1.21.9-59"
+        "version": "1.21.9-59",
+        "url": "https://fill-data.papermc.io/v1/objects/aec002e77c7566e49494fdf05430b96078ffd1d7430e652d4f338fef951e7a10/paper-1.21.9-59.jar"
     },
     "1.21.8": {
         "hash": "sha256-jefFLDsCQDUD0W+sWAA/Hv733XoCVnhoQ5J/qS7lfx4=",
-        "version": "1.21.8-60"
+        "version": "1.21.8-60",
+        "url": "https://fill-data.papermc.io/v1/objects/8de7c52c3b02403503d16fac58003f1efef7dd7a0256786843927fa92ee57f1e/paper-1.21.8-60.jar"
     },
     "1.21.7": {
         "hash": "sha256-g4OBiGmcsoN+VbiQ+xodOa0HEChe1jP7+fwU6fR84Hg=",
-        "version": "1.21.7-32"
+        "version": "1.21.7-32",
+        "url": "https://fill-data.papermc.io/v1/objects/83838188699cb2837e55b890fb1a1d39ad0710285ed633fbf9fc14e9f47ce078/paper-1.21.7-32.jar"
     },
     "1.21.6": {
         "hash": "sha256-NeLfpms0kbnS8LsDNnn6WsoeH98JfnoGqAzor+2lwhQ=",
-        "version": "1.21.6-48"
+        "version": "1.21.6-48",
+        "url": "https://fill-data.papermc.io/v1/objects/35e2dfa66b3491b9d2f0bb033679fa5aca1e1fdf097e7a06a80ce8afeda5c214/paper-1.21.6-48.jar"
     },
     "1.21.5": {
         "hash": "sha256-KuauIq30F2mXRuD4n8LvbLbuBQpfZgjO5Y8FNdYLUJ4=",
-        "version": "1.21.5-114"
+        "version": "1.21.5-114",
+        "url": "https://fill-data.papermc.io/v1/objects/2ae6ae22adf417699746e0f89fc2ef6cb6ee050a5f6608cee58f0535d60b509e/paper-1.21.5-114.jar"
     },
     "1.21.4": {
         "hash": "sha256-XuT1QvYooUxkRBCwjJTqQudy700p/pKXNja2gT1Or/w=",
-        "version": "1.21.4-232"
+        "version": "1.21.4-232",
+        "url": "https://fill-data.papermc.io/v1/objects/5ee4f542f628a14c644410b08c94ea42e772ef4d29fe92973636b6813d4eaffc/paper-1.21.4-232.jar"
     },
     "1.21.3": {
         "hash": "sha256-h+lz4dM46Gnn/bxLj63BV517sCRqDgz25XAKzmyLwX4=",
-        "version": "1.21.3-83"
+        "version": "1.21.3-83",
+        "url": "https://fill-data.papermc.io/v1/objects/87e973e1d338e869e7fdbc4b8fadc1579d7bb0246a0e0cf6e5700ace6c8bc17e/paper-1.21.3-83.jar"
     },
     "1.21.1": {
         "hash": "sha256-Ob2MALnhjekdyr08w9z6UyhoWlO3GHovYygMIuLSh7k=",
-        "version": "1.21.1-133"
+        "version": "1.21.1-133",
+        "url": "https://fill-data.papermc.io/v1/objects/39bd8c00b9e18de91dcabd3cc3dcfa5328685a53b7187a2f63280c22e2d287b9/paper-1.21.1-133.jar"
     },
     "1.21": {
         "hash": "sha256-q5uxr8POppeKDAPOhEiqZU/oqcTd3zQefL2hsO2qc/U=",
-        "version": "1.21-130"
+        "version": "1.21-130",
+        "url": "https://fill-data.papermc.io/v1/objects/ab9bb1afc3cea6978a0c03ce8448aa654fe8a9c4dddf341e7cbda1b0edaa73f5/paper-1.21-130.jar"
     },
     "1.20.6": {
         "hash": "sha256-SwEfWttfbHIAdoaiIxdPzoLzGutLNPr0ZSq8hAtH5kA=",
-        "version": "1.20.6-151"
+        "version": "1.20.6-151",
+        "url": "https://fill-data.papermc.io/v1/objects/4b011f5adb5f6c72007686a223174fce82f31aeb4b34faf4652abc840b47e640/paper-1.20.6-151.jar"
     },
     "1.20.5": {
         "hash": "sha256-PNfaL435LggqUBo5xnSqs8A0Pt0Xm4b1usyuv8mXQTI=",
-        "version": "1.20.5-22"
+        "version": "1.20.5-22",
+        "url": "https://fill-data.papermc.io/v1/objects/3cd7da2f8df92e082a501a39c674aab3c0343edd179b86f5baccaebfc9974132/paper-1.20.5-22.jar"
     },
     "1.20.4": {
         "hash": "sha256-yr7TrnfPVd66fH2HIryc/V6ZEgHCEWZfkmVhbZ/lx3s=",
-        "version": "1.20.4-499"
+        "version": "1.20.4-499",
+        "url": "https://fill-data.papermc.io/v1/objects/cabed3ae77cf55deba7c7d8722bc9cfd5e991201c211665f9265616d9fe5c77b/paper-1.20.4-499.jar"
     },
     "1.20.2": {
         "hash": "sha256-ujQKg1rEC4Vjqn7aHNZHmhGnYjQJyJosNc2ddJDtF6c=",
-        "version": "1.20.2-318"
+        "version": "1.20.2-318",
+        "url": "https://fill-data.papermc.io/v1/objects/ba340a835ac40b8563aa7eda1cd6479a11a7623409c89a2c35cd9d7490ed17a7/paper-1.20.2-318.jar"
     },
     "1.20.1": {
         "hash": "sha256-I0qbMgmBAMb8EWZk1k42zNtYtbZJrw+AvMywiwJV6uo=",
-        "version": "1.20.1-196"
+        "version": "1.20.1-196",
+        "url": "https://fill-data.papermc.io/v1/objects/234a9b32098100c6fc116664d64e36ccdb58b5b649af0f80bcccb08b0255eaea/paper-1.20.1-196.jar"
     },
     "1.20": {
         "hash": "sha256-HkzPwFmfSR7m/uRFXTciMyrF14WE/M1Vy7O1HhFQRQU=",
-        "version": "1.20-17"
+        "version": "1.20-17",
+        "url": "https://fill-data.papermc.io/v1/objects/1e4ccfc0599f491ee6fee4455d3722332ac5d78584fccd55cbb3b51e11504505/paper-1.20-17.jar"
     },
     "1.19.4": {
         "hash": "sha256-5YfXjLo+me+MS8JM8gzDvbvonjOwtXIHBEavTra+XM8=",
-        "version": "1.19.4-550"
+        "version": "1.19.4-550",
+        "url": "https://fill-data.papermc.io/v1/objects/e587d78cba3e99ef8c4bc24cf20cc3bdbbe89e33b0b572070446af4eb6be5ccf/paper-1.19.4-550.jar"
     },
     "1.19.3": {
         "hash": "sha256-MAfyxjjV8E7TK2raozBT/jY0zPp0NFyD0+pJgtONtdw=",
-        "version": "1.19.3-448"
+        "version": "1.19.3-448",
+        "url": "https://fill-data.papermc.io/v1/objects/3007f2c638d5f04ed32b6adaa33053fe3634ccfa74345c83d3ea4982d38db5dc/paper-1.19.3-448.jar"
     },
     "1.19.2": {
         "hash": "sha256-LrXHRZ7JS83Fl+1xHVSaOrSw/aE+QSoHkqGgabWQOGQ=",
-        "version": "1.19.2-307"
+        "version": "1.19.2-307",
+        "url": "https://fill-data.papermc.io/v1/objects/2eb5c7459ec94bcdc597ed711d549a3ab4b0fda13e412a0792a1a069b5903864/paper-1.19.2-307.jar"
     },
     "1.19.1": {
         "hash": "sha256-Wv4jofreksVHEk+odLx9kI+mdvSfCYefqHYiS2Lp1Rs=",
-        "version": "1.19.1-111"
+        "version": "1.19.1-111",
+        "url": "https://fill-data.papermc.io/v1/objects/5afe23a1fade92c547124fa874bc7d908fa676f49f09879fa876224b62e9d51b/paper-1.19.1-111.jar"
     },
     "1.19": {
         "hash": "sha256-DTnKzFGneysHHhzoYvy/C0pL1mjMfosxNZjYT6Cfq6w=",
-        "version": "1.19-81"
+        "version": "1.19-81",
+        "url": "https://fill-data.papermc.io/v1/objects/0d39cacc51a77b2b071e1ce862fcbf0b4a4bd668cc7e8b313598d84fa09fabac/paper-1.19-81.jar"
     },
     "1.18.2": {
         "hash": "sha256-BXjxj01jK0lLRo7FaztBS1tW/qCH7n05z23N9MnQHwU=",
-        "version": "1.18.2-388"
+        "version": "1.18.2-388",
+        "url": "https://fill-data.papermc.io/v1/objects/0578f18f4d632b494b468ec56b3b414b5b56fea087ee7d39cf6dcdf4c9d01f05/paper-1.18.2-388.jar"
     },
     "1.18.1": {
         "hash": "sha256-qUkXpEcsLLyZB6FcZmu7eE+V7Ne1PHe8CP5xED5Uh/U=",
-        "version": "1.18.1-216"
+        "version": "1.18.1-216",
+        "url": "https://fill-data.papermc.io/v1/objects/a94917a4472c2cbc9907a15c666bbb784f95ecd7b53c77bc08fe71103e5487f5/paper-1.18.1-216.jar"
     },
     "1.18": {
         "hash": "sha256-PJlfINrk5OIdVVT6yVegqKXIW9W/NJFfrEtPFuDvEBs=",
-        "version": "1.18-66"
+        "version": "1.18-66",
+        "url": "https://fill-data.papermc.io/v1/objects/3c995f20dae4e4e21d5554fac957a0a8a5c85bd5bf34915fac4b4f16e0ef101b/paper-1.18-66.jar"
     }
 }
