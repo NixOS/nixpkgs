@@ -10,12 +10,7 @@ let
   testGroup = "netbox-users";
 in
 import ../../make-test-python.nix (
-  {
-    lib,
-    pkgs,
-    netbox,
-    ...
-  }:
+  { lib, pkgs, ... }:
   {
     name = "netbox";
 
@@ -27,117 +22,114 @@ import ../../make-test-python.nix (
 
     skipTypeCheck = true;
 
-    containers.machine =
-      { config, ... }:
-      {
-        boot.kernelParams = [
-          # helps debugging seccomp filter issues
-          "audit=1"
-        ];
-        services.netbox = {
+    containers.machine = {
+      boot.kernelParams = [
+        # helps debugging seccomp filter issues
+        "audit=1"
+      ];
+      services.netbox = {
+        enable = true;
+
+        nginx = {
           enable = true;
-          package = netbox;
-
-          nginx = {
-            enable = true;
-            hostname = "localhost";
-          };
-
-          ldapConfigFile = pkgs.writeText "ldap_config.py" ''
-            import ldap
-            from django_auth_ldap.config import LDAPSearch, PosixGroupType
-
-            AUTH_LDAP_SERVER_URI = "ldap://localhost/"
-
-            AUTH_LDAP_USER_SEARCH = LDAPSearch(
-                "ou=accounts,ou=posix,${ldapSuffix}",
-                ldap.SCOPE_SUBTREE,
-                "(uid=%(user)s)",
-            )
-
-            AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-                "ou=groups,ou=posix,${ldapSuffix}",
-                ldap.SCOPE_SUBTREE,
-                "(objectClass=posixGroup)",
-            )
-            AUTH_LDAP_GROUP_TYPE = PosixGroupType()
-
-            # Mirror LDAP group assignments.
-            AUTH_LDAP_MIRROR_GROUPS = True
-
-            # For more granular permissions, we can map LDAP groups to Django groups.
-            AUTH_LDAP_FIND_GROUP_PERMS = True
-          '';
+          hostname = "localhost";
         };
 
-        # Adapted from the sssd-ldap NixOS test
-        services.openldap = {
-          enable = true;
-          settings = {
-            children = {
-              "cn=schema".includes = [
-                "${pkgs.openldap}/etc/schema/core.ldif"
-                "${pkgs.openldap}/etc/schema/cosine.ldif"
-                "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
-                "${pkgs.openldap}/etc/schema/nis.ldif"
-              ];
-              "olcDatabase={1}mdb" = {
-                attrs = {
-                  objectClass = [
-                    "olcDatabaseConfig"
-                    "olcMdbConfig"
-                  ];
-                  olcDatabase = "{1}mdb";
-                  olcDbDirectory = "/var/lib/openldap/db";
-                  olcSuffix = ldapSuffix;
-                  olcRootDN = "cn=${ldapRootUser},${ldapSuffix}";
-                  olcRootPW = ldapRootPassword;
-                };
+        ldapConfigFile = pkgs.writeText "ldap_config.py" ''
+          import ldap
+          from django_auth_ldap.config import LDAPSearch, PosixGroupType
+
+          AUTH_LDAP_SERVER_URI = "ldap://localhost/"
+
+          AUTH_LDAP_USER_SEARCH = LDAPSearch(
+              "ou=accounts,ou=posix,${ldapSuffix}",
+              ldap.SCOPE_SUBTREE,
+              "(uid=%(user)s)",
+          )
+
+          AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+              "ou=groups,ou=posix,${ldapSuffix}",
+              ldap.SCOPE_SUBTREE,
+              "(objectClass=posixGroup)",
+          )
+          AUTH_LDAP_GROUP_TYPE = PosixGroupType()
+
+          # Mirror LDAP group assignments.
+          AUTH_LDAP_MIRROR_GROUPS = True
+
+          # For more granular permissions, we can map LDAP groups to Django groups.
+          AUTH_LDAP_FIND_GROUP_PERMS = True
+        '';
+      };
+
+      # Adapted from the sssd-ldap NixOS test
+      services.openldap = {
+        enable = true;
+        settings = {
+          children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [
+                  "olcDatabaseConfig"
+                  "olcMdbConfig"
+                ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/lib/openldap/db";
+                olcSuffix = ldapSuffix;
+                olcRootDN = "cn=${ldapRootUser},${ldapSuffix}";
+                olcRootPW = ldapRootPassword;
               };
             };
           };
-          declarativeContents = {
-            ${ldapSuffix} = ''
-              dn: ${ldapSuffix}
-              objectClass: top
-              objectClass: dcObject
-              objectClass: organization
-              o: ${ldapDomain}
-
-              dn: ou=posix,${ldapSuffix}
-              objectClass: top
-              objectClass: organizationalUnit
-
-              dn: ou=accounts,ou=posix,${ldapSuffix}
-              objectClass: top
-              objectClass: organizationalUnit
-
-              dn: uid=${testUser},ou=accounts,ou=posix,${ldapSuffix}
-              objectClass: person
-              objectClass: posixAccount
-              userPassword: ${testPassword}
-              homeDirectory: /home/${testUser}
-              uidNumber: 1234
-              gidNumber: 1234
-              cn: ""
-              sn: ""
-
-              dn: ou=groups,ou=posix,${ldapSuffix}
-              objectClass: top
-              objectClass: organizationalUnit
-
-              dn: cn=${testGroup},ou=groups,ou=posix,${ldapSuffix}
-              objectClass: posixGroup
-              gidNumber: 2345
-              memberUid: ${testUser}
-            '';
-          };
         };
+        declarativeContents = {
+          ${ldapSuffix} = ''
+            dn: ${ldapSuffix}
+            objectClass: top
+            objectClass: dcObject
+            objectClass: organization
+            o: ${ldapDomain}
 
-        users.users.nginx.extraGroups = [ "netbox" ];
+            dn: ou=posix,${ldapSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
 
-        networking.firewall.allowedTCPPorts = [ 80 ];
+            dn: ou=accounts,ou=posix,${ldapSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
+
+            dn: uid=${testUser},ou=accounts,ou=posix,${ldapSuffix}
+            objectClass: person
+            objectClass: posixAccount
+            userPassword: ${testPassword}
+            homeDirectory: /home/${testUser}
+            uidNumber: 1234
+            gidNumber: 1234
+            cn: ""
+            sn: ""
+
+            dn: ou=groups,ou=posix,${ldapSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
+
+            dn: cn=${testGroup},ou=groups,ou=posix,${ldapSuffix}
+            objectClass: posixGroup
+            gidNumber: 2345
+            memberUid: ${testUser}
+          '';
+        };
       };
+
+      users.users.nginx.extraGroups = [ "netbox" ];
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+    };
 
     testScript =
       let
@@ -154,7 +146,7 @@ import ../../make-test-python.nix (
           t = Token.objects.create(user=u, token="0123456789abcdef0123456789abcdef01234567", version=TokenVersionChoices.V2)
           print(t.get_auth_header_prefix())
         '';
-        netboxVersion = netbox.version;
+        netboxVersion = pkgs.netbox.version;
       in
       builtins.replaceStrings
         [

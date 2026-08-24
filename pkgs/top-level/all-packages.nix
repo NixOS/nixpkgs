@@ -2512,8 +2512,7 @@ with pkgs;
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
-  # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_6;
+  netbox_4_6 = netbox;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 

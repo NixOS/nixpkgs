@@ -120,7 +120,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     pythonPath = py.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_6;
+      inherit (nixosTests) netbox;
     };
     updateScript = nix-update-script { };
     plugins = lib.recurseIntoAttrs (
