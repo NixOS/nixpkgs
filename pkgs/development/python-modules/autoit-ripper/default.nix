@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "autoit-ripper";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+BHWDkeVewoRUgaHln5TyoajpCvJiowCiC2dFYyp1MA=";
+    hash = "sha256-IOnDiCDbFDpPl24qFloEME/b0qHPGrJgef3kC61wpHk=";
   };
 
   nativeBuildInputs = [ setuptools ];
