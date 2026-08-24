@@ -7,18 +7,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "cadvisor";
-  version = "0.56.2";
+  version = "0.60.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UBQvFlO0pb5mDUrrUTaEsuQcKX7qKQrAMub2knUZWGA=";
+    hash = "sha256-j/QImeIRafeRmtZMZAtyaee81uJk8t/Ij3MEUpQMuwo=";
   };
 
   modRoot = "./cmd";
 
-  vendorHash = "sha256-JJulf+Wj/bf3l8l0rufcyLlfqefriOzhxCfGUru6+lA=";
+  vendorHash = "sha256-lkxftA6LOzI73xHza3t0/SINfZM3UmtTiJu2gVe0/F0=";
 
   ldflags = [
     "-s"
@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "cadvisor";
     homepage = "https://github.com/google/cadvisor";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.lukas-sgx ];
     platforms = lib.platforms.linux;
   };
 })
