@@ -113,6 +113,9 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
+  # test suite starts a real localhost server; hangs without this on darwin
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     cachetools
     orjson
