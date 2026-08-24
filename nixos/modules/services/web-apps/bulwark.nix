@@ -146,6 +146,8 @@ in
           };
           jmapServers = mkOption {
             type = attrsOf (submodule {
+              freeformType = format.type;
+
               options = {
                 label = mkOption {
                   type = str;
@@ -188,16 +190,10 @@ in
             '';
           };
 
-          searchEngineIndexing = mkOption {
-            type = bool;
-            default = false;
-            description = ''
-              Allow search engines to index this webmail. Off (the default) sends noindex/nofollow in the page head, recommended for private deployments.
-            '';
-          };
-
           oauth = mkOption {
             type = submodule {
+              freeformType = format.type;
+
               options = {
                 enabled = mkOption {
                   type = bool;
@@ -252,30 +248,13 @@ in
               config = mkIf config.enabled { };
             };
             default = { };
-            description = "OAuth / OpenID Connect";
+            description = "OAuth / OpenID Connect. Options are prefixed with `oauth` and the `oauth` submodule is flattened, so `oauth.clientId` turns to `oauthClientId`.";
           };
 
           autoSsoEnabled = mkOption {
             type = bool;
             default = false;
             description = "Automatically redirect to SSO provider on load.";
-          };
-          cookieSameSite = mkOption {
-            type = enum [
-              "lax"
-              "strict"
-              "none"
-            ];
-            default = "lax";
-            description = "Value of the `SameSite` attribute for the session cookie.";
-          };
-          allowedFrameAncestors = mkOption {
-            type = nullOr str;
-            description = "Specifiy the CSP `frame-ancestors` directive.";
-          };
-          parentOrigin = mkOption {
-            type = nullOr str;
-            description = "Parent Origin for embedded mode communication";
           };
 
           sessionSecretFile = mkOption {
@@ -369,11 +348,13 @@ in
         };
       };
       default = { };
-      description = "Bulwark configuration";
+      description = "Bulwark configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example) for more configuration options, keys are written in camel case. ";
     };
 
     admin = mkOption {
       type = nullOr (submodule {
+        freeformType = format.type;
+
         options = {
           passwordHashFile = mkOption {
             type = str;
