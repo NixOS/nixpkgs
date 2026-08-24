@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   copyDesktopItems,
-  electron_41,
+  electron_42,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
@@ -13,18 +13,18 @@
 }:
 
 let
-  electron = electron_41;
+  electron = electron_42;
   nodejs = nodejs_24;
   description = "Cross-platform desktop app for managing periodic breaks";
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "breaktimer";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "breaktimer-app";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-STDb6+brlVk/ZPUbw3cQOpe2r03WlFKEBgVLqJrsrHI=";
   };
 
@@ -124,10 +124,10 @@ buildNpmPackage rec {
   meta = {
     inherit description;
     homepage = "https://github.com/tom-james-watson/breaktimer-app";
-    changelog = "https://github.com/tom-james-watson/breaktimer-app/releases/tag/v${version}";
+    changelog = "https://github.com/tom-james-watson/breaktimer-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ proitheus ];
     mainProgram = "breaktimer";
     platforms = electron.meta.platforms;
   };
-}
+})
