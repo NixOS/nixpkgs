@@ -1978,7 +1978,7 @@ with pkgs;
 
   expect = tcl8Packages.expect_5;
 
-  Fabric = with python3Packages; toPythonApplication fabric;
+  fabric = with python3Packages; toPythonApplication fabric;
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
@@ -2513,7 +2513,7 @@ with pkgs;
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_5;
+  netbox = netbox_4_6;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
