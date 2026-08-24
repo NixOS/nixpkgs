@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sdroxide";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dividebysandwich";
     repo = "sdroxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9agV8Y6Vk7CFacm8o6sPJXW23OP+5Ze7kK38QHLmOiU=";
+    hash = "sha256-obVqYyrZRzKpt2/LU0T6XPg8wa6GdegLy3NykAHCHl0=";
   };
 
-  cargoHash = "sha256-u662PZWoIWdMEfUXiViKu+vs2fagCSZ12P2RYXSx2K4=";
+  cargoHash = "sha256-RChkuoXZ/Ex45P+D+9t2ZQ2JPM3O06DpkFyrSCOe/9s=";
 
   __structuredAttrs = true;
   buildInputs = [ alsa-lib ];
