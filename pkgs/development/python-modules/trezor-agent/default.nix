@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "trezor-agent";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "trezor_agent";
     inherit version;
-    hash = "sha256-4IylpUvXZYAXFkyFGNbN9iPTsHff3M/RL2Eq9f7wWFU=";
+    hash = "sha256-8zJKfFcI2w5AaC4nJyD12enax7Yige50DueCXmoj6P8=";
   };
 
   propagatedBuildInputs = [
