@@ -8,7 +8,7 @@
   gitMinimal,
   mercurial,
   nbmake,
-  py-cpuinfo,
+  py-cpuinfo2,
   pygal,
   pytest,
   pytestCheckHook,
@@ -20,21 +20,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-benchmark";
-  version = "5.2.3";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "pytest-benchmark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qjgP9H3WUYFm1xamOqhGk5YJQv94QfyJvrRoltHJHHc=";
+    hash = "sha256-f3v+jAPMz4Cc+Al3pwqb887QzhGI5k5W80C4Vnk4qt4=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [ py-cpuinfo ];
+  dependencies = [ py-cpuinfo2 ];
 
   optional-dependencies = {
     aspect = [ aspectlib ];
