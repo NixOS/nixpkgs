@@ -16158,12 +16158,12 @@ final: prev: {
 
   scretch-nvim = buildVimPlugin {
     pname = "scretch.nvim";
-    version = "1.2.4";
+    version = "1.2.5";
     src = fetchFromGitHub {
       owner = "0xJohnnyboy";
       repo = "scretch.nvim";
-      tag = "v1.2.4";
-      hash = "sha256-FCv6EI/aYV/RDSeLGPSCkrAbNMfbTWVCIrmX+7tV+AE=";
+      tag = "v1.2.5";
+      hash = "sha256-Gz5jW8K3Ysjm3yzadyKkFusyRvGVMIMXxWsiXDCGMs8=";
     };
     meta.homepage = "https://github.com/0xJohnnyboy/scretch.nvim/";
     meta.license = getLicenseFromSpdxId "AGPL-3.0-only";
