@@ -14,18 +14,16 @@
 
   # native dependencies
   glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
   joblib,
+  llvmPackages,
   narwhals,
   pillow,
+  pytest-xdist,
+  pytestCheckHook,
   threadpoolctl,
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
-
   pname = "scikit-learn";
   version = "1.9.0";
   pyproject = true;
@@ -46,6 +44,11 @@ buildPythonPackage rec {
     })
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "scipy"
+  ];
+
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
@@ -63,9 +66,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
-  nativeBuildInputs = [
-    gfortran
-  ];
+  nativeBuildInputs = [ gfortran ];
 
   build-system = [
     cython
