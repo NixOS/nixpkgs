@@ -6,19 +6,19 @@
   stdenv,
   versionCheckHook,
 }:
-
 let
   appName = "AeroSpace.app";
-  version = "0.21.2-Beta";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aerospace";
+  version = "0.21.3-Beta";
 
-  inherit version;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchzip {
-    url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${version}/AeroSpace-v${version}.zip";
-    sha256 = "sha256-+4n9di1NbPs5pttSEHPDzpHinfuSyWSx5CjNA9IOH+Q=";
+    url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${finalAttrs.version}/AeroSpace-v${finalAttrs.version}.zip";
+    hash = "sha256-JHXtF3IKUbge7z2cMBi4L9IruiByNPCIKugLe4ymvys=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -58,4 +58,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ alexandru0-dev ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

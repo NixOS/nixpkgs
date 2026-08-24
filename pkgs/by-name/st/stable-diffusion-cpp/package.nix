@@ -35,14 +35,13 @@ let
     cmakeBool
     cmakeFeature
     optionals
-    optionalString
     ;
 
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-741-484baa4";
+  version = "master-827-97d2990";
 
   outputs = [
     "out"
@@ -52,8 +51,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "master-741-484baa4";
-    hash = "sha256-7NM3wGgqdFRCYUwIzoD7bA5yvV7n07gncheQFU7iNIs=";
+    tag = finalAttrs.version;
+    hash = "sha256-1XUQiZI3xybe8ukuDAQdHXObdIcfWMaQbaB1jbdEK90=";
     fetchSubmodules = true;
   };
 
@@ -99,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (cmakeBool "SD_BUILD_EXAMPLES" true)
-    (cmakeBool "SD_BUILD_SHARED_LIBS" true)
+    (cmakeBool "SD_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (cmakeBool "SD_USE_SYSTEM_GGML" false)
     (cmakeBool "SD_CUDA" cudaSupport)
     (cmakeBool "SD_HIPBLAS" rocmSupport)
@@ -122,6 +121,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       adriangl
+      jk
     ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;

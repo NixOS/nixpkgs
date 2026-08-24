@@ -945,6 +945,9 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+    }
+    // lib.optionalAttrs (rev == null) {
+      changelog = "https://downloads.haskell.org/~ghc/${version}/docs/users_guide/${version}-notes.html";
     };
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

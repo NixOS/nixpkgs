@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "1.0.0-unstable-2024-10-09";
 
   src = fetchFromGitHub {
-    owner = "riscv";
+    owner = "riscv-software-src";
     repo = "riscv-pk";
     rev = "abadfdc507d5a75b6272dc360e70a80a510c758a";
     sha256 = "sha256-02qcj0TAs7g4CSorWWbUzouS6mNthUOSdeocibw5g2A=";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "RISC-V Proxy Kernel and Bootloader";
-    homepage = "https://github.com/riscv/riscv-pk";
+    homepage = "https://github.com/riscv-software-src/riscv-pk";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.riscv;
     maintainers = [ lib.maintainers.shlevy ];

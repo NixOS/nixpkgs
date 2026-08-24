@@ -9,10 +9,8 @@
 
   # dependencies
   numpy,
-  types-pytz,
 
   # tests
-  pytestCheckHook,
   beautifulsoup4,
   html5lib,
   jinja2,
@@ -22,7 +20,9 @@
   openpyxl,
   pandas,
   pyarrow,
+  pyiceberg,
   pyreadstat,
+  pytestCheckHook,
   python-calamine,
   scipy,
   sqlalchemy,
@@ -33,15 +33,16 @@
   xlsxwriter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandas-stubs";
   version = "3.0.3.260530";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vPXz4ibNbFE2B14pkGPN5EDAwhA92VgFXzMLR9da6WQ=";
   };
 
@@ -49,11 +50,9 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
-    types-pytz
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     beautifulsoup4
     html5lib
     jinja2
@@ -63,7 +62,10 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pyarrow
+    pyiceberg
     pyreadstat
+    pytestCheckHook
+    python-calamine
     scipy
     sqlalchemy
     tables
@@ -71,7 +73,12 @@ buildPythonPackage rec {
     typing-extensions
     xarray
     xlsxwriter
-    python-calamine
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future.
+    # This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -109,4 +116,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ malo ];
   };
-}
+})

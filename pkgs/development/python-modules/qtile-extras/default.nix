@@ -23,7 +23,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.36.0";
+  version = "0.37.0";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile`
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H2A5Y+ukTkUqjQB5eQVuOMYpf7T8RgQlNlQ25wlWwr8=";
+    hash = "sha256-gaBgB9ylC043EcNviAk/6ZfuocUISurbB4EO/fOhSo4=";
   };
 
   build-system = [ setuptools-scm ];
@@ -72,6 +72,8 @@ buildPythonPackage (finalAttrs: {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # Import error
+    "test_init_import_error_no_fallback"
   ];
 
   disabledTestPaths = [

@@ -100,6 +100,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
+  env = {
+    # It is also to avoid to the client being banned on some Teeworlds servers.
+    #
+    # The hash below has been generated with the command line below.
+    # git rev-parse --short=32 HEAD
+    #
+    # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
+    DDNET_GIT_SHORTREV_HASH = "4e4269396b97d06879c11ae3b9696c3d";
+  };
+
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #

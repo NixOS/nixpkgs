@@ -23,16 +23,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wox";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FbOnENSko/BYtTI7z2Ep+IIYufgZpNWcz6d0mqhTL5g=";
+    hash = "sha256-XYPGCHsO5qi5pSTd2M54aAkdMGU0uHaIpZry5+7nuvE=";
   };
 
-  vendorHash = "sha256-IDcIEZVCJp1ls5c2fblgX+I+MhfRDXqFbf0GhgcFiTo=";
+  vendorHash = "sha256-gVDOCMBNKY7mJkjUOeO3Y78o/57iftmC4q6tE7Hgcto=";
 
   sourceRoot = "${finalAttrs.src.name}/wox.core";
 

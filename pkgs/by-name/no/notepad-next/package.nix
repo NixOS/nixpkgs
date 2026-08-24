@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with lib.maintainers; [ Holiu618 ];
-    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };
 })

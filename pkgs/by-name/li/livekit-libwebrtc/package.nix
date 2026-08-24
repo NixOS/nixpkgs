@@ -7,8 +7,6 @@
   fetchurl,
   fetchpatch,
   xcbuild,
-  lld,
-  llvm,
   python3,
   ninja,
   git,
@@ -51,7 +49,7 @@ let
     "aarch64" = "arm64";
   };
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  gnArch = platformMap."${cpuName}" or (throw "unsupported arch ${cpuName}");
+  gnArch = platformMap."${cpuName}" or "unsupported";
   gnOs =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -184,13 +182,7 @@ stdenv.mkDerivation {
     ln -sf ${lib.getExe gn} buildtools/mac/gn
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
-
-    # When 'use_lld=true' is set, llvm-ar is used instead of ar.
-    # The build config expects llvm-ar to be inside the provided clang base path,
-    # but this is not the case in nixpkgs.
-    substituteInPlace build/toolchain/apple/toolchain.gni \
-      --replace-fail "/bin/cp -Rc" "cp -a" \
-      --replace-fail '${"$"}{prefix}llvm-ar' '${lib.getExe' llvm "llvm-ar"}'
+    substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
 
     # nixpkgs calls the target "darwin" instead of "macos", and passing a different target
     # results in warnings by the nixpkgs compiler wrapper
@@ -218,10 +210,7 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      lld
-    ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nasm
@@ -290,8 +279,7 @@ stdenv.mkDerivation {
     "rtc_enable_objc_symbol_export=true"
     "rtc_include_dav1d_in_internal_decoder_factory=true"
     "clang_use_chrome_plugins=false"
-    # ld64 traps on linking because of C++ hardening
-    "use_lld=true"
+    "use_lld=false"
     ''clang_base_path="${clang}"''
   ]);
 
@@ -308,12 +296,6 @@ stdenv.mkDerivation {
     "sdk:mac_framework_objc"
     "desktop_capture_objc"
   ];
-
-  env = {
-    # ensure install_name_tool has enough space in binary headers
-    # to replace rpaths with very long nix store paths
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
-  };
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -370,6 +352,8 @@ stdenv.mkDerivation {
       WeetHet
       niklaskorz
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.intersectLists (lib.platforms.linux ++ lib.platforms.darwin) (
+      lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm
+    );
   };
 }

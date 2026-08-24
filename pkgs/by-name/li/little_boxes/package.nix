@@ -3,13 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  little_boxes,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
   version = "1.12.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "giodamelio";
@@ -32,10 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --nushell $extrasPath/little_boxes.nu
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = little_boxes;
-    command = "little_boxes --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Add boxes are input text";

@@ -8,13 +8,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromCodeberg {
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5YR1Cn9/psNswLVYtDZGmvoP9AwBANa0sPHN4eqcRhQ=";
+    hash = "sha256-QkOJFjqZtAo4GqZ/khbx0MZQDB0Hh8S3H9r4ln5AxqM=";
   };
 
   cargoHash = "sha256-FA9C7Li4wtXvI8+jDTmdFjqsop6cvGNPByRpOfvQPzw=";

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tensor";
-  version = "unstable-2017-02-21";
+  version = "0.3-unstable-2017-02-21";
 
   src = fetchFromGitHub {
     owner = "davidar";

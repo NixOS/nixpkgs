@@ -4,6 +4,7 @@
   glib,
   lib,
   libxcb,
+  microsoft-edge,
   nspr,
   nss,
   stdenvNoCC,
@@ -11,11 +12,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
-  version = "150.0.4078.65";
+  version = "150.0.4078.105";
 
   src = fetchzip {
     url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_linux64.zip";
-    hash = "sha256-TwGjt8Hw4rvwW2OwkIcqRzKLXu1dRL7/9n+Zq3VmKag=";
+    hash = "sha256-dFXj22lTP3lBN8gLooHFn6OzBWb7ha+dEHl/+jFjctI=";
     stripRoot = false;
   };
 
@@ -52,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "WebDriver implementation that controls an Edge browser running on the local machine";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ cholli ];
+    maintainers = microsoft-edge.meta.maintainers;
     platforms = [
       "x86_64-linux"
     ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchpatch2,
   cython,
   isPyPy,
   ninja,
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/fonts-team/libskia/-/raw/6574ca599eab076a9cd5b8667f81aef0f67b3eeb/debian/patches/loong-build";
+      stripLen = 1;
+      extraPrefix = "src/cpp/skia-builder/skia/";
+      hash = "sha256-pKbWDYfZKUTv9ADdCl5sVPFfWiUCUmS8MXSw3eZhqMI=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "build_cmd = [sys.executable, build_skia_py, build_dir]" \
@@ -37,18 +47,7 @@ buildPythonPackage rec {
       --replace "-mthumb" ""
     substituteInPlace src/cpp/skia-builder/skia/src/core/SkOpts.cpp \
       --replace "defined(SK_CPU_ARM64)" "0"
-  ''
-  +
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) # old compiler?
-      ''
-        patch -p1 <<EOF
-        --- a/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
-        +++ b/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
-        @@ -492 +492 @@:
-        -    static constexpr int kMaxCapacity = SkToInt(std::min(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
-        +    static constexpr int kMaxCapacity = SkToInt(std::min<size_t>(SIZE_MAX / sizeof(T), (size_t)INT_MAX));
-        EOF
-      '';
+  '';
 
   build-system = [
     cython
@@ -72,7 +71,7 @@ buildPythonPackage rec {
     description = "Python access to operations on paths using the Skia library";
     homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.wegank ];
     # "The Skia team is not endian-savvy enough to support big-endian CPUs."
     badPlatforms = lib.platforms.bigEndian;
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.

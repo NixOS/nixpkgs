@@ -1,10 +1,11 @@
 {
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
-  libgit2,
   libgpg-error,
   lua5_4,
   makeWrapper,
@@ -18,18 +19,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.36.1";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-260gORAxU0l3gxv4ojUSmdNgHvdLpQNPdLkn8ze4HGA=";
+    hash = "sha256-FcJUZw4FnLOznaYd8TAdrPAcJs91tCv7bHDO38wqDRk=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-P9XonyY+gC0ni8WqkMPWJW6AjU4EBB7BEjxZ3U/q2qM=";
+  cargoHash = "sha256-/8MzwM23u3NxbcDGat595dgBky687dO/K863xKSPitY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -47,14 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gnupg
     gpgme
-    libgit2
     libgpg-error
     lua5_4
     openssl
   ];
 
   env = {
-    LIBGIT2_NO_VENDOR = 1;
     LIBSSH2_SYS_USE_PKG_CONFIG = 1;
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
@@ -68,14 +67,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nix
   ];
 
-  postBuild = ''
-    cargo xtask dist-man
-    cargo xtask dist-completions
-  '';
-
   postInstall = ''
-    installManPage target/dist/*.1
-    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+    ${
+      # Using lx to generate man pages and completions is faster than xtask
+      if stdenv.hostPlatform.emulatorAvailable buildPackages then
+        let
+          lx = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lx";
+        in
+        ''
+          ${lx} util man --target-dir="target/dist"
+          ${lx} util completion --target-dir="target/dist"
+        ''
+      else
+        ''
+          cargo xtask dist-man
+          cargo xtask dist-completions
+        ''
+    }
+      installManPage target/dist/*.1
+      installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {

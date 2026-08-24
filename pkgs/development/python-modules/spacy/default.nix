@@ -33,6 +33,7 @@
   spacy-lookups-data,
 
   # tests
+  pytest-xdist,
   pytestCheckHook,
   hypothesis,
   mock,
@@ -96,6 +97,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     hypothesis
     mock

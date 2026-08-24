@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     automake --add-missing -Wno-portability
   '';
 
+  # GCC 16's unused variable analysis is more advanced, leading to a build
+  # failure since sbsigntool builds with -Wno-error.
+  configureFlags = [ "CFLAGS=-Wno-error=unused-but-set-variable" ];
+
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];

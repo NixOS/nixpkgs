@@ -28,17 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.53.1";
+  version = "3.53.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
-    hash = "sha256-GytXVdkGTE1dGwv1MHtIsImWPikcQMxzUTGKobYcRg4=";
+    hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-n9Bgv33YwseOdBHQb7gdyKqgWeth7sgMZeBlioVFtDM=";
+    hash = "sha256-Fo+Zhph2vPTbjZPvoqSDqcgVNlN9AZAMWM110KZ8yic=";
   };
 
   outputs = [
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.blessing;
     mainProgram = "sqlite3";
     maintainers = with lib.maintainers; [ np ];
     teams = [ lib.teams.security-review ];

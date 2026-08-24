@@ -201,7 +201,7 @@ rec {
         (onFullSupported "nixos.tests.printing-socket")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
-        (onFullSupported "nixos.tests.shadow")
+        (onFullSupported "nixos.tests.shadow.login")
         (onFullSupported "nixos.tests.simple-container")
         (onFullSupported "nixos.tests.simple-vm")
         (onFullSupported "nixos.tests.sway")

@@ -16,6 +16,7 @@
   dev86,
   e2fsprogs,
   flex,
+  json_c,
   libnl,
   libuuid,
   lzo,
@@ -71,22 +72,37 @@ let
     genAttrs
     getExe
     getExe'
-    licenses
     optionalString
     optionals
-    systems
     teams
+    versionAtLeast
     versionOlder
-    versions
     warn
+    withFeature
+    withFeatureAs
     ;
-  inherit (systems.inspect.patterns) isLinux isAarch64;
-  inherit (licenses)
+  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
+  inherit (lib.versions) majorMinor;
+  inherit (lib.licenses)
     cc-by-40
     gpl2Only
     lgpl21Only
     mit
     ;
+
+  # Xen has a ternary system for enabling and disabling optional firmwares.
+  # - If we want a built-in firmware, then the correct flag to use is
+  #   '--enable-X', or (withXenFeature true "X" null).
+  # - If we want Xen to use a system firmware, then the correct to use is
+  #   '--with-system-X=/path/to/firmware', or (withXenFeature true "X" drv).
+  # - If we do not want Xen to use any firmware, then the correct flag to use is
+  #   '--disable-X', or (withXenFeature false "X" null).
+  withXenFeature =
+    bool: key: value:
+    if (bool && !isNull value) then
+      (withFeatureAs bool "system-${key}" value)
+    else
+      (enableFeature bool key);
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
@@ -173,9 +189,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.3";
+  version = "4.22.0";
 
-  # This attribute can be overriden to correct the file paths in
+  # This attribute can be overridden to correct the file paths in
   # `passthru` when building an unstable Xen.
   upstreamVersion = finalAttrs.version;
   # Useful for further identifying downstream Xen variants. (i.e. Qubes)
@@ -185,146 +201,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
-
-    # XSA #483
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa483.patch";
-      hash = "sha256-pZkSQKAjEIa/EHlCa2hD+3kofzpVHtFxcdp/TiWu9i8=";
-    })
-
-    # XSA #484
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa484.patch";
-      hash = "sha256-6zkTBHKfpAK2poSycEFSb3pE9pDpZwBxAe5Jf862j+U=";
-    })
-
-    # XSA #486
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa486.patch";
-      hash = "sha256-8EC1lv2JAYqchX5sHbO3NbP7haEyu1V0/72KwALG+BA=";
-    })
-
-    # XSA #488
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa488-4.20.patch";
-      hash = "sha256-QttKWdmWC6Zn5k2hd6RIMCpLWv71HB/A9mCbDP+i8to=";
-    })
-
-    # XSA #490
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa490-4.21.patch";
-      hash = "sha256-PF4zNeaS8aXHBNKLcgjVBUqmREg+nvdyHyLlhX2YBiw=";
-    })
-
-    # XSA #491
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa491-4.21.patch";
-      hash = "sha256-I21YIcaK1v7BfBJi/aiVACgR3QyN+/gXnB4YMprT4zA=";
-    })
-
-    # XSA #492
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-01.patch";
-      hash = "sha256-U3nE7jgTKh2HmS9tMVQG+TIGvgU5B1aikC3NSER0CaY=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-02.patch";
-      hash = "sha256-Y3k9ICThfnIcu59F2pFDbFWD5DL6siPJmINmC7nT2uY=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-03.patch";
-      hash = "sha256-k4nPft59/MQwYKcdrzj5d80+LDhp05e86iJWzabjkQc=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-04.patch";
-      hash = "sha256-Mn+8q9zsstXbmrS/rkDdtwWEiD3EGNlmpa+eB1wESA4=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-05.patch";
-      hash = "sha256-csf9nf6cz3skhq1ph8HIs2AEVgBkw29hP39zwqy2vwM=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-06.patch";
-      hash = "sha256-urY9bjqqzKSGqGqEhDnagLUrzDsKkARMERT7vmukeUU=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-07.patch";
-      hash = "sha256-OyUC9bJevxiMuJuyJO9Z3ScXebe7lZM95HkK5YxGino=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-08.patch";
-      hash = "sha256-g3zV+r9LKjuMbkl4gprhWqClOgDU/Kbesr39LQiM+Aw=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-09.patch";
-      hash = "sha256-Wuc5dqwm+zwlYOzDXpRgyQH584sKwETi+xcE7HASHyI=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-10.patch";
-      hash = "sha256-ggln1O+epVOErBSUhIxX7xhwBy808vnQtcae3KYoQdo=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-11.patch";
-      hash = "sha256-/Yb1i/ms8MaVsEa/nK84CTFclOKcJoWMjjQJQab7l40=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-12.patch";
-      hash = "sha256-IpUeM+t7AZ8IVlzake+PiFAe0FCeFzChy+eaN9MAiSM=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-13.patch";
-      hash = "sha256-3vZj9VrDcFtlKrlMy1OD//F+6O252m23jJ0BRShQ6wA=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-14.patch";
-      hash = "sha256-LiBavW+FTfXdELs8Fm79KeOvskRqDXytv/e7eYRgSvY=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-15.patch";
-      hash = "sha256-0eK2hIFPNDIfv2W0ivkGL8Z3F+NpN4p2X0JVKjeBYWE=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-16.patch";
-      hash = "sha256-iEEkPC9mIuSF6Swt3/myUizsc8DubSPEkLkf1zm0/NE=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-17.patch";
-      hash = "sha256-YNo1wr+fRKk8+78Jf/zqJ7q9ugbzg7gyiyJ3zU+nB60=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-18.patch";
-      hash = "sha256-qNWe3iw+bYDtvBZ2KVfcy4VKu/waOyhoKZ0L8bqLdNc=";
-    })
-
-    # XSA #493
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-01.patch";
-      hash = "sha256-SvAj+9CIyedpFENCB/lQTJUB4kpVkGh+z+NNk82lQqM=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-02.patch";
-      hash = "sha256-4fajBBBKMnMTy7mvFSUghwkRbYo833s3jATeGfiOrjc=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-03.patch";
-      hash = "sha256-/AI9gtd60UWf89NNd7+Zx1g+KyAIM2wCih/07LN5zt4=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-04.patch";
-      hash = "sha256-qvXQG9VZkgca/za3bx1zTDkmRz5lFT3JPkbdI1mlBGY=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-05.patch";
-      hash = "sha256-6pGjjPjalw6TY0n9TInE3nCXNmt6BUxwy1r1xf55U7k=";
-    })
-
-    # XSA #494
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa494-4.20.patch";
-      hash = "sha256-ns0s++J2adUD/HWuMiYad/g3MITs+twlMnkpFnP7T0w=";
-    })
-
-    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+  ]
+  ++ optionals (versionOlder finalAttrs.version "4.21") [
+    # Patch `libxl` to search for `qemu-system-i386` properly.
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
       hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
@@ -337,13 +216,14 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "dev"
     "boot"
+    "ocaml"
   ];
 
   src = fetchFromGitHub {
     owner = "xen-project";
     repo = "xen";
-    tag = "RELEASE-4.20.3";
-    hash = "sha256-+qTHIsDD2A5lVwmpJ7artnzdviT1XN05CYeu7JFxfqc=";
+    tag = "RELEASE-${finalAttrs.version}";
+    hash = "sha256-airf4+QjornWQ9aH+cCpKzgVoLbsNduurXySDAv8clY=";
   };
 
   strictDeps = true;
@@ -358,11 +238,12 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     perl
     pkg-config
-
-    # oxenstored
-    ocamlPackages.findlib
-    ocamlPackages.ocaml
   ]
+  ++ (with ocamlPackages; [
+    findlib
+    ocaml
+    ocamlbuild
+  ])
   ++ (with python3Packages; [
     python
     setuptools
@@ -383,15 +264,16 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ optionals withFlask [ checkpolicy ]
-  ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ];
+  ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ]
+  ++ optionals (versionAtLeast finalAttrs.version "4.21") [ json_c ];
 
   configureFlags = [
-    "--enable-systemd"
-    "--disable-qemu-traditional"
-    "--with-system-qemu"
-    (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF-xen.mergedFirmware}" else "--disable-ovmf")
-    (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
+    (enableFeature true "systemd")
+    (withFeature true "system-qemu")
+    (withFeatureAs true "systemd-sleep" "$out/lib/systemd/system-sleep")
+    (withXenFeature withSeaBIOS "seabios" seabios-qemu.firmware)
+    (withXenFeature withOVMF "ovmf" OVMF-xen.mergedFirmware)
+    (withXenFeature withIPXE "ipxe" ipxe.firmware)
     (enableFeature withFlask "xsmpolicy")
   ];
 
@@ -426,15 +308,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=maybe-uninitialized"
-    "-Wno-error=array-bounds"
-  ];
-
   dontUseCmakeConfigure = true;
-
-  # Remove in-tree QEMU sources, we don't need them in any circumstance.
-  prePatch = "rm -rf tools/qemu-xen tools/qemu-xen-traditional";
 
   installPhase = ''
     runHook preInstall
@@ -442,10 +316,37 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out $out/share $boot
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/etc $out
-    # Decompresses the multiboot binary so it's present for bootloaders such as Limine
-    # The find command is used instead of a simple file glob so we skip processing symlinks
+  ''
+  # Decompresses the multiboot binary so it's present for bootloaders such as Limine
+  # The find command is used instead of a simple file glob so we skip processing symlinks
+  + ''
     find dist/install/boot -type f -name '*.gz' -print -exec gunzip -k '{}' ';'
     cp -prvd dist/install/boot $boot
+  ''
+  # Copy the xsd_glue OCaml plugin interface to the ocaml output.
+  # This allows other derivations (namely oxenstored) to depend on the
+  # canonical plugin interface without pulling in the entire xen package,
+  # and avoiding issues that arise when the plugin interface is built twice,
+  # once in this package, and again in the oxenstored package, leading to
+  # a mismatch in hash between the two interfaces and the plugin not being
+  # able to load in oxenstored.
+  + ''
+    mkdir -p $ocaml/lib/ocaml
+    if [ -d $out/lib/ocaml/*/site-lib/xsd_glue ]; then
+      ocamlVersion=$(ls $out/lib/ocaml/)
+      mkdir -p $ocaml/lib/ocaml/$ocamlVersion/site-lib
+      cp -prvd $out/lib/ocaml/$ocamlVersion/site-lib/xsd_glue $ocaml/lib/ocaml/$ocamlVersion/site-lib/
+    fi
+  ''
+  # Also provide the canonical plugin_interface_v1 source files so
+  # downstream packages can build ABI-compatible OCaml modules against
+  # the versions built in the xen derivation. The dependency on the Xen
+  # package in this way also keeps the plugin, interface, oxenstored
+  # and xen packages coupled.
+  + ''
+    mkdir -p $ocaml/share/xen/ocaml/xsd_glue
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.ml $ocaml/share/xen/ocaml/xsd_glue/
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.mli $ocaml/share/xen/ocaml/xsd_glue/
 
     runHook postInstall
   '';
@@ -492,6 +393,7 @@ stdenv.mkDerivation (finalAttrs: {
           "xenguest"
           "xenhypfs"
           "xenlight"
+          "xenmanage"
           "xenstat"
           "xenstore"
           "xentoolcore"
@@ -504,7 +406,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    branch = versions.majorMinor finalAttrs.version;
+    branch = majorMinor finalAttrs.version;
 
     description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
     longDescription = ''

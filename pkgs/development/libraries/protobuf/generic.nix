@@ -73,16 +73,23 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/protocolbuffers/protobuf/commit/8282f0f8ecf8b847e5964a308e041ba3b049811c.patch";
         hash = "sha256-4c/yLuAd29Cxrz6I9F2Lj02lW2bazIcGb+86uxZY7qA=";
       })
+    ]
+    ++ lib.optionals ((lib.versionAtLeast version "33") && (lib.versionOlder version "36")) [
       # Fix packed enum decoding on big-endian platforms
       # https://github.com/protocolbuffers/protobuf/pull/25683
       ./fix-upb-packed-enum-be.patch
     ]
-    ++ lib.optionals (lib.versionAtLeast version "34") [
+    ++ lib.optionals ((lib.versionAtLeast version "34") && (lib.versionOlder version "36")) [
       # upb linker-array fix for newer toolchains (notably GCC 15):
       # `UPB_linkarr_internal_empty_upb_AllExts` can conflict with extension
       # entries in `linkarr_upb_AllExts` during test builds.
       # Context: https://github.com/protocolbuffers/protobuf/issues/21021
       ./fix-upb-linkarr-sentinel-init.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "34") [
+      # Fix BoolKeys test on big-endian
+      # https://github.com/protocolbuffers/protobuf/pull/25862
+      ./fix-BoolKeys-test-on-be.patch
     ];
 
   postPatch =
@@ -90,9 +97,17 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/google/protobuf/testing/googletest.cc \
         --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
     ''
+    # Adapt https://github.com/protocolbuffers/protobuf/pull/22412 for various
+    # older versions. sed -z spans newlines, so this can capture and replace
+    # the full multiline #if macro.
+    + lib.optionalString (lib.versionOlder version "32") ''
+      sed -zi 's/\(#if \w*(clang::musttail)\)[^\n]*\(\\\n[^\n]*\)*/'\
+      '\1 \&\& (defined(__aarch64__) || defined(__x86_64__) || defined(_M_X64))/' \
+        src/google/protobuf/port_def.inc
+    ''
     # Keep the sentinel macro non-retained for GCC 15+ to match generated
     # extension objects in linker arrays and avoid section type conflicts.
-    + lib.optionalString (lib.versionAtLeast version "34") ''
+    + lib.optionalString ((lib.versionAtLeast version "34") && (lib.versionOlder version "36")) ''
       substituteInPlace upb/port/def.inc \
         --replace-fail \
           '#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))' \

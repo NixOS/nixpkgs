@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   nodejs,
   pnpm_10,
@@ -8,15 +8,15 @@
   pnpmConfigHook,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  version = "0.14.29";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o5NyU52j3ZyuKWT4lL5U78qz4TBbXerylTl2fdvwqlk=";
+    hash = "sha256-QMTzylHAO5s5VtyBAnHEoxKq8ndRyAdvh/N5xUYRLas=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -25,17 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
-      patchPhase
       ;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-excPYLP+81ftU/LwBeO/lmj4Nbefb4dNvpvudg/sx+w=";
+    hash = "sha256-5e6fC+5BwQm9TqZlnZ9GiPlVwCdEePTpUh4m4tt8qy4=";
   };
-
-  patchPhase = ''
-    substituteInPlace ./packages/tailwindcss-language-server/package.json \
-      --replace '"@tailwindcss/oxide": "^4.1.15",' '"@tailwindcss/oxide": "^4.1.14",'
-  '';
 
   nativeBuildInputs = [
     pnpmConfigHook
@@ -51,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
-  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.14.24/pnpm-lock.yaml#L71
+  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.16.0/pnpm-lock.yaml#L77
   buildPhase = ''
     runHook preBuild
 

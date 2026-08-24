@@ -19,13 +19,13 @@ let
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.24.5";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     tag = version;
-    hash = "sha256-B0LAd9Fn1E5heGPk5dd7DoHWreHRxe42Xew5PmLId7g=";
+    hash = "sha256-9Ynji8x2JfwbLDtp/U7pmTmLACXc7XZO8CD7s4oOXbg=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,14 @@ buildDotnetModule rec {
     name = "${pname}-${version}-npm-deps";
     inherit src;
     sourceRoot = "${src.name}/${npmRoot}";
-    hash = "sha256-hmN91Y9ePJ7ZUyQX8jJbOgf0SuhsgmhO1ifi4sWhPUM=";
+    hash = "sha256-HagCY1xxW0dC5OGpySi3spf3jSLS6+GfTkrzLBMiy+I=";
   };
 
   projectFile = "slskd.sln";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   testProjectFile = "tests/slskd.Tests.Unit/slskd.Tests.Unit.csproj";
   doCheck = true;

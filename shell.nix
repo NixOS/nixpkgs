@@ -13,7 +13,34 @@
 #
 {
   system ? builtins.currentSystem,
-  nixpkgs ? null,
+  nixpkgs ? (
+    # On 26.05 we need a CI-pinned Nixpkgs revision that supports x86_64-darwin.
+    # TODO: remove after 26.05 support ends.
+    if system == "x86_64-darwin" && (builtins.readFile ./.version) == "26.05" then
+      let
+        pinned = (builtins.fromJSON (builtins.readFile ./ci/pinned.json)).pins;
+        warn = builtins.warn or (import ./lib).warn;
+
+        inherit (pinned."nixpkgs-26.05-darwin")
+          url
+          hash
+          revision
+          branch
+          ;
+
+        withWarning = warn (toString [
+          "The currently pinned Nixpkgs (${pinned.nixpkgs.revision}) does not support ${system},"
+          "using revision (${revision}) from ${branch}."
+          "You may experience some differences to CI."
+        ]);
+      in
+      withWarning fetchTarball {
+        inherit url;
+        sha256 = hash;
+      }
+    else
+      null
+  ),
 }:
 let
   inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
@@ -38,4 +65,7 @@ curPkgs
     # treefmt wrapper
     fmt.pkg
   ];
+}
+// {
+  formatter = fmt.pkg;
 }

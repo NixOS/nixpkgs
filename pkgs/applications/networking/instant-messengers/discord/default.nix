@@ -77,6 +77,7 @@ let
       infinidoge
       jopejoe1
       Scrumplex
+      sophiebsw
     ];
     platforms = [
       "x86_64-linux"
@@ -84,7 +85,6 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-  package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
   sources = lib.importJSON ./sources.json;
 in
@@ -95,7 +95,7 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
     source = sources."${platformName}-${args.branch}";
   in
-  callPackage package (
+  callPackage ./wrapper.nix (
     args
     // {
       inherit pname source;

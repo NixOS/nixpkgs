@@ -41,12 +41,12 @@ index 096d31389e..c6e4aabdeb 100644
 -
 -if(PROTOBUF_CHECK EQUAL 0)
 -    if(PROTOBUF_VERSION VERSION_LESS "3.20.0" OR PROTOBUF_VERSION VERSION_GREATER_EQUAL "4.0.0")
--        message(FATAL_ERROR "Python protobuf ${PROTOBUF_VERSION} found, but version (>=3.20, <4.0) is required")
+-        message(FATAL_ERROR "Python protobuf ${PROTOBUF_VERSION} found, but version (>=3.20, <4.0) is required. Run ./configure.sh to provision a local .venv with the correct version, or set SKIP_PYTHON_VENV=1 to manage protobuf via your system Python.")
 -    else()
 -        message(STATUS "Python protobuf ${PROTOBUF_VERSION} found (>=3.20, <4.0)")
 -    endif()
 -else()
--    message(FATAL_ERROR "Python protobuf not found. Install version (>=3.20, <4.0)")
+-    message(FATAL_ERROR "Python protobuf not found. Run ./configure.sh to provision a local .venv with the correct version (>=3.20, <4.0), or set SKIP_PYTHON_VENV=1 to manage protobuf via your system Python.")
 -endif()
 -
 -

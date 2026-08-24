@@ -12,7 +12,6 @@
   lzo,
   libjpeg,
   libogg,
-  pcre,
   makeWrapper,
 }:
 let
@@ -55,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     lzo
     libjpeg
     libogg
-    pcre
   ];
 
   cmakeFlags = [

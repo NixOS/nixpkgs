@@ -19,6 +19,7 @@ let
     isList
     foldl'
     ;
+  hasRootPrefix = hasPrefix "/";
 in
 
 rec {
@@ -62,6 +63,8 @@ rec {
     let
       # prevent infinite recursion for the default stdenv value
       defaultStdenv = stdenv;
+      defaultPassAsFile = [ "buildCommand" ];
+      removedNames = [ "passAsFile" ];
     in
     {
       # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
@@ -79,9 +82,7 @@ rec {
       {
         enableParallelBuilding = true;
         inherit buildCommand name;
-        passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
-      }
-      // {
+        passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
         ${if !derivationArgs ? meta then "pos" else null} =
           let
             args = builtins.attrNames derivationArgs;
@@ -93,7 +94,7 @@ rec {
         ${if runLocal then "preferLocalBuild" else null} = true;
         ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs removedNames
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -106,6 +107,14 @@ rec {
     ];
 
     extendDrvArgs =
+      let
+        defaultPassAsFile = [ "text" ];
+        removedDerivationNames = [
+          "passAsFile"
+          "meta"
+          "passthru"
+        ];
+      in
       finalAttrs:
       {
         name,
@@ -132,7 +141,7 @@ rec {
           ;
         destination =
           assert
-            (destination != "" -> (lib.hasPrefix "/" destination && destination != "/"))
+            (destination != "" -> (hasRootPrefix destination && destination != "/"))
             || throw ''
               destination must be an absolute path, relative to the derivation's out path,
               got '${destination}' instead.
@@ -140,7 +149,7 @@ rec {
               Ensure that the path starts with a / and specifies at least the filename.
             '';
           destination;
-        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
+        passAsFile = defaultPassAsFile ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
           target=$out$destination
@@ -171,11 +180,7 @@ rec {
           // derivationArgs.meta or { };
         passthru = passthru // derivationArgs.passthru or { };
       }
-      // removeAttrs derivationArgs [
-        "passAsFile"
-        "meta"
-        "passthru"
-      ];
+      // removeAttrs derivationArgs removedDerivationNames;
 
     # `writeTextFile`'s set pattern doesn't have ellipses.
     inheritFunctionArgs = false;
@@ -534,6 +539,23 @@ rec {
     ];
 
     extendDrvArgs =
+      let
+        mapPaths =
+          f:
+          map (
+            path:
+            if path == null then
+              null
+            else if isList path then
+              mapPaths f path
+            else
+              f path
+          );
+        defaultPassAsFile = [
+          "buildCommand"
+          "paths"
+        ];
+      in
       finalAttrs:
       args@{
         name ?
@@ -550,32 +572,16 @@ rec {
         ...
       }:
       assert
-        (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/"))
+        (stripPrefix != "" -> (hasRootPrefix stripPrefix && stripPrefix != "/"))
         || throw ''
           stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
 
           Ensure that the path starts with / and specifies path to the subdirectory.
         '';
-      let
-        mapPaths =
-          f:
-          map (
-            path:
-            if path == null then
-              null
-            else if isList path then
-              mapPaths f path
-            else
-              f path
-          );
-      in
       {
         enableParallelBuilding = true;
         inherit name allowSubstitutes preferLocalBuild;
-        passAsFile = [
-          "buildCommand"
-          "paths"
-        ];
+        passAsFile = defaultPassAsFile;
         paths = mapPaths (path: "${path}${stripPrefix}") paths;
         buildCommand = ''
           mkdir -p $out
@@ -589,8 +595,6 @@ rec {
           done
           ${postBuild}
         '';
-      }
-      // {
         ${if !args ? meta then "pos" else null} =
           if args ? pname then
             builtins.unsafeGetAttrPos "pname" args
@@ -633,9 +637,17 @@ rec {
       entries' =
         if (lib.isAttrs entries) then
           entries
-        # We do this foldl to have last-wins semantics in case of repeated entries
         else if (lib.isList entries) then
-          foldl' (a: b: a // { "${b.name}" = b.path; }) { } entries
+          # listToAttrs takes the first attribute with a given name, so we
+          # reverse the list to get last-wins semantics in case of repeated entries
+          lib.listToAttrs (
+            lib.reverseList (
+              map (entry: {
+                inherit (entry) name;
+                value = entry.path;
+              }) entries
+            )
+          )
         else
           throw "linkFarm entries must be either attrs or a list!";
 

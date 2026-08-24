@@ -34,16 +34,20 @@ Inside each package set are:
 - builders: mixRelease, buildRebar3, etc
 - hooks: for composing builders and packages
 
-To use a non-default Elixir it's important to keep the rest of the package set consistent, so it's recommended to use `.extend`. This ensures that builders like `mixRelease`, `fetchMixDeps`, and `buildMix` all pick up the overridden Elixir:
+The package set is the only place Erlang and Elixir versions are chosen. Builders such as `mixRelease`, `fetchMixDeps` and `buildMix` take them from the set they are called from, and do not accept `erlang`, `elixir` or `hex` arguments.
+
+To use a non-default Elixir, derive a new set with `overrideScope`. This keeps the rest of the set consistent, so every builder picks up the overridden Elixir:
 
 ```nix
 let
-  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 in
 beamPackages.mixRelease {
   # ...
 }
 ```
+
+`erlang` can be replaced the same way, which is useful for a patched OTP. Every member of the set is built from the set's own `erlang`, so overriding it rebuilds Elixir, Rebar3 and the rest against it.
 
 ## Build Tools {#beam-build-tools}
 
@@ -206,7 +210,7 @@ Here is how your `default.nix` file would look for a Phoenix project.
   # beam27Packages or beam29Packages is available if you need a particular version
   beamPackages,
 }:
-let
+beamPackages.mixRelease (finalAttrs: {
   pname = "your_project";
   version = "0.0.1";
 
@@ -215,24 +219,6 @@ let
     rev = "replace_with_your_commit";
   };
 
-  # if using mix2nix you can use the mixNixDeps attribute
-  mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
-    # nix will complain and tell you the right value to replace this with
-    hash = lib.fakeHash;
-    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
-    # if you have build time environment variables add them here
-    MY_ENV_VAR = "my_value";
-  };
-in
-beamPackages.mixRelease {
-  inherit
-    src
-    pname
-    version
-    mixFodDeps
-    ;
   # if you have build time environment variables add them here
   MY_ENV_VAR = "my_value";
 
@@ -242,7 +228,18 @@ beamPackages.mixRelease {
     mix do deps.loadpaths --no-deps-check, phx.digest
     mix phx.digest --no-deps-check
   '';
-}
+
+  # if using mix2nix you can use the mixNixDeps attribute
+  mixFodDeps = beamPackages.fetchMixDeps {
+    pname = "mix-deps-${finalAttrs.pname}";
+    inherit (finalAttrs) src version;
+    # nix will complain and tell you the right value to replace this with
+    hash = lib.fakeHash;
+    mixEnv = ""; # default is "prod", when empty includes all dependencies, such as "dev", "test".
+    # if you have build time environment variables add them here
+    MY_ENV_VAR = "my_value";
+  };
+})
 ```
 
 Setup will require the following steps:
@@ -339,8 +336,8 @@ Usually, we need to create a `shell.nix` file and do our development inside the 
 
 with pkgs;
 let
-  # pin OTP via beam27Packages/beam28Packages/... and Elixir via .extend
-  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
+  # pin OTP via beam27Packages/beam28Packages/... and Elixir via overrideScope
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 in
 mkShell { buildInputs = [ beamPackages.elixir ]; }
 ```
@@ -375,8 +372,8 @@ Here is an example `shell.nix`.
 with import <nixpkgs> { };
 
 let
-  # pin OTP via beam27Packages/beam28Packages/... and Elixir via .extend
-  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
+  # pin OTP via beam27Packages/beam28Packages/... and Elixir via overrideScope
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 
   # define packages to install
   basePackages = [

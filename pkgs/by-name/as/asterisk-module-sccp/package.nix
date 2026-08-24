@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Replacement for the SCCP channel driver in Asterisk";
     homepage = "https://github.com/chan-sccp/chan-sccp";
     license = lib.licenses.gpl1Only;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     # https://github.com/chan-sccp/chan-sccp/issues/609
     broken = lib.versionAtLeast (lib.getVersion asterisk) "21";
   };

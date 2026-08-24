@@ -105,8 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   meta = {
-    # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
     homepage = "https://ccl.clozure.com/";
     license = lib.licenses.asl20;

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # fix architecture checks in build.rs to fix build for riscv
+    # fix architecture checks in build.rs to fix build for non x86_64
     ./cross-arch-compat.patch
   ];
 

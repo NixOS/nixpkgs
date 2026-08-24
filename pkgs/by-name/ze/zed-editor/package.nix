@@ -98,7 +98,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.10.0";
+  version = "1.16.1";
 
   outputs = [
     "out"
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KLoowntT7rrUWJdZ+uA2qvKih+Ygo58RIxd5jR7fFYE=";
+    hash = "sha256-ZUb6DhjlaOQbwsx7Tf7WEtflzZhGUXxFxvMrRwxatj0=";
   };
 
   postPatch = ''
@@ -134,7 +134,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  cargoHash = "sha256-HzDxvX72H3nLmfI0nIGZISpoF5vTiPj+hT/pz/6MUF4=";
+  cargoHash = "sha256-prcAPH9jA8/drWBPblXHbBYCB0OryZ4JhgPPArPKxoE=";
 
   __structuredAttrs = true;
 

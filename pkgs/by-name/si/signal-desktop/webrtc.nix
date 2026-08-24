@@ -86,42 +86,32 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
   ];
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L604-L612
-    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
-    (fetchpatch {
-      name = "chromium-146-revert-Update-fsanitizer=array-bounds-config.patch";
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7539408
-      url = "https://chromium.googlesource.com/chromium/src/+/acb47d9a6b56c4889a2ed4216e9968cfc740086c^!?format=TEXT";
-      decode = "base64 -d";
-      revert = true;
-      hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
-    })
+  env = {
+    BUILD_CC = "$CC_FOR_BUILD";
+    BUILD_CXX = "$CXX_FOR_BUILD";
+    BUILD_AR = "$AR_FOR_BUILD";
+    BUILD_NM = "$NM_FOR_BUILD";
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-Wno-changes-meaning";
+  };
 
-    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L620-L623
+  patches = [
     # clang++: error: unknown argument: '-fno-lifetime-dse'
     ./chromium-147-llvm-22.patch
 
-    # https://github.com/NixOS/nixpkgs/blob/8e689a91c5b4e47b57dee488dd7e319cc704eb9d/pkgs/applications/networking/browsers/chromium/common.nix#L624-L644
+    # Keep in sync with Chromium's LLVM 22 compatibility patches.
+    # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
+    # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
     # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+    ./chromium-149-llvm-22.patch
+
+    # ninja: error: 'ar', needed by 'obj/third_party/protobuf/libprotoc_lib.a',
+    # missing and no known rule to make it
     (fetchpatch {
-      name = "chromium-148-revert-build-Add--fsanitizer=return-config.patch";
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7629257
-      url = "https://chromium.googlesource.com/chromium/src/+/99ba1f5302f9433efdb4df302cb7b7de56c72e4c^!?format=TEXT";
+      name = "chromium-150-backport-build--Omit-ar-from-inputs-when-resolved-via--PATH.patch";
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7904982
+      url = "https://chromium.googlesource.com/chromium/src/+/60f987d8d5f7272793a40290d060b8f50933f825^!?format=TEXT";
       decode = "base64 -d";
-      revert = true;
-      hash = "sha256-/qzzxwTdPMwIdsqD/G02S7kKHCj3QxECL+g1WYEaWmU=";
-    })
-    # ERROR Unresolved dependencies.
-    # //apps:apps(//build/toolchain/linux/unbundle:default)
-    #   needs //build/config/compiler:sanitize_return(//build/toolchain/linux/unbundle:default)
-    (fetchpatch {
-      name = "chromium-148-revert-build-Enable--fsanitizer=return-config.patch";
-      # https://chromium-review.googlesource.com/c/chromium/src/+/7629258
-      url = "https://chromium.googlesource.com/chromium/src/+/9357bfbea03753fe52264c9ec36abe74f48cfef5^!?format=TEXT";
-      decode = "base64 -d";
-      revert = true;
-      hash = "sha256-14fTHNh3vGsf4KgeH8uLX+aK3lrjK0VKd1dfK1g7r0I=";
+      hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
     })
   ];
 

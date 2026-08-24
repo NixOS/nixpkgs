@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+quLNaxaGCUpsg3PH11nEMeKjIoHsKaBqK4FdIHlaMM=";
+    hash = "sha256-+yt3FIOe51zzQVOm19LKYhlmoCANTQ299qLtP4JHF+Q=";
   };
 
   build-system = [ setuptools ];

@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.29.0";
+  version = "3.29.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
-    tag = version;
-    hash = "sha256-efBEyjuCcLkHsfpG61eKN6ALk4QW4UMdNmD56rSgFLc=";
+    tag = finalAttrs.version;
+    hash = "sha256-sRJQa7vmMf9aWXT5QdYAZQHM0oIFFZM9P2tQ2x5T79Y=";
   };
 
   build-system = [
@@ -41,13 +41,14 @@ buildPythonPackage rec {
     "tests/test_virtualenv.py"
     # Very prone to timeouts on busy machines
     "tests/test_filelock.py"
+    "tests/test_read_write.py"
   ];
 
   meta = {
-    changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
+    changelog = "https://github.com/tox-dev/filelock/releases/tag/${finalAttrs.version}";
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "txm";
-  version = "0.1.4";
+  version = "0.1.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thatmagicalcat";
     repo = "txm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TV2vDQRH4KV+id7pPtG3Wjbfz/V60RS3wfIvKTP90iE=";
+    hash = "sha256-3UkxQDm0OJuCLx2pIsjynDrjIgBHRpwwEkjSQDmhOzY=";
   };
 
-  cargoHash = "sha256-ZGoIIPuDZUata7YmKOMCYcwc8Dlxo0s8W6eogK8qWsE=";
+  cargoHash = "sha256-tibIgVKntQQFOGdDT3DQkoWNTHlIPmDShZv10lKL/+w=";
 
   passthru.updateScript = nix-update-script { };
 

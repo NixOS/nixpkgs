@@ -2,27 +2,35 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
   gevent,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grequests";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "grequests";
+    inherit (finalAttrs) version;
     hash = "sha256-XDPxQmjfW4+hEH2FN4Fb5v67rW7FYFJNakBLd3jPa6Y=";
   };
+
+  build-system = [ setuptools ];
 
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     gevent
   ];
+
+  pythonImportsCheck = [ "grequests" ];
 
   meta = {
     description = "Asynchronous HTTP requests";
@@ -30,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ matejc ];
   };
-}
+})

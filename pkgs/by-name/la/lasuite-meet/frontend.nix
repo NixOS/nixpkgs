@@ -3,26 +3,11 @@
   version,
   meta,
   fetchNpmDeps,
-  fetchpatch,
   buildNpmPackage,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "lasuite-meet-frontend";
   inherit src version;
-
-  patches = [
-    # backport build fix
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://github.com/suitenumerique/meet/commit/df1495c97bc913866169ee8875a9a3169fcfc87e.diff";
-      stripLen = 2;
-      includes = [
-        "package.json"
-        "package-lock.json"
-      ];
-      hash = "sha256-1A26T6LtFlOiJNVGD/fZs562feoQXY37A2ecUfvDGpk=";
-    })
-  ];
 
   sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
@@ -30,10 +15,9 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs)
       version
       src
-      patches
       sourceRoot
       ;
-    hash = "sha256-uiD5pcpmka43uraMFo7lRuQFx/4aq1BEhQvyCAzo8fg=";
+    hash = "sha256-ZvdfLM0GlIZPaKbpDK9ymSgARVMsJE+cop8lKq3R7fE=";
   };
   npmBuildScript = "build";
 

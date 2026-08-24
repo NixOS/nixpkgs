@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     "install"
     "install-lib-headers"
   ]
-  ++ lib.optionals (!enableStatic) [
+  ++ lib.optionals (!enableStatic && !stdenv.hostPlatform.isWindows) [
     "install-lib-so-link"
   ];
 
@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Console utility and library for computing and verifying hash sums of files";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ graysontinker ];
   };
 })

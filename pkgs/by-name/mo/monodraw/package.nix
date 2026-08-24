@@ -19,6 +19,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monodraw";
   version = "1.7.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = "https://updates.helftone.com/monodraw/downloads/Monodraw-b${build}.zip";
     hash = "sha256-7ti/FXoxNMhSYV7TWTeP8mAnCdqukI0SgDdW6RRQsFc=";

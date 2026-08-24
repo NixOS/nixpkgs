@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -31,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -71,8 +69,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CC=musl-gcc \
-      CXXFLAGS="-static -g0 -O2 -DNDEBUG -ffile-prefix-map=${gcc}=. -fmacro-prefix-map=${gcc}=."
+      CXXFLAGS="-g0 -O2 -DNDEBUG -ffile-prefix-map=${gcc}=. -fmacro-prefix-map=${gcc}=."
 
     # Build
     make -j $NIX_BUILD_CORES

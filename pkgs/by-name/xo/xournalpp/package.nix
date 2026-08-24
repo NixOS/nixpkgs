@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.5";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JvB9Oh56ujg7L+q1wTuLsel9Wl2Fyoz9nnz0m/mGxAU=";
+    hash = "sha256-CvuHgZ824jLF/L0/PAnbT4RXFLV+Uh2RJ30DA4PEEbE=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "translations" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/thumbnailers/com.github.xournalpp.xournalpp.thumbnailer \
       --replace-fail "Exec=xournalpp-thumbnailer" "Exec=$out/bin/xournalpp-thumbnailer"
   '';

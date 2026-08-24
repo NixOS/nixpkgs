@@ -172,30 +172,19 @@ let
     ${lib.optionalString (cfg.useNixStoreImage) ''
       echo "Creating Nix store image..."
 
-      ${hostPkgs.gnutar}/bin/tar --create \
-        --absolute-names \
-        --verbatim-files-from \
-        --transform 'flags=rSh;s|/nix/store/||' \
-        --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
-        --files-from ${
+      ${import ../../lib/erofs-store-image.nix {
+        inherit hostPkgs;
+        storePaths = "${
           hostPkgs.closureInfo {
             rootPaths = [
               config.system.build.toplevel
               regInfo
             ];
           }
-        }/store-paths \
-        | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-          --quiet \
-          --force-uid=0 \
-          --force-gid=0 \
-          -L ${nixStoreFilesystemLabel} \
-          -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-          -T 0 \
-          --hard-dereference \
-          --tar=f \
-          "$TMPDIR"/store.img
-
+        }/store-paths";
+        label = nixStoreFilesystemLabel;
+        destination = ''"$TMPDIR"/store.img'';
+      }}
       echo "Created Nix store image."
     ''}
 
@@ -431,6 +420,10 @@ in
       ]
       "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`"
     )
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "useSecureBoot"
+    ] "The default OVMF now always supports Secure Boot.")
   ];
 
   options = {
@@ -997,18 +990,7 @@ in
     };
 
     virtualisation.efi = {
-      OVMF = mkOption {
-        type = types.package;
-        default =
-          (pkgs.OVMF.override {
-            secureBoot = cfg.useSecureBoot;
-          }).fd;
-        defaultText = ''
-          (pkgs.OVMF.override {
-                    secureBoot = cfg.useSecureBoot;
-                  }).fd'';
-        description = "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
-      };
+      OVMF = lib.mkPackageOption pkgs "OVMFFull" { };
 
       firmware = mkOption {
         type = types.path;
@@ -1096,14 +1078,6 @@ in
 
         If disabled, a root filesystem has to be specified and
         formatted (for example in the initial ramdisk).
-      '';
-    };
-
-    virtualisation.useSecureBoot = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable Secure Boot support in the EFI firmware.
       '';
     };
 

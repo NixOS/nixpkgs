@@ -1,6 +1,5 @@
 {
   lib,
-  elixir,
   fetchFromGitHub,
   fetchMixDeps,
   mixRelease,
@@ -27,7 +26,6 @@ mixRelease {
     pname
     version
     src
-    elixir
     ;
 
   escriptBinName = "ex_doc";
@@ -36,7 +34,7 @@ mixRelease {
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
-    inherit src version elixir;
+    inherit src version;
     hash = "sha256-FSLAQhFk7NCUXRMfNr6E9XvndrviapjcKZDisHbB87Y=";
   };
 

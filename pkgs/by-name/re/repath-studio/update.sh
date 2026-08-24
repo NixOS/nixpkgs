@@ -57,7 +57,7 @@ cp deps.edn b/deps.edn
 
 # insert clojure dep at start of :deps map
 sed -i "0,/:deps {/s|:deps {|:deps {org.clojure/clojure {:mvn/version \"$clj_version\"}\n        |" b/deps.edn
-git --no-pager diff --no-index --no-prefix a/deps.edn b/deps.edn >"$PATCH_CLJ_FILE" || true
+diff -u --label=a/deps.edn --label=b/deps.edn a/deps.edn b/deps.edn >"$PATCH_CLJ_FILE" || true
 
 rm -rf a b
 

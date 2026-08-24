@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "std-uritemplate";
-  version = "2.0.11";
+  version = "2.0.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "std_uritemplate";
     inherit (finalAttrs) version;
-    hash = "sha256-afqeUkc41RG7S5Sz4jk8oFJKrRGOVJJZxU2zZ+BdmFI=";
+    hash = "sha256-wkXm2caATkNcRfqU7ko8ilfgiu60WvJhEByw1ROWRTQ=";
   };
 
   build-system = [ poetry-core ];

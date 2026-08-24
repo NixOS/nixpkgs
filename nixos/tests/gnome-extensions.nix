@@ -146,7 +146,7 @@
 
               machine.succeed(f"${run "gnome-extensions enable {extension}"}")
               wait_time = 5
-              while getState(extension) == "ACTIVATING" and (wait_time := wait_time - 1) > 0:
+              while "ACTIVATING" in getState(extension) and (wait_time := wait_time - 1) > 0:
                   machine.log(f"Extension {extension} is still activating, waiting {wait_time} more seconds")
                   machine.sleep(1)
               checkState("ACTIVE", extension)

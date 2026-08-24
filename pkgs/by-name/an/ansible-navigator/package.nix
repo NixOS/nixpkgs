@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-navigator";
-  version = "26.6.0";
+  version = "26.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ansible_navigator";
-    hash = "sha256-WyazCoFg4uPx0jLAG8u19l4dr806pQFzbYFadJwYfTM=";
+    hash = "sha256-V5UyoCrLr4iZvDeFQUIcXSxTWP1G3TmCJUdhWQIpn+Q=";
   };
 
   build-system = with python3Packages; [

@@ -144,12 +144,10 @@ in
       ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
       wantedBy = [ "multi-user.target" ];
 
-      script = ''
-        exec ${getExe cfg.package} -config ${settingsFile}
-      '';
-
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
+
+        ExecStart = "${getExe cfg.package} -config ${settingsFile}";
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;

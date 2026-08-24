@@ -19,12 +19,12 @@
 }:
 
 let
-  version = "3.20.1";
+  version = "3.22.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-SkPbu0DUNyjo1ARjZX+BXq+3ehZqnrku9kPjwsTJfuM=";
+    hash = "sha256-3jDKcDHiA+7ePJGEyGhBSZrhkFQYHrak+AiOHoMv2qE=";
   };
 
   frontend = stdenv.mkDerivation {
@@ -36,7 +36,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/frontend/yarn.lock";
-      hash = "sha256-nhV93uRfKUa/G7ikJkd6l9IudgMk7PZ7ujZNnwIZ71k=";
+      hash = "sha256-S0i7FGD6be/MIBZRDlEb65tzVUuMPLkg9rL71lkrmms=";
     };
 
     nativeBuildInputs = [
@@ -162,7 +162,7 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==82.0.1"' '"setuptools"'
+     --replace-fail '"setuptools==83.0.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'

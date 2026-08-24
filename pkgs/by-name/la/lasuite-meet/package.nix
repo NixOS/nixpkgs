@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.22.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-w2Lw5K62Iaqzqa/ckxK36o5ZHFLXUpHnGGGl5PYGjaI=";
+    hash = "sha256-WiyVSqkyKDXYYPvzcA/fHcxQJrUThNGfNu+z/KcHK3g=";
   };
 
   meta = {
@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
   ];
 

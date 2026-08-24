@@ -150,6 +150,10 @@ in
     ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule [
+      "services"
+      "bosun"
+    ] "bosun has been removed as it is no longer maintained upstream.")
     (mkRemovedOptionModule [ "services" "botamusique" ]
       "The botamusique module has been removed. The project was archived upstream in 2024: https://github.com/azlux/botamusique"
     )
@@ -316,6 +320,9 @@ in
       The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
       and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
     '')
+    (mkRemovedOptionModule [ "services" "pfix-srsd" ] ''
+      The pfixtools project is dormant and does not support pcre2.  `services.postsrsd` is the recommended replacement for Sender Rewriting Scheme support with Postfix.
+    '')
     (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
       The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
     '')
@@ -403,9 +410,19 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "afterstep" ] ''
+      The services.xserver.windowManager.afterstep module and the corresponding
+      package have been removed from Nixpkgs because they were unmaintained
+      upstream.
+    '')
     (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
       The services.xserver.windowManager.ragnarwm module has been removed
       because the corresponding package was removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "sawfish" ] ''
+      The services.xserver.windowManager.sawfish module and the corresponding
+      package have been removed from Nixpkgs because they depended on the
+      deprecated GTK2 engine.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -511,7 +528,7 @@ in
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
-      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+      security.pam.enableEcryptfs was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises
@@ -534,6 +551,13 @@ in
     (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
       services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
+    (mkRemovedOptionModule
+      [
+        "services"
+        "overseerr"
+      ]
+      "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
+    )
     # Do NOT add any option renames here, see top of the file
   ];
 }

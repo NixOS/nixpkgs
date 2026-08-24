@@ -24,19 +24,39 @@
   wavpack,
   ffmpeg,
   pulseaudio,
+  rustPlatform,
   withDiscordRPC ? true,
 }:
-python3Packages.buildPythonApplication rec {
-  pname = "tauon";
-  version = "10.0.1";
-  pyproject = true;
-
+let
+  version = "11.1.1";
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-atLyNePy3pc3xJFliy5hITC5R0VU6jfHYqfq8RxqGoM=";
+    hash = "sha256-/E8+c8FX8JnSaYgaXRKE2u6eIWjkL4yGU1WQTluGWjY=";
   };
+
+  lrclib-solver = rustPlatform.buildRustPackage {
+    pname = "lrclib-solver";
+    inherit version;
+    src = "${src}/src/lrclib-solver";
+    cargoHash = "sha256-uNEf0d462W9mJHGLeAE/aLjpyzKT5orKZ7BYQ+53msY=";
+
+    meta = {
+      mainProgram = "lrclib-solver";
+      license = lib.licenses.gpl3;
+      maintainers = with lib.maintainers; [
+        jansol
+        alfarel
+      ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    };
+  };
+in
+python3Packages.buildPythonApplication {
+  pname = "tauon";
+  pyproject = true;
+  inherit version src;
 
   postUnpack = ''
     rmdir source/src/phazor/kissfft
@@ -106,6 +126,7 @@ python3Packages.buildPythonApplication rec {
       pygobject3
       pyopengl
       pysdl3
+      rapidfuzz
       requests
       send2trash
       setproctitle
@@ -136,7 +157,10 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
+    ln -s ${lib.getExe lrclib-solver} $out/${python3Packages.python.sitePackages}/tauon/lrclib-solver
   '';
+
+  passthru = { inherit lrclib-solver; };
 
   meta = {
     description = "Linux desktop music player from the future";

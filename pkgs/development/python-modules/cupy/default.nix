@@ -1,85 +1,118 @@
 {
   lib,
   buildPythonPackage,
+  cudaPackages,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cython,
   setuptools,
 
   # nativeBuildInputs
-  cudaPackages,
-  symlinkJoin,
-  addDriverRunpath,
+  autoAddDriverRunpath,
+  writableTmpDirAsHomeHook,
 
   # dependencies
   numpy,
   cuda-pathfinder,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
 }:
 
-let
-  shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
-
-  # some packages are not available on all platforms
-  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
-  libcutensor = shouldUsePkg (cudaPackages.libcutensor or null);
-  nccl = shouldUsePkg (cudaPackages.nccl or null);
-
-  outpaths = lib.filter (outpath: outpath != null) (
-    with cudaPackages;
-    [
-      cccl # <nv/target>
-      cuda_cudart
-      cuda_nvcc # <crt/host_defines.h>
-      cuda_nvprof
-      cuda_nvrtc
-      cuda_nvtx
-      cuda_profiler_api
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
-      libcusparse_lt # cusparseLt.h
-    ]
-  );
-  cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
-    paths =
-      outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
-  };
-in
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cupy";
-  version = "14.0.1";
+  version = "14.1.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TaEJ0BveUCXCRrNq9L49Tfbu0334+cANcVm5qnSOE1Q=";
+    hash = "sha256-8jreEbQA24V7EAD87z3uFwlr3LPDoGRCvF5vbf2dKvI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-        "Cython>=3.1,<3.2" \
-        "Cython"
-  '';
+  patches = [
+    # Let cupy_setup_build.py find static libraries (.a) from buildInputs.
+    # By default, it looks for them in `$CUDA_PATH/lib{64,}`.
+    ./link-static-libraries.patch
+
+    # Fix test collection with pytest>=9
+    # https://github.com/cupy/cupy/pull/10020
+    (fetchpatch {
+      name = "pytest-9-compat.patch";
+      url = "https://github.com/cupy/cupy/commit/6f52f1541e0e047cdb84286793d6110567bce5c8.patch";
+      hash = "sha256-D4VjOL0XO8gnfItGC/2MjuWYCJ7eNJYFn8jIyM+EojM=";
+    })
+  ];
+
+  postPatch =
+    # Inject absolute path to nvcc instead of relying on runtime discovery heuristics
+    ''
+      substituteInPlace cupy/_environment.py \
+        --replace-fail \
+          "nvcc_path = os.environ.get('NVCC', None)" \
+          "return '${lib.getExe cudaPackages.cuda_nvcc}'"
+    ''
+    # Inject absolute path to CUDA libraries which get disovered at runtime
+    + ''
+      substituteInPlace cupy/_core/core.pyx \
+        --replace-fail \
+          "_cuda_include_dir = find_nvidia_header_directory('cudart')" \
+          "_cuda_include_dir = '${lib.getInclude cudaPackages.cuda_cudart}/include'"
+
+      substituteInPlace cupy/cuda/__init__.py \
+        --replace-fail \
+          "from cuda import pathfinder" \
+          "from ctypes import CDLL" \
+        --replace-fail \
+          'pathfinder.load_nvidia_dynamic_lib("cufft")' \
+          'CDLL("${lib.getLib cudaPackages.libcufft}/lib/libcufft.so")'
+
+      substituteInPlace cupy/cuda/cufft.pyx \
+        --replace-fail \
+          "from cuda import pathfinder" \
+          "from ctypes import CDLL" \
+        --replace-fail \
+          "loaded_dl = pathfinder.load_nvidia_dynamic_lib('cufft')" \
+          "loaded_dl = CDLL('${lib.getLib cudaPackages.libcufft}/lib/libcufft.so')" \
+        --replace-fail \
+          "handle = loaded_dl._handle_uint" \
+          "handle = loaded_dl._handle"
+
+      substituteInPlace cupy_backends/cuda/api/_runtime_softlink.pxi \
+        --replace-fail \
+          "from cuda import pathfinder" \
+          "from ctypes import CDLL" \
+        --replace-fail \
+          "loaded_dl = pathfinder.load_nvidia_dynamic_lib('cudart')" \
+          "loaded_dl = CDLL('${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so')" \
+        --replace-fail \
+          "handle = loaded_dl._handle_uint" \
+          "handle = loaded_dl._handle"
+
+      substituteInPlace cupy_backends/cuda/libs/_cnvrtc.pxi \
+        --replace-fail \
+          "from cuda import pathfinder" \
+          "from ctypes import CDLL" \
+        --replace-fail \
+          "loaded_dl = pathfinder.load_nvidia_dynamic_lib('nvrtc')" \
+          "loaded_dl = CDLL('${lib.getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so')" \
+        --replace-fail \
+          "handle = loaded_dl._handle_uint" \
+          "handle = loaded_dl._handle"
+
+      substituteInPlace cupy/cuda/compiler.py \
+        --replace-fail \
+          "cudadevrt = get_cuda_path()" \
+          "return '${lib.getOutput "static" cudaPackages.cuda_cudart}/lib/libcudadevrt.a'"
+    '';
 
   env = {
     LDFLAGS = toString [
       # Fake libcuda.so (the real one is deployed impurely)
       "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
     ];
-    # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
-    CUDA_PATH = "${cudatoolkit-joined}";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
@@ -92,20 +125,36 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
+  enableParallelBuilding = true;
+
   build-system = [
     cython
     setuptools
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
-    cudatoolkit-joined
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
+
+    writableTmpDirAsHomeHook # Needed for pythonImportsCheck
   ];
 
-  buildInputs = [
-    cudatoolkit-joined
-    libcutensor
-    nccl
+  buildInputs = with cudaPackages; [
+    cuda_cudart # cuda.h, cuda_runtime.h, libcudart_static.a
+    cuda_cuxxfilt # nv_decode.h
+    cuda_nvrtc # nvrtc.h
+    cuda_nvtx # nvToolsExt.h
+    cuda_profiler_api # cuda_profiler_api.h
+    libcublas # cublas_v2.h
+    libcufft # cufft.h
+    libcurand # curand.h
+    libcusolver # cusolverDn.h
+    libcusparse # cusparse.h
+    libcusparse_lt # cusparseLt.h
+    libcutensor # cutensor.h
+    nccl # nccl.h
+
+    (lib.getOutput "static" cuda_cuxxfilt) # libcufilt.a
   ];
 
   dependencies = [
@@ -113,22 +162,14 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     numpy
   ];
 
-  nativeCheckInputs = [
-    pytest-mock
-    pytestCheckHook
+  pythonImportsCheck = [
+    "cupy"
+    "cupy_backends"
+    "cupyx"
   ];
 
-  # Won't work with the GPU, whose drivers won't be accessible from the build
-  # sandbox
+  # Won't work with the GPU, whose drivers won't be accessible from the build sandbox
   doCheck = false;
-
-  postFixup = ''
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addDriverRunpath "$lib"
-    done
-  '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "NumPy-compatible matrix library accelerated by CUDA";
@@ -140,5 +181,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    teams = [ lib.teams.cuda ];
   };
 })

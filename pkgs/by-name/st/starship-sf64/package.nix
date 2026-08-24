@@ -201,6 +201,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
   '';
 
+  postPatch = ''
+    # fix building with fmt_12
+    substituteInPlace tools/Torch/lib/miniz/zip_file.hpp \
+      --replace-fail '#include <cstdint>' '#include <cstdint>''\n#include <cstring>'
+  '';
+
   postBuild = ''
     cp ${sdl_gamecontrollerdb}/share/gamecontrollerdb.txt gamecontrollerdb.txt
     ./TorchExternal/src/TorchExternal-build/torch pack ../port starship.o2r o2r

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   rustPlatform,
 
   # tests
@@ -15,22 +16,24 @@ buildPythonPackage (finalAttrs: {
   pname = "cramjam";
   version = "2.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "cramjam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vGT57ou9nnCVCw8LR+w+5MV54EqwT2R+ww9acRQk8Lc=";
+    hash = "sha256-Sjb1YBFJ26or4RiTA1G0UmVD6tyi9hNwBrde7E/WOes=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-evXYLbv+GwSBUJBb0upjQTFtMPdQbKka8KfJltMUmDs=";
+    hash = "sha256-wTheNASf8G4i8cTLPcreBM1+Kl/VvR+jyliiSC+KMpY=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    pyprojectVersionPatchHook
   ];
 
   nativeCheckInputs = [

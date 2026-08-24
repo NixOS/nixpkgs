@@ -1,8 +1,8 @@
 [
   {
     "pname": "AngleSharp",
-    "version": "1.4.0",
-    "hash": "sha256-xHpoMkhYSj7ejeMmI2e7ygef84QGZhttPjYOnLjITd0="
+    "version": "1.5.2",
+    "hash": "sha256-81rDtnwvR0SDXNNUnPirWIa782gwkgRlz1Fbzm2ywwc="
   },
   {
     "pname": "AngleSharp.Xml",
@@ -111,8 +111,8 @@
   },
   {
     "pname": "MailKit",
-    "version": "4.16.0",
-    "hash": "sha256-4yyFxq8pJVTIgAJkyAYcuV2+/ZirENgUSk1OSD/gKIo="
+    "version": "4.17.0",
+    "hash": "sha256-LGruedMrHrI0AXHcXOFxsYP2awwPbrC9Q41AeQk4+9U="
   },
   {
     "pname": "Microsoft.ApplicationInsights",
@@ -151,8 +151,8 @@
   },
   {
     "pname": "Microsoft.Data.SqlClient",
-    "version": "6.1.5",
-    "hash": "sha256-XpGL/oKQWn+FmYNmKB6CMmWbPEuCDX/xdOMqljS0vvs="
+    "version": "6.1.6",
+    "hash": "sha256-VH1VbBC4ywqSF/RxaMeYivH1DdKdXbk9wGrbvJLNKcc="
   },
   {
     "pname": "Microsoft.Data.SqlClient.SNI.runtime",
@@ -346,13 +346,23 @@
   },
   {
     "pname": "Microsoft.Identity.Client",
-    "version": "4.80.0",
-    "hash": "sha256-vtuXCu0ykTYJjvlSSWMjC9EGJQXZ1dqgpaMeD4FmlGQ="
+    "version": "4.84.2",
+    "hash": "sha256-pYMBMwhrWf/uIVNfov3RpmEAFlkR+fpskUWMf6HlU1M="
+  },
+  {
+    "pname": "Microsoft.Identity.Client.Broker",
+    "version": "4.84.2",
+    "hash": "sha256-yRULIJvCTiA/pHJgeC8t8wpGfj5VttLJwQt8IOOV9o0="
   },
   {
     "pname": "Microsoft.Identity.Client.Extensions.Msal",
     "version": "4.78.0",
     "hash": "sha256-0s9wa8HkFhnzmAz+TGxtA3qTX3dZiIoPcTWGLgY8mAg="
+  },
+  {
+    "pname": "Microsoft.Identity.Client.NativeInterop",
+    "version": "0.20.6",
+    "hash": "sha256-PbaN21Juuh5fnfp84uX+QtGXJ0NmFGEQE/WjylnWD8M="
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
@@ -491,8 +501,8 @@
   },
   {
     "pname": "MimeKit",
-    "version": "4.16.0",
-    "hash": "sha256-yWGXVm+EHvBSsZlVHdWdD+rVwdf/5hHxsUfJMSd2Afo="
+    "version": "4.17.0",
+    "hash": "sha256-GpWv+8shoprshuPNB+H+C5saffiKQ6Pek3zhLUGklRo="
   },
   {
     "pname": "Mono.Nat",
@@ -587,8 +597,8 @@
   },
   {
     "pname": "Polly",
-    "version": "8.6.6",
-    "hash": "sha256-0BrOttCw+HQYB24Y2uMy2vo0P5/txUlhELC8FlyLKps="
+    "version": "8.7.0",
+    "hash": "sha256-iMNusWW+4nuIvkNLUaoru23Roe9vpC140TOIHbLvewE="
   },
   {
     "pname": "Polly.Contrib.WaitAndRetry",
@@ -597,8 +607,8 @@
   },
   {
     "pname": "Polly.Core",
-    "version": "8.6.6",
-    "hash": "sha256-y6/a4OWrUlRfe0J8qdhBRmYRDi6K2y+kwhEVCIUOjvU="
+    "version": "8.7.0",
+    "hash": "sha256-1AT4Xym9hn2Awgul9WErwXk2bBPN58P9XfRExrIPItg="
   },
   {
     "pname": "RestSharp",

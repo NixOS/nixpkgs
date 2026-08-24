@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   patches = [
-    # Remove once https://github.com/AGProjects/blink-qt/pull/7 is mereged and tagged
+    # Remove once https://github.com/AGProjects/blink-qt/pull/7 is merged and tagged
     ./fix-none-account.patch
   ];
 
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       lxml
       lxml-html-clean
       msrplib
-      otr
+      python3-otr
       pgpy
       pyqt6
       pyqt6-webengine

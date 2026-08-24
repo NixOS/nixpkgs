@@ -10,7 +10,6 @@
   shiboken6,
   llvmPackages,
   symlinkJoin,
-  fetchpatch,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -58,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (shiboken6) version src;
 
   sourceRoot = "${finalAttrs.src.name}/sources/pyside6";
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   # Qt Designer plugin moved to a separate output to reduce closure size
   # for downstream things

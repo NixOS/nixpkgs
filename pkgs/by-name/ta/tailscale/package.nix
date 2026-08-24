@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.98.8";
+  version = "1.102.2";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Ikti52jcncQTq9//rBa3Q9N2C2MkGONJ6+4cn4eUFc=";
+    hash = "sha256-vqNShvER4jT+8WJCcaSVboXPEP6S3QacmkC39tJkR4g=";
   };
 
-  vendorHash = "sha256-Sd2iLJ7eDfDYdIRuW4xuiKgzhQWJWGAnz97FJWrVRlE=";
+  vendorHash = "sha256-amKkUPszyhG4N5ZtrB01swBACYq76raSS+SQRneLmwc=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -175,6 +175,10 @@ buildGoModule (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
+
+        # Runs `go test -race`, which requires cgo, but we build with CGO_ENABLED=0
+        "TestRaceAttributedToPassingTest" # cmd/testwrapper
+        "TestRaceSuppressesFlakyRetry" # cmd/testwrapper
 
         # Uses testing/synctest which spawns goroutines that block on syscalls
         # incompatible with synctest's bubble mechanism

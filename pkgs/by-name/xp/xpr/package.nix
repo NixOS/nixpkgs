@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpr";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xpr";
     tag = "xpr-${finalAttrs.version}";
-    hash = "sha256-q8WcQSzlAwbdIcXWyQjjHmvuqYa4k2e7O+VhShwBDUE=";
+    hash = "sha256-KAWQyVIkqa1zOVNjUAQl4zCqctNwaDLPO+LWE0QoIDk=";
   };
 
   strictDeps = true;

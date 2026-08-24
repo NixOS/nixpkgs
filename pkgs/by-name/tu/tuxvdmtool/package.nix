@@ -5,7 +5,7 @@
 }:
 
 rustPlatform.buildRustPackage {
-  name = "tuxvdmtool";
+  pname = "tuxvdmtool";
   version = "0.2.0-unstable-2026-03-15";
 
   src = fetchFromGitHub {

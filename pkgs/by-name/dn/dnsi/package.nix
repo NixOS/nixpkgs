@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command line tool to investigate the Domain Name System";
     mainProgram = "dnsi";
     homepage = "https://nlnetlabs.nl/projects/domain/dnsi/";
+    changelog = "https://github.com/NLnetLabs/dnsi/blob/v${finalAttrs.version}/Changelog.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.skyesoss ];
   };

@@ -1,8 +1,8 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -38,6 +38,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pytest-9.1-compat.patch";
+      url = "https://github.com/pydantic/pydantic/commit/f257d0155c6643fbda9516af6b2c4ca082ed7651.patch";
+      excludes = [ "uv.lock" ];
+      hash = "sha256-azclSDYY/H8RcerNvI07njwLzr8fyIZ17nM18y/edVo=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/--benchmark/d" pyproject.toml

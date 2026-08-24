@@ -181,6 +181,9 @@ in
     # ot-ctl can be used to query the router instance
     environment.systemPackages = [ cfg.package ];
 
+    # Shared by the agent and web interface for the OpenThread control socket.
+    users.groups.otbr = { };
+
     # Make sure we have ipv6 support, and that forwarding is enabled
     networking.enableIPv6 = true;
     networking.firewall.allowedTCPPorts =
@@ -217,6 +220,7 @@ in
           THREAD_IF = cfg.interfaceName;
         };
         serviceConfig = {
+          Group = "otbr";
           ExecStartPre = "${utils.escapeSystemdExecArg (lib.getExe' cfg.package "otbr-firewall")} start";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
@@ -269,7 +273,7 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          UMask = "0077";
+          UMask = "0007";
 
           CapabilityBoundingSet = [
             "CAP_NET_ADMIN"
@@ -288,6 +292,7 @@ in
         after = [ "otbr-agent.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
+          Group = "otbr";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
               [

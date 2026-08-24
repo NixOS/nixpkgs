@@ -202,11 +202,7 @@ let
   };
   webkit-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        aarch64-darwin = "sha256-glVkYnthOFBPp1gZXTue9WwjP+oCgQpq6j9Mlm/bjmg=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-glVkYnthOFBPp1gZXTue9WwjP+oCgQpq6j9Mlm/bjmg=";
   };
 in
 {

@@ -1,100 +1,96 @@
 {
   lib,
   stdenv,
+  callPackage,
+  fetchFromGitHub,
   fetchurl,
+  automake,
+  autoconf,
+  cmake,
+  versionCheckHook,
 }:
 let
-  version = "110.99.9";
-  baseurl = "https://smlnj.cs.uchicago.edu/dist/working/${version}";
+  version = "2026.2";
+  src = fetchFromGitHub {
+    owner = "smlnj";
+    repo = "smlnj";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-1oiDdiGZvg8Dlz3InFLjOilvBTShuTFHz91Xmc1onMA=";
+  };
 
-  arch = if stdenv.hostPlatform.is64bit then "64" else "32";
+  llvm = callPackage ./llvm.nix { inherit src version; };
 
-  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
-
-  fetchSource =
-    name:
-    fetchurl {
-      url = "${baseurl}/${name}";
-      hash = hashes.${name};
-    };
-
-  bootSource = if stdenv.hostPlatform.is64bit then "boot.amd64-unix.tgz" else "boot.x86-unix.tgz";
-
-  sources = map fetchSource [
-    bootSource
-    "config.tgz"
-    "cm.tgz"
-    "compiler.tgz"
-    "runtime.tgz"
-    "system.tgz"
-    "MLRISC.tgz"
-    "smlnj-lib.tgz"
-    "old-basis.tgz"
-    "ckit.tgz"
-    "nlffi.tgz"
-    "cml.tgz"
-    "eXene.tgz"
-    "ml-lpt.tgz"
-    "ml-lex.tgz"
-    "ml-yacc.tgz"
-    "ml-burg.tgz"
-    "pgraph.tgz"
-    "trace-debug-profile.tgz"
-    "heap2asm.tgz"
-    "smlnj-c.tgz"
-    "doc.tgz"
-    "asdl.tgz"
-  ];
+  bootFile =
+    if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isx86_64 then
+      fetchurl {
+        url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.amd64-unix.tgz";
+        hash = "sha256-ug2Busk6aYeqEGh923ZG8c3xw1Cjmct2Fxv7K44cjOs=";
+      }
+    else if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.arm64-unix.tgz";
+        hash = "sha256-UQ8GxaabgJ3QoH6hlnWCNSsxyR73H2VdKsbsgt376k0=";
+      }
+    else
+      throw "Unsupported host platform: ${stdenv.hostPlatform.config}";
 
 in
 stdenv.mkDerivation {
   pname = "smlnj";
-  inherit version sources;
+  inherit src version;
 
-  unpackPhase = ''
-    for s in $sources; do
-      b=$(basename $s)
-      cp $s ''${b#*-}
-    done
-    unpackFile config.tgz
-    mkdir base
-    ./config/unpack $TMP runtime
-  '';
+  nativeBuildInputs = [
+    autoconf
+    automake
+    cmake
+  ];
 
-  patchPhase = ''
-    sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
-    echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
-  '';
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  dontUseCmakeConfigure = true;
 
   buildPhase = ''
-    ./config/install.sh -default ${arch}
+    runHook preBuild
+
+    unpackFile ${bootFile}
+    mkdir -pv $out/bin $out/lib bin lib
+    ln -s ${llvm}/bin/llvm-config     bin/llvm-config
+    ln -s ${llvm}/bin/llvm-config     $out/bin/llvm-config
+    ln -s ${llvm}/lib/libCFGCodeGen.a lib/libCFGCodeGen.a
+    ln -s ${llvm}/lib/libCFGCodeGen.a $out/lib/libCFGCodeGen.a
+
+    ./build.sh -install $out
+
+    rm $out/bin/llvm-config $out/lib/libCFGCodeGen.a
+
+    runHook postBuild
   '';
 
-  installPhase = ''
-    mkdir -pv $out
-    cp -rv bin lib $out
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "@SMLversion";
+  doInstallCheck = true;
 
-    cd $out/bin
-    for i in *; do
-      sed -i "2iSMLNJ_HOME=$out/" $i
-    done
-  '';
-
-  passthru.updateScript = ./update.sh;
+  passthru.llvm = llvm;
 
   meta = {
-    description = "Standard ML of New Jersey, a compiler";
-    homepage = "http://smlnj.org";
+    description = "Standard ML of New Jersey, a Standard ML compiler";
+    homepage = "https://smlnj.org";
+    downloadPage = "https://smlnj.org/dist/working/${version}/install.html";
+    changelog = "https://smlnj.org/dist/working/${version}/README.html";
     license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
+    maintainers = [ lib.maintainers.skyesoss ];
+    mainProgram = "sml";
     platforms = [
       "x86_64-linux"
-      "i686-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [
-      skyesoss
-      thoughtpolice
-    ];
-    mainProgram = "sml";
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }

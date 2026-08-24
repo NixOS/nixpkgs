@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixdoc";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixdoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7UOjmW8Ef4mEvj7SINaKWh2ZuyNMVEXB82mtuZTQiPA=";
+    hash = "sha256-FW8yZLO+hVDn2vs4pEUfjMM/5P508WKCLxd4AozLElk=";
   };
 
-  cargoHash = "sha256-Aw794yhIET8/pnlQiK2xKVbYC/Kd5MExvFTwkv4LLTc=";
+  cargoHash = "sha256-pV/KEg3/UaT7bbgtRgjZZGq+RVyN1xY28YqzfslYoQo=";
 
   meta = {
     description = "Generate documentation for Nix functions";

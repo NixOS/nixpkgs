@@ -12,16 +12,16 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioruckus";
-  version = "0.46.3";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms264556";
     repo = "aioruckus";
-    tag = "v${version}";
-    hash = "sha256-17vcYdggtoeAtGShshseBMB4PSiIOf00nRNIHOAP9Jw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tfoMjZbQ/8uzTHka//LAwUZZuPuqSmPyuYqFr2TVPxY=";
   };
 
   build-system = [
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

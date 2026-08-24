@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "bumble";
-  version = "0.0.232";
+  version = "0.0.233";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bumble";
     tag = "v${version}";
-    hash = "sha256-NT8WNfkYHorjNfsZWry63Uuxk7zyOQDOHTqxZxJNypI=";
+    hash = "sha256-WTikxDp+V+H2RPN+myWg+CRgqncJY5v3zhwotfa8CCU=";
   };
 
   build-system = [

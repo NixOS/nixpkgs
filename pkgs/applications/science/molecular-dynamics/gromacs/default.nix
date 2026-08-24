@@ -34,22 +34,24 @@ let
   # The possible values are defined in CMakeLists.txt:
   # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
   # AVX2_128 AVX_512 AVX_512_KNL MIC ARM_NEON ARM_NEON_ASIMD
-  SIMD =
-    x:
-    if (cpuAcceleration != null) then
-      x
-    else if hostPlatform.system == "i686-linux" then
+  defaultSIMD =
+    if hostPlatform.system == "i686-linux" then
       "SSE2"
-    else if hostPlatform.system == "x86_64-linux" then
-      "SSE4.1"
-    else if hostPlatform.system == "x86_64-darwin" then
-      "SSE4.1"
-    else if hostPlatform.system == "aarch64-darwin" then
-      "ARM_NEON_ASIMD"
-    else if hostPlatform.system == "aarch64-linux" then
+    else if hostPlatform.isx86_64 then
+      if hostPlatform.avx512Support then
+        "AVX_512"
+      else if hostPlatform.avx2Support then
+        "AVX2_256"
+      else if hostPlatform.avxSupport then
+        "AVX_256"
+      else
+        "SSE4.1"
+    else if hostPlatform.isAarch64 then
       "ARM_NEON_ASIMD"
     else
       "None";
+
+  SIMD = if cpuAcceleration != null then cpuAcceleration else defaultSIMD;
 
   source =
     if enablePlumed then
@@ -59,8 +61,8 @@ let
       }
     else
       {
-        version = "2026.2";
-        hash = "sha256-0n5EVegkYXeVI2Z5hjGg2tny4fVnQApsuFShaNzAUN0=";
+        version = "2026.3";
+        hash = "sha256-EJS3u8ajlgIjgnEUYmZXEQtACWzflZinJ5NfyE6/iqA=";
       };
 
 in
@@ -122,7 +124,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "GMX_HWLOC" true)
-    (lib.cmakeFeature "GMX_SIMD" (SIMD cpuAcceleration))
+    (lib.cmakeFeature "GMX_SIMD" SIMD)
     (lib.cmakeBool "GMX_OPENMP" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
 

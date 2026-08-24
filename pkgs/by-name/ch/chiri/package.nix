@@ -41,21 +41,21 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "chiri";
-    version = "0.9.2";
+    version = "1.0.0";
 
     src = fetchFromGitHub {
       owner = "chiriapp";
       repo = "chiri";
       tag = "app-v${finalAttrs.version}";
-      hash = "sha256-zBv/egEvmsZXklhKtN5fd2DOKH+UWcaGUUkFxz0G+JI=";
+      hash = "sha256-ASmDHMlp+jNA/8uJ78SLv/2plG41KYkKdel2WpMGwq8=";
     };
 
-    cargoHash = "sha256-69r9ILhSov7A9zdWcPphGMXur/8lYyZYo7qSGPW9IzM=";
+    cargoHash = "sha256-BeEpTFKWr81vNBUhHOnfrJ/yNgpZGDExnaxvIbwkBMs=";
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm-patched;
-      hash = "sha256-1S1XR/E611LGivXpIK0kvkvXWPNqDzvFKPT7a1Qu1zg=";
+      hash = "sha256-IQgYbkGsPC0TbqcDxhOgVWFmpxprCCwrQI7QJx4IpAc=";
       fetcherVersion = 4;
     };
 

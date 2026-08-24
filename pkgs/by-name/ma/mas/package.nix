@@ -9,6 +9,7 @@
   versionCheckHook,
   zsh,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
   version = "7.0.0";
@@ -60,6 +61,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
@@ -67,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "mas";
     maintainers = with lib.maintainers; [
       zachcoyle
+      tiferrei
     ];
     platforms = [
       "aarch64-darwin"

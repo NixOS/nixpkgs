@@ -12,7 +12,7 @@
 
 # Work around issue reported in https://github.com/NixOS/nixpkgs/issues/476278.
 # Should be solved when libpqxx 8.x is released.
-gcc14Stdenv.mkDerivation (finalAttrs: {
+(if stdenv.cc.isGNU then gcc14Stdenv else stdenv).mkDerivation (finalAttrs: {
   pname = "libpqxx";
   version = "7.10.7";
 

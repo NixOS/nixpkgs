@@ -28,14 +28,18 @@
   fetchpatch,
   withQt5 ? false,
   qt5,
+  withQt6 ? false,
+  qt6,
   yelp-tools,
   yelp-xsl,
   nixosTests,
 }:
 
+assert !(withQt5 && withQt6);
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm";
-  version = "1.32.0";
+  version = "1.33.1";
 
   outputs = [
     "out"
@@ -46,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ubuntu";
     repo = "lightdm";
     tag = finalAttrs.version;
-    sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
+    hash = "sha256-/p5/V2KNRkm1cP9/Ld3crfAxAdHYc2mFyNl1rV6QXr0=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     polkit
   ]
-  ++ lib.optional withQt5 qt5.qtbase;
+  ++ lib.optional withQt5 qt5.qtbase
+  ++ lib.optional withQt6 qt6.qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -89,14 +94,18 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
-
-    # glib gettext is deprecated and broken, so use regular gettext instead
-    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  preConfigure =
+    lib.optionalString withQt6 ''
+      # See m4/qt-validate-moc.m4 for how moc is found.
+      export PATH=${buildPackages.qt6Packages.qtbase}/libexec:$PATH
+    ''
+    + ''
+      NOCONFIGURE=1 ./autogen.sh
+    '';
 
   configureFlags = [
     "--localstatedir=/var"
@@ -104,19 +113,20 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-tests"
     "--disable-dmrc"
   ]
-  ++ lib.optional withQt5 "--enable-liblightdm-qt5";
+  ++ lib.optional withQt5 "--enable-liblightdm-qt5"
+  ++ lib.optional withQt6 "--enable-liblightdm-qt6";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace autogen.sh \
-      --replace "which" "${buildPackages.busybox}/bin/which"
+      --replace-fail "which" "${buildPackages.busybox}/bin/which"
 
     substituteInPlace src/shared-data-manager.c \
-      --replace /bin/rm ${busybox}/bin/rm
+      --replace-fail /bin/rm ${busybox}/bin/rm
   '';
 
   postInstall = ''

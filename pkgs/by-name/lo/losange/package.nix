@@ -21,7 +21,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "losange";
-  version = "0.10.1";
+  version = "0.10.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tymmesyde";
     repo = "losange";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mr54/vnaopLwG9lhFiZJGgxWH/VaGitROVEeV7GSyHM=";
+    hash = "sha256-GRWDtua4QaJP6Te/EUXu0YmUJYdYbMrdNxj0WiE/B7w=";
   };
 
-  cargoHash = "sha256-LJ8EpxEIN8wojSmQ+WVshYRxGFAC9sUk5tnh3I2J408=";
+  cargoHash = "sha256-e7ENEIEpnwdI50bQnlP9iV0vmsNOlfNaR0UJ6mHsi2g=";
 
   buildInputs = [
     mpv

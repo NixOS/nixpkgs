@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vals";
-  version = "0.44.4";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
     owner = "helmfile";
     repo = "vals";
-    sha256 = "sha256-R9TVsajh/IaXWAwdz2b85GuhNP9G/rP1CAxeMEqApt8=";
+    sha256 = "sha256-aDFCJaAhZNxo/E++/yFeqeTttvmT4FHhcFzSV6Mn2ck=";
   };
 
-  vendorHash = "sha256-xSeT1QnQBj66n9hexSxFi3NHdR2PArljJQqL9p6pdPc=";
+  vendorHash = "sha256-eVoKsXFtvfGU3XUH+U9PKPYGCDNyGGrj8F0EANonkuY=";
 
   proxyVendor = true;
 

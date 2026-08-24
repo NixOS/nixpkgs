@@ -1,30 +1,34 @@
 {
   lib,
+  astunparse,
   build,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ipywidgets,
+  execnb,
   fastcore,
   fastgit,
-  astunparse,
-  watchdog,
-  execnb,
+  fetchPypi,
   ghapi,
+  ipywidgets,
   pyyaml,
+  setuptools,
+  watchdog,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nbdev";
-  version = "3.0.15";
+  version = "3.3.12";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-CSpEJr8IYUFa54VGdPy0p8erNh5qKrGBTsfNYvE3uIo=";
+    hash = "sha256-D5je848qb6oYy60LwZGAbJAmt1GMiBSnXYsPPquWfaE=";
   };
 
-  pythonRelaxDeps = [ "ipywidgets" ];
+  pythonRelaxDeps = [
+    "fastgit"
+    "ghapi"
+    "ipywidgets"
+  ];
 
   build-system = [
     build

@@ -27,12 +27,9 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ [ ffmpeg ];
 
-  postPatch = with python3Packages; ''
-    substituteInPlace pyproject.toml \
-      --replace-fail \
-      'colorlog==6.7.0' \
-      'colorlog==${colorlog.version}'
-  '';
+  pythonRelaxDeps = [
+    "colorlog"
+  ];
 
   checkPhase = ''
     runHook preCheck

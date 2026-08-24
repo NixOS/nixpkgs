@@ -9,22 +9,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xfr";
-  version = "0.9.21";
+  version = "0.9.25";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "xfr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dcXbyiqhj/6VXIlFmk19LocxbfSnGC3aXR70YlUXQkA=";
+    hash = "sha256-3yL8N3pjU6//joBs8Js/fsQtNJBkIyuBdG0GiR9F608=";
   };
 
-  cargoHash = "sha256-A5oYEjJvvS7hWtt9ceD9ewup8rzk8NRP0egQRrQwlzY=";
+  cargoHash = "sha256-Za00+UJEKtpybAJoIhK1Xb6N4OQY+c7Jb/CO5SVFGW8=";
 
   nativeBuildInputs = [
     installShellFiles
     versionCheckHook
   ];
+
   doInstallCheck = true;
+
+  # opt ouf of default features to deselect the update-check feature
+  buildNoDefaultFeatures = true;
+
+  buildFeatures = [
+    "discovery"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd xfr \

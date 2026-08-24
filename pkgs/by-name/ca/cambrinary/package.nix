@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "cambrinary";
-  version = "unstable-2023-07-16";
+  version = "0.1.3-unstable-2023-07-16";
   pyproject = true;
 
   src = fetchFromGitHub {

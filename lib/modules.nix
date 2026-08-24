@@ -566,7 +566,7 @@ let
         let
           keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
         in
-        map (attrs: attrs.module) (genericClosure {
+        catAttrs "module" (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
@@ -1148,8 +1148,8 @@ let
     // {
       value = addErrorContext "while evaluating the option `${showOption loc}':" value;
       inherit (res.defsFinal') highestPrio;
-      definitions = map (def: def.value) res.defsFinal;
-      files = map (def: def.file) res.defsFinal;
+      definitions = catAttrs "value" res.defsFinal;
+      files = catAttrs "file" res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
       inherit (res.checkedAndMerged) valueMeta;

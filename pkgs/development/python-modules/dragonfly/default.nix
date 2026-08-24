@@ -79,6 +79,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

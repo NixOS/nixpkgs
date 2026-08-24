@@ -200,6 +200,7 @@ in
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         LimitNOFILE = 131072;
+        LimitMEMLOCK = "infinity";
       };
     };
 

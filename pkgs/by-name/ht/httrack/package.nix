@@ -5,19 +5,26 @@
   zlib,
   openssl,
   libiconv,
+  autoreconfHook,
+  autoconf-archive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.49.7";
+  version = "3.49.22";
   pname = "httrack";
 
   src = fetchFromGitHub {
     owner = "xroche";
     repo = "httrack";
     tag = finalAttrs.version;
-    hash = "sha256-GTNXTFU5a/c1F6dBE8iHOq4PyTgUhXrjLEE6FsPeJbQ=";
+    hash = "sha256-e7OvdvHphTP8vnZZkCVhonLkK/yNsaMToA2jnzNPZHE=";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+  ];
 
   buildInputs = [
     libiconv

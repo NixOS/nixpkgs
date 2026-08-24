@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tesseract";
-  version = "5.5.2";
+  version = "5.5.3";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = finalAttrs.version;
-    sha256 = "sha256-VLmKwycJK66fFkdWOSYO5OJkJC8MTWKTQWIVb243ekc=";
+    sha256 = "sha256-n+ZtLAVi6+dOusK040i/sSjJqw58Ef62uTeimYbMUHk=";
   };
 
   enableParallelBuilding = true;

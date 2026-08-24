@@ -5,16 +5,16 @@
   fetchpatch,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-topology";
-  version = "1.2.19";
+  version = "1.2.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-topology";
-    tag = "v${version}";
-    hash = "sha256-M12MdXyEwyvXscp7roE19mWZ4+/miTAyzUH3SUtOohE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oPhzNnlZszcXLSy29xfbhU5ML+twgeu2U794zdqSssI=";
   };
 
   build-system = with python3Packages; [
@@ -49,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     "networkx"
     "matplotlib"
     "setuptools"
+    "pyluwen"
   ];
 
   # Tests are broken
@@ -58,8 +59,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "tt-topology";
     description = "Command line utility used to flash multiple NB cards on a system to use specific eth routing configurations";
     homepage = "https://github.com/tenstorrent/tt-topology";
-    changelog = "https://github.com/tenstorrent/tt-topology/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tenstorrent/tt-topology/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };
-}
+})

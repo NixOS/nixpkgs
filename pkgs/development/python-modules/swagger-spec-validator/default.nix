@@ -3,12 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  importlib-resources,
   jsonschema,
   pyyaml,
-  six,
   pytestCheckHook,
-  mock,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,18 +21,26 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-8T0973g8JZKLCTpYqyScr/JAiFdBexEReUJoMQh4vO4=";
   };
 
+  postPatch = ''
+    # https://github.com/Yelp/swagger_spec_validator/pull/176
+    substituteInPlace swagger_spec_validator/common.py tests/common_test.py \
+      --replace-fail "import importlib_resources" "import importlib.resources as importlib_resources"
+  '';
+
   build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "importlib-resources"
+  ];
 
   dependencies = [
     pyyaml
-    importlib-resources
     jsonschema
-    six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
   ];
 
   pythonImportsCheck = [ "swagger_spec_validator" ];

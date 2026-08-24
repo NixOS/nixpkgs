@@ -203,13 +203,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261";
+  version = "261.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IB1ZEQqQ0impwBhCaLZAEgMVkVFU61JDVlGotxNzGQ=";
+    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
   };
 
   # PATCH POLICY
@@ -245,18 +245,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
   ''
   + lib.optionalString withLibBPF ''
-    substituteInPlace meson.build \
-      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    substituteInPlace src/bpf/meson.build \
+      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
-      --replace \
+      --replace-fail \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace \
+      --replace-fail \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
   ''
@@ -366,7 +366,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals (withHomed || withCryptsetup || withFido2) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (
@@ -580,7 +580,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preConfigure = ''
     substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+      --replace-fail /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -628,7 +628,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix reference to /bin/false in the D-Bus services.
       for i in $out/share/dbus-1/system-services/*.service; do
-        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+        substituteInPlace $i --replace-fail /bin/false ${coreutils}/bin/false
       done
 
       # For compatibility with dependents that use sbin instead of bin.
@@ -789,7 +789,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          # systemd-repart-factory-reset # broken upstream
+          systemd-repart-factory-reset
           ;
       }
       // {
@@ -798,11 +798,11 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
-          # systemd # broken on master
+          systemd
           systemd-analyze
           systemd-bpf
           systemd-confinement
-          # systemd-coredump # broken on master
+          systemd-coredump
           systemd-cryptenroll
           systemd-credentials-tpm2
           systemd-escaping
@@ -821,14 +821,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-networkd-openvpn
           systemd-initrd-vlan
           systemd-journal
-          # systemd-journal-gateway # broken on master
+          systemd-journal-gateway
           systemd-journal-upload
           # systemd-machinectl # broken on master
           systemd-networkd
           systemd-networkd-bridge
           systemd-networkd-dhcpserver
           systemd-networkd-dhcpserver-static-leases
-          systemd-networkd-ipv6-prefix-delegation
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
@@ -842,12 +841,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-sysusers-mutable
           systemd-sysusers-immutable
           systemd-sysusers-password-option-override-ordering
-          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-timesyncd
+          systemd-timesyncd-nscd-dnssec
           systemd-user-linger
           systemd-user-tmpfiles-rules
           systemd-misc
           systemd-userdbd
-          # systemd-homed # broken on master
+          systemd-homed
           ;
       };
 

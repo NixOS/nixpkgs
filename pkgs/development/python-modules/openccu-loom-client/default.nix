@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openccu-loom-client";
-  version = "2026.7.6";
+  version = "2026.8.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "openccu-loom-client";
     tag = finalAttrs.version;
-    hash = "sha256-zeWZYYu/TdGr0OpAmiu0HMsXjf79TDy8lPNPm8x5urY=";
+    hash = "sha256-wV9CVMBmztDHmg7kxYwELW+yDiJLBElvgnAvMGaGjoY=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +41,8 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/SukramJ/openccu-loom-client/blob/${finalAttrs.src.tag}/changelog.md";

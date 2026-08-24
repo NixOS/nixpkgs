@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonOlder,
 
   # nativeBuildInputs
   protoc,
@@ -12,6 +13,7 @@
   protobuf,
 
   # dependencies
+  cloudpickle,
   pyarrow,
   typing-extensions,
 
@@ -26,7 +28,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "datafusion";
   # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
-  version = "53.0.0";
+  version = "54.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,12 +39,12 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-3plgAJuh2rrnvzkQVy3gUgEoHHT4FSjDp5DZx1keD+g=";
+    hash = "sha256-Kh8w8L3AJCs9a3KA9RHaA0btbJEBdYZge1VK7AX0lX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-kHGlUaPNSs1Nh3HCU+yUVQq/IXp9PUwpDmfAon8eRBk=";
+    hash = "sha256-s4+Y2axZKL7wKiw8Z6c12eWAnf1zGPAFFvWS45vFrlo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -56,7 +58,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    cloudpickle
     pyarrow
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 

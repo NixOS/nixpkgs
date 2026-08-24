@@ -13,10 +13,10 @@ aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md
+check-phase-thread-limit-hook.section.md
 cmake.section.md
 desktop-file-utils.section.md
 gdk-pixbuf.section.md
-ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
@@ -34,7 +34,6 @@ nodejs-install-manuals.section.md
 npm-build-hook.section.md
 npm-config-hook.section.md
 npm-install-hook.section.md
-openmp-check-hook.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
 pkg-config.section.md

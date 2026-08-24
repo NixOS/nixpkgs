@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "16.3";
+  version = "16.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-rerunfailures";
     tag = version;
-    hash = "sha256-T4l4AoUHvT6GjHyRK2TA3vPTxRicZ5pvgFgDtbkOGMw=";
+    hash = "sha256-wdUNGc50Yqrctc8OXBmgRwmHVjSeOq+ADRYcLtKSraM=";
   };
 
   build-system = [ setuptools ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "oneapi-src";
+    owner = "uxlfoundation";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
     hash = "sha256-HIHF6KHlEI4rgQ9Epe0+DmNe1y95K9iYa4V/wFnJfEU=";
@@ -76,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+    # Treating compiler errors as warnings creates churn each compiler update,
+    # and provides little utility to us downstream.
+    (lib.cmakeBool "TBB_STRICT" false)
     (lib.cmakeBool "TBB_TEST" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -83,10 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    # Fix build with modern gcc
-    # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=stringop-overflow";
-
     # Fix undefined reference errors with version script under LLVM.
     NIX_LDFLAGS = lib.optionalString (
       stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"

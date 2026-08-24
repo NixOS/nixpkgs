@@ -27,6 +27,7 @@
   wheel,
   python-xlib,
   qtbase,
+  qtsvg,
   wrapQtAppsHook,
   hidapi,
   xkbcommon,
@@ -58,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "openstenoproject";
+    owner = "opensteno";
     repo = "plover";
     tag = "v${finalAttrs.version}";
     hash = "sha256-qaEuzPVqh+e3qq778VdUaRufGzOx9HyUnygIbA0+6kw=";
@@ -127,6 +128,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     qtbase
+    qtsvg
   ];
 
   nativeCheckInputs = [

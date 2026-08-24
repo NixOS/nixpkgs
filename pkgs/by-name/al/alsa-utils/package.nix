@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.alsa-project.org/";
+    changelog = "https://github.com/alsa-project/alsa-utils/releases/tag/v${finalAttrs.version}";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
       The Advanced Linux Sound Architecture (ALSA) provides audio and

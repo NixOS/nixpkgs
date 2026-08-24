@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.15.2";
 
   src = fetchFromGitHub {
-    owner = "davidnewhall";
+    owner = "Unpackerr";
     repo = "unpackerr";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";

@@ -16,7 +16,7 @@ fi
 
 update-source-version grok-build "${version}" || true
 
-for system in "aarch64-darwin macos-aarch64" "aarch64-linux linux-aarch64" "x86_64-darwin macos-x86_64" "x86_64-linux linux-x86_64"; do
+for system in "aarch64-darwin macos-aarch64" "aarch64-linux linux-aarch64" "x86_64-linux linux-x86_64"; do
   # shellcheck disable=SC2086
   set -- ${system}
 

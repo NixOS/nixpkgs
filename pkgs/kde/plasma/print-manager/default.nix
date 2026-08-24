@@ -1,6 +1,5 @@
 {
   mkKdeDerivation,
-  kdeclarative,
   cups,
 }:
 mkKdeDerivation {
@@ -8,7 +7,6 @@ mkKdeDerivation {
 
   # FIXME: cups-smb?
   extraBuildInputs = [
-    kdeclarative
     cups
   ];
 }

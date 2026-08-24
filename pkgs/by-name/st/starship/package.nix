@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages,
   installShellFiles,
   writableTmpDirAsHomeHook,
   gitMinimal,
@@ -23,29 +22,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-pStNE8SMMVavL3ld6RO+5QQRJPXpqlU3asccS2tUoMQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     writableTmpDirAsHomeHook
   ];
 
-  env = {
-    TZDIR = "${tzdata}/share/zoneinfo";
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Work around ld64's libc++ hardening issue.
-    #
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+  env.TZDIR = "${tzdata}/share/zoneinfo";
 
   postInstall = ''
     presetdir=$out/share/starship/presets/
     mkdir -p $presetdir
     cp docs/public/presets/toml/*.toml $presetdir
+    install -Dm644 .github/config-schema.json $out/share/starship/config-schema.json
   ''
   + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
@@ -55,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd starship \
         --bash <(${emulator} $out/bin/starship completions bash) \
         --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
         --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
   );
@@ -66,8 +56,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) starship;
+  passthru = {
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
+    };
+    tests = {
+      inherit (nixosTests) starship;
+    };
   };
 
   meta = {

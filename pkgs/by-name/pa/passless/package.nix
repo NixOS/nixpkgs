@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "passless";
-  version = "0.13.0";
+  version = "0.17.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "pando85";
     repo = "passless";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfIScs+ougawn/tXK8PBme13CEdvxeL8/D38b3F/bcg=";
+    hash = "sha256-5axlo670ust9QQsayahbAe5iPEEG+WUaDZlDtWpA5FA=";
   };
 
-  cargoHash = "sha256-RpfegA8nH8chbHXHbuWMRH9drSrnBRQwYJtnw2Sqymw=";
+  cargoHash = "sha256-bt08Gd1eAk/vT18XcTCEBz8vV9jNZ3Nu8cx1vKQfv8k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
     install -Dm644 contrib/udev/* $out/etc/udev/rules.d
 
     export COMPLETIONS="target/${stdenv.targetPlatform.config}/$cargoBuildType/build/passless-rs-*/out/completions"

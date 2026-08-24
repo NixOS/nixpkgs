@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-XyBiEXL/hLKwsV/Lc5SFaeqHlJxGgwET0PIy2Bu8t4A=";
+    hash = "sha256-BJOLUFxXAbby5x7LllTSgHH5RGFc6bDtwaf13TcLXfs=";
   };
 in
 flutter341.buildFlutterApplication {

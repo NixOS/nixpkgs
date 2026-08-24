@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyoverkiz";
-  version = "2.0.5";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LdOVhOWxejTXhgUwlbucYNDqhKJDov56IaEcvJvEBQ4=";
+    hash = "sha256-f43f1PNdCK8aJDQ4IsiTsHBAjOYSTY19N9Rt8WYCOys=";
   };
 
   build-system = [ hatchling ];

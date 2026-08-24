@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   # but this causes a FileAlreadyExists error during installation
   # on Darwin (case-insensitive filesystem).
   # https://github.com/CravateRouge/bloodyAD/issues/99
-  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace pyproject.toml \
       --replace-fail "bloodyAD = \"bloodyAD.main:main\"" ""
   '';

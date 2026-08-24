@@ -1,12 +1,16 @@
 {
   fetchFromGitHub,
   lib,
+  stdenv,
   rustPlatform,
   gtk4,
   pkg-config,
   pango,
   wrapGAppsHook4,
   versionCheckHook,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,7 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
-  ];
+    copyDesktopItems
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     gtk4
@@ -41,9 +47,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "packetry";
+      desktopName = "Packetry";
+      comment = finalAttrs.meta.description;
+      exec = "packetry";
+      icon = "packetry";
+      categories = [ "Utility" ];
+    })
+  ];
+
   # packetry-cli is only necessary on windows https://github.com/greatscottgadgets/packetry/pull/154
   postInstall = ''
     rm $out/bin/packetry-cli
+
+    install -Dm644 appimage/dist/icon.png \
+      $out/share/icons/hicolor/512x512/apps/packetry.png
   '';
 
   meta = {

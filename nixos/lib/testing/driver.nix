@@ -68,9 +68,11 @@ let
         ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.ty ]
         ++ lib.optionals (!config.skipLint) [ hostPkgs.ruff ];
         buildInputs = [ testDriver ];
-        testScript = config.testScriptString;
         preferLocalBuild = true;
-        passthru = config.passthru;
+        passthru = config.passthru // {
+          # testScript used to be a part of the derivation attributes, kept for backwards compat.
+          testScript = config.testScriptString;
+        };
         meta = config.meta // {
           mainProgram = "nixos-test-driver";
         };
@@ -82,7 +84,7 @@ let
           # prepend type hints so the test script can be type checked with ty
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
           echo "${toString typeHints}" >> testScriptWithTypes
-          echo -n "$testScript" >> testScriptWithTypes
+          cat "${config.driverConfiguration.test_script}" >> testScriptWithTypes
         ''}
 
         ${lib.optionalString (!config.skipTypeCheck) ''

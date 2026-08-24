@@ -9,13 +9,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "asahi-audio";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "asahi-audio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tp+yL7SbzowYcCrfI7UU+5GeIJtyBMuE7KhcYmA1+hw=";
+    hash = "sha256-4UOng1M/nVE/2OkKf+kqCdea4mUCvktW2M0x5Um4CPI=";
   };
 
   makeFlags = [

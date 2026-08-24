@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     sqlite
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
 

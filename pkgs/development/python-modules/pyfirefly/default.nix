@@ -7,6 +7,7 @@
   lib,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -24,6 +25,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-RrVjXhV42DBvmTcZMowmHXN5K4nZfKPT/CDbvf1tOAQ=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 

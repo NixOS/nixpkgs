@@ -3,6 +3,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchpatch,
   bundlerEnv,
   ruby_4_0,
   makeWrapper,
@@ -67,10 +68,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
     hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update_rails_8_1_3_1.pach";
+      url = "https://github.com/redmine/redmine/commit/cbb2c341ca54baae28ba2dafc0573102c5d1099c.patch";
+      hash = "sha256-cAWUN1MB9DXNKwVxvZcStKXehRxTXTE9hjVrvkA98vk=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

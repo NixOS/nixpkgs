@@ -77,7 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Backend service for PostgreSQL server tools, offering features such as connection management, query execution with result set handling, and language service support via the VS Code protocol";
     changelog = "https://github.com/microsoft/pgsql-tools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "ossdbtoolsservice_main";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

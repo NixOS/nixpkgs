@@ -5,6 +5,7 @@
   fetchFromGitHub,
   nicegui,
   hatchling,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -22,6 +23,8 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [ "docutils" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     docutils

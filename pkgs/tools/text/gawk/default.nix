@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   removeReferencesTo,
   runtimeShellPackage,
   texinfo,
@@ -25,12 +26,22 @@ assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
-    hash = "sha256-PdQw8M07RCjGw/avwCG5zTwfjJP3pojcJoykKKkLSsE=";
+    hash = "sha256-B/b3NCt/6+QxP8LCVCrZPWT+IK2HFyABCfEFqCb1/Tc=";
   };
+
+  patches = [
+    # When building gawk without gmp and mpfr, gawk 5.4.1 causes build failures
+    # in downstream packages such as GCC and libpng.
+    # Discussion on bug-gawk:
+    # https://lists.gnu.org/archive/html/bug-gawk/2026-07/msg00013.html
+    # Vendored since we can't use fetchpatch:
+    # https://gitweb.git.savannah.gnu.org/gitweb/?p=gawk.git;a=commit;h=bf85f8a3175af703597082d4c7e0abc2066a44d3
+    ./node-struct-without-gmp-mpfr.patch
+  ];
 
   # When we do build separate interactive version, it makes sense to always include man.
   outputs = [

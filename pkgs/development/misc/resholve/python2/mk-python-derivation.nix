@@ -27,6 +27,9 @@
   eggBuildHook,
   eggInstallHook,
 }:
+let
+  hasZipSuffix = lib.hasSuffix "zip";
+in
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
@@ -207,7 +210,7 @@ lib.extendMkDerivation {
       ++ lib.optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+      ++ lib.optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
         unzip
       ]
       ++ lib.optionals (format == "setuptools") [

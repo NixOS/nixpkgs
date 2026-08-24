@@ -28,19 +28,22 @@
   vulkan-tools,
   vmtouch,
   libportal,
+  libportal-gtk4,
+  obs-studio-plugins,
   nix-update-script,
   removeWarningPopup ? false,
+  withObsVkCapture ? false,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "64.1";
+  version = "65.4";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-RwH2XLY9PmyDvIYu3Wr2qL89ErJBfC58i0jHLLNnKJQ=";
+    hash = "sha256-59Duh4E1kMShhk/iH/SBhpmFfUjYzRClNuWqoDSbTeM=";
   };
 
   patches = [
@@ -75,6 +78,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gtksourceview5
     libadwaita
     libportal
+    libportal-gtk4
   ];
 
   propagatedBuildInputs =
@@ -116,7 +120,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       lsb-release
       pciutils
       procps
-    ];
+    ]
+    ++ lib.optional withObsVkCapture obs-studio-plugins.obs-vkcapture;
 
   pyproject = false;
   dontWrapGApps = true; # prevent double wrapping

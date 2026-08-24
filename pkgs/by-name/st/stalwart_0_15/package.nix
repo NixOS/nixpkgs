@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
   version = "0.15.5";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";

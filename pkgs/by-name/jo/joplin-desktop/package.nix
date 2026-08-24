@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs_22,
+  nodejs,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -18,6 +18,7 @@
   buildPackages,
   callPackage,
   libGL,
+  libnotify,
   clang_20,
   jq,
   glib,
@@ -25,9 +26,7 @@
 }:
 
 let
-  # nodejs pin should be obsolete once #522655 is in master
-  nodejs = nodejs_22;
-  yarn-berry = yarn-berry_4.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
 in
@@ -72,8 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
+    libnotify
   ];
 
   nativeBuildInputs = [
@@ -193,7 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            libnotify
+          ]
+        }" \
+        --prefix PATH : "${lib.makeBinPath [ libnotify ]}" \
         --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \

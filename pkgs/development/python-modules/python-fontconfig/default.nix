@@ -22,14 +22,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-fontconfig";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "python-fontconfig";
     tag = "v${version}";
-    hash = "sha256-4qxl5a9oKmhrF8O2OjA8X1wsHyEHL4ViRt20IcU/ANw=";
+    hash = "sha256-Z7Yj3TmUXBe1rJIuoo6TNB+3IaPfUFlFL+9Vo9fJU4c=";
   };
 
   build-system = [

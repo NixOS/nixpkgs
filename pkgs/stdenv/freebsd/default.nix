@@ -3,7 +3,6 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
   bootstrapFiles ?
@@ -18,7 +17,6 @@
     files,
 }:
 
-assert crossSystem == localSystem;
 let
   genericStdenv = import ../generic { defaultConfig = config; };
 

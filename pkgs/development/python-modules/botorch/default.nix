@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -41,6 +42,16 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-tUTtImqPlbS8g1oLoTTCCWQbeLwLop13qPjFrQeMtb8=";
   };
+
+  patches = [
+    # Allow scipy 1.18 in batched L-BFGS-B fast path
+    # https://github.com/meta-pytorch/botorch/pull/3328
+    (fetchpatch {
+      name = "scipy-1.18.patch";
+      url = "https://github.com/meta-pytorch/botorch/commit/611f14acc8c1b2f30ce2ae058568d90f96bbb2ec.patch";
+      hash = "sha256-PiXq9GmPaWQXh+emY7aNI53Y+ufl8K5uOFa8GD0clP8=";
+    })
+  ];
 
   build-system = [
     setuptools

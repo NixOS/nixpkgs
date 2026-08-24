@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 

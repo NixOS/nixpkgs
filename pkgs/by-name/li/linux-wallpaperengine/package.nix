@@ -10,6 +10,7 @@
   SDL2,
   SDL2_mixer,
   cef-binary,
+  dbus,
   egl-wayland,
   ffmpeg,
   fftw,
@@ -53,14 +54,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2026-05-12";
+  version = "0.0.1-unstable-2026-06-09";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "a8ce9b6aa14cc10f0396bbb74a16ca12ed3990dc";
+    rev = "b016d7d1fdcf4e5fd2f9c9fa420a8aaa07fee02d";
     fetchSubmodules = true;
-    hash = "sha256-S9tPlHugYdg5dbOW4OyDPPfVhxBg6purYhc+Bgt3ovM=";
+    hash = "sha256-ExWAYdSFW5plPuS3/jxTPMXIly6zVb5GojE3e37imZM=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_mixer
+    dbus
     egl-wayland
     ffmpeg
     fftw
@@ -127,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
     license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.tadomika_ari ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

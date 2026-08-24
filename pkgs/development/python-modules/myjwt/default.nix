@@ -10,11 +10,12 @@
   poetry-core,
   pyopenssl,
   pyperclip,
+  pyprojectVersionPatchHook,
   pytest-mock,
   pytestCheckHook,
   questionary,
-  requests,
   requests-mock,
+  requests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -36,6 +37,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     click

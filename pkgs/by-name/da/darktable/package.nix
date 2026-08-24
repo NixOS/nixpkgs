@@ -103,8 +103,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
     saxon # Use Saxon instead of libxslt to fix XSLT generate-id() consistency issues
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  ];
 
   buildInputs = [
     SDL2
@@ -185,12 +184,6 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Work around ld64's libc++ hardening issue.
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
-
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
   # binaries can't find libdarktable.so, so change LD_LIBRARY_PATH in
@@ -232,6 +225,7 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
     changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${version}";
+    mainProgram = "darktable";
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [

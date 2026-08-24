@@ -6,7 +6,6 @@
   qtdeclarative,
   qt5compat,
   qqc2-desktop-style,
-  fetchpatch,
 }:
 # Kirigami has a runtime dependency on qqc2-desktop-style,
 # which has a build time dependency on Kirigami.
@@ -17,11 +16,6 @@
 let
   unwrapped = mkKdeDerivation {
     pname = "kirigami";
-
-    patches = [
-      # upstream PR: https://invent.kde.org/frameworks/kirigami/-/merge_requests/1991
-      ./rb-templates.patch
-    ];
 
     extraNativeBuildInputs = [
       qtsvg

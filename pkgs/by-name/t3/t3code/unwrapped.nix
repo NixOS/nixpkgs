@@ -16,7 +16,7 @@
   writeDarwinBundle,
   xcbuild,
   fetchPnpmDeps,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   pnpmBuildHook,
   cacert,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (
   let
     appName = "T3 Code (Alpha)";
     electron = electron_41;
-    pnpm = pnpm_10;
+    pnpm = pnpm_11;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.0.28";
+    version = "0.0.33";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -45,13 +45,13 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-InVrw9L281QSSPrHSiZuivmb+FkYEd6FkHwHIAAxmGk=";
+      hash = "sha256-qZi9hMGzqpmnpqvvVtsQvkZIiVqTgOMWv1y15MiSAYg=";
     };
 
     postPatch = ''
       substituteInPlace apps/web/vite.config.ts \
-        --replace-fail 'const host = process.env.HOST?.trim() || "localhost";' \
-                       'const host = process.env.HOST?.trim() || "127.0.0.1";'
+        --replace-fail 'const host = explicitHost || "localhost";' \
+                       'const host = explicitHost || "127.0.0.1";'
     '';
 
     nativeBuildInputs = [
@@ -93,10 +93,14 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 4;
-      hash = "sha256-+JqW/iI0wdRPxyL7y6ggD/+AvwwZXs9+fSUtG/SgW9s=";
+      hash = "sha256-i/K5bj7CS7PGIX5hfayxAJ7ngNib92w3SDKGXTVWccA=";
     };
 
     preBuild = ''
+      # pnpm 11 otherwise detects the package version updates below as
+      # dependency drift and runs another install, including lifecycle scripts.
+      export pnpm_config_verify_deps_before_run=false
+
       node scripts/update-release-package-versions.ts ${finalAttrs.version}
 
       export npm_config_nodedir=${nodejs}

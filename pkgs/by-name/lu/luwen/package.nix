@@ -6,21 +6,21 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "luwen";
-  version = "0.8.5";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lY7cZ+8C0UEGGYxufl4Vi8g0L4AJFXaGqn7XE2ivTcQ=";
+    hash = "sha256-pc/7G9YxBTg2uYn47ONxI7zsfdK3Ex4zndLASRtDQyk=";
   };
 
   nativeBuildInputs = [
     protobuf
   ];
 
-  cargoHash = "sha256-QBGXbRiBk4WIQFopq1OccmUHgx5GzR/PKhMH4Ie+fyg=";
+  cargoHash = "sha256-2ibAZnfv++eyCB57F0uD7XFJ3MP9SnAApOn6uelo3Po=";
 
   meta = {
     description = "Tenstorrent system interface tools";

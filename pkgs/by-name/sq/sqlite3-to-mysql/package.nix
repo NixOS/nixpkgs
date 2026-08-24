@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tabulate
     unidecode
     packaging
-    mysql84
+    mysql84.client
     python-dateutil
     sqlglot
   ];

@@ -5,8 +5,10 @@
   semgrep-core,
 
   # check tools
-  git,
+  addBinToPathHook,
+  gitMinimal,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 
   # python runtime dependencies
   attrs,
@@ -15,6 +17,7 @@
   click-option-group,
   colorama,
   defusedxml,
+  exceptiongroup,
   glom,
   jsonschema,
   mcp,
@@ -51,33 +54,54 @@
 
 let
   common = import ./common.nix { inherit lib; };
-  semgrepBinPath = lib.makeBinPath [ semgrep-core ];
 in
-buildPythonPackage rec {
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "semgrep";
   inherit (common) version;
+  pyproject = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "semgrep";
     repo = "semgrep";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = common.srcHash;
   };
+
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   # prepare a subset of the submodules as we only need a handful
   # and there are many many submodules total
   postPatch =
-    (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (path: submodule: ''
-        # substitute ${path}
-        # remove git submodule placeholder
-        rm -r ${path}
-        # link submodule
-        ln -s ${submodule}/ ${path}
-      '') passthru.submodulesSubset
-    ))
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        path: submodule:
+        let
+          path' = lib.removePrefix "cli/" path;
+        in
+        ''
+          # substitute ${path'}
+          # remove git submodule placeholder
+          rm -r ${path'}
+          # link submodule
+          ln -s ${submodule}/ ${path'}
+        ''
+      ) finalAttrs.passthru.submodulesSubset
+    )
+    # hardcode the path to the shared `semgrep-core` binary so that it does not
+    # need to be copied into the wheel nor be present on PATH at runtime.
+    # There are two independent lookups: one in the library and one in the CLI
+    # entrypoint (which execs semgrep-core directly).
     + ''
-      cd cli
+      substituteInPlace src/semgrep/semgrep_core.py \
+        --replace-fail \
+          'ret = compute_executable_path("semgrep-core")' \
+          'ret = "${lib.getExe semgrep-core}"'
+
+      substituteInPlace src/semgrep/console_scripts/entrypoint.py \
+        --replace-fail \
+          'path = shutil.which(core)' \
+          'path = "${lib.getExe semgrep-core}" if not pro else shutil.which(core)'
     '';
 
   # tell cli/setup.py to not copy semgrep-core into the result
@@ -87,9 +111,16 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "boltons"
+    "click"
+    "exceptiongroup"
     "glom"
+    "jsonschema"
+    "mcp"
+    "opentelemetry-api"
+    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-sdk"
+    "wcmatch"
   ];
-
   dependencies = [
     attrs
     boltons
@@ -97,6 +128,7 @@ buildPythonPackage rec {
     click-option-group
     colorama
     defusedxml
+    exceptiongroup
     glom
     jsonschema
     mcp
@@ -119,11 +151,11 @@ buildPythonPackage rec {
     wcmatch
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
-    git
+    addBinToPathHook
+    gitMinimal
     pytestCheckHook
+    writableTmpDirAsHomeHook
 
     flaky
     pytest-asyncio
@@ -152,35 +184,18 @@ buildPythonPackage rec {
     "test_send"
     # many child tests require networking to download files
     "TestConfigLoaderForProducts"
+    # require networking (pro install metrics are sent to semgrep.dev)
+    "test_install_command_download_error_records_download_reason"
+    "test_install_command_metrics_off"
+    "test_install_command_sends_failure_metrics"
+    "test_install_command_sends_metrics_when_logged_in"
+    "test_run_install_success_records_outcome"
+    "test_run_install_version_check_failure_records_error"
   ];
-
-  preCheck = ''
-    # tests need a home directory
-    export HOME="$(mktemp -d)"
-
-    # tests need access to `semgrep-core`
-    export OLD_PATH="$PATH"
-    export PATH="$PATH:${semgrepBinPath}"
-  '';
-
-  postCheck = ''
-    export PATH="$OLD_PATH"
-    unset OLD_PATH
-  '';
-
-  # since we stop cli/setup.py from finding semgrep-core and copying it into
-  # the result we need to provide it on the PATH
-  preFixup = ''
-    makeWrapperArgs+=(--prefix PATH : ${semgrepBinPath})
-  '';
-
-  postInstall = ''
-    chmod +x $out/bin/{,py}semgrep
-  '';
 
   passthru = {
     inherit common semgrep-core;
-    submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;
+    submodulesSubset = lib.mapAttrs (_: args: fetchFromGitHub args) common.submodules;
     updateScript = ./update.sh;
   };
 
@@ -188,4 +203,4 @@ buildPythonPackage rec {
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
   };
-}
+})

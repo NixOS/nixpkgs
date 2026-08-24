@@ -105,7 +105,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     pugixml
     zlib
   ]
-  ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
+  ++ lib.optionals turingstdenv.hostPlatform.isDarwin [ llvmPackages_20.openmp ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart

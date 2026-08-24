@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export HOME=$TMPDIR
   '';
 
-  postInstall = lib.optionals withPulseaudio ''
+  postInstall = lib.optionalString withPulseaudio ''
     wrapProgram "$out/bin/swayrbar" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   makeBinaryWrapper,
   pkg-config,
@@ -21,7 +22,7 @@
   gzip,
   lz4,
   lzop,
-  squashfsTools,
+  squashfs-tools,
   util-linux,
   xz,
   zstd,
@@ -29,14 +30,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
-  version = "111";
+  version = "112";
 
   src = fetchFromGitHub {
     owner = "dracut-ng";
     repo = "dracut";
     tag = finalAttrs.version;
-    hash = "sha256-2jdS7/LGuLSBBXv1R/o8yjgwdXl2l2wNbZWxq01wSb0";
+    hash = "sha256-aER+3EbJP3HCBuei+oLHzt/j90fpWj5NgyhMTx3V/YQ=";
   };
+
+  # Remove with the first release containing c4d555716d569038ca38365741e94ee07908f261.
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-15816.patch";
+      url = "https://github.com/dracut-ng/dracut/commit/c4d555716d569038ca38365741e94ee07908f261.patch?full_index=1";
+      hash = "sha256-UpeoiMyQgvwMNOjX39v0IQSIlwvM+MczyPKPRWmT6vQ=";
+    })
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -101,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         gzip
         lz4
         lzop
-        squashfsTools
+        squashfs-tools
         util-linux
         xz
         zstd

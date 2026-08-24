@@ -6,16 +6,16 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-home-idp-discovery";
-  version = "26.2.1";
+  version = "26.2.2";
 
   src = fetchFromGitHub {
     owner = "sventorben";
     repo = "keycloak-home-idp-discovery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4zZVDl50LOYv6OeBsBevxM9u3PNQPrn4ZxSNTa8dN7M=";
+    hash = "sha256-EshNZ7COraluW7zyj6BB0yo390ms2nBbB7mCnKcOPtw=";
   };
 
-  mvnHash = "sha256-+Urd07v2mYQjPCGAP4OnJr/dE/lmLrq8M7RAEdhyX3Y=";
+  mvnHash = "sha256-cz5GFZ4IWTHe3o0fr1BRVRqIiutGLECuUoVl9I8gsW4=";
 
   # e2e tests need docker (testcontainers/selenium)
   mvnParameters = "-DskipTests";

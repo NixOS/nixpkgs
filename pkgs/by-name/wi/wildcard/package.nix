@@ -29,9 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-hoJsXoPmp0A6oIV1Rm7eXI2U2OIGrStmKzDdPQtI41A=";
-    name = "wildcard-${finalAttrs.version}";
   };
 
   nativeBuildInputs = [

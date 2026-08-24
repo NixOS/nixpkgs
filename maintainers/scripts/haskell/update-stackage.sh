@@ -34,7 +34,7 @@ fi
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
 SOLVER=LTS
-# Stackage solver verson, if any. Use latest if empty
+# Stackage solver version, if any. Use latest if empty
 VERSION=
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER

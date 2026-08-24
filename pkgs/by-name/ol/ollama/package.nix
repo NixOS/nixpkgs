@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
-  nix-update-script,
 
   cmake,
   gitMinimal,
@@ -112,11 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
+  llamaCppVersion = "b10488";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b9840";
-    hash = "sha256-SlcBqlUSeXgGltk7fz1blp4DobypzkT8cw8a7dkVGiU=";
+    tag = llamaCppVersion;
+    hash = "sha256-5noPIcSD9Ki1D3J7b6JofeXiPO1RdL/Q8z+E0ZCwceY=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.32.0";
+  version = "0.32.15";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyZ3H1gsC692IcmdTXjIA9jDtTobUEfJladGW72aNGw=";
+    hash = "sha256-BpN3y1unf6Yd1RBura2S4O5jLSkImzi1Guo6GWbNZI8=";
   };
 
   vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
@@ -204,8 +204,8 @@ goBuild (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
     ++ lib.optionals enableVulkan vulkanLibs;
 
-  # replace inaccurate version number with actual release version
   postPatch = ''
+    # replace inaccurate version number with actual release version
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
 
@@ -225,6 +225,10 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
+    if [[ ${llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+      exit 1
+    fi
     cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
@@ -302,6 +306,7 @@ goBuild (finalAttrs: {
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
         -DOLLAMA_MLX_BACKENDS="" \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
@@ -339,6 +344,8 @@ goBuild (finalAttrs: {
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
+  subPackages = [ "." ];
+
   __darwinAllowLocalNetworking = true;
 
   # required for github.com/ollama/ollama/detect's tests
@@ -365,6 +372,7 @@ goBuild (finalAttrs: {
   versionCheckKeepEnvironment = "HOME";
 
   passthru = {
+    inherit llamaCppSrc llamaCppVersion;
     tests = {
       inherit ollama;
     }
@@ -375,8 +383,9 @@ goBuild (finalAttrs: {
       service-rocm = nixosTests.ollama-rocm;
       service-vulkan = nixosTests.ollama-vulkan;
     };
+    updateScript = ./update.sh;
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
 
   meta = {
     description =
@@ -393,5 +402,7 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       prusnak
     ];
+    # install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

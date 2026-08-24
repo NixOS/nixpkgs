@@ -16,7 +16,7 @@
 }:
 
 let
-  # https://github.com/OHF-Voice/piper1-gpl/blob/v1.3.0/CMakeLists.txt#L33-L40
+  # https://github.com/OHF-Voice/piper1-gpl/blob/v1.7.0/CMakeLists.txt#L33-L40
   espeak-ng' = espeak-ng.override {
     asyncSupport = false;
     klattSupport = false;
@@ -29,14 +29,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.4.2";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-FHO+1d1iJimc6KweY/O6lEvWqGCyUwnDrslEfkxYR7A=";
+    hash = "sha256-oQhDFhB2GXlAdxW1K7BM7RJkzihAwyoB6QbOpaMUVHM=";
   };
 
   patches = [
@@ -92,6 +92,7 @@ python3Packages.buildPythonApplication rec {
         jsonargparse
         librosa
         lightning
+        onnx
         pysilero-vad
         tensorboard
         tensorboardx
@@ -104,6 +105,15 @@ python3Packages.buildPythonApplication rec {
     alignment = with python3Packages; [
       onnx
     ];
+    zh = with python3Packages; [
+      # g2pw # not packaged
+      transformers
+      sentence-stream
+      unicode-rbnf
+    ];
+    ja = [
+      # pyopenjtalk-plus # not packaged
+    ];
   };
 
   postInstall = ''
@@ -114,6 +124,14 @@ python3Packages.buildPythonApplication rec {
     rm -v src/piper/train/vits/monotonic_align/{Makefile,setup.py,core.c,core.pyx}
     cp -Rv src/piper/train/vits $train/
   '';
+
+  pythonImportsCheck = [
+    "piper"
+    "piper.tashkeel"
+    "piper.hebrew"
+    "piper.train"
+    "piper.train.vits"
+  ];
 
   meta = {
     changelog = "https://github.com/OHF-Voice/piper1-gpl/releases/tag/v${version}";

@@ -14,13 +14,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store-frontend";
-  version = "2.28.6";
+  version = "2.29.10";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store-Front-End";
     tag = finalAttrs.version;
-    hash = "sha256-dCby4fKCx9lzlSdn9TZwOsQWPFf36ZcL5bEg3XgipjY=";
+    hash = "sha256-jQXIwdt9+yndTFBCrs6bZ7dCZ2fmjti0xQAgAGZbC1M=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-lj93WF3mqvgaD0qnZC+X4ubw8ohz8E5ICWYWbEITYnk=";
+    hash = "sha256-Pr0l1JxHvpsgfsvQdENbxLehBAn7/X87lPxsbKfNBw0=";
   };
 
   npmConfigHook = pnpmConfigHook;

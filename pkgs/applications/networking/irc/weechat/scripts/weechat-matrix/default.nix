@@ -60,7 +60,7 @@ buildPythonPackage {
     attrs
     logbook
     pygments
-    (matrix-nio.override { withOlm = true; })
+    (matrix-nio.override { withVodozemac = true; })
     aiohttp
     requests
   ];

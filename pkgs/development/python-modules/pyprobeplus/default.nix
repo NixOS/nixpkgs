@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-CJbQs0xZHdXNPX71G1KrrHHV58gXaQsUHGcX9P8E+iY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyprobeplus/__init__.py \
+      --replace-fail "1.0.1" "${version}"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

@@ -31,21 +31,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yYXB2DhLcLqxaqwP5mII+j2PMIoXdZ35bpx/d0WSZA8=";
-    fetchSubmodules = true;
+    hash = "sha256-4Wps/hNIBH6qWr2sX683WyLIPQJmih4ADwQKqqjitDk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version;
     src = "${finalAttrs.src}/rust";
     sourceRoot = "rust";
-    hash = "sha256-iuiRp2FA5jnb3uh/p1gpc7Sznt1s4/UR91wEtXTf97o=";
+    hash = "sha256-/2JQ31pMHbNjZsIu2RLCWzNul/qzL1O2+XB3qdOEb2U=";
   };
   cargoRoot = "rust";
 

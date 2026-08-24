@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.7.0";
+  version = "5.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-zc/83Ypmxul8fB3q0lUSgC9yfcdg7tJuZff+0LE0w30=";
+    hash = "sha256-b15g/FlB7lHiu19KotHXMvY1j+m0TZ4xVAy84wBXcbA=";
   };
 
   build-system = [
@@ -82,6 +82,11 @@ buildPythonPackage rec {
     numpy
     pillow
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # does not work on ZFS with normalization
+    "tests/test_opener.py::test_open_garbled_filename"
   ];
 
   pythonImportsCheck = [

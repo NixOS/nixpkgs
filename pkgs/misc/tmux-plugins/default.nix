@@ -976,12 +976,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.6.6";
+    version = "1.8.1";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
-      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
+      rev = "a39e00bf01fea05f916e4b7707bad5e64adee02c";
+      hash = "sha256-tmS0MBANSsTg53E2GB0TnjwGcZXboTRFNeDE6Ehn+bM=";
     };
     meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
@@ -1029,12 +1029,12 @@ in
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2023-10-24";
+    version = "unstable-2025-09-24";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "d62b6865c0e7c956ad1f0396823a6f34cf7452a7";
-      hash = "sha256-hVkSQYvBXrkXbKc98V9hwwvFp6z7/mX1K4N3N9j4NN4=";
+      rev = "05af76daa2487575b93a4f604693b00969f19c2f";
+      hash = "sha256-ay7z0MkeDCpxdwNTKFrkxi/hUE7a5K7P7oFhfn94aLA=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
@@ -1162,12 +1162,12 @@ in
 
   tmux-sm = mkTmuxPlugin {
     pluginName = "tmux-sm";
-    version = "0-unstable-2026-05-14";
+    version = "0-unstable-2026-06-06";
     src = fetchFromGitHub {
       owner = "vimlinuz";
       repo = "tmux-sm";
-      rev = "97d411a11d124443c982d17fde03c1e09809d7b1";
-      hash = "sha256-7HW/TLP/yyQp4j0/utA0tibTv+suV1B2K56pUS3Z004=";
+      rev = "33b4841531eefcc30ebaa52438d7073b0066164b";
+      hash = "sha256-6zEx5X7j7Pm4Vn8edFtbaCkE8cDtN2rOQYVYJ/Vo5Qs=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     rtpFilePath = "main.tmux";

@@ -92,6 +92,11 @@ in
           ]
         );
 
+        restartTriggers = [
+          cfg.package
+          config.environment.etc."gamemode.ini".source
+        ];
+
         serviceConfig.ExecStart = lib.mkIf cfg.enableRenice [
           "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.
           "${config.security.wrapperDir}/gamemoded"

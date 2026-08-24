@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_9,
   nix-update-script,
   libGL,
   jdk21,
@@ -14,30 +14,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.07.13";
+  version = "26.08.08-1";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Akm57GxGtEymDbfq879uglxEoENp/g+aFUNM1O0qRo=";
+    hash = "sha256-SbDdC910EdQy4HEwovuHjTzK4zEbzeI1w6pEQ1EQAGI=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-TIpT2g00f99qTGPA+bBaEz4kj5BC1scEywv6oDCFlkQ=";
+    hash = "sha256-P0NcsKNmLHlfZ8tMjkfOChLrJ7l5tc9xy6FtZqyL1As=";
   };
 
   nativeBuildInputs = [
     jdk21
-    gradle
+    gradle_9
     git
     cargo
     rustc
     rustPlatform.cargoSetupHook
   ];
+  #broken entry unused entry in Cargo.toml, can probably be removed with next update
+  postUnpack = ''
+      substituteInPlace ./source/matrix-rust-sdk/Cargo.toml --replace-fail \
+      "ruma = { git = \"https://github.com/matrix-org/ruma\", rev = \"2a1d714314f6f711d5bca755c73cf2ce3053c3d1\" }" \
+    ""
+  '';
 
   gradleBuildTask = "createReleaseDistributable";
 
@@ -51,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     #gradle createReleaseDistributable --write-verification-metadata sha256
   '';
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };

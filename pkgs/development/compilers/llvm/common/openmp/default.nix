@@ -19,7 +19,7 @@
   ompdSupport ? true,
   ompdGdbSupport ? ompdSupport,
   getVersionFile,
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 
   buildInputs = [

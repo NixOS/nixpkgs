@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "inject";
-  version = "5.4.1";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivankorobkov";
     repo = "python-inject";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-thVgKkpFtMwTMfeQ2r7xMvLtzBFJ/xIy6aUTq3400VA=";
+    hash = "sha256-F2YzzcMFmhurTcP1ETvJIfsFHUpPyi0mubGws2YYpok=";
   };
 
   build-system = [

@@ -6,6 +6,7 @@
   nix-update-script,
   libz,
   libtool,
+  bash,
   perl,
   R,
   bowtie2,
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "breseq";
-  version = "0.39.0";
+  version = "0.40.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -27,10 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "barricklab";
     repo = "breseq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DsDX2oGn7Ex50Wnp1phJjCziCzZIeeZOHriUGJbejsk=";
+    hash = "sha256-txZiyXyhMYXWO5RGrIkqgCS7Dmh34wogKXIfrE3fmms=";
   };
 
   buildInputs = [
+    bash
     perl
     libz
     libtool

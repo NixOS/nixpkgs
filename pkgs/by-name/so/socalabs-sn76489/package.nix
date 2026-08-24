@@ -29,7 +29,7 @@
   enableVST2 ? false,
 }:
 let
-  version = "1.1.5";
+  version = "1.1.7";
 in
 stdenv.mkDerivation {
   pname = "socalabs-sn76489";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     owner = "FigBug";
     repo = "SN76489";
     tag = "v${version}";
-    hash = "sha256-dQ697B0mhdIC0ltdY2EnErLNAGRKA6ARONX/kR3OLyI=";
+    hash = "sha256-gTFQ4Aibj2uesx0NRTM7H7diEzlic33Tl6gAzWUikxQ=";
     fetchSubmodules = true;
     preFetch = ''
       # can't clone using ssh

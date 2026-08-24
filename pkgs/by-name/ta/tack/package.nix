@@ -6,18 +6,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tack";
-  version = "1.0.0";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "manic-systems";
     repo = "tack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KhJb0NWLhj8AkD8uWEbXt179YlFLemk0OgOltw4jEk8=";
+    hash = "sha256-2wwH6pzL2vzffXKuMQwVMbUhfRubDwjPbrqdcbcJZqA=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  cargoHash = "sha256-3vDMM5uTsmRso6McH/b3+RpjeKjhgQm9V1piBrnSRjk=";
+  cargoHash = "sha256-xTSLcORGg6nUzi+1Th74+/egs/zKT4qmnemLUosCtXQ=";
 
   prePatch = ''
     rm .cargo/config.toml

@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck =
     !stdenv.hostPlatform.isStatic
     && stdenv.buildPlatform.canExecute stdenv.hostPlatform
-    && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+    && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs texi2pod.pl
@@ -129,13 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   installCheckTarget = "test";
-
-  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
-  preInstallCheck =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
-      ''
-        rm tests/tests2/{108,114}*
-      '';
 
   meta = {
     homepage = "https://repo.or.cz/tinycc.git";

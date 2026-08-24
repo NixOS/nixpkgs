@@ -118,41 +118,39 @@ in
         Main command line for systemd's ExecReload with systemd's specifier and
         environment variable substitution enabled.
 
-        This option sets the primary ExecRestart entry. Additional ExecReload entries
-        can be added via `systemd.service.serviceConfig.ExecReload` with `lib.mkBefore`
-        or `lib.mkAfter`.
+        This option sets the primary ExecReload entry, and is the way to extend the
+        command line derived from {option}`process.reloadCommand`.
 
         This option allows you to use systemd specifiers like `%n` (unit name),
         `%i` (instance), `%t` (runtime directory), and environment variables using
         `''${VAR}` syntax in your command line.
 
-        By default, it is either set to null or this is set to the escaped version of {option}`process.reloadCommand`
-        when specified to prevent systemd substitution. Set this option explicitly to enable
-        systemd's substitution features.
+        By default, it is set to {option}`process.reloadCommand`. Because
+        {option}`process.reloadCommand` is already a command line (not an argument
+        list), it is used verbatim so that references like `$MAINPID` are preserved.
+
+        When {option}`process.reloadCommand` is unset, this option is `null` and no
+        `ExecReload` is emitted; a service may then set
+        `systemd.service.serviceConfig.ExecReload` itself.
 
         To extend {option}`process.reloadCommand` with systemd specifiers, you can append
-        to the escaped arguments:
+        to the command line:
 
         ```nix
         systemd.mainExecReload =
-          config.systemd.lib.escapeSystemdExecArgs config.process.reload + " --systemd-unit %n";
+          config.process.reloadCommand + " --systemd-unit %n";
         ```
 
         This pattern allows you to pass the unit name (or other systemd specifiers)
-        as additional arguments while keeping the base command from {option}`process.argv`
-        properly escaped.
+        as additional arguments.
 
         See {manpage}`systemd.service(5)` (section "COMMAND LINES") for details on
         variable substitution and {manpage}`systemd.unit(5)` (section "SPECIFIERS")
         for available specifiers like `%n`, `%i`, `%t`.
       '';
       type = types.nullOr types.str;
-      default =
-        if config.process.reloadCommand then
-          config.systemd.lib.escapeSystemdExecArgs config.process.reloadCommand
-        else
-          "";
-      defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.reloadCommand";
+      default = config.process.reloadCommand;
+      defaultText = lib.literalExpression "config.process.reloadCommand";
     };
 
     systemd.services = mkOption {
@@ -212,10 +210,8 @@ in
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
-        ExecReload = config.systemd.mainExecReload;
-        Type = lib.mkDefault (
-          if (config.serviceManager.notificationProtocol == "systemd") then "notify" else "simple"
-        );
+        ExecReload = lib.mkIf (config.systemd.mainExecReload != null) config.systemd.mainExecReload;
+        Type = lib.mkDefault (if config.notificationProtocol.systemd then "notify" else "simple");
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [

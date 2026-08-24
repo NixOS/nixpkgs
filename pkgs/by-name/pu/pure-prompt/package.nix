@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pure-prompt";
-  version = "1.28.1";
+  version = "1.28.3";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UQ0hP3qJd4Qxiw1LXPdb9d0Dc4OSD3HJpgYzaCfujno=";
+    sha256 = "sha256-ZNi0ruTX9HRELXq1yvTm+StOuQ0UZgK6toMSgwqSD9A=";
   };
 
   strictDeps = true;

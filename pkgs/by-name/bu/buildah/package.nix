@@ -73,6 +73,7 @@ runCommand buildah-unwrapped.name
     mkdir -p $out
     ln -s ${buildah-unwrapped}/share $out/share
     makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
-      --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
-      --prefix PATH : "${binPath}"
+      --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin ${
+        lib.optionalString (binPath != "") "--prefix PATH : \"${binPath}\""
+      }
   ''

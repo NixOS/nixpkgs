@@ -5,20 +5,20 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
 in
 buildNpmPackage rec {
   pname = "piped";
-  version = "0-unstable-2024-11-04";
+  version = "0-unstable-2026-08-13";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
     repo = "piped";
-    rev = "7866c06801baef16ce94d6f4dd0f8c1b8bc88153";
-    hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
+    rev = "15f7e8a23b0f048e8110a449fa3720902ffed308";
+    hash = "sha256-zQqkF+MFDokN0DPBWfJfEhqaYzQkIGT/0ityYXMi5PM=";
   };
 
   nativeBuildInputs = [ pnpm ];
@@ -39,10 +39,12 @@ buildNpmPackage rec {
       pnpm
       ;
     fetcherVersion = 4;
-    hash = "sha256-o5NKMMIVPkKiPx++ALcZ+3oN80DMQHPwQqGT4f4q5P8=";
+    hash = "sha256-mBEzm+GzF/V3W/6JPOn81YawAMaSTw8THtOUb3qtmvc=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";

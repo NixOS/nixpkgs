@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cornucopia";
-  version = "1.0.0";
+  version = "1.0.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cornucopia-rs";
     repo = "cornucopia";
     tag = "cornucopia-v${finalAttrs.version}";
-    hash = "sha256-qlhdBI8XadU2dMbBEGRzWbZMdCkzt5u5ywfcvuIEYC8=";
+    hash = "sha256-dmIodvHxnSgjLXFIzP6Oo2e/EOqkuT3JjMKZn0ka200=";
   };
 
-  cargoHash = "sha256-Tm951lRd53Mzw9UwpDHQ11KRhk0Mj/XaGXcKqSE43cM=";
+  cargoHash = "sha256-kuxjjCNrjbmlbB6sCa9NHCV5ooC1SwqbasIe0Igottc=";
 
   cargoBuildFlags = [ "--package=cornucopia" ];
 

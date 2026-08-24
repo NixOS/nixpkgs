@@ -40,7 +40,6 @@ callPackage ./common.nix
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
     sourceDateEpoch = 1780959777;
     srcHash = "sha256-N+7D++Cxu0RGWChEWW8gtNz7E2I8qM2AFbXv4luAXto=";
-    homePath = "${jetbrains.jdk}/lib/openjdk";
     jcefPackage = jetbrains.jcef;
     extraBuildPhase = ''
       cp -r ${gtk-protocols.out} gtk-shell.xml

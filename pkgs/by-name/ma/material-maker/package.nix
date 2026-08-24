@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  godot_4_6,
+  godot_4_7,
   vulkan-headers,
   vulkan-loader,
   libx11,
@@ -15,19 +15,21 @@
   libxrender,
   nix-update-script,
 }:
-
+let
+  godot = godot_4_7;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "material-maker";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "RodZill4";
     repo = "material-maker";
     rev = finalAttrs.version;
-    hash = "sha256-jSbauK9eXoTW2xjZsipWcPs/8qmK8ztmT+doCgu8zrU=";
+    hash = "sha256-/oBAbdYNfIeNKnv1NGP05Nk5G8gov1yqRsG0jnFMW/Y=";
   };
 
-  nativeBuildInputs = [ godot_4_6 ];
+  nativeBuildInputs = [ godot ];
 
   buildInputs = [
     vulkan-headers
@@ -48,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$TMPDIR
     mkdir -p "$HOME/.local/share/godot"
-    ln -s "${godot_4_6.export-templates-bin}/share/godot/export_templates" "$HOME/.local/share/godot/export_templates"
+    ln -s "${godot.export-templates-bin}/share/godot/export_templates" "$HOME/.local/share/godot/export_templates"
 
     mkdir -vp build
     godot4 -v --headless --export-release 'Linux/X11' build/material-maker

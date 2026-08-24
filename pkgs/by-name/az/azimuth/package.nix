@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libGL,
   SDL2,
-  which,
   pkg-config,
-  installTool ? false,
+  libGL,
+  which,
+  makeBinaryWrapper,
+  icnsify,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,30 +26,63 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    makeBinaryWrapper
     which
+    SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    icnsify
   ];
 
   buildInputs = [
-    libGL
     SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
-
-  makeFlags = [
-    "BUILDTYPE=release"
-    "PREFIX=${placeholder "out"}"
-    "INSTALLTOOL=${if installTool then "true" else "false"}"
-  ];
+  makeFlags = [ "BUILDTYPE=release" ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs src/azimuth/system/generate_blob_index.sh
+
+    # Remove over-erroring measures
+    substituteInPlace Makefile \
+      --replace-fail "-Werror" ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # iconutil is not available in the build sandbox
+    substituteInPlace Makefile \
+      --replace-fail \
+        'iconutil -c icns $(OUTDIR)/icon.iconset -o $@ 2> /dev/null' \
+        'icnsify $(OUTDIR)/icon.iconset/icon_128x128.png -o $@'
+  '';
 
   doCheck = true;
   checkTarget = "test";
 
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -m755 out/release/host/bin/azimuth $out/bin/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -R out/release/host/Azimuth.app $out/Applications/
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeBinaryWrapper "$out/Applications/Azimuth.app/Contents/MacOS/Azimuth" \
+      "$out/bin/azimuth"
+  '';
+
   meta = {
-    description = "Metroidvania game using only vectorial graphic";
-    mainProgram = "azimuth";
+    description = "Metroidvania game with vector graphics, inspired by Super Metroid and Star Control II";
     longDescription = ''
       Azimuth is a metroidvania game, and something of an homage to the previous
       greats of the genre (Super Metroid in particular). You will need to pilot
@@ -58,11 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
       weapons and upgrades to find and use, and a wide variety of enemies and
       bosses to tangle with.
     '';
-
+    homepage = "https://mdsteele.games/azimuth/";
+    changelog = "https://github.com/mdsteele/azimuth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    homepage = "https://mdsteele.games/azimuth/index.html";
-    maintainers = with lib.maintainers; [ marius851000 ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      philocalyst
+      marius851000
+    ];
+    mainProgram = "azimuth";
+    platforms = lib.platforms.unix;
   };
 
 })

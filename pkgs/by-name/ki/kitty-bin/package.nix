@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kitty-bin";
-  version = "0.47.4";
+  version = "0.48.2";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/kovidgoyal/kitty/releases/download/v${finalAttrs.version}/kitty-${finalAttrs.version}.dmg";
-    hash = "sha256-tTubGKJ9U61Eol3Wd2/ejEdIe04QOsUNaCrx7o57d+0=";
+    hash = "sha256-+AT1juS2nHb4TrMoHhQHSCaaY/P0qBYBWo3sKgbSsZU=";
   };
 
   # undmg can't read the APFS dmg; -snld keeps the .app's symlinks intact.

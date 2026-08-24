@@ -5,13 +5,14 @@
   cudaPackages,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   jax,
   lib,
-  llvmPackages, # TODO: use llvm 21 in 1.10, see python-packages.nix
+  symlinkJoin,
+  llvmPackages, # llvm 21, matching warp's build-from-source LLVM (see python-packages.nix)
   numpy,
   pkgsBuildHost,
   python,
-  replaceVars,
   runCommand,
   setuptools,
   stdenv,
@@ -19,6 +20,7 @@
   warp-lang, # Self-reference to this package for passthru.tests
   writableTmpDirAsHomeHook,
   writeShellApplication,
+  zlib,
 
   # Use standalone LLVM-based JIT compiler and CPU device support
   standaloneSupport ? true,
@@ -43,7 +45,7 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "warp-lang";
-  version = "1.11.0";
+  version = "1.15.0";
   pyproject = true;
 
   # TODO(@connorbaker): Some CUDA setup hook is failing when __structuredAttrs is false,
@@ -55,13 +57,18 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wV4F6E4l0lfPB8zk/XhmdMNk649j5aJelW/DVu2R5mM=";
+    hash = "sha256-XHgurCEbsFqgJIW5gfP8H3UYInrpP0VKl1D/Qnvb8c4=";
   };
 
-  patches = lib.optionals standaloneSupport [
-    (replaceVars ./dynamic-link.patch {
-      LLVM_LIB = llvmPackages.llvm.lib;
-      LIBCLANG_LIB = llvmPackages.libclang.lib;
+  patches = [
+    # Fix dangling-reference bugs in clang.cpp's LLVM 21 path that segfault when JIT-compiling any
+    # CPU kernel. Also folds in the LLVM 19+ getHostCPUFeatures() guard we used to patch locally.
+    # Fixed upstream after v1.15.0: https://github.com/NVIDIA/warp/pull/1645
+    # TODO: drop once part of a tagged release.
+    (fetchpatch {
+      name = "fix-diagnostics-lifetime-llvm21.patch";
+      url = "https://github.com/NVIDIA/warp/commit/309c6147a6d19c3a01159a145d50c56ec1f34101.patch";
+      hash = "sha256-KZ7X7CViYol+XPK8Z7rQoaI8ccTfaTK8o5zGubGvjHA=";
     })
   ];
 
@@ -71,9 +78,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       --replace-fail \
         '"-D", f"CMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0 {abi_version}",  # The pre-C++11 ABI is still the default on the CentOS 7 toolchain' \
         ""
-
+  ''
+  # Drop the pre-C++11 ABI flag from both the g++ (.cpp, space-separated) and the nvcc
+  # (.cu, comma-separated in --compiler-options) command lines.
+  # If only one is dropped, the .cpp and .cu objects disagree on the std::string ABI and fail to link:
+  # warp 1.14.0's apic_load_graph_cuda_setup() passes a std::string across the .cpp/.cu boundary.
+  + ''
     substituteInPlace "$PWD/warp/_src/build_dll.py" \
-      --replace-fail " -D_GLIBCXX_USE_CXX11_ABI=0" ""
+      --replace-fail " -D_GLIBCXX_USE_CXX11_ABI=0" "" \
+      --replace-fail ",-D_GLIBCXX_USE_CXX11_ABI=0" ""
   ''
   + lib.optionalString effectiveStdenv.hostPlatform.isDarwin (
     ''
@@ -93,16 +106,28 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     substituteInPlace "$PWD/warp/_src/build_dll.py" \
       --replace-fail "clang++" "${effectiveStdenv.cc}/bin/cc"
   ''
-  + lib.optionalString standaloneSupport ''
-    substituteInPlace "$PWD/warp/_src/build_dll.py" \
-      --replace-fail \
-        '-I"{warp_home_path.parent}/external/llvm-project/out/install/{mode}-{arch}/include"' \
-        '-I"${llvmPackages.llvm.dev}/include"' \
-      --replace-fail \
-        '-I"{warp_home_path.parent}/_build/host-deps/llvm-project/release-{arch}/include"' \
-        '-I"${llvmPackages.libclang.dev}/include"' \
-
-  ''
+  + lib.optionalString standaloneSupport (
+    ''
+      substituteInPlace "$PWD/warp/_src/build_dll.py" \
+        --replace-fail \
+          'warp_home_path.parent, "external", "llvm-project", "out", "install", f"{mode}-{arch}", "include"' \
+          '"${lib.getDev llvmPackages.llvm}", "include"' \
+        --replace-fail \
+          'warp_home_path.parent, "_build", "host-deps", "llvm-project", f"release-{arch}", "include"' \
+          '"${lib.getDev llvmPackages.libclang}", "include"'
+    ''
+    # Warp expects to find static LLVM/Clang archives in the LLVM lib directory and links against
+    # every one it finds.
+    # Nixpkgs only ships the shared libraries, so link against those (plus zlib, which libLLVM
+    # depends on) instead.
+    + ''
+      nixLog "patching $PWD/build_llvm.py to link against nixpkgs' shared LLVM/Clang libraries"
+      substituteInPlace "$PWD/build_llvm.py" \
+        --replace-fail \
+          'libs = [f"-l{lib[3:-2]}" for lib in libs if os.path.splitext(lib)[1] == ".a"]' \
+          'libs = ["-lclang-cpp", "-lLLVM", "-lz"]'
+    ''
+  )
   # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
   + lib.optionalString cudaSupport (
     let
@@ -163,6 +188,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
       llvmPackages.llvm
       llvmPackages.clang
       llvmPackages.libcxx
+      zlib
     ]
     ++ lib.optionals cudaSupport [
       (lib.getStatic cudaPackages.cuda_nvcc) # dependency on nvptxcompiler_static; no dynamic version available
@@ -181,23 +207,35 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   preBuild =
     let
+      llvmPath = symlinkJoin {
+        name = "llvm-path";
+        paths = [
+          (lib.getDev llvmPackages.libclang)
+          (lib.getLib llvmPackages.llvm)
+          (lib.getLib llvmPackages.libclang)
+        ];
+      };
       buildOptions =
-        lib.optionals effectiveStdenv.cc.isClang [
-          "--clang_build_toolchain"
+        lib.optionals standaloneSupport [
+          "--standalone"
+          "--llvm-path=${llvmPath}"
+        ]
+        ++ lib.optionals effectiveStdenv.cc.isClang [
+          "--clang-build-toolchain"
         ]
         ++ lib.optionals (!standaloneSupport) [
-          "--no_standalone"
+          "--no-standalone"
         ]
         ++ lib.optionals cudaSupport [
           # NOTE: The `cuda_path` argument is the directory which contains `bin/nvcc` (i.e., the bin output).
-          "--cuda_path=${lib.getBin pkgsBuildHost.cudaPackages.cuda_nvcc}"
+          "--cuda-path=${lib.getBin pkgsBuildHost.cudaPackages.cuda_nvcc}"
         ]
         ++ lib.optionals libmathdxSupport [
-          "--libmathdx"
-          "--libmathdx_path=${libmathdx}"
+          "--use-libmathdx"
+          "--libmathdx-path=${libmathdx}"
         ]
         ++ lib.optionals (!libmathdxSupport) [
-          "--no_libmathdx"
+          "--no-use-libmathdx"
         ];
 
       buildOptionString = lib.concatStringsSep " " buildOptions;

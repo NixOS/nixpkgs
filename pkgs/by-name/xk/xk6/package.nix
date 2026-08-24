@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "xk6";
-  version = "1.4.7";
+  version = "1.4.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "xk6";
     tag = "v${version}";
-    hash = "sha256-ZJJlwP3jI8/J8XIg2oqtPY5Bojm7xuYCnBJ7B+qbDSU=";
+    hash = "sha256-WYips+uE5xadPXUqJ5+27rrFRcbaM1Dad3HCXZW++iA=";
   };
 
   vendorHash = null;

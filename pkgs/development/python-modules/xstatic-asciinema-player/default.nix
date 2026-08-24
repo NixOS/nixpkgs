@@ -2,7 +2,7 @@
   buildPythonPackage,
   lib,
   fetchPypi,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-yA6WC067St82Dm6StaCKdWrRBhmNemswetIO8iodfcw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   # no tests implemented
   doCheck = false;

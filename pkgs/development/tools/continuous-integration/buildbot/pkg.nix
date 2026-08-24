@@ -18,6 +18,8 @@ buildPythonPackage {
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
 
+  env.BUILDBOT_VERSION = buildbot.version;
+
   build-system = [ setuptools ];
 
   # No tests

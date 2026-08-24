@@ -15,13 +15,14 @@
 
   # tests
   numpy,
+  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-tvm-ffi";
-  version = "0.1.12";
+  version = "0.1.13-post3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,8 +31,15 @@ buildPythonPackage (finalAttrs: {
     repo = "tvm-ffi";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZFi7MKFiHK2lNoVkQbPhOc7NpIf24PLLP8SqGQiQ9Lw=";
+    hash = "sha256-AN7AqBl62T8DqnRt7KRvGjqo/c0SJ66QZrCQQ5yicHw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "cython>=3.2.8" \
+        "cython"
+  '';
 
   build-system = [
     cmake
@@ -56,6 +64,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     numpy
+    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];

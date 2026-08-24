@@ -26,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7RRlaIOyOjZLQFfAVZXZMlLam8Rz0wEGUZUZ0NoUEoM=";
   };
 
+  # Work around too strict landlock hardening
+  # https://bugs.astron.com/view.php?id=785
+  postPatch = ''
+    substituteInPlace src/landlock.c --replace-fail \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -49,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://darwinsys.com/file";

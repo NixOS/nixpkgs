@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "21.2.4";
+  version = "21.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "virtualenv";
     tag = version;
-    hash = "sha256-3Ed2h5zzjpm+D1fQW2urWYcO/6sFGuZtueQxUnIu3MY=";
+    hash = "sha256-8LOmA1Mhfqbl3hsGZa8tQutjfjEVeDlpOKyVut5rDVI=";
   };
 
   build-system = [

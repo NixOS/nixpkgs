@@ -3,6 +3,7 @@
   stdenv,
   config,
   fetchFromGitHub,
+  symlinkJoin,
   cmake,
   llvmPackages, # openmp
   withMkl ? false,
@@ -18,6 +19,10 @@
   openblas,
   withRuy ? true,
 
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
+  rocmGpuTargets ? (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets or [ ]),
+
   # passthru tests
   libretranslate,
   wyoming-faster-whisper,
@@ -25,6 +30,25 @@
 
 let
   stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
+
+  rocmLibs = [
+    rocmPackages.hiprand
+    rocmPackages.hipblas
+    rocmPackages.hipcub
+    rocmPackages.rocrand
+    rocmPackages.rocblas
+    rocmPackages.rocprim
+    rocmPackages.rocthrust
+    rocmPackages.rocm-device-libs
+    rocmPackages.rocm-comgr
+    rocmPackages.rocm-runtime
+    rocmPackages.rocm-core
+  ];
+  rocmtoolkit_joined = symlinkJoin {
+    name = "rocm-merged";
+
+    paths = rocmLibs;
+  };
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
@@ -61,6 +85,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withCUDA [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.clr
   ];
 
   cmakeFlags = [
@@ -74,6 +101,14 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_OPENBLAS" withOpenblas)
     (lib.cmakeBool "WITH_RUY" withRuy)
     (lib.cmakeBool "WITH_MKL" withMkl)
+    (lib.cmakeBool "WITH_HIP" rocmSupport)
+  ]
+  ++ lib.optionals rocmSupport [
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "amdclang")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "amdclang++")
+    (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
+    (lib.cmakeFeature "GPU_TARGETS" (builtins.concatStringsSep ";" rocmGpuTargets))
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "WITH_ACCELERATE" true)
@@ -81,6 +116,10 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.gcc.arch or null != null) [
     (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
   ];
+
+  env = lib.optionalAttrs rocmSupport {
+    ROCM_PATH = lib.optionalString rocmSupport rocmtoolkit_joined;
+  };
 
   buildInputs =
     lib.optionals withMkl [
@@ -95,6 +134,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals (withCUDA && withCuDNN) [
       cudaPackages.cudnn
     ]
+    ++ lib.optionals rocmSupport rocmLibs
     ++ lib.optionals withOneDNN [
       onednn
     ]
@@ -122,6 +162,6 @@ stdenv'.mkDerivation (finalAttrs: {
       hexa
       misuzu
     ];
-    broken = !(withCuDNN -> withCUDA);
+    broken = !(withCuDNN -> withCUDA) || withCUDA && rocmSupport;
   };
 })

@@ -7,21 +7,24 @@
   jinja2,
   pygments, # for Erlang support
   pathspec, # for .gitignore support
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lizard";
-  version = "1.23.0";
-  format = "setuptools";
+  version = "1.24.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terryyin";
     repo = "lizard";
-    tag = version;
-    hash = "sha256-rKCa5JniIr6SZaYgfC29GjOXl9MW9Dkt76z/oqfqnqc=";
+    tag = finalAttrs.version;
+    hash = "sha256-npxnl9QrsAMLgrSDGsmWTb17VLwJ9sYCi9dhROCblhg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jinja2
     pygments
     pathspec
@@ -40,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lizard" ];
 
   meta = {
-    changelog = "https://github.com/terryyin/lizard/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/terryyin/lizard/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
     mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";
@@ -48,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

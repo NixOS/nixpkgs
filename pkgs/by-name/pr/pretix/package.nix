@@ -55,20 +55,24 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.6.0";
+  version = "2026.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yKJGJziMpOB8ttz0n4USay03wJTId77bYT7id4OgoIE=";
+    hash = "sha256-ozgsveEstgX3Wy24EaYhpbTUQrwbm+cIWFE0F2YIqfw=";
   };
 
   patches = [
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # [2026.7.0] Inherit PYTHONPATH in test that tries starting Pretix with a
+    # naked interpreter.
+    ./test_startup_pythonpath.patch
   ];
 
   postPatch = ''
@@ -88,7 +92,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-DJCvNcgDIY71Q9qg4Ng7SAM9i9wHhHOdJonpt5t/Xx8=";
+    hash = "sha256-3sF6TmzDBu3UJASNaPL6zkJNRCHZIHzFTjJWmfkMeAo=";
   };
 
   nativeBuildInputs = [
@@ -135,6 +139,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-oauth-toolkit
       django-otp
       django-phonenumber-field
+      django-querytagger
       django-redis
       django-scopes
       django-statici18n
@@ -208,6 +213,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
+    "django-scopes"
     "dnspython"
     "drf_ujson2"
     "importlib_metadata"

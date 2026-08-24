@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "wlc";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aljCKtVrVyHCz6jd6XtBbhi1xm207lc25DU+1bqJYos=";
+    hash = "sha256-z0Ig+SuJ5XdZkDb3I5AXziVFjMAMCIly2vcQRqx62sw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -7,17 +7,18 @@
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  coreutils,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "bootdev-cli";
-  version = "1.29.6";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "bootdotdev";
     repo = "bootdev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uoFnhcJvvY+lb8VLv0kPI8hp4H8XfQOY5R83Rj17gfw=";
+    hash = "sha256-0koZYMQxCHPtB44OYhiD9+nYAyHWXbyQd2xhdqnOqEw=";
   };
 
   vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
@@ -32,6 +33,14 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # TestGetLatestVersionHasOverallTimeout writes a fake go helper that runs
+  # /bin/sleep; that path is missing in the Nix sandbox, and the test also
+  # resets PATH so a bare "sleep" would not help. Point at store sleep.
+  postPatch = ''
+    substituteInPlace version/version_test.go \
+      --replace-fail 'exec /bin/sleep 5' 'exec ${lib.getExe' coreutils "sleep"} 5'
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       installShellCompletion --cmd bootdev --"$shell" <($out/bin/bootdev completion "$shell")
@@ -41,6 +50,9 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/bootdev";
   doInstallCheck = true;
+
+  # checks tests use httptest.NewServer (bind localhost)
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

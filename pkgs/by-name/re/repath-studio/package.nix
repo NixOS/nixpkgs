@@ -7,10 +7,12 @@
   pkg-config,
   electron,
   chromium,
+  libicns,
   cacert,
   clojure,
   git,
   vips,
+  python3,
 
   writeShellScriptBin,
   copyDesktopItems,
@@ -21,30 +23,34 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.16";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wqDsjr+ZQDRFINzr38i7ClgREEmAaKt+U/Ma63vAH1k=";
+    hash = "sha256-uHGF/SEbKZF6Ax1yrXYoAjXH5k6PzKF4aB85TXGJvk4=";
   };
 
   patches = [
     # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
+    ./0001-disable-auto-update-check.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-IvKHLxX7rTB3AGDzNQIVNhfXs0C6TVATdVGUDHGrpOo=";
+  npmDepsHash = "sha256-LBzauu5lpyfwOpnncsjPP4NpnoKqqcvX+HbK0YWNerA=";
 
   nativeBuildInputs = [
     finalAttrs.passthru.clojureWithHome
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   # For 'sharp' dependency, otherwise it will try to build it
@@ -53,11 +59,19 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
     PUPPETEER_SKIP_DOWNLOAD = true;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   postPatch = ''
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
+
+    substituteInPlace src/renderer/shell/impl/python.cljs \
+      --replace-fail '"/pyodide/pyodide.js"' '"pyodide/pyodide.js"' \
+      --replace-fail '(js/loadPyodide)' '(js/loadPyodide #js {:indexURL "pyodide/"})'
   '';
 
   buildPhase = ''
@@ -68,13 +82,20 @@ buildNpmPackage (finalAttrs: {
     chmod -R u+w "$electron_dist"
 
     npm run build
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p build
+      png2icns build/icon.icns resources/public/img/icon.png
+    ''}
     npm exec electron-builder -- --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.icon=build/icon.icns"}
 
     runHook postBuild
   '';
 
+  # NOTE: use "--set-default ELECTRON_ENABLE_LOGGING 1" to debug
   installPhase = ''
     runHook preInstall
 
@@ -84,7 +105,8 @@ buildNpmPackage (finalAttrs: {
         ''
           mkdir -p $out/Applications
           cp -r "dist/mac"*"/Repath Studio.app" "$out/Applications"
-          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio"
+          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio" \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
         ''
       else
         # bash
@@ -97,6 +119,7 @@ buildNpmPackage (finalAttrs: {
             --add-flags "$out/share/repath-studio/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
             --inherit-argv0
         ''
     }
@@ -106,7 +129,7 @@ buildNpmPackage (finalAttrs: {
 
   # chromium package not available for darwin
   doCheck = stdenv.hostPlatform.isLinux;
-  checkPhase = ''
+  checkPhase = lib.optionalString (stdenv.hostPlatform.isLinux) /* sh */ ''
     runHook preCheck
     export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
@@ -188,7 +211,7 @@ buildNpmPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash = "sha256-2ijBbKXKiXStWAyeLoRv8OSMoCfB2xA1TVw6xtlBPes=";
+      outputHash = "sha256-0+7pPY/f7Cn+wgGZyM5gKS7g3dsL4j57oQE4GWdCpu0=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };

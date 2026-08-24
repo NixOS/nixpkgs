@@ -140,13 +140,17 @@ let
       # [2026.7.2] Language string mismatch (id vs ID)
       "tests/components/netatmo/test_media_source.py::test_async_browse_media"
     ];
-    wmspro = [
-      # [2026.7.2] Outdated snapshot
-      "tests/components/wmspro/test_number.py::test_number_update"
+    remote_calendar = [
+      # [2026.8.0] AssertionError: assert '2026-05-18 06:40:00' == '2026-05-19 08:00:00'
+      "tests/components/remote_calendar/test_calendar.py::test_coordinator_refresh_updates_upcoming_event_state"
     ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    wmspro = [
+      # [2026.7.2] Outdated snapshot
+      "tests/components/wmspro/test_number.py::test_number_update"
     ];
   };
 

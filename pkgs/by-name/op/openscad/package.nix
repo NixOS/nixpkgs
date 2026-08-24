@@ -30,9 +30,11 @@
   wayland-protocols,
   wrapGAppsHook3,
   cairo,
+  callPackage,
   openscad,
   runCommand,
   versionCheckHook,
+  openscadPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -127,9 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     eigen
     boost
-    # OpenSCAD's GLX offscreen renderer needs GLEW's GLXEW symbols (`__GLXEW_SGIX_pbuffer`, `__GLXEW_SGIX_fbconfig`)
-    # which are not found in the default EGL-enabled glew and causes the build failure in https://github.com/NixOS/nixpkgs/issues/530529
-    (glew.override { enableEGL = false; })
+    glew
     opencsg
     cgal_5
     mpfr
@@ -205,20 +205,27 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       bjornfor
       raskin
+      xoconoch
     ];
     mainProgram = "openscad";
   };
 
-  passthru.tests = {
-    lib3mf_support =
-      runCommand "${finalAttrs.pname}-lib3mf-support-test"
-        {
-          nativeBuildInputs = [ finalAttrs.finalPackage ];
-        }
-        ''
-          echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
-          echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
-          mv cube-import.3mf $out
-        '';
+  passthru = {
+    tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      lib3mf_support =
+        runCommand "${finalAttrs.pname}-lib3mf-support-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+            echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+            mv cube-import.3mf $out
+          '';
+    };
+    withPackages = callPackage ./wrapper.nix {
+      openscad = finalAttrs.finalPackage;
+      inherit openscadPackages;
+    };
   };
 })

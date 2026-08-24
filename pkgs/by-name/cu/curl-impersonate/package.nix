@@ -1,33 +1,23 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   callPackage,
-  buildGoModule,
   installShellFiles,
   buildPackages,
-  zlib,
-  zstd,
-  sqlite,
   cmake,
-  python3,
   ninja,
-  perl,
   pkg-config,
   autoconf,
   automake,
   libtool,
-  cctools,
-  cacert,
   unzip,
-  go,
-  p11-kit,
+  fixDarwinDylibNames,
   nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "1.5.6";
+  version = "2.1.0";
 
   outputs = [
     "out"
@@ -38,168 +28,120 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-t4fdTp/pb00dcuelvvZyN7ZdgLoQt3nbYXU9sW9jlS8=";
+    hash = "sha256-gN4TD+WxQM2eJofHsOHA/JpH6bQ8CI3VUTPL8NuySn4=";
   };
 
-  # Disable blanket -Werror to fix build on `gcc-13` related to minor
-  # warnings on `boringssl`.
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
-
+  separateDebugInfo = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
   depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      # Must come first so that it shadows the 'libtool' command but leaves 'libtoolize'
-      cctools
-    ]
-    ++ [
-      installShellFiles
-      cmake
-      python3
-      python3.pythonOnBuildForHost.pkgs.gyp
-      ninja
-      perl
-      pkg-config
-      autoconf
-      automake
-      libtool
-      unzip
-      go
-    ];
-
-  buildInputs = [
-    zlib
-    zstd
-    sqlite
+  nativeBuildInputs = [
+    installShellFiles
+    cmake
+    ninja
+    pkg-config
+    autoconf
+    automake
+    libtool
+    unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.ICU
+    # Rewrite the dylib's install name to its absolute store path.
+    # Without this it keeps upstream's "@rpath/libcurl-impersonate.4.dylib",
+    # and every consumer linking it (e.g. python3Packages.curl-cffi's
+    # extension module, and through it yt-dlp) records an @rpath reference
+    # with no LC_RPATH set, failing at dlopen with "no LC_RPATH's found".
+    fixDarwinDylibNames
   ];
 
-  configureFlags = [
-    "--with-ca-bundle=${
-      if stdenv.hostPlatform.isDarwin then "/etc/ssl/cert.pem" else "/etc/ssl/certs/ca-certificates.crt"
-    }"
-    "--with-ca-path=${cacert}/etc/ssl/certs"
+  # Upstream CMake build wants its own specific versions of
+  # zlib, zstd, brotli, nghttp2, ngtcp2, nghttp3, boringssl.
+  # These come from passthru.deps, instead of buildInputs.
+
+  cmakeFlags =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "-DCURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # This fork's CMakeLists sets USE_APPLE_IDN=ON expecting curl to use Apple's IDN support.
+      # This however results in no IDN at all in the built binary (none listed in -V)? Force to
+      # use libidn instead, this needs the -liconv in postPatch below
+      "-DUSE_LIBIDN2=ON"
+    ];
+
+  patches = [
+    ./darwin-libidn2-linker-flags.patch
   ];
 
-  buildFlags = [ "build" ];
-  checkTarget = "checkbuild";
-  installTargets = [ "install" ];
+  postPatch =
+    let
+      localDep = name: "file://${passthru.deps.${name}}";
+    in
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'URL "''${ZLIB_URL}"' 'URL "${localDep "zlib-1.3.1.tar.gz"}"' \
+        --replace-fail 'URL "''${ZSTD_URL}"' 'URL "${localDep "zstd-1.5.7.tar.gz"}"' \
+        --replace-fail 'URL "''${BROTLI_URL}"' 'URL "${localDep "brotli-1.2.0.tar.gz"}"' \
+        --replace-fail 'URL "''${BORINGSSL_URL}"' 'URL "${localDep "boringssl-156c7b75ae9b8c3b3f847acf264f17594c3859fb.zip"}"' \
+        --replace-fail 'URL "''${NGHTTP2_URL}"' 'URL "${localDep "nghttp2-1.63.0.tar.bz2"}"' \
+        --replace-fail 'URL "''${NGTCP2_URL}"' 'URL "${localDep "ngtcp2-1.20.0.tar.bz2"}"' \
+        --replace-fail 'URL "''${NGHTTP3_URL}"' 'URL "${localDep "nghttp3-1.15.0.tar.bz2"}"' \
+        --replace-fail 'URL "''${CURL_URL}"' 'URL "${localDep "curl-8_21_0.tar.gz"}"'
 
-  doCheck = true;
-
-  dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
-  dontUseNinjaCheck = true;
-
-  postUnpack =
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
-        lib.filterAttrs (n: v: v ? outPath) passthru.deps
-      )
-    )
-    + ''
-
-      curltar=$(realpath -s ${src.name}/curl-*.tar.gz)
-
-      pushd "$(mktemp -d)"
-
-      tar -xf "$curltar"
-
-      pushd curl-curl-*/
-      patchShebangs scripts
-      popd
-
-      rm "$curltar"
-      tar -czf "$curltar" .
-
-      popd
+      substituteInPlace scripts/build-libidn2.sh \
+        --replace-fail '[ -f "$archive" ] || curl -L "$libidn2_url" -o "$archive"' \
+          '[ -f "$archive" ] || cp ${passthru.deps."libidn2-2.3.7.tar.gz"} "$archive"'
     '';
 
-  postPatch = ''
-    substituteInPlace Makefile.in \
-      --replace-fail "-lc++" "-lstdc++"
+  preConfigure = ''
+    # Prebuild libidn2 (statically, with bundled libunistring) offline,
+    # matching `make prepare-libidn2`.
+    BUILD_DIR="$PWD/build" ZIG_FLAGS='-target ${stdenv.hostPlatform.config}' ./scripts/build-libidn2.sh
   '';
 
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-    export GOPROXY=file://${passthru.boringssl-go-modules}
-    export GOSUMDB=off
+  installPhase = ''
+    runHook preInstall
 
-    # Need to get value of $out for this flag
-    configureFlagsArray+=("--with-libnssckbi=$out/lib")
+    mkdir -p $out/bin $out/lib $dev/include
+    install -Dm755 deps/build/curl/src/curl-impersonate $out/bin/curl-impersonate
+    cp -P deps/build/curl/lib/libcurl-impersonate.* $out/lib/
+    cp -r deps/src/curl/include/curl $dev/include/curl
+    install -Dm755 -t $out/bin ../bin/curl_*
+
+    runHook postInstall
   '';
 
   postInstall = ''
-    # Remove vestigial *-config script
-    rm $out/bin/curl-impersonate-config
-
-    # Patch all shebangs of installed scripts
     patchShebangs $out/bin
-
-    # Install headers
-    make -C curl-*/include install
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # Patch completion names
-    substituteInPlace curl-*/scripts/Makefile \
-      --replace-fail "_curl" "_curl-impersonate" \
-      --replace-fail "curl.fish" "curl-impersonate.fish"
-
-    # Install completions
-    make -C curl-*/scripts install
   '';
 
-  preFixup =
-    let
-      libext = stdenv.hostPlatform.extensions.sharedLibrary;
-    in
-    # sh
-    ''
-      # If libnssckbi.so is needed, link libnssckbi.so without needing nss in closure
-      if grep -F nssckbi $out/lib/libcurl-impersonate${libext} &>/dev/null; then
-        ln -s ${p11-kit}/lib/pkcs11/p11-kit-trust${libext} $out/lib/libnssckbi${libext}
-        ${lib.optionalString stdenv.hostPlatform.isElf ''
-          patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate${libext}
-        ''}
-      fi
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-      # installPhase already installs curl headers in $dev, better to override those
-      rm -rf "$dev/include/curl"
-    '';
+    version_output=$($out/bin/curl-impersonate -V)
+    echo "$version_output"
+    echo "$version_output" | grep -q zlib
+    echo "$version_output" | grep -q zstd
+    echo "$version_output" | grep -q brotli
+    echo "$version_output" | grep -q nghttp2
+    echo "$version_output" | grep -q BoringSSL
+    echo "$version_output" | grep -q IDN
 
-  disallowedReferences = [ go ];
+    runHook postInstallCheck
+  '';
+
+  doInstallCheck = true;
 
   passthru = {
     deps = callPackage ./deps.nix { };
 
     updateScript = ./update.sh;
 
-    # Find the correct boringssl source file
-    boringssl-source = builtins.head (
-      lib.attrValues (lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps)
-    );
-    boringssl-go-modules =
-      (buildGoModule {
-        inherit (passthru.boringssl-source) name;
-
-        src = passthru.boringssl-source;
-        vendorHash = "sha256-HepiJhj7OsV7iQHlM2yi5BITyAM04QqWRX28Rj7sRKk=";
-
-        nativeBuildInputs = [ unzip ];
-
-        proxyVendor = true;
-      }).goModules;
-
     inherit src;
-
     tests = { inherit (nixosTests) curl-impersonate; };
   };
 
@@ -211,7 +153,9 @@ stdenv.mkDerivation rec {
       curl
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      ui-1
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
   };

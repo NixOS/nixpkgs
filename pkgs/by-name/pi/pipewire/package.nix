@@ -13,7 +13,7 @@
   libinotify-kqueue,
   epoll-shim,
   systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.highghlow.
   pkg-config,
   docutils,
   doxygen,
@@ -88,7 +88,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.7";
+  version = "1.6.8";
 
   outputs = [
     "out"
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-DSW9ho+NLikW/stlxvHLhRguMZy/4b7VEcC938ObJmQ=";
+    hash = "sha256-sxS6+LtvpEWCKoKLDUSYkW4+rrcIXPjWPBglReIDh/k=";
   };
 
   patches = [
@@ -229,6 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
+    (lib.mesonEnable "systemd-user-service" enableSystemd)
     (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)

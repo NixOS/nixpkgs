@@ -9,21 +9,23 @@
   dbus,
 
   writableTmpDirAsHomeHook,
+  gitMinimal,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.61.1";
+  version = "0.71.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
-    owner = "always-further";
+    owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y5oMR5Vawf/1QUj3ACDdqAjKT+Q2gizRfKkal340EP8=";
+    hash = "sha256-Xrqd8Do1R2kCwTAmju2VmOLAf329eoOSslfa8i9ogJc=";
   };
-  cargoHash = "sha256-Oy/IqAK5ml1vu0eee+pF5pRjzk0Na/Fb04e1Mx0d924=";
+  cargoHash = "sha256-bMGrLh3DEA3yJsyb62Xdt+SfhzFY5VXawai4V6xttpI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,12 +37,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
+    gitMinimal
   ];
 
   checkFlags = map (t: "--skip=${t}") (
     [
       # fails to initialize the sandbox under '/build'
       "test_all_profiles_signal_mode_resolves"
+      "test_restrict_execute_does_not_break_rename_into_new_subdir"
       # panic
       "build_run_profile_patch_adds_override_deny_for_sensitive_file"
       "build_run_profile_patch_merges_read_and_write_to_allow_file"
@@ -55,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "rollback_signed_session_verifies_from_audit_dir_bundle"
 
       # nono-cli
-      # wants a script `cripts/test-list-aliases.sh`, `git`, and `.git` history
+      # wants a script `scripts/test-list-aliases.sh`, `git`, and `.git` history
       "alias_inventory_script_passes"
       # fails to initialize the sandbox under '/build'
       # has also failed due to running on darwin despite testing the linux only
@@ -69,6 +73,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "alias_inventory_rejects_unapproved_deprecated_module_reach_in"
       "lint_docs_accepts_clean_tree"
       "lint_docs_rejects_quoted_override_deny_outside_allowlist"
+      # need /bin/cat
+      "granted_path_exits_zero"
+      "env_credentials_with_command_policies_non_shim_entry_succeeds"
 
       # nono-proxy
       # fails to prepare TLS bundle inside build sandbox
@@ -76,6 +83,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "server::tests::test_route_diagnostics_summarises_each_route"
       "tls_intercept::bundle::tests::bundle_contains_ephemeral_and_system_roots"
       "tls_intercept::bundle::tests::bundle_file_has_restrictive_permissions"
+      # fail due to credential capture not configured
+      "proxy_runtime::tests::capture_helper_with_interaction_stdin_true_inherits_terminal_stdin"
+      "proxy_runtime::tests::capture_helper_with_stdio_true_receives_null_not_terminal_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_captures_and_caches"
+      "proxy_runtime::tests::proxy_credential_capture_backend_parses_json_headers"
+      "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
+      "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # panic
+      "server::tests::reactive_proxy_auth_retry_answered_after_407"
+      "server::tests::test_oauth_capture_routes_activate_intercept"
+      "server::tests::test_route_diagnostics_groups_credential_and_endpoint_routes"
+
+      # nono's ELF dependency resolution cannot find `libc.so.6` for libgcc_s.so.1
+      # command_policies are broken on nixos without this support
+      "command_policies_allows_compiled_binary_exec_in_writable_grant_dir"
+      "command_policies_allows_script_exec_in_writable_grant_dir"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # panics with "exact-path fallback must not recursively cover descendants"
@@ -85,15 +109,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # wants access to /var/folders
       "sandbox_state::cap_file_validation_tests::test_acceptable_temp_roots_includes_var_folders_on_macos"
       "sandbox_state::cap_file_validation_tests::test_validate_rejects_path_outside_temp"
-      # don't work inside of the /nix dir
-      # unsure why home is still under /nix with writableTmpDirAsHomeHook
+      # doesn't work inside of the /nix dir, which build-dir is under
       "deprecated_override_deny_flag_emits_single_warning_on_stderr"
       "deprecated_override_deny_flag_warning_is_emitted_once_for_multiple_uses"
       "override_deny_alias_and_bypass_protection_merge_in_argv_order"
+      "shell_dry_run_rejects_block_net_with_upstream_proxy"
+      "run_launch_plan_rejects_block_net_with_upstream_proxy"
 
       # env_vars
-      # don't work inside of the /nix dir
-      # unsure why home is still under /nix with writableTmpDirAsHomeHook
+      # doesn't work inside of the /nix dir, which build-dir is under
       # Sandbox initialization failed: Refusing to grant '/nix' (source: group:system_read_macos) because it overlaps protected nono state root '/nix/build/nix-<ID>/.home/.nono'.
       "allow_net_overrides_profile_external_proxy"
       "cli_flag_overrides_env_var"
@@ -109,19 +133,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "environment_allow_vars_default_allows_all"
       "environment_allow_vars_prefix_patterns"
       "environment_allow_vars_with_profile"
+
+      "tool_sandbox::macos::tests::executable_shape_baseline_grants_env_shebang_target_interpreter"
+      "tool_sandbox::macos::tests::macos_runtime_baseline_does_not_grant_system_volumes_data"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_attributes_when_helper_names_the_daemon"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_cache_prunes_dead_entries"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_denies_when_helper_names_a_different_pid"
+      "tool_sandbox::macos::tests::run_daemon_pid_source_verify_mode_round_trips_candidate_pid"
+      "env_nono_capability_elevation_accepts_truthy"
+      "env_nono_trust_override_accepts_truthy"
+      "env_nono_trust_proxy_ca_accepts_truthy"
+      "dry_run_does_not_modify_workspace"
+      "rollback_restores_file_after_write"
+
+      # `git init` intermittently fails with ENOENT, most likely because a
+      # concurrent test mutates PATH under the shared env lock
+      "tool_sandbox::dynamic_providers::tests::git_read_main_worktree_returns_main_repo_root_in_linked_worktree"
     ]
   );
 
+  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
-    homepage = "https://github.com/always-further/nono";
-    changelog = "https://github.com/always-further/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/nolabs-ai/nono";
+    changelog = "https://github.com/nolabs-ai/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
     ];
     mainProgram = "nono";
-    # https://github.com/always-further/nono#platform-support
+    # https://github.com/nolabs-ai/nono#platform-support
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

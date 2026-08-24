@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "knx-telegram-store";
-  version = "0.4.0";
+  version = "0.12.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "XKNX";
     repo = "knx-telegram-store";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t4Bmm5n9+XSBiR2Rvm6UKAKweH9fQuZwaNqG1W2q3Co=";
+    hash = "sha256-otHKGgWjo8j6jlWlD7ojh/3LGlR41hQQGueCxvocCM4=";
   };
 
   build-system = [
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ finalAttrs.passthru.optional-dependencies.sqlite;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [
     "knx_telegram_store"

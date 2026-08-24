@@ -64,6 +64,7 @@ pnpmConfigHook() {
       rm "$STORE_PATH/v11/index.db.sql"
     fi
 
+    pnpm config set reporter append-only
     pnpm config set store-dir "$STORE_PATH"
 
     # Prevent hard linking on file systems without clone support.

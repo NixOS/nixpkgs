@@ -6,7 +6,7 @@
   gitUpdater,
   cmake,
   pkg-config,
-  ffmpeg,
+  ffmpeg_8,
   libGLU,
   alsa-lib,
   libx11,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
     libGLU
   ]
   ++ (with qtPackages; [

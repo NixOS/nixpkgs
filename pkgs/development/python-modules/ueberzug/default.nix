@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "ueberzug";
-  version = "18.3.1";
+  version = "18.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Lk4E5YwEq2mUnYbIWDhzz9/CCwfXMJ11/TtJ44ugOk=";
+    hash = "sha256-CRDgXsCYzZX2o+0Spigjlo6B/5wVLDaZAe6TDQJ7L3Q=";
   };
 
   build-system = [

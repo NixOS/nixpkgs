@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.5.2";
+  version = "3.7.1";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-86MIKiOzfCk6T80QUxR7Nx8v+R+n6hsqUuM1Z2usgtw=";
+    hash = "sha256-1emmY43b0lE921RRjrZ+S75vpwe8wBwQ9iEvCgiNgZ0=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://sourceware.org/libffi/";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libffi" ];
   };

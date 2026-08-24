@@ -34,6 +34,8 @@ let
     pathIsRegularFile
     ;
 
+  removeSlashSuffix = removeSuffix "/";
+
   /**
     A basic filter for `cleanSourceWith` that removes
     directories of version control system, backup files (`*~`)
@@ -362,7 +364,7 @@ let
               gitDir = absolutePath (dirOf path) (head m);
               commonDir'' =
                 if pathIsRegularFile "${gitDir}/commondir" then fileContents "${gitDir}/commondir" else gitDir;
-              commonDir' = removeSuffix "/" commonDir'';
+              commonDir' = removeSlashSuffix commonDir'';
               commonDir = absolutePath gitDir commonDir';
               refFile = removePrefix "${commonDir}/" "${gitDir}/${file}";
             in
@@ -460,7 +462,7 @@ let
   urlToName =
     url:
     let
-      base = baseNameOf (removeSuffix "/" (last (splitString ":" (toString url))));
+      base = baseNameOf (removeSlashSuffix (last (splitString ":" (toString url))));
       # chop away one git or archive-related extension
       removeExt =
         name:

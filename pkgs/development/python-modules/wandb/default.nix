@@ -13,16 +13,19 @@
   ## wandb-xpu
   rustPlatform,
 
+  ## parquet-rust-wrapper
+  cacert,
+
   ## wandb
   buildPythonPackage,
-  replaceVars,
 
   # build-system
   hatchling,
 
   # dependencies
   click,
-  gitpython,
+  opentelemetry-api,
+  packaging,
   platformdirs,
   protobuf,
   pydantic,
@@ -30,14 +33,12 @@
   requests,
   sentry-sdk,
   setproctitle,
-  setuptools,
   pythonOlder,
   typing-extensions,
 
   # tests
-  pytestCheckHook,
-  azure-core,
   azure-containerregistry,
+  azure-core,
   azure-identity,
   azure-storage-blob,
   bokeh,
@@ -54,6 +55,7 @@
   kubernetes-asyncio,
   looptime,
   matplotlib,
+  moto,
   moviepy,
   pandas,
   parameterized,
@@ -66,6 +68,7 @@
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
+  pytestCheckHook,
   rdkit,
   responses,
   scikit-learn,
@@ -77,22 +80,22 @@
 }:
 
 let
-  version = "0.28.0";
+  version = "0.28.2";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-YdM/LrrWQFup/1Fkv49//eOFfYFCRgpuuH7+DZIOT1M=";
+    hash = "sha256-kmgLHb+1NjStqcjMOYPPU2v2js4m8O3b2OpM6BiSbXI=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
     pname = "wandb-xpu";
-    version = "0.7.0";
+    version = "0.7.1";
     inherit src;
 
     sourceRoot = "${src.name}/xpu";
 
-    cargoHash = "sha256-vB0LZjfnf//U1BXCzvaQBjlXLlGx/4g+emSZWcS+oGU=";
+    cargoHash = "sha256-YKuXtttLam4NmJsJPQH8sFbj1Qs5Gc2uoFJEvTYxkew=";
 
     checkFlags = [
       # fails in sandbox
@@ -117,12 +120,19 @@ let
 
   parquet-rust-wrapper = rustPlatform.buildRustPackage {
     pname = "arrow-rs-wrapper";
-    version = "0.1.0";
+    version = "0.1.1";
     inherit src;
 
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
-    cargoHash = "sha256-BkeSRbZoehYGHj15KcInugRBvOLXJlh1NqTHhRnNOK8=";
+    cargoHash = "sha256-F68Rvfc04eI/y0Z5tGtQn4zEmqLuMZGZiKEh2HMFi/g=";
+
+    nativeCheckInputs = [
+      # The `httpfile` tests serve a local HTTP server, but reqwest's rustls backend refuses to
+      # build a client at all without system CA certificates.
+      # Its setup hook exports `SSL_CERT_FILE`.
+      cacert
+    ];
 
     # The original build script renames the library:
     # https://github.com/wandb/wandb/blob/v0.26.0/parquet-rust-wrapper/build.sh#L37-L68
@@ -140,15 +150,8 @@ let
     sourceRoot = "${src.name}/core";
 
     postPatch =
-      # Relax the Go toolchain requirement; nixpkgs ships 1.26.2.
-      ''
-        substituteInPlace go.mod \
-          --replace-fail \
-            "go 1.26.4" \
-            "go 1.26.2"
-      ''
       # hardcode the `wandb-xpu` binary path.
-      + ''
+      ''
         substituteInPlace internal/monitor/xpuresourcemanager.go \
           --replace-fail \
             'cmdPath, err := getXPUCmdPath()' \
@@ -198,13 +201,6 @@ buildPythonPackage (finalAttrs: {
 
   inherit src version;
 
-  patches = [
-    # Replace git paths
-    (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe gitMinimal;
-    })
-  ];
-
   postPatch =
     # Prevent hatch from building wandb-core and arrow-rs-wrapper
     ''
@@ -218,6 +214,13 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           'bin_path = pathlib.Path(__file__).parent / "bin" / "wandb-core"' \
           'bin_path = pathlib.Path("${lib.getExe wandb-core}")'
+    ''
+    # Hard-code the path to git in the python code
+    + ''
+      substituteInPlace wandb/cli/cli.py \
+        --replace-fail \
+          '["git", "apply",' \
+          '["${lib.getExe gitMinimal}", "apply",' \
     '';
 
   env = {
@@ -235,7 +238,8 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     click
-    gitpython
+    opentelemetry-api
+    packaging
     platformdirs
     protobuf
     pydantic
@@ -243,8 +247,6 @@ buildPythonPackage (finalAttrs: {
     requests
     sentry-sdk
     setproctitle
-    # setuptools is necessary since pkg_resources is required at runtime.
-    setuptools
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
@@ -253,9 +255,8 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    azure-core
     azure-containerregistry
+    azure-core
     azure-identity
     azure-storage-blob
     bokeh
@@ -263,6 +264,7 @@ buildPythonPackage (finalAttrs: {
     cloudpickle
     cwsandbox
     flask
+    gitMinimal
     google-cloud-artifact-registry
     google-cloud-compute
     google-cloud-storage
@@ -272,6 +274,7 @@ buildPythonPackage (finalAttrs: {
     kubernetes-asyncio
     looptime
     matplotlib
+    moto
     moviepy
     pandas
     parameterized
@@ -284,11 +287,13 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytest-timeout
     pytest-xdist
+    pytestCheckHook
     rdkit
     responses
     scikit-learn
     soundfile
     tenacity
+    versionCheckHook
     torch
     torchvision
     tqdm
@@ -322,6 +327,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # The conftest mocks out `read_many_from_queue`, which is the agent loop's only throttle.
+    # It then spins while the child runs, and the `MagicMock` API retains every heartbeat
+    # call (~270MiB/s), OOM-killing the pytest worker.
+    "test_agent_config_whitespace_cli_agent"
+    "test_agent_subprocess_with_import_readline"
+
     # Probably failing because of lack of internet access
     # AttributeError: module 'wandb.sdk.launch.registry' has no attribute 'azure_container_registry'. Did you mean: 'elastic_container_registry'?
     "test_registry_from_uri"
@@ -392,6 +403,7 @@ buildPythonPackage (finalAttrs: {
     "test_log_media_prefixed_with_multiple_slashes"
     "test_log_media_saves_to_run_directory"
     "test_log_media_with_path_traversal"
+    "test_table_logging_mode_incremental_warns_after_100_increments"
 
     # HandleAbandonedError / SystemExit when run in sandbox
     "test_makedirs_raises_oserror__uses_temp_dir"
@@ -422,7 +434,7 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert 'did you mean https://api.wandb.ai' in '1'
     "test_login_bad_host"
 
-    # Asserttion error: 1 != 0 (testing system exit code)
+    # Assertion error: 1 != 0 (testing system exit code)
     "test_login_host_trailing_slash_fix_invalid"
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
@@ -448,6 +460,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+    mainProgram = "wandb";
     broken = wandb-xpu.meta.broken || wandb-core.meta.broken;
   };
 })

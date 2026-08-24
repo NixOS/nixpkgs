@@ -6,7 +6,8 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     io::{BufRead, Read, Write},
-    os::unix::{fs::PermissionsExt, process::CommandExt},
+    os::unix::fs::{MetadataExt, PermissionsExt},
+    os::unix::process::CommandExt,
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
@@ -211,17 +212,22 @@ fn die() -> ! {
     std::process::exit(code);
 }
 
+/// Parses the key-value pairs of `/etc/os-release`.
+/// Absence or emptiness of the file become the empty map.
+/// Failure to read returns an error Result.
 fn parse_os_release() -> Result<HashMap<String, String>> {
-    Ok(std::fs::read_to_string("/etc/os-release")
-        .context("Failed to read /etc/os-release")?
-        .lines()
-        .fold(HashMap::new(), |mut acc, line| {
-            if let Some((k, v)) = line.split_once('=') {
-                acc.insert(k.to_string(), v.to_string());
-            }
+    let contents = match std::fs::read_to_string("/etc/os-release") {
+        Ok(contents) => contents,
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => String::new(),
+        Err(err) => return Err(err).context("Failed to read /etc/os-release"),
+    };
+    Ok(contents.lines().fold(HashMap::new(), |mut acc, line| {
+        if let Some((k, v)) = line.split_once('=') {
+            acc.insert(k.to_string(), v.to_string());
+        }
 
-            acc
-        }))
+        acc
+    }))
 }
 
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
@@ -2379,19 +2385,33 @@ won't take effect until you reboot the system.
             exit_code = 4;
         }
         Ok(users) => {
-            for (uid, name, user_dbus_path) in users {
-                let proxy = dbus_conn.with_proxy(
-                    "org.freedesktop.login1",
-                    &user_dbus_path,
-                    Duration::from_millis(5000),
-                );
-                let gid: u32 = proxy
-                    .get("org.freedesktop.login1.User", "GID")
-                    .with_context(|| format!("Failed to get GID for {name}"))?;
-
-                let runtime_path: String = proxy
-                    .get("org.freedesktop.login1.User", "RuntimePath")
-                    .with_context(|| format!("Failed to get runtime directory for {name}"))?;
+            for (uid, name, _user_dbus_path) in users {
+                // Derive GID and runtime path from the filesystem instead of querying
+                // logind via D-Bus, which races against logind's async GC of user
+                // objects (list_users snapshot → Properties::get hits UnknownObject).
+                // /run/user/<uid> exists iff the user manager is active (BindsTo= on
+                // user@.service), so stat() is an atomic, race-free liveness check.
+                let runtime_path = PathBuf::from(format!("/run/user/{uid}"));
+                let metadata = match std::fs::metadata(&runtime_path) {
+                    Ok(m) => m,
+                    Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+                        eprintln!(
+                            "skipping user {name}: {} not found \
+                             (user manager not running)",
+                            runtime_path.display()
+                        );
+                        continue;
+                    }
+                    Err(err) => {
+                        eprintln!(
+                            "warning: failed to stat {} for user {name}; \
+                             skipping: {err}",
+                            runtime_path.display()
+                        );
+                        exit_code = 4;
+                        continue;
+                    }
+                };
 
                 eprintln!("reloading user units for {name}...");
                 let myself = Path::new("/proc/self/exe")
@@ -2401,7 +2421,7 @@ won't take effect until you reboot the system.
                 log::debug!("Performing user switch for {name}");
                 let status = std::process::Command::new(&myself)
                     .uid(uid)
-                    .gid(gid)
+                    .gid(metadata.gid())
                     .env_clear()
                     .env("XDG_RUNTIME_DIR", runtime_path)
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)

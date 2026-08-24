@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ubelt";
-  version = "1.4.1";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
     tag = "v${version}";
-    hash = "sha256-iEKwJaOWiotyGcz1orc8z3Iqq5Va7p639ebStOA1bCo=";
+    hash = "sha256-LCewB9K4nGw/uyGK35mcesJYXju2N0FsdLW1XkPLD+I=";
   };
 
   nativeBuildInputs = [

@@ -173,6 +173,8 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
     "rich"
+    # trimesh<5.0.0,>=3.21.7 not satisfied by version 5.0.0
+    "trimesh"
   ];
 
   __darwinAllowLocalNetworking = true;

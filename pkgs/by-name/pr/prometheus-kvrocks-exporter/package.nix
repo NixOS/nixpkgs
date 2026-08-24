@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kvrocks,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -63,7 +64,10 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^(${builtins.concatStringsSep "|" skippedTests})$" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests.prometheus-exporters) kvrocks; };
+  };
 
   meta = {
     description = "Prometheus exporter for Kvrocks metrics";

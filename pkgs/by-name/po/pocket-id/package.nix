@@ -14,18 +14,18 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.10.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ad8YlWwWeGEwsrx29qpq1asEr4UNN7BueGTBPfFrRuE=";
+    hash = "sha256-4BtVTfjXu/V9l4L2ucabpQXjrTBEB4cTrO4tb/oE3YU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-bQNeocRCmhiV7gwCJppjsNw7K5MnsJMK9M18jf0X/oM=";
+  vendorHash = "sha256-SrpUgyruwbIJZ1HB6sqidbGAwzBOqKcJzR+cH9E0siw=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -38,12 +38,15 @@ buildGo127Module (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking
-    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+    "-tags=unit"
   ];
 
-  # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  # many tests time out on darwin when waiting for 127.0.0.1 with only `__darwinAllowLocalNetworking = true`
+  # caused by `quic.DialAddr` of `quic-go`, works after loosening the sandbox
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+  sandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    (allow network* (remote ip "*:*"))
+  '';
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
@@ -67,7 +70,7 @@ buildGo127Module (finalAttrs: {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-LVhTS3ertpGqLMsoodaoEgDb7sK3kTRTVB3KOyvJwpE=";
+      hash = "sha256-KswQQVz2Xw/dG21134SObM3mQAKP2IHc+UM/BX/dvrI=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
@@ -107,6 +110,7 @@ buildGo127Module (finalAttrs: {
       marcusramberg
       tmarkus
       ymstnt
+      esch
     ];
     platforms = lib.platforms.unix;
   };

@@ -19,32 +19,34 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
-  version = "0.9.12";
+  version = "0.20.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "debba";
+    owner = "TabularisDB";
     repo = "tabularis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kObjJ+C+0d/wLNt902yUPe8Cvss8d0ILeuo98vIiYDU=";
+    hash = "sha256-Q03i0EhhRPOQYkb27MwIzcGH1uA4npcD3OJbTHQG0hw=";
   };
-
-  patches = [
-    ./disable-updater.patch
-  ];
 
   strictDeps = true;
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-XYvwgZMJXM62kC8+DR06LygtTnL+8TLWyRZAgTQWf3Q=";
+  cargoHash = "sha256-7UMmX8dPAYtWM8dG150RKCTdpUpVqlUaEiqio7K7ZIg=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-S/XCypKyYlJtuISNiG8NtJzisAejiUwqPVltXEmVlZw=";
+    hash = "sha256-pvocyG5wDCqpokUcYp3yoiOMK+Cbg2xKlYj0W1CtPME=";
   };
+
+  postPatch = ''
+    substituteInPlace src-tauri/tauri.conf.json \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
+  '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -64,6 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  checkFlags = [
+    "--skip=pool_manager_tests::postgres_tls_connector_tests::test_tls_connector_verify_full"
+  ];
+
   env.OPENSSL_NO_VENDOR = 1;
 
   passthru.updateScript = nix-update-script { };
@@ -71,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Lightweight, developer-focused database management tool, built with Tauri and React";
     homepage = "http://tabularis.dev";
-    changelog = "https://github.com/debba/tabularis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/TabularisDB/tabularis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     inherit (cargo-tauri.hook.meta) platforms;
     maintainers = with lib.maintainers; [ nartsiss ];

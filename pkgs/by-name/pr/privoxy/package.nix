@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "privoxy";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${finalAttrs.version}%20%28stable%29/privoxy-${finalAttrs.version}-stable-src.tar.gz";
-    hash = "sha256-I+RoblhIx0y2gMCcKBHwNXc57P5kH5xAcu5COZCSyXs=";
+    hash = "sha256-b5Emf4H2JsQWmU24mrYvTQkkbuv0dUuBGG4ToY7pAo8=";
   };
 
   nativeBuildInputs = [

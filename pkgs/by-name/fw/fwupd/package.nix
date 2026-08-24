@@ -52,7 +52,6 @@
   readline,
   sqlite,
   tpm2-tss,
-  valgrind,
   xz, # for liblzma
 
   # mesonFlags
@@ -222,7 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     tpm2-tss
-    valgrind
     xz # for liblzma
   ];
 
@@ -235,8 +233,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
-    # Use the EFI app from the separate fwupd-efi package.
-    (lib.mesonOption "efi_app_location" "${fwupd-efi}/libexec/fwupd/efi")
+    # Signing setups (lanzaboote, sbctl, …) must place the signed EFI app next
+    # to the unsigned one, which the store does not allow.
+    # https://github.com/fwupd/fwupd/issues/10202
+    (lib.mesonOption "efi_app_location" "/run/fwupd-efi")
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
     (lib.mesonEnable "hsi" isx86)
@@ -245,6 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: what should this be?
     (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
     (lib.mesonEnable "umockdev_tests" false)
+    (lib.mesonEnable "valgrind" false)
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ]

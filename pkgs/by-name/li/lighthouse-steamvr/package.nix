@@ -8,20 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "Lighthouse";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ShayBox";
     repo = "Lighthouse";
     rev = finalAttrs.version;
-    hash = "sha256-Ai+d7BKA1o98iOhQ7VXltnWHW/knw122xLZHhFM6gZ0=";
+    hash = "sha256-c3AEoNpuPqCn37WIDVbJDX61qM6Pg/f6sMro3M/skNc=";
   };
 
-  cargoHash = "sha256-+5fxqWq7akICVmDa8Lc6M8laEAWrrEyg4uCFLoCNRpo=";
+  cargoHash = "sha256-Kow/M7FDgaZiLcWU9se5ut3lrVOtAZebQTgURzSORsA=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ dbus ];
+  buildFeatures = [ "cli" ];
 
   meta = {
     description = "VR Lighthouse power state management";

@@ -49,6 +49,8 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==80.10.2" "setuptools"
+    substituteInPlace setup.py \
+      --replace-fail ' dry_run=self.dry_run)' ' )'
   ''
   # Otherwise fails to find libc
   # xla_ffi.cpp:(.text+0x308): undefined reference to `__stack_chk_fail'

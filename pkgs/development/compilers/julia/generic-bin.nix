@@ -18,17 +18,20 @@ let
     # Test flaky
     "read"
   ]
+  ++ lib.optionals (lib.versions.majorMinor version == "1.10") [
+    "LinearAlgebra/blas"
+  ]
   ++ lib.optionals (lib.versionAtLeast version "1.10") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/52739
     "REPL"
     # Test flaky
     "ccall"
+    "loading"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.11") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/54280
-    "loading"
     "cmdlineargs"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.12") [

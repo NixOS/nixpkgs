@@ -64,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.2";
+  version = "1.12.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-0CtFaj0+mCNDLG5h728vJkvYGcsa48SbDd3/Y8TXtQo=";
+    hash = "sha256-/QkkKNwc8RS4dYSkptqJDwRmmP9WDBpBoPtufqKvwqw=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -184,7 +184,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pytestFlags = [
-    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # UserWarning: 'where' used without 'out', expect uninitialized memory in output.
     # If this is intentional, use out=None.
     "-Wignore::UserWarning"
   ];
@@ -239,6 +239,10 @@ buildPythonPackage (finalAttrs: {
     # 'write/test.h5ad', errno = 2, error message = 'No such file or directory', flags = 13, o_flags
     # = 242)
     "test_write"
+
+    # numba thread-count assertions that depend on the host's thread settings
+    "test_numba_thread_limit_restores_previous_value"
+    "test_set_numba_threads_from_settings"
 
     # Snapshot tests failing because of warnings in output
     "scanpy.datasets._datasets.krumsiek11"

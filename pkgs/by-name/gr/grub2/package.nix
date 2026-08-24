@@ -583,6 +583,13 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac1512b872af8567b408518a7efa01607a0219ae";
       hash = "sha256-deyp6Yatlgv86bYMt7WcWhKg8J6StDPUEy4UPHqJYIc=";
     })
+    # Required to build grub2_efi with GCC 16, or fails with "error: 'regparm'
+    # attribute ignored [-Werror=attributes]"
+    (fetchpatch {
+      name = "gcc16_make_regparm_attribute_more_conditional.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9922ed133c2c754ec9f37198da2b3e3e8a4fd5ff";
+      hash = "sha256-V2vffDxL/qQ14YN5scc3CFPBFBWvkh57dc5/hWd/6F4=";
+    })
   ];
 
   postPatch =
@@ -663,7 +670,7 @@ stdenv.mkDerivation rec {
 
     ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+    substituteInPlace ./configure --replace-fail '/usr/share/fonts' '${unifont}/share/fonts'
   ''
   # build-grub-mkfont is built & run during build, need to find freetype for buildPlatform
   + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''

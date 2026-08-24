@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0.36.0";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ctc80gG36O4viHrFcG3RSrr8wnwD3YZD0eyauS9JCPA=";
+    hash = "sha256-G+7fCkG1omdFgbmZDYGPiQTWCvcHtui+Fv0dXXzuJ08=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/frontend";
-    hash = "sha256-3bLzlGbC1i8TOYNi/SAVqIb8bsK0IhDTGr65rVWU5XY=";
+    hash = "sha256-mDJMETAasMXIH9yCh2zfeaPNQUaYlHjxz8jDf7LySaY=";
   };
 
-  cargoHash = "sha256-lkD2Yd15VuQT+OmMttea0KBWOnhwvRBN6aS1DVR0Heg=";
+  cargoHash = "sha256-VPavc79U8AFhctktJ2Z2M75zguTGz7fhJGtMPXLqIgQ=";
 
   preBuild = ''
     pushd src/wasm-modules

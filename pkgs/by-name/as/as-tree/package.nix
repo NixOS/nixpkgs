@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "as-tree";
-  version = "unstable-2021-03-09";
+  version = "0.12.0-unstable-2021-03-09";
 
   src = fetchFromGitHub {
     owner = "jez";

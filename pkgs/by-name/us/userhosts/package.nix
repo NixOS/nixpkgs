@@ -6,13 +6,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "userhosts";
-  version = "1.0.0";
+  version = "1.0.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "figiel";
     repo = "hosts";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9uF0fYl4Zz/Ia2UKx7CBi8ZU8jfWoBfy2QSgTSwXo5A";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qpdwita1QDFGry5mNgg8pmbkVcjTzbEab742oEx6NYc=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];

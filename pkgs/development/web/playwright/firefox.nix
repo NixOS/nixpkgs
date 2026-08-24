@@ -40,11 +40,7 @@ let
   };
   firefox-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        aarch64-darwin = "sha256-Opwa5SbuAaXf2A+qrldHc6BkhRaOzzl0dy7R4vodG5w=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-Opwa5SbuAaXf2A+qrldHc6BkhRaOzzl0dy7R4vodG5w=";
   };
 in
 {

@@ -111,14 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     filecheck
   ];
 
-  postPatch = ''
-    # `NO_CMAKE_PACKAGE_REGISTRY` prevents it from finding OpenCL, so we unset it
-    # Note that this cmake file is imported in various places, not just unified-runtime
-    # See also: https://github.com/intel/llvm/issues/19635#issuecomment-3247008981
-    substituteInPlace cmake/FetchOpenCL.cmake \
-        --replace-fail "NO_CMAKE_PACKAGE_REGISTRY" ""
-  ''
-  + lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # These tests don't run without setting UR_DPCXX,
     # however they aren't properly excluded, causing lit to fail.
     rm test/adapters/hip/lit.cfg.py
@@ -146,9 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "UR_ENABLE_LATENCY_HISTOGRAM" true)
 
-    (lib.cmakeBool "UR_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "UR_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # The test hello_world.test depends on the hello_world example, so build examples when testing
-    (lib.cmakeBool "UR_BUILD_EXAMPLES" finalAttrs.doCheck)
+    (lib.cmakeBool "UR_BUILD_EXAMPLES" finalAttrs.finalPackage.doCheck)
 
     (lib.cmakeBool "UR_BUILD_ADAPTER_L0" levelZeroSupport)
     (lib.cmakeBool "UR_BUILD_ADAPTER_L0_V2" levelZeroSupport)
@@ -196,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = [ "x86_64-linux" ];
   };
 })

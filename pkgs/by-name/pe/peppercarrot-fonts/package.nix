@@ -57,30 +57,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.nim65s ];
     license =
       with lib.licenses;
-      let
-        gpl2font = {
-          deprecated = true;
-          free = true;
-          fullName = "GNU General Public License v2.0 w/Font exception";
-          redistributable = true;
-          shortName = "gpl2font";
-          spdxId = " GPL-2.0-with-font-exception";
-          url = "https://spdx.org/licenses/GPL-2.0-with-font-exception.html";
-        };
-        ofl10 = {
-          deprecated = false;
-          free = true;
-          fullName = "SIL Open Font License 1.0";
-          redistributable = true;
-          shortName = "ofl10";
-          spdxId = "OFL-1.0";
-          url = "https://spdx.org/licenses/OFL-1.0.html";
-        };
-      in
-      [
+      AND [
         asl20
         cc-by-30
-        gpl2font
+        (WITH gpl2 fontException)
+        (WITH gpl3 fontException)
         gpl3
         mplus
         ofl

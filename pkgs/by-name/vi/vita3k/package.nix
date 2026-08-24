@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "vita3k";
-  version = "4064";
+  version = "4065";
 
   src = fetchurl {
     url = "https://github.com/Vita3K/Vita3K-builds/releases/download/${version}/Vita3K-x86_64.AppImage";
-    sha256 = "sha256-QUzu+7BqiJ8gWWugwyMyKyQ3bXzmAx/zSxJ2+AeVQB4=";
+    sha256 = "sha256-jgypzFZgQeBvtuEuw51ex6r7tOqTYaIJAE3JzDRMcWI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

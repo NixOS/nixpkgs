@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherversion = 4;
+    fetcherVersion = 4;
     hash = lib.fakeHash;
   };
 
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherversion = 4;
+    fetcherVersion = 4;
     hash = lib.fakeHash;
   };
 

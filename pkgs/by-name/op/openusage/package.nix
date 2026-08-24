@@ -2,40 +2,34 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  _7zz,
   nix-update-script,
-  undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openusage";
-  version = "0.6.13";
+  version = "0.7.5";
 
-  # if is aarch64 download aarch64, otherwise intel
-  src =
-    if stdenvNoCC.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "https://github.com/robinebers/openusage/releases/download/v${finalAttrs.version}/OpenUsage_${finalAttrs.version}_aarch64.dmg";
-        hash = "sha256-Zfv1VAJSDHFdo2R9KgZ3TN/gu2Ua9Uleq5wNXrBBEH4=";
-      }
-    else if stdenvNoCC.hostPlatform.isx86_64 then
-      fetchurl {
-        url = "https://github.com/robinebers/openusage/releases/download/v${finalAttrs.version}/OpenUsage_${finalAttrs.version}_x64.dmg";
-        hash = "sha256-tllecJOGNUDG3GwQhjeRaNrTHVK2GPzstfiT/GanZmM=";
-      }
-    else
-      throw "Unsupported architecture";
+  src = fetchurl {
+    url = "https://github.com/robinebers/openusage/releases/download/v${finalAttrs.version}/OpenUsage-${finalAttrs.version}.dmg";
+    hash = "sha256-ycKm7kzOM+fv5Jhjv3JrG+oyK3LEOj9Ps7ll2Pz0T9c=";
+  };
+
+  unpackCmd = "7zz -snld x $src";
+
+  nativeBuildInputs = [ _7zz ];
+
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications
-    cp -r "OpenUsage.app" $out/Applications/
+    mkdir -p $out/Applications $out/bin
+    cp -r OpenUsage.app $out/Applications/
+    ln -s $out/Applications/OpenUsage.app/Contents/MacOS/OpenUsage $out/bin/openusage
 
     runHook postInstall
   '';
-
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
 
   dontBuild = true;
   dontFixup = true;
@@ -49,6 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ myzel394 ];
+    maintainers = with lib.maintainers; [
+      myzel394
+      Br1ght0ne
+    ];
+    mainProgram = "openusage";
   };
 })

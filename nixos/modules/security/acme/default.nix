@@ -772,7 +772,7 @@ let
           description = ''
             Key type to use for private keys.
             For an up to date list of supported values check the --key-type option
-            at <https://go-acme.github.io/lego/usage/cli/options/>.
+            at <https://go-acme.github.io/lego/references/ref-flags/index.html#options>.
           '';
         };
 
@@ -833,7 +833,7 @@ let
           '';
           example = lib.literalExpression ''
             {
-              "RFC2136_TSIG_SECRET_FILE" = "/run/secrets/tsig-secret-example.org";
+              "DNSUPDATE_TSIG_SECRET_FILE" = "/run/secrets/tsig-secret-example.org";
             }
           '';
         };
@@ -852,8 +852,9 @@ let
           inherit (defaultAndText "ocspMustStaple" false) default defaultText;
           description = ''
             Turns on the OCSP Must-Staple TLS extension.
-            Make sure you know what you're doing! See:
-
+            Make sure you know what you're doing!
+            OCSP Must-Staple can be considered a legacy feature, that is no longer superted by Let's Encrypt. See:
+            - <https://letsencrypt.org/2024/12/05/ending-ocsp>
             - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
             - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
           '';

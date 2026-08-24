@@ -4,7 +4,7 @@ set -euo pipefail
 
 
 # executing this script without arguments will
-# - find the newest stable spotify version avaiable on snapcraft (https://snapcraft.io/spotify)
+# - find the newest stable spotify version available on snapcraft (https://snapcraft.io/spotify)
 # - read the current spotify version from the current nix expression
 # - update the nix expression if the versions differ
 # - try to build the updated version, exit if that fails
@@ -83,7 +83,6 @@ update_macos() {
 
   pushd $tmp_dir
 
-  x86_64_url="https://download.scdn.co/Spotify.dmg"
   aarch64_url="https://download.scdn.co/SpotifyARM64.dmg"
 
   curl -OL $aarch64_url
@@ -99,12 +98,7 @@ update_macos() {
 
   if [[ "$current_nix_version" != "$upstream_version" ]]; then
     archive_url="https://web.archive.org/save"
-    archived_x86_64_url=$(curl -s -I -L -o /dev/null "$archive_url/$x86_64_url" -w '%{url_effective}')
     archived_aarch64_url=$(curl -s -I -L -o /dev/null "$archive_url/$aarch64_url" -w '%{url_effective}')
-
-    update-source-version "pkgsCross.x86_64-darwin.spotify" "$upstream_version" "" "$archived_x86_64_url" \
-      --file=$nix_file \
-      --ignore-same-version
 
     update-source-version "pkgsCross.aarch64-darwin.spotify" "$upstream_version" "" "$archived_aarch64_url" \
       --file=$nix_file \

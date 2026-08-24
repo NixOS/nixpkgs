@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bc-detect-secrets";
-  version = "1.5.47";
+  version = "1.5.50";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     tag = finalAttrs.version;
-    hash = "sha256-ykmOa29/ASEr+AG2SjhSUN8gLMeKpscDKsPtTTZ+cU8=";
+    hash = "sha256-t9uG5EFA0I6243P1x/ZLu8J92RM0wRDtsOXt3VXH2fk=";
   };
 
   build-system = [ setuptools ];

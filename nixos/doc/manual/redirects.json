@@ -1,4 +1,10 @@
 {
+  "module-services-portmaster": [
+    "index.html#module-services-portmaster"
+  ],
+  "module-services-portmaster-declarative-configuration": [
+    "index.html#module-services-portmaster-declarative-configuration"
+  ],
   "module-hardware-facter": [
     "index.html#module-hardware-facter"
   ],
@@ -65,6 +71,24 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-lxmd": [
+    "index.html#module-services-lxmd"
+  ],
+  "module-services-lxmd-communication-backbone": [
+    "index.html#module-services-lxmd-communication-backbone"
+  ],
+  "module-services-lxmd-communication-rpc": [
+    "index.html#module-services-lxmd-communication-rpc"
+  ],
+  "module-services-lxmd-communication-with-rnsd": [
+    "index.html#module-services-lxmd-communication-with-rnsd"
+  ],
+  "module-services-lxmd-health-check": [
+    "index.html#module-services-lxmd-health-check"
+  ],
+  "module-services-lxmd-quickstart": [
+    "index.html#module-services-lxmd-quickstart"
+  ],
   "module-services-mautrix-discord": [
     "index.html#module-services-mautrix-discord"
   ],
@@ -103,6 +127,18 @@
   ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
+  ],
+  "module-services-rnsd": [
+    "index.html#module-services-rnsd"
+  ],
+  "module-services-rnsd-hardware-access": [
+    "index.html#module-services-rnsd-hardware-access"
+  ],
+  "module-services-rnsd-health-check": [
+    "index.html#module-services-rnsd-health-check"
+  ],
+  "module-services-rnsd-quickstart": [
+    "index.html#module-services-rnsd-quickstart"
   ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
@@ -178,6 +214,24 @@
   "module-services-tdarr-server-only": [
     "index.html#module-services-tdarr-server-only"
   ],
+  "module-services-zapret2": [
+    "index.html#module-services-zapret2"
+  ],
+  "module-services-zapret2-configuration": [
+    "index.html#module-services-zapret2-configuration"
+  ],
+  "module-services-zapret2-configuration-firewall": [
+    "index.html#module-services-zapret2-configuration-firewall"
+  ],
+  "module-services-zapret2-configuration-lua-files": [
+    "index.html#module-services-zapret2-configuration-lua-files"
+  ],
+  "module-services-zapret2-configuration-profiles": [
+    "index.html#module-services-zapret2-configuration-profiles"
+  ],
+  "module-services-zapret2-quick-start": [
+    "index.html#module-services-zapret2-quick-start"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
@@ -198,6 +252,9 @@
   ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
+  ],
+  "sec-state-revision": [
+    "index.html#sec-state-revision"
   ],
   "sec-wireless-declarative": [
     "index.html#sec-wireless-declarative"
@@ -336,6 +393,9 @@
   ],
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
+  ],
+  "module-services-firefox-syncserver-database": [
+    "index.html#module-services-firefox-syncserver-database"
   ],
   "module-services-firefox-syncserver-clients": [
     "index.html#module-services-firefox-syncserver-clients"
@@ -618,6 +678,15 @@
   ],
   "sec-luks-file-systems-fido2-systemd": [
     "index.html#sec-luks-file-systems-fido2-systemd"
+  ],
+  "sec-nfs-file-systems": [
+    "index.html#sec-nfs-file-systems"
+  ],
+  "sec-nfs-automount": [
+    "index.html#sec-nfs-automount"
+  ],
+  "sec-nfs-adhoc": [
+    "index.html#sec-nfs-adhoc"
   ],
   "sec-sshfs-file-systems": [
     "index.html#sec-sshfs-file-systems"
@@ -1411,6 +1480,9 @@
   ],
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
+  ],
+  "module-services-gitlab-registry-database-migration": [
+    "index.html#module-services-gitlab-registry-database-migration"
   ],
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
@@ -2296,6 +2368,9 @@
   ],
   "test-opt-meta.hydraPlatforms": [
     "index.html#test-opt-meta.hydraPlatforms"
+  ],
+  "test-opt-meta.teams": [
+    "index.html#test-opt-meta.teams"
   ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"

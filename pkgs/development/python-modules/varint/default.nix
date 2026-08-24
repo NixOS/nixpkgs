@@ -2,16 +2,22 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "varint";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a6ecc02377ac5ee9d65a6a8ad45c9ff1dac8ccee19400a5950fb51d594214ca5";
+    pname = "varint";
+    inherit (finalAttrs) version;
+    hash = "sha256-puzAI3esXunWWmqK1Fyf8drIzO4ZQApZUPtR1ZQhTKU=";
   };
+
+  build-system = [ setuptools ];
 
   # No tests are available
   doCheck = false;
@@ -24,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

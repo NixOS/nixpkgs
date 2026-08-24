@@ -2,7 +2,9 @@
   autoconf,
   automake,
   bison,
+  cargo,
   fetchFromGitHub,
+  fetchpatch2,
   flex,
   gitMinimal,
   lib,
@@ -16,7 +18,6 @@
   rustPlatform,
   stdenv,
   symlinkJoin,
-  cargo,
 }:
 
 let
@@ -103,6 +104,23 @@ stdenv.mkDerivation (finalAttrs: {
         done
       '';
     };
+
+  # ethnum <= 1.5.2 fails on rustc 1.97+ (TryFromIntError is no longer ZST).
+  # Protocols p21-p26 pin ethnum 1.5.0 in Cargo.lock / dep-tree expects, so keep
+  # that version and apply the upstream 1.5.3 source fix in the vendored crate.
+  # https://github.com/nlordell/ethnum-rs/pull/58
+  postPatch = ''
+    shopt -s nullglob
+    for crate in "$cargoDepsCopy"/source-registry-*/ethnum-1.5.0; do
+      patch -p1 -d "$crate" < ${
+        fetchpatch2 {
+          name = "ethnum-1.5.0-rustc-1.97.patch";
+          url = "https://github.com/nlordell/ethnum-rs/commit/87e3457c095c98fcac554548ee80f56e0cfb80ae.patch?full_index=1";
+          hash = "sha256-xG3RQg2vF+XW9IiYWaNyOF39WipSeoZGrygsOJ3XgIs=";
+        }
+      }
+    done
+  '';
 
   strictDeps = true;
 

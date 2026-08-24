@@ -10,21 +10,27 @@
   attrs,
   e2b,
   httpx,
+
+  # tests
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "e2b-code-interpreter";
-  inherit (e2b) version;
+  version = "2.9.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "e2b-dev";
     repo = "code-interpreter";
-    tag = "@e2b/code-interpreter-python@${version}";
-    hash = "sha256-a2rc7BtV+qwtqlB+JtLCs0BKN15yfwmG3XWWO8we2LA=";
+    tag = "@e2b/code-interpreter-python@${finalAttrs.version}";
+    hash = "sha256-RIKbk0CKqP9KUyi/WDqPGFK3ce/033VwKJR/yJGLPvI=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [
     poetry-core
@@ -32,20 +38,37 @@ buildPythonPackage rec {
 
   dependencies = [
     attrs
+    # Upstream requires e2b >=2.39.1,<3.0.0; enforced by pythonRuntimeDepsCheck.
     e2b
     httpx
   ];
 
   pythonImportsCheck = [ "e2b_code_interpreter" ];
 
-  # Tests require an API key
-  # e2b.exceptions.AuthenticationException: API key is required, please visit the Team tab at https://e2b.dev/dashboard to get your API key.
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    # upstream's pytest.ini passes --numprocesses
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  # Everything else under tests/ drives a real sandbox and needs an API key --
+  # including tests/charts, which renders the charts inside one.
+  enabledTestPaths = [ "tests/test_sandbox_url.py" ];
+
+  # Import e2b_code_interpreter from $out rather than the source tree.
+  preCheck = ''
+    rm -r e2b_code_interpreter
+  '';
 
   meta = {
-    description = "E2B Code Interpreter - Stateful code execution";
+    description = "Stateful code execution in cloud sandboxes";
     homepage = "https://github.com/e2b-dev/code-interpreter/tree/main/python";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/e2b-dev/code-interpreter/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mishushakov
+    ];
   };
-}
+})

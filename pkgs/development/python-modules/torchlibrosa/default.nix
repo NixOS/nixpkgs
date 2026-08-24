@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torchlibrosa" ];
 
   meta = {
-    description = "PyTorch implemention of part of librosa functions";
+    description = "PyTorch implementation of part of librosa functions";
     homepage = "https://github.com/qiuqiangkong/torchlibrosa";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azuwis ];

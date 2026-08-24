@@ -1,7 +1,7 @@
 {
-  version = "14.23";
-  rev = "refs/tags/REL_14_23";
-  hash = "sha256-fjoboaUhrHFDqusmIXzSS5ZnIpSRHO9+qcqvkchl2dM=";
+  version = "14.24";
+  rev = "refs/tags/REL_14_24";
+  hash = "sha256-yfZJFXk10vJ4QEhbUXe1gtz8rBS2YOEcD3unEjSHzjk=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {
       url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";

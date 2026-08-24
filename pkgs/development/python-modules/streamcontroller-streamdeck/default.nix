@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "streamcontroller-streamdeck";
-  version = "0.1.7";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "streamcontroller_streamdeck";
-    hash = "sha256-n8MYXsuWGSfOTnYrFItwkQaZlBQvPOwt1GdNP4MDjnY=";
+    hash = "sha256-uQdRdznrlK38mfhbBhw0yzvpnpmtCMXqjWPkSFbDgMs=";
   };
 
   patches = [

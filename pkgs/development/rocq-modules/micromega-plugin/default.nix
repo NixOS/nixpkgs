@@ -15,10 +15,12 @@ mkRocqDerivation {
     in
     with lib.versions;
     lib.switch rocq-core.rocq-version [
+      (case (range "9.0" "9.3") "1.1.1")
       (case (range "9.0" "9.2") "1.1.0")
     ] null;
 
   release = {
+    "1.1.1".hash = "sha256-TIUbrMRoPkLx3QcBGTAEdnzqt4HcKOHaQwJWUtBXUQA=";
     "1.1.0".hash = "sha256-CWMbGErC5bu20Yu9eskgslLkzmSof6klNlOYEkQjUjc=";
   };
   releaseRev = v: "v${v}";

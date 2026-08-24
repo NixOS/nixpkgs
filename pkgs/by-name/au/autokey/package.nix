@@ -6,7 +6,7 @@
   gobject-introspection,
   imagemagick,
   gtksourceview3,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   xautomation,
   xwd,
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtksourceview3
-    libappindicator-gtk3
+    libappindicator
     libnotify
   ];
 

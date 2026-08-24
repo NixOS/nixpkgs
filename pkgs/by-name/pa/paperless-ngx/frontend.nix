@@ -7,7 +7,6 @@
   nodejs,
   node-gyp,
   pkg-config,
-  python3,
   pango,
   giflib,
   xcbuild,
@@ -27,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit pnpm;
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
+    fetcherVersion = 4;
+    hash = "sha256-Q7JA5fDtdLiuhzwISBRyUtP541jtdsNpKMrEfbvy+rg=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     pnpmConfigHook
     pnpm
-    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
@@ -55,10 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-
-    pushd node_modules/canvas
-    node-gyp rebuild
-    popd
 
     # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
     pnpm run build --configuration production | cat

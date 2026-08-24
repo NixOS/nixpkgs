@@ -300,8 +300,19 @@
           NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
 
           # Fetcher version controls which features are enabled in prefetch-npm-deps
-          # Version 2+ enables packument fetching for workspace support
-          NPM_FETCHER_VERSION = toString fetcherVersion;
+          NPM_FETCHER_VERSION =
+            let
+              # Increment when we introduce a new version.
+              validFetcherVersions = [
+                1 # Initial version
+                2 # enables packument fetching for workspace support
+              ];
+            in
+            assert lib.assertMsg (lib.elem fetcherVersion validFetcherVersions)
+              "fetchNpmDeps: fetcher version must be one of: ${
+                lib.concatMapStringsSep ", " toString validFetcherVersions
+              }.";
+            (toString fetcherVersion);
 
           SSL_CERT_FILE =
             if

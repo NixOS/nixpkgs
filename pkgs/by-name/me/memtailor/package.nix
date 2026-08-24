@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
-    (lib.withFeature finalAttrs.doCheck "gtest")
+    (lib.withFeature finalAttrs.finalPackage.doCheck "gtest")
   ];
 
   enableParallelBuilding = true;

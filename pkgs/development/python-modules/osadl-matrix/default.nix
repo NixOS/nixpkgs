@@ -24,6 +24,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-vcSaWDX8P07Bj035vGq5dZYO+WkZOod7tTubWygl27k=";
   };
 
+  postPatch = ''
+    echo '${finalAttrs.version}' > VERSION
+  '';
+
   build-system = [
     setuptools
   ];

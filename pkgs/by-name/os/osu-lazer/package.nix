@@ -10,6 +10,7 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
@@ -22,13 +23,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2026.711.0";
+  version = "2026.804.2";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = "${version}-lazer";
-    hash = "sha256-hdrbbPl7ClNx73bsjoN5u4bEmvl/sdcjgFnZ/uxYbOk=";
+    hash = "sha256-1cUR3Z3TCNfnkyNkxlb+rmsFkYZ0WMBBRQwvRqoXUfw=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -46,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -79,6 +81,7 @@ buildDotnetModule rec {
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';

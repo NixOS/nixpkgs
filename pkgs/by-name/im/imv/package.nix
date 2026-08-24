@@ -45,6 +45,7 @@
   libnsbmp,
   libwebp,
   qoi,
+  bashNonInteractive,
 }:
 
 let
@@ -126,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pango
     inih
+    bashNonInteractive
   ]
   ++ windowSystems."${withWindowSystem}"
   ++ map (b: backends."${b}") withBackends;

@@ -6,7 +6,6 @@
   ninja,
   pkg-config,
   perl,
-  go,
   python3,
   protobuf,
   zlib,
@@ -25,11 +24,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "36.0.1";
+  version = "37.0.0";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-OOioS3OUgBQd4INr9tWBszOax9U9D3zowESjNoyML48=";
+    hash = "sha256-JyXQn4kqOjjlNEKfR6Mh9Y7PajFpyqQskV+yy31Gvg4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     perl
-    go
   ];
   buildInputs = [
     protobuf
@@ -51,10 +49,6 @@ stdenv.mkDerivation rec {
     fmt
   ];
   propagatedBuildInputs = [ pythonEnv ];
-
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-  '';
 
   meta = {
     description = "Android SDK platform tools";

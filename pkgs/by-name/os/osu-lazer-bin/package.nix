@@ -10,18 +10,18 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2026.711.0";
+  version = "2026.804.2";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
-        hash = "sha256-XwfNO38dDaUmu/3AEgRwV0VW6JrAUCxWD6Wt0Ew23Eo=";
+        hash = "sha256-gyqZUMrdiTls+XwbhYQpd8Hi3mjaNgtPO5c1gfJxG4g=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
-        hash = "sha256-KyA5UCvb9epk7jRtdG5wl0LzKc6/D2rkw5EJQxIaihw=";
+        hash = "sha256-0K/dyvIwrlBzcexYDCCilNknJdEZja1OTfAotP6MvjY=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -73,7 +73,7 @@ if stdenvNoCC.hostPlatform.isDarwin then
     '';
   }
 else
-  appimageTools.wrapType2 {
+  appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
@@ -89,21 +89,17 @@ else
       "--ro-bind-try /etc/egl/egl_external_platform.d /etc/egl/egl_external_platform.d"
     ];
 
-    extraInstallCommands =
-      let
-        contents = appimageTools.extract { inherit pname version src; };
-      in
-      ''
-        . ${makeWrapper}/nix-support/setup-hook
-        mv -v $out/bin/${pname} $out/bin/osu!
+    extraInstallCommands = ''
+      . ${makeWrapper}/nix-support/setup-hook
+      mv -v $out/bin/${pname} $out/bin/osu!
 
-        wrapProgram $out/bin/osu! \
-          ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
-          --set OSU_EXTERNAL_UPDATE_PROVIDER 1
+      wrapProgram $out/bin/osu! \
+        ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
+        --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
-        install -m 444 -D ${contents}/osu!.desktop -t $out/share/applications
-        for i in 16 32 48 64 96 128 256 512 1024; do
-          install -D ${contents}/osu.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
-        done
-      '';
-  }
+      install -m 444 -D ${finalAttrs.contents}/osu!.desktop -t $out/share/applications
+      for i in 16 32 48 64 96 128 256 512 1024; do
+        install -D ${finalAttrs.contents}/osu.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
+      done
+    '';
+  })

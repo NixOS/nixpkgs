@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-formtools";
-  version = "2.6.1";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-formtools";
     tag = finalAttrs.version;
-    hash = "sha256-cg6bl2KJL2aOES7vWqrR25Bd6t9vWGTZLWtbMUhkCkg=";
+    hash = "sha256-/985+Q2o3BoxxicyDFTYl4m4++d/4Vc+y5qQFpUc9RM=";
   };
 
   build-system = [

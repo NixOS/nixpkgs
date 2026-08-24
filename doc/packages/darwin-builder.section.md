@@ -83,6 +83,57 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
 Note that if the builder is running and you have created the above ssh conf file, you can ssh into the builder with `sudo ssh builder@linux-builder`.
 
+## Using the Virtualization.framework backend {#sec-darwin-builder-vz}
+
+`darwin.linux-builder-vz` is a variant of `darwin.linux-builder` that runs the same
+NixOS guest on Apple's Virtualization.framework (via `pkgs.vzvm`) instead of QEMU.
+Instead of emulating x86_64, it exposes Rosetta to the guest, so `x86_64-linux`
+builds are translated rather than emulated, which is substantially faster. It
+requires an Apple silicon host (`aarch64-darwin`) running macOS 13 or newer, with
+Rosetta installed:
+
+```ShellSession
+$ softwareupdate --install-rosetta --agree-to-license
+```
+
+The builder refuses to start when Rosetta is missing, rather than silently dropping
+`x86_64-linux` support; set `virtualisation.vz.rosetta.enable = false` to run
+without it.
+
+It is a drop-in replacement: it listens on the same host port (31022) and presents
+the same host key as the QEMU builder, so the `nix.conf` and SSH configuration
+described above apply unchanged; only the transport behind the port changes, from
+TCP forwarding to vsock. Since a single builder VM handles both architectures
+through Rosetta, list both systems in your `builders` entry
+(`aarch64-linux,x86_64-linux`), or with nix-darwin:
+
+```nix
+{
+  nix.linux-builder = {
+    enable = true;
+    package = pkgs.darwin.linux-builder-vz;
+    systems = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+  };
+}
+```
+
+When switching an existing QEMU builder over, delete its data disk first (e.g.
+`sudo rm /var/lib/linux-builder/nixos.qcow2`): the vz builder reuses the file name
+but writes a raw image, and refuses to misread a genuine qcow2 left behind.
+
+The guest console goes to the macOS unified log by default; read it with:
+
+```ShellSession
+$ /usr/bin/log show --last 5m --predicate 'subsystem == "systems.applicative.vzvm"'
+```
+
+The `virtualisation.vz.*` NixOS options configure the backend further, e.g.
+`virtualisation.vz.nestedVirtualization` gives the guest a working `/dev/kvm` for
+running NixOS integration tests on the builder (macOS 15+, M3 or newer).
+
 ## Example flake usage {#sec-darwin-builder-example-flake}
 
 ```nix

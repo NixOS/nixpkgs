@@ -6,12 +6,12 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cirq-web";
   pyproject = true;
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = [ setuptools ];
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     # No need to test the version number
     "cirq_web/_version_test.py"
   ];
-}
+})

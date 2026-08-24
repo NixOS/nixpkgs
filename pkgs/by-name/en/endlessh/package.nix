@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
-  endlessh,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -11,21 +10,24 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "endlessh";
   version = "1.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "endlessh";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-yHQzDrjZycDL/2oSQCJjxbZQJ30FoixVG1dnFyTKPH4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit (nixosTests) endlessh;
-    version = testers.testVersion {
-      package = endlessh;
-      command = "endlessh -V";
-    };
   };
 
   meta = {

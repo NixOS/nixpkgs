@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.2.11";
+  version = "8.2.12";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -60,15 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-sqFkZ19eYZHQFwVX2zwaKaYXisvoqN25+8DFbyGU2H4=";
+        hash = "sha256-dInAJIYOsz7lAZD7o7p178pKUNlCZcSILebC0XUam4g=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-5AX8pb1jInbQTuE0RqpqqcRXon6wKwdvoDCNDF70krE=";
+        hash = "sha256-hIqjImtj0sZmgoU6fLp6ASdqL97bG+6iFoB62vuUndE=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-M3/x/d2rVKUmIZBQ9hVuT6W9ajZy/Ut5+8aDeXF+HwY=";
+        hash = "sha256-ixFA3XRcI6yvuBIBL6w/9VnFkwZdtjGlvsPbr6+N0cI=";
       };
     };
     updateScript =

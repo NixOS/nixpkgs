@@ -30,7 +30,7 @@
   libxcomposite,
   lib,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   systemd,
   pciutils,
 }:
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies = [
     (lib.getLib systemd)
     libnotify
-    libappindicator-gtk3
+    libappindicator
     pulseaudio
     pciutils
   ];

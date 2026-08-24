@@ -1,49 +1,60 @@
 {
+  coreutils,
   fetchFromGitHub,
+  gamemode,
+  gawk,
+  gnugrep,
   gobject-introspection,
+  gst_all_1,
   icoextract,
-  imagemagick,
   lib,
-  libayatana-appindicator,
-  libcanberra-gtk3,
+  libadwaita,
+  libgudev,
+  libmanette,
   lsfg-vk,
   meson,
   ninja,
   nix-update-script,
   python3Packages,
   umu-launcher,
-  vulkan-tools,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   xdg-utils,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "1.22.8";
+  version = "2.1.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-2FsuD40u5O7VwbziTqhsfVyceyfmSRvdmsizfBy/Xys=";
+    hash = "sha256-Va5cPUPBfnmaTZhJhdSLBgtW4mUBM9/H6+vUrNbUiSg=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
     meson
     ninja
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    libayatana-appindicator
-  ];
+    libadwaita
+    libmanette
+    libgudev
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   dependencies = with python3Packages; [
+    dbus-python
     pillow
     psutil
-    pygame
     pygobject3
     requests
     vdf
@@ -59,25 +70,28 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so"
   '';
 
-  dontWrapGApps = true;
-
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-      --suffix PYTHONPATH : "$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
+    gappsWrapperArgs+=(
+      --set PYTHONPATH "$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
+      --set LD_PRELOAD "libgamemode.so:$LD_PRELOAD"
+      --set LD_LIBRARY_PATH "${lib.getLib gamemode}/lib:$LD_LIBRARY_PATH"
       --suffix PATH : "${
         lib.makeBinPath [
+          coreutils
+          gawk
+          gnugrep
           icoextract
-          imagemagick
-          libcanberra-gtk3
           umu-launcher
-          vulkan-tools
           xdg-utils
         ]
       }"
     )
-    wrapProgram $out/bin/faugus-launcher ''${makeWrapperArgs[@]}
   '';
+
+  # has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "faugus" ];
 
   passthru.updateScript = nix-update-script { };
 

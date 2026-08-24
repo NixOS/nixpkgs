@@ -10,7 +10,7 @@ let
   rev-prefix = "ena_linux_";
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.17.0";
+  version = "2.17.2";
   pname = "ena";
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "${rev-prefix}${finalAttrs.version}";
-    hash = "sha256-Yt8fF73lN5+wKEMtiSFToJMLv63EkfZI/WJfC9ae8H8=";
+    hash = "sha256-v/b4P5twRFaqjkeuXy6UhjnRCxVZ6+Muk80653uXnsY=";
   };
 
   hardeningDisable = [ "pic" ];

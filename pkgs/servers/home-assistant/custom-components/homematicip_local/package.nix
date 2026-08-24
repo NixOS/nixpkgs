@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "2.8.3";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-CCs4+xHQGU4x7V9OpTvAjBP0/w+sXCoxqL0BaKVt15Y=";
+    hash = "sha256-zBtTqNxmOD844rBxPyHGCkE3GLYUH8mI5qBtPdxz24o=";
   };
 
   postPatch = ''
@@ -49,13 +49,8 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTestPaths = [
-    # tries to write to the Nix store
-    "tests/test_blueprints.py"
-  ];
-
-  disabledTests = [
-    # custom_components.homematicip_local.support.InvalidConfig: C
-    "test_async_validate_config_and_get_system_information"
+    # zeroconf fails with: No such device
+    "tests/test_config_flow.py::TestReauthFlow::test_reauth_flow_success"
   ];
 
   meta = {

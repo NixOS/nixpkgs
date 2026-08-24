@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-export";
-  version = "1.11.7";
+  version = "1.11.8";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-export";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDIGbkyRMNoQOdlXwqfLyRqDfK6jNFMVFJv67OY1SCg=";
+    hash = "sha256-wqUcoQddN0FJV673u/xcwNuNz/BB9AFWNFEuQPHyVDw=";
   };
 
   build-system = [
@@ -70,6 +70,9 @@ buildPythonPackage (finalAttrs: {
     pkgs.zstd
     pkgs.pv
   ];
+
+  # Kafka tests use librdkafka's mock broker bound to the loopback interface.
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # I don't know how to fix the following error

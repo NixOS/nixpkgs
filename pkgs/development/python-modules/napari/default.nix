@@ -21,7 +21,7 @@
   jsonschema,
   magicgui,
   napari-console,
-  napari-npe2,
+  npe2,
   napari-svg,
   pandas,
   pillow,
@@ -95,7 +95,7 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     magicgui
     napari-console
-    napari-npe2
+    npe2
     napari-svg
     pandas
     pillow

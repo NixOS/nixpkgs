@@ -83,6 +83,39 @@ lib.recurseIntoAttrs {
     assert appended.makeWrapper ? __spliced;
     pkgs.emptyFile;
 
+  replaceStdenv =
+    let
+      replacedPkgs = nixpkgsFun {
+        localSystem = {
+          inherit (pkgs.stdenv.buildPlatform) system;
+        };
+        config.replaceStdenv =
+          { pkgs }:
+          assert !(pkgs.config ? replaceStdenv);
+          pkgs.stdenv
+          // {
+            wasReplaced = true;
+          };
+      };
+    in
+    assert replacedPkgs.stdenv.wasReplaced;
+    pkgs.emptyFile;
+
+  replaceStdenvIgnoredForCross =
+    let
+      crossPkgs = nixpkgsFun {
+        localSystem = {
+          system = "x86_64-linux";
+        };
+        crossSystem = {
+          system = "aarch64-linux";
+        };
+        config.replaceStdenv = _: throw "replaceStdenv must be ignored when cross compiling";
+      };
+    in
+    assert crossPkgs.stdenv.buildPlatform != crossPkgs.stdenv.hostPlatform;
+    pkgs.emptyFile;
+
   massRebuildVariantComposition =
     let
       variants = [

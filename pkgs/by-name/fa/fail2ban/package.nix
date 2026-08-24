@@ -10,14 +10,17 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fail2ban";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fail2ban";
     repo = "fail2ban";
-    rev = finalAttrs.version;
-    hash = "sha256-0xPNhbu6/p/cbHOr5Y+PXbMbt5q/S13S5100ZZSdylE=";
+    tag = finalAttrs.version;
+    hash = "sha256-6L8lSoFdf/KL1AQfN0lfGthEfeLlxodVsMI3LXCq+XY=";
   };
 
   outputs = [
@@ -35,16 +38,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     (builtins.any lib.id)
   ]) [ "doc" ];
 
+  build-system = [ python3.pkgs.setuptools ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  pythonPath =
+  dependencies =
     with python3.pkgs;
     lib.optionals stdenv.hostPlatform.isLinux [
       systemd-python
       pyinotify
-
-      # https://github.com/fail2ban/fail2ban/issues/3787, remove it in the next release
-      setuptools
     ];
 
   preConfigure = ''
@@ -57,15 +59,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   patches = [
-    # Adjust sshd filter for OpenSSH 9.8 new daemon name - remove next release
+    # fixes for systemd socket activation - remove next release
     (fetchpatch {
-      url = "https://github.com/fail2ban/fail2ban/commit/2fed408c05ac5206b490368d94599869bd6a056d.patch";
-      hash = "sha256-uyrCdcBm0QyA97IpHzuGfiQbSSvhGH6YaQluG5jVIiI=";
-    })
-    # filter.d/sshd.conf: ungroup (unneeded for _daemon) - remove next release
-    (fetchpatch {
-      url = "https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a.patch";
-      hash = "sha256-YGsUPfQRRDVqhBl7LogEfY0JqpLNkwPjihWIjfGdtnQ=";
+      url = "https://github.com/fail2ban/fail2ban/commit/403df4a91c8ad8f235a3cb9e17d0cc4d29c2dafd.patch";
+      hash = "sha256-HI/9qaB+TMbRu/2NPwV+kVcYK03YNnzcD+iaBOlM20w=";
+      # causes merge conflicts
+      excludes = [ "ChangeLog" ];
     })
   ];
 
@@ -81,11 +80,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       sitePackages = "$out/${python3.sitePackages}";
     in
     ''
-      install -m 644 -D -t "$out/lib/systemd/system" build/fail2ban.service
+      install -m 644 -D -t "$out/lib/systemd/system" build/fail2ban.service build/fail2ban.socket
       # Replace binary paths
       sed -i "s#build/bdist.*/wheel/fail2ban.*/scripts/#$out/bin/#g" $out/lib/systemd/system/fail2ban.service
-      # Delete creating the runtime directory, systemd does that
-      sed -i "/ExecStartPre/d" $out/lib/systemd/system/fail2ban.service
 
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/etc"
@@ -109,6 +106,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
+    changelog = "https://github.com/fail2ban/fail2ban/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       Deric-W

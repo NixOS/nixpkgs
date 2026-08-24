@@ -43,7 +43,7 @@
   fetchpatch2,
 
   # Feature flags
-  withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Alsa in/output supporT
+  withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Alsa in/output support
   withAmf ? withHeadlessDeps && lib.meta.availableOn stdenv.hostPlatform amf, # AMD Media Framework video encoding
   withAom ? withHeadlessDeps, # AV1 reference encoder
   withAribb24 ? withFullDeps, # ARIB text and caption decoding
@@ -55,30 +55,35 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withFullDeps, # CELT decoder
+  withCelt ? withFullDeps && lib.versionOlder version "9.0", # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
-  withCudaLLVM ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin, # Cuda isn’t supported on Darwin
+  withCudaLLVM ?
+    withHeadlessDeps
+    # Cuda isn’t supported on Darwin
+    && !stdenv.hostPlatform.isDarwin
+    # Clang for our ppc64 targets needs cc-wrapper to work
+    && !(stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isBigEndian),
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
   withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
   withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin, # IIDC-1394 grabbing (ieee 1394)
-  withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # libdrm support
+  withDrm ? withHeadlessDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # libdrm support
   withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withFdkAac ? withFullDeps && (!withGPL || withUnfree), # Fraunhofer FDK AAC de/encoder
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv;
+      with stdenv.hostPlatform;
       !isDarwin
       && !isAarch32
-      && !hostPlatform.isLoongArch64
-      && !hostPlatform.isRiscV
-      && !(hostPlatform.isPower && hostPlatform.isBigEndian)
-      && hostPlatform == buildPlatform
+      && !isLoongArch64
+      && !isRiscV
+      && !(isPower && isBigEndian)
+      && stdenv.hostPlatform == stdenv.buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
@@ -128,7 +133,11 @@
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
-  withShaderc ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "5.0",
+  withShaderc ?
+    withFullDeps
+    && !stdenv.hostPlatform.isDarwin
+    && lib.versionAtLeast version "5.0"
+    && lib.versionOlder version "9.0",
   withShine ? withFullDeps, # Fixed-point MP3 encoding
   withSnappy ? withFullDeps, # Snappy compression, needed for hap encoding
   withSoxr ? withHeadlessDeps, # Resampling via soxr
@@ -143,8 +152,8 @@
   withUavs3d ? withFullDeps, # AVS3 decoder
   withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Video 4 Linux support
   withV4l2M2m ? withV4l2,
-  withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
-  withVdpau ? withSmallDeps && (with stdenv; isLinux || isFreeBSD), # Vdpau hardware acceleration
+  withVaapi ? withHeadlessDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # Vaapi hardware acceleration
+  withVdpau ? withSmallDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
   withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
@@ -249,7 +258,6 @@
   celt,
   chromaprint,
   codec2,
-  clang,
   dav1d,
   davs2,
   fdk_aac,
@@ -367,9 +375,6 @@
   libnpp,
   # Testing
   testers,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 /*
@@ -462,6 +467,15 @@ stdenv.mkDerivation (
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
+      ]
+      ++ optionals (lib.versionAtLeast version "8.1.2" && stdenv.hostPlatform.isLoongArch64) [
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/23825 (merged, but not backported to 8.1.x or 9.0.x)
+        # As git.ffmpeg.org deploys Anubis, we cannot fetch this patch reliably from there.
+        # So instead, we fetch it from Debian.
+        (fetchpatch2 {
+          url = "https://salsa.debian.org/multimedia-team/ffmpeg/-/raw/d52aea25bc9123bfaf61f7a7e5a0d9da01c8788d/debian/patches/0001-swscale-loongarch-fix-buffer-underflow-in-yuv2plane1.patch";
+          hash = "sha256-QRkb7z4Btyd9ZgV/1hh6Fb87IhkygFgVDqQdloXKL6Q=";
+        })
       ]
       ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.1.4") [
         (fetchpatch2 {
@@ -609,7 +623,12 @@ stdenv.mkDerivation (
       (enableFeature withBzlib "bzlib")
       (enableFeature withCaca "libcaca")
       (enableFeature withCdio "libcdio")
+    ]
+    ++ optionals (versionOlder version "9.0") [
+      # FFMpeg >= 9 doesn't know about the flag anymore
       (enableFeature withCelt "libcelt")
+    ]
+    ++ [
       (enableFeature withChromaprint "chromaprint")
       (enableFeature withCodec2 "libcodec2")
       (enableFeature withCuda "cuda")
@@ -708,7 +727,7 @@ stdenv.mkDerivation (
       (enableFeature withSamba "libsmbclient")
       (enableFeature withSdl2 "sdl2")
     ]
-    ++ optionals (versionAtLeast version "5.0") [
+    ++ optionals (versionAtLeast version "5.0" && versionOlder version "9.0") [
       (enableFeature withShaderc "libshaderc")
     ]
     ++ [
@@ -805,6 +824,10 @@ stdenv.mkDerivation (
       "--cc=${stdenv.cc.targetPrefix}clang"
       "--cxx=${stdenv.cc.targetPrefix}clang++"
     ]
+    ++ optionals withCudaLLVM [
+      # Unwrapped compiler because it will be retargeted and used freestanding with --cuda-device-only.
+      "--nvcc=${lib.getExe buildPackages.clang.cc}"
+    ]
     ++ optionals withMetal [
       "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
       "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -819,10 +842,12 @@ stdenv.mkDerivation (
         toStrip =
           map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
           ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
+          ++ lib.optional withCudaLLVM buildPackages.clang.cc
           ++ lib.optional withMetal xcode;
       in
-      "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
+      "remove-references-to ${lib.concatMapStringsSep " " (o: "-t ${o}") toStrip} config.h";
 
+    __structuredAttrs = true;
     strictDeps = true;
 
     nativeBuildInputs = [
@@ -834,10 +859,7 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang.cc ]
-    ++ optionals withCudaNVCC [ cuda_nvcc ]
-    # TODO: Clean up on `staging`.
-    ++ optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+    ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =
       [ ]
@@ -981,17 +1003,12 @@ stdenv.mkDerivation (
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-    env =
-      lib.optionalAttrs stdenv.cc.isGNU {
-        NIX_CFLAGS_COMPILE = toString [
-          "-Wno-error=incompatible-pointer-types"
-          "-Wno-error=int-conversion"
-        ];
-      }
-      # TODO: Clean up on `staging`.
-      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-        NIX_CFLAGS_LINK = "-fuse-ld=lld";
-      };
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-error=int-conversion"
+      ];
+    };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;

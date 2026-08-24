@@ -35,15 +35,17 @@ let
     transmission-rpc
     authlib
     apprise
+    httpx
+    h2
   ];
 
-  version = "1.3.3";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${version}";
-    hash = "sha256-uRuSFWjEnJp3cMx4IeM9akpj+l/36/jgIRavoan9iAU=";
+    hash = "sha256-UECLBwwfDs1FZQOfidDkRelRnJT0ykCptiFRJL3iALM=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
@@ -52,7 +54,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
-    npmDepsHash = "sha256-oqEUiHOHx78+plHUnsOtdv0S3ZhaHr0CAb7kA0VbG/k=";
+    npmDepsHash = "sha256-XNXI1cCMaJCCBcoFyhDcG2ca7njVcrDtqvhUP85Ha/8=";
 
     installPhase = ''
       runHook preInstall

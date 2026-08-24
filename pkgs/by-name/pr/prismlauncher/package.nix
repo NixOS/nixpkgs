@@ -11,14 +11,15 @@
   kdePackages,
   lib,
   libGL,
+  libdecor,
+  libjack2,
+  libpulseaudio,
+  libusb1,
   libx11,
   libxcursor,
   libxext,
   libxrandr,
   libxxf86vm,
-  libjack2,
-  libpulseaudio,
-  libusb1,
   openal,
   pciutils,
   pipewire,
@@ -105,6 +106,7 @@ symlinkJoin {
         libxrandr
         libxxf86vm
         wayland
+        libdecor
 
         udev # oshi
 

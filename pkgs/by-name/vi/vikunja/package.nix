@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   stdenv,
   nodejs_24,
@@ -11,15 +12,16 @@
   dart-sass,
   writeShellScriptBin,
   nixosTests,
+  nix-update-script,
 }:
 
 let
-  version = "2.3.0";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-bdHiSFaN0vNQMhy6GPlpoFeYrk2CLvO7E30d8J/9GC0=";
+    hash = "sha256-qI4mkgcN9yYRmh5V+KzIHupX7uWsszV4Xb31OYvukxQ=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +39,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-cDGeIrCxZtcomu3YxikutjXpVe3EeUZ/L3+3y9yx67s=";
+      hash = "sha256-xZBgE4GM59Ihl5a3qgcmkjR4Q3wYlcsiDapiNEzBQOg=";
     };
 
     nativeBuildInputs = [
@@ -82,7 +84,7 @@ let
       }' ${file}
     '';
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   inherit src version;
   pname = "vikunja";
 
@@ -102,9 +104,10 @@ buildGoModule {
       mage
     ];
 
-  vendorHash = "sha256-4UMnfbwL2JFnw9KZDO5sq6XCSBUD5ejeqp6vaTbYWJc=";
+  vendorHash = "sha256-bn+bcGzeB0/KkhPNkbjK/EgKQG3iqVlJxtt6betGUNE=";
 
   inherit frontend;
+  veans = callPackage ./veans.nix { inherit (finalAttrs) src version meta; };
 
   prePatch = ''
     cp -r ${frontend} frontend/dist
@@ -143,7 +146,14 @@ buildGoModule {
   passthru = {
     tests.vikunja = nixosTests.vikunja;
     frontend = frontend;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--subpackage"
+        "veans"
+      ];
+    };
   };
 
   meta = {
@@ -158,4 +168,4 @@ buildGoModule {
     mainProgram = "vikunja";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
-  version = "2.60.4";
+  version = "2.60.6";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gh9bqYBZF/QfxqpoI9z4h6KR1gekJ+LVr7a136ZQcMc=";
+    hash = "sha256-qJtkqLIXqAQr3w41y/q2Kc7uNWQNunXfV4r96ap4nVc=";
   };
 
   nativeBuildInputs = [
@@ -79,15 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   mesonFlags = [
-    # Provide dbus-daemon fallback when it is not already running when
-    # at-spi2-bus-launcher is executed. This allows us to avoid
-    # including the entire dbus closure in libraries linked with
-    # the at-spi2-core libraries.
-    "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+    # Allows at-spi2-bus-launcher to use dbus-daemon from PATH.
+    # This allows us to avoid including the entire dbus closure in libraries
+    # linked with the at-spi2-core libraries.
+    "-Ddbus_daemon=dbus-daemon"
   ]
   ++ lib.optionals systemdSupport [
     # Same as the above, but for dbus-broker
-    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
+    "-Ddbus_broker=dbus-broker-launch"
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Duse_systemd=false"
@@ -108,17 +107,23 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postFixup = ''
-    # Cannot use wrapGAppsHook'due to a dependency cycle
-    wrapProgram $out/libexec/at-spi-bus-launcher \
-      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''} \
+    busLauncherWrapperArgs=(
+      # Prefer dbus-daemon and dbus-broker-launch from system locations.
+      --prefix PATH : "/run/current-system/sw/bin:/usr/bin"
+
+      # Access to accessibility settings.
+      ${lib.optionalString withDconf ''--prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"''}
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
+    )
+
+    # Cannot use wrapGAppsHook'due to a dependency cycle
+    wrapProgram "$out/libexec/at-spi-bus-launcher" "''${busLauncherWrapperArgs[@]}"
   '';
 
   meta = {
     description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
     homepage = "https://gitlab.gnome.org/GNOME/at-spi2-core";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

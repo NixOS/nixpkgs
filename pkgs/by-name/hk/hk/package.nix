@@ -10,11 +10,12 @@
   libgit2,
   openssl,
   usage,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hk";
-  version = "1.50.0";
+  version = "1.56.0";
 
   __structuredAttrs = true;
 
@@ -22,10 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "hk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1sty3JUxiT4UDPmoqR6vql9bQcoSR+xfq3dQzT6u6rY=";
+    hash = "sha256-c1SINPa38YpE0R4/9NtrMWbyMBh7sGpdPiF9EYFrPcw=";
   };
 
-  cargoHash = "sha256-oUgAzO7kWVlbw1ZvcjqIdV78tvXQYlV5bwvOSucQvWE=";
+  cargoHash = "sha256-LzOtuU+GoV6gVijaH8HxpNaMlnPJEXjnHLRYADFxUgA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     openssl
   ];
+
+  # Some tests build fixture repositories by shelling out to git.
+  nativeCheckInputs = [ gitMinimal ];
 
   # These tests require external dependencies and are fragile -- skipping.
   checkFlags = [
@@ -77,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       typedrat
       Br1ght0ne
+      sshine
     ];
     mainProgram = "hk";
   };

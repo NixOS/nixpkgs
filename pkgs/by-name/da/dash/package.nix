@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.13.4";
+  version = "0.5.13.5";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0Q39Qc2lkWVWDbOcqRXCxKdjb/8EKB2NLfd62Sx1Pis=";
+    hash = "sha256-QAkBAaKkkfE+kB09SOkEFPJmNGKLm//zX/VANjwien0=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ "--with-libedit" ];
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 

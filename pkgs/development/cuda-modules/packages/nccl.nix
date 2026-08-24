@@ -1,5 +1,6 @@
 {
   _cuda,
+  autoAddDriverRunpath,
   backendStdenv,
   cccl,
   cuda_cudart,
@@ -8,12 +9,18 @@
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
+  gdrcopy,
   lib,
+  patchelf,
   python3,
+  rdma-core,
   removeReferencesTo,
   which,
   # passthru.updateScript
   gitUpdater,
+
+  withGdrcopy ? true,
+  withRdmaCore ? true,
 }:
 let
   inherit (_cuda.lib) _mkMetaBadPlatforms;
@@ -27,6 +34,8 @@ let
     getLib
     licenses
     maintainers
+    makeLibraryPath
+    optional
     optionalString
     teams
     versionAtLeast
@@ -47,7 +56,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   #   newer versions of NCCL than what we provide here.
   version =
     if cudaAtLeast "12.0" then
-      "2.30.7-1"
+      "2.31.2-1"
     else if cudaAtLeast "11.7" then
       "2.28.7-1"
     else if cudaAtLeast "11.6" then
@@ -60,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.30.7-1" = "sha256-fdiQZweX0jYfGroP0bL5Sfv3+DkCzVBZZLEbPv8aqq8=";
+      "2.31.2-1" = "sha256-G3Nx9pCgSNBYX0CV86ruiNC9aZ9YuZH5hF/WnoOF2mQ=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
@@ -74,7 +83,11 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    # libnccl dlopens libnvidia-ml.so.1 (src/os/linux.cc), and the statically linked CUDA runtime
+    # (src/Makefile: CUDARTLIB ?= cudart_static) dlopens libcuda.so.1, both by bare soname.
+    autoAddDriverRunpath
     cuda_nvcc
+    patchelf
     python3
     removeReferencesTo
     which
@@ -137,6 +150,15 @@ backendStdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${lib.getBin cuda_nvcc}" \
       ''${!outputLib}/lib/libnccl.so.* \
       ''${!outputStatic}/lib/*.a
+  ''
+  # makefiles/common.mk sets RDMA_CORE=0 and MLX5DV=0, so libibverbs/libmlx5/libgdrapi are dlopen'd
+  # rather than DT_NEEDED and buildInputs would not reach the runpath. Losing them is quiet: NCCL
+  # logs at INFO and falls back to the socket transport.
+  + optionalString (withRdmaCore || withGdrcopy) ''
+    nixLog "adding dlopen'd transport libraries to libnccl's runpath"
+    patchelf --add-rpath "${
+      makeLibraryPath (optional withRdmaCore rdma-core ++ optional withGdrcopy gdrcopy)
+    }" "''${!outputLib:?}"/lib/libnccl.so.*.*
   '';
 
   # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed

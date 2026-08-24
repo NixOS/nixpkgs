@@ -20,15 +20,15 @@ let
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "18.13.1";
+  version = "18.19.0";
 
   inherit nodejs;
 
   src = fetchFromGitHub {
-    owner = "johannesjo";
+    owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-gfoGGLJ2Pyl2BPcCAukk2eNPTsGYofT2G6a9FmlDwTE=";
+    hash = "sha256-tUK2vytQ/fBSw8drjBLh4HlrnQh/0tX9e9otYMhXYsA=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -74,7 +74,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-staJsDxwcF2TC+Y8wr9iaq7TmfQVG3ZIQh17UTCP/9I=";
+      hash = "sha256-Je3pHgkBwt35sIvxQqnYX3F+uJQeBGc5kzCAL9czCYs=";
     }
   );
 
@@ -112,6 +112,12 @@ buildNpmPackage rec {
     # not our app directory, so it would search the wrong location.
     substituteInPlace electron/idle-time-handler.ts \
       --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # build/icon.icns is checked in and already contains all ten macOS icon
+    # representations. Avoid regenerating it with sandbox-unavailable iconutil.
+    substituteInPlace electron-builder.yaml \
+      --replace-fail "beforePack: ./tools/beforePack.js" ""
   '';
 
   buildPhase = ''

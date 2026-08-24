@@ -17,18 +17,17 @@
   wrapGAppsHook3,
   zlib,
   nixosTests,
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.2.2";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-5lGv1ajuDE/DTqUbnVeRRBcXntrzn6bs72mZbQMf7Fc=";
+    hash = "sha256-K6YnqKHVo+notbjKxnzcN1DEcpAa2KMge4Ov30poEQY=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     qt6.wrapQtAppsHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # TODO: Remove once #536365 reaches this branch
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -64,11 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
   ]
   ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 

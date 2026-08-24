@@ -31,6 +31,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # broken by intentional 3.14.7 behavior change
+    # reported upstream: https://github.com/pydantic/typing-inspection/issues/55
+    "test_literal_values_unhashable_type"
+  ];
+
   meta = {
     changelog = "https://github.com/pydantic/typing-inspection/blob/${src.tag}/HISTORY.md";
     description = "Runtime typing introspection tools";

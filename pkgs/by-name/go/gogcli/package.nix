@@ -1,37 +1,37 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   testers,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gogcli";
-  version = "0.29.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JunPpEzbNp00uEiJ7AzouXyzFwyNLehLU7mwL3eh4bM=";
+    hash = "sha256-UQa9Z7zv2IuH7GL1udNee2F+uB2BAZA5a0/2XtFcBWg=";
   };
 
-  vendorHash = "sha256-JrRIUYpw2lAD0ezi0HTZvS42OS7vP8DAHU3m0u3eCbM=";
+  vendorHash = "sha256-+Nbuwok3dY/82gUDKeGgrC0F1ZqXSW8IpV6Q1yzIPvo=";
 
   subPackages = [ "cmd/gog" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steipete/gogcli/internal/cmd.version=v${finalAttrs.version}"
-    "-X github.com/steipete/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
-    "-X github.com/steipete/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/openclaw/gogcli/internal/cmd.version=v${finalAttrs.version}"
+    "-X github.com/openclaw/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
+    "-X github.com/openclaw/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "gog --version";
-    version = "v${finalAttrs.version}";
+    version = "v${finalAttrs.version} (${finalAttrs.src.rev} 1970-01-01T00:00:00Z)";
   };
 
   meta = {

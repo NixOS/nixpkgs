@@ -4,11 +4,11 @@
   buildNpmPackage,
   fetchFromGitHub,
   electron_41,
-  dart-sass,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
+  nodejs-slim_latest,
   darwin,
   actool,
   copyDesktopItems,
@@ -18,16 +18,19 @@
 }:
 let
   pname = "feishin";
-  version = "1.13.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-v6dWzEB1+IK4bHmDo8Rr5e0Xi3OWKcm+UPBmBiSfdZ0=";
+    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
   electron = electron_41;
+
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
 in
 buildNpmPackage {
   inherit pname version;
@@ -43,18 +46,18 @@ buildNpmPackage {
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
+      pnpm
       version
       src
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-zNOGJ24G0xcgsGK4DmbBm7d1PHTp7IJS+RTALGRtfDg=";
+    fetcherVersion = 4;
+    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm_10
+    pnpm
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !webVersion) [ copyDesktopItems ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && !webVersion) [
@@ -66,15 +69,6 @@ buildNpmPackage {
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
       --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
-  '';
-
-  preBuild = ''
-    rm -r node_modules/.pnpm/sass-embedded-*
-
-    test -d node_modules/.pnpm/sass-embedded@*
-    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
-    mkdir -p "$dir"
-    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
   '';
 
   postBuild = lib.optionalString (!webVersion) ''

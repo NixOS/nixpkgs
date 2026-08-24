@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "masakichi";
+    owner = "yuanji-dev";
     repo = "tango";
     rev = "v${finalAttrs.version}";
     hash = "sha256-e/M2iRm/UwfnRVnMo1PmQTkz4IGTxnsCXNSSUkhsiHk=";
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Local command-line Japanese dictionary tool using yomichan's dictionary files";
-    homepage = "https://github.com/masakichi/tango";
+    homepage = "https://github.com/yuanji-dev/tango";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "tango";

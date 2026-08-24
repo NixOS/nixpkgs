@@ -5,10 +5,6 @@
   useSwiftDriver ? true,
   swift-driver,
   clang,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
-  writeShellScriptBin,
 }:
 
 stdenv.mkDerivation (
@@ -46,6 +42,20 @@ stdenv.mkDerivation (
               "-resource-dir=$out/resource-root" \
               "-resource-dir=${lib.getLib swift}/lib/swift/clang"
         ''
+        +
+          lib.optionalString
+            (
+              stdenv.targetPlatform.isLinux
+              && stdenv.targetPlatform.isx86
+              && lib.versionAtLeast (lib.getVersion clang) "19.1"
+            )
+            ''
+              # Swift bundles Clang 16, which predates -mtls-dialect=gnu2
+              # support (added in Clang 19.1). The cc-wrapper adds it based
+              # on the system Clang version, so strip it here.
+              substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
+                --replace-fail "'-mtls-dialect=gnu2'" ""
+            ''
         # We need the libc++ headers corresponding to the LLVM version of
         # Swift’s Clang.
         + lib.optionalString (clang.libcxx != null) ''
@@ -57,7 +67,6 @@ stdenv.mkDerivation (
       stdenv.targetPlatform.darwinMinVersion
     );
 
-    passAsFile = [ "buildCommand" ];
     buildCommand = ''
       mkdir -p $out/bin $out/nix-support
 
@@ -94,15 +103,6 @@ stdenv.mkDerivation (
           cp "$input" "$out/nix-support/$(basename "$input")"
         done
       fi
-    ''
-    # TODO: Clean up on `staging`.
-    + lib.optionalString stdenv.targetPlatform.isDarwin ''
-      printf "NIX_SWIFTFLAGS_COMPILE+=' -use-ld=lld -tools-directory %s'\n" \
-        ${writeShellScriptBin "ld" ''
-          exec ${lib.getExe' llvmPackages.lld "ld64.lld"} "$@"
-        ''}/bin \
-        >> $out/nix-support/setup-hook
-      printf '%s\n' ${lib.getBin llvmPackages.lld} >> $out/nix-support/propagated-build-inputs
     '';
 
     passthru = {

@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Toolset to assist DNS operators with zone and nameserver maintenance";
     mainProgram = "dnst";
     homepage = "https://nlnetlabs.nl/projects/domain/dnst/";
+    changelog = "https://github.com/NLnetLabs/dnst/blob/v${finalAttrs.version}/Changelog.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.skyesoss ];
   };

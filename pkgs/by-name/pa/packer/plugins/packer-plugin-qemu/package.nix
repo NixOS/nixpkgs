@@ -7,16 +7,16 @@
 mkPackerPlugin (finalAttrs: {
 
   pname = "packer-plugin-qemu";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer-plugin-qemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ose7ueo9V2zJ5K5yvew9ErTD9lR+rkp1UB/yDi+U+fY=";
+    hash = "sha256-hHAxagcOCgcf5rVdObWlWmKonV5GJDfxzyc1g5hdNnM=";
   };
 
-  vendorHash = "sha256-pgfI/ntG6Fesimw3jk70GP+lBUEUMfq6wbqXx8xCTf0=";
+  vendorHash = "sha256-l7ITkEiyzMnonVqLByQQnwL0idJ3b1lXYU8X6uH+Oqg=";
 
   meta = {
     description = "Packer plugin for QEMU";

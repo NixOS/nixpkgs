@@ -10,10 +10,19 @@
   gtk3-x11,
   gtk3,
   lib,
-  python3Packages,
+  python313Packages,
+  stdenv,
 }:
 
 let
+  hostArch =
+    if stdenv.hostPlatform.isx86 then
+      "i386"
+    else if stdenv.hostPlatform.isAarch64 then
+      "aarch64"
+    else
+      throw "renode: unsupported host architecture ${stdenv.hostPlatform.system}";
+
   resources = fetchFromGitHub {
     owner = "renode";
     repo = "renode-resources";
@@ -22,7 +31,7 @@ let
   };
 
   pythonLibs =
-    with python3Packages;
+    with python313Packages;
     makePythonPath [
       construct
       psutil
@@ -36,7 +45,8 @@ let
       # from tools/execution_tracer/requirements.txt
       pyelftools
 
-      (robotframework.overrideDerivation (oldAttrs: {
+      (robotframework.overridePythonAttrs (oldAttrs: {
+        version = "6.1";
         src = fetchFromGitHub {
           owner = "robotframework";
           repo = "robotframework";
@@ -151,7 +161,7 @@ buildDotnetModule rec {
           CMAKE_CONF_FLAGS+=" -DTARGET_WORDS_BIGENDIAN=1"
       fi
 
-      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=i386 $SOURCE
+      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=${hostArch} $SOURCE
       cmake --build . -j$NIX_BUILD_CORES
       popd
     done
@@ -194,6 +204,9 @@ buildDotnetModule rec {
       otavio
       znaniye
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

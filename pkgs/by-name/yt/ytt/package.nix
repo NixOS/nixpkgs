@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ytt";
-  version = "0.55.1";
+  version = "0.55.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HysL71PTCjWxgrqF8Ua7fUtzpxcf/XEbTlek+CvfUxA=";
+    hash = "sha256-IwM39J5DRCW2CuAmq7Q+KkeqDMLFcktU3NDbBh8wt7g=";
   };
 
   vendorHash = null;

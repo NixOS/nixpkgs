@@ -54,7 +54,9 @@ buildPythonPackage (finalAttrs: {
 
   # When doCheck is disabled, nnativeCheckInputs are not available and the package fails to import:
   #   ModuleNotFoundError: No module named 'snakemake'
-  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "snakemake_storage_plugin_xrootd" ];
+  pythonImportsCheck = lib.optionals finalAttrs.finalPackage.doCheck [
+    "snakemake_storage_plugin_xrootd"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

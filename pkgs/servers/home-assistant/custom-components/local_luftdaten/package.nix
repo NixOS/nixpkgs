@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "lichtteil";
   domain = "local_luftdaten";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "lichtteil";
     repo = "local_luftdaten";
     tag = version;
-    hash = "sha256-K8sQ/xm9aoJ6EBF9H9Y87m7a0OZN4y6T3DFZcSpPYOI=";
+    hash = "sha256-VVMTZjxcfq/nAh4FhlDlkmLV45M9y5fkWa5s68Qd8oI=";
   };
 
   meta = {

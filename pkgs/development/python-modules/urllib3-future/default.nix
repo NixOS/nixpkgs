@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "urllib3-future";
-  version = "2.22.901";
+  version = "2.24.901";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
     tag = version;
-    hash = "sha256-SP6C6xF9McRbmCAfARKrFVSxKRkNZvs7fLdcR9pIEyM=";
+    hash = "sha256-/IgZNhaa1yUR+hH8xsYfpw0x+dpA2jhLAaNGjJWeXGU=";
   };
 
   postPatch = ''
@@ -76,6 +76,10 @@ buildPythonPackage rec {
     trustme
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTestPaths = [
     # test connects to the internet

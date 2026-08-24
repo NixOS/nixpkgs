@@ -8,15 +8,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "obliteratus";
-  version = "0-unstable-2026-06-17";
+  version = "0-unstable-2026-08-14";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elder-plinius";
     repo = "OBLITERATUS";
-    rev = "a5a1ffa5849b442cf188b3c03fd4de71ddf5bdcc";
-    hash = "sha256-IxIpUlVlZRzXan53mCCsH8AYg/ajNofSm56iUO9XPrg=";
+    rev = "2295ef3571f64dec95e3fb3e42036b35d2efa43d";
+    hash = "sha256-LgtJQrIrOvWyxZ0vtPwQfzA4GRPJDjcO+gTwFAUKBgo=";
   };
 
   build-system = with python3Packages; [ setuptools ];

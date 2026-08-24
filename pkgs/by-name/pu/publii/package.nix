@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "publii";
-  version = "0.47.3";
+  version = "0.47.9";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${finalAttrs.version}.deb";
-    hash = "sha256-1LzjnN0gmzE4JJdgTOUQ3n/BATg+B5Lfi0yR94TU+XE=";
+    hash = "sha256-bYlmnA8F3vGY1wGwUn/Ziv9v8KgmQ3WwUbvy4f1NaFI=";
   };
 
   dontConfigure = true;
@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       quickly and easily; perfect for anyone who wants a fast, secure website in a flash.
     '';
     homepage = "https://getpublii.com";
-    changelog = "https://github.com/getpublii/publii/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [
     ];

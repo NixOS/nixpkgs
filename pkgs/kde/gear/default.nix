@@ -97,7 +97,9 @@
   kdf = callPackage ./kdf { };
   kdialog = callPackage ./kdialog { };
   kdiamond = callPackage ./kdiamond { };
+  kdominate = callPackage ./kdominate { };
   keditbookmarks = callPackage ./keditbookmarks { };
+  keepsecret = callPackage ./keepsecret { };
   keysmith = callPackage ./keysmith { };
   kfind = callPackage ./kfind { };
   kfourinline = callPackage ./kfourinline { };
@@ -136,7 +138,6 @@
   kmail-account-wizard = callPackage ./kmail-account-wizard { };
   kmailtransport = callPackage ./kmailtransport { };
   kmbox = callPackage ./kmbox { };
-  kmime = callPackage ./kmime { };
   kmines = callPackage ./kmines { };
   kmix = callPackage ./kmix { };
   kmousetool = callPackage ./kmousetool { };

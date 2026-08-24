@@ -130,12 +130,9 @@ in
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
-          pkgs.writeShellScript "pre-start" ''
-            umask 077
-            ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          ''
-        );
+        ExecStartPre = lib.optional (
+          cfg.environmentFiles != [ ]
+        ) "${pkgs.envsubst}/bin/envsubst -i '${staticConfigFile}' -o '${finalStaticConfigFile}'";
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
@@ -152,6 +149,7 @@ in
         ProtectSystem = "full";
         ReadWritePaths = [ cfg.dataDir ];
         RuntimeDirectory = "traefik";
+        RuntimeDirectoryMode = "0700";
         WorkingDirectory = cfg.dataDir;
       };
     };

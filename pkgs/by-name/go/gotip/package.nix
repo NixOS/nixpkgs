@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotip";
-  version = "0.6.4";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "gotip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CgTznW4SwKrJ4Q7dIo2ebn51G13nP36tv8n2G9T+MZ0=";
+    hash = "sha256-jVZeyVujUnT0E43RNugdoGqrx8ybjNnzcHeP8y1tg8M=";
   };
 
-  vendorHash = "sha256-Sj7JzyWviGxp10O1zGONN49TXtwquXYJ1KoijIVcyj0=";
+  vendorHash = "sha256-YUBIL/TF3tnchxtkqMD4/+tPW+25EB6ujRsQaIRlaJo=";
 
   ldflags = [
     "-s"

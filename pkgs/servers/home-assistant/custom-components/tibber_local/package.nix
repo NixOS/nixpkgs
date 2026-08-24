@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "marq24";
   domain = "tibber_local";
-  version = "2026.6.2";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-tibber-pulse-local";
     tag = version;
-    hash = "sha256-Mssjizh9DcA6fldwl6QmmgG8aOVwvF5d0akqrkArM5g=";
+    hash = "sha256-lR3URLk6gpp2d+xfiNaHp2wb59SFxaEgLS1uFA9LTHs=";
   };
 
   dependencies = [

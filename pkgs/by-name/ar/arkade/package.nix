@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "arkade";
-  version = "0.11.113";
+  version = "0.11.116";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     tag = finalAttrs.version;
-    hash = "sha256-8T7gYaT52L4Xnbuxvi9GayQ1qfI5U2cphSIkRGqx5Go=";
+    hash = "sha256-59e30fzfO0mUr6gP27i0+KzA/rVy2DCFN6v7xW8pD0E=";
   };
 
   env.CGO_ENABLED = 0;

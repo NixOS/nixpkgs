@@ -606,9 +606,9 @@
   };
 
   elm = {
-    version = "5.9.2";
+    version = "5.9.4";
     url = "github:elm-tooling/tree-sitter-elm";
-    hash = "sha256-NJRmII48Zo2xKxZmL88Dxskf352fGaCp8B14+x1XJHw=";
+    hash = "sha256-HFfpwThgWdd+pz8Ub042pKDKyFcuokHRGljhZ2xZFQU=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1120,6 +1120,19 @@
     hash = "sha256-NsTf3DR3gHVMYZDmTNvThB5bJcDwTcJ1+3eJhvsiDn8=";
     meta = {
       license = lib.licenses.mit;
+    };
+  };
+
+  hledger = {
+    version = "0-unstable-2026-03-11";
+    url = "github:chrislloyd/tree-sitter-hledger";
+    rev = "8ee65478cb941a8cdaa798ffa73bb4437d4c4d07";
+    hash = "sha256-92k6/0tcHGMp164VVZDtDiBopKCD+4tfBXGFLSOrUdQ=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        tomasrivera
+      ];
     };
   };
 
@@ -2217,9 +2230,9 @@
   };
 
   qmljs = rec {
-    version = "0.3.0";
+    version = "0.3.1";
     url = "github:yuja/tree-sitter-qmljs?ref=${version}";
-    hash = "sha256-tV4lipey+OAQwygRFp9lQAzgCNiZzSu7p3Mr6CCBH1g=";
+    hash = "sha256-Yn3/adOETfPHBVCIVfI5qXUwC2wQr14pbhK2aUtdCiY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2287,9 +2300,13 @@
   };
 
   regex = {
-    version = "1.0.0";
+    # Note: if you see an attempt to update tree-sitter-regex to version 1.0.0,
+    # check if https://github.com/tree-sitter/tree-sitter-regex/tags is actually
+    # a recent version. After v1.0.0, tree-sitter-regex confusingly released
+    # v0.20.0, v0.21.0, etc.
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-regex";
-    hash = "sha256-3D+LOWRUamAdbegVfWD5yFcCjBucthPogOL/zWR78PY=";
+    hash = "sha256-bR0K6SR19QuQwDUic+CJ69VQTSGqry5a5IOpPTVJFlo=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2498,9 +2515,9 @@
   };
 
   sourcepawn = {
-    version = "0.7.8";
+    version = "0.8.0";
     url = "github:nilshelmig/tree-sitter-sourcepawn";
-    hash = "sha256-TfLCG2Ro3QnGStyCNqHwO54HQMR2fEOV6FjBv+0LjJ0=";
+    hash = "sha256-FmVOiJDOGDgw/Uju1PZZkG7hsy/6u3XTRUCycpbZ7M8=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2556,9 +2573,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.7.9";
+    version = "2026.8.13";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-La1h6uJC5gUA84OAr3zBbQiR+AnrhcUhNf6r4HUpwhg=";
+    hash = "sha256-a4tkU01oJ7x9rfVJRB3F9y8O3gmCVy0gLV6RieTrLLc=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
@@ -2955,6 +2972,18 @@
     };
   };
 
+  vcl = rec {
+    version = "0.4.0";
+    url = "github:ntsk/tree-sitter-vcl?ref=v${version}";
+    hash = "sha256-qV+Ww5pzUHxmv9R6zIJDcLZnHLHL6xi3EZoRlhzgISQ=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        ntsk
+      ];
+    };
+  };
+
   vento = {
     version = "0-unstable-2026-02-23";
     url = "github:ventojs/tree-sitter-vento";
@@ -3109,9 +3138,9 @@
   };
 
   wit = {
-    version = "1.3.0";
+    version = "1.4.0";
     url = "github:bytecodealliance/tree-sitter-wit";
-    hash = "sha256-FG73R38Bw60+aT5YB/xpENCnQwoGMVjXRLjP1GdJEn4=";
+    hash = "sha256-63xH63s6lgticgRtMz7LCL1ThuXegn7qFCZgeQqIZH4=";
     # Fails strict schema validation due to Neovim ecosystem extensions
     excludeBrokenTreeSitterJson = true;
     meta = {

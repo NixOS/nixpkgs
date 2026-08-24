@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "ralphex";
-  version = "1.6.0";
+  version = "1.6.1";
 
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "umputun";
     repo = "ralphex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RUl5BVGc5EjeXZNjfC2WVZrrSXxR1mQyABkIxIT2NyQ=";
+    hash = "sha256-M1VeZgpNv64ZbcNvhzscnhTJhuR6yrh+clAWAce7vxI=";
   };
 
   vendorHash = null;

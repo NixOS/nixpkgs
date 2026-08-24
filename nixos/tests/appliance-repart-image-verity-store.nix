@@ -123,6 +123,6 @@
       without_version.wait_for_unit("default.target")
       run_verity_tests(without_version)
       with subtest("Image version is not set"):
-        without_version.succeed('grep IMAGE_VERSION="" /etc/os-release')
+        without_version.fail('grep IMAGE_VERSION /etc/os-release')
     '';
 }

@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd zoxide \
       --bash contrib/completions/zoxide.bash \
       --fish contrib/completions/zoxide.fish \
+      --nushell contrib/completions/zoxide.nu \
       --zsh contrib/completions/_zoxide
   '';
 

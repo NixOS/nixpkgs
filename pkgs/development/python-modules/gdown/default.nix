@@ -10,6 +10,8 @@
   requests,
   setuptools,
   tqdm,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,9 +39,18 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ requests.optional-dependencies.socks;
 
-  checkPhase = ''
-    $out/bin/gdown --help > /dev/null
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTestPaths = [
+    # requires network
+    "tests/test___main__.py"
+    "tests/test_cached_download.py"
+    "tests/test_download.py"
+    "tests/test_download_folder.py"
+  ];
 
   pythonImportsCheck = [ "gdown" ];
 

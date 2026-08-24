@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildFHSEnv,
   fetchurl,
@@ -8,6 +9,7 @@
 
   # Either "community" or "pro"
   iconName ? "community",
+  licenseAccepted ? config.burpsuite.accept_license or false,
 }:
 assert lib.assertMsg (
   iconName == "pro" || iconName == "community"
@@ -15,7 +17,7 @@ assert lib.assertMsg (
 
 let
   pname = "burpsuite";
-  version = "2026.6";
+  version = "2026.7.3";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -24,7 +26,7 @@ let
       "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
     ];
-    hash = "sha256-nafdpcXgWpuIinmgYp+uXkfoFkQfhFRsDaxsh+Rgb3M=";
+    hash = "sha256-yCYtxUJvOL7cSQ1mxdIbb/d9bcbYXO/mpmyIJpATQGk=";
   };
 
   description = "Integrated platform for performing security testing of web applications";
@@ -45,7 +47,9 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  runScript = "${lib.getExe jdk} -jar ${src}";
+  runScript =
+    "${lib.getExe jdk} -jar ${src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
+    + lib.optionalString licenseAccepted " --i-accept-the-license-agreement";
 
   targetPkgs =
     pkgs: with pkgs; [

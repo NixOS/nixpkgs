@@ -2,19 +2,21 @@
   fetchFromGitHub,
   lib,
   python3Packages,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlit-tui";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Maxteabag";
     repo = "sqlit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lcZe7EiN/wZllRO7KnXryoeGiUVBhSE4AYaRniZV6Cw=";
+    hash = "sha256-LAWlUnRa+i+XQN8Sl7ri4i0UGjyqV7MTz1X+XgNDAcI=";
   };
 
   build-system = with python3Packages; [
@@ -27,33 +29,35 @@ python3Packages.buildPythonApplication (finalAttrs: {
     docker
     duckdb
     keyring
-    mariadb
     mysql-connector-python
     oracledb
     paramiko
     psycopg2
     pyodbc
     pyperclip
+    pytz
     sqlparse
     sshtunnel
     textual
     textual-fastdatatable
   ];
 
-  pythonRelaxDeps = [
-    "paramiko"
-  ];
-
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
     pytest-asyncio
     pytestCheckHook
-    writableTmpDirAsHomeHook
-  ];
+  ]);
 
   pythonImportsCheck = [ "sqlit" ];
 
-  disabledTests = [
+  disabledTestPaths = [
     "tests/ui/" # UI tests fail in the sandbox
+  ];
+
+  disabledTests = [
     "test_installer_cancel_terminates_process" # timeout error
     "test_detect_strategy_pip_user_fallback" # AssertionError: assert 'externally-managed' == 'pip-user'
   ];

@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "exim";
-  version = "4.99.4";
+  version = "4.100";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/exim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-h/84gVcA37HuTrfo26eRbfenVZBTVNLQ+qGuF5DE/Z0=";
+    hash = "sha256-W9Cj41Pb/NXIF0OIuCQxamHuJFXZBS6i8Id97pOdM7M=";
   };
 
   enableParallelBuilding = true;
@@ -205,6 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
       helsinki-Jo
       tv
     ];
-    changelog = "https://github.com/Exim/exim/blob/exim-${finalAttrs.version}/doc/doc-txt/ChangeLog";
+    changelog = "https://code.exim.org/exim/exim/releases/tag/exim-${finalAttrs.version}";
   };
 })

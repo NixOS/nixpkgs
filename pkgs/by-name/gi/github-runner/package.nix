@@ -17,10 +17,8 @@
   runtimeShell,
   # List of Node.js runtimes the package should support
   nodeRuntimes ? [
-    # Node.js 20.x has reached EOL and is marked as insecure in Nixpkgs, thus omitted here
     "node24"
   ],
-  nodejs_20,
   nodejs_24,
 }:
 
@@ -28,23 +26,23 @@
 assert builtins.all (
   x:
   builtins.elem x [
-    "node20"
+    # Node.js 20.x has reached EOL and was removed from Nixpkgs, thus omitted here
     "node24"
   ]
 ) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.335.1";
+  version = "2.336.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mFwWhpFzp0pT7WaMpF/N6PGw0IJt3I6/e7GDgw9wA2U=";
+    hash = "sha256-QbenIEfOvISgXXlsalZa51y0m8ZG5uc/MpLnddpxXLo=";
     leaveDotGit = true;
     postFetch = ''
-      git -C $out rev-parse --short HEAD > $out/.git-revision
+      git -C $out rev-parse HEAD > $out/.git-revision
       rm -rf $out/.git
     '';
   };
@@ -67,8 +65,8 @@ buildDotnetModule (finalAttrs: {
     mkdir -p $TMPDIR/bin
     cat > $TMPDIR/bin/git <<EOF
     #!${runtimeShell}
-    if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
-      echo $(cat $TMPDIR/src/.git-revision)
+    if [ \$# -eq 2 ] && [ "\$1" = "rev-parse" ] && [ "\$2" = "HEAD" ]; then
+      cat $TMPDIR/src/.git-revision
       exit 0
     fi
     exec ${buildPackages.git}/bin/git "\$@"
@@ -111,6 +109,9 @@ buildDotnetModule (finalAttrs: {
   };
 
   postConfigure = ''
+    # Avoid deriving assembly metadata from the nondeterministic temporary Git commit.
+    export SourceRevisionId="$(cat .git-revision)"
+
     # Generate src/Runner.Sdk/BuildConstants.cs
     dotnet msbuild \
       -t:GenerateConstant \
@@ -250,9 +251,6 @@ buildDotnetModule (finalAttrs: {
     export GITHUB_ACTIONS_RUNNER_TRACE=1
     mkdir -p _layout/externals
   ''
-  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} _layout/externals/node20
-  ''
   + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
     ln -s ${nodejs_24} _layout/externals/node24
   '';
@@ -293,9 +291,6 @@ buildDotnetModule (finalAttrs: {
     # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-  ''
-  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} $out/lib/externals/node20
   ''
   + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
     ln -s ${nodejs_24} $out/lib/externals/node24
@@ -351,7 +346,7 @@ buildDotnetModule (finalAttrs: {
     fi
 
     commit=$($out/bin/Runner.Listener --commit)
-    if [[ "$commit" != "$(git rev-parse HEAD)" ]]; then
+    if [[ "$commit" != "$(cat .git-revision)" ]]; then
       printf 'Unexpected commit %s' "$commit"
       exit 1
     fi
@@ -374,6 +369,7 @@ buildDotnetModule (finalAttrs: {
       kfollesdal
       aanderse
       zimbatm
+      schmittlauch
     ];
     platforms = [
       "x86_64-linux"

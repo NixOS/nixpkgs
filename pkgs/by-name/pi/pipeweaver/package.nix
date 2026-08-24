@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (
 
       sourceRoot = "${finalAttrs.src.name}/web";
 
-      npmDepsHash = "sha256-ZX/3H/VdRdWC2j+mPA/0rZflDhslqTN1mqA9vvQRQG0=";
+      npmDepsHash = "sha256-kInUUBeau7alBB9GcIyrBf6PwYSEj4NTMoO1/lguRQU=";
 
       installPhase = ''
         runHook preInstall
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "pipeweaver";
-    version = "0.1.6";
+    version = "0.1.9";
 
     __structuredAttrs = true;
 
@@ -37,10 +37,10 @@ rustPlatform.buildRustPackage (
       owner = "pipeweaver";
       repo = "pipeweaver";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-wf3gxCLT5vOz+5+CpfmkX0stKoAOpQ6KIoW6xBNV1xk=";
+      hash = "sha256-aGZ5VfHv5DHPsGhFGXhQBl3DNt6J+h5daMu38LJshI4=";
     };
 
-    cargoHash = "sha256-Jv0fF6keg2NcUnCJhCId7rwPVZK1/Q9+otQNjp54RCI=";
+    cargoHash = "sha256-XC/jK70FZs8jF0A85MpoxcMmxF/FmExD/qfF4KL9Y0M=";
 
     nativeBuildInputs = [
       pkg-config

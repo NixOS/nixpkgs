@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
   const Bottleneck = require('bottleneck')
 

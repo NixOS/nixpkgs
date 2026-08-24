@@ -10,6 +10,7 @@
 
   # tests
   numpy,
+  pytest-xdist,
   pytestCheckHook,
   torch,
 }:
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     numpy
+    pytest-xdist
     pytestCheckHook
     torch
   ];

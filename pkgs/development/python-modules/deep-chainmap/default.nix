@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   flit-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,7 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  # Tests are not published to pypi
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "deep_chainmap" ];
 

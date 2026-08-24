@@ -23,8 +23,8 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-XWhQ5GlAGW0WAyiPwBULLz1yQps2IdjVkusQ0a88tCs=";
   };
 
-  npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-dRc+hTk5ELw0rJhT71heFnLjTmjN1UpIOHUMXKt4YwU=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-2vr8Yspm6CCVnO6Jf8B3wiL6X+Tp6hZZEPr+WC/Dcak=";
 
   # npm 11 incompatible with fetchNpmDeps
   # https://github.com/NixOS/nixpkgs/issues/474535

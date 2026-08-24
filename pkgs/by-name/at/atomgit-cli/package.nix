@@ -1,9 +1,12 @@
 {
+  _experimental-update-script-combinators,
   lib,
   stdenv,
   buildGoModule,
   fetchgit,
   gitMinimal,
+  gitUpdater,
+  nix-update-script,
   makeWrapper,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -14,15 +17,15 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "atomgit-cli";
-  version = "0.5.0";
+  version = "0.7.2";
 
   src = fetchgit {
     url = "https://atomgit.com/hust-open-atom-club/atomgit-cli.git";
-    rev = "11f1ff216053bf47c0a3baaed6698c9222f1ce77";
-    hash = "sha256-ZvQ8S0f1jUfN48UE/U+JnTTrtoWYZfwhDPDBbKKLlC0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-E1T093LkccgLPPNs5OokxY5tw4HEMmRy+ulaROnuSCE=";
   };
 
-  vendorHash = "sha256-7K17JaXFsjf163g5PXCb5ng2gYdotnZ2IDKk8KFjNj0=";
+  vendorHash = "sha256-YuAY+CBO+YAMEfrJuUJ/EMnmR9pfRkL+qMhOr1LPKck=";
 
   subPackages = [ "cmd/ag" ];
 
@@ -36,10 +39,15 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.Version=v${finalAttrs.version}"
     "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.Commit=${finalAttrs.src.rev}"
-    "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.BuildDate=2026-07-13T07:53:45Z"
+    "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.BuildDate=2026-07-18T16:40:02Z"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater { rev-prefix = "v"; }).command
+    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/ag \
@@ -49,6 +57,7 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [
+    gitMinimal
     versionCheckHook
     writableTmpDirAsHomeHook
   ];

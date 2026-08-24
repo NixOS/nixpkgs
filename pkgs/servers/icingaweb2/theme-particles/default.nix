@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-particles";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 }

@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glibmm";
-  version = "2.88.0";
+  version = "2.88.1";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor finalAttrs.version}/glibmm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-plSdo6bEPeg7hxfa5UE8V6YNkvbsxiRhXGEtC7CtD+I=";
+    hash = "sha256-wTn5YrFXXIgnzTnRrCG3o2e+O9oUCcDH4hopCQ83FQY=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

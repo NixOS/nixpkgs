@@ -186,5 +186,11 @@ writeTextFile rec {
         gap
       ]
     }''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Adapted from src/bin/sage-env in the upstream repo (sagemath/sage).
+    #
+    # See also: sagemath/sage#25921
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
   '';
 }

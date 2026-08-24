@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.6.0";
+  version = "2.9.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ddQOi7jZiV3affmbsDI36n3wpbkLup5MuJ+9iDPZbro=";
+    hash = "sha256-liWCT2ArXdRmyB+oPwSLJRRyfossW+jfSNpWgeSfvb0=";
   };
 
   preBuild = ''

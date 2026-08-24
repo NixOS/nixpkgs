@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { classify } = require('../supportedBranches.js')
 
 function runChecklist({

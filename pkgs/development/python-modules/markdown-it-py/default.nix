@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "4.0.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "markdown-it-py";
     tag = "v${version}";
-    hash = "sha256-92J9cMit2zwyjoE8G1YpwDxj+wiApQW2eUHxUOUt3as=";
+    hash = "sha256-S3xDPvnGqawsxAUcrMF/3a4jds6i+zfPLMpyvduaDpE=";
   };
 
   # fix downstrem usage of markdown-it-py[linkify]

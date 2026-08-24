@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "hatari";
-  version = "0-unstable-2026-06-10";
+  version = "0-unstable-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "hatari";
-    rev = "c605d3aa342f2ad8f915f94bf03bae018e1be7b7";
-    hash = "sha256-UJyfIt5+anXaqqMmL9JNTBvXu5bmyMYloYc8fWxx2m0=";
+    rev = "92e2874e664be40e1b51b97e0ff925a1aa917f22";
+    hash = "sha256-TwPlz/H0FKHI0wELj5gYTTL2RJIQOwLLIe+UktK3XXI=";
   };
 
   extraNativeBuildInputs = [ which ];

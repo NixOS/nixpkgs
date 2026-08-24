@@ -107,10 +107,10 @@ in
 {
   emacs31 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "31.0.90";
+    version = "31.1";
     variant = "mainline";
-    rev = "emacs-31.0.90";
-    hash = "sha256-Rzlnn+NKQ+jICXLNop27RnVInq79myn4hueJieDO2Ck=";
+    rev = "emacs-31.1";
+    hash = "sha256-lFT5Vt49G17t/fRm5yppO5p9ui10I9JNJVaGO1GPZFI=";
   });
 
   emacs30 = import ./make-emacs.nix (mkArgs {
@@ -139,6 +139,11 @@ in
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/02_all_ts-query-pred.patch?id=86190bf195b3e17108372d8ad89eb57037180dd2";
         hash = "sha256-0GPyfKLSaB09a8hamrSf6lx4Qk8Big4AKMOivkN1wEM=";
       })
+      (fetchpatch {
+        name = "nullify-read-symbol-shorthands-around-risky-intern-calls-80574.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8466eb44991707d128110bdc549fad14c8e1d61e";
+        hash = "sha256-SyRCay2MahCJovtzBHA9M1H9hXhtD5IG3ZFSEUwaWlg=";
+      })
     ];
   });
 
@@ -158,6 +163,11 @@ in
         # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/971731
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/02_all_ts-query-pred.patch?id=86190bf195b3e17108372d8ad89eb57037180dd2";
         hash = "sha256-0GPyfKLSaB09a8hamrSf6lx4Qk8Big4AKMOivkN1wEM=";
+      })
+      (fetchpatch {
+        name = "nullify-read-symbol-shorthands-around-risky-intern-calls-80574.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8466eb44991707d128110bdc549fad14c8e1d61e";
+        hash = "sha256-SyRCay2MahCJovtzBHA9M1H9hXhtD5IG3ZFSEUwaWlg=";
       })
     ];
   });

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.10.0";
+  version = "6.11.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-GCagpb2TFhOEH+lzMth+PWiJxlEw0L+H1DYUEQoMF3g=";
+    hash = "sha256-GHpgcGBE/AAhTVxGVzTPMdZ8BkuXa7/OgMumZJ8ENRc=";
   };
 
   srcglucose = fetchFromGitHub {

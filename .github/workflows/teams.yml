@@ -38,7 +38,8 @@ jobs:
             maintainers/github-teams.json
 
       - name: Install dependencies
-        run: npm install bottleneck@2.19.5
+        run: npm ci --package-lock-only=false bottleneck
+        working-directory: ci/github-script
 
       - name: Synchronise teams
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0

@@ -119,7 +119,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rexies
-      ppom
     ];
     platforms = [ "x86_64-linux" ];
   };

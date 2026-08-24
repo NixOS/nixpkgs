@@ -16,25 +16,26 @@
   nix-update-script,
   versionCheckHook,
   buildPackages,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.20.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0fvGhBxwXhSzWvNhflreEFoCBycM10vMkMf4sj95vfY=";
+    hash = "sha256-DnaVIMp+pRRsNlyBZiTiqXajOgGFBT38sNLmC+IF8pU=";
   };
 
-  cargoHash = "sha256-3V50qNvg24WZvQ9z7IZJAnPXHTibZ6o3EzUoinLU6Gw=";
+  cargoHash = "sha256-3fBikvSbPTiIYXk7TQKoQ/YqjF5ZCoN0xQRSqCmHF9Q=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 4;
-    hash = "sha256-j2A2VCKQPfoyrNDtazu8hzUHpS130Ju/Cy3yfu9tC5I=";
+    hash = "sha256-8dPqsa1/D4q7hdntV1AmbRxQyZgAf7Q/z+etj+R/jIE=";
   };
 
   pnpmRoot = "frontend";
@@ -101,12 +102,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # avoid unstable pre‐releases
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
+  passthru = {
+    tests = { inherit (nixosTests) matrix-authentication-service; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # avoid unstable pre‐releases
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {

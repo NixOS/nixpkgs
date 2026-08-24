@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.9.6";
+  version = "2.9.13";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -32,8 +32,10 @@
       ps: with ps; [
         alexapy
       ];
-    apple_music = ps: [
-    ]; # missing pywidevine
+    apple_music =
+      ps: with ps; [
+        pywidevine
+      ];
     ard_audiothek =
       ps: with ps; [
         gql
@@ -147,8 +149,6 @@
     loudness_analysis = ps: [
     ];
     lrclib = ps: [
-    ];
-    motherearthradio = ps: [
     ];
     mpd =
       ps: with ps; [

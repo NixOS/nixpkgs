@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lifecycled";
-  version = "3.3.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "lifecycled";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
+    sha256 = "sha256-4xHtibZk3LERp2Klh6rqUOdEwghChQ8CpbgFoc7nedM=";
   };
 
-  vendorHash = "sha256-q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";
+  vendorHash = "sha256-8IVw/vSrt7u9SgUGML8Q52UQ0XKUivr/TCxz/ncFe7s=";
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

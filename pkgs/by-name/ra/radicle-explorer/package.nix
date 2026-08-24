@@ -1,9 +1,12 @@
 {
   lib,
   buildNpmPackage,
+  fetchFromRadicle,
   fetchFromGitHub,
-  radicle-httpd,
   writers,
+  _experimental-update-script-combinators,
+  unstableGitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -20,18 +23,16 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  inherit (radicle-httpd) version;
+  version = "0-unstable-2026-08-12";
 
-  # radicle-explorer uses the radicle-httpd API, and they are developed in the
-  # same repo. For this reason we pin the sources to each other, but due to
-  # radicle-httpd using a more limited sparse checkout we need to carry a
-  # separate hash.
-  src = radicle-httpd.src.override {
-    hash = "sha256-cnQsPWkRChC8yPrICRoUpGW2GGLB2TK9+3v8ZRGe3x0=";
-    sparseCheckout = [ ];
+  src = fetchFromRadicle {
+    seed = "seed.radicle.dev";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    rev = "ab514fe0d477c7cf7e0d5f24b63e302e755f98cf";
+    hash = "sha256-PGnOVKj1R5fWGeDJJJW0U0qdTBV5SHoY/VLtzFPg/Tw=";
   };
 
-  npmDepsHash = "sha256-8vmAs788PjdUTaQ5E8YLX0KiIPymJbH51oNaGZACe6I=";
+  npmDepsHash = "sha256-L/JOhI7KVXNDGHzk8RVNNcd8hHL+I7YKVg8sZyRSBtA=";
 
   postPatch = ''
     patchShebangs --build ./scripts
@@ -73,6 +74,11 @@ buildNpmPackage (finalAttrs: {
   passthru.withConfig =
     config:
     finalAttrs.finalPackage.overrideAttrs { configFile = writers.writeJSON "config.json" config; };
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (unstableGitUpdater { hardcodeZeroVersion = true; })
+    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+  ];
 
   meta = {
     description = "Web frontend for Radicle";

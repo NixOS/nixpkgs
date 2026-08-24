@@ -7,13 +7,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.9.1";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iS6DiyPqRQo/NVczumZx06VYrWgCv+w9OK4jHDKE8PQ=";
+    hash = "sha256-3HYxrFvte38ZKcKJOW86Yp1nGvEvzmflapNkVd9hSGg=";
   };
 
   pyproject = true;
@@ -40,11 +40,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    "croniter"
-    "fastapi"
-    "qbittorrent-api"
-    "requests"
-    "uvicorn"
+    "bencode.py"
+    "gitpython"
+    "humanize"
   ];
 
   passthru = {

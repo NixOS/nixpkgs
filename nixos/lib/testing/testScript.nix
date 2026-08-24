@@ -8,12 +8,12 @@ testModuleArgs@{
 }:
 let
   inherit (lib) mkOption types;
-  inherit (types) either str functionTo;
+  inherit (types) either lines functionTo;
 in
 {
   options = {
     testScript = mkOption {
-      type = either str (functionTo str);
+      type = either lines (functionTo lines);
       apply =
         v:
         if lib.isFunction v then
@@ -27,7 +27,7 @@ in
       '';
     };
     testScriptString = mkOption {
-      type = str;
+      type = lines;
       readOnly = true;
       internal = true;
     };

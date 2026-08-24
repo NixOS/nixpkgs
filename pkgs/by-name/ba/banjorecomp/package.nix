@@ -42,13 +42,13 @@ in
 
 llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
   pname = "banjorecomp";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "BanjoRecomp";
     repo = "BanjoRecomp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QIiSjwA0iyoGTaeKANah6WhTUwPGXv1qR26kTdg7OqU=";
+    hash = "sha256-GGV3L60Z0ivkWOoJnqK2Hx5q1EVUsbE2D5jHPAW3Cy0=";
     fetchSubmodules = true;
   };
 

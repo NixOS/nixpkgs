@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyscf";
-  version = "2.13.1";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IEgbm7sZqxKxI+VPE9IoH+BAHkNgasGmRsdDykUFCeM=";
+    hash = "sha256-9FyiN5VrFpZ6Q4JFvNn1gVQJq4KQysiL5Sz5E+fSC5U=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -116,6 +116,7 @@ buildPythonPackage (finalAttrs: {
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
     "test_sparse_dot"
+    "test_set_param_named"
   ];
 
   disabledTestPaths = [

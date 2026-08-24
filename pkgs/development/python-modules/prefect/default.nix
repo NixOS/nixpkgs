@@ -7,7 +7,6 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  replaceVars,
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
 
@@ -79,6 +78,7 @@
   semver,
   sniffio,
   sqlalchemy,
+  starlette,
   toml,
   typing-extensions,
   uv,
@@ -92,14 +92,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.7.0";
+  version = "3.8.3";
   pyproject = true;
+
+  # keeps list elements containing spaces intact, which disabledTests below needs
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-AfiXH9u6W6UpE8hepNzPGIm1cxC+5RonhtBYWMu2IaQ=";
+    hash = "sha256-C20gFzsswVOVfJiz2UcDamUSSMbvm+KVIM115ZAzEyM=";
   };
 
   postPatch = ''
@@ -108,16 +111,18 @@ buildPythonPackage (finalAttrs: {
         'default-version = "3.6.24+nogit"' \
         'default-version = "${finalAttrs.version}"'
   ''
-  + lib.optionalString finalAttrs.doCheck ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
     substituteInPlace src/prefect/__init__.py \
       --replace-fail \
         '__development_base_path__: pathlib.Path = __module_path__.parents[1]' \
         '__development_base_path__: pathlib.Path = pathlib.Path("${finalAttrs.src}")'
   '';
 
-  # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
   nativeBuildInputs = [
+    # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
     (writeShellScriptBin "git" "false")
+    # prefect wants to create ~/.prefect on import, which pythonImportsCheck triggers
+    writableTmpDirAsHomeHook
   ];
 
   build-system = [
@@ -177,6 +182,7 @@ buildPythonPackage (finalAttrs: {
     ruamel-yaml-clib
     semver
     sniffio
+    starlette
     toml
     typing-extensions
     uvicorn
@@ -258,12 +264,15 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  passthru.tests = {
-    inherit (nixosTests) prefect;
+  passthru = {
+    tests = {
+      inherit (nixosTests) prefect;
+    };
 
+    # Upstream publishes every pre‐release (3.8.4.dev1, …) as a GitHub release,
+    # so restrict the updater to plain three‐component stable tags.
     updateScript = nix-update-script {
       extraArgs = [
-        # avoid pre‐releases
         "--version-regex"
         "^(\\d+\\.\\d+\\.\\d+)$"
       ];
@@ -271,6 +280,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   # FIXME: build killed at ~30%
+
   doCheck = false;
   nativeCheckInputs = [
     pytestCheckHook
@@ -295,6 +305,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
+    changelog = "https://github.com/PrefectHQ/prefect/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       happysalada

@@ -194,6 +194,35 @@ stdenv.mkDerivation {
       extraPrefix = "libs/context/";
       sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
     })
+    # Backports https://github.com/boostorg/context/pull/331, which prevents
+    # an optimisation that breaks coroutine migration between threads.
+    # (mostly needed to avoid conflicts when applying the patch below,
+    # but it's a meaningful standalone fix too).
+    ++
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.92.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/0921b9fd5c776aec7748475c6c10807e0d51bc6d.patch";
+          relative = "include";
+          hash = "sha256-nQYMd3HFsDLxijnGdyas0ZHs3ylQVMGQL14K7F6MkF0=";
+        })
+    # Backports https://github.com/boostorg/context/pull/337 which fixes a regression that breaks
+    # std::uncaught_exceptions for abandoned coroutines under libstdc++ and fcontext implementation.
+    # This bug also caused subtle breakage in Nix. See https://github.com/NixOS/nix/issues/16174.
+    ++
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.93.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/5883212311535a0046031d74d1568ae173c1e35b.patch";
+          relative = "include";
+          hash = "sha256-CytNLi2d0wjI/lY5lDv98mwwQaEt7qeIs4UkE6QgCBU=";
+        })
+    ++
+      # This also broke Nix https://github.com/NixOS/nix/issues/13145 and probably much more dependants too.
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.89.0")
+        (fetchpatch {
+          url = "https://github.com/boostorg/context/commit/c79564d0de69422ed33f2fbc892908ad510e6a19.patch";
+          relative = "include";
+          hash = "sha256-5iZ+rSdtyOupBUYws6U8whd43XMkTlQlApW5xvE0ZB4=";
+        })
     # This fixes another issue regarding ill-formed constant expressions, which is a default error
     # in clang 16 and will be a hard error in clang 17.
     ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
@@ -209,7 +238,7 @@ stdenv.mkDerivation {
         url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
         hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
       })
-      # This fixes another ill-formed contant expressions issue flagged by clang 16.
+      # This fixes another ill-formed constant expressions issue flagged by clang 16.
       (fetchpatch {
         url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
         relative = "include";

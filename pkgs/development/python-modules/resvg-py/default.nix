@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "resvg-py";
-  version = "0.3.3";
+  version = "0.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baseplate-admin";
     repo = "resvg-py";
     tag = finalAttrs.version;
-    hash = "sha256-XYV3XVLZNlCGPvvYPtyr4UX+9yuXnV7ZWwqt2I/rxTc=";
+    hash = "sha256-SRY22I4wK3v8RrwkS3/5YjBe+IRLnUS/KYYThDUByXY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-v7Y+Kh8Z5S5gn8zoijjwKq8UZGT36azltC62m9xCHiY=";
+    hash = "sha256-5gyzo48SEct7kaN9ckectoHsuS1EJcJOdT+dxpKw+QQ=";
   };
 
   build-system = [

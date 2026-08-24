@@ -11,7 +11,7 @@
   keybinder3,
   intltool,
   libcanberra-gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   libpulseaudio,
   libgudev,
 }:
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gtk3
     libwnck
     keybinder3
-    libappindicator-gtk3
+    libappindicator
     libgudev
   ];
 

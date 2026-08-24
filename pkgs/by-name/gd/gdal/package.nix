@@ -79,17 +79,17 @@
   xz,
   zlib,
   zstd,
+  buildPackages,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.13.1";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IsSENjOJpCMnGR1O8/gV6X7GTNIK/c+JIYBrkxDgj/A=";
+    hash = "sha256-sHMfAAZ4LrHXXh1g3Q9WsAqt8DHRkSdBlb3kZSy+vX0=";
   };
 
   nativeBuildInputs = [
@@ -113,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
-      lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      # mysql puts libraries into top-level `lib` (but has pkgconfig),
+      # mariadb puts them into a subdirectory (but has no pkgconfig)
+      lib.optionalString (libmysqlclient.pname != "mysql-client") "mysql/"
     }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
   ++ lib.optionals finalAttrs.doInstallCheck [
@@ -132,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This is not strictly needed as the Java bindings wouldn't build anyway if
     # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   buildInputs =

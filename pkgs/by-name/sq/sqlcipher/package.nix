@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcipher";
-  version = "4.16.0";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hvgdKpgyj2vD8rxCzS9gM5pKANgMFW4IV0M/c7eapNM=";
+    hash = "sha256-LVyFE5Oj7t48BpLF1nmPSVe7cuX6ogPO7Sgqi8CG17Q=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     TCLLIBDIR = "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
   };
 
-  # Rename files from sqlite3 to sqlcipher to prevent file collisons
+  # Rename files from sqlite3 to sqlcipher to prevent file collisions
   postInstall = ''
     mv $out/bin/{sqlite3,sqlcipher}
     mkdir $out/include/sqlcipher

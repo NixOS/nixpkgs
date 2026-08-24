@@ -22,7 +22,7 @@ let
       options = {
         config = mkOption {
           type = types.nullOr types.lines;
-          description = "viml configuration associated with this plugin.";
+          description = "Configuration associated with this plugin. Use the 'type' plugin option to set the language (viml by default).";
           default = null;
           example = "set title";
         };

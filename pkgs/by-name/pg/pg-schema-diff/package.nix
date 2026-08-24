@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pg-schema-diff";
-  version = "1.0.7";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "pg-schema-diff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7N9n0puEyCOq3MKXRLNAgtgrFEC4Sh9d6OK9U/h4xCQ=";
+    hash = "sha256-ycp4dM7PwuKH71Od4qqcwJ5JOJfSHv/hq4jrRYljfjM=";
   };
 
   subPackages = [

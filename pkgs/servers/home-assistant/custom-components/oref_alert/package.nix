@@ -15,13 +15,13 @@
 buildHomeAssistantComponent rec {
   owner = "amitfin";
   domain = "oref_alert";
-  version = "6.20.2";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
     tag = "v${version}";
-    hash = "sha256-jDrSFIFlp9BVytIVUiW3lAKAmG6N0NYS0TaUxQC26eE=";
+    hash = "sha256-ZYV/pylzjzjDAR9v9CaCMUCS+ttCf5t3yii06tmjLm0=";
   };
 
   # Do not publish cards, currently broken, attempting to write to nix store.

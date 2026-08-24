@@ -115,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
+    changelog = "https://download.samba.org/pub/rsync/NEWS#${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = [

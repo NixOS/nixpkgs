@@ -193,7 +193,7 @@ let
       # https://discourse.ardour.org/t/ardour-8-2-released/109615/8
       # "--use-external-libs"
     ]
-    ++ lib.optional finalAttrs.doCheck "--test"
+    ++ lib.optional finalAttrs.finalPackage.doCheck "--test"
     ++ lib.optional optimize "--optimize";
 
     env = {

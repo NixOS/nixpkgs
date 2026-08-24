@@ -51,7 +51,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   error: ‘throw_if’ is not a member of ‘cudnn_frontend’
     ./fix-cudnn-frontend-compat.patch
 
-    # By default apex's setup.py will taget all capabilities instead of using TORCH_CUDA_ARCH_LIST
+    # By default apex's setup.py will target all capabilities instead of using TORCH_CUDA_ARCH_LIST
     # This result in the build failing on recent versions of CUDA.
     # Instead, use TORCH_CUDA_ARCH_LIST as the source of truth for selecting capabilities
     ./fix-cuda-capabilities-selection.patch
@@ -75,6 +75,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
         --replace-fail \
           "lerp(" \
           "apex_lerp("
+    ''
+    # Upstream hardcodes `version="0.1"` in setup.py, which fails the metadata check
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'version="0.1",' \
+          'version="${finalAttrs.version}",'
     '';
 
   env = {

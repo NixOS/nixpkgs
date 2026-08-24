@@ -2,13 +2,17 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
+  autoconf-archive,
   libestr,
   json_c,
   zlib,
   docutils,
   libfastjson,
+  withLibyaml ? true,
+  libyaml,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -62,16 +66,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2512.0";
+  version = "8.2606.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
+    hash = "sha256-JXSz8waOaVXrlO9WQ+K2pbhYXMjqp3IJ/1y8Hi5fceU=";
   };
+
+  patches = [
+    # Remove with rsyslog 8.2608.0 or newer.
+    (fetchpatch {
+      name = "CVE-2026-19654.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/f7f774228273730ba1075f4cd457ae78303a8f08.patch";
+      hash = "sha256-ww8Ade2eKrQygJduLMPFjxd/fmBnpQ4ePLEzHffPy90=";
+    })
+
+    # Fix imjournal invalidation reopen busy-loop.
+    # Remove with rsyslog 8.2608.0 or newer.
+    # https://github.com/rsyslog/rsyslog/pull/7384
+    (fetchpatch {
+      name = "imjournal-invalidation-reopen-busy-loop.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/383f80f21f16c3c94e7d7a57b0a5af12cdac9d75.patch";
+      excludes = [ "ChangeLog" ];
+      hash = "sha256-RlhXoK+dAPBN2wu4V7GoFw/d+uWQzO7+nUkW5+z7QJY=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    autoconf-archive
     docutils
   ];
 
@@ -81,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     zlib
   ]
+  ++ lib.optional withLibyaml libyaml
   ++ lib.optional withKrb5 libkrb5
   ++ lib.optional withJemalloc jemalloc
   ++ lib.optional withPostgres libpq
@@ -112,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     (lib.enableFeature true "largefile")
     (lib.enableFeature true "regexp")
+    (lib.enableFeature withLibyaml "libyaml")
     (lib.enableFeature withKrb5 "gssapi-krb5")
     (lib.enableFeature true "klog")
     (lib.enableFeature true "kmsg")
@@ -157,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature false "imsolaris")
     (lib.enableFeature true "imptcp")
     (lib.enableFeature true "impstats")
+    (lib.enableFeature false "impstats-push")
     (lib.enableFeature true "omprog")
     (lib.enableFeature withNet "omudpspoof")
     (lib.enableFeature true "omstdout")

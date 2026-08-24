@@ -13,15 +13,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "awakened-poe-trade";
-  version = "3.28.103";
+  version = "3.29.104";
 
   src = fetchurl {
     url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v${finalAttrs.version}/Awakened-PoE-Trade-${finalAttrs.version}.AppImage";
-    hash = "sha256-p/XDWnE9lm/LwT3r/lhQWtEJ3YoaGRFd4Rv7RbdDIeg=";
+    hash = "sha256-ApZwjy1tJwUtevLA7QY8/zrnHI5Tt4aXMpTo+5VWGUg=";
   };
 
   passthru = {
-    appImageContents = appimageTools.extractType2 {
+    appImageContents = appimageTools.extract {
       inherit (finalAttrs) pname src version;
     };
 

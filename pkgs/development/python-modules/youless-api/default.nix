@@ -19,6 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-BAIwShbIZaX5QOkxajwv6vtL8/EouHA3ELCLAm9ylKA=";
   };
 
+  env.PUBLISH_VERSION = version;
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];

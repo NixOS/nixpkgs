@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "codexbar";
-  version = "0.43.0";
+  version = "0.45.1";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
-    hash = "sha256-dKr5/7HzgqDXUwkHGj1z534ekTajyUFNSrpg+vK/4Yw=";
+    hash = "sha256-N/DfZw1H42R0rsyCWzsfrI6DAgCnmCvSgqeODoXQta0=";
   };
 
   sourceRoot = ".";

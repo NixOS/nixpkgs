@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "50.2";
+  version = "50.4";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UyFUIOUO/dTQYRultZ4Qy0yJ+j9R4q3f2Vyt4GGgmik=";
+    hash = "sha256-xTGTlTnbMWpBrvI2cDcKvRMw0yVPhLyw+fTa5dbjYs8=";
   };
 
   patches = [
@@ -197,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
+
+    substituteInPlace meson.build subprojects/extensions-app/meson.build \
+      --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
   '';
 
   preInstall = ''
@@ -253,8 +256,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  strictDeps = true;
+
   meta = {
-    description = "Core user interface for the GNOME 3 desktop";
+    description = "Core user interface for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;

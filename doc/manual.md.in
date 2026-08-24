@@ -3,10 +3,10 @@
 
 ```{=include=} chapters
 preface.chapter.md
-first-package.chapter.md
 ```
 
 ```{=include=} parts
+getting-started/getting-started.part.md
 using-nixpkgs.md
 lib.md
 stdenv.md

@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "imagesize";
-  version = "1.4.1";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
+    hash = "sha256-joNYxKBcME8fzPf/lvA25yQ6GJ6eQukIUZk8VYz+nuM=";
   };
 
   meta = {

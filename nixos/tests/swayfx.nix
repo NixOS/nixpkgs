@@ -2,6 +2,7 @@
 {
   name = "swayfx";
   meta = {
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
     maintainers = [ ];
   };
 

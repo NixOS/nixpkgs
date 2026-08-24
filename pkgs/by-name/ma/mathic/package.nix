@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    (lib.withFeature finalAttrs.doCheck "gtest")
+    (lib.withFeature finalAttrs.finalPackage.doCheck "gtest")
   ];
 
   __structuredAttrs = true;

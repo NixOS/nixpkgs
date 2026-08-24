@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wdiff";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://gnu/wdiff/wdiff-${finalAttrs.version}.tar.gz";
-    sha256 = "0sxgg0ms5lhi4aqqvz1rj4s77yi9wymfm3l3gbjfd1qchy66kzrl";
+    sha256 = "sha256-KaRFfrDtNckC5nMtcfJeHWx/5/oO2g+2w3HtZ3m0n9Y=";
   };
 
   # for makeinfo

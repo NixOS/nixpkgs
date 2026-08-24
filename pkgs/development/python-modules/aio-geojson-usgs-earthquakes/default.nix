@@ -2,7 +2,7 @@
   lib,
   aio-geojson-client,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "2026.6.0";
+  version = "2026.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UzLnctft/D38bqClqyyJ4b5GvVXM4CFSd6TypuLo0Y4=";
+    hash = "sha256-ymmO43USHiu11SRmirkJfjKZayD7eRv057uPhtZLWx0=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
   ];

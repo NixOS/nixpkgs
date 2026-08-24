@@ -27,16 +27,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.8.0";
+  version = "8.10.1";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-D9rhe5GC0axhKHoRfeegUIGYXbrcEsa9m9vYJVxwtCk=";
+    hash = "sha256-fGLuOuiM3VHj70qlSpb2s25RYD8gFARrqwAhW6CIHXE=";
   };
 
-  patches = lib.optional useSystemJemalloc (fetchpatch2 {
+  patches = [
+    # https://github.com/redis/redis/pull/15585
+    (fetchpatch2 {
+      url = "https://github.com/redis/redis/commit/c027c8effe13564bcbc903741305acd929cc23da.patch";
+      hash = "sha256-MynmKLQ04JjyHMVbfeSIEnKaj4jvjS1FjQNpfvQz3Pw=";
+    })
+  ]
+  ++ lib.optional useSystemJemalloc (fetchpatch2 {
     url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
@@ -77,8 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and some tests (e.g. memtests) are flaky.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
@@ -111,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       --timeout 2000 \
       --clients "$CLIENTS" \
       --tags -leaks \
+      --tags -defrag \
       --skipunit integration/aof-multi-part \
       --skipunit integration/failover \
       --skipunit integration/replication-rdbchannel \
@@ -126,7 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
 
   passthru = {
-    tests.redis = nixosTests.redis;
+    tests = {
+      redis = nixosTests.redis;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+    };
     serverBin = "redis-server";
     updateScript = nix-update-script { };
   };

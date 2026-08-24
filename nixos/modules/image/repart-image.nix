@@ -17,7 +17,7 @@
   dosfstools,
   mtools,
   e2fsprogs,
-  squashfsTools,
+  squashfs-tools,
   erofs-utils,
   btrfs-progs,
   xfsprogs,
@@ -86,7 +86,6 @@ let
         depsBuildBuild = [ ruff ];
         nativeBuildInputs = [
           python3
-          black
           mypy
         ];
       }
@@ -94,8 +93,8 @@ let
         install ${./amend-repart-definitions.py} $out
         patchShebangs --build $out
 
-        black --check --diff $out
-        ruff check --line-length 88 $out
+        ruff format --check $out
+        ruff check $out
         mypy --strict $out
       '';
 
@@ -105,7 +104,7 @@ let
       mtools
     ];
     "ext4" = [ e2fsprogs.bin ];
-    "squashfs" = [ squashfsTools ];
+    "squashfs" = [ squashfs-tools ];
     "erofs" = [ erofs-utils ];
     "btrfs" = [ btrfs-progs ];
     "xfs" = [ xfsprogs ];

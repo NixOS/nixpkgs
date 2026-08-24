@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   poetry-core,
@@ -26,6 +27,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-c91xCrlNpCutZZYO6y0pOaqPCF4exbr7xVxfsf5LI0Q=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 

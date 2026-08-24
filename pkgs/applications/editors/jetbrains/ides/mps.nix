@@ -12,16 +12,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3.tar.gz";
-      hash = "sha256-xAI+UrTheCTWHSdoI4YZvhTlrlc121M+OVFkfzd7a3k=";
+      url = "https://download.jetbrains.com/mps/2026.1/MPS-2026.1.tar.gz";
+      hash = "sha256-NbURKu1jTPoJQvV8FpMacBa+FehF7XfF6xZmIhFlb2A=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3.tar.gz";
-      hash = "sha256-xAI+UrTheCTWHSdoI4YZvhTlrlc121M+OVFkfzd7a3k=";
+      url = "https://download.jetbrains.com/mps/2026.1/MPS-2026.1.tar.gz";
+      hash = "sha256-NbURKu1jTPoJQvV8FpMacBa+FehF7XfF6xZmIhFlb2A=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3-macos-aarch64.dmg";
-      hash = "sha256-3HnEHOhRRI9IYjBhc5FO7h5j4jBBDtZTVkmO/S1fBEQ=";
+      url = "https://download.jetbrains.com/mps/2026.1/MPS-2026.1-macos-aarch64.dmg";
+      hash = "sha256-5VtPS26/vCKa+mfDAQKgd9x5A+Cqv39Kz+2EKkgul+I=";
     };
   };
   # update-script-end: urls
@@ -35,8 +35,8 @@ mkJetBrainsProduct {
   product = "MPS";
 
   # update-script-start: version
-  version = "2025.3";
-  buildNumber = "253.28294.432";
+  version = "2026.1";
+  buildNumber = "261.25134.779";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

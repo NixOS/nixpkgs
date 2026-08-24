@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
@@ -51,8 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Otherwise compilation fails with:
     #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
     fetchSubmodules = true;
-    hash = "sha256-Td6L5wXDadIbHfk251bj6k9J3kIjqCYVx5lDso/u76M=";
+    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
   };
+
+  # UCX uses the `#pragma omp master` declaration which is deprecated since
+  # OpenMP 5.1. Since UCX builds with -Werror by default, this causes build
+  # failures in GCC 16 which introduced the `deprecated-openmp` warning.
+  # Accordingly, we replace it with the new `#pragma omp masked` version in
+  # compilers which support OpenMP 5.1.
+  # https://github.com/openucx/ucx/pull/11697
+  patches = [ ./deprecated-openmp-pragma.patch ];
 
   postPatch = ''
     patchShebangs config/nvcc_wrap.sh
@@ -125,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
+    downloadPage = "https://github.com/openucx/ucx";
+    changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     # LoongArch64 is not supported.

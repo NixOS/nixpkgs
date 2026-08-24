@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awatcher";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "2e3s";
     repo = "awatcher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wxnbyWkfRFN+aWa7rrSIv5PdNHNU/D/w7y/VIwzxxaI=";
+    hash = "sha256-ZC2BfWoBa2qvLkROG30FTIVTbS64VO41haJLHtLzjT0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doCheck = false;
 
-  cargoHash = "sha256-/dI0gaTRElAQnZNRo2sKMUc33fphubcG/fXOflPHXWs=";
+  cargoHash = "sha256-1QLXMqqEBAu6ZfdMNZKkynFkoqXEUgSG9QNICd9/6VY=";
 
   meta = {
     description = "Activity and idle watchers";

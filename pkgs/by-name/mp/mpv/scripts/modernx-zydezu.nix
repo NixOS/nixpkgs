@@ -9,14 +9,14 @@
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
-  version = "0.4.6";
+  version = "0.4.7";
 
   scriptPath = "modernx.lua";
   src = fetchFromGitHub {
     owner = "zydezu";
     repo = "ModernX";
     rev = finalAttrs.version;
-    hash = "sha256-jK35LmihSCF789AJhKlySg6fXurAe5uuHNsgFjt0+iY=";
+    hash = "sha256-EekTzSC2Komh3H18IK1xr5bpQuAlulsc6CnmGb4aZ+A=";
   };
 
   nativeBuildInputs = [ installFonts ];

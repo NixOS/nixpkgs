@@ -9,20 +9,20 @@
   nodejs,
   stdenvNoCC,
   util-linux,
-  yarnBuildHook,
-  yarnConfigHook,
+  yarn-berry_4,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.37.2";
+  version = "0.40.1";
+  yarn-berry = yarn-berry_4;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     tag = "v${version}";
-    hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
+    hash = "sha256-nmmj1PvW9LOoEdwwWRRXe9q9J8z6Fp45Tt038BjWD+k=";
   };
 
   patches = [
@@ -31,27 +31,39 @@ let
 
     # zip extraction fails on newer nodejs versions without this fix
     ./bump-yauzl.patch
+
+    # https://github.com/nixos/nixpkgs/issues/542343
+    ./yarn-metadata-version.patch
   ];
+
+  missingHashes = ./missing-hashes.json;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src patches;
+    inherit
+      version
+      src
+      patches
+      missingHashes
+      ;
 
-    offlineCache = fetchYarnDeps {
-      inherit src patches;
-      hash = "sha256-5yUsjXQ3OHwEGFgMTUJAXAuTdAl4zkb8zxTs5OT6sw4=";
+    offlineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src patches missingHashes;
+      hash = "sha256-xxguRiyZDGdVt3eYh+KUI/odLZZ/LeScRBfexMxAOVI=";
     };
 
     nativeBuildInputs = [
       git
       nodejs
       util-linux
-      yarnBuildHook
-      yarnConfigHook
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
       zip
     ];
 
-    preBuild = ''
+    buildPhase = ''
+      runHook preBuild
+
       # electron files need to be writable on Darwin
       cp -r ${electron.dist} electron-dist
       chmod -R u+w electron-dist
@@ -65,12 +77,14 @@ let
       # force @electron/packager to use our electron instead of downloading it, even if it is a different version
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+      node --run package
+
+      runHook postBuild
     '';
 
     # electron-forge's console output is squeezed into one narrow column if unset
     env.CI = "1";
-
-    yarnBuildScript = "package";
 
     installPhase = ''
       runHook preInstall
@@ -167,11 +181,8 @@ buildFHSEnv {
       # for running Electron before 4.0.0 inside
       fontconfig
 
-      # for running Electron before 3.0.0 inside
-      gnome2.GConf
-
-      # Electron 2.0.8 is the earliest working version, due to
-      # https://github.com/electron/electron/issues/13972
+      # Electron 3.0.0 is the earliest working version, since GConf was removed
+      # from Nixpkgs
     ];
 
   meta = {

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gitUpdater,
+  nix-update-script,
+  testers,
   jre,
   makeWrapper,
   mysqlSupport ? true,
@@ -77,14 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/liquibase
     '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/liquibase/liquibase";
-    rev-prefix = "v";
-    # The latest versions are in the 4.xx series.  I am not sure where
-    # 10.10.10 and 5.0.0 came from, though it appears like they are
-    # for the commercial product.
-    ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
-  };
+  # Upstream tags things it never releases -- v5.0.4 exists right now with no
+  # release behind it -- so ask the release endpoint rather than the tags.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Version Control for your database";
@@ -92,8 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jsoo1 ];
+    # Relicensed at 5.0.0. The FSL permits internal and commercial use but
+    # forbids competing products, so it is unfree by our definition; each
+    # release additionally becomes Apache-2.0 two years after publication.
+    license = lib.licenses.fsl11Asl20;
+    maintainers = with lib.maintainers; [
+      agilesteel
+      jsoo1
+    ];
     platforms = with lib.platforms; unix;
   };
 })

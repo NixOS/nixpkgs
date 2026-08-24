@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   kinparse,
   pyspice,
   graphviz,
   sexpdata,
+  simp-sexp,
 }:
 buildPythonPackage rec {
   pname = "skidl";
@@ -21,16 +21,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    future
     kinparse
     pyspice
     graphviz
     sexpdata
+    simp-sexp
   ];
 
   # Checks require availability of the kicad symbol libraries.
   doCheck = false;
-  pythonImportsCheck = [ "skidl" ];
 
   meta = {
     description = "SKiDL is a module that extends Python with the ability to design electronic circuits";

@@ -70,9 +70,6 @@
   xen,
   cephSupport ? false,
   ceph,
-  glusterfsSupport ? false,
-  glusterfs,
-  libuuid,
   openGLSupport ? sdlSupport,
   libgbm,
   libepoxy,
@@ -99,6 +96,8 @@
   capstone,
   valgrindSupport ? false,
   valgrind-light,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
+  brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -123,9 +122,6 @@
   minimal ? toolsOnly || userOnly,
   gitUpdater,
   qemu-utils, # for tests attribute
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -144,11 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "11.0.1";
+  version = "11.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DSNfWCAnjZFKMVXsJ6+OQljWl+qJKJVXCAfWnAy4zWQ=";
+    hash = "sha256-buHRph9oISR2snEIwm2l9EncCbYm1C+CeboNwuCPqFg=";
   };
 
   depsBuildBuild = [
@@ -183,9 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals hexagonSupport [ glib ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
-
-    # TODO: Clean up on `staging`.
-    llvmPackages.lld
   ]
   ++ lib.optionals (!userOnly) [ dtc ];
 
@@ -240,10 +233,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xenSupport [ xen ]
   ++ lib.optionals cephSupport [ ceph ]
-  ++ lib.optionals glusterfsSupport [
-    glusterfs
-    libuuid
-  ]
   ++ lib.optionals openGLSupport [
     libgbm
     libepoxy
@@ -259,10 +248,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals brlttySupport [ brltty ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  # QEMU uses Meson and Ninja but still wants Make to be the entrypoint.
+  dontUseMesonConfigure = true;
+  dontUseNinjaBuild = true;
+  dontUseNinjaCheck = true;
+  dontUseNinjaInstall = true;
   dontAddStaticConfigureFlags = true;
+  enableParallelBuilding = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
   separateDebugInfo = true;
@@ -283,6 +278,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # Fix compilation of the TLS migration tests when gnutls is available
+    # but libtasn1 is not, as in the minimal build, see #547163.
+    # Submitted upstream, remove when included in a release:
+    # https://lists.gnu.org/archive/html/qemu-devel/2026-07/msg08469.html
+    ./fix-tls-tests-without-tasn1.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -301,6 +302,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
       --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
+    substituteInPlace Makefile \
+      --replace-fail '$(SRC_PATH)/VERSION' '$(SRC_PATH)/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace-fail "'VERSION'" "'QEMU_VERSION'"
     substituteInPlace docs/conf.py \
@@ -333,7 +336,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional gtkSupport "--enable-gtk"
   ++ lib.optional xenSupport "--enable-xen"
   ++ lib.optional cephSupport "--enable-rbd"
-  ++ lib.optional glusterfsSupport "--enable-glusterfs"
   ++ lib.optional openGLSupport "--enable-opengl"
   ++ lib.optional virglSupport "--enable-virglrenderer"
   ++ lib.optional tpmSupport "--enable-tpm"
@@ -344,6 +346,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional brlttySupport "--enable-brlapi"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
@@ -380,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
   '';
-  preBuild = "cd build";
 
   # tests can still timeout on slower systems
   doCheck = false;
@@ -392,48 +394,35 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
-    substituteInPlace ../tests/unit/meson.build \
-      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
-    substituteInPlace ../tests/qtest/meson.build \
-      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-    substituteInPlace ../tests/fp/meson.build \
-      --replace 'timeout: 90)' 'timeout: 300)'
-
-    # point tests towards correct binaries
-    substituteInPlace ../tests/unit/test-qga.c \
-      --replace '/bin/bash' "$(type -P bash)" \
-      --replace '/bin/echo' "$(type -P echo)"
-    substituteInPlace ../tests/unit/test-io-channel-command.c \
-      --replace '/bin/socat' "$(type -P socat)"
+    substituteInPlace tests/unit/meson.build \
+      --replace-fail 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+    substituteInPlace tests/qtest/meson.build \
+      --replace-fail 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
-    substituteInPlace ../tests/qtest/bios-tables-test.c \
-      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+    substituteInPlace tests/qtest/bios-tables-test.c \
+      --replace-fail 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
-      ../tests/unit/test-qga.c
+      tests/unit/test-qga.c
 
     # xattrs are not allowed in the sandbox
-    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+    substituteInPlace tests/qtest/virtio-9p-test.c \
       --replace-fail mapped-xattr mapped-file
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
-    substituteInPlace ../tests/unit/meson.build \
-      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+    substituteInPlace tests/unit/meson.build \
+      --replace-fail "'test-io-channel-command'" "#'test-io-channel-command'"
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = lib.optionalString (!minimal && !xenSupport) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

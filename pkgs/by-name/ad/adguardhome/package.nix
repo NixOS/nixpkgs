@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "adguardhome";
-  version = "0.107.77";
+  version = "0.107.78";
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "AdGuardHome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CwM8Zi5FXNwb+5gdESoP31Ja1O6PrnOgFfJaT8Yc890=";
+    hash = "sha256-u/fAvBgaoGph+BeTO/QzFtuFvJnnwaJRK3qmRhubj5w=";
   };
 
-  vendorHash = "sha256-D91mHBG78LOG1O5oVlaA3T8HWIISPeKMB06VpWuxxqo=";
+  vendorHash = "sha256-+LqNok2kaHQnVJA5cVX1MB31uLFfNxb952lzZk8V8Z8=";
 
   dashboard = buildNpmPackage {
     inherit (finalAttrs) src version;

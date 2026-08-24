@@ -19,6 +19,7 @@
   fontmake,
   fonttools,
   gflanguages,
+  gfmetadata,
   gfsubsets,
   glyphsets,
   glyphslib,
@@ -57,14 +58,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.996";
+  version = "0.9.999";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-8tz6xsDtjJMa5Vnpv69BbcmGtDHp6eFlryAtO1zKyDs=";
+    hash = "sha256-jKd/i0qXzPJNOxzO2Ds3BxP2RDoelNhKutqeaz/yQww=";
   };
 
   postPatch = ''
@@ -133,6 +134,7 @@ buildPythonPackage rec {
     fontmake
     fonttools
     gflanguages
+    gfmetadata
     gfsubsets
     glyphsets
     glyphslib

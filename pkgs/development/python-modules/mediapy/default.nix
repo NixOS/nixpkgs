@@ -9,7 +9,7 @@
   numpy,
   pillow,
   absl-py,
-  ffmpeg-headless,
+  ffmpeg_8-headless,
   pytestCheckHook,
 }:
 
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     absl-py
-    ffmpeg-headless
+    ffmpeg_8-headless
     pytestCheckHook
   ];
 

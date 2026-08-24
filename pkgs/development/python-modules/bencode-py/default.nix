@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 buildPythonPackage (finalAttrs: {
-  pname = "beconde-py";
+  pname = "bencode-py";
   version = "4.0.0";
   pyproject = true;
 

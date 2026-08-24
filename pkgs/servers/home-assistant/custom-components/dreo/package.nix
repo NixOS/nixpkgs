@@ -5,27 +5,27 @@
   nix-update-script,
   websockets,
   # Test dependencies
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "JeffSteinbok";
   domain = "dreo";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hass-dreo";
     tag = "v${version}";
-    hash = "sha256-/PBTWmqx/KTKvJ5K3KeKbVeypLtiT24TOZkWO62l7wA=";
+    hash = "sha256-OY8VFBZXCKgluJB3k/fXrDtEv17xu7Qw6dVQh4RgUAU=";
   };
 
   dependencies = [ websockets ];
 
   nativeCheckInputs = [
     pytest-homeassistant-custom-component
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pytestFlags = [

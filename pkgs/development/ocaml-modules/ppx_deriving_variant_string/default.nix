@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  ocaml,
   buildDunePackage,
   ppxlib,
   ounit2,
@@ -19,7 +20,7 @@ buildDunePackage (finalAttrs: {
     ppxlib
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.12";
   checkInputs = [
     ounit2
   ];

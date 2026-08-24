@@ -12,6 +12,7 @@
   vte-gtk4,
   gsettings-desktop-schemas,
   gtksourceview5,
+  glib-networking,
   webkitgtk_6_0,
   lsb-release,
   bash,
@@ -20,7 +21,7 @@
 }:
 
 let
-  version = "1.4.5";
+  version = "1.5.0";
 in
 python3Packages.buildPythonApplication {
   pname = "newelle";
@@ -31,7 +32,7 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-GcNAwrk5y6F0BgRy69nRePkX4WoYviWsB+8X/+N5QwE=";
+    hash = "sha256-P+bwcqrF9BTKFb47vVBO1GzFaqb6zMpaeYlI2g9rhX4=";
   };
 
   postPatch = ''
@@ -54,11 +55,13 @@ python3Packages.buildPythonApplication {
     gsettings-desktop-schemas
     gtksourceview5
     webkitgtk_6_0
+    glib-networking
   ];
 
   dependencies = with python3Packages; [
     pygobject3
     libxml2
+    cssselect
     pydub
     gtts
     speechrecognition
@@ -75,6 +78,7 @@ python3Packages.buildPythonApplication {
     llama-index-readers-file
     google-genai
     anthropic
+    mcp
   ];
 
   strictDeps = true;

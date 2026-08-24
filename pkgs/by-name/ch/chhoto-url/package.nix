@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chhoto-url";
-  version = "7.4.10";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "SinTan1729";
     repo = "chhoto-url";
     tag = finalAttrs.version;
-    hash = "sha256-iZQFH+WoGu91DJT7X8FTs1qktf/SSrh6F9U4/OQWZiI=";
+    hash = "sha256-lyrTuZxsVui25JIfxDoezNcMTZDKgYOPJ9+VMOfhHjg=";
     fetchLFS = true;
   };
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'rust-version = "1.96"' 'rust-version = "1.95"'
   '';
 
-  cargoHash = "sha256-1q5WWNnqDILgDbd9Wztvm0pYDDtaufqOxixwHb4VifY=";
+  cargoHash = "sha256-y1MIiJ7NAP1F1c0IkrrVn1Wd2K+mrQD1RhqiumcPq1o=";
 
   postInstall = ''
     mkdir -p $out/share/chhoto-url

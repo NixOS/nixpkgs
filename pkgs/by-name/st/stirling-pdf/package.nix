@@ -25,7 +25,7 @@
   nixosTests,
 
   isDesktopVariant ? false,
-  withAdditionalFeatures ? true,
+  withAdditionalFeatures ? !isDesktopVariant,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
@@ -37,23 +37,32 @@ let
   jre = jdk25;
 in
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.10.1";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qod8x8aB6qDxbRTE5rWUoqVka5kizfXJAWkKo5lhnFQ=";
+    hash = "sha256-Jh7F3e7Zho3BlaBZD8xfXSCjwXyF5qQk4VSm8DIwIBY=";
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
 
-    # upstream probably forgot to commit the lockfile after a bump
-    ./fix-cargo-lock.patch
+    # tests require network facilities intentionally unavailable in the Nix sandbox
+    ./skip-sandbox-incompatible-tests.patch
   ];
+
+  postPatch = lib.optionalString isDesktopVariant ''
+    # Nixpkgs does not produce artifacts for Stirling-PDF's upstream updater
+    # and does not have access to upstream's private signing key.
+    substituteInPlace frontend/editor/src-tauri/tauri.conf.json \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
+  '';
 
   npmRoot = "frontend";
 
@@ -61,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-y+mviHatwhdIGCOKir1nnG/0Zm8oSoLKW345tU9upls=";
+    hash = "sha256-3JYcOtX0pBMIgUtcK6LoejIhoSR2jpnQRzhePdCfJzI=";
   };
 
-  cargoRoot = "frontend/src-tauri";
+  cargoRoot = "frontend/editor/src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -75,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-Tx6twcyFupNOzuXbW8uUulMJFObyPg/i2U0QnvyhIRQ=";
+    hash = "sha256-YhDFSmx6XK7x5wzQaPslyuaRbiX8W/X8y/Z0fxjbGwk=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -127,17 +136,17 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseGradleBuild = isDesktopVariant; # we'll use the buildPhase from cargo-tauri-hook for the desktop app
 
   # prepare the resources before building the desktop app
-  preBuild = lib.optionals isDesktopVariant ''
+  preBuild = lib.optionalString isDesktopVariant ''
     MODE=desktop task frontend:prepare
 
     # this simulates what the desktop:jlink:jar would do
     gradle bootJar
-    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/src-tauri/libs
+    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/editor/src-tauri/libs
 
     # creates as minimal jre via jlink
     task desktop:jlink:runtime
 
-    substituteInPlace frontend/src-tauri/stirling-pdf.desktop \
+    substituteInPlace frontend/editor/src-tauri/stirling-pdf.desktop \
       --replace-fail 'MimeType=application/pdf;' 'MimeType=application/pdf;x-scheme-handler/stirlingpdf;'
   '';
 
@@ -153,12 +162,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
-    makeWrapper "$out/Applications/Stirling-PDF.app/Contents/MacOS/stirling-pdf" "$out/bin/stirling-pdf"
+    makeWrapper "$out/Applications/Stirling PDF.app/Contents/MacOS/Stirling-PDF" "$out/bin/stirling-pdf"
   '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) stirling-pdf-desktop; # TODO: fix or remove
+    };
+  }
+  // lib.optionalAttrs (!isDesktopVariant) {
+    # this being optional makes the auto-update PRs always put stirling-pdf in the title
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) stirling-pdf-desktop; };
   };
 
   meta = {
@@ -177,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # java deps
+      binaryNativeCode # bundled jpdfium inside jar
     ];
   };
 })

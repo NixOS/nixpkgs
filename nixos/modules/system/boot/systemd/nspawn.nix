@@ -55,10 +55,14 @@ let
       "LinkJournal"
       "Ephemeral"
       "AmbientCapability"
+      "SuppressSync"
+      "PrivateUsersDelegate"
+      "RestrictAddressFamilies"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
     (assertValueOneOf "NotifyReady" boolValues)
+    (assertValueOneOf "SuppressSync" boolValues)
   ];
 
   checkFiles = checkUnitConfig "Files" [
@@ -74,6 +78,7 @@ let
       "BindUser"
       "Inaccessible"
       "PrivateUsersOwnership"
+      "BindUserShell"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
@@ -97,6 +102,7 @@ let
       "Bridge"
       "Zone"
       "Port"
+      "NamespacePath"
     ])
     (assertValueOneOf "Private" boolValues)
     (assertValueOneOf "VirtualEthernet" boolValues)

@@ -15,7 +15,10 @@ let
 
   minDarwinVersion = "10.12";
   effectiveDarwinVersion =
-    if stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion then
+    if
+      stdenv.hostPlatform.isDarwin
+      && lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion
+    then
       minDarwinVersion
     else
       stdenv.hostPlatform.darwinMinVersion;
@@ -57,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     MACOSX_DEPLOYMENT_TARGET = effectiveDarwinVersion;
     NIX_CFLAGS_COMPILE = "-mmacosx-version-min=${effectiveDarwinVersion}";
   };
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "flang-rt")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" effectiveDarwinVersion)
   ];
 

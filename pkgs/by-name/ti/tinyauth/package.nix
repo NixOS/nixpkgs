@@ -3,23 +3,27 @@
   buildGoModule,
   fetchFromGitHub,
   stdenvNoCC,
-  bun,
+  nodejs-slim,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  pnpm_11,
+  fetchPnpmDeps,
   nixosTests,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tinyauth";
-  version = "5.0.7";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
-    owner = "steveiliop56";
+    owner = "tinyauthapp";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VeII5jSNUJpGZgqons1o1fp6KXxDOBhSMciSqtQfaC4=";
+    hash = "sha256-bxGKSGmVt8lv3/yDd1HG+/MJ90cZmvUOm++As9Nai3A=";
   };
 
-  vendorHash = "sha256-XP+kVfcDKWAvBdrvGjiTdWh7jNe6qiDsgVjPrFFPoDU=";
+  vendorHash = "sha256-iuRLcspVUBgs7cA+k5jCWb/XddaKA7c2Ffke8ByD4No=";
 
   subPackages = [ "cmd/tinyauth" ];
 
@@ -27,8 +31,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steveiliop56/tinyauth/internal/config.Version=v${finalAttrs.version}"
-    "-X github.com/steveiliop56/tinyauth/internal/config.CommitHash=${finalAttrs.src.rev}"
+    "-X github.com/tinyauthapp/tinyauth/internal/model.Version=v${finalAttrs.version}"
+    "-X github.com/tinyauthapp/tinyauth/internal/model.CommitHash=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -38,46 +42,32 @@ buildGoModule (finalAttrs: {
   frontend = stdenvNoCC.mkDerivation {
     pname = "tinyauth-frontend";
     inherit (finalAttrs) version src;
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
 
     nativeBuildInputs = [
-      bun
+      nodejs-slim
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_11
     ];
 
-    configurePhase = ''
-      runHook preConfigure
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      sourceRoot = "${finalAttrs.src.name}/frontend";
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-tgF+jG+QU7dLWaEs/yB1PyXylJ+fmCPYt33nLOJcRW0=";
+    };
 
-      bun install --no-progress --frozen-lockfile
-      substituteInPlace node_modules/.bin/{tsc,vite} \
-        --replace-fail "/usr/bin/env node" "${lib.getExe bun}"
-
-      runHook postConfigure
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      bun run build
-
-      runHook postBuild
-    '';
+    pnpmRoot = "frontend";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/dist
-      cp -r dist $out
+      cp -r frontend/dist $out
 
       runHook postInstall
     '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-FRACDa1akm+JnYIRwNXRcomzDIMCIAlJDbjMyS77sNA=";
   };
 
   passthru = {
@@ -95,8 +85,8 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Simple authentication middleware for web apps";
     homepage = "https://tinyauth.app";
-    changelog = "https://github.com/steveiliop56/tinyauth/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/tinyauthapp/tinyauth/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
     mainProgram = "tinyauth";
     maintainers = with lib.maintainers; [
       shaunren

@@ -25,8 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     platforms = lib.platforms.unix;
-    homepage = "http://frodo.looijaard.name/project/getopt";
+    homepage = "https://frodo.looijaard.name/project/getopt";
     description = "Parses command-line arguments from shell scripts";
     mainProgram = "getopt";
+    license = lib.licenses.gpl2Plus;
   };
 })

@@ -11,7 +11,6 @@
   apple-sdk_15,
   withAdditionalGuestAgents ? false,
   lima-additional-guestagents,
-  llvmPackages,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   testers,
@@ -36,16 +35,7 @@ buildGoModule (finalAttrs: {
     # For checkPhase, and installPhase(required to build completion)
     writableTmpDirAsHomeHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
-    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
-    llvmPackages.lld
-  ];
-
-  # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' llvmPackages.lld "ld64.lld"}";
-  };
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 

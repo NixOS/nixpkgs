@@ -3,8 +3,6 @@
   pkg-config,
   qtsensors,
   qtwayland,
-  kitemmodels,
-  plasma5support,
   wayland-protocols,
   dbus,
 }:
@@ -16,9 +14,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsensors
     qtwayland
-
-    kitemmodels
-    plasma5support
 
     wayland-protocols
   ];

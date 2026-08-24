@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "whale";
-  version = "0.1.62";
+  version = "0.1.66";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "usewhale";
     repo = "Whale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EvuNdgpW5M+i33tGLurQDq0z+Ht/z5agIsaWWapXqpY=";
+    hash = "sha256-sFpTIOmWrwdQAti75+rx9JOY2pgARGJw3L0SdY/nf7g=";
   };
 
   vendorHash = "sha256-YBY5b2SLcWeiCQDZELJdsi+mJ+YEuo+yTbotUlLgqEA=";

@@ -38,15 +38,15 @@ buildGoModule (finalAttrs: {
     # > Some binaries contain forbidden references to /build/.
     #
     # If we need it in the future, we should consider packaging silkworm and silkworm-go
-    # as depenedencies explicitly.
+    # as dependencies explicitly.
     "nosilkworm"
   ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
-      # avoid testing‐releases
+      # avoid testing‐releases; erigon tags are v-prefixed
       "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)$"
+      "^v?(\\d+\\.\\d+\\.\\d+)$"
     ];
   };
 

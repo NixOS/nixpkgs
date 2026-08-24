@@ -17,7 +17,7 @@
 
   # tests
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   writableTmpDirAsHomeHook,
   procps,
 }:
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

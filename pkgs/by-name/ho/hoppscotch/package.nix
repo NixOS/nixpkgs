@@ -8,18 +8,18 @@
 
 let
   pname = "hoppscotch";
-  version = "26.5.0-0";
+  version = "26.7.0-0";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
-          hash = "sha256-RnLMpXkDAk89T5ogNiVz8zMMdLtXTlAg5nu+sjyczEk=";
+          hash = "sha256-qR/eX9tDTBZzaTVyJVMO5l4BZfXoK2c763APcn87HYU=";
         };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-irPI613Y1l0j5F+Nzm9v/JXsiJY35D8dQpmMcPMYvmU=";
+          hash = "sha256-yobIv1gjmM+y0ufIKr6azcbv17wORWa4tQivv2L4i38=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -82,7 +82,7 @@ else
 
     extraInstallCommands =
       let
-        appimageContents = appimageTools.extractType2 { inherit pname version src; };
+        appimageContents = appimageTools.extract { inherit pname version src; };
       in
       ''
         # Install .desktop files

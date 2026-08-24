@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  prek,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -20,10 +20,18 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-g2e+iQXBaoGO1Yv5v+xpiM+beecErI58Ua5/FODg8Bo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<83.0" setuptools
+  '';
+
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   nativeCheckInputs = [
-    prek
     pytest-asyncio
     pytestCheckHook
   ];

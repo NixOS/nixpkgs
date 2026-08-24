@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     tag = "v${version}";
-    hash = "sha256-BqwKo1zZ7CqkUZ9H05fbbHVj/z3m0xaERh5dGBDKFYI=";
+    hash = "sha256-smpdmmut4wYekVew13KZXluI71lSUdZriPejUumkLNU=";
   };
 
   outputs = [

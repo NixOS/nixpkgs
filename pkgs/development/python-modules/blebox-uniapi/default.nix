@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blebox-uniapi";
-  version = "2.5.5";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vmVCXzfs/LYn2lT3lqdRy4cJcieF1idljH5IPKeH4QA=";
+    hash = "sha256-uQYX8TpQ1DLgNvHMYe3OSOpSlEdIrRFmgjVT2391EqU=";
   };
 
   postPatch = ''

@@ -17,21 +17,19 @@
   sphinxcontrib-httpdomain,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-markdown-builder";
-  version = "0.6.10";
+  version = "0.6.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "sphinx-markdown-builder";
-    tag = version;
-    hash = "sha256-97mlVD1MCtSw8AYyGc38auOrHU/vKH2aQJa4YIRQcBk=";
+    tag = finalAttrs.version;
+    hash = "sha256-PFGatmgQsoCCMjT3KoNmqmB77ZfdxE1tACV/8pGJmqg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     docutils
@@ -39,9 +37,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pythonImportsCheck = [
-    "sphinx_markdown_builder"
-  ];
+  pythonImportsCheck = [ "sphinx_markdown_builder" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -56,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

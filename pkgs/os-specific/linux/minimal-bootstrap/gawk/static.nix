@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -32,7 +31,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -66,9 +64,7 @@ bash.runCommand "${pname}-${version}"
       --disable-extensions \
       --disable-mpfr \
       --disable-nls \
-      --disable-pma \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-pma
 
     # Build
     make -j $NIX_BUILD_CORES

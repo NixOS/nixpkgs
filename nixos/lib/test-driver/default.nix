@@ -60,7 +60,7 @@ buildPythonApplication {
     util-linux
     vde2
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [

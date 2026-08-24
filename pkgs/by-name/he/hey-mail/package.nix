@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   makeWrapper,
   autoPatchelfHook,
   c-ares,
@@ -14,8 +14,7 @@
   libvpx,
   libxslt,
   libnotify,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
+  libappindicator,
   libxkbcommon,
   libGL,
   wrapGAppsHook3,
@@ -58,8 +57,7 @@ let
     libvpx
     libxslt
     libnotify
-    libappindicator-gtk2
-    libappindicator-gtk3
+    libappindicator
     libxkbcommon
     libGL
     atk
@@ -94,16 +92,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hey-mail";
-  version = "1.3.3";
-  rev = "31";
+  version = "1.3.6";
+  rev = "33";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/lfWUNpR7PrPGsDfuxIhVxbj0wZHoH7bK_${finalAttrs.rev}.snap";
-    hash = "sha512-0KhmZ1xkEPuuzukeKbWW7jeNh2TOINMnOtuwpZQIM7sgDhCSl2DEZnguEKY2DvGNTTQxVWSZcuU/KSSblqIE4Q==";
+    hash = "sha512-UVutihbA/CDPefCqiJtSbHSWDZj5yHGAEpVO9kd/a72DEszcUid7Xg5HzDQYifDEXyP//AfLFP1rAa058K2SNg==";
   };
 
   nativeBuildInputs = [
-    squashfsTools
+    squashfs-tools
     makeWrapper
     autoPatchelfHook
     wrapGAppsHook3

@@ -1,14 +1,13 @@
 {
   lib,
-  llvmPackages_18,
   fetchFromGitHub,
   makeBinaryWrapper,
   which,
   nix-update-script,
+  llvmPackages,
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {

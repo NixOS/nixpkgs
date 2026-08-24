@@ -2,12 +2,15 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "vulnx";
   version = "2.0.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -22,14 +25,15 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-s" ];
 
-  __structuredAttrs = true;
-
   strictDeps = true;
 
-  # Issue with updater and version check
-  # nativeInstallCheckInputs = [ versionCheckHook ];
-  # doInstallCheck = true;
-  # versionCheckProgramArg = [ "version" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to work with CVEs";

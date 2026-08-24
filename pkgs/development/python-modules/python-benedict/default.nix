@@ -19,6 +19,7 @@
   pydantic,
   setuptools,
   tomli-w,
+  typing-extensions,
   useful-types,
   xlrd,
   xmltodict,
@@ -36,7 +37,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1YZqc0Ytqx4a1WGaqz5y0r2hw3okvax0/r267YTTGCE=";
   };
 
-  pythonRelaxDeps = [ "boto3" ];
+  pythonRelaxDeps = [
+    "boto3"
+    "typing_extensions"
+  ];
 
   build-system = [ setuptools ];
 
@@ -45,6 +49,7 @@ buildPythonPackage (finalAttrs: {
     python-slugify
     requests
     useful-types
+    typing-extensions
   ];
 
   optional-dependencies = {

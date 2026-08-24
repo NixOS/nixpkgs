@@ -161,7 +161,7 @@
       changelog = "http://www.ch-werner.de/sqliteodbc/html/index.html#changelog";
       license = lib.licenses.bsd2;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ vlstill ];
+      maintainers = [ ];
     };
   };
 

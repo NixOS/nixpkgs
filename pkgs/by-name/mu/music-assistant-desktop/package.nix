@@ -23,7 +23,8 @@
   atk,
   dbus,
   glib-networking,
-  libappindicator-gtk3,
+  gst_all_1,
+  libappindicator,
   llvmPackages,
   pulseaudio,
   gtk3,
@@ -32,13 +33,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.5.7";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-KKyIYSSIC134t46H7YOFNCdj4M/VoBrX9jN5aX/kSlc=";
+    hash = "sha256-d9dC6YiF4xIM2hVA2lX5B8qt5dnDFSG/MAZhQdZf8q4=";
   };
 
   patches = [
@@ -85,7 +86,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     atk
     dbus
     glib-networking
-    libappindicator-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    libappindicator
     pulseaudio
     gtk3
     webkitgtk_4_1
@@ -93,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator ]}"
     )
   '';
 

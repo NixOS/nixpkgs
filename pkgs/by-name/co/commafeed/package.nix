@@ -12,13 +12,13 @@
   stdenv,
 }:
 let
-  version = "7.1.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-n68REVBLThChiCq+Rx4Cy3KS/GlgOr5DBn2wzLWX6TY=";
+    hash = "sha256-VCN8NBVGQl7/D3fESxiw3ipUoK3qBM0SSnEYBB0E+64=";
   };
 
   frontend = buildNpmPackage {
@@ -28,7 +28,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-bP0f2+n01YdZf/NCAWE41x/dezpHzYy4qvAscs/b+Lc=";
+    npmDepsHash = "sha256-usdJEjW/Oz993Ik8JZnEQ08ArqmLx/3hSdhlUJgCrig=";
 
     nativeBuildInputs = [ biome ];
 
@@ -54,7 +54,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-P3pmU/ou/gErk91ANjD4QuBTldBPKHYtGJREJQVgde8=";
+  mvnHash = "sha256-Gi+KMrdSXlnI34wvAYnJffVCa3WUYkPEFIv382+mwj4=";
   mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [

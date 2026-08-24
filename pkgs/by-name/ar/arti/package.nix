@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-jOCFXlBI2xAzgpb7Fa8ap53SpDF6kcRGYnBXcu3vpk4=";
+    hash = "sha256-fPobYu2ADTeIwpeXyxQKh5yr1zw+yMQfqTkiZMMd8YY=";
   };
 
   # Working around a bug in cargo that appears with cargo-auditable, see
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   buildAndTestSubdir = "crates/arti";
-  cargoHash = "sha256-JK6ubp697jZ98ErNrZdFe0mXIez3lUZ5SmAHkyD97WQ=";
+  cargoHash = "sha256-+JQ+SkRLyLl4RUq69nIUn1zJ/DmYpVEICQO5o85FsNw=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 

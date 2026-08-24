@@ -29,7 +29,7 @@ in
             import asyncio
 
             from mautrix.client import Client
-            from mautrix.types import EventType, RoomFilter
+            from mautrix.types import EventType, RoomFilter, Filter
 
 
             async def main() -> None:
@@ -66,7 +66,7 @@ in
                     received.set()
 
                 client.add_event_handler(EventType.ROOM_MESSAGE, on_message)
-                sync_task = client.start(RoomFilter(rooms=[room_id]))
+                sync_task = client.start(Filter(room=RoomFilter(rooms=[room_id])))
 
                 await client.send_text(room_id, msg)
 

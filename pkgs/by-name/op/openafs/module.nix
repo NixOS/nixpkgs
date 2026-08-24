@@ -28,15 +28,17 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux: pagevec.h renamed to folio_batch.h
+    # LINUX: Disable osi_dnlc
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/d47c438aec49e417066a7bef00bd82078014f5ea.patch";
-      hash = "sha256-LPURZovpl6KbigzP4mNjgHvPlXYKY5Pxh8sj9RT2W08=";
+      url = "https://gerrit.openafs.org/changes/16927/revisions/a3bd427be8437a38c96ac34ef8216e58ab999945/patch";
+      hash = "sha256-q0AOGpWL1r2hMLQgowMBkfOcEvhXEhXVLe1A/tlawFo=";
+      decode = "base64 -d";
     })
-    # Linux: Add comment for d_alias configure test
+    # linux: replace strncpy with strscpy
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/fd157926f08d10afe981d85654395bbf083ea7a3.patch";
-      hash = "sha256-gJ+ylIEZwJcpTWc5hmIXS/QcxtICqjaEzZsl2QegjhY=";
+      url = "https://gerrit.openafs.org/changes/16928/revisions/5f04ae748a1ede14882174a81dfa38baa2e66a20/patch";
+      hash = "sha256-fwzRzS799Y68l29vlzIAmHLda57gToLippgNMKWfWaw=";
+      decode = "base64 -d";
     })
   ];
 

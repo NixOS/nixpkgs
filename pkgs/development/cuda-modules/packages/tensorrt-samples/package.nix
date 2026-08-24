@@ -121,6 +121,10 @@ backendStdenv.mkDerivation (finalAttrs: {
         tag = "v10.16";
         hash = "sha256-Wm5oOXxAIpIlwiJKhH0WjgUAuTB9H2xFEVpM/sO36qk=";
       };
+      "11.0.0" = {
+        tag = "v11.0";
+        hash = "sha256-xbGMxCSDTixR0fOoOABWyEVE4S9x031L3i5KQwPu24Y=";
+      };
     }
   );
 
@@ -135,7 +139,8 @@ backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)' \
         '# find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)'
-
+  ''
+  + optionalString (lib.versionOlder finalAttrs.version "11.0") ''
     nixLog "patching $PWD/CMakeLists.txt to use find_package(CUDAToolkit) instead of find_package(CUDA)"
     substituteInPlace "$PWD"/CMakeLists.txt \
       --replace-fail \

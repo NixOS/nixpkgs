@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "bramstroker";
   domain = "powercalc";
-  version = "1.21.2";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-powercalc";
     tag = "v${version}";
-    hash = "sha256-D8gFEhitQjryZLLcP2ZsXNqWLvPyayuoYGq5C0B2D5w=";
+    hash = "sha256-sxwaly6JH3oJumcBzvbNPWJZVEuoOejvkaxiGa5fcnk=";
   };
 
   dependencies = [ numpy ];
@@ -40,11 +40,6 @@ buildHomeAssistantComponent rec {
     patchShebangs --build tests/setup.sh
     tests/setup.sh
   '';
-
-  disabledTests = [
-    # test contacts api.powercalc.nl
-    "test_exception_is_raised_on_github_resource_unavailable"
-  ];
 
   meta = {
     changelog = "https://github.com/bramstroker/homeassistant-powercalc/releases/tag/${src.tag}";

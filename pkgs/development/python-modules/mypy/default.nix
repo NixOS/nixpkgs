@@ -129,7 +129,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # circular dependency on distutils
     "mypyc/test/test_external.py"
-    # fails to find tyoing_extensions
+    # fails to find typing_extensions
     "mypy/test/testcmdline.py"
     "mypy/test/testdaemon.py"
     # fails to find setuptools

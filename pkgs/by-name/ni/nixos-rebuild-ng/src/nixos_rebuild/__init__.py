@@ -86,7 +86,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
 
     main_parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
-        parents=list(sub_parsers.values()),
+        parents=sub_parsers.values(),
         description="Reconfigure a NixOS machine",
         add_help=False,
         allow_abbrev=False,
@@ -240,13 +240,18 @@ def parse_args(
         }
     )
 
-    if args.help or args.action is None:
+    if args.help:
         if WITH_SHELL_FILES:
             r = run(["man", "8", EXECUTABLE], check=False)
             parser.exit(r.returncode)
         else:
             parser.print_help()
             parser.exit()
+
+    if args.action is None:
+        parser.error(
+            f"No valid subcommands. Type {parser.prog} --help for more information"
+        )
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
@@ -255,7 +260,6 @@ def parse_args(
     if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
     if args.action == Action.DRY_RUN.value:
         args.action = Action.DRY_BUILD.value
 

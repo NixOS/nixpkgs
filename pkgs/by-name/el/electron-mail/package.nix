@@ -62,7 +62,7 @@ let
 
     extraPkgs = pkgs: [
       pkgs.libsecret
-      pkgs.libappindicator-gtk3
+      pkgs.libappindicator
     ];
 
     passthru.updateScript = nix-update-script { };

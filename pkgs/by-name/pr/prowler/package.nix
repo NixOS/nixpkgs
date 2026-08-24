@@ -2,12 +2,13 @@
   lib,
   fetchFromGitHub,
   kingfisher,
+  nix-update-script,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.33.1";
+  version = "5.39.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,8 +17,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-uecwowuP/h+o739EV7REIGLoiejJ9Jcu6bk08DMWno0=";
+    hash = "sha256-iWjdcw5IY7xkow0E1AYTi/OgkS14CdVM9AOW86VPMak=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
 
   pythonRelaxDeps = true;
 
@@ -80,6 +86,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     google-api-python-client
     google-auth-httplib2
     h2
+    huaweicloudsdkcore
+    huaweicloudsdkcts
+    huaweicloudsdkecs
+    huaweicloudsdkelb
+    huaweicloudsdkevs
+    huaweicloudsdkiam
+    huaweicloudsdkkms
+    huaweicloudsdkobs
+    huaweicloudsdkrds
+    huaweicloudsdkvpc
+    huaweicloudsdkwaf
     jsonschema
     kubernetes
     linode-api4
@@ -115,6 +132,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "prowler" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Security tool to perform Cloud Security best practices assessments";

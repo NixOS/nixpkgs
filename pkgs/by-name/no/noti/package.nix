@@ -1,37 +1,26 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromCodeberg,
-  llvmPackages,
   installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "noti";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromCodeberg {
     owner = "roble";
     repo = "noti";
     tag = finalAttrs.version;
-    hash = "sha256-FwOS4ifMiODIzKVQufLhkDYOcmXz9dAfWw+hM3rXT/Y=";
+    hash = "sha256-gC4vahFfphw2rogd98b5HdCSbB/QdCvC9JcEqhOVFUs=";
   };
 
   vendorHash = null;
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/noti" ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Work around ld64's libc++ hardening issue.
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   ldflags = [
     "-s"

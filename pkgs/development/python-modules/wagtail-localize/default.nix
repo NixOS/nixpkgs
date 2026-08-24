@@ -26,18 +26,18 @@
 let
   pname = "wagtail-localize";
 
-  version = "1.13.1";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-iJwX/N8/aaAjinU1htVasp88fuuZCOomVPgJ1Ymxre4=";
+    hash = "sha256-3T3o2whNNWSbsggNhPI6vnxeONGpNdD2/BMiFl/nWmo=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
-    npmDepsHash = "sha256-mLZaa3BBvbbgaSgZhsdUVPRXR6X5xy/sWRiOXnzV2cQ=";
+    npmDepsHash = "sha256-5TKYDFYF8H1UrSUWeKDd/lf0Twk1mVKrPL9ywsdSdz4=";
 
     NODE_OPTIONS = "--openssl-legacy-provider";
 
@@ -48,7 +48,7 @@ let
 
       mkdir $out
 
-      for static_dir in wagtail_localize/static; do
+      for static_dir in src/wagtail_localize/static; do
         cp --parents -r $static_dir $out
       done
 
@@ -84,11 +84,8 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    cp -r ${assets}/wagtail_localize .
+    cp -r ${assets}/src/wagtail_localize/static src/wagtail_localize/
   '';
-
-  # See https://github.com/wagtail/wagtail-localize/issues/922
-  patches = [ ./failing-test.patch ];
 
   checkPhase = ''
     runHook preCheck

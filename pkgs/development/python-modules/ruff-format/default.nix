@@ -19,6 +19,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-7XWeEcvbsVffaDbGDW2251qaZtUj6Sip3TEs9lytoo8=";
   };
 
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail \
+        'version = "0.5.2"' \
+        'version = "0.5.3"'
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     hash = "sha256-D19Irgy8kh14neAJDMlNRQ81qyYB8NNZ25wxjbUk7wk=";

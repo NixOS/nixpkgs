@@ -30,10 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple drag-and-drop source/sink for X or Wayland (called dragon in upstream)";
     homepage = "https://github.com/mwh/dragon";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      das_j
-      panicrune
-    ];
+    maintainers = with lib.maintainers; [ panicrune ];
     mainProgram = "dragon-drop";
     platforms = lib.platforms.linux;
   };

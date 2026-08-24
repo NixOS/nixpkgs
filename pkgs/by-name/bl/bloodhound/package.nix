@@ -17,7 +17,7 @@
   glib,
   gtk3,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libdrm,
   libnotify,
   libpulseaudio,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libGL
-    libappindicator-gtk3
+    libappindicator
     libdrm
     libnotify
     libpulseaudio

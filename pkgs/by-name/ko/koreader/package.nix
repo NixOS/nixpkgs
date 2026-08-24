@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "2026.03";
+  version = "2026.07.1";
 
   # LuaJIT with table.pack/unpack support for KOReader
   # https://github.com/koreader/koreader-base/tree/master/thirdparty/luajit
@@ -35,7 +35,7 @@ let
     owner = "koreader";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-KWpWlFoBEAhVDuRTiF7yj1wlKLzYmvcngI9iWqsDuQY=";
+    hash = "sha256-395G5bu0gs0oKOc/CfKNeal66vgXBDgHSpopoQ0GRzw=";
   };
 in
 stdenv.mkDerivation {
@@ -59,9 +59,9 @@ stdenv.mkDerivation {
     fetchurl {
       url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader_${version}-1_${arch}.deb";
       hash = selectSystem {
-        aarch64-linux = "sha256-4ulpMXYcICQ5/9Q0GGn9lkbW0ntzIfUHQ5woTAhyXLU=";
-        armv7l-linux = "sha256-diMWFhL0D5bWPQFc9vvZZRPMfNxlxchGyT8Lz/TLHPs=";
-        x86_64-linux = "sha256-OhBu3oj9IqNmK5ngCkXvucVQq5aJohObgENtjdDcQcE=";
+        aarch64-linux = "sha256-swwNcmquMjnO31pFNkKZbqU8Kx7Rtwq2ebT12XK8yvQ=";
+        armv7l-linux = "sha256-TpMm9smcDff7A4BkWguWuOwDAJXQITk/HGmDgDIRtrw=";
+        x86_64-linux = "sha256-CWmnfC7Dy4nVf7diwRvsOvE12W/gkE2235h49Hq0f4k=";
       };
     };
 

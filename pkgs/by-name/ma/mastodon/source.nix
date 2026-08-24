@@ -2,22 +2,29 @@
 {
   fetchFromGitHub,
   applyPatches,
+  fetchpatch,
   patches ? [ ],
 }:
 let
-  version = "4.6.3";
+  version = "4.6.6";
 in
 applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-NMeI8Ev0CSIf0dfbjqVAmFuTU9MFC8Y3qO9gI3p8Y+4=";
+    hash = "sha256-V/mhT11IJ60kT7Q1dP17XOEUIVGNuJoitseDBX1sbjI=";
     passthru = {
       inherit version;
-      yarnHash = "sha256-G1keSWDDpp0vBAOqQI8y8n7bmAeo9Hrdbo7R+cVZQwE=";
+      yarnHash = "sha256-VlOG91ZuO+1UXTbtwIrYUbqHjmSfPSfLhrf4TxCJqJ0=";
       yarnMissingHashes = ./missing-hashes.json;
     };
   };
-  patches = patches ++ [ ];
+  patches = patches ++ [
+    (fetchpatch {
+      name = "CVE-2026-66066.patch";
+      url = "https://github.com/mastodon/mastodon/commit/0aede8f7d799aff721a2b3e454163dfae25538b7.patch";
+      hash = "sha256-NSplnP+c8ZnTmmarZ/cplk5TZvxooKXfLnMDHcBSYY4=";
+    })
+  ];
 }

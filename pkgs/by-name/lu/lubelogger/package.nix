@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.6.8";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-ePzR6TmByUBWGuOEg8WKMpvQT7qHGkZuBF8CkTwMtuY=";
+    hash = "sha256-I4GGlkEirqxiwIqczsCe9ns0ImOOalqg+pWKXx3o1Fo=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -32,7 +32,7 @@ buildDotnetModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Vehicle service records and maintainence tracker";
+    description = "Vehicle service records and maintenance tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
     '';

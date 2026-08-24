@@ -42,14 +42,14 @@ in
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "tonearm";
-  version = "1.4.2";
+  version = "1.5.0";
   src = fetchFromCodeberg {
     owner = "dergs";
     repo = "Tonearm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XXL0PfBNBuYkoDocZTWr26ogcgPJX6fUkzj9ccEmt84=";
+    hash = "sha256-OUqKM9VFoQ732xL9d36QKHZlrH5dXH3xtxI3epZXbIM=";
   };
-  vendorHash = "sha256-vOkOSquBbWjx1eK7h3vmmHKzaopkbu2iL5mbknMo1Kg=";
+  vendorHash = "sha256-pa0C0zMaKIa1wK49JIxHyfE1rbzzBB3yn44swlrR4HY=";
 
   ldflags = [
     "-X \"codeberg.org/dergs/tonearm/internal/ui.Version=${finalAttrs.version}\""

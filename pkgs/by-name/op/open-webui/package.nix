@@ -5,17 +5,22 @@
   python3Packages,
   nixosTests,
   fetchurl,
-  ffmpeg-headless,
 }:
 let
   pname = "open-webui";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-tJ9b5up5FoX5TrmpwMWevyA/o3Ai/lKsHu+nahc2Ttc=";
+    hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
+  };
+
+  # we need datasets_3 for SpeechT5 embeddings
+  datasets = python3Packages.datasets_3;
+  colbert-ai = python3Packages.colbert-ai.override {
+    inherit datasets;
   };
 
   frontend = buildNpmPackage rec {
@@ -24,13 +29,13 @@ let
 
     # the backend for run-on-client-browser python execution
     # must match the version that is locked in package-lock.json
-    pyodideVersion = "0.28.3";
+    pyodideVersion = "314.0.3";
     pyodide = fetchurl {
-      hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
+      hash = "sha256-oCgELZDbqedP377PNuqn1X6IvwrWGNnFBZ6xBAqnYSo=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-yw/1n1jBCUtt8wUqJmIkB3W53wsXTKuAFG/EMwcTpx8=";
+    npmDepsHash = "sha256-9Wa6gP0asGPCoBJh8ufpweOg4zNf7onzBu08iQwgqis=";
 
     npmFlags = [ "--force" ];
 
@@ -40,10 +45,6 @@ let
       substituteInPlace package.json \
         --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
-
-    propagatedBuildInputs = [
-      ffmpeg-headless
-    ];
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
@@ -84,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       accelerate
       aiocache
+      aiodns
       aiofiles
       aiohttp
       aiosqlite
@@ -106,7 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       chardet
       chromadb
       cryptography
-      datasets_3
+      datasets
       ddgs
       docx2txt
       einops
@@ -121,14 +123,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-cloud-storage
       google-genai
       googleapis-common-protos
+      hiredis
       httpx
       itsdangerous
+      joserfc
       langchain
       langchain-classic
       langchain-community
       langchain-text-splitters
       ldap3
       loguru
+      lxml
       markdown
       mcp
       msoffcrypto-tool
@@ -149,12 +154,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-sdk
       openpyxl
       opensearch-py
+      orjson
       pandas
       pillow
       psutil
       psycopg
       pyarrow
       pycrdt
+      pydantic
       pydub
       pyjwt
       pymdown-extensions
@@ -162,7 +169,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pypandoc
       pypdf
       python-dotenv
-      python-jose
       python-mimeparse
       python-multipart
       python-pptx
@@ -171,8 +177,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytz
       pyxlsb
       rank-bm25
-      rapidocr-onnxruntime
+      rapidocr
       redis
+      regex
       requests
       restrictedpython
       sentence-transformers
@@ -188,6 +195,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xlrd
       youtube-transcript-api
     ]
+    ++ (with httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
+    ++ uvicorn.optional-dependencies.standard
     ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
     ++ sqlalchemy.optional-dependencies.asyncio
@@ -211,10 +220,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      gcp-storage-emulator
       moto
       oracledb
-      pinecone-client
+      pinecone
       playwright
       pymilvus
       pymongo

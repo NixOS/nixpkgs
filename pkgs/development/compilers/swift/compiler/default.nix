@@ -37,8 +37,6 @@
   DarwinTools,
   apple-sdk_14,
   darwinMinVersionHook,
-  # TODO: Clean up on `staging`
-  lld,
 }:
 
 let
@@ -122,7 +120,17 @@ let
       + ''
         substituteInPlace $out/nix-support/cc-cflags \
           --replace-fail " -resource-dir=$out/resource-root" ""
-      '';
+      ''
+      +
+        lib.optionalString
+          (targetPlatform.isLinux && targetPlatform.isx86 && lib.versionAtLeast (lib.getVersion clang) "19.1")
+          ''
+            # Swift bundles Clang 16, which predates -mtls-dialect=gnu2
+            # support (added in Clang 19.1). The cc-wrapper adds it based
+            # on the system Clang version, so strip it here.
+            substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
+              --replace-fail "'-mtls-dialect=gnu2'" ""
+          '';
   });
 
   # Build a tool used during the build to create a custom clang wrapper, with
@@ -254,8 +262,6 @@ stdenv.mkDerivation {
     DarwinTools # sw_vers
     fixDarwinDylibNames
     cctools.libtool
-    # TODO: Clean up on `staging`
-    lld
   ];
 
   buildInputs = [
@@ -566,12 +572,6 @@ stdenv.mkDerivation {
     #   Fixed in: https://github.com/apple/swift/commit/84083afef1de5931904d5c815d53856cdb3fb232
     cmakeFlags="
       -GNinja
-      ${
-        # Fix for ld64 hardening issue
-        #
-        # TODO: Clean up on staging
-        lib.optionalString stdenv.hostPlatform.isDarwin "-DCMAKE_LINKER_TYPE=LLD"
-      }
       -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.hostPlatform.isDarwin "-WITH-HOSTLIBS"}
       -DSWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING=ON
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON
@@ -829,7 +829,12 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift";
     teams = [ lib.teams.swift ];
     license = lib.licenses.asl20;
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.

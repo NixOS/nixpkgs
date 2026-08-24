@@ -10,6 +10,7 @@
   foundationdb,
   zstd,
   stdenv,
+  _experimental-update-script-combinators,
   nix-update-script,
   rocksdb,
   callPackage,
@@ -50,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.13";
+  version = "0.16.17";
 
   __structuredAttrs = true;
 
@@ -58,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uc1dUuu4TnpTKB17GArlo/hYT2gdUUnl3NxWalSB50k=";
+    hash = "sha256-tQY5L8tTyVbhIX0VrWbaKfR+Q97coTVoMRRDSHv5Lms=";
   };
 
-  cargoHash = "sha256-C+BwUqeYzutGcX13YgR1ngfUtuk+S12/k/xAYz68b3s=";
+  cargoHash = "sha256-EUx/ELV85pdPKzv49SEQ1Q8e/4ism2x3ZrKPqL6uvoE=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual
@@ -76,6 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lib.optionalAttrs
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
+        # Required to fix Stalwart on ARM systems with 16 KB page size.
+        # Using rust-jemalloc-sys causes segmentation faults on x86_64.
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
       };
 
@@ -277,7 +280,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
-    updateScript = nix-update-script { };
+    # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script { attrPath = "stalwart_0_16.webui"; })
+      (nix-update-script { attrPath = "stalwart_0_16.spam-filter"; })
+    ];
   };
 
   meta = {
@@ -298,7 +306,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-
+    maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada

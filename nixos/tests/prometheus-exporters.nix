@@ -806,6 +806,22 @@ let
         '';
       };
 
+    kvrocks =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider.services.kvrocks.enable = true;
+        exporterTest = ''
+          wait_for_unit("kvrocks.service")
+          wait_for_unit("prometheus-kvrocks-exporter.service")
+          wait_for_open_port(6666)
+          wait_for_open_port(9121)
+          wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'kvrocks_up 1'")
+        '';
+      };
+
     lnd =
       { pkgs, ... }:
       {
@@ -1756,16 +1772,6 @@ let
         exporterConfig = {
           enable = true;
           tokenFile = "/tmp/faketoken";
-        };
-        metricProvider = {
-          networking = {
-            # The exporter tries to access Hetzner on startup and crashes.
-            # Blocking this on the firewall level allows the exporter to start.
-            extraHosts = "127.0.0.1 api.hetzner.com";
-            firewall.extraCommands = ''
-              iptables -A OUTPUT -p tcp --dport 443 -d 127.0.0.1 -j DROP
-            '';
-          };
         };
         exporterTest = ''
           succeed(
