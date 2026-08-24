@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "screed";
-  version = "1.1.3";
+  version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N+gWl8fbqVoFNVTltahq/zKXBeHPXfxee42lht7gcrg=";
+    hash = "sha256-Dk5q4fPDy0CXa7vCvn4ZGCFhZmbl94QGxAziy/0jqtc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
