@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.52";
+  version = "3.0.53";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prompt-toolkit";
     repo = "python-prompt-toolkit";
     tag = version;
-    hash = "sha256-ggCy7xTvOkjy6DgsO/rPNtQiAQ4FjsK4ShrvkIHioNQ=";
+    hash = "sha256-MvGwFmu4kxTFsUsaFJu6FuQ+qd4VWBP6a+2N+eANbCg=";
   };
 
   postPatch = ''
