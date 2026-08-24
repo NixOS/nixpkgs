@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "A native SDR client for many radios, written in Rust, with native and web remote UI";
-    homepage = "https://github.com/dividebysandwich/sdroxide";
+    homepage = "https://sdroxide.com/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       nicoo
