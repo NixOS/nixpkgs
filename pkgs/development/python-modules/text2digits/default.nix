@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "text2digits";
-  version = "0.1.0";
+  version = "0.1.2";
   pyproject = false;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oB2NyNVxediIulid9A4Ccw878t2JKrIsN1OOR5lyi7I=";
+    hash = "sha256-AgUwIIGcuzAkjz1xo+snRZ9JB9IwDCICNb8P4HSaerA=";
   };
 
   nativeBuildInputs = [
