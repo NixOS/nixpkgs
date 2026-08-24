@@ -33,7 +33,7 @@ let
     pythonImportsCheck = [ ];
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trio";
   version = "0.34.0";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5ooFU1TP9CU0+dpIWs8cw+gHvBzntCnxejpBQn/QffE=";
   };
 
@@ -96,7 +96,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-trio/trio/blob/${src.tag}/docs/source/history.rst";
+    changelog = "https://github.com/python-trio/trio/blob/${finalAttrs.src.tag}/docs/source/history.rst";
     description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [
@@ -104,4 +104,4 @@ buildPythonPackage rec {
       asl20
     ];
   };
-}
+})
