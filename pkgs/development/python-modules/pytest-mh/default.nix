@@ -7,6 +7,7 @@
   hatch-requirements-txt,
   ansible-pylibssh,
   colorama,
+  jc,
   pytest,
   pyyaml,
   gitUpdater,
@@ -14,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-mh";
-  version = "1.0.29";
+  version = "1.0.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "next-actions";
     repo = "pytest-mh";
     tag = finalAttrs.version;
-    hash = "sha256-1QaqHDS+eU1O2aLWtdd6XWxErwqONAPngKe8FqYAmJY=";
+    hash = "sha256-nmRM0LEA93LaCTexOCC5NjrldlriJALSWwTuYerxngc=";
   };
 
   build-system = [
@@ -33,6 +34,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     ansible-pylibssh
     colorama
+    jc
     pytest
     pyyaml
   ];
