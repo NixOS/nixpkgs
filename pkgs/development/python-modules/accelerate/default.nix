@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "accelerate";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
+    tag = "v${version}";
+    hash = "sha256-dvixYS/j+ZiTpRjuo5q3jY6x9MrWWnpMJz3fuJoAYh0=";
   };
 
   build-system = [ setuptools ];
