@@ -1554,6 +1554,7 @@ in
   rsyslogd = handleTest ./rsyslogd.nix { };
   rtkit = runTest ./rtkit.nix;
   rtorrent = runTest ./rtorrent.nix;
+  rundeck = runTest ./rundeck.nix;
   rush = runTest ./rush.nix;
   rustfs = runTest ./rustfs.nix;
   rustical = runTest ./web-apps/rustical.nix;
