@@ -5,44 +5,33 @@
   dart-sass,
   electron,
   fetchFromGitHub,
+  fetchPnpmDeps,
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  yarn-berry,
-  substitute,
+  pnpm_11,
+  pnpmConfigHook,
 }:
+let
+  pnpm = pnpm_11;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.18";
+  version = "3.2.20";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6vSc3Gx0VZJoGSXm70T6rsOLhlv/7CnjK4HWkPOZv2s=";
-
-    # Remove when updating since upstream migrated to pnpm
-    # https://github.com/ebkr/r2modmanPlus/commit/db41dfdf4e4b9059ce0d574a7fab0d2d344e633a
-    postFetch = ''
-      cd $out
-      patch -p1 < ${
-        (substitute {
-          src = ./yarn-fix.patch;
-          substitutions = [
-            "--replace-fail"
-            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-            yarn-berry.lockfileVersion
-          ];
-        })
-      }
-    '';
+    hash = "sha256-7zigBXnHiUYL9matqT6da5c+cXwQH8CdqpSrsrOURYE=";
   };
 
-  missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-CAtDbWbl9u8tPdPQKxB2qcN7OhDomwO8EqDdRZppgQU=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-xfafdQkOTLHUPeFxKn3fujZrEmK+AJ2TN85eHAvilj8=";
   };
 
   patches = [
@@ -60,14 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     dart-sass
     makeWrapper
     nodejs
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    pnpm
+    pnpmConfigHook
   ];
 
-  env = {
-    # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
-    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
-  };
+  # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
   postPatch = ''
     # Hide update banner
@@ -77,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    yarn quasar build --mode electron --skip-pkg
+    pnpm quasar build --mode electron --skip-pkg
 
     runHook postBuild
   '';
@@ -125,8 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     })
   ];
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
