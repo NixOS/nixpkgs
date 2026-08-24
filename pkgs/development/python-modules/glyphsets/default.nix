@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "1.1.0";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jza6VQ3PZAQPku2hyo0KeO59r64Q9TpqLCI0dIX/URU=";
+    hash = "sha256-YJ5hNq2QgIgQFnMJ+yJGOzsLRpUabSqJttVEWsRDBaQ=";
   };
 
   postPatch = ''
