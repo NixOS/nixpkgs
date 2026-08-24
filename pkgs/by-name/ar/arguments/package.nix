@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "arguments";
-  version = "1.4.60-unstable-2023-01-18";
+  version = "release-0.20.10";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
