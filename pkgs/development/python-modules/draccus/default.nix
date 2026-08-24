@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "draccus";
-  version = "0.11.5";
+  version = "0.11.6";
   pyproject = true;
 
   # No (recent) tags on GitHub
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uC4sICcDCuGg8QVRUSX5FOBQwHZqtRjfOgVgoH0Q3ck=";
+    hash = "sha256-0TT1dqH0/r2TxrIA33+S5f6//p79wKXzgb9QwuBWijk=";
   };
 
   patches = [
