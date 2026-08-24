@@ -913,7 +913,10 @@ in
   kexec = runTest ./kexec.nix;
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix { };
-  keymap = handleTest ./keymap.nix { };
+  keymap = import ./keymap.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
   kiwix-serve = runTest ./kiwix-serve;
