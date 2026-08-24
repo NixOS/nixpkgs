@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
   pname = "gmodpatchtool";
   version = "20260722";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "solsticegamestudios";
     repo = "GModPatchTool";
