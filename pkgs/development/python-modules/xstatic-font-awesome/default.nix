@@ -1,23 +1,24 @@
 {
   buildPythonPackage,
   lib,
-  fetchPypi,
-  setuptools_80,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xstatic-font-awesome";
-  version = "6.2.1.1";
+  version = "6.2.1.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "XStatic-Font-Awesome";
-    inherit version;
-    hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
+  src = fetchFromGitHub {
+    owner = "xstatic-py";
+    repo = "xstatic-font-awesome";
+    tag = version;
+    hash = "sha256-O70Io+9PCFDn+K9GqR/AeLSGzdRtu7cqn69dr4/QBSc=";
   };
 
   # xstatic uses pkg_resources.declare_namespace, removed in setuptools 83.
-  build-system = [ setuptools_80 ];
+  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
