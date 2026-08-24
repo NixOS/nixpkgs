@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ci-info";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-H9UMvUAfKa3/7rGLBIniMtFqwadFisa8MW3qtq5TX7A=";
+    hash = "sha256-NNWhhyazeAq9+YUjS4cawzEk1k3Y4pSHC4zFtBDBhBg=";
   };
 
   nativeCheckInputs = [
