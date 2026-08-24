@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "kserve-storage";
-  version = "0.16.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "kserve_storage";
     inherit version;
-    hash = "sha256-xgLnWegsPF18RLxwxt0dfnrZwsX7AK3b8AdT594Bac4=";
+    hash = "sha256-8tBFGx++hMQkZfptV0EuFePZrlN1Tn5TlefzGop9aU0=";
   };
 
   build-system = [
