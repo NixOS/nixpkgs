@@ -7,30 +7,35 @@
   boost,
   curl,
   cxxopts,
-  gdal,
+  expat,
   geos,
+  libgeotiff,
   libspatialite,
+  libtiff,
   luajit,
   lz4,
+  openssl,
   prime-server,
   protobuf,
   python3,
   rapidjson,
+  spatialite-tools,
   sqlite,
   zeromq,
   zlib,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valhalla";
-  version = "3.6.3";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "valhalla";
     repo = "valhalla";
     tag = finalAttrs.version;
-    hash = "sha256-Q+h1k26UPiZEVhtonjipUS6gGIUZHM16pYgCxq/Zav0=";
+    hash = "sha256-wWiiadJqoZylV2YK+mu+cQBfd597id39RQgwaQDtvW4=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    spatialite-tools
   ];
 
   cmakeFlags = [
@@ -59,15 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     cxxopts
+    expat
+    libgeotiff
+    libtiff
     lz4
-    (python3.withPackages (ps: [ ps.pybind11 ]))
+    openssl
+    python3
     rapidjson
     zeromq
   ];
 
   propagatedBuildInputs = [
     curl
-    gdal
     geos
     libspatialite
     luajit
@@ -77,8 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -86,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.Thra11 ];
+    maintainers = with lib.maintainers; [
+      Thra11
+      karlbeecken
+    ];
     pkgConfigModules = [ "libvalhalla" ];
     platforms = lib.platforms.unix;
   };
