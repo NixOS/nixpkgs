@@ -1920,7 +1920,10 @@ in
     inherit pkgs runTest;
     inherit (pkgs) lib;
   };
-  wine = handleTest ./wine.nix { };
+  wine = import ./wine.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   wireguard = import ./wireguard {
     inherit pkgs runTest;
     inherit (pkgs) lib;
