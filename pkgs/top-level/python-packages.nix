@@ -13718,7 +13718,7 @@ self: super: with self; {
   };
 
   plover_5 = callPackage ../development/python-modules/plover/5.nix {
-    inherit (pkgs.qt6) qtbase wrapQtAppsHook;
+    inherit (pkgs.qt6) qtbase wrapQtAppsHook qtsvg;
   };
 
   pluggy = callPackage ../development/python-modules/pluggy { };
