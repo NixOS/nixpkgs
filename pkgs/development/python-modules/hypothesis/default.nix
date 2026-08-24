@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hypothesis";
-  version = "6.156.1";
+  version = "6.165.10";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z3LffzA+tsJtvXebTayfRZo32b0LcU2RFDS6bAdCDqU=";
+    hash = "sha256-oQd7wR8uFC939CJqk/QSXz67MnufTg2WmuUdKrFjwms=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hypothesis";
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-WEuCK1jpemnNpO+UxsfpdAkFLSM0v2WRjZr3qmSLBJI=";
+    hash = "sha256-DZg+7SRvy69d5efN6H2Csko8poEYPd4fw7V8fqi5mvE=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
