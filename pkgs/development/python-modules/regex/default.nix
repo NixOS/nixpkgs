@@ -4,22 +4,19 @@
   lib,
   python,
   setuptools,
-  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "regex";
-  version = "2026.7.11";
+  version = "2026.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrabarnett";
     repo = "mrab-regex";
     tag = finalAttrs.version;
-    hash = "sha256-x9XjtIUjm1eV0GS0216ZimHx6DNxtxZV5pQ6dbkEfTc=";
+    hash = "sha256-TOaJBk9W/ZEA+l2i0kzrr6RxlkdFzTIxj+Bu25JBNws=";
   };
-
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
