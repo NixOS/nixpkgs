@@ -39,7 +39,7 @@ let
 
       nodes = {
         server =
-          { config, pkgs, ... }:
+          { pkgs, ... }:
           {
             virtualisation.memorySize = 2047;
             services.gitea = {
@@ -47,10 +47,12 @@ let
               database = { inherit type; };
               package = pkgs.gitea;
               metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
-              settings.service.DISABLE_REGISTRATION = true;
-              settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
-              settings.actions.ENABLED = true;
-              settings.metrics.ENABLED = true;
+              settings = {
+                "repository.signing".SIGNING_KEY = signingPrivateKeyId;
+                actions.ENABLED = true;
+                metrics.ENABLED = true;
+                service.DISABLE_REGISTRATION = true;
+              };
             };
             environment.systemPackages = [
               pkgs.gitea
@@ -75,12 +77,12 @@ let
             };
           };
         client1 =
-          { config, pkgs, ... }:
+          { pkgs, ... }:
           {
             environment.systemPackages = [ pkgs.git ];
           };
         client2 =
-          { config, pkgs, ... }:
+          { pkgs, ... }:
           {
             environment.systemPackages = [ pkgs.git ];
           };
@@ -92,7 +94,7 @@ let
           inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
           serverSystem = nodes.server.system.build.toplevel;
         in
-        ''
+        /* python */ ''
           GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
           REPO = "gitea@server:test/repo"
           PRIVK = "${snakeOilPrivateKey}"
