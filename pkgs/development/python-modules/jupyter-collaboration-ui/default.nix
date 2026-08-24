@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration-ui";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration_ui";
     inherit (finalAttrs) version;
-    hash = "sha256-cPR+sCvX1RqLTLcPqQ6+TS8OrDUNkVxcOzAYySiqXx0=";
+    hash = "sha256-gVmIB374oWTZDXZz/P4RLpu3M4GHmsEq6xgWKx3bPXA=";
   };
 
   build-system = [
