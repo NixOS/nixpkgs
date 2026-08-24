@@ -21,14 +21,14 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "arandr";
-  version = "0.1.11";
+  version = "debian/0.1.11-1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "arandr";
     repo = "arandr";
     tag = finalAttrs.version;
-    hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
+    hash = "sha256-KAnTo3+0WTB1SzMCM8vDMPJhPw/fsT4msRETXwE21qA=";
   };
 
   patches = [
