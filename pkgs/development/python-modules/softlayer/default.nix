@@ -26,7 +26,7 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "softlayer";
   version = "6.2.9";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kGgCW9N2NZi8PHcfpN+8L2bg7v1edP8ZXYaoSt9545M=";
   };
 
@@ -87,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})
