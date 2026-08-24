@@ -12,12 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dot2tex";
-  version = "2.11.3";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-KZoq8FruW74CV6VipQapPieSk9XDjyjQirissyM/584=";
+    hash = "sha256-EbCXOQuU0ab1BywIxQY35yTi+BtGN5SXLD1CMAW19TY=";
   };
 
   patches = [
