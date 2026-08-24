@@ -5,15 +5,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rolespec";
-  version = "20161104";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nickjj";
     repo = "rolespec";
-    rev = "d9ee530cd709168882059776c482fc37f46cb743";
-    sha256 = "1jkidw6aqr0zfqwmcvlpi9qa140z2pxcfsd43xm5ikx6jcwjdrzl";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-9t7aDfRYb5zJ+POnhx0BmsTVyWGRJwEzcsbJhdOvOBU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -46,7 +46,10 @@ stdenv.mkDerivation {
     '';
     downloadPage = "https://github.com/nickjj/rolespec";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.dochang ];
+    maintainers = [
+      lib.maintainers.dochang
+      lib.maintainers.lukas-sgx
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})
