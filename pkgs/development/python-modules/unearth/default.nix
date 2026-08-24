@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.18.2";
+  version = "0.18.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HlPX9S9G3V+HXnf/HFWxJHfiFaCS5LZsl2SnffSptSA=";
+    hash = "sha256-FAZ88RQckG94fW2dBwy8/dRD/RBYrsqmUM6VGaoQ29w=";
   };
 
   patches = [
