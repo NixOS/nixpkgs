@@ -36,16 +36,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.46.0";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SRBz4vv5w0gFyWL5rN2Ml9z0h2EIR9/c8t72my/NcdU=";
+    hash = "sha256-+sowkBtUbpBPAgi1Tn1WSgIac2yzCWsXcsh96Pp5VSY=";
   };
 
-  cargoHash = "sha256-gxXF+EAEhEHsk/AkMqZiy8y3+EDALnFgbrzIIPZNQzw=";
+  cargoHash = "sha256-rJnhi14eKkYBK1rmQsRTb3lS2ChklOZ8mOA/H1iclh0=";
 
   cargoBuildFlags = [
     "--bin"
@@ -148,6 +148,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
     "--skip=test_session_id_matches_across_calls"
     "--skip=test_session_id_propagation_to_llm"
+    # keychain-backed dictation secret test panics on empty swap_remove
+    "--skip=test_custom_dictation_secret_save_delete"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
