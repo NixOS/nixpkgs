@@ -233,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.concatStrings [
     (lib.optionalString stdenv.hostPlatform.isLinux ''
+      addDriverRunpath $out/bin/.obs-nvenc-test-wrapped
       addDriverRunpath $out/lib/lib*.so
       addDriverRunpath $out/lib/obs-plugins/*.so
     '')
