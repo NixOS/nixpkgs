@@ -52,6 +52,13 @@ stdenv.mkDerivation (
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
+      # Bake the T3 Connect public identifiers (Clerk publishable key/JWT
+      # template, OAuth client ID, relay URL). The bundled web client gates
+      # every cloud feature on these via `import.meta.env`, so official
+      # release builds ship them. This is upstream's own suggested
+      # source-build setup (`cp .env.example .env`); the file holds public
+      # identifiers, not secrets.
+      cp .env.example .env
     '';
 
     nativeBuildInputs = [
@@ -193,6 +200,10 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
+        # Claimed here because the app's runtime registration is gated on
+        # `app.isPackaged`, which never holds under the Nix Electron
+        # wrapper; without it the Clerk OAuth redirect never reaches the app.
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
