@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "jaraco-text";
-  version = "4.0.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_text";
     inherit version;
-    hash = "sha256-W3H+zqaatvk51MkGwE/uHtp2UA0WQRF99uxFuGXxDbA=";
+    hash = "sha256-3dXrYlnQcB4Iy2QsjWtjvMc5R9A9+SOepnu++RGz5OE=";
   };
 
   pythonNamespaces = [ "jaraco" ];
