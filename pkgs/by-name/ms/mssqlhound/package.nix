@@ -22,10 +22,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  checkPhase = ''
-    go test ./...
-  '';
-
   __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
