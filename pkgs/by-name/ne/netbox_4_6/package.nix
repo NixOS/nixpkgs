@@ -121,7 +121,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     inherit (py.pkgs) gunicorn;
     tests = {
       netbox = nixosTests.netbox_4_6;
-      inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
     plugins = lib.recurseIntoAttrs (
