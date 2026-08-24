@@ -1784,6 +1784,7 @@
   ./services/web-apps/nifi.nix
   ./services/web-apps/nipap.nix
   ./services/web-apps/node-red.nix
+  ./services/web-apps/nodebb.nix
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix
   ./services/web-apps/olivetin.nix
