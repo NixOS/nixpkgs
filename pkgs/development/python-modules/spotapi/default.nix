@@ -19,13 +19,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spotapi";
-  version = "1.2.7";
+  version = "1.2.8";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-x4UA65A4UvxqlDN5upHsPPa5yv8gKZw3kqLou/1xVtY=";
+    hash = "sha256-hTXIIFIuBeaVl0Lp5jbVKjwVGzcTBGD/R6Rsrig1d6E=";
   };
 
   build-system = [ setuptools ];
