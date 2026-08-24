@@ -6,6 +6,7 @@
   perl,
   actool,
   makeBinaryWrapper,
+  re-plistbuddy,
   rcodesign,
   nix-update-script,
 }:
@@ -41,32 +42,6 @@ let
       CFBundleVersion = "1";
     };
 
-  mainInfoPlist =
-    version:
-    toPlist {
-      CFBundleDevelopmentRegion = "en";
-      CFBundleExecutable = "Stats";
-      CFBundleIconFile = "AppIcon";
-      CFBundleIconName = "AppIcon";
-      CFBundleIdentifier = "eu.exelban.Stats";
-      CFBundleInfoDictionaryVersion = "6.0";
-      CFBundleName = "Stats";
-      CFBundlePackageType = "APPL";
-      CFBundleShortVersionString = version;
-      # CFBundleVersion is extracted from upstream's Info.plist at build time
-      Description = "Simple macOS system monitor in your menu bar";
-      LSApplicationCategoryType = "public.app-category.utilities";
-      LSMinimumSystemVersion = "12.0";
-      LSUIElement = true;
-      NSAppTransportSecurity = {
-        NSAllowsArbitraryLoads = true;
-      };
-      NSBluetoothAlwaysUsageDescription = "This permission allows obtaining battery level of Bluetooth devices";
-      NSHumanReadableCopyright = "Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.";
-      NSPrincipalClass = "NSApplication";
-      NSUserNotificationAlertStyle = "alert";
-      TeamId = "RP2S87B72W";
-    };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
@@ -292,6 +267,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     app="$out/Applications/Stats.app"
+    appInfo="$app/Contents/Info.plist"
+    assetInfo="$NIX_BUILD_TOP/asset-info.plist"
     mkdir -p "$app/Contents/"{MacOS,Frameworks,Resources}
 
     cp "$buildDir/Stats" "$app/Contents/MacOS/Stats"
@@ -304,14 +281,16 @@ stdenv.mkDerivation (finalAttrs: {
       printf '%s' ${lib.escapeShellArg (frameworkPlist fw)} > "$fwDir/Resources/Info.plist"
     '') frameworks}
 
-    printf '%s' ${lib.escapeShellArg (mainInfoPlist finalAttrs.version)} > "$app/Contents/Info.plist"
-    # Splice CFBundleVersion from upstream's checked-in Info.plist so it stays
-    # in sync automatically — nix-update-script bumps the tag & hash, and the
-    # new source tree carries the correct build number
-    bundleVersion=$(sed -n '/<key>CFBundleVersion<\/key>/{n;s/.*<string>\(.*\)<\/string>.*/\1/p;}' \
-      "Stats/Supporting Files/Info.plist")
-    sed -i "s|</dict>|<key>CFBundleVersion</key><string>$bundleVersion</string></dict>|" \
-      "$app/Contents/Info.plist"
+    # Keep upstream's plist as the source of truth so privacy and bundle
+    # metadata added by upstream are retained.
+    cp "Stats/Supporting Files/Info.plist" "$appInfo"
+    substituteInPlace "$appInfo" \
+      --replace-fail '$(DEVELOPMENT_LANGUAGE)' "en" \
+      --replace-fail '$(EXECUTABLE_NAME)' "Stats" \
+      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' "eu.exelban.Stats" \
+      --replace-fail '$(PRODUCT_NAME)' "Stats" \
+      --replace-fail '$(MARKETING_VERSION)' "${finalAttrs.version}" \
+      --replace-fail '$(MACOSX_DEPLOYMENT_TARGET)' "12.0"
 
     # Compile asset catalogs
     actool \
@@ -319,8 +298,11 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx \
       --minimum-deployment-target 14.0 \
       --app-icon AppIcon \
-      --output-partial-info-plist /dev/null \
+      --output-partial-info-plist "$assetInfo" \
       "Stats/Supporting Files/Assets.xcassets"
+
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Merge $assetInfo" "$appInfo"
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Delete :SMPrivilegedExecutables" "$appInfo"
 
     # Copy localization files
     find "Stats/Supporting Files" -name '*.lproj' -type d -exec cp -r {} "$app/Contents/Resources/" \;
