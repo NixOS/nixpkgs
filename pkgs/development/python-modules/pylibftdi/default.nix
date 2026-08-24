@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pylibftdi";
-  version = "0.23.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v1tMa6c9eab234ScNFsAunY9AjIBvtm6Udh2pDl7Ftg=";
+    hash = "sha256-4iKbwQ0HfwGMvnsrSQInsrU4ZD+m97/xMs3hVUnKEps=";
   };
 
   build-system = [ poetry-core ];
