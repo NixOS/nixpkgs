@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+z5YO6BzuGHo4LxeYvZvBzZekUf102SR3krWLyPkU2I=";
+    hash = "sha256-I9EevRtoCz5qKpJrc95P/ocssf/thwHyV80cRtGoQKw=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   postPatch = ''
     sed "s|driver_files =.*|driver_files = ['${lib.getLib rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
