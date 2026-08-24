@@ -257,6 +257,12 @@
     githubId = 3417013;
     name = "Eske Nielsen";
   };
+  _4evy = {
+    name = "4evy";
+    email = "git@evy.pink";
+    github = "4evy";
+    githubId = 57304299;
+  };
   _4r7if3x = {
     email = "the.artifex@proton.me";
     matrix = "@4r7if3x:matrix.org";
@@ -9027,13 +9033,6 @@
     githubId = 6499211;
     name = "Sebastian Neubauer";
     keys = [ { fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672"; } ];
-  };
-  FlameFlag = {
-    name = "FlameFlag";
-    email = "github@flameflag.dev";
-    github = "FlameFlag";
-    githubId = 57304299;
-    matrix = "@donteatoreo:matrix.org";
   };
   Flameopathic = {
     email = "flameopathic@gmail.com";
