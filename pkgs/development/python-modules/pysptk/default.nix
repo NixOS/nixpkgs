@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   cython,
+  pytestCheckHook,
   setuptools,
   decorator,
   numpy,
@@ -35,8 +36,20 @@ buildPythonPackage (finalAttrs: {
     standard-pkg-resources
   ];
 
-  # Tests are not part of the PyPI releases
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Remove source to prevent the tests from trying to import it
+  preCheck = ''
+    rm -r pysptk
+  '';
+
+  disabledTests = [
+    # These tests rely on test data not present in the pypi release
+    "test_rapt_regression"
+    "test_swipe_regression"
+  ];
 
   pythonImportsCheck = [ "pysptk" ];
 
