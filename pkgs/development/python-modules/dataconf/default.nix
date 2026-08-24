@@ -11,7 +11,7 @@
 }:
 let
   pname = "dataconf";
-  version = "3.6.0";
+  version = "3.7.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +30,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hcZi8n290GZkgIM074Z1Ne2gOS5WDmX8fPR+BJGZyzU=";
+    hash = "sha256-YUt1iLQ7zSnYGbJMWCvl2MZ82k2XR8gccwrnynnuDqo=";
   };
 
   pythonImportsCheck = [ "dataconf" ];
