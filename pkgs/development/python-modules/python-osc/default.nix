@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "python-osc";
-  version = "1.9.3";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_osc";
     inherit version;
-    hash = "sha256-vQ+kDe9DzlCYlHCf6w4Y8CGSrKGSxebI/iumnljyF5Q=";
+    hash = "sha256-cyVI9PRn3an4kKaws7+whasRf0vTikWljSyg871qVG0=";
   };
 
   build-system = [ setuptools ];
