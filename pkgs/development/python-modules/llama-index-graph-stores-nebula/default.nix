@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-nebula";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_graph_stores_nebula";
     inherit version;
-    hash = "sha256-XTW6XrAbWx8DZgoEoOL2rP2WNuQqQO+hcCWpQSj98ks=";
+    hash = "sha256-/LJ161lbY5q8qO/5AK8QK3WE7gx/c9AxgEH9OIrrFEE=";
   };
 
   build-system = [ hatchling ];
