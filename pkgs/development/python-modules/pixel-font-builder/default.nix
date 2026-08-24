@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.47";
+  version = "0.0.55";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pixel-font-builder";
     tag = version;
-    hash = "sha256-a25JKZy5XaBfpeFwH7YnSTY28hQF8dLa/AGEOXHN94I=";
+    hash = "sha256-WMwmhGspseqTkGUPrMNR16sZBB+n/lvthHX7JTtdlsQ=";
   };
 
   build-system = [ uv-build ];
