@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cask-server";
-  version = "0.6.0";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "Nitrux";
