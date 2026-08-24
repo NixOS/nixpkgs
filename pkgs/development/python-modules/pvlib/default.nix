@@ -20,12 +20,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pvlib";
-  version = "0.14.0";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-nmpmhlJAzk4xy+nTYKKNbreVO6u2KsQDry+QrtFqRQk=";
+    hash = "sha256-zt7GX2U2oh6mQ1HmUYluhJrJXLVCO1wZYmKVi0DPrBU=";
   };
 
   build-system = [
