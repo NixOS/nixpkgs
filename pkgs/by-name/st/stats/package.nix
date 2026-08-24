@@ -5,7 +5,7 @@
   leveldb,
   perl,
   actool,
-  makeWrapper,
+  makeBinaryWrapper,
   rcodesign,
   nix-update-script,
 }:
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift
     perl
     actool
-    makeWrapper
+    makeBinaryWrapper
     rcodesign
   ];
 
