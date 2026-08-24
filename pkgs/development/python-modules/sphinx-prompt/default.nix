@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-prompt";
   version = "1.10.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ut1g4Clq8mVUYwCe0XMt4GIXUJ4Hy7k8DjWbR7GJ8Bg=";
   };
 
@@ -66,7 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
+    changelog = "https://github.com/sbrunner/sphinx-prompt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})
