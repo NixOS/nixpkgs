@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation {
   pname = "casync";
-  version = "2-unstable-2023-10-16";
+  version = "2";
 
   src = fetchFromGitHub {
     owner = "systemd";
