@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2026.1.14";
+  version = "2026.8.23";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pCPFg+HuzZyiVWQtR/Rj76jX8jZaDhEOsBZ1cEk+DIw=";
+    hash = "sha256-vTyBbxZvhckzKaVKDJoezMmWimp4+R1jtl17F2dZFfI=";
   };
 
   build-system = [ setuptools ];
