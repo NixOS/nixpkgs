@@ -14,6 +14,65 @@
 let
   inherit (swiftPackages) stdenv swift;
 
+  moduleConfigs = [
+    {
+      name = "CPU";
+      bridgingHeader = "Modules/CPU/bridge.h";
+      frameworks = [ "IOKit" ];
+      libraries = [ "IOReport" ];
+    }
+    {
+      name = "GPU";
+      bridgingHeader = "Modules/GPU/bridge.h";
+      frameworks = [
+        "IOKit"
+        "Metal"
+      ];
+      libraries = [ "IOReport" ];
+    }
+    {
+      name = "RAM";
+      frameworks = [ "IOKit" ];
+    }
+    {
+      name = "Disk";
+      bridgingHeader = "Modules/Disk/header.h";
+      frameworks = [
+        "IOKit"
+        "DiskArbitration"
+      ];
+    }
+    {
+      name = "Net";
+      frameworks = [
+        "IOKit"
+        "CoreWLAN"
+        "SystemConfiguration"
+      ];
+    }
+    {
+      name = "Battery";
+      frameworks = [ "IOKit" ];
+    }
+    {
+      name = "Bluetooth";
+      frameworks = [
+        "IOKit"
+        "IOBluetooth"
+        "CoreBluetooth"
+      ];
+    }
+    {
+      name = "Sensors";
+      bridgingHeader = "Modules/Sensors/bridge.h";
+      frameworks = [ "IOKit" ];
+      libraries = [ "IOReport" ];
+      objcSource = "Modules/Sensors/reader.m";
+    }
+    { name = "Clock"; }
+    { name = "Remote"; }
+  ];
+
   frameworks = [
     "Kit"
     "CPU"
@@ -41,6 +100,59 @@ let
       CFBundlePackageType = "FMWK";
       CFBundleVersion = "1";
     };
+
+  findSwiftFiles = varName: dirs: ''
+    ${varName}=()
+    while IFS= read -r -d "" f; do
+      ${varName}+=("$f")
+    done < <(find ${lib.escapeShellArgs dirs} -name '*.swift' -print0 2>/dev/null)
+  '';
+
+  buildModuleShell =
+    mod:
+    let
+      linkFlags = [
+        "-lKit"
+      ]
+      ++ map (library: "-l${library}") (mod.libraries or [ ])
+      ++ lib.concatMap (framework: [
+        "-framework"
+        framework
+      ]) (mod.frameworks or [ ]);
+    in
+    ''
+      echo "Building framework: ${mod.name}"
+
+      ${lib.optionalString (mod ? objcSource) ''
+        clang -x objective-c \
+          -I "Modules/${mod.name}" \
+          -fobjc-arc \
+          -O2 \
+          -c "${mod.objcSource}" \
+          -o "$buildDir/${lib.toLower mod.name}_objc.o"
+      ''}
+
+      ${findSwiftFiles "swiftFiles" [
+        mod.name
+        "Modules/${mod.name}"
+      ]}
+
+      swiftc \
+        "''${commonSwiftFlags[@]}" \
+        -emit-module \
+        -emit-library \
+        -module-name "${mod.name}" \
+        -module-link-name "${mod.name}" \
+        -emit-module-path "$buildDir/${mod.name}.swiftmodule" \
+        ${lib.optionalString (mod ? bridgingHeader) ''-import-objc-header "${mod.bridgingHeader}"''} \
+        -I "$buildDir" \
+        -L "$buildDir" \
+        -Xlinker -install_name -Xlinker "@rpath/${mod.name}.framework/${mod.name}" \
+        ${lib.escapeShellArgs linkFlags} \
+        ${lib.optionalString (mod ? objcSource) ''"$buildDir/${lib.toLower mod.name}_objc.o"''} \
+        "''${swiftFiles[@]}" \
+        -o "$buildDir/lib${mod.name}.dylib"
+    '';
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -100,48 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
       -Xlinker -platform_version -Xlinker macos -Xlinker 14.0 -Xlinker 26.0
     )
 
-    buildFramework() {
-      local name="$1"
-      shift
-      local bridgingHeader="$1"
-      shift
-      local extraFlags=("$@")
-
-      echo "Building framework: $name"
-
-      local swiftFiles=()
-      while IFS= read -r -d "" f; do
-        swiftFiles+=("$f")
-      done < <(find "$name" -name '*.swift' -print0 2>/dev/null)
-
-      # For modules in Modules/ subdirectory
-      if [ ''${#swiftFiles[@]} -eq 0 ]; then
-        while IFS= read -r -d "" f; do
-          swiftFiles+=("$f")
-        done < <(find "Modules/$name" -name '*.swift' -print0 2>/dev/null)
-      fi
-
-      local bridgeFlags=()
-      if [ -n "$bridgingHeader" ]; then
-        bridgeFlags=(-import-objc-header "$bridgingHeader")
-      fi
-
-      swiftc \
-        "''${commonSwiftFlags[@]}" \
-        -emit-module \
-        -emit-library \
-        -module-name "$name" \
-        -module-link-name "$name" \
-        -emit-module-path "$buildDir/$name.swiftmodule" \
-        "''${bridgeFlags[@]}" \
-        -I "$buildDir" \
-        -L "$buildDir" \
-        -Xlinker -install_name -Xlinker "@rpath/$name.framework/$name" \
-        "''${extraFlags[@]}" \
-        "''${swiftFiles[@]}" \
-        -o "$buildDir/lib$name.dylib"
-    }
-
     echo "=== Building Kit ==="
 
     # Compile lldb.m (Objective-C++ with LevelDB)
@@ -179,65 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
       "''${kitSwiftFiles[@]}" \
       -o "$buildDir/libKit.dylib"
 
-    buildFramework CPU "Modules/CPU/bridge.h" \
-      -lKit -lIOReport -framework IOKit
-
-    buildFramework GPU "Modules/GPU/bridge.h" \
-      -lKit -lIOReport -framework IOKit -framework Metal
-
-    buildFramework RAM "" \
-      -lKit -framework IOKit
-
-    buildFramework Disk "Modules/Disk/header.h" \
-      -lKit -framework IOKit -framework DiskArbitration
-
-    buildFramework Net "" \
-      -lKit -framework IOKit -framework CoreWLAN -framework SystemConfiguration
-
-    buildFramework Battery "" \
-      -lKit -framework IOKit
-
-    buildFramework Bluetooth "" \
-      -lKit -framework IOKit -framework IOBluetooth -framework CoreBluetooth
-
-    # Build Sensors - needs ObjC file too
-    echo "Building framework: Sensors"
-
-    # Compile reader.m (ObjC)
-    clang -x objective-c \
-      -I "Modules/Sensors" \
-      -fobjc-arc \
-      -O2 \
-      -c Modules/Sensors/reader.m \
-      -o "$buildDir/sensors_reader.o"
-
-    sensorsSwiftFiles=()
-    while IFS= read -r -d "" f; do
-      sensorsSwiftFiles+=("$f")
-    done < <(find Modules/Sensors -name '*.swift' -print0)
-
-    swiftc \
-      "''${commonSwiftFlags[@]}" \
-      -emit-module \
-      -emit-library \
-      -module-name Sensors \
-      -module-link-name Sensors \
-      -emit-module-path "$buildDir/Sensors.swiftmodule" \
-      -import-objc-header "Modules/Sensors/bridge.h" \
-      -I "$buildDir" \
-      -L "$buildDir" \
-      -lKit -lIOReport \
-      -framework IOKit \
-      -Xlinker -install_name -Xlinker "@rpath/Sensors.framework/Sensors" \
-      "$buildDir/sensors_reader.o" \
-      "''${sensorsSwiftFiles[@]}" \
-      -o "$buildDir/libSensors.dylib"
-
-    buildFramework Clock "" \
-      -lKit
-
-    buildFramework Remote "" \
-      -lKit
+    ${lib.concatMapStrings buildModuleShell moduleConfigs}
 
     echo "=== Building Stats app ==="
 
