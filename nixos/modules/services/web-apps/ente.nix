@@ -145,6 +145,14 @@ in
               };
             };
 
+            http = {
+              port = mkOption {
+                type = types.port;
+                default = 8080;
+                description = "The HTTP port for the museum API service.";
+              };
+            };
+
             db = {
               host = mkOption {
                 type = types.str;
@@ -286,7 +294,7 @@ in
       services.nginx = mkIf cfgApi.nginx.enable {
         enable = true;
         upstreams.museum = {
-          servers."localhost:8080" = { };
+          servers."localhost:${toString cfgApi.settings.http.port}" = { };
           extraConfig = ''
             zone museum 64k;
             keepalive 20;
