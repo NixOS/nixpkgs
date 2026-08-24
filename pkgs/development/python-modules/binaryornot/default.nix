@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "binaryornot";
-  version = "0.4.4";
+  version = "0.6.0";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-NZUB38nUBjLtyfrIkOGVQtsaKHu8+lgXW2Zlg5IBgGE=";
+    hash = "sha256-zI1Xz6cddP+MKKdyZzTVOoUdAvrZ46VYH7gH+Yn3AvA=";
   };
 
   build-system = [ setuptools ];
