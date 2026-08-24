@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.86";
+  version = "1.88";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k6ULWGpNLOxoqy+Z0D71g8V2HY+6VTXLjoHaeB0Nkv8=";
+    hash = "sha256-mqoxwL2k0Fn3su4Av9tcu3Ot4wV6pLc3p8wBhwkdBxo=";
   };
 
   patches = [
