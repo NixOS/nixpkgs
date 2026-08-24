@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arwen";
-  version = "0.0.5-unstable-2026-04-07";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "nichmor";
