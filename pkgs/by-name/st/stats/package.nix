@@ -73,19 +73,7 @@ let
     { name = "Remote"; }
   ];
 
-  frameworks = [
-    "Kit"
-    "CPU"
-    "GPU"
-    "RAM"
-    "Disk"
-    "Net"
-    "Battery"
-    "Bluetooth"
-    "Sensors"
-    "Clock"
-    "Remote"
-  ];
+  frameworks = [ "Kit" ] ++ map (module: module.name) moduleConfigs;
   modules = lib.tail frameworks;
 
   toPlist = lib.generators.toPlist { escape = true; };
