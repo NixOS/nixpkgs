@@ -67,9 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ leveldb ];
 
-  # Stats uses IOReport private API symbols declared in bridging headers
-  env.NIX_LDFLAGS = "-lIOReport";
-
   # Swift 5.10 doesn't support trailing commas in argument lists (Swift 6 feature)
   # Remove them from all Swift source files
   postPatch = ''
@@ -183,10 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
       -o "$buildDir/libKit.dylib"
 
     buildFramework CPU "Modules/CPU/bridge.h" \
-      -lKit -framework IOKit
+      -lKit -lIOReport -framework IOKit
 
     buildFramework GPU "Modules/GPU/bridge.h" \
-      -lKit -framework IOKit -framework Metal
+      -lKit -lIOReport -framework IOKit -framework Metal
 
     buildFramework RAM "" \
       -lKit -framework IOKit
@@ -229,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
       -import-objc-header "Modules/Sensors/bridge.h" \
       -I "$buildDir" \
       -L "$buildDir" \
-      -lKit \
+      -lKit -lIOReport \
       -framework IOKit \
       -Xlinker -install_name -Xlinker "@rpath/Sensors.framework/Sensors" \
       "$buildDir/sensors_reader.o" \
