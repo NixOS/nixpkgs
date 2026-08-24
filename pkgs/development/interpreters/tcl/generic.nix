@@ -128,6 +128,7 @@ let
       homepage = "https://www.tcl.tk/";
       license = lib.licenses.tcltk;
       platforms = lib.platforms.all;
+      badPlatforms = lib.platforms.cygwin;
       maintainers = with lib.maintainers; [ agbrooks ];
     };
 
