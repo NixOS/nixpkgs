@@ -111,6 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libgit2.org/";
     license = with lib.licenses; WITH gpl2Only gccException20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 })
