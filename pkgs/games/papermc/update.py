@@ -27,7 +27,7 @@ class Version:
 
 
 class VersionManager:
-    def __init__(self, base_url: str = "https://api.papermc.io/v2/projects/paper"):
+    def __init__(self, base_url: str = "https://fill.papermc.io/v3/projects/paper"):
         self.versions: list[Version] = []
         self.base_url: str = base_url
 
@@ -46,8 +46,10 @@ class VersionManager:
             return
 
         # we only want versions that are no pre-releases
-        release_versions = filter(
-            lambda v_name: all(s not in v_name for s in ["pre", "rc"]), response.json()["versions"])
+        release_versions: list = []
+        for i in response.json()["versions"]:
+            release_versions += filter(
+                lambda v_name: all(s not in v_name for s in ["pre", "rc"]), response.json()["versions"][i])
 
         for version_name in release_versions:
 
@@ -77,16 +79,24 @@ class VersionManager:
                 return
 
             # the highest build in response.json()['builds']:
-            latest_build = response.json()['builds'][-1]
+            latest_build = response.json()['builds'][0]
             version.build_number = latest_build
 
     def generate_version_hashes(self):
         """
         Generate and set the hashes for all registered versions (versions will are downloaded to memory)
         """
-
         for version in self.versions:
-            url = f"{self.base_url}/versions/{version.name}/builds/{version.build_number}/downloads/paper-{version.full_name}.jar"
+            response = requests.get(f"{self.base_url}/versions/{version.name}/builds/{version.build_number}")
+
+            try:
+                response.raise_for_status()
+
+            except requests.exceptions.HTTPError as e:
+                print(e)
+                return
+
+            url = response.json()["downloads"]["server:default"]["url"]
             version.hash = self.download_and_generate_sha256_hash(url)
 
     def versions_to_json(self):
