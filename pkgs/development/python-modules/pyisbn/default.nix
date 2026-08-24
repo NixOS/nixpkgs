@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pyisbn";
-  version = "1.3.1";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cPVjgXlps/8IUGieULx/917puGXD+A+DWWSxMGxO1Rk=";
+    hash = "sha256-qPOS8G/ZUqH23mvhSKcs93s8UfpXIxIc0cIgGvRjpbM=";
   };
 
   build-system = [ setuptools ];
