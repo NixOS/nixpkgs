@@ -58,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      binary-eater
       booxter
       m1dugh
     ];
