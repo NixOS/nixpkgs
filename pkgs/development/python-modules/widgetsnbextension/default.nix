@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "4.0.15";
+  version = "4.0.16";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3oYQY5mW8VZ5UtdjpaQa+K838ldaQfmFKjj5R+uCo7k=";
+    hash = "sha256-re6grnjwhW7klF9BMpmAG4KgoBQWMDMB85pwQoKje3M=";
   };
 
   nativeBuildInputs = [ jupyter-packaging ];
