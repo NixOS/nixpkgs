@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aeidon";
-  version = "1.15";
+  version = "1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "otsaloma";
     repo = "gaupol";
     tag = version;
-    hash = "sha256-lhNyeieeiBBm3rNDEU0BuWKeM6XYlOtv1voW8tR8cUM=";
+    hash = "sha256-blVkjikCSDaqkQi8COIFJ33ozVmo+l6h3Dcn4C+yNHA=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aeidon" ];
 
   meta = {
-    changelog = "https://github.com/otsaloma/gaupol/releases/tag/${version}";
+    changelog = "https://github.com/otsaloma/gaupol/releases/tag/${src.tag}";
     description = "Reading, writing and manipulating text-based subtitle files";
     homepage = "https://github.com/otsaloma/gaupol";
     license = lib.licenses.gpl3Plus;
