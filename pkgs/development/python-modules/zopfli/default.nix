@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zopfli";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-qO6ZKyVJ4JDNPwF4v2Bt1Bop4GE6BM31BUIkZixy3OY=";
+    hash = "sha256-06UPkaE86puv4CXej9h6AF6ybeAqTwwZMSfdvyOsjr4=";
   };
 
   postPatch = ''
