@@ -31,13 +31,13 @@ in
 
 buildPythonPackage rec {
   pname = "fastjet";
-  version = "3.5.1.2";
+  version = "3.5.1.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fastjet";
     inherit version;
-    hash = "sha256-dDvlFBZrTWhpNhngKuAvu9zpbcLWvz7IpRQsmctvaW0=";
+    hash = "sha256-Rr6fGS6l8yJpeUrdDITfo+YbbbXWNm0aAetxLChJLMA=";
   };
 
   # unvendor fastjet/fastjet-contrib
