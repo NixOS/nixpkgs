@@ -27,20 +27,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.33.7";
+  version = "2.34.6";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-6QysdmXgSxfJpNaL10HogrnNYEyrxZLdkfgBnRiXWX4=";
+    hash = "sha256-xB5ChOrcno5rCjWYrGtdNrqkwBtMeYCqml8xfrUAgEM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-Ei/8j+KvhZVgqteA+bqNsL11IMGzWn3OHngDpsEH6jk=";
+    hash = "sha256-35nNgdoQwZlIZCzlWxC5eLKdyXAWWyBoIaa1B9zPEfY=";
   };
 
   nativeBuildInputs = [

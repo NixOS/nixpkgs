@@ -31,18 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.8";
+  version = "1.39.2";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9sDE7ua3WMCfV9ZbwQdAbpatv2IhvcwHzzPr+/l2au0=";
+    hash = "sha256-1ilzebplgFVaqiSzpTeGRgnSqYfo9W8G7xj/6KlX990=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-F1+FeAlYSqOxeWJI8vHShpXrOZqYXjNGvty/s6f6u8w=";
+    hash = "sha256-g3r99wa4S0ZVUvTSYo4PTzOswjsOn83hkocoziHcn2A=";
   };
 
   postPatch = ''
@@ -159,6 +159,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
-    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })
