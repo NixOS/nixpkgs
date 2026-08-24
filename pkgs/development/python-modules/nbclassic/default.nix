@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "1.2.0";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c27FBIOlRIWXHbITvpIH405R/BRMeDQ2JbaZF0I2RLo=";
+    hash = "sha256-Q0Iodj+M7nVDGM1t+kI3DbGRr2MNq6uOMLr8jBqj7uY=";
   };
 
   build-system = [
