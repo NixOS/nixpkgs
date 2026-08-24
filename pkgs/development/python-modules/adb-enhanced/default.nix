@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adb-enhanced";
-  version = "2.8.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = "adb-enhanced";
-    tag = finalAttrs.version;
-    hash = "sha256-YuQgz3WeN50hg/IgdoNV61St9gpu6lcgFfKCfI/ENl0=";
+    tag = version;
+    hash = "sha256-RKMF2Cn3wd5p3SdC22BO5AeINaq8u3+1t+3QkXYjbpE=";
   };
   patches = [
     # psutil==7.2.1 -> psutil==7.2.2
