@@ -1,8 +1,6 @@
 {
-  stdenv,
   buildPythonPackage,
   lib,
-  pythonAtLeast,
   fetchPypi,
   poetry-core,
   setuptools,
@@ -17,13 +15,13 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcelemental";
   version = "0.51.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hVjzBN8IzkAJWOaubWMuQ+9hzMpGPJ6N9PJltKYZXnk=";
   };
 
@@ -51,7 +49,10 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "qcelemental" ];
 
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     "qcelemental/tests/test_molparse_align_chiral.py"
     "qcelemental/tests/test_molparse_from_schema.py"
     "qcelemental/tests/test_molparse_from_string.py"
+    "qcelemental/tests/test_molparse_mae.py"
     "qcelemental/tests/test_molparse_pubchem.py"
     "qcelemental/tests/test_molparse_to_schema.py"
     "qcelemental/tests/test_molparse_to_string.py"
@@ -75,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
     homepage = "https://github.com/MolSSI/QCElemental";
-    changelog = "https://github.com/MolSSI/QCElemental/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/MolSSI/QCElemental/blob/v${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
   };
-}
+})
