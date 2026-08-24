@@ -912,7 +912,10 @@ in
   keter = runTest ./keter.nix;
   kexec = runTest ./kexec.nix;
   keycloak = discoverTests (import ./keycloak.nix);
-  keyd = handleTest ./keyd.nix { };
+  keyd = import ./keyd.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   keymap = import ./keymap.nix {
     inherit pkgs runTest;
     inherit (pkgs) lib;
