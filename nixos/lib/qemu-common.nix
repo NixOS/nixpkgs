@@ -49,7 +49,9 @@ rec {
       };
       otherHostGuestMatrix = {
         aarch64-darwin = {
-          aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=${accel "hvf"} -cpu max";
+          # Pin virt-11.0 to avoid gic-version=3 that works on MacOS 15+ only.
+          # FIXME: Revert to `virt` after minimal supported macos is 15+.
+          aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt-11.0,accel=${accel "hvf"} -cpu max";
         };
       };
 
