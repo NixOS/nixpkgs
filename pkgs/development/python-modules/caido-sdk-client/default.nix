@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caido-sdk-client";
-  version = "0.2.0";
+  version = "0.3.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "caido_sdk_client";
     inherit (finalAttrs) version;
-    hash = "sha256-OZiP4Hs/qcaa29SWYttmDXcH1g2SRRCbFiPe+Xs5usg=";
+    hash = "sha256-9jvd49QePhboxtHDDyWcumliNLX8n2bfOjNjcZWLKDs=";
   };
 
   postPatch = ''
