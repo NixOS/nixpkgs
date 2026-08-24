@@ -25,13 +25,13 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-m8y7O0Dj3hA1H49QaOEF0PQIOxpl+ge2Y0+8QBpih/0=";
+    hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
 
   postPatch = ''
