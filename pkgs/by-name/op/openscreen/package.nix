@@ -7,13 +7,13 @@
   makeWrapper,
   makeDesktopItem,
   xcbuild,
-  electron_42,
+  electron_41,
   nodejs_22,
   nix-update-script,
   fetchgit,
 }:
 let
-  electron = electron_42;
+  electron = electron_41;
   nodejs = nodejs_22;
 
   # download model
