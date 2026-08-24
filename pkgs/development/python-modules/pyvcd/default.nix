@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
+  version = "0.5.0";
   format = "setuptools";
   pname = "pyvcd";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3GJ16Vp5SbgjYIarLm0Dr+3nNEEkPsUQnJ6okHfz1pY=";
+    hash = "sha256-luPHuUCeY/WOtLXCKwF/nzQS3b38c0zsLh361cKag98=";
   };
 
   buildInputs = [ setuptools-scm ];
