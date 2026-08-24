@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "citeproc-py";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "citeproc_py";
     inherit version;
-    hash = "sha256-WHgdilY+h8p8zrQ9CL6soQ3N+fPPd93zsXiUBx7cJ8g=";
+    hash = "sha256-uWkzyTiu4G/3RZDN9ouuZXwE4vsp1s0uaTqg2X3je8I=";
   };
 
   build-system = [ setuptools ];
