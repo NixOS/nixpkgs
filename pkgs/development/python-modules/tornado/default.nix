@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tornado";
-  version = "6.5.7";
+  version = "6.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iE0Tf95zmPoZJhw7FDLzTmv8HaWds3ZU5xzZSMvxFH4=";
+    hash = "sha256-BwthRtaZReFNQQTm2ZOx1i074lO9WuVl9WgX/M+4FEc=";
   };
 
   build-system = [ setuptools ];
