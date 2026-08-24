@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tq6qme2RFj7Y+arBMscKgfJbxMEvPNVNujKfwmxnObU=";
+    hash = "sha256-C9/x+menhW7Imcb3gQqGkRJT12IBowgi1+TvFLZxvcA=";
   };
 
   build-system = [
