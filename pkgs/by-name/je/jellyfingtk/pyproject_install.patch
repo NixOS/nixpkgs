@@ -1,0 +1,21 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 60439cb..5ff3736 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,8 +13,15 @@ dependencies = [
+ [project.urls]
+ homepage = "https://example.com"
+ 
++[project.scripts]
++jellyfin-gtk = "src.main:main"
++
+ [tool.setuptools]
+-py-modules = []
++package-dir = {"" = "."}
++packages = ["src"]
++
++[tool.setuptools.package-data]
++"src" = ["../ui/*", "../ui/*.ui", "../ui/*.cmb", "../assets/*", "../assets/**/*"]
+ 
+ [tool.black]
+ line-length = 100
