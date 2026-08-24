@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.11.1";
+  version = "0.12.1";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e6CvclFrRfXR5fL2ZG1LZxTTsTRouLsDicCwvXtySGE=";
+    hash = "sha256-Jh5HxN8Ey2PbNL1TQ3cHLHhB1vlfndmGwTlD2klR/U4=";
   };
 
   propagatedBuildInputs = [
