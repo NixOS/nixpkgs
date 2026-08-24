@@ -1399,6 +1399,8 @@ self: super: with self; {
 
   asn1 = callPackage ../development/python-modules/asn1 { };
 
+  asn1_2 = callPackage ../development/python-modules/asn1/2.nix { };
+
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
