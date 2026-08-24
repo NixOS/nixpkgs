@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
     version = version;
-    hash = "sha256-ZlaKBbxzlCxl8eIgGudGKVgW3ACe3YS0gsRMdY11CXo=";
+    hash = "sha256-iEmbIvE1OJN0PDzWjyylYcStnvdc1rzH9iEWHNDoB0Q=";
   };
 
   nativeBuildInputs = [ setuptools ];
