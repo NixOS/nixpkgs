@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-webencodings";
-  version = "0.6.0.20260821";
+  version = "0.6.0.20260824";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_webencodings";
     inherit (finalAttrs) version;
-    hash = "sha256-QkfJhQ1TblGM2gi+mJsrfuviF/q49vv+/AxDaQ/9TaE=";
+    hash = "sha256-E8RE/Griw5IMIovuRKjk1FdIXcTUNS0NeDgWoSmyz9U=";
   };
 
   build-system = [ setuptools ];
