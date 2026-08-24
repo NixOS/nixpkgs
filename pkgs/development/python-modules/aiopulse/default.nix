@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.7";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DM/zDFoTYgaW+o2YYv4bDAja5iwabIBfFJ7Yep4Fywc=";
+    hash = "sha256-acUcJM5ghUKezpYTncDADQTZa6NMyteG6Yu7GFPbuLs=";
   };
 
   build-system = [ hatchling ];
