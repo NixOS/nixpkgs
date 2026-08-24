@@ -5,6 +5,7 @@
   pkg-config,
   rustPlatform,
   openssl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -46,8 +47,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "hf_xet" ];
 
-  # No tests (yet?)
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Xet client tech, used in huggingface_hub";
