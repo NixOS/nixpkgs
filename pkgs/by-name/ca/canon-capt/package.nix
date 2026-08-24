@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.1.4.2-GxB";
+  version = "0.1.3";
 in
 stdenv.mkDerivation {
   pname = "canon-capt";
