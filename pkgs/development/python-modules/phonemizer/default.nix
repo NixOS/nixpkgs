@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xgw4Ei7/4LMxok5nSv8laHTs4WnXCpzxEgM3tW+OPQw=";
+    hash = "sha256-4TIxmAxQvGcewEZjeboCcmCtnWGSmVLYrpZls9DyUes=";
   };
 
   patches = [
