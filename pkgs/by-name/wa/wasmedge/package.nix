@@ -1,26 +1,18 @@
 {
   lib,
-  fetchFromGitHub,
-  fetchpatch,
-  llvmPackages_19,
   boost,
   cmake,
-  spdlog,
-  libxml2,
+  fetchFromGitHub,
+  fetchpatch,
   libffi,
+  libxml2,
+  llvmPackages,
+  spdlog,
   testers,
+  nix-update-script,
 }:
 
 let
-  # The supported version is found in the changelog, the documentation does indicate a minimum version but not a maximum.
-  # The project is also using a `flake.nix` so we can retrieve the used llvm version with:
-  #
-  # ```shell
-  # nix eval --inputs-from .# nixpkgs#llvmPackages.libllvm.version
-  # ```
-  #
-  # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
-  llvmPackages = llvmPackages_19;
   stdenv = llvmPackages.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -30,9 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-+Z9mhIoRc8iJoCPafbkX3lB9nQAysKB5gjLmq8AUk/I=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     # fmt 12.2's uint128 fallback does not support unary complement. PR #4936
@@ -48,21 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.lld
+    llvmPackages.bintools
   ];
 
   buildInputs = [
     boost
-    spdlog
-    llvmPackages.llvm
-    libxml2
     libffi
+    libxml2
+    llvmPackages.lld
+    llvmPackages.llvm
+    spdlog
   ];
 
-  cmakeFlags = [
-    "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
 
@@ -70,16 +63,20 @@ stdenv.mkDerivation (finalAttrs: {
     echo -n $version > VERSION
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://wasmedge.org/";
-    license = lib.licenses.asl20;
     description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
+    changelog = "https://github.com/WasmEdge/WasmEdge/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
