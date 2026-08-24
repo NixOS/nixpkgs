@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "7.0.3";
+  version = "7.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tGAE7DClMkZyaD7ISK7Z6PxQCw0mHUCjIpwtK7/O3Ck=";
+    hash = "sha256-lz2irumWHXyyeKp04YKfbar+yd2O6MFlXL8/WEO/4IM=";
   };
 
   build-system = [ setuptools_80 ];
