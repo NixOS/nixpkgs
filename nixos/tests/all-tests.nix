@@ -1177,7 +1177,7 @@ in
   nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
-  netbox = handleTest ./web-apps/netbox/default.nix { };
+  netbox = runTest ./web-apps/netbox/default.nix;
   netdata = runTest ./netdata.nix;
   netfoil = runTest ./netfoil.nix;
   netplan = runTest ./netplan.nix;
