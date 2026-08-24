@@ -2162,16 +2162,7 @@ with pkgs;
 
   limine-full = limine.override { enableAll = true; };
 
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
-    enableUnfree = false;
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
-  logstash = logstash7;
+  logstash = logstash8;
 
   lagrange-tui = lagrange.override { enableTUI = true; };
 

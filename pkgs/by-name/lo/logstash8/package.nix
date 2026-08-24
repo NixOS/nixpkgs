@@ -6,6 +6,7 @@
   bash,
   coreutils,
   gnused,
+  nixosTests,
   jre_headless,
   versionCheckHook,
 }:
@@ -76,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru = {
+    tests = {
+      elk = nixosTests.elk.ELK-8;
+    };
+  };
 
   meta = {
     description = "Data pipeline that helps you process logs and other event data from a variety of systems";
