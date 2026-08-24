@@ -21,13 +21,13 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzmq";
   version = "27.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VNQlnRv64k7Ntcp596zC6sbChqAtagrmF3l8tF8HJtM=";
   };
 
@@ -85,10 +85,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
+    changelog = "https://pyzmq.readthedocs.io/en/latest/changelog.html";
     license = with lib.licenses; [
       bsd3 # or
       lgpl3Only
     ];
     maintainers = [ ];
   };
-}
+})
