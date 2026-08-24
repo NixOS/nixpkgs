@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cssselect";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V/iplCTPqyiaG2qBakMHWksAlIyGtNzz707n4V96sMc=";
+    sha256 = "sha256-PL6C3XrL7pup5XI7X55HSYJpEvH7Mc1/kqq+1f3hWxU=";
   };
 
   nativeBuildInputs = [ setuptools ];
