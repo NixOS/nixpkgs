@@ -1,43 +1,42 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
-  whey,
-  sphinx,
   apeye,
   autodocsumm,
   beautifulsoup4,
+  buildPythonPackage,
   cachecontrol,
   dict2css,
+  fetchPypi,
   filelock,
   html5lib,
+  python,
   roman,
   ruamel-yaml,
   sphinx-autodoc-typehints,
   sphinx-jinja2-compat,
   sphinx-prompt,
   sphinx-tabs,
+  sphinx,
   tabulate,
-  python,
+  whey,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-toolbox";
-  version = "4.1.2";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "sphinx_toolbox";
-    hash = "sha256-wwpPhsTCnpetsOuTN9NfUJPLlqRPScr/z31bxYqIt4E=";
+    hash = "sha256-B+wmF2dE7jq+PB60QHQZ6BRo9FNvMy3K/E4yQLDW+uI=";
   };
 
-  postPatch = ''
-    substituteInPlace \
-      requirements.txt PKG-INFO pyproject.toml \
-      --replace-fail "sphinx-tabs<3.4.7,>=1.2.1" "sphinx-tabs<=3.5.0,>=1.2.1" \
-      --replace-fail "ruamel.yaml<=0.18.16,>=0.16.12" "ruamel.yaml<=0.19.1,>=0.16.12"
-  '';
+  pythonRelaxDeps = [
+    "ruamel.yaml"
+    "sphinx-autodoc-typehints"
+    "sphinx-tabs"
+  ];
 
   build-system = [ whey ];
 
@@ -67,6 +66,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Box of handy tools for Sphinx";
     homepage = "https://github.com/sphinx-toolbox/sphinx-toolbox";
+    changelog = "https://github.com/sphinx-toolbox/sphinx-toolbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
