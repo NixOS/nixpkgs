@@ -3,6 +3,7 @@
   stdenv,
   runCommand,
   writeText,
+  runtimeShell,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -17,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
   clang = if enableLibcxx then libcxxClang else clang;
+  shell = runtimeShell;
 
   installPhase = ''
     runHook preInstall
@@ -38,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       cp $toolPath $out/bin/$toolName-unwrapped
+      export prog="$out/bin/$toolName-unwrapped"
       substituteAll ${./wrapper} $out/bin/$toolName
       chmod +x $out/bin/$toolName
     done
