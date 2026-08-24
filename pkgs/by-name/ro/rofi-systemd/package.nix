@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-systemd";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "colonelpanic8";
     repo = "rofi-systemd";
     tag = "v${version}";
-    sha256 = "1zwbw119mblp5b6dj4h92fi0y2ymimlgh4bawi5ks2051hpq6c1a";
+    sha256 = "sha256-Ry7GRd1e5OvkfB9O0QWtd+cMpmU1qv6kYQ/wx01lrI0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
