@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytz";
-  version = "2026.2";
+  version = "2026.3.post1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DmC0eynyFXQ3byGP4hq8AJiUojIeoWxnVPPK1ut83Wo=";
+    hash = "sha256-IhHT/Pmnl9NAXKyWrH9h2A5qZE9yozCWBygv6KIBDF0=";
   };
 
   postPatch = ''
