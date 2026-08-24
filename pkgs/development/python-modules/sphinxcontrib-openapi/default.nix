@@ -2,27 +2,37 @@
   lib,
   buildPythonPackage,
   deepmerge,
-  fetchPypi,
-  setuptools-scm,
+  fetchFromGitHub,
   jsonschema,
   picobox,
   pyyaml,
+  setuptools-scm,
+  setuptools,
   sphinx-mdinclude,
+  sphinx,
   sphinxcontrib-httpdomain,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-openapi";
-  version = "0.8.4";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-34g4CKW15LQROtaXGFxDo/Qt89znBFOveLpwdpB+miA=";
+  src = fetchFromGitHub {
+    owner = "sphinx-contrib";
+    repo = "openapi";
+    tag = finalAttrs.version;
+    hash = "sha256-PmT2GcOvO7KmWwjdqkuZ9cgoIZwbg82V21Opsfhz+mY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  buildInput = [ sphinx ];
+
+  dependencies = [
     deepmerge
     jsonschema
     picobox
@@ -36,9 +46,10 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = {
-    homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
+    homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
+    changelog = "https://github.com/sphinx-contrib/openapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.flokli ];
   };
-}
+})
