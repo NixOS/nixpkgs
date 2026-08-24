@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "avidtools";
-  version = "0.2.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rYkA/+YfFhrS/WSx+jUWCsXDjp03aMoMiGdXeK3Kf4M=";
+    hash = "sha256-sx+g3yBJ478C8L2IhO1iYIzubsP6kTA2sCts3nwF23E=";
   };
 
   build-system = [ poetry-core ];
