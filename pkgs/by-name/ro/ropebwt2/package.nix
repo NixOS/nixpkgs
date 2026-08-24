@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation {
   pname = "ropebwt2";
-  version = "0-unstable-2021-02-01";
+  version = "rle6-final";
   src = fetchFromGitHub {
     owner = "lh3";
     repo = "ropebwt2";
