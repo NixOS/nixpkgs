@@ -1429,6 +1429,13 @@ with pkgs;
     packetbeat7
     ;
 
+  inherit (callPackages ../misc/logging/beats/8.x.nix { })
+    auditbeat8
+    heartbeat8
+    metricbeat8
+    packetbeat8
+    ;
+
   auditbeat = auditbeat7;
   filebeat = filebeat7;
   heartbeat = heartbeat7;
