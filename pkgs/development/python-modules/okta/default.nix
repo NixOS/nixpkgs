@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "3.1.0";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ZYDrup+HJxlrOmSBGsWD4Ku8HRlQR4E68olWQtcazg=";
+    hash = "sha256-58ghdrWv0jAeO2heBxViDf2SUT/EWZkUfjPXSFJjo/I=";
   };
 
   build-system = [ setuptools ];
