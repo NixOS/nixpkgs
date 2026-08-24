@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wraith";
-  version = "1.4.10-unstable-2024-03-19";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "wraith";
