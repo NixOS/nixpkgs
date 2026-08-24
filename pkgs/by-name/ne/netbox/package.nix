@@ -6,6 +6,8 @@
   plugins ? _ps: [ ],
   nixosTests,
   nix-update-script,
+  runCommand,
+  writers,
 }:
 let
   py = python3.override {
@@ -121,6 +123,22 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     inherit (py.pkgs) gunicorn;
     tests = {
       inherit (nixosTests) netbox;
+      satisfiesBaseRequirements =
+        runCommand "test-netbox-satisfies-base-requirements"
+          {
+            nativeBuildInputs = [
+              (writers.writePython3Bin "test-netbox-requirements" {
+                libraries = finalAttrs.passthru.dependencies ++ [
+                  py.pkgs.packaging
+                  finalAttrs.passthru.gunicorn
+                ];
+              } (builtins.readFile ./test-netbox-requirements.py))
+            ];
+          }
+          ''
+            test-netbox-requirements ${finalAttrs.src}/base_requirements.txt
+            touch $out
+          '';
     };
     updateScript = nix-update-script { };
     plugins = lib.recurseIntoAttrs (
