@@ -71,6 +71,9 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -268,11 +271,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
