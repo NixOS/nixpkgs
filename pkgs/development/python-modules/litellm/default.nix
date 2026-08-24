@@ -13,6 +13,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
@@ -120,6 +121,7 @@ buildPythonPackage rec {
       backoff
       boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
