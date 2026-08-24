@@ -24,7 +24,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/bearer/bearer/cmd/bearer/build.Version=${finalAttrs.version}"
   ];
 
