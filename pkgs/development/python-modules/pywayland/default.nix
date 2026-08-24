@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.18";
+  version = "0.4.19";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WYreAng6rQWjKPZjtRtpTFq2i9XR4JJsDaPFISxWZTM=";
+    hash = "sha256-nYR49bDfNUAzPM+FpV/os0FQssKMaFgF3p/6hViYVJ4=";
   };
 
   depsBuildBuild = [ pkg-config ];
