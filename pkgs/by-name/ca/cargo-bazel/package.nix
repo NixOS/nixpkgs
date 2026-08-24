@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bazel";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-KWcxZxzDbiBfBpr37M6HoqHMCYXq6sTVxU9KR3PIiJc=";
+    hash = "sha256-yPMos/V7OjAPJWoivLlatqhbsJzbvsxUf0pTDf4JxFg=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libz;
 
-  cargoHash = "sha256-wNsGggyKL6CyldPsNADwGKm3HGfxQwjCCOdgzWcAx4g=";
+  cargoHash = "sha256-F55vjMNNPB+d0VdP7HySDCnb3DidhUS9wZwCn8e4J6A=";
 
   # `test_data` is explicitly excluded from the package published to crates.io, so tests cannot be run
   doCheck = false;
