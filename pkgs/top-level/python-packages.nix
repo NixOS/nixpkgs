@@ -5739,6 +5739,8 @@ self: super: with self; {
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
 
+  expression = callPackage ../development/python-modules/expression { };
+
   exrex = callPackage ../development/python-modules/exrex { };
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
