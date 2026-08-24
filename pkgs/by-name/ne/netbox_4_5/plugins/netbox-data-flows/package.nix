@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-data-flows";
-  version = "1.5.2";
+  version = "1.5.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Alef-Burzmali";
     repo = "netbox-data-flows";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fry8AK0qgPs+QC5L2oilGSY68m1Y9KHWQ/QOzQ7B2+k=";
+    hash = "sha256-RJrS0B5MZBshSWl4ZL53kz1nK6UvUYmL8JSA4NEAzRo=";
   };
 
   build-system = [ setuptools ];
