@@ -1,0 +1,46 @@
+--- a/bin/elasticsearch-env
++++ b/bin/elasticsearch-env
+@@ -19,18 +19,22 @@
+   fi
+ done
+ 
+-# determine Elasticsearch home; to do this, we strip from the path until we find
+-# bin, and then strip bin (there is an assumption here that there is no nested
+-# directory under bin also named bin)
+-ES_HOME=`dirname "$SCRIPT"`
++# determine the install directory; to do this, we strip from the path until we
++# find bin, and then strip bin (there is an assumption here that there is no
++# nested directory under bin also named bin)
++ES_INSTALL_DIR=`dirname "$SCRIPT"`
+ 
+-# now make ES_HOME absolute
+-ES_HOME=`cd "$ES_HOME"; pwd`
++# now make ES_INSTALL_DIR absolute
++ES_INSTALL_DIR=`cd "$ES_INSTALL_DIR"; pwd`
+ 
+-while [ "`basename "$ES_HOME"`" != "bin" ]; do
+-  ES_HOME=`dirname "$ES_HOME"`
++while [ "`basename "$ES_INSTALL_DIR"`" != "bin" ]; do
++  ES_INSTALL_DIR=`dirname "$ES_INSTALL_DIR"`
+ done
+-ES_HOME=`dirname "$ES_HOME"`
++ES_INSTALL_DIR=`dirname "$ES_INSTALL_DIR"`
++
++# keep an ES_HOME from the environment: the NixOS module sets it to the data
++# directory, because the install directory is in the read-only Nix store
++ES_HOME="${ES_HOME:-$ES_INSTALL_DIR}"
+ 
+ # now set the path to java
+ if [ ! -z "$ES_JAVA_HOME" ]; then
+@@ -48,9 +52,9 @@
+   # use the bundled JDK (default)
+   if [ "$(uname -s)" = "Darwin" ]; then
+     # macOS has a different structure
+-    JAVA="$ES_HOME/jdk.app/Contents/Home/bin/java"
++    JAVA="$ES_INSTALL_DIR/jdk.app/Contents/Home/bin/java"
+   else
+-    JAVA="$ES_HOME/jdk/bin/java"
++    JAVA="$ES_INSTALL_DIR/jdk/bin/java"
+   fi
+   JAVA_TYPE="bundled JDK"
+ fi
