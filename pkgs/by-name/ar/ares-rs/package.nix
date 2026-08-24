@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ares-rs";
-  version = "0.11.0";
+  version = "untagged-6f5c4d8ee9777328c6eb";
 
   src = fetchFromGitHub {
     owner = "bee-san";
     repo = "ares";
     tag = finalAttrs.version;
-    hash = "sha256-IsIastLIrPknaJcH8sb0plPme+VGvo9DeDIisTD4sRM=";
+    hash = "sha256-TyRp+ffa98LGFOrotld+YA6qJ9ToGlEsvPS82XlNEXI=";
   };
 
-  cargoHash = "sha256-3L1LpmH96rYFB947sEhZcDK5g97zUgr2runjc1EYzZk=";
+  cargoHash = "sha256-R4FuKBegiYu9H4KIQ7nA18E2SL7OE2Io4SYwclhuM9U=";
 
   nativeBuildInputs = [ pkg-config ];
 
