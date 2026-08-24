@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "argononed";
-  version = "0.4.1-unstable-2025-12-26";
+  version = "0.1.6";
 
   src = fetchFromGitLab {
     owner = "DarkElvenAngel";
