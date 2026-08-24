@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lwG7LBoV6y6AdMsuKMoAfGm5+lKWG4O5jHV+rWuA3u8=";
+    hash = "sha256-lM97/l2u0dBYREzhY34QF33yL5A2g6U9H77kdVNIjGU=";
   };
 
   build-system = [ poetry-core ];
