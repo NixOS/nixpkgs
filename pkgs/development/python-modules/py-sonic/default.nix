@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "py-sonic";
-  version = "1.0.3";
+  version = "1.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kcly3pTBL9ZMDcCfKgI1pO8Iyr15/tv8PVoi5WUUUKE=";
+    hash = "sha256-WzygTPYcqqifF2K21DfMw4bjALVglGS3MOijYXwb0dk=";
   };
 
   # package has no tests
