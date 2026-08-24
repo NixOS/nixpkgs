@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-client";
-  version = "8.8.0";
+  version = "8.9.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_client";
     inherit version;
-    hash = "sha256-1VaBFBmk8tlshprzToVOPwWbfMLW0Bqc2chcJnaRvj4=";
+    hash = "sha256-pY9zDdnnKLoWuh1i68z3/+Hrvbzk6Vz66UG3Mhrh9Po=";
   };
 
   build-system = [ hatchling ];
