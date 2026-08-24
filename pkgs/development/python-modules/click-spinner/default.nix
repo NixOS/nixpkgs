@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "click-spinner";
-  version = "0.1.10";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h+rPnXKYlzol12Fe9X1Hgq6/kTpTK7pLKKN+Nm6XXa8=";
+    hash = "sha256-ATcVUFlrwY8eFUa7KVZ0Xu04cjUjXmZLyW+MxnW31ug=";
   };
 
   postPatch = ''
