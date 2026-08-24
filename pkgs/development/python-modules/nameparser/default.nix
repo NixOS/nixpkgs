@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "nameparser";
-  version = "1.1.3";
+  version = "1.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qiQArXHM+AcGdbQDEaJXyTRln5GFSxVOG6bCZHYcBJ0=";
+    hash = "sha256-pbkQXee4eZCWVraVTnBm8GvHp0Om5ncbGUZbC7vmpM8=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];
