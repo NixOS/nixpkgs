@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.11.4";
+  version = "0.11.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XUjXVs9/ETlbbtvYz8YJqCsP1BFajqQKQfSM+Rvm4O0=";
+    hash = "sha256-A7seYrOgTvO9npvE0vRbKlkiGqi1P6Q/mKXfWKQz4aE=";
   };
 
   build-system = [ setuptools ];
