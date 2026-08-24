@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.11.0";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
+    hash = "sha256-GOW+uudNalbgnq0a3JLYeUweejP0VBHAgPef8qTDH64=";
   };
 
   pythonRelaxDeps = [ "smart-open" ];
