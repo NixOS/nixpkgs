@@ -118,6 +118,8 @@ buildPythonPackage (finalAttrs: {
     dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/nltk/nltk/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Natural Language Processing ToolKit";

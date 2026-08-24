@@ -2,11 +2,16 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tlsx";
   version = "1.3.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -17,13 +22,21 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-5zqiA4Aoc5qjxXf8q+IzJqycSv49hJfynAVQ5Yomrro=";
 
-  ldflags = [
-    "-s"
-    "-w"
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TLS grabber focused on TLS based data collection";
@@ -32,7 +45,7 @@ buildGoModule (finalAttrs: {
       collection and analysis.
     '';
     homepage = "https://github.com/projectdiscovery/tlsx";
-    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

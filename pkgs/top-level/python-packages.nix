@@ -8317,6 +8317,8 @@ self: super: with self; {
 
   infinity = callPackage ../development/python-modules/infinity { };
 
+  infisicalsdk = callPackage ../development/python-modules/infisicalsdk { };
+
   inflate64 = callPackage ../development/python-modules/inflate64 { };
 
   inflect = callPackage ../development/python-modules/inflect { };
@@ -18951,6 +18953,8 @@ self: super: with self; {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simber = callPackage ../development/python-modules/simber { };
+
+  simp-sexp = callPackage ../development/python-modules/simp-sexp { };
 
   simpful = callPackage ../development/python-modules/simpful { };
 

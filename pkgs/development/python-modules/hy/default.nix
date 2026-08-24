@@ -4,14 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   funcparserlib,
-  hy,
   pytestCheckHook,
   python,
   setuptools,
-  testers,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hy";
   version = "1.3.1";
   pyproject = true;
@@ -19,18 +18,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qNgPuFG/j/q1osu/IJ8JbF+l/XiCphdhUYPOKbLEgTk=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
-  env.HY_VERSION = version;
+  env.HY_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
   dependencies = [ funcparserlib ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-v";
 
   preCheck = ''
     # For test_bin_hy
@@ -40,29 +43,26 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hy" ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = hy;
-      command = "hy -v";
-    };
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
     withPackages =
       python-packages:
       (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
-        name = "${hy.name}-env";
-        meta = lib.mergeAttrs (removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+        name = "${finalAttrs.finalPackage.name}-env";
+        meta = removeAttrs finalAttrs.finalPackage.meta [ "license" ];
       });
   };
 
   meta = {
     description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
-    changelog = "https://github.com/hylang/hy/releases/tag/${src.tag}";
+    changelog = "https://github.com/hylang/hy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    mainProgram = "hy";
     maintainers = with lib.maintainers; [
       mazurel
       nixy
     ];
   };
-}
+})

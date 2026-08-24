@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.23.2";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5fGvMWlLlyd5ibK7y1dqIK1MTpLABj3v1M0r/VArww=";
+    hash = "sha256-Of1YU59mj9BZwQi7lbj/+XGaCs+MTGFCZ12bgcNbEu0=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -66,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
+    qt6.qttools
     qt6.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qt6.qttools
     swift
   ];
 
@@ -146,7 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ zstg ];
+    maintainers = with lib.maintainers; [
+      zstg
+      nolight132
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vicinae";
   };

@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
-    homepage = "https://www.marktext.cc";
+    homepage = "https://www.marktext.me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       nh2

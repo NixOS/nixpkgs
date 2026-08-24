@@ -23,20 +23,20 @@
 
 let
   pname = "github-copilot-app";
-  version = "1.1.11";
+  version = "1.1.12";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-BmHuJg4fIsPp52LZ9F+9esvSNsAd9bjF4GEtfzgG7Dg=";
+      hash = "sha256-gT8CzKaoyNhykDtNGXQDqYc0yBRvNotjwETxI9VnPoA=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-AHUvg7aur4/eCo1Ewne7QWpEFsoZG7FcHPcxtbcOnyY=";
+      hash = "sha256-bC5Z3ZAhF/YqWWj+YHEYQBki8eOUv35rXH7C+DnGSlg=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-gXJp65Kf/D4m+G3BSUDJwPkdM1dx8C+vTveCUtWkUX8=";
+      hash = "sha256-8cNMYDqgOyMIyMqtZvKOzxWYHQ6+tKmxlaim1Zqn33c=";
     };
   };
 

@@ -160,6 +160,10 @@ in
     );
 
     environment.systemPackages = [ cfg.package ];
+
+    # Install at least one monospace font, as otherwise the fallback is DejaVu Sans, a non-monospace font
+    fonts.packages = [ pkgs.hack-font ];
+
     systemd.packages = [ cfg.package ];
 
     systemd.services."kmsconvt@" = {
