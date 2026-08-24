@@ -8,6 +8,7 @@
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
   postInstall = ''
     wrapProgram $out/bin/rtk \
       --prefix PATH : ${
@@ -52,11 +54,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script {
+    # Upstream also publishes `dev-<version>-rc.<n>` prerelease tags.
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
   meta = {
     description = "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands";
     homepage = "https://github.com/rtk-ai/rtk";
     changelog = "https://github.com/rtk-ai/rtk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rtk";
   };

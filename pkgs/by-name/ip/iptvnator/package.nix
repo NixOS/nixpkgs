@@ -4,7 +4,7 @@
   nodejs,
   fetchFromGitHub,
   fetchPnpmDeps,
-  electron_41,
+  electron_43,
   pnpmConfigHook,
   pnpm_10,
   copyDesktopItems,
@@ -26,11 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LKLM9SQ7TJCmsH2cDN4GAkTbvMtEfsDA3y40i4dGqJs=";
   };
 
+  patches = [
+    # better-sqlite3 13.0.3 is needed to build against Electron 43; hand-ported
+    # because upstream's equivalent change (https://github.com/4gray/iptvnator/pull/1415)
+    # does not apply to the v0.22.0 manifests.
+    ./better-sqlite3-13.patch
+  ];
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit (finalAttrs) patches;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-gPeQ+LYsEmZa38/C7q6DqRijMUc7FZAwO5Sn2NRv5kc=";
+    hash = "sha256-b6v8hCZy/H06n4RceS/x3xFACdP0czAokwRl8xXQ1gI=";
   };
 
   __structuredAttrs = true;
@@ -69,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME="$NIX_BUILD_TOP/home"
     mkdir -p "$HOME"
 
-    cp -rL "${electron_41.dist}" "$HOME/.electron-dist"
+    cp -rL "${electron_43.dist}" "$HOME/.electron-dist"
     chmod -R u+w "$HOME/.electron-dist"
   '';
 
   preBuild = ''
-    export npm_config_nodedir=${electron_41.headers}
+    export npm_config_nodedir=${electron_43.headers}
     export npm_config_build_from_source=true
   '';
 
@@ -91,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     # Override electron-builder config: use local electron dist, pin version, dir-only for linux
     jq --arg dist "$HOME/.electron-dist" \
-       --arg ver "${electron_41.version}" \
+       --arg ver "${electron_43.version}" \
        '. + {electronDist: $dist, electronVersion: $ver}
         | .linux.target = [{"target": "dir", "arch": ["x64"]}]
         | .files = [
@@ -120,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     cp -r "$linuxDir"/{locales,resources{,.pak}} $out/share/iptvnator/
 
-    makeWrapper ${lib.getExe electron_41} $out/bin/iptvnator \
+    makeWrapper ${lib.getExe electron_43} $out/bin/iptvnator \
       --add-flags $out/share/iptvnator/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
