@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       DPDmancul
     ];
-    mainProgram = "karlyricseditor";
+    mainProgram = "karlyriceditor";
     platforms = lib.platforms.linux;
   };
 })
