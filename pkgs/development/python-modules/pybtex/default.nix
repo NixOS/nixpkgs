@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pybtex";
-  version = "0.25.1";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-nq+QJnx+g+Ilr4n+plw3Cvv2X0WCINOUap4wSeHspJE=";
+    sha256 = "sha256-LlVDvqQk5g6eQu73C/9Ze+SGSdj2i6Bhp6CSskd9VGQ=";
   };
 
   build-system = [
