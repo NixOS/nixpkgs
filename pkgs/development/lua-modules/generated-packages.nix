@@ -2632,17 +2632,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-session";
-      version = "4.1.5-1";
+      version = "4.2.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-session-4.1.5-1.rockspec";
-          sha256 = "1mapndwa260pk18v4nwnmz4bncqizfn1zc8k8aj1557pc1fj5ii6";
+          url = "mirror://luarocks/lua-resty-session-4.2.0-1.rockspec";
+          sha256 = "1xps6j9ddz4xqminhl56s3gvx2nbbnc9k3bzhjpkz4x6f39ciabf";
         }).outPath;
       src = fetchFromGitHub {
         owner = "bungle";
         repo = "lua-resty-session";
-        tag = "v4.1.5";
-        hash = "sha256-qwXNEWU0i3PUJK5cUChkcH43HnBCz4EEVPDQQ10Je+Q=";
+        tag = "v4.2.0";
+        hash = "sha256-wRAd6AGcSkhZcA4Cm9cGetEUt1TfABtYpU2avrK1Hdw=";
       };
 
       disabled = luaOlder "5.1";
