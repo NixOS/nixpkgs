@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   libpcap,
+  nixosTests,
 }:
 
 let
@@ -58,6 +59,11 @@ in
   };
   metricbeat8 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
+    passthru = {
+      tests = {
+        elk = nixosTests.elk.ELK-8;
+      };
+    };
   };
   packetbeat8 = beat "packetbeat" {
     buildInputs = [ libpcap ];
