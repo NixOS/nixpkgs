@@ -1389,6 +1389,8 @@ let
 
         mmap = callPackage ../development/ocaml-modules/mmap { };
 
+        monocypher = callPackage ../development/ocaml-modules/monocypher { };
+
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
         mopsa = callPackage ../development/ocaml-modules/mopsa {
