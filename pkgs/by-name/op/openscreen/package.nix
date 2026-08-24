@@ -7,28 +7,37 @@
   makeWrapper,
   makeDesktopItem,
   xcbuild,
-  electron_41,
+  electron_42,
   nodejs_22,
   nix-update-script,
+  fetchgit,
 }:
 let
-  electron = electron_41;
+  electron = electron_42;
   nodejs = nodejs_22;
+
+  # download model
+  xenovaWhisperTiny = fetchgit {
+    url = "https://huggingface.co/Xenova/whisper-tiny";
+    fetchLFS = true;
+    hash = "sha256-6v4CMUeFFLrN80gb7OxVv8EHIWg61Xx2khRjzhHvAnQ=";
+  };
+
 in
 buildNpmPackage (finalAttrs: {
   inherit nodejs;
 
   pname = "openscreen";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "siddharthvaddem";
     repo = "openscreen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZBWDQVYDXJ/IQGhlmscmCOMjpl03kVIdMoJXOW8OjUI=";
+    hash = "sha256-csGCSYfqhQaswn/qdFeX3wZsAYlwU7V30n90HJrKslY=";
   };
 
-  npmDepsHash = "sha256-SMAYgOwlZg9+/KZBUhVviOxEdMeL3Z2YdC8Hx8Q/ioY=";
+  npmDepsHash = "sha256-lx38H0qG5IrjQRekLG2N+x90Zq/emPfbxOo/qDSn7iE=";
 
   npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent running `node-gyp build`
 
@@ -42,6 +51,25 @@ buildNpmPackage (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  configurePhase = ''
+    runHook preConfigure
+
+    # Copy manually model files
+    mkdir -p caption-assets/models/Xenova/whisper-tiny
+    for el in config.json generation_config.json preprocessor_config.json tokenizer.json tokenizer_config.json \
+      added_tokens.json special_tokens_map.json normalizer.json merges.txt vocab.json quantize_config.json \
+      onnx/encoder_model_quantized.onnx onnx/decoder_model_merged_quantized.onnx; do
+
+        install -Dm644 "${xenovaWhisperTiny}/$el" "caption-assets/models/Xenova/whisper-tiny/$el"
+    done
+
+    # Disable download in script
+    substituteInPlace scripts/fetch-caption-model.mjs \
+      --replace-fail 'await download(`''${HF_BASE}/''${rel}`, path.join(modelDir, rel));' '/* skip */'
+
+    runHook postConfigure
+  '';
+
   buildPhase = ''
     runHook preBuild
 
@@ -52,6 +80,7 @@ buildNpmPackage (finalAttrs: {
       # electronDist needs to be modifiable on Darwin
       cp -r ${electron.dist} electron-dist
       chmod -R u+w electron-dist
+
 
       # Disable code signing during build on macOS.
       # https://www.electron.build/code-signing-mac.html#how-to-disable-code-signing-during-the-build-process-on-macos
