@@ -1156,6 +1156,7 @@ in
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netbox_4_5 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_5; };
+  netbox_4_6 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_6; };
   netdata = runTest ./netdata.nix;
   netfoil = runTest ./netfoil.nix;
   netplan = runTest ./netplan.nix;
@@ -1553,6 +1554,7 @@ in
   rsyslogd = handleTest ./rsyslogd.nix { };
   rtkit = runTest ./rtkit.nix;
   rtorrent = runTest ./rtorrent.nix;
+  rundeck = runTest ./rundeck.nix;
   rush = runTest ./rush.nix;
   rustfs = runTest ./rustfs.nix;
   rustical = runTest ./web-apps/rustical.nix;
