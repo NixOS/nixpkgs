@@ -1,4 +1,5 @@
 {
+  lib,
   makeSetupHook,
 }:
 makeSetupHook {
@@ -7,4 +8,9 @@ makeSetupHook {
   name = "pnpm-build-hook";
 
   __structuredAttrs = true;
+
+  meta = {
+    maintainers = [ lib.maintainers.RossSmyth ];
+    license = lib.licenses.mit;
+  };
 } ./pnpm-build-hook.sh
