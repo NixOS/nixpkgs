@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tetro-tui";
-  version = "3.6.1";
+  version = "3.6.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Strophox";
     repo = "tetro-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i/d+i6E0ClMAAjC6zB9Lt26LYEcjvR01MCzGne2EXNQ=";
+    hash = "sha256-tlZYvk9PrdkuN8m+tu/sPrG88k9L58T/QDk2fLZmM34=";
   };
 
-  cargoHash = "sha256-LTHokF9T7nRvvzfQWSL9igTHmvV+w40Pm4z/i0y7goA=";
+  cargoHash = "sha256-AF5aerbBhBJ8Ommrq27GjSeGE/smTvVdEoXS1XLktRE=";
 
   nativeBuildInputs = [
     copyDesktopItems

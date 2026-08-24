@@ -793,6 +793,7 @@ mapAliases {
   expidus = throw "'expidus' has been removed from nixpkgs due to it not being maintained"; # Added 2026-07-28
   ext4fuse = throw "'ext4fuse' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # added 2026-08-12
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
+  Fabric = fabric; # Added 2026-06-29
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   falcon = throw "'falcon' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-16
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
@@ -2142,6 +2143,7 @@ mapAliases {
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
+  raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16

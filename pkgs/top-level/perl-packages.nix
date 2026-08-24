@@ -7771,17 +7771,21 @@ with self;
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.35";
+    version = "0.41";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.35.tar.gz";
-      hash = "sha256-XuvVWsBxY0yGSo549c+vuq9Dz4TAQyOgm3Hddr8CXMI=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-RSA-0.41.tar.gz";
+      hash = "sha256-gvqDmJe4jpwkW2Jl874m07yHnK5MeoFR+tSjB8M2aCI=";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRandom ];
+    propagatedBuildInputs = [
+      CryptOpenSSLBignum
+      CryptOpenSSLRandom
+    ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     env.OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
+      homepage = "https://github.com/cpan-authors/Crypt-OpenSSL-RSA";
       description = "RSA encoding and decoding, using the openSSL libraries";
       license = with lib.licenses; [
         artistic1
@@ -22968,6 +22972,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-SAML-0.07.tar.gz";
       hash = "sha256-csJMrNtvHXp14uqgBDfHFKv1eafSENSqTT8g8e/0cQ0=";
     };
+    patches = [
+      ../development/perl-modules/MojoSAML-select-PKCS-1-padding.patch
+    ];
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [
       CryptOpenSSLRSA
