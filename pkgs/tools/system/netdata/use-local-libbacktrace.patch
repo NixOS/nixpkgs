@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 34b1f55ad..fd91d6e1c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -692,10 +692,6 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+     message(STATUS "Added compiler and linker flags for better stack trace support")
+ endif()
+ 
+-if(ENABLE_LIBBACKTRACE)
+-    netdata_bundle_libbacktrace()
+-endif()
+-
+ netdata_bundle_sqlite3()
+ 
+ #
+@@ -2584,8 +2580,10 @@ if(OS_LINUX OR OS_WINDOWS)
+     target_link_libraries(libnetdata PUBLIC netipc)
+ endif()
+ 
+-if(HAVE_LIBBACKTRACE)
+-    netdata_add_libbacktrace_to_target(libnetdata)
++if(ENABLE_LIBBACKTRACE AND HAVE_LIBBACKTRACE)
++  target_link_libraries(libnetdata ${LIBBACKTRACE_LIBRARIES})
++  target_include_directories(libnetdata PUBLIC ${LIBBACKTRACE_INCLUDE_DIRS})
++  target_compile_options(libnetdata PUBLIC ${LIBBACKTRACE_CFLAGS_OTHER})
+ endif()
+ 
+ netdata_add_sqlite3_to_target(libnetdata)

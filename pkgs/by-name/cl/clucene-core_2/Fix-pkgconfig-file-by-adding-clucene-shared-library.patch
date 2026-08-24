@@ -1,0 +1,19 @@
+From 7be4a19b76d98260cf95040a47935f854a4ba7a4 Mon Sep 17 00:00:00 2001
+From: Valentin Rusu <kde@rusu.info>
+Date: Sat, 17 Dec 2011 13:47:58 +0100
+Subject: [PATCH] Fix .pc file by adding clucene-shared library
+
+---
+ src/core/libclucene-core.pc.cmake |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/src/core/libclucene-core.pc.cmake
++++ b/src/core/libclucene-core.pc.cmake
+@@ -6,6 +6,6 @@ includedir=${prefix}/include:${prefix}/i
+ Name: libclucene
+ Description: CLucene - a C++ search engine, ported from the popular Apache Lucene
+ Version: @CLUCENE_VERSION_MAJOR@.@CLUCENE_VERSION_MINOR@.@CLUCENE_VERSION_REVISION@.@CLUCENE_VERSION_PATCH@
+-Libs: -L${prefix}/@LIB_DESTINATION@/ -lclucene-core
++Libs: -L${prefix}/@LIB_DESTINATION@/ -lclucene-core -lclucene-shared
+ Cflags: -I${prefix}/include -I${prefix}/include/CLucene/ext
+ ~

@@ -1,0 +1,61 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    aws-eventstream (1.4.0)
+    aws-partitions (1.1124.0)
+    aws-sdk-core (3.226.2)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-kms (1.106.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.191.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.12.1)
+      aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.3.0)
+    cfn-model (0.6.6)
+      kwalify (= 0.7.2)
+      psych (~> 3)
+    cfn-nag (0.8.10)
+      aws-sdk-s3 (~> 1.76)
+      cfn-model (= 0.6.6)
+      lightly (~> 0.3.2)
+      logging (~> 2.2.2)
+      netaddr (~> 2.0.4)
+      optimist (~> 3.0.0)
+      rexml
+    jmespath (1.6.2)
+    kwalify (0.7.2)
+    lightly (0.3.3)
+    little-plugger (1.1.4)
+    logger (1.7.0)
+    logging (2.2.2)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.10)
+    multi_json (1.15.0)
+    netaddr (2.0.6)
+    optimist (3.0.1)
+    ostruct (0.6.2)
+    psych (3.3.4)
+    rexml (3.4.1)
+    syslog (0.3.0)
+      logger
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cfn-nag
+  logger
+  ostruct
+  syslog
+
+BUNDLED WITH
+   2.6.9

@@ -1,0 +1,12 @@
+diff --git a/src/cmd/create.go b/src/cmd/create.go
+index 74e90b1..113ef80 100644
+--- a/src/cmd/create.go
++++ b/src/cmd/create.go
+@@ -423,6 +425,7 @@ func createContainer(container, image, release string, showCommandToEnter bool)
+ 		"--volume", toolboxPathMountArg,
+ 		"--volume", usrMountArg,
+ 		"--volume", runtimeDirectoryMountArg,
++		"--volume", "@glibc@:@glibc@:ro",
+ 	}...)
+ 
+ 	createArgs = append(createArgs, avahiSocketMount...)

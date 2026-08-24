@@ -1,0 +1,38 @@
+diff --git a/src/bignum.c b/src/bignum.c
+index 1a5553d5a..6bcdb5b6b 100644
+--- a/src/bignum.c
++++ b/src/bignum.c
+@@ -1949,6 +1949,7 @@ static SgObject small_bignum_to_string(SgBignum *b, int radix, int use_upper)
+ }
+ 
+ /* FIXME this is also in number.c */
++#if !defined(__GLIBC__) || !__GLIBC_PREREQ(2, 26)
+ static inline double roundeven(double v)
+ {
+   double r;
+@@ -1966,6 +1967,7 @@ static inline double roundeven(double v)
+   }
+   return r;
+ }
++  #endif
+ /* this is used here */
+ static SgBignum * bignum_expt(SgBignum *b, long exponent);
+ 
+diff --git a/src/roundeven.inc b/src/roundeven.inc
+index 36d3c5535..1a29eefce 100644
+--- a/src/roundeven.inc
++++ b/src/roundeven.inc
+@@ -31,6 +31,7 @@
+ #include <math.h>
+ #include <float.h>
+ 
++#if !defined(__GLIBC__) || !__GLIBC_PREREQ(2, 26)
+ static inline double roundeven(double v)
+ {
+   double r;
+@@ -50,3 +51,5 @@ static inline double roundeven(double v)
+ }
+ 
+ #endif
++
++#endif

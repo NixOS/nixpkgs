@@ -1,0 +1,17 @@
+diff --git a/cli/build.rs b/cli/build.rs
+index adba6cf..a7a2a53 100644
+--- a/cli/build.rs
++++ b/cli/build.rs
+@@ -5,12 +5,5 @@
+ // Copyright 2023 Oxide Computer Company
+ 
+ fn main() {
+-    let src = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+-    match built::util::get_repo_head(src.as_ref()) {
+-        Ok(Some((_branch, _commit, _commit_short))) => (),
+-        Ok(None) => panic!("Error: Build script could not find git commit information"),
+-        Err(e) => panic!("Build script error: {}", e),
+-    };
+-
+     built::write_built_file().expect("Failed to acquire build-time information");
+ }

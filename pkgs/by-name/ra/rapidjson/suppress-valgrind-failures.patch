@@ -1,0 +1,36 @@
+diff --git a/test/valgrind.supp b/test/valgrind.supp
+index c9d3d226..63af7bf9 100644
+--- a/test/valgrind.supp
++++ b/test/valgrind.supp
+@@ -24,3 +24,31 @@
+    fun:*Uri*Parse_UTF16_Std*
+ }
+ 
++{
++   Suppress memcpy_chk valgrind report 5
++   Memcheck:Overlap
++   fun:__memcpy_chk
++   fun:*dtoa_normal*
++}
++
++{
++   Suppress memcpy_chk valgrind report 6
++   Memcheck:Overlap
++   fun:__memcpy_chk
++   fun:*dtoa_maxDecimalPlaces*
++}
++
++{
++   Suppress memcpy_chk valgrind report 7
++   Memcheck:Overlap
++   fun:__memcpy_chk
++   ...
++   fun:*Reader*ParseDoubleHandler*
++}
++
++{
++   Suppress memcpy_chk valgrind report 8
++   Memcheck:Overlap
++   fun:__memcpy_chk
++   fun:*Reader*ParseNumber_NormalPrecisionError*
++}

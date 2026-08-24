@@ -1,0 +1,61 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  versionCheckHook,
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "luau-lsp";
+  version = "1.69.0";
+
+  src = fetchFromGitHub {
+    owner = "JohnnyMorganz";
+    repo = "luau-lsp";
+    tag = finalAttrs.version;
+    hash = "sha256-fVmc/Ky1fbS4hnh2pOw1idaZFCq0KFHE2hTVQQmYmfM=";
+    fetchSubmodules = true;
+  };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
+  ];
+
+  nativeBuildInputs = [ cmake ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    cmake --build . --target Luau.LanguageServer.CLI --config Release
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D luau-lsp $out/bin/luau-lsp
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Language Server Implementation for Luau";
+    homepage = "https://github.com/JohnnyMorganz/luau-lsp";
+    downloadPage = "https://github.com/JohnnyMorganz/luau-lsp/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/JohnnyMorganz/luau-lsp/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    mainProgram = "luau-lsp";
+    platforms = lib.platforms.all;
+  };
+})

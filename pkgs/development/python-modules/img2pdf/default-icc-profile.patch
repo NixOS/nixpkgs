@@ -1,0 +1,23 @@
+diff --git a/src/img2pdf.py b/src/img2pdf.py
+index f89670b..01ec4d3 100755
+--- a/src/img2pdf.py
++++ b/src/img2pdf.py
+@@ -3841,17 +3841,7 @@ def validate_icc(fname):
+ 
+ 
+ def get_default_icc_profile():
+-    for profile in [
+-        "/usr/share/color/icc/sRGB.icc",
+-        "/usr/share/color/icc/OpenICC/sRGB.icc",
+-        "/usr/share/color/icc/colord/sRGB.icc",
+-    ]:
+-        if not os.path.exists(profile):
+-            continue
+-        if not file_is_icc(profile):
+-            continue
+-        return profile
+-    return "/usr/share/color/icc/sRGB.icc"
++    return "@srgbProfile@"
+ 
+ 
+ def get_main_parser():
