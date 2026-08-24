@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.5.5";
+  version = "1.5.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aQxDPSJtNcicnrFwRi2yBJCcsGs5xzgeaICkm2/DcBU=";
+    hash = "sha256-9r4G+CZnei6SLDh535vjlEsUppZD2A577Jrfsm9rXkI=";
   };
 
   nativeBuildInputs = [
