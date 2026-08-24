@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "robustirc-bridge";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "robustirc";
     repo = "bridge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8SNy3xqVahBuEXCrG21zIggXeahbzJtqtFMxfp+r48g=";
+    hash = "sha256-Y46DHmKqfrMCcGzZSzuEa3XllxCLt8SgKh/pBeK4izU=";
   };
 
   vendorHash = "sha256-NBouR+AwQd7IszEcnYRxHFKtCdVTdfOWnzYjdZ5fXfs=";
