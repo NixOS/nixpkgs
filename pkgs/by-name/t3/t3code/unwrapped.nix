@@ -55,10 +55,12 @@ stdenv.mkDerivation (
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
-
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+
+      # Bake the T3 Connect public identifiers (public, not secrets; see .env.example)
+      cp .env.example .env
     '';
 
     nativeBuildInputs = [
@@ -219,6 +221,10 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
+        # Claimed here because the app's runtime registration is gated on
+        # `app.isPackaged`, which never holds under the Nix Electron
+        # wrapper; without it the Clerk OAuth redirect never reaches the app.
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
