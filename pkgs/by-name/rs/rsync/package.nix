@@ -124,6 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
           "variety-symlink-traversal"
           "variety"
         ]
+        # The Darwin sandbox drops set-id bits, and Python's os.getgroups()
+        # reports account groups that may not be usable by this process.
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "chmod-setid"
+          "daemon-groupmap-wild"
+        ]
         # This test assumes that every Linux libc provides glibc malloc stats.
         ++ lib.optional stdenv.hostPlatform.isMusl "misc-coverage"
         # These require a native compiler and dynamic interposition.
