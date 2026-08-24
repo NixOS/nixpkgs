@@ -4,7 +4,6 @@
   electron_42,
   fetchFromGitHub,
   deltachat-rpc-server,
-  deltachat-tauri,
   makeDesktopItem,
   makeWrapper,
   nodejs,
@@ -150,7 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       package = deltachat-desktop;
     };
-    inherit deltachat-tauri;
   };
 
   meta = {
