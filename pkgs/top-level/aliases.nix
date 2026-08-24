@@ -2506,6 +2506,7 @@ mapAliases {
   sharkey = throw "'sharkey' has been dropped as it has not been updated in a sufficiently timely manner considering its attack surface"; # Added 2026-11-14
   shipyard = throw "'shipyard' has been renamed to/replaced by 'jumppad'"; # Converted to throw 2025-10-27
   shisho = throw "'shisho' has been removed, as it is archived upstream. Consider using 'semgrep', 'opengrep', or 'ast-grep' instead"; # Added 2026-04-28
+  shortenPerlShebang = warnAlias "'shortenPerlShebang' is deprecated and a no-op; remove it from nativeBuildInputs and drop any calls to the 'shortenPerlShebang' function" shortenPerlShebang-old; # Added 2026-11-19
   sic-image-cli = warnAlias "'sic-image-cli' has been renamed to 'imagineer'" imagineer; # Added 2026-03-29
   sickgear = throw "'sickgear' has been removed from Nixpkgs due to security concerns. See https://github.com/NixOS/nixpkgs/issues/560697 for details."; # Added 2026-09-13
   siduck76-st = throw "'siduck76-st' has been renamed to/replaced by 'st-snazzy'"; # Converted to throw 2025-10-27
