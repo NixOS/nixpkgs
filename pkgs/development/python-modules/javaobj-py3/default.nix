@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "javaobj-py3";
-  version = "0.4.4";
+  version = "0.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5OMlfvLPgaMzl4ek1c+STlTJHwlacj9tJYTa5h1Dlu0=";
+    hash = "sha256-CI/whsaqKRLzQnVMQ7DKOlBPuGm7Xm8TOVEx6HdE7zw=";
   };
 
   propagatedBuildInputs = [ numpy ];
