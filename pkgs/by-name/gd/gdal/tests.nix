@@ -4,6 +4,7 @@
   jdk,
   lib,
   testers,
+  pkgsCross,
 }:
 
 let
@@ -66,4 +67,6 @@ in
     ${lib.getExe jdk} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
     touch $out
   '';
+
+  aarch64-multiplatform-minimal = pkgsCross.aarch64-multiplatform.gdalMinimal;
 }

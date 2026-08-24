@@ -80,6 +80,7 @@
   zlib,
   zstd,
   buildPackages,
+  pkgsCross,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
+    (buildPackages.python3.withPackages (ps: [ ps.numpy ]))
     python3Packages.setuptools
     python3Packages.wrapPython
     swig
@@ -324,9 +326,13 @@ stdenv.mkDerivation (finalAttrs: {
     popd # autotest
   '';
 
-  passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+  passthru.tests = callPackage ./tests.nix {
+    gdal = finalAttrs.finalPackage;
+    inherit pkgsCross;
+  };
 
   __darwinAllowLocalNetworking = true;
+  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
