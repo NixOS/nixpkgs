@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "django-otp-webauthn";
-  version = "0.8.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "django_otp_webauthn";
-    hash = "sha256-GMkKL+U7CPfw3WaSlsnoi0VmEPF/wbb86phfl01NM6I=";
+    hash = "sha256-dIhrzgjRcmKvNloiy5/5ZJhEqfe51gtIqqX7i0AIuqs=";
   };
 
   build-system = [ hatchling ];
