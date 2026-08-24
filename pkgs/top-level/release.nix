@@ -77,13 +77,12 @@ let
   inherit (release-lib) mapTestOn pkgs;
 
   inherit (release-lib.lib)
-    collect
+    concatMap
     elem
     genAttrs
     hasInfix
     hasSuffix
     id
-    isDerivation
     optionals
     ;
 
@@ -113,49 +112,49 @@ let
           name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents = [
-            jobs.tarball
-            jobs.release-checks
+            "tarball"
+            "release-checks"
           ]
           ++ optionals supportDarwin [
-            jobs.cabal2nix.aarch64-darwin
-            jobs.ghc.aarch64-darwin
-            jobs.git.aarch64-darwin
-            jobs.go.aarch64-darwin
-            jobs.mariadb.aarch64-darwin
-            jobs.nix.aarch64-darwin
-            jobs.nixpkgs-review.aarch64-darwin
-            jobs.nix-info.aarch64-darwin
-            jobs.nix-info-tested.aarch64-darwin
-            jobs.openssh.aarch64-darwin
-            jobs.openssl.aarch64-darwin
-            jobs.pandoc.aarch64-darwin
-            jobs.postgresql.aarch64-darwin
-            jobs.python3.aarch64-darwin
-            jobs.ruby.aarch64-darwin
-            jobs.rustc.aarch64-darwin
+            "cabal2nix.aarch64-darwin"
+            "ghc.aarch64-darwin"
+            "git.aarch64-darwin"
+            "go.aarch64-darwin"
+            "mariadb.aarch64-darwin"
+            "nix.aarch64-darwin"
+            "nixpkgs-review.aarch64-darwin"
+            "nix-info.aarch64-darwin"
+            "nix-info-tested.aarch64-darwin"
+            "openssh.aarch64-darwin"
+            "openssl.aarch64-darwin"
+            "pandoc.aarch64-darwin"
+            "postgresql.aarch64-darwin"
+            "python3.aarch64-darwin"
+            "ruby.aarch64-darwin"
+            "rustc.aarch64-darwin"
             # blocking ofBorg CI 2020-02-28
-            # jobs.stack.aarch64-darwin
-            jobs.stdenv.aarch64-darwin
-            jobs.vim.aarch64-darwin
-            jobs.cachix.aarch64-darwin
-            jobs.darwin.linux-builder.aarch64-darwin
+            # "stack.aarch64-darwin"
+            "stdenv.aarch64-darwin"
+            "vim.aarch64-darwin"
+            "cachix.aarch64-darwin"
+            "darwin.linux-builder.aarch64-darwin"
 
             # UI apps
-            # jobs.firefox-unwrapped.aarch64-darwin
-            jobs.qt5.qtmultimedia.aarch64-darwin
-            jobs.inkscape.aarch64-darwin
-            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resolved
-            jobs.emacs.aarch64-darwin
-            jobs.wireshark.aarch64-darwin
+            # "firefox-unwrapped.aarch64-darwin"
+            "qt5.qtmultimedia.aarch64-darwin"
+            "inkscape.aarch64-darwin"
+            "gimp2.aarch64-darwin" # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resolved
+            "emacs.aarch64-darwin"
+            "wireshark.aarch64-darwin"
 
             # Tests
             /*
-              jobs.tests.cc-wrapper.default.aarch64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
-              jobs.tests.stdenv-inputs.aarch64-darwin
-              jobs.tests.macOSSierraShared.aarch64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
+              "tests.cc-wrapper.default.aarch64-darwin"
+              "tests.cc-wrapper.llvmPackages.clang.aarch64-darwin"
+              "tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin"
+              "tests.stdenv-inputs.aarch64-darwin"
+              "tests.macOSSierraShared.aarch64-darwin"
+              "tests.stdenv.hooks.patch-shebangs.aarch64-darwin"
             */
           ];
         }
@@ -166,68 +165,71 @@ let
       name = "nixpkgs-${jobs.tarball.version}";
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
       constituents = [
-        jobs.tarball
-        jobs.release-checks
-        jobs.metrics
-        jobs.manual
-        jobs.tests.lib-tests.x86_64-linux
-        jobs.tests.pkgs-lib.formats-tests.x86_64-linux
-        jobs.stdenv.x86_64-linux
-        jobs.cargo.x86_64-linux
-        jobs.go.x86_64-linux
-        jobs.linux.x86_64-linux
-        jobs.nix.x86_64-linux
-        jobs.pandoc.x86_64-linux
-        jobs.python3.x86_64-linux
+        "tarball"
+        "release-checks"
+        "metrics"
+        "manual"
+        "tests.lib-tests.x86_64-linux"
+        "tests.pkgs-lib.formats-tests.x86_64-linux"
+        "stdenv.x86_64-linux"
+        "cargo.x86_64-linux"
+        "go.x86_64-linux"
+        "linux.x86_64-linux"
+        "nix.x86_64-linux"
+        "pandoc.x86_64-linux"
+        "python3.x86_64-linux"
         # Needed by contributors to test PRs (by inclusion of the PR template)
-        jobs.nixpkgs-review.x86_64-linux
+        "nixpkgs-review.x86_64-linux"
         # Needed for support
-        jobs.nix-info.x86_64-linux
-        jobs.nix-info-tested.x86_64-linux
+        "nix-info.x86_64-linux"
+        "nix-info-tested.x86_64-linux"
         # Ensure that X11/GTK are in order.
-        jobs.firefox-unwrapped.x86_64-linux
-        jobs.cachix.x86_64-linux
-        jobs.devenv.x86_64-linux
+        "firefox-unwrapped.x86_64-linux"
+        "cachix.x86_64-linux"
+        "devenv.x86_64-linux"
 
         /*
           TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
 
-          jobs.tests.cc-wrapper.default.x86_64-linux
+          "tests.cc-wrapper.default.x86_64-linux"
 
           # broken see issue #40038
 
-          jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-          jobs.tests.cc-multilib-gcc.x86_64-linux
-          jobs.tests.cc-multilib-clang.x86_64-linux
-          jobs.tests.stdenv-inputs.x86_64-linux
-          jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
+          "tests.cc-wrapper.llvmPackages.clang.x86_64-linux"
+          "tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux"
+          "tests.cc-multilib-gcc.x86_64-linux"
+          "tests.cc-multilib-clang.x86_64-linux"
+          "tests.stdenv-inputs.x86_64-linux"
+          "tests.stdenv.hooks.patch-shebangs.x86_64-linux"
         */
       ]
-      ++ collect isDerivation jobs.stdenvBootstrapTools
+      ++ concatMap (config: [
+        "stdenvBootstrapTools.${config}.build"
+        "stdenvBootstrapTools.${config}.test"
+      ]) bootstrapConfigs
       ++ optionals supportDarwin [
-        jobs.stdenv.aarch64-darwin
-        jobs.cargo.aarch64-darwin
-        jobs.cachix.aarch64-darwin
-        jobs.devenv.aarch64-darwin
-        jobs.go.aarch64-darwin
-        jobs.python3.aarch64-darwin
-        jobs.nixpkgs-review.aarch64-darwin
-        jobs.nix.aarch64-darwin
-        jobs.nix-info.aarch64-darwin
-        jobs.nix-info-tested.aarch64-darwin
-        jobs.git.aarch64-darwin
-        jobs.mariadb.aarch64-darwin
-        jobs.vim.aarch64-darwin
-        jobs.inkscape.aarch64-darwin
-        jobs.qt5.qtmultimedia.aarch64-darwin
-        jobs.darwin.linux-builder.aarch64-darwin
+        "stdenv.aarch64-darwin"
+        "cargo.aarch64-darwin"
+        "cachix.aarch64-darwin"
+        "devenv.aarch64-darwin"
+        "go.aarch64-darwin"
+        "python3.aarch64-darwin"
+        "nixpkgs-review.aarch64-darwin"
+        "nix.aarch64-darwin"
+        "nix-info.aarch64-darwin"
+        "nix-info-tested.aarch64-darwin"
+        "git.aarch64-darwin"
+        "mariadb.aarch64-darwin"
+        "vim.aarch64-darwin"
+        "inkscape.aarch64-darwin"
+        "qt5.qtmultimedia.aarch64-darwin"
+        "darwin.linux-builder.aarch64-darwin"
         /*
-          jobs.tests.cc-wrapper.default.aarch64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
-          jobs.tests.stdenv-inputs.aarch64-darwin
-          jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
+          "tests.cc-wrapper.default.aarch64-darwin"
+          "tests.cc-wrapper.llvmPackages.clang.aarch64-darwin"
+          "tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin"
+          "tests.stdenv-inputs.aarch64-darwin"
+          "tests.stdenv.hooks.patch-shebangs.aarch64-darwin"
         */
       ];
     };
