@@ -113,6 +113,8 @@ let
           inherit (pkgs.llvmPackages) llvm;
         };
 
+        base32 = callPackage ../development/ocaml-modules/base32 { };
+
         base64 = callPackage ../development/ocaml-modules/base64 { };
 
         batteries = callPackage ../development/ocaml-modules/batteries { };
