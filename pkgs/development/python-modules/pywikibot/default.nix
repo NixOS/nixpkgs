@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pywikibot";
-  version = "10.7.4";
+  version = "10.7.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/hHfZRLoEgaPKZLus9x/d5O62GnwU/1A7PAsebGj634=";
+    hash = "sha256-fBzcrVtqRf7eOnr6bhIAC9VGzjuWp04g+Jq7qRuunkg=";
   };
 
   build-system = [ setuptools ];
