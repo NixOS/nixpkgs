@@ -14560,6 +14560,12 @@
     github = "kaptcha0";
     githubId = 50426223;
   };
+  karalynx = {
+    name = "Ernestas Karalius";
+    email = "erklion@tutanota.com";
+    github = "karalynx";
+    githubId = 78487146;
+  };
   karantan = {
     name = "Gasper Vozel";
     email = "karantan@gmail.com";

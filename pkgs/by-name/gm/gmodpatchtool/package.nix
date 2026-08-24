@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/solsticegamestudios/GModPatchTool";
     license = with lib.licenses; [ gpl3 ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ karalynx ];
   };
 }
