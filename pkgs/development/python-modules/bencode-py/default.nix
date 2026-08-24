@@ -8,7 +8,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "bencode-py";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "bencode.py";
-    hash = "sha256-KiTM2hclpRplCJPQtjJgE4NZ6qKZu256CZYTUKKm4Fw=";
+    hash = "sha256-+TNytF3DcP5AJPkjASjx+fvA/jDD1B8cOn0C/myJmBM=";
   };
 
   build-system = [
