@@ -1083,6 +1083,7 @@
   ./services/monitoring/nezha-agent.nix
   ./services/monitoring/nezha.nix
   ./services/monitoring/ocsinventory-agent.nix
+  ./services/monitoring/openobserve.nix
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
