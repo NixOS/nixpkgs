@@ -74,12 +74,7 @@ let
               };
             };
           };
-        client1 =
-          { pkgs, ... }:
-          {
-            environment.systemPackages = [ pkgs.git ];
-          };
-        client2 =
+        client =
           { pkgs, ... }:
           {
             environment.systemPackages = [ pkgs.git ];
@@ -99,17 +94,17 @@ let
 
           start_all()
 
-          client1.succeed("mkdir /tmp/repo")
-          client1.succeed("mkdir -p $HOME/.ssh")
-          client1.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-          client1.succeed("chmod 0400 $HOME/.ssh/privk")
-          client1.succeed("git -C /tmp/repo init")
-          client1.succeed("echo hello world > /tmp/repo/testfile")
-          client1.succeed("git -C /tmp/repo add .")
-          client1.succeed("git config --global user.email test@localhost")
-          client1.succeed("git config --global user.name test")
-          client1.succeed("git -C /tmp/repo commit -m 'Initial import'")
-          client1.succeed(f"git -C /tmp/repo remote add origin {REPO}")
+          client.succeed("mkdir /tmp/repo")
+          client.succeed("mkdir -p $HOME/.ssh")
+          client.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
+          client.succeed("chmod 0400 $HOME/.ssh/privk")
+          client.succeed("git -C /tmp/repo init")
+          client.succeed("echo hello world > /tmp/repo/testfile")
+          client.succeed("git -C /tmp/repo add .")
+          client.succeed("git config --global user.email test@localhost")
+          client.succeed("git config --global user.name test")
+          client.succeed("git -C /tmp/repo commit -m 'Initial import'")
+          client.succeed(f"git -C /tmp/repo remote add origin {REPO}")
 
           server.wait_for_unit("gitea.service")
           server.wait_for_open_port(3000)
@@ -152,15 +147,12 @@ let
               + ' -d \'{"key":"${snakeOilPublicKey}","read_only":true,"title":"SSH"}\'''
           )
 
-          client1.succeed(
+          client.succeed(
               f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git -C /tmp/repo push origin master"
           )
 
-          client2.succeed("mkdir -p $HOME/.ssh")
-          client2.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-          client2.succeed("chmod 0400 $HOME/.ssh/privk")
-          client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
-          client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
+          client.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO} repo2")
+          client.succeed('test "$(cat repo2/testfile | xargs echo -n)" = "hello world"')
 
           server.wait_until_succeeds(
               'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
