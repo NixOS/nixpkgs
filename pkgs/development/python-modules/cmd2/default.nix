@@ -2,9 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   glibcLocales,
   gnureadline,
+  prompt-toolkit,
   pyperclip,
   pytest-cov-stub,
   pytest-mock,
@@ -15,25 +16,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cmd2";
-  version = "3.5.1";
+  version = "4.2.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "python-cmd2";
-    repo = "cmd2";
-    tag = finalAttrs.version;
-    hash = "sha256-dntUbxlMVlss6TN8IhEaWcANqiqWgqxT35bGY7cWjcE=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-iQIWA6GM60FgDS8CtAxd9NN+QRAnMI6aWHFL4fOla2s=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    prompt-toolkit
     pyperclip
     rich-argparse
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
-
-  doCheck = true;
 
   nativeCheckInputs = [
     glibcLocales
