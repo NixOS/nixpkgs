@@ -96,7 +96,8 @@ stripDirs() {
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:
         #     error adding symbols: archive has no index; run ranlib to add one
-        # Restore the index by running 'ranlib'.
-        find $paths -name '*.a' -type f -exec $ranlibCmd '{}' \; 2>/dev/null
+        # Restore the index by running 'ranlib', or a platform-specific equivalent.
+        local archiveRanlibCmd="${NIX_STRIP_STATIC_ARCHIVE_RANLIB_CMD:-$ranlibCmd}"
+        find $paths -name '*.a' -type f -exec $archiveRanlibCmd '{}' \; 2>/dev/null
     fi
 }
