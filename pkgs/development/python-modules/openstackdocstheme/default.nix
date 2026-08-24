@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "3.5.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3h1dXtIMk1/CgbUP30ppUo+Q8qdb7PQtGIRD9eGWwJ8=";
+    hash = "sha256-U6+ltUGULIsyA0cD8gY5aR1FBI2meSb9vvUl3zV84NA=";
   };
 
   postPatch = ''
