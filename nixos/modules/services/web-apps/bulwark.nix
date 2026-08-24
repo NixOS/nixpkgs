@@ -51,158 +51,6 @@ let
       default = "Webmail";
       description = "App name displayed in the UI, browser tab title, and PWA manifest.";
     };
-    appShortName = mkOption {
-      type = nullOr str;
-      description = ''
-        Short name for the app, used in contexts where space is limited
-        (e.g. home screen label on mobile). Defaults to `settings.appName` if not set.
-      '';
-    };
-    appDescription = mkOption {
-      type = str;
-      default = "Your personal webmail";
-      description = "Description shown in the PWA manifest (displayed by the OS during install).";
-    };
-    faviconUrl = mkOption {
-      type = str;
-      default = "/branding/Bulwark_Favicon.svg";
-      description = ''
-        Custom favicon shown in the browser tab.
-        Supported formats: SVG (recommended), PNG, ICO.
-        Can be an absolute URL (https://...) or a path relative to the public/ directory.
-      '';
-    };
-    pwaIconUrl = mkOption {
-      type = nullOr str;
-      description = ''
-        Source image used to auto-generate PWA icons (192×192 and 512×512 PNG).
-        Supported formats: SVG (recommended for best quality) or PNG (≥512×512px recommended).
-        Can be an absolute URL (https://...) or a path relative to the public/ directory.
-        Falls back to `settings.branding.faviconUrl` if not set, and to the default Bulwark icons if neither is set.
-      '';
-    };
-    pwaScreenshotMobileUrl = mkOption {
-      type = nullOr str;
-      description = ''
-        PWA Screenshot (Mobile)
-        Supported formats: PNG, JPG, WebP.
-        Can be absolute URLs or paths relative to the public/ directory.
-      '';
-    };
-    pwaScreenshotDesktopUrl = mkOption {
-      type = nullOr str;
-      description = ''
-        PWA Screenshot (Desktop)
-        Supported formats: PNG, JPG, WebP.
-        Can be absolute URLs or paths relative to the public/ directory.
-      '';
-    };
-    pwaThemeColor = mkOption {
-      type = str;
-      default = "#ffffff";
-      description = ''
-        Color applied to the browser UI chrome when the app is installed as a PWA
-        (address bar, status bar on Android).
-      '';
-    };
-    pwaBackgroundColor = mkOption {
-      type = str;
-      default = "#ffffff";
-      description = ''
-        Background color shown on the PWA splash screen while the app is loading.
-        Should match your app's main background color.
-      '';
-    };
-    appLogoLightUrl = mkOption {
-      type = nullOr str;
-      default = "/branding/Bulwark_Logo_Color.svg";
-      description = ''
-        Logos shown in the sidebar (main app, after login).
-        Supported formats: SVG (recommended), PNG, WebP.
-        Recommended size: min 24×24px, max 128×128px.
-        Can be absolute URLs or paths relative to the public/ directory.
-        If not set, no logo is shown in the sidebar.
-      '';
-    };
-    appLogoDarkUrl = mkOption {
-      type = nullOr str;
-      default = "/branding/Bulwark_Logo_White.svg";
-      description = ''
-        Logos shown in the sidebar (main app, after login).
-        Supported formats: SVG (recommended), PNG, WebP.
-        Recommended size: min 24×24px, max 128×128px.
-        Can be absolute URLs or paths relative to the public/ directory.
-        If not set, no logo is shown in the sidebar.
-      '';
-    };
-
-    loginLogoLightUrl = mkOption {
-      type = str;
-      default = "/branding/Bulwark_Logo_Color.svg";
-      description = ''
-        Logos shown on the login page.
-        Supported formats: SVG (recommended), PNG, WebP.
-        Recommended size: min 32×32px, max 512×512px.
-        Can be absolute URLs or paths relative to the public/ directory.
-        Light mode logo (shown on light backgrounds).
-      '';
-    };
-    loginLogoDarkUrl = mkOption {
-      type = str;
-      default = "/branding/Bulwark_Logo_White.svg";
-      description = ''
-        Logos shown on the login page.
-        Supported formats: SVG (recommended), PNG, WebP.
-        Recommended size: min 32×32px, max 512×512px.
-        Can be absolute URLs or paths relative to the public/ directory.
-        Dark mode logo (shown on dark backgrounds).
-      '';
-    };
-    loginCompanyName = mkOption {
-      type = nullOr str;
-      description = "Company name shown above the version number on the login page.";
-    };
-    loginImprintUrl = mkOption {
-      type = nullOr str;
-      description = "URL for the imprint / legal notice link on the login page.";
-    };
-    loginPrivacyPolicyUrl = mkOption {
-
-      type = nullOr str;
-      description = "URL for the privacy policy link on the login page.";
-    };
-    loginWebsiteUrl = mkOption {
-      type = nullOr str;
-      description = "URL for the company website link on the login page.";
-    };
-    loginLogoMaxHeight = mkOption {
-      type = nullOr str;
-      description = "Maximum height of the logo on the login page.";
-    };
-    loginLogoMaxWidth = mkOption {
-      type = nullOr str;
-      description = "Maximum width of the logo on the login page.";
-    };
-    loginShowHeading = mkOption {
-      type = bool;
-      default = true;
-      description = "Whether the heading is shown on the login page.";
-    };
-    loginShowSubtitle = mkOption {
-      type = bool;
-      default = true;
-      description = "Whether the subtitle is shown on the login page.";
-    };
-    loginShowTotp = mkOption {
-      type = bool;
-      default = true;
-      description = "Whether the \"I have a 2FA code\" toggle is shown on the login page.";
-    };
-    loginShowVersion = mkOption {
-      type = bool;
-      default = true;
-      description = "Whether the build version is shown on the login page.";
-    };
   };
 in
 {
@@ -484,10 +332,20 @@ in
             description = "Log level: `error`, `warn`, `info`, or `debug`";
           };
 
-          branding = brandingModule;
+          branding = mkOption {
+            type = submodule {
+              freeformType = format.type;
+
+              options = brandingModule;
+            };
+            default = { };
+            description = "Branding configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example#L191), keys are written in camel case.";
+          };
 
           domainBranding = mkOption {
             type = attrsOf (submodule {
+              freeformType = format.type;
+
               options = brandingModule;
             });
             default = { };
