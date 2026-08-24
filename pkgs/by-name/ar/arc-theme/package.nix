@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "arc-theme";
-  version = "20221218-unstable-2025-10-18";
+  version = "20221218";
 
   src = fetchFromGitHub {
     owner = "jnsh";
