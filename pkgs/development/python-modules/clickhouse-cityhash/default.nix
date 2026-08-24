@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "clickhouse-cityhash";
-  version = "1.0.2.5";
+  version = "1.0.2.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "clickhouse_cityhash";
-    hash = "sha256-T5jvgbIfDU2tWCR76kC6/AmM9v+g7eaZiC1KQurD7Xk=";
+    hash = "sha256-Yq9sraxmVWE3cGZKsmgCjlyLcvyXgrMMD12HJK9Sx78=";
   };
 
   nativeBuildInputs = [
