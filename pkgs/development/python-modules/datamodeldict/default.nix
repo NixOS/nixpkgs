@@ -19,6 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4tyf3zlzxbtHkvADP+Kmw3/XMugAGi4FNO0qM16m8DU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [ xmltodict ];
