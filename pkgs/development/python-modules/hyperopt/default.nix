@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "hyperopt";
-  version = "0.2.7";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bf89ae58050bbd32c7307199046117feee245c2fd9ab6255c7308522b7ca149";
+    sha256 = "sha256-15p3Ui/v7BOiWLl6DMvfQIMrMnDeTbCCeLsHubk065o=";
   };
 
   propagatedBuildInputs = [
