@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NncPUZ31vs08v+C+5Ku/v5ufa0604DNh0oK378/E8N8=";
+    hash = "sha256-Gdta0g4mRQGo7mTj4VejdmpedEFw5Uzuy05coJsIZVo=";
   };
 
   patches = [
