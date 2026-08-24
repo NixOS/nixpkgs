@@ -1,0 +1,4 @@
+source 'https://rubygems.org' do
+  gem 'kaitai-struct-visualizer'
+  gem 'rb-readline'
+end
