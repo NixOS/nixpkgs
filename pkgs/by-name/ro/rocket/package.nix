@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "rocket";
-  version = "2018-06-09";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "rocket";
