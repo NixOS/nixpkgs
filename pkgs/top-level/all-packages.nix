@@ -1421,14 +1421,6 @@ with pkgs;
 
   beautysh = with python3.pkgs; toPythonApplication beautysh;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
-    auditbeat7
-    filebeat7
-    heartbeat7
-    metricbeat7
-    packetbeat7
-    ;
-
   inherit (callPackages ../misc/logging/beats/8.x.nix { })
     auditbeat8
     heartbeat8
@@ -1436,11 +1428,11 @@ with pkgs;
     packetbeat8
     ;
 
-  auditbeat = auditbeat7;
-  filebeat = filebeat7;
-  heartbeat = heartbeat7;
-  metricbeat = metricbeat7;
-  packetbeat = packetbeat7;
+  auditbeat = auditbeat8;
+  filebeat = filebeat8;
+  heartbeat = heartbeat8;
+  metricbeat = metricbeat8;
+  packetbeat = packetbeat8;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
@@ -1962,10 +1954,6 @@ with pkgs;
   emscriptenStdenv = stdenv // {
     mkDerivation = buildEmscriptenPackage;
   };
-
-  # The latest version used by logstash and the beats from elastic.
-  # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.27";
 
   elasticsearch = elasticsearch8;
 
