@@ -8,7 +8,6 @@
   bleak-retry-connector,
   chacha20poly1305,
   chacha20poly1305-reuseable,
-  commentjson,
   cryptography,
   fetchFromGitHub,
   orjson,
@@ -20,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-ptfL6MPnjAtKqYbsILzE6u+wkse3/Js4ZME4So3tVmU=";
+    hash = "sha256-ozVIT9JGi4rcW3LRcp1QR1kj0gl5APLv9y4Imqe99yE=";
   };
 
   build-system = [ poetry-core ];
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     bleak-retry-connector
     chacha20poly1305
     chacha20poly1305-reuseable
-    commentjson
     cryptography
     orjson
     zeroconf
