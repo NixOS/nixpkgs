@@ -14181,6 +14181,8 @@ self: super: with self; {
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
+  py-cpuinfo2 = callPackage ../development/python-modules/py-cpuinfo2 { };
+
   py-dactyl = callPackage ../development/python-modules/py-dactyl { };
 
   py-datastruct = callPackage ../development/python-modules/py-datastruct { };
