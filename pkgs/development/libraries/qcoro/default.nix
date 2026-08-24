@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/danvratil/qcoro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ smitop ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

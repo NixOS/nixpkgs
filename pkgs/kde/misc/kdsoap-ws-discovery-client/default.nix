@@ -16,4 +16,5 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [ doxygen ];
 
   meta.license = lib.licenses.gpl3Plus;
+  meta.platforms = lib.platforms.unix;
 }

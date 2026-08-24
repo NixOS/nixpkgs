@@ -9,6 +9,7 @@ self:
   python3,
   python3Packages,
   jq,
+  writers,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -50,6 +51,14 @@ let
     meta.license = lib.licenses.mit;
   } ./move-outputs-hook.sh;
 
+  darwinBundleHook = makeSetupHook {
+    name = "kf6-darwin-bundle-hook";
+    meta.license = lib.licenses.mit;
+  } ./darwin-bundle-hook.sh;
+
+  # Compatibility layer for getting past iconutil not being in the nix sandbox.
+  iconutilCompat = writers.writePython3Bin "iconutil" { } ./iconutil-compat.py;
+
   qmllintHook = makeSetupHook {
     name = "qmllint-validate-hook";
     substitutions = {
@@ -74,10 +83,13 @@ in
 let
   depNames = dependencies.${pname} or [ ];
   filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
+  availableDepNames = builtins.filter (
+    dep: lib.meta.availableOn stdenv.hostPlatform self.${dep}
+  ) filteredDepNames;
 
   # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
   # but cross is currently very broken anyway, so we can figure this out later.
-  deps = map (dep: self.${dep}) filteredDepNames;
+  deps = map (dep: self.${dep}) availableDepNames;
 
   traceDuplicateDeps =
     attrName: attrValue:
@@ -113,6 +125,11 @@ let
       qt6.wrapQtAppsHook
       moveOutputsHook
       qmllintHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwinBundleHook
+      iconutilCompat
+      python3Packages.icnsutil
     ]
     ++ lib.optionals hasPythonBindings [
       python3Packages.shiboken6
@@ -154,6 +171,11 @@ let
     "meta"
   ];
 
+  repoPath = projectInfo.${pname}.repo_path or null;
+  # Enable darwin by default only for framework scope atm
+  # In other folders most of them tend to not work
+  isFramework = repoPath != null && lib.hasPrefix "frameworks/" repoPath;
+
   meta = {
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
@@ -161,7 +183,8 @@ let
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms =
+      lib.platforms.linux ++ lib.platforms.freebsd ++ lib.optionals isFramework lib.platforms.darwin;
   }
   // (args.meta or { });
 

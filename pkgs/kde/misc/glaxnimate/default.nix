@@ -59,5 +59,6 @@ mkKdeDerivation rec {
     ];
     maintainers = [ lib.maintainers.tobiasBora ];
     mainProgram = "glaxnimate";
+    platforms = lib.platforms.unix;
   };
 }

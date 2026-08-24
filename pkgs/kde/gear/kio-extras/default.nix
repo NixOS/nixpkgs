@@ -15,6 +15,8 @@
   libappimage,
   libxcursor,
   kio,
+  lib,
+  stdenv,
 }:
 mkKdeDerivation {
   pname = "kio-extras";
@@ -33,15 +35,21 @@ mkKdeDerivation {
     libmtp
     libimobiledevice
     gperf
-    libtirpc
     openexr
     taglib
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     libappimage
+    libtirpc
     libxcursor
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/dbus-1/services/org.kde.kmtpd5.service \
-      --replace-fail Exec=$out/libexec/kf6/kiod6 Exec=${kio}/libexec/kf6/kiod6
+    if [ -f $out/share/dbus-1/services/org.kde.kmtpd5.service ]; then
+      substituteInPlace $out/share/dbus-1/services/org.kde.kmtpd5.service \
+        --replace-fail Exec=$out/libexec/kf6/kiod6 Exec=${kio}/libexec/kf6/kiod6
+    fi
   '';
+
+  meta.platforms = lib.platforms.unix;
 }
