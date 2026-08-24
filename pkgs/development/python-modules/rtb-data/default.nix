@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "rtb-data";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xRKS3c31li5ZRWw6WrYqTVQKXqW91ONbKWP57Dglzx0=";
+    hash = "sha256-ruxPqOs/hN6Kfb7ory+Er7CBll+ysUVxyy0EiUa+mJw=";
   };
 
   nativeBuildInputs = [ setuptools ];
