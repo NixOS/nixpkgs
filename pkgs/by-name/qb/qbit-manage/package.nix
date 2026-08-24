@@ -7,13 +7,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.11.0";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3HYxrFvte38ZKcKJOW86Yp1nGvEvzmflapNkVd9hSGg=";
+    hash = "sha256-C1TNRkVwim/t2unRthJ0vuCZ13Cj2a61D0RKbXn4aP0=";
   };
 
   pyproject = true;
