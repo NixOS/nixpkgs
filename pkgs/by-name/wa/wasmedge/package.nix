@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     changelog = "https://github.com/WasmEdge/WasmEdge/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ilkecan ];
     platforms = lib.platforms.all;
   };
 })
