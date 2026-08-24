@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "MAVProxy";
   version = "1.8.74";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "MAVProxy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1/bp3vlCXt4Hg36zwMKSzPSxW7xlxpfx2o+2uQixdos=";
   };
 
@@ -57,9 +57,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "MAVLink proxy and command line ground station";
     homepage = "https://github.com/ArduPilot/MAVProxy";
-    changelog = "https://github.com/ArduPilot/MAVProxy/releases/tag/${src.tag}";
+    changelog = "https://github.com/ArduPilot/MAVProxy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ lopsided98 ];
     mainProgram = "mavproxy.py";
   };
-}
+})
