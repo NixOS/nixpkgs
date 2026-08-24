@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.5.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZmLLYkiG7THrlNr2HidYO1FE68c4Ohe64Hb49PWQiPs=";
+    hash = "sha256-/kjIlVqEQor3e/8mQrpHBB4bj3yGelt8yU+LwlWo8M8=";
   };
 
   postPatch = ''
