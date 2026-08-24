@@ -1,0 +1,13 @@
+--- a/custom_components/ha_mcp_tools/embedded_server.py	2026-08-13 12:08:27
++++ b/custom_components/ha_mcp_tools/embedded_server.py	2026-08-13 12:08:30
+@@ -695,6 +695,10 @@
+         Never imports ``ha_mcp`` in this (main) process — that happens only inside
+         the worker thread.
+         """
++        installed_version = await self._hass.async_add_executor_job(_installed_ha_mcp_version)
++        if installed_version is not None and _is_compatible_embedded_version(installed_version):
++            _LOGGER.info("HA-MCP package %s already satisfied in environment; skipping uv install", installed_version)
++            return installed_version
+         await self._async_wait_for_pending_install()
+
+         stored_spec = self._entry.data.get(DATA_LAST_PIP_SPEC)

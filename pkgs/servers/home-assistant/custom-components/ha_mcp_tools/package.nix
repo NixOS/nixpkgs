@@ -1,5 +1,4 @@
 {
-  lib,
   buildHomeAssistantComponent,
   ha-mcp,
   nix-update-script,
@@ -12,6 +11,7 @@ buildHomeAssistantComponent {
   inherit (ha-mcp.src) owner;
 
   dependencies = [
+    ha-mcp
     ruamel-yaml
   ];
 
@@ -21,6 +21,11 @@ buildHomeAssistantComponent {
       "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
     ];
   };
+
+  patches = [
+    ./skip-uv-install.patch
+    ./disable-update-entity.patch
+  ];
 
   meta = {
     inherit (ha-mcp.meta)

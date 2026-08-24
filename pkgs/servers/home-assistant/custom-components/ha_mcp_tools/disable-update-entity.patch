@@ -1,0 +1,12 @@
+--- a/custom_components/ha_mcp_tools/update.py	2026-08-13 12:08:27
++++ b/custom_components/ha_mcp_tools/update.py	2026-08-13 12:08:30
+@@ -65,8 +65,7 @@
+     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+ ) -> None:
+     """Add the single server-package update entity for this config entry."""
+-    coordinator: ServerVersionCoordinator = hass.data[DOMAIN][DATA_UPDATE_COORDINATOR]
+-    async_add_entities([ServerUpdateEntity(coordinator, entry)])
++    return
+
+
+ class ServerUpdateEntity(CoordinatorEntity[ServerVersionCoordinator], UpdateEntity):
