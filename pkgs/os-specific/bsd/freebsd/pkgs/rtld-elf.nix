@@ -3,6 +3,7 @@
   stdenv,
   mkDerivation,
   fetchpatch,
+  versionData,
   include,
   rpcgen,
   libsys,
@@ -40,8 +41,8 @@ mkDerivation {
   ]
   ++ extraSrc;
 
-  patches = [
-    # https://github.com/freebsd/freebsd-src/pull/1882
+  # https://github.com/freebsd/freebsd-src/pull/1882, landed in 16.0
+  patches = lib.optionals (versionData.major <= 15) [
     (fetchpatch {
       name = "freebsd-rtld-use-nonstring-attribute.patch";
       url = "https://github.com/freebsd/freebsd-src/pull/1882/commits/650800993deb513dc31e99ef5cdecd50ee70bb04.diff";

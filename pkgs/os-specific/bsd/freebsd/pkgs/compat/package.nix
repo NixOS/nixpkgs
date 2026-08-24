@@ -116,6 +116,9 @@ mkDerivation {
 
     "contrib/libedit/readline/readline.h"
   ]
+  ++ lib.optionals (versionData.major >= 16) [
+    "include/stdckdint.h"
+  ]
   ++ [
 
     # Listed in Makefile as SYSINCS
