@@ -2,37 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  python-dateutil,
-  tokenize-rt,
   freezegun,
+  hypothesis,
   pytestCheckHook,
+  python-dateutil,
+  setuptools,
+  tokenize-rt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "time-machine";
-  version = "3.2.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
     tag = finalAttrs.version;
-    hash = "sha256-UWoKvNz0ojVZtkIUGT02zJitza+mkyToANQMsU64xL4=";
+    hash = "sha256-9ocj5RsjmHtXjcueDJE4v9QvpeFXgPSNam1Wct0q89o=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    python-dateutil
-  ];
+  dependencies = [ python-dateutil ];
 
-  optional-dependencies.cli = [
-    tokenize-rt
-  ];
+  optional-dependencies.cli = [ tokenize-rt ];
 
   nativeCheckInputs = [
     freezegun
+    hypothesis
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.cli;
@@ -45,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     "test_destination_datetime_tzinfo_zoneinfo_no_orig_tz"
     "test_destination_datetime_tzinfo_zoneinfo"
     "test_move_to_datetime_with_tzinfo_zoneinfo"
+    "test_localtime_and_gmtime_match_datetime"
   ];
 
   pythonImportsCheck = [ "time_machine" ];
