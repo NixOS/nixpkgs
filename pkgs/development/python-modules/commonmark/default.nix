@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "commonmark";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "commonmark.py";
     tag = version;
-    hash = "sha256-Ui/G/VLdjWcm7YmVjZ5Q8h0DEEFqdDByre29g3zHUq4=";
+    hash = "sha256-XC+Koma3FFrR6YiLzDzHTWnFAdQG5IFwARCmj4TZfi4=";
   };
 
   build-system = [ setuptools ];
