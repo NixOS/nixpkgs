@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "affine-gaps";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gata-bio";
     repo = "affine-gaps";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WMH2wUqzA196FSe2TpfslQVW0PGwk7lGMRSKyfCG9rg=";
+    tag = "v${version}";
+    hash = "sha256-Nbm79gKuCMqcCWQCjk8O2bbnzXBvby6FB/YhzqeDIJw=";
   };
 
   build-system = [ hatchling ];
