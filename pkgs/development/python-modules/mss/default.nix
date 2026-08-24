@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "10.1.0";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
+    hash = "sha256-qycYYHdVReYvKdexH4LyeawQSPW73SbPrYSDAgjb05M=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
