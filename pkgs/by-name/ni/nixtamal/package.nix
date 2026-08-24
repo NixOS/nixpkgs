@@ -170,5 +170,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       • No experimental Nix features required
     '';
     maintainers = with lib.maintainers; [ toastal ];
+    donationPage = "https://nixtamal.toast.al/funding/";
   };
 })
