@@ -14630,12 +14630,12 @@ final: prev: {
 
   opencode-nvim = buildVimPlugin {
     pname = "opencode.nvim";
-    version = "0.14.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "nickjvandyke";
       repo = "opencode.nvim";
-      tag = "v0.14.0";
-      hash = "sha256-bAF3ssHly41AxqKEHFrsK9S1mTbrIZfEI3kzZ6alKXc=";
+      tag = "v1.0.0";
+      hash = "sha256-Au8vW7ISTH0jMxzgkRN3pFmLm4fMd9l27tBs1QH3v5c=";
     };
     meta.homepage = "https://github.com/nickjvandyke/opencode.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
