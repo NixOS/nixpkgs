@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pycoin";
-  version = "0.92.20241201";
+  version = "0.92718.20260405";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bpN74YFXPM8Cs1BkhEvsRt4TA4a0Xz3xltMHSox5BRI=";
+    hash = "sha256-XqVaoX8L4tS3i1WaiGeP9vSwB8JW4IpAEtjECQz3Evc=";
   };
 
   propagatedBuildInputs = [ setuptools ];
