@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WKP8iFM9WTDDVG3H6sZsbSiKzeT4AeIAHmXtxdyc8Ns=";
+    hash = "sha256-msqq+X0WNVFm5Aha/p0iW/vfK371IPnfO+jyskgnXgk=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
