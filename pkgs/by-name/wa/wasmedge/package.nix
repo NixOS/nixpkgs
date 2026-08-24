@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   llvmPackages_19,
   boost,
   cmake,
@@ -24,14 +25,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.16.3";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-Z6SnTKLW1nBa9gCSDO3d+CmwfWpGRAb2D9ZCoqqqMjk=";
+    hash = "sha256-+Z9mhIoRc8iJoCPafbkX3lB9nQAysKB5gjLmq8AUk/I=";
   };
+
+  patches = [
+    # fmt 12.2's uint128 fallback does not support unary complement. PR #4936
+    # was merged into WasmEdge's main development history on June 5, but the
+    # 0.17.1 release was cut from a separate release line that diverged from
+    # that history on May 18. The fix was not cherry-picked into that release
+    # line.
+    (fetchpatch {
+      url = "https://github.com/WasmEdge/WasmEdge/commit/41a01b6b4f40defbac0dd551663c542cdcf9ae76.patch";
+      hash = "sha256-g8EOz/dldPN7oM9+IKfwGCqMQgD8FnsT2w2WsyLdR60=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
