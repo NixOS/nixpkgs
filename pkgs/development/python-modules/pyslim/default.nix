@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pyslim";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T0ES0a7B4yTIUMXQgDEiIjxFJfZNmA7euTpa7JmryQU=";
+    hash = "sha256-XPwEQnzdPflPsUm6UR5nTCISxYH28x6UIhcfqYupo5k=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
