@@ -1,0 +1,13 @@
+diff --git a/customtkinter/windows/widgets/font/font_manager.py b/customtkinter/windows/widgets/font/font_manager.py
+index b3ef369d..ce097585 100644
+--- a/customtkinter/windows/widgets/font/font_manager.py
++++ b/customtkinter/windows/widgets/font/font_manager.py
+@@ -55,7 +55,7 @@ def load_font(cls, font_path: str) -> bool:
+         # Linux
+         elif sys.platform.startswith("linux"):
+             try:
+-                shutil.copy(font_path, os.path.expanduser(cls.linux_font_path))
++                shutil.copyfile(font_path, os.path.join(os.path.expanduser(cls.linux_font_path), os.path.basename(font_path)))
+                 return True
+             except Exception as err:
+                 sys.stderr.write("FontManager error: " + str(err) + "\n")
