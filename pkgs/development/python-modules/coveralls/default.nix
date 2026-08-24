@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "TheKevJames";
     repo = "coveralls-python";
     tag = version;
-    hash = "sha256-c7YV1SAbxmqfVI/wGtfdr+S4T7G2q7tf0FhuyCJaPDg=";
+    hash = "sha256-sr3pR3t21nMZczwugFNAioSry/RxIWAzGdGG070YXGw=";
   };
 
   build-system = [ poetry-core ];
