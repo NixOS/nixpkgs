@@ -40,29 +40,21 @@ let
           { pkgs, ... }:
           {
             virtualisation.memorySize = 2047;
-            services.gitea = {
-              enable = true;
-              database = { inherit type; };
-              package = pkgs.gitea;
-              metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
-              settings = {
-                "repository.signing".SIGNING_KEY = signingPrivateKeyId;
-                actions.ENABLED = true;
-                metrics.ENABLED = true;
-                service.DISABLE_REGISTRATION = true;
+            services = {
+              gitea = {
+                enable = true;
+                database = { inherit type; };
+                package = pkgs.gitea;
+                metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
+                settings = {
+                  "repository.signing".SIGNING_KEY = signingPrivateKeyId;
+                  actions.ENABLED = true;
+                  metrics.ENABLED = true;
+                  service.DISABLE_REGISTRATION = true;
+                };
               };
-            };
-            environment.systemPackages = [
-              pkgs.gitea
-              pkgs.gnupg
-              pkgs.jq
-            ];
-            services.openssh.enable = true;
 
-            specialisation.runner = {
-              inheritParentConfig = true;
-
-              configuration.services.gitea-actions-runner.instances."test" = {
+              gitea-actions-runner.instances."test" = {
                 enable = true;
                 name = "ci";
                 url = "http://localhost:3000";
@@ -72,7 +64,14 @@ let
                 ];
                 tokenFile = "/var/lib/gitea/runner_token";
               };
+
+              openssh.enable = true;
             };
+            environment.systemPackages = [
+              pkgs.gitea
+              pkgs.gnupg
+              pkgs.jq
+            ];
           };
         client =
           { pkgs, ... }:
@@ -82,10 +81,8 @@ let
       };
 
       testScript =
-        { nodes, ... }:
         let
           inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-          serverSystem = nodes.server.system.build.toplevel;
         in
         /* python */ ''
           GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
@@ -169,7 +166,6 @@ let
               server.succeed(
                   "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/gitea/runner_token"
               )
-              server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
               server.wait_for_unit("gitea-runner-test.service")
               server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
         '';
