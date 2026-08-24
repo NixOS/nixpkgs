@@ -309,9 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Copy module config plists into each framework's Resources
     for mod in ${lib.concatStringsSep " " modules}; do
-      if [ -f "Modules/$mod/config.plist" ]; then
-        cp "Modules/$mod/config.plist" "$app/Contents/Frameworks/$mod.framework/Resources/config.plist"
-      fi
+      cp "Modules/$mod/config.plist" "$app/Contents/Frameworks/$mod.framework/Resources/config.plist"
     done
 
     makeWrapper "$app/Contents/MacOS/Stats" "$out/bin/stats"
