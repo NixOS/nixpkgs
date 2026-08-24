@@ -251,6 +251,8 @@ let
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
 
+        cborl = callPackage ../development/ocaml-modules/cborl { };
+
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
