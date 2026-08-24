@@ -11,7 +11,7 @@
   wrapGAppsHook3,
   zip,
 
-  electron_41,
+  electron_43,
   html-tidy,
 
   # Command line arguments which are always set e.g "--password-store=kwallet6"
@@ -30,9 +30,10 @@ let
 
   patches = [
     ./remove-rpm-deb-and-macos-package-generation.patch
+    ./update-electron-from-41.7.2-43.4.1.patch
   ];
 
-  electron = electron_41;
+  electron = electron_43;
 
   mailspring-sync = callPackage ./mailsync.nix { inherit src version; };
 
@@ -40,7 +41,7 @@ let
     pname = "mailspring-app";
     inherit version src patches;
     postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
-    npmDepsHash = "sha256-JkjtC4WT3cBsVlmrfO5WAxU1Xe3vXbxuNBDs2Q7fEck=";
+    npmDepsHash = "sha256-FnbSnkMcOEoWTIy42JccdP+GqHWkoQKEZqVxzsw2cwc=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -66,7 +67,7 @@ buildNpmPackage (finalAttrs: {
   pname = "mailspring";
   inherit version src patches;
 
-  npmDepsHash = "sha256-0cg/DT0MUbfzTq5hejH7auSk77M9Md7FWzidov8iyA4=";
+  npmDepsHash = "sha256-jDuCLreiQvOUhSWw+E2zJXy39/6ITB7FEmrXBUiWYDU=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

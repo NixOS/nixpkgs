@@ -2,7 +2,7 @@
   lib,
   actual-server,
   copyDesktopItems,
-  electron_41,
+  electron_42,
   imagemagick,
   jq,
   makeDesktopItem,
@@ -11,7 +11,7 @@
   stdenv,
 }:
 let
-  electron = electron_41;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "actual-client";
@@ -45,12 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # TODO: uncomment once actual updates their electron version to v42+
+    # https://github.com/actualbudget/actual/issues/8767
     # verify electron version
-    upstreamElectronMajor=$(${lib.getExe jq} -r '.devDependencies.electron | match("[0-9]+").string' packages/desktop-electron/package.json)
-    if [[ "$upstreamElectronMajor" != "${lib.versions.major electron.version}" ]]; then
-      echo "Electron major version mismatch: Actual expects $upstreamElectronMajor, nixpkgs provides ${electron.version}" >&2
-      exit 1
-    fi
+    # upstreamElectronMajor=$(${lib.getExe jq} -r '.devDependencies.electron | match("[0-9]+").string' packages/desktop-electron/package.json)
+    # if [[ "$upstreamElectronMajor" != "${lib.versions.major electron.version}" ]]; then
+    #   echo "Electron major version mismatch: Actual expects $upstreamElectronMajor, nixpkgs provides ${electron.version}" >&2
+    #   exit 1
+    # fi
 
     export HOME=$(mktemp -d)
 
