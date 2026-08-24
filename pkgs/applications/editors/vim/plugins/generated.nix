@@ -15977,11 +15977,11 @@ final: prev: {
 
   run-nvim = buildVimPlugin {
     pname = "run.nvim";
-    version = "2.0.0";
+    version = "2.01";
     src = fetchgit {
       url = "https://codeberg.org/ssnoer/run.nvim";
-      tag = "v2.0.0";
-      hash = "sha256-MTxhhcD6lHLJCfwaivKF9reeUrMog/8I2kJarNWz5Kk=";
+      tag = "v2.01";
+      hash = "sha256-/3ouvPsPoGhsotAP+l0r0AacA1KmC11Z3Ch4C3XdQNg=";
     };
     meta.homepage = "https://codeberg.org/ssnoer/run.nvim";
     meta.license = unfree;
