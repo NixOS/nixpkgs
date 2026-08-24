@@ -10818,6 +10818,8 @@ self: super: with self; {
 
   minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
+  minimega = callPackage ../development/python-modules/minimega { minimega = pkgs.minimega; };
+
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override { python3 = python; })).py;
