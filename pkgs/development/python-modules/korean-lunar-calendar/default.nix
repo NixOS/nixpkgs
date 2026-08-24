@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "korean-lunar-calendar";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "korean_lunar_calendar";
-    hash = "sha256-6yxIUSSgYQFpJr3qbYnv35uf2/FttViVts8eW+wXuFc=";
+    hash = "sha256-vlbye8BZT9u997vgD1BKn5KaMeMRvX2buTVhtkWvrec=";
   };
 
   # no real tests
