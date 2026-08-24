@@ -1063,6 +1063,8 @@ let
           cmdliner = cmdliner_1;
         };
 
+        kapla = callPackage ../development/ocaml-modules/kapla { };
+
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
