@@ -216,7 +216,13 @@ let
             myPackages = python.pkgs.overrideScope extension;
           in
           assert myPackages.foobar == myPackages.numpy;
-          myPackages.python.withPackages (ps: with ps; [ foobar ]);
+          assert myPackages.python.pkgs.foobar == myPackages.numpy;
+          myPackages.python.withPackages (
+            ps: with ps; [
+              foobar
+              ps.python.pkgs.foobar
+            ]
+          );
         #
         # Have to skip prebuilt python as it's not present in top-level
         # `pkgs` as an attribute.
