@@ -19,8 +19,8 @@ let
     rev = "3f863a3f35f31b61982d813835d8637b3d93d87a";
     hash = "sha256-BsxP3GrS98ubIAkFx/c4pB1i97ZZL2TijS+2ORnooww=";
   };
-  GIT_DATE = "2025-08-29";
-  GIT_VERSION = "v0.0-4023-gc1271a00";
+  GIT_DATE = "2026-08-16";
+  GIT_VERSION = "v0.0-4148-g1ea007ec";
 in
 buildBazelPackage {
   pname = "verible";
