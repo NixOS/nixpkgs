@@ -1,0 +1,14 @@
+diff --git a/build/npm/postinstall.js b/build/npm/postinstall.js
+index 1033e4ecf68..3d249125c92 100644
+--- a/build/npm/postinstall.js
++++ b/build/npm/postinstall.js
+@@ -58,6 +58,9 @@ function npmInstall(dir, opts) {
+ 		}
+ 		run('sudo', ['docker', 'run', '-e', 'GITHUB_TOKEN', '-v', `${process.env['VSCODE_HOST_MOUNT']}:/root/vscode`, '-v', `${process.env['VSCODE_HOST_MOUNT']}/.build/.netrc:/root/.netrc`, '-w', path.resolve('/root/vscode', dir), process.env['VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME'], 'sh', '-c', `\"chown -R root:root ${path.resolve('/root/vscode', dir)} && npm i -g node-gyp-build && npm ci\"`], opts);
+ 		run('sudo', ['chown', '-R', `${userinfo.uid}:${userinfo.gid}`, `${path.resolve(root, dir)}`], opts);
++	} else if (process.env['npm_install_command']) {
++		log(dir, `Installing dependencies by ${process.env['npm_install_command']}`);
++		run(process.env['npm_install_command'], [], opts);
+ 	} else {
+ 		log(dir, 'Installing dependencies...');
+ 		run(npm, command.split(' '), opts);
