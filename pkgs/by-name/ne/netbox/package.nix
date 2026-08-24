@@ -80,6 +80,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
         strawberry-graphql-django
         svgwrite
         tablib
+        tzdata
 
         # Optional dependencies, kept here for backward compatibility
 
