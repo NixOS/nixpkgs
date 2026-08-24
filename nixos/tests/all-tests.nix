@@ -802,7 +802,7 @@ in
     systemdStage1 = true;
   };
   hister = runTest ./hister.nix;
-  hitch = handleTest ./hitch { };
+  hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
   holo-daemon-modular-service = runTest ./holo-daemon-modular.nix;
