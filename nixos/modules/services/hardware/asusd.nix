@@ -20,8 +20,8 @@ let
   managedConfigFiles = lib.filterAttrs (_: value: value != null) configFiles;
   configPath = name: "asusd/${name}";
   managedConfigDescription = ''
-    The declared content is restored before each asusd start. Changes made at runtime
-    persist until the service restarts.
+    By default, the declared content is restored before each asusd start. Set
+    {option}`services.asusd.restoreConfigs` to `false` to preserve runtime changes.
   '';
 in
 {
@@ -71,6 +71,15 @@ in
         enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
 
         package = lib.mkPackageOption pkgs "asusctl" { };
+
+        restoreConfigs = lib.mkOption {
+          type = bool;
+          default = true;
+          description = ''
+            Whether to restore declared configuration files before each asusd start.
+            Disable this to preserve runtime changes across service restarts.
+          '';
+        };
 
         animeConfig = lib.mkOption {
           type = nullOr configType;
@@ -156,17 +165,19 @@ in
     ) managedConfigFiles;
 
     systemd.services.asusd = lib.mkIf (managedConfigFiles != { }) {
-      preStart = lib.concatMapStringsSep "\n" (
-        name:
-        let
-          path = configPath name;
-        in
-        ''
-          ${lib.getExe' pkgs.coreutils "install"} -m 0644 -- ${
-            lib.escapeShellArg (toString config.environment.etc.${path}.source)
-          } ${lib.escapeShellArg "/etc/${path}"}
-        ''
-      ) (lib.attrNames managedConfigFiles);
+      preStart = lib.mkIf cfg.restoreConfigs (
+        lib.concatMapStringsSep "\n" (
+          name:
+          let
+            path = configPath name;
+          in
+          ''
+            ${lib.getExe' pkgs.coreutils "install"} -m 0644 -- ${
+              lib.escapeShellArg (toString config.environment.etc.${path}.source)
+            } ${lib.escapeShellArg "/etc/${path}"}
+          ''
+        ) (lib.attrNames managedConfigFiles)
+      );
       restartTriggers = map (name: config.environment.etc.${configPath name}.source) (
         lib.attrNames managedConfigFiles
       );
