@@ -8629,12 +8629,12 @@ final: prev: {
 
   lazy-lsp-nvim = buildVimPlugin {
     pname = "lazy-lsp.nvim";
-    version = "2025.12.19-unstable-2026-03-12";
+    version = "2026.08.22";
     src = fetchFromGitHub {
       owner = "dundalek";
       repo = "lazy-lsp.nvim";
-      rev = "e2599ac3d2ee3b0c38d11edf1c01ce7e846f0079";
-      hash = "sha256-70roDFHMY2MB2d7wPrPbWdLqhr8r8TMkYTpaGI/GRRU=";
+      tag = "2026.08.22";
+      hash = "sha256-ZycJy86HJNLSAax2hSKvddbLvsOLL40a0NVZ+s2pQUM=";
     };
     meta.homepage = "https://github.com/dundalek/lazy-lsp.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
