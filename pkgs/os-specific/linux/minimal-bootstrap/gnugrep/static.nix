@@ -3,6 +3,7 @@
   buildPlatform,
   hostPlatform,
   fetchurl,
+  bash-build,
   bash,
   gcc,
   binutils,
@@ -24,7 +25,7 @@ let
     hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 in
-bash.runCommand "${pname}-${version}"
+bash-build.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
@@ -61,6 +62,10 @@ bash.runCommand "${pname}-${version}"
     # Unpack
     tar xf ${src}
     cd grep-${version}
+
+    # Patch
+    # Drop dependency on build bash
+    sed -i '1c\\#!${lib.getExe bash}' src/egrep.sh
 
     # Configure
     bash ./configure \
