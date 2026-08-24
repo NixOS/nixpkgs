@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "0-unstable-2025-12-26";
+  version = "sub";
 
   src = fetchFromCodeberg {
     owner = "letoram";
