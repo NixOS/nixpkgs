@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "archivemount";
-  version = "1b";
+  version = "1";
 
   src = fetchFromSourcehut {
     owner = "~nabijaczleweli";
     repo = "archivemount-ng";
     rev = finalAttrs.version;
-    hash = "sha256-QQeVr3kPLVX543PwM2jtMnVQgkEfiQd09hG9VQvqLng=";
+    hash = "sha256-xuLtbqC9iS86BKz4jG8of4id+GTlBXoohONrkmIzOpY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
