@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "datamodeldict";
-  version = "0.9.9";
+  version = "0.9.10";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DataModelDict";
     inherit version;
-    hash = "sha256-DadBRsc8qEu9PWgMNllGS2ESKL7kgBLDhg4yDr87WRk=";
+    hash = "sha256-1kBPRoLaunpPsHq2cKjvJ3r9j9SSY0XJHVmGcZ29BOc=";
   };
 
   propagatedBuildInputs = [ xmltodict ];
