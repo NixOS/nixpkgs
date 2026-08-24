@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+G4Y8T4rlsHB7t4Le5AJW7th2Z/twUgTxE3C82HbuuE=";
+    hash = "sha256-iv7RiqGJ/YHi6DO0JrtK9IVZSSHwsdNsIAH8Vjei8hA=";
   };
 
   build-system = [
