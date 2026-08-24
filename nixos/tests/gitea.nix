@@ -30,10 +30,9 @@ let
     type:
     lib.nameValuePair type (runTest {
       name = "${pkgs.gitea.pname}-${type}";
-      meta.maintainers = with lib.maintainers; [
-        aanderse
-        kolaente
-      ];
+      meta = {
+        inherit (pkgs.gitea.meta) maintainers;
+      };
 
       nodes = {
         server =
