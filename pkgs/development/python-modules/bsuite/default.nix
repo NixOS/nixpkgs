@@ -30,12 +30,12 @@
 let
   bsuite = buildPythonPackage rec {
     pname = "bsuite";
-    version = "0.3.5";
+    version = "0.3.6";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
+      hash = "sha256-GPHmxJ/0CSKItlfk+YPHeUaTMA+4U81l1Z4Cfe+hikA=";
     };
 
     patches = [
