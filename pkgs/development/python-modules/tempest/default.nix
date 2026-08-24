@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "46.2.0";
+  version = "46.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F/K0X4wHZOR4dvicGwQ9JOeh25iyqfKkgjiIZc6qWLY=";
+    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
   };
 
   postPatch = ''
