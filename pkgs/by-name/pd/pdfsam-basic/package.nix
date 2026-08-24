@@ -117,7 +117,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "torakiki";
     repo = "pdfsam";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RbCZ7HQvb2FN5JxsdZvjFeMTt/N2qJE9iK7vGezSuD8=";
   };
 
