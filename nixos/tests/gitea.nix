@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
   signingPrivateKey = ''
@@ -30,9 +28,9 @@ let
   ];
   makeGiteaTest =
     type:
-    nameValuePair type (runTest {
+    lib.nameValuePair type (runTest {
       name = "${pkgs.gitea.pname}-${type}";
-      meta.maintainers = with maintainers; [
+      meta.maintainers = with lib.maintainers; [
         aanderse
         kolaente
       ];
@@ -186,4 +184,4 @@ let
     });
 in
 
-listToAttrs (map makeGiteaTest supportedDbTypes)
+lib.listToAttrs (map makeGiteaTest supportedDbTypes)
