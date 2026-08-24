@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "arcanist";
-  version = "0-unstable-2026-07-19";
+  version = "2026.27";
 
   # The phorgeit fork is the maintained continuation of the upstream
   # (archived) phacility/arcanist.
