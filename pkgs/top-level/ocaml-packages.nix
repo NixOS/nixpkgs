@@ -606,6 +606,8 @@ let
 
         eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
 
+        eris = callPackage ../development/ocaml-modules/eris { };
+
         erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
         erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
