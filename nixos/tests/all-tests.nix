@@ -1957,6 +1957,7 @@ in
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;
   zenohd = runTest ./zenohd.nix;
+  zeroclaw = runTest ./zeroclaw.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
   zfs = import ./zfs.nix { inherit system pkgs runTest; };
   zigbee2mqtt = runTest ./zigbee2mqtt.nix;
