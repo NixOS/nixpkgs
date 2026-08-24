@@ -3,9 +3,9 @@ index 9e598ea..0776132 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,6 +1,7 @@
- VERSION         := 0.12
  DKMS_ROOT_PATH  := /usr/src/msi_ec-$(VERSION)
  KERNELRELEASE ?= $(shell uname -r)
+ KMOD_DIR        := /lib/modules/$(KERNELRELEASE)/updates/drivers/platform/x86
 +KERNELDIR ?= /lib/modules/$(KERNELRELEASE)/build/
  
  ccflags-y := -std=gnu11 -Wno-declaration-after-statement

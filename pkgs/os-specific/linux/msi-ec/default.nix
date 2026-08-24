@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2025-09-17";
+  version = "0-unstable-2026-03-13";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";
     repo = "msi-ec";
-    rev = "ed92e2eb0005ab815f5492c8cb02495289263738";
-    hash = "sha256-9jynXUvSZT2smyciK8GqojC/4MtxtqfQvJcf5RgPXKY=";
+    rev = "11c8a31039ec08695308d0cb99a312129352ff89";
+    hash = "sha256-2XcSp293S+JljIO9DKPLx75V2JyBzlbrv0utSBRzuik=";
   };
 
   dontMakeSourcesWritable = false;
