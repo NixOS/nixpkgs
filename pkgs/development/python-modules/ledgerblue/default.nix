@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.55";
+  version = "0.1.58";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6s2V8cXik6jEg8z3UK49qVwodPbwXMIkWk7iJ7OY0rM=";
+    hash = "sha256-EHniiz6h6qoH8srquVaiWIxpTDQaKp9strNtuIpHeTY=";
   };
 
   build-system = [
