@@ -4,15 +4,11 @@
   fetchFromGitHub,
   setuptools,
 }:
-let
+buildPythonPackage {
   pname = "stemming";
   version = "1.0.1";
-in
-buildPythonPackage {
-  inherit version pname;
   pyproject = true;
 
-  # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "nmstoker";
     repo = "stemming";
@@ -23,6 +19,8 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "stemming" ];
+
+  doCheck = false; # source doesn't contain tests
 
   meta = {
     description = "Python implementations of various stemming algorithms";
