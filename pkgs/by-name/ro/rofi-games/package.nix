@@ -3,14 +3,18 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+
   cargo,
   just,
   rofi,
   pkg-config,
+
   glib,
   cairo,
   pango,
   sqlite,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     sqlite
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Rolv-Apneseth/rofi-games/blob/${finalAttrs.src.rev}/CHANGELOG.md";
