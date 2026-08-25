@@ -12650,6 +12650,12 @@
     githubId = 5283991;
     name = "Jake Waksbaum";
   };
+  jakewins = {
+    name = "Jacob Davis-Hansson";
+    email = "jake@davis-hansson.com";
+    github = "jakewins";
+    githubId = 182752;
+  };
   jakubgs = {
     email = "jakub@gsokolowski.pl";
     github = "jakubgs";
