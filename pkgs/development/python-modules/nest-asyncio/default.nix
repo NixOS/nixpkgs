@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nest-asyncio";
   version = "1.6.0";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erdewit";
     repo = "nest_asyncio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5I5WItOl1QpyI4OXZgZf8GiQ7Jlo+SJbDicIbernaU4=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace-fail 'version = 1.5.9' 'version = ${version}'
+      --replace-fail 'version = 1.5.9' 'version = ${finalAttrs.version}'
   '';
 
   build-system = [
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Patch asyncio to allow nested event loops";
     homepage = "https://github.com/erdewit/nest_asyncio";
-    changelog = "https://github.com/erdewit/nest_asyncio/releases/tag/v${version}";
+    changelog = "https://github.com/erdewit/nest_asyncio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
-}
+})
