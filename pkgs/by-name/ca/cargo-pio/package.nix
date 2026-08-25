@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-pio";
-  version = "0.25.6";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "embuild";
     rev = "cargo-pio-v${finalAttrs.version}";
-    hash = "sha256-YH2CPb3uBlPncd+KkP25xhCVvDB7HDxJuSqWOJ1LT3k=";
+    hash = "sha256-BOkzaJ9GFkrZaXRFXwvECHFSNL091Rf5WZu4f69B6IQ=";
   };
 
-  cargoHash = "sha256-/WBhgPyd5hR3DBYvV8pd7uZb6FeD3yiDe3wOKtyFRG8=";
+  cargoHash = "sha256-S3aoNON25W6IX+2V6AlyJr0gBYD3iikGwfV9+/Mj3zo=";
 
   buildAndTestSubdir = "cargo-pio";
 
