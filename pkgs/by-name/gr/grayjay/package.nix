@@ -58,13 +58,13 @@ let
     fetchSubmodules = true;
     fetchLFS = true;
   };
-  getLibrary =
-    pkg: libnm:
-    "${lib.getLib pkg}/lib/lib${libnm}${pkg.drvAttrs.stdenv.hostPlatform.extensions.sharedLibrary}";
   justcefNative = fetchurl {
     url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
     hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
   };
+  getLibrary =
+    pkg: libnm:
+    "${lib.getLib pkg}/lib/lib${libnm}${pkg.drvAttrs.stdenv.hostPlatform.extensions.sharedLibrary}";
 in
 buildDotnetModule (finalAttrs: {
   pname = "grayjay";
@@ -142,7 +142,6 @@ buildDotnetModule (finalAttrs: {
     rm -r Grayjay.ClientServer/wwwroot/web
     cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
 
-
     mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
     cp ${justcefNative} \
       JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
@@ -160,8 +159,8 @@ buildDotnetModule (finalAttrs: {
     ln -s ${getLibrary libsodium "sodium"} $out/lib/grayjay/libsodium.so
     ln -s ${getLibrary sqlite "sqlite3"} $out/lib/grayjay/libe_sqlite3.so
 
-    # CEF is still vendored for now
-    chmod +x $out/lib/grayjay/cef/dotcefnative
+    # Explicitly fetched and copied over in preBuild
+    chmod +x $out/lib/grayjay/cef/justcefnative
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/lib/grayjay/grayjay.png $out/share/icons/hicolor/scalable/apps/grayjay.png
