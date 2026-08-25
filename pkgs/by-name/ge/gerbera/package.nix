@@ -5,7 +5,12 @@
   cmake,
   pkg-config,
   nixosTests,
-  # required
+
+  # required deps
+  # keep-sorted start case=no numeric=no block=yes
+  fmt,
+  icu77,
+  jsoncpp,
   libiconv,
   libupnp,
   libuuid,
@@ -13,35 +18,47 @@
   spdlog,
   sqlite,
   zlib,
-  fmt,
-  jsoncpp,
-  icu77,
-  # options
-  enableMysql ? false,
-  libmysqlclient,
-  enableDuktape ? true,
-  duktape,
+  # keep-sorted end
+
+  # optional deps
+  # keep-sorted start case=no numeric=no group_start_regex=["^  enable"] newline_separated=2
+  enableAvcodec ? false,
+  ffmpeg,
+
   enableCurl ? true,
   curl,
-  enableTaglib ? true,
-  taglib,
+
+  enableDuktape ? true,
+  duktape,
+
+  enableExiv2 ? false,
+  exiv2,
+
+  enableFFmpegThumbnailer ? false,
+  ffmpegthumbnailer,
+
+  enableInotifyTools ? true,
+  inotify-tools,
+
+  enableLibexif ? true,
+  libexif,
+
   enableLibmagic ? true,
   file,
+
   enableLibmatroska ? true,
   libmatroska,
   libebml,
-  enableAvcodec ? false,
-  ffmpeg,
-  enableLibexif ? true,
-  libexif,
-  enableExiv2 ? false,
-  exiv2,
-  enableFFmpegThumbnailer ? false,
-  ffmpegthumbnailer,
-  enableInotifyTools ? true,
-  inotify-tools,
-  wavpack,
+
+  enableMysql ? false,
+  libmysqlclient,
+
+  enableTaglib ? true,
+  taglib,
+
   enableWavPack ? false,
+  wavpack,
+  # keep-sorted end
 }:
 
 let
@@ -53,6 +70,7 @@ let
   });
 
   options = [
+    # keep-sorted start case=no numeric=no block=yes
     {
       name = "AVCODEC";
       enable = enableAvcodec;
@@ -116,6 +134,7 @@ let
       enable = enableWavPack;
       packages = [ wavpack ];
     }
+    # keep-sorted end
   ];
 
   inherit (lib) flatten;
@@ -157,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # keep-sorted start case=no numeric=no block=yes
     libiconv
     libupnp'
     libuuid
@@ -167,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     jsoncpp
     icu77
+    # keep-sorted end
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
