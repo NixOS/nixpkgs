@@ -28,9 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.name == "stdenv-linux";
 
   meta = {
+    changelog = "https://github.com/NixOS/patchelf/blob/${finalAttrs.version}/ChangeLog.md";
+    description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
     homepage = "https://github.com/NixOS/patchelf";
     license = lib.licenses.gpl3Plus;
-    description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
     mainProgram = "patchelf";
     maintainers = [ ];
     platforms = lib.platforms.all;
