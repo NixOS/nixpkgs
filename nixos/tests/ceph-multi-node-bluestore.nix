@@ -56,6 +56,11 @@ let
         monInitialMembers = cfg.monA.name;
       };
       extraConfig = {
+        log_to_syslog = "false";
+        log_to_file = "false";
+        log_to_stderr = "true";
+        debug_rocksdb = "1/5";
+        debug_mgr = "1/5";
         mon_host = "v2:${cfg.monA.ip}:3300 v1:${cfg.monA.ip}:6789";
       };
     }
@@ -442,7 +447,7 @@ let
     dashboard = "http://${cfg.monA.ip}:8080"
 
     monA.wait_for_open_port(8080, addr="${cfg.monA.ip}")
-    monA.wait_until_succeeds(f"curl -q --fail {dashboard}")
+    monA.wait_until_succeeds(f"curl -s --fail {dashboard}")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     # Initialize dashboard creds.
