@@ -44,7 +44,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 for prompt in generator.prompts.values():
                     print(f"- '{prompt.name}'")
                     if not args.dry_run:
-                        run_prompt(config, prompt, prompt_in_dir / prompt.name)
+                        run_prompt(args, config, prompt, prompt_in_dir / prompt.name)
 
             if entry in args.set:
                 print(f"Importing '{entry}' from disk")

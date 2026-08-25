@@ -10,7 +10,7 @@ def collect_garbage(args: SecretsArgs, config: SecretsConfig):
 
             continue
 
-        secrets = list_secrets(config, backend)
+        secrets = list_secrets(args, config, backend)
         specified = set()
         for generator in config.generators.values():
             for file in generator.files.values():

@@ -13,7 +13,7 @@ class SecretsPromptBackend:
     name: str
     ask: str
 
-    def from_jsom(name: str, json: Any) -> Self:
+    def from_json(name: str, json: Any) -> Self:
         return SecretsPromptBackend(name=name, ask=json["ask"])
 
 
@@ -25,7 +25,7 @@ class SecretsPrompt:
     backend: str
     type: str  # There's probably a way to type this properly..
 
-    def from_jsom(name: str, json: Any) -> Self:
+    def from_json(name: str, json: Any) -> Self:
         return SecretsPrompt(
             name=name,
             label=json["label"],
@@ -47,7 +47,7 @@ class SecretsStoreBackend:
     deployRemote: Optional[str]
     deployLocal: Optional[str]
 
-    def from_jsom(name: str, json: Any) -> Self:
+    def from_json(name: str, json: Any) -> Self:
         return SecretsStoreBackend(
             name=name,
             get=json["get"],
@@ -66,7 +66,7 @@ class SecretsFile:
     name: str
     deploy: bool
 
-    def from_jsom(name: str, json: Any) -> Self:
+    def from_json(name: str, json: Any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -84,7 +84,7 @@ class SecretsSecret:
     prompts: Mapping[str, SecretsPrompt]
     files: Mapping[str, SecretsFile]
 
-    def from_jsom(name: str, json: Any) -> Self:
+    def from_json(name: str, json: Any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"Secret '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -100,10 +100,10 @@ class SecretsSecret:
         )
 
         for k, v in json["prompts"].items():
-            result.prompts[k] = SecretsPrompt.from_jsom(k, v)
+            result.prompts[k] = SecretsPrompt.from_json(k, v)
 
         for k, v in json["files"].items():
-            result.files[k] = SecretsFile.from_jsom(k, v)
+            result.files[k] = SecretsFile.from_json(k, v)
 
         if not result.files:
             raise SecretsError(f"Secret '{name}' has no associated files")
@@ -127,17 +127,17 @@ class SecretsConfig:
     storeBackends: Mapping[str, SecretsStoreBackend]
     promptBackends: Mapping[str, SecretsPromptBackend]
 
-    def from_jsom(json: Any) -> Self:
+    def from_json(json: Any) -> Self:
         result = SecretsConfig(generators={}, storeBackends={}, promptBackends={})
 
         for k, v in json["backends"]["prompt"].items():
-            result.promptBackends[k] = SecretsPromptBackend.from_jsom(k, v)
+            result.promptBackends[k] = SecretsPromptBackend.from_json(k, v)
 
         for k, v in json["backends"]["store"].items():
-            result.storeBackends[k] = SecretsStoreBackend.from_jsom(k, v)
+            result.storeBackends[k] = SecretsStoreBackend.from_json(k, v)
 
         for k, v in json["store"].items():
-            result.generators[k] = SecretsSecret.from_jsom(k, v)
+            result.generators[k] = SecretsSecret.from_json(k, v)
 
         referencedGenerators: Set[str] = set()
         referencedStoreBackends: Set[str] = set()
