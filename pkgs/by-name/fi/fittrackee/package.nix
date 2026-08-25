@@ -11,27 +11,22 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "1.3.4";
+  version = "1.4.0b1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PN+YHRKvsAgTaSm4dl2t5voRxbgIo+yoieMfGEuE0oI=";
+    hash = "sha256-RzABlTt1LKdRsmWxxI2kC6dj6Zn2q7LjIwEKZtL+lKM=";
   };
-
-  patches = [
-    # https://codeberg.org/FitTrackee/FitTrackee/pulls/1205
-    ./0001-pytest-Parametrize-compatability-with-9.1.1.patch
-  ];
 
   makeCacheWritable = true;
   npmRoot = "fittrackee_client";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-kN/J7hIeEcnCKaramIPhoBsbBg32VgF372f9KOPi+nY=";
+    hash = "sha256-KE3DS4TMSunHHYEkLROnFSJHiY0EZtL3jSJ0tZTmtmI=";
     sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
   };
 
