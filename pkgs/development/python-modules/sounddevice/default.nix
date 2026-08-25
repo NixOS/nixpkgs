@@ -11,13 +11,13 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sounddevice";
   version = "0.5.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jsn7/eLjLwILFn40jzqzusZiWl8Vr1JNeQEIrHFHpBA=";
   };
 
@@ -48,7 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Play and Record Sound with Python";
     homepage = "https://python-sounddevice.readthedocs.io/";
-    changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${version}";
+    changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})
