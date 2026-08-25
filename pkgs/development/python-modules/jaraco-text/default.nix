@@ -11,7 +11,7 @@
   typer,
 }:
 
-buildPythonPackage (finalAttrs: rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-text";
   version = "4.3.0";
   pyproject = true;
