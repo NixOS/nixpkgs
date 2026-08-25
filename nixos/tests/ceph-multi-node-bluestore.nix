@@ -81,6 +81,7 @@ let
         bash
         sudo
         ceph
+        cryptsetup
         netcat
       ];
 
@@ -332,54 +333,55 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
 
-    # Send the admin keyring to the OSD machines.
-    monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
-    osd0.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd1.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
-    osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
+    # Send the bootstrap-osd keyring to the OSD machines.
+    monA.succeed("ceph auth get client.bootstrap-osd -o /etc/ceph/ceph.client.bootstrap-osd.keyring")
+    monA.succeed("cp /etc/ceph/ceph.client.bootstrap-osd.keyring /tmp/shared")
 
     # Bootstrap the BlueStore OSDs.
-    osd0.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd0.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd0.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd0.name}/keyring --name osd.${cfg.osd0.name} --add-key ${cfg.osd0.key}",
-        'echo \'{"cephx_secret": "${cfg.osd0.key}"}\' | ceph osd new ${cfg.osd0.uuid} -i -',
-    )
-    osd1.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd1.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd1.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd1.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
-        'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
-    )
-    osd2.succeed(
-        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
-        "echo bluestore > /var/lib/ceph/osd/ceph-${cfg.osd2.name}/type",
-        "ln -sf /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd2.name}/block",
-        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
-        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
-    )
+    #
+    # The steps for this are roughly the same for all OSDs:
+    # 1. get the bootstrap-osd keyring
+    # 2. prepare the osd via ceph-volume lvm, the second line contains the OSD specific configuration
+    # 3. deactivate it to unmount the tmpfs
+    # 4. activate it without a tmpfs for persistent data
+    # 5. sync, so the osd has at least one consistent state saved
+    # 6. start it
 
-    # We `sync` so that the config survives the forced crashes below.
+    # osd.0: plain
     osd0.succeed(
-        "ceph-osd -i ${cfg.osd0.name} --mkfs --osd-uuid ${cfg.osd0.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-id ${cfg.osd0.name} --osd-fsid ${cfg.osd0.uuid} "
+          "--data /dev/vdb",
+        "ceph-volume lvm deactivate ${cfg.osd0.name} ${cfg.osd0.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd0.name} ${cfg.osd0.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd0.name}",
     )
+    # osd.1: plain
     osd1.succeed(
-        "ceph-osd -i ${cfg.osd1.name} --mkfs --osd-uuid ${cfg.osd1.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-id ${cfg.osd1.name} --osd-fsid ${cfg.osd1.uuid} "
+          "--data /dev/vdb --dmcrypt",
+        "ceph-volume lvm deactivate ${cfg.osd1.name} ${cfg.osd1.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd1.name} ${cfg.osd1.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd1.name}",
     )
+    # osd.2: plain
     osd2.succeed(
-        "ceph-osd -i ${cfg.osd2.name} --mkfs --osd-uuid ${cfg.osd2.uuid}",
-        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "mkdir -p /var/lib/ceph/bootstrap-osd",
+        "cp /tmp/shared/ceph.client.bootstrap-osd.keyring /var/lib/ceph/bootstrap-osd/ceph.keyring",
+        "ceph-volume lvm prepare --objectstore bluestore --no-systemd --osd-fsid ${cfg.osd2.uuid} --osd-id ${cfg.osd2.name} "
+          "--data /dev/vdb",
+        "ceph-volume lvm deactivate ${cfg.osd2.name} ${cfg.osd2.uuid}",
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd2.name} ${cfg.osd2.uuid}",
         "sync",
         "systemctl start ceph-osd-${cfg.osd2.name}",
     )
+
+
     monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
@@ -476,17 +478,33 @@ let
     osd1.crash()
     osd2.crash()
 
-    # Start it up
+    # Start the mon first and mark the OSDs as down.
+    # Since the heartbeats are pretty high by default, the OSDs would otherwise be marked as up still.
+    # However we do not want to lower the heartbeats since this might cause flakey tests.
+    monA.start()
+    monA.wait_for_unit("ceph-mon-${cfg.monA.name}")
+    monA.wait_until_succeeds("ceph osd down all")
+    # Then start the OSDs as normal.
     osd0.start()
     osd1.start()
     osd2.start()
-    monA.start()
+    # Ensure they are all up.
+    osd0.wait_for_unit("network.target")
+    osd1.wait_for_unit("network.target")
+    osd2.wait_for_unit("network.target")
 
-    # Ensure the cluster comes back up again.
+    # FIXME: dmcrypt OSDs currently do not work out of the box.
+    # For a potential long-term fix see: https://github.com/NixOS/nixpkgs/pull/512912#discussion_r3140295546
+    osd1.succeed(
+        "ceph-volume lvm activate --no-tmpfs --no-systemd ${cfg.osd1.name} ${cfg.osd1.uuid}",
+        "systemctl start ceph-osd-${cfg.osd1.name}",
+    )
+
+    # Test the cluster state thoroughly.
     monA.wait_until_succeeds("ceph -s | grep 'mon: 1 daemons'")
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
-    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
+    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     # Verify the recovery.
