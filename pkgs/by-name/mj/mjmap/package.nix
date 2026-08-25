@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.1.1";
 in
 
 buildGoModule {
@@ -20,7 +20,7 @@ buildGoModule {
     owner = "~rockorager";
     repo = "mjmap";
     rev = "v${version}";
-    hash = "sha256-VV+bZ01l+uEe3wqdYyVwpzsZJNzoTCD38F6a58dozbg=";
+    hash = "sha256-DUAwarg2yb2f+1O1oV3aXqkzh92CFhkesCY+54LPiFM=";
   };
 
   vendorHash = "sha256-sZsS8q/hkA2T/8QmtKzNof0mzCuWYin227+/7k3XTM0=";
