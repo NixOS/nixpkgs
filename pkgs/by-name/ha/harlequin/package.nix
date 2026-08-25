@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3GpchONAU+FAFh82E1vZ2tXqo536qpQaVbECyjnH6K4=";
+    hash = "sha256-TD6i+nlZncr8yNGYsEqIuRbYU/5DoHIoDaHih4S/7Vw=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -32,14 +32,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "click"
     "questionary"
     "tomlkit"
-    "textual-fastdatatable"
   ];
   dependencies =
     with python3Packages;
     [
       click
       duckdb
-      pandas
+      msgspec
       platformdirs
       pyarrow
       pyperclip
@@ -68,6 +67,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     flaky
+    jsonschema
     pytest-asyncio
     pytest-textual-snapshot
     pytest-xdist
