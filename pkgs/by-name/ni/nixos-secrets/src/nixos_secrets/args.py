@@ -15,6 +15,7 @@ class SecretsArgs:
     local: Optional[str]  # "deploy" only
     generators: List[str]  # "generate" only
     set: Mapping[str, Path]  # "generate" only
+    timeout: Optional[float]  # "generate" only
     command: str  # gotta figure out how to type this properly
     verbose: str
 
@@ -25,6 +26,8 @@ class SecretsArgs:
             d["generators"] = []
         if "local" not in d:
             d["local"] = None
+        if "timeout" not in d:
+            d["timeout"] = None
 
         setArgDict = dict()
         if "set" in d:
