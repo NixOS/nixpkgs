@@ -18,6 +18,9 @@ let
     pname = "binding-wasm32-wasi";
     version = "0.139.0";
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     src = fetchurl {
       url = "https://registry.npmjs.org/@oxc-parser/${finalAttrs.pname}/-/${finalAttrs.pname}-${finalAttrs.version}.tgz";
       sha256 = "sha256-mQYWVK52hHi3gsXKpPxK7liQEg16wxKjY2hjkX9NPZE=";
@@ -73,6 +76,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier-unwrapped";
   version = "3.9.6";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "prettier";
