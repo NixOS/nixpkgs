@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wireservice";
     repo = "agate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tjPI2LLiWbjAZW4uh2EPUa4m19w5XgODiHP2R/S/8mU=";
   };
 
