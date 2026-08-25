@@ -11,7 +11,7 @@
   jupyter-client,
   jupyter-core,
   matplotlib-inline,
-  nest-asyncio,
+  nest-asyncio2,
   packaging,
   psutil,
   pyzmq,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     jupyter-client
     jupyter-core
     matplotlib-inline
-    nest-asyncio
+    nest-asyncio2
     packaging
     psutil
     pyzmq
