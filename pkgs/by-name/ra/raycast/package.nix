@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lovesegfault
       stepbrobd
-      FlameFlag
+      _4evy
       jakecleary
     ];
     platforms = [
