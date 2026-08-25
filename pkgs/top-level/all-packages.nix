@@ -10757,7 +10757,7 @@ with pkgs;
     dart-source
     ;
 
-  dart = if stdenv.hostPlatform.isLinux then dart-source else dart-bin;
+  dart = if lib.meta.availableOn stdenv.hostPlatform dart-source then dart-source else dart-bin;
 
   pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
 
