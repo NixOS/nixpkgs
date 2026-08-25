@@ -1,0 +1,31 @@
+libunwind: restore _Unwind_CallPersonality for release-LLVM pairing
+
+Nixpkgs pairs the emscripten runtime with the generic llvmPackages release
+LLVM instead of the trunk commit emsdk pins (default.nix already patches
+EXPECTED_LLVM_VERSION accordingly). Release LLVM (<= 22.x) WasmEHPrepare
+still emits calls to _Unwind_CallPersonality in landing pads; emscripten's
+system libs dropped that entry point when the personality wrapper moved
+into libc++abi as __gxx_wasm_personality_v0 (called directly by trunk
+LLVM's codegen). Restore the old entry point as a forwarder so that
+-fwasm-exceptions links. Drop this when llvmPackages reaches an LLVM that
+calls the personality directly.
+
+--- a/system/lib/libunwind/src/Unwind-wasm.c
++++ b/system/lib/libunwind/src/Unwind-wasm.c
+@@ -80,4 +80,16 @@
+   return 0;
+ }
+ 
++/// Restored from LLVM <= 22.x libunwind: release LLVM's WasmEHPrepare emits
++/// calls to _Unwind_CallPersonality in landing pads, while emscripten's pinned
++/// (trunk) LLVM calls the personality directly. The personality wrapper that
++/// used to live here moved into libc++abi as __gxx_wasm_personality_v0, so
++/// forward to it. Needed when pairing this runtime with a release LLVM.
++_Unwind_Reason_Code __gxx_wasm_personality_v0(void *exception_ptr);
++
++_LIBUNWIND_EXPORT _Unwind_Reason_Code
++_Unwind_CallPersonality(void *exception_ptr) {
++  return __gxx_wasm_personality_v0(exception_ptr);
++}
++
+ #endif // defined(__WASM_EXCEPTIONS__)
