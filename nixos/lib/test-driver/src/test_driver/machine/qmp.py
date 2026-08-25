@@ -4,6 +4,7 @@ import logging
 import os
 import selectors
 import socket
+import time
 from collections.abc import Iterator
 from pathlib import Path
 from queue import Queue
@@ -78,16 +79,18 @@ class QMPSession:
             if self.read_pending_messages():
                 continue
 
-            with selectors.DefaultSelector() as selector:
-                selector.register(self.sock, selectors.EVENT_READ)
-                selector.select()
-
-            if self.sock.recv(1, socket.MSG_PEEK) == b"":
-                raise ConnectionError(
-                    "QMP connection closed while waiting for a response"
-                )
+            self._wait_for_socket_data()
 
         return self.results.get()
+
+    def _wait_for_socket_data(self, timeout: float | None = None) -> None:
+        with selectors.DefaultSelector() as selector:
+            selector.register(self.sock, selectors.EVENT_READ)
+            if not selector.select(timeout):
+                raise TimeoutError
+
+        if self.sock.recv(1, socket.MSG_PEEK) == b"":
+            raise ConnectionError("QMP connection closed while waiting for data")
 
     def read_pending_messages(self) -> bool:
         line = self.reader.readline()
@@ -110,10 +113,18 @@ class QMPSession:
     def wait_for_event(
         self, timeout: dt.timedelta = dt.timedelta(seconds=10)
     ) -> dict[str, Any]:
+        deadline = time.monotonic() + timeout.total_seconds()
         while self.pending_events.empty():
-            self.read_pending_messages()
+            if self.read_pending_messages():
+                continue
 
-        return self.pending_events.get(timeout=timeout.total_seconds())
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError
+
+            self._wait_for_socket_data(remaining)
+
+        return self.pending_events.get_nowait()
 
     def events(
         self, timeout: dt.timedelta = dt.timedelta(seconds=10)
