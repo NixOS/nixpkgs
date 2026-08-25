@@ -2,24 +2,36 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   setuptools-scm,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "screed";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Dk5q4fPDy0CXa7vCvn4ZGCFhZmbl94QGxAziy/0jqtc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools >= 48",' '"setuptools",' \
+      --replace-fail '"setuptools_scm[toml] >= 9, <10",' '"setuptools_scm",' \
+      --replace-fail '"setuptools_scm_git_archive",' ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "screed" ];
-  checkInputs = [ pytestCheckHook ];
 
   # These tests use the screed CLI and make assumptions on how screed is
   # installed that break with nix. Can be enabled when upstream is fixed.
@@ -31,9 +43,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple read-only sequence database, designed for short reads";
-    mainProgram = "screed";
-    homepage = "https://pypi.org/project/screed/";
-    maintainers = with lib.maintainers; [ luizirber ];
+    homepage = "https://github.com/dib-lab/screed";
+    changelog = "https://github.com/dib-lab/screed/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ luizirber ];
+    mainProgram = "screed";
   };
-}
+})
