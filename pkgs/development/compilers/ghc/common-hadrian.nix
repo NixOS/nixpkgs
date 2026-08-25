@@ -257,7 +257,7 @@
       ++
         lib.optionals
           (
-            stdenv.hostPlatform.isRiscV64
+            (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64)
             && lib.versionAtLeast version "9.10"
             && lib.versionOlder version "9.12"
           )
