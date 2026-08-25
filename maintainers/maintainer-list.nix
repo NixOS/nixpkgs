@@ -16764,6 +16764,12 @@
     githubId = 4030336;
     name = "Luna Perroni";
   };
+  lPhiNix = {
+    github = "lPhiNix";
+    githubId = 152783810;
+    name = "lPhiNix";
+    email = "pmp.contact@proton.me";
+  };
   lpostula = {
     email = "lois@postu.la";
     github = "loispostula";
