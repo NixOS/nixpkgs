@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "canard";
-  version = "0.0.2-unstable-2024-04-22";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "mrusme";
