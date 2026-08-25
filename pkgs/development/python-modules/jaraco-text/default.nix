@@ -2,44 +2,56 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  autocommand,
+  more-itertools,
+  inflect,
   jaraco-functools,
   jaraco-context,
-  inflect,
   pytestCheckHook,
   setuptools-scm,
+  typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: rec {
   pname = "jaraco-text";
   version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_text";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3dXrYlnQcB4Iy2QsjWtjvMc5R9A9+SOepnu++RGz5OE=";
   };
 
+  pythonRemoveDeps = [ "typer-slim" ];
+
+  postPatch = ''
+    # downloads license texts at build time
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
+
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    autocommand
+  dependencies = [
+    more-itertools
     jaraco-context
     jaraco-functools
-    inflect
+    typer
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    inflect
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jaraco.text" ];
 
   meta = {
     description = "Module for text manipulation";
     homepage = "https://github.com/jaraco/jaraco.text";
+    changelog = "https://github.com/jaraco/jaraco.text/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
