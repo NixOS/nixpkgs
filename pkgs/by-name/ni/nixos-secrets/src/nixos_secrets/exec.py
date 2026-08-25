@@ -2,7 +2,7 @@ import os
 import subprocess
 import graphlib
 import functools
-from typing import List, Set
+from typing import List, Set, Mapping
 from pathlib import Path
 from .config import (
     SecretsConfig,
@@ -30,6 +30,17 @@ def build_binary(path: Path) -> Path:
         raise SecretsError(f"Error building '{path}':\n{e.stderr}")
 
 
+def backend_env_vars(args: SecretsArgs) -> Mapping[str, str]:
+    out = dict()
+    if args.json:
+        out["NIXOS_SECRETS_CONFIG"] = args.json
+    elif args.file:
+        out["NIXOS_SECRETS_CONFIG"] = args.file
+    elif args.flake:
+        out["NIXOS_SECRETS_FLAKE"] = args.flake
+    return out
+
+
 def file_exists(
     args: SecretsArgs,
     backend: SecretsStoreBackend,
@@ -37,9 +48,12 @@ def file_exists(
     file: SecretsFile,
 ) -> bool:
     binary = build_binary(backend.exists)
+    env = os.environ.copy()
+    env.update(backend_env_vars(args))
     result = subprocess.run(
         [binary, generator.name, file.name],
         capture_output=not args.verbose,
+        env=env,
         text=True,
     )
 
@@ -72,12 +86,13 @@ def get_secret(
     try:
         env = os.environ.copy()
         env["out"] = out
+        env.update(backend_env_vars(args))
         subprocess.run(
             [binary, generator.name, file.name],
             capture_output=not args.verbose,
+            env=env,
             text=True,
             check=True,
-            env=env,
         )
     except subprocess.CalledProcessError as e:
         raise SecretsError(
@@ -97,12 +112,13 @@ def set_secret(
     try:
         env = os.environ.copy()
         env["in"] = at
+        env.update(backend_env_vars(args))
         subprocess.run(
             [binary, generator.name, file.name],
             capture_output=not args.verbose,
+            env=env,
             text=True,
             check=True,
-            env=env,
         )
     except subprocess.CalledProcessError as e:
         raise SecretsError(
@@ -122,9 +138,12 @@ def delete_secret(
 ):
     binary = build_binary(backend.delete)
     try:
+        env = os.environ.copy()
+        env.update(backend_env_vars(args))
         subprocess.run(
             [binary, gen_name, file_name],
             capture_output=not args.verbose,
+            env=env,
             text=True,
             check=True,
         )
@@ -135,16 +154,19 @@ def delete_secret(
 
 
 def list_secrets(
-    config: SecretsConfig, backend: SecretsStoreBackend
+    args: SecretsArgs, config: SecretsConfig, backend: SecretsStoreBackend
 ) -> Set[tuple[str, str]]:
     binary = build_binary(backend.list)
     try:
         pairs = set()
+        env = os.environ.copy()
+        env.update(backend_env_vars(args))
         result = subprocess.run(
             [binary],
             capture_output=True,
             text=True,
             check=True,
+            env=env,
         )
 
         for line in result.stdout.strip().split("\n"):
@@ -184,10 +206,13 @@ def deploy_secrets(
 
     binary = build_binary(script)
     try:
+        env = os.environ.copy()
+        env.update(backend_env_vars(args))
         subprocess.run(
             [binary, args.local] if local else [binary],
             input="\n".join(inputLines),
             capture_output=not args.verbose,
+            env=env,
             text=True,
             check=True,
         )
@@ -197,12 +222,18 @@ def deploy_secrets(
         )
 
 
-def run_prompt(config: SecretsConfig, prompt: SecretsPrompt, out: Path):
+def run_prompt(
+    args: SecretsArgs,
+    config: SecretsConfig,
+    prompt: SecretsPrompt,
+    out: Path,
+):
     backend = config.promptBackends[prompt.backend]
     binary = build_binary(backend.ask)
     try:
         env = os.environ.copy()
         env["out"] = out
+        env.update(backend_env_vars(args))
         command = [binary, prompt.type, prompt.label]
         if prompt.description:
             command.append(prompt.description)
@@ -293,9 +324,12 @@ def fixup_all(args: SecretsArgs, config: SecretsConfig):
 
         binary = build_binary(backend.fixup)
         try:
+            env = os.environ.copy()
+            env.update(backend_env_vars(args))
             subprocess.run(
                 [binary, "\n".join(inputLines)],
                 capture_output=not args.verbose,
+                env=env,
                 text=True,
                 check=True,
             )

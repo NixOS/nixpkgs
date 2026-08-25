@@ -28,7 +28,7 @@ def evaluate_config(args: SecretsArgs) -> SecretsConfig:
     except subprocess.CalledProcessError as e:
         raise SecretsError(f"Config validation error:\n{e.stdout}")
 
-    return SecretsConfig.from_jsom(json.loads(json_str))
+    return SecretsConfig.from_json(json.loads(json_str))
 
 
 def evaluate_config_raw(args: SecretsArgs) -> Any:
