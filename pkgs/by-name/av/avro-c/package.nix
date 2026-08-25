@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${finalAttrs.version}/c/avro-c-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-tk4xuUcZSZVJYiqpLx2W0XQpZ87SYaCTG2O+O76Qfyw=";
+    sha256 = "sha256-zMhcWpZ8pkf+CWHd7t8obN4Aqs+Hg02MpVKgFlrkqm0=";
   };
 
   postPatch = ''
