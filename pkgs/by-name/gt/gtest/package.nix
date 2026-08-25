@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     re2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ]
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_CXX_STANDARD=${cxx_standard}"
   ]
   ++ lib.optional withAbseil "-DGTEST_HAS_ABSL=ON";
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Google's framework for writing C++ tests";

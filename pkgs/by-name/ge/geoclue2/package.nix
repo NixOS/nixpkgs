@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geoclue";
-  version = "2.8.1";
+  version = "2.8.2";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "geoclue";
     repo = "geoclue";
     tag = finalAttrs.version;
-    hash = "sha256-CyZhUMAa2vMUi61sL+gGBZFxGo0lu7Cm68fTjcbblTg=";
+    hash = "sha256-fjF0yd3+b+q3gTW2PpPNFE6zQafilj/g9rXWSgs/XGE=";
   };
 
   patches = [

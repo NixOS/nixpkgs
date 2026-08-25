@@ -70,6 +70,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ buildcatrust ];
 
+  strictDeps = true;
+
   buildPhase = ''
     mkdir unbundled hashed
     buildcatrust \
@@ -246,6 +248,8 @@ stdenv.mkDerivation {
             '';
       };
   };
+
+  __structuredAttrs = true;
 
   inherit meta;
 }

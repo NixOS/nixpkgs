@@ -9,8 +9,7 @@
   gstreamer,
   gst-plugins-base,
   gettext,
-  # FIXME: unpin when upstream supports ffmpeg 9
-  ffmpeg_8-headless,
+  ffmpeg-headless,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -20,16 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.28.5";
-
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.28.6";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RShUZWBW8LFlEaHZrU8mef9eWofIn5DPfuXewAXdseQ=";
+    hash = "sha256-cebq+0//KmbRuwuo0HgiTf5+M5cwfYwLuj3CNgbgj1E=";
   };
 
   separateDebugInfo = true;
@@ -51,15 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gstreamer
     gst-plugins-base
-    ffmpeg_8-headless
+    ffmpeg-headless
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \

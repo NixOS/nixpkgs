@@ -953,7 +953,7 @@ in
         ++ lib.optional (useSendmail && config.services.postfix.enable) "AF_NETLINK";
         RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RemoveIPC = true;

@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withJemalloc jemalloc;
 
+  strictDeps = true;
+
   cmakeFlags = [
     # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
     # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit curl;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";

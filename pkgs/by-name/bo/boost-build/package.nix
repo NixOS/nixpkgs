@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     useBoost.src or (fetchFromGitHub {
       owner = "boostorg";
       repo = "build";
-      rev = defaultVersion;
+      tag = defaultVersion;
       sha256 = "1r4rwlq87ydmsdqrik4ly5iai796qalvw7603mridg2nwcbbnf54";
     });
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation {
     bison
   ];
 
+  strictDeps = true;
+
   buildPhase = ''
     runHook preBuild
     ./bootstrap.sh
@@ -75,6 +77,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.boost.org/build/";
