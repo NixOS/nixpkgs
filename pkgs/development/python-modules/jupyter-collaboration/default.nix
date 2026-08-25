@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -68,6 +69,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Failed: Timeout (>300.0s) from pytest-timeout
     "test_document_ttl_from_settings"
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: None
+    "test_dirty"
   ];
 
   __darwinAllowLocalNetworking = true;
