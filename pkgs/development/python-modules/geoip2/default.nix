@@ -14,7 +14,7 @@
   uv-build,
 }:
 
-buildPythonPackage (finalAttrs: rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoip2";
   version = "5.3.0";
   pyproject = true;
