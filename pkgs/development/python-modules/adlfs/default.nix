@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "adlfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5LeuAzGHqZElvo58vP1hOpFyjThzzPyCY7rWiXswrVM=";
   };
 
