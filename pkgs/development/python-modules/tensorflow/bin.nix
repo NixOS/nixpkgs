@@ -51,20 +51,17 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
+
+  pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+  cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
+  key = "${stdenv.system}_${pyVerNoDot}${cuda}";
 in
 buildPythonPackage (finalAttrs: {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   version = packages."${"version" + lib.optionalString isCudaJetson "_jetson"}";
   format = "wheel";
 
-  src =
-    let
-      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-      platform = stdenv.system;
-      cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
-      key = "${platform}_${pyVerNoDot}${cuda}";
-    in
-    fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
+  src = fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -241,6 +238,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     # unsupported combination
-    broken = stdenv.hostPlatform.isDarwin && cudaSupport;
+    broken = stdenv.hostPlatform.isDarwin && cudaSupport || !(packages ? ${key});
   };
 })
