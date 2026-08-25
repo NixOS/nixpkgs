@@ -70,7 +70,12 @@ buildPythonPackage (finalAttrs: {
     questionary
   ];
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ git ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ git ])
+  ];
 
   passthru.updateScript = nix-update-script { };
 
