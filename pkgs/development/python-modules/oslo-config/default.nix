@@ -13,14 +13,14 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-config";
   version = "10.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_config";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Tw/Uyn7P5RH7wOAS08Y/zlcAnzYBmenpzCMp7VXskR4=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
