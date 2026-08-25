@@ -10357,7 +10357,7 @@ with pkgs;
 
   xyce-parallel = callPackage ../by-name/xy/xyce/package.nix {
     withMPI = true;
-    trilinos = trilinos-mpi;
+    trilinos_16 = trilinos_16-mpi;
   };
 
   ### SCIENCE / MATH
