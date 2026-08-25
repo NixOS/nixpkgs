@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.4.6.1";
+  version = "1.4.6.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-Nv0aX4lzX4mvh71U7BbHXXaM0UN2itzKyIpdIQ22fM0=";
+    hash = "sha256-9NahHQDxxHfUoUDWjSkxzqrL6at3EFIQPLbVSfz4NE8=";
   };
 
   prePatch = ''
