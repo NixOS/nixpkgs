@@ -9329,6 +9329,12 @@
     githubId = 41450706;
     name = "fin-w";
   };
+  fin444 = {
+    email = "fin444_dev@proton.me";
+    github = "fin444";
+    githubId = 24360839;
+    name = "fin444";
+  };
   findus = {
     email = "findus-nix@trsk.cc";
     github = "findus";
