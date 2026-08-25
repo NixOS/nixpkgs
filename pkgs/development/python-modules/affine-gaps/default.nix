@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gata-bio";
     repo = "affine-gaps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Nbm79gKuCMqcCWQCjk8O2bbnzXBvby6FB/YhzqeDIJw=";
   };
 
