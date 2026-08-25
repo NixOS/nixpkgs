@@ -12,6 +12,8 @@
   binutils,
   gcc,
   libc,
+  # TESTING ONLY
+  pkgsCross,
 }:
 let
   runtimeBuildTools = [
@@ -67,9 +69,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # no tests implemented
   doCheck = false;
 
-  # Passthru helper for getting the AVR-targetting QMK
-  passthru.avr = pkgsCross.buildPackages.qmk;
+  passthru = {
+    # Passthru helper for getting an AVR-targetting QMK
+    avr = pkgsCross.buildPackages.qmk;
 
+    tests = {
+      # Cannot use finalAttrs.finalPackage here
+      # because it is not spliced, and this must be spliced.
+      avr = pkgsCross.avr.callPackage ./avr.nix { };
+    };
+  };
   meta = {
     homepage = "https://github.com/qmk/qmk_cli";
     description = "Program to help users work with QMK Firmware";
