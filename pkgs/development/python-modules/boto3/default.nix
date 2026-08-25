@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=get_version()," "version='${finalAttrs.version}'," 
+      --replace-fail "version=get_version()," "version='${finalAttrs.version}',"
   '';
 
   pythonRelaxDeps = [
