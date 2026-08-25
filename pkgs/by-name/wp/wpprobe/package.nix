@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
-  version = "0.12.7";
+  version = "0.12.10";
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
     repo = "wpprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OPVu1Kxq/szv01VUKnkWfsxwy3Brz73pz4otkOTjwgk=";
+    hash = "sha256-PXXnlcABEQcGRh0AbZobVFBNg2YnssnoIncF1kbYJi0=";
   };
 
-  vendorHash = "sha256-pAKFrdja+rH0kiJH6hToZwLjE8lLBHFAUCjnCLbgxVo=";
+  vendorHash = "sha256-0l7n6u2iODxoVR1fIMyUBaQj7cYk0Q5VnXUePaqOHXc=";
 
   nativeCheckInputs = [
     versionCheckHook
