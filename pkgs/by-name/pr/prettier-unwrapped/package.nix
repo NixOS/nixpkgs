@@ -143,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       l0b0
       S0AndS0
+      starryreverie
     ];
   };
 })
