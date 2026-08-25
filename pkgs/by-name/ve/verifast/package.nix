@@ -44,7 +44,7 @@ let
   '';
 
   pname = "verifast";
-  version = "25.08";
+  version = "26.01";
 
 in
 stdenv.mkDerivation (
@@ -53,7 +53,7 @@ stdenv.mkDerivation (
     srcs = {
       x86_64-linux = fetchurl {
         url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-linux.tar.gz";
-        hash = "sha256-HkABnWrdkb9yFByG9AB/L+Hu9n9FPLf7jx9at9MdUJ8=";
+        hash = "sha256-98sxa0gsURP+ZYAdRP8tLbFJC+B8LQXx3uNUfErag5A=";
       };
       aarch64-darwin = fetchurl {
         url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/${pname}-${finalAttrs.version}-macos-aarch.tar.gz";
