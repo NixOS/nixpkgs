@@ -8,6 +8,7 @@
   pyzmq,
   tornado,
   traitlets,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "jupyter_client" ];
