@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "brickstore";
-  version = "2026.3.2";
+  version = "2026.8.1";
 
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UIVzvzsterKkL8/JPx5S0wly6mLxflAqX0gMFX3rOes=";
+    hash = "sha256-C5d5ffWuXTPmihDdl0Ee/hvlxmiyo5Fj8WykyTT6ubo=";
     fetchSubmodules = true;
   };
 
