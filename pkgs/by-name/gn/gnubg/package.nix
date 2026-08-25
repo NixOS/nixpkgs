@@ -6,10 +6,11 @@
   flex,
   glib,
   python3,
-  gtk2,
+  gtk3,
   readline,
   copyDesktopItems,
   makeDesktopItem,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,17 +28,18 @@ stdenv.mkDerivation rec {
     python3
     flex
     glib
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk2
+    gtk3
     readline
   ];
 
   strictDeps = true;
 
   configureFlags = [
-    "--with-gtk"
+    "--with-gtk3"
     "--with--board3d"
   ];
 
