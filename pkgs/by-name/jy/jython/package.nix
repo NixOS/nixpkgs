@@ -9,11 +9,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "jython";
 
-  version = "2.7.4";
+  version = "2.7.5b1";
 
   src = fetchurl {
     url = "https://search.maven.org/remotecontent?filepath=org/python/jython-standalone/${finalAttrs.version}/jython-standalone-${finalAttrs.version}.jar";
-    sha256 = "sha256-H7oXae/8yLGfXhBDa8gnShWM6YhVnyV5J8JMc7sTfzw=";
+    sha256 = "sha256-CzrxX62Q3TqIeojuT7mvCCyzNc/xmlT1knZz4yh2EpA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
