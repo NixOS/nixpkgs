@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "nix-easy-search";
@@ -12,6 +16,9 @@ buildGoModule rec {
   };
 
   vendorHash = null;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = ''
     mv $out/bin/nix-easy-search $out/bin/nes
