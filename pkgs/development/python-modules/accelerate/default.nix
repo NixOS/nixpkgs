@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dvixYS/j+ZiTpRjuo5q3jY6x9MrWWnpMJz3fuJoAYh0=";
   };
 
@@ -90,6 +90,9 @@ buildPythonPackage (finalAttrs: {
 
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
+
+    # RuntimeError: Cannot access accelerator device when none is available.
+    "test_get_balanced_memory_no_split_module_classes_set"
   ]
   ++ lib.optionals ((pythonAtLeast "3.13") || (torch.rocmSupport or false)) [
     # RuntimeError: Dynamo is not supported on Python 3.13+
