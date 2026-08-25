@@ -333,19 +333,22 @@ lib.extendMkDerivation {
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
-      env.SSL_CERT_FILE =
-        if
-          (
-            hash_.outputHash == ""
-            || hash_.outputHash == fakeSha256
-            || hash_.outputHash == fakeSha512
-            || hash_.outputHash == fakeHash
-            || netrcPhase != null
-          )
-        then
-          "${cacert}/etc/ssl/certs/ca-bundle.crt"
-        else
-          "/no-cert-file.crt";
+      env = {
+        SSL_CERT_FILE =
+          if
+            (
+              hash_.outputHash == ""
+              || hash_.outputHash == fakeSha256
+              || hash_.outputHash == fakeSha512
+              || hash_.outputHash == fakeHash
+              || netrcPhase != null
+            )
+          then
+            "${cacert}/etc/ssl/certs/ca-bundle.crt"
+          else
+            "/no-cert-file.crt";
+      }
+      // (derivationArgs.env or { });
 
       outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
