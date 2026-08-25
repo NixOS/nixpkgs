@@ -9,7 +9,7 @@
 makeSetupHook {
   name = "dotnet-hook";
   substitutions = {
-    dotnetRuntime = dotnet-runtime;
+    dotnetRuntime = lib.defaultTo "" dotnet-runtime;
     wrapperPath = lib.makeBinPath [
       which
       coreutils
