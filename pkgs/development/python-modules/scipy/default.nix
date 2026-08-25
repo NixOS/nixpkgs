@@ -67,7 +67,8 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"pybind11>=2.13.2,<3.1.0",' '"pybind11",'
-  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace scipy/meson.build \
       --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
     substituteInPlace scipy/meson.build \
