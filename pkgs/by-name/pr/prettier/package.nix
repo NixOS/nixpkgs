@@ -70,6 +70,9 @@ symlinkJoin {
   pname = "prettier";
   inherit (prettier-unwrapped) version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   paths = [
     prettier-unwrapped
   ];
