@@ -2,34 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  wheel,
+  hatchling,
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "julius";
   version = "0.2.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1pHmUSAJMK/+pPbIScJulf7IRghyga49GndX6skCU9U=";
   };
 
-  propagatedBuildInputs = [ torch ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  dependencies = [ torch ];
 
   pythonImportsCheck = [ "julius" ];
 
   meta = {
-    description = "Nice DSP sweets: resampling, FFT Convolutions. All with PyTorch, differentiable and with CUDA support";
-    homepage = "https://pypi.org/project/julius/";
+    description = "Module to perform resampling and FFT convolutions";
+    homepage = "https://github.com/adefossez/julius";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})
