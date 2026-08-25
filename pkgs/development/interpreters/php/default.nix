@@ -12,9 +12,6 @@ let
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        pcre2 = pcre2.override {
-          withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-        };
         inherit version hash;
       };
     in

@@ -77,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
     description = "General-purpose data compression software, successor of LZMA";

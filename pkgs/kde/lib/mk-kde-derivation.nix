@@ -116,6 +116,7 @@ let
     ]
     ++ lib.optionals hasPythonBindings [
       python3Packages.shiboken6
+      python3Packages.shiboken6-generator
       (python3.withPackages (ps: [
         ps.build
         ps.setuptools

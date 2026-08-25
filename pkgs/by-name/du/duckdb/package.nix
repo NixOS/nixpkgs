@@ -5,15 +5,33 @@
   cmake,
   ninja,
   openssl,
-  openjdk11,
   python3,
-  unixodbc,
-  withJdbc ? false,
-  withOdbc ? false,
   versionCheckHook,
 }:
 
 let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Keep this in sync with DuckDBPlatform() in DuckDB's platform.hpp.
+  duckdbPlatform =
+    let
+      os =
+        if stdenv.hostPlatform.isWindows then
+          "windows"
+        else if stdenv.hostPlatform.isDarwin then
+          "osx"
+        else if stdenv.hostPlatform.isFreeBSD then
+          "freebsd"
+        else
+          "linux";
+      arch =
+        if stdenv.hostPlatform.isAarch64 then
+          "arm64"
+        else if stdenv.hostPlatform.is64bit then
+          "amd64"
+        else
+          "i686";
+    in
+    "${os}_${arch}${lib.optionalString stdenv.hostPlatform.isMusl "_musl"}${lib.optionalString stdenv.hostPlatform.isMinGW "_mingw"}";
   versions = lib.importJSON ./versions.json;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,22 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ];
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals withJdbc [ openjdk11 ]
-  ++ lib.optionals withOdbc [ unixodbc ];
+  buildInputs = [ openssl ];
 
   cmakeFlags = [
     (lib.cmakeFeature "DUCKDB_EXTENSION_CONFIGS" "${finalAttrs.src}/.github/config/in_tree_extensions.cmake")
-    (lib.cmakeBool "BUILD_ODBC_DRIVER" withOdbc)
-    (lib.cmakeBool "JDBC_DRIVER" withJdbc)
     (lib.cmakeFeature "OVERRIDE_GIT_DESCRIBE" "v${finalAttrs.version}-0-g${finalAttrs.rev}")
     # development settings
-    (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.doInstallCheck)
+    (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.finalPackage.doInstallCheck)
+  ]
+  ++ lib.optionals (!canExecute) [
+    (lib.cmakeFeature "DUCKDB_EXPLICIT_PLATFORM" duckdbPlatform)
   ];
 
-  doInstallCheck = true;
+  doInstallCheck = canExecute;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

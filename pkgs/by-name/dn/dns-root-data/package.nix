@@ -27,6 +27,9 @@ stdenv.mkDerivation {
     cp ${./root.ds} $out/root.ds
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.iana.org/domains/root/files";
     description = "DNS root data including root hints and DNSSEC root trust anchor + key";

@@ -106,7 +106,7 @@ in
     version = "12.2.0";
     hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
 
-    patches = lib.optionals stdenv.hostPlatform.is32bit [
+    patches = [
       # fix build on 32-bit targets
       # FIXME: remove in next update
       (fetchpatch {

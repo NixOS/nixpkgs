@@ -50,18 +50,6 @@
   gitMinimal,
 }:
 
-let
-  # nixpkgs stb doesn't have stb_image_resize2.h which noctalia needs
-  stb' = stb.overrideAttrs {
-    version = "0-unstable-2025-10-26";
-    src = fetchFromGitHub {
-      owner = "nothings";
-      repo = "stb";
-      rev = "f1c79c02822848a9bed4315b12c8c8f3761e1296";
-      hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
@@ -113,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     polkit
     sdbus-cpp_2
-    stb'
+    stb
     systemdLibs
     tomlplusplus
     wayland

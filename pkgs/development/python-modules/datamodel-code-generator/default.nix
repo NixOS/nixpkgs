@@ -123,6 +123,9 @@ buildPythonPackage (finalAttrs: {
     "test_type_checking_imports_default_to_runtime_imports_for_modular_pydantic_ruff"
   ];
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "datamodel_code_generator" ];
 
   meta = {
