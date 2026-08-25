@@ -7,7 +7,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxml-html-clean";
   version = "0.4.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "lxml_html_clean";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-R2FRaIgO0n9hNbKY4HYeqO0THXrXYokQekqers/Q1ao=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Separate project for HTML cleaning functionalities copied from lxml.html.clean";
     homepage = "https://github.com/fedora-python/lxml_html_clean/";
-    changelog = "https://github.com/fedora-python/lxml_html_clean/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/fedora-python/lxml_html_clean/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
