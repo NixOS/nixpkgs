@@ -4,18 +4,29 @@
   buildGoModule,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
+  applyPatches,
   lib,
   nixosTests,
   stdenvNoCC,
 }:
 
 let
-  version = "2024.9.2";
-  src = fetchFromGitHub {
-    owner = "cortezaproject";
-    repo = "corteza";
-    tag = version;
-    hash = "sha256-1mekSiRfFSNa/6MSzwRrI3rb9GHABkn3i1b6tX+73fI=";
+  version = "2024.9.9";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "cortezaproject";
+      repo = "corteza";
+      tag = version;
+      hash = "sha256-r6/z5yplkT2d1iEhA4S29C1LcbdEJQiOWr0JRP5Pvb0=";
+    };
+    patches = [
+      # CVE-2026-6093
+      (fetchpatch {
+        url = "https://github.com/cortezaproject/corteza/commit/64b58b9d7324e77248bacd183fb994ff338091ec.patch";
+        hash = "sha256-0Ume1zkksS3kwf6QS6T5lDXklAboZVlTt5ZJReqwu3w=";
+      })
+    ];
   };
   meta = {
     description = "Low-code platform";
@@ -47,13 +58,13 @@ let
     };
 
   webApps = lib.mapAttrs mkWebApp {
-    admin = "sha256-34lfnK2mecvu1Lgg9IM61+fbnqRgZC/Agi7iyugn0fM=";
-    compose = "sha256-1/Fyl6Z27TtZzNBeerKYNs4VhLWEW3wJyr0SCapzc9E=";
-    discovery = "sha256-mL+ibAgVFCRV5AvN0VZc4LCCY8hyaIC8gOlgEdXayuU=";
-    one = "sha256-SuGf72y4PXatZJQgbW5X4mPjtJmQlpwbjfFYCEZElBU=";
-    privacy = "sha256-yHi6pq0OKCh+2reygNL7TvwULCHwxeD8BXVVMjlnpLc=";
-    reporter = "sha256-AWKSzULOTdUZ5wdlTo8dJwVGc7RlYbimR4YF4ZAN1pQ=";
-    workflow = "sha256-cxD2mG4uuO8KT1r2Y4opPlY84Hvqu7cbWh2BSo8CcEc=";
+    admin = "sha256-fen4KxPbYpH0ikWco1w3Zr+4WeghFITdmsOqHMGa3gA=";
+    compose = "sha256-UHhyzCeSWTROgzULYkDKN/2hgZ25aDZ7roHTLkt466o=";
+    discovery = "sha256-GHmALrqLTBie0VTDmZz4zJ9Ls2JYsfV0A3VkRwCKSuQ=";
+    one = "sha256-GHCtouGYrFgghWlBVbF5rD9cXrAfleVVxVqZtuLOSr0=";
+    privacy = "sha256-PlmeAJZY/S+osdM650tpJI3XSOanc80WYuMQ6jsiJwQ=";
+    reporter = "sha256-4O6FEF7Ol4V0FxznKGISaIA0w68XL0E3HvQ8bbt2klE=";
+    workflow = "sha256-2vyx3lCxICtVlRFLPkpy0fzXZ9W4li9ESm9sJzInc8g=";
   };
 
   server-webconsole = callPackage ./buildYarnDistOnly.nix {
@@ -67,8 +78,8 @@ let
   corteza-locale = fetchFromGitHub {
     owner = "cortezaproject";
     repo = "corteza-locale";
-    rev = "64b6d5d562dce642652db55949231abf8b9af4ef";
-    sha256 = "sha256-OKr/M91sEDlTwYBiDXwWkShlfazJBm21G0uU429fjW0=";
+    rev = "57b1f2403207c44055ebce19d95cedd5573f39df";
+    sha256 = "sha256-j+mfWG6tED8AACkUcRWpol2G05qknTxp8b+kwu7c2NA=";
   };
 
   corteza-webapp = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -116,6 +127,7 @@ let
       cp -r ${server-webconsole}/* webconsole/dist/
     ''
     + lib.optionalString withLocales ''
+      chmod -R u+w pkg/locale/src
       cp -r ${corteza-locale}/src/* pkg/locale/src/
     '';
 
