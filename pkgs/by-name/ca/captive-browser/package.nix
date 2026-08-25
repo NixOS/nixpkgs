@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "captive-browser";
-  version = "0-unstable-2025-11-05";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "pacoorozco";
