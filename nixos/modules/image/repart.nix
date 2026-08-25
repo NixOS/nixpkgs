@@ -58,7 +58,7 @@ let
           example = lib.literalExpression ''
             {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
 
               "/loader/entries/nixos.conf".source = systemdBootEntry;
             }
@@ -227,7 +227,7 @@ in
           "10-esp" = {
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
             };
             repartConfig = {
               Type = "esp";
