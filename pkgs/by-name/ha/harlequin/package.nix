@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "click"
     "questionary"
     "tomlkit"
+    "textual-fastdatatable"
   ];
   dependencies =
     with python3Packages;
