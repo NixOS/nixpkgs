@@ -262,6 +262,10 @@ Backends will commonly need to define custom per-generator or per-file options. 
 }
 ```
 
+### Environment variables
+
+Backends receive additional environment variables one can read if things like Git-root detection are required by the given backend. In particular, `NIXOS_SECRETS_FLAKE` will contain the value passed to `--flake` and `NIXOS_SECRETS_CONFIG` will contain the path given to `--json` or `--file` respectively.
+
 ## The secrets schema
 
 Earlier on we observed that the secrets CLI can take in NixOS configurations as argument. Of course, this by itself can be read in multiple ways. For example — do the configurations in question need to be evaluated already? If not, where is Nixpkgs taken from?
@@ -278,7 +282,7 @@ jsonify : { config, pkgsDefault ? null, pkgsHost ? null, pkgsTarget ? null } -> 
 
 We've already seen what happens if `config` is given to be a (possibly evaluated) NixOS instance. If this function receives a `SecretsConfiguration` as the config argument, then the function will simply return the configuration it is given. This means one can side-step the `jsonify.nix` logic and produce a Nix attrset containing the needed data by whichever means they desire (for example, as part of a tool that's totally disconnected from the NixOS module system). The aforementioned function can (and should) also be called when `pkgsHost` needs to be set to a different architecture than `pkgsTarget`.
 
-TODO: document the `SecretsConfiguration` schema somewhere.
+The `SecretsConfiguration` type is documented as a JSON schema in [`secrets-config.schema.json`](./src/nixos_secrets/secrets-config.schema.json).
 
 One can also sidestep going through Nix-lang altogether by using the `--json` flag to pass a JSON string satisfying the aforementioned schema
 
