@@ -5,16 +5,8 @@ set -euo pipefail
 
 nixpkgs="$(git rev-parse --show-toplevel || (printf 'Could not find root of nixpkgs repo\nAre we running from within the nixpkgs git repo?\n' >&2; exit 1))"
 
-stripwhitespace() {
-    sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
-}
-
 nixeval() {
     nix --extra-experimental-features nix-command eval --json --impure -f "$nixpkgs" "$1" | jq -r .
-}
-
-vendorhash() {
-    (nix --extra-experimental-features nix-command build --impure --argstr nixpkgs "$nixpkgs" --argstr attr "$1" --expr '{ nixpkgs, attr }: let pkgs = import nixpkgs {}; in (pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." attr) pkgs).overrideAttrs (attrs: { outputHash = pkgs.lib.fakeHash; })' --no-link 2>&1 >/dev/null | tail -n3 | grep -F got: | cut -d: -f2- | stripwhitespace) 2>/dev/null || true
 }
 
 findpath() {
@@ -40,11 +32,4 @@ if [ "$updated" -eq 0 ]; then
     exit 0
 fi
 
-curhash="$(nixeval "$attr.mixFodDeps.outputHash")"
-newhash="$(vendorhash "$attr.mixFodDeps")"
-
-if [ -n "$newhash" ] && [ "$curhash" != "$newhash" ]; then
-    sed -i -e "s|\"$curhash\"|\"$newhash\"|" "$pkgpath"
-else
-    echo 'update.sh: New vendorHash same as old vendorHash, nothing to do.'
-fi
+cd "$nixpkgs" && update-source-version "$attr" "$version" --source-key=cargoDeps --file="$pkgpath"

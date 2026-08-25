@@ -7,6 +7,10 @@
   copyDesktopItems,
   cmake,
   pkg-config,
+  git,
+  rustc,
+  cargo,
+  rustPlatform,
   catch2_3,
   ncurses,
   kdePackages,
@@ -15,8 +19,8 @@
   reproc,
   platform-folders,
   ruby_3_3,
-  beamPackages,
   alsa-lib,
+  libsndfile,
   rtmidi,
   boost186,
   aubio,
@@ -25,13 +29,6 @@
   pipewire,
   supercollider-with-sc3-plugins,
   parallel,
-
-  withTauWidget ? false,
-
-  withImGui ? false,
-  gl3w,
-  SDL2,
-  fmt,
 }@args:
 
 let
@@ -41,25 +38,38 @@ let
     ps.rake
     ps.rexml
   ]);
+
+  ableton-link = fetchFromGitHub {
+    owner = "Ableton";
+    repo = "link";
+    tag = "Link-4.0";
+    hash = "sha256-jbVFzb3TwNMbWogPHLtmdWEfcOxNlQmuhao4duEvNQM=";
+    fetchSubmodules = true;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sonic-pi";
-  version = "4.6.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = "sonic-pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sF/ksVhUzSV5P3Oe/T8hAiFMFiuOMEPmuBlUZtPSvtk=";
+    hash = "sha256-wUW/KxL4f0ftH0euLShEhBL11/mErl+VWMoe/H2Ab+k=";
+    fetchSubmodules = true;
   };
 
-  mixFodDeps = beamPackages.fetchMixDeps {
-    inherit (finalAttrs) version;
-    pname = "mix-deps-sonic-pi";
-    mixEnv = "test";
-    src = "${finalAttrs.src}/app/server/beam/tau";
-    hash = "sha256-UoETv6X/Q/RmKb0uCsu59DH7OF0H+A9e7+4uRM/B1Wk=";
+  cargoRoot = "app/external/supersonic/rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-ch2og6OP9LUPAo4waL/fCD4f9oVjY2NV6MncbtnpnkI=";
   };
 
   strictDeps = true;
@@ -70,10 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     cmake
     pkg-config
+    git
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
     ruby
-    beamPackages.erlang
-    beamPackages.elixir
-    beamPackages.hex
   ];
 
   buildInputs = [
@@ -91,17 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     platform-folders
     ruby
     alsa-lib
+    libsndfile
+    jack2
     rtmidi
     boost186
     aubio
-  ]
-  ++ lib.optionals withTauWidget [
-    kdePackages.qtwebengine
-  ]
-  ++ lib.optionals withImGui [
-    gl3w
-    SDL2
-    fmt
   ];
 
   nativeCheckInputs = [
@@ -112,8 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DUSE_SYSTEM_LIBS=ON"
-    "-DBUILD_IMGUI_INTERFACE=${if withImGui then "ON" else "OFF"}"
-    "-DWITH_QT_GUI_WEBENGINE=${if withTauWidget then "ON" else "OFF"}"
+    "-DSUPERSONIC_SYSTEM_SNDFILE=ON"
+    "-DSUPERSONIC_CARGO_OFFLINE=ON"
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+    "-DFETCHCONTENT_SOURCE_DIR_ABLETONLINK=/build/ableton-link"
     "-DAPP_INSTALL_ROOT=${placeholder "out"}/app"
   ];
 
@@ -124,47 +131,25 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs app bin
   '';
 
-  preConfigure =
-    # Set build environment
-    ''
-      export SONIC_PI_HOME="$TMPDIR/spi"
+  preConfigure = ''
+    git init
+    git config user.name "Nix Build"
+    git config user.email "nix@build.local"
+    git add .
+    git commit -m "init"
 
-      export HEX_HOME="$TEMPDIR/hex"
-      export HEX_OFFLINE=1
-      export MIX_REBAR3='${beamPackages.rebar3}/bin/rebar3'
-      export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
-      export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
-      export MIX_HOME="$TEMPDIR/mix"
-      export MIX_DEPS_PATH="$TEMPDIR/deps"
-      export MIX_ENV=prod
-    ''
-    # Copy Mix dependency sources
-    + ''
-      echo 'Copying ${finalAttrs.mixFodDeps} to Mix deps'
-      cp --no-preserve=mode -R '${finalAttrs.mixFodDeps}' "$MIX_DEPS_PATH"
-    ''
-    # Change to project base directory
-    + ''
-      cd app
-    ''
-    # Prebuild Ruby vendored dependencies and Qt docs
-    + ''
-      ./linux-prebuild.sh -o
-    '';
-
-  # Build BEAM server
-  postBuild = ''
-    ../linux-post-tau-prod-release.sh -o
+    SRC_DIR="$PWD"
+    cp -r '${ableton-link}' /build/ableton-link
+    chmod -R +w /build/ableton-link
+    pushd /build/ableton-link
+    cmake -DLINK_PATCH_DIR="$SRC_DIR/app/external/supersonic/external" -P "$SRC_DIR/app/external/supersonic/external/apply-link-patches.cmake"
+    popd
+    cd app
+    ./linux-prebuild.sh -o
   '';
 
   checkPhase = ''
     runHook preCheck
-  ''
-  # BEAM tests
-  + ''
-    pushd ../server/beam/tau
-    MIX_ENV=test TAU_ENV=test mix test
-    popd
   ''
   # Ruby tests
   + ''
@@ -217,28 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
           pipewire.jack
         ]
       }
-  ''
-  # If ImGui was built, Wrap ImGui into bin
-  + ''
-    if [ -e $out/app/build/gui/imgui/sonic-pi-imgui ]; then
-      makeWrapper $out/app/build/gui/imgui/sonic-pi-imgui $out/bin/sonic-pi-imgui \
-        --inherit-argv0 \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            ruby
-            supercollider-with-sc3-plugins
-            jack2
-            jack-example-tools
-            pipewire.jack
-          ]
-        }
-    fi
-  ''
-  # Remove runtime Erlang references
-  + ''
-    for file in $(grep -FrIl '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau); do
-      substituteInPlace "$file" --replace-fail '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
-    done
   '';
 
   stripDebugList = [
