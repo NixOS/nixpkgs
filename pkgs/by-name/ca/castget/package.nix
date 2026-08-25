@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
   # Using unstable version since it doesn't require `ronn`, see:
   # https://github.com/mlj/castget/commit/218734296e2efc53071e0dbd3c4d59930b571aae
-  version = "2.0.1-unstable-2026-02-04";
+  version = "rel_2_0_1";
 
   src = fetchFromGitHub {
     owner = "mlj";
