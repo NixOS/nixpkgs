@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   name = "systemd-journal";
@@ -14,7 +14,8 @@
     security.audit.enable = true;
   };
   nodes.journaldAudit = {
-    services.journald.audit = true;
+    # Verify that the module's option default remains overridable by downstream defaults.
+    services.journald.settings.Journal.Audit = lib.mkDefault true;
     security.audit.enable = true;
   };
   nodes.containerCheck = {
@@ -45,6 +46,7 @@
 
     with subtest("journald audit"):
       journaldAudit.wait_for_unit("multi-user.target")
+      journaldAudit.succeed("grep -Fx 'Audit=true' /etc/systemd/journald.conf")
 
       # logs should end up in the journald
       journaldAudit.succeed("journalctl _TRANSPORT=audit --grep 'unit=systemd-journald'")
