@@ -9,14 +9,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "out-of-tree";
-  version = "2.1.1";
+  version = "2.1.2";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
     tag = "v${finalAttrs.version}";
     url = "https://code.dumpstack.io/tools/out-of-tree.git";
-    hash = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
+    hash = "sha256-vf4XxyeJq1BPSYpqQiB5DMfbZdMbwsSsZhLWfaD6BB4=";
   };
 
   vendorHash = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
