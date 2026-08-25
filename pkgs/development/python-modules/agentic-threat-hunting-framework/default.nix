@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nebulock-Inc";
     repo = "agentic-threat-hunting-framework";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IUOn3q6SA2P77/Bt7Hr21NglgjWhyNBOA7c2lCzUTN0=";
   };
 
