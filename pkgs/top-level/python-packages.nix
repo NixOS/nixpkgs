@@ -3126,6 +3126,8 @@ self: super: with self; {
 
   ciscoconfparse2 = callPackage ../development/python-modules/ciscoconfparse2 { };
 
+  ciscoisesdk = callPackage ../development/python-modules/ciscoisesdk { };
+
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
