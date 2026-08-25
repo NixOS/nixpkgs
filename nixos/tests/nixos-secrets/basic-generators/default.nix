@@ -38,14 +38,21 @@
     machine.succeed("nixos-secrets collect-garbage -f /etc/nixos/config2.nix ")
 
     # "derived" depends on "example"
-    t.assertIn("Successfully (re)run 1 generator(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g derived"))
-    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example"))
-    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example -g derived"))
+    t.assertIn("Successfully updated 1 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g derived"))
+    t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example"))
+    t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example -g derived"))
 
     machine.succeed("mkdir /tmp/system")
     machine.succeed("nixos-secrets deploy -l /tmp/system -f /etc/nixos/config2.nix")
     t.assertIn("Hewwo placeholder!!", machine.succeed("cat /tmp/system/tmp/secrets-demo/example/example"))
     t.assertIn("< Hewwo placeholder!! >", machine.succeed("cat /tmp/system/tmp/secrets-demo/derived/derived2"))
+
+    # --set
+    machine.succeed("mkdir /tmp/example-files")
+    machine.succeed("echo 'green orange' > /tmp/example-files/example")
+    machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix --set example=/tmp/example-files")
+    t.assertIn("green orange", machine.succeed("cat /tmp/secrets-demo/generators/example/files/example"))
+    t.assertIn("< green orange >", machine.succeed("cat /tmp/secrets-demo/generators/derived/files/derived2"))
 
     # We haven't yet implemented this!
     machine.fail("nixos-secrets deploy -f /etc/nixos/config2.nix")

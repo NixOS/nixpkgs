@@ -3,7 +3,7 @@ import tempfile
 import subprocess
 from pathlib import Path
 from .args import SecretsArgs
-from .config import SecretsConfig
+from .config import SecretsConfig, SecretsSecret
 from .exec import (
     rebuild_order,
     build_binary,
@@ -39,7 +39,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             os.makedirs(prompt_in_dir)
 
             generator = config.generators[entry]
-            if generator.prompts:
+            if generator.prompts and entry not in args.set:
                 print(f"Evaluating prompts for '{entry}':")
                 for prompt in generator.prompts.values():
                     print(f"- '{prompt.name}'")
@@ -48,9 +48,10 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
             if entry in args.set:
                 print(f"Importing '{entry}' from disk")
-                raise SecretsError(
-                    "Setting files using the CLI hasn't been implemented yet...."
-                )
+                if args.dry_run:
+                    continue
+
+                set_files_from_dir(args, config, generator, args.set[entry])
             elif generator.generate is not None:
                 binary = build_binary(generator.generate)
 
@@ -130,18 +131,33 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 except subprocess.CalledProcessError as e:
                     raise SecretsError(f"Error generating '{entry}': {e.stderr}")
 
-                for file in generator.files.values():
-                    try:
-                        set_secret(args, config, generator, file, out_dir / file.name)
-                    except subprocess.CalledProcessError as e:
-                        raise SecretsError(
-                            f"Error setting '{entry}/{file.name}': {e.stderr}"
-                        )
+                set_files_from_dir(args, config, generator, out_dir)
             else:
                 raise SecretsError(
                     f"Secret '{entry}' has no generator script, and no corresponding --set argument was found."
                 )
 
-    print(f"Successfully (re)run {len(order)} generator(s).")
+    print(f"Successfully updated {len(order)} secret(s).")
 
     fixup_all(args, config)
+
+
+def set_files_from_dir(
+    args: SecretsArgs,
+    config: SecretsConfig,
+    generator: SecretsSecret,
+    from_dir: Path,
+):
+    for file in generator.files.values():
+        if not (from_dir / file.name).exists():
+            raise SecretsError(
+                f"Cannot update files for '{generator.name}': missing file {file.name}"
+            )
+
+    for file in generator.files.values():
+        try:
+            set_secret(args, config, generator, file, from_dir / file.name)
+        except subprocess.CalledProcessError as e:
+            raise SecretsError(
+                f"Error setting '{generator.name}/{file.name}': {e.stderr}"
+            )

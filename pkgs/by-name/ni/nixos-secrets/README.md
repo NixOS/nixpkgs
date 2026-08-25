@@ -50,7 +50,7 @@ Rebuild order:
 - 'example' (file 'example' is missing)
 Evaluating prompts:
 Generating 'example'
-Successfully (re)run 1 generator(s).
+Successfully updated 1 secret(s).
 Running fixup scripts:
 - 'example' (1 files)
 ```
@@ -63,7 +63,7 @@ Rebuild order:
 - 'example' (forced)
 Evaluating prompts:
 Generating 'example'
-Successfully (re)run 1 generator(s).
+Successfully updated 1 secret(s).
 Running fixup scripts:
 - 'example' (1 files)
 ```
@@ -102,7 +102,7 @@ Rebuild order:
 - Skipping 'example'
 - 'derived' (file 'derived' is missing)
 Evaluating prompts:
-Successfully (re)run 1 generator(s).
+Successfully updated 1 secret(s).
 Running fixup scripts:
 - 'example' (1 files)
 - 'derived' (1 files)
