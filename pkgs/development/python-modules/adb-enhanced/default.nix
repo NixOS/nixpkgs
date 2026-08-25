@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = "adb-enhanced";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RKMF2Cn3wd5p3SdC22BO5AeINaq8u3+1t+3QkXYjbpE=";
   };
   patches = [
