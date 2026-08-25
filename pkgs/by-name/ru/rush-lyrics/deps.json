@@ -1106,8 +1106,8 @@
   }
  },
  "https://plugins.gradle.org/m2": {
-  "com/diffplug/spotless#com.diffplug.spotless.gradle.plugin/8.9.0": {
-   "pom": "sha256-KiSidLMlcjuB1QGv6fjuNTNJK+WK2VIVukcEh39e4Y0="
+  "com/diffplug/spotless#com.diffplug.spotless.gradle.plugin/8.10.0": {
+   "pom": "sha256-ra/Nlpf+Kp8Avuz6+J2kSLeB9jalyt6qysEtRyplPuE="
   },
   "io/github/kdroidfilter#plugin/1.15.7": {
    "jar": "sha256-IvPp5/y8+e0Bcyi0Eb7VhDJhnawfX4TcLnDDH8EzPS4=",
@@ -1242,20 +1242,20 @@
    "module": "sha256-IFNqlfL+sr9DBRKMaq7Lb9idxFeYqchfJgK4qAnXUNs=",
    "pom": "sha256-Q1z/VXiZht7arXF/aPuo1UgklHhWLc2EsirU1lZvRAs="
   },
-  "com/diffplug/spotless#spotless-lib-extra/4.9.0": {
-   "jar": "sha256-HyB4zQvxKfI/aIGO8OrU6ZzrqKsAjmOKwDEbUHsBKZw=",
-   "module": "sha256-I50MaVyJBIeDyCJl4zMasKuy2R2M3KlK6mTFAn0trCs=",
-   "pom": "sha256-4wnu/KcMgWId/dV/l3tpBl8bLn/F1e5Ter3IWJqR7Js="
+  "com/diffplug/spotless#spotless-lib-extra/4.10.0": {
+   "jar": "sha256-qA1noQ+cq1Y/9COWXC6dEN7wcCiHHxzBn+H5jrY/rMQ=",
+   "module": "sha256-T4TFhZ9MzF7yp0I6/7fwHHedZeXUBp1ZsvLiU6y/Ycc=",
+   "pom": "sha256-ioWK1HalFxfvqjbUM4Ohc5jWHz4iChTTTPw2Y/2Q2cU="
   },
-  "com/diffplug/spotless#spotless-lib/4.9.0": {
-   "jar": "sha256-kJBhy1A+7QEskhkMHZAXa7on65jVopAG6tFoGlkG8m8=",
-   "module": "sha256-5ev03bdRVVuCANvKHdvU32eoI7dR1b71/s+m2wiZoyw=",
-   "pom": "sha256-ieleUBzLXDxf9VR8iyR3/Clbl34Nj34OULWTrue9sL4="
+  "com/diffplug/spotless#spotless-lib/4.10.0": {
+   "jar": "sha256-vzNRv+tuE9okAroygAd7Jo+1abvv9p7y4KqC8kGnH+M=",
+   "module": "sha256-jFGrf+KRC0NLXgzovbGy5BaOb1KpjJNX+WbgYLcCfQg=",
+   "pom": "sha256-wVQykHOJ3haa9MGXBgqliTz0q5W17B/bQMojbPHXhNM="
   },
-  "com/diffplug/spotless#spotless-plugin-gradle/8.9.0": {
-   "jar": "sha256-quTS9fpQJs0gJ0xXYP0Be0mSMAMv6E39jkgquZYNN2Y=",
-   "module": "sha256-Rdxah2UCG19mXf3ilysGO5Zgt0tySYdVqUVDQ0PYAOc=",
-   "pom": "sha256-PNYQSZvqWU/zcOUC/g/oAAWXUNpyrGTsPlBnkM0hE0s="
+  "com/diffplug/spotless#spotless-plugin-gradle/8.10.0": {
+   "jar": "sha256-oqP11YHf1YSstguJ891uR7Ek2dD3qUjc1nGb28u70W0=",
+   "module": "sha256-DuukKQzRN9+KmKyKzBHYTvG5zCFEhxtRaiCBSiAm2CM=",
+   "pom": "sha256-mxJJFkhEsRuoHuVUCxUdNiVULdfqqGUVguHzY1w/S3M="
   },
   "com/fleeksoft/charset#charset-iosarm64/0.0.8": {
    "module": "sha256-V8Uy9SUZRBEusEMLoGUv6CXHix6R9/eIWjeePvAhVpg=",
@@ -3736,12 +3736,12 @@
   "org/eclipse/ee4j#project/1.0.5": {
    "pom": "sha256-kWtHlNjYIgpZo/32pk2+eUrrIzleiIuBrjaptaLFkaY="
   },
-  "org/eclipse/jgit#org.eclipse.jgit-parent/7.7.0.202606012155-r": {
-   "pom": "sha256-S4qHPLaFhEH/MSUDTbVU0leSL7cIIEeVtyAZDW+05iE="
+  "org/eclipse/jgit#org.eclipse.jgit-parent/7.7.1.202607240634-r": {
+   "pom": "sha256-O/RKKe9ukBmDx7MfGQkaaEumdP6n1a3V3zF9DvoJxoc="
   },
-  "org/eclipse/jgit#org.eclipse.jgit/7.7.0.202606012155-r": {
-   "jar": "sha256-onxHjV94vD2VRh8VOmDv3xYjknUCxopFetmplaNcWnw=",
-   "pom": "sha256-owH00aR2nxrSVstU54V6Uq8n59A+UMo8UPTLZDw98SY="
+  "org/eclipse/jgit#org.eclipse.jgit/7.7.1.202607240634-r": {
+   "jar": "sha256-WRq8yElVpq0zY+yQS9p5zxRCdwbvtOBv/re8NgFQOYA=",
+   "pom": "sha256-4c9HhuyN3iB/5lh/QQ8lwsaHe+Oh3TCZ02dC3qgQUWs="
   },
   "org/eclipse/platform#org.eclipse.osgi/3.24.200": {
    "jar": "sha256-v+g/zR+gNOuamGs8tuXisY27rLZ+q9qtLaMoBOzYxlo=",
