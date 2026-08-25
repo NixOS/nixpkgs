@@ -26966,6 +26966,12 @@
     githubId = 8686360;
     name = "Illia Shestakov";
   };
+  snhsish = {
+    email = "mail@snehasish.xyz";
+    github = "snhsish";
+    githubId = 113252136;
+    name = "Snehasish";
+  };
   snicket2100 = {
     github = "snicket2100";
     githubId = 57048005;
