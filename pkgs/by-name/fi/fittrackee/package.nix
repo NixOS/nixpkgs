@@ -8,6 +8,7 @@
   postgresql,
   postgresqlTestHook,
   python3Packages,
+  nixosTests,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
@@ -123,11 +124,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export UI_URL=http://0.0.0.0:5000
   '';
 
+  passthru = {
+    tests.fittrackee = nixosTests.fittrackee;
+  };
+
   meta = {
     description = "Self-hosted outdoor activity tracker";
     homepage = "https://docs.fittrackee.org/";
     changelog = "https://codeberg.org/FitTrackee/FitTrackee/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
       tebriel
       traxys
