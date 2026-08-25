@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catnest";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "eweOS";
     repo = "catnest";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/t1clnxBNU5lfTjtUbt5eOl5KPeAfG8Hq6jBVMqkkWY=";
+    hash = "sha256-rMIZZtsBX7Tyeg/HMj9fOU6d/VCdTHHiBeHGPtYFNu8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
