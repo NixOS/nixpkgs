@@ -12,6 +12,7 @@
   highlight = callPackage ./highlight/package.nix { };
   net = callPackage ./net/package.nix { };
   polars = callPackage ./polars/package.nix { };
+  port_extension = callPackage ./port_extension/package.nix { };
   query = callPackage ./query/package.nix { };
   semver = callPackage ./semver/package.nix { };
   skim = callPackage ./skim/package.nix { };
