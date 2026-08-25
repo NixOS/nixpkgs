@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-linkcheck2";
-  version = "0.12.2";
+  version = "0.13.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "marxin";
     repo = "mdbook-linkcheck2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0pteKtmBDkqcaonbNzL6tyo97x+qQhn6oY88+4VGFE=";
+    hash = "sha256-HLV3LqMUbaUL/AMlid0oamceeWiac6zydjQYuujCp3M=";
   };
 
-  cargoHash = "sha256-XY1epCro/BqHm95HVP1eK0oVLSPYjD2hU7IdiEkgNMM=";
+  cargoHash = "sha256-TcMiConcI8KMptOS67J+faPtCRnMCJxrWqFs3o19XMA=";
 
   propagatedNativeBuildInputs = [ cacert ];
 

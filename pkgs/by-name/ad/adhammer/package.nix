@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adhammer";
-  version = "1.3.10";
+  version = "1.4.2";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "icedracon";
     repo = "adhammer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QQjiyvj3e5unEsh17UyKck2rs8oKeLO5eodBG7cn1LQ=";
+    hash = "sha256-Jn3hmCSpc/9zxfIzebrCkDOgZ4HzfXdKOcJSXNvxZGM=";
   };
 
-  cargoHash = "sha256-Ebkvxl/JyiZ84ucv7FmOluHTqYd14I3B6z53QNmVQZw=";
+  cargoHash = "sha256-037x5bhTizcCqW/pszIadAVA9ElQzJOQ9W1dh5Kpg9Y=";
 
   nativeBuildInputs = [
     pkg-config
