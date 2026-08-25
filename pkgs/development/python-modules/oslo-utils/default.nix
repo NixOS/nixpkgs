@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  cryptography,
   debtcollector,
   iso8601,
   netaddr,
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    cryptography
     debtcollector
     iso8601
     netaddr
