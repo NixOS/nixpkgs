@@ -8429,10 +8429,10 @@ with pkgs;
     ;
 
   emacs-macport = emacs30-macport;
-  emacs = emacs30;
-  emacs-gtk = emacs30-gtk3;
-  emacs-nox = emacs30-nox;
-  emacs-pgtk = emacs30-pgtk;
+  emacs = emacs31;
+  emacs-gtk = emacs31-gtk3;
+  emacs-nox = emacs31-nox;
+  emacs-pgtk = emacs31-pgtk;
 
   emacsPackagesFor =
     emacs:
