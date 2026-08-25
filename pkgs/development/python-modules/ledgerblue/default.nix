@@ -5,7 +5,6 @@
   buildPythonPackage,
   ecpy,
   fetchPypi,
-  future,
   hidapi,
   nfcpy,
   pillow,
@@ -13,20 +12,21 @@
   pycrypto,
   pycryptodomex,
   pyelftools,
+  pyserial,
   python-gnupg,
   python-u2flib-host,
-  setuptools,
   setuptools-scm,
+  setuptools,
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ledgerblue";
   version = "0.1.58";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-EHniiz6h6qoH8srquVaiWIxpTDQaKp9strNtuIpHeTY=";
   };
 
@@ -37,9 +37,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "protobuf" ];
 
+  pythonRemoveDeps = [ "future" ];
+
   dependencies = [
     ecpy
-    future
     hidapi
     nfcpy
     pillow
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     pycrypto
     pycryptodomex
     pyelftools
+    pyserial
     python-gnupg
     python-u2flib-host
     websocket-client
@@ -61,7 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
+    changelog = "https://github.com/LedgerHQ/blue-loader-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ np ];
   };
-}
+})
