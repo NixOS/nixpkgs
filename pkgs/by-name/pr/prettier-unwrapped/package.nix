@@ -134,7 +134,7 @@ let
   });
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "prettier";
+  pname = "prettier-unwrapped";
   version = "3.9.6";
 
   src = fetchFromGitHub {
