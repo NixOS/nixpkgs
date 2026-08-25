@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  GIT_PAGER = "cat";
+  env.GIT_PAGER = "cat";
   dontUseCargoParallelTests = true;
 
   postInstall = ''
