@@ -8625,6 +8625,8 @@ self: super: with self; {
 
   ixia = callPackage ../development/python-modules/ixia { };
 
+  ixnetwork-restpy = callPackage ../development/python-modules/ixnetwork-restpy { };
+
   j2cli = callPackage ../development/python-modules/j2cli { };
 
   j2lint = callPackage ../development/python-modules/j2lint { };
