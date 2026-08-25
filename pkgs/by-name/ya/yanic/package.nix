@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   installShellFiles,
 }:
 
@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   pname = "yanic";
   version = "1.8.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${finalAttrs.version}";
@@ -36,8 +36,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool to collect and aggregate respondd data";
-    homepage = "https://github.com/FreifunkBremen/yanic";
-    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://freifunkbremen.codeberg.page/yanic";
+    changelog = "https://codeberg.org/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ herbetom ];
     mainProgram = "yanic";
