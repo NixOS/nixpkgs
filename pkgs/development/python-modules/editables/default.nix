@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "editables";
   version = "0.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EWODSQI4HEYTeHlRxZFIAP3xVa4IhIo3O46lAGeAl3w=";
+  src = fetchFromGitHub {
+    owner = "pfmoore";
+    repo = "editables";
+    tag = finalAttrs.version;
+    hash = "sha256-U2IH1Bzu0k+hvNH6b3eT2W23BxfBeqOzNyp1Ig0bnOY=";
   };
 
   build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Tests not included in archive.
+  # Infinite recursion
   doCheck = false;
 
   pythonImportsCheck = [ "editables" ];
@@ -28,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Editable installations";
     homepage = "https://github.com/pfmoore/editables";
-    changelog = "https://github.com/pfmoore/editables/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pfmoore/editables/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})
