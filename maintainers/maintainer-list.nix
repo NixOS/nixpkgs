@@ -12383,6 +12383,12 @@
     email = "itepastra@gmail.com";
     keys = [ { fingerprint = "E681 4CAF 06AE B076 D55D  3E32 A16C DCBF 1472 541F"; } ];
   };
+  itgourmand = {
+    name = "Anthony Gourmand";
+    github = "ITGourmand";
+    githubId = 203161393;
+    email = "contactpro.gourmand@gmail.com";
+  };
   itsvic-dev = {
     email = "contact@itsvic.dev";
     name = "Victor B.";
