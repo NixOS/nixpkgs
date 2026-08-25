@@ -95,6 +95,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             [
                                 "bwrap",
                                 "--unshare-all",
+                                "--die-with-parent",
                                 "--ro-bind",
                                 "/nix/store",
                                 "/nix/store",
