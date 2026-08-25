@@ -88,6 +88,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             capture_output=not args.verbose,
                             check=True,
                             text=True,
+                            timeout=args.timeout,
                         )
                     else:
                         subprocess.run(
@@ -127,9 +128,12 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             capture_output=not args.verbose,
                             check=True,
                             text=True,
+                            timeout=args.timeout,
                         )
                 except subprocess.CalledProcessError as e:
                     raise SecretsError(f"Error generating '{entry}': {e.stderr}")
+                except subprocess.TimeoutExpired:
+                    raise SecretsError(f"Generator '{entry}' timed out")
 
                 set_files_from_dir(args, config, generator, out_dir)
             else:
