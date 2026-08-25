@@ -19,7 +19,7 @@
 
 buildPythonPackage {
   pname = "rainbowstream";
-  version = "1.5.5";
+  version = "1.3.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
