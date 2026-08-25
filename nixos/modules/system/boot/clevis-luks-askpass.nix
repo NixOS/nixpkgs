@@ -55,7 +55,7 @@ in
 
       storePaths = [
         cfg.package
-        "${pkgs.systemd}/lib/systemd/systemd-reply-password"
+        "${config.systemd.package}/lib/systemd/systemd-reply-password"
         "${pkgs.jose}/bin/jose"
         "${pkgs.curl}/bin/curl"
         "${pkgs.cryptsetup}/bin/cryptsetup"
