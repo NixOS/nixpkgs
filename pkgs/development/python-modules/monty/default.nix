@@ -35,15 +35,16 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "monty";
   version = "2026.7.16";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "materialyzeai";
     repo = "monty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x5FNw7E3rtrgCWVhMsBpnO+uwu+mB3ELNFdd33+uFds=";
   };
 
@@ -85,7 +86,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-benchmark
   ]
-  ++ optional-dependencies.optional;
+  ++ finalAttrs.passthru.optional-dependencies.optional;
 
   pythonImportsCheck = [ "monty" ];
 
@@ -97,11 +98,11 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialyzeai/monty";
-    changelog = "https://github.com/materialyzeai/monty/releases/tag/${src.tag}";
+    changelog = "https://github.com/materialyzeai/monty/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       psyanticy
       berquist
     ];
   };
-}
+})
