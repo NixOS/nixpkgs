@@ -2,6 +2,7 @@ import datetime as dt
 import json
 import logging
 import os
+import select
 import socket
 from collections.abc import Iterator
 from pathlib import Path
@@ -56,13 +57,22 @@ class QMPSession:
     def _wait_for_new_result(self) -> dict[str, str]:
         assert self.results.empty(), "Results set is not empty, missed results!"
         while self.results.empty():
-            self.read_pending_messages()
+            if self.read_pending_messages():
+                continue
+
+            select.select([self.sock], [], [])
+
+            if self.sock.recv(1, socket.MSG_PEEK) == b"":
+                raise ConnectionError(
+                    "QMP connection closed while waiting for a response"
+                )
+
         return self.results.get()
 
-    def read_pending_messages(self) -> None:
+    def read_pending_messages(self) -> bool:
         line = self.reader.readline()
         if not line:
-            return
+            return False
         evt_or_result = json.loads(line)
         logger.debug(f"Received a message: {evt_or_result}")
 
@@ -74,6 +84,8 @@ class QMPSession:
             self.pending_events.put(evt_or_result)
         else:
             raise QMPAPIError(evt_or_result)
+
+        return True
 
     def wait_for_event(
         self, timeout: dt.timedelta = dt.timedelta(seconds=10)

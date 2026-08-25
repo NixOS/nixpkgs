@@ -106,3 +106,41 @@ def test_queues_event_received_before_command_result(
     thread.join(timeout=1)
     assert not thread.is_alive()
     assert list(session.events()) == [event]
+
+
+def test_reports_connection_closed_before_greeting() -> None:
+    client_sock, server_sock = socket.socketpair()
+    server_sock.close()
+
+    try:
+        with pytest.raises(
+            ConnectionError,
+            match="QMP connection closed while waiting for a response",
+        ):
+            QMPSession(client_sock)
+    finally:
+        client_sock.close()
+
+
+def test_reports_connection_closed_while_waiting_for_result(
+    qmp_session: tuple[QMPSession, QMPServer],
+) -> None:
+    session, server = qmp_session
+    requests: Queue[dict[str, Any]] = Queue()
+
+    def disconnect() -> None:
+        requests.put(server.receive())
+        server.close()
+
+    thread = threading.Thread(target=disconnect)
+    thread.start()
+
+    with pytest.raises(
+        ConnectionError,
+        match="QMP connection closed while waiting for a response",
+    ):
+        session.send("query-status")
+
+    thread.join(timeout=1)
+    assert not thread.is_alive()
+    assert requests.get_nowait() == {"execute": "query-status"}
