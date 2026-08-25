@@ -14,7 +14,7 @@ class SecretsArgs:
     dry_run: bool
     local: Optional[str]  # "deploy" only
     generators: List[str]  # "generate" only
-    set: Mapping[str, str]  # "generate" only
+    set: Mapping[str, Path]  # "generate" only
     command: str  # gotta figure out how to type this properly
     verbose: str
 
@@ -30,7 +30,7 @@ class SecretsArgs:
         if "set" in d:
             for arg in d["set"]:
                 try:
-                    key, value = arg.split(",")
+                    key, value = arg.split("=")
                     if key in setArgDict:
                         raise SecretsError(
                             f"Multiple --set arguments received for generator '{key}'"
