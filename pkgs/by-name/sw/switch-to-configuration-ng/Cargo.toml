@@ -18,6 +18,7 @@ glob = "0.3.1"
 libsystemd = "0.7.2"
 log = "0.4.21"
 nix = { version = "0.31.1", features = ["fs", "signal"] }
+procfs = { version = "0.18.0", default-features = false }
 regex = "1.12.3"
 rust-ini = { version = "0.21.3", features = ["inline-comment"] }
 syslog = "7.0.0"
