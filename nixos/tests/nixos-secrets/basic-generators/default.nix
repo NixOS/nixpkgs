@@ -22,19 +22,26 @@
 
   testScript = ''
     machine.wait_for_unit("default.target")
+
     # We ensure this works even if there's nothing there to garbage collect
     machine.succeed("nixos-secrets collect-garbage -f /etc/nixos/config1.nix")
+
+    # Generating the first config
     machine.succeed("nixos-secrets generate -f /etc/nixos/config1.nix")
     t.assertEqual("Hewwo placeholder!", machine.succeed("cat /tmp/secrets-demo/generators/example/files/example").strip())
     t.assertIn("< Hewwo placeholder! >", machine.succeed("cat /tmp/secrets-demo/generators/derived/files/derived"))
 
+    # Switching to the second config
     machine.succeed("nixos-secrets collect-garbage -f /etc/nixos/config2.nix")
     machine.succeed("test ! -f /tmp/secrets-demo/generators/derived/files/derived")
-
     machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix")
     t.assertIn("< Hewwo placeholder! >", machine.succeed("cat /tmp/secrets-demo/generators/derived/files/derived2"))
 
-    # Should be a no-op
+    # Should work without a sandbox
+    machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix")
+    t.assertIn("< Hewwo placeholder! >", machine.succeed("cat /tmp/secrets-demo/generators/derived/files/derived2"))
+
+    # Should be a no-op (there's no garbage to collect)
     machine.succeed("nixos-secrets collect-garbage -f /etc/nixos/config2.nix ")
 
     # "derived" depends on "example"
@@ -42,6 +49,7 @@
     t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example"))
     t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g example -g derived"))
 
+    # Local deployments
     machine.succeed("mkdir /tmp/system")
     machine.succeed("nixos-secrets deploy -l /tmp/system -f /etc/nixos/config2.nix")
     t.assertIn("Hewwo placeholder!!", machine.succeed("cat /tmp/system/tmp/secrets-demo/example/example"))
@@ -54,7 +62,7 @@
     t.assertIn("green orange", machine.succeed("cat /tmp/secrets-demo/generators/example/files/example"))
     t.assertIn("< green orange >", machine.succeed("cat /tmp/secrets-demo/generators/derived/files/derived2"))
 
-    # We haven't yet implemented this!
+    # This script is written to always fail!
     machine.fail("nixos-secrets deploy -f /etc/nixos/config2.nix")
   '';
 }
