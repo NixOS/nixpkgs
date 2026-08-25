@@ -162,8 +162,10 @@ in
           ExecStartPre = optionalString (
             !baseq3InStore
           ) "+${lib.getExe' pkgs.coreutils "cp"} ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
+          ExecStart = "${lib.getExe' cfg.package "ioq3ded"} +set fs_homepath ${
+            if baseq3InStore then home else cfg.baseq3
+          }/.q3a +exec nix.cfg";
 
-          ExecStart = "${lib.getExe' cfg.package "ioq3ded"} +exec nix.cfg";
         };
       };
     };
