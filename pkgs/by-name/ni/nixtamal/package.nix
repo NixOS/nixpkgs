@@ -21,7 +21,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.9.3";
+  version = "1.10.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-NlCm9XQBK5ooX67ruOJr8TWlOAHGoCgNwIU0BKWol84=";
+    hash = "sha256-IiR8hihbhdGDIcKA4dwQPcieSxT6VOlB2TcuHB16PmQ=";
   };
 
   nativeBuildInputs = [
@@ -170,5 +170,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       • No experimental Nix features required
     '';
     maintainers = with lib.maintainers; [ toastal ];
+    donationPage = "https://nixtamal.toast.al/funding/";
   };
 })
