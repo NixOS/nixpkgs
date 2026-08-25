@@ -182,6 +182,7 @@ let
       # these hashes are auto-updated by update.py
       dart-x64-hash = "sha256-2rnqNeEr8PFMuFa4IhutxxXui1dCw3XQVqCV5ZwsUR8=";
       dart-arm64-hash = "sha256-8sgc9IaeWSRnURFtMuSOqnKACkDc5WynmLIboYWwoSM=";
+      dart-riscv64-hash = "sha256-9amKnAuuAQcKTQT2DGnl9r64g7ATY9GCvZUvY9pzEIM=";
     in
     bundlerEnv rec {
       name = "discourse-ruby-env-${version}";
@@ -190,7 +191,12 @@ let
       gemset = import (gemdir + "/gemset.nix") src;
       passthru = {
         # these MUST be passthru'd for update.py to function correctly (to update dart-dart-x64-hash and dart-arm64-hash)
-        inherit dart-x64-hash dart-arm64-hash gemset;
+        inherit
+          dart-x64-hash
+          dart-arm64-hash
+          dart-riscv64-hash
+          gemset
+          ;
       };
       gemConfig = defaultGemConfig // {
         mini_racer = attrs: {
@@ -310,6 +316,8 @@ let
                   "linux-x64"
                 else if stdenv.system == "aarch64-linux" then
                   "linux-arm64"
+                else if stdenv.system == "riscv64-linux" then
+                  "linux-riscv64"
                 else
                   "unsupported-system-triple-download-will-fail";
               hash =
@@ -317,6 +325,8 @@ let
                   dart-x64-hash
                 else if stdenv.system == "aarch64-linux" then
                   dart-arm64-hash
+                else if stdenv.system == "riscv64-linux" then
+                  dart-riscv64-hash
                 else
                   "unsupported-system";
             in
@@ -592,6 +602,7 @@ let
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
+        "riscv64-linux"
       ];
       maintainers = with lib.maintainers; [
         leona
