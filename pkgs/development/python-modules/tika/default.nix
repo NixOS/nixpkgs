@@ -1,35 +1,42 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
   pyyaml,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tika";
   version = "3.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RopTAiSRYjUfZc/gVjLThpwDUNcmrvgqdeewT6XKyKs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    beautifulsoup4
     pyyaml
     requests
   ];
 
   # Requires network
   doCheck = false;
-  pythonImportsCheck = [ pname ];
+
+  pythonImportsCheck = [ "tika" ];
 
   meta = {
     description = "Python binding to the Apache Tika™ REST services";
-    mainProgram = "tika-python";
     homepage = "https://github.com/chrismattmann/tika-python";
+    changelog = "https://github.com/chrismattmann/tika-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Flakebi ];
+    mainProgram = "tika-python";
   };
-}
+})
