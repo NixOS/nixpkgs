@@ -69,8 +69,7 @@ stdenv.mkDerivation rec {
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
-    # Release LLVM still emits _Unwind_CallPersonality, which emscripten's
-    # system libs dropped; without this, -fwasm-exceptions fails to link.
+    # Readd the entry point release LLVM emits; without it, -fwasm-exceptions fails to link.
     ./0002-libunwind-restore-Unwind_CallPersonality.patch
   ];
 

@@ -12,15 +12,12 @@ calls the personality directly.
 
 --- a/system/lib/libunwind/src/Unwind-wasm.c
 +++ b/system/lib/libunwind/src/Unwind-wasm.c
-@@ -80,4 +80,16 @@
+@@ -95,4 +95,13 @@
    return 0;
  }
  
-+/// Restored from LLVM <= 22.x libunwind: release LLVM's WasmEHPrepare emits
-+/// calls to _Unwind_CallPersonality in landing pads, while emscripten's pinned
-+/// (trunk) LLVM calls the personality directly. The personality wrapper that
-+/// used to live here moved into libc++abi as __gxx_wasm_personality_v0, so
-+/// forward to it. Needed when pairing this runtime with a release LLVM.
++/// Release LLVM (<= 22.x) still emits calls to this helper; its body moved
++/// into libc++abi as __gxx_wasm_personality_v0 (llvm-project #209282).
 +_Unwind_Reason_Code __gxx_wasm_personality_v0(void *exception_ptr);
 +
 +_LIBUNWIND_EXPORT _Unwind_Reason_Code
