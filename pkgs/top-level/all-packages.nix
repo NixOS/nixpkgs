@@ -8420,11 +8420,6 @@ with pkgs;
     emacs31-nox
     emacs31-pgtk
 
-    emacs30
-    emacs30-gtk3
-    emacs30-nox
-    emacs30-pgtk
-
     emacs30-macport
     ;
 
