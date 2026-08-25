@@ -13,7 +13,7 @@
   simplejson,
 }:
 
-buildPythonPackage (finalAttrs: rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpickle";
   version = "4.1.2";
   pyproject = true;
