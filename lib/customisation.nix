@@ -32,6 +32,7 @@ let
     deepSeq
     extends
     id
+    warn
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -304,11 +305,27 @@ rec {
           loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
         in
         "lib.customisation.callPackageWith: Function called without required argument \"${arg}\" at ${loc'}${prettySuggestions (getSuggestions arg)}";
+      inherit (builtins) functionArgs;
+      functionArgsWithWarn =
+        f:
+        if f ? __functor then
+          let
+            pos = builtins.unsafeGetAttrPos "__functor" f;
+          in
+          warn ''
+            `lib.customisation.callPackageWith` was called with a functor in ${
+              if pos != null then "unknown position" else "${pos.file}:${toString pos.line}"
+            }.
+            This is deprecated as of Nixpkgs 26.11, and will be unsupported in a
+            future release.
+          '' (f.__functionArgs or (functionArgs (f.__functor f)))
+        else
+          functionArgs f;
     in
     autoArgs: fn: args:
     let
       f = if isFunction fn then fn else import fn;
-      fargs = functionArgs f;
+      fargs = functionArgsWithWarn f;
 
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
