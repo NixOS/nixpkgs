@@ -11306,6 +11306,12 @@
     githubId = 69494718;
     name = "Herschenglime";
   };
+  hesprs = {
+    email = "hesprs@outlook.com";
+    github = "hesprs";
+    githubId = 190185753;
+    name = "Hēsperus";
+  };
   hexa = {
     email = "hexa@darmstadt.ccc.de";
     matrix = "@hexa:lossy.network";
