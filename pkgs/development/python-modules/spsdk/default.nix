@@ -62,12 +62,18 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-eA18DvQ0IIZtseJXXXMiFYkaOwBIhVXNaWiAObIj55I=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm<10" "setuptools_scm"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
   ];
 
   pythonRelaxDeps = [
+    "chardet"
     "cryptography"
     "filelock"
     "importlib-metadata"
@@ -75,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     "prettytable"
     "requests"
     "ruamel.yaml.clib"
+    "setuptools"
     "setuptools_scm"
     "typing-extensions"
   ];
