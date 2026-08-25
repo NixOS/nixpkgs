@@ -802,7 +802,7 @@ in
     systemdStage1 = true;
   };
   hister = runTest ./hister.nix;
-  hitch = handleTest ./hitch { };
+  hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
   holo-daemon-modular-service = runTest ./holo-daemon-modular.nix;
@@ -912,8 +912,14 @@ in
   keter = runTest ./keter.nix;
   kexec = runTest ./kexec.nix;
   keycloak = discoverTests (import ./keycloak.nix);
-  keyd = handleTest ./keyd.nix { };
-  keymap = handleTest ./keymap.nix { };
+  keyd = import ./keyd.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
+  keymap = import ./keymap.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
   kiwix-serve = runTest ./kiwix-serve;
@@ -1007,7 +1013,7 @@ in
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
-  lorri = handleTest ./lorri/default.nix { };
+  lorri = runTest ./lorri/default.nix;
   luks = runTest ./luks.nix;
   luks-suspend = runTest ./luks-suspend.nix;
   lvm2 = import ./lvm2 { inherit pkgs runTest; };
@@ -1789,7 +1795,7 @@ in
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
-  thelounge = handleTest ./thelounge.nix { };
+  thelounge = runTest ./thelounge.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;
@@ -1920,7 +1926,10 @@ in
     inherit pkgs runTest;
     inherit (pkgs) lib;
   };
-  wine = handleTest ./wine.nix { };
+  wine = import ./wine.nix {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   wireguard = import ./wireguard {
     inherit pkgs runTest;
     inherit (pkgs) lib;

@@ -2231,6 +2231,8 @@ self: super: with self; {
 
   bbox = callPackage ../development/python-modules/bbox { };
 
+  bbpb = callPackage ../development/python-modules/bbpb { };
+
   bc-detect-secrets = callPackage ../development/python-modules/bc-detect-secrets { };
 
   bc-jsonpath-ng = callPackage ../development/python-modules/bc-jsonpath-ng { };
