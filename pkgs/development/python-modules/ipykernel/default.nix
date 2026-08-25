@@ -22,22 +22,22 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipykernel";
   version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-msqq+X0WNVFm5Aha/p0iW/vfK371IPnfO+jyskgnXgk=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
   pythonRemoveDeps = [ "debugpy" ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     comm
     ipython
     jupyter-client
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "IPython Kernel for Jupyter";
     homepage = "https://ipython.org/";
-    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
+    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})
