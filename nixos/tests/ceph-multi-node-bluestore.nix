@@ -145,6 +145,11 @@ let
         enable = true;
         daemons = [ cfg.monA.name ];
       };
+      # TODO: move this to a separate machine
+      rgw = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
     }
     # The MDS daemon (which provides CephFS) is only configured in the CephFS
     # variant of this test.
@@ -290,6 +295,8 @@ let
   # Based on the "manual deployment" approach from:
   # https://docs.ceph.com/en/tentacle/install/manual-deployment/
   baseScript = ''
+    import json
+
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -400,6 +407,67 @@ let
         "ceph osd pool ls | grep 'multi-node-test'",
         "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it",
     )
+
+    # Bootstrap RGW
+    monA.succeed(
+        "sudo -u ceph mkdir -p /var/lib/ceph/radosgw/ceph-${cfg.monA.name}",
+        "ceph auth get-or-create client.${cfg.monA.name} osd 'allow rwx' mon 'allow rw' > /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "chown ceph:ceph /var/lib/ceph/radosgw/ceph-${cfg.monA.name}/keyring",
+        "systemctl start ceph-rgw-${cfg.monA.name}",
+    )
+    monA.wait_for_unit("ceph-rgw-${cfg.monA.name}")
+    monA.wait_for_open_port(7480)
+
+    # Enable the dashboard and recheck health
+    monA.succeed(
+        "ceph mgr module enable dashboard",
+        "ceph config set mgr mgr/dashboard/ssl false",
+        # default is 8080 but it's better to be explicit
+        "ceph config set mgr mgr/dashboard/server_port 8080",
+    )
+
+    # The dashboard does not listen on localhost:
+    # `server_addr` defaults to the wildcard address, but the dashboard module
+    # resolves that to the active mgr's own IP and binds only to it,
+    # so loopback is never bound.
+    # See https://github.com/ceph/ceph/blob/v20.2.2/src/pybind/mgr/dashboard/module.py#L213-L214
+    # Therefore address the dashboard via the mgr's IP instead of localhost.
+    dashboard = "http://${cfg.monA.ip}:8080"
+
+    monA.wait_for_open_port(8080, addr="${cfg.monA.ip}")
+    monA.wait_until_succeeds(f"curl -q --fail {dashboard}")
+    monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Initialize dashboard creds.
+    # In a the query below, we test the Dashboard's `/api/rgw/daemon`,
+    # which needs that the dashboard can talk to RGW.
+    # `set-rgw-credentials` needs a running RGW daemon.
+    monA.succeed(
+        "echo 'foo bar baz qux' > /tmp/dashboard_pw",
+        "ceph dashboard ac-user-create admin -i /tmp/dashboard_pw administrator",
+        "ceph dashboard set-rgw-credentials",
+        "sync",
+    )
+
+    # Get dashboard auth token
+    auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
+    auth_response = json.loads(monA.succeed(
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' {dashboard}/api/auth",
+    ))
+    token = auth_response["token"]
+
+    # Check cluster health via dashboard API
+    health = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/health/minimal",
+    ))
+    assert health["health"]["status"] == "HEALTH_OK"
+
+    # List daemons via REST API.
+    # This also requires a running RGW daemon, as it asserts on the first one.
+    rgw_daemons = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' {dashboard}/api/rgw/daemon",
+    ))
+    assert rgw_daemons[0]["id"] == "${cfg.monA.name}"
 
     # Shut down ceph on all machines in a very unpolite way
     monA.crash()
