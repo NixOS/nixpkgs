@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ];
+  ]
+  ++ lib.optional (
+    stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name
+  ) "UNAME=${if stdenv.hostPlatform.isDarwin then "Darwin" else "Linux"}";
 
   postPatch = ''
     # we don't want to build HTML documentation
