@@ -7,7 +7,7 @@
 }:
 let
   name = "broadcast-box";
-  version = "0-unstable-2025-06-04";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     repo = "broadcast-box";
