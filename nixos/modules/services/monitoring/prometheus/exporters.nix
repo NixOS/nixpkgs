@@ -121,6 +121,7 @@ let
         "smartctl"
         "smokeping"
         "snmp"
+        "snowflake"
         "speedtest"
         "sql"
         "statsd"
