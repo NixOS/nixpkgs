@@ -170,7 +170,10 @@ stdenv.mkDerivation rec {
       gpl2Plus
     ]; # GPLv2+ for tools
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ artturin ];
+    maintainers = with lib.maintainers; [
+      artturin
+      joaosreis
+    ];
     teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kernel" version;
   };
