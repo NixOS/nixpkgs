@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quazip";
-  version = "1.5";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "stachenov";
     repo = "quazip";
     rev = "v${version}";
-    sha256 = "sha256-AOamvy2UgN8n7EZ8EidWkVzRICzEXMmvZsB18UwxIVo=";
+    sha256 = "sha256-t/xwHgGbylyGIpS155bdZoCpZK5fmHJ0hyKilvjjzQg=";
   };
 
   buildInputs = [
