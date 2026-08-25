@@ -7,13 +7,16 @@
   makeWrapper,
   makeDesktopItem,
   xcbuild,
-  electron_41,
+  electron_42,
   nodejs_22,
   nix-update-script,
   fetchgit,
+  vips,
+  glib,
+  pkg-config,
 }:
 let
-  electron = electron_41;
+  electron = electron_42;
   nodejs = nodejs_22;
 
   # download model
@@ -45,8 +48,15 @@ buildNpmPackage (finalAttrs: {
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    pkg-config
     xcbuild
+  ];
+
+  # Fix darwin build
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
+    vips
+    glib
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
