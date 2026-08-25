@@ -16113,6 +16113,12 @@
     githubId = 77865363;
     name = "Leonid Belyaev";
   };
+  leonid-shevtsov = {
+    email = "leonid@shevtsov.me";
+    github = "leonid-shevtsov";
+    githubId = 116518;
+    name = "Leonid Shevtsov";
+  };
   leonm1 = {
     github = "leonm1";
     githubId = 32306579;
