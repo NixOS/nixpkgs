@@ -105,6 +105,9 @@ class SecretsSecret:
         for k, v in json["files"].items():
             result.files[k] = SecretsFile.from_jsom(k, v)
 
+        if not result.files:
+            raise SecretsError(f"Secret '{name}' has no associated files")
+
         if result.generate is None and result.dependencies:
             raise SecretsError(
                 f"Secret '{name}' has associated dependencies without a corresponding generator script"
