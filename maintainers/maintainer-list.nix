@@ -26097,6 +26097,12 @@
     githubId = 5791019;
     name = "Jiuyang Liu";
   };
+  ser = {
+    email = "nixos-github@random.re";
+    github = "ser";
+    githubId = 231537;
+    name = "ᎠᎡ. Ѕϵrgϵ Ѵictor";
+  };
   Sereja313 = {
     name = "Sergey Gulin";
     github = "Sereja313";
