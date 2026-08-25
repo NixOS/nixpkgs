@@ -23432,12 +23432,6 @@
     github = "pyle";
     githubId = 7279609;
   };
-  pyrotelekinetic = {
-    name = "Clover Ison";
-    email = "clover@isons.org";
-    github = "pyrotelekinetic";
-    githubId = 29682759;
-  };
   pyrox0 = {
     name = "Pyrox";
     email = "pyrox@pyrox.dev";
@@ -29385,6 +29379,12 @@
     matrix = "@tpw_rules:matrix.org";
     github = "tpwrules";
     githubId = 208010;
+  };
+  tr3foil = {
+    name = "Clover Ison";
+    email = "clover@isons.org";
+    github = "tr3foil";
+    githubId = 29682759;
   };
   transcaffeine = {
     name = "transcaffeine";
