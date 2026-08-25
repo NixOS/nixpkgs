@@ -5,6 +5,7 @@
   makeFontsConf,
   buildLua,
   buildGoModule,
+  installFonts,
 }:
 
 buildLua (finalAttrs: {
@@ -20,6 +21,8 @@ buildLua (finalAttrs: {
   };
   passthru.updateScript = gitUpdater { };
 
+  nativeBuildInputs = [ installFonts ];
+
   tools = buildGoModule {
     pname = "uosc-bin";
     inherit (finalAttrs) version src;
@@ -28,7 +31,6 @@ buildLua (finalAttrs: {
 
   # the script uses custom "texture" fonts as the background for ui elements.
   # In order for mpv to find them, we need to adjust the fontconfig search path.
-  postInstall = "cp -r src/fonts $out/share";
   passthru.extraWrapperArgs = [
     "--set"
     "FONTCONFIG_FILE"
