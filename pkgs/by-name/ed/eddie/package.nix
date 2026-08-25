@@ -29,25 +29,26 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "eddie";
-  version = "2.24.6";
+  version = "2.26.2";
 
   src = fetchFromGitHub {
     owner = "AirVPN";
     repo = "Eddie";
-    tag = finalAttrs.version;
-    hash = "sha256-XSLxjF2k9cw+cx6KzFIQHtjDWqLT2V49KRw+oIyxM5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G3geXoZAd8gf6HnKboadDL/QLlO9d4fd0rNEnViobhY=";
   };
 
   patches = [
     ./dont-set-rpath-in-eddie-tray.patch
     ./remove-the-postbuild-from-the-project-file.patch
+    ./remove-impure-integrity-check.patch
   ];
 
-  projectFile = [ "src/App.CLI.Linux/App.CLI.Linux.net8.csproj" ];
+  projectFile = [ "src/App.CLI.Linux/App.CLI.Linux.net10.csproj" ];
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [
     gcc
@@ -142,9 +143,7 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://eddie.website";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eddie-ui";
-    maintainers = with lib.maintainers; [
-      ryand56
-    ];
+    maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.linux;
   };
 })

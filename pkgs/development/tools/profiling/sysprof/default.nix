@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
     # In a separate libsysprof-capture package
@@ -75,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "sysprof";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "System-wide profiler for Linux";

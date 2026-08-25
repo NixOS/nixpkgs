@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     process
     sedlex
     toml
-    ocaml_sqlite3
+    sqlite3
   ];
 
   buildFlags = [ "all" ];

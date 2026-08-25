@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   cython,
   docutils,
@@ -23,33 +22,24 @@
   filetype,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kivy";
-  version = "2.3.1";
+  version = "2.3.1-unstable-2026-07-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
-    tag = version;
-    hash = "sha256-q8BoF/pUTW2GMKBhNsqWDBto5+nASanWifS9AcNRc8Q=";
+    rev = "d8e642fec15894ce338b0c9773c3f58b41b75f09";
+    hash = "sha256-i+4qsCIWOddfkw4fseHyTZRj29cdPX84uaPMORE6Gp4=";
   };
-
-  patches = [
-    # Fix compat with newer Cython
-    (fetchpatch {
-      name = "0001-kivy-Remove-old-Python-2-long.patch";
-      url = "https://github.com/kivy/kivy/commit/5a1b27d7d3bdee6cedb55440bfae9c4e66fb3c68.patch";
-      hash = "sha256-GDNYL8dC1Rh4KJ8oPiIjegOJGzRQ1CsgWQeAvx9+Rc8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=69.2.0" "setuptools" \
-      --replace-fail "wheel~=0.44.0" "wheel" \
-      --replace-fail "cython>=0.29.1,<=3.0.11" "cython" \
-      --replace-fail "packaging~=24.0" packaging
+      --replace-fail "setuptools~=82.0.0" "setuptools" \
+      --replace-fail "wheel~=0.47.0" "wheel" \
+      --replace-fail "cython>=0.29.1,<=3.2.0" "cython" \
+      --replace-fail "packaging~=26.0" packaging
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
@@ -122,10 +112,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kivy" ];
 
   meta = {
-    changelog = "https://github.com/kivy/kivy/releases/tag/${src.tag}";
     description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://github.com/kivy/kivy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ risson ];
   };
-}
+})

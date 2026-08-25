@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nginx_exporter";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "nginx-prometheus-exporter";
     rev = "v${version}";
-    sha256 = "sha256-BJf5gL+bkT6g28OVhGM29IwuLfFz3HPAo/DZzg5Eoqk=";
+    sha256 = "sha256-TrLgMYzlvTWgGfFkpGziflx6t7k0zee7IlpTraBEinw=";
   };
 
-  vendorHash = "sha256-lMLJvfB85kGAaPffRd7fz+PAFddSnVS2kzJHRKdnGH4=";
+  vendorHash = "sha256-56jLUx/0kJIa+rk0k/ZBuV18Egy00AmzHZnvKXWHjf0=";
 
   ldflags =
     let

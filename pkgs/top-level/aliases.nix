@@ -793,6 +793,7 @@ mapAliases {
   expidus = throw "'expidus' has been removed from nixpkgs due to it not being maintained"; # Added 2026-07-28
   ext4fuse = throw "'ext4fuse' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # added 2026-08-12
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
+  Fabric = fabric; # Added 2026-06-29
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   falcon = throw "'falcon' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-16
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
@@ -1697,6 +1698,7 @@ mapAliases {
   mouse-actions-gui = throw "'mouse-actions-gui' has been removed as it depended on webkitgtk 4.0 and libsoup 2.4"; # Added 2026-06-07
   move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
+  mozart-binary = throw "'mozart-binary' has been removed, as it was an unmaintained 2018 alpha snapshot superseded by 'mozart2'"; # Added 2026-08-22
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   mpage = throw "'mpage' has been removed due to being unmaintained and broken"; # Added 2026-05-05
   mpc-cli = throw "'mpc-cli' has been renamed to/replaced by 'mpc'"; # Converted to throw 2025-10-27
@@ -2142,6 +2144,7 @@ mapAliases {
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
+  raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
@@ -2312,6 +2315,7 @@ mapAliases {
   speed_dreams = speed-dreams; # Added 2026-01-19
   spidermonkey_91 = throw "'spidermonkey_91 is EOL since 2022/09"; # Added 2025-08-26
   spidermonkey_115 = throw "'spidermonkey_115 is EOL since 2024/09"; # Added 2026-07-06
+  splayer = warnAlias "'splayer' has been replaced by 'splayer-next'" splayer-next; # Added 2026-08-12
   spoof = throw "'spoof' has been removed, as it is broken with the latest MacOS versions and is unmaintained upstream"; # Added 2025-11-14
   spotify-unwrapped = throw "'spotify-unwrapped' has been renamed to/replaced by 'spotify'"; # Converted to throw 2025-10-27
   spring = throw "spring has been removed, as it had been broken since 2023 (it was a game; maybe you’re thinking of spring-boot-cli?)"; # Added 2025-09-16
@@ -2398,6 +2402,7 @@ mapAliases {
   tbb_2020 = throw "tbb_2020 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-14
   tbb_2021 = throw "tbb_2021 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-13
   tbb_2022 = onetbb; # Added 2025-09-14
+  tcl-8_5 = throw "'tcl-8_5' has been removed, as Tcl 8.5 is end-of-life and nothing needed it any more"; # Added 2026-08-22
   tcl-fcgi = throw "'tcl-fcgi' has been renamed to/replaced by 'tclPackages.tcl-fcgi'"; # Converted to throw 2025-10-27
   tclcurl = throw "'tclcurl' has been renamed to/replaced by 'tclPackages.tclcurl'"; # Converted to throw 2025-10-27
   tcllib = throw "'tcllib' has been renamed to/replaced by 'tclPackages.tcllib'"; # Converted to throw 2025-10-27
@@ -2453,6 +2458,7 @@ mapAliases {
   timemachine = throw "'timemachine' has been removed as it depended on the deprecated GTK 2 engine"; # Added 2026-08-13
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
   tinyxml2 = throw "The 'tinyxml2' alias has been removed, use 'tinyxml' for https://sourceforge.net/projects/tinyxml/ or 'tinyxml-2' for https://github.com/leethomason/tinyxml2"; # Added 2025-10-11
+  tk-8_5 = throw "'tk-8_5' has been removed, as Tk 8.5 is end-of-life and nothing needed it any more"; # Added 2026-08-22
   tkcvs = throw "'tkcvs' has been renamed to/replaced by 'tkrev'"; # Converted to throw 2025-10-27
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = throw "'tkimg' has been renamed to/replaced by 'tclPackages.tkimg'"; # Converted to throw 2025-10-27

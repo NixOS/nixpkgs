@@ -2,11 +2,15 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cdncheck";
   version = "1.2.50";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -21,7 +25,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   preCheck = ''
@@ -30,6 +33,13 @@ buildGoModule (finalAttrs: {
       --replace-fail "TestCheckDomainWithFallback" "SkipTestCheckDomainWithFallback" \
       --replace-fail "TestCheckDNSResponse" "SkipTestCheckDNSResponse"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to detect various technology for a given IP address";

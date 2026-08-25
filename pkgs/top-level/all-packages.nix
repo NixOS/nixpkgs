@@ -1978,7 +1978,7 @@ with pkgs;
 
   expect = tcl8Packages.expect_5;
 
-  Fabric = with python3Packages; toPythonApplication fabric;
+  fabric = with python3Packages; toPythonApplication fabric;
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
@@ -2513,7 +2513,7 @@ with pkgs;
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_5;
+  netbox = netbox_4_6;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
@@ -4636,7 +4636,6 @@ with pkgs;
   };
 
   tcl = tcl-8_6;
-  tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
   tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
@@ -6702,7 +6701,6 @@ with pkgs;
 
   tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
-  tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
   tpm2-tss = callPackage ../development/libraries/tpm2-tss {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -6711,18 +6709,6 @@ with pkgs;
   unixodbcDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
-
-  valhalla = callPackage ../development/libraries/valhalla {
-    boost = boost.override {
-      enablePython = true;
-      python = python3;
-    };
-    protobuf = protobuf_21.override {
-      abseil-cpp = abseil-cpp_202103.override {
-        cxxStandard = "17";
-      };
-    };
-  };
 
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 

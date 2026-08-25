@@ -54,7 +54,6 @@ let
     cmakeBool
     cmakeFeature
     optionals
-    optionalString
     ;
 
   cudaBuildInputs = with cudaPackages; [
@@ -73,7 +72,7 @@ let
   ];
 
   vulkanBuildInputs = [
-    shaderc
+    spirv-headers
     vulkan-headers
     vulkan-loader
   ];
@@ -81,6 +80,9 @@ in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
   version = "10408";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -108,11 +110,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     nodejs_latest
     npmHooks.npmConfigHook
     pkg-config
-    spirv-headers
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
     autoAddDriverRunpath
+  ]
+  # `glslc` is used at build time to compile the shaders
+  ++ optionals vulkanSupport [
+    shaderc
   ];
 
   buildInputs =
@@ -216,6 +221,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       xddxdd
       yuannan
     ];
+    teams = [ lib.teams.cuda ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
