@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 import socket
 import threading
@@ -115,7 +116,7 @@ def test_reports_connection_closed_before_greeting() -> None:
     try:
         with pytest.raises(
             ConnectionError,
-            match="QMP connection closed while waiting for a response",
+            match="QMP connection closed",
         ):
             QMPSession(client_sock)
     finally:
@@ -137,10 +138,40 @@ def test_reports_connection_closed_while_waiting_for_result(
 
     with pytest.raises(
         ConnectionError,
-        match="QMP connection closed while waiting for a response",
+        match="QMP connection closed",
     ):
         session.send("query-status")
 
     thread.join(timeout=1)
     assert not thread.is_alive()
     assert requests.get_nowait() == {"execute": "query-status"}
+
+
+def test_reports_connection_closed_while_waiting_for_event(
+    qmp_session: tuple[QMPSession, QMPServer],
+) -> None:
+    session, server = qmp_session
+    errors: Queue[BaseException] = Queue()
+
+    def wait_for_event() -> None:
+        try:
+            session.wait_for_event()
+        except BaseException as error:
+            errors.put(error)
+
+    server.close()
+    thread = threading.Thread(target=wait_for_event, daemon=True)
+    thread.start()
+    thread.join(timeout=1)
+
+    assert not thread.is_alive(), "wait_for_event did not detect the disconnect"
+    assert isinstance(errors.get_nowait(), ConnectionError)
+
+
+def test_waiting_for_event_times_out(
+    qmp_session: tuple[QMPSession, QMPServer],
+) -> None:
+    session, _ = qmp_session
+
+    with pytest.raises(TimeoutError):
+        session.wait_for_event(dt.timedelta(milliseconds=10))
