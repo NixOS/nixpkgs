@@ -47,6 +47,11 @@ let
         vlans = [ 1 ];
       };
 
+      # Ceph 20.2.4 introduced the aes256k cipher for authentication.
+      # Linux started supporting these in kernel version 7.0.
+      # Remove this line at the earliest convenience (i.e. when tests are run by 7.0 or higher by default).
+      boot.kernelPackages = pkgs.linuxPackages_latest;
+
       networking = networkConfig;
 
       environment.systemPackages = with pkgs; [
