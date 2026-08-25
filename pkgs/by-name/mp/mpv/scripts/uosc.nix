@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  makeFontsConf,
   buildLua,
   buildGoModule,
   installFonts,
@@ -30,13 +29,8 @@ buildLua (finalAttrs: {
   };
 
   # the script uses custom "texture" fonts as the background for ui elements.
-  # In order for mpv to find them, we need to adjust the fontconfig search path.
+  passthru.fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
   passthru.extraWrapperArgs = [
-    "--set"
-    "FONTCONFIG_FILE"
-    (toString (makeFontsConf {
-      fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
-    }))
     "--set"
     "MPV_UOSC_ZIGGY"
     (lib.getExe' finalAttrs.tools "ziggy")
