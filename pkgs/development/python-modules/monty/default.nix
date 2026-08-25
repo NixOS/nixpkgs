@@ -16,24 +16,19 @@
   invoke,
   ipython,
   msgpack,
-  mypy,
   myst-parser,
   orjson,
   pandas,
   pint,
   pydantic,
   pymongo,
-  pytest,
-  pytest-cov,
   requests,
   roman-numerals,
-  ruff,
   sphinx,
   sphinx-markdown-builder,
   sphinx-rtd-theme,
   torch,
   tqdm,
-  uv,
 
   # tests
   pytestCheckHook,
@@ -63,14 +58,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = rec {
-    ci = [
-      mypy
-      pytest
-      pytest-cov
-      ruff
-      uv
-    ]
-    ++ optional;
     dev = [ ipython ];
     docs = [
       sphinx
