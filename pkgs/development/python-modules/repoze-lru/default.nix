@@ -2,26 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  pytest-cov-stub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "repoze-lru";
   version = "0.8";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "repoze.lru";
-    inherit version;
+    pname = "repoze_lru";
+    inherit (finalAttrs) version;
     hash = "sha256-olJAjNk/5nDIjWZluW/l1C4HHbolB6HyGh5gmuT6iRo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  enabledTestPaths = [ "repoze/lru/tests.py" ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # time sensitive tests
@@ -36,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tiny LRU cache implementation and decorator";
     homepage = "http://www.repoze.org/";
-    changelog = "https://github.com/repoze/repoze.lru/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/repoze/repoze.lru/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})
