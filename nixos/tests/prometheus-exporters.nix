@@ -2141,6 +2141,30 @@ let
         '';
       };
 
+    yace =
+      { pkgs, ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          configFile = pkgs.writeText "yace-config.yml" ''
+            apiVersion: v1alpha1
+            sts-region: us-east-1
+            discovery:
+              jobs:
+                - type: AWS/EC2
+                  regions: [us-east-1]
+                  metrics:
+                    - name: CPUUtilization
+                      statistics: [Average]
+          '';
+        };
+        exporterTest = ''
+          wait_for_unit("prometheus-yace-exporter.service")
+          wait_for_open_port(5000)
+          succeed("curl -sSf http://localhost:5000/metrics")
+        '';
+      };
+
     zfs =
       { ... }:
       {
