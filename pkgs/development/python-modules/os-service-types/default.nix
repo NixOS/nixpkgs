@@ -4,18 +4,17 @@
   callPackage,
   fetchPypi,
   pbr,
-  setuptools,
-  six,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "os-service-types";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "os_service_types";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Hy5ftx0fb0/zHYmSZ08jaEZbwvJc2UAYAVw92/xcYX8=";
   };
 
@@ -25,15 +24,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  build-system = [
-    pbr
-    setuptools
-  ];
+  build-system = [ pbr ];
 
-  dependencies = [
-    pbr
-    six
-  ];
+  dependencies = [ typing-extensions ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;
@@ -47,7 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for consuming OpenStack service-types-authority data";
     homepage = "https://github.com/openstack/os-service-types";
+    changelog = "https://github.com/openstack/os-service-types/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
