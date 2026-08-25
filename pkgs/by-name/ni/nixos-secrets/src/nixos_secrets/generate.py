@@ -151,7 +151,7 @@ def set_files_from_dir(
     for file in generator.files.values():
         if not (from_dir / file.name).exists():
             raise SecretsError(
-                f"Cannot update files for '{generator.name}': missing file {file.name}"
+                f"Cannot update files for '{generator.name}': missing file '{file.name}'"
             )
 
     for file in generator.files.values():
