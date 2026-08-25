@@ -187,6 +187,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.testing;
 
+  pytestFlags = [ "--maxfail=10" ];
+
   disabledTests = [
     # Benign regression since safetensors >= 0.8.0
     #   json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 235 (char 234)
