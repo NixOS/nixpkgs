@@ -97,6 +97,14 @@ def main() -> None:
         action="append",
         help="Generator(s) to import from external files.",
     )
+    gen_parser.add_argument(
+        "-t",
+        "--timeout",
+        metavar="<seconds>",
+        type=float,
+        default=10,
+        help="The amount of seconds to wait for individual generator scripts to run.",
+    )
 
     gc_parser = subparsers.add_parser("collect-garbage", help="Delete stale secrets")
 
