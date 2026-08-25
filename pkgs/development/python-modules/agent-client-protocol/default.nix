@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GBMzhDHOiXGQDyHtDEBpGL4SH/I16Zh/QMePhiLHJSE=";
   };
 
