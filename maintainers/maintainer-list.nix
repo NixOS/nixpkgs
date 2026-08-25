@@ -2377,7 +2377,7 @@
     name = "Vikram Narayanan";
   };
   armeenm = {
-    email = "mahdianarmeen@gmail.com";
+    email = "armeen@fulminous-hill.com";
     github = "armeenm";
     githubId = 29145250;
     name = "Armeen Mahdian";
