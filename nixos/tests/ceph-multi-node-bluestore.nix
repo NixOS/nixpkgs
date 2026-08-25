@@ -401,6 +401,7 @@ let
         "ceph osd pool ls | grep 'multi-node-other-test'",
     )
     monA.succeed("ceph osd pool set multi-node-other-test size 2")
+    # TODO: actually write to the pool using rados directly
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
     monA.wait_until_succeeds("! ceph -s | grep -e 'unknown' -e 'pgs inactive'")
     monA.fail(
