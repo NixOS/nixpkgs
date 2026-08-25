@@ -3,8 +3,9 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
-  pillow,
   hatchling,
+  pathvalidate,
+  pillow,
   requests,
   rich,
   uv-dynamic-versioning,
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     beautifulsoup4
+    pathvalidate
     pillow
     requests
     rich
