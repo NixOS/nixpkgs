@@ -15,9 +15,9 @@
 let
   sources = {
     lts-36 = {
-      version = "36.0.13";
-      hash = "sha256-KVNnxmEVDgH+EzItFdpRIpLm6DbmrN2JIKjctx6IyBE=";
-      cargoHash = "sha256-q1l2zmfdCI7Yg41/8jDTjf5akeHiQcC/60iIzMnh6B0=";
+      version = "36.0.14";
+      hash = "sha256-OI8wixfzV4U2brmW7uqhk55eLhj+Fdp+J5Pzz1iBO6U=";
+      cargoHash = "sha256-2Nwcw3Z4/cbkRcG2hJ2/1PcXZf3vYB9NGUlr7pxdqzU=";
     };
     main = {
       version = "48.0.0";
