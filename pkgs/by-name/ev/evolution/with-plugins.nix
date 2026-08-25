@@ -2,8 +2,13 @@
   lib,
   makeWrapper,
   symlinkJoin,
+  evolution,
   evolution-data-server,
-  plugins,
+  evolution-ews,
+  plugins ? [
+    evolution
+    evolution-ews
+  ],
 }:
 
 symlinkJoin {
