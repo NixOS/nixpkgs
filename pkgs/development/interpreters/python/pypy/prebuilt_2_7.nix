@@ -11,8 +11,6 @@
   gdbm,
   ncurses6,
   sqlite,
-  tcl-8_5,
-  tk-8_5,
   tcl-8_6,
   tk-8_6,
   zlib,
@@ -84,16 +82,21 @@ stdenv.mkDerivation {
     zlib
     stdenv.cc.cc.libgcc or null
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    tcl-8_5
-    tk-8_5
-  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tcl-8_6
     tk-8_6
   ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  # Only a bootstrap interpreter, so its `tkinter` is never imported. The
+  # tarball bundles the Tcl/Tk it wants but `installPhase` does not keep
+  # `lib/`, so rather than depend on a Tcl this old just to satisfy a module
+  # nobody loads, let the module stay unresolved.
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.hostPlatform.isLinux [
+    "libtcl8.5.so"
+    "libtk8.5.so"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -150,10 +153,12 @@ stdenv.mkDerivation {
         "sys"
         "curses"
       ]
-      ++ lib.optionals (!isPy3k) [
+      # Only Linux gives up on `tkinter`; Darwin still links it against a Tcl
+      # of ours in `preFixup`.
+      ++ lib.optionals (!isPy3k && !stdenv.hostPlatform.isLinux) [
         "Tkinter"
       ]
-      ++ lib.optionals isPy3k [
+      ++ lib.optionals (isPy3k && !stdenv.hostPlatform.isLinux) [
         "tkinter"
       ];
       imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;

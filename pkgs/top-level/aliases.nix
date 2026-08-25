@@ -1698,6 +1698,7 @@ mapAliases {
   mouse-actions-gui = throw "'mouse-actions-gui' has been removed as it depended on webkitgtk 4.0 and libsoup 2.4"; # Added 2026-06-07
   move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
+  mozart-binary = throw "'mozart-binary' has been removed, as it was an unmaintained 2018 alpha snapshot superseded by 'mozart2'"; # Added 2026-08-22
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   mpage = throw "'mpage' has been removed due to being unmaintained and broken"; # Added 2026-05-05
   mpc-cli = throw "'mpc-cli' has been renamed to/replaced by 'mpc'"; # Converted to throw 2025-10-27
@@ -2401,6 +2402,7 @@ mapAliases {
   tbb_2020 = throw "tbb_2020 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-14
   tbb_2021 = throw "tbb_2021 has been removed because it is unmaintained upstream and had no remaining users; use onetbb"; # Added 2025-09-13
   tbb_2022 = onetbb; # Added 2025-09-14
+  tcl-8_5 = throw "'tcl-8_5' has been removed, as Tcl 8.5 is end-of-life and nothing needed it any more"; # Added 2026-08-22
   tcl-fcgi = throw "'tcl-fcgi' has been renamed to/replaced by 'tclPackages.tcl-fcgi'"; # Converted to throw 2025-10-27
   tclcurl = throw "'tclcurl' has been renamed to/replaced by 'tclPackages.tclcurl'"; # Converted to throw 2025-10-27
   tcllib = throw "'tcllib' has been renamed to/replaced by 'tclPackages.tcllib'"; # Converted to throw 2025-10-27
@@ -2456,6 +2458,7 @@ mapAliases {
   timemachine = throw "'timemachine' has been removed as it depended on the deprecated GTK 2 engine"; # Added 2026-08-13
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
   tinyxml2 = throw "The 'tinyxml2' alias has been removed, use 'tinyxml' for https://sourceforge.net/projects/tinyxml/ or 'tinyxml-2' for https://github.com/leethomason/tinyxml2"; # Added 2025-10-11
+  tk-8_5 = throw "'tk-8_5' has been removed, as Tk 8.5 is end-of-life and nothing needed it any more"; # Added 2026-08-22
   tkcvs = throw "'tkcvs' has been renamed to/replaced by 'tkrev'"; # Converted to throw 2025-10-27
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = throw "'tkimg' has been renamed to/replaced by 'tclPackages.tkimg'"; # Converted to throw 2025-10-27

@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rstcheck-core";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4NvaBG2LQqHJgDLcUpjVjknkc0unVyAM8d5Z8SlZ2jw=";
+    hash = "sha256-Tz6saJfGlP6h21Jckyw4LBgcRALwFvlV+z+cAis2j5s=";
   };
 
   build-system = [
