@@ -1,5 +1,6 @@
 {
   lib,
+  arrow,
   buildPythonPackage,
   cryptography,
   defusedxml,
@@ -46,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
+    arrow
     cryptography
     defusedxml
     gql
