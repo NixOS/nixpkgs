@@ -2,6 +2,7 @@
   beautifulsoup4,
   buildPythonPackage,
   colorama,
+  curl-cffi,
   fetchPypi,
   lib,
   pillow,
@@ -33,6 +34,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     beautifulsoup4
     colorama
+    curl-cffi
     pillow
     pyotp
     readerwriterlock
