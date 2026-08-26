@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
-    changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
