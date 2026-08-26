@@ -123,7 +123,7 @@ in
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
-        user = config.services.nginx.user;
+        user = mkDefault config.services.nginx.user;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
