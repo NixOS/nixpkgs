@@ -341,6 +341,7 @@ in
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
       DB_PORT = db.port;
+      DB_SOCKET = lib.mkIf db.createLocally "/run/mysqld/mysqld.sock";
       DB_DATABASE = db.name;
       DB_USERNAME = db.user;
       DB_PASSWORD._secret = db.passwordFile;
