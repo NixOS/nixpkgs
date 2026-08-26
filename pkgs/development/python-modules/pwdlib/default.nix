@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pwdlib";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "pwdlib";
     tag = "v${version}";
-    hash = "sha256-0ye/CYlDW73Y2HGKjSdk7LniVkQ6OznoO/qnypRCmBQ=";
+    hash = "sha256-4fqdgeDtPZztaR2SzwpYjv3WjXcf/9qHKzNwm/muXm8=";
   };
 
   build-system = [
