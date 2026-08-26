@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.15.1";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mYVg4IuoU/GEK/L3qXUfO224eWMrRtoXTTi8RhOJk4=";
+    hash = "sha256-nBVjmd+Y/woAOtLU4pUQiKrVAtpSBng0PpDc8TLk8fE=";
   };
 
   build-system = [ hatchling ];
@@ -112,7 +112,7 @@ buildPythonPackage (finalAttrs: {
     # Tests require OpenAI API key
     "tests/llm/"
     # Network and requires API keys
-    "tests/test_auto_client.py"
+    "tests/providers/test_auto_client.py"
     # annoying dependencies
     "tests/docs"
     "examples"
