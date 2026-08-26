@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   cmake,
   dbus,
@@ -12,6 +11,7 @@
   protobuf,
   openssl,
   cacert,
+  gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -34,36 +34,22 @@
   wl-clipboard,
 }:
 
-let
-  gpt-4o-tokenizer = fetchurl {
-    url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
-    hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";
-    meta.license = lib.licenses.mit;
-  };
-  claude-tokenizer = fetchurl {
-    url = "https://huggingface.co/Xenova/claude-tokenizer/resolve/cae688821ea05490de49a6d3faa36468a4672fad/tokenizer.json";
-    hash = "sha256-wkFzffJLTn98mvT9zuKaDKkD3LKIqLdTvDRqMJKRF2c=";
-    meta.license = lib.licenses.mit;
-  };
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.28.0";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/1TtsnNiLoTkvyeFR282qSpo+Jt3pvFxduJ7lyzsTXI=";
+    hash = "sha256-+sowkBtUbpBPAgi1Tn1WSgIac2yzCWsXcsh96Pp5VSY=";
   };
 
-  cargoHash = "sha256-bhnbSjGqyWbQd5PjZ116JH91vjVy6R/+iBlNKL6debg=";
+  cargoHash = "sha256-rJnhi14eKkYBK1rmQsRTb3lS2ChklOZ8mOA/H1iclh0=";
 
   cargoBuildFlags = [
     "--bin"
     "goose"
-    "--bin"
-    "goosed"
   ];
 
   nativeBuildInputs = [
@@ -84,12 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
     RUSTY_V8_ARCHIVE = librusty_v8;
   };
-
-  preBuild = ''
-    mkdir -p tokenizer_files/Xenova--gpt-4o tokenizer_files/Xenova--claude-tokenizer
-    ln -s ${gpt-4o-tokenizer} tokenizer_files/Xenova--gpt-4o/tokenizer.json
-    ln -s ${claude-tokenizer} tokenizer_files/Xenova--claude-tokenizer/tokenizer.json
-  '';
 
   postFixup = ''
     wrapProgram $out/bin/goose \
@@ -116,6 +96,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     cacert
+    # plugins tests create git-backed fixture repositories
+    gitMinimal
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -124,40 +106,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # need dbus-daemon for keychain access
     "--skip=config::base::tests::test_multiple_secrets"
     "--skip=config::base::tests::test_secret_management"
-    "--skip=config::base::tests::test_concurrent_extension_writes"
     "--skip=config::signup_tetrate::tests::test_configure_tetrate"
     # Observer should be Some with both init project keys set
     "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
     "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-    # need API keys
-    "--skip=providers::factory::tests::test_create_lead_worker_provider"
-    "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
-    "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
     # need network access
     "--skip=test_concurrent_access"
-    "--skip=test_model_not_in_openrouter"
-    "--skip=test_pricing_cache_performance"
-    "--skip=test_pricing_refresh"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_http_error"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_invalid_json"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_notification"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_id_handling"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_session_not_found"
-    "--skip=transport::streamable_http::tests::test_handle_outgoing_message_successful_request"
-    "--skip=routes::audio::tests::test_transcribe_endpoint_requires_auth"
-    "--skip=routes::config_management::tests::test_get_provider_models_openai_configured"
-    # tunnel tests that need external connectivity to Cloudflare
-    "--skip=tunnel::lapstone_test::test_tunnel_end_to_end"
-    "--skip=tunnel::lapstone_test::test_tunnel_post_request"
+    # these race on process-global state (GOOSE_PATH_ROOT / GOOSE_SHELL env
+    # vars, OnceLock caches) when the lib tests run in parallel
+    # https://github.com/aaif-goose/goose/issues/11059
+    "--skip=hooks::tests::matcher_filters_by_tool_name"
+    "--skip=plugins::discovery::tests::enabled_in_config_keeps_plugin_without_modifying_config"
+    # the mock provider can finish before the polling loop observes an active run
+    "--skip=test_steer_session_adds_input_to_active_prompt"
     # integration tests that need network access
     "--skip=test_replayed_session::vec_uvx_mcp_server_fetch_vec_calltoolrequestparam_name_fetch_into_arguments_some_object_url_https_example_com_vec_expects"
     "--skip=test_replayed_session::vec_github_mcp_server_stdio_vec_calltoolrequestparam_name_get_file_contents_into_arguments_some_object_owner_block_repo_goose_path_readme_md_sha_ab62b863c1666232a67048b6c4e10007a2a5b83c_vec_github_personal_access_token_expects"
-    "--skip=test_replayed_session::vec_cargo_run_quiet_p_goose_server_bin_goosed_mcp_developer_vec_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_view_path_goose_crates_goose_tests_tmp_goose_txt_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_str_replace_path_goose_crates_goose_tests_tmp_goose_txt_old_str_goose_new_str_goose_modified_by_test_calltoolrequestparam_name_shell_into_arguments_some_object_command_cat_goose_crates_goose_tests_tmp_goose_txt_calltoolrequestparam_name_text_editor_into_arguments_some_object_command_str_replace_path_goose_crates_goose_tests_tmp_goose_txt_old_str_goose_modified_by_test_new_str_goose_calltoolrequestparam_name_list_windows_into_arguments_some_object_vec_expects"
     "--skip=test_replayed_session::vec_npx_y_modelcontextprotocol_server_everything_vec_calltoolrequestparam_name_echo_into_arguments_some_object_message_hello_world_calltoolrequestparam_name_add_into_arguments_some_object_a_1_b_2_calltoolrequestparam_name_longrunningoperation_into_arguments_some_object_duration_1_steps_5_calltoolrequestparam_name_structuredcontent_into_arguments_some_object_location_11238_vec_expects"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--skip=context_mgmt::auto_compact::tests::test_auto_compact_respects_config"
-    "--skip=scheduler::tests::test_scheduled_session_has_schedule_id"
+    # loopback_transport_does_not_use_environment_proxy sets HTTP_PROXY
+    # process-wide; concurrent wiremock-based tests in the same binary pick it
+    # up and fail with NetworkError. Remove once the fix lands upstream:
+    # https://github.com/aaif-goose/goose/pull/11262
+    "--skip=api_client::tests::loopback_transport_does_not_use_environment_proxy"
+    "--skip=anthropic::tests::fetch_models_treats_invalid_json_as_endpoint_not_found"
+    "--skip=anthropic::tests::fetch_models_treats_missing_data_field_as_request_failed"
+    "--skip=anthropic::tests::fetch_supported_models_accepts_null_error"
+    "--skip=anthropic::tests::fetch_supported_models_does_not_fall_back_on_missing_data"
+    "--skip=anthropic::tests::fetch_supported_models_falls_back_on_invalid_payload"
+    "--skip=anthropic::tests::fetch_supported_models_preserves_200_error_type"
+    "--skip=anthropic::tests::fetch_supported_models_propagates_auth_error"
+    "--skip=anthropic::tests::fetch_supported_models_propagates_auth_error_from_200_payload"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Broken on aarch64-linux: request capture races across session_id_propagation_test cases
@@ -165,12 +143,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_session_id_propagation_to_llm"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=logging::tests::test_log_file_name_no_session"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
     "--skip=test_session_id_matches_across_calls"
     "--skip=test_session_id_propagation_to_llm"
+    # keychain-backed dictation secret test panics on empty swap_remove
+    "--skip=test_custom_dictation_secret_save_delete"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -182,9 +161,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM";
     homepage = "https://github.com/aaif-goose/goose";
+    changelog = "https://github.com/aaif-goose/goose/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "goose";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      asiantuntija
       cloudripper
       thardin
       brittonr
