@@ -288,7 +288,7 @@ in
         wants = [ "network-online.target" ];
 
         path = with pkgs; [
-          ffmpeg_4-full
+          ffmpeg-full
         ];
 
         script = ''
