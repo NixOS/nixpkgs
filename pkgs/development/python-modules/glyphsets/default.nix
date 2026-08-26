@@ -16,13 +16,13 @@
   youseedee,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glyphsets";
   version = "1.1.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YJ5hNq2QgIgQFnMJ+yJGOzsLRpUabSqJttVEWsRDBaQ=";
   };
 
@@ -66,9 +66,9 @@ buildPythonPackage rec {
   meta = {
     description = "Google Fonts glyph set metadata";
     homepage = "https://github.com/googlefonts/glyphsets";
-    changelog = "https://github.com/googlefonts/glyphsets/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googlefonts/glyphsets/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "glyphsets";
   };
-}
+})
