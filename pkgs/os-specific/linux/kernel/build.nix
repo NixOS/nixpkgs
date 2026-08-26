@@ -324,6 +324,7 @@ lib.makeOverridable (
 
     makeFlags = [
       "O=$(buildRoot)"
+      "KBUILD_BUILD_TIMESTAMP=@$(SOURCE_DATE_EPOCH)"
 
       "DTC_FLAGS=-@"
 
@@ -395,8 +396,6 @@ lib.makeOverridable (
         echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
         exit 1
       fi
-
-      buildFlags+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
 
       cd $buildRoot
     '';
