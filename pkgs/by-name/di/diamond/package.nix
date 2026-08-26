@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  zlib,
+  zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diamond";
-  version = "2.1.16";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/rSnyOlQ7PWMpoX8vojOmD73jrvIDLjT5LOB7MyTnMo=";
+    hash = "sha256-qt9oNHru1qBwrcncqvQzjinWGfFW0jexOqHWCWHiWX0=";
   };
 
   nativeBuildInputs = [ cmake ];
