@@ -7,6 +7,7 @@
   mashumaro,
   poetry-core,
   poetry-dynamic-versioning,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
@@ -27,15 +28,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-hgdK7Rrw/iELRE+vSuwsRUzLDT8qE2Dhxqd4bAgxays=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
-
   build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
