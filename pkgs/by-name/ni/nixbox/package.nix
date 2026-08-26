@@ -24,5 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with maintainers; [ rajveer ];
     mainProgram = "nixbox";
     platforms = platforms.linux;
+  meta = {
+    description = "TUI package manager for NixOS that wires selections into your flake + home-manager config";
+    homepage = "https://github.com/SINGH-RAJVEER/nix-box";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rajveer ];
+    mainProgram = "nixbox";
+    platforms = lib.platforms.linux;
   };
 }
