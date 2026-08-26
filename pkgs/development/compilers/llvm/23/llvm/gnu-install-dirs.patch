@@ -1,5 +1,4 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index a90be4f6235e..be9cef03bfea 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1207,9 +1207,9 @@ if (NOT TENSORFLOW_AOT_PATH STREQUAL "")
@@ -15,7 +14,6 @@ index a90be4f6235e..be9cef03bfea 100644
    # Once we add more modules, we should handle this more automatically.
    if (DEFINED LLVM_OVERRIDE_MODEL_HEADER_INLINERSIZEMODEL)
 diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
-index 835750e2d2a1..f7400f708535 100644
 --- a/cmake/modules/AddLLVM.cmake
 +++ b/cmake/modules/AddLLVM.cmake
 @@ -974,8 +974,8 @@ macro(add_llvm_library name)
@@ -78,10 +76,9 @@ index 835750e2d2a1..f7400f708535 100644
 +    set(_install_rpath ${extra_libdir})
      if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
 diff --git a/cmake/modules/AddOCaml.cmake b/cmake/modules/AddOCaml.cmake
-index 2d9116b08a52..2dd7cad4ec66 100644
 --- a/cmake/modules/AddOCaml.cmake
 +++ b/cmake/modules/AddOCaml.cmake
-@@ -147,9 +147,9 @@ function(add_ocaml_library name)
+@@ -150,9 +150,9 @@ function(add_ocaml_library name)
    endforeach()
  
    if( APPLE )
@@ -94,7 +91,6 @@ index 2d9116b08a52..2dd7cad4ec66 100644
    list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
  
 diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
-index ef4cfa3acdb5..7478e157a7c2 100644
 --- a/cmake/modules/CMakeLists.txt
 +++ b/cmake/modules/CMakeLists.txt
 @@ -130,7 +130,7 @@ set(LLVM_CONFIG_INCLUDE_DIRS
@@ -107,7 +103,6 @@ index ef4cfa3acdb5..7478e157a7c2 100644
    "${LLVM_CONFIG_LIBRARY_DIR}"
    # FIXME: Should there be other entries here?
 diff --git a/tools/llvm-config/BuildVariables.inc.in b/tools/llvm-config/BuildVariables.inc.in
-index e4e1d449bf4d..3aab6ea7bf8b 100644
 --- a/tools/llvm-config/BuildVariables.inc.in
 +++ b/tools/llvm-config/BuildVariables.inc.in
 @@ -23,6 +23,7 @@
@@ -119,7 +114,6 @@ index e4e1d449bf4d..3aab6ea7bf8b 100644
  #define LLVM_INSTALL_PACKAGE_DIR "@LLVM_INSTALL_PACKAGE_DIR@"
  #define LLVM_TARGETS_BUILT "@LLVM_TARGETS_BUILT@"
 diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
-index 49df8fdcb7f7..c7cb05b82821 100644
 --- a/tools/llvm-config/llvm-config.cpp
 +++ b/tools/llvm-config/llvm-config.cpp
 @@ -365,7 +365,11 @@ int main(int argc, char **argv) {
