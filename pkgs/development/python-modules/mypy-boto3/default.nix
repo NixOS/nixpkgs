@@ -630,8 +630,8 @@ in
       "sha256-F+4rmr2/nI1TQCFnMY0dPxAXlgN3IBSfiQaDGup5HSw=";
 
   mypy-boto3-iot =
-    buildMypyBoto3Package "iot" "1.43.20"
-      "sha256-ZARIC6yQVEkQ1ZtbM8HmQb7mHLQC/3o1PSLCD/KuC4o=";
+    buildMypyBoto3Package "iot" "1.43.80"
+      "sha256-98iuZorHk2BZFJDHPViQ5LRnPKr5W44YvxJ11SvcvKQ=";
 
   mypy-boto3-iot-data =
     buildMypyBoto3Package "iot-data" "1.43.17"
