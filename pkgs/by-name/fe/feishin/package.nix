@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_41,
+  electron_43,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -27,7 +27,7 @@ let
     hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
-  electron = electron_41;
+  electron = electron_43;
 
   # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
