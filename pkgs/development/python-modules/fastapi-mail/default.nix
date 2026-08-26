@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-mail";
-  version = "1.6.5";
+  version = "1.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    tag = finalAttrs.version;
-    hash = "sha256-7Of7PSfY5lFbuxqBM5IyCnOa1CwbOijruSSrRylz3S8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KWwR/p3CFjQCLPa+TRFVLwVn+y5pqs7ZjRnce2f5B0U=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];

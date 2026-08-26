@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xssearch";
-  version = "0.1.9";
+  version = "0.2.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "affolter-engineering";
     repo = "xssearch";
     tag = finalAttrs.version;
-    hash = "sha256-09knkYBnIjZsdAlczYIeqtn0XGAvCD+RF3o9sGSUorw=";
+    hash = "sha256-b0pS8iu6iIO1VwmHWp7yhZiP7ngbdrUz5PCz5NjHZTo=";
   };
 
-  cargoHash = "sha256-t+IcNrjHlVVKrYuLiRrlteT4jQLRiWUsj9RTTTflTiA=";
+  cargoHash = "sha256-uS4PJhBRUuvbRFafO7HSG7+b5cb8k0YDRWgy4Iz8JMU=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
