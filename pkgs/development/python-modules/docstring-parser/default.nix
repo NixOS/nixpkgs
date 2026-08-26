@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "docstring-parser";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
     tag = version;
-    hash = "sha256-hR+i1HU/ZpN6I3a8k/Wv2OrXgB4ls/A5OHZRqxEZS78=";
+    hash = "sha256-6jkPo3GPV8lfkLayVb6l+kD5DV/rAmtmSyi3VV/FoFc=";
   };
 
   build-system = [ hatchling ];
