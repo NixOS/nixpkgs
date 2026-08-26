@@ -50,6 +50,7 @@ rec {
       otherHostGuestMatrix = {
         aarch64-darwin = {
           aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=${accel "hvf"} -cpu max";
+          x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=${accel "hvf"} -cpu max";
         };
       };
 
