@@ -3,6 +3,11 @@
   fetchFromGitHub,
   crystal_1_15,
   versionCheckHook,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  writeShellScript,
+  crystal2nix,
+  runCommand,
 }:
 
 let
@@ -44,6 +49,38 @@ crystal.buildCrystalPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/ameba-ls";
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--use-github-releases"
+          "--src-only"
+        ];
+      })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "ameba-ls.shardLock" "${toString ./.}/shard.lock")
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}")
+          ./.
+        ];
+      }
+      {
+        command = [
+          "rm"
+          "${toString ./.}/shard.lock"
+        ];
+      }
+    ];
+    shardLock = runCommand "shard.lock" { inherit src; } ''
+      cp "$src/shard.lock" "$out"
+    '';
+  };
 
   meta = {
     description = "Crystal language server powered by Ameba linter";
