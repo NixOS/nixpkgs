@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "typer-config";
-  version = "1.4.3";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxb2";
     repo = "typer-config";
     tag = version;
-    hash = "sha256-pR32E6zdlfNpzIS4u/WOCxuqrnjDWZYiroUu92RBHVM=";
+    hash = "sha256-gWe4Eo4WyjpQ3ZHzp1sIIo0L/EfnZMwR6EKfPtYSKuY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.7.19,<0.8.0" "uv_build"
+      --replace-fail "uv_build>=0.7.19,<0.11.0" "uv_build"
   '';
 
   build-system = [ uv-build ];
