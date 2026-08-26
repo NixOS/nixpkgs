@@ -278,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     for target in ${lib.escapeShellArgs allGasTargets}; do
       mkdir "$NIX_BUILD_TOP/build-$target"
       env -C "$NIX_BUILD_TOP/build-$target" \
-        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        "$configureScript" "''${configureFlags[@]}" \
         --enable-gas --program-prefix "$target-"  --target "$target"
     done
   '';
@@ -293,7 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString withAllTargets ''
     for target in ${lib.escapeShellArgs allGasTargets}; do
       make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
-        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        "''${makeFlags[@]}" "''${buildFlags[@]}" \
         TARGET-gas=as-new all-gas
     done
   '';
@@ -328,7 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withAllTargets ''
       for target in ${lib.escapeShellArgs allGasTargets}; do
         make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
-          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          "''${makeFlags[@]}" "''${installFlags[@]}" \
           install-exec-bindir
       done
     ''
@@ -353,6 +353,8 @@ stdenv.mkDerivation (finalAttrs: {
         --wildcards '*'/include/plugin-api.h
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
