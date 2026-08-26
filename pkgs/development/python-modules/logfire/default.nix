@@ -3,7 +3,6 @@
   callPackage,
   fetchFromGitHub,
   lib,
-  fetchpatch2,
 
   # build-system
   hatchling,
@@ -65,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logfire";
-  version = "4.37.0";
+  version = "4.41.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -73,19 +72,8 @@ buildPythonPackage (finalAttrs: {
     owner = "pydantic";
     repo = "logfire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o6qtMiwXcfUuYkUrM+Iy6WhtwBOLK3q/nqPDC5QMmg0=";
+    hash = "sha256-0k0xfsnNwtdmI8Pfh6kBhTwG8J31ybsd7mN9vjsIwk4=";
   };
-
-  patches = [
-    # https://github.com/pydantic/logfire/pull/2042
-    (fetchpatch2 {
-      url = "https://github.com/pydantic/logfire/commit/c7ff8beec3a674a2b096fcd9395159723de4cc67.patch";
-      hash = "sha256-HdPT1cYOUiyjJBUYC5yoVRjC+gWyCMvo1MpOSL32lPM=";
-      excludes = [
-        "uv.lock"
-      ];
-    })
-  ];
 
   build-system = [ hatchling ];
 
